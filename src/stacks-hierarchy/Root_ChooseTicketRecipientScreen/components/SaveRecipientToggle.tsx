@@ -4,9 +4,9 @@ import {Checkbox} from '@atb/components/checkbox';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors.ts';
-import {useFetchRecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 const MAX_RECIPIENTS = 10;
 
@@ -21,7 +21,7 @@ export const SaveRecipientToggle = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {data: recipients} = useFetchRecipientsQuery();
+  const {data: recipients} = useFetchOnBehalfOfAccountsQuery({enabled: true});
   if (!settingPhone) return null;
 
   const isAtMaxRecipients = (recipients?.length || 0) >= MAX_RECIPIENTS;

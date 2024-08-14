@@ -1,7 +1,5 @@
 import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
-import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
-
-export type ExistingRecipientType = Required<TicketRecipientType>;
+import {OnBehalfOfAccountType} from "@atb/on-behalf-of/types.ts";
 
 export type OnBehalfOfErrorCode =
   | GetAccountByPhoneErrorCode
@@ -13,7 +11,7 @@ export type OnBehalfOfErrorCode =
 export type RecipientSelectionState = {
   settingPhone: boolean;
   settingName: boolean;
-  recipient?: ExistingRecipientType;
+  recipient?: OnBehalfOfAccountType;
   phone?: string;
   prefix: string;
   name?: string;

@@ -38,6 +38,7 @@ import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 export type FareContractInfoProps = {
   travelRight: NormalTravelRight;
@@ -85,6 +86,13 @@ export const FareContractInfoHeader = ({
     sentToCustomerAccountId,
   );
 
+  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
+    enabled: !!phoneNumber,
+  });
+  const recipientName =
+    phoneNumber &&
+    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
+
   return (
     <View style={styles.header}>
       {productName && (
@@ -115,7 +123,9 @@ export const FareContractInfoHeader = ({
       {phoneNumber && (
         <MessageInfoText
           type="warning"
-          message={t(FareContractTexts.details.sentTo(phoneNumber))}
+          message={t(
+            FareContractTexts.details.sentTo(recipientName || phoneNumber),
+          )}
         />
       )}
       {status === 'valid' && warning && (

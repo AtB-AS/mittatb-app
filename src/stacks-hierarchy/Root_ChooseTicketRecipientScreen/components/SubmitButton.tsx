@@ -1,8 +1,8 @@
 import {
-  ExistingRecipientType,
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
 import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -19,7 +19,7 @@ import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
 
@@ -75,8 +75,8 @@ export const SubmitButton = ({
       return;
     }
 
-    const recipients = queryClient.getQueryData<ExistingRecipientType[]>([
-      FETCH_RECIPIENTS_QUERY_KEY,
+    const recipients = queryClient.getQueryData<OnBehalfOfAccountType[]>([
+      FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY,
       userId,
     ]);
 

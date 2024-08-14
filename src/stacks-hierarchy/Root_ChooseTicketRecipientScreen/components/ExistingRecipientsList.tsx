@@ -1,9 +1,5 @@
-import {
-  ExistingRecipientType,
-  RecipientSelectionState,
-} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useFetchRecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useEffect, useLayoutEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -15,6 +11,8 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation.ts';
 import {animateNextChange} from '@atb/utils/animation.ts';
 import {screenReaderPause} from '@atb/components/text';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
 
 export const ExistingRecipientsList = ({
   state: {recipient},
@@ -23,7 +21,7 @@ export const ExistingRecipientsList = ({
   themeColor,
 }: {
   state: RecipientSelectionState;
-  onSelect: (r?: ExistingRecipientType) => void;
+  onSelect: (r?: OnBehalfOfAccountType) => void;
   onEmptyRecipients: () => void;
   themeColor: StaticColor;
 }) => {
@@ -31,7 +29,7 @@ export const ExistingRecipientsList = ({
   const {t} = useTranslation();
   const {theme, themeName} = useTheme();
 
-  const recipientsQuery = useFetchRecipientsQuery();
+  const recipientsQuery = useFetchOnBehalfOfAccountsQuery({enabled: true});
   const {mutation: deleteMutation, activeDeletions} =
     useDeleteRecipientMutation();
 
@@ -45,7 +43,7 @@ export const ExistingRecipientsList = ({
     }
   }, [recipientsQuery.status, recipientsQuery.data, onEmptyRecipients]);
 
-  const onDelete = ({accountId}: ExistingRecipientType) => {
+  const onDelete = ({accountId}: OnBehalfOfAccountType) => {
     if (recipient?.accountId === accountId) {
       onSelect(undefined);
     }

@@ -3,7 +3,7 @@ import {OfferReservation, ReserveOffer, reserveOffers} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
 import {PaymentMethod, TicketRecipientType} from '@atb/stacks-hierarchy/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 type Args = {
   offers: ReserveOffer[];
@@ -47,7 +47,7 @@ export const useReserveOfferMutation = ({
     },
     onSuccess: () => {
       if (recipient?.name) {
-        queryClient.invalidateQueries([FETCH_RECIPIENTS_QUERY_KEY]);
+        queryClient.invalidateQueries([FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY]);
       }
     },
   });
