@@ -14,21 +14,22 @@ export type PreassignedFareProductId = string;
 export type PreassignedFareProduct = {
   id: PreassignedFareProductId;
   name: LanguageAndTextType;
-  isDefault: boolean;
+  isDefault?: boolean;
   version: string;
   description?: LanguageAndTextType[];
   productDescription?: LanguageAndTextType[];
   warningMessage?: LanguageAndTextType[];
   type: string;
   productAlias?: LanguageAndTextType[];
+  durationDays?: number;
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
   zoneSelectionMode?: ZoneSelectionMode;
   limitations: {
     userProfileRefs: string[];
     tariffZoneRefs?: string[];
-    appVersionMin: string | undefined;
-    appVersionMax: string | undefined;
+    appVersionMin?: string;
+    appVersionMax?: string;
     latestActivationDate?: number;
   };
 };
