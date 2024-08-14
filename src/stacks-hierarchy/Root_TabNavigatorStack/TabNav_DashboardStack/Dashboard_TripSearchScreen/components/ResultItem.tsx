@@ -203,10 +203,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   };
   const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
-  const staySeated = (idx: number) => {
+  const staySeated = (idx: number): boolean => {
     const previousLeg = expandedLegs[idx - 1];
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
+
+  const displayLegDash = (idx: number): boolean =>
+    idx < expandedLegs.length - 1 && !staySeated(idx + 1);
 
   return (
     <PressableOpacity
@@ -301,7 +304,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         )}
                       </View>
                     </View>
-                    {i < expandedLegs.length - 1 ? (
+                    {displayLegDash(i) ? (
                       <View style={[styles.dashContainer, iconHeight]}>
                         <LegDash />
                       </View>
