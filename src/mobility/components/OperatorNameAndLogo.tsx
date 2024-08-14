@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {SvgCssUri} from 'react-native-svg';
+import {SvgCssUri} from 'react-native-svg/css';
 import {StyleSheet} from '@atb/theme';
 
 const LOGO_SIZE = 20;

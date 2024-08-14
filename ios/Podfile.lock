@@ -638,9 +638,9 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - BugsnagReactNative (7.21.0):
+  - BugsnagReactNative (7.25.0):
     - React-Core
-  - BVLinearGradient (2.6.2):
+  - BVLinearGradient (2.8.3):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -954,7 +954,6 @@ PODS:
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
-  - NextLevelSessionExporter (0.4.6)
   - OpenSSL-Universal (1.1.1100)
   - PromisesObjC (2.4.0)
   - RCT-Folly (2022.05.16.00):
@@ -1828,38 +1827,41 @@ PODS:
   - React-Mapbuffer (0.73.7):
     - glog
     - React-debug
-  - react-native-compressor (1.8.12):
+  - react-native-compressor (1.8.25):
     - glog
-    - NextLevelSessionExporter
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - react-native-device-brightness (1.2.7):
     - React
-  - react-native-flipper (0.212.0):
+  - react-native-flipper (0.262.0):
     - React-Core
   - react-native-flipper-performance-plugin (0.4.0):
     - React-Core
     - react-native-flipper-performance-plugin/FBDefines (= 0.4.0)
   - react-native-flipper-performance-plugin/FBDefines (0.4.0):
     - React-Core
-  - react-native-geolocation (3.2.1):
+  - react-native-geolocation (3.3.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-get-random-values (1.8.0):
+  - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-kettle-module (1.2.0):
     - glog
     - KettleKit (= 1.3.1)
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-pager-view (6.1.2):
+  - react-native-pager-view (6.3.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-safe-area-context (4.7.4):
+  - react-native-safe-area-context (4.10.8):
     - React-Core
-  - react-native-slider (4.4.3):
+  - react-native-slider (4.5.2):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-webview (13.8.1):
+  - react-native-webview (13.10.5):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2033,15 +2035,15 @@ PODS:
   - ReactNativeCameraKit (14.0.0-beta12):
     - React-Core
   - RecaptchaInterop (100.0.0)
-  - RNBootSplash (4.4.1):
+  - RNBootSplash (6.1.1):
     - React-Core
   - RNCAsyncStorage (1.19.8):
     - React-Core
-  - RNCClipboard (1.11.1):
+  - RNCClipboard (1.14.1):
     - React-Core
-  - RNDateTimePicker (7.6.1):
+  - RNDateTimePicker (8.2.0):
     - React-Core
-  - RNDeviceInfo (10.3.0):
+  - RNDeviceInfo (11.1.0):
     - React-Core
   - RNFBAnalytics (18.5.0):
     - Firebase/Analytics (= 10.15.0)
@@ -2068,32 +2070,33 @@ PODS:
     - Firebase/RemoteConfig (= 10.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.15.0):
+  - RNGestureHandler (2.18.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - RNInAppBrowser (3.7.0):
     - React-Core
-  - RNLocalize (2.2.4):
+  - RNLocalize (3.2.1):
     - React-Core
-  - rnmapbox-maps (10.1.3):
+  - rnmapbox-maps (10.1.28):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.3)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.28)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.3):
+  - rnmapbox-maps/DynamicLibrary (10.1.28):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
     - Turf
-  - RNPermissions (3.10.0):
+  - RNPermissions (4.1.5):
     - React-Core
-  - RNScreens (3.29.0):
+  - RNScreens (3.34.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSVG (13.7.0):
+    - React-RCTImage
+  - RNSVG (15.5.0):
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
@@ -2271,7 +2274,6 @@ SPEC REPOS:
     - MapboxMaps
     - MapboxMobileEvents
     - nanopb
-    - NextLevelSessionExporter
     - OpenSSL-Universal
     - PromisesObjC
     - RecaptchaInterop
@@ -2484,8 +2486,8 @@ SPEC CHECKSUMS:
   BarcodeiOSLib: 9f460686e7d7150cde46c652e5244d9fa6b516ab
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  BugsnagReactNative: c681c456736c24344553f48013da8253eb00ee92
-  BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
+  BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 9f533d5a4c75ca77c8ed774aced1a91a0701781e
@@ -2529,7 +2531,6 @@ SPEC CHECKSUMS:
   MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
@@ -2553,17 +2554,17 @@ SPEC CHECKSUMS:
   React-jsinspector: f356e49aa086380d3a4892708ca173ad31ac69c1
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 6f392912435adb8fbf4c3eee0e79a0a0b4e4b717
-  react-native-compressor: 8a237db7081ffee2f726225fce3eb02e03c8bcae
+  react-native-compressor: db1b725658367d9aa0f8bdabed4b0aec88cd1c0b
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
-  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
+  react-native-flipper: 1733f4a047493bb631ac9edaf87f714ca216a375
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
-  react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
-  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
+  react-native-geolocation: 4b12da636bf33b15b537fe8de141942b63101ee1
+  react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-kettle-module: e61ea63ecfb741d7e23fb9ea121d3039bab0b0cb
-  react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
-  react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
-  react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
-  react-native-webview: 05fa0e766f1c408e8c293cbcb84b2c199711cfd1
+  react-native-pager-view: 4cc7e44dbc04cad0ca9e0a49c62c593d0fa793cc
+  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
+  react-native-slider: 7a39874fc1fcdfee48e448fa72cce0a8f2c7c5d6
+  react-native-webview: 998fc075d16458361ef89ce34c263b659da5531f
   React-nativeconfig: 754233aac2a769578f828093b672b399355582e6
   React-NativeModulesApple: a03b2da2b8e127d5f5ee29c683e0deba7a9e1575
   React-perflogger: 68ec84e2f858a3e35009aef8866b55893e5e0a1f
@@ -2586,24 +2587,24 @@ SPEC CHECKSUMS:
   ReactCommon: 8cae78d3c3eceff20ee4bbca8bb73b675a45fd5d
   ReactNativeCameraKit: 80ee467bdc72ab04dea312eb275c0d2cd682f2db
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RNBootSplash: 4f968c1e098c7ec97939ace039f735e3d335bd4b
+  RNBootSplash: 5951974a5271183d06d3279bd4b9d7d093f4e2fc
   RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
-  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
-  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
-  RNDeviceInfo: 4701f0bf2a06b34654745053db0ce4cb0c53ada7
+  RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
+  RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
+  RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNFBAnalytics: 30184f205f17c114a9e426806925331b9110f749
   RNFBApp: cc9384746945ac0eedd4759171a8abb4c4c5309d
   RNFBAuth: cf84aa347759beb4356bf79a3092c954ecbc449a
   RNFBFirestore: efd8996a791bb9edbd0a3b3acfd80d7a60d9a1d9
   RNFBMessaging: 3c573398dced30f6cbaf55a195080916ea23f819
   RNFBRemoteConfig: 3b872da757ed617b83d4a780d7bd0915cc82bd03
-  RNGestureHandler: 67fb54b3e6ca338a8044e85cd6f340265aa41091
+  RNGestureHandler: 1155b1898ceddefeebf77792927360d44fe11e77
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
-  RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  rnmapbox-maps: 8f6b0c4b4dfc62c72c16df5578b1105426d02e68
-  RNPermissions: 2a9336f58607a4ba0000dd6b8ad7b3dd19004966
-  RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
-  RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
+  RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
+  rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
+  RNPermissions: 47db57715014b92750634e0fd5c0287fa7156007
+  RNScreens: 29418ceffb585b8f0ebd363de304288c3dce8323
+  RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
@@ -2613,6 +2614,6 @@ SPEC CHECKSUMS:
   VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948
   Yoga: c716aea2ee01df6258550c7505fa61b248145ced
 
-PODFILE CHECKSUM: 31e4ce16eb5a31b801f56daeb87eb495c7907806
+PODFILE CHECKSUM: 5d9e9c06fdbbd9a216ddd8596063fda334bef2cf
 
 COCOAPODS: 1.14.3

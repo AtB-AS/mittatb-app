@@ -13,6 +13,7 @@ import {
 } from '@atb/components/map';
 import buffer from '@turf/buffer';
 import difference from '@turf/difference';
+import {featureCollection} from '@turf/helpers';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
@@ -101,8 +102,10 @@ export const needsReload = (
     shownArea.range,
   );
 
+  if (!prevAreaFeature || !newAreaFeature) return true;
+
   // If the previous area covers the new area the 'difference' will return null
-  const diff = difference(newAreaFeature, prevAreaFeature);
+  const diff = difference(featureCollection([newAreaFeature, prevAreaFeature]));
   return Boolean(diff);
 };
 

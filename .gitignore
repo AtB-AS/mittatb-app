@@ -83,8 +83,11 @@ ios/Configs/Config.xcconfig
 android/app/src/**/res/**/bootsplash_logo.png
 android/app/src/**/res/values/colors.xml
 assets/bootsplash_logo*.png
+assets/bootsplash/
 ios/atb/BootSplash.storyboard
 ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
+ios/atb/Images.xcassets/BootSplashLogo-*.imageset
+ios/atb/Colors.xcassets/BootSplashBackground-*.colorset
 /ios/ios-devices.txt
 
 #Service files
