@@ -41,6 +41,8 @@ export const useStations: (
 
   const [stations, setStations] = useState<StationFeatures>(emptyStations);
 
+  const enableStations = isCityBikesEnabled || isCarSharingEnabled;
+
   useEffect(() => {
     if (!initialFilter) {
       // Initial filter === undefined, use user's filter from store.
@@ -53,7 +55,7 @@ export const useStations: (
   }, [getMapFilter, initialFilter]);
 
   useEffect(() => {
-    if (isCityBikesEnabled && isFocused && area) {
+    if (enableStations && isFocused && area) {
       const abortCtrl = new AbortController();
       setIsLoading(true);
       const carOperators = getOperators(filter, FormFactor.Car);
@@ -86,8 +88,9 @@ export const useStations: (
         .catch(() => {}); //Most likely abort
       return () => abortCtrl.abort();
     }
+
     setStations(emptyStations);
-  }, [area, isCityBikesEnabled, isCarSharingEnabled, filter, isFocused]);
+  }, [area, enableStations, filter, isFocused]);
 
   const updateRegion = useCallback((region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
@@ -97,7 +100,7 @@ export const useStations: (
     setFilter(filter);
   };
 
-  return isCityBikesEnabled
+  return enableStations
     ? {
         stations,
         onFilterChange,
