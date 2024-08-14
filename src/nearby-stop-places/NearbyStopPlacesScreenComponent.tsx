@@ -11,7 +11,7 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -58,15 +58,7 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const screenHasFocus = useIsFocused();
 
-  const handleLocationUpdate = useCallback(() => {
-    if (
-      (location?.resultType == 'search' ||
-        location?.resultType === 'favorite') &&
-      location?.layer === 'venue'
-    ) {
-      onSelectStopPlace(location);
-    }
-  }, [location])
+  const onSelectStopPlaceRef = useRef(onSelectStopPlace);
 
   useDoOnceWhen(
     setCurrentLocationAsFromIfEmpty,
@@ -130,8 +122,14 @@ export const NearbyStopPlacesScreenComponent = ({
   };
 
   useEffect(() => {
-    handleLocationUpdate();
-  }, [handleLocationUpdate]);
+    if (
+      (location?.resultType == 'search' ||
+        location?.resultType === 'favorite') &&
+      location?.layer === 'venue'
+    ) {
+      onSelectStopPlaceRef.current(location);
+    }
+  }, [location]);
 
 
   useEffect(() => {
