@@ -11,7 +11,7 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -58,6 +58,16 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const screenHasFocus = useIsFocused();
 
+  const handleLocationUpdate = useCallback(() => {
+    if (
+      (location?.resultType == 'search' ||
+        location?.resultType === 'favorite') &&
+      location?.layer === 'venue'
+    ) {
+      onSelectStopPlace(location);
+    }
+  }, [location])
+
   useDoOnceWhen(
     setCurrentLocationAsFromIfEmpty,
     Boolean(currentLocation) && screenHasFocus,
@@ -75,23 +85,6 @@ export const NearbyStopPlacesScreenComponent = ({
   );
 
   const openLocationSearch = () => onPressLocationSearch(location);
-
-  useEffect(() => {
-    if (
-      (location?.resultType == 'search' ||
-        location?.resultType === 'favorite') &&
-      location?.layer === 'venue'
-    ) {
-      onSelectStopPlace(location);
-    }
-    /*
-     Refreshing (by dragging down) doesn't work since the location id doesn't
-     change. Take a look at fixing this when looking at the exchaustive-deps
-     error. May also consider using react-query instead of the custom reducer
-     with side effect flow.
-    */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location?.id]);
 
   function setCurrentLocationAsFrom() {
     onUpdateLocation(
@@ -137,6 +130,11 @@ export const NearbyStopPlacesScreenComponent = ({
   };
 
   useEffect(() => {
+    handleLocationUpdate();
+  }, [handleLocationUpdate]);
+
+
+  useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
     if (isLoading && !!location) {
@@ -167,6 +165,7 @@ export const NearbyStopPlacesScreenComponent = ({
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
           <RefreshControl
+            progressViewOffset={90}
             refreshing={Platform.OS === 'ios' ? false : isLoading}
             onRefresh={refresh}
           />
