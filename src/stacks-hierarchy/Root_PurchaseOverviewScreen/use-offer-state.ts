@@ -50,8 +50,10 @@ const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
 const getOriginalPriceAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.original_amount_float ?? 0;
 
-const getValidDurationSeconds = (offer: Offer): number =>
-  secondsBetween(offer.valid_from, offer.valid_to);
+const getValidDurationSeconds = (offer: Offer): number | undefined =>
+  offer.valid_from && offer.valid_to
+    ? secondsBetween(offer.valid_from, offer.valid_to)
+    : undefined;
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
