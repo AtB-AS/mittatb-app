@@ -8,8 +8,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Removed as part of https://github.com/AtB-AS/kundevendt/issues/18747 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" tools:node="remove"/>
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_LOCATION"
+        tools:node="remove" />
     <application
         android:name=".MainApplication"
         android:label="@string/app_name"
