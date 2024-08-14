@@ -92,10 +92,23 @@ const mapToUserProfilesWithCountAndOffer = (
   offers: Offer[],
 ): UserProfileWithCountAndOffer[] =>
   userProfileWithCounts
-    .map((u) => ({
-      ...u,
-      offer: offers.find((o) => o.traveller_id === u.userTypeString),
-    }))
+    .map((u) => {
+      const offerAlternatives = offers.filter(
+        (o) => o.traveller_id === u.userTypeString,
+      );
+      // If there are multiple offers for the same traveller, use the cheapest
+      // one. This shouldn't happen in practice, but it's here as a sensible
+      // fallback.
+      const offer = offerAlternatives.sort(
+        (a, b) =>
+          getCurrencyAsFloat(a.prices, 'NOK') -
+          getCurrencyAsFloat(b.prices, 'NOK'),
+      )[0];
+      return {
+        ...u,
+        offer: offer,
+      };
+    })
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
 const getOfferReducer =
