@@ -41,6 +41,7 @@ describe('Travel search filter', () => {
         await TravelsearchOverviewPage.getNumberOfTransportModesInSearch();
 
       // Filter out buses
+      await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
       await TravelsearchFilterPage.openFilter();
       await TravelsearchFilterPage.toggleFilter('bus');
       await TravelsearchFilterPage.confirmFilter();
@@ -50,6 +51,10 @@ describe('Travel search filter', () => {
       const numberOfModesWithFilter =
         await TravelsearchOverviewPage.getNumberOfTransportModesInSearch();
       expect(numberOfModesWithFilter).toBeLessThan(numberOfModesInitial);
+      await AppHelper.scrollUpUntilId(
+        'tripSearchContentView',
+        'selectedFilterButton',
+      );
       await TravelsearchFilterPage.shouldShowSelectedFilter('6 of 7');
 
       // Remove the selected filters
@@ -60,6 +65,7 @@ describe('Travel search filter', () => {
       const numberOfModes =
         await TravelsearchOverviewPage.getNumberOfTransportModesInSearch();
       expect(numberOfModes).toEqual(numberOfModesInitial);
+      await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
       await expect(TravelsearchFilterPage.selectedFilterButton).not.toExist();
     } catch (errMsg) {
       await AppHelper.screenshot('error_travelsearch_filter_transport_modes');
