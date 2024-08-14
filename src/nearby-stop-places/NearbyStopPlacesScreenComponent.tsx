@@ -76,6 +76,16 @@ export const NearbyStopPlacesScreenComponent = ({
     [data],
   );
 
+  useEffect(() => {
+    if (
+      (location?.resultType == 'search' ||
+        location?.resultType === 'favorite') &&
+      location?.layer === 'venue'
+    ) {
+      onSelectStopPlaceRef.current(location);
+    }
+  }, [location]);
+
   const openLocationSearch = () => onPressLocationSearch(location);
 
   function setCurrentLocationAsFrom() {
@@ -120,17 +130,6 @@ export const NearbyStopPlacesScreenComponent = ({
         return;
     }
   };
-
-  useEffect(() => {
-    if (
-      (location?.resultType == 'search' ||
-        location?.resultType === 'favorite') &&
-      location?.layer === 'venue'
-    ) {
-      onSelectStopPlaceRef.current(location);
-    }
-  }, [location]);
-
 
   useEffect(() => {
     if (updatingLocation)
