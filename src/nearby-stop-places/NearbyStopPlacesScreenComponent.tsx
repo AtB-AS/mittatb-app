@@ -11,7 +11,7 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -58,8 +58,6 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const screenHasFocus = useIsFocused();
 
-  const onSelectStopPlaceRef = useRef(onSelectStopPlace);
-
   useDoOnceWhen(
     setCurrentLocationAsFromIfEmpty,
     Boolean(currentLocation) && screenHasFocus,
@@ -84,9 +82,9 @@ export const NearbyStopPlacesScreenComponent = ({
         location?.resultType === 'favorite') &&
       location?.layer === 'venue'
     ) {
-      onSelectStopPlaceRef.current(location);
+      onSelectStopPlace(location);
     }
-  }, [location]);
+  }, [location, onSelectStopPlace]);
 
   function setCurrentLocationAsFrom() {
     onUpdateLocation(
