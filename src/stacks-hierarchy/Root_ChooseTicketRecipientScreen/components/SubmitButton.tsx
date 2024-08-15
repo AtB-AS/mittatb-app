@@ -99,7 +99,11 @@ export const SubmitButton = ({
       setIsSubmitting(false);
 
       if (accountId) {
-        onSubmit({accountId, name, phoneNumber: fullPhoneNumber});
+        onSubmit({
+          accountId,
+          name: settingName ? name : undefined,
+          phoneNumber: fullPhoneNumber,
+        });
       } else {
         onError('no_associated_account');
       }
