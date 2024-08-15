@@ -348,6 +348,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           publicCode={publicCode}
           interchangeDetails={interchangeDetails}
           maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
+          staySeated={leg.interchangeTo?.staySeated}
         />
       )}
     </>
@@ -515,18 +516,27 @@ type InterchangeSectionProps = {
   publicCode: string;
   interchangeDetails: InterchangeDetails;
   maximumWaitTime?: number;
+  staySeated?: boolean;
 };
 function InterchangeSection({
   iconColor,
   publicCode,
   interchangeDetails,
   maximumWaitTime,
+  staySeated,
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
 
   let text = '';
-  if (publicCode) {
+  if (publicCode && staySeated) {
+    text = t(
+      TripDetailsTexts.messages.lineChangeStaySeated(
+        interchangeDetails.publicCode,
+        publicCode,
+      ),
+    );
+  } else if (publicCode) {
     text = t(
       TripDetailsTexts.messages.interchange(
         publicCode,
