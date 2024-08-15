@@ -1,15 +1,11 @@
 import {useTheme} from '@atb/theme';
 import {
-  flatStaticColors,
-  isStaticColor,
-  isStatusColor,
-  Mode,
+  ContrastColor,
   Theme,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {View} from 'react-native';
-import type {IconColor} from './types';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
@@ -18,8 +14,8 @@ import React from 'react';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: IconColor;
-  size?: keyof Theme['icon']['size'];
+  colorType?: ContrastColor;
+  size?: keyof Theme['Icon']['Size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
 } & SvgProps;
@@ -27,21 +23,21 @@ export type ThemeIconProps = {
 export const ThemeIcon = ({
   svg,
   colorType,
-  size = 'normal',
+  size = "Medium",
   fill,
   notification,
   style,
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element => {
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
-  const fillToUse = fill || getFill(theme, themeName, colorType);
+  const fillToUse = fill || colorType?.Background;
 
   const fontScale = useFontScale();
   const iconSize = allowFontScaling
-    ? theme.icon.size[size] * fontScale
-    : theme.icon.size[size];
+    ? theme.Icon.Size[size] * fontScale
+    : theme.Icon.Size[size];
 
   const settings = {
     fill: fillToUse,
@@ -61,15 +57,3 @@ export const ThemeIcon = ({
     </View>
   );
 };
-
-function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
-  if (colorType && typeof colorType !== 'string') {
-    return colorType.text;
-  } else if (isStatusColor(colorType)) {
-    return theme.status[colorType].primary.background;
-  } else if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType].text;
-  } else {
-    return theme.text.colors[colorType ?? 'primary'];
-  }
-}

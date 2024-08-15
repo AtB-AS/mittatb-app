@@ -7,7 +7,7 @@ import {BenefitImageAsset} from '@atb/mobility/components/BenefitImage';
 import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {toFormFactorEnum} from '@atb/mobility/utils';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
@@ -22,6 +22,7 @@ export const MobilityBenefitsInfoSectionItem = ({
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const { theme } = useTheme();
 
   const accessibilityLabel =
     t(MobilityTexts.includedWithTheTicket) +
@@ -47,7 +48,7 @@ export const MobilityBenefitsInfoSectionItem = ({
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox
-        backgroundColor="background_0"
+        backgroundColor={theme.Background[0]}
         type="large"
         style={styles.borderedInfoBox}
       >
@@ -91,9 +92,9 @@ const BenefitInfo = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const fontScale = useFontScale();
   return {
-    borderedInfoBox: {marginTop: theme.spacings.small},
-    borderedInfoBoxContent: {gap: theme.spacings.small},
-    benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.spacings.small},
+    borderedInfoBox: {marginTop: theme.Spacing.Small},
+    borderedInfoBoxContent: {gap: theme.Spacing.Small},
+    benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.Spacing.Small},
     formFactorsContainer: {height: 18 * fontScale, width: 28 * fontScale},
     benefitText: {flex: 1},
   };

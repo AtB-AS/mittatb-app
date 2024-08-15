@@ -1,10 +1,10 @@
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {useChatUnreadCount} from './use-chat-unread-count';
-import {StaticColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
@@ -13,11 +13,12 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 
 export const useChatIcon = (
-  color?: StaticColor | TextColor,
+  color?: ContrastColor,
   testID?: string,
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
+  const { theme } = useTheme();
   const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
@@ -41,7 +42,7 @@ export const useChatIcon = (
           notification={
             unreadCount
               ? {
-                  color: 'valid',
+                  color: theme.Status.Success.Primary,
                   backgroundColor: color,
                 }
               : undefined
@@ -60,6 +61,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.Border.Radius.Medium,
   },
 }));

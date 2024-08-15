@@ -14,14 +14,6 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react-native';
-import {Mode} from '@atb-as/theme';
-import {
-  InteractiveColor,
-  StaticColor,
-  getStaticColor,
-  isStaticColor,
-  themes,
-} from '@atb/theme/colors';
 
 type BorderedInfoBoxMetaProps = BorderedInfoBoxProps & ThemedStoryProps;
 
@@ -55,11 +47,11 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
                 <ThemeIcon
                   svg={Info}
                   style={{marginRight: 4}}
-                  colorType={getColor(args.theme, args.backgroundColor)}
+                  colorType={args.backgroundColor}
                 />
                 <ThemeText
                   type="body__tertiary"
-                  color={getColor(args.theme, args.backgroundColor)}
+                  color={args.backgroundColor}
                   style={{flex: 1}}
                 >
                   This is a large box with custom child component. Can have
@@ -73,17 +65,6 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
     ),
     ThemedStoryDecorator,
   ],
-};
-
-const getColor = (
-  theme: Mode,
-  backgroundColor: StaticColor | InteractiveColor,
-) => {
-  if (isStaticColor(backgroundColor)) {
-    return getStaticColor(theme, backgroundColor);
-  } else {
-    return themes[theme].interactive[backgroundColor]?.default;
-  }
 };
 
 export default BorderedInfoBoxMeta;

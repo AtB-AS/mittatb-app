@@ -1,9 +1,3 @@
-import {
-  flatStaticColors,
-  InteractiveColor,
-  isStaticColor,
-  StaticColor,
-} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
@@ -14,7 +8,7 @@ import {ContrastColor} from '@atb-as/theme';
 export type BorderedInfoBoxProps =
   | {
       /** The background color of the component where this box is placed */
-      backgroundColor: StaticColor | InteractiveColor;
+      backgroundColor: ContrastColor;
       type: 'large' | 'small';
       style?: StyleProp<ViewStyle>;
       testID?: string;
@@ -33,12 +27,11 @@ export const BorderedInfoBox = ({
   testID,
   ...props
 }: BorderedInfoBoxProps) => {
-  const contrastColor = useContrastColor(backgroundColor);
-  const styles = useStyles(type, contrastColor.text);
+  const styles = useStyles(type, backgroundColor.Foreground.Primary);
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={contrastColor} testID={testID}>
+        <ThemeText type="body__tertiary" color={backgroundColor} testID={testID}>
           {props.text}
         </ThemeText>
       ) : (
@@ -48,29 +41,16 @@ export const BorderedInfoBox = ({
   );
 };
 
-/**
- * Find the contrast color to use, based on given static or interactive color
- */
-function useContrastColor(
-  backgroundColor: BorderedInfoBoxProps['backgroundColor'],
-): ContrastColor {
-  const {theme, themeName} = useTheme();
-  if (isStaticColor(backgroundColor)) {
-    return flatStaticColors[themeName][backgroundColor];
-  }
-  return theme.interactive[backgroundColor].default;
-}
-
 const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
       borderColor: addOpacity(textColor, 0.1),
-      borderWidth: theme.border.width.slim,
-      borderRadius: theme.border.radius.regular,
+      borderWidth: theme.Border.Width.Slim,
+      borderRadius: theme.Border.Radius.Medium,
       paddingHorizontal:
-        type === 'large' ? theme.spacings.medium : theme.spacings.small,
+        type === 'large' ? theme.Spacing.Medium : theme.Spacing.Small,
       paddingVertical:
-        type === 'large' ? theme.spacings.medium : theme.spacings.xSmall,
+        type === 'large' ? theme.Spacing.Medium : theme.Spacing.xSmall,
       width: type === 'large' ? '100%' : undefined,
       alignSelf: 'flex-start',
     },
