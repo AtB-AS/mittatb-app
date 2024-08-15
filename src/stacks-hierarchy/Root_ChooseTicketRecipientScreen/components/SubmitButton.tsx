@@ -2,7 +2,6 @@ import {
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
 import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -19,9 +18,7 @@ import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
-import {useQueryClient} from '@tanstack/react-query';
-import {useAuthState} from '@atb/auth';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 export const SubmitButton = ({
   state: {settingPhone, settingName, recipient, phone, prefix, name, error},
@@ -37,10 +34,9 @@ export const SubmitButton = ({
   const styles = useStyles();
   const {themeName} = useTheme();
   const {t} = useTranslation();
-  const queryClient = useQueryClient();
-  const {userId} = useAuthState();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {data: recipients} = useFetchOnBehalfOfAccountsQuery({enabled: true});
 
   const onPress = async () => {
     if (recipient) {
@@ -74,11 +70,6 @@ export const SubmitButton = ({
       onError('invalid_phone');
       return;
     }
-
-    const recipients = queryClient.getQueryData<OnBehalfOfAccountType[]>([
-      FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY,
-      userId,
-    ]);
 
     const phoneAlreadyExists = recipients?.some(
       (r) => r.phoneNumber === fullPhoneNumber,
