@@ -162,7 +162,6 @@ export const NearbyStopPlacesScreenComponent = ({
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
           <RefreshControl
-            progressViewOffset={90}
             refreshing={Platform.OS === 'ios' ? false : isLoading}
             onRefresh={refresh}
           />
