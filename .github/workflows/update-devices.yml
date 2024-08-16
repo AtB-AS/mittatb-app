@@ -11,40 +11,23 @@ on:
           - fram
           - nfk
 jobs:
-  update-devices:
-    name: Update new devices and provisioning profiles
-    strategy:
-      fail-fast: false
-      matrix:
-        type: [development, adhoc]
-    environment: ${{ inputs.org }}
-    timeout-minutes: 180
+  update-devices-development:
+    name: Update new devices and provisioning profiles for development
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout project
-        uses: actions/checkout@v3
-      - name: Set global env vars
-        run: echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-      - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Copy Development files
-        if: ${{ matrix.type=='development'}}
-        run: cp env/${{ inputs.org }}/dev/.env fastlane/.env.default
-      - name: Copy Adhoc files
-        if: ${{ matrix.type=='adhoc'}}
-        run: cp env/${{ inputs.org }}/staging/.env fastlane/.env.default
-      - name: Setup ruby and bundle install
-        uses: ruby/setup-ruby@v1
+      - name: development
+        uses: ./.github/actions/ios-build-setup
         with:
-          ruby-version: '2.7.6'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Update devices and provisioning profiles
-        run: |
-          echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
-          bundle exec fastlane ios update_devices
-        env:
-          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-          FASTLANE_MATCH_TYPE: ${{ matrix.type }}
-          MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
+          app-environment: development
+          app-org: ${{ inputs.org }}
+
+  update-devices-adhoc:
+    name: adhoc
+    needs: update-devices-development
+    runs-on: ubuntu-latest
+    steps:
+      - name: adhoc
+        uses: ./.github/actions/ios-build-setup
+        with:
+          app-environment: adhoc
+          app-org: ${{ inputs.org }}
