@@ -31,6 +31,7 @@ jobs:
     name: adhoc
     needs: update-devices-development
     runs-on: ubuntu-latest
+    environment: ${{ inputs.org }}
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
