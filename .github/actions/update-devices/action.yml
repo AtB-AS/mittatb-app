@@ -16,6 +16,10 @@ inputs:
   match-deploy-key:
     description: "The Match deploy key"
     required: true
+  ruby-version:
+    description: "The ruby version to use"
+    default: "2.7.6"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -36,10 +40,10 @@ runs:
         if: ${{ inputs.app-environment=='adhoc' }}
         run: cp env/${{ inputs.app-org }}/staging/.env fastlane/.env.default
       - name: Setup ruby and bundle install
-        shell: bash
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7.6'
+          ruby-version: ${{ inputs.ruby-version }}
+          cache-version: 1
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Update devices and provisioning profiles
         shell: bash
