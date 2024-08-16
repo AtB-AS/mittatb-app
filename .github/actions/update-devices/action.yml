@@ -28,9 +28,11 @@ runs:
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
       - name: Copy Development files
+        shell: bash
         if: ${{ inputs.app-environment=='development' }}
         run: cp env/${{ inputs.app-org }}/dev/.env fastlane/.env.default
       - name: Copy Adhoc files
+        shell: bash
         if: ${{ inputs.app-environment=='adhoc' }}
         run: cp env/${{ inputs.app-org }}/staging/.env fastlane/.env.default
       - name: Setup ruby and bundle install
