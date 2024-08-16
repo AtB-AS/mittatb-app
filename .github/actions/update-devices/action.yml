@@ -10,8 +10,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-      - name: Checkout project
-        uses: actions/checkout@v3
       - name: Set global env vars
         run: echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
       - name: Decrypt env files
