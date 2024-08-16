@@ -10,6 +10,7 @@ on:
           - atb
           - fram
           - nfk
+          - troms
 jobs:
   update-devices-development:
     name: development
