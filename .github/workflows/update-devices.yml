@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       org:
-        description: 'App organization to update provisioning profiles'
+        description: 'App organization to update devices for'
         required: true
         type: choice
         options:
@@ -12,11 +12,11 @@ on:
           - nfk
 jobs:
   update-devices-development:
-    name: Update new devices and provisioning profiles for development
+    name: development
     runs-on: ubuntu-latest
     steps:
       - name: development
-        uses: ./.github/actions/ios-build-setup
+        uses: ./.github/actions/update-devices
         with:
           app-environment: development
           app-org: ${{ inputs.org }}
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: adhoc
-        uses: ./.github/actions/ios-build-setup
+        uses: ./.github/actions/update-devices
         with:
           app-environment: adhoc
           app-org: ${{ inputs.org }}
