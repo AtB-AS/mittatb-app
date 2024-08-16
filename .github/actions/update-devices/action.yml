@@ -1,5 +1,5 @@
 name: Update devices
-description: 'Updates devices and provisioning profiles for development and adhoc environments'
+description: 'Updates devices and provisioning profile'
 inputs:
   app-environment:
     default: "adhoc"
