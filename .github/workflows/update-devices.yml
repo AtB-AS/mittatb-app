@@ -15,6 +15,8 @@ jobs:
     name: development
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
       - name: development
         uses: ./.github/actions/update-devices
         with:
@@ -26,6 +28,8 @@ jobs:
     needs: update-devices-development
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
       - name: adhoc
         uses: ./.github/actions/update-devices
         with:
