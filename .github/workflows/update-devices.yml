@@ -22,6 +22,9 @@ jobs:
         with:
           app-environment: development
           app-org: ${{ inputs.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          app-store-connect-api-key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          match-deploy-key: ${{ secrets.MATCH_DEPLOY_KEY }}
 
   update-devices-adhoc:
     name: adhoc
@@ -35,3 +38,6 @@ jobs:
         with:
           app-environment: adhoc
           app-org: ${{ inputs.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          app-store-connect-api-key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          match-deploy-key: ${{ secrets.MATCH_DEPLOY_KEY }}
