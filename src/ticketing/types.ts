@@ -124,29 +124,46 @@ export type PaymentResponse = {
 export type FlexDiscountLadder = {
   current: number;
   steps: {
-    expires: string;
+    expires?: string;
     discount: number; // The discount percentage
   }[];
 };
 
 export type OfferPrice = {
-  amount?: string;
+  amount: string;
   amount_float?: number;
   currency: string;
   vat_group?: string;
   tax_amount?: string;
-  original_amount?: string;
+  original_amount: string;
   original_amount_float?: number;
   original_tax_amount?: string;
+};
+
+enum RouteType {
+  Zones,
+  StopPlaces,
+  Authority,
+}
+
+type Route = {
+  type: RouteType;
+  from?: string;
+  to?: string;
 };
 
 export type Offer = {
   offer_id: string;
   traveller_id: string;
+  route?: Route;
+  user_profile_id?: string;
+  user_profile_ids: string[];
   prices: OfferPrice[];
+  fare_product?: string;
   flex_discount_ladder?: FlexDiscountLadder;
-  valid_from: string;
-  valid_to: string;
+  valid_from?: string;
+  valid_to?: string;
+  should_start_now: boolean;
 };
 
 export type OfferSearchResponse = Offer[];
