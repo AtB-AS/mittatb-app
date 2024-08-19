@@ -30,10 +30,11 @@ export function useOfferDefaults(
   toPlace?: TariffZoneWithMetadata | StopPlaceFragment,
 ) {
   const {data: fareProducts} = useGetFareProductsQuery();
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {tariffZones, userProfiles, preassignedFareProducts} =
+    useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
-  // Get default PreassignedFareProduct
+  // Get default PreassignedFareProduct alternatives
   const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = fareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
@@ -42,6 +43,14 @@ export function useOfferDefaults(
     useDefaultPreassignedFareProduct(selectableProducts);
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? defaultFareProduct;
+  const defaultPreassignedFareProductAlternatives = useMemo(() => {
+    const productAliasId = defaultPreassignedFareProduct.productAliasId;
+    return productAliasId
+      ? preassignedFareProducts.filter(
+          (fp) => fp.productAliasId === productAliasId,
+        )
+      : [defaultPreassignedFareProduct];
+  }, [defaultPreassignedFareProduct, preassignedFareProducts]);
 
   // Check for whitelisted zones
   const allowedTariffZoneRefs =
@@ -84,7 +93,8 @@ export function useOfferDefaults(
   );
 
   return {
-    preassignedFareProduct: defaultPreassignedFareProduct,
+    preassignedFareProductAlternatives:
+      defaultPreassignedFareProductAlternatives,
     selectableTravellers: defaultSelectableTravellers,
     fromPlace: defaultFromPlace,
     toPlace: defaultToPlace,

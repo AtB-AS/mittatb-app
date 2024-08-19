@@ -21,7 +21,7 @@ import {
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes, parseISO} from 'date-fns';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -122,6 +122,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const isOnBehalfOf = !!recipient;
 
+  const preassignedFareProductAlternatives = useMemo(
+    () => [preassignedFareProduct],
+    [preassignedFareProduct],
+  );
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -132,7 +137,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     offerEndpoint,
-    preassignedFareProduct,
+    preassignedFareProductAlternatives,
     fromPlace,
     toPlace,
     userProfilesWithCount,

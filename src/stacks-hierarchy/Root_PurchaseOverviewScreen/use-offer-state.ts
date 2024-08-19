@@ -1,10 +1,6 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
+import {PreassignedFareProduct, TariffZone} from '@atb/configuration';
 import {
   FlexDiscountLadder,
   Offer,
@@ -170,14 +166,13 @@ const initialState: OfferState = {
 
 export function useOfferState(
   offerEndpoint: 'zones' | 'authority' | 'stop-places',
-  preassignedFareProduct: PreassignedFareProduct,
+  preassignedFareProductAlternatives: PreassignedFareProduct[],
   fromPlace: TariffZone | StopPlaceFragmentWithIsFree,
   toPlace: TariffZone | StopPlaceFragmentWithIsFree,
   userProfilesWithCount: UserProfileWithCount[],
   isOnBehalfOf: boolean = false,
   travelDate?: string,
 ) {
-  const {preassignedFareProducts} = useFirestoreConfiguration();
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const zones = useMemo(
@@ -212,13 +207,6 @@ export function useOfferState(
             return;
           }
 
-          const productAliasId = preassignedFareProduct.productAliasId;
-          const productAlternatives = productAliasId
-            ? preassignedFareProducts.filter(
-                (fp) => fp.productAliasId === productAliasId,
-              )
-            : [preassignedFareProduct];
-
           const placeParams =
             offerEndpoint === 'stop-places'
               ? {from: fromPlace.id, to: toPlace.id}
@@ -227,7 +215,7 @@ export function useOfferState(
             ...placeParams,
             is_on_behalf_of: isOnBehalfOf,
             travellers: offerTravellers,
-            products: productAlternatives.map((p) => p?.id),
+            products: preassignedFareProductAlternatives.map((p) => p.id),
             travel_date: travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
@@ -266,7 +254,7 @@ export function useOfferState(
     [
       dispatch,
       userProfilesWithCount,
-      preassignedFareProduct,
+      preassignedFareProductAlternatives,
       offerEndpoint,
       zones,
       travelDate,
@@ -284,7 +272,7 @@ export function useOfferState(
     dispatch,
     updateOffer,
     userProfilesWithCount,
-    preassignedFareProduct,
+    preassignedFareProductAlternatives,
     zones,
     travelDate,
   ]);

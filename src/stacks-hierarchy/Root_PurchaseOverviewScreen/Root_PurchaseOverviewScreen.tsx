@@ -48,14 +48,18 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? 'isFree' in params.toPlace && !!params.toPlace.isFree
     : false;
 
-  const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
-    useOfferDefaults(
-      params.preassignedFareProduct,
-      params.fareProductTypeConfig.type,
-      params.userProfilesWithCount,
-      params.fromPlace,
-      params.toPlace,
-    );
+  const {
+    preassignedFareProductAlternatives,
+    selectableTravellers,
+    fromPlace,
+    toPlace,
+  } = useOfferDefaults(
+    params.preassignedFareProduct,
+    params.fareProductTypeConfig.type,
+    params.userProfilesWithCount,
+    params.fromPlace,
+    params.toPlace,
+  );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
     navigation.setParams({
@@ -114,13 +118,18 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     offerEndpoint,
-    preassignedFareProduct,
+    preassignedFareProductAlternatives,
     fromPlace,
     toPlace,
     travellerSelection,
     isOnBehalfOfToggle,
     travelDate,
   );
+
+  const preassignedFareProduct =
+    preassignedFareProductAlternatives.find(
+      (p) => p.id === userProfilesWithCountAndOffer[0]?.offer.fare_product,
+    ) ?? preassignedFareProductAlternatives[0];
 
   const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
     {
