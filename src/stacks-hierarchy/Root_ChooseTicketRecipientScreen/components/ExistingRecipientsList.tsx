@@ -13,6 +13,7 @@ import {animateNextChange} from '@atb/utils/animation.ts';
 import {screenReaderPause} from '@atb/components/text';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 export const ExistingRecipientsList = ({
   state: {recipient},
@@ -81,7 +82,7 @@ export const ExistingRecipientsList = ({
         <RadioGroupSection
           items={recipientsQuery.data}
           itemToText={(i) => i.name}
-          itemToSubtext={(i) => i.phoneNumber}
+          itemToSubtext={(i) => formatPhoneNumber(i.phoneNumber)}
           itemToA11yLabel={(i) =>
             i.name +
             screenReaderPause +

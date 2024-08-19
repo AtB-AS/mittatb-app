@@ -25,7 +25,6 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
@@ -46,6 +45,7 @@ import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -88,7 +88,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
-  const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
+  const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
   const {enable_vipps_login} = useRemoteConfig();
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
 
@@ -123,9 +123,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                 </ThemeText>
-                <ThemeText type="body__secondary" color="secondary">
-                  {phoneNumber?.formatInternational()}
-                </ThemeText>
+                {phoneNumber && (
+                  <ThemeText type="body__secondary" color="secondary">
+                    {phoneNumber}
+                  </ThemeText>
+                )}
               </GenericSectionItem>
             )}
             {customerNumber && (

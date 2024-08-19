@@ -11,12 +11,12 @@ import {useAuthState} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import parsePhoneNumber from 'libphonenumber-js';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -53,9 +53,7 @@ export const Profile_EditProfileScreen = ({
   const isLoadingOrSubmittingProfile =
     isLoadingUpdateProfile || isLoadingGetProfile;
 
-  const phoneNumber = parsePhoneNumber(
-    authPhoneNumber ?? '',
-  )?.formatInternational();
+  const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
 
   const onSubmit = async () => {
     if (isValidEmail(email) || email === '') {
@@ -198,18 +196,20 @@ export const Profile_EditProfileScreen = ({
                   />
                 </Section>
               )}
-              <View style={styles.phone}>
-                <ThemeText>
-                  {t(EditProfileTexts.personalDetails.phone.header)}
-                </ThemeText>
-                <ThemeText type="body__secondary" color="secondary">
-                  {t(
-                    EditProfileTexts.personalDetails.phone.loggedIn(
-                      phoneNumber,
-                    ),
-                  )}
-                </ThemeText>
-              </View>
+              {phoneNumber && (
+                <View style={styles.phone}>
+                  <ThemeText>
+                    {t(EditProfileTexts.personalDetails.phone.header)}
+                  </ThemeText>
+                  <ThemeText type="body__secondary" color="secondary">
+                    {t(
+                      EditProfileTexts.personalDetails.phone.loggedIn(
+                        phoneNumber,
+                      ),
+                    )}
+                  </ThemeText>
+                </View>
+              )}
 
               <View style={styles.submitSection}>
                 <Button
@@ -244,13 +244,15 @@ export const Profile_EditProfileScreen = ({
             <ThemeText>
               {t(EditProfileTexts.profileInfo.loginProvider)}
             </ThemeText>
-            <ThemeText
-              type="body__secondary"
-              color="secondary"
-              style={styles.profileItem}
-            >
-              {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
-            </ThemeText>
+            {phoneNumber && (
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                style={styles.profileItem}
+              >
+                {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
+              </ThemeText>
+            )}
             {customerNumber && (
               <>
                 <ThemeText>
