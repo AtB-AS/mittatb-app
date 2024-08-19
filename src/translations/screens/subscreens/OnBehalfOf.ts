@@ -56,7 +56,7 @@ const OnBehalfOfTexts = {
     ),
     too_long_recipient_name: _(
       'Navnet er for langt',
-      'Name is too long',
+      'The name is too long',
       'Namnet er for langt',
     ),
     name_already_exists: _(
