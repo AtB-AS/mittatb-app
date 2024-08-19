@@ -35,6 +35,7 @@ import {
   significantWaitTime,
   significantWalkTime,
   TimeValues,
+  filterNotices,
 } from '../utils';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
@@ -113,6 +114,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
   const notices = getNoticesForLeg(leg);
+  const toEstimatedCallNotices = filterNotices([
+    ...(leg.toEstimatedCall?.notices || []),
+  ]);
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
@@ -341,6 +345,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </ThemeText>
           </TripRow>
         )}
+        {toEstimatedCallNotices.map((notice) => (
+          <TripRow key={notice.id}>
+            <MessageInfoBox type="info" message={notice.text} />
+          </TripRow>
+        ))}
       </View>
       {showInterchangeSection && (
         <InterchangeSection
