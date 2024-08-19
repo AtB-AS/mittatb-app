@@ -39,6 +39,7 @@ import {FareContractHarborStopPlaces} from './components/FareContractHarborStopP
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 export type FareContractInfoProps = {
   travelRight: NormalTravelRight;
@@ -124,7 +125,9 @@ export const FareContractInfoHeader = ({
         <MessageInfoText
           type="warning"
           message={t(
-            FareContractTexts.details.sentTo(recipientName || phoneNumber),
+            FareContractTexts.details.sentTo(
+              recipientName || formatPhoneNumber(phoneNumber),
+            ),
           )}
         />
       )}

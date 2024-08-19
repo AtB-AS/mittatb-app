@@ -45,6 +45,7 @@ import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -311,7 +312,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   >
                     {t(
                       PurchaseConfirmationTexts.sendingTo(
-                        recipient.name || recipient.phoneNumber,
+                        recipient.name ||
+                          formatPhoneNumber(recipient.phoneNumber),
                       ),
                     )}
                   </ThemeText>

@@ -47,6 +47,7 @@ import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useIsActivateTicketNowEnabled} from '../use-is-activate-now-enabled';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 type Props = {
   fareContract: FareContract;
@@ -203,7 +204,9 @@ export const DetailsContent: React.FC<Props> = ({
           <MessageInfoText
             type="info"
             message={t(
-              FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
+              FareContractTexts.details.purchasedBy(
+                formatPhoneNumber(purchaserPhoneNumber),
+              ),
             )}
           />
         </GenericSectionItem>
