@@ -59,13 +59,13 @@ const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
   const offersForTraveller = offers.filter(
     (o) => o.traveller_id === userTypeString,
   );
+
+  // If there are multiple offers for the same traveller, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
   const offersSortedByPrice = offersForTraveller.sort(
     (a, b) =>
       getCurrencyAsFloat(a.prices, 'NOK') - getCurrencyAsFloat(b.prices, 'NOK'),
   );
-
-  // If there are multiple offers for the same traveller, use the cheapest one.
-  // This shouldn't happen in practice, but it's a sensible fallback.
   return offersSortedByPrice[0];
 };
 
@@ -98,13 +98,10 @@ const mapToUserProfilesWithCountAndOffer = (
   offers: Offer[],
 ): UserProfileWithCountAndOffer[] =>
   userProfileWithCounts
-    .map((u) => {
-      const offer = getOfferForTraveller(offers, u.userTypeString);
-      return {
-        ...u,
-        offer: offer,
-      };
-    })
+    .map((u) => ({
+      ...u,
+      offer: getOfferForTraveller(offers, u.userTypeString),
+    }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
 const getOfferReducer =
@@ -206,7 +203,6 @@ export function useOfferState(
             dispatch({type: 'CLEAR_OFFER'});
             return;
           }
-
           const placeParams =
             offerEndpoint === 'stop-places'
               ? {from: fromPlace.id, to: toPlace.id}
