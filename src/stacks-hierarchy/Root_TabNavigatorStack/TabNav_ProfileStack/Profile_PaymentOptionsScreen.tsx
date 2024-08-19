@@ -13,7 +13,7 @@ import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScree
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {RecurringPayment} from '@atb/ticketing';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
