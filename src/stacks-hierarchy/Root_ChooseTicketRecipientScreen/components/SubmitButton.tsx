@@ -88,10 +88,16 @@ export const SubmitButton = ({
       return;
     }
 
-    if (settingName && !name) {
-      setIsSubmitting(false);
-      onError('missing_recipient_name');
-      return;
+    if (settingName) {
+      if (!name) {
+        setIsSubmitting(false);
+        onError('missing_recipient_name');
+        return;
+      } else if (name.length > 30) {
+        setIsSubmitting(false);
+        onError('too_long_recipient_name');
+        return;
+      }
     }
 
     try {

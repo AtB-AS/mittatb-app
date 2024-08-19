@@ -63,6 +63,11 @@ const OnBehalfOfTexts = {
       'You need too add recipient name',
       'Du må leggja inn namn på mottakar',
     ),
+    too_long_recipient_name: _(
+      'Navnet er for langt',
+      'The name is too long',
+      'Namnet er for langt',
+    ),
     name_already_exists: _(
       'Navnet er allerede tilknyttet en annen mottaker',
       'The phone number is used for another recipient',
