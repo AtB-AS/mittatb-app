@@ -272,7 +272,7 @@ export function useOfferState(
       travelDate,
       fromPlace,
       toPlace,
-      isOnBehalfOf
+      isOnBehalfOf,
     ],
   );
 
