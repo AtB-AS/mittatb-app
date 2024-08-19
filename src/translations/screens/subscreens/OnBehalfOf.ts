@@ -33,7 +33,7 @@ const OnBehalfOfTexts = {
     'Save this recipient for later',
     'Lagre denne mottakaren til seinare',
   ),
-  deleteModal: {
+  deleteAlert: {
     title: (name: string) =>
       _(`Fjern ${name}?`, `Remove ${name}?`, `Fjern ${name}?`),
     message: _(

@@ -49,8 +49,8 @@ export const ExistingRecipientsList = ({
     }
 
     Alert.alert(
-      t(OnBehalfOfTexts.deleteModal.title(name)),
-      t(OnBehalfOfTexts.deleteModal.message),
+      t(OnBehalfOfTexts.deleteAlert.title(name)),
+      t(OnBehalfOfTexts.deleteAlert.message),
       [
         {text: t(dictionary.cancel), style: 'cancel'},
         {
