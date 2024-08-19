@@ -532,8 +532,8 @@ function InterchangeSection({
   if (publicCode && staySeated) {
     text = t(
       TripDetailsTexts.messages.lineChangeStaySeated(
-        interchangeDetails.publicCode,
         publicCode,
+        interchangeDetails.publicCode,
       ),
     );
   } else if (publicCode) {
