@@ -78,7 +78,10 @@ export const FareProducts = ({
               ? t(TicketingTexts.availableFareProducts.allTickets)
               : undefined
           }
-          key={group.transportModes.map((m) => m.mode).join('-')}
+          key={[
+            group.transportModes.map((m) => m.mode).join('-'),
+            group.heading?.[0]?.value,
+          ].join('-')}
           transportModes={group.transportModes}
           fareProducts={group.fareProducts}
           onProductSelect={onProductSelect}
