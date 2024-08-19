@@ -59,16 +59,28 @@ const getValidDurationSeconds = (offer: Offer): number | undefined =>
     ? secondsBetween(offer.valid_from, offer.valid_to)
     : undefined;
 
+const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
+  const offersForTraveller = offers.filter(
+    (o) => o.traveller_id === userTypeString,
+  );
+  const offersSortedByPrice = offersForTraveller.sort(
+    (a, b) =>
+      getCurrencyAsFloat(a.prices, 'NOK') - getCurrencyAsFloat(b.prices, 'NOK'),
+  );
+
+  // If there are multiple offers for the same traveller, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
+  return offersSortedByPrice[0];
+};
+
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getCurrencyAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -78,11 +90,9 @@ const calculateOriginalPrice = (
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getOriginalPriceAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getOriginalPriceAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -93,17 +103,7 @@ const mapToUserProfilesWithCountAndOffer = (
 ): UserProfileWithCountAndOffer[] =>
   userProfileWithCounts
     .map((u) => {
-      const offerAlternatives = offers.filter(
-        (o) => o.traveller_id === u.userTypeString,
-      );
-      // If there are multiple offers for the same traveller, use the cheapest
-      // one. This shouldn't happen in practice, but it's here as a sensible
-      // fallback.
-      const offer = offerAlternatives.sort(
-        (a, b) =>
-          getCurrencyAsFloat(a.prices, 'NOK') -
-          getCurrencyAsFloat(b.prices, 'NOK'),
-      )[0];
+      const offer = getOfferForTraveller(offers, u.userTypeString);
       return {
         ...u,
         offer: offer,
