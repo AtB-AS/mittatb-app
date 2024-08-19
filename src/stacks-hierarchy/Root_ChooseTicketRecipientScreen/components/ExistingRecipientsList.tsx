@@ -1,7 +1,7 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useEffect, useLayoutEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -43,11 +43,23 @@ export const ExistingRecipientsList = ({
     }
   }, [recipientsQuery.status, recipientsQuery.data, onEmptyRecipients]);
 
-  const onDelete = ({accountId}: OnBehalfOfAccountType) => {
+  const onDelete = ({accountId, name}: OnBehalfOfAccountType) => {
     if (recipient?.accountId === accountId) {
       onSelect(undefined);
     }
-    deleteMutation.mutate(accountId);
+
+    Alert.alert(
+      t(OnBehalfOfTexts.deleteAlert.title(name)),
+      t(OnBehalfOfTexts.deleteAlert.message),
+      [
+        {text: t(dictionary.cancel), style: 'cancel'},
+        {
+          text: t(dictionary.remove),
+          style: 'destructive',
+          onPress: () => deleteMutation.mutate(accountId),
+        },
+      ],
+    );
   };
 
   return (

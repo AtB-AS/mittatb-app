@@ -118,6 +118,8 @@ const dictionary = {
     error: _('Feil', 'Error', `Feil`),
   },
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
+  cancel: _('Avbryt', 'Cancel', `Avbryt`),
+  remove: _('Fjern', 'Remove', `Fjern`),
   seeMore: _('Vis mer', 'See more', `Vis meir`),
   readMore: _('Les mer', 'Read more', `Les meir`),
   loading: _('Laster…', 'Loading…', `Lastar…`),

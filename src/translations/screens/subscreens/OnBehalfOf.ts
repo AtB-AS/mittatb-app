@@ -33,6 +33,15 @@ const OnBehalfOfTexts = {
     'Save this recipient for later',
     'Lagre denne mottakaren til seinare',
   ),
+  deleteAlert: {
+    title: (name: string) =>
+      _(`Fjern ${name}?`, `Remove ${name}?`, `Fjern ${name}?`),
+    message: _(
+      'Er du sikker på at du vil fjerne denne mottakeren?',
+      'Are you sure you want to remove this recipient?',
+      'Er du sikker på at du vil fjerne denne mottakaren?',
+    ),
+  },
   errors: {
     fetch_recipients_failed: _(
       'Kunne ikke laste mottakere',
