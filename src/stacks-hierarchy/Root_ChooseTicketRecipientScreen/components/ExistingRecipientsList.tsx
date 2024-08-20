@@ -19,11 +19,13 @@ export const ExistingRecipientsList = ({
   state: {recipient},
   onSelect,
   onEmptyRecipients,
+  onDelete,
   themeColor,
 }: {
   state: RecipientSelectionState;
   onSelect: (r?: OnBehalfOfAccountType) => void;
   onEmptyRecipients: () => void;
+  onDelete: () => void;
   themeColor: StaticColor;
 }) => {
   const styles = useStyles();
@@ -36,7 +38,8 @@ export const ExistingRecipientsList = ({
 
   useLayoutEffect(() => {
     if (deleteMutation.status !== 'idle') animateNextChange();
-  }, [deleteMutation.status]);
+    if (deleteMutation.status === 'success') onDelete();
+  }, [deleteMutation.status, onDelete]);
 
   useEffect(() => {
     if (recipientsQuery.status === 'success' && !recipientsQuery.data.length) {
@@ -44,7 +47,7 @@ export const ExistingRecipientsList = ({
     }
   }, [recipientsQuery.status, recipientsQuery.data, onEmptyRecipients]);
 
-  const onDelete = ({accountId, name}: OnBehalfOfAccountType) => {
+  const onDeletePress = ({accountId, name}: OnBehalfOfAccountType) => {
     if (recipient?.accountId === accountId) {
       onSelect(undefined);
     }
@@ -111,7 +114,7 @@ export const ExistingRecipientsList = ({
             icon: (props) => (
               <Delete {...props} fill={theme.status.error.primary.background} />
             ),
-            onPress: () => onDelete(item),
+            onPress: () => onDeletePress(item),
             isLoading: activeDeletions.includes(item.accountId),
           })}
         />

@@ -3,7 +3,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
-import {useCallback} from 'react';
+import {useCallback, useRef} from 'react';
 import {KeyboardAvoidingView, RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {animateNextChange} from '@atb/utils/animation.ts';
@@ -16,6 +16,7 @@ import {TitleAndDescription} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipi
 import {useQueryClient} from '@tanstack/react-query';
 import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton.tsx';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {giveFocus} from '@atb/utils/use-focus-on-load.ts';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -32,12 +33,14 @@ export const Root_ChooseTicketRecipientScreen = ({
 
   const queryClient = useQueryClient();
 
+  const onDeleteRef = useRef();
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(OnBehalfOfTexts.chooseReceiver.header)}
-        setFocusOnLoad={false}
+        setFocusOnLoad={true}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView
@@ -56,7 +59,7 @@ export const Root_ChooseTicketRecipientScreen = ({
             />
           }
         >
-          <TitleAndDescription themeColor={themeColor} />
+          <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
 
           <ExistingRecipientsList
             state={state}
@@ -68,6 +71,7 @@ export const Root_ChooseTicketRecipientScreen = ({
               animateNextChange();
               dispatch({type: 'SELECT_SEND_TO_OTHER'});
             }, [dispatch])}
+            onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
             themeColor={themeColor}
           />
           <SendToOtherButton
