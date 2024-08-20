@@ -5,19 +5,21 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
-import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {getReferenceDataName} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {daysInWeek} from '@atb/utils/date';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import { Theme } from '@atb-as/theme';
+
+const getInteractiveColor = (theme: Theme) => theme.interactive[2];
 
 export const TicketSummary = () => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
-  const interactiveColor = theme.Interactive[2];
+  const interactiveColor = getInteractiveColor(theme);
 
   const {recommendedTicketSummary, inputParams} = useTicketAssistantState();
   if (!recommendedTicketSummary) return null;
@@ -127,7 +129,7 @@ export const TicketSummary = () => {
           <View style={styles.productName} testID="Title">
             <ThemeText
               type="body__secondary--bold"
-              color={interactiveColor.Default}
+              color={interactiveColor.default}
               accessibilityLabel={ticketName}
             >
               {ticketName}
@@ -141,7 +143,7 @@ export const TicketSummary = () => {
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
               <BorderedInfoBox
-                backgroundColor={interactiveColor.Default}
+                backgroundColor={interactiveColor.default}
                 type="small"
                 style={styles.infoChip}
                 text={travellerName}
@@ -153,7 +155,7 @@ export const TicketSummary = () => {
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
               <BorderedInfoBox
-                backgroundColor={interactiveColor.Default}
+                backgroundColor={interactiveColor.default}
                 type="small"
                 style={styles.infoChip}
                 text={zonesString}
@@ -162,12 +164,12 @@ export const TicketSummary = () => {
           </View>
         </View>
         <View accessible={true} style={styles.ticketFooter}>
-          <ThemeText type="body__secondary" color={interactiveColor.Outline}>
+          <ThemeText type="body__secondary" color={interactiveColor.outline}>
             {t(TicketAssistantTexts.summary.price)}
           </ThemeText>
           <ThemeText
             type="body__secondary--bold"
-            color={interactiveColor.Outline}
+            color={interactiveColor.outline}
           >
             {ticketPriceString}
           </ThemeText>
@@ -189,54 +191,54 @@ export const TicketSummary = () => {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   ticketContainer: {
-    marginHorizontal: theme.Spacing.Large,
-    backgroundColor: theme.Interactive[2].Default.Background,
-    borderRadius: theme.Border.Radius.Medium,
+    marginHorizontal: theme.spacing.large,
+    backgroundColor: getInteractiveColor(theme).default.background,
+    borderRadius: theme.border.radius.medium,
     overflow: 'hidden',
   },
   transportModes: {
     flex: 2,
   },
   upperPart: {
-    padding: theme.Spacing.xLarge,
+    padding: theme.spacing.xLarge,
     flexGrow: 1,
     minWidth: '60%',
   },
   travelModeWrapper: {
     flexShrink: 1,
-    marginBottom: theme.Spacing.Medium,
+    marginBottom: theme.spacing.medium,
   },
   transportationIcon: {
-    marginRight: theme.Spacing.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   productName: {
-    marginBottom: theme.Spacing.Medium,
+    marginBottom: theme.spacing.medium,
   },
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    gap: theme.Spacing.Large,
+    gap: theme.spacing.large,
   },
   infoChip: {
-    marginVertical: theme.Spacing.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   infoChip_travellers: {
-    marginRight: theme.Spacing.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   additionalCategories: {
-    marginHorizontal: theme.Spacing.Small,
-    marginVertical: theme.Spacing.xSmall,
+    marginHorizontal: theme.spacing.small,
+    marginVertical: theme.spacing.xSmall,
   },
   ticketFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.Spacing.xLarge,
-    paddingVertical: theme.Spacing.Medium,
-    backgroundColor: theme.Background.Accent[1].Background,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingVertical: theme.spacing.medium,
+    backgroundColor: theme.background.accent[1].background,
   },
   savingsText: {
     textAlign: 'center',
-    paddingVertical: theme.Spacing.Large,
+    paddingVertical: theme.spacing.large,
   },
 }));

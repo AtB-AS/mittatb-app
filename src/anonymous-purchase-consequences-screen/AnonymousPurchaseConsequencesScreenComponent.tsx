@@ -13,6 +13,7 @@ import {OnboardingFullScreenView} from '@atb/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
+import {Theme} from '@atb-as/theme';
 
 type Props = {
   onPressContinueWithoutLogin: () => void;
@@ -20,17 +21,19 @@ type Props = {
   leftButton: LeftButtonProps;
 };
 
+const getThemeColor = (theme: Theme) => theme.background.accent[0]
+
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
   leftButton,
 }: Props) => {
   const styles = useStyle();
-  const { theme } = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
 
-  const themeColor = theme.Background.Accent[0];
+  const themeColor = getThemeColor(theme);
 
   const loginButton = {
     onPress: onPressLogin || (() => {}),
@@ -82,24 +85,24 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.Background.Accent[0].Background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   contentContainer: {
     flexGrow: 1,
-    marginHorizontal: theme.Spacing.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
   },
   mainContent: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   header: {
-    margin: theme.Spacing.xLarge,
+    margin: theme.spacing.xLarge,
     textAlign: 'center',
     fontWeight: '700',
   },
   button: {
-    marginHorizontal: theme.Spacing.Medium,
-    marginTop: theme.Spacing.Medium,
+    marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

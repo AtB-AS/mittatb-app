@@ -31,8 +31,6 @@ type RecentFareContractProps = {
   testID: string;
 };
 
-const interactiveColorName: InteractiveColor = 'interactive_2';
-
 export const RecentFareContractComponent = ({
   recentFareContract,
   onSelect,
@@ -53,6 +51,7 @@ export const RecentFareContractComponent = ({
   const fromZoneName = fromTariffZone?.name.value;
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
+  const interactiveColor = theme.interactive[2];
 
   const harborsQuery = useHarborsQuery();
 
@@ -130,8 +129,6 @@ export const RecentFareContractComponent = ({
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
-  const interactiveColor = theme.interactive[interactiveColorName];
-
   const showTwoWayIcon = direction === TravelRightDirection.Both;
 
   return (
@@ -140,7 +137,7 @@ export const RecentFareContractComponent = ({
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       accessibilityLabel={currentAccessibilityLabel}
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}
-      interactiveColor="interactive_2"
+      interactiveColor={interactiveColor}
       mode="spacious"
       onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
       style={{minWidth: width * 0.6}}
@@ -180,7 +177,7 @@ export const RecentFareContractComponent = ({
           {userProfilesWithCount.length <= 2 &&
             userProfilesWithCount.map((u) => (
               <BorderedInfoBox
-                backgroundColor={interactiveColorName}
+                backgroundColor={interactiveColor.default}
                 type="small"
                 key={u.id}
                 text={`${u.count} ${getReferenceDataName(u, language)}`}
@@ -196,7 +193,7 @@ export const RecentFareContractComponent = ({
                 <BorderedInfoBox
                   key={u.id}
                   type="small"
-                  backgroundColor={interactiveColorName}
+                  backgroundColor={interactiveColor.default}
                   text={`${u.count} ${getReferenceDataName(u, language)}`}
                   testID={`${testID}Travellers${userProfilesWithCount.indexOf(
                     u,
@@ -224,14 +221,14 @@ export const RecentFareContractComponent = ({
               </ThemeText>
               {fromZoneName === toZoneName ? (
                 <BorderedInfoBox
-                  backgroundColor={interactiveColorName}
+                  backgroundColor={interactiveColor.default}
                   type="small"
                   text={`${fromZoneName}`}
                   testID={`${testID}Zone`}
                 />
               ) : (
                 <BorderedInfoBox
-                  backgroundColor={interactiveColorName}
+                  backgroundColor={interactiveColor.default}
                   type="small"
                   text={`${fromZoneName} - ${toZoneName}`}
                   testID={`${testID}Zones`}
@@ -247,10 +244,10 @@ export const RecentFareContractComponent = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   travelModeWrapper: {
     flexShrink: 1,
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   productName: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   travellersTileWrapper: {
     display: 'flex',
@@ -262,15 +259,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   detailContainer: {
-    rowGap: theme.spacings.xSmall,
+    rowGap: theme.spacing.xSmall,
   },
   infoChip_travellers: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   additionalCategories: {
-    marginHorizontal: theme.spacings.small,
+    marginHorizontal: theme.spacing.small,
   },
   harbors: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

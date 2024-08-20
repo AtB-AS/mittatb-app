@@ -15,7 +15,7 @@ import React from 'react';
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: ContrastColor;
-  size?: keyof Theme['Icon']['Size'];
+  size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
 } & SvgProps;
@@ -23,7 +23,7 @@ export type ThemeIconProps = {
 export const ThemeIcon = ({
   svg,
   colorType,
-  size = "Medium",
+  size = "medium",
   fill,
   notification,
   style,
@@ -32,12 +32,12 @@ export const ThemeIcon = ({
 }: ThemeIconProps): JSX.Element => {
   const {theme} = useTheme();
 
-  const fillToUse = fill || colorType?.Background;
+  const fillToUse = fill || colorType?.background;
 
   const fontScale = useFontScale();
   const iconSize = allowFontScaling
-    ? theme.Icon.Size[size] * fontScale
-    : theme.Icon.Size[size];
+    ? theme.icon.size[size] * fontScale
+    : theme.icon.size[size];
 
   const settings = {
     fill: fillToUse,

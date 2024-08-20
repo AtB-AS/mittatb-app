@@ -48,7 +48,7 @@ export const MobilityBenefitsInfoSectionItem = ({
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox
-        backgroundColor={theme.Background[0]}
+        backgroundColor={theme.background[0]}
         type="large"
         style={styles.borderedInfoBox}
       >
@@ -92,9 +92,9 @@ const BenefitInfo = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const fontScale = useFontScale();
   return {
-    borderedInfoBox: {marginTop: theme.Spacing.Small},
-    borderedInfoBoxContent: {gap: theme.Spacing.Small},
-    benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.Spacing.Small},
+    borderedInfoBox: {marginTop: theme.spacing.small},
+    borderedInfoBoxContent: {gap: theme.spacing.small},
+    benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.spacing.small},
     formFactorsContainer: {height: 18 * fontScale, width: 28 * fontScale},
     benefitText: {flex: 1},
   };

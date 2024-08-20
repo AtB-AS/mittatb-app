@@ -23,8 +23,8 @@ export const NotificationIndicator = ({
   iconSize,
 }: NotificationIndicatorProps) => {
   const styles = useStyles();
-  const notificationColor = color.Background;
-  const borderColor = backgroundColor?.Background;
+  const notificationColor = color.background;
+  const borderColor = backgroundColor?.background;
   const fontScale = useFontScale();
   const indicatorSize = getIndicatorSize(iconSize, !!borderColor, fontScale);
   const borderWidth = (iconSize === 'xSmall' ? 1 : 2) * fontScale;
@@ -70,7 +70,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     right: 0,
     top: 0,
-    borderRadius: theme.Border.Radius.Circle,
+    borderRadius: theme.border.radius.circle,
     zIndex: 10,
     overflow: 'hidden',
   },

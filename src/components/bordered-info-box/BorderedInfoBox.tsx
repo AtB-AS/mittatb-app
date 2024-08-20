@@ -27,7 +27,7 @@ export const BorderedInfoBox = ({
   testID,
   ...props
 }: BorderedInfoBoxProps) => {
-  const styles = useStyles(type, backgroundColor.Foreground.Primary);
+  const styles = useStyles(type, backgroundColor.foreground.primary);
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
@@ -45,12 +45,12 @@ const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
       borderColor: addOpacity(textColor, 0.1),
-      borderWidth: theme.Border.Width.Slim,
-      borderRadius: theme.Border.Radius.Medium,
+      borderWidth: theme.border.width.Slim,
+      borderRadius: theme.border.radius.Medium,
       paddingHorizontal:
-        type === 'large' ? theme.Spacing.Medium : theme.Spacing.Small,
+        type === 'large' ? theme.spacing.medium : theme.spacing.small,
       paddingVertical:
-        type === 'large' ? theme.Spacing.Medium : theme.Spacing.xSmall,
+        type === 'large' ? theme.spacing.medium : theme.spacing.xSmall,
       width: type === 'large' ? '100%' : undefined,
       alignSelf: 'flex-start',
     },

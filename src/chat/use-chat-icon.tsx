@@ -18,7 +18,7 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const { theme } = useTheme();
+  const {theme} = useTheme();
   const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
@@ -42,7 +42,7 @@ export const useChatIcon = (
           notification={
             unreadCount
               ? {
-                  color: theme.Status.Success.Primary,
+                  color: theme.status.success.primary,
                   backgroundColor: color,
                 }
               : undefined
@@ -61,6 +61,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.Border.Radius.Medium,
+    borderRadius: theme.border.radius.medium,
   },
 }));
