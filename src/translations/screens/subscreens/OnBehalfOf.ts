@@ -70,7 +70,7 @@ const OnBehalfOfTexts = {
     ),
     name_already_exists: _(
       'Navnet er allerede tilknyttet en annen mottaker',
-      'The phone number is used for another recipient',
+      'The name is already used for another recipient',
       'Namnet er allerede knytta til ein annan mottakar',
     ),
   },
