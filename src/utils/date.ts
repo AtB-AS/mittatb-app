@@ -14,7 +14,7 @@ import {
   getMinutes,
   getSeconds,
   isPast,
-  isSameDay,
+  isSameDay as isSameDayInternal,
   isSameYear,
   isToday,
   isWithinInterval,
@@ -27,6 +27,7 @@ import {
   FormatOptionsWithTZ,
   formatInTimeZone,
   fromZonedTime,
+  toZonedTime,
 } from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
@@ -346,8 +347,6 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
   });
 }
 
-export {isSameDay};
-
 export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),
@@ -442,7 +441,16 @@ export function formatToWeekday(
 }
 
 export function daysBetween(base: string | Date, target: string | Date) {
-  return differenceInCalendarDays(parseIfNeeded(target), parseIfNeeded(base));
+  return differenceInCalendarDays(
+    toZonedTime(parseIfNeeded(target), CET),
+    toZonedTime(parseIfNeeded(base), CET),
+  );
+}
+export function isSameDay(base: string | Date, target: string | Date) {
+  return isSameDayInternal(
+    toZonedTime(parseIfNeeded(target), CET),
+    toZonedTime(parseIfNeeded(base), CET),
+  );
 }
 
 export function isSeveralDays(items: string[]) {
