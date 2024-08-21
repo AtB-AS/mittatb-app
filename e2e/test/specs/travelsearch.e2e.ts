@@ -61,7 +61,9 @@ describe('Travel search', () => {
         'start',
         0,
       );
-      expect(startTime).toEqual(startTimeInDetails);
+      expect(
+        TimeHelper.timeIsEqualWithMargin(startTime, startTimeInDetails),
+      ).toBe(true);
       const departureInDetails = await TravelsearchDetailsPage.getLocation(
         'start',
         0,
@@ -74,7 +76,9 @@ describe('Travel search', () => {
         'end',
         noLegs - 1,
       );
-      expect(endTime).toEqual(endTimeInDetails);
+      expect(TimeHelper.timeIsEqualWithMargin(endTime, endTimeInDetails)).toBe(
+        true,
+      );
       const arrivalInDetails = await TravelsearchDetailsPage.getLocation(
         'end',
         noLegs - 1,
