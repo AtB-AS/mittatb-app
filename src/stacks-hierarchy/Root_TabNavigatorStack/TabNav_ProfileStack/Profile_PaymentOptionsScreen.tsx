@@ -16,18 +16,14 @@ import {RecurringPayment} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import queryString from 'query-string';
-import React, {useEffect} from 'react';
-import {Linking, RefreshControl, View} from 'react-native';
+import React from 'react';
+import {RefreshControl, View} from 'react-native';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
-import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
-import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
-
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
 export const Profile_PaymentOptionsScreen = ({
@@ -48,49 +44,9 @@ export const Profile_PaymentOptionsScreen = ({
     isError: deleteRecurringPaymentError,
   } = useDeleteRecurringPaymentMutation();
 
-  const {
-    mutateAsync: authorizeRecurringPayment,
-    isError: authorizeRecurringPaymentError,
-  } = useAuthorizeRecurringPaymentMutation();
-
-  const {
-    mutateAsync: cancelRecurringPayment,
-    isError: cancelRecurringPaymentError,
-  } = useCancelRecurringPaymentMutation();
-
   const isError =
     recurringPaymentError ||
-    deleteRecurringPaymentError ||
-    authorizeRecurringPaymentError ||
-    cancelRecurringPaymentError;
-
-  useEffect(() => {
-    const addPaymentMethodCallbackHandler = async ({url}: {url: string}) => {
-      if (
-        url.includes('response_code') &&
-        url.includes('recurring_payment_id')
-      ) {
-        const responseCode = queryString.parseUrl(url).query.response_code;
-        const paymentId = Number(
-          queryString.parseUrl(url).query.recurring_payment_id,
-        );
-        if (responseCode === 'OK') {
-          await authorizeRecurringPayment(paymentId);
-        } else if (responseCode === 'Cancel') {
-          await cancelRecurringPayment(paymentId);
-        }
-      }
-    };
-
-    // Listen to deep link redirects back here after
-    // the add card process completes.
-    const eventSubscription = Linking.addEventListener(
-      'url',
-      addPaymentMethodCallbackHandler,
-    );
-    return () => eventSubscription.remove();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    deleteRecurringPaymentError;
 
   const onAddRecurringPayment = async () => {
     navigation.push('Root_AddPaymentMethodScreen');
