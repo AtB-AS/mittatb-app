@@ -186,6 +186,10 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
+            disabled={isLoading}
+          />
           <Button
             interactiveColor="interactive_0"
             mode="primary"
@@ -197,10 +201,6 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
             rightIcon={{svg: ArrowRight}}
             testID="chooseLoginPhoneButton"
-          />
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
           />
           <Button
             mode="secondary"
