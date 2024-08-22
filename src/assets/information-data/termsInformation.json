@@ -37,7 +37,7 @@
       {
           "text": "Personvernerklæring",
           "type": "link",
-          "link": "https://beta.atb.no/private-policy"
+          "link": "https://www.atb.no/vilkar/personvernerklaering-for-billettlosninger/"
       }
   ],
   "en": [
@@ -78,7 +78,7 @@
       {
           "text": "Privacy Statement",
           "type": "link",
-          "link": "https://beta.atb.no/private-policy"
+          "link": "https://www.atb.no/vilkar/personvernerklaering-for-billettlosninger/"
       }
   ],
   "nn": [
@@ -119,7 +119,7 @@
       {
           "text": "Personvernerklæring",
           "type": "link",
-          "link": "https://beta.atb.no/private-policy"
+          "link": "https://www.atb.no/vilkar/personvernerklaering-for-billettlosninger/"
       }
   ]
 }
