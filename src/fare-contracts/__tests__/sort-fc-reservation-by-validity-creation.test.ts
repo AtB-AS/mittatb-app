@@ -23,6 +23,7 @@ jest.mock('@bugsnag/react-native', () => {});
 jest.mock('@react-native-firebase/auth', () => {});
 jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
 jest.mock('react-native-device-info', () => {});
+jest.mock('react-native-inappbrowser-reborn', () => {});
 jest.mock('@atb/auth', () => ({
   useAuthState: () => ({
     authStatus: DEFAULT_MOCK_STATE,
