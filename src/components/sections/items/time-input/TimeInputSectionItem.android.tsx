@@ -23,7 +23,10 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
       <ButtonSectionItem
         label={t(SectionTexts.timeInput.label)}
         onPress={() => setShow(true)}
-        value={formatLocaleTime(time, language)}
+        value={formatLocaleTime(time, language, {
+          // Value is already adjusted to the timezone
+          ignoreTimeZone: true,
+        })}
         containerStyle={{alignItems: 'flex-end'}}
         {...innerprops}
       />
