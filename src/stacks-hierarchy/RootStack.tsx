@@ -51,7 +51,6 @@ import {
   LoadingScreenBoundary,
   useIsLoadingAppState,
 } from '@atb/loading-screen';
-import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 import {
   Root_ParkingViolationsConfirmationScreen,
   Root_ParkingViolationsPhotoScreen,
@@ -402,10 +401,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
                 component={Root_ActiveTokenOnPhoneRequiredForFareProductScreen}
-              />
-              <Stack.Screen
-                name="Root_AddPaymentMethodScreen"
-                component={Root_AddPaymentMethodScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

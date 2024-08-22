@@ -12,6 +12,7 @@ import {
   SendReceiptResponse,
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -57,12 +58,20 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
 
 export async function addPaymentMethod(paymentRedirectUrl: string) {
   const url = `ticket/v3/recurring-payments`;
-  const response = await client.post<AddPaymentMethodResponse>(
+  return client.post<AddPaymentMethodResponse>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
-  );
-  return response.data;
+  ).then(async (response) => {
+    const authorisationUrl = response.data;
+    await InAppBrowser.open(
+      authorisationUrl.terminal_url,
+      // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
+      // hence user is again navigated back to browser after finishing the Nets flow,
+      // and then can complete the authentication process successfully
+      {showInRecents: true},
+    );
+  });
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
