@@ -26,7 +26,7 @@ export const Consequence = ({
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme) => ({
   description: {
     paddingHorizontal: theme.spacing.medium,
     flex: 1,

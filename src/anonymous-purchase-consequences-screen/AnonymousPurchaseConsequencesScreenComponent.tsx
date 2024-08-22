@@ -69,15 +69,15 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       </View>
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="Large" />}
+        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="Large" />}
+        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-        icon={<ThemeIcon svg={Support} colorType={themeColor} size="Large" />}
+        icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
       />
     </OnboardingFullScreenView>
   );
