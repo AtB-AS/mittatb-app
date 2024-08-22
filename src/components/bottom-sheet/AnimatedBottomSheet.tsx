@@ -41,7 +41,7 @@ export function AnimatedBottomSheet({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   bottomSheet: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.background[1].background,
     width: '100%',
     position: 'absolute',
     bottom: 0,

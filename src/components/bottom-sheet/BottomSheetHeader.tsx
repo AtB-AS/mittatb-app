@@ -7,6 +7,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {insets} from '@atb/utils/insets';
+import { Theme } from '@atb-as/theme';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
@@ -32,9 +33,9 @@ export const BottomSheetHeader = ({
     closeBottomSheetDefault();
   };
 
-  const themeColor = 'interactive_3';
-  const {background: backgroundColor, text: textColor} =
-    theme.interactive[themeColor]['default'];
+  const themeColor = theme.interactive[3];
+  const {background: backgroundColor, foreground: { primary: textColor }} =
+    themeColor.default;
 
   return (
     <View style={styles.container}>
@@ -73,8 +74,8 @@ export const BottomSheetHeader = ({
 const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginVertical: theme.spacings.large,
+      marginHorizontal: theme.spacing.medium,
+      marginVertical: theme.spacing.large,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -82,7 +83,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
     button: {
       justifyContent: 'center',
       alignItems: 'center',
-      padding: theme.spacings.small,
+      padding: theme.spacing.small,
       borderRadius: 100,
     },
 
