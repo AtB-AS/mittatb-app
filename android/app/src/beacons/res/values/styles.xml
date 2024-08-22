@@ -1,5 +1,5 @@
 <resources>
-  <style name="BootTheme" parent="Theme.SplashScreen">
+  <style name="BootTheme" parent="Theme.BootSplash.TransparentStatus">
     <item name="bootSplashBackground">@color/bootsplash_background</item>
     <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
     <item name="postBootSplashTheme">@style/AppTheme</item>
