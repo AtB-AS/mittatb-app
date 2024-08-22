@@ -11,6 +11,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import { Theme } from '@atb-as/theme';
 
 export const useChatIcon = (
   color?: ContrastColor,
@@ -55,7 +56,7 @@ export const useChatIcon = (
   };
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   chatContainer: {
     width: 36,
     height: 28,
