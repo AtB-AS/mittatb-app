@@ -3,7 +3,11 @@
 
 import {Language} from '@atb/translations';
 import {parseISO} from 'date-fns';
-import {formatLocaleTime, formatToLongDateTime} from '../date';
+import {
+  dateWithReplacedTime,
+  formatLocaleTime,
+  formatToLongDateTime,
+} from '../date';
 import timeMocker from 'timezone-mock';
 
 type TimeZone =
@@ -14,7 +18,7 @@ type TimeZone =
   | 'Europe/London'
   | 'Australia/Adelaide';
 
-describe.only.each<TimeZone>([
+describe.each<TimeZone>([
   'US/Pacific',
   'US/Eastern',
   'Brazil/East',
@@ -27,6 +31,33 @@ describe.only.each<TimeZone>([
   });
   afterAll(() => {
     timeMocker.unregister();
+  });
+
+  describe('dateWithReplacedTime', () => {
+    test.each([
+      ['2024-09-01T12:00:00Z', '14:00', '2024-09-01T12:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '15:00', '2024-09-01T13:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '16:00', '2024-09-01T14:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '17:00', '2024-09-01T15:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '18:00', '2024-09-01T16:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '19:00', '2024-09-01T17:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '20:00', '2024-09-01T18:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '21:00', '2024-09-01T19:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '22:00', '2024-09-01T20:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '23:00', '2024-09-01T21:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '23:59', '2024-09-01T21:59:00.000Z'],
+      ['2024-09-01T12:00:00Z', '05:00', '2024-09-01T03:00:00.000Z'],
+      ['2024-09-01T12:00:00Z', '02:00', '2024-09-01T00:00:00.000Z'],
+      ['2024-09-01T15:00:00Z', '17:00', '2024-09-01T15:00:00.000Z'],
+      // Back in time
+      ['2024-09-01T12:00:00Z', '01:00', '2024-08-31T23:00:00.000Z'],
+    ])(
+      'should replace time enforced to CET (%s -> %s)',
+      (date, time, expected) => {
+        const result = dateWithReplacedTime(date, time);
+        expect(result.toISOString()).toBe(expected);
+      },
+    );
   });
 
   describe('formatLocaleTime', () => {

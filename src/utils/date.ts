@@ -472,14 +472,25 @@ export function dateWithReplacedTime(
     ignoreTimeZone?: boolean;
   } = {},
 ) {
-  let parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
   const parsedDate = parseIfNeeded(date);
-
   if (!options.ignoreTimeZone) {
-    // Time pickers show dates in CET timezone, so when updating
-    // time we want to convert from CET before replacing hour/minute/second.
-    parsedTime = fromZonedTime(parsedTime, CET);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Convert the parsed date to CET
+    const cetDate = toZonedTime(parsedDate, CET);
+
+    // Set the time in CET
+    const updatedCETDate = set(cetDate, {
+      hours,
+      minutes,
+      seconds: 0,
+    });
+
+    // Convert back to UTC
+    return fromZonedTime(updatedCETDate, CET);
   }
+
+  const parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
 
   return set(parsedDate, {
     hours: getHours(parsedTime),
