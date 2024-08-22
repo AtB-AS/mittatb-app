@@ -63,9 +63,8 @@ export async function addPaymentMethod(paymentRedirectUrl: string) {
     {paymentRedirectUrl},
     {authWithIdToken: true},
   ).then(async (response) => {
-    const authorisationUrl = response.data;
     await InAppBrowser.open(
-      authorisationUrl.terminal_url,
+      response.data.terminal_url,
       // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
       // hence user is again navigated back to browser after finishing the Nets flow,
       // and then can complete the authentication process successfully

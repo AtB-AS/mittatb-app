@@ -26,8 +26,8 @@ import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-p
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
 import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
-import { APP_SCHEME } from '@env';
-import { useAppStateStatus } from '@atb/utils/use-app-state-status';
+import {APP_SCHEME} from '@env';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 export const Profile_PaymentOptionsScreen = () => {
