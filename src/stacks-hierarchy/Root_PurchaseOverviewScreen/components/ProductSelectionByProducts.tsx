@@ -10,6 +10,7 @@ import {
   useFirestoreConfiguration,
   getReferenceDataName,
   isProductSellableInApp,
+  removeProductAliasDuplicates,
 } from '@atb/configuration';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
@@ -43,7 +44,9 @@ export function ProductSelectionByProducts({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type);
+    .filter((product) => product.type === selectedProduct.type)
+    .filter(removeProductAliasDuplicates);
+
   const [selected, setProduct] = useState(selectedProduct);
 
   const alias = (fareProduct: PreassignedFareProduct) =>
@@ -76,7 +79,7 @@ export function ProductSelectionByProducts({
           <ProductDescriptionToggle title={title} />
           <RadioGroupSection<PreassignedFareProduct>
             items={selectableProducts}
-            keyExtractor={(u) => u.id}
+            keyExtractor={(u) => u.productAliasId ?? u.id}
             itemToText={(fp) => productDisplayName(fp)}
             hideSubtext={hideProductDescriptions}
             itemToSubtext={(fp) => subText(fp)}

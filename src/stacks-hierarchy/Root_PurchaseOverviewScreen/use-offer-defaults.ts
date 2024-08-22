@@ -9,7 +9,10 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useDefaultTariffZone, useFilterTariffZone} from '@atb/stacks-hierarchy/utils';
+import {
+  useDefaultTariffZone,
+  useFilterTariffZone,
+} from '@atb/stacks-hierarchy/utils';
 import {useMemo} from 'react';
 import {useDefaultPreassignedFareProduct} from '@atb/fare-contracts/utils';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
@@ -27,10 +30,11 @@ export function useOfferDefaults(
   toPlace?: TariffZoneWithMetadata | StopPlaceFragment,
 ) {
   const {data: fareProducts} = useGetFareProductsQuery();
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {tariffZones, userProfiles, preassignedFareProducts} =
+    useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
-  // Get default PreassignedFareProduct
+  // Get default PreassignedFareProduct alternatives
   const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = fareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
@@ -39,10 +43,22 @@ export function useOfferDefaults(
     useDefaultPreassignedFareProduct(selectableProducts);
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? defaultFareProduct;
+  const defaultPreassignedFareProductAlternatives = useMemo(() => {
+    const productAliasId = defaultPreassignedFareProduct.productAliasId;
+    return productAliasId
+      ? preassignedFareProducts.filter(
+          (fp) => fp.productAliasId === productAliasId,
+        )
+      : [defaultPreassignedFareProduct];
+  }, [defaultPreassignedFareProduct, preassignedFareProducts]);
 
   // Check for whitelisted zones
-  const allowedTariffZoneRefs = defaultPreassignedFareProduct.limitations.tariffZoneRefs ?? [];
-  const usableTariffZones = useFilterTariffZone(tariffZones, allowedTariffZoneRefs);
+  const allowedTariffZoneRefs =
+    defaultPreassignedFareProduct.limitations.tariffZoneRefs ?? [];
+  const usableTariffZones = useFilterTariffZone(
+    tariffZones,
+    allowedTariffZoneRefs,
+  );
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(usableTariffZones);
@@ -77,7 +93,8 @@ export function useOfferDefaults(
   );
 
   return {
-    preassignedFareProduct: defaultPreassignedFareProduct,
+    preassignedFareProductAlternatives:
+      defaultPreassignedFareProductAlternatives,
     selectableTravellers: defaultSelectableTravellers,
     fromPlace: defaultFromPlace,
     toPlace: defaultToPlace,

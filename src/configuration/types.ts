@@ -20,6 +20,7 @@ export type PreassignedFareProduct = {
   productDescription?: LanguageAndTextType[];
   warningMessage?: LanguageAndTextType[];
   type: string;
+  productAliasId?: string;
   productAlias?: LanguageAndTextType[];
   durationDays?: number;
   distributionChannel: DistributionChannel[];

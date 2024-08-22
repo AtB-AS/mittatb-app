@@ -5,6 +5,7 @@ import {
   FareProductTypeConfig,
   useFirestoreConfiguration,
   findReferenceDataById,
+  isProductSellableInApp,
 } from '@atb/configuration';
 import {
   listRecentFareContracts,
@@ -93,7 +94,7 @@ const mapBackendRecentFareContracts = (
   userProfiles: UserProfile[],
 ): RecentFareContract | null => {
   const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
+    preassignedFareProducts.filter((p) => isProductSellableInApp(p)),
     recentFareContract.products[0],
   );
 

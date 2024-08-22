@@ -55,16 +55,28 @@ const getValidDurationSeconds = (offer: Offer): number | undefined =>
     ? secondsBetween(offer.valid_from, offer.valid_to)
     : undefined;
 
+const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
+  const offersForTraveller = offers.filter(
+    (o) => o.traveller_id === userTypeString,
+  );
+
+  // If there are multiple offers for the same traveller, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
+  const offersSortedByPrice = offersForTraveller.sort(
+    (a, b) =>
+      getCurrencyAsFloat(a.prices, 'NOK') - getCurrencyAsFloat(b.prices, 'NOK'),
+  );
+  return offersSortedByPrice[0];
+};
+
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getCurrencyAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -74,11 +86,9 @@ const calculateOriginalPrice = (
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getOriginalPriceAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getOriginalPriceAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -90,7 +100,7 @@ const mapToUserProfilesWithCountAndOffer = (
   userProfileWithCounts
     .map((u) => ({
       ...u,
-      offer: offers.find((o) => o.traveller_id === u.userTypeString),
+      offer: getOfferForTraveller(offers, u.userTypeString),
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
@@ -153,7 +163,7 @@ const initialState: OfferState = {
 
 export function useOfferState(
   offerEndpoint: 'zones' | 'authority' | 'stop-places',
-  preassignedFareProduct: PreassignedFareProduct,
+  preassignedFareProductAlternatives: PreassignedFareProduct[],
   fromPlace: TariffZone | StopPlaceFragmentWithIsFree,
   toPlace: TariffZone | StopPlaceFragmentWithIsFree,
   userProfilesWithCount: UserProfileWithCount[],
@@ -201,7 +211,7 @@ export function useOfferState(
             ...placeParams,
             is_on_behalf_of: isOnBehalfOf,
             travellers: offerTravellers,
-            products: [preassignedFareProduct.id],
+            products: preassignedFareProductAlternatives.map((p) => p.id),
             travel_date: travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
@@ -240,13 +250,13 @@ export function useOfferState(
     [
       dispatch,
       userProfilesWithCount,
-      preassignedFareProduct,
+      preassignedFareProductAlternatives,
       offerEndpoint,
       zones,
       travelDate,
       fromPlace,
       toPlace,
-      isOnBehalfOf
+      isOnBehalfOf,
     ],
   );
 
@@ -258,7 +268,7 @@ export function useOfferState(
     dispatch,
     updateOffer,
     userProfilesWithCount,
-    preassignedFareProduct,
+    preassignedFareProductAlternatives,
     zones,
     travelDate,
   ]);
