@@ -7,6 +7,7 @@ import {
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
 import {CustomerProfile} from '@atb/ticketing';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
@@ -66,5 +67,9 @@ export const removeProductAliasDuplicates = (
   arr: PreassignedFareProduct[],
 ): boolean => {
   if (val.productAliasId === undefined) return true;
-  return arr.map((p) => p.productAliasId).indexOf(val.productAliasId) === i;
+  return onlyUniquesBasedOnField<PreassignedFareProduct>('productAliasId')(
+    val,
+    i,
+    arr,
+  );
 };
