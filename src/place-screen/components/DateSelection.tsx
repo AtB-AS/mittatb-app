@@ -1,21 +1,23 @@
-import {StyleSheet} from '@atb/theme';
-import React from 'react';
-import {View} from 'react-native';
+import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
   formatToShortDate,
   formatToVerboseDateTime,
   isInThePast,
+  isWithinSameDate,
+  parseISOFromCET,
 } from '@atb/utils/date';
-import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
-import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
-import {DepartureTimeSheet} from './DepartureTimeSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {SearchTime} from '../types';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {addDays, isToday, parseISO} from 'date-fns';
+import React from 'react';
+import {View} from 'react-native';
+import {SearchTime} from '../types';
+import {DepartureTimeSheet} from './DepartureTimeSheet';
 
 type DateSelectionProps = {
   searchTime: SearchTime;
@@ -28,7 +30,9 @@ export const DateSelection = ({
 }: DateSelectionProps): JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const disablePreviousDayNavigation = isToday(parseISO(searchTime.date));
+  const disablePreviousDayNavigation = isToday(
+    parseISOFromCET(searchTime.date),
+  );
 
   const fontScale = useFontScale();
   const shouldShowNextPrevTexts = fontScale < 1.3;
@@ -39,19 +43,18 @@ export const DateSelection = ({
       : formatToTwoLineDateTime(searchTime.date, language);
 
   const getA11ySearchTimeText = () => {
-    const parsed = parseISO(searchTime.date);
-
+    const parsedDate = parseISOFromCET(searchTime.date);
     if (searchTime.option === 'now')
       return t(DeparturesTexts.dateNavigation.today);
 
-    if (isSameDay(parsed, new Date()))
+    if (isWithinSameDate(parsedDate, new Date()))
       return (
         t(DeparturesTexts.dateNavigation.today) +
         ', ' +
-        formatToClock(parsed, language, 'floor')
+        formatToClock(parsedDate, language, 'floor')
       );
 
-    return formatToVerboseDateTime(parsed, language);
+    return formatToVerboseDateTime(parsedDate, language);
   };
 
   const onSetSearchTime = (time: SearchTime) => {
@@ -147,14 +150,13 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
 }
 
 function formatToTwoLineDateTime(isoDate: string, language: Language) {
-  const parsed = parseISO(isoDate);
-  if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language, 'floor');
+  if (isWithinSameDate(isoDate, new Date())) {
+    return formatToClock(isoDate, language, 'floor');
   }
   return (
-    formatToShortDate(parsed, language) +
+    formatToShortDate(isoDate, language) +
     '\n' +
-    formatToClock(parsed, language, 'floor')
+    formatToClock(isoDate, language, 'floor')
   );
 }
 

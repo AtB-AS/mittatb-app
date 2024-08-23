@@ -430,6 +430,10 @@ export function formatToShortSimpleDate(
   });
 }
 
+export function parseISOFromCET(isoDate: string) {
+  return toZonedTime(parseISO(isoDate), CET);
+}
+
 export function formatToWeekday(
   date: Date | string,
   language: Language,
