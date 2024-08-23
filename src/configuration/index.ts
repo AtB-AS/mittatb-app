@@ -25,6 +25,5 @@ export {
   isProductSellableInApp,
   findReferenceDataById,
   getReferenceDataName,
-  removeProductAliasDuplicates,
 } from './utils';
 export {useFirestoreConfiguration} from './FirestoreConfigurationContext';

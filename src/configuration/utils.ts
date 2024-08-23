@@ -7,7 +7,6 @@ import {
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
 import {CustomerProfile} from '@atb/ticketing';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
@@ -59,17 +58,4 @@ export const isProductSellableInApp = (
     return true;
 
   return product.distributionChannel.some((channel) => channel === 'app');
-};
-
-export const removeProductAliasDuplicates = (
-  val: PreassignedFareProduct,
-  i: number,
-  arr: PreassignedFareProduct[],
-): boolean => {
-  if (val.productAliasId === undefined) return true;
-  return onlyUniquesBasedOnField<PreassignedFareProduct>('productAliasId')(
-    val,
-    i,
-    arr,
-  );
 };
