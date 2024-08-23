@@ -59,12 +59,3 @@ export const isProductSellableInApp = (
 
   return product.distributionChannel.some((channel) => channel === 'app');
 };
-
-export const removeProductAliasDuplicates = (
-  val: PreassignedFareProduct,
-  i: number,
-  arr: PreassignedFareProduct[],
-): boolean => {
-  if (val.productAliasId === undefined) return true;
-  return arr.map((p) => p.productAliasId).indexOf(val.productAliasId) === i;
-};

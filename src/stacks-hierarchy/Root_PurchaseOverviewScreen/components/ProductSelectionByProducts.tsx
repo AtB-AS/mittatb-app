@@ -10,7 +10,6 @@ import {
   useFirestoreConfiguration,
   getReferenceDataName,
   isProductSellableInApp,
-  removeProductAliasDuplicates,
 } from '@atb/configuration';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
@@ -23,6 +22,7 @@ import {useTicketingState} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferenceItems} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -45,7 +45,7 @@ export function ProductSelectionByProducts({
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === selectedProduct.type)
-    .filter(removeProductAliasDuplicates);
+    .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const [selected, setProduct] = useState(selectedProduct);
 
