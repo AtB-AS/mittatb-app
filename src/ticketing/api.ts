@@ -12,7 +12,6 @@ import {
   SendReceiptResponse,
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
