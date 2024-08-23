@@ -134,7 +134,6 @@ export type RootStackParamList = StackParams<{
   Root_LoginPhoneInputScreen: undefined;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
-  Root_AddPaymentMethodScreen: undefined;
   Root_ParkingViolationsSelectScreen: undefined;
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;

@@ -57,12 +57,11 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
 
 export async function addPaymentMethod(paymentRedirectUrl: string) {
   const url = `ticket/v3/recurring-payments`;
-  const response = await client.post<AddPaymentMethodResponse>(
+  return client.post<AddPaymentMethodResponse>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
   );
-  return response.data;
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
