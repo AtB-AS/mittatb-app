@@ -173,11 +173,12 @@ describe('Function onlyUniqueBasedOnField', () => {
   it('does not remove undefined if treatUndefinedAsUnique is true', () => {
     const testData = [
       {field1: 'id-1'},
+      {field1: 'id-2'},
       {field1: undefined},
       {field1: undefined},
     ];
     const deduped = testData.filter(onlyUniquesBasedOnField('field1', true));
-    expect(deduped.length).toEqual(3);
+    expect(deduped.length).toEqual(4);
   });
 });
 
