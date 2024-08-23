@@ -2,13 +2,12 @@
 // import {formatLocaleTime} from '../date';
 
 import {Language} from '@atb/translations';
-import {parseISO} from 'date-fns';
+import timeMocker from 'timezone-mock';
 import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
 } from '../date';
-import timeMocker from 'timezone-mock';
 
 type TimeZone =
   | 'US/Pacific'
