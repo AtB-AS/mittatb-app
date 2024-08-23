@@ -12,14 +12,13 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {RecurringPayment} from '@atb/ticketing';
+import {addPaymentMethod, RecurringPayment} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
 import React, {useEffect} from 'react';
 import {Linking, RefreshControl, View} from 'react-native';
-import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -27,12 +26,10 @@ import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-p
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
 import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
+import {APP_SCHEME} from '@env';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
-type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
-
-export const Profile_PaymentOptionsScreen = ({
-  navigation,
-}: PaymentOptionsProps) => {
+export const Profile_PaymentOptionsScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -70,6 +67,7 @@ export const Profile_PaymentOptionsScreen = ({
         url.includes('response_code') &&
         url.includes('recurring_payment_id')
       ) {
+        InAppBrowser.close();
         const responseCode = queryString.parseUrl(url).query.response_code;
         const paymentId = Number(
           queryString.parseUrl(url).query.recurring_payment_id,
@@ -89,11 +87,18 @@ export const Profile_PaymentOptionsScreen = ({
       addPaymentMethodCallbackHandler,
     );
     return () => eventSubscription.remove();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [authorizeRecurringPayment, cancelRecurringPayment]);
 
   const onAddRecurringPayment = async () => {
-    navigation.push('Root_AddPaymentMethodScreen');
+    const redirectUrl = `${APP_SCHEME}://profile`;
+    const response = await addPaymentMethod(redirectUrl);
+    await InAppBrowser.open(
+      response.data.terminal_url,
+      // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
+      // hence user is again navigated back to browser after finishing the Nets flow,
+      // and then can complete the authentication process successfully
+      {showInRecents: true},
+    );
   };
 
   return (
