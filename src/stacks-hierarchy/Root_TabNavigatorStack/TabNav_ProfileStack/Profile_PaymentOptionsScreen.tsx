@@ -91,15 +91,14 @@ export const Profile_PaymentOptionsScreen = () => {
 
   const onAddRecurringPayment = async () => {
     const redirectUrl = `${APP_SCHEME}://profile`;
-    await addPaymentMethod(redirectUrl).then(async (response) => {
-      await InAppBrowser.open(
-        response.data.terminal_url,
-        // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
-        // hence user is again navigated back to browser after finishing the Nets flow,
-        // and then can complete the authentication process successfully
-        {showInRecents: true},
-      );
-    });
+    const response = await addPaymentMethod(redirectUrl);
+    await InAppBrowser.open(
+      response.data.terminal_url,
+      // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
+      // hence user is again navigated back to browser after finishing the Nets flow,
+      // and then can complete the authentication process successfully
+      {showInRecents: true},
+    );
   };
 
   return (
