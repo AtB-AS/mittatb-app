@@ -12,4 +12,4 @@
 
 "NSCameraUsageDescription" = "We use camera to capture the image of wrongfully parked electric scooters, and scan the QR code on the electric scooters.";
 
-"NSPhotoLibraryUsageDescription" = "We need access to photo gallery so you can select and send image(s) to help resolve issues in the app.";
+"NSPhotoLibraryUsageDescription" = "Send pictures to help solve problems in the app.";
