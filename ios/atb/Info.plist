@@ -76,7 +76,7 @@
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
+	<key>Privacy - Bluetooth Peripheral Usage Description</key>
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
