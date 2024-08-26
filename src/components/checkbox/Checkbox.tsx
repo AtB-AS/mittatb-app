@@ -2,6 +2,7 @@ import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
+import {Theme} from '@atb-as/theme';
 
 type CheckedProps = {
   checked: boolean;
@@ -9,6 +10,9 @@ type CheckedProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
+
+const getDefaultColor = (theme: Theme) => theme.background.accent[3]
+const getCheckedColor = (theme: Theme) => theme.background[0]
 
 export const Checkbox: React.FC<CheckedProps> = ({
   checked,
@@ -36,18 +40,18 @@ export const Checkbox: React.FC<CheckedProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveCheckbox: {
-    height: theme.spacings.large,
-    width: theme.spacings.large,
+    height: theme.spacing.large,
+    width: theme.spacing.large,
     borderRadius: theme.border.radius.small,
     borderWidth: theme.border.width.medium,
-    borderColor: theme.static.background.background_accent_3.background,
+    borderColor: getCheckedColor(theme).background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveCheckboxChecked: {
-    backgroundColor: theme.static.background.background_accent_3.background,
+    backgroundColor: getCheckedColor(theme).background,
   },
   saveCheckboxDefault: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: getDefaultColor(theme).background,
   },
 }));
