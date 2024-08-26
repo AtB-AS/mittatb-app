@@ -68,6 +68,8 @@ const getIllustrationFileName = (
       return 'Ticket';
     case 'boat-period':
       return 'PeriodTicket';
+    case 'boat-carnet':
+      return 'TicketMultiple';
     case 'ticketMultiple':
       return 'TicketMultiple';
     case 'city':
