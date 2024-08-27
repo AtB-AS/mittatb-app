@@ -52,6 +52,16 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
+"@atb-as/theme@11.0.0-alpha.1":
+  version "11.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.1.tgz#d0df164f539f788f5e477513c2fe49476e005d68"
+  integrity sha512-Onbs8KSrNHZohO0+FXd5KjAdwkK5CGEQeYtIUP7tPrpuEvtM/3pg/UaYNfKenyxVyAEkXtLY5YUuyOpiSSQvDg==
+  dependencies:
+    "@tfk-samf/figma-to-dtcg" "0.3.1"
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+    typescript "^4.4.3"
+
 "@atb-as/theme@^10.4.1":
   version "10.4.1"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-10.4.1.tgz#2ac1b4d467e78dd2b91d50ecaa7e90d00a8626be"
@@ -5430,6 +5440,11 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
     react-error-boundary "^3.1.0"
+
+"@tfk-samf/figma-to-dtcg@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.1.tgz#033a3d6066ae1eb9687f281c6eed853656018e07"
+  integrity sha512-UV6MCbyBuUdMGA9AclC0zH56KTS5fTGgymqPDBYR6c68yRrUrAntT6AWJ1JsmoDklXkxa1CgwM6jxV4OZ5Hkrw==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -12012,6 +12027,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
+lodash.get@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+  integrity sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==
+
 lodash.groupby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npmjs.org/lodash.groupby/-/lodash.groupby-4.6.0.tgz"
@@ -16193,6 +16213,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript@^4.4.3:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 typescript@^5.1.6:
   version "5.1.6"
