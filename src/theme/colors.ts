@@ -11,13 +11,11 @@ import {
   TextColor,
   TextNames,
   textNames,
-  ThemeVariant,
-  Theme
+  ThemeVariant
 } from '@atb-as/theme';
 import {Flattened, flattenObject} from '@atb/utils/object';
 import {AppOrgs} from '../../types/app-orgs';
 
-export type {Theme} from "@atb-as/theme"
 export type {Statuses, Mode, TextColor, ContrastColor, TextNames};
 export {textNames};
 
@@ -86,7 +84,7 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
 
 // @TODO: Make part of @AtB-as/theme
 
-export type Themes = typeof themes;
-export type InteractiveColor = Theme['interactive'][0];
-export type TransportColor = Theme['transport'];
-export type StatusColor = Theme['status'];
+export type Theme = typeof themes['light'];
+export type InteractiveColor = Theme['color']['interactive'][0];
+export type TransportColor = Theme['color']['transport'];
+export type StatusColor = Theme['color']['status'];
