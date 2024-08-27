@@ -108,7 +108,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       } else if (errorText) {
         return {
           borderColor:
-            theme.interactive.interactive_destructive.destructive.background,
+            theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;
@@ -181,7 +181,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                 <ThemeIcon
                   style={styles.expandIcon}
                   svg={isSelectingPrefix ? ExpandLess : ExpandMore}
-                  size="normal"
+                  size="medium"
                 />
               </PressableOpacity>
             )}
@@ -257,37 +257,37 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     flexGrow: 1,
   },
   container: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.static.background.background_0.background,
+    borderColor: theme.color.background.neutral[0].background,
   },
   containerInline: {
     alignItems: 'center',
     flexDirection: 'row',
   },
   containerMultiline: {
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
   },
   label: {
-    minWidth: 60 - theme.spacings.medium,
-    paddingRight: theme.spacings.xSmall,
+    minWidth: 60 - theme.spacing.medium,
+    paddingRight: theme.spacing.xSmall,
   },
   prefix: {
     flexDirection: 'row',
   },
   expandIcon: {
-    marginLeft: theme.spacings.xSmall,
-    marginRight: theme.spacings.small,
+    marginLeft: theme.spacing.xSmall,
+    marginRight: theme.spacing.small,
   },
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacings.medium,
+    bottom: theme.spacing.medium,
     alignSelf: 'center',
   },
   prefixList: {
     maxHeight: 300,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.medium,
   },
   countryItem: {
     flexDirection: 'row',
@@ -299,6 +299,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     width: '83%',
   },
   error: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
 }));

@@ -1,13 +1,12 @@
 import {ViewStyle} from 'react-native';
 import {Theme, useTheme} from '@atb/theme';
-import {RadiusSizes} from '@atb/theme/colors';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
   transparent?: boolean;
   type?: ContainerSizingType;
   radius?: RadiusModeType;
-  radiusSize?: RadiusSizes;
+  radiusSize?: keyof Theme['border']['radius'];
   testID?: string;
 };
 
@@ -32,7 +31,7 @@ export function useSectionItem({
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
-      : theme.static.background.background_0.background,
+      : theme.color.background.neutral[0].background,
   };
   const contentContainer: ViewStyle = {
     flex: 1,
@@ -49,15 +48,15 @@ function useSpacing(type: ContainerSizingType) {
   const {theme} = useTheme();
   switch (type) {
     case 'block':
-      return theme.spacings.medium;
+      return theme.spacing.medium;
     case 'spacious':
-      return theme.spacings.large;
+      return theme.spacing.large;
   }
 }
 
 function mapToBorderRadius(
   theme: Theme,
-  radiusSize: RadiusSizes = 'regular',
+  radiusSize: keyof Theme['border']['radius'] = 'medium',
   radius?: RadiusModeType,
 ): ViewStyle {
   if (!radius) {

@@ -31,7 +31,7 @@ export function Section({
 
         const additionalProps: Partial<BaseSectionItemProps> = {
           radius: toRadius(index, lastIndex, firstIndex),
-          radiusSize: 'regular',
+          radiusSize: 'medium',
           type,
           ...child.props,
         };
@@ -66,7 +66,7 @@ function toRadius(index: number, lastIndex: number, firstIndex: number) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   separator: {
     flexGrow: 0,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
     height: 1,
   },
 }));

@@ -35,7 +35,7 @@ export function MessageSectionItem({
     onPressConfig?.text,
   );
 
-  const themeColor = theme.status[messageType].secondary;
+  const themeColor = theme.color.status[messageType].secondary;
 
   const onPress =
     onPressConfig &&
@@ -55,7 +55,7 @@ export function MessageSectionItem({
     >
       <ThemeIcon
         style={styles.icon}
-        fill={themeColor.text}
+        fill={themeColor.foreground.primary}
         svg={messageTypeToIcon(messageType, true, themeName)}
       />
       <View style={styles.textContent}>
@@ -102,13 +102,13 @@ const useA11yLabel = (
 const useStyles = (type: Statuses) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
-      backgroundColor: theme.status[type].secondary.background,
+      backgroundColor: theme.color.status[type].secondary.background,
       flexDirection: 'row',
       borderWidth: theme.border.width.medium,
-      borderColor: theme.status[type].primary.background,
+      borderColor: theme.color.status[type].primary.background,
     },
-    icon: {marginRight: theme.spacings.small},
+    icon: {marginRight: theme.spacing.small},
     textContent: {flex: 1},
-    title: {marginBottom: theme.spacings.small},
-    linkText: {marginTop: theme.spacings.medium},
+    title: {marginBottom: theme.spacing.small},
+    linkText: {marginTop: theme.spacing.medium},
   }));

@@ -42,7 +42,7 @@ export const LinkSectionItem = forwardRef<View, Props>(
       disabled,
       textType,
       testID,
-      interactiveColor = 'interactive_2',
+      interactiveColor,
       ...props
     },
     forwardedRef,
@@ -52,10 +52,10 @@ export const LinkSectionItem = forwardRef<View, Props>(
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
     const {theme} = useTheme();
-    const themeColor = theme.interactive[interactiveColor].default;
+    const themeColor = interactiveColor?.default ?? theme.color.interactive[2].default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
-        <NavigationIcon mode={icon} fill={themeColor.text} />
+        <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />
       ) : (
         icon
       );

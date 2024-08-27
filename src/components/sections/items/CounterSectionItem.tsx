@@ -42,7 +42,7 @@ export function CounterSectionItem({
   const {theme} = useTheme();
   const removeButtonDisabled = count === 0;
   const activeColor =
-    count > 0 && color ? theme.interactive[color].active : undefined;
+    count > 0 && color ? color.active : undefined;
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
@@ -87,7 +87,7 @@ export function CounterSectionItem({
                 )
           }
           accessibilityState={{disabled: removeButtonDisabled}}
-          hitSlop={insets.all(theme.spacings.medium)}
+          hitSlop={insets.all(theme.spacing.medium)}
           style={counterStyles.removeCount}
           testID={testID + '_rem'}
         >
@@ -111,7 +111,7 @@ export function CounterSectionItem({
             importantForAccessibility="no"
             style={[
               counterStyles.countText,
-              activeColor && {color: activeColor.text},
+              activeColor && {color: activeColor.foreground.primary},
             ]}
             type="body__primary--bold"
             testID={testID + '_count'}
@@ -145,16 +145,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     infoContainer: {
       flexDirection: 'column',
       alignItems: 'flex-start',
-      marginRight: theme.spacings.medium,
+      marginRight: theme.spacing.medium,
     },
     infoSubtext: {
-      marginTop: theme.spacings.small,
+      marginTop: theme.spacing.small,
     },
     countContainer: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
     },
     countActions: {
       flexDirection: 'row',
@@ -167,15 +167,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       justifyContent: 'center',
     },
     countText: {
-      minWidth: theme.spacings.large * scale,
-      margin: theme.spacings.small * scale,
+      minWidth: theme.spacing.large * scale,
+      margin: theme.spacing.small * scale,
       textAlign: 'center',
     },
     removeCount: {
-      marginRight: theme.spacings.xLarge,
+      marginRight: theme.spacing.xLarge,
     },
     addCount: {
-      marginLeft: theme.spacings.xLarge,
+      marginLeft: theme.spacing.xLarge,
     },
   };
 });
