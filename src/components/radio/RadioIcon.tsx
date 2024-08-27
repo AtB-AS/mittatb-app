@@ -1,22 +1,20 @@
 import React from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {View} from 'react-native';
+import { ContrastColor } from '@atb-as/theme';
 
 type CheckedProps = {
   checked: boolean;
-  color?: string;
+  color: ContrastColor;
 };
 
-export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
+export function RadioIcon({checked, color }: CheckedProps) {
   const styles = useStyles();
-  const {theme} = useTheme();
-
-  const colorValue = color ?? theme.text.colors.primary;
-
+ 
   return (
-    <View style={[styles.radio, {borderColor: colorValue}]}>
+    <View style={[styles.radio, {borderColor: color.background}]}>
       {checked ? (
-        <View style={[styles.radioInner, {backgroundColor: colorValue}]} />
+        <View style={[styles.radioInner, {backgroundColor: color.background}]} />
       ) : null}
     </View>
   );
@@ -24,16 +22,16 @@ export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   radio: {
-    height: theme.spacings.large,
-    width: theme.spacings.large,
-    borderRadius: theme.spacings.large,
+    height: theme.spacing.large,
+    width: theme.spacing.large,
+    borderRadius: theme.spacing.large,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioInner: {
-    height: theme.spacings.medium,
-    width: theme.spacings.medium,
-    borderRadius: theme.spacings.large,
+    height: theme.spacing.medium,
+    width: theme.spacing.medium,
+    borderRadius: theme.spacing.large,
   },
 }));

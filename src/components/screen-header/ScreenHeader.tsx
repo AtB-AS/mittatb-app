@@ -12,9 +12,9 @@ import {
   HeaderButtonProps,
 } from './HeaderButton';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {ThemeText} from '@atb/components/text';
+import { ContrastColor } from '@atb-as/theme';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
@@ -47,7 +47,7 @@ export type ScreenHeaderProps = {
    */
   globalMessageContext?: GlobalMessageContextEnum;
   style?: ViewStyle;
-  color?: StaticColor;
+  color?: ContrastColor;
   setFocusOnLoad?: boolean;
   textOpacity?: number;
 };
@@ -64,13 +64,13 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   textOpacity = 1,
 }) => {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
-  const themeColor = color ?? 'background_accent_0';
+  const {theme} = useTheme();
+  const themeColor = color ?? theme.color.background.accent[0];
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
-  const backgroundColor = getStaticColor(themeName, themeColor).background;
+  const backgroundColor = themeColor.background;
 
   const leftIcon = leftButton ? (
     <HeaderButton color={themeColor} {...leftButton} testID="lhb" />
@@ -94,7 +94,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           styles.headerTitle,
           {
             // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: theme.spacings.medium + buttonsTopOffset,
+            marginBottom: theme.spacing.medium + buttonsTopOffset,
           },
         ]}
         onLayout={setLayoutFor('container')}
@@ -116,7 +116,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         style={[
           styles.buttons,
           {
-            top: theme.spacings.medium + buttonsTopOffset,
+            top: theme.spacing.medium + buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -135,8 +135,8 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
   headerTitle: {alignItems: 'center'},
   buttons: {
@@ -144,11 +144,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'absolute',
-    left: theme.spacings.medium,
+    left: theme.spacing.medium,
     width: '100%',
   },
   globalMessageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));
 

@@ -43,7 +43,7 @@ export const useChatIcon = (
           notification={
             unreadCount
               ? {
-                  color: theme.status.success.primary,
+                  color: theme.color.status.success.primary,
                   backgroundColor: color,
                 }
               : undefined

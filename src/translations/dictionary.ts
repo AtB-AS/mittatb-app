@@ -114,7 +114,7 @@ const dictionary = {
   messageTypes: {
     info: _('Til info', 'Info', `Til info`),
     warning: _('Advarsel', 'Warning', `Åtvaring`),
-    valid: _('Suksess', 'Success', `Suksess`),
+    success: _('Suksess', 'Success', `Suksess`),
     error: _('Feil', 'Error', `Feil`),
   },
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),

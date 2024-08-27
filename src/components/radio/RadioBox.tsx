@@ -40,9 +40,9 @@ export function RadioBox({
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const themeColor =
-    theme.interactive[interactiveColor][selected ? 'active' : 'default'];
-  const {background: backgroundColor, text: textColor} = themeColor;
+  interactiveColor = interactiveColor ?? theme.color.interactive[2]
+  const themeColor = interactiveColor[selected ? 'active' : 'default'];
+  const {background: backgroundColor, foreground: { primary: textColor }} = themeColor;
 
   return (
     <PressableOpacity
@@ -95,23 +95,23 @@ function useSpacing(type: ContainerSizingType) {
   const {theme} = useTheme();
   switch (type) {
     case 'compact':
-      return theme.spacings.small;
+      return theme.spacing.small;
     case 'standard':
-      return theme.spacings.medium;
+      return theme.spacing.medium;
     case 'spacious':
-      return theme.spacings.xLarge;
+      return theme.spacing.xLarge;
   }
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.medium,
     justifyContent: 'space-between',
     alignContent: 'center',
   },
   title: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
     textAlign: 'center',
   },
   icon: {

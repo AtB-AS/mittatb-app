@@ -24,16 +24,16 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pageIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
   pageDot: {
-    height: theme.spacings.medium,
-    width: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium / 2,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_0.background,
+    height: theme.spacing.medium,
+    width: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium / 2,
+    borderRadius: theme.border.radius.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   activeDot: {
-    backgroundColor: theme.interactive.interactive_0.default.background,
+    backgroundColor: theme.color.interactive[0].default.background,
   },
 }));
