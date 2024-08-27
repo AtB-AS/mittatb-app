@@ -4,8 +4,8 @@ import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Theme} from '@atb-as/theme';
 
-const getThemeColor = (theme: Theme) => theme.background.accent[0];
-const getAccentColor = (theme: Theme) => theme.background.accent[1];
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getAccentColor = (theme: Theme) => theme.color.background.accent[1];
 
 export const Consequence = ({
   value,

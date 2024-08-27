@@ -11,8 +11,8 @@ type CheckedProps = {
   testID?: string;
 };
 
-const getDefaultColor = (theme: Theme) => theme.background.accent[3]
-const getCheckedColor = (theme: Theme) => theme.background[0]
+const getDefaultColor = (theme: Theme) => theme.color.background.accent[3]
+const getCheckedColor = (theme: Theme) => theme.color.background.neutral[0]
 
 export const Checkbox: React.FC<CheckedProps> = ({
   checked,

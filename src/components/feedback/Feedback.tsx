@@ -13,8 +13,7 @@ import {View} from 'react-native';
 import {RenderQuestion} from './RenderQuestions';
 import {Button} from '@atb/components/button';
 import {GoodOrBadQuestion} from './GoodOrBadQuestion';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {Theme} from '@atb-as/theme';
+import {StyleSheet, useTheme, Theme} from '@atb/theme';
 
 export enum Opinions {
   Good = 'GOOD',
@@ -22,8 +21,8 @@ export enum Opinions {
   NotClickedYet = 'NOTCLICKEDYET',
 }
 
-const getThemeColor = (theme: Theme) => theme.background[1];
-const getInteractiveColor = (theme: Theme) => theme.interactive[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];
 
 type VersionStats = {
   // answered is a number so that we know at which render the user answered

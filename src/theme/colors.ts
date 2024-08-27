@@ -84,6 +84,7 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
 
 // @TODO: Make part of @AtB-as/theme
 
+export type Themes = typeof themes;
 export type Theme = typeof themes['light'];
 export type InteractiveColor = Theme['color']['interactive'][0];
 export type TransportColor = Theme['color']['transport'];

@@ -2,8 +2,7 @@ import {RCTChangeNative} from '@atb/change-native';
 import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
 import {usePreferences} from '../preferences';
-import {Mode, Themes, themes} from './colors';
-import {Theme} from '@atb-as/theme';
+import {Mode, Theme, Themes, themes} from './colors';
 
 interface ThemeContextValue {
   theme: Theme;

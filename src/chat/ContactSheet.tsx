@@ -22,8 +22,8 @@ type Props = {
   onReportParkingViolation: () => void;
 };
 
-const getInteractiveColor = (theme: Theme) => theme.interactive[2]
-const getBackgroundColor = (theme: Theme) => theme.background[0]
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
 
 export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {t} = useTranslation();

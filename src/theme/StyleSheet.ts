@@ -4,8 +4,7 @@ import {
   TextStyle,
   ImageStyle,
 } from 'react-native';
-import {Mode as ThemeMode} from './colors';
-import {Theme} from '@atb-as/theme';
+import {Mode as ThemeMode, Theme} from './colors';
 import {useTheme} from './ThemeContext';
 
 export type NamedStyles<T> = {

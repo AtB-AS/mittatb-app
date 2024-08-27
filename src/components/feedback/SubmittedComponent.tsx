@@ -20,8 +20,8 @@ type SubmittedComponentProps = {
   firebaseId?: string;
 };
 
-const getThemeColor = (theme: Theme) => theme.background[1];
-const getInteractiveColor = (theme: Theme) => theme.interactive[2];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export const SubmittedComponent = ({
   viewContext,

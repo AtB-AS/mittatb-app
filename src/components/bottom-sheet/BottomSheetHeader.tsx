@@ -7,7 +7,6 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {insets} from '@atb/utils/insets';
-import { Theme } from '@atb-as/theme';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
@@ -33,7 +32,7 @@ export const BottomSheetHeader = ({
     closeBottomSheetDefault();
   };
 
-  const themeColor = theme.interactive[3];
+  const themeColor = theme.color.interactive[3];
   const {background: backgroundColor, foreground: { primary: textColor }} =
     themeColor.default;
 

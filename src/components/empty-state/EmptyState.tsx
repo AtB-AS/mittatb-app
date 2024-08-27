@@ -25,7 +25,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme()
-  const interactiveColor = theme.interactive[3]
+  const interactiveColor = theme.color.interactive[3]
 
   return (
     <View

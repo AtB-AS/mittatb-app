@@ -9,7 +9,6 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from './utils';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {getTransportationColor} from '@atb/theme/colors';
 
 export type TransportationIconBoxProps = {
   mode?: AnyMode;
@@ -28,18 +27,18 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   subMode,
   isFlexible = false,
   lineNumber,
-  size = 'normal',
+  size = 'medium',
   type = 'compact',
   style,
   disabled,
   testID,
 }) => {
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
-  const transportationColor = getTransportationColor(themeName, themeColor);
+  const transportationColor = theme.color.transport[themeColor].primary
   const backgroundColor = disabled
-    ? theme.text.colors.disabled
+    ? transportationColor.foreground.disabled
     : transportationColor.background;
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
@@ -69,7 +68,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
       <ThemeIcon
         size={size}
         svg={svg}
-        fill={transportationColor.text}
+        fill={transportationColor.foreground.primary}
         accessibilityLabel={t(getTranslatedModeName(mode))}
         testID={testID}
       />
@@ -82,13 +81,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIconBox: {
     display: 'flex',
     flexDirection: 'row',
-    padding: theme.spacings.xSmall,
+    padding: theme.spacing.xSmall,
     borderRadius: theme.border.radius.small,
   },
   standardTransportationIconBox: {
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
   },
   lineNumberText: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
   },
 }));

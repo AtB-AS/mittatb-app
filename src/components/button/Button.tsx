@@ -98,11 +98,11 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const interactiveColor =
       'interactiveColor' in props && props.interactiveColor
         ? props.interactiveColor
-        : theme.interactive[0];
+        : theme.color.interactive[0];
     const backgroundColor =
       'backgroundColor' in props && props.backgroundColor
         ? props.backgroundColor
-        : theme.background[0];
+        : theme.color.background.neutral[0];
 
     const fadeAnim = useRef(
       new Animated.Value(disabled ? DISABLED_OPACITY : 1),
