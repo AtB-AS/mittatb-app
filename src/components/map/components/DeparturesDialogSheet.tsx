@@ -166,6 +166,6 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   paddingHorizontal: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));
