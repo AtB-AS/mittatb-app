@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {ScrollView, View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {listRecurringPayments, PaymentType} from '@atb/ticketing';
+import {PaymentType, RecurringPayment} from '@atb/ticketing';
 import {PaymentMethod, SavedPaymentOption} from '../../types';
 import {useAuthState} from '@atb/auth';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -20,6 +20,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 type Props = {
   onSelect: (value: PaymentMethod) => void;
   previousPaymentMethod?: SavedPaymentOption;
+  recurringPayments?: RecurringPayment[];
 };
 
 function getSelectedPaymentMethod(
@@ -65,19 +66,13 @@ function isRecurring(option: PaymentMethod): option is {
   );
 }
 
-const remotePaymentOptions: SavedPaymentOption[] = [];
-
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
+  recurringPayments,
 }) => {
   const {t} = useTranslation();
-
-  const [loadingRecurringOptions, setLoadingRecurringOptions] =
-    useState<boolean>(true);
-
   const {authenticationType} = useAuthState();
-  const {theme} = useTheme();
   const {paymentTypes} = useFirestoreConfiguration();
 
   const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
@@ -92,29 +87,27 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
   >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
-  const [remoteOptions, setRemoteOptions] = useState(remotePaymentOptions);
   const styles = useStyles();
 
-  async function getRecurringPaymentOptions(): Promise<
-    Array<SavedPaymentOption>
-  > {
+  function getRecurringPaymentOptions(): SavedPaymentOption[] {
     if (authenticationType !== 'phone') return [];
-    const recurringOptions: Array<SavedPaymentOption> = (
-      await listRecurringPayments()
-    ).map((option) => {
-      return {
-        savedType: 'recurring',
-        paymentType: option.payment_type,
-        recurringCard: {
-          id: option.id,
-          masked_pan: option.masked_pan,
-          expires_at: option.expires_at,
-          payment_type: option.payment_type,
-        },
-      };
-    });
-    return [...recurringOptions.reverse()];
+    const recurringOptions: Array<SavedPaymentOption> | undefined =
+      recurringPayments?.map((option) => {
+        return {
+          savedType: 'recurring',
+          paymentType: option.payment_type,
+          recurringCard: {
+            id: option.id,
+            masked_pan: option.masked_pan,
+            expires_at: option.expires_at,
+            payment_type: option.payment_type,
+          },
+        };
+      });
+    return recurringOptions ? [...recurringOptions.reverse()] : [];
   }
+
+  const remoteOptions = getRecurringPaymentOptions();
 
   const isSelectedOption = (item: SavedPaymentOption) => {
     // False if types doesn't match
@@ -131,16 +124,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     // True if both are not recurring, false otherwise
     return !itemIsRecurring && !selectedIsRecurring;
   };
-
-  useEffect(() => {
-    async function run() {
-      const remoteOptions = await getRecurringPaymentOptions();
-      setRemoteOptions(remoteOptions);
-      setLoadingRecurringOptions(false);
-    }
-    run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previousPaymentMethod]);
 
   return (
     <BottomSheetContainer
@@ -163,17 +146,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 />
               );
             })}
-
-            {loadingRecurringOptions && (
-              <>
-                <ActivityIndicator
-                  color={theme.text.colors.primary}
-                  style={styles.spinner}
-                  animating={true}
-                  size="large"
-                />
-              </>
-            )}
 
             {remoteOptions.length > 0 && (
               <View style={styles.listHeading}>
