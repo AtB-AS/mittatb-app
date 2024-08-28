@@ -149,10 +149,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
-    ({count, offer: {offer_id}}) => ({
-      count,
-      offer_id,
-    }),
+    ({count, offer: {offer_id}}) => ({count, offer_id}),
   );
   const fromPlaceName = getPlaceName(fromPlace, language);
 
