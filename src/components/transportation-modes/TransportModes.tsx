@@ -8,7 +8,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {TextColor, TextNames} from '@atb-as/theme';
+import {ContrastColor, TextNames} from '@atb-as/theme';
 import _ from 'lodash';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 
@@ -51,7 +51,7 @@ export const TransportModes = ({
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
   textType?: TextNames;
-  textColor?: TextColor;
+  textColor?: ContrastColor;
   style?: ViewStyle;
   customTransportModeText?: string;
 }) => {
@@ -86,7 +86,7 @@ export const TransportModes = ({
       />
       <ThemeText
         type={textType ?? 'label__uppercase'}
-        color={textColor ?? 'secondary'}
+        color={textColor}
       >
         {customTransportModeText ?? description}
       </ThemeText>
@@ -101,6 +101,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
   transportationIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
 }));

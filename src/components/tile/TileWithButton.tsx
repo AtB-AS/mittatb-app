@@ -2,7 +2,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
+import {InteractiveColor} from '@atb/theme/colors';
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
@@ -33,8 +33,6 @@ export function TileWithButton({
   children,
 }: TileWithButtonProps): JSX.Element {
   const styles = useStyles(interactiveColor);
-  const {themeName} = useTheme();
-  const color = getInteractiveColor(themeName, interactiveColor);
 
   return (
     <PressableOpacity
@@ -70,9 +68,9 @@ export function TileWithButton({
           {buttonText}
         </ThemeText>
         <ThemeIcon
-          size={mode === 'spacious' ? 'normal' : 'xSmall'}
+          size={mode === 'spacious' ? 'medium' : 'xSmall'}
           svg={buttonSvg}
-          fill={color.outline.text}
+          fill={interactiveColor.outline.foreground.primary}
         />
       </View>
     </PressableOpacity>
@@ -82,35 +80,35 @@ export function TileWithButton({
 const useStyles = (interactiveColor: InteractiveColor) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
-      backgroundColor: theme.interactive[interactiveColor].default.background,
-      borderRadius: theme.border.radius.regular,
+      backgroundColor: interactiveColor.default.background,
+      borderRadius: theme.border.radius.medium,
       overflow: 'hidden',
       borderWidth: theme.border.width.slim,
-      borderColor: theme.static.background.background_2.background,
+      borderColor: theme.color.background.neutral[2].background,
     },
     spaciousContentContainer: {
-      padding: theme.spacings.xLarge,
+      padding: theme.spacing.xLarge,
       flexGrow: 1,
     },
     compactContentContainer: {
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
       flexGrow: 1,
     },
     button: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: theme.interactive[interactiveColor].outline.background,
+      backgroundColor: interactiveColor.outline.background,
     },
     spaciousButton: {
-      paddingHorizontal: theme.spacings.xLarge,
-      paddingVertical: theme.spacings.medium,
+      paddingHorizontal: theme.spacing.xLarge,
+      paddingVertical: theme.spacing.medium,
     },
     compactButton: {
-      paddingHorizontal: theme.spacings.medium,
-      paddingVertical: theme.spacings.small,
+      paddingHorizontal: theme.spacing.medium,
+      paddingVertical: theme.spacing.small,
     },
     buttonText: {
-      color: theme.interactive[interactiveColor].outline.text,
+      color: interactiveColor.outline.foreground.primary,
     },
   }))();

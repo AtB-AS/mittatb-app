@@ -21,7 +21,7 @@ export const WalkingDistance = ({style, distance}: Props) => {
   return (
     <View style={[style, sheetStyles.distanceLabel]}>
       <ThemeIcon svg={Walk} fill={theme.text.colors.secondary} style={sheetStyles.icon}/>
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText type="body__secondary" color={theme.text.colors.secondary}>
         {humanizedDistance}
       </ThemeText>
     </View>
@@ -34,7 +34,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   icon: {
-    marginStart: theme.spacings.small,
-    marginEnd: theme.spacings.small,
+    marginStart: theme.spacing.small,
+    marginEnd: theme.spacing.small,
   },
 }));

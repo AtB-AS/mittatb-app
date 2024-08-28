@@ -18,11 +18,13 @@ type Props = Pick<
 export function Toggle({
   value,
   onValueChange,
-  interactiveColor = 'interactive_1',
+  interactiveColor,
   ...props
 }: Props) {
   const [checked, setChecked] = useState(value);
   const {theme} = useTheme();
+  const interactiveColorValue = interactiveColor ?? theme.color.interactive[1]
+  const backgroundColor = theme.color.background.neutral[3].background
   const styles = useStyles();
 
   // Preserve outside changes
@@ -42,8 +44,8 @@ export function Toggle({
       value={checked}
       onValueChange={(value) => handleValueChange(value)}
       trackColor={{
-        true: theme.interactive[interactiveColor].outline.background,
-        false: theme.static.background.background_3.background,
+        true: interactiveColorValue.outline.background,
+        false: backgroundColor,
       }}
       thumbColor="white"
       style={[

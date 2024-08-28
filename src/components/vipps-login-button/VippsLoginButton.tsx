@@ -19,6 +19,7 @@ export const VippsLoginButton = ({
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0].default
 
   const styles = useStyles();
 
@@ -34,7 +35,7 @@ export const VippsLoginButton = ({
         <ThemeText
           type="body__primary--bold"
           style={styles.label}
-          color={theme.interactive.interactive_0.default}
+          color={interactiveColor}
         >
           {t(LoginTexts.logInOptions.options.vipps.label)}
         </ThemeText>
@@ -49,7 +50,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.medium,
     justifyContent: 'center',
     borderWidth: theme.border.width.medium,
     borderColor: VIPPS_BACKGROUND_COLOR,
@@ -58,11 +59,11 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     opacity: 0.2,
   },
   vippsLogo: {
-    marginLeft: theme.spacings.small,
-    marginTop: theme.spacings.xSmall,
+    marginLeft: theme.spacing.small,
+    marginTop: theme.spacing.xSmall,
     alignSelf: 'center',
   },
   label: {
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));
