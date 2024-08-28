@@ -93,7 +93,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const {savedPaymentMethod: previousPaymentMethod} =
+  const {savedPaymentMethod: previousPaymentMethod, recurringPayments} =
     usePreviousPaymentMethods();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
@@ -224,6 +224,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     openBottomSheet(() => {
       return (
         <SelectPaymentMethodSheet
+          recurringPayments={recurringPayments}
           onSelect={(option: PaymentMethod) => {
             goToPayment(option);
             closeBottomSheet();
