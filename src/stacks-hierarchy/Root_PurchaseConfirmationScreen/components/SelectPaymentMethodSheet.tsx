@@ -117,73 +117,66 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      fullHeight
-    >
-      <View style={{flex: 1}}>
-        <View style={{flexShrink: 1, flexGrow: 1}}>
-          <ScrollView style={styles.paymentOptions}>
-            {defaultPaymentOptions.map((option, index) => {
-              return (
-                <PaymentOptionView
-                  key={option.paymentType}
-                  option={option}
-                  selected={isSelectedOption(option)}
-                  onSelect={(val: PaymentMethod) => {
-                    setSelectedOption(val);
-                  }}
-                  index={index}
-                />
-              );
-            })}
+    <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
+      <ScrollView style={styles.paymentOptions}>
+        {defaultPaymentOptions.map((option, index) => {
+          return (
+            <PaymentOptionView
+              key={option.paymentType}
+              option={option}
+              selected={isSelectedOption(option)}
+              onSelect={(val: PaymentMethod) => {
+                setSelectedOption(val);
+              }}
+              index={index}
+            />
+          );
+        })}
 
-            {remoteOptions && remoteOptions.length > 0 && (
-              <View style={styles.listHeading}>
-                <ThemeText>
-                  {t(SelectPaymentMethodTexts.saved_cards.text)}
-                </ThemeText>
-              </View>
-            )}
+        {remoteOptions && remoteOptions.length > 0 && (
+          <View style={styles.listHeading}>
+            <ThemeText>
+              {t(SelectPaymentMethodTexts.saved_cards.text)}
+            </ThemeText>
+          </View>
+        )}
 
-            {remoteOptions?.map((option, index) => {
-              return (
-                <PaymentOptionView
-                  key={
-                    option.savedType === 'recurring'
-                      ? option.recurringCard.id
-                      : option.paymentType
-                  }
-                  option={option}
-                  selected={isSelectedOption(option)}
-                  onSelect={(val: PaymentMethod) => {
-                    setSelectedOption(val);
-                  }}
-                  index={index}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
-        <FullScreenFooter>
-          <Button
-            style={styles.confirmButton}
-            interactiveColor="interactive_0"
-            text={t(SelectPaymentMethodTexts.confirm_button.text)}
-            accessibilityHint={t(
-              SelectPaymentMethodTexts.confirm_button.a11yhint,
-            )}
-            onPress={() => {
-              if (selectedOption) {
-                onSelect(selectedOption);
+        {remoteOptions?.map((option, index) => {
+          return (
+            <PaymentOptionView
+              key={
+                option.savedType === 'recurring'
+                  ? option.recurringCard.id
+                  : option.paymentType
               }
-            }}
-            disabled={!selectedOption}
-            rightIcon={{svg: ArrowRight}}
-            testID="confirmButton"
-          />
-        </FullScreenFooter>
-      </View>
+              option={option}
+              selected={isSelectedOption(option)}
+              onSelect={(val: PaymentMethod) => {
+                setSelectedOption(val);
+              }}
+              index={index}
+            />
+          );
+        })}
+      </ScrollView>
+      <FullScreenFooter>
+        <Button
+          style={styles.confirmButton}
+          interactiveColor="interactive_0"
+          text={t(SelectPaymentMethodTexts.confirm_button.text)}
+          accessibilityHint={t(
+            SelectPaymentMethodTexts.confirm_button.a11yhint,
+          )}
+          onPress={() => {
+            if (selectedOption) {
+              onSelect(selectedOption);
+            }
+          }}
+          disabled={!selectedOption}
+          rightIcon={{svg: ArrowRight}}
+          testID="confirmButton"
+        />
+      </FullScreenFooter>
     </BottomSheetContainer>
   );
 };
