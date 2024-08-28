@@ -7,7 +7,11 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {PaymentType, RecurringPayment} from '@atb/ticketing';
-import {PaymentMethod, SavedPaymentOption} from '../../types';
+import {
+  PaymentMethod,
+  RecurringPaymentOption,
+  SavedPaymentOption,
+} from '../../types';
 import {useAuthState} from '@atb/auth';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -72,7 +76,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   recurringPayments,
 }) => {
   const {t} = useTranslation();
-  const {authenticationType} = useAuthState();
   const {paymentTypes} = useFirestoreConfiguration();
 
   const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
@@ -89,25 +92,13 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
   const styles = useStyles();
 
-  function getRecurringPaymentOptions(): SavedPaymentOption[] {
-    if (authenticationType !== 'phone') return [];
-    const recurringOptions: Array<SavedPaymentOption> | undefined =
-      recurringPayments?.map((option) => {
-        return {
-          savedType: 'recurring',
-          paymentType: option.payment_type,
-          recurringCard: {
-            id: option.id,
-            masked_pan: option.masked_pan,
-            expires_at: option.expires_at,
-            payment_type: option.payment_type,
-          },
-        };
-      });
-    return recurringOptions ? [...recurringOptions.reverse()] : [];
-  }
-
-  const remoteOptions = getRecurringPaymentOptions();
+  const remoteOptions: RecurringPaymentOption[] | undefined = recurringPayments
+    ?.map((option) => ({
+      savedType: 'recurring' as 'recurring', // Workaround for a TypeScript bug
+      paymentType: option.payment_type,
+      recurringCard: option,
+    }))
+    .reverse();
 
   const isSelectedOption = (item: SavedPaymentOption) => {
     // False if types doesn't match
@@ -147,7 +138,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               );
             })}
 
-            {remoteOptions.length > 0 && (
+            {remoteOptions && remoteOptions.length > 0 && (
               <View style={styles.listHeading}>
                 <ThemeText>
                   {t(SelectPaymentMethodTexts.saved_cards.text)}
@@ -155,7 +146,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               </View>
             )}
 
-            {remoteOptions.map((option, index) => {
+            {remoteOptions?.map((option, index) => {
               return (
                 <PaymentOptionView
                   key={
