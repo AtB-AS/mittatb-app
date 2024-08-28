@@ -76,20 +76,11 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   recurringPayments,
 }) => {
   const {t} = useTranslation();
-  const {paymentTypes} = useFirestoreConfiguration();
-
-  const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
-    (paymentType) => {
-      return {
-        paymentType: paymentType,
-        savedType: 'normal',
-      };
-    },
-  );
+  const {paymentTypes: defaultPaymentOptions} = useFirestoreConfiguration();
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
-  >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
+  >(getSelectedPaymentMethod(defaultPaymentOptions, previousPaymentMethod));
   const styles = useStyles();
 
   const remoteOptions: RecurringPaymentOption[] | undefined = recurringPayments
@@ -119,19 +110,21 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   return (
     <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
       <ScrollView style={styles.paymentOptions}>
-        {defaultPaymentOptions.map((option, index) => {
-          return (
-            <PaymentOptionView
-              key={option.paymentType}
-              option={option}
-              selected={isSelectedOption(option)}
-              onSelect={(val: PaymentMethod) => {
-                setSelectedOption(val);
-              }}
-              index={index}
-            />
-          );
-        })}
+        {defaultPaymentOptions.map((paymentType, index) => (
+          <PaymentOptionView
+            key={paymentType}
+            option={{
+              paymentType: paymentType,
+              savedType: 'normal',
+            }}
+            selected={isSelectedOption({
+              paymentType: paymentType,
+              savedType: 'normal',
+            })}
+            onSelect={setSelectedOption}
+            index={index}
+          />
+        ))}
 
         {remoteOptions && remoteOptions.length > 0 && (
           <View style={styles.listHeading}>
@@ -141,23 +134,21 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
           </View>
         )}
 
-        {remoteOptions?.map((option, index) => {
-          return (
-            <PaymentOptionView
-              key={
-                option.savedType === 'recurring'
-                  ? option.recurringCard.id
-                  : option.paymentType
-              }
-              option={option}
-              selected={isSelectedOption(option)}
-              onSelect={(val: PaymentMethod) => {
-                setSelectedOption(val);
-              }}
-              index={index}
-            />
-          );
-        })}
+        {remoteOptions?.map((option, index) => (
+          <PaymentOptionView
+            key={
+              option.savedType === 'recurring'
+                ? option.recurringCard.id
+                : option.paymentType
+            }
+            option={option}
+            selected={isSelectedOption(option)}
+            onSelect={(val: PaymentMethod) => {
+              setSelectedOption(val);
+            }}
+            index={index}
+          />
+        ))}
       </ScrollView>
       <FullScreenFooter>
         <Button
