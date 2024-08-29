@@ -108,7 +108,6 @@ export type NextScreenParams<
 
 export type RootStackParamList = StackParams<{
   Root_ExtendedOnboardingStack: undefined;
-  Root_TermsInformationScreen: undefined;
   Root_ConsiderTravelTokenChangeScreen: undefined;
   Root_SelectTravelTokenScreen: undefined;
   Root_TicketAssistantStack: undefined;

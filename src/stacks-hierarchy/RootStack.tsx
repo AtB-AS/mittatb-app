@@ -57,7 +57,6 @@ import {
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
-import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
@@ -287,10 +286,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ExtendedOnboardingStack"
                 component={Root_ExtendedOnboardingStack}
-              />
-              <Stack.Screen
-                name="Root_TermsInformationScreen"
-                component={Root_TermsInformationScreen}
               />
               <Stack.Screen
                 name="Root_ConsiderTravelTokenChangeScreen"

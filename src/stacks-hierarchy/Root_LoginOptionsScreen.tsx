@@ -26,10 +26,8 @@ import queryString from 'query-string';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {APP_ORG} from '@env';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 
@@ -219,30 +217,17 @@ export const Root_LoginOptionsScreen = ({
             testID="useAppAnonymouslyButton"
           />
         </View>
-        {APP_ORG === 'atb' ? (
-          <View style={styles.termsOfUseButtonContainer}>
-            <PressableOpacity
-              onPress={() => navigation.navigate('Root_TermsInformationScreen')}
-              role="button"
-            >
-              <ThemeText color={themeColor} style={styles.termsOfUseText}>
-                {t(LoginTexts.logInOptions.termsOfUse)}
-              </ThemeText>
-            </PressableOpacity>
+        {termsInfoUrl && (
+          <View style={styles.termsOfUseLinkContainer}>
+            <Button
+              backgroundColor={themeColor}
+              mode="tertiary"
+              rightIcon={{svg: ExternalLink}}
+              onPress={() => InAppBrowser.open(termsInfoUrl, {animated: true})}
+              text={t(LoginTexts.logInOptions.termsOfUse)}
+              accessibilityRole="link"
+            />
           </View>
-        ) : (
-          termsInfoUrl && (
-            <View style={styles.termsOfUseLinkContainer}>
-              <Button
-                backgroundColor={themeColor}
-                mode="tertiary"
-                rightIcon={{svg: ExternalLink}}
-                onPress={() => Linking.openURL(termsInfoUrl)}
-                text={t(LoginTexts.logInOptions.termsOfUse)}
-                accessibilityRole="link"
-              />
-            </View>
-          )
         )}
       </ScrollView>
     </View>
