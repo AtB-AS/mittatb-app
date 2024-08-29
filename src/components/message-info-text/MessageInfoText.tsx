@@ -12,7 +12,7 @@ export type MessageInfoTextProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
-  textColor?: ContrastColor;
+  textColor?: ContrastColor | TextColor;
   isMarkdown?: boolean;
 };
 
@@ -28,7 +28,7 @@ export const MessageInfoText = ({
   const styles = useStyles();
   const {themeName} = useTheme();
 
-  const iconColorProps = {colorType: textColor};
+  const iconColorProps = {color: textColor};
 
   return (
     <View

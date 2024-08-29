@@ -76,9 +76,9 @@ export const CompactFareContracts: React.FC<Props> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
+    rowGap: theme.spacing.small,
   },
   fareContracts: {
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

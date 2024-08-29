@@ -36,8 +36,8 @@ export const SaveRecipientToggle = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
 }));

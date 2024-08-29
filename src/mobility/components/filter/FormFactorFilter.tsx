@@ -63,6 +63,6 @@ export const FormFactorFilter = ({
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
+    rowGap: theme.spacing.small,
   },
 }));

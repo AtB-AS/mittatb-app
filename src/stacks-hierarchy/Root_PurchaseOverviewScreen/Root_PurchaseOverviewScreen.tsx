@@ -381,22 +381,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     header: {
-      marginHorizontal: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
     },
     contentContainer: {
-      rowGap: theme.spacings.medium,
-      margin: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      rowGap: theme.spacing.medium,
+      margin: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     messages: {
-      rowGap: theme.spacings.medium,
-      marginTop: theme.spacings.medium,
+      rowGap: theme.spacing.medium,
+      marginTop: theme.spacing.medium,
     },
     selectionComponent: {
-      rowGap: theme.spacings.medium,
+      rowGap: theme.spacing.medium,
     },
     summary: {
-      marginVertical: theme.spacings.medium,
+      marginVertical: theme.spacing.medium,
     },
   };
 });

@@ -56,13 +56,13 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
 };
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.color.background.neutral[3].background,
     flex: 1,
   },
   error: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   orderContainer: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

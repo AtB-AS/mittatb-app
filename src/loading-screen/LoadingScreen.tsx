@@ -1,14 +1,16 @@
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 
-const themeColor = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const LoadingScreen = React.memo(() => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
 
   return (
     <View
@@ -37,10 +39,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
-  loadingText: {textAlign: 'center', marginTop: theme.spacings.medium},
+  loadingText: {textAlign: 'center', marginTop: theme.spacing.medium},
   activityIndicator: {
-    backgroundColor: theme.static.background[themeColor].text,
+    backgroundColor: getThemeColor(theme).foreground.primary,
   },
 }));

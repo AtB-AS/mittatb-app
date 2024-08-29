@@ -85,7 +85,7 @@ export const LinkSectionItem = forwardRef<View, Props>(
       >
         <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
-            style={[contentContainer, {color: themeColor.text}]}
+            style={[contentContainer, {color: themeColor.foreground.primary}]}
             type={textType}
           >
             {text}

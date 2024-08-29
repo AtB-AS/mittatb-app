@@ -128,19 +128,19 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   headerContainer: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   header: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   withMargin: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   contentBlock: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   scroll: {
     flex: 1,

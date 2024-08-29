@@ -85,12 +85,12 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    margin: theme.spacings.xLarge,
+    margin: theme.spacing.xLarge,
     textAlign: 'center',
     fontWeight: '700',
   },
   description: {
     textAlign: 'center',
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

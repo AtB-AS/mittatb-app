@@ -54,7 +54,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const marginBottom =
-    safeAreaBottom > 0 ? safeAreaBottom : theme.spacings.medium;
+    safeAreaBottom > 0 ? safeAreaBottom : theme.spacing.medium;
 
   return (
     <BottomSheetContainer
@@ -67,7 +67,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
       maxHeightValue={0.83}
     >
       <View style={[style.scrollViewContainer, {marginBottom}]}>
-        <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
+        <ScrollView contentContainerStyle={{padding: theme.spacing.xLarge}}>
           <View style={style.messageBoxContainer}>
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
@@ -145,40 +145,40 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    paddingHorizontal: theme.spacings.small,
-    paddingTop: theme.spacings.small,
+    paddingHorizontal: theme.spacing.small,
+    paddingTop: theme.spacing.small,
   },
   scrollViewContainer: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
     flex: 1,
   },
   messageBoxContainer: {
-    paddingBottom: theme.spacings.small,
+    paddingBottom: theme.spacing.small,
   },
   imageContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingBottom: theme.spacings.large,
+    paddingBottom: theme.spacing.large,
   },
   steps: {
-    paddingHorizontal: theme.spacings.small,
-    paddingTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.xSmall,
+    paddingHorizontal: theme.spacing.small,
+    paddingTop: theme.spacing.medium,
+    paddingBottom: theme.spacing.xSmall,
   },
   step: {
     display: 'flex',
     flexDirection: 'row',
   },
   linkText: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     alignSelf: 'flex-start',
   },
   readMoreAbout: {
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
-    marginBottom: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.small,
+    paddingVertical: theme.spacing.small,
+    marginBottom: theme.spacing.medium,
   },
 }));

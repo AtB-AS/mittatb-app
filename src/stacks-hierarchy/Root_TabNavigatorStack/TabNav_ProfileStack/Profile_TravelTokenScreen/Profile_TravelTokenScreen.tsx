@@ -49,14 +49,14 @@ export const Profile_TravelTokenScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
   scrollView: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   tokenInfoSection: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   tokenInfoView: {flexDirection: 'row'},
 }));

@@ -269,12 +269,6 @@ function LineChip({
     transportMode,
     transportSubmode,
   );
-  const transportTextColor = useTransportationColor(
-    transportMode,
-    transportSubmode,
-    false,
-    'text',
-  );
 
   const msgType = mode !== 'Favourite' && getMsgTypeForEstimatedCall(departure);
   const icon = msgType && messageTypeToIcon(msgType, true, themeName);
@@ -282,17 +276,17 @@ function LineChip({
   if (!publicCode && !transportMode) return null;
 
   return (
-    <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
+    <View style={[styles.lineChip, {backgroundColor: transportColor.background}]}>
       <ThemeIcon
-        fill={transportTextColor}
-        style={{marginRight: publicCode ? theme.spacings.small : 0}}
+        color={transportColor.foreground.primary}
+        style={{marginRight: publicCode ? theme.spacing.small : 0}}
         svg={svg}
       />
       {publicCode && (
         <ThemeText
           style={[
             styles.lineChipText,
-            {color: transportTextColor, minWidth: fontScale * 20},
+            {color: transportColor.foreground.primary, minWidth: fontScale * 20},
           ]}
           type="body__primary--bold"
           testID={`${testID}PublicCode`}
@@ -313,7 +307,7 @@ const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
 
 export const getMsgTypeForEstimatedCall = (
   estimatedCall: EstimatedCall,
-): Exclude<Statuses, 'valid'> | undefined => {
+): Exclude<Statuses, 'success'> | undefined => {
   const msgTypeForSituationOrNotice =
     getMsgTypeForMostCriticalSituationOrNotice(
       estimatedCall.situations,
@@ -337,7 +331,7 @@ export const getMsgTypeForEstimatedCall = (
     msgTypeForSituationOrNotice,
     msgTypeForBooking,
     msgTypeForRailReplacementBus,
-  ].reduce<Exclude<Statuses, 'valid'> | undefined>(
+  ].reduce<Exclude<Statuses, 'success'> | undefined>(
     toMostCriticalStatus,
     undefined,
   );
@@ -349,7 +343,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
   lineAndDepartureTime: {
     flex: 1,
@@ -365,29 +359,29 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     minWidth: '30%',
   },
   realtimeIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   lineChip: {
-    padding: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    marginRight: theme.spacings.medium,
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.medium,
+    marginRight: theme.spacing.medium,
     flexDirection: 'row',
   },
   lineChipIcon: {
     position: 'absolute',
-    top: -theme.spacings.small,
-    left: -theme.spacings.small,
+    top: -theme.spacing.small,
+    left: -theme.spacing.small,
   },
   lineChipText: {
-    color: theme.static.background.background_accent_3.text,
+    color: theme.color.background.accent[3].foreground.primary,
     textAlign: 'center',
   },
   realtimeAndText: {flexDirection: 'row', alignItems: 'center'},
   realtime: {flexDirection: 'row', alignItems: 'center'},
   aimedTime: {textAlign: 'right'},
-  warningIcon: {marginRight: theme.spacings.small},
+  warningIcon: {marginRight: theme.spacing.small},
 }));

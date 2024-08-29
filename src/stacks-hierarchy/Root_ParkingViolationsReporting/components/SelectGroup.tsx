@@ -97,7 +97,7 @@ const SelectItem = <T,>({
 }: ItemProps<T>) => {
   const itemStyles = useItemStyles();
   const {theme} = useTheme();
-  const background = theme.static.background.background_0.background;
+  const background = theme.color.background.neutral[0].background;
   const selectedBackground = theme.interactive.interactive_2.active.background;
   const selectedBorder = theme.interactive.interactive_0.default.background;
 
@@ -136,18 +136,18 @@ const SelectItem = <T,>({
 
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   item: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.medium,
     borderWidth: 2,
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.xLarge,
     flexDirection: 'row',
     alignItems: 'center',
   },
   indicator: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
 }));

@@ -48,6 +48,6 @@ export const TravelSearchPreference = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

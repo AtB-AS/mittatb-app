@@ -79,7 +79,7 @@ export const Profile_DesignSystemScreen = ({
       style={{
         backgroundColor: color.background,
         color: color.text,
-        padding: theme.spacings.medium,
+        padding: theme.spacing.medium,
       }}
     >
       {name} {color.text} / {color.background}
@@ -115,7 +115,7 @@ export const Profile_DesignSystemScreen = ({
     return (
       <Swatch
         color={{
-          text: theme.static.background.background_0.background,
+          text: theme.color.background.neutral[0].background,
           background: textColors[color as keyof typeof textColors],
         }}
         name={color}
@@ -142,7 +142,7 @@ export const Profile_DesignSystemScreen = ({
       key={color}
       activeIndex={segmentedSelection}
       style={{
-        marginTop: theme.spacings.small,
+        marginTop: theme.spacing.small,
       }}
       color={color as InteractiveColor}
       options={radioSegmentsOptions}
@@ -426,7 +426,7 @@ export const Profile_DesignSystemScreen = ({
                 style={{
                   flexDirection: 'row',
                   flexWrap: 'wrap',
-                  marginTop: -theme.spacings.small,
+                  marginTop: -theme.spacing.small,
                 }}
               >
                 <LabelInfo label="new" />
@@ -1145,7 +1145,7 @@ export const Profile_DesignSystemScreen = ({
           {textSwatches}
         </View>
 
-        <View style={{margin: theme.spacings.medium}}>
+        <View style={{margin: theme.spacing.medium}}>
           <ThemeText>Segmented controls:</ThemeText>
           {radioSegments}
         </View>
@@ -1160,26 +1160,26 @@ function presser() {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   buttonContainer: {
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   transportationIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   icons: {
     flexDirection: 'row',
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
     flexWrap: 'wrap',
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   swatchGroup: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

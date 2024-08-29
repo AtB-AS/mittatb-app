@@ -1,20 +1,20 @@
 import React from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {View} from 'react-native';
-import { ContrastColor } from '@atb-as/theme';
+import { ColorValue } from 'react-native';
 
 type CheckedProps = {
   checked: boolean;
-  color: ContrastColor;
+  color: ColorValue;
 };
 
 export function RadioIcon({checked, color }: CheckedProps) {
   const styles = useStyles();
  
   return (
-    <View style={[styles.radio, {borderColor: color.background}]}>
+    <View style={[styles.radio, {borderColor: color}]}>
       {checked ? (
-        <View style={[styles.radioInner, {backgroundColor: color.background}]} />
+        <View style={[styles.radioInner, {backgroundColor: color}]} />
       ) : null}
     </View>
   );

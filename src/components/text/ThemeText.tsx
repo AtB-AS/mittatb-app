@@ -5,6 +5,7 @@ import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
   ContrastColor,
+  Statuses,
   TextColor,
   TextNames,
   useColor,
@@ -12,7 +13,7 @@ import {
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: ContrastColor | TextColor | ColorValue;
+  color?: ContrastColor | Statuses | TextColor | ColorValue;
   isMarkdown?: boolean;
 };
 

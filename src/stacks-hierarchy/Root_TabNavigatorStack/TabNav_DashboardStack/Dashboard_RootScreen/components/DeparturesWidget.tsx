@@ -161,7 +161,7 @@ function compareStopsByDistance(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   noFavouritesView: {
     flexDirection: 'row',
@@ -169,15 +169,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noFavouritesTextContainer: {
     flex: 1,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacing.small,
   },
   noFavouritesText: {
-    marginHorizontal: theme.spacings.small,
+    marginHorizontal: theme.spacing.small,
   },
   noFavouritesUrl: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   activityIndicator: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
 }));

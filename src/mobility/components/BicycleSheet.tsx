@@ -148,25 +148,25 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     container: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     content: {
       flexDirection: 'row',
       alignContent: 'center',
     },
     operatorBenefit: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     errorMessage: {
-      marginHorizontal: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginHorizontal: theme.spacing.medium,
     },
     operatorNameAndLogo: {
       flexDirection: 'row',

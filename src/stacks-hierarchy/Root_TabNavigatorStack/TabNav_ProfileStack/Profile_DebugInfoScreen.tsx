@@ -849,25 +849,25 @@ function MapEntry({title, value}: {title: string; value: any}) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   icons: {
     flexDirection: 'row',
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   buttons: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   button: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacing.small,
   },
   remoteToken: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   objectEntry: {
     flexDirection: 'column',

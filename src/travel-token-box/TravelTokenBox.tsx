@@ -9,7 +9,7 @@ import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button'; // re-add when new onboarding ready
-import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
+import {InteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
@@ -17,21 +17,19 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 export function TravelTokenBox({
   showIfThisDevice,
   alwaysShowErrors,
-  interactiveColor = 'interactive_1',
+  interactiveColor,
 }: {
   showIfThisDevice: boolean;
   alwaysShowErrors?: boolean;
   interactiveColor?: InteractiveColor;
 }) {
-  const styles = useStyles(interactiveColor)();
+  const {theme} = useTheme();
+  const themeTextColor = interactiveColor ?? theme.color.interactive[1];
+
+  const styles = useStyles(themeTextColor)();
   const {t} = useTranslation();
   const {mobileTokenStatus, isInspectable, tokens, retry} = useMobileTokenContextState();
 
-  const {themeName} = useTheme();
-  const themeTextColor = getInteractiveColor(
-    themeName,
-    interactiveColor,
-  ).default;
 
   const navigation = useNavigation<RootNavigationProps>();
   const onPressChangeButton = () =>
@@ -95,7 +93,7 @@ export function TravelTokenBox({
         <View style={styles.activeTravelTokenInfo}>
           <ThemeText
             type="body__primary--bold"
-            color={themeTextColor}
+            color={themeTextColor.default}
             style={styles.travelTokenBoxTitle}
           >
             {t(TravelTokenBoxTexts.title) +
@@ -110,14 +108,14 @@ export function TravelTokenBox({
           {inspectableToken && (
             <TravelTokenDeviceTitle
               inspectableToken={inspectableToken}
-              themeTextColor={themeTextColor}
+              themeTextColor={themeTextColor.default}
             />
           )}
         </View>
       </View>
       <Button
         mode="secondary"
-        backgroundColor={interactiveColor}
+        backgroundColor={themeTextColor.default}
         onPress={onPressChangeButton}
         text={t(TravelTokenBoxTexts.change)}
         testID="continueWithoutChangingTravelTokenButton"
@@ -129,28 +127,28 @@ export function TravelTokenBox({
 const useStyles = (interactiveColor: InteractiveColor) =>
   StyleSheet.createThemeHook((theme: Theme) => ({
     loadingIndicator: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     errorMessage: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
 
     container: {
-      backgroundColor: theme.interactive[interactiveColor].default.background,
-      padding: theme.spacings.xLarge,
-      borderRadius: theme.border.radius.regular,
-      marginBottom: theme.spacings.medium,
+      backgroundColor: interactiveColor.default.background,
+      padding: theme.spacing.xLarge,
+      borderRadius: theme.border.radius.medium,
+      marginBottom: theme.spacing.medium,
     },
     content: {
-      marginBottom: theme.spacings.large,
+      marginBottom: theme.spacing.large,
       display: 'flex',
       flexDirection: 'row',
     },
     activeTravelTokenInfo: {
       flex: 1,
-      marginLeft: theme.spacings.medium,
+      marginLeft: theme.spacing.medium,
     },
     travelTokenBoxTitle: {
-      marginBottom: theme.spacings.xSmall,
+      marginBottom: theme.spacing.xSmall,
     },
   }));

@@ -67,6 +67,6 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
+    rowGap: theme.spacing.small,
   },
 }));

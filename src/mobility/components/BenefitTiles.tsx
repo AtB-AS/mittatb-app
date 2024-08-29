@@ -1,7 +1,7 @@
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
+import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
 import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
@@ -86,7 +86,7 @@ export const BenefitTile = ({
         />
         <ThemeText
           type="body__tertiary--bold"
-          color={getInteractiveColor(themeName, interactiveColor).default}
+          color={interactiveColor.default}
         >
           {title}
         </ThemeText>
@@ -135,10 +135,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   image: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   description: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   benefits: {
     flexDirection: 'row',

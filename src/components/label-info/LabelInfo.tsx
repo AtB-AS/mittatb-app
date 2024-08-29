@@ -22,7 +22,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText color={theme.color.status.info.primary} type="body__tertiary">
+      <ThemeText color="info" type="body__tertiary">
         {flagTranslated}
       </ThemeText>
     </View>

@@ -88,22 +88,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
     width: '100%',
   },
   mainView: {
     flex: 1,
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
     width: '100%',
   },
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   backdrop: {
     position: 'absolute',

@@ -79,8 +79,8 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           return <PageIndicator {...props} />;
         }}
         style={{
-          paddingTop: theme.spacings.xLarge,
-          paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
+          paddingTop: theme.spacing.xLarge,
+          paddingBottom: Math.max(safeAreaBottom, theme.spacing.medium),
           backgroundColor: theme.static.background[themeColor].background,
         }}
         tabBarPosition="bottom"

@@ -4,8 +4,7 @@ import {Logo} from '@atb/assets/svg/mono-icons/logo';
 import {Linking, Platform, ScrollView, View} from 'react-native';
 import React, {useState} from 'react';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors.ts';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   ForceUpdateTexts,
   getTextForLanguage,
@@ -15,12 +14,13 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) =>  theme.color.background.accent[0];
 
 export const ForceUpdateScreen = () => {
   const [error, setError] = useState<boolean>(false);
   const styles = useStyles();
   const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const {t, language} = useTranslation();
   const {configurableLinks} = useFirestoreConfiguration();
 
@@ -34,7 +34,7 @@ export const ForceUpdateScreen = () => {
             <Logo
               width={iconDimension}
               height={iconDimension}
-              fill={theme.static.background[themeColor].text}
+              fill={themeColor.foreground.primary}
             />
           </View>
           <ThemeText
@@ -89,7 +89,7 @@ export const ForceUpdateScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {
@@ -97,20 +97,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   icon: {
     alignItems: 'center',
   },
   subText: {
     textAlign: 'center',
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   messageBox: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
 }));

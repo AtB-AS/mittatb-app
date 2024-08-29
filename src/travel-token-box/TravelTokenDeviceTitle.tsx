@@ -72,7 +72,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flexWrap: 'wrap',
   },
   tokenName: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   transparent: {
     opacity: 0.6,

@@ -83,10 +83,10 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     contentContainer: {
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
     },
     section: {
-      marginBottom: theme.spacings.large,
+      marginBottom: theme.spacing.large,
     },
   };
 });

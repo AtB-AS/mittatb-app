@@ -30,8 +30,8 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
           backgroundColor: currentColor.background,
           borderColor: theme.interactive[color].outline.background,
           borderWidth: borderOffset,
-          paddingVertical: theme.spacings.medium - borderOffset,
-          paddingHorizontal: theme.spacings.xLarge - borderOffset,
+          paddingVertical: theme.spacing.medium - borderOffset,
+          paddingHorizontal: theme.spacing.xLarge - borderOffset,
         },
       ]}
       onPress={onPress}
@@ -54,7 +54,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     borderRadius: theme.border.radius.circle * 2,
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
     justifyContent: 'center',
   },
 }));

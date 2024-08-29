@@ -160,9 +160,9 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   content: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
 }));

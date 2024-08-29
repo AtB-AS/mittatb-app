@@ -59,12 +59,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: CIRCLE_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     borderRadius: CIRCLE_SIZE / 2,
     backgroundColor: theme.interactive[circleColor].outline.background,
   },
   message: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
 }));

@@ -130,12 +130,12 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     buttonsContainer: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.large,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.large,
       flexDirection: 'row',
       gap: 8,
     },
@@ -150,7 +150,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       alignItems: 'center',
     },
     disclaimer: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
   };
 });

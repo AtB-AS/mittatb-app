@@ -74,7 +74,7 @@ export const Announcement = ({announcement, style}: Props) => {
               <PressableOpacity
                 style={styles.close}
                 role="button"
-                hitSlop={insets.all(theme.spacings.medium)}
+                hitSlop={insets.all(theme.spacing.medium)}
                 accessibilityHint={t(
                   DashboardTexts.announcemens.announcement.closeA11yHint,
                 )}
@@ -147,9 +147,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   imageContainer: {
-    marginRight: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-    padding: -theme.border.radius.regular,
+    marginRight: theme.spacing.medium,
+    borderRadius: theme.border.radius.medium,
+    padding: -theme.border.radius.medium,
     overflow: 'hidden',
   },
   textContainer: {
@@ -163,7 +163,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   summary: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   close: {
     flexGrow: 0,

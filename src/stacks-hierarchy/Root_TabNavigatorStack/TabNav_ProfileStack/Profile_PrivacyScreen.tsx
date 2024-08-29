@@ -250,11 +250,11 @@ export const Profile_PrivacyScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.small,
-    rowGap: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
   },
   spacingTop: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
 }));

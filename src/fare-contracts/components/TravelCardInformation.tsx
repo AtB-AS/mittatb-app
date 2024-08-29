@@ -76,17 +76,17 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
       <View style={styles.cardNumber} accessible={false}>
         <ThemeText
           type="body__tertiary"
-          color={color.foreground.primary}
+          color={color}
           style={styles.transparentText}
         >
           XXXX XX
         </ThemeText>
-        <ThemeText type="body__tertiary" color={color.foreground.primary}>
+        <ThemeText type="body__tertiary" color={color}>
           {formatedTravelCardId}
         </ThemeText>
         <ThemeText
           type="body__tertiary"
-          color={color.foreground.primary}
+          color={color}
           style={styles.transparentText}
         >
           X
@@ -95,7 +95,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
       <View>
         <ThemeText
           type="body__tertiary"
-          color={getBackgroundColor(theme).foreground.primary}
+          color={getBackgroundColor(theme)}
           style={styles.tcardicon}
         >
           {'\n'}

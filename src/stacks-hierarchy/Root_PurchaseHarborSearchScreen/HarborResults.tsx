@@ -139,7 +139,7 @@ function getDistance(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -147,7 +147,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   buttonContainer: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     flex: 1,
   },
   button: {
@@ -155,6 +155,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

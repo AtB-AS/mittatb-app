@@ -79,33 +79,33 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   description: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.xLarge,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.xLarge,
     textAlign: 'center',
   },
   notice: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.xLarge,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.xLarge,
   },
   noticeText: {
     textAlign: 'left',
     flexShrink: 1,
   },
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   boatInfo: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     textAlign: 'center',
-    marginHorizontal: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
 }));

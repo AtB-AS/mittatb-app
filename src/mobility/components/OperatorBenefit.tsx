@@ -71,7 +71,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 4,
   },
   benefitImage: {
-    marginEnd: theme.spacings.medium,
-    marginStart: theme.spacings.small,
+    marginEnd: theme.spacing.medium,
+    marginStart: theme.spacing.small,
   },
 }));

@@ -59,13 +59,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   checkmark: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     height: 72,
     width: 72,
     alignItems: 'center',

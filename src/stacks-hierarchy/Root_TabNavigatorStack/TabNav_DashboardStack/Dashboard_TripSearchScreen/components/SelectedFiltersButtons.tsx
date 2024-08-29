@@ -57,7 +57,7 @@ export const SelectedFiltersButtons = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

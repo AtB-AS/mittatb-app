@@ -16,7 +16,7 @@ export function FareContractDetail({
   const {theme} = useTheme();
 
   const themeColor = theme.color.background.neutral[0]
-  const textColor = theme.text.colors['secondary']
+  const textColor = theme.color.foreground.dynamic.secondary
 
   return (
     <View style={styles.container}>

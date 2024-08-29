@@ -51,8 +51,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: theme.spacings.medium,
-      marginHorizontal: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
+      marginHorizontal: theme.spacing.medium,
       alignItems: 'center',
     },
     switchAndLabel: {
@@ -60,6 +60,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       justifyContent: 'flex-end',
       alignItems: 'center',
     },
-    label: {marginRight: theme.spacings.xSmall},
+    label: {marginRight: theme.spacing.xSmall},
   };
 });

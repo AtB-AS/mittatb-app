@@ -247,22 +247,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   buttonContainer: {
-    marginBottom: theme.spacings.large,
-    rowGap: theme.spacings.medium,
+    marginBottom: theme.spacing.large,
+    rowGap: theme.spacing.medium,
   },
   emojiContainer: {
     width: '50%',
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   innerContainer: {
     flex: 1,
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
   },
   errorMessageBox: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

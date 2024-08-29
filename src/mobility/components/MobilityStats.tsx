@@ -23,10 +23,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
   },
   vehicleStat: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.medium,
   },
   vehicleStat__first: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
 }));

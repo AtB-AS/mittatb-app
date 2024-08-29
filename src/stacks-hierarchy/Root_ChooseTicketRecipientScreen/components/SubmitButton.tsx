@@ -141,6 +141,6 @@ export const SubmitButton = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {marginTop: theme.spacings.xLarge},
-  errorMessage: {marginBottom: theme.spacings.medium},
+  container: {marginTop: theme.spacing.xLarge},
+  errorMessage: {marginBottom: theme.spacing.medium},
 }));

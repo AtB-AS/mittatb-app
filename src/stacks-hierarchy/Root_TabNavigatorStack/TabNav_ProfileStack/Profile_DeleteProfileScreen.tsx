@@ -77,7 +77,7 @@ export const Profile_DeleteProfileScreen = () => {
       }}
       parallaxContent={(focusRef) => (
         <View
-          style={{marginHorizontal: theme.spacings.medium}}
+          style={{marginHorizontal: theme.spacing.medium}}
           accessible={true}
           ref={focusRef}
         >
@@ -125,14 +125,14 @@ export const Profile_DeleteProfileScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   contentMargin: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
 }));

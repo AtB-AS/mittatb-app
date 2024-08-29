@@ -461,7 +461,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                       <ActivityIndicator
                         color={theme.text.colors.secondary}
                         style={{
-                          marginRight: theme.spacings.medium,
+                          marginRight: theme.spacing.medium,
                         }}
                       />
                       <ThemeText color="secondary" testID="searchingForResults">
@@ -642,34 +642,34 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollView: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
     backgroundColor: theme.static.background[resultsBackgroundColor].background,
   },
   searchParametersButtons: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   searchTimeButton: {flexGrow: 1},
   searchHeader: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
     backgroundColor: theme.static.background[headerBackgroundColor].background,
   },
   loadingIndicator: {
     flexDirection: 'row',
   },
   missingLocationText: {
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
     textAlign: 'center',
   },
   loadMoreButton: {
-    paddingVertical: theme.spacings.xLarge,
-    marginBottom: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.xLarge,
+    marginBottom: theme.spacing.xLarge,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   emptyResultsSpacer: {
-    marginTop: theme.spacings.xLarge * 3,
+    marginTop: theme.spacing.xLarge * 3,
   },
 }));

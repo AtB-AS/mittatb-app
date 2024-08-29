@@ -87,7 +87,7 @@ export const FavoriteDeparturesScreenComponent = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

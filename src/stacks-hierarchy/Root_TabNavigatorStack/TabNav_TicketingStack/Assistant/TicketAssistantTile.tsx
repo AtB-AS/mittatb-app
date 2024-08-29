@@ -67,6 +67,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexShrink: 1,
     alignSelf: 'stretch',
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

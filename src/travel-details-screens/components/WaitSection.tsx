@@ -22,7 +22,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
   const shortWait = timeIsShort(wait.waitTimeInSeconds);
-  const iconColor = useTransportationColor();
+  const iconColor = useTransportationColor().background;
 
   return (
     <View style={style.section}>
@@ -46,6 +46,6 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
 }));

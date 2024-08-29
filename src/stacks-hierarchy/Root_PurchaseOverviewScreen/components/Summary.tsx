@@ -92,11 +92,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   originalPrice: {
     textAlign: 'center',
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   free: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
-  message: {textAlign: 'center', marginTop: theme.spacings.medium},
-  button: {marginTop: theme.spacings.xLarge},
+  message: {textAlign: 'center', marginTop: theme.spacing.medium},
+  button: {marginTop: theme.spacing.xLarge},
 }));

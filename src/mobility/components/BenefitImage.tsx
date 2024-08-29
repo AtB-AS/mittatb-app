@@ -61,6 +61,6 @@ const BenefitEligibilityIndicator = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   indicator: {
     position: 'absolute',
-    right: theme.spacings.medium,
+    right: theme.spacing.medium,
   },
 }));

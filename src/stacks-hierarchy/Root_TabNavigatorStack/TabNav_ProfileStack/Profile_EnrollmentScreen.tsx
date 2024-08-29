@@ -122,7 +122,7 @@ function useMessageText(type: MessageInfoBoxProps['type']) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
-    padding: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

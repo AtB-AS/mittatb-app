@@ -294,16 +294,16 @@ function sortAndFilterStopPlaces(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   locationInputSection: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   favoriteChips: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   emptyStopPlacesIllustration: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

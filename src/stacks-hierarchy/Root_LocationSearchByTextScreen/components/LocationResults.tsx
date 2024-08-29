@@ -133,7 +133,7 @@ const getLocationIconAccessibilityLabel = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     margin: 0,
   },
   subLabel: {

@@ -207,21 +207,21 @@ const a11yLabel = (
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   subtitleStyle: {
-    paddingTop: theme.spacings.xSmall,
+    paddingTop: theme.spacing.xSmall,
   },
   sectionText: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   fromZone: {
     flexDirection: 'row',
   },
   toZone: {
     flexDirection: 'row',
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   toFromLabel: {
     minWidth: 40,
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   sectionContentContainer: {
     display: 'flex',

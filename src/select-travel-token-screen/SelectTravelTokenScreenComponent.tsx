@@ -3,7 +3,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -39,6 +39,7 @@ type Props = {onAfterSave: () => void};
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
 
   const {fareContracts} = useTicketingState();
   const {disable_travelcard} = useRemoteConfig();
@@ -163,7 +164,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               }}
               style={styles.leftRadioBox}
               testID="selectTravelcard"
-              interactiveColor="interactive_2"
+              interactiveColor={theme.color.interactive[2]}
             />
           )}
           <RadioBox
@@ -255,7 +256,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             <Button
               onPress={onSave}
               text={t(TravelTokenTexts.toggleToken.saveButton)}
-              interactiveColor="interactive_0"
+              interactiveColor={theme.color.interactive[0]}
               disabled={!selectedToken || (data?.toggleLimit ?? 0) < 1}
               testID="confirmSelectionButton"
             />
@@ -268,30 +269,30 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
   tokenInfo: {
     flexDirection: 'row',
-    marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.large,
+    marginTop: theme.spacing.small,
+    marginBottom: theme.spacing.large,
   },
   scrollView: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   radioArea: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
     alignContent: 'center',
   },
   leftRadioBox: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
   selectDeviceSection: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   errorMessageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

@@ -132,12 +132,12 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row', paddingHorizontal: theme.spacings.medium},
+  container: {flexDirection: 'row', paddingHorizontal: theme.spacing.medium},
   button: {
     flex: 1,
-    borderTopLeftRadius: theme.border.radius.regular,
-    borderTopRightRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.medium,
+    borderTopRightRadius: theme.border.radius.medium,
     alignItems: 'center',
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
   },
 }));

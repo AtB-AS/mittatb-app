@@ -26,7 +26,7 @@ const DefaultCarImage = () => {
   const style = useSheetStyle();
   return (
     <View style={[style.container, style.defaultImage]}>
-      <ThemeIcon size="large" fill={theme.text.colors.secondary} svg={Car} />
+      <ThemeIcon size="large" color="secondary" svg={Car} />
     </View>
   );
 };

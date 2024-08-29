@@ -48,7 +48,7 @@ export const MobilityBenefitsInfoSectionItem = ({
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox
-        backgroundColor={theme.background[0]}
+        backgroundColor={theme.color.background.neutral[0]}
         type="large"
         style={styles.borderedInfoBox}
       >

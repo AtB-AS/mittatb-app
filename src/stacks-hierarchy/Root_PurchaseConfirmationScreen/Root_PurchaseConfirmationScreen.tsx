@@ -399,9 +399,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 </ThemeText>
               ) : (
                 <ActivityIndicator
-                  size={theme.spacings.medium}
+                  size={theme.spacing.medium}
                   color={theme.text.colors.primary}
-                  style={{margin: theme.spacings.medium}}
+                  style={{margin: theme.spacing.medium}}
                 />
               )}
             </View>
@@ -429,7 +429,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           <ActivityIndicator
             size="large"
             color={theme.text.colors.primary}
-            style={{margin: theme.spacings.medium}}
+            style={{margin: theme.spacing.medium}}
           />
         ) : (
           <View>
@@ -586,7 +586,7 @@ function getPlaceName(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   flexColumn: {
     flex: 1,
@@ -598,33 +598,33 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   buttonTopSpacing: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
   },
   errorMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   warningMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
-  infoSection: {padding: theme.spacings.medium},
+  infoSection: {padding: theme.spacing.medium},
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  userProfileCountAndName: {marginRight: theme.spacings.small},
+  userProfileCountAndName: {marginRight: theme.spacing.small},
   userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
   userProfileOriginalPriceAmount: {
-    marginEnd: theme.spacings.small,
+    marginEnd: theme.spacing.small,
     alignSelf: 'flex-end',
     textDecorationLine: 'line-through',
   },
   paymentSummaryContainer: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   sendingToText: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   ticketInfoContainer: {
     flex: 1,
@@ -636,15 +636,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   totalContainerHeadings: {
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacing.xSmall,
   },
   globalMessage: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   purchaseInformation: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   smallTopMargin: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
 }));

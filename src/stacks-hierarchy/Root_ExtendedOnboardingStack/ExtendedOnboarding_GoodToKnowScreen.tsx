@@ -55,11 +55,11 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     flexGrow: 1,
-    paddingTop: theme.spacings.xLarge,
+    paddingTop: theme.spacing.xLarge,
   },
   container: {
     backgroundColor: theme.static.background[themeColor].background,
-    paddingTop: theme.spacings.xLarge,
+    paddingTop: theme.spacing.xLarge,
   },
   mainView: {
     flex: 1,
@@ -67,15 +67,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
 }));

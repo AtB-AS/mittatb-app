@@ -159,13 +159,13 @@ function translateStateToMessage(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   content: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginBottom: theme.spacings.large,
+    marginTop: theme.spacing.large,
+    marginBottom: theme.spacing.large,
   }
 }));

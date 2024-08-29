@@ -229,10 +229,10 @@ export const Profile_FareContractsScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   content: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
 }));

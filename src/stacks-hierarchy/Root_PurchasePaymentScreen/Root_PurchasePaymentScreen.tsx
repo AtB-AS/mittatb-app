@@ -145,9 +145,9 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
-  center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
-  messageBox: {marginBottom: theme.spacings.small},
-  button: {marginBottom: theme.spacings.small},
+  center: {flex: 1, justifyContent: 'center', padding: theme.spacing.medium},
+  messageBox: {marginBottom: theme.spacing.small},
+  button: {marginBottom: theme.spacing.small},
 }));

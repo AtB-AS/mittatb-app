@@ -15,7 +15,7 @@ import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {SituationType} from './types';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
@@ -34,6 +34,9 @@ export const SituationBottomSheet = forwardRef<View, Props>(
   ({situation}, focusRef) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
+    const {theme} = useTheme();
+    const interactiveColor = theme.color.interactive[0];
+  
     const summary = getTextForLanguage(situation.summary, language);
     const description = getTextForLanguage(situation.description, language);
     const advice = getTextForLanguage(situation.advice, language);
@@ -87,7 +90,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                   <View style={styles.validityContainer}>
                     <ThemeIcon
                       svg={Time}
-                      colorType="secondary"
+                      color="secondary"
                       style={styles.validityIcon}
                     />
                     <ThemeText
@@ -107,7 +110,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
           <Button
             style={styles.button}
             onPress={close}
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             text={t(SituationsTexts.bottomSheet.button)}
             testID="closeButton"
           />
@@ -180,17 +183,17 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {paddingHorizontal: theme.spacings.medium},
+  section: {paddingHorizontal: theme.spacing.medium},
   textContainer: {flex: 1},
   summaryContainer: {flexDirection: 'row'},
-  summaryIcon: {marginRight: theme.spacings.small},
+  summaryIcon: {marginRight: theme.spacing.small},
   summaryText: {flex: 1},
-  description: {marginTop: theme.spacings.medium},
-  advice: {marginTop: theme.spacings.medium},
-  infoLinksContainer: {marginTop: theme.spacings.medium, flexDirection: 'row'},
-  infoLink: {marginRight: theme.spacings.medium},
-  validityContainer: {flexDirection: 'row', marginTop: theme.spacings.medium},
-  validityIcon: {marginRight: theme.spacings.small},
+  description: {marginTop: theme.spacing.medium},
+  advice: {marginTop: theme.spacing.medium},
+  infoLinksContainer: {marginTop: theme.spacing.medium, flexDirection: 'row'},
+  infoLink: {marginRight: theme.spacing.medium},
+  validityContainer: {flexDirection: 'row', marginTop: theme.spacing.medium},
+  validityIcon: {marginRight: theme.spacing.small},
   validityText: {flex: 1},
-  button: {marginTop: theme.spacings.medium},
+  button: {marginTop: theme.spacing.medium},
 }));

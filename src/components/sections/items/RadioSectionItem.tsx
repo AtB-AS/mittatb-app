@@ -57,11 +57,11 @@ export function RadioSectionItem({
     ? selected
       ? interactiveColor.active.foreground.primary
       : interactiveColor.default.foreground.primary
-    : theme.text.colors.primary;
+    : theme.color.foreground.dynamic.primary;
 
   const selectedRadioColor = interactiveColor
     ? interactiveColor.outline.background
-    : theme.text.colors.primary;
+    : theme.color.foreground.dynamic.primary;
 
   return (
     <View style={[style.spaceBetween, topContainer, {backgroundColor}]}>

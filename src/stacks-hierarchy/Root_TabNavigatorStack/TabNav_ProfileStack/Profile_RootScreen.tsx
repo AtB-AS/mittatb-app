@@ -570,11 +570,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
-    rowGap: theme.spacings.small,
-    margin: theme.spacings.medium,
+    rowGap: theme.spacing.small,
+    margin: theme.spacing.medium,
   },
   customerNumberHeading: {
-    marginBottom: theme.spacings.xSmall,
+    marginBottom: theme.spacing.xSmall,
   },
   debugInfoContainer: {
     alignItems: 'center',

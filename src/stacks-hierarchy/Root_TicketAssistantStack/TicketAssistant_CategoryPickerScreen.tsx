@@ -249,39 +249,39 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
   a11yCategoryCards: {
     flexDirection: 'row',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
-    margin: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-    gap: theme.spacings.medium,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    margin: theme.spacing.medium,
+    borderRadius: theme.border.radius.medium,
+    gap: theme.spacing.medium,
   },
   a11yTitle: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   header: {
     textAlign: 'center',
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   scrollView: {
     flex: 1,
   },
   test: {
     flex: 1,
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
   },
   chooseButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   expandedContent: {
     color: theme.text.colors.secondary,
   },
   categoriesContainer: {
-    marginTop: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_1.background,
-    marginHorizontal: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
+    borderRadius: theme.border.radius.medium,
+    backgroundColor: theme.color.background.neutral[1].background,
+    marginHorizontal: theme.spacing.xLarge,
   },
 }));

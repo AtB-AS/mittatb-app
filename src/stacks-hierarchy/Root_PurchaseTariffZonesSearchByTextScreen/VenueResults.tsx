@@ -86,7 +86,7 @@ export const VenueResults: React.FC<Props> = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     margin: 0,
   },
   rowContainer: {

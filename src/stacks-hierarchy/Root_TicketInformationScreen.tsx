@@ -104,14 +104,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      rowGap: theme.spacings.small,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      rowGap: theme.spacing.small,
     },
     descriptionHeading: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
       flexShrink: 1,
     },
   };

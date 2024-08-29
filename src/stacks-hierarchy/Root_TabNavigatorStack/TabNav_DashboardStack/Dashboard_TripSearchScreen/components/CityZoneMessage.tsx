@@ -127,7 +127,7 @@ const CityZoneBox = ({
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
             accessibilityRole="button"
-            hitSlop={insets.all(theme.spacings.medium)}
+            hitSlop={insets.all(theme.spacing.medium)}
           >
             <ThemeIcon fill={textColor} svg={Close} />
           </PressableOpacity>
@@ -205,27 +205,27 @@ const useActionButtons = (cityZone?: CityZone) => {
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
   cityZoneMessage: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   container: {
-    padding: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
+    padding: theme.spacing.medium,
+    borderRadius: theme.border.radius.medium,
     flexDirection: 'row',
   },
   icon: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     justifyContent: 'center',
   },
   content: {
     flex: 1,
   },
   message: {
-    paddingRight: theme.spacings.small,
+    paddingRight: theme.spacing.small,
   },
   action: {
-    marginTop: theme.spacings.medium,
-    marginRight: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginRight: theme.spacing.medium,
   },
   actions: {
     flexWrap: 'wrap',

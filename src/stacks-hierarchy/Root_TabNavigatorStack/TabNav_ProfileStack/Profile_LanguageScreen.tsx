@@ -88,7 +88,7 @@ export const Profile_LanguageScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.small,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));

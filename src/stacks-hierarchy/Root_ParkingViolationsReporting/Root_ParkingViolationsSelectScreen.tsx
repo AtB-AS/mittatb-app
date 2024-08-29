@@ -77,7 +77,7 @@ export const Root_ParkingViolationsSelectScreen = ({
                     ...style.itemImage,
                     borderColor: isSelected
                       ? theme.interactive.interactive_2.outline.background
-                      : theme.static.background.background_0.background,
+                      : theme.color.background.neutral[0].background,
                   }}
                   height={ICON_SIZE}
                   width={ICON_SIZE}
@@ -141,13 +141,13 @@ const IssueMessageBox = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   violation: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   itemImage: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     borderColor: theme.interactive.interactive_2.outline.background,
     borderRadius: ICON_SIZE / 2,
     height: ICON_SIZE,
@@ -158,7 +158,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   issueMessageBoxContainer: {
-    paddingHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

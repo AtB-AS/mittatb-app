@@ -159,21 +159,21 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   text: {
     textAlign: 'center',
   },
   textSpacing: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacing.small,
   },
   selectDeviceSection: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   errorMessageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonStyle: {
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));

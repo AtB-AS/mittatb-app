@@ -183,33 +183,33 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   scrollView: {
-    paddingBottom: theme.spacings.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   contentContainerStyle: {
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.large,
+    marginVertical: theme.spacing.large,
     textAlign: 'center',
   },
   phoneInput: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   activityIndicator: {
-    marginVertical: theme.spacings.large,
+    marginVertical: theme.spacing.large,
   },
   errorMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   submitButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

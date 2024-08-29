@@ -187,36 +187,36 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flex: 1,
     },
     buttonContainer: {
-      gap: theme.spacings.small,
+      gap: theme.spacing.small,
     },
     questionText: {
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
     },
     flatListArea: {
-      backgroundColor: theme.static.background.background_0.background,
-      margin: theme.spacings.medium,
-      marginBottom: theme.spacings.xLarge,
-      borderRadius: theme.border.radius.regular,
+      backgroundColor: theme.color.background.neutral[0].background,
+      margin: theme.spacing.medium,
+      marginBottom: theme.spacing.xLarge,
+      borderRadius: theme.border.radius.medium,
     },
     selectableDeparture: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: theme.spacings.medium,
+      paddingHorizontal: theme.spacing.medium,
     },
     selectableDepartureTextView: {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      paddingVertical: theme.spacings.medium,
+      paddingVertical: theme.spacing.medium,
     },
     secondaryText: {
       color: theme.text.colors.secondary,
     },
     lineModeIcon: {
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacing.small,
     },
     lineIdentifierText: {
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
     },
   };
 });

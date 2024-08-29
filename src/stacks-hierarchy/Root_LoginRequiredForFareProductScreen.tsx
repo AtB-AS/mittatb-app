@@ -128,37 +128,37 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    padding: theme.spacings.large,
+    padding: theme.spacing.large,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
     textAlign: 'center',
   },
   errorMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   illustration: {
     alignSelf: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   laterButton: {
-    marginTop: theme.spacings.medium,
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginTop: theme.spacing.medium,
+    padding: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
   laterButtonText: {textAlign: 'center'},
   carrotInfo: {
-    margin: theme.spacings.xLarge,
-    marginBottom: theme.spacings.xLarge,
+    margin: theme.spacing.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
   carrotTitle: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
 }));

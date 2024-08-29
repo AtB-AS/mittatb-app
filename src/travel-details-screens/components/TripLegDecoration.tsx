@@ -38,7 +38,7 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   decorationPlaceholder: {
-    width: theme.spacings.large,
+    width: theme.spacing.large,
   },
   decoration: {
     position: 'absolute',
@@ -63,7 +63,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   decorationCenter: {
     position: 'absolute',
-    top: theme.spacings.large + theme.spacings.small,
+    top: theme.spacing.large + theme.spacing.small,
   },
   decorationEnd: {
     position: 'absolute',

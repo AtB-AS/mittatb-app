@@ -183,7 +183,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   infoBox: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   container: {
     flex: 1,
@@ -192,23 +192,23 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mainView: {
     flex: 1,
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
     width: '100%',
     justifyContent: 'space-between',
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   header: {
     textAlign: 'center',
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
+    paddingHorizontal: theme.spacing.xLarge,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.large,
   },
   backdrop: {
     position: 'absolute',
@@ -222,17 +222,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   notice: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
   noticeText: {
     textAlign: 'center',
     flexShrink: 1,
   },
   feedback: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   loadingSpinner: {
     flex: 1,

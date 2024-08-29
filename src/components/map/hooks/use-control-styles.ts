@@ -19,24 +19,24 @@ export function useControlPositionsStyle() {
     () => ({
       backArrowContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium,
-        left: theme.spacings.medium,
+        top: top + theme.spacing.medium,
+        left: theme.spacing.medium,
       },
       positionArrowContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium,
-        right: theme.spacings.medium,
+        top: top + theme.spacing.medium,
+        right: theme.spacing.medium,
       },
       controlsContainer: {
         position: 'absolute',
         bottom:
-          bottom + bottomPaddingIfBottomSheetIsOpen + theme.spacings.medium,
-        right: theme.spacings.medium,
+          bottom + bottomPaddingIfBottomSheetIsOpen + theme.spacing.medium,
+        right: theme.spacing.medium,
       },
       locationContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium + 28 + theme.spacings.medium,
-        paddingHorizontal: theme.spacings.medium,
+        top: top + theme.spacing.medium + 28 + theme.spacing.medium,
+        paddingHorizontal: theme.spacing.medium,
         width: '100%',
       },
     }),

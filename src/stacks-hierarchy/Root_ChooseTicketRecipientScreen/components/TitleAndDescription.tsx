@@ -34,10 +34,10 @@ export const TitleAndDescription = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  title: {marginTop: theme.spacings.medium, textAlign: 'center'},
+  title: {marginTop: theme.spacing.medium, textAlign: 'center'},
   description: {
     textAlign: 'center',
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

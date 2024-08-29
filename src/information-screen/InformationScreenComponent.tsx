@@ -101,15 +101,15 @@ const Link = ({link}: {link: InformationLink}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   paragraphHeading: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   bullet: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   link: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

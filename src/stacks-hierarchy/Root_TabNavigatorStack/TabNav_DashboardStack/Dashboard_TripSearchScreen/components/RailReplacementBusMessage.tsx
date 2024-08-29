@@ -20,7 +20,7 @@ export const RailReplacementBusMessage: React.FC<{
       accessibilityLabel={t(
         RailReplacementBusTexts.tripIncludesRailReplacementBus,
       )}
-      style={{marginLeft: theme.spacings.small}}
+      style={{marginLeft: theme.spacing.small}}
     />
   ) : null;
 };

@@ -405,7 +405,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   scrollView: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
     backgroundColor: 'transparent',
   },
   backdrop: {
@@ -418,8 +418,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   contentSection: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   contentSection__horizontalScroll: {
     marginHorizontal: 0,
@@ -428,14 +428,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: 0,
   },
   favoriteChips: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   searchHeader: {
     marginTop: 0,
     backgroundColor: theme.static.background[themeBackgroundColor].background,
   },
   dashboardGlobalmessages: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

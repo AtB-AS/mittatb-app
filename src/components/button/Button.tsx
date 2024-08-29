@@ -202,7 +202,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon fill={textColor} {...leftIcon} />
+              <ThemeIcon color={textColor} {...leftIcon} />
             </View>
           )}
           {text && (

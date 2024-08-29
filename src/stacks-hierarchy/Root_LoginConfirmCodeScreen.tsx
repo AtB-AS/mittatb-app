@@ -180,35 +180,35 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   scrollView: {
-    paddingBottom: theme.spacings.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   contentContainerStyle: {
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.large,
+    marginVertical: theme.spacing.large,
     textAlign: 'center',
   },
   activityIndicator: {
-    marginVertical: theme.spacings.large,
+    marginVertical: theme.spacing.large,
   },
   messageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   submitButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   resendButton: {
-    marginTop: theme.spacings.medium,
-    padding: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    padding: theme.spacing.medium,
   },
   resendButtonText: {textAlign: 'center'},
 }));

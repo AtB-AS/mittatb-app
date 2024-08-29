@@ -91,20 +91,20 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   headerSubSection: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.static.background.background_accent_1.background,
-    paddingTop: theme.spacings.medium,
+    borderTopColor: theme.color.background.accent[1].background,
+    paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'nowrap',
   },
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   ticketDescription: {
     flexShrink: 1,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
 }));

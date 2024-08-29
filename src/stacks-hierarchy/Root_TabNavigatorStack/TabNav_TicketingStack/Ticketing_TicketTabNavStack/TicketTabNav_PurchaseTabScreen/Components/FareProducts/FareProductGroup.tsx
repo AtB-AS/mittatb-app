@@ -91,17 +91,17 @@ export const FareProductGroup = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
+    margin: theme.spacing.medium,
+    marginLeft: theme.spacing.xLarge,
+    marginTop: theme.spacing.large,
   },
   fareProductsContainer: {
     flex: 1,
     flexDirection: 'row',
-    paddingLeft: theme.spacings.medium,
+    paddingLeft: theme.spacing.medium,
     alignItems: 'stretch',
   },
   fareProductsContainer__row: {
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
   },
 }));

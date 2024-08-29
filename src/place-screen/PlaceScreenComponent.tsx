@@ -2,7 +2,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchTime} from './types';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -48,6 +48,9 @@ export const PlaceScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
+
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -166,7 +169,7 @@ export const PlaceScreenComponent = ({
       {onPressClose && (
         <View style={styles.closeButton}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             text={t(DeparturesTexts.closeButton.label)}
             onPress={onPressClose}
             testID="confirmButton"
@@ -179,19 +182,19 @@ export const PlaceScreenComponent = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   closeButton: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   stopPlaceAndQuaySelection: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
   quayData: {flex: 1},
   messageBox: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

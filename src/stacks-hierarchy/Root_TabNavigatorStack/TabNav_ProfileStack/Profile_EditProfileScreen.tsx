@@ -286,43 +286,43 @@ export const Profile_EditProfileScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   personalDetails: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
-    marginTop: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
+    marginTop: theme.spacing.xLarge,
   },
   noAccount: {
-    marginHorizontal: theme.spacings.medium,
-    marginVertical: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.medium,
+    marginVertical: theme.spacing.xLarge,
   },
-  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  parallaxContent: {marginHorizontal: theme.spacing.medium},
   profileError: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   phone: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
   },
   submitSection: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   submitContent: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   sectionBottomPadding: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   profileContainer: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
   },
-  profileItem: {marginBottom: theme.spacings.large},
+  profileItem: {marginBottom: theme.spacing.large},
   deleteProfile: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

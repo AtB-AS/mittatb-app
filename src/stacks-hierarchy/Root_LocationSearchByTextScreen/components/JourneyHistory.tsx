@@ -72,8 +72,8 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
-    marginTop: theme.spacings.large,
-    marginBottom: theme.spacings.large,
+    marginTop: theme.spacing.large,
+    marginBottom: theme.spacing.large,
   },
 }));
 

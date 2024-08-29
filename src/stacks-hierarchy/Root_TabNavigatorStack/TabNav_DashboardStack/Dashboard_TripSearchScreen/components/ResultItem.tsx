@@ -199,9 +199,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
   const iconHeight = {
-    height: theme.icon.size['normal'] * fontScale + theme.spacings.small * 2,
+    height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
   };
-  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
+  const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
 
   return (
     <PressableOpacity
@@ -375,19 +375,19 @@ const ResultItemFooter: React.FC<{
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pressableOpacity: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   result: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.medium,
   },
   resultInPast: {
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   detailsContainer: {
-    paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.small,
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
+    paddingBottom: theme.spacing.small,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -396,17 +396,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   legLine: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.color.background.neutral[3].background,
     flexDirection: 'row',
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.medium,
     width: 5,
   },
   leftLegLine: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
     marginRight: 2,
   },
   rightLegLine: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   destinationLineContainer_grow: {
     justifyContent: 'center',
@@ -414,31 +414,31 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   destinationLineContainer: {
     justifyContent: 'center',
-    width: theme.spacings.large,
+    width: theme.spacing.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.static.background.background_3.background,
-    marginLeft: theme.spacings.xSmall,
-    borderBottomLeftRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[3].background,
+    marginLeft: theme.spacing.xSmall,
+    borderBottomLeftRadius: theme.border.radius.medium,
+    borderTopLeftRadius: theme.border.radius.medium,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_3.background,
-    marginRight: theme.spacings.xSmall,
-    borderBottomRightRadius: theme.border.radius.regular,
-    borderTopRightRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[3].background,
+    marginRight: theme.spacing.xSmall,
+    borderBottomRightRadius: theme.border.radius.medium,
+    borderTopRightRadius: theme.border.radius.medium,
   },
   iconContainer: {
-    backgroundColor: theme.static.background.background_2.background,
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
+    backgroundColor: theme.color.background.neutral[2].background,
+    paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.small,
     borderRadius: theme.border.radius.small,
     alignItems: 'center',
   },
   walkContainer: {
-    backgroundColor: theme.static.background.background_2.background,
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
+    backgroundColor: theme.color.background.neutral[2].background,
+    paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
     alignItems: 'flex-end',
     borderRadius: theme.border.radius.small,
@@ -452,8 +452,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
   row: {
     flexDirection: 'row',
@@ -478,10 +478,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   scheduledTime: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
   },
   resultFooter: {
     display: 'flex',
@@ -489,8 +489,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.small,
   },
   footerNotice: {
     flexDirection: 'row',
@@ -501,17 +501,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsTextWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: theme.spacings.medium,
+    paddingLeft: theme.spacing.medium,
   },
   detailsIcon: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
   },
   durationContainer: {
     flex: 1,
     alignItems: 'flex-end',
   },
   warningIcon: {
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacing.small,
   },
 }));
 
@@ -519,7 +519,7 @@ const LegDash = () => {
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const fontScale = useFontScale();
-  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
+  const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
   return (
     <>
       <View style={styles.lineContainer}>

@@ -262,36 +262,36 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     scrollView: {
       flexGrow: 1,
       justifyContent: 'center',
-      paddingHorizontal: theme.spacings.xLarge,
+      paddingHorizontal: theme.spacing.xLarge,
       paddingBottom: safeAreaBottom,
     },
     title: {
       textAlign: 'center',
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     description: {
-      marginVertical: theme.spacings.large,
+      marginVertical: theme.spacing.large,
       textAlign: 'center',
     },
     activityIndicator: {
-      marginVertical: theme.spacings.large,
+      marginVertical: theme.spacing.large,
     },
     errorMessage: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     buttonContainer: {
-      gap: theme.spacings.medium,
+      gap: theme.spacing.medium,
     },
     termsOfUseLinkContainer: {
-      marginVertical: theme.spacings.xLarge - theme.spacings.medium,
+      marginVertical: theme.spacing.xLarge - theme.spacing.medium,
     },
     termsOfUseButtonContainer: {
-      marginVertical: theme.spacings.xLarge - theme.spacings.medium,
+      marginVertical: theme.spacing.xLarge - theme.spacing.medium,
       flexDirection: 'row',
       justifyContent: 'center',
     },
     termsOfUseText: {
-      padding: theme.spacings.medium / 2,
+      padding: theme.spacing.medium / 2,
     },
   };
 });

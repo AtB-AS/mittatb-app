@@ -152,12 +152,12 @@ const useStyles = (type: Statuses) =>
       flex: 1,
     },
     icon: {
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacing.small,
     },
     linkText: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
     title: {
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
     },
   }));

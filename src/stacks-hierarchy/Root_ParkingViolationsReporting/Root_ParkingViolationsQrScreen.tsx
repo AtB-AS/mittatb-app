@@ -182,6 +182,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   error: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

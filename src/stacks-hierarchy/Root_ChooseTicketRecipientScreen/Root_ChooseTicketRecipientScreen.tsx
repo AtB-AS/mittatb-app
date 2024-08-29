@@ -121,5 +121,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {flex: 1},
-  contentContainerStyle: {padding: theme.spacings.medium},
+  contentContainerStyle: {padding: theme.spacing.medium},
 }));

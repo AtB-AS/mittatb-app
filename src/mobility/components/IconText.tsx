@@ -26,6 +26,6 @@ export const IconText = ({svg, text}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

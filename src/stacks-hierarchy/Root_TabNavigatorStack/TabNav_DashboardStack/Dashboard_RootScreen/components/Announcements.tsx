@@ -67,16 +67,16 @@ export const Announcements = ({style}: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
+    rowGap: theme.spacing.small,
   },
   headerWrapper: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   scrollView: {
-    paddingHorizontal: theme.spacings.medium,
-    gap: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   announcement: {
-    width: Dimensions.get('window').width * 0.9 - 2 * theme.spacings.medium,
+    width: Dimensions.get('window').width * 0.9 - 2 * theme.spacing.medium,
   },
 }));

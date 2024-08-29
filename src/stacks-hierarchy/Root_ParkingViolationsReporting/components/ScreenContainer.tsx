@@ -80,22 +80,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     content: {
       flex: 1,
-      paddingVertical: theme.spacings.medium,
+      paddingVertical: theme.spacing.medium,
     },
     header: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.large,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.large,
     },
     secondaryText: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
     centered: {
       flex: 1,
       justifyContent: 'center',
     },
     actionButtons: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

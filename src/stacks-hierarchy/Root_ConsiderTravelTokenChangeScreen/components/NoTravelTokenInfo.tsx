@@ -47,17 +47,17 @@ export function NoTravelTokenInfo({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
     textAlign: 'center',
   },
   illustration: {
     minHeight: 180,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: theme.spacings.xLarge,
+    marginVertical: theme.spacing.xLarge,
   },
   description: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     textAlign: 'center',
   },
 }));

@@ -2,7 +2,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
 
@@ -23,6 +23,8 @@ const StopPlaceAndQuaySelection = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[1];
 
   const isMissingQuays = place.quays === undefined;
 
@@ -42,7 +44,7 @@ const StopPlaceAndQuaySelection = ({
             <Button
               onPress={() => onPress()}
               text={t(DeparturesTexts.quayChips.allStops)}
-              interactiveColor="interactive_1"
+              interactiveColor={interactiveColor}
               active={!selectedQuay}
               accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
               testID="allStopsSelectionButton"
@@ -54,7 +56,7 @@ const StopPlaceAndQuaySelection = ({
         <Button
           onPress={() => onPress(item.id)}
           text={getQuayName(item)}
-          interactiveColor="interactive_1"
+          interactiveColor={interactiveColor}
           active={selectedQuay?.id === item.id}
           accessibilityHint={
             t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
@@ -72,14 +74,14 @@ function getQuayName(quay: Quay): string {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChipContainer: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
     flexShrink: 0,
     flexGrow: 0,
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
   quayChipContentContainer: {
-    gap: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    gap: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));
 

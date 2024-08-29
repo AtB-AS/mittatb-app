@@ -51,7 +51,7 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   faqSection: {
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
 }));
 

@@ -15,7 +15,7 @@ export const LoadingOverlay = ({text}: {text: string}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   loadingOverlay: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     zIndex: 100,
     position: 'absolute',
     top: 0,
@@ -24,6 +24,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     right: 0,
     flex: 1,
     justifyContent: 'center',
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
 }));

@@ -21,6 +21,6 @@ export const SectionHeading = ({accessibilityLabel, children}: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

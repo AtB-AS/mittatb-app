@@ -113,23 +113,23 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    padding: theme.spacings.large,
+    padding: theme.spacing.large,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
     textAlign: 'center',
   },
   fareContract: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
     opacity: 0.6,
     pointerEvents: 'none',
   },
   logInAndDeleteButton: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

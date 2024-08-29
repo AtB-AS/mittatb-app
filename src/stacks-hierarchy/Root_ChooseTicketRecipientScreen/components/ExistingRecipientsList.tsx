@@ -75,7 +75,7 @@ export const ExistingRecipientsList = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  loadingSpinner: {marginBottom: theme.spacings.medium},
-  errorMessage: {marginBottom: theme.spacings.medium},
-  recipientList: {marginBottom: theme.spacings.medium},
+  loadingSpinner: {marginBottom: theme.spacing.medium},
+  errorMessage: {marginBottom: theme.spacing.medium},
+  recipientList: {marginBottom: theme.spacing.medium},
 }));

@@ -194,11 +194,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_0.background,
-    marginVertical: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
+    borderRadius: theme.border.radius.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    marginVertical: theme.spacing.xLarge,
   },
   topPart: {
     width: '100%',
@@ -211,33 +211,33 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   dateIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   datePicker: {
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
     flexShrink: 1,
   },
   datePickerText: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacing.medium,
     textAlign: 'center',
   },
   datePickerButton: {
     width: '100%',
     alignSelf: 'flex-end',
-    backgroundColor: theme.static.background.background_1.background,
-    padding: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.background.neutral[1].background,
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.medium,
   },
   sliderContainer: {
     width: '100%',
     flexDirection: 'column',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.large,
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.large,
   },
   slider: {
     width: '100%',
     alignSelf: 'center',
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   limitHeader: {
     width: '100%',
@@ -250,6 +250,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   description: {
     textAlign: 'center',
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));

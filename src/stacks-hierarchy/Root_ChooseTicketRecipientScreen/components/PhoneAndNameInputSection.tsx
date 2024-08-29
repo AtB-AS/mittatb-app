@@ -83,7 +83,7 @@ export const PhoneAndNameInputSection = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   newRecipientLabel: {
-    marginLeft: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginLeft: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
 }));

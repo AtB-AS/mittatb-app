@@ -106,10 +106,10 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   content: {
-    padding: theme.spacings.medium,
-    paddingBottom: theme.spacings.xLarge,
+    padding: theme.spacing.medium,
+    paddingBottom: theme.spacing.xLarge,
   },
 }));

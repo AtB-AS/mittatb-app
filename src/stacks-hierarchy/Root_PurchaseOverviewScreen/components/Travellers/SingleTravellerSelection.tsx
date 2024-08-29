@@ -81,7 +81,7 @@ export function SingleTravellerSelection({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     onBehalfOfContainer: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
   };
 });

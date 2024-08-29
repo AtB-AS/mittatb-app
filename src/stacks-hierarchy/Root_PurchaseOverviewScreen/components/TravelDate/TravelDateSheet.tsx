@@ -133,18 +133,18 @@ export const TravelDateSheet = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   contentContainer: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   saveButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   messageBox: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   dateWarningMessageBox: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
 }));

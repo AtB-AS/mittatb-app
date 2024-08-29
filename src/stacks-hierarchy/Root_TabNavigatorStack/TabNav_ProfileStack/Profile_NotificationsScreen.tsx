@@ -277,10 +277,10 @@ export const Profile_NotificationsScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   parallaxContent: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   content: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

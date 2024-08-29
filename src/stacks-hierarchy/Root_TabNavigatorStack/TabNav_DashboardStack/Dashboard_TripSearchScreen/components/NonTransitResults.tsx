@@ -86,12 +86,12 @@ const getMode = (
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   scrollView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   container: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   tripMode: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

@@ -43,7 +43,7 @@ export const Root_SearchStopPlaceScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
 }));

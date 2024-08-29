@@ -49,35 +49,35 @@ export const Ticketing_NotEnabledScreen = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   scrollContainer: {
     flexGrow: 1,
   },
   contentContainer: {
-    paddingVertical: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.xLarge,
     flex: 1,
     height: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   textContent: {
-    paddingHorizontal: theme.spacings.large,
-    marginBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    marginBottom: theme.spacing.xLarge,
     boxShadow: 'inset 0',
   },
   buttonContainer: {
-    paddingHorizontal: theme.spacings.large,
+    paddingHorizontal: theme.spacing.large,
     width: '100%',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   text: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   bannerContainer: {
     position: 'absolute',
-    bottom: theme.spacings.large,
+    bottom: theme.spacing.large,
   },
   underline: {textDecorationLine: 'underline'},
-  button: {marginBottom: theme.spacings.small},
+  button: {marginBottom: theme.spacing.small},
 }));

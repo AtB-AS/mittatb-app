@@ -149,20 +149,20 @@ export const TicketAssistant_ZonePickerScreen = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   zonesSelectorButtonsContainer: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   zonesSelectorMapContainer: {
     flexGrow: 1,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.medium,
     overflow: 'hidden',
   },
   zonesSelectorContainer: {
     flex: 1,
-    marginHorizontal: theme.spacings.xLarge,
-    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginVertical: theme.spacing.medium,
   },
   contentContainer: {
     flexGrow: 1,
@@ -172,13 +172,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   loadingGif: {
     width: 200,
     height: 200,
     alignSelf: 'center',
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
 }));

@@ -45,7 +45,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacing.small,
   },
   leftColumn: {
     minWidth: theme.tripLegDetail.labelWidth,

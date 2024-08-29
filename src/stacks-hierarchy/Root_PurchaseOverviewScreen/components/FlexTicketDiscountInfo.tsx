@@ -145,6 +145,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   discountInfoContainer: {flexDirection: 'row'},
-  discountInfo: {marginRight: theme.spacings.small},
+  discountInfo: {marginRight: theme.spacing.small},
   priceInfo: {alignSelf: 'center'},
 }));

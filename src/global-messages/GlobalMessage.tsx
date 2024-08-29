@@ -11,7 +11,7 @@ import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
-import {StaticColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useAuthState} from '@atb/auth';
 
@@ -20,7 +20,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;
-  textColor: StaticColor | TextColor;
+  textColor: ContrastColor | TextColor;
 };
 
 const GlobalMessage = ({
