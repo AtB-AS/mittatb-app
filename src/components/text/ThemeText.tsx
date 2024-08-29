@@ -1,20 +1,18 @@
 import React from 'react';
 import {useTheme} from '@atb/theme';
-import {Platform, Text, TextProps, TextStyle} from 'react-native';
+import {ColorValue, Platform, Text, TextProps, TextStyle} from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
-  StatusColor,
+  ContrastColor,
   TextColor,
   TextNames,
+  useColor,
 } from '@atb/theme/colors';
-import {ContrastColor} from '@atb-as/theme';
-
-type ColorType = ContrastColor;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: ColorType;
+  color?: ContrastColor | TextColor | ColorValue;
   isMarkdown?: boolean;
 };
 
@@ -27,7 +25,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   ...props
 }) => {
   const {theme, useAndroidSystemFont} = useTheme();
-  const textColor = color?.foreground.primary ?? theme.text.colors[color];
+  const textColor = useColor(color);
 
   const typeStyle = {
     ...theme.typography[fontType],

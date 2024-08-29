@@ -59,7 +59,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         <View style={styles.validityContainer}>
           <View style={styles.validityHeader}>
             {status === 'reserving' ? (
-              <ActivityIndicator color={theme.text.colors.primary} />
+              <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
             ) : (
               <FareContractStatusSymbol status={status} />
             )}
@@ -124,30 +124,30 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   detail: {
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacing.xSmall,
   },
   container: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
-    marginBottom: theme.spacings.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.medium,
+    marginBottom: theme.spacing.medium,
   },
   extraText: {
-    paddingVertical: theme.spacings.xSmall,
-    color: theme.text.colors.disabled,
+    paddingVertical: theme.spacing.xSmall,
+    color: theme.color.foreground.dynamic.disabled,
   },
   validityContainer: {
     flexDirection: 'row',
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
   },
   validityDashContainer: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   infoContainer: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   reservationStatus: {
     flex: 1,
     textAlign: 'right',
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacing.small,
   },
 }));

@@ -239,11 +239,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   details: {
     flex: 1,
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
     justifyContent: 'center',
   },
   header: {
     flex: 1,
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

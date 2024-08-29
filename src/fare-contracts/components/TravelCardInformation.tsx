@@ -1,6 +1,6 @@
+import { ContrastColor } from '@atb-as/theme';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {flatStaticColors, StaticColor} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {TravelCard} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -10,9 +10,12 @@ type Props = {
   travelCard: TravelCard;
 };
 
+const getBackgroundColor = (theme: Theme) => theme.color.background.accent[2]
+
 export const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   return (
     <View style={styles.container}>
@@ -31,7 +34,7 @@ export const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
       </ThemeText>
       <ActiveTravelCard
         cardId={travelCard.id?.toString()}
-        color="background_accent_2"
+        color={getBackgroundColor(theme)}
        />
       {/* <ThemeText
         type="body__tertiary"
@@ -46,14 +49,14 @@ export const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
 
 type ActiveTravelCardProps = {
   cardId: string;
-  color: StaticColor;
+  color: ContrastColor;
 };
 
 export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
-  const {cardId = '000000000', color = 'background_accent_2'} = props;
+  const {theme} = useTheme();
+  const {cardId = '000000000', color = getBackgroundColor(theme)} = props;
   const formatedTravelCardId = cardId.substr(0, 2) + ' ' + cardId.substr(2);
   const styles = useStyles();
-  const {themeName} = useTheme();
 
   const {t} = useTranslation();
 
@@ -61,7 +64,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
     <View
       style={[
         styles.activeTravelCard,
-        {backgroundColor: flatStaticColors[themeName][color].background},
+        {backgroundColor: color.background},
       ]}
       accessible={true}
       accessibilityLabel={t(
@@ -73,17 +76,17 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
       <View style={styles.cardNumber} accessible={false}>
         <ThemeText
           type="body__tertiary"
-          color={color}
+          color={color.foreground.primary}
           style={styles.transparentText}
         >
           XXXX XX
         </ThemeText>
-        <ThemeText type="body__tertiary" color={color}>
+        <ThemeText type="body__tertiary" color={color.foreground.primary}>
           {formatedTravelCardId}
         </ThemeText>
         <ThemeText
           type="body__tertiary"
-          color={color}
+          color={color.foreground.primary}
           style={styles.transparentText}
         >
           X
@@ -92,7 +95,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
       <View>
         <ThemeText
           type="body__tertiary"
-          color="background_accent_2"
+          color={getBackgroundColor(theme).foreground.primary}
           style={styles.tcardicon}
         >
           {'\n'}
@@ -106,33 +109,33 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    marginBottom: theme.spacings.large,
-    backgroundColor: theme.static.background.background_0.background,
-    padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
+    marginBottom: theme.spacing.large,
+    backgroundColor: theme.color.background.neutral[0].background,
+    padding: theme.spacing.xLarge,
+    borderRadius: theme.border.radius.medium,
   },
   scrollView: {
     flex: 1,
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   centerText: {
     textAlign: 'center',
   },
   title: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   gradient: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
 
   transparentText: {
     opacity: 0.2,
   },
   activeTravelCard: {
-    padding: theme.spacings.large,
-    borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.large,
-    marginBottom: theme.spacings.medium,
+    padding: theme.spacing.large,
+    borderRadius: theme.border.radius.medium,
+    marginTop: theme.spacing.large,
+    marginBottom: theme.spacing.medium,
     alignSelf: 'center',
   },
   cardNumber: {
@@ -141,10 +144,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   tcardicon: {
     borderWidth: 1,
     borderRadius: 2,
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
     alignSelf: 'flex-end',
-    marginTop: theme.spacings.small,
-    backgroundColor: theme.static.background.background_accent_3.text,
+    marginTop: theme.spacing.small,
+    backgroundColor: theme.color.background.neutral[3].foreground.primary,
     textAlign: 'center',
   },
 }));

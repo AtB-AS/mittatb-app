@@ -14,7 +14,6 @@ import {
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb-as/theme';
-import {getTransportationColor} from '@atb/theme/colors';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type InspectionSymbolProps = {
@@ -46,8 +45,8 @@ export const InspectionSymbol = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
 
   const themeColor = isInspectable
-    ? getTransportationColor(themeName, transportColor)
-    : theme.status['warning'].primary;
+    ? theme.color.transport[transportColor].primary
+    : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
@@ -128,7 +127,7 @@ const InspectableContent = ({
         <ThemeText
           type="body__primary--bold"
           allowFontScaling={false}
-          color={shouldFill ? themeColor : undefined}
+          color={shouldFill ? themeColor.foreground.primary : undefined}
         >
           {fromTariffZoneName}
           {fromTariffZone.id !== toTariffZone.id && '-' + toTariffZoneName}
@@ -136,7 +135,7 @@ const InspectableContent = ({
       )}
       <ThemeIcon
         svg={InspectionSvg}
-        fill={shouldFill ? themeColor.text : undefined}
+        fill={shouldFill ? themeColor.foreground.primary : undefined}
         size="large"
       />
     </View>
@@ -171,13 +170,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     alignSelf: 'center',
     borderRadius: 1000,
-    borderColor: theme.status.warning.primary.background,
+    borderColor: theme.color.status.warning.primary.background,
     borderWidth: 5,
   },
   symbolContent: {
     height: '100%',
     width: '100%',
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -80,12 +80,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      backgroundColor: theme.static.background.background_1.background,
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      backgroundColor: theme.color.background.neutral[1].background,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     contentContainer: {
-      rowGap: theme.spacings.medium,
+      rowGap: theme.spacing.medium,
     },
   };
 });

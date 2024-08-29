@@ -13,6 +13,7 @@ import React, {forwardRef} from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import { useTheme } from '@atb/theme';
 
 type Props = {
   lineNumber: string;
@@ -24,6 +25,8 @@ type Props = {
 export const FavoriteDialogSheet = forwardRef<View, Props>(
   ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
     const {t} = useTranslation();
+    const {theme} = useTheme();
+    const interactiveColor = theme.color.interactive[0]
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
     const {close} = useBottomSheet();
@@ -46,7 +49,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
         <FullScreenFooter>
           <View style={styles.buttonContainer}>
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={() => {
                 close();
                 addFavorite(true);
@@ -61,7 +64,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
               testID="onlySelectedDeparture"
             />
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={() => {
                 close();
                 addFavorite(false);
@@ -81,9 +84,9 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   buttonContainer: {
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
 }));

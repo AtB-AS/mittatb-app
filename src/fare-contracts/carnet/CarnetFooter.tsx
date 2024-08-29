@@ -86,7 +86,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   triangle: {
     width: 0,
@@ -98,29 +98,29 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: theme.static.background.background_1.background,
+    borderBottomColor: theme.color.background.neutral[1].background,
   },
   box: {
     alignItems: 'center',
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
     flex: 1,
   },
   count: {
     alignItems: 'center',
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacing.xSmall,
     borderRadius: 3,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   dot: {
-    backgroundColor: theme.static.background.background_accent_1.background,
+    backgroundColor: theme.color.background.accent[1].background,
     borderRadius: 20,
-    borderColor: theme.static.background.background_accent_1.background,
+    borderColor: theme.color.background.accent[1].background,
     borderWidth: 2,
     width: 16,
     height: 16,
   },
   dot__unused: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   dotFill__activeViewBox: {
     height: '100%',
@@ -133,6 +133,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: '100%',
     width: '200%',
     alignSelf: 'flex-end',
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
 }));

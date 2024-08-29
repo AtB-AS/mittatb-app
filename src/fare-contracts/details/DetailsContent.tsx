@@ -236,13 +236,13 @@ export const DetailsContent: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
     flex: 1,
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
   },
   section: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
-    paddingVertical: theme.spacings.xLarge * 2,
+    paddingVertical: theme.spacing.xLarge * 2,
   },
 }));

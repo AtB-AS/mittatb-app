@@ -17,6 +17,7 @@ export function ConsumeCarnetSectionItem({
 }: ConsumeCarnetSectionItemProps): JSX.Element {
   const {t} = useTranslation();
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0]
 
   const {open} = useBottomSheet();
   const onPress = () => {
@@ -30,10 +31,10 @@ export function ConsumeCarnetSectionItem({
       icon={
         <ThemeIcon
           svg={TicketValid}
-          fill={theme.interactive.interactive_0.default.text}
+          fill={interactiveColor.default.foreground.primary}
         />
       }
-      interactiveColor="interactive_0"
+      interactiveColor={interactiveColor}
       {...sectionProps}
     />
   );

@@ -242,7 +242,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   aztecCode: {
     width: '100%',
     aspectRatio: 1,
-    padding: theme.spacings.large,
+    padding: theme.spacing.large,
     backgroundColor: '#FFFFFF',
   },
   staticBottomContainer: {

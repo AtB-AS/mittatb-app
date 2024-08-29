@@ -15,11 +15,12 @@ export function FareContractDetail({
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const themeColor = theme.background[0]
+  const themeColor = theme.color.background.neutral[0]
+  const textColor = theme.text.colors['secondary']
 
   return (
     <View style={styles.container}>
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText type="body__secondary" color={textColor}>
         {header}
       </ThemeText>
       {content.map((c) => (

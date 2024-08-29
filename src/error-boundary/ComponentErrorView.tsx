@@ -19,6 +19,6 @@ export function ComponentErrorView({message}: ErrorProps) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

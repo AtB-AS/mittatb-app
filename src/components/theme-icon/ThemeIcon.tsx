@@ -1,11 +1,13 @@
 import {useTheme} from '@atb/theme';
 import {
   ContrastColor,
+  TextColor,
   Theme,
+  useColor,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {View} from 'react-native';
+import {ColorValue, View} from 'react-native';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
@@ -14,25 +16,23 @@ import React from 'react';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: ContrastColor;
+  color?: ContrastColor | TextColor | ColorValue;
   size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
-} & SvgProps;
+} & Omit<SvgProps, 'color' | 'fill'>;
 
 export const ThemeIcon = ({
   svg,
-  colorType,
+  color,
   size = "medium",
-  fill,
   notification,
   style,
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme} = useTheme();
-
-  const fillToUse = fill || colorType?.background;
+  const fill = useColor(color)
 
   const fontScale = useFontScale();
   const iconSize = allowFontScaling
@@ -40,7 +40,7 @@ export const ThemeIcon = ({
     : theme.icon.size[size];
 
   const settings = {
-    fill: fillToUse,
+    fill,
     height: iconSize,
     width: iconSize,
     ...props,

@@ -52,12 +52,12 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@11.0.0-alpha.1":
-  version "11.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.1.tgz#d0df164f539f788f5e477513c2fe49476e005d68"
-  integrity sha512-Onbs8KSrNHZohO0+FXd5KjAdwkK5CGEQeYtIUP7tPrpuEvtM/3pg/UaYNfKenyxVyAEkXtLY5YUuyOpiSSQvDg==
+"@atb-as/theme@11.0.0-alpha.3":
+  version "11.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.3.tgz#4cebd8735a0389e61c2d8acef5c9f64c4b765396"
+  integrity sha512-NwDIi6FnLPtH2msLptJt7g7c7MJzwhuwAosP2QsujQhcDVRu/Ii9BlvGdscCDG5el2pG8DUJZeiTtDAUFAFYjg==
   dependencies:
-    "@tfk-samf/figma-to-dtcg" "0.3.1"
+    "@tfk-samf/figma-to-dtcg" "0.3.2"
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
     typescript "^4.4.3"
@@ -5441,10 +5441,10 @@
     "@babel/runtime" "^7.12.5"
     react-error-boundary "^3.1.0"
 
-"@tfk-samf/figma-to-dtcg@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.1.tgz#033a3d6066ae1eb9687f281c6eed853656018e07"
-  integrity sha512-UV6MCbyBuUdMGA9AclC0zH56KTS5fTGgymqPDBYR6c68yRrUrAntT6AWJ1JsmoDklXkxa1CgwM6jxV4OZ5Hkrw==
+"@tfk-samf/figma-to-dtcg@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.2.tgz#5fa1e3460109c1b5573c5b3a493b88a38620c1ed"
+  integrity sha512-Yk8mE/vCh2otUQ9YoQWNh0gyZa0yQcINpIgd4wWH/pwv82vhtajfpert35o3DkP6ET1h1whT0DQb13L4iViX/A==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"

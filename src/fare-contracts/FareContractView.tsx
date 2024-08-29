@@ -175,6 +175,6 @@ export const FareContractView: React.FC<Props> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
 }));
