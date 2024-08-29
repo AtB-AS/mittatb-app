@@ -25,7 +25,7 @@ import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
-import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useOnboardingState} from '@atb/onboarding';
@@ -222,10 +222,8 @@ export const Root_LoginOptionsScreen = ({
             <Button
               backgroundColor={themeColor}
               mode="tertiary"
-              rightIcon={{svg: ExternalLink}}
-              onPress={() => Linking.openURL(termsInfoUrl)}
+              onPress={() => InAppBrowser.open(termsInfoUrl, {animated: true})}
               text={t(LoginTexts.logInOptions.termsOfUse)}
-              accessibilityRole="link"
             />
           </View>
         )}
