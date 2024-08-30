@@ -1,0 +1,13 @@
+diff --git a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
+index a41752b..03e7b5d 100644
+--- a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
++++ b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
+@@ -443,7 +443,7 @@ public class TokenCoreModule: NSObject {
+ 
+         token.encodeAsSecureContainer(tokenEncodingRequest: tokenEncodingRequest) { secureContainerWrapper, error in
+             if let error = error {
+-                return reject(self.mapErrorCode(error).code, "Error while generating the secure container", error)
++                return reject(self.mapErrorCode(error).code, "Error while generating the secure container: \(error.localizedDescription)", error)
+             }
+             
+             guard let base64EncodedSecureContainer = secureContainerWrapper?.base64EncodedString else {
