@@ -40,6 +40,7 @@ import {
 import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
 import {useGeofencingZonesDebugOverride} from '@atb/mobility/use-geofencing-zones-enabled';
+import {useShmoDeepIntegrationDebugOverride} from '@atb/mobility/use-shmo-deep-integration-enabled';
 import {
   useFromTravelSearchToTicketDebugOverride,
   useFromTravelSearchToTicketForBoatDebugOverride,
@@ -117,6 +118,9 @@ export const Profile_DebugInfoScreen = () => {
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
   const geofencingZonesDebugOverride = useGeofencingZonesDebugOverride();
+  const shmoDeepIntegrationDebugOverride =
+    useShmoDeepIntegrationDebugOverride();
+
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
@@ -376,6 +380,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable geofencing zones"
               override={geofencingZonesDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable shared mobility deep integration"
+              override={shmoDeepIntegrationDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
