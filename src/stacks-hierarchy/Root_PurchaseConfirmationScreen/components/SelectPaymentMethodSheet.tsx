@@ -167,7 +167,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             {loadingRecurringOptions && (
               <>
                 <ActivityIndicator
-                  color={theme.text.colors.primary}
+                  color={theme.color.foreground.dynamic.primary}
                   style={styles.spinner}
                   animating={true}
                   size="large"
@@ -205,7 +205,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <FullScreenFooter>
           <Button
             style={styles.confirmButton}
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             text={t(SelectPaymentMethodTexts.confirm_button.text)}
             accessibilityHint={t(
               SelectPaymentMethodTexts.confirm_button.a11yhint,

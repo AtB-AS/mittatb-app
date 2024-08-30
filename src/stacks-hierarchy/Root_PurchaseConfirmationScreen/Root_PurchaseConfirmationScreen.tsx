@@ -86,6 +86,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
@@ -400,7 +401,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               ) : (
                 <ActivityIndicator
                   size={theme.spacing.medium}
-                  color={theme.text.colors.primary}
+                  color={theme.color.foreground.dynamic.primary}
                   style={{margin: theme.spacing.medium}}
                 />
               )}
@@ -428,7 +429,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
-            color={theme.text.colors.primary}
+            color={theme.color.foreground.dynamic.primary}
             style={{margin: theme.spacing.medium}}
           />
         ) : (
@@ -437,7 +438,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
-                  interactiveColor="interactive_0"
+                  interactiveColor={interactiveColor}
                   disabled={!!error}
                   rightIcon={{
                     svg:
@@ -486,7 +487,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
             ) : (
               <Button
-                interactiveColor="interactive_0"
+                interactiveColor={interactiveColor}
                 text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
                 disabled={!!error}
                 accessibilityHint={t(

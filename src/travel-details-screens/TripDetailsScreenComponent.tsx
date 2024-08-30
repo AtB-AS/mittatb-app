@@ -408,7 +408,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacing.xSmall,
   },
   borderTop: {
-    borderTopColor: theme.border.primary,
+    borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
   },
   durationIcon: {marginRight: theme.spacing.small},

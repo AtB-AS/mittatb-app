@@ -35,7 +35,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
           justifyContent: 'flex-end',
           alignSelf: 'flex-end',
         }}
-        textColor={theme.text.colors.primary}
+        textColor={theme.color.foreground.dynamic.primary}
         display="compact"
         testID="dateInput"
         minimumDate={new Date()}

@@ -17,7 +17,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {TravellerSelectionBottomSheetType} from './types';
 
@@ -30,6 +30,7 @@ export function MultipleTravellersSelection({
   isTravelerOnBehalfOfToggle,
 }: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
 
   const travellersModified = useRef(false);
@@ -69,7 +70,7 @@ export function MultipleTravellersSelection({
             removeCount={() => removeTraveller(u.userTypeString)}
             type="spacious"
             testID={'counterInput_' + u.userTypeString.toLowerCase()}
-            color="interactive_2"
+            color={theme.color.interactive[2]}
             subtext={getTextForLanguage(u.alternativeDescriptions, language)}
           />
         ))}

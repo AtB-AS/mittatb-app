@@ -199,7 +199,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
   const iconHeight = {
-    height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
+    height: theme.icon.size['medium'] * fontScale + theme.spacing.small * 2,
   };
   const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
 
@@ -446,7 +446,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   walkDuration: {
     fontSize: 10,
     marginLeft: -2,
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -487,7 +487,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderTopColor: theme.border.primary,
+    borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
     paddingHorizontal: theme.spacing.medium,
     paddingVertical: theme.spacing.small,

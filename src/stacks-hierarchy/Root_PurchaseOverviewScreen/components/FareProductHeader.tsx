@@ -10,7 +10,7 @@ import {
 } from '@atb/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
@@ -34,6 +34,7 @@ export const FareProductHeader = forwardRef<View, Props>(
     ref,
   ) => {
     const {t, language} = useTranslation();
+    const {theme} = useTheme();
     const styles = useStyle();
     const [isTicketInformationEnabled] = useIsTicketInformationEnabled();
 
@@ -49,7 +50,7 @@ export const FareProductHeader = forwardRef<View, Props>(
         <View style={styles.header} ref={ref} accessible={true}>
           <TransportationIconBoxList
             modes={fareProductTypeConfig.transportModes}
-            iconSize="normal"
+            iconSize="medium"
           />
           <ThemeText
             type="heading--medium"
@@ -72,7 +73,7 @@ export const FareProductHeader = forwardRef<View, Props>(
             <Button
               type="small"
               leftIcon={{svg: Info}}
-              interactiveColor="interactive_1"
+              interactiveColor={theme.color.interactive[1]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
             />

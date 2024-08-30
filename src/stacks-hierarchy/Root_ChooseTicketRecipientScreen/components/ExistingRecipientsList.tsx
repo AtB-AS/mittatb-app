@@ -9,7 +9,7 @@ import {ActivityIndicator} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import OnBehalfOfTexts from "@atb/translations/screens/subscreens/OnBehalfOf.ts";
 
 export const ExistingRecipientsList = ({
@@ -21,11 +21,11 @@ export const ExistingRecipientsList = ({
   state: RecipientSelectionState;
   onSelect: (r: ExistingRecipientType) => void;
   onErrorOrEmpty: () => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {theme} = useTheme();
 
   const recipientsQuery = useFetchRecipientsQuery();
 
@@ -44,7 +44,7 @@ export const ExistingRecipientsList = ({
         <ActivityIndicator
           style={styles.loadingSpinner}
           size="large"
-          color={getStaticColor(themeName, themeColor).text}
+          color={themeColor.foreground.primary}
         />
       )}
       {recipientsQuery.status === 'error' && (
@@ -66,7 +66,7 @@ export const ExistingRecipientsList = ({
           keyExtractor={(i) => i.accountId}
           selected={recipient}
           onSelect={onSelect}
-          color="interactive_2"
+          color={theme.color.interactive[2]}
           style={styles.recipientList}
         />
       ) : null}

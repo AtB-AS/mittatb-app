@@ -2,7 +2,7 @@ import {Button} from '@atb/components/button';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useValidRightNowFareContract} from '@atb/ticketing';
 import {
   DashboardTexts,
@@ -31,13 +31,14 @@ export const CompactFareContracts: React.FC<Props> = ({
   const validFareContracts = useValidRightNowFareContract();
 
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
   return (
     <View style={[style, itemStyle.container]}>
       <ContentHeading
-        color="background_accent_0"
+        color={theme.color.background.accent[0]}
         text={t(TicketingTexts.header.title)}
       />
       {validFareContracts.length == 0 ? (

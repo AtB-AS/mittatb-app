@@ -1,7 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useCallback} from 'react';
 import {KeyboardAvoidingView, RefreshControl, View} from 'react-native';
@@ -18,9 +17,10 @@ import {
     FETCH_RECIPIENTS_QUERY_KEY,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import { Theme } from '@atb-as/theme';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const Root_ChooseTicketRecipientScreen = ({
   navigation,
@@ -28,7 +28,8 @@ export const Root_ChooseTicketRecipientScreen = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
 
   const [state, dispatch] = useRecipientSelectionState();
 
@@ -51,8 +52,8 @@ export const Root_ChooseTicketRecipientScreen = ({
                 queryClient.resetQueries([FETCH_RECIPIENTS_QUERY_KEY])
               }
               refreshing={false}
-              tintColor={getStaticColor(themeName, themeColor).text}
-              colors={[getStaticColor(themeName, themeColor).text]}
+              tintColor={themeColor.foreground.primary}
+              colors={[themeColor.foreground.primary]}
             />
           }
         >
@@ -117,7 +118,7 @@ export const Root_ChooseTicketRecipientScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {flex: 1},

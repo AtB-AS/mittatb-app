@@ -10,7 +10,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import {StyleSheet} from '@atb/theme';
 
 export const PhoneAndNameInputSection = ({
@@ -24,7 +24,7 @@ export const PhoneAndNameInputSection = ({
   onChangePrefix: (p: string) => void;
   onChangePhone: (p: string) => void;
   onChangeName: (n: string) => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();

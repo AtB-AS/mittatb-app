@@ -5,7 +5,7 @@ import {Announcement} from './Announcement';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/heading';
@@ -18,6 +18,7 @@ type Props = {
 export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsState();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const now = useNow(10000);
   const {isConsentGranted} = useBeaconsState();
 
@@ -45,7 +46,7 @@ export const Announcements = ({style}: Props) => {
     <View style={[style, styles.container]} testID="announcements">
       <View style={styles.headerWrapper}>
         <ContentHeading
-          color="background_accent_0"
+          color={theme.color.background.accent[0]}
           text={t(DashboardTexts.announcemens.header)}
         />
       </View>

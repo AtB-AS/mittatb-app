@@ -12,7 +12,7 @@ import {
 } from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
@@ -27,6 +27,7 @@ export function SingleTravellerSelection({
   isTravelerOnBehalfOfToggle,
 }: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
@@ -56,7 +57,7 @@ export function SingleTravellerSelection({
         }
         selected={selectedProfile}
         onSelect={select}
-        color="interactive_2"
+        color={theme.color.interactive[2]}
         accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
       />
       {isOnBehalfOfAllowed && (

@@ -1,6 +1,6 @@
 import {View} from 'react-native';
-import {ScreenContainer, themeColor} from './components/ScreenContainer';
-import {StyleSheet} from '@atb/theme';
+import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -19,6 +19,8 @@ export const Root_ParkingViolationsConfirmationScreen = ({
 }: ConfirmationScreenProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const analytics = useAnalytics();
 
   const closeReporting = () => {
@@ -47,7 +49,7 @@ export const Root_ParkingViolationsConfirmationScreen = ({
           )}
           accessibilityRole="button"
         >
-          <ThemeIcon stroke="#fff" fill="#fff" size="large" svg={Confirm} />
+          <ThemeIcon stroke="#fff" color="#fff" size="large" svg={Confirm} />
         </PressableOpacity>
       </View>
     </ScreenContainer>
@@ -71,6 +73,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 36,
-    backgroundColor: theme.interactive.interactive_0.default.background,
+    backgroundColor: theme.color.interactive[0].default.background,
   },
 }));

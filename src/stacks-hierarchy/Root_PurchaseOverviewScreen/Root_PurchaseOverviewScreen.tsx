@@ -1,6 +1,6 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
@@ -42,6 +42,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const {authenticationType} = useAuthState();
 
   const isFree = params.toPlace
@@ -208,7 +209,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
-              type="valid"
+              type="success"
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
@@ -272,7 +273,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <StartTimeSelection
             selectionMode={timeSelectionMode}
-            color="interactive_2"
+            color={theme.color.interactive[2]}
             travelDate={travelDate}
             setTravelDate={setTravelDate}
             validFromTime={travelDate}
@@ -310,7 +311,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           {isFree ? (
             <MessageInfoBox
-              type="valid"
+              type="success"
               message={t(PurchaseOverviewTexts.summary.free)}
               style={styles.messages}
             />
@@ -321,7 +322,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview
                 }
-                textColor="background_0"
+                textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
                   fromTariffZone: fromPlace.id,

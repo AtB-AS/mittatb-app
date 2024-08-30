@@ -2,13 +2,13 @@ import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load.ts';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import {StyleSheet} from '@atb/theme';
 
 export const TitleAndDescription = ({
   themeColor,
 }: {
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();

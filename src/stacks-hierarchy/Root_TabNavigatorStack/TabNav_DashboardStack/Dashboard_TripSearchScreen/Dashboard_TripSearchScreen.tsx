@@ -24,8 +24,7 @@ import {
 } from '@atb/journey-date-picker';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
 import {
@@ -58,10 +57,8 @@ import {areDefaultFiltersSelected} from './utils';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
-const headerBackgroundColor: StaticColorByType<'background'> =
-  'background_accent_0';
-
-const resultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
+const getHeaderBackgroundColor = (theme: Theme) => theme.color.background.accent[0];
+const getResultsBackgroundColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   navigation,
@@ -70,6 +67,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {callerRoute} = route.params;
   const styles = useStyles();
   const {theme} = useTheme();
+  const headerBackgroundColor = getHeaderBackgroundColor(theme);
+  const resultsBackgroundColor = getResultsBackgroundColor(theme);
+  const interactiveColor = theme.color.interactive[1];
+  const statusColor = theme.color.status.success.primary;
+
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
@@ -340,7 +342,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   language,
                 )}
                 mode="primary"
-                interactiveColor='interactive_1'
+                interactiveColor={interactiveColor}
                 compact={true}
                 style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
@@ -349,7 +351,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   svg: Time,
                   notification:
                     searchTime.option !== 'now'
-                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      ? {color: statusColor, backgroundColor: headerBackgroundColor}
                       : undefined,
                 }}
               />
@@ -359,7 +361,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
-                    interactiveColor='interactive_1'
+                    interactiveColor={interactiveColor}
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
@@ -370,8 +372,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                         filtersState.filtersSelection?.transportModes,
                       )
                         ? {
-                            color: 'valid',
-                            backgroundColor: 'background_accent_0',
+                            color: statusColor,
+                            backgroundColor: headerBackgroundColor,
                           }
                         : undefined,
                     }}
@@ -459,7 +461,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   {tripPatterns.length ? (
                     <>
                       <ActivityIndicator
-                        color={theme.text.colors.secondary}
+                        color={theme.color.foreground.dynamic.secondary}
                         style={{
                           marginRight: theme.spacing.medium,
                         }}
@@ -479,9 +481,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   {loadMore ? (
                     <>
                       <ThemeIcon
-                        colorType="secondary"
+                        color="secondary"
                         svg={ExpandMore}
-                        size="normal"
+                        size="medium"
                       />
                       <ThemeText color="secondary" testID="resultsLoaded">
                         {' '}
@@ -638,12 +640,12 @@ function computeNoResultReasons(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[resultsBackgroundColor].background,
+    backgroundColor: getResultsBackgroundColor(theme).background,
     flex: 1,
   },
   scrollView: {
     paddingBottom: theme.spacing.medium,
-    backgroundColor: theme.static.background[resultsBackgroundColor].background,
+    backgroundColor: getResultsBackgroundColor(theme).background,
   },
   searchParametersButtons: {
     marginTop: theme.spacing.medium,
@@ -653,7 +655,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchTimeButton: {flexGrow: 1},
   searchHeader: {
     marginHorizontal: theme.spacing.medium,
-    backgroundColor: theme.static.background[headerBackgroundColor].background,
+    backgroundColor: getHeaderBackgroundColor(theme).background,
   },
   loadingIndicator: {
     flexDirection: 'row',

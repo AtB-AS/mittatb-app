@@ -41,7 +41,7 @@ const UnknownProvider = ({height, width}: {height: number; width: number}) => {
     <View
       style={{
         backgroundColor:
-          theme.static.background['background_accent_0'].background,
+          theme.color.background.accent[0].background,
         height,
         width,
         alignItems: 'center',

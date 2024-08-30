@@ -114,6 +114,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: 2,
   },
   locationIcon: {
-    backgroundColor: theme.text.colors.primary,
+    backgroundColor: theme.color.foreground.dynamic.primary,
   },
 }));

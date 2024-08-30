@@ -114,7 +114,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
             </>
           )}
         </View>
-        {canSelectZone && <ThemeIcon svg={Edit} size="normal" />}
+        {canSelectZone && <ThemeIcon svg={Edit} size="medium" />}
       </View>
     );
 

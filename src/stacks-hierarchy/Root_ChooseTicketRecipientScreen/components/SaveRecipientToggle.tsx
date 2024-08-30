@@ -4,7 +4,7 @@ import {TouchableOpacity} from 'react-native';
 import {Checkbox} from '@atb/components/checkbox';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 
 export const SaveRecipientToggle = ({
   state: {settingPhone, settingName},
@@ -13,7 +13,7 @@ export const SaveRecipientToggle = ({
 }: {
   state: RecipientSelectionState;
   onPress: () => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();

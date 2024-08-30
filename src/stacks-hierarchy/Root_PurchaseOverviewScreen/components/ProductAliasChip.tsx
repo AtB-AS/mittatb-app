@@ -15,8 +15,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const currentColor =
-    theme.interactive[color][selected ? 'active' : 'default'];
+  const currentColor = color[selected ? 'active' : 'default'];
 
   // To make items with and without border the same size, we subtract the border
   // width from the padding when there is a border.
@@ -28,7 +27,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
         styles.container,
         {
           backgroundColor: currentColor.background,
-          borderColor: theme.interactive[color].outline.background,
+          borderColor: color.outline.background,
           borderWidth: borderOffset,
           paddingVertical: theme.spacing.medium - borderOffset,
           paddingHorizontal: theme.spacing.xLarge - borderOffset,

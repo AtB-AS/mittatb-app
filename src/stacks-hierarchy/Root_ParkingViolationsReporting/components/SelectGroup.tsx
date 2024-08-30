@@ -98,8 +98,8 @@ const SelectItem = <T,>({
   const itemStyles = useItemStyles();
   const {theme} = useTheme();
   const background = theme.color.background.neutral[0].background;
-  const selectedBackground = theme.interactive.interactive_2.active.background;
-  const selectedBorder = theme.interactive.interactive_0.default.background;
+  const selectedBackground = theme.color.interactive[2].active.background;
+  const selectedBorder = theme.color.interactive[0].default.background;
 
   return (
     <View style={style ?? itemStyles.container}>
@@ -124,7 +124,7 @@ const SelectItem = <T,>({
           <View style={itemStyles.indicator}>
             <RadioIcon
               checked={selected}
-              color={theme.interactive.interactive_0.default.background}
+              color={theme.color.interactive[0].default.background}
             />
           </View>
         )}

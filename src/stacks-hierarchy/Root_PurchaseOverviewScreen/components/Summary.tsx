@@ -2,7 +2,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
@@ -33,6 +33,7 @@ export function Summary({
 }: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
   const formattedOriginalPrice = formatDecimalNumber(
@@ -74,7 +75,7 @@ export function Summary({
         </ThemeText>
       )}
       <Button
-        interactiveColor="interactive_0"
+        interactiveColor={theme.color.interactive[0]}
         text={summaryButtonText}
         disabled={isLoading || !hasSelection || isFree || isError}
         onPress={toPaymentFunction}

@@ -12,7 +12,7 @@ import {
   useFirestoreConfiguration,
 } from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   ExpandableSectionItem,
@@ -30,6 +30,7 @@ type Props = {
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
   const {appTexts} = useFirestoreConfiguration();
@@ -104,7 +105,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                       <BorderedInfoBox
                         style={styles.discountInfo}
                         type="small"
-                        backgroundColor="background_0"
+                        backgroundColor={theme.color.background.neutral[0]}
                         text={discountText}
                       />
                     )}

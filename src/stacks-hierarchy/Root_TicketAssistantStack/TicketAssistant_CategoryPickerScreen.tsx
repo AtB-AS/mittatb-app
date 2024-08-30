@@ -276,7 +276,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
   },
   expandedContent: {
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
   },
   categoriesContainer: {
     marginTop: theme.spacing.xLarge,

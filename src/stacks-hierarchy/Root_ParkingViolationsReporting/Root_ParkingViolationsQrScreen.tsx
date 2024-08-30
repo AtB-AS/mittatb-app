@@ -1,11 +1,11 @@
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useEffect, useMemo, useState} from 'react';
-import {ScreenContainer} from './components/ScreenContainer';
+import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
@@ -28,6 +28,8 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +157,7 @@ export const Root_ParkingViolationsQrScreen = ({
         <Button
           disabled={isError}
           mode="secondary"
-          backgroundColor="background_accent_0"
+          backgroundColor={themeColor}
           onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
         />

@@ -39,7 +39,7 @@ function MyComponent() {
 
   return (
     <View style={{backgroundColor: theme.background.primary}}>
-      <Text style={{color: theme.text.colors.primary}}>Hello</Text>
+      <Text style={{color: theme.color.foreground.dynamic.primary}}>Hello</Text>
     </View>
   );
 }
@@ -70,7 +70,7 @@ const style = StyleSheet.createTheme((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
   },
 }));
 ```
@@ -98,7 +98,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   text: {
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
   },
 }));
 ```

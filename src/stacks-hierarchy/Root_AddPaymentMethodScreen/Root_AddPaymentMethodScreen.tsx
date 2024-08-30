@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useAddPaymentMethod} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/use-add-payment-method';
 import {dictionary, useTranslation} from '@atb/translations';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -16,6 +16,7 @@ type Props = RootStackScreenProps<'Root_AddPaymentMethodScreen'>;
 export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const [showWebView, setShowWebView] = useState<boolean>(true);
   const {
     terminalUrl,
@@ -52,7 +53,7 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
             style={styles.messageBox}
           />
           <Button
-            interactiveColor="interactive_1"
+            interactiveColor={theme.color.interactive[1]}
             onPress={() => navigation.goBack()}
             text={t(AddPaymentMethodTexts.buttons.goBack)}
           />

@@ -14,13 +14,13 @@ import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-
 import {useState} from 'react';
 import phoneValidator from 'phone';
 import {ActivityIndicator, View} from 'react-native';
-import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
+import {ContrastColor} from '@atb-as/theme';
 
 export const SubmitButton = ({
   state: {settingName, recipient, phone, prefix, name, error},
@@ -31,10 +31,10 @@ export const SubmitButton = ({
   state: RecipientSelectionState;
   onSubmit: (r: TicketRecipientType) => void;
   onError: (c?: OnBehalfOfErrorCode) => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const queryClient = useQueryClient();
   const {userId} = useAuthState();
@@ -115,7 +115,7 @@ export const SubmitButton = ({
       {isSubmitting && (
         <ActivityIndicator
           size="large"
-          color={getStaticColor(themeName, themeColor).text}
+          color={themeColor.foreground.primary}
         />
       )}
 
@@ -129,7 +129,7 @@ export const SubmitButton = ({
 
       {!isSubmitting && (
         <Button
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
           onPress={onPress}
           text={t(PurchaseOverviewTexts.summary.button.payment)}
           testID="toPaymentButton"

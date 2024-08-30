@@ -95,8 +95,8 @@ export function CounterSectionItem({
             svg={Subtract}
             fill={
               removeButtonDisabled
-                ? theme.text.colors.disabled
-                : theme.text.colors.primary
+                ? theme.color.foreground.dynamic.disabled
+                : theme.color.foreground.dynamic.primary
             }
           />
         </PressableOpacity>

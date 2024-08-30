@@ -5,7 +5,7 @@ import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filter
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 
 type Props = {
   preference: TravelSearchPreferenceWithSelectionType;
@@ -19,6 +19,7 @@ export const TravelSearchPreference = ({
 }: Props) => {
   const {language} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
   const selectedIndex = preference.options.findIndex(
     (o) => preference.selectedOption === o.id,
   );
@@ -32,7 +33,7 @@ export const TravelSearchPreference = ({
         <GenericSectionItem>
           <RadioSegments
             activeIndex={selectedIndex}
-            color="interactive_2"
+            color={theme.color.interactive[2]}
             options={preference.options.map((option) => ({
               text: getTextForLanguage(option.text, language) ?? '',
               onPress: () => {

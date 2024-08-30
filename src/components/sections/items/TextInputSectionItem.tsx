@@ -88,7 +88,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
 
     const getBorderColor = () => {
       if (isFocused) {
-        return {borderColor: theme.border.focus};
+        return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
           borderColor:

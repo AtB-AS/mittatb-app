@@ -106,7 +106,7 @@ const PADDING = 5;
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerText: {
     padding: theme.spacing.xSmall,
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
     justifyContent: 'center',
     textAlignVertical: 'center',
   },

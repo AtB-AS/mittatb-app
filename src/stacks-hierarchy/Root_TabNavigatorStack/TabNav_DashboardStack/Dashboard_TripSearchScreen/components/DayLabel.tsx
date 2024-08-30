@@ -52,6 +52,6 @@ const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
     paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
   },
 }));

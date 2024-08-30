@@ -52,10 +52,10 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@11.0.0-alpha.3":
-  version "11.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.3.tgz#4cebd8735a0389e61c2d8acef5c9f64c4b765396"
-  integrity sha512-NwDIi6FnLPtH2msLptJt7g7c7MJzwhuwAosP2QsujQhcDVRu/Ii9BlvGdscCDG5el2pG8DUJZeiTtDAUFAFYjg==
+"@atb-as/theme@11.0.0-alpha.4":
+  version "11.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.4.tgz#45e1a22a89bdd8c25f84af22ed8245518dc12edd"
+  integrity sha512-RCqkyBAodvoGIy07+XrScYTHKgo6PaYau9KWUcpkvu0KlR9V2koQGiB9Lh+YieoH58wOEfkh4Qh2PGPxHBiSBQ==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.3.2"
     hex-to-rgba "^2.0.1"

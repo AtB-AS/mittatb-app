@@ -76,7 +76,7 @@ export const Root_ParkingViolationsSelectScreen = ({
                   style={{
                     ...style.itemImage,
                     borderColor: isSelected
-                      ? theme.interactive.interactive_2.outline.background
+                      ? theme.color.interactive[2].outline.background
                       : theme.color.background.neutral[0].background,
                   }}
                   height={ICON_SIZE}
@@ -148,7 +148,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   itemImage: {
     marginRight: theme.spacing.medium,
-    borderColor: theme.interactive.interactive_2.outline.background,
+    borderColor: theme.color.interactive[2].outline.background,
     borderRadius: ICON_SIZE / 2,
     height: ICON_SIZE,
     width: ICON_SIZE,

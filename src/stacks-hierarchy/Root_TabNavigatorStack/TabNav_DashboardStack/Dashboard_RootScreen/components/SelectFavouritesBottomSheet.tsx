@@ -9,7 +9,7 @@ import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -96,6 +96,7 @@ export const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
@@ -152,7 +153,7 @@ export const SelectFavouritesBottomSheet = ({
       <FullScreenFooter>
         <View style={styles.buttonContainer}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             text={t(SelectFavouriteDeparturesText.confirm_button.text)}
             accessibilityHint={t(
               SelectFavouriteDeparturesText.confirm_button.a11yhint,
@@ -210,7 +211,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingVertical: theme.spacing.medium,
     },
     secondaryText: {
-      color: theme.text.colors.secondary,
+      color: theme.color.foreground.dynamic.secondary,
     },
     lineModeIcon: {
       marginRight: theme.spacing.small,

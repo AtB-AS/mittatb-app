@@ -3,6 +3,7 @@ import {RadioSegments} from '@atb/components/radio';
 import React from 'react';
 import {UseDebugOverride} from '@atb/debug/use-debug-override';
 import {View} from 'react-native';
+import { useTheme } from '@atb/theme';
 
 type Props = {
   description?: String;
@@ -10,13 +11,14 @@ type Props = {
 };
 
 export const DebugOverride = ({description, override}: Props) => {
+  const {theme} = useTheme();
   const [overrideVal, setOverride] = override;
   return (
     <View style={{flex: 1}}>
       <ThemeText>{description}</ThemeText>
       <RadioSegments
         activeIndex={overrideVal ? 0 : overrideVal === undefined ? 1 : 2}
-        color="interactive_2"
+        color={theme.color.interactive[2]}
         style={{marginTop: 8}}
         options={[
           {

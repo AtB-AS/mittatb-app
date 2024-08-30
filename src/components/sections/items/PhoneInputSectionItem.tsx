@@ -104,7 +104,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 
     const getBorderColor = () => {
       if (isFocused) {
-        return {borderColor: theme.border.focus};
+        return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
           borderColor:
@@ -188,7 +188,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             <InternalTextInput
               ref={combinedRef}
               style={[styles.input, padding, style]}
-              placeholderTextColor={theme.text.colors.secondary}
+              placeholderTextColor={theme.color.foreground.dynamic.secondary}
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
               maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -251,7 +251,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
     fontSize: theme.typography.body__primary.fontSize,
     flexGrow: 1,

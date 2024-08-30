@@ -130,7 +130,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     minWidth: 60 - theme.spacing.medium,
   },
   faded: {
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
   },
   inlineValueStyle: {
     paddingTop: theme.spacing.xSmall,

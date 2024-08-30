@@ -120,7 +120,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === 0 && !isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType="disabled" />
+        <ThemeIcon svg={Icon} color="disabled" />
       </View>
     );
   }
@@ -128,7 +128,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === length - 1 && isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType="disabled" />
+        <ThemeIcon svg={Icon} color="disabled" />
       </View>
     );
   }

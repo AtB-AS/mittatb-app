@@ -1,14 +1,13 @@
 import {Onboarding4} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {ExtendedOnboardingScreenProps} from './navigation-types';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export type GoodToKnowScreenProps =
   ExtendedOnboardingScreenProps<'ExtendedOnboarding_GoodToKnowScreen'>;
@@ -17,6 +16,9 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
   navigation,
 }: GoodToKnowScreenProps) => {
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = theme.color.interactive[0];
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
 
@@ -40,7 +42,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
       </View>
       <View style={styles.bottomView}>
         <Button
-          interactiveColor="interactive_0"
+          interactiveColor={interactiveColor}
           onPress={() =>
             navigation.navigate('ExtendedOnboarding_AlsoGoodToKnowScreen')
           }
@@ -58,7 +60,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacing.xLarge,
   },
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     paddingTop: theme.spacing.xLarge,
   },
   mainView: {
