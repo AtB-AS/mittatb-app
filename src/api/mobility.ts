@@ -23,6 +23,8 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  ShmoBooking,
+  ShmoBookingSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
   ViolationsReportingInitQuery,
@@ -127,13 +129,26 @@ export const getCarStation = (
 export const getGeofencingZones = (
   systemIds: string[],
   opts?: AxiosRequestConfig,
-): Promise<GeofencingZones[] | undefined> => {
-  if (systemIds.length < 1) return Promise.resolve(undefined);
+): Promise<GeofencingZones[] | null> => {
+  if (systemIds.length < 1) return Promise.resolve(null);
   const url = '/bff/v2/mobility/geofencing-zones';
   const query = qs.stringify({systemIds});
   return client
     .get<GetGeofencingZonesQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.geofencingZones);
+    .then((res) => res.data.geofencingZones ?? null);
+};
+
+export const getActiveShmoBooking = (
+  opts?: AxiosRequestConfig,
+): Promise<ShmoBooking | null> => {
+  return client
+    .get<ShmoBooking | null>('/mobility/v1/bookings/active', {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((response) =>
+      response.data === null ? null : ShmoBookingSchema.parse(response.data),
+    );
 };
 
 export const initViolationsReporting = (
