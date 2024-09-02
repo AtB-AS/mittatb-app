@@ -23,6 +23,7 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  InitShmoOneStopBookingRequestBody,
   ShmoBooking,
   ShmoBookingSchema,
   ViolationsReportQuery,
@@ -149,6 +150,16 @@ export const getActiveShmoBooking = (
     .then((response) =>
       response.data === null ? null : ShmoBookingSchema.parse(response.data),
     );
+};
+
+export const initShmoOneStopBooking = (
+  reqBody: InitShmoOneStopBookingRequestBody,
+): Promise<ShmoBooking> => {
+  return client
+    .post<ShmoBooking>('/mobility/v1/bookings/one-stop', reqBody, {
+      authWithIdToken: true,
+    })
+    .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (

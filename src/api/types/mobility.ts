@@ -128,3 +128,23 @@ export const ShmoBookingSchema = z.object({
 });
 
 export type ShmoBooking = z.infer<typeof ShmoBookingSchema>;
+
+const ShmoCoordinatesSchema = z.object({
+  longitude: z.number(),
+  latitude: z.number(),
+  altitude: z.number().optional().nullable(),
+});
+
+const InitShmoOneStopBookingRequestBodySchema = z.object({
+  recurringPaymentId: z.number().int(),
+  coordinates: ShmoCoordinatesSchema,
+  assetId: z
+    .string()
+    .optional()
+    .describe('This is the same id as vehicleId from the mobility API'),
+  preferredLanguageCode: z.string().optional(), // preferredLanguageCode will be replaced by Accept-Language headers
+});
+
+export type InitShmoOneStopBookingRequestBody = z.infer<
+  typeof InitShmoOneStopBookingRequestBodySchema
+>;
