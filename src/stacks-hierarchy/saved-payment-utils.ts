@@ -4,42 +4,41 @@ import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthState} from '@atb/auth';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
+import {RecurringPayment} from '@atb/ticketing';
 
-export function usePreviousPaymentMethod(): SavedPaymentOption | undefined {
-  const [paymentMethod, setPaymentMethod] = useState<
-    SavedPaymentOption | undefined
-  >(undefined);
+export function usePreviousPaymentMethods(): {
+  recurringPayments: RecurringPayment[] | undefined;
+  previousPaymentMethod: SavedPaymentOption | undefined;
+} {
   const {userId} = useAuthState();
-
   const {data: recurringPayments} = useListRecurringPaymentsQuery();
+  const [previousPaymentMethod, setPreviousPaymentMethod] =
+    useState<SavedPaymentOption>();
 
   useEffect(() => {
-    async function run(uid: string) {
-      const savedMethod = await getPreviousPaymentMethodByUser(uid);
-      if (
-        recurringPayments &&
-        savedMethod &&
-        savedMethod.savedType === 'recurring'
-      ) {
-        const method = recurringPayments.find(
-          (recurringPayment) =>
-            recurringPayment.id === savedMethod.recurringCard.id,
-        );
-        if (method) setPaymentMethod(savedMethod);
-      } else {
-        setPaymentMethod(savedMethod);
-      }
-    }
-
     if (!userId) {
-      setPaymentMethod(undefined);
-      return;
+      setPreviousPaymentMethod(undefined);
     } else {
-      run(userId);
+      getPreviousPaymentMethodByUser(userId).then((storedMethod) => {
+        // Since the stored payment could have been deleted, we need to check if
+        // it is still in the list of recurring payments.
+        if (!storedMethod) return;
+        const shouldUseStored =
+          'recurringCard' in storedMethod
+            ? !!recurringPayments?.find(
+                (recurringPayment) =>
+                  recurringPayment.id === storedMethod.recurringCard.id,
+              )
+            : true;
+        setPreviousPaymentMethod(shouldUseStored ? storedMethod : undefined);
+      });
     }
-  }, [recurringPayments, userId]);
+  }, [userId, recurringPayments]);
 
-  return paymentMethod;
+  return {
+    recurringPayments,
+    previousPaymentMethod,
+  };
 }
 
 type StoredPaymentMethods = {

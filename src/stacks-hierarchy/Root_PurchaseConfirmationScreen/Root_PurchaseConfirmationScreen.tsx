@@ -35,7 +35,7 @@ import {
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
-import {usePreviousPaymentMethod} from '../saved-payment-utils';
+import {usePreviousPaymentMethods} from '../saved-payment-utils';
 import {PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -93,7 +93,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const previousPaymentMethod = usePreviousPaymentMethod();
+  const {previousPaymentMethod, recurringPayments} =
+    usePreviousPaymentMethods();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
@@ -223,6 +224,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     openBottomSheet(() => {
       return (
         <SelectPaymentMethodSheet
+          recurringPayments={recurringPayments}
           onSelect={(option: PaymentMethod) => {
             goToPayment(option);
             closeBottomSheet();
