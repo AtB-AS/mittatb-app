@@ -22,14 +22,15 @@ export function usePreviousPaymentMethods(): {
       getPreviousPaymentMethodByUser(userId).then((storedMethod) => {
         // Since the stored payment could have been deleted, we need to check if
         // it is still in the list of recurring payments.
-        if (!storedMethod || !('recurringCard' in storedMethod)) return;
-        const isInRecurringPayments = !!recurringPayments?.find(
-          (recurringPayment) =>
-            recurringPayment.id === storedMethod.recurringCard.id,
-        );
-        setPreviousPaymentMethod(
-          isInRecurringPayments ? storedMethod : undefined,
-        );
+        if (!storedMethod) return;
+        const shouldUseStored =
+          'recurringCard' in storedMethod
+            ? !!recurringPayments?.find(
+                (recurringPayment) =>
+                  recurringPayment.id === storedMethod.recurringCard.id,
+              )
+            : true;
+        setPreviousPaymentMethod(shouldUseStored ? storedMethod : undefined);
       });
     }
   }, [userId, recurringPayments]);
