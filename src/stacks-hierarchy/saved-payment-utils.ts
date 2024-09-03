@@ -32,7 +32,7 @@ export function usePreviousPaymentMethods(): {
         );
       });
     }
-  }, [userId]);
+  }, [userId, recurringPayments]);
 
   return {
     recurringPayments,
