@@ -54,8 +54,13 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
 
   const orderId = reserveMutation.data?.order_id;
   const fareContractReceived = React.useMemo(() => {
-    const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
-    return allPossibleFareContracts.some((fc) => fc.orderId === orderId && orderId !== undefined);
+    const allPossibleFareContracts = [
+      ...(fareContracts ?? []),
+      ...(sentFareContracts ?? []),
+    ];
+    return allPossibleFareContracts.some(
+      (fc) => fc.orderId === orderId && orderId !== undefined,
+    );
   }, [fareContracts, orderId, sentFareContracts]);
 
   useEffect(() => {
