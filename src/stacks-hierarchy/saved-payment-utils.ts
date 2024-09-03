@@ -8,26 +8,26 @@ import {RecurringPayment} from '@atb/ticketing';
 
 export function usePreviousPaymentMethods(): {
   recurringPayments: RecurringPayment[] | undefined;
-  savedPaymentMethod: SavedPaymentOption | undefined;
+  previousPaymentMethod: SavedPaymentOption | undefined;
 } {
   const {userId} = useAuthState();
   const {data: recurringPayments} = useListRecurringPaymentsQuery();
-  const [savedPaymentMethod, setSavedPaymentMethod] =
+  const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<SavedPaymentOption>();
 
   useEffect(() => {
     if (!userId) {
-      setSavedPaymentMethod(undefined);
+      setPreviousPaymentMethod(undefined);
     } else {
       getPreviousPaymentMethodByUser(userId).then((method) => {
-        setSavedPaymentMethod(method);
+        setPreviousPaymentMethod(method);
       });
     }
   }, [userId]);
 
   return {
     recurringPayments,
-    savedPaymentMethod,
+    previousPaymentMethod,
   };
 }
 

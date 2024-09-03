@@ -93,7 +93,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const {savedPaymentMethod: previousPaymentMethod, recurringPayments} =
+  const {previousPaymentMethod, recurringPayments} =
     usePreviousPaymentMethods();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
