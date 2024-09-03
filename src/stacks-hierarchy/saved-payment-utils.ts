@@ -20,6 +20,14 @@ export function usePreviousPaymentOptions(): {
   const validPaymentOption = (paymentOption: PaymentOption | undefined) => {
     if (!paymentOption) return;
 
+    // Since the stored payment could have been deleted, we need to check if
+    // it is still in the list of recurring payments.
+    const isInRecurringPayments = !!recurringPayments?.find(
+      (recurringPayment) =>
+        recurringPayment.id === paymentOption.recurringCard?.id,
+    );
+    if (!isInRecurringPayments) return;
+
     // Payment type is not enabled
     if (!paymentTypes.includes(paymentOption.paymentType)) return;
 
@@ -38,17 +46,6 @@ export function usePreviousPaymentOptions(): {
       return;
     }
     getPreviousPaymentMethodByUser(userId).then((storedMethod) => {
-      // Since the stored payment could have been deleted, we need to check if
-      // it is still in the list of recurring payments.
-      if (!storedMethod || !('recurringCard' in storedMethod)) return;
-      const isInRecurringPayments = !!recurringPayments?.find(
-        (recurringPayment) =>
-          recurringPayment.id === storedMethod.recurringCard?.id,
-      );
-      setPreviousPaymentOption(
-        isInRecurringPayments ? storedMethod : undefined,
-      );
-
       setPreviousPaymentOption(validPaymentOption(storedMethod));
     });
   }, [userId, recurringPayments]);
