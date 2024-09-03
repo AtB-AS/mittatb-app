@@ -7,20 +7,23 @@ import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useHarbors} from '@atb/harbors';
+import {ProductTypeTransportModes} from '@atb-as/config-specs';
 
 export function FareContractHarborStopPlaces({
   fromStopPlaceId,
   toStopPlaceId,
   showTwoWayIcon,
+  transportModes,
 }: {
   fromStopPlaceId?: string;
   toStopPlaceId?: string;
   showTwoWayIcon: boolean;
+  transportModes?: ProductTypeTransportModes[];
 }) {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const harborsQuery = useHarbors();
+  const harborsQuery = useHarbors({transportModes});
 
   if (!fromStopPlaceId || !toStopPlaceId) return null;
   if (harborsQuery.isLoading)

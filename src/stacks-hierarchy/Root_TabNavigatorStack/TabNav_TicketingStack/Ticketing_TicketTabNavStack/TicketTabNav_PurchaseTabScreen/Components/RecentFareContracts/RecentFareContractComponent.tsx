@@ -54,12 +54,14 @@ export const RecentFareContractComponent = ({
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
 
-  const harborsQuery = useHarborsQuery();
-
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
+
+  const harborsQuery = useHarborsQuery({
+    transportModes: fareProductTypeConfig?.transportModes,
+  });
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -168,6 +170,7 @@ export const RecentFareContractComponent = ({
             showTwoWayIcon={showTwoWayIcon}
             fromStopPlaceId={pointToPointValidity?.fromPlace}
             toStopPlaceId={pointToPointValidity?.toPlace}
+            transportModes={fareProductTypeConfig.transportModes}
           />
         </View>
       )}

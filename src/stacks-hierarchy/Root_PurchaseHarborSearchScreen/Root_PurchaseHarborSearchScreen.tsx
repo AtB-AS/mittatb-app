@@ -54,8 +54,10 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   useEffect(() => {
     isFocused && giveFocus(inputRef);
   }, [isFocused]);
-
-  const harborsQuery = useHarbors(fromHarbor?.id);
+  const harborsQuery = useHarbors({
+    fromHarborId: fromHarbor?.id,
+    transportModes: fareProductTypeConfig.transportModes,
+  });
 
   const debouncedText = useDebounce(text, 200);
 
