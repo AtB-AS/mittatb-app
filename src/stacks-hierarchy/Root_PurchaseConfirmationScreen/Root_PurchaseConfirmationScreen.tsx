@@ -20,8 +20,8 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {addMinutes, parseISO} from 'date-fns';
-import React, {useEffect, useMemo, useState} from 'react';
+import {addMinutes} from 'date-fns';
+import React, {useMemo} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -35,8 +35,8 @@ import {
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
-import {usePreviousPaymentMethods} from '../saved-payment-utils';
-import {PaymentMethod, SavedPaymentOption} from '../types';
+import {usePreviousPaymentOptions} from '../saved-payment-utils';
+import {PaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
@@ -46,38 +46,6 @@ import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_Dash
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-
-function getPreviousPaymentMethod(
-  previousPaymentMethod: SavedPaymentOption | undefined,
-  paymentTypes: PaymentType[],
-): PaymentMethod | undefined {
-  if (!previousPaymentMethod) return undefined;
-
-  if (!paymentTypes.includes(previousPaymentMethod.paymentType))
-    return undefined;
-
-  switch (previousPaymentMethod.savedType) {
-    case 'normal':
-      if (previousPaymentMethod.paymentType === PaymentType.Vipps) {
-        return {paymentType: PaymentType.Vipps};
-      } else {
-        return {
-          paymentType: previousPaymentMethod.paymentType,
-          save: false,
-        };
-      }
-    case 'recurring':
-      const notExpired =
-        parseISO(previousPaymentMethod.recurringCard.expires_at).getTime() >
-        Date.now();
-      return notExpired
-        ? {
-            paymentType: previousPaymentMethod.paymentType,
-            recurringPaymentId: previousPaymentMethod.recurringCard.id,
-          }
-        : undefined;
-  }
-}
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -89,12 +57,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {paymentTypes, vatPercent} = useFirestoreConfiguration();
-  const [previousMethod, setPreviousMethod] = useState<
-    PaymentMethod | undefined
-  >(undefined);
-  const {previousPaymentMethod, recurringPayments} =
-    usePreviousPaymentMethods();
+  const {vatPercent} = useFirestoreConfiguration();
+  const {previousPaymentOption, recurringPaymentOptions} =
+    usePreviousPaymentOptions();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
@@ -172,15 +137,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       )
     : t(PurchaseConfirmationTexts.travelDate.now);
 
-  useEffect(() => {
-    const prevMethod = getPreviousPaymentMethod(
-      previousPaymentMethod,
-      paymentTypes,
-    );
-    setPreviousMethod(prevMethod);
-  }, [previousPaymentMethod, paymentTypes]);
-
-  function goToPayment(option: PaymentMethod) {
+  function goToPayment(option: PaymentOption, save: boolean) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -192,13 +149,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: option,
-          recipient,
+          savePaymentMethod: save,
         });
       }
     }
   }
 
-  function getPaymentOptionTexts(option: PaymentMethod): string {
+  function getPaymentOptionTexts(option: PaymentOption): string {
     let str;
     switch (option.paymentType) {
       case PaymentType.Vipps:
@@ -211,11 +168,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
     }
-    if (previousPaymentMethod) {
-      const paymentOption = previousPaymentMethod;
-      if (paymentOption?.savedType === 'recurring') {
-        str = str + ` (**** ${paymentOption.recurringCard.masked_pan})`;
-      }
+    if (option.recurringCard) {
+      str = str + ` (**** ${option.recurringCard.masked_pan})`;
     }
     return str;
   }
@@ -224,12 +178,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     openBottomSheet(() => {
       return (
         <SelectPaymentMethodSheet
-          recurringPayments={recurringPayments}
-          onSelect={(option: PaymentMethod) => {
-            goToPayment(option);
+          recurringPaymentOptions={recurringPaymentOptions}
+          onSelect={(option: PaymentOption, save: boolean) => {
+            goToPayment(option, save);
             closeBottomSheet();
           }}
-          previousPaymentMethod={previousPaymentMethod}
+          previousPaymentMethod={previousPaymentOption}
         />
       );
     });
@@ -442,17 +396,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         ) : (
           <View>
-            {previousMethod ? (
+            {previousPaymentOption ? (
               <View style={styles.flexColumn}>
                 <Button
-                  text={getPaymentOptionTexts(previousMethod)}
+                  text={getPaymentOptionTexts(previousPaymentOption)}
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
                     svg:
-                      previousMethod.paymentType === PaymentType.Mastercard
+                      previousPaymentOption.paymentType ===
+                      PaymentType.Mastercard
                         ? MasterCard
-                        : previousMethod.paymentType === PaymentType.Vipps
+                        : previousPaymentOption.paymentType ===
+                          PaymentType.Vipps
                         ? Vipps
                         : Visa,
                   }}
@@ -461,11 +417,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Pay with previous payment method clicked',
                       {
-                        paymentMethod: previousMethod?.paymentType,
+                        paymentMethod: previousPaymentOption?.paymentType,
                         mode: params.mode,
                       },
                     );
-                    goToPayment(previousMethod);
+                    goToPayment(previousPaymentOption, false);
                   }}
                 />
                 <PressableOpacity
@@ -476,7 +432,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Change payment method clicked',
                       {
-                        paymentMethod: previousMethod?.paymentType,
+                        paymentMethod: previousPaymentOption?.paymentType,
                         mode: params.mode,
                       },
                     );

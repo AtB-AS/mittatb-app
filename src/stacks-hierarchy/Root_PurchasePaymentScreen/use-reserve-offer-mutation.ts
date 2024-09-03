@@ -22,21 +22,11 @@ export const useReserveOfferMutation = ({
 
   return useMutation({
     mutationFn: async (): Promise<OfferReservation> => {
-      const {paymentType} = paymentMethod;
-
-      const recurringPaymentId =
-        'recurringPaymentId' in paymentMethod
-          ? paymentMethod.recurringPaymentId
-          : undefined;
-
-      const saveRecurringCard =
-        'save' in paymentMethod ? paymentMethod.save : false;
-
       return reserveOffers({
         offers,
-        paymentType: paymentType,
-        recurringPaymentId: recurringPaymentId,
-        savePaymentMethod: saveRecurringCard,
+        paymentType: paymentMethod.paymentType,
+        recurringPaymentId: paymentMethod.recurringPaymentId,
+        savePaymentMethod: paymentMethod.save ?? false,
         opts: {retry: true},
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
