@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthState} from '@atb/auth';
@@ -17,28 +17,31 @@ export function usePreviousPaymentOptions(): {
     useState<PaymentOption>();
   const {paymentTypes} = useFirestoreConfiguration();
 
-  const validPaymentOption = (paymentOption: PaymentOption | undefined) => {
-    if (!paymentOption) return;
+  const isValidPaymentOption = useCallback(
+    (paymentOption: PaymentOption | undefined) => {
+      if (!paymentOption) return false;
 
-    // Since the stored payment could have been deleted, we need to check if
-    // it is still in the list of recurring payments.
-    const isInRecurringPayments = !!recurringPayments?.find(
-      (recurringPayment) =>
-        recurringPayment.id === paymentOption.recurringCard?.id,
-    );
-    if (!isInRecurringPayments) return;
+      // Since the stored payment could have been deleted, we need to check if
+      // it is still in the list of recurring payments.
+      const isInRecurringPayments = !!recurringPayments?.find(
+        (recurringPayment) =>
+          recurringPayment.id === paymentOption.recurringCard?.id,
+      );
+      if (!isInRecurringPayments) return false;
 
-    // Payment type is not enabled
-    if (!paymentTypes.includes(paymentOption.paymentType)) return;
+      // Payment type is not enabled
+      if (!paymentTypes.includes(paymentOption.paymentType)) return false;
 
-    // Card has expired
-    const expired =
-      paymentOption.recurringCard &&
-      parseISO(paymentOption.recurringCard.expires_at).getTime() < Date.now();
-    if (expired) return;
+      // Card has expired
+      const expired =
+        paymentOption.recurringCard &&
+        parseISO(paymentOption.recurringCard.expires_at).getTime() < Date.now();
+      if (expired) return false;
 
-    return paymentOption;
-  };
+      return true;
+    },
+    [recurringPayments, paymentTypes],
+  );
 
   useEffect(() => {
     if (!userId) {
@@ -46,9 +49,11 @@ export function usePreviousPaymentOptions(): {
       return;
     }
     getPreviousPaymentMethodByUser(userId).then((storedMethod) => {
-      setPreviousPaymentOption(validPaymentOption(storedMethod));
+      setPreviousPaymentOption(
+        isValidPaymentOption(storedMethod) ? storedMethod : undefined,
+      );
     });
-  }, [userId, recurringPayments]);
+  }, [userId, isValidPaymentOption]);
 
   const recurringPaymentOptions = recurringPayments?.map(
     (recurringPayment): PaymentOption => ({
