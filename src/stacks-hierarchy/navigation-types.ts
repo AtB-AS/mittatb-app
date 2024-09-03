@@ -87,6 +87,7 @@ type Root_PurchasePaymentScreenParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
   paymentMethod: PaymentMethod;
+  savePaymentMethod: boolean;
   recipient?: TicketRecipientType;
 };
 

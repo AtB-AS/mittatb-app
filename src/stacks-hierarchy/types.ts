@@ -1,17 +1,10 @@
 import {PaymentType} from '@atb/ticketing';
 
-export type CardPaymentMethod =
-  | {paymentType: PaymentType.Visa | PaymentType.Mastercard; save: boolean}
-  | {
-      paymentType: PaymentType.Visa | PaymentType.Mastercard;
-      recurringPaymentId: number;
-    };
-
-export type VippsPaymentMethod = {
-  paymentType: PaymentType.Vipps;
+export type PaymentMethod = {
+  paymentType: PaymentType;
+  recurringPaymentId?: number;
+  save?: boolean;
 };
-
-export type PaymentMethod = VippsPaymentMethod | CardPaymentMethod;
 
 export type SavedRecurringPayment = {
   id: number;
@@ -20,17 +13,11 @@ export type SavedRecurringPayment = {
   payment_type: number;
 };
 
-export type DefaultPaymentOption = {
-  savedType: 'normal';
+export type PaymentOption = {
+  savedType: 'normal' | 'recurring';
   paymentType: PaymentType;
+  recurringCard?: SavedRecurringPayment;
 };
-export type RecurringPaymentOption = {
-  savedType: 'recurring';
-  paymentType: PaymentType.Visa | PaymentType.Mastercard;
-  recurringCard: SavedRecurringPayment;
-};
-
-export type SavedPaymentOption = DefaultPaymentOption | RecurringPaymentOption;
 
 export type PaymentProcessorStatus = 'loading' | 'success' | 'error';
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -6,9 +6,6 @@ import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {PaymentType, RecurringPayment} from '@atb/ticketing';
-import {PaymentMethod, SavedPaymentOption} from '../../types';
-import {useAuthState} from '@atb/auth';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
@@ -16,114 +13,33 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {PaymentOption} from '@atb/stacks-hierarchy/types';
+import {useAuthState} from '@atb/auth';
+import {PaymentType} from '@atb/ticketing';
 
 type Props = {
-  onSelect: (value: PaymentMethod) => void;
-  previousPaymentMethod?: SavedPaymentOption;
-  recurringPayments?: RecurringPayment[];
+  onSelect: (value: PaymentOption, save: boolean) => void;
+  previousPaymentMethod?: PaymentOption;
+  recurringPaymentOptions?: PaymentOption[];
 };
-
-function getSelectedPaymentMethod(
-  paymentTypes: PaymentType[],
-  previousPaymentMethod?: SavedPaymentOption,
-): PaymentMethod | undefined {
-  if (!previousPaymentMethod) return undefined;
-  const {savedType, paymentType} = previousPaymentMethod;
-  if (!paymentTypes.includes(paymentType)) {
-    return undefined;
-  }
-  switch (savedType) {
-    case 'normal':
-      switch (paymentType) {
-        case PaymentType.Vipps:
-          return {
-            paymentType,
-          };
-        default:
-        case PaymentType.Mastercard:
-        case PaymentType.Visa:
-          return {
-            paymentType,
-            save: false,
-          };
-      }
-    case 'recurring':
-      return {
-        paymentType: previousPaymentMethod.paymentType,
-        recurringPaymentId: previousPaymentMethod.recurringCard.id,
-      };
-  }
-}
-
-function isRecurring(option: PaymentMethod): option is {
-  paymentType: PaymentType.Visa | PaymentType.Mastercard;
-  recurringPaymentId: number;
-} {
-  return (
-    (option.paymentType === PaymentType.Visa ||
-      option.paymentType === PaymentType.Mastercard) &&
-    'recurringPaymentId' in option
-  );
-}
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
-  recurringPayments,
+  recurringPaymentOptions,
 }) => {
   const {t} = useTranslation();
-  const {authenticationType} = useAuthState();
-  const {paymentTypes} = useFirestoreConfiguration();
-
-  const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
-    (paymentType) => {
-      return {
-        paymentType: paymentType,
-        savedType: 'normal',
-      };
-    },
-  );
-
-  const [selectedOption, setSelectedOption] = useState<
-    PaymentMethod | undefined
-  >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
   const styles = useStyles();
+  const [shouldSave, setShouldSave] = useState(false);
 
-  function getRecurringPaymentOptions(): SavedPaymentOption[] {
-    if (authenticationType !== 'phone') return [];
-    const recurringOptions: Array<SavedPaymentOption> | undefined =
-      recurringPayments?.map((option) => {
-        return {
-          savedType: 'recurring',
-          paymentType: option.payment_type,
-          recurringCard: {
-            id: option.id,
-            masked_pan: option.masked_pan,
-            expires_at: option.expires_at,
-            payment_type: option.payment_type,
-          },
-        };
-      });
-    return recurringOptions ? [...recurringOptions.reverse()] : [];
-  }
-
-  const remoteOptions = getRecurringPaymentOptions();
-
-  const isSelectedOption = (item: SavedPaymentOption) => {
-    // False if types doesn't match
-    if (!(selectedOption?.paymentType === item.paymentType)) return false;
-
-    const itemIsRecurring = !!selectedOption && isRecurring(selectedOption);
-    const selectedIsRecurring = item.savedType === 'recurring';
-
-    // True if recurring ID matches
-    if (itemIsRecurring && selectedIsRecurring) {
-      return item.recurringCard.id === selectedOption.recurringPaymentId;
-    }
-
-    // True if both are not recurring, false otherwise
-    return !itemIsRecurring && !selectedIsRecurring;
-  };
+  const {paymentTypes} = useFirestoreConfiguration();
+  const defaultPaymentOptions: PaymentOption[] = paymentTypes.map(
+    (paymentType) => ({
+      paymentType,
+      savedType: 'normal',
+    }),
+  );
+  const [selectedOption, setSelectedOption] = useState(previousPaymentMethod);
 
   return (
     <BottomSheetContainer
@@ -138,40 +54,41 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 <PaymentOptionView
                   key={option.paymentType}
                   option={option}
-                  selected={isSelectedOption(option)}
-                  onSelect={(val: PaymentMethod) => {
+                  shouldSave={shouldSave}
+                  onSetShouldSave={setShouldSave}
+                  selected={
+                    !selectedOption?.recurringCard &&
+                    selectedOption?.paymentType === option.paymentType
+                  }
+                  onSelect={(val: PaymentOption) => {
                     setSelectedOption(val);
+                    setShouldSave(false);
                   }}
                   index={index}
                 />
               );
             })}
 
-            {remoteOptions.length > 0 && (
+            {recurringPaymentOptions && recurringPaymentOptions?.length > 0 && (
               <View style={styles.listHeading}>
                 <ThemeText>
                   {t(SelectPaymentMethodTexts.saved_cards.text)}
                 </ThemeText>
               </View>
             )}
-
-            {remoteOptions.map((option, index) => {
-              return (
-                <PaymentOptionView
-                  key={
-                    option.savedType === 'recurring'
-                      ? option.recurringCard.id
-                      : option.paymentType
-                  }
-                  option={option}
-                  selected={isSelectedOption(option)}
-                  onSelect={(val: PaymentMethod) => {
-                    setSelectedOption(val);
-                  }}
-                  index={index}
-                />
-              );
-            })}
+            {recurringPaymentOptions?.map((option, index) => (
+              <PaymentOptionView
+                key={option.recurringCard?.id}
+                option={option}
+                selected={
+                  selectedOption?.recurringCard?.id === option.recurringCard?.id
+                }
+                shouldSave={shouldSave}
+                onSetShouldSave={setShouldSave}
+                onSelect={setSelectedOption}
+                index={index}
+              />
+            ))}
           </ScrollView>
         </View>
         <FullScreenFooter>
@@ -183,9 +100,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               SelectPaymentMethodTexts.confirm_button.a11yhint,
             )}
             onPress={() => {
-              if (selectedOption) {
-                onSelect(selectedOption);
-              }
+              if (selectedOption) onSelect(selectedOption, shouldSave);
             }}
             disabled={!selectedOption}
             rightIcon={{svg: ArrowRight}}
@@ -198,9 +113,11 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 };
 
 type PaymentOptionsProps = {
-  option: SavedPaymentOption;
+  option: PaymentOption;
   selected: boolean;
-  onSelect: (value: PaymentMethod) => void;
+  onSelect: (value: PaymentOption) => void;
+  shouldSave: boolean;
+  onSetShouldSave: (val: boolean) => void;
   index: number;
 };
 
@@ -208,28 +125,32 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   option,
   selected,
   onSelect,
+  shouldSave,
+  onSetShouldSave,
   index,
 }) => {
-  const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
 
-  useEffect(() => {
-    if (selected) {
-      select();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [save]);
-
-  function getPaymentTexts(option: SavedPaymentOption): {
+  function getPaymentTexts(option: PaymentOption): {
     text: string;
     label: string;
     hint: string;
   } {
     const paymentTypeName = getPaymentTypeName(option.paymentType);
-
-    if (option.savedType === 'normal') {
+    if (option.recurringCard) {
+      return {
+        text: paymentTypeName,
+        label: t(
+          PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
+            paymentTypeName,
+            option.recurringCard!.masked_pan,
+          ),
+        ),
+        hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
+      };
+    } else {
       return {
         text: paymentTypeName,
         label: t(
@@ -239,27 +160,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         ),
         hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11Hint),
       };
-    } else if (option.savedType === 'recurring') {
-      return {
-        text: paymentTypeName,
-        label: t(
-          PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
-            paymentTypeName,
-            option.recurringCard.masked_pan,
-          ),
-        ),
-        hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
-      };
-    } else {
-      return {
-        text: '',
-        label: '',
-        hint: '',
-      };
     }
   }
 
-  function getPaymentTestId(option: SavedPaymentOption, index: number) {
+  function getPaymentTestId(option: PaymentOption, index: number) {
     if (option.savedType === 'normal') {
       return getPaymentTypeName(option.paymentType) + 'Button';
     } else {
@@ -267,36 +171,18 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     }
   }
 
-  function getSelectOption(): PaymentMethod {
-    switch (option.savedType) {
-      case 'normal':
-        if (option.paymentType === PaymentType.Vipps) {
-          return {paymentType: PaymentType.Vipps};
-        } else {
-          return {
-            paymentType: option.paymentType,
-            save,
-          };
-        }
-      case 'recurring':
-        return {
-          paymentType: option.paymentType,
-          recurringPaymentId: option.recurringCard.id,
-        };
-    }
-  }
-
-  function select() {
-    onSelect(getSelectOption());
-  }
-
   const paymentTexts = getPaymentTexts(option);
+
+  const canSaveCard =
+    authenticationType === 'phone' &&
+    option.savedType === 'normal' &&
+    option.paymentType !== PaymentType.Vipps;
 
   return (
     <View style={styles.card}>
       <PressableOpacity
         style={[styles.paymentOption, styles.centerRow]}
-        onPress={select}
+        onPress={() => onSelect(option)}
         accessibilityLabel={paymentTexts.label}
         accessibilityHint={paymentTexts.hint}
         accessibilityRole="radio"
@@ -308,35 +194,27 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             <View style={styles.centerRow}>
               <RadioView checked={selected} />
               <ThemeText>{paymentTexts.text}</ThemeText>
-              {option.savedType === 'recurring' ? (
+              {option.recurringCard && (
                 <ThemeText
                   style={styles.maskedPanPadding}
                   testID={getPaymentTestId(option, index) + 'Number'}
                 >
                   **** {`${option.recurringCard.masked_pan}`}
                 </ThemeText>
-              ) : null}
+              )}
             </View>
             <PaymentBrand icon={option.paymentType} />
           </View>
-          {option.savedType === 'recurring' &&
-          option.recurringCard.expires_at ? (
-            <View>
-              <ThemeText style={styles.expireDate}>
-                {getExpireDate(option.recurringCard.expires_at)}
-              </ThemeText>
-            </View>
-          ) : null}
+          {option.recurringCard && (
+            <ThemeText style={styles.expireDate}>
+              {getExpireDate(option.recurringCard.expires_at)}
+            </ThemeText>
+          )}
         </View>
       </PressableOpacity>
-      {selected &&
-      authenticationType === 'phone' &&
-      option.savedType === 'normal' &&
-      option.paymentType !== PaymentType.Vipps ? (
+      {selected && canSaveCard && (
         <PressableOpacity
-          onPress={() => {
-            setSave(!save);
-          }}
+          onPress={() => onSetShouldSave(!shouldSave)}
           style={styles.saveOptionSection}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
@@ -345,10 +223,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           <View style={styles.saveButton}>
             <Checkbox
               style={styles.saveButtonCheckbox}
-              checked={save}
+              checked={shouldSave}
               accessibility={{
                 accessibilityHint: t(
-                  save
+                  shouldSave
                     ? SelectPaymentMethodTexts.a11yHint.notSave
                     : SelectPaymentMethodTexts.a11yHint.save,
                 ),
@@ -358,7 +236,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
         </PressableOpacity>
-      ) : null}
+      )}
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Linking} from 'react-native';
-import {savePreviousPaymentMethodByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
+import {savePreviousPaymentOptionByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
@@ -34,7 +34,7 @@ const saveLastUsedPaymentMethod = async (
   if (!userId) return;
 
   if (!recurringPaymentId) {
-    await savePreviousPaymentMethodByUser(userId, {
+    await savePreviousPaymentOptionByUser(userId, {
       savedType: 'normal',
       paymentType: paymentMethod.paymentType,
     });
@@ -45,7 +45,7 @@ const saveLastUsedPaymentMethod = async (
         return c.id === recurringPaymentId;
       });
       if (card) {
-        await savePreviousPaymentMethodByUser(userId, {
+        await savePreviousPaymentOptionByUser(userId, {
           savedType: 'recurring',
           paymentType: card.payment_type,
           recurringCard: card,
