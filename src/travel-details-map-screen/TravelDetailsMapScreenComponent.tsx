@@ -363,7 +363,7 @@ const LiveVehicleIcon = ({
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, false, 'text');
+  const fillColor = useTransportationColor(mode, subMode).foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)

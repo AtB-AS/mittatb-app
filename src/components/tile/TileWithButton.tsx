@@ -1,7 +1,7 @@
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';

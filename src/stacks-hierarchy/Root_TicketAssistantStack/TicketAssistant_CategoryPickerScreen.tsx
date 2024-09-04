@@ -1,5 +1,5 @@
 import {Linking, ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 
 import {
   getTextForLanguage,
@@ -10,7 +10,7 @@ import {
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
@@ -31,6 +31,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
 }: CategoryPickerProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const a11yContext = useAccessibilityContext();
 
   const focusRef = useFocusOnLoad();

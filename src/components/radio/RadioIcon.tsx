@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {View} from 'react-native';
 import { ColorValue } from 'react-native';
 

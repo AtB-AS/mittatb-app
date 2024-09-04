@@ -2,7 +2,7 @@ import {Image, ImageStyle, View} from 'react-native';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   uri: string | undefined;
@@ -22,7 +22,6 @@ export const CarImage = ({uri}: Props) => {
 };
 
 const DefaultCarImage = () => {
-  const {theme} = useTheme();
   const style = useSheetStyle();
   return (
     <View style={[style.container, style.defaultImage]}>

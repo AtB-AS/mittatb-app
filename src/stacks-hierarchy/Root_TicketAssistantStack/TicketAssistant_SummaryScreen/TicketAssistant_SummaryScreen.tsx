@@ -1,9 +1,9 @@
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getInteractiveColor, getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
@@ -20,6 +20,9 @@ type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
   const {authenticationType} = useAuthState();
   const analytics = useAnalytics();
   const {loading, inputParams, recommendedTicketSummary, error} =
@@ -148,7 +151,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               />
             )}
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={onBuyButtonPress}
               text={t(TicketAssistantTexts.summary.buyButton)}
               testID="nextButton"

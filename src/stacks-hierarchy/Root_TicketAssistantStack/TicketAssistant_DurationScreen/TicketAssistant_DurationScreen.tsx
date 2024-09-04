@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {getThemeColor, getInteractiveColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
@@ -19,6 +19,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
   const focusRef = useFocusOnLoad();
   const [duration, setDuration] = useState(daysInWeek);
 
@@ -65,7 +68,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
 
         <View style={styles.bottomView}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             onPress={() => {
               updateDuration();
               navigation.navigate(TICKET_ASSISTANT_ZONE_PICKER_SCREEN);

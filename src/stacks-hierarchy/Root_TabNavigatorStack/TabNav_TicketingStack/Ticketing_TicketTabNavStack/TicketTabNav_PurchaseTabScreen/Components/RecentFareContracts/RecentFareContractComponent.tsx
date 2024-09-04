@@ -11,7 +11,6 @@ import {
   useFirestoreConfiguration,
 } from '@atb/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {InteractiveColor} from '@atb/theme/colors';
 import {
   getTransportModeText,
   TransportModes,
@@ -51,7 +50,7 @@ export const RecentFareContractComponent = ({
   const fromZoneName = fromTariffZone?.name.value;
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
-  const interactiveColor = theme.interactive[2];
+  const interactiveColor = theme.color.interactive[2];
 
   const harborsQuery = useHarborsQuery();
 

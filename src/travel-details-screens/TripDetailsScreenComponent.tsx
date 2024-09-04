@@ -21,7 +21,7 @@ import {
   useFromTravelSearchToTicketEnabled,
   useFromTravelSearchToTicketForBoatEnabled,
 } from './use_from_travel_search_to_ticket_enabled';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';

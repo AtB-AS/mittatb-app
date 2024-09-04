@@ -7,8 +7,7 @@ import {
 } from '@atb/components/sections';
 import {Linking, Platform, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StaticColorByType} from '@atb/theme/colors';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
@@ -27,7 +26,6 @@ import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/T
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type NotificationsScreenProps =
   ProfileScreenProps<'Profile_NotificationsScreen'>;
 
@@ -36,6 +34,8 @@ export const Profile_NotificationsScreen = ({
 }: NotificationsScreenProps) => {
   const style = useStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
     permissionStatus,

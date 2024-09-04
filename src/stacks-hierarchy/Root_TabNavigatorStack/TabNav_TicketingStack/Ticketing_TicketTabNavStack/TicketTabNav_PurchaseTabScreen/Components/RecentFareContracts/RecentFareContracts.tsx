@@ -64,7 +64,7 @@ export const RecentFareContracts = ({
             {t(TicketingTexts.recentFareContracts.loading)}
           </ThemeText>
           <ActivityIndicator
-            color={theme.color.background.neutral[0].text}
+            color={theme.color.background.neutral[0].foreground.primary}
           />
         </View>
       )}

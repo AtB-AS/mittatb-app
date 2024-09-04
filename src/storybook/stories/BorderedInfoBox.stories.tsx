@@ -47,7 +47,7 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
                 <ThemeIcon
                   svg={Info}
                   style={{marginRight: 4}}
-                  colorType={args.backgroundColor}
+                  color={args.backgroundColor}
                 />
                 <ThemeText
                   type="body__tertiary"

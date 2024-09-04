@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 
@@ -13,13 +13,14 @@ import {daysInWeek} from '@atb/utils/date';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import { Theme } from '@atb-as/theme';
 
-const getInteractiveColor = (theme: Theme) => theme.interactive[2];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export const TicketSummary = () => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const interactiveColor = getInteractiveColor(theme);
+  const themeColor = getThemeColor(theme);
 
   const {recommendedTicketSummary, inputParams} = useTicketAssistantState();
   if (!recommendedTicketSummary) return null;
@@ -235,7 +236,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacing.xLarge,
     paddingVertical: theme.spacing.medium,
-    backgroundColor: theme.background.accent[1].background,
+    backgroundColor: theme.color.background.accent[1].background,
   },
   savingsText: {
     textAlign: 'center',

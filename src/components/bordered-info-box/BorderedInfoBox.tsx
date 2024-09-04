@@ -1,7 +1,7 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {addOpacity} from '@atb/utils/add-opacity';
 import {ContrastColor} from '@atb-as/theme';
 

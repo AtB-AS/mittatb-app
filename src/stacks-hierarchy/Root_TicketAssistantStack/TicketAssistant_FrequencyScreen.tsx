@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {getThemeColor, getInteractiveColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
@@ -24,6 +24,9 @@ export const TicketAssistant_FrequencyScreen = ({
 }: FrequencyScreenProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
@@ -99,7 +102,7 @@ export const TicketAssistant_FrequencyScreen = ({
                 return (
                   <Button
                     key={number}
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                     onPress={() => {
                       setSliderValue(number);
                       navigation.navigate(TICKET_ASSISTANT_DURATION_SCREEN);
@@ -157,7 +160,7 @@ export const TicketAssistant_FrequencyScreen = ({
         {!a11yContext.isScreenReaderEnabled && (
           <View style={styles.bottomView}>
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={() => {
                 navigation.navigate('TicketAssistant_DurationScreen');
               }}
@@ -180,7 +183,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     width: '100%',
   },
   mainView: {

@@ -4,7 +4,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   ProfileTexts,
   getTextForLanguage,
@@ -26,6 +26,8 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 
 export const Profile_PrivacyScreen = () => {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const destructiveColor = theme.color.interactive.destructive;
   const {
     revokeBeacons,
     isConsentGranted,
@@ -188,7 +190,7 @@ export const Profile_PrivacyScreen = () => {
         <Section style={style.spacingTop}>
           <Button
             leftIcon={{svg: Delete}}
-            interactiveColor="interactive_destructive"
+            interactiveColor={destructiveColor}
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}
@@ -217,7 +219,7 @@ export const Profile_PrivacyScreen = () => {
             <Button
               style={style.spacingTop}
               leftIcon={{svg: Delete}}
-              interactiveColor="interactive_destructive"
+              interactiveColor={destructiveColor}
               text={t(PrivacySettingsTexts.clearCollectedData.label)}
               loading={isCleaningCollectedData}
               disabled={isCleaningCollectedData}

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {PhoneSignInErrorCode, useAuthState} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 import {TransitionPresets} from '@react-navigation/stack';
@@ -23,7 +22,7 @@ import phone from 'phone';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
 
@@ -33,13 +32,14 @@ export const Root_LoginPhoneInputScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const {signInWithPhoneNumber} = useAuthState();
   const focusRef = useFocusOnLoad();
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
-  const {themeName} = useTheme();
   const {isRateLimited, rateLimitIfNeeded} =
     useRateLimitWhen<PhoneSignInErrorCode>(
       (code) => code === 'too_many_attempts',
@@ -141,7 +141,7 @@ export const Root_LoginPhoneInputScreen = ({
               <ActivityIndicator
                 style={styles.activityIndicator}
                 size="large"
-                color={getStaticColor(themeName, themeColor).text}
+                color={themeColor.foreground.primary}
               />
             )}
 
@@ -156,7 +156,7 @@ export const Root_LoginPhoneInputScreen = ({
             {!isSubmitting && (
               <Button
                 style={styles.submitButton}
-                interactiveColor="interactive_0"
+                interactiveColor={theme.color.interactive[0]}
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber || isRateLimited}
@@ -173,7 +173,7 @@ export const Root_LoginPhoneInputScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

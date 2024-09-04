@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {screenReaderPause} from '@atb/components/text';
 import React from 'react';
@@ -23,6 +23,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   const title = t(TicketingTexts.ticketAssistantTile.title);
   const description = t(TicketingTexts.ticketAssistantTile.description);
@@ -52,7 +53,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           accented={accented}
           onPress={() => onPress(requiresLoginConfig)}
           testID={testID}
-          transportColor="transport_other"
+          transportColor={theme.color.transport.other}
           illustrationName="ticketMultiple"
           title={title}
           description={description}

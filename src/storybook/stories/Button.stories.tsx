@@ -19,11 +19,11 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
   argTypes: {
     interactiveColor: {
       control: 'select',
-      options: [...Object.keys(themes['light'].interactive)],
+      options: [...Object.keys(themes['light'].color.interactive)],
     },
     backgroundColor: {
       control: 'select',
-      options: [...Object.keys(themes['light'].static)],
+      options: [...Object.keys(themes['light'].color.background)],
     },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},

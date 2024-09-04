@@ -9,8 +9,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {storage} from '@atb/storage';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   getTextForLanguage,
   LoginTexts,
@@ -33,7 +32,7 @@ import {APP_ORG} from '@env';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 
@@ -46,6 +45,8 @@ export const Root_LoginOptionsScreen = ({
 
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const {signInWithCustomToken} = useAuthState();
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
@@ -187,7 +188,7 @@ export const Root_LoginOptionsScreen = ({
 
         <View style={styles.buttonContainer}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             mode="primary"
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
             text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
@@ -253,7 +254,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   return {
     container: {
-      backgroundColor: theme.static.background[themeColor].background,
+      backgroundColor: getThemeColor(theme).background,
       flex: 1,
     },
     mainView: {

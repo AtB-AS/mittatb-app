@@ -5,9 +5,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {
-  getStaticColor,
-  getTransportationColor,
-  StaticColor,
   TransportColor,
 } from '@atb/theme/colors';
 
@@ -28,28 +25,18 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  transportColor: TransportColor;
+  transportColor: TransportColor['city'];
   title?: string;
   description?: string;
   accessibilityLabel?: string;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
-  const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
-  const themeColor = getStaticColor(themeName, color);
-
-  const themePrimaryColor = getTransportationColor(
-    themeName,
-    transportColor,
-    'primary',
-  );
-  const themeSecondaryColor = getTransportationColor(
-    themeName,
-    transportColor,
-    'secondary',
-  );
+  const themeColor = accented ? theme.color.background.accent[3] : theme.color.background.neutral[0];
+  const themePrimaryColor = transportColor.primary;
+  const themeSecondaryColor = transportColor.secondary
 
   return (
     <PressableOpacity

@@ -12,10 +12,8 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   InteractiveColor,
-  StatusColor,
   textNames,
   TextNames,
-  TransportColor,
 } from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';

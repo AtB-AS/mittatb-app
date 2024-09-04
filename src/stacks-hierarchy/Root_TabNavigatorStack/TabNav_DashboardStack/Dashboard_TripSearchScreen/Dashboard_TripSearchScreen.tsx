@@ -68,7 +68,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const headerBackgroundColor = getHeaderBackgroundColor(theme);
-  const resultsBackgroundColor = getResultsBackgroundColor(theme);
   const interactiveColor = theme.color.interactive[1];
   const statusColor = theme.color.status.success.primary;
 

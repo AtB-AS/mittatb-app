@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareProductTile} from './FareProductTile';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TransportModes} from '@atb/components/transportation-modes';
 
 type Props = {
@@ -24,6 +24,7 @@ export const FareProductGroup = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   /*
   Group by two and two, as two fare products are shown side by side on each row
@@ -44,7 +45,7 @@ export const FareProductGroup = ({
           iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
-          textColor="primary"
+          textColor={{foreground: { primary: theme.color.foreground.dynamic.primary, secondary: "", disabled: "" }, background: ""}}
           customTransportModeText={heading}
         />
       ) : (
@@ -53,7 +54,7 @@ export const FareProductGroup = ({
           iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
-          textColor="primary"
+          textColor={{foreground: { primary: theme.color.foreground.dynamic.primary, secondary: "", disabled: "" }, background: ""}}
           customTransportModeText={
             transportModes.length === 0
               ? t(FareContractTexts.otherFareContracts)

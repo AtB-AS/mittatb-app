@@ -21,7 +21,7 @@ export const CounterIconBox = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const fontScale = useFontScale();
   const lineHeight = theme.icon.size[size];
 

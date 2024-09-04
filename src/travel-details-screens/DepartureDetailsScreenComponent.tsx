@@ -470,7 +470,7 @@ function EstimatedCallRow({
   const iconColor = useTransportationColor(
     group === 'trip' ? mode : undefined,
     subMode,
-  );
+  ).background;
 
   const {flex_booking_number_of_days_available} = useRemoteConfig();
   const bookingStatus = getBookingStatus(

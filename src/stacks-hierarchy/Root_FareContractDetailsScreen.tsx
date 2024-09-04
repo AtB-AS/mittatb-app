@@ -1,7 +1,7 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   FareContractTexts,
   TicketingTexts,
@@ -22,6 +22,7 @@ type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {enable_ticket_information} = useRemoteConfig();
   const {serverNow} = useTimeContextState();
   const analytics = useAnalytics();
@@ -70,7 +71,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             ? {
                 type: 'info',
                 onPress: navigateToTicketInfoScreen,
-                color: 'background_accent_0',
+                color: theme.color.background.accent[0],
                 accessibilityHint: t(
                   FareContractTexts.details.infoButtonA11yHint,
                 ),

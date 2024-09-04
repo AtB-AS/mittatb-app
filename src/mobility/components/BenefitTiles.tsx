@@ -1,6 +1,6 @@
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
@@ -31,7 +31,6 @@ export const BenefitTile = ({
   onNavigateToMap,
 }: BenefitCardProps): JSX.Element => {
   const styles = useStyles();
-  const {themeName} = useTheme();
   const {t, language} = useTranslation();
   const title = t(
     MobilityTexts.formFactor(benefit.formFactors[0] as FormFactor),

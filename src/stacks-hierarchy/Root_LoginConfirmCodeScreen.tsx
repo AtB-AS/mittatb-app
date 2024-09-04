@@ -19,15 +19,14 @@ import {loginConfirmCodeInputId} from '@atb/test-ids';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 type LoginErrorCode = ConfirmationErrorCode | PhoneSignInErrorCode;
@@ -36,7 +35,8 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const {phoneNumber} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const {confirmCode, signInWithPhoneNumber} = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<LoginErrorCode>();
@@ -122,7 +122,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
               <ActivityIndicator
                 style={styles.activityIndicator}
                 size="large"
-                color={getStaticColor(themeName, themeColor).text}
+                color={themeColor.foreground.primary}
               />
             )}
 
@@ -137,7 +137,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
             {!isLoading && (
               <>
                 <Button
-                  interactiveColor="interactive_0"
+                  interactiveColor={theme.color.interactive[0]}
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
                   disabled={!code || isRateLimited}
@@ -170,7 +170,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

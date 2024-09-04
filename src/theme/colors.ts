@@ -13,7 +13,6 @@ import {
   textNames,
   ThemeVariant
 } from '@atb-as/theme';
-import { Flattened, flattenObject } from '@atb/utils/object';
 import { AppOrgs } from '../../types/app-orgs';
 import { useTheme } from './ThemeContext';
 

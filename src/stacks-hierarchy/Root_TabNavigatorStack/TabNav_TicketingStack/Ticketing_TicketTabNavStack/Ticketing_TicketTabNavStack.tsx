@@ -101,7 +101,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
           });
         };
 
-        const tabColor = isFocused ? 'background_1' : 'background_accent_0';
+        const tabColor = isFocused ? theme.color.background.neutral[1] : theme.color.background.accent[0];
         return (
           <PressableOpacity
             key={index}
@@ -113,7 +113,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             style={[
               styles.button,
               {
-                backgroundColor: theme.static.background[tabColor].background,
+                backgroundColor: tabColor.background,
               },
             ]}
           >

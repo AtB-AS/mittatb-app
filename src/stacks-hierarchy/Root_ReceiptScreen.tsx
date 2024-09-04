@@ -5,7 +5,7 @@ import {
   MessageInfoBoxProps,
 } from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -37,6 +37,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalytics();
 
@@ -112,7 +113,7 @@ export function Root_ReceiptScreen({route}: Props) {
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
         />
       </View>
     </View>
@@ -141,7 +142,7 @@ function translateStateToMessage(
         message: t(
           FareContractTexts.receipt.messages.success(email, reference!),
         ),
-        type: 'valid',
+        type: 'success',
       };
     case 'invalid-field':
       return {

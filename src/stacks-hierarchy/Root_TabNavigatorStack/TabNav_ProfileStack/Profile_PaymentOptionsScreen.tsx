@@ -205,7 +205,7 @@ const Card = (props: {
               height={21 * fontScale}
               width={21 * fontScale}
               fill={
-                theme.interactive.interactive_destructive.default.background
+                theme.color.interactive.destructive.default.background
               }
             />
           </PressableOpacity>

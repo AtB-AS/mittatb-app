@@ -1,6 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {StaticColorByType} from '@atb/theme/colors';
 
 import {
   ConsiderTravelTokenChangeTexts,

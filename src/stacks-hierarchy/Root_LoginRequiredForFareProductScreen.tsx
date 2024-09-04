@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
@@ -7,7 +7,6 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
 import {Psst} from '@atb/assets/svg/color/illustrations';
 import {Ticket} from '@atb/assets/svg/color/images';
 import {useTextForLanguage} from '@atb/translations/utils';
@@ -17,7 +16,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginRequiredForFareProductScreen'>;
 
@@ -29,7 +28,10 @@ export const Root_LoginRequiredForFareProductScreen = ({
   const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
   const styles = useThemeStyles();
+  const {theme} = useTheme();
   const focusRef = useFocusOnLoad();
+
+  const themeColor = getThemeColor(theme);
 
   const hasReservationOrActiveFareContract =
     useHasReservationOrActiveFareContract();
@@ -83,7 +85,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
         <Ticket style={styles.illustration} />
         <View style={styles.buttonView}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
             rightIcon={{svg: ArrowRight}}
@@ -124,7 +126,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

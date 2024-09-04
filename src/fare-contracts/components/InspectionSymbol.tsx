@@ -30,7 +30,7 @@ export const InspectionSymbol = ({
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
