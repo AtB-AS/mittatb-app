@@ -52,7 +52,7 @@ export const MessageInfoBox = ({
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const iconColorProps = {fill: theme.color.status[type].secondary.foreground.primary};
-  const textColor = theme.color.status[type].secondary.background;
+  const textColor = theme.color.status[type].secondary.foreground.primary;
 
   const onPress =
     onPressConfig &&

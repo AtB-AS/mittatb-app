@@ -82,6 +82,7 @@ export const DepartureDetailsScreenComponent = ({
   const {theme} = useTheme();
   const interactiveColor = theme.color.interactive[1];
   const backgroundColor = theme.color.background.neutral[0];
+  const themeColor = theme.color.background.accent[0];
 
   const analytics = useAnalytics();
   const {enable_ticketing} = useRemoteConfig();
@@ -174,7 +175,7 @@ export const DepartureDetailsScreenComponent = ({
               )}
               <ThemeText
                 type="heading--medium"
-                color="background_accent_0"
+                color={themeColor}
                 style={{flexShrink: 1}}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
@@ -330,6 +331,8 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   return (
     <View style={styles.passedSection}>
@@ -340,7 +343,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
       />
       <ThemeText
         type="body__secondary"
-        color="background_accent_0"
+        color={themeColor}
         style={styles.passedText}
       >
         {realtimeText}

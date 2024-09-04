@@ -246,7 +246,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {data?.toggleLimit !== undefined && (
           <TokenToggleInfo
             style={styles.tokenInfo}
-            textColor="background_accent_0"
+            textColor={theme.color.background.accent[0]}
           />
         )}
         {toggleMutation.isLoading ? (

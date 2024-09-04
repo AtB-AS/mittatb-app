@@ -37,18 +37,18 @@ export const ProviderLogo = ({provider, size = 50, style}: Props) => {
 
 const UnknownProvider = ({height, width}: {height: number; width: number}) => {
   const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0]
   return (
     <View
       style={{
-        backgroundColor:
-          theme.color.background.accent[0].background,
+        backgroundColor: themeColor.background,
         height,
         width,
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <ThemeText type="body__primary--big--bold" color="background_accent_0">
+      <ThemeText type="body__primary--big--bold" color={themeColor}>
         ?
       </ThemeText>
     </View>

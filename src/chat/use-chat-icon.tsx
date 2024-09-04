@@ -38,7 +38,7 @@ export const useChatIcon = (
     children: (
       <View style={styles.chatContainer} testID={testID}>
         <ThemeIcon
-          colorType={color}
+          color={color}
           svg={Chat}
           notification={
             unreadCount

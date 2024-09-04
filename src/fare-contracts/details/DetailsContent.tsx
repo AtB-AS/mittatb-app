@@ -28,7 +28,7 @@ import {
   useGlobalMessagesState,
 } from '@atb/global-messages';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {
   findReferenceDataById,
@@ -68,6 +68,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {abtCustomerId: currentUserId} = useAuthState();
 
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesState();
   const isActivateTicketNowEnabled = useIsActivateTicketNowEnabled();
@@ -191,7 +192,7 @@ export const DetailsContent: React.FC<Props> = ({
               globalMessageContext={
                 GlobalMessageContextEnum.appFareContractDetails
               }
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
               ruleVariables={globalMessageRuleVariables}
               style={styles.globalMessages}
             />

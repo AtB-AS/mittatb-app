@@ -35,6 +35,7 @@ export const FareProductHeader = forwardRef<View, Props>(
   ) => {
     const {t, language} = useTranslation();
     const {theme} = useTheme();
+    const themeColor = theme.color.background.accent[0];
     const styles = useStyle();
     const [isTicketInformationEnabled] = useIsTicketInformationEnabled();
 
@@ -54,7 +55,7 @@ export const FareProductHeader = forwardRef<View, Props>(
           />
           <ThemeText
             type="heading--medium"
-            color="background_accent_0"
+            color={themeColor}
             style={styles.headerText}
           >
             {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
@@ -64,7 +65,7 @@ export const FareProductHeader = forwardRef<View, Props>(
           <View style={styles.headerSubSection}>
             <ThemeText
               type="body__secondary"
-              color="background_accent_0"
+              color={themeColor}
               style={styles.ticketDescription}
               numberOfLines={1}
             >

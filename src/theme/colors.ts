@@ -14,7 +14,6 @@ import {
   ThemeVariant
 } from '@atb-as/theme';
 import { AppOrgs } from '../../types/app-orgs';
-import { useTheme } from './ThemeContext';
 
 export type { Statuses, Mode, TextColor, ContrastColor, TextNames };
 export { textNames };
@@ -82,32 +81,8 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   },
 });
 
-const isStatusColor = (color: unknown, theme: Theme): color is Statuses => Object.keys(theme.color.status).includes(color as string)
-const isTextColor = (color: unknown, theme: Theme): color is TextColor => Object.keys(theme.color.foreground.dynamic).includes(color as string)
-
-/**
- * Accepts 
- * 
- * ContrastColor: uses foreground color of that contrast color
- * TextColor: uses the that text color for the current theme
- * Statuses: uses the primary status color for that status
- * ColorValue: uses this value directly
- * 
- * @param color Color definition or reference
- * @returns Actual color value
- */
-export function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
-  const {theme} = useTheme();
-  if (typeof color === 'object') {
-    return color.foreground.primary;
-  } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].primary.background;
-  } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary']
-  } else {
-    return color
-  }
-}
+export const isStatusColor = (color: unknown, theme: Theme): color is Statuses => Object.keys(theme.color.status).includes(color as string)
+export const isTextColor = (color: unknown, theme: Theme): color is TextColor => Object.keys(theme.color.foreground.dynamic).includes(color as string)
 
 // @TODO: Make part of @AtB-as/theme
 

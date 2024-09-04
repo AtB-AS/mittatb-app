@@ -68,6 +68,7 @@ export const Profile_DeleteProfileScreen = () => {
     setDeleteError(false);
   }, [deleteError, setDeleteError, t]);
   const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   return (
     <FullScreenView
@@ -83,7 +84,7 @@ export const Profile_DeleteProfileScreen = () => {
         >
           <ThemeText
             type="heading--medium"
-            color="background_accent_0"
+            color={themeColor}
             style={{flexShrink: 1}}
           >
             {t(DeleteProfileTexts.header.title)}

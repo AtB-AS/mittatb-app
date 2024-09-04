@@ -8,7 +8,8 @@ import {
   Statuses,
   TextColor,
   TextNames,
-  useColor,
+  isStatusColor,
+  isTextColor
 } from '@atb/theme/colors';
 
 export type ThemeTextProps = TextProps & {
@@ -70,3 +71,16 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     </Text>
   );
 };
+
+function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
+  const {theme} = useTheme();
+  if (typeof color === 'object') {
+    return color.foreground.primary;
+  } else if (isStatusColor(color, theme)) {
+    return theme.color.status[color].secondary.foreground.primary;
+  } else if (isTextColor(color, theme) || color === undefined) {
+    return theme.color.foreground.dynamic[color ?? 'primary']
+  } else {
+    return color
+  }
+}

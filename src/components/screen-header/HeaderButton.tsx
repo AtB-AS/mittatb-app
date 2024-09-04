@@ -113,7 +113,7 @@ const useHeaderButton = (
     case 'info':
       const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeIcon svg={Info} colorType={color}/>,
+        children: <ThemeIcon svg={Info} color={color}/>,
         accessibilityLabel: t(ScreenHeaderTexts.headerButton[type].text),
         onPress: onPress,
         ...accessibilityProps
@@ -138,7 +138,7 @@ const HeaderButtonIcon = ({
 }) => {
   const {theme} = useTheme();
   const iconProps: Omit<ThemeIconProps, 'svg'> = {
-    colorType: color,
+    color: color,
     style: {marginRight: theme.spacing.xSmall},
   };
 

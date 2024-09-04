@@ -36,7 +36,7 @@ export const useServiceDisruptionIcon = (
     children: (
       <ThemeIcon
         testID={testID}
-        colorType={color}
+        color={color}
         svg={ServiceDisruption}
         notification={
           globalMessages.length > 0
