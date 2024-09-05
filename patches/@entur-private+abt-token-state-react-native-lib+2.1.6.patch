@@ -1,13 +1,57 @@
 diff --git a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
-index a41752b..03e7b5d 100644
+index a41752b..19542ed 100644
 --- a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
 +++ b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
-@@ -443,7 +443,7 @@ public class TokenCoreModule: NSObject {
+@@ -442,8 +442,8 @@ public class TokenCoreModule: NSObject {
+         let tokenEncodingRequest = TokenEncodingRequest(deviceDetails: deviceDetailsProvider.deviceDetails, challenges: decodedChallenges, tokenActions: tokenPayloadActions, includeCertificate: includeCertificate)
  
          token.encodeAsSecureContainer(tokenEncodingRequest: tokenEncodingRequest) { secureContainerWrapper, error in
-             if let error = error {
+-            if let error = error {
 -                return reject(self.mapErrorCode(error).code, "Error while generating the secure container", error)
-+                return reject(self.mapErrorCode(error).code, "Error while generating the secure container: \(error.localizedDescription)", error)
++            if let error = error, let errorDescription = error.errorDescription {
++                return reject(self.mapErrorCode(error).code, errorDescription, error)
              }
              
              guard let base64EncodedSecureContainer = secureContainerWrapper?.base64EncodedString else {
+diff --git a/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift b/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
+index 9404ce0..e48a039 100644
+--- a/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
++++ b/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
+@@ -4,3 +4,36 @@ public enum TokenEncoderError: Error {
+     case errorCreatingSecureContainer(String?)
+     case errorInvalidSignaturePrivateKey
+ }
++
++extension TokenEncoderError: LocalizedError {
++    public var errorDescription: String? {
++        switch self {
++        case .errorUnableToGetClockTime:
++            return NSLocalizedString(
++                "Unable to get the current time",
++                comment: ""
++            )
++        case .errorSigning:
++            return NSLocalizedString(
++                "There was an error signing the token",
++                comment: ""
++            )
++        case .errorCreatingSecureContainer(let message):
++            let format = NSLocalizedString(
++                "There was an error creating the secure container: '%@'",
++                comment: ""
++            )
++            
++            if let message = message {
++                return String(format: format, message)
++            }
++
++            return String(format: format, "unknown error")
++        case .errorInvalidSignaturePrivateKey:
++            return NSLocalizedString(
++                "Invalid signature private key",
++                comment: ""
++            )
++        }
++    }
++}
+\ No newline at end of file
