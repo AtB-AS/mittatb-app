@@ -1,10 +1,5 @@
 import {PaymentType} from '@atb/ticketing';
 
-export type PaymentMethod = {
-  paymentType: PaymentType;
-  recurringPaymentId?: number;
-};
-
 export type SavedRecurringPayment = {
   id: number;
   expires_at: string;

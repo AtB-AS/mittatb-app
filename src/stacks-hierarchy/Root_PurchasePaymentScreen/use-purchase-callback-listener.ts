@@ -3,11 +3,11 @@ import {Linking} from 'react-native';
 import {savePreviousPaymentOptionByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
+import {PaymentOption} from '@atb/stacks-hierarchy/types';
 
 export const usePurchaseCallbackListener = (
   onCallback: () => void,
-  paymentMethod: PaymentMethod,
+  paymentMethod: PaymentOption,
   recurringPaymentId?: number,
 ) => {
   const {userId} = useAuthState();
@@ -28,7 +28,7 @@ export const usePurchaseCallbackListener = (
 
 const saveLastUsedPaymentMethod = async (
   userId: string | undefined,
-  paymentMethod: PaymentMethod,
+  paymentMethod: PaymentOption,
   recurringPaymentId?: number,
 ) => {
   if (!userId) return;

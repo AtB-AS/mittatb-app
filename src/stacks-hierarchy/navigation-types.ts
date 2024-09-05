@@ -12,7 +12,7 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ReserveOffer} from '@atb/ticketing';
-import {PaymentMethod, TicketRecipientType} from '@atb/stacks-hierarchy/types';
+import {PaymentOption, TicketRecipientType} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
@@ -86,7 +86,7 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
 type Root_PurchasePaymentScreenParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
-  paymentMethod: PaymentMethod;
+  paymentMethod: PaymentOption;
   savePaymentMethod: boolean;
   recipient?: TicketRecipientType;
 };
