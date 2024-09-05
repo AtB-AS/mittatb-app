@@ -7,7 +7,7 @@ import {PaymentOption} from '@atb/stacks-hierarchy/types';
 
 export const usePurchaseCallbackListener = (
   onCallback: () => void,
-  paymentMethod: PaymentOption,
+  paymentOption: PaymentOption,
   recurringPaymentId?: number,
 ) => {
   const {userId} = useAuthState();
@@ -16,19 +16,19 @@ export const usePurchaseCallbackListener = (
       if (event.url.includes('purchase-callback')) {
         await saveLastUsedPaymentMethod(
           userId,
-          paymentMethod,
+          paymentOption,
           recurringPaymentId,
         );
         onCallback();
       }
     });
     return () => unsub();
-  }, [onCallback, userId, paymentMethod, recurringPaymentId]);
+  }, [onCallback, userId, paymentOption, recurringPaymentId]);
 };
 
 const saveLastUsedPaymentMethod = async (
   userId: string | undefined,
-  paymentMethod: PaymentOption,
+  paymentOption: PaymentOption,
   recurringPaymentId?: number,
 ) => {
   if (!userId) return;
@@ -36,7 +36,7 @@ const saveLastUsedPaymentMethod = async (
   if (!recurringPaymentId) {
     await savePreviousPaymentOptionByUser(userId, {
       savedType: 'normal',
-      paymentType: paymentMethod.paymentType,
+      paymentType: paymentOption.paymentType,
     });
   } else {
     try {
