@@ -3,7 +3,6 @@ import {PaymentType} from '@atb/ticketing';
 export type PaymentMethod = {
   paymentType: PaymentType;
   recurringPaymentId?: number;
-  save?: boolean;
 };
 
 export type SavedRecurringPayment = {
