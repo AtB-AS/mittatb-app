@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '../text';
 import {View} from 'react-native';
 import {LabelType} from '@atb/configuration';
@@ -12,6 +12,7 @@ export type LabelInfoProps = {
 export const LabelInfo = ({label}: LabelInfoProps) => {
   const {t} = useTranslation();
   const linkSectionItemStyle = useStyles();
+  const {theme} = useTheme();
 
   const flagTranslated = t(LabelInfoTexts.labels[label]);
 
@@ -21,7 +22,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText color="info" type="body__tertiary">
+      <ThemeText color={theme.color.status.info.primary} type="body__tertiary">
         {flagTranslated}
       </ThemeText>
     </View>
