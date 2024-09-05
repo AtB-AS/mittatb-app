@@ -34,14 +34,14 @@ export function RadioBox({
   onPress,
   style,
   testID,
-  interactiveColor = 'interactive_2',
+  interactiveColor,
 }: Props) {
   const styles = useStyles();
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  interactiveColor = interactiveColor ?? theme.color.interactive[2]
-  const themeColor = interactiveColor[selected ? 'active' : 'default'];
+  const currentInteractiveColor = interactiveColor ?? theme.color.interactive[2]
+  const themeColor = currentInteractiveColor[selected ? 'active' : 'default'];
   const {background: backgroundColor, foreground: { primary: textColor }} = themeColor;
 
   return (

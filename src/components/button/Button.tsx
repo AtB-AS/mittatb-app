@@ -221,7 +221,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
               {loading ? (
                 <ActivityIndicator size="small" color={styleText.color} />
               ) : (
-                rightIcon && <ThemeIcon fill={textColor} {...rightIcon} />
+                rightIcon && <ThemeIcon color={textColor} {...rightIcon} />
               )}
             </View>
           )}

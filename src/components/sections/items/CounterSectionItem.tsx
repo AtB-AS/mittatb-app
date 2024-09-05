@@ -93,7 +93,7 @@ export function CounterSectionItem({
         >
           <ThemeIcon
             svg={Subtract}
-            fill={
+            color={
               removeButtonDisabled
                 ? theme.color.foreground.dynamic.disabled
                 : theme.color.foreground.dynamic.primary

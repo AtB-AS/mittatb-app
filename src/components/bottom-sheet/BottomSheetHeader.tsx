@@ -64,7 +64,7 @@ export const BottomSheetHeader = ({
         accessibilityRole="button"
         testID="closeButton"
       >
-        <ThemeIcon fill={textColor} svg={Close} size="medium" />
+        <ThemeIcon color={textColor} svg={Close} size="medium" />
       </TouchableOpacity>
     </View>
   );

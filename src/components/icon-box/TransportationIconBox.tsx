@@ -68,7 +68,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
       <ThemeIcon
         size={size}
         svg={svg}
-        fill={transportationColor.foreground.primary}
+        color={transportationColor.foreground.primary}
         accessibilityLabel={t(getTranslatedModeName(mode))}
         testID={testID}
       />

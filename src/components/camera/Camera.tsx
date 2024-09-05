@@ -68,7 +68,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
           zoom={zoom}
           scanBarcode={mode === 'qr'}
           showFrame={mode === 'qr'}
-          frameColor={theme.interactive[0].default.background}
+          frameColor={theme.color.interactive[0].default.background}
           laserColor="transparent"
           onReadCode={(e: unknown) => {
             if (
