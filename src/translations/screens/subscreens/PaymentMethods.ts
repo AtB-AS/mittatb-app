@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 
-const PaymentOptionsTexts = {
+const PaymentMethodsTexts = {
   header: {
     title: _('Betalingskort', 'Payment cards', 'Betalingskort'),
   },
@@ -54,4 +54,4 @@ const PaymentOptionsTexts = {
   ),
 };
 
-export default PaymentOptionsTexts;
+export default PaymentMethodsTexts;

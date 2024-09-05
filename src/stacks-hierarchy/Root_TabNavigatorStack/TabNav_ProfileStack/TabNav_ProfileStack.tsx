@@ -10,7 +10,7 @@ import {Profile_SelectStartScreenScreen} from './Profile_SelectStartScreenScreen
 import {Profile_DesignSystemScreen} from './Profile_DesignSystemScreen';
 import {Profile_DebugInfoScreen} from './Profile_DebugInfoScreen';
 import {Profile_DefaultUserProfileScreen} from './Profile_DefaultUserProfileScreen';
-import {Profile_PaymentOptionsScreen} from './Profile_PaymentOptionsScreen';
+import {Profile_PaymentMethodsScreen} from './Profile_PaymentMethodsScreen';
 import {ProfileStackParams} from './navigation-types';
 import {Profile_PlaceScreen} from './Profile_PlaceScreen';
 import {Profile_NearbyStopPlacesScreen} from './Profile_NearbyStopPlacesScreen';
@@ -45,8 +45,8 @@ export const TabNav_ProfileStack = () => {
         component={Profile_TicketHistorySelectionScreen}
       />
       <Stack.Screen
-        name="Profile_PaymentOptionsScreen"
-        component={Profile_PaymentOptionsScreen}
+        name="Profile_PaymentMethodsScreen"
+        component={Profile_PaymentMethodsScreen}
       />
       <Stack.Screen
         name="Profile_DeleteProfileScreen"

@@ -14,7 +14,7 @@ import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {addPaymentMethod, RecurringPayment} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
-import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
+import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
 import React, {useEffect} from 'react';
@@ -29,7 +29,7 @@ import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recur
 import {APP_SCHEME} from '@env';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
-export const Profile_PaymentOptionsScreen = () => {
+export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -105,7 +105,7 @@ export const Profile_PaymentOptionsScreen = () => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(PaymentOptionsTexts.header.title),
+        title: t(PaymentMethodsTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
       refreshControl={
@@ -117,7 +117,7 @@ export const Profile_PaymentOptionsScreen = () => {
       parallaxContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
-          text={t(PaymentOptionsTexts.header.title)}
+          text={t(PaymentMethodsTexts.header.title)}
         />
       )}
     >
@@ -145,13 +145,13 @@ export const Profile_PaymentOptionsScreen = () => {
 
         <Section>
           <LinkSectionItem
-            text={t(PaymentOptionsTexts.addPaymentMethod)}
+            text={t(PaymentMethodsTexts.addPaymentMethod)}
             onPress={onAddRecurringPayment}
             icon={<ThemeIcon svg={Add} />}
           />
         </Section>
         <MessageInfoBox
-          message={t(PaymentOptionsTexts.vippsInfo)}
+          message={t(PaymentMethodsTexts.vippsInfo)}
           type="info"
         />
       </View>
@@ -176,7 +176,7 @@ const Card = (props: {
         <View>
           <ThemeText
             accessibilityLabel={t(
-              PaymentOptionsTexts.a11y.cardInfo(paymentName, card.masked_pan),
+              PaymentMethodsTexts.a11y.cardInfo(paymentName, card.masked_pan),
             )}
           >
             {paymentName} **** {card.masked_pan}
@@ -187,7 +187,7 @@ const Card = (props: {
           <PaymentBrand icon={card.payment_type} />
           <PressableOpacity
             accessibilityLabel={t(
-              PaymentOptionsTexts.a11y.deleteCardIcon(
+              PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
                 card.masked_pan,
               ),
@@ -195,13 +195,13 @@ const Card = (props: {
             style={{marginLeft: theme.spacings.medium}}
             onPress={() => {
               destructiveAlert({
-                alertTitleString: t(PaymentOptionsTexts.deleteModal.title),
-                alertMessageString: t(PaymentOptionsTexts.deleteModal.message),
+                alertTitleString: t(PaymentMethodsTexts.deleteModal.title),
+                alertMessageString: t(PaymentMethodsTexts.deleteModal.message),
                 cancelAlertString: t(
-                  PaymentOptionsTexts.deleteModal.cancelButton,
+                  PaymentMethodsTexts.deleteModal.cancelButton,
                 ),
                 confirmAlertString: t(
-                  PaymentOptionsTexts.deleteModal.confirmButton,
+                  PaymentMethodsTexts.deleteModal.confirmButton,
                 ),
                 destructiveArrowFunction: () => removePaymentHandler(card),
               });
@@ -231,7 +231,7 @@ const NoCardsInfo = () => {
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="info"
-        message={t(PaymentOptionsTexts.noStoredCards)}
+        message={t(PaymentMethodsTexts.noStoredCards)}
       />
     </View>
   );
@@ -243,7 +243,7 @@ const GenericError = () => {
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="error"
-        message={t(PaymentOptionsTexts.genericError)}
+        message={t(PaymentMethodsTexts.genericError)}
       />
     </View>
   );
