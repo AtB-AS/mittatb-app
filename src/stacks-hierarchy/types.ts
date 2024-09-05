@@ -7,11 +7,17 @@ export type RecurringCard = {
   payment_type: number;
 };
 
-export type PaymentOption = {
-  savedType: 'normal' | 'recurring';
-  paymentType: PaymentType;
+type CardPaymentOption = {
+  savedType: 'recurring' | 'normal';
+  paymentType: PaymentType.Mastercard | PaymentType.Visa;
   recurringCard?: RecurringCard;
 };
+type VippsPaymentOption = {
+  savedType: 'normal';
+  paymentType: PaymentType.Vipps;
+  recurringCard?: undefined;
+};
+export type PaymentOption = CardPaymentOption | VippsPaymentOption;
 
 export type PaymentProcessorStatus = 'loading' | 'success' | 'error';
 
