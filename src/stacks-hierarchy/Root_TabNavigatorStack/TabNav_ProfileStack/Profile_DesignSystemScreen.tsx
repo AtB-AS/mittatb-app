@@ -189,7 +189,7 @@ export const Profile_DesignSystemScreen = ({
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="xSmall"
-                notification={{color: theme.color.status.success.primary}}
+                notification={{color: theme.color.status.valid.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
@@ -220,7 +220,7 @@ export const Profile_DesignSystemScreen = ({
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="xSmall"
-                notification={{color: theme.color.status.success.primary, backgroundColor: theme.color.background.neutral[0]}}
+                notification={{color: theme.color.status.valid.primary, backgroundColor: theme.color.background.neutral[0]}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
@@ -289,7 +289,7 @@ export const Profile_DesignSystemScreen = ({
             <MessageInfoBox
               message="This is a success message"
               title="Title"
-              type="success"
+              type="valid"
             />
           </GenericSectionItem>
 
@@ -351,7 +351,7 @@ export const Profile_DesignSystemScreen = ({
 
           <GenericSectionItem>
             <MessageInfoBox
-              type="success"
+              type="valid"
               isMarkdown={true}
               title="Without icon"
               noStatusIcon={true}
@@ -388,7 +388,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageInfoText
-              type="success"
+              type="valid"
               isMarkdown={true}
               message="This is a valid text"
               textColor={theme.color.background.neutral[0]}
@@ -396,7 +396,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageInfoText
-              type="success"
+              type="valid"
               isMarkdown={true}
               iconPosition="right"
               message="This is a text with right sided icon"
@@ -405,7 +405,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageInfoText
-              type="success"
+              type="valid"
               isMarkdown={true}
               message="This is a valid **markdown** message"
               textColor={theme.color.background.neutral[0]}
@@ -859,7 +859,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     interactiveColor={theme.color.interactive[0]}
-                    leftIcon={{svg: Add, notification: {color: theme.color.status.success.primary}}}
+                    leftIcon={{svg: Add, notification: {color: theme.color.status.valid.primary}}}
                     style={{margin: 4}}
                   />
                   <Button
@@ -1105,7 +1105,7 @@ export const Profile_DesignSystemScreen = ({
           />
 
           <MessageSectionItem
-            messageType="success"
+            messageType="valid"
             message="A success message without title"
           />
 

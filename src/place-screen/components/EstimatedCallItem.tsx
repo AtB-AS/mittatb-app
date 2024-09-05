@@ -307,7 +307,7 @@ const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
 
 export const getMsgTypeForEstimatedCall = (
   estimatedCall: EstimatedCall,
-): Exclude<Statuses, 'success'> | undefined => {
+): Exclude<Statuses, 'valid'> | undefined => {
   const msgTypeForSituationOrNotice =
     getMsgTypeForMostCriticalSituationOrNotice(
       estimatedCall.situations,
@@ -331,7 +331,7 @@ export const getMsgTypeForEstimatedCall = (
     msgTypeForSituationOrNotice,
     msgTypeForBooking,
     msgTypeForRailReplacementBus,
-  ].reduce<Exclude<Statuses, 'success'> | undefined>(
+  ].reduce<Exclude<Statuses, 'valid'> | undefined>(
     toMostCriticalStatus,
     undefined,
   );

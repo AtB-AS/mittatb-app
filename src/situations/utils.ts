@@ -51,14 +51,14 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
   situations: SituationType[],
   notices?: NoticeFragment[],
   cancellation: boolean = false,
-): Exclude<Statuses, 'success'> | undefined => {
+): Exclude<Statuses, 'valid'> | undefined => {
   if (cancellation) return 'error';
   if (!situations.length) {
     return notices?.length ? 'info' : undefined;
   }
   return situations
     .map(getMessageTypeForSituation)
-    .reduce<Exclude<Statuses, 'success'> | undefined>(
+    .reduce<Exclude<Statuses, 'valid'> | undefined>(
       toMostCriticalStatus,
       undefined,
     );

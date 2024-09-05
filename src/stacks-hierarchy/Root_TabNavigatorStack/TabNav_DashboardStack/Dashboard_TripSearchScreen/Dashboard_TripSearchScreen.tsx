@@ -69,7 +69,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const headerBackgroundColor = getHeaderBackgroundColor(theme);
   const interactiveColor = theme.color.interactive[1];
-  const statusColor = theme.color.status.success.primary;
+  const statusColor = theme.color.status.valid.primary;
 
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);

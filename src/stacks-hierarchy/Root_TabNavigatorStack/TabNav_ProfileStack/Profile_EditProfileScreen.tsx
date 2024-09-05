@@ -224,7 +224,7 @@ export const Profile_EditProfileScreen = ({
                 />
                 {isSuccessUpdateProfile && (
                   <MessageInfoBox
-                    type="success"
+                    type="valid"
                     message={t(EditProfileTexts.profileUpdate.success)}
                     style={styles.submitContent}
                   />

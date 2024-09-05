@@ -142,7 +142,7 @@ function translateStateToMessage(
         message: t(
           FareContractTexts.receipt.messages.success(email, reference!),
         ),
-        type: 'success',
+        type: 'valid',
       };
     case 'invalid-field':
       return {

@@ -209,7 +209,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
-              type="success"
+              type="valid"
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
@@ -311,7 +311,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           {isFree ? (
             <MessageInfoBox
-              type="success"
+              type="valid"
               message={t(PurchaseOverviewTexts.summary.free)}
               style={styles.messages}
             />

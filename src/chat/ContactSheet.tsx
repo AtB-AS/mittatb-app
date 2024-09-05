@@ -81,7 +81,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
                 svg: Chat,
                 notification: unreadCount
                   ? {
-                      color: theme.color.status.success.primary,
+                      color: theme.color.status.valid.primary,
                     }
                   : undefined,
               }}

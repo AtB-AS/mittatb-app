@@ -41,7 +41,7 @@ export const useServiceDisruptionIcon = (
         notification={
           globalMessages.length > 0
             ? {
-                color: theme.color.status.success.primary,
+                color: theme.color.status.valid.primary,
               }
             : undefined
         }
