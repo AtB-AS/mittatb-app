@@ -1,6 +1,6 @@
 import {PaymentType} from '@atb/ticketing';
 
-export type SavedRecurringPayment = {
+export type RecurringCard = {
   id: number;
   expires_at: string;
   masked_pan: string;
@@ -10,7 +10,7 @@ export type SavedRecurringPayment = {
 export type PaymentOption = {
   savedType: 'normal' | 'recurring';
   paymentType: PaymentType;
-  recurringCard?: SavedRecurringPayment;
+  recurringCard?: RecurringCard;
 };
 
 export type PaymentProcessorStatus = 'loading' | 'success' | 'error';
