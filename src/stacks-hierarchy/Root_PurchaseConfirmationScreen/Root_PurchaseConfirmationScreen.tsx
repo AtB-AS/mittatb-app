@@ -137,7 +137,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       )
     : t(PurchaseConfirmationTexts.travelDate.now);
 
-  function goToPayment(option: PaymentOption, save: boolean) {
+  function goToPayment(option: PaymentOption, savePaymentMethod: boolean) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -149,7 +149,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: option,
-          savePaymentMethod: save,
+          savePaymentMethod,
         });
       }
     }
@@ -179,8 +179,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       return (
         <SelectPaymentMethodSheet
           recurringPaymentOptions={recurringPaymentOptions}
-          onSelect={(option: PaymentOption, save: boolean) => {
-            goToPayment(option, save);
+          onSelect={(option: PaymentOption, savePaymentMethod: boolean) => {
+            goToPayment(option, savePaymentMethod);
             closeBottomSheet();
           }}
           previousPaymentMethod={previousPaymentOption}
