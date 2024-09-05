@@ -9,14 +9,14 @@ type Args = {
   offers: ReserveOffer[];
   paymentMethod: PaymentMethod;
   recipient?: TicketRecipientType;
-  savePaymentMethod: boolean;
+  shouldSavePaymentMethod: boolean;
 };
 
 export const useReserveOfferMutation = ({
   offers,
   paymentMethod,
   recipient,
-  savePaymentMethod,
+  shouldSavePaymentMethod,
 }: Args) => {
   const {abtCustomerId} = useAuthState();
   const {enable_auto_sale: autoSale} = useRemoteConfig();
@@ -28,7 +28,7 @@ export const useReserveOfferMutation = ({
         offers,
         paymentType: paymentMethod.paymentType,
         recurringPaymentId: paymentMethod.recurringCard?.id,
-        savePaymentMethod,
+        shouldSavePaymentMethod,
         opts: {retry: true},
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,

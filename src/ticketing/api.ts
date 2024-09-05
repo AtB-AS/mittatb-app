@@ -111,7 +111,7 @@ type ReserveOfferParams = {
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
   customerAccountId: string;
-  savePaymentMethod: boolean;
+  shouldSavePaymentMethod: boolean;
   recurringPaymentId?: number;
   autoSale: boolean;
   customerAlias?: string;
@@ -161,7 +161,7 @@ export async function reserveOffers({
     payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
     offers,
     payment_type: paymentType,
-    store_payment: rest.savePaymentMethod,
+    store_payment: rest.shouldSavePaymentMethod,
     recurring_payment_id: rest.recurringPaymentId,
     sca_exemption: scaExemption,
     customer_account_id: customerAccountId,
