@@ -1,13 +1,13 @@
 import {useEffect} from 'react';
 import {Linking} from 'react-native';
-import {savePreviousPaymentOptionByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
+import {savePreviousPaymentMethodByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
-import {PaymentOption} from '@atb/stacks-hierarchy/types';
+import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 
 export const usePurchaseCallbackListener = (
   onCallback: () => void,
-  paymentOption: PaymentOption,
+  paymentMethod: PaymentMethod,
   recurringPaymentId?: number,
 ) => {
   const {userId} = useAuthState();
@@ -16,27 +16,27 @@ export const usePurchaseCallbackListener = (
       if (event.url.includes('purchase-callback')) {
         await saveLastUsedPaymentMethod(
           userId,
-          paymentOption,
+          paymentMethod,
           recurringPaymentId,
         );
         onCallback();
       }
     });
     return () => unsub();
-  }, [onCallback, userId, paymentOption, recurringPaymentId]);
+  }, [onCallback, userId, paymentMethod, recurringPaymentId]);
 };
 
 const saveLastUsedPaymentMethod = async (
   userId: string | undefined,
-  paymentOption: PaymentOption,
+  paymentMethod: PaymentMethod,
   recurringPaymentId?: number,
 ) => {
   if (!userId) return;
 
   if (!recurringPaymentId) {
-    await savePreviousPaymentOptionByUser(userId, {
+    await savePreviousPaymentMethodByUser(userId, {
       savedType: 'normal',
-      paymentType: paymentOption.paymentType,
+      paymentType: paymentMethod.paymentType,
     });
   } else {
     try {
@@ -45,7 +45,7 @@ const saveLastUsedPaymentMethod = async (
         return c.id === recurringPaymentId;
       });
       if (card) {
-        await savePreviousPaymentOptionByUser(userId, {
+        await savePreviousPaymentMethodByUser(userId, {
           savedType: 'recurring',
           paymentType: card.payment_type,
           recurringCard: card,

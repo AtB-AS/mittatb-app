@@ -35,8 +35,8 @@ import {
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
-import {usePreviousPaymentOptions} from '../saved-payment-utils';
-import {PaymentOption} from '../types';
+import {usePreviousPaymentMethods} from '../saved-payment-utils';
+import {PaymentMethod} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
@@ -58,8 +58,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {vatPercent} = useFirestoreConfiguration();
-  const {previousPaymentOption, recurringPaymentOptions} =
-    usePreviousPaymentOptions();
+  const {previousPaymentMethod, recurringPaymentMethods} =
+    usePreviousPaymentMethods();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
@@ -137,27 +137,27 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       )
     : t(PurchaseConfirmationTexts.travelDate.now);
 
-  function goToPayment(option: PaymentOption, savePaymentMethod: boolean) {
+  function goToPayment(method: PaymentMethod, savePaymentMethod: boolean) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
         analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod: option,
+          paymentMethod: method,
         });
         navigation.push('Root_PurchasePaymentScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
-          paymentMethod: option,
+          paymentMethod: method,
           savePaymentMethod,
         });
       }
     }
   }
 
-  function getPaymentOptionTexts(option: PaymentOption): string {
+  function getPaymentMethodTexts(method: PaymentMethod): string {
     let str;
-    switch (option.paymentType) {
+    switch (method.paymentType) {
       case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
         break;
@@ -168,8 +168,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
     }
-    if (option.recurringCard) {
-      str = str + ` (**** ${option.recurringCard.masked_pan})`;
+    if (method.recurringCard) {
+      str = str + ` (**** ${method.recurringCard.masked_pan})`;
     }
     return str;
   }
@@ -178,12 +178,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     openBottomSheet(() => {
       return (
         <SelectPaymentMethodSheet
-          recurringPaymentOptions={recurringPaymentOptions}
-          onSelect={(option: PaymentOption, savePaymentMethod: boolean) => {
-            goToPayment(option, savePaymentMethod);
+          recurringPaymentMethods={recurringPaymentMethods}
+          onSelect={(method: PaymentMethod, savePaymentMethod: boolean) => {
+            goToPayment(method, savePaymentMethod);
             closeBottomSheet();
           }}
-          previousPaymentOption={previousPaymentOption}
+          previousPaymentMethod={previousPaymentMethod}
         />
       );
     });
@@ -396,18 +396,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         ) : (
           <View>
-            {previousPaymentOption ? (
+            {previousPaymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
-                  text={getPaymentOptionTexts(previousPaymentOption)}
+                  text={getPaymentMethodTexts(previousPaymentMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
                     svg:
-                      previousPaymentOption.paymentType ===
+                      previousPaymentMethod.paymentType ===
                       PaymentType.Mastercard
                         ? MasterCard
-                        : previousPaymentOption.paymentType ===
+                        : previousPaymentMethod.paymentType ===
                           PaymentType.Vipps
                         ? Vipps
                         : Visa,
@@ -417,11 +417,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Pay with previous payment method clicked',
                       {
-                        paymentMethod: previousPaymentOption?.paymentType,
+                        paymentMethod: previousPaymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
-                    goToPayment(previousPaymentOption, false);
+                    goToPayment(previousPaymentMethod, false);
                   }}
                 />
                 <PressableOpacity
@@ -432,19 +432,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Change payment method clicked',
                       {
-                        paymentMethod: previousPaymentOption?.paymentType,
+                        paymentMethod: previousPaymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
-                    PurchaseConfirmationTexts.changePaymentOption.a11yHint,
+                    PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
                   )}
                 >
                   <View style={styles.flexRowCenter}>
                     <ThemeText type="body__primary--bold">
-                      {t(PurchaseConfirmationTexts.changePaymentOption.text)}
+                      {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
                     </ThemeText>
                   </View>
                 </PressableOpacity>
@@ -452,10 +452,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             ) : (
               <Button
                 interactiveColor="interactive_0"
-                text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
+                text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
                 disabled={!!error}
                 accessibilityHint={t(
-                  PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                  PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
                 )}
                 onPress={() => {
                   analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
@@ -463,7 +463,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                testID="choosePaymentOptionButton"
+                testID="choosePaymentMethodButton"
               />
             )}
           </View>

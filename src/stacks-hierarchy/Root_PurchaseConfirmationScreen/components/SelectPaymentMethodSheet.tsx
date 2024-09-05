@@ -13,33 +13,33 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {PaymentOption} from '@atb/stacks-hierarchy/types';
+import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {useAuthState} from '@atb/auth';
 import {PaymentType} from '@atb/ticketing';
 
 type Props = {
-  onSelect: (value: PaymentOption, save: boolean) => void;
-  previousPaymentOption?: PaymentOption;
-  recurringPaymentOptions?: PaymentOption[];
+  onSelect: (value: PaymentMethod, save: boolean) => void;
+  previousPaymentMethod?: PaymentMethod;
+  recurringPaymentMethods?: PaymentMethod[];
 };
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
-  previousPaymentOption,
-  recurringPaymentOptions,
+  previousPaymentMethod,
+  recurringPaymentMethods,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const [shouldSave, setShouldSave] = useState(false);
 
   const {paymentTypes} = useFirestoreConfiguration();
-  const defaultPaymentOptions: PaymentOption[] = paymentTypes.map(
+  const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
     (paymentType) => ({
       paymentType,
       savedType: 'normal',
     }),
   );
-  const [selectedOption, setSelectedOption] = useState(previousPaymentOption);
+  const [selectedMethod, setSelectedMethod] = useState(previousPaymentMethod);
 
   return (
     <BottomSheetContainer
@@ -48,20 +48,20 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     >
       <View style={{flex: 1}}>
         <View style={{flexShrink: 1, flexGrow: 1}}>
-          <ScrollView style={styles.paymentOptions}>
-            {defaultPaymentOptions.map((option, index) => {
+          <ScrollView style={styles.paymentMethods}>
+            {defaultPaymentMethods.map((method, index) => {
               return (
-                <PaymentOptionView
-                  key={option.paymentType}
-                  option={option}
+                <PaymentMethodView
+                  key={method.paymentType}
+                  paymentMethod={method}
                   shouldSave={shouldSave}
                   onSetShouldSave={setShouldSave}
                   selected={
-                    !selectedOption?.recurringCard &&
-                    selectedOption?.paymentType === option.paymentType
+                    !selectedMethod?.recurringCard &&
+                    selectedMethod?.paymentType === method.paymentType
                   }
-                  onSelect={(val: PaymentOption) => {
-                    setSelectedOption(val);
+                  onSelect={(val: PaymentMethod) => {
+                    setSelectedMethod(val);
                     setShouldSave(false);
                   }}
                   index={index}
@@ -69,23 +69,23 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               );
             })}
 
-            {recurringPaymentOptions && recurringPaymentOptions?.length > 0 && (
+            {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
               <View style={styles.listHeading}>
                 <ThemeText>
                   {t(SelectPaymentMethodTexts.saved_cards.text)}
                 </ThemeText>
               </View>
             )}
-            {recurringPaymentOptions?.map((option, index) => (
-              <PaymentOptionView
-                key={option.recurringCard?.id}
-                option={option}
+            {recurringPaymentMethods?.map((method, index) => (
+              <PaymentMethodView
+                key={method.recurringCard?.id}
+                paymentMethod={method}
                 selected={
-                  selectedOption?.recurringCard?.id === option.recurringCard?.id
+                  selectedMethod?.recurringCard?.id === method.recurringCard?.id
                 }
                 shouldSave={shouldSave}
                 onSetShouldSave={setShouldSave}
-                onSelect={setSelectedOption}
+                onSelect={setSelectedMethod}
                 index={index}
               />
             ))}
@@ -100,9 +100,9 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               SelectPaymentMethodTexts.confirm_button.a11yhint,
             )}
             onPress={() => {
-              if (selectedOption) onSelect(selectedOption, shouldSave);
+              if (selectedMethod) onSelect(selectedMethod, shouldSave);
             }}
-            disabled={!selectedOption}
+            disabled={!selectedMethod}
             rightIcon={{svg: ArrowRight}}
             testID="confirmButton"
           />
@@ -112,17 +112,17 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   );
 };
 
-type PaymentOptionsProps = {
-  option: PaymentOption;
+type PaymentMethodProps = {
+  paymentMethod: PaymentMethod;
   selected: boolean;
-  onSelect: (value: PaymentOption) => void;
+  onSelect: (value: PaymentMethod) => void;
   shouldSave: boolean;
   onSetShouldSave: (val: boolean) => void;
   index: number;
 };
 
-const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
-  option,
+const PaymentMethodView: React.FC<PaymentMethodProps> = ({
+  paymentMethod,
   selected,
   onSelect,
   shouldSave,
@@ -133,19 +133,19 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const styles = useStyles();
   const {authenticationType} = useAuthState();
 
-  function getPaymentTexts(option: PaymentOption): {
+  function getPaymentTexts(method: PaymentMethod): {
     text: string;
     label: string;
     hint: string;
   } {
-    const paymentTypeName = getPaymentTypeName(option.paymentType);
-    if (option.recurringCard) {
+    const paymentTypeName = getPaymentTypeName(method.paymentType);
+    if (method.recurringCard) {
       return {
         text: paymentTypeName,
         label: t(
           PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
             paymentTypeName,
-            option.recurringCard!.masked_pan,
+            method.recurringCard!.masked_pan,
           ),
         ),
         hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
@@ -163,51 +163,51 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     }
   }
 
-  function getPaymentTestId(option: PaymentOption, index: number) {
-    if (option.savedType === 'normal') {
-      return getPaymentTypeName(option.paymentType) + 'Button';
+  function getPaymentTestId(method: PaymentMethod, index: number) {
+    if (method.savedType === 'normal') {
+      return getPaymentTypeName(method.paymentType) + 'Button';
     } else {
       return 'recurringPayment' + index;
     }
   }
 
-  const paymentTexts = getPaymentTexts(option);
+  const paymentTexts = getPaymentTexts(paymentMethod);
 
   const canSaveCard =
     authenticationType === 'phone' &&
-    option.savedType === 'normal' &&
-    option.paymentType !== PaymentType.Vipps;
+    paymentMethod.savedType === 'normal' &&
+    paymentMethod.paymentType !== PaymentType.Vipps;
 
   return (
     <View style={styles.card}>
       <PressableOpacity
-        style={[styles.paymentOption, styles.centerRow]}
-        onPress={() => onSelect(option)}
+        style={[styles.paymentMethod, styles.centerRow]}
+        onPress={() => onSelect(paymentMethod)}
         accessibilityLabel={paymentTexts.label}
         accessibilityHint={paymentTexts.hint}
         accessibilityRole="radio"
         accessibilityState={{selected: selected}}
-        testID={getPaymentTestId(option, index)}
+        testID={getPaymentTestId(paymentMethod, index)}
       >
         <View style={styles.column}>
           <View style={styles.row}>
             <View style={styles.centerRow}>
               <RadioView checked={selected} />
               <ThemeText>{paymentTexts.text}</ThemeText>
-              {option.recurringCard && (
+              {paymentMethod.recurringCard && (
                 <ThemeText
                   style={styles.maskedPanPadding}
-                  testID={getPaymentTestId(option, index) + 'Number'}
+                  testID={getPaymentTestId(paymentMethod, index) + 'Number'}
                 >
-                  **** {`${option.recurringCard.masked_pan}`}
+                  **** {`${paymentMethod.recurringCard.masked_pan}`}
                 </ThemeText>
               )}
             </View>
-            <PaymentBrand icon={option.paymentType} />
+            <PaymentBrand icon={paymentMethod.paymentType} />
           </View>
-          {option.recurringCard && (
+          {paymentMethod.recurringCard && (
             <ThemeText style={styles.expireDate}>
-              {getExpireDate(option.recurringCard.expires_at)}
+              {getExpireDate(paymentMethod.recurringCard.expires_at)}
             </ThemeText>
           )}
         </View>
@@ -215,10 +215,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
       {selected && canSaveCard && (
         <PressableOpacity
           onPress={() => onSetShouldSave(!shouldSave)}
-          style={styles.saveOptionSection}
+          style={styles.saveMethodSection}
         >
-          <ThemeText style={styles.saveOptionTextPadding}>
-            {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
+          <ThemeText style={styles.saveMethodTextPadding}>
+            {t(SelectPaymentMethodTexts.save_payment_method_description.text)}
           </ThemeText>
           <View style={styles.saveButton}>
             <Checkbox
@@ -282,7 +282,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.static.background.background_0.background,
   },
-  saveOptionSection: {
+  saveMethodSection: {
     paddingHorizontal: theme.spacings.xLarge,
     paddingBottom: theme.spacings.xLarge,
   },
@@ -292,10 +292,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
-  paymentOptions: {
+  paymentMethods: {
     paddingHorizontal: theme.spacings.medium,
   },
-  paymentOption: {
+  paymentMethod: {
     flex: 1,
     flexDirection: 'column',
     padding: theme.spacings.xLarge,
@@ -348,7 +348,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   maskedPanPadding: {
     paddingLeft: theme.spacings.small,
   },
-  saveOptionTextPadding: {
+  saveMethodTextPadding: {
     paddingTop: theme.spacings.medium,
     opacity: 0.6,
   },
