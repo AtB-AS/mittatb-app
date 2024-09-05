@@ -10,7 +10,7 @@ import {
   Section,
   TimeInputSectionItem,
 } from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   dateWithReplacedTime,
@@ -32,6 +32,8 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+    const {theme} = useTheme();
+    const interactiveColor = theme.color.interactive[0];
 
     const [date, setDate] = useState(initialTime.date);
     const [time, setTime] = useState(
@@ -65,7 +67,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
 
           <Button
             onPress={onSelect}
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             text={t(DeparturesTexts.dateInput.confirm)}
             rightIcon={{svg: Confirm}}
             accessibilityHint={t(DeparturesTexts.dateInput.a11yInPastHint)}

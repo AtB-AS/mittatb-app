@@ -226,7 +226,7 @@ export const ParkAndRideTexts = {
 };
 
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
-  Allowed: {
+  allowed: {
     title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
     description: _(
       'Her kan du både kjøre og parkere',
@@ -234,7 +234,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Her kan du både køyre og parkere',
     ),
   },
-  Slow: {
+  slow: {
     title: _('Saktesone', 'Slow Zone', 'Saktesone'),
     description: _(
       'Farten blir redusert i dette området',
@@ -266,7 +266,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   //   ),
   // },
 
-  NoParking: {
+  noParking: {
     title: _(
       'Parkering forbudt-sone',
       'No Parking Zone',
@@ -278,7 +278,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Du kan ikkje parkere i dette området',
     ),
   },
-  NoEntry: {
+  noEntry: {
     title: _('Kjøring forbudt-sone', 'No Riding Zone', 'Kjøring forboden-sone'),
     description: _(
       'Du kan ikke kjøre inn i dette området',
@@ -286,7 +286,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Du kan ikkje køyre inn i dette området',
     ),
   },
-  Unspecified: {
+  unspecified: {
     title: _('Uspesifisert', 'Unspecified', 'Uspesifisert'),
     description: _(
       'Ingen regler angitt for dette området',

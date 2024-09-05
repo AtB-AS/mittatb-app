@@ -190,7 +190,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     width: '100%',
   },
   mainView: {

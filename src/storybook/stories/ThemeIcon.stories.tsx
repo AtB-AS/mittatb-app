@@ -158,14 +158,15 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['large', 'normal', 'small', 'xSmall'] as IconSize[],
+      options: ['large', 'medium', 'small', 'xSmall'] as IconSize[],
     },
     color: {
       control: 'select',
       options: [
-        ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].status),
-        ...Object.keys(themes['light'].text.colors),
+        ...Object.keys(themes['light'].color.background.neutral),
+        ...Object.keys(themes['light'].color.background.accent),
+        ...Object.keys(themes['light'].color.status),
+        ...Object.keys(themes['light'].color.foreground.dynamic),
       ],
     },
     notification: {

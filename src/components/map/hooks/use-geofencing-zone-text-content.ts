@@ -13,7 +13,7 @@ export const useGeofencingZoneTextContent = () => {
   ) => {
     const title = t(
       GeofencingZoneExplanations[
-        geofencingZoneCustomProps?.code || 'Unspecified'
+        geofencingZoneCustomProps?.code || 'unspecified'
       ].title,
     );
 
@@ -24,7 +24,7 @@ export const useGeofencingZoneTextContent = () => {
     const description =
       t(
         GeofencingZoneExplanations[
-          geofencingZoneCustomProps?.code || 'Unspecified'
+          geofencingZoneCustomProps?.code || 'unspecified'
         ].description,
       ) + isStationParkingPostfix;
 

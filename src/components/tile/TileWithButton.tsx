@@ -70,7 +70,7 @@ export function TileWithButton({
         <ThemeIcon
           size={mode === 'spacious' ? 'medium' : 'xSmall'}
           svg={buttonSvg}
-          fill={interactiveColor.outline.foreground.primary}
+          color={interactiveColor.outline.foreground.primary}
         />
       </View>
     </PressableOpacity>

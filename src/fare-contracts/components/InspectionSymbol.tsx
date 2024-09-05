@@ -135,7 +135,7 @@ const InspectableContent = ({
       )}
       <ThemeIcon
         svg={InspectionSvg}
-        fill={shouldFill ? themeColor.foreground.primary : undefined}
+        color={shouldFill ? themeColor : undefined}
         size="large"
       />
     </View>

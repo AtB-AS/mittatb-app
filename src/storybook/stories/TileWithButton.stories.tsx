@@ -24,7 +24,7 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
       },
     },
     interactiveColor: {
-      options: [...Object.keys(themes['light'].interactive)],
+      options: [...Object.keys(themes['light'].color.interactive)],
       control: {
         type: 'select',
       },
@@ -33,7 +33,7 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
   },
   args: {
     mode: 'compact',
-    interactiveColor: 'interactive_2',
+    interactiveColor: themes.light.color.interactive[2],
     accessibilityLabel: 'Accessibility label',
     buttonText: 'Button text',
     buttonSvg: SvgArrowRight,

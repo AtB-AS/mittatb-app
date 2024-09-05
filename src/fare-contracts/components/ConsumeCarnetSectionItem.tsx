@@ -31,7 +31,7 @@ export function ConsumeCarnetSectionItem({
       icon={
         <ThemeIcon
           svg={TicketValid}
-          fill={interactiveColor.default.foreground.primary}
+          color={interactiveColor.default}
         />
       }
       interactiveColor={interactiveColor}

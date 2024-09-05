@@ -232,5 +232,5 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZKey in GeofencingZoneKeys | 'Unspecified']: GeofencingZoneExplanationType;
+  [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
 };

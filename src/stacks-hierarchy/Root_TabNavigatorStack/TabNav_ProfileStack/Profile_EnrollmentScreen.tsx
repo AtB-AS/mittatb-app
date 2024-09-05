@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
 import {
   MessageInfoBox,
@@ -18,6 +18,8 @@ import {ScreenHeading} from '@atb/components/heading';
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
   const [inviteCode, setInviteCode] = useState<string>('');
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
@@ -57,7 +59,7 @@ export const Profile_EnrollmentScreen = () => {
               text={t(EnrollmentTexts.button)}
               leftIcon={{svg: Confirm}}
               disabled={isLoading || !inviteCode}
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
             />
           </>
         )}
