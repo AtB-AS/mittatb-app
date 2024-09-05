@@ -6,7 +6,6 @@ import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {Ticket} from '@atb/assets/svg/color/images';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {Ticket as SentTicket} from '@atb/assets/svg/mono-icons/ticketing';
-import { useTheme } from '@atb/theme';
 
 export const FareContractStatusSymbol = ({
   status,
@@ -14,7 +13,6 @@ export const FareContractStatusSymbol = ({
   status: ValidityStatus;
 }) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   switch (status) {
     case 'expired':
     case 'refunded':
