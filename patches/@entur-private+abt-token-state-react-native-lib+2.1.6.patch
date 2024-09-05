@@ -1,27 +1,11 @@
 diff --git a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
-index a41752b..19542ed 100644
+index a41752b..b558fda 100644
 --- a/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
 +++ b/node_modules/@entur-private/abt-token-state-react-native-lib/ios/TokenCoreModule.swift
-@@ -442,8 +442,8 @@ public class TokenCoreModule: NSObject {
-         let tokenEncodingRequest = TokenEncodingRequest(deviceDetails: deviceDetailsProvider.deviceDetails, challenges: decodedChallenges, tokenActions: tokenPayloadActions, includeCertificate: includeCertificate)
- 
-         token.encodeAsSecureContainer(tokenEncodingRequest: tokenEncodingRequest) { secureContainerWrapper, error in
--            if let error = error {
--                return reject(self.mapErrorCode(error).code, "Error while generating the secure container", error)
-+            if let error = error, let errorDescription = error.errorDescription {
-+                return reject(self.mapErrorCode(error).code, errorDescription, error)
-             }
-             
-             guard let base64EncodedSecureContainer = secureContainerWrapper?.base64EncodedString else {
-diff --git a/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift b/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
-index 9404ce0..e48a039 100644
---- a/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
-+++ b/node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib/AbtTokenCoreSDK/errors/TokenEncoderError.swift
-@@ -4,3 +4,36 @@ public enum TokenEncoderError: Error {
-     case errorCreatingSecureContainer(String?)
-     case errorInvalidSignaturePrivateKey
+@@ -131,6 +131,39 @@ extension TokenCoreModuleError: IdentifiableError {
+     }
  }
-+
+ 
 +extension TokenEncoderError: LocalizedError {
 +    public var errorDescription: String? {
 +        switch self {
@@ -54,4 +38,29 @@ index 9404ce0..e48a039 100644
 +        }
 +    }
 +}
-\ No newline at end of file
++
+ 
+ @objc(TokenCoreModule)
+ public class TokenCoreModule: NSObject {
+@@ -442,8 +475,8 @@ public class TokenCoreModule: NSObject {
+         let tokenEncodingRequest = TokenEncodingRequest(deviceDetails: deviceDetailsProvider.deviceDetails, challenges: decodedChallenges, tokenActions: tokenPayloadActions, includeCertificate: includeCertificate)
+ 
+         token.encodeAsSecureContainer(tokenEncodingRequest: tokenEncodingRequest) { secureContainerWrapper, error in
+-            if let error = error {
+-                return reject(self.mapErrorCode(error).code, "Error while generating the secure container", error)
++            if let error = error, let errorDescription = error.errorDescription {
++                return reject(self.mapErrorCode(error).code, errorDescription, error)
+             }
+             
+             guard let base64EncodedSecureContainer = secureContainerWrapper?.base64EncodedString else {
+@@ -597,8 +630,8 @@ public class TokenCoreModule: NSObject {
+                         includeCertificate: includeCertificate
+                     )
+                     token.encodeAsSecureContainer(tokenEncodingRequest: tokenEncodingRequest) { [self] secureContainerWrapper, error in
+-                        if let error = error {
+-                            reject(self.mapErrorCode(error).code, "Error while generating the secure container", error)
++                        if let error = error, let errorDescription = error.errorDescription {
++                            reject(self.mapErrorCode(error).code, errorDescription, error)
+                         }
+                         
+                         if base64EncodedBarcode {
