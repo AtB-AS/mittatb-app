@@ -183,7 +183,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             goToPayment(option, savePaymentMethod);
             closeBottomSheet();
           }}
-          previousPaymentMethod={previousPaymentOption}
+          previousPaymentOption={previousPaymentOption}
         />
       );
     });
