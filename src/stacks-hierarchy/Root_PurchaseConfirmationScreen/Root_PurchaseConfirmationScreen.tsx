@@ -414,12 +414,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
-                    svg:
-                      paymentMethod.paymentType === PaymentType.Mastercard
-                        ? MasterCard
-                        : paymentMethod.paymentType === PaymentType.Vipps
-                        ? Vipps
-                        : Visa,
+                    svg: getPaymentOptionSvg(paymentMethod.paymentType),
                   }}
                   onPress={() => {
                     analytics.logEvent(
@@ -555,6 +550,17 @@ function getPlaceName(
   return 'geometry' in place
     ? getReferenceDataName(place, language)
     : place.name;
+}
+
+function getPaymentOptionSvg(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Mastercard:
+      return MasterCard;
+    case PaymentType.Vipps:
+      return Vipps;
+    case PaymentType.Visa:
+      return Visa;
+  }
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
