@@ -417,7 +417,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
-                    svg: getPaymentOptionSvg(paymentMethod.paymentType),
+                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
                   }}
                   onPress={() => {
                     analytics.logEvent(
@@ -555,7 +555,7 @@ function getPlaceName(
     : place.name;
 }
 
-function getPaymentOptionSvg(paymentType: PaymentType) {
+function getPaymentTypeSvg(paymentType: PaymentType) {
   switch (paymentType) {
     case PaymentType.Mastercard:
       return MasterCard;
