@@ -170,11 +170,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             {authenticationType == 'phone' && (
               <LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.account.linkSectionItems.paymentOptions
+                  ProfileTexts.sections.account.linkSectionItems.paymentMethods
                     .label,
                 )}
                 onPress={() =>
-                  navigation.navigate('Profile_PaymentOptionsScreen')
+                  navigation.navigate('Profile_PaymentMethodsScreen')
                 }
               />
             )}

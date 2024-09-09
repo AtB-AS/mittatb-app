@@ -16,7 +16,7 @@ const SelectPaymentMethodTexts = {
       'Aktiver for å gå vidare til betaling',
     ),
   },
-  save_payment_option_description: {
+  save_payment_method_description: {
     text: _(
       'Lagre bankkortet for fremtidige betalinger',
       'Save the payment card for future usage',

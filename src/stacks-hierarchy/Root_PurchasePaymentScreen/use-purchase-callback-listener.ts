@@ -3,7 +3,10 @@ import {Linking} from 'react-native';
 import {savePreviousPaymentMethodByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
+import {
+  PaymentMethod,
+  SavedPaymentMethodType,
+} from '@atb/stacks-hierarchy/types';
 
 export const usePurchaseCallbackListener = (
   onCallback: () => void,
@@ -35,7 +38,7 @@ const saveLastUsedPaymentMethod = async (
 
   if (!recurringPaymentId) {
     await savePreviousPaymentMethodByUser(userId, {
-      savedType: 'normal',
+      savedType: SavedPaymentMethodType.Normal,
       paymentType: paymentMethod.paymentType,
     });
   } else {
@@ -46,7 +49,7 @@ const saveLastUsedPaymentMethod = async (
       });
       if (card) {
         await savePreviousPaymentMethodByUser(userId, {
-          savedType: 'recurring',
+          savedType: SavedPaymentMethodType.Recurring,
           paymentType: card.payment_type,
           recurringCard: card,
         });

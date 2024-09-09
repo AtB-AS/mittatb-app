@@ -136,7 +136,7 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje dette kortet',
     ),
   },
-  choosePaymentOption: {
+  choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
@@ -144,7 +144,7 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje betalingsmåte',
     ),
   },
-  changePaymentOption: {
+  changePaymentMethod: {
     text: _(
       'Endre betalingsmåte',
       'Change payment option',

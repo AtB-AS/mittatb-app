@@ -24,7 +24,8 @@ type Props = RootStackScreenProps<'Root_PurchasePaymentScreen'>;
 export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {offers, recipient, paymentMethod} = route.params;
+  const {offers, recipient, paymentMethod, shouldSavePaymentMethod} =
+    route.params;
   const analytics = useAnalytics();
   const {fareContracts, sentFareContracts} = useTicketingState();
   const [paymentProcessorStatus, setPaymentProcessorStatus] =
@@ -44,6 +45,7 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
     offers,
     paymentMethod,
     recipient,
+    shouldSavePaymentMethod,
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
   usePurchaseCallbackListener(
@@ -54,8 +56,13 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
 
   const orderId = reserveMutation.data?.order_id;
   const fareContractReceived = React.useMemo(() => {
-    const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
-    return allPossibleFareContracts.some((fc) => fc.orderId === orderId && orderId !== undefined);
+    const allPossibleFareContracts = [
+      ...(fareContracts ?? []),
+      ...(sentFareContracts ?? []),
+    ];
+    return allPossibleFareContracts.some(
+      (fc) => fc.orderId === orderId && orderId !== undefined,
+    );
   }, [fareContracts, orderId, sentFareContracts]);
 
   useEffect(() => {
