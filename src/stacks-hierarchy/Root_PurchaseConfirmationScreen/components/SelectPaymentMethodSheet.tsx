@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -116,7 +116,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               if (selectedMethod) onSelect(selectedMethod, shouldSave);
             }}
             disabled={!selectedMethod}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: Confirm}}
             testID="confirmButton"
           />
         </FullScreenFooter>
