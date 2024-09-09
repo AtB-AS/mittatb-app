@@ -17,6 +17,7 @@ import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import auth from '@react-native-firebase/auth';
 import {Platform} from 'react-native';
+import {SHOULD_FORCE_REFRESH} from '@atb/auth/AuthContext';
 
 type InternalUpstreamServerError = {
   errorCode: 602;
@@ -103,7 +104,12 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
     const user = auth().currentUser;
-    const idToken = await user?.getIdToken(config.forceRefreshIdToken);
+    const tokenResult = await user?.getIdTokenResult(config.forceRefreshIdToken);
+    if (config.forceRefreshIdToken && tokenResult?.claims['customer_number']) {
+      SHOULD_FORCE_REFRESH.value = true;
+    }
+
+    const idToken = tokenResult?.token;
     config.headers[Authorization] = 'Bearer ' + idToken;
   }
   return config;
