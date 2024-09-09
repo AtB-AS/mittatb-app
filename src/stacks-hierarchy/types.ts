@@ -1,16 +1,9 @@
-import {PaymentType} from '@atb/ticketing';
-
-export type RecurringCard = {
-  id: number;
-  expires_at: string;
-  masked_pan: string;
-  payment_type: number;
-};
+import {PaymentType, RecurringPayment} from '@atb/ticketing';
 
 type CardPaymentMethod = {
   savedType: 'recurring' | 'normal';
   paymentType: PaymentType.Mastercard | PaymentType.Visa;
-  recurringCard?: RecurringCard;
+  recurringCard?: RecurringPayment;
 };
 type VippsPaymentMethod = {
   savedType: 'normal';
