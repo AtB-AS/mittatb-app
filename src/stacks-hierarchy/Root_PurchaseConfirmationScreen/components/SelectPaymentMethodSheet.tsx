@@ -22,13 +22,13 @@ import {PaymentType} from '@atb/ticketing';
 
 type Props = {
   onSelect: (value: PaymentMethod, save: boolean) => void;
-  previousPaymentMethod?: PaymentMethod;
+  currentPaymentMethod?: PaymentMethod;
   recurringPaymentMethods?: PaymentMethod[];
 };
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
-  previousPaymentMethod,
+  currentPaymentMethod,
   recurringPaymentMethods,
 }) => {
   const {t} = useTranslation();
@@ -42,7 +42,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       savedType: SavedPaymentMethodType.Normal,
     }),
   );
-  const [selectedMethod, setSelectedMethod] = useState(previousPaymentMethod);
+  const [selectedMethod, setSelectedMethod] = useState(currentPaymentMethod);
 
   return (
     <BottomSheetContainer

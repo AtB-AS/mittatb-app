@@ -21,7 +21,7 @@ import {
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -64,6 +64,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod>();
+  const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
+  const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
 
   const {
     fareProductTypeConfig,
@@ -186,10 +190,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             method: PaymentMethod,
             shouldSavePaymentMethod: boolean,
           ) => {
-            goToPayment(method, shouldSavePaymentMethod);
+            setSelectedPaymentMethod(method);
+            setShouldSavePaymentMethod(shouldSavePaymentMethod);
             closeBottomSheet();
           }}
-          previousPaymentMethod={previousPaymentMethod}
+          currentPaymentMethod={paymentMethod}
         />
       );
     });
@@ -402,19 +407,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         ) : (
           <View>
-            {previousPaymentMethod ? (
+            {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
-                  text={getPaymentMethodTexts(previousPaymentMethod)}
+                  text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
                     svg:
-                      previousPaymentMethod.paymentType ===
-                      PaymentType.Mastercard
+                      paymentMethod.paymentType === PaymentType.Mastercard
                         ? MasterCard
-                        : previousPaymentMethod.paymentType ===
-                          PaymentType.Vipps
+                        : paymentMethod.paymentType === PaymentType.Vipps
                         ? Vipps
                         : Visa,
                   }}
@@ -423,11 +426,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Pay with previous payment method clicked',
                       {
-                        paymentMethod: previousPaymentMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
-                    goToPayment(previousPaymentMethod, false);
+                    goToPayment(paymentMethod, shouldSavePaymentMethod);
                   }}
                 />
                 <PressableOpacity
@@ -438,7 +441,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Change payment method clicked',
                       {
-                        paymentMethod: previousPaymentMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
