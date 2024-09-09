@@ -25,7 +25,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
