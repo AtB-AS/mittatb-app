@@ -22,9 +22,10 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {usePreviousPaymentMethods} from '../saved-payment-utils';
 import {PaymentMethod} from '../types';
-import {PreassignedFareContractSummary} from './PreassignedFareProductSummary';
+import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
 import {ZoneSelectionMode} from '@atb-as/config-specs';
+import {PriceSummary} from './components/PriceSummary';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -182,11 +183,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           toPlace={toPlace}
           isSearchingOffer={isSearchingOffer}
           preassignedFareProduct={preassignedFareProduct}
-          totalPrice={totalPrice}
-          userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
           recipient={recipient}
           travelDate={travelDate}
           validDurationSeconds={validDurationSeconds}
+        />
+        <PriceSummary
+          fareProductTypeConfig={fareProductTypeConfig}
+          isSearchingOffer={isSearchingOffer}
+          totalPrice={totalPrice}
+          userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
         />
         {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox
