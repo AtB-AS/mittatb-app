@@ -25,7 +25,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -37,7 +37,7 @@ import {
   MessageSectionItem,
   Section,
 } from '@atb/components/sections';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
@@ -83,10 +83,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
-  const user = auth().currentUser;
-  const [idToken, setIdToken] = useState<
-    FirebaseAuthTypes.IdTokenResult | undefined
-  >(undefined);
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -110,17 +106,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       );
     });
   }
-
-  useEffect(() => {
-    (async function () {
-      const idToken = await user?.getIdTokenResult();
-      setIdToken(idToken);
-    })();
-  }, [user]);
-
-  // If we are not authenticated or we don't have an idToken, we show an error message
-  // and a button to retry the authentication.
-  const errorLoadingAccount = authStatus !== 'authenticated' || !idToken;
 
   return (
     <>
@@ -168,7 +153,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 <ActivityIndicator />
               </GenericSectionItem>
             )}
-            {errorLoadingAccount && (
+            {authStatus !== 'authenticated' && (
               <MessageSectionItem
                 message={t(ProfileTexts.sections.account.infoItems.claimsError)}
                 messageType="error"
