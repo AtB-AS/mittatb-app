@@ -13,7 +13,10 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
+import {
+  PaymentMethod,
+  SavedPaymentMethodType,
+} from '@atb/stacks-hierarchy/types';
 import {useAuthState} from '@atb/auth';
 import {PaymentType} from '@atb/ticketing';
 
@@ -36,7 +39,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
     (paymentType) => ({
       paymentType,
-      savedType: 'normal',
+      savedType: SavedPaymentMethodType.Normal,
     }),
   );
   const [selectedMethod, setSelectedMethod] = useState(previousPaymentMethod);
