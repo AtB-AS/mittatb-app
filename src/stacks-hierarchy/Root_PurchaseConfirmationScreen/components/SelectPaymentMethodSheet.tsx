@@ -21,19 +21,27 @@ import {useAuthState} from '@atb/auth';
 import {PaymentType} from '@atb/ticketing';
 
 type Props = {
-  onSelect: (value: PaymentMethod, save: boolean) => void;
-  currentPaymentMethod?: PaymentMethod;
+  onSelect: (
+    paymentMethod: PaymentMethod,
+    shouldSavePaymentMethod: boolean,
+  ) => void;
+  currentOptions?: {
+    shouldSavePaymentMethod?: boolean;
+    paymentMethod?: PaymentMethod;
+  };
   recurringPaymentMethods?: PaymentMethod[];
 };
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
-  currentPaymentMethod,
   recurringPaymentMethods,
+  currentOptions,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const [shouldSave, setShouldSave] = useState(false);
+  const [shouldSave, setShouldSave] = useState(
+    currentOptions?.shouldSavePaymentMethod ?? false,
+  );
 
   const {paymentTypes} = useFirestoreConfiguration();
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
@@ -42,7 +50,9 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       savedType: SavedPaymentMethodType.Normal,
     }),
   );
-  const [selectedMethod, setSelectedMethod] = useState(currentPaymentMethod);
+  const [selectedMethod, setSelectedMethod] = useState(
+    currentOptions?.paymentMethod,
+  );
 
   return (
     <BottomSheetContainer

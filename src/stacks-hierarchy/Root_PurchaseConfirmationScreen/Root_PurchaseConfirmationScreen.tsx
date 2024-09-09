@@ -187,14 +187,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         <SelectPaymentMethodSheet
           recurringPaymentMethods={recurringPaymentMethods}
           onSelect={(
-            method: PaymentMethod,
+            paymentMethod: PaymentMethod,
             shouldSavePaymentMethod: boolean,
           ) => {
-            setSelectedPaymentMethod(method);
+            setSelectedPaymentMethod(paymentMethod);
             setShouldSavePaymentMethod(shouldSavePaymentMethod);
             closeBottomSheet();
           }}
-          currentPaymentMethod={paymentMethod}
+          currentOptions={{
+            paymentMethod,
+            shouldSavePaymentMethod,
+          }}
         />
       );
     });
