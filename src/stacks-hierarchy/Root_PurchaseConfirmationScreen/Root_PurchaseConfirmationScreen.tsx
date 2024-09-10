@@ -21,7 +21,7 @@ import {
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -64,6 +64,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod>();
+  const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
+  const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
 
   const {
     fareProductTypeConfig,
@@ -183,13 +187,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         <SelectPaymentMethodSheet
           recurringPaymentMethods={recurringPaymentMethods}
           onSelect={(
-            method: PaymentMethod,
+            paymentMethod: PaymentMethod,
             shouldSavePaymentMethod: boolean,
           ) => {
-            goToPayment(method, shouldSavePaymentMethod);
+            setSelectedPaymentMethod(paymentMethod);
+            setShouldSavePaymentMethod(shouldSavePaymentMethod);
             closeBottomSheet();
           }}
-          previousPaymentMethod={previousPaymentMethod}
+          currentOptions={{
+            paymentMethod,
+            shouldSavePaymentMethod,
+          }}
         />
       );
     });
@@ -402,32 +410,25 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         ) : (
           <View>
-            {previousPaymentMethod ? (
+            {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
-                  text={getPaymentMethodTexts(previousPaymentMethod)}
+                  text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error}
                   rightIcon={{
-                    svg:
-                      previousPaymentMethod.paymentType ===
-                      PaymentType.Mastercard
-                        ? MasterCard
-                        : previousPaymentMethod.paymentType ===
-                          PaymentType.Vipps
-                        ? Vipps
-                        : Visa,
+                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
                   }}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
                       'Pay with previous payment method clicked',
                       {
-                        paymentMethod: previousPaymentMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
-                    goToPayment(previousPaymentMethod, false);
+                    goToPayment(paymentMethod, shouldSavePaymentMethod);
                   }}
                 />
                 <PressableOpacity
@@ -438,7 +439,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       'Ticketing',
                       'Change payment method clicked',
                       {
-                        paymentMethod: previousPaymentMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
@@ -552,6 +553,17 @@ function getPlaceName(
   return 'geometry' in place
     ? getReferenceDataName(place, language)
     : place.name;
+}
+
+function getPaymentTypeSvg(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Mastercard:
+      return MasterCard;
+    case PaymentType.Vipps:
+      return Vipps;
+    case PaymentType.Visa:
+      return Visa;
+  }
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

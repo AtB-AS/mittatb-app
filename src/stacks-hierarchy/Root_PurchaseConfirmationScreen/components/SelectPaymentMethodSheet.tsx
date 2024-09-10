@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -21,19 +21,27 @@ import {useAuthState} from '@atb/auth';
 import {PaymentType} from '@atb/ticketing';
 
 type Props = {
-  onSelect: (value: PaymentMethod, save: boolean) => void;
-  previousPaymentMethod?: PaymentMethod;
+  onSelect: (
+    paymentMethod: PaymentMethod,
+    shouldSavePaymentMethod: boolean,
+  ) => void;
+  currentOptions?: {
+    shouldSavePaymentMethod?: boolean;
+    paymentMethod?: PaymentMethod;
+  };
   recurringPaymentMethods?: PaymentMethod[];
 };
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
-  previousPaymentMethod,
   recurringPaymentMethods,
+  currentOptions,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const [shouldSave, setShouldSave] = useState(false);
+  const [shouldSave, setShouldSave] = useState(
+    currentOptions?.shouldSavePaymentMethod ?? false,
+  );
 
   const {paymentTypes} = useFirestoreConfiguration();
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
@@ -42,7 +50,9 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       savedType: SavedPaymentMethodType.Normal,
     }),
   );
-  const [selectedMethod, setSelectedMethod] = useState(previousPaymentMethod);
+  const [selectedMethod, setSelectedMethod] = useState(
+    currentOptions?.paymentMethod,
+  );
 
   return (
     <BottomSheetContainer
@@ -106,7 +116,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               if (selectedMethod) onSelect(selectedMethod, shouldSave);
             }}
             disabled={!selectedMethod}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: Confirm}}
             testID="confirmButton"
           />
         </FullScreenFooter>
