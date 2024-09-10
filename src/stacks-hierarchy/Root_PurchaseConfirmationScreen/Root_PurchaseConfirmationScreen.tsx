@@ -157,6 +157,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: method,
           shouldSavePaymentMethod,
+          recipient,
         });
       }
     }
