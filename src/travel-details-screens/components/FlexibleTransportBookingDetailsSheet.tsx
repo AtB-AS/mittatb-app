@@ -63,8 +63,8 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
           publicCode,
         ),
       )}
-      fullHeight={true}
-      maxHeightValue={0.83}
+      //fullHeight={true}
+      //maxHeightValue={0.83}
     >
       <View style={[style.scrollViewContainer, {marginBottom}]}>
         <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>

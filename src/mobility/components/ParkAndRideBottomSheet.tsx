@@ -63,7 +63,7 @@ export const ParkAndRideBottomSheet = ({
     <BottomSheetContainer
       title={t(ParkAndRideTexts.title)}
       onClose={onClose}
-      maxHeightValue={0.5}
+      //maxHeightValue={0.5}
     >
       <ScrollView>
         <View style={styles.buttonsContainer}>

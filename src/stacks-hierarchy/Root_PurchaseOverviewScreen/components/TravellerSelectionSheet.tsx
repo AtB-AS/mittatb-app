@@ -50,7 +50,7 @@ export const TravellerSelectionSheet = ({
   return (
     <BottomSheetContainer
       title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-      maxHeightValue={0.9}
+      //maxHeightValue={0.9}
     >
       <ScrollView style={style.container}>
         {selectionMode === 'multiple' ? (

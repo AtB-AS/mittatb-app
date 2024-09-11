@@ -55,7 +55,7 @@ export const MapFilterSheet = ({
     <BottomSheetContainer
       title={t(MapTexts.filters.bottomSheet.heading)}
       onClose={onClose}
-      maxHeightValue={0.9}
+      //maxHeightValue={0.9}
     >
       <ScrollView style={style.container}>
         <MobilityFilters

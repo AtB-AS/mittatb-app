@@ -155,9 +155,9 @@ export const DeparturesDialogSheet = ({
   return (
     <BottomSheetContainer
       title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
-      maxHeightValue={0.5}
+      //maxHeightValue={0.5}
       onClose={onClose}
-      fullHeight
+      //fullHeight
     >
       <StopPlaceViewOrError />
     </BottomSheetContainer>

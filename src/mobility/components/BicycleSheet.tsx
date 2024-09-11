@@ -49,7 +49,7 @@ export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
       onClose={onClose}
-      maxHeightValue={0.5}
+      //maxHeightValue={0.5}
     >
       <>
         {isLoading && (

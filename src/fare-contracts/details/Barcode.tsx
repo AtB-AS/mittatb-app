@@ -275,7 +275,7 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
       <BottomSheetContainer
         title={t(FareContractTexts.details.bottomSheetTitle)}
         testID="barcodeBottomSheet"
-        fullHeight
+        //fullHeight
       >
         <View style={styles.staticBottomContainer}>
           <View style={[styles.aztecCode, styles.staticQrCode]}>

@@ -54,7 +54,7 @@ export const BikeStationBottomSheet = ({
 
   return (
     <BottomSheetContainer
-      maxHeightValue={0.6}
+      //maxHeightValue={0.6}
       title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
       onClose={onClose}
     >
