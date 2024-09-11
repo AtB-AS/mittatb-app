@@ -30,7 +30,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
 import {ActivityIndicator, Linking, ScrollView, Text, View} from 'react-native';
-import parsePhoneNumber from 'libphonenumber-js';
+
 import React, {useRef, useState} from 'react';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -144,23 +144,23 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   // Present the sheet ✅
   const present = async () => {
     await sheet.current?.present();
-    console.log('horray! sheet has been presented 💩');
+    //console.log('horray! sheet has been presented 💩');
   };
 
   // Dismiss the sheet ✅
   const dismiss = async () => {
     await sheet.current?.dismiss();
-    console.log('Bye bye 👋');
+    //console.log('Bye bye 👋');
   };
 
   const dismiss2 = async () => {
     await sheet2.current?.dismiss();
-    console.log('Bye bye 👋');
+    //console.log('Bye bye 👋');
   };
 
   const dismiss3 = async () => {
     await sheet2.current?.dismiss();
-    console.log('Bye bye 👋');
+    //console.log('Bye bye 👋');
   };
 
   const presentSheet2 = async () => {
@@ -184,7 +184,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       >
         <View testID="profileHomeScrollView" style={style.contentContainer}>
           <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
-          <Button text="Bottom sheet" onPress={present}></Button>
+          <Button text="Bottom sheet" onPress={present} />
           <Section>
             {authenticationType === 'phone' && (
               <GenericSectionItem>

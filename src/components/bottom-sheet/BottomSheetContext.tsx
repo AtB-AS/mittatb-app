@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import {View} from 'react-native';
-import {ThemeText} from '../text';
 
 type BottomSheetContentFunction = () => ReactNode;
 
@@ -36,13 +35,13 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   // Present the sheet ✅
   const present = async () => {
     await sheet.current?.present();
-    console.log('horray! sheet has been presented 💩');
+    //console.log('horray! sheet has been presented 💩');
   };
 
   // Dismiss the sheet ✅
   const dismiss = async () => {
     await sheet.current?.dismiss();
-    console.log('Bye bye 👋');
+    //console.log('Bye bye 👋');
   };
 
   // const {bottom: safeAreaBottom} = useSafeAreaInsets();
@@ -61,13 +60,13 @@ export const BottomSheetProvider: React.FC = ({children}) => {
 
   const open = (
     contentFunction: () => ReactNode,
-    useBackdrop: boolean = true,
+    _useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
     present();
   };
 
-  const [height, setHeight] = useState<number>(0);
+  const [height] = useState<number>(0);
 
   const state = {
     open,

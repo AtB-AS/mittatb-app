@@ -9,7 +9,6 @@ import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {StyleSheet} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 
 export const ServiceDisruptionSheet = () => {
   const {t} = useTranslation();
