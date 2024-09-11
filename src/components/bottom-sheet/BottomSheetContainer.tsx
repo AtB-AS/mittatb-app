@@ -14,16 +14,12 @@ export type BottomSheetContainerProps = {
 
 export function BottomSheetContainer({
   children,
-  maxHeightValue = 0.8,
-  fullHeight,
   testID,
   title,
   onClose,
   focusTitleOnLoad = true,
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
-  const maxHeight = windowHeight * maxHeightValue;
-  const height = fullHeight ? maxHeight : 'auto';
   return (
     <View testID={testID} style={{height: windowHeight}}>
       <BottomSheetHeader

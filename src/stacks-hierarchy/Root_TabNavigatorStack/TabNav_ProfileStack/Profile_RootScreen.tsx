@@ -30,7 +30,6 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import parsePhoneNumber from 'libphonenumber-js';
 import React, {useRef} from 'react';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -118,13 +117,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   // Present the sheet ✅
   const present = async () => {
     await sheet.current?.present();
-    console.log('horray! sheet has been presented 💩');
+    // console.log('horray! sheet has been presented 💩');
   };
 
   // Dismiss the sheet ✅
   const dismiss = async () => {
     await sheet.current?.dismiss();
-    console.log('Bye bye 👋');
+    // console.log('Bye bye 👋');
   };
   return (
     <>
