@@ -29,9 +29,9 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Linking, ScrollView, Text, View} from 'react-native';
 import parsePhoneNumber from 'libphonenumber-js';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
@@ -53,15 +53,39 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 import {Button} from '@atb/components/button';
 
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 const buildNumber = getBuildNumber();
 const version = getVersion();
 
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
+const SomeFooter = () => {
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <Text>My Foot-er is Awesome.</Text>
+    </View>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    container: {
+      backgroundColor: 'rgba(0,255,0,0.5)',
+      paddingBottom: Math.max(bottom, theme.spacings.medium),
+      paddingTop: theme.spacings.medium,
+      paddingHorizontal: theme.spacings.medium,
+    },
+  };
+});
+
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing} = useRemoteConfig();
   const {clearTokenAtLogout} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
+  const styles2 = useStyles2();
   const {t, language} = useTranslation();
   const analytics = useAnalytics();
   const {
@@ -99,7 +123,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
 
   const {logEvent} = useAnalytics();
-
+  const [show, setShow] = useState(true);
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet(() => {
@@ -114,6 +138,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   }
 
   const sheet = useRef<TrueSheet>(null);
+  const sheet2 = useRef<TrueSheet>(null);
+  const sheet3 = useRef<TrueSheet>(null);
 
   // Present the sheet ✅
   const present = async () => {
@@ -126,6 +152,28 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     await sheet.current?.dismiss();
     console.log('Bye bye 👋');
   };
+
+  const dismiss2 = async () => {
+    await sheet2.current?.dismiss();
+    console.log('Bye bye 👋');
+  };
+
+  const dismiss3 = async () => {
+    await sheet2.current?.dismiss();
+    console.log('Bye bye 👋');
+  };
+
+  const presentSheet2 = async () => {
+    await sheet2.current?.present(); // Sheet 2 will now present 🎉
+  };
+
+  const presentSheet3 = async () => {
+    await sheet3.current?.present(); // Sheet 3 will now present 🎉
+  };
+  const toggleShow = async () => {
+    setShow((show) => !show);
+  };
+
   return (
     <>
       <FullScreenView
@@ -588,44 +636,73 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       {isLoading && <ActivityIndicatorOverlay />}
       <TrueSheet
         ref={sheet}
-        sizes={['auto', 'small', 'medium']}
+        sizes={['auto']}
         cornerRadius={24}
         grabber={false}
+        FooterComponent={SomeFooter}
       >
-        <BottomSheetContainer title="test" onClose={dismiss}>
-          <ScrollView>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-            <ThemeText>Test</ThemeText>
-          </ScrollView>
-        </BottomSheetContainer>
+        <View style={{padding: 10}}>
+          <BottomSheetContainer
+            title={show ? 'Tall content' : 'Small content'}
+            onClose={dismiss}
+          >
+            <Button
+              onPress={toggleShow}
+              text="Toggle content"
+              style={{paddingBottom: 10}}
+            />
+            {show ? (
+              <ScrollView>
+                <Button onPress={presentSheet2} text="Open new bottom sheet" />
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+              </ScrollView>
+            ) : (
+              <ScrollView>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+              </ScrollView>
+            )}
+            <TrueSheet sizes={['auto']} ref={sheet2} grabber={false}>
+              <View style={styles2.container}>
+                <BottomSheetContainer title="Dos bros" onClose={dismiss2}>
+                  <Button
+                    onPress={presentSheet3}
+                    text="Open another bottom sheet"
+                  />
+                  <ThemeText>Test2</ThemeText>
+                  <ThemeText>Test2</ThemeText>
+                  <ThemeText>Test2</ThemeText>
+                  <ThemeText>Test2</ThemeText>
+                </BottomSheetContainer>
+                <TrueSheet sizes={['auto', '80%']} ref={sheet3}>
+                  <View style={styles2.container}>
+                    <BottomSheetContainer title="Vamonos" onClose={dismiss3}>
+                      <ThemeText>Test3</ThemeText>
+                      <ThemeText>Test3</ThemeText>
+                      <ThemeText>Test3</ThemeText>
+                      <ThemeText>Test3</ThemeText>
+                    </BottomSheetContainer>
+                  </View>
+                </TrueSheet>
+              </View>
+            </TrueSheet>
+          </BottomSheetContainer>
+        </View>
       </TrueSheet>
     </>
   );
@@ -647,3 +724,14 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
 }));
+
+const useStyles2 = StyleSheet.createThemeHook((theme: Theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    container: {
+      paddingBottom: Math.max(bottom, theme.spacings.medium),
+      paddingTop: theme.spacings.medium,
+      paddingHorizontal: theme.spacings.medium,
+    },
+  };
+});

@@ -2109,6 +2109,10 @@ PODS:
     - TokenCore
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
+  - TrueSheet (0.12.4):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - Turf (2.7.0)
   - VisualCodeModeliOSLib (1.0.0)
   - VisualCodeViewiOSLib (1.0.0):
@@ -2229,6 +2233,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - "TokenStateReactNativeLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib`)"
+  - "TrueSheet (from `../node_modules/@lodev09/react-native-true-sheet`)"
   - "VisualCodeModeliOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - "VisualCodeViewiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -2454,6 +2459,8 @@ EXTERNAL SOURCES:
     :tag: release-2.1.6
   TokenStateReactNativeLib:
     :path: "../node_modules/@entur-private/abt-token-state-react-native-lib"
+  TrueSheet:
+    :path: "../node_modules/@lodev09/react-native-true-sheet"
   VisualCodeModeliOSLib:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
     :tag: release-2.1.6
@@ -2608,7 +2615,8 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
-  TokenStateReactNativeLib: 24ac2ffe1fc294ad23df4b7b12d2bcc0b0f8aa69
+  TokenStateReactNativeLib: cf1f10c0093559c5f7902e982cb2fb617e4dd5e9
+  TrueSheet: 940aae3a95aaef30521daef58aaeec15ea65466c
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   VisualCodeModeliOSLib: 826875ce13fe87af1517d5d730a23181ca3b21be
   VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948

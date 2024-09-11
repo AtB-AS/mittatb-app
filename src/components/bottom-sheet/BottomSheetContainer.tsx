@@ -23,9 +23,9 @@ export function BottomSheetContainer({
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
-  const height = fullHeight ? maxHeight : 'auto';
+  // const height = fullHeight ? maxHeight : 'auto'; // style={{height: windowHeight}}
   return (
-    <View testID={testID} style={{height: windowHeight}}>
+    <View testID={testID}>
       <BottomSheetHeader
         onClose={onClose}
         title={title}
