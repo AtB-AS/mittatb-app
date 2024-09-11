@@ -1,25 +1,15 @@
+import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TrueSheet} from '@lodev09/react-native-true-sheet';
 import React, {
   createContext,
   ReactNode,
   Ref,
   useContext,
-  useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {
-  Animated,
-  BackHandler,
-  Easing,
-  LayoutChangeEvent,
-  View,
-} from 'react-native';
-import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {Backdrop} from './Backdrop';
-import {ClickableBackground} from './ClickableBackground';
-import {AnimatedBottomSheet} from './AnimatedBottomSheet';
+import {View} from 'react-native';
+import {ThemeText} from '../text';
 
 type BottomSheetContentFunction = () => ReactNode;
 
@@ -42,33 +32,31 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
 );
 
 export const BottomSheetProvider: React.FC = ({children}) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  const sheet = useRef<TrueSheet>(null);
+  // Present the sheet ✅
+  const present = async () => {
+    await sheet.current?.present();
+    console.log('horray! sheet has been presented 💩');
+  };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isBackdropEnabled, setBackdropEnabled] = useState(true);
+  // Dismiss the sheet ✅
+  const dismiss = async () => {
+    await sheet.current?.dismiss();
+    console.log('Bye bye 👋');
+  };
+
+  // const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const [contentFunction, setContentFunction] = useState<() => ReactNode>(
     () => () => null,
   );
 
-  const animatedOffset = useMemo(() => new Animated.Value(0), []);
   const onOpenFocusRef = useFocusOnLoad();
   const onCloseFocusRef = useRef(null);
 
-  useEffect(
-    () => () =>
-      Animated.timing(animatedOffset, {
-        toValue: isOpen ? 0 : 1,
-        duration: 400,
-        easing: Easing.out(Easing.exp),
-        useNativeDriver: true,
-      }).start(),
-    [animatedOffset, isOpen],
-  );
-
   const close = () => {
     setContentFunction(() => () => null);
-    setIsOpen(false);
     giveFocus(onCloseFocusRef);
+    dismiss();
   };
 
   const open = (
@@ -76,58 +64,15 @@ export const BottomSheetProvider: React.FC = ({children}) => {
     useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
-    setBackdropEnabled(useBackdrop);
-    setIsOpen(true);
+    present();
   };
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        if (isOpen) {
-          close();
-          return true;
-        }
-        return false;
-      },
-    );
-    return () => backHandler.remove();
-  }, [isOpen]);
 
   const [height, setHeight] = useState<number>(0);
-  const onLayout = ({nativeEvent}: LayoutChangeEvent) => {
-    setHeight(nativeEvent.layout.height);
-  };
-
-  const bottomSheet = useMemo(
-    () => (
-      <>
-        {isBackdropEnabled && (
-          <>
-            <Backdrop animatedOffset={animatedOffset} />
-            <ClickableBackground
-              isOpen={isOpen}
-              close={close}
-              height={height}
-            />
-          </>
-        )}
-        <AnimatedBottomSheet
-          animatedOffset={animatedOffset}
-          onLayout={onLayout}
-        >
-          {contentFunction()}
-        </AnimatedBottomSheet>
-      </>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isOpen, close, animatedOffset, safeAreaBottom],
-  );
 
   const state = {
     open,
     close,
-    isOpen: () => isOpen,
+    isOpen: () => false,
     height,
     onOpenFocusRef,
     onCloseFocusRef,
@@ -137,12 +82,20 @@ export const BottomSheetProvider: React.FC = ({children}) => {
     <BottomSheetContext.Provider value={state}>
       <View
         style={{flex: 1}}
-        accessibilityElementsHidden={isOpen}
-        importantForAccessibility={isOpen ? 'no-hide-descendants' : 'yes'}
+        // accessibilityElementsHidden={isOpen}
+        // importantForAccessibility={isOpen ? 'no-hide-descendants' : 'yes'}
       >
         {children}
       </View>
-      {bottomSheet}
+      <TrueSheet
+        ref={sheet}
+        sizes={['auto']}
+        cornerRadius={24}
+        dimmed={false}
+        grabber={false}
+      >
+        {contentFunction()}
+      </TrueSheet>
     </BottomSheetContext.Provider>
   );
 };

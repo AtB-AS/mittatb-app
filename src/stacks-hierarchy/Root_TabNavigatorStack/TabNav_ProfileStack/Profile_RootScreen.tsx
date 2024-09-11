@@ -1,8 +1,12 @@
+import {TrueSheet} from '@lodev09/react-native-true-sheet';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -25,8 +29,9 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import React from 'react';
-import {ActivityIndicator, Linking, View} from 'react-native';
+import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import parsePhoneNumber from 'libphonenumber-js';
+import React, {useRef} from 'react';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
@@ -46,6 +51,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {Button} from '@atb/components/button';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -107,6 +113,19 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     });
   }
 
+  const sheet = useRef<TrueSheet>(null);
+
+  // Present the sheet ✅
+  const present = async () => {
+    await sheet.current?.present();
+    console.log('horray! sheet has been presented 💩');
+  };
+
+  // Dismiss the sheet ✅
+  const dismiss = async () => {
+    await sheet.current?.dismiss();
+    console.log('Bye bye 👋');
+  };
   return (
     <>
       <FullScreenView
@@ -117,6 +136,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       >
         <View testID="profileHomeScrollView" style={style.contentContainer}>
           <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
+          <Button text="Bottom sheet" onPress={present}></Button>
           <Section>
             {authenticationType === 'phone' && (
               <GenericSectionItem>
@@ -566,6 +586,47 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         </View>
       </FullScreenView>
       {isLoading && <ActivityIndicatorOverlay />}
+      <TrueSheet
+        ref={sheet}
+        sizes={['auto', 'small', 'medium']}
+        cornerRadius={24}
+        grabber={false}
+      >
+        <BottomSheetContainer title="test" onClose={dismiss}>
+          <ScrollView>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+            <ThemeText>Test</ThemeText>
+          </ScrollView>
+        </BottomSheetContainer>
+      </TrueSheet>
     </>
   );
 };
