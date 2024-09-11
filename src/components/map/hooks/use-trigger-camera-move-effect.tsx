@@ -2,7 +2,6 @@ import {Feature, Point} from 'geojson';
 import {MapLine} from '@atb/travel-details-map-screen/utils';
 import {RefObject, useEffect} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
@@ -29,7 +28,6 @@ export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  const {height: bottomSheetHeight} = useBottomSheet();
   const padding = useCalculatePaddings();
 
   useEffect(() => {
@@ -46,7 +44,6 @@ export const useTriggerCameraMoveEffect = (
    * padding.
    */
   useEffect(() => {
-    if (!bottomSheetHeight) return;
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
     } else if (cameraFocusMode?.mode === 'entity') {
@@ -57,7 +54,7 @@ export const useTriggerCameraMoveEffect = (
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bottomSheetHeight, cameraFocusMode, mapCameraRef]);
+  }, [cameraFocusMode, mapCameraRef]);
 };
 
 const moveCameraToMapLines = (
@@ -149,12 +146,11 @@ export const fitCameraWithinLocation = (
 };
 
 const useCalculatePaddings = (): MapPadding => {
-  const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {height: screenHeight} = Dimensions.get('screen');
   const basePadding = screenHeight * 0.1;
 
-  const bottomPaddingAdjustment = bottomSheetHeight - tabBarMinHeight;
+  const bottomPaddingAdjustment = 500 - tabBarMinHeight;
   const topPadding =
     Platform.OS === 'android'
       ? basePadding + (StatusBar.currentHeight ?? 0)

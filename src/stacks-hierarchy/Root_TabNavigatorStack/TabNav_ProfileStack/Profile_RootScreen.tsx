@@ -135,7 +135,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       >
         <View testID="profileHomeScrollView" style={style.contentContainer}>
           <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
-          <Button text="Bottom sheet" onPress={present}></Button>
+          <Button text="Bottom sheet" onPress={present} />
           <Section>
             {authenticationType === 'phone' && (
               <GenericSectionItem>

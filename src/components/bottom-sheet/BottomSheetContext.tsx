@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import {View} from 'react-native';
-import {ThemeText} from '../text';
 
 type BottomSheetContentFunction = () => ReactNode;
 
@@ -20,7 +19,7 @@ type BottomSheetState = {
   ) => void;
   isOpen: () => boolean;
   close: () => void;
-  height: number;
+  // height: number;
   /** Use onOpenFocusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
   onOpenFocusRef: Ref<any>;
   /** Optional ref to component which should be focused on sheet close */
@@ -36,13 +35,13 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   // Present the sheet ✅
   const present = async () => {
     await sheet.current?.present();
-    console.log('horray! sheet has been presented 💩');
+    // console.log('horray! sheet has been presented 💩');
   };
 
   // Dismiss the sheet ✅
   const dismiss = async () => {
     await sheet.current?.dismiss();
-    console.log('Bye bye 👋');
+    // console.log('Bye bye 👋');
   };
 
   // const {bottom: safeAreaBottom} = useSafeAreaInsets();
@@ -59,21 +58,15 @@ export const BottomSheetProvider: React.FC = ({children}) => {
     dismiss();
   };
 
-  const open = (
-    contentFunction: () => ReactNode,
-    useBackdrop: boolean = true,
-  ) => {
+  const open = (contentFunction: () => ReactNode) => {
     setContentFunction(() => contentFunction);
     present();
   };
-
-  const [height, setHeight] = useState<number>(0);
 
   const state = {
     open,
     close,
     isOpen: () => false,
-    height,
     onOpenFocusRef,
     onCloseFocusRef,
   };
