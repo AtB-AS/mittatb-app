@@ -142,7 +142,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     reserveMutation.data?.url,
     paymentMethod?.paymentType,
     useCallback(() => setVippsNotInstalledError(true), []),
-    reserveMutation.isLoading,
   );
 
   const navigateToActiveTicketsScreen = useCallback(async () => {

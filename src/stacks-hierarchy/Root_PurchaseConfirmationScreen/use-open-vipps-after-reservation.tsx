@@ -9,11 +9,10 @@ export const useOpenVippsAfterReservation = (
   url: string | undefined,
   paymentType: PaymentType | undefined,
   onErrorCallback: () => void,
-  isLoading: boolean,
 ) => {
   useEffect(() => {
-    if (paymentType === PaymentType.Vipps && url && !isLoading) {
+    if (paymentType === PaymentType.Vipps && url) {
       Linking.openURL(url).catch(onErrorCallback);
     }
-  }, [paymentType, url, onErrorCallback, isLoading]);
+  }, [paymentType, url, onErrorCallback]);
 };
