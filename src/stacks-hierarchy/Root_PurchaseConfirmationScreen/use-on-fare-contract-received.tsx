@@ -2,8 +2,8 @@ import {useTicketingState} from '@atb/ticketing';
 import {useEffect, useMemo} from 'react';
 
 /**
- * Calls `callback()` once a fare contract with `orderId` appers in the ticketing
- * context.
+ * Calls `callback()` once a fare contract with `orderId` appears in the
+ * ticketing context.
  */
 export const useOnFareContractReceived = ({
   orderId,
