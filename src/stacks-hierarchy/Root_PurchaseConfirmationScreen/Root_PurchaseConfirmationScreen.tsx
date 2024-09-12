@@ -32,6 +32,7 @@ import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -155,8 +156,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           animated: true,
           dismissButtonStyle: 'cancel',
         }).then(() => StatusBar.popStackEntry(oldStyle));
-      } catch (error) {
-        console.error('InAppBrowser error', error);
+      } catch (error: any) {
+        notifyBugsnag(error);
       }
     }
   }, [
