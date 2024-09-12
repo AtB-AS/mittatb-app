@@ -79,7 +79,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {
     offerSearchTime,
     isSearchingOffer,
-    error,
+    error: offerError,
     validDurationSeconds,
     totalPrice,
     refreshOffer,
@@ -253,7 +253,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
-        {error && (
+        {offerError && (
           <MessageInfoBox
             type="error"
             title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
@@ -326,7 +326,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <Button
                   text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor="interactive_0"
-                  disabled={!!error}
+                  disabled={!!offerError}
                   rightIcon={{
                     svg: getPaymentTypeSvg(paymentMethod.paymentType),
                   }}
@@ -345,7 +345,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 />
                 <PressableOpacity
                   style={styles.buttonTopSpacing}
-                  disabled={!!error}
+                  disabled={!!offerError}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -372,7 +372,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               <Button
                 interactiveColor="interactive_0"
                 text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
-                disabled={!!error}
+                disabled={!!offerError}
                 accessibilityHint={t(
                   PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
                 )}
