@@ -12,7 +12,6 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
-  PaymentCreditCardTexts,
   PurchaseConfirmationTexts,
   dictionary,
   useTranslation,
@@ -301,14 +300,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         {reserveMutation.isError && (
           <MessageInfoBox
             style={{marginBottom: theme.spacings.medium}}
-            message={t(PaymentCreditCardTexts.error)}
+            message={t(PurchaseConfirmationTexts.reserveError)}
             type="error"
           />
         )}
         {vippsNotInstalledError && (
           <MessageInfoBox
             style={{marginBottom: theme.spacings.medium}}
-            message={t(PaymentCreditCardTexts.vippsInstalledError)}
+            message={t(PurchaseConfirmationTexts.vippsInstalledError)}
             type="error"
           />
         )}
