@@ -33,6 +33,7 @@ import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -108,35 +109,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
 
-  const navigateToActiveTicketsScreen = useCallback(() => {
-    navigation.navigate('Root_TabNavigatorStack', {
-      screen: 'TabNav_TicketingStack',
-      params: {
-        screen: 'Ticketing_RootScreen',
-        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
-      },
-    });
-  }, [navigation]);
-
-  useOpenVippsAfterReservation(
-    reserveMutation.data?.url,
-    paymentMethod?.paymentType,
-    useCallback(() => setVippsNotInstalledError(true), []),
-    reserveMutation.isLoading,
-  );
-
-  // Nets calls {APP_SCHEME}://purchase-callback on completion, which navigates
-  // to active tickets and closes the in app browser (handled elsewhere). But in
-  // edge cases where the fare contract appears before the callback is called,
-  // we can cancel the payment flow and navigate to active tickets.
-  useOnFareContractReceived({
-    orderId: reserveMutation.data?.order_id,
-    callback: () => {
-      InAppBrowser.closeAuth();
-      navigateToActiveTicketsScreen();
-    },
-  });
-
   useEffect(() => {
     if (
       reserveMutation.isSuccess &&
@@ -165,6 +137,41 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     reserveMutation.data?.url,
     paymentMethod?.paymentType,
   ]);
+
+  useOpenVippsAfterReservation(
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+    useCallback(() => setVippsNotInstalledError(true), []),
+    reserveMutation.isLoading,
+  );
+
+  const navigateToActiveTicketsScreen = useCallback(async () => {
+    const browserIsAvailable = await InAppBrowser.isAvailable();
+    if (browserIsAvailable) InAppBrowser.close();
+
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_TicketingStack',
+      params: {
+        screen: 'Ticketing_RootScreen',
+        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+      },
+    });
+  }, [navigation]);
+
+  // When deep link {APP_SCHEME}://purchase-callback is called, save payment
+  // method and navigate to active tickets.
+  usePurchaseCallbackListener(
+    navigateToActiveTicketsScreen,
+    paymentMethod?.paymentType,
+    reserveMutation.data?.recurring_payment_id,
+  );
+
+  // In edge cases where the fare contract appears before the callback is
+  // called, we can cancel the payment flow and navigate to active tickets.
+  useOnFareContractReceived({
+    orderId: reserveMutation.data?.order_id,
+    callback: navigateToActiveTicketsScreen,
+  });
 
   function goToPayment() {
     setVippsNotInstalledError(false);

@@ -67,7 +67,6 @@ import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version.ts';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -208,36 +207,6 @@ export const RootStack = () => {
                 },
               },
               getStateFromPath(path, config) {
-                if (path.includes('purchase-callback')) {
-                  InAppBrowser.isAvailable().then((available) => {
-                    if (available) InAppBrowser.close();
-                  });
-                  return {
-                    routes: [
-                      {
-                        name: 'Root_TabNavigatorStack',
-                        state: {
-                          routes: [
-                            {
-                              name: 'TabNav_TicketingStack',
-                              state: {
-                                routes: [
-                                  {
-                                    name: 'Ticketing_RootScreen',
-                                    params: {
-                                      screen:
-                                        'TicketTabNav_ActiveFareProductsTabScreen',
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  } as ResultState;
-                }
                 if (path.includes('privacy')) {
                   return {
                     routes: [
