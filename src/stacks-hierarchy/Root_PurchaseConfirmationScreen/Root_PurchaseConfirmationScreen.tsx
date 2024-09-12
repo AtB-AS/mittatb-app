@@ -53,7 +53,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     useState<PaymentMethod>();
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
-  const [vippsError, setVippsError] = useState(false);
+  const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
 
   const {
     fareProductTypeConfig,
@@ -121,7 +121,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
     paymentMethod?.paymentType,
-    useCallback(() => setVippsError(true), []),
+    useCallback(() => setVippsNotInstalledError(true), []),
     reserveMutation.isLoading,
   );
 
@@ -167,7 +167,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   ]);
 
   function goToPayment() {
-    setVippsError(false);
+    setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && totalPrice > 0) {
@@ -211,7 +211,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             shouldSavePaymentMethod: boolean,
           ) => {
             reserveMutation.reset();
-            setVippsError(false);
+            setVippsNotInstalledError(false);
             if (reserveMutation.isSuccess) {
               cancelPaymentMutation.mutate(reserveMutation.data);
               analytics.logEvent('Ticketing', 'Payment cancelled');
@@ -292,20 +292,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             preassignedFareProductType: preassignedFareProduct.type,
           }}
         />
-        {(reserveMutation.isError || vippsError) && (
+        {reserveMutation.isError && (
           <MessageInfoBox
             style={{marginBottom: theme.spacings.medium}}
-            message={
-              t(PaymentCreditCardTexts.error) +
-              (reserveMutation.isSuccess
-                ? t(PaymentCreditCardTexts.vippsInstalledError)
-                : '')
-            }
+            message={t(PaymentCreditCardTexts.error)}
             type="error"
-            onPressConfig={{
-              action: goToPayment,
-              text: t(dictionary.retry),
-            }}
+          />
+        )}
+        {vippsNotInstalledError && (
+          <MessageInfoBox
+            style={{marginBottom: theme.spacings.medium}}
+            message={t(PaymentCreditCardTexts.vippsInstalledError)}
+            type="error"
           />
         )}
         {isSearchingOffer ? (

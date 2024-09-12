@@ -10,9 +10,9 @@ const PurchasePaymentTexts = {
     'Oops - vi feila då vi prøvde å sette i gang betalinga. Supert om du prøver igjen 🤞',
   ),
   vippsInstalledError: _(
-    '\n\nHar du Vipps-appen installert?',
-    '\n\nDo you have the Vipps app installed?',
-    '\n\nHar du Vipps-appen installert?',
+    'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
+    'We were unable to set up the payment. Do you have the Vipps app installed?',
+    'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
   ),
   loading: _('Laster…', 'Loading…', 'Lastar…'),
 };
