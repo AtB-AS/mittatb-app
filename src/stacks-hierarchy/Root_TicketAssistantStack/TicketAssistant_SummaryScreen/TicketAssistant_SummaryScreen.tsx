@@ -62,7 +62,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
         preassignedFareProduct: recommendedTicketSummary.preassignedFareProduct,
         travelDate: undefined,
-        headerLeftButton: {type: 'close'},
         mode: 'Ticket',
       };
     const {fareProductTypeConfig} = recommendedTicketSummary;

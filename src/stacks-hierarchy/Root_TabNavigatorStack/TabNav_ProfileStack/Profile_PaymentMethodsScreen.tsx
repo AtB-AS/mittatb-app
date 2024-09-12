@@ -99,6 +99,7 @@ export const Profile_PaymentMethodsScreen = () => {
       // authentication process successfully
       showInRecents: true,
       animated: true,
+      dismissButtonStyle: 'cancel',
     });
   };
 

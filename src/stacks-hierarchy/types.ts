@@ -26,8 +26,6 @@ type VippsPaymentMethod = {
 };
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
 
-export type PaymentProcessorStatus = 'loading' | 'success' | 'error';
-
 export type TicketRecipientType = {
   accountId: string;
   phoneNumber: string;

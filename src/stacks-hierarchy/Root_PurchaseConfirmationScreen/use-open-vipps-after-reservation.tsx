@@ -7,12 +7,13 @@ import {PaymentType} from '@atb/ticketing';
  */
 export const useOpenVippsAfterReservation = (
   url: string | undefined,
-  paymentType: PaymentType,
+  paymentType: PaymentType | undefined,
   onErrorCallback: () => void,
+  isLoading: boolean,
 ) => {
   useEffect(() => {
-    if (paymentType === PaymentType.Vipps && url) {
+    if (paymentType === PaymentType.Vipps && url && !isLoading) {
       Linking.openURL(url).catch(onErrorCallback);
     }
-  }, [paymentType, url, onErrorCallback]);
+  }, [paymentType, url, onErrorCallback, isLoading]);
 };

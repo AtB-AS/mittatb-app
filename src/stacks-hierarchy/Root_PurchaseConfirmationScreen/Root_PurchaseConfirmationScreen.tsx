@@ -12,13 +12,14 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
+  PaymentCreditCardTexts,
   PurchaseConfirmationTexts,
   dictionary,
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {useMemo, useState} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {ActivityIndicator, ScrollView, StatusBar, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {usePreviousPaymentMethods} from '../saved-payment-utils';
 import {PaymentMethod} from '../types';
@@ -26,6 +27,11 @@ import {PreassignedFareContractSummary} from './components/PreassignedFareProduc
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
 import {ZoneSelectionMode} from '@atb-as/config-specs';
 import {PriceSummary} from './components/PriceSummary';
+import {useReserveOfferMutation} from './use-reserve-offer-mutation';
+import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
+import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {useOnFareContractReceived} from './use-on-fare-contract-received';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -46,6 +52,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     useState<PaymentMethod>();
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
+  const [vippsError, setVippsError] = useState(false);
 
   const {
     fareProductTypeConfig,
@@ -54,7 +61,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     preassignedFareProduct,
     userProfilesWithCount,
     travelDate,
-    headerLeftButton,
     recipient,
   } = params;
 
@@ -93,10 +99,74 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }),
   );
 
-  function goToPayment(
-    method: PaymentMethod,
-    shouldSavePaymentMethod: boolean,
-  ) {
+  const reserveMutation = useReserveOfferMutation({
+    offers,
+    paymentMethod,
+    recipient,
+    shouldSavePaymentMethod,
+  });
+  const cancelPaymentMutation = useCancelPaymentMutation();
+
+  const navigateToActiveTicketsScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_TicketingStack',
+      params: {
+        screen: 'Ticketing_RootScreen',
+        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+      },
+    });
+  }, [navigation]);
+
+  useOpenVippsAfterReservation(
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+    useCallback(() => setVippsError(true), []),
+    reserveMutation.isLoading,
+  );
+
+  // Nets calls {APP_SCHEME}://purchase-callback on completion, which navigates
+  // to active tickets and closes the in app browser (handled elsewhere). But in
+  // edge cases where the fare contract appears before the callback is called,
+  // we can cancel the payment flow and navigate to active tickets.
+  useOnFareContractReceived({
+    orderId: reserveMutation.data?.order_id,
+    callback: () => {
+      InAppBrowser.closeAuth();
+      navigateToActiveTicketsScreen();
+    },
+  });
+
+  useEffect(() => {
+    if (
+      reserveMutation.isSuccess &&
+      paymentMethod?.paymentType !== PaymentType.Vipps &&
+      reserveMutation.data.url
+    ) {
+      try {
+        const oldStyle = StatusBar.pushStackEntry({
+          barStyle: 'dark-content',
+        });
+        InAppBrowser.open(reserveMutation.data.url, {
+          // Param showInRecents is needed so the InAppBrowser doesn't get closed
+          // when the app goes to background hence user is again navigated back to
+          // browser after finishing the Nets flow, and then can complete the
+          // authentication process successfully
+          showInRecents: true,
+          animated: true,
+          dismissButtonStyle: 'cancel',
+        }).then(() => StatusBar.popStackEntry(oldStyle));
+      } catch (error) {
+        console.error('InAppBrowser error', error);
+      }
+    }
+  }, [
+    reserveMutation.isSuccess,
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+  ]);
+
+  function goToPayment() {
+    setVippsError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && totalPrice > 0) {
@@ -104,15 +174,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         refreshOffer();
       } else {
         analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod: method,
+          paymentMethod,
         });
-        navigation.push('Root_PurchasePaymentScreen', {
-          offers,
-          preassignedFareProduct: params.preassignedFareProduct,
-          paymentMethod: method,
-          shouldSavePaymentMethod,
-          recipient,
-        });
+        reserveMutation.mutate();
       }
     }
   }
@@ -145,6 +209,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             paymentMethod: PaymentMethod,
             shouldSavePaymentMethod: boolean,
           ) => {
+            reserveMutation.reset();
+            setVippsError(false);
+            if (reserveMutation.isSuccess) {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+              analytics.logEvent('Ticketing', 'Payment cancelled');
+            }
             setSelectedPaymentMethod(paymentMethod);
             setShouldSavePaymentMethod(shouldSavePaymentMethod);
             closeBottomSheet();
@@ -162,7 +232,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(PurchaseConfirmationTexts.title)}
-        leftButton={headerLeftButton}
+        leftButton={{
+          type: 'back',
+          onPress: () => {
+            if (reserveMutation.isSuccess) {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+              analytics.logEvent('Ticketing', 'Payment cancelled');
+            }
+            navigation.pop();
+          },
+        }}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
@@ -212,6 +291,22 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             preassignedFareProductType: preassignedFareProduct.type,
           }}
         />
+        {(reserveMutation.isError || vippsError) && (
+          <MessageInfoBox
+            style={{marginBottom: theme.spacings.medium}}
+            message={
+              t(PaymentCreditCardTexts.error) +
+              (reserveMutation.isSuccess
+                ? t(PaymentCreditCardTexts.vippsInstalledError)
+                : '')
+            }
+            type="error"
+            onPressConfig={{
+              action: goToPayment,
+              text: t(dictionary.retry),
+            }}
+          />
+        )}
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -238,8 +333,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         mode: params.mode,
                       },
                     );
-                    goToPayment(paymentMethod, shouldSavePaymentMethod);
+                    goToPayment();
                   }}
+                  loading={reserveMutation.isLoading}
                 />
                 <PressableOpacity
                   style={styles.buttonTopSpacing}
