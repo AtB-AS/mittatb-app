@@ -18,7 +18,7 @@ import {
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, ScrollView, StatusBar, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {usePreviousPaymentMethods} from '../saved-payment-utils';
 import {PaymentMethod} from '../types';
@@ -29,10 +29,9 @@ import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
-import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
+import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -114,22 +113,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType !== PaymentType.Vipps &&
       reserveMutation.data.url
     ) {
-      try {
-        const oldStyle = StatusBar.pushStackEntry({
-          barStyle: 'dark-content',
-        });
-        InAppBrowser.open(reserveMutation.data.url, {
-          // Param showInRecents is needed so the InAppBrowser doesn't get closed
-          // when the app goes to background hence user is again navigated back to
-          // browser after finishing the Nets flow, and then can complete the
-          // authentication process successfully
-          showInRecents: true,
-          animated: true,
-          dismissButtonStyle: 'cancel',
-        }).then(() => StatusBar.popStackEntry(oldStyle));
-      } catch (error: any) {
-        notifyBugsnag(error);
-      }
+      openInAppBrowser(reserveMutation.data.url, 'cancel');
     }
   }, [
     reserveMutation.isSuccess,
@@ -144,8 +128,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const navigateToActiveTicketsScreen = useCallback(async () => {
-    const browserIsAvailable = await InAppBrowser.isAvailable();
-    if (browserIsAvailable) InAppBrowser.close();
+    closeInAppBrowser();
 
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',

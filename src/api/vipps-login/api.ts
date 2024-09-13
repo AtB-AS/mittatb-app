@@ -2,8 +2,8 @@ import {storage} from '@atb/storage';
 import {client} from '@atb/api/client';
 import {VippsSignInErrorCode} from '@atb/auth';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {APP_SCHEME} from '@env';
+import {openInAppBrowser} from '@atb/in-app-browser';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 
@@ -17,16 +17,9 @@ export const authorizeUser = async (setIsLoading: any) => {
     .then(async (response) => {
       const authorisationUrl = response.data;
       setIsLoading(false);
-      await InAppBrowser.open(
+      openInAppBrowser(
         `${authorisationUrl}&state=${state}&nonce=${nonce}`,
-        {
-          // Param showInRecents is needed so the InAppBrowser doesn't get
-          // closed when the app goes to background hence user is again
-          // navigated back to browser after giving consent in Vipps App, and
-          // then can complete the authentication process successfully
-          showInRecents: true,
-          animated: true,
-        },
+        'cancel',
       );
     });
 };

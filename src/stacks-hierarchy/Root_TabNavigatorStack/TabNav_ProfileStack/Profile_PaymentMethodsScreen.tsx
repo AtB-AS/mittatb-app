@@ -27,7 +27,7 @@ import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recur
 import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -67,7 +67,7 @@ export const Profile_PaymentMethodsScreen = () => {
         url.includes('response_code') &&
         url.includes('recurring_payment_id')
       ) {
-        InAppBrowser.close();
+        closeInAppBrowser();
         const responseCode = queryString.parseUrl(url).query.response_code;
         const paymentId = Number(
           queryString.parseUrl(url).query.recurring_payment_id,
@@ -92,15 +92,7 @@ export const Profile_PaymentMethodsScreen = () => {
   const onAddRecurringPayment = async () => {
     const redirectUrl = `${APP_SCHEME}://profile`;
     const response = await addPaymentMethod(redirectUrl);
-    await InAppBrowser.open(response.data.terminal_url, {
-      // Param showInRecents is needed so the InAppBrowser doesn't get closed
-      // when the app goes to background hence user is again navigated back to
-      // browser after finishing the Nets flow, and then can complete the
-      // authentication process successfully
-      showInRecents: true,
-      animated: true,
-      dismissButtonStyle: 'cancel',
-    });
+    openInAppBrowser(response.data.terminal_url, 'cancel');
   };
 
   return (
