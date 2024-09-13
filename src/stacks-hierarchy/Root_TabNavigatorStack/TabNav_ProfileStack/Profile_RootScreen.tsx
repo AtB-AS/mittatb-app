@@ -123,7 +123,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
 
   const {logEvent} = useAnalytics();
-  const [show, setShow] = useState(true);
+  const [counter, rotateCounter] = useState(0);
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet(() => {
@@ -159,7 +159,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   };
 
   const dismiss3 = async () => {
-    await sheet2.current?.dismiss();
+    await sheet3.current?.dismiss();
     //console.log('Bye bye 👋');
   };
 
@@ -171,7 +171,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     await sheet3.current?.present(); // Sheet 3 will now present 🎉
   };
   const toggleShow = async () => {
-    setShow((show) => !show);
+    rotateCounter((counter) => (counter + 1) % 3);
+    // setTimeout(() => {
+    //   console.log(
+    //     'sheet.current?.state.contentHeight',
+    //     sheet.current?.state.contentHeight,
+    //   );
+    //   sheet.current?.resize(0);
+    // }, 2000);
   };
 
   return (
@@ -636,14 +643,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       {isLoading && <ActivityIndicatorOverlay />}
       <TrueSheet
         ref={sheet}
-        sizes={['auto']}
+        sizes={['auto', 'large']}
         cornerRadius={24}
         grabber={false}
+        //onSizeChange={(e) => console.log('size changed', e)}
+        //onLayout={(e) => console.log('onLayout', e)}
+        onDismiss={() => console.log('ttestestes')}
         FooterComponent={SomeFooter}
       >
         <View style={{padding: 10}}>
           <BottomSheetContainer
-            title={show ? 'Tall content' : 'Small content'}
+            title={counter ? 'Tall content' : 'Small content'}
             onClose={dismiss}
           >
             <Button
@@ -651,21 +661,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text="Toggle content"
               style={{paddingBottom: 10}}
             />
-            {show ? (
+            {counter === 0 ? (
               <ScrollView>
                 <Button onPress={presentSheet2} text="Open new bottom sheet" />
                 <ThemeText>Test</ThemeText>
                 <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
-                <ThemeText>Test</ThemeText>
+              </ScrollView>
+            ) : counter === 2 ? (
+              <ScrollView>
                 <ThemeText>Test</ThemeText>
                 <ThemeText>Test</ThemeText>
                 <ThemeText>Test</ThemeText>
@@ -675,9 +678,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ScrollView>
                 <ThemeText>Test</ThemeText>
                 <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
+                <ThemeText>Test</ThemeText>
               </ScrollView>
             )}
-            <TrueSheet sizes={['auto']} ref={sheet2} grabber={false}>
+            <TrueSheet
+              sizes={['auto']}
+              ref={sheet2}
+              grabber={false}
+              cornerRadius={24}
+            >
               <View style={styles2.container}>
                 <BottomSheetContainer title="Dos bros" onClose={dismiss2}>
                   <Button
@@ -689,7 +703,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   <ThemeText>Test2</ThemeText>
                   <ThemeText>Test2</ThemeText>
                 </BottomSheetContainer>
-                <TrueSheet sizes={['auto', '80%']} ref={sheet3}>
+                <TrueSheet
+                  sizes={['auto', '80%']}
+                  ref={sheet3}
+                  cornerRadius={24}
+                >
                   <View style={styles2.container}>
                     <BottomSheetContainer title="Vamonos" onClose={dismiss3}>
                       <ThemeText>Test3</ThemeText>
