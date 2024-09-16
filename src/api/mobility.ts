@@ -29,7 +29,6 @@ import {
   InitShmoOneStopBookingRequestBody,
   ShmoBooking,
   ShmoBookingEvent,
-  ShmoBookingEventType,
   ShmoBookingSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
