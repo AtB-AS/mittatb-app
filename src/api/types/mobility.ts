@@ -129,9 +129,18 @@ export const ShmoBookingSchema = z.object({
 
 export type ShmoBooking = z.infer<typeof ShmoBookingSchema>;
 
+const longitude = z
+  .number()
+  .min(-180, {message: 'longitude must be greater than or equal to -180'})
+  .max(180, {message: 'longitude must be less than or equal to 180'});
+const latitude = z
+  .number()
+  .min(-90, {message: 'latitude must be greater than or equal to -90'})
+  .max(90, {message: 'latitude must be less than or equal to 90'});
+
 const ShmoCoordinatesSchema = z.object({
-  longitude: z.number(),
-  latitude: z.number(),
+  longitude,
+  latitude,
   altitude: z.number().optional().nullable(),
 });
 
@@ -148,3 +157,39 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
 export type InitShmoOneStopBookingRequestBody = z.infer<
   typeof InitShmoOneStopBookingRequestBodySchema
 >;
+
+export enum ShmoBookingEventType {
+  START_FINISHING = 'START_FINISHING',
+  FINISH = 'FINISH',
+}
+
+const ShmoImageFileSchema = z.object({
+  fileName: z.string(),
+  fileType: z.string(),
+  fileData: z.string().describe('base64 encoded image data'),
+});
+
+type StartFinishingEvent = {event: ShmoBookingEventType.START_FINISHING};
+type FinishEvent = {
+  event: ShmoBookingEventType.FINISH;
+} & z.infer<typeof ShmoImageFileSchema>;
+
+export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
+
+export const IdsFromQrCodeResponseSchema = z.object({
+  operatorId: z.string(),
+  vehicleId: z.string().nullable().optional(),
+  stationId: z.string().nullable().optional(),
+});
+
+export type IdsFromQrCodeResponse = z.infer<typeof IdsFromQrCodeResponseSchema>;
+
+export const IdsFromQrCodeQuerySchema = z.object({
+  qrCodeUrl: z
+    .string()
+    .min(1, {message: 'qrCodeUrl must be at least 1 character long'}),
+  longitude,
+  latitude,
+});
+
+export type IdsFromQrCodeQuery = z.infer<typeof IdsFromQrCodeQuerySchema>;

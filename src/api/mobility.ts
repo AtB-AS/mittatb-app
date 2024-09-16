@@ -23,8 +23,13 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  IdsFromQrCodeQuery,
+  IdsFromQrCodeResponse,
+  IdsFromQrCodeResponseSchema,
   InitShmoOneStopBookingRequestBody,
   ShmoBooking,
+  ShmoBookingEvent,
+  ShmoBookingEventType,
   ShmoBookingSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
@@ -152,6 +157,18 @@ export const getActiveShmoBooking = (
     );
 };
 
+export const getShmoBooking = (
+  bookingId: ShmoBooking['bookingId'],
+  opts?: AxiosRequestConfig,
+): Promise<ShmoBooking> => {
+  return client
+    .get<ShmoBooking>(`/mobility/v1/bookings/${bookingId}`, {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
 export const initShmoOneStopBooking = (
   reqBody: InitShmoOneStopBookingRequestBody,
 ): Promise<ShmoBooking> => {
@@ -160,6 +177,36 @@ export const initShmoOneStopBooking = (
       authWithIdToken: true,
     })
     .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
+export const sendShmoBookingEvent = (
+  bookingId: ShmoBooking['bookingId'],
+  shmoBookingEvent: ShmoBookingEvent,
+): Promise<ShmoBooking> => {
+  return client
+    .post<ShmoBooking>(
+      `/mobility/v1/bookings/${bookingId}/event`,
+      shmoBookingEvent,
+      {
+        authWithIdToken: true,
+      },
+    )
+    .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
+export const getIdsFromQrCode = (
+  params: IdsFromQrCodeQuery,
+  opts?: AxiosRequestConfig,
+): Promise<IdsFromQrCodeResponse> => {
+  params;
+  const url = '/mobility/v1/asset/qr';
+  const query = qs.stringify(params);
+  return client
+    .get<IdsFromQrCodeResponse>(stringifyUrl(url, query), {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (
