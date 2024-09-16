@@ -36,6 +36,8 @@ import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
+import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -71,6 +73,14 @@ export const Map = (props: MapProps) => {
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+
+  const [
+    shmoDeepIntegrationEnabled,
+    shmoDeepIntegrationEnabledDebugOverrideReady,
+  ] = useShmoDeepIntegrationEnabled();
+
+  const showShmoTesting =
+    shmoDeepIntegrationEnabled && shmoDeepIntegrationEnabledDebugOverrideReady;
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -226,6 +236,10 @@ export const Map = (props: MapProps) => {
             <GeofencingZones
               selectedVehicleId={selectedFeature.properties.id}
             />
+          )}
+
+          {showShmoTesting && (
+            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
           )}
 
           {mapLines && <MapRoute lines={mapLines} />}

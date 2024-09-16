@@ -30,6 +30,7 @@ export const useSendShmoBookingEventMutation = () => {
             getShmoBookingQueryKey(data.bookingId),
             data,
           );
+          queryClient.invalidateQueries(GET_ACTIVE_SHMO_BOOKING_QUERY_KEY);
           break;
         default:
           break;

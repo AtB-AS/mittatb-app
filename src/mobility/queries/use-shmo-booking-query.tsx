@@ -8,11 +8,14 @@ export const getShmoBookingQueryKey = (bookingId: ShmoBooking['bookingId']) => [
   bookingId,
 ];
 
-export const useShmoBookingQuery = (bookingId: ShmoBooking['bookingId']) => {
+export const useShmoBookingQuery = (bookingId?: ShmoBooking['bookingId']) => {
+  const bookingIdString = bookingId || '';
+  const isValidBookingId = !!bookingId && bookingIdString.trim() !== '';
   return useQuery({
-    queryKey: getShmoBookingQueryKey(bookingId),
-    queryFn: ({signal}) => getShmoBooking(bookingId, {signal}),
+    queryKey: getShmoBookingQueryKey(bookingIdString),
+    queryFn: ({signal}) => getShmoBooking(bookingIdString, {signal}),
     staleTime: ONE_HOUR_MS,
     cacheTime: ONE_HOUR_MS,
+    enabled: isValidBookingId,
   });
 };
