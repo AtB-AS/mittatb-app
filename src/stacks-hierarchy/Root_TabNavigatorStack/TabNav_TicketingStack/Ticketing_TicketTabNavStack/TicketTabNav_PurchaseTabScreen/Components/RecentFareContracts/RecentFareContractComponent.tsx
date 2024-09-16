@@ -21,12 +21,14 @@ import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
   onSelect: (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
+    harbors?: StopPlaceFragment[],
   ) => void;
   testID: string;
 };
@@ -144,7 +146,9 @@ export const RecentFareContractComponent = ({
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}
       interactiveColor="interactive_2"
       mode="spacious"
-      onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
+      onPress={() =>
+        onSelect(recentFareContract, fareProductTypeConfig, harborsQuery.data)
+      }
       style={{minWidth: width * 0.6}}
     >
       <View style={styles.travelModeWrapper}>

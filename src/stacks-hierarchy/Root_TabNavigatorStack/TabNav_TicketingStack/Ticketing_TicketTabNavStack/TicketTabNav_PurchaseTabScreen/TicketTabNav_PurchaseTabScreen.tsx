@@ -15,7 +15,6 @@ import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAss
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useHarborsQuery} from '@atb/queries';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
@@ -44,7 +43,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const hasMobileTokenError = mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
-  const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -100,6 +98,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const onFareContractSelect = (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
+    harbors?: StopPlaceFragment[],
   ) => {
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
@@ -109,7 +108,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       zone: TariffZone | undefined,
     ): TariffZoneWithMetadata | StopPlaceFragment | undefined => {
       if (pointToPointValidityPlace !== undefined) {
-        const fromName = harborsQuery.data?.find(
+        const fromName = harbors?.find(
           (sp) => sp.id === pointToPointValidityPlace,
         )?.name;
         return fromName
