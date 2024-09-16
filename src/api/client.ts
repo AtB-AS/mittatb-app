@@ -43,7 +43,7 @@ declare module 'axios' {
   }
 }
 
-function shouldRetry(error: AxiosError): boolean {
+export function shouldRetry(error: AxiosError): boolean {
   const isRateLimited = error.response?.status === 429;
   if (isRateLimited) return false;
 
