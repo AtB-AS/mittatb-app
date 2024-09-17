@@ -6,7 +6,7 @@ export async function openInAppBrowser(
   url: string,
   dismissButtonStyle: 'cancel' | 'close' | 'done',
 ) {
-  const previousStatusBarStyle = StatusBar.pushStackEntry({
+  const statusBarStyle = StatusBar.pushStackEntry({
     barStyle: 'dark-content',
     animated: true,
   });
@@ -21,7 +21,7 @@ export async function openInAppBrowser(
   } catch (error: any) {
     notifyBugsnag(error);
   }
-  StatusBar.popStackEntry(previousStatusBarStyle);
+  StatusBar.popStackEntry(statusBarStyle);
 }
 
 export async function openInAppBrowserWithCallback(
@@ -30,7 +30,7 @@ export async function openInAppBrowserWithCallback(
   successUrl: string,
   onSuccess?: (url: string) => void,
 ) {
-  const previousStatusBarStyle = StatusBar.pushStackEntry({
+  const statusBarStyle = StatusBar.pushStackEntry({
     barStyle: 'dark-content',
     animated: true,
   });
@@ -52,7 +52,7 @@ export async function openInAppBrowserWithCallback(
   } catch (error: any) {
     notifyBugsnag(error);
   }
-  StatusBar.popStackEntry(previousStatusBarStyle);
+  StatusBar.popStackEntry(statusBarStyle);
 }
 
 export function closeInAppBrowser() {
