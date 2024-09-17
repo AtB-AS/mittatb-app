@@ -1,4 +1,4 @@
-name: TypeScript Check & Test
+name: TypeScript Check, Lint & Test
 on:
   workflow_dispatch:
   push:
@@ -39,5 +39,7 @@ jobs:
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
         uses: icrawl/action-tsc@v1
+      - name: Run lint
+        run: yarn lint
       - name: Run tests
         run: yarn test
