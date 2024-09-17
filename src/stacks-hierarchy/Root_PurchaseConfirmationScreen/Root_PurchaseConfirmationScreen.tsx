@@ -31,7 +31,7 @@ import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
-import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
+import {closeInAppBrowser} from '@atb/in-app-browser';
 import {openInAppBrowserWithCallback} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 
@@ -109,25 +109,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
 
-  useEffect(() => {
-    if (
-      reserveMutation.isSuccess &&
-      paymentMethod?.paymentType !== PaymentType.Vipps &&
-      reserveMutation.data.url
-    ) {
-      openInAppBrowserWithCallback(
-        reserveMutation.data.url,
-        'cancel',
-        `${APP_SCHEME}://purchase-callback`,
-        navigateToActiveTicketsScreen,
-      );
-    }
-  }, [
-    reserveMutation.isSuccess,
-    reserveMutation.data?.url,
-    paymentMethod?.paymentType,
-  ]);
-
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
     paymentMethod?.paymentType,
@@ -145,6 +126,26 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       },
     });
   }, [navigation]);
+
+  useEffect(() => {
+    if (
+      reserveMutation.isSuccess &&
+      paymentMethod?.paymentType !== PaymentType.Vipps &&
+      reserveMutation.data.url
+    ) {
+      openInAppBrowserWithCallback(
+        reserveMutation.data.url,
+        'cancel',
+        `${APP_SCHEME}://purchase-callback`,
+        navigateToActiveTicketsScreen,
+      );
+    }
+  }, [
+    reserveMutation.isSuccess,
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+    navigateToActiveTicketsScreen,
+  ]);
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
   // method and navigate to active tickets.
