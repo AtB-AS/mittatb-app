@@ -27,15 +27,15 @@ export async function openInAppBrowser(
 export async function openInAppBrowserWithCallback(
   url: string,
   dismissButtonStyle: 'cancel' | 'close' | 'done',
-  callbackUrl: string,
-  onCallback?: (url: string) => void,
+  successUrl: string,
+  onSuccess?: (url: string) => void,
 ) {
   const previousStatusBarStyle = StatusBar.pushStackEntry({
     barStyle: 'dark-content',
     animated: true,
   });
   try {
-    await InAppBrowser.openAuth(url, callbackUrl, {
+    await InAppBrowser.openAuth(url, successUrl, {
       animated: true,
       dismissButtonStyle,
       // Android: Makes the InAppBrowser stay open after the app goes to
@@ -46,7 +46,7 @@ export async function openInAppBrowserWithCallback(
       ephemeralWebSession: true,
     }).then((result) => {
       if (result.type === 'success') {
-        onCallback?.(result.url);
+        onSuccess?.(result.url);
       }
     });
   } catch (error: any) {
