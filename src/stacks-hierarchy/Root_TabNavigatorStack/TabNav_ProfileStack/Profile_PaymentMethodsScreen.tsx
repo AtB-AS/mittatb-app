@@ -76,7 +76,7 @@ export const Profile_PaymentMethodsScreen = () => {
   };
 
   const onAddRecurringPayment = async () => {
-    const callbackUrl = `${APP_SCHEME}://profile`;
+    const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
     const response = await addPaymentMethod(callbackUrl);
     openInAppBrowser(
       response.data.terminal_url,
