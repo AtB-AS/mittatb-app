@@ -5,29 +5,7 @@ import {notifyBugsnag} from '../utils/bugsnag-utils';
 export async function openInAppBrowser(
   url: string,
   dismissButtonStyle: 'cancel' | 'close' | 'done',
-) {
-  const statusBarStyle = StatusBar.pushStackEntry({
-    barStyle: 'dark-content',
-    animated: true,
-  });
-  try {
-    await InAppBrowser.open(url, {
-      animated: true,
-      dismissButtonStyle,
-      // Android: Makes the InAppBrowser stay open after the app goes to
-      // background. Needs to be true for Vipps login and BankID.
-      showInRecents: true,
-    });
-  } catch (error: any) {
-    notifyBugsnag(error);
-  }
-  StatusBar.popStackEntry(statusBarStyle);
-}
-
-export async function openInAppBrowserWithCallback(
-  url: string,
-  dismissButtonStyle: 'cancel' | 'close' | 'done',
-  successUrl: string,
+  successUrl?: string,
   onSuccess?: (url: string) => void,
 ) {
   const statusBarStyle = StatusBar.pushStackEntry({
@@ -35,20 +13,29 @@ export async function openInAppBrowserWithCallback(
     animated: true,
   });
   try {
-    await InAppBrowser.openAuth(url, successUrl, {
-      animated: true,
-      dismissButtonStyle,
-      // Android: Makes the InAppBrowser stay open after the app goes to
-      // background. Needs to be true for Vipps login and BankID.
-      showInRecents: true,
-      // iOS: If false, InAppBrowser will re-use cookies from other sessions and
-      // show a warning to the user about information sharing.
-      ephemeralWebSession: true,
-    }).then((result) => {
+    if (!successUrl) {
+      await InAppBrowser.open(url, {
+        animated: true,
+        dismissButtonStyle,
+        // Android: Makes the InAppBrowser stay open after the app goes to
+        // background. Needs to be true for Vipps login and BankID.
+        showInRecents: true,
+      });
+    } else {
+      const result = await InAppBrowser.openAuth(url, successUrl, {
+        animated: true,
+        dismissButtonStyle,
+        // Android: Makes the InAppBrowser stay open after the app goes to
+        // background. Needs to be true for Vipps login and BankID.
+        showInRecents: true,
+        // iOS: If false, InAppBrowser will re-use cookies from other sessions
+        // and show a warning to the user about information sharing.
+        ephemeralWebSession: true,
+      });
       if (result.type === 'success') {
         onSuccess?.(result.url);
       }
-    });
+    }
   } catch (error: any) {
     notifyBugsnag(error);
   }

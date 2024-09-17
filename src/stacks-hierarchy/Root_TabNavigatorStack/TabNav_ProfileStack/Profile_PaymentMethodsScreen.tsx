@@ -27,7 +27,7 @@ import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recur
 import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
-import {openInAppBrowserWithCallback} from '@atb/in-app-browser/in-app-browser';
+import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -78,7 +78,7 @@ export const Profile_PaymentMethodsScreen = () => {
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://profile`;
     const response = await addPaymentMethod(callbackUrl);
-    openInAppBrowserWithCallback(
+    openInAppBrowser(
       response.data.terminal_url,
       'cancel',
       callbackUrl,

@@ -32,7 +32,7 @@ import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {closeInAppBrowser} from '@atb/in-app-browser';
-import {openInAppBrowserWithCallback} from '@atb/in-app-browser/in-app-browser';
+import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
@@ -133,7 +133,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType !== PaymentType.Vipps &&
       reserveMutation.data.url
     ) {
-      openInAppBrowserWithCallback(
+      openInAppBrowser(
         reserveMutation.data.url,
         'cancel',
         `${APP_SCHEME}://purchase-callback`,
