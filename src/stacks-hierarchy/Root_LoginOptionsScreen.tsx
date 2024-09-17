@@ -19,7 +19,6 @@ import {
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import queryString from 'query-string';
 
@@ -30,6 +29,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -104,7 +104,7 @@ export const Root_LoginOptionsScreen = ({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
-        InAppBrowser.close();
+        closeInAppBrowser();
         setIsLoading(true);
         const code = queryString.parseUrl(event.url).query.code;
         if (code) {
@@ -223,7 +223,7 @@ export const Root_LoginOptionsScreen = ({
               backgroundColor={themeColor}
               mode="tertiary"
               rightIcon={{svg: ExternalLink}}
-              onPress={() => InAppBrowser.open(termsInfoUrl, {animated: true})}
+              onPress={() => openInAppBrowser(termsInfoUrl, 'done')}
               text={t(LoginTexts.logInOptions.termsOfUse)}
               accessibilityRole="link"
             />
