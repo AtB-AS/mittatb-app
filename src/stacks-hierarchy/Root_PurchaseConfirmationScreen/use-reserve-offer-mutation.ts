@@ -7,7 +7,7 @@ import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/u
 
 type Args = {
   offers: ReserveOffer[];
-  paymentMethod: PaymentMethod;
+  paymentMethod?: PaymentMethod;
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
 };
@@ -24,6 +24,9 @@ export const useReserveOfferMutation = ({
 
   return useMutation({
     mutationFn: async (): Promise<OfferReservation> => {
+      if (!paymentMethod) {
+        return Promise.reject(new Error('No payment method provided'));
+      }
       return reserveOffers({
         offers,
         paymentType: paymentMethod.paymentType,

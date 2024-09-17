@@ -33,7 +33,6 @@ import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen
 import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
-import {Root_PurchasePaymentScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
@@ -326,11 +325,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_PurchaseHarborSearchScreen"
                 component={Root_PurchaseHarborSearchScreen}
-                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-              />
-              <Stack.Screen
-                name="Root_PurchasePaymentScreen"
-                component={Root_PurchasePaymentScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen

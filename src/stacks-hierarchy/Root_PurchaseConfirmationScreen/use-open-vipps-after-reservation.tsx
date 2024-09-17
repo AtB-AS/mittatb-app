@@ -7,7 +7,7 @@ import {PaymentType} from '@atb/ticketing';
  */
 export const useOpenVippsAfterReservation = (
   url: string | undefined,
-  paymentType: PaymentType,
+  paymentType: PaymentType | undefined,
   onErrorCallback: () => void,
 ) => {
   useEffect(() => {

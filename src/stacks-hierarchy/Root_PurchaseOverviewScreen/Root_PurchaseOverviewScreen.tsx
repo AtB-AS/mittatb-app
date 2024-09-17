@@ -139,7 +139,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       userProfilesWithCount: travellerSelection,
       preassignedFareProduct,
       travelDate,
-      headerLeftButton: {type: 'back'},
       mode: params.mode,
     };
 

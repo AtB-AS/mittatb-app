@@ -17,8 +17,8 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect} from 'react';
-import {Linking, RefreshControl, View} from 'react-native';
+import React from 'react';
+import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -27,7 +27,7 @@ import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recur
 import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -61,45 +61,29 @@ export const Profile_PaymentMethodsScreen = () => {
     authorizeRecurringPaymentError ||
     cancelRecurringPaymentError;
 
-  useEffect(() => {
-    const addPaymentMethodCallbackHandler = async ({url}: {url: string}) => {
-      if (
-        url.includes('response_code') &&
-        url.includes('recurring_payment_id')
-      ) {
-        InAppBrowser.close();
-        const responseCode = queryString.parseUrl(url).query.response_code;
-        const paymentId = Number(
-          queryString.parseUrl(url).query.recurring_payment_id,
-        );
-        if (responseCode === 'OK') {
-          await authorizeRecurringPayment(paymentId);
-        } else if (responseCode === 'Cancel') {
-          await cancelRecurringPayment(paymentId);
-        }
+  const addPaymentMethodCallbackHandler = (url: string) => {
+    if (url.includes('response_code') && url.includes('recurring_payment_id')) {
+      const responseCode = queryString.parseUrl(url).query.response_code;
+      const paymentId = Number(
+        queryString.parseUrl(url).query.recurring_payment_id,
+      );
+      if (responseCode === 'OK') {
+        authorizeRecurringPayment(paymentId);
+      } else if (responseCode === 'Cancel') {
+        cancelRecurringPayment(paymentId);
       }
-    };
-
-    // Listen to deep link redirects back here after
-    // the add card process completes.
-    const eventSubscription = Linking.addEventListener(
-      'url',
-      addPaymentMethodCallbackHandler,
-    );
-    return () => eventSubscription.remove();
-  }, [authorizeRecurringPayment, cancelRecurringPayment]);
+    }
+  };
 
   const onAddRecurringPayment = async () => {
-    const redirectUrl = `${APP_SCHEME}://profile`;
-    const response = await addPaymentMethod(redirectUrl);
-    await InAppBrowser.open(response.data.terminal_url, {
-      // Param showInRecents is needed so the InAppBrowser doesn't get closed
-      // when the app goes to background hence user is again navigated back to
-      // browser after finishing the Nets flow, and then can complete the
-      // authentication process successfully
-      showInRecents: true,
-      animated: true,
-    });
+    const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
+    const response = await addPaymentMethod(callbackUrl);
+    openInAppBrowser(
+      response.data.terminal_url,
+      'cancel',
+      callbackUrl,
+      addPaymentMethodCallbackHandler,
+    );
   };
 
   return (

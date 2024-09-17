@@ -1,0 +1,48 @@
+import {StatusBar} from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {notifyBugsnag} from '../utils/bugsnag-utils';
+
+export async function openInAppBrowser(
+  url: string,
+  dismissButtonStyle: 'cancel' | 'close' | 'done',
+  successUrl?: string,
+  onSuccess?: (url: string) => void,
+) {
+  const statusBarStyle = StatusBar.pushStackEntry({
+    barStyle: 'dark-content',
+    animated: true,
+  });
+  try {
+    if (!successUrl) {
+      await InAppBrowser.open(url, {
+        animated: true,
+        dismissButtonStyle,
+        // Android: Makes the InAppBrowser stay open after the app goes to
+        // background. Needs to be true for Vipps login and BankID.
+        showInRecents: true,
+      });
+    } else {
+      const result = await InAppBrowser.openAuth(url, successUrl, {
+        animated: true,
+        dismissButtonStyle,
+        // Android: Makes the InAppBrowser stay open after the app goes to
+        // background. Needs to be true for Vipps login and BankID.
+        showInRecents: true,
+        // iOS: If false, InAppBrowser will re-use cookies from other sessions
+        // and show a warning to the user about information sharing.
+        ephemeralWebSession: true,
+      });
+      if (result.type === 'success') {
+        onSuccess?.(result.url);
+      }
+    }
+  } catch (error: any) {
+    notifyBugsnag(error);
+  }
+  StatusBar.popStackEntry(statusBarStyle);
+}
+
+export function closeInAppBrowser() {
+  InAppBrowser.close();
+  InAppBrowser.closeAuth();
+}
