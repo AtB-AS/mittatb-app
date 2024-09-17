@@ -4,6 +4,7 @@ import {
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
+  useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -71,6 +72,7 @@ export const FareContractInfoHeader = ({
 }: FareContractInfoProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
     travelRight;
 
@@ -93,6 +95,13 @@ export const FareContractInfoHeader = ({
   const recipientName =
     phoneNumber &&
     onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
+
+  const fareProductTypeConfig = preassignedFareProduct
+    ? fareProductTypeConfigs.find(
+        (fareProductTypeConfig) =>
+          fareProductTypeConfig.type === preassignedFareProduct.type,
+      )
+    : undefined;
 
   return (
     <View style={styles.header}>
@@ -119,6 +128,7 @@ export const FareContractInfoHeader = ({
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
           showTwoWayIcon={showTwoWayIcon}
+          transportModes={fareProductTypeConfig?.transportModes}
         />
       )}
       {phoneNumber && (
