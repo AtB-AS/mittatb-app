@@ -2,6 +2,10 @@ import {StatusBar} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {notifyBugsnag} from '../utils/bugsnag-utils';
 
+/**
+ * Wrapper around `react-native-inappbrowser-reborn`. See docs at:
+ * https://github.com/proyecto26/react-native-inappbrowser
+ */
 export async function openInAppBrowser(
   url: string,
   dismissButtonStyle: 'cancel' | 'close' | 'done',
@@ -9,7 +13,7 @@ export async function openInAppBrowser(
   onSuccess?: (url: string) => void,
 ) {
   const statusBarStyle = StatusBar.pushStackEntry({
-    barStyle: 'dark-content',
+    barStyle: successUrl ? 'light-content' : 'dark-content',
     animated: true,
   });
   try {
