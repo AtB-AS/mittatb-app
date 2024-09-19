@@ -20,7 +20,10 @@ import {addMinutes} from 'date-fns';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
-import {usePreviousPaymentMethods} from '../saved-payment-utils';
+import {
+  saveLastUsedRecurringPaymentOrType,
+  usePreviousPaymentMethods,
+} from '../saved-payment-utils';
 import {PaymentMethod} from '../types';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
@@ -34,6 +37,7 @@ import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {closeInAppBrowser} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
+import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -44,6 +48,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const {userId} = useAuthState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
@@ -115,9 +120,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     useCallback(() => setVippsNotInstalledError(true), []),
   );
 
-  const navigateToActiveTicketsScreen = useCallback(async () => {
+  const onPaymentCompleted = useCallback(async () => {
+    saveLastUsedRecurringPaymentOrType(
+      userId,
+      paymentMethod?.paymentType,
+      reserveMutation.data?.recurring_payment_id,
+    );
     closeInAppBrowser();
-
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',
       params: {
@@ -125,7 +134,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
       },
     });
-  }, [navigation]);
+  }, [
+    navigation,
+    userId,
+    paymentMethod?.paymentType,
+    reserveMutation.data?.recurring_payment_id,
+  ]);
 
   useEffect(() => {
     if (
@@ -137,29 +151,25 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         reserveMutation.data.url,
         'cancel',
         `${APP_SCHEME}://purchase-callback`,
-        navigateToActiveTicketsScreen,
+        onPaymentCompleted,
       );
     }
   }, [
     reserveMutation.isSuccess,
     reserveMutation.data?.url,
     paymentMethod?.paymentType,
-    navigateToActiveTicketsScreen,
+    onPaymentCompleted,
   ]);
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
   // method and navigate to active tickets.
-  usePurchaseCallbackListener(
-    navigateToActiveTicketsScreen,
-    paymentMethod?.paymentType,
-    reserveMutation.data?.recurring_payment_id,
-  );
+  usePurchaseCallbackListener(onPaymentCompleted);
 
   // In edge cases where the fare contract appears before the callback is
   // called, we can cancel the payment flow and navigate to active tickets.
   useOnFareContractReceived({
     orderId: reserveMutation.data?.order_id,
-    callback: navigateToActiveTicketsScreen,
+    callback: onPaymentCompleted,
   });
 
   function goToPayment() {

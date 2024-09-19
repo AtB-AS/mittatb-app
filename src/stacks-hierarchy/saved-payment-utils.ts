@@ -6,6 +6,7 @@ import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-p
 import {PaymentMethod, SavedPaymentMethodType} from './types';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {parseISO} from 'date-fns';
+import {PaymentType, listRecurringPayments} from '@atb/ticketing';
 
 export function usePreviousPaymentMethods(): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -110,3 +111,37 @@ export async function savePreviousPaymentMethodByUser(
     Bugsnag.notify(err);
   }
 }
+
+/**
+ * Fetches RecurringPayment data and saves it as the previous payment, or saves
+ * the payment type if no recurring payment id is given.
+ */
+export const saveLastUsedRecurringPaymentOrType = async (
+  userId: string | undefined,
+  paymentType: PaymentType | undefined,
+  recurringPaymentId?: number,
+) => {
+  if (!userId) return;
+
+  if (!recurringPaymentId) {
+    if (!paymentType) return;
+    await savePreviousPaymentMethodByUser(userId, {
+      savedType: SavedPaymentMethodType.Normal,
+      paymentType: paymentType,
+    });
+  } else {
+    try {
+      const recurringPaymentCards = await listRecurringPayments();
+      const card = recurringPaymentCards.find((c) => {
+        return c.id === recurringPaymentId;
+      });
+      if (card) {
+        await savePreviousPaymentMethodByUser(userId, {
+          savedType: SavedPaymentMethodType.Recurring,
+          paymentType: card.payment_type,
+          recurringCard: card,
+        });
+      }
+    } catch {} // Just fail silently, as saving payment method is not critical
+  }
+};
