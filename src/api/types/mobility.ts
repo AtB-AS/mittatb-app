@@ -151,7 +151,6 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
     .string()
     .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
-  preferredLanguageCode: z.string().optional(), // preferredLanguageCode will be replaced by Accept-Language headers
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<

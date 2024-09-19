@@ -144,12 +144,14 @@ export const getGeofencingZones = (
 };
 
 export const getActiveShmoBooking = (
+  acceptLanguage: string,
   opts?: AxiosRequestConfig,
 ): Promise<ShmoBooking | null> => {
   return client
     .get<ShmoBooking | null>('/mobility/v1/bookings/active', {
       ...opts,
       authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
     })
     .then((response) =>
       response.data === null ? null : ShmoBookingSchema.parse(response.data),
@@ -158,22 +160,26 @@ export const getActiveShmoBooking = (
 
 export const getShmoBooking = (
   bookingId: ShmoBooking['bookingId'],
+  acceptLanguage: string,
   opts?: AxiosRequestConfig,
 ): Promise<ShmoBooking> => {
   return client
     .get<ShmoBooking>(`/mobility/v1/bookings/${bookingId}`, {
       ...opts,
       authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
     })
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
 export const initShmoOneStopBooking = (
   reqBody: InitShmoOneStopBookingRequestBody,
+  acceptLanguage: string,
 ): Promise<ShmoBooking> => {
   return client
     .post<ShmoBooking>('/mobility/v1/bookings/one-stop', reqBody, {
       authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
     })
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
@@ -181,6 +187,7 @@ export const initShmoOneStopBooking = (
 export const sendShmoBookingEvent = (
   bookingId: ShmoBooking['bookingId'],
   shmoBookingEvent: ShmoBookingEvent,
+  acceptLanguage: string,
 ): Promise<ShmoBooking> => {
   return client
     .post<ShmoBooking>(
@@ -188,6 +195,7 @@ export const sendShmoBookingEvent = (
       shmoBookingEvent,
       {
         authWithIdToken: true,
+        headers: {'Accept-Language': acceptLanguage},
       },
     )
     .then((response) => ShmoBookingSchema.parse(response.data));
@@ -195,6 +203,7 @@ export const sendShmoBookingEvent = (
 
 export const getIdsFromQrCode = (
   params: IdsFromQrCodeQuery,
+  acceptLanguage: string,
   opts?: AxiosRequestConfig,
 ): Promise<IdsFromQrCodeResponse> => {
   params;
@@ -204,6 +213,7 @@ export const getIdsFromQrCode = (
     .get<IdsFromQrCodeResponse>(stringifyUrl(url, query), {
       ...opts,
       authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
     })
     .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
 };

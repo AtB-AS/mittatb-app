@@ -12,7 +12,6 @@ import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-sh
 import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query';
 // eslint-disable-next-line no-restricted-imports
 import {usePreviousPaymentMethod} from '@atb/stacks-hierarchy/saved-payment-utils';
-import {useTranslation} from '@atb/translations';
 import {useCallback, useState} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';
@@ -32,7 +31,6 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
     previousPaymentMethod?.savedType === 'recurring'
       ? previousPaymentMethod?.recurringCard?.id
       : '';
-  const {language} = useTranslation();
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
   const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);
@@ -70,11 +68,10 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         recurringPaymentId,
         coordinates: {latitude: 0, longitude: 0},
         assetId: selectedVehicleId,
-        preferredLanguageCode: language,
       };
       initShmoOneStopBooking(initReqBody);
     }
-  }, [language, recurringPaymentId, initShmoOneStopBooking, selectedVehicleId]);
+  }, [recurringPaymentId, initShmoOneStopBooking, selectedVehicleId]);
 
   const startFinishingShmoBooking = useCallback(() => {
     if (activeShmoBooking?.bookingId) {
