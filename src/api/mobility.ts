@@ -23,6 +23,13 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  IdsFromQrCodeQuery,
+  IdsFromQrCodeResponse,
+  IdsFromQrCodeResponseSchema,
+  InitShmoOneStopBookingRequestBody,
+  ShmoBooking,
+  ShmoBookingEvent,
+  ShmoBookingSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
   ViolationsReportingInitQuery,
@@ -127,13 +134,88 @@ export const getCarStation = (
 export const getGeofencingZones = (
   systemIds: string[],
   opts?: AxiosRequestConfig,
-): Promise<GeofencingZones[] | undefined> => {
-  if (systemIds.length < 1) return Promise.resolve(undefined);
+): Promise<GeofencingZones[] | null> => {
+  if (systemIds.length < 1) return Promise.resolve(null);
   const url = '/bff/v2/mobility/geofencing-zones';
   const query = qs.stringify({systemIds});
   return client
     .get<GetGeofencingZonesQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.geofencingZones);
+    .then((res) => res.data.geofencingZones ?? null);
+};
+
+export const getActiveShmoBooking = (
+  acceptLanguage: string,
+  opts?: AxiosRequestConfig,
+): Promise<ShmoBooking | null> => {
+  return client
+    .get<ShmoBooking | null>('/mobility/v1/bookings/active', {
+      ...opts,
+      authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
+    })
+    .then((response) =>
+      response.data === null ? null : ShmoBookingSchema.parse(response.data),
+    );
+};
+
+export const getShmoBooking = (
+  bookingId: ShmoBooking['bookingId'],
+  acceptLanguage: string,
+  opts?: AxiosRequestConfig,
+): Promise<ShmoBooking> => {
+  return client
+    .get<ShmoBooking>(`/mobility/v1/bookings/${bookingId}`, {
+      ...opts,
+      authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
+    })
+    .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
+export const initShmoOneStopBooking = (
+  reqBody: InitShmoOneStopBookingRequestBody,
+  acceptLanguage: string,
+): Promise<ShmoBooking> => {
+  return client
+    .post<ShmoBooking>('/mobility/v1/bookings/one-stop', reqBody, {
+      authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
+    })
+    .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
+export const sendShmoBookingEvent = (
+  bookingId: ShmoBooking['bookingId'],
+  shmoBookingEvent: ShmoBookingEvent,
+  acceptLanguage: string,
+): Promise<ShmoBooking> => {
+  return client
+    .post<ShmoBooking>(
+      `/mobility/v1/bookings/${bookingId}/event`,
+      shmoBookingEvent,
+      {
+        authWithIdToken: true,
+        headers: {'Accept-Language': acceptLanguage},
+      },
+    )
+    .then((response) => ShmoBookingSchema.parse(response.data));
+};
+
+export const getIdsFromQrCode = (
+  params: IdsFromQrCodeQuery,
+  acceptLanguage: string,
+  opts?: AxiosRequestConfig,
+): Promise<IdsFromQrCodeResponse> => {
+  params;
+  const url = '/mobility/v1/asset/qr';
+  const query = qs.stringify(params);
+  return client
+    .get<IdsFromQrCodeResponse>(stringifyUrl(url, query), {
+      ...opts,
+      authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
+    })
+    .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (
