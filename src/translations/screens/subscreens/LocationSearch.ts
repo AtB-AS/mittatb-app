@@ -123,5 +123,10 @@ const LocationSearchTexts = {
       },
     },
   },
+  onlyStopPlacesCheckbox: _(
+    'Vis kun holdeplasser',
+    'Show only stop places',
+    'Vis berre haldeplassar',
+  ),
 };
 export default LocationSearchTexts;

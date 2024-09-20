@@ -5,6 +5,7 @@ export type AnalyticsEventContext =
   | 'Favorites'
   | 'Flexible transport'
   | 'Loading boundary'
+  | 'Location search'
   | 'Map'
   | 'Mobility'
   | 'Onboarding'

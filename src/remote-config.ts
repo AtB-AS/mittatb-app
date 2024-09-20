@@ -46,6 +46,7 @@ export type RemoteConfig = {
   enable_vipps_login: boolean;
   enable_save_ticket_recipients: boolean;
   enable_shmo_deep_integration: boolean;
+  enable_only_stop_places_checkbox: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   flex_booking_number_of_days_available: number;
@@ -111,6 +112,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vipps_login: false,
   enable_save_ticket_recipients: false,
   enable_shmo_deep_integration: false,
+  enable_only_stop_places_checkbox: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   flex_booking_number_of_days_available: 7,
@@ -247,6 +249,9 @@ export function getConfig(): RemoteConfig {
   const enable_shmo_deep_integration =
     values['enable_shmo_deep_integration']?.asBoolean() ??
     defaultRemoteConfig.enable_shmo_deep_integration;
+  const enable_only_stop_places_checkbox =
+    values['enable_only_stop_places_checkbox']?.asBoolean() ??
+    defaultRemoteConfig.enable_only_stop_places_checkbox;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -344,6 +349,7 @@ export function getConfig(): RemoteConfig {
     enable_vipps_login,
     enable_save_ticket_recipients,
     enable_shmo_deep_integration,
+    enable_only_stop_places_checkbox,
     favourite_departures_poll_interval,
     feedback_questions,
     flex_booking_number_of_days_available,

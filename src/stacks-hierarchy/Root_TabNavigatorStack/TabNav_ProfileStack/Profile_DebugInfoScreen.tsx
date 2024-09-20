@@ -68,6 +68,7 @@ import {useServerTimeEnabledDebugOverride} from '@atb/time';
 import Bugsnag from '@bugsnag/react-native';
 import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
 import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
+import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -145,6 +146,8 @@ export const Profile_DebugInfoScreen = () => {
     useActivateTicketNowEnabledDebugOverride();
   const backendSmsAuthEnabledDebugOverride =
     useBackendSmsAuthEnabledDebugOverride();
+  const onlyStopPlacesCheckboxEnabledDebugOverride =
+    useOnlyStopPlacesCheckboxEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -482,6 +485,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable new backend sms auth"
               override={backendSmsAuthEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable only stop places checkbox"
+              override={onlyStopPlacesCheckboxEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
