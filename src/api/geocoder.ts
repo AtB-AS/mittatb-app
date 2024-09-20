@@ -14,6 +14,7 @@ export async function autocomplete(
   text: string,
   coordinates: Coordinates | null,
   onlyLocalTariffZoneAuthority: boolean = false,
+  onlyStopPlaces: boolean = false,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/features';
@@ -26,7 +27,8 @@ export async function autocomplete(
       tariff_zone_authorities: onlyLocalTariffZoneAuthority
         ? TARIFF_ZONE_AUTHORITY
         : null,
-      multiModal: 'parent'
+      layers: onlyStopPlaces ? ['venue'] : undefined,
+      multiModal: 'parent',
     },
     {skipNull: true},
   );

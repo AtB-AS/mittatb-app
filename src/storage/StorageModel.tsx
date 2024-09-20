@@ -27,6 +27,7 @@ export enum StorageModelKeysEnum {
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableSaveTicketRecipientsDebugOverride = '@ATB_enable_save_ticket_recipients_debug_override',
   EnableShmoDeepIntegrationDebugOverride = '@ATB_enable_shmo_deep_integration_debug_override',
+  EnableOnlyStopPlacesCheckboxDebugOverride = '@ATB_enable_only_stop_places_checkbox_debug_override',
   OneTimePopOver = '@ATB_one_time_popovers_seen',
   ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
   UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
