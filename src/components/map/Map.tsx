@@ -238,10 +238,6 @@ export const Map = (props: MapProps) => {
             />
           )}
 
-          {showShmoTesting && (
-            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-          )}
-
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
@@ -297,7 +293,9 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-
+        {showShmoTesting && (
+          <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
+        )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

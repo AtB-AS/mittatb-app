@@ -16,6 +16,7 @@ import {useCallback, useState} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ShmoTestingProps = {selectedVehicleId?: string};
 
@@ -25,6 +26,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
+  const {top: safeAreaTop} = useSafeAreaInsets();
 
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
   const lastRecurringPaymentMethod =
@@ -197,7 +199,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
           position: 'absolute',
           left: 0,
           width: '50%',
-          paddingTop: 50,
+          paddingTop: safeAreaTop,
         }}
       >
         <ScrollView
