@@ -134,19 +134,19 @@ export function addGeofencingZoneCustomProps(
           isStationParking = !!rule.stationParking;
         }
 
-        const {Allowed, Slow, NoParking, NoEntry} = geofencingZoneStyles;
+        const {allowed, slow, noParking, noEntry} = geofencingZoneStyles;
 
         let geofencingZoneCustomProps: GeofencingZoneCustomProps = {
-          ...Allowed,
-          code: 'Allowed',
+          ...allowed,
+          code: 'allowed',
         };
 
         if (rideThroughNotAllowed) {
-          geofencingZoneCustomProps = {...NoEntry, code: 'NoEntry'};
+          geofencingZoneCustomProps = {...noEntry, code: 'noEntry'};
         } else if (rideNotAllowed) {
-          geofencingZoneCustomProps = {...NoParking, code: 'NoParking'};
+          geofencingZoneCustomProps = {...noParking, code: 'noParking'};
         } else if (isSlowArea) {
-          geofencingZoneCustomProps = {...Slow, code: 'Slow'};
+          geofencingZoneCustomProps = {...slow, code: 'slow'};
         }
         geofencingZoneCustomProps.isStationParking = isStationParking;
 
