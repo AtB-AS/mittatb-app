@@ -132,7 +132,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: performance_measures_summary.json
+          name: performance_measures_summary
           path: |
             ./e2e/performance/performance_measures_summary.json
           retention-days: 1
