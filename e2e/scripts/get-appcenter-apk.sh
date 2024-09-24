@@ -43,6 +43,7 @@ version=$(echo ${latest} | jq -j '.short_version')
 concat_app_version="${version}-${latest_id}"
 # Set version as env for later summary
 export TESTED_VERSION="${concat_app_version}"
+echo "export TESTED_VERSION=${concat_app_version}" >> ~/.bashrc
 
 if ! [[ $download_url =~ ^http ]]; then
   echo "Failed to find download url in response"
