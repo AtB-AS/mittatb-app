@@ -79,6 +79,16 @@ jobs:
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
+      # TEMP
+      - name: Create performance summary
+        working-directory: e2e/performance
+        run: npx tsx createPerformanceSummary.ts
+        env:
+          TESTED_VERSION: ${{ env.TESTED_VERSION }}
+      - name: Print summary
+        working-directory: e2e/performance
+        run: cat performance_measures_summary.json | jq .
+
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -104,7 +114,16 @@ jobs:
           if [ ! -f ./e2e/performance_measures_*.json ];
           then
             exit 1
+          else
+            cp ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
           fi
+      - name: Create performance summary
+        working-directory: e2e/performance
+        run: npx tsx createPerformanceSummary.ts
+        env:
+          TESTED_VERSION: ${{ env.TESTED_VERSION }}
+
+      # Uploads
       - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -112,6 +131,14 @@ jobs:
           name: performance_measures
           path: |
             ./e2e/performance_measures_*.json
+          retention-days: 1
+      - name: Upload performance summary
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance_measures_summary.json
+          path: |
+            ./e2e/performance/performance_measures_summary.json
           retention-days: 1
       - name: Upload screenshots
         if: failure()

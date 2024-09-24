@@ -41,6 +41,8 @@ download_url=$(echo ${latest} | jq -j '.download_url')
 latest_id=$(echo ${latest} | jq -j '.version')
 version=$(echo ${latest} | jq -j '.short_version')
 concat_app_version="${version}-${latest_id}"
+# Set version as env for later summary
+export TESTED_VERSION="${concat_app_version}"
 
 if ! [[ $download_url =~ ^http ]]; then
   echo "Failed to find download url in response"

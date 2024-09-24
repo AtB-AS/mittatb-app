@@ -11,6 +11,8 @@
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"yarn test:android:local:dev --spec test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1"
   },
   "devDependencies": {
+    "@perf-profiler/reporter": "0.9.0",
+    "@perf-profiler/types": "0.8.0",
     "@wdio/appium-service": "8.3.11",
     "@wdio/cli": "8.3.11",
     "@wdio/globals": "8.5.6",
@@ -26,6 +28,7 @@
     "prettier": "^2.8.3",
     "ts-jest": "^29.1.1",
     "ts-node": "10.9.1",
+    "tsx": "4.19.1",
     "typescript": "^5.1.6",
     "wdio-mochawesome-reporter": "4.0.0",
     "wdio-wait-for": "3.0.2"
