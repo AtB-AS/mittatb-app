@@ -25,6 +25,8 @@ jobs:
   run_tests:
     name: Performance measures for Android
     runs-on: ubuntu-latest
+    outputs:
+      TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
     environment: atb
     timeout-minutes: 90
     steps:
@@ -47,6 +49,7 @@ jobs:
 
       # Download APK
       - name: Get AppCenter APK
+        id: get-appcenter-apk
         run: bash ./scripts/get-appcenter-apk.sh
         working-directory: e2e
         env:
@@ -104,7 +107,19 @@ jobs:
           if [ ! -f ./e2e/performance_measures_*.json ];
           then
             exit 1
+          else
+            cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
           fi
+      - name: Create performance summary
+        working-directory: e2e/performance
+        run: npx tsx createPerformanceSummary.ts
+        env:
+          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      - name: Print performance summary
+        working-directory: e2e/performance
+        run: cat performance_measures_summary.json | jq .
+
+      # Uploads
       - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -112,6 +127,14 @@ jobs:
           name: performance_measures
           path: |
             ./e2e/performance_measures_*.json
+          retention-days: 1
+      - name: Upload performance summary
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance_measures_summary
+          path: |
+            ./e2e/performance/performance_measures_summary.json
           retention-days: 1
       - name: Upload screenshots
         if: failure()

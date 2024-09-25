@@ -1,0 +1,86 @@
+{
+  "name": "performance_measures",
+  "iterations": [
+    {
+      "time": 157450.53833401203,
+      "startTime": 12973.825665950775,
+      "measures": [
+        {
+          "cpu": {
+            "perName": {
+              "UI Thread": 7.96812749003984,
+              "Runtime worker ": 0,
+              "Runtime worker  (2)": 0,
+              "Runtime worker  (3)": 0,
+              "Runtime worker  (4)": 0,
+              "Signal Catcher": 0,
+              "perfetto_hprof_": 0,
+              "ADB-JDWP Connec": 0,
+              "Jit thread pool": 0,
+              "HeapTaskDaemon": 0,
+              "ReferenceQueueD": 0,
+              "FinalizerDaemon": 0,
+              "FinalizerWatchd": 0,
+              "Binder #1": 0,
+              "Binder #2": 0,
+              "Binder #3": 0,
+              "Profile Saver": 0,
+              "ScionFrontendAp": 0,
+              "Firebase Blocki": 0,
+              "pool-4-thread-1": 0,
+              "Firebase-Messag": 0,
+              "Firebase Blocki (2)": 0,
+              "Firebase-Messag (2)": 0,
+              "Firebase Blocki (3)": 0,
+              "Firebase Blocki (4)": 0,
+              "Firebase Backgr": 0,
+              "GmsDynamite": 0,
+              "TAG": 0,
+              "queued-work-loo": 0,
+              "Firebase Backgr (2)": 0,
+              "Measurement Wor": 1.99203187250996,
+              "Firebase Backgr (3)": 0,
+              "Firebase Backgr (4)": 0,
+              "WM.task-1": 0,
+              "Bugsnag IO thre": 0,
+              "pool-12-thread-": 0,
+              "Bugsnag Default": 0,
+              "process reaper": 0,
+              "bugsnag-anr-col": 0,
+              "WM.task-2": 0,
+              "mittatb.staging": 0,
+              "Bugsnag Error t": 0,
+              "Bugsnag Session": 0,
+              "ConnectivityThr": 0,
+              "pool-13-thread-": 0,
+              "RenderThread": 1.99203187250996,
+              "HybridData Dest": 0,
+              "AsyncTask #1": 0,
+              "s.a0 Dispatcher": 0,
+              "pool-15-thread-": 0,
+              "mqt_js": 79.6812749003984,
+              "mqt_native_modu": 3.98406374501992,
+              "hades": 0,
+              "OkHttp Connecti": 0,
+              "Binder #4": 0,
+              "Okio Watchdog": 0,
+              "Thread-3": 0,
+              "GoogleApiHandle": 0
+            },
+            "perCore": {
+              "0": 13.944223107569721,
+              "1": 0,
+              "2": 79.6812749003984,
+              "3": 1.99203187250996
+            }
+          },
+          "fps": 59.339116106880596,
+          "ram": 320.44921875,
+          "time": 502
+        }
+      ],
+      "status": "SUCCESS"
+    }
+  ],
+  "status": "SUCCESS"
+}
