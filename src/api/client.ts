@@ -6,12 +6,12 @@ import Bugsnag from '@bugsnag/react-native';
 import {
   AppIdentifierHeaderName,
   AppVersionHeaderName,
+  Authorization,
   FirebaseAuthIdHeaderName,
   InstallIdHeaderName,
   PlatformHeaderName,
   PlatformVersionHeaderName,
   RequestIdHeaderName,
-  Authorization,
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
@@ -50,11 +50,21 @@ function shouldRetry(error: AxiosError): boolean {
   const shouldForceRefresh = error.config?.forceRefreshIdToken;
   if (shouldForceRefresh) return true;
 
-  const shouldRetryOnNetworkErrorOrIdempotentRequest =
+  return (
     Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
-      isIdempotentRequestError(error));
-  return shouldRetryOnNetworkErrorOrIdempotentRequest;
+      isIdempotentRequestError(error))
+  );
+}
+
+// Implements a custom axios-retry to force a refresh if 401 error is found
+function handleUnauthorizedError(error: AxiosError) {
+  if (error.config && error.response?.status === 401) {
+    error.config.forceRefreshIdToken = true;
+    SHOULD_FORCE_REFRESH.value = true;
+    return client(error.config);
+  }
+  return Promise.reject(error);
 }
 
 export function createClient(baseUrl: string | undefined) {
@@ -66,6 +76,7 @@ export function createClient(baseUrl: string | undefined) {
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
+  client.interceptors.request.use(undefined, handleUnauthorizedError);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
   axiosRetry(client, {retries: RETRY_COUNT, retryCondition: shouldRetry});
@@ -81,7 +92,9 @@ export function setInstallId(installId: string) {
 export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
 
-function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
+function requestHandler(
+  config: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig {
   config.headers[RequestIdHeaderName] = uuid();
 
   if (installIdHeaderValue) {
@@ -104,7 +117,9 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
     const user = auth().currentUser;
-    const tokenResult = await user?.getIdTokenResult(config.forceRefreshIdToken);
+    const tokenResult = await user?.getIdTokenResult(
+      config.forceRefreshIdToken,
+    );
     if (config.forceRefreshIdToken && tokenResult?.claims['customer_number']) {
       SHOULD_FORCE_REFRESH.value = true;
     }
@@ -128,6 +143,7 @@ function isInternalUpstreamServerError(
 ): e is InternalUpstreamServerError {
   return 'errorCode' in e && 'shortNorwegian' in e;
 }
+
 function responseErrorHandler(error: AxiosError) {
   if (shouldSkipLogging(error)) {
     return Promise.reject(error);
