@@ -23,6 +23,6 @@ To download the app, go to one of these links:
 - iOS: https://testflight.apple.com/join/hTAYrwea
 - Android: https://install.appcenter.ms/orgs/vipps/apps/vipps-android/distribution_groups/mt%20testers
 
-After downloading, you will need to make an account. The only phone number(that we know of) which works is `479 98 803`. It will accept any OTP you input to verify the phone number. You will also define your own PIN, which you will need to remember to unlock the app.
+For details on how to use the Vipps MT (phone number, etc), see: [Vipps MT in testing](https://github.com/AtB-AS/docs-private/blob/main/vipps-mt.md)
 
 When testing the QA-version on the device, the payment process will launch the **Vipps MT**-app. Therefore it should not be possible to pay with the production version (and your own money), unless you make a mistake and open _our_ production app.
