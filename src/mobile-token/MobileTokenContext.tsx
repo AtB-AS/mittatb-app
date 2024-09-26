@@ -268,30 +268,31 @@ const useMobileTokenStatus = (
     use_trygg_overgang_qr_code,
   } = useRemoteConfig();
 
-  if (use_trygg_overgang_qr_code) return 'staticQr';
-
+  const fallbackStatus = use_trygg_overgang_qr_code ? 'staticQr' : 'fallback';
   // Treat iOS emulator as fallback
   if (Platform.OS === 'ios' && DeviceInfo.isEmulatorSync()) {
-    return 'fallback';
+    return fallbackStatus;
   }
 
   if (isTimeout)
-    return enable_token_fallback_on_timeout ? 'fallback' : 'loading';
+    return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';
 
   switch (loadNativeTokenStatus) {
     case 'loading':
       return 'loading';
     case 'error':
-      return enable_token_fallback ? 'fallback' : 'error';
+      return enable_token_fallback ? fallbackStatus : 'error';
     case 'success':
       switch (remoteTokensStatus) {
         case 'loading':
           return 'loading';
         case 'error':
-          return enable_token_fallback ? 'fallback' : 'error';
+          return enable_token_fallback ? fallbackStatus : 'error';
         case 'success':
           return deviceInspectable(nativeToken, remoteTokens)
-            ? 'success-and-inspectable'
+            ? use_trygg_overgang_qr_code
+              ? 'staticQr'
+              : 'success-and-inspectable'
             : 'success-not-inspectable';
       }
   }
