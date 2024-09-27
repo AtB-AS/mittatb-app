@@ -1,0 +1,3 @@
+export const SCOOTERS_MAX_CLUSTER_LEVEL = 21;
+export const SCOOTERS_MAX_ZOOM_LEVEL = 22;
+export const SCOOTERS_CLUSTER_RADIUS = 40;
