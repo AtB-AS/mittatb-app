@@ -8,6 +8,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, Platform, StatusBar} from 'react-native';
+import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/utils/map-spec';
 
 type BoundingBox = {
   xMin: number;
@@ -115,6 +116,7 @@ const moveCameraToEntity = (
   if (!padding) {
     flyToLocation({
       coordinates,
+      padding: SLIGHTLY_RAISED_MAP_PADDING,
       mapCameraRef,
       animationMode: 'easeTo',
     });
