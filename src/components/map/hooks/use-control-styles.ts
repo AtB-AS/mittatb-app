@@ -6,7 +6,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 export function useControlPositionsStyle() {
-  const {top, bottom} = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
   const {theme} = useTheme();
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight} = useBottomNavigationStyles();
@@ -29,8 +29,7 @@ export function useControlPositionsStyle() {
       },
       controlsContainer: {
         position: 'absolute',
-        bottom:
-          bottom + bottomPaddingIfBottomSheetIsOpen + theme.spacings.medium,
+        bottom: bottomPaddingIfBottomSheetIsOpen + theme.spacings.medium,
         right: theme.spacings.medium,
       },
       locationContainer: {
@@ -40,6 +39,6 @@ export function useControlPositionsStyle() {
         width: '100%',
       },
     }),
-    [theme, bottom, top, bottomPaddingIfBottomSheetIsOpen],
+    [theme, top, bottomPaddingIfBottomSheetIsOpen],
   );
 }
