@@ -1,5 +1,8 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
+import {
+  VehicleExtendedFragment,
+  VehicleId,
+} from '@atb/api/types/generated/fragments/vehicles';
+import React, {useEffect, useMemo} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -32,11 +35,13 @@ type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
+  onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
 };
 export const ScooterSheet = ({
   vehicleId: id,
   onClose,
   onReportParkingViolation,
+  onVehicleReceived,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
@@ -50,7 +55,12 @@ export const ScooterSheet = ({
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
+
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  useEffect(() => {
+    !!vehicle && !!onVehicleReceived && onVehicleReceived(vehicle);
+  }, [vehicle, onVehicleReceived]);
 
   const [isParkingViolationsReportingEnabled] =
     useParkingViolationsReportingEnabled();

@@ -33,7 +33,10 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
-): Feature<Point, GeoJsonProperties> | undefined => {
+): {
+  selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
+  closeWithCallback: () => void;
+} => {
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -186,5 +189,5 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
 
-  return selectedFeature;
+  return {selectedFeature, closeWithCallback};
 };

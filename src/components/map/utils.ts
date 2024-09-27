@@ -1,5 +1,5 @@
 import {RefObject} from 'react';
-import MapboxGL, {CameraAnimationMode} from '@rnmapbox/maps';
+import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
 import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
@@ -155,7 +155,8 @@ export const getFeaturesAtClick = async (
 };
 
 type FlyToLocationArgs = {
-  coordinates: Coordinates | undefined;
+  coordinates?: Coordinates;
+  padding?: CameraPadding;
   mapCameraRef: RefObject<MapboxGL.Camera>;
   zoomLevel?: number;
   animationDuration?: number;
@@ -163,6 +164,7 @@ type FlyToLocationArgs = {
 };
 export function flyToLocation({
   coordinates,
+  padding,
   mapCameraRef,
   zoomLevel,
   animationDuration,
@@ -171,6 +173,7 @@ export function flyToLocation({
   coordinates &&
     mapCameraRef.current?.setCamera({
       centerCoordinate: [coordinates.longitude, coordinates.latitude],
+      padding,
       zoomLevel,
       animationMode,
       animationDuration: animationDuration ?? 750,

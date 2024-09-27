@@ -17,6 +17,7 @@ import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -38,6 +39,7 @@ import {isCarStation, isStation} from '@atb/mobility/utils';
 import {Snackbar, useSnackbar} from '../snackbar';
 import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {ScanButton} from './components/ScanButton';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -55,13 +57,18 @@ export const Map = (props: MapProps) => {
     [currentCoordinatesRef, initialLocation],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick, selectedFeature} =
-    useMapSelectionChangeEffect(
-      props,
-      mapViewRef,
-      mapCameraRef,
-      startingCoordinates,
-    );
+  const {
+    mapLines,
+    selectedCoordinates,
+    onMapClick,
+    selectedFeature,
+    closeWithCallback,
+  } = useMapSelectionChangeEffect(
+    props,
+    mapViewRef,
+    mapCameraRef,
+    startingCoordinates,
+  );
 
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
@@ -81,6 +88,12 @@ export const Map = (props: MapProps) => {
 
   const showShmoTesting =
     shmoDeepIntegrationEnabled && shmoDeepIntegrationEnabledDebugOverrideReady;
+
+  const scanButtonOnPress = useCallback(() => {
+    closeWithCallback();
+    props.selectionMode === 'ExploreEntities' &&
+      props.navigateToScanQrCodeToSelectVehicle(mapCameraRef); // go to qr scan screen
+  }, [closeWithCallback, props]);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -296,6 +309,10 @@ export const Map = (props: MapProps) => {
         {showShmoTesting && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
         )}
+        {showShmoTesting &&
+          (!selectedFeature || isScooter(selectedFeature)) && (
+            <ScanButton onPress={scanButtonOnPress} />
+          )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

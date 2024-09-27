@@ -2,6 +2,18 @@ import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const MapTexts = {
+  qr: {
+    scan: _('Skann', 'Scan', 'Skann'),
+    notFound: {
+      title: _('Ingen treff', 'Not found', 'Ingen treff'),
+      description: _(
+        'Kunne ikke finne denne el-sparkesykkelen.',
+        "Couldn't find this e-scooter.",
+        'Kunne ikkje finne denne el-sparkesykkelen.',
+      ),
+      ok: _('OK', 'OK', 'OK'),
+    },
+  },
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back', 'Gå tilbake'),
   },

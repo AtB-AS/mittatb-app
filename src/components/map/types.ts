@@ -23,6 +23,8 @@ import {
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
+import {RefObject} from 'react';
+import MapboxGL from '@rnmapbox/maps';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -79,6 +81,11 @@ export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
 ) => void;
+
+export type NavigateToScanQrCodeToSelectVehicleCallback = (
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+) => void;
+
 export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,
@@ -103,6 +110,7 @@ export type MapProps = {
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
       navigateToTripSearch: NavigateToTripSearchCallback;
+      navigateToScanQrCodeToSelectVehicle: NavigateToScanQrCodeToSelectVehicleCallback;
     }
 );
 

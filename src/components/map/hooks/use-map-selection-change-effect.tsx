@@ -42,13 +42,14 @@ export const useMapSelectionChangeEffect = (
       : undefined;
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
-  const selectedFeature = useUpdateBottomSheetWhenSelectedEntityChanges(
-    mapProps,
-    distance,
-    mapSelectionAction,
-    mapViewRef,
-    () => setMapSelectionAction(undefined),
-  );
+  const {selectedFeature, closeWithCallback} =
+    useUpdateBottomSheetWhenSelectedEntityChanges(
+      mapProps,
+      distance,
+      mapSelectionAction,
+      mapViewRef,
+      () => setMapSelectionAction(undefined),
+    );
 
   return {
     mapLines:
@@ -63,5 +64,6 @@ export const useMapSelectionChangeEffect = (
       ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
       : undefined,
     selectedFeature,
+    closeWithCallback,
   };
 };

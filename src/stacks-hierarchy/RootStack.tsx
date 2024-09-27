@@ -27,6 +27,7 @@ import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
+import {Root_ScanQrCodeToSelectVehicleScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeToSelectVehicleScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
@@ -302,6 +303,10 @@ export const RootStack = () => {
                 name="Root_LocationSearchByMapScreen"
                 component={Root_LocationSearchByMapScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_ScanQrCodeToSelectVehicleScreen"
+                component={Root_ScanQrCodeToSelectVehicleScreen}
               />
               <Stack.Screen
                 name="Root_PurchaseOverviewScreen"
