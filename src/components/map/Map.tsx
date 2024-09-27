@@ -40,6 +40,7 @@ import {Snackbar, useSnackbar} from '../snackbar';
 import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
+import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -81,6 +82,9 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
+  const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
+    useActiveShmoBookingQuery();
+
   const [
     shmoDeepIntegrationEnabled,
     shmoDeepIntegrationEnabledDebugOverrideReady,
@@ -88,6 +92,12 @@ export const Map = (props: MapProps) => {
 
   const showShmoTesting =
     shmoDeepIntegrationEnabled && shmoDeepIntegrationEnabledDebugOverrideReady;
+
+  const showScanButton =
+    showShmoTesting &&
+    !activeShmoBooking &&
+    !activeShmoBookingIsLoading &&
+    (!selectedFeature || isScooter(selectedFeature));
 
   const scanButtonOnPress = useCallback(() => {
     closeWithCallback();
@@ -309,10 +319,7 @@ export const Map = (props: MapProps) => {
         {showShmoTesting && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
         )}
-        {showShmoTesting &&
-          (!selectedFeature || isScooter(selectedFeature)) && (
-            <ScanButton onPress={scanButtonOnPress} />
-          )}
+        {showScanButton && <ScanButton onPress={scanButtonOnPress} />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

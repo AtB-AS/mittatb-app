@@ -2,7 +2,7 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
