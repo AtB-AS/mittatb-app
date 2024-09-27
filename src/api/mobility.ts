@@ -73,12 +73,12 @@ export const getVehicles = (
 export const getVehicle = (
   id: string,
   opts?: VehicleRequestOpts,
-): Promise<VehicleExtendedFragment | undefined> => {
+): Promise<VehicleExtendedFragment | null> => {
   const url = '/bff/v2/mobility/vehicle';
   const query = qs.stringify({ids: id});
   return client
     .get<GetVehicleQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.vehicles?.[0]);
+    .then((res) => res.data.vehicles?.[0] || null);
 };
 
 export const getStations = (
