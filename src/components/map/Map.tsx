@@ -81,15 +81,16 @@ export const Map = (props: MapProps) => {
     bottomSheetCurrentlyAutoSelected?.type ===
       AutoSelectableBottomSheetType.Bicycle;
 
+  const selectedFeatureIsAVehicle =
+    isScooter(selectedFeature) || isBicycle(selectedFeature);
+
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
 
   const showGeofencingZones =
     geofencingZonesEnabled &&
     geofencingZonesEnabledDebugOverrideReady &&
-    (isScooter(selectedFeature) ||
-      isBicycle(selectedFeature) ||
-      aVehicleIsAutoSelected);
+    (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -109,7 +110,7 @@ export const Map = (props: MapProps) => {
     showShmoTesting &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
-    (!selectedFeature || isScooter(selectedFeature) || aVehicleIsAutoSelected);
+    (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
   useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
