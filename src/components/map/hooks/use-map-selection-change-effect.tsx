@@ -42,7 +42,7 @@ export const useMapSelectionChangeEffect = (
       : undefined;
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
-  const {selectedFeature, closeWithCallback} =
+  const {selectedFeature, onReportParkingViolation} =
     useUpdateBottomSheetWhenSelectedEntityChanges(
       mapProps,
       distance,
@@ -64,6 +64,6 @@ export const useMapSelectionChangeEffect = (
       ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
       : undefined,
     selectedFeature,
-    closeWithCallback,
+    onReportParkingViolation,
   };
 };

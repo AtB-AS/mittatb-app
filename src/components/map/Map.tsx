@@ -16,6 +16,7 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
+import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
 
 import {
@@ -63,7 +64,7 @@ export const Map = (props: MapProps) => {
     selectedCoordinates,
     onMapClick,
     selectedFeature,
-    closeWithCallback,
+    onReportParkingViolation,
   } = useMapSelectionChangeEffect(
     props,
     mapViewRef,
@@ -99,11 +100,7 @@ export const Map = (props: MapProps) => {
     !activeShmoBookingIsLoading &&
     (!selectedFeature || isScooter(selectedFeature));
 
-  const scanButtonOnPress = useCallback(() => {
-    closeWithCallback();
-    props.selectionMode === 'ExploreEntities' &&
-      props.navigateToScanQrCodeToSelectVehicle(mapCameraRef); // go to qr scan screen
-  }, [closeWithCallback, props]);
+  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -319,7 +316,7 @@ export const Map = (props: MapProps) => {
         {showShmoTesting && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
         )}
-        {showScanButton && <ScanButton onPress={scanButtonOnPress} />}
+        {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

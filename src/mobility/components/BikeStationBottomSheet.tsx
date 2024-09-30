@@ -24,17 +24,21 @@ import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
+import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
+  onStationReceived?: (station: BikeStationFragment) => void;
 };
 
 export const BikeStationBottomSheet = ({
   stationId,
   distance,
   onClose,
+  onStationReceived,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -51,6 +55,8 @@ export const BikeStationBottomSheet = ({
     availableBikes,
   } = useBikeStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  useDoOnceOnTruthy(onStationReceived, station);
 
   return (
     <BottomSheetContainer

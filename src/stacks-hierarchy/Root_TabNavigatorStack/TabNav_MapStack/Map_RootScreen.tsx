@@ -1,4 +1,4 @@
-import React, {RefObject} from 'react';
+import React from 'react';
 import {
   Map,
   MapFilterType,
@@ -10,7 +10,6 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {useStations, useVehicles} from '@atb/mobility';
-import MapboxGL from '@rnmapbox/maps';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -69,15 +68,6 @@ export const Map_RootScreen = ({
     });
   };
 
-  const navigateToScanQrCodeToSelectVehicle = (
-    mapCameraRef: RefObject<MapboxGL.Camera>,
-  ) => {
-    navigation.navigate({
-      name: 'Root_ScanQrCodeToSelectVehicleScreen',
-      params: {mapCameraRef},
-    });
-  };
-
   return (
     <>
       <StatusBarOnFocus barStyle="dark-content" backgroundColor="#00000000" />
@@ -88,9 +78,6 @@ export const Map_RootScreen = ({
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
         navigateToTripSearch={navigateToTripSearch}
-        navigateToScanQrCodeToSelectVehicle={
-          navigateToScanQrCodeToSelectVehicle
-        }
         includeSnackbar={true}
       />
     </>

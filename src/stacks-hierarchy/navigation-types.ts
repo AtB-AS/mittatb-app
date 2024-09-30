@@ -14,8 +14,6 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
-import {RefObject} from 'react';
-import MapboxGL from '@rnmapbox/maps';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -33,10 +31,6 @@ export type Root_LocationSearchByMapScreenParams = {
   callerRouteName: string;
   callerRouteParam: string;
   initialLocation?: Location;
-};
-
-export type Root_ScanQrCodeToSelectVehicleParams = {
-  mapCameraRef: RefObject<MapboxGL.Camera>;
 };
 
 type ReceiptScreenRouteParams = {
@@ -111,7 +105,7 @@ export type RootStackParamList = StackParams<{
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
-  Root_ScanQrCodeToSelectVehicleScreen: Root_ScanQrCodeToSelectVehicleParams;
+  Root_ScanQrCodeToSelectVehicleScreen: undefined;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
   Root_SearchStopPlaceScreen: undefined;
   Root_ShareTravelHabitsScreen: undefined;

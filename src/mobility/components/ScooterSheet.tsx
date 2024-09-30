@@ -2,7 +2,7 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -30,6 +30,7 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedScooter} from '@atb/theme/ThemedAssets';
+import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
 
 type Props = {
   vehicleId: VehicleId;
@@ -58,9 +59,7 @@ export const ScooterSheet = ({
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  useEffect(() => {
-    !!vehicle && !!onVehicleReceived && onVehicleReceived(vehicle);
-  }, [vehicle, onVehicleReceived]);
+  useDoOnceOnTruthy(onVehicleReceived, vehicle);
 
   const [isParkingViolationsReportingEnabled] =
     useParkingViolationsReportingEnabled();

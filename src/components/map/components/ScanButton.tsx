@@ -5,15 +5,17 @@ import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
 import {useAnalytics} from '@atb/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useControlPositionsStyle} from '../hooks/use-control-styles';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 
-type ScanButtonProps = {
-  onPress: () => void;
-};
-export const ScanButton = ({onPress}: ScanButtonProps) => {
+export const ScanButton = () => {
   const styles = useStyles();
   const analytics = useAnalytics();
+  const navigation = useNavigation<RootNavigationProps>();
   const {t} = useTranslation();
   const {controlsContainer} = useControlPositionsStyle();
+  const {close: closeBottomSheet} = useBottomSheet();
 
   return (
     <Button
@@ -23,8 +25,9 @@ export const ScanButton = ({onPress}: ScanButtonProps) => {
       interactiveColor="interactive_2"
       accessibilityRole="button"
       onPress={() => {
+        closeBottomSheet();
         analytics.logEvent('Map', 'Scan');
-        onPress();
+        navigation.navigate('Root_ScanQrCodeToSelectVehicleScreen');
       }}
       text={t(MapTexts.qr.scan)}
       rightIcon={{svg: Qr}}

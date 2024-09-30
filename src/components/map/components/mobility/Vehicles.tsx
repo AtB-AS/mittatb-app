@@ -4,10 +4,13 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {Cluster, VehicleFeatures} from '../../types';
 import {Scooters} from './Scooters';
 import {Bicycles} from './Bicycles';
-import {flyToLocation, isClusterFeature} from '@atb/components/map';
+import {
+  flyToLocation,
+  isClusterFeature,
+  SLIGHTLY_RAISED_MAP_PADDING,
+} from '@atb/components/map';
 import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/utils/map-spec';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;

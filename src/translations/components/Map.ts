@@ -5,11 +5,15 @@ const MapTexts = {
   qr: {
     scan: _('Skann', 'Scan', 'Skann'),
     notFound: {
-      title: _('Ingen treff', 'Not found', 'Ingen treff'),
+      title: _(
+        'Kunne ikke lese QR-kode',
+        "Couldn't read the QR code.",
+        'Kunne ikkje lese QR-kode.',
+      ),
       description: _(
-        'Kunne ikke finne denne el-sparkesykkelen.',
-        "Couldn't find this e-scooter.",
-        'Kunne ikkje finne denne el-sparkesykkelen.',
+        'Det kan hende at vi ikke kan vise dette innholdet i appen eller at lenken er ugyldig.',
+        'It could be that we are unable to show this content in the app or that the link is broken.',
+        'Det kan hende at vi ikkje kan vise dette innhaldet i appen eller at lenken er ugyldig.',
       ),
       ok: _('OK', 'OK', 'OK'),
     },

@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {OnboardingContextProvider} from './onboarding';
 import {GlobalMessagesContextProvider} from './global-messages';
+import {MapContextProvider} from './MapContext';
 import {GeolocationContextProvider} from './GeolocationContext';
 import {RootStack} from '@atb/stacks-hierarchy';
 import {trackAppState} from './diagnostics/trackAppState';
@@ -98,23 +99,25 @@ export const App = () => {
                                         <MobileTokenContextProvider>
                                           <AppLanguageProvider>
                                             <GeolocationContextProvider>
-                                              <GlobalMessagesContextProvider>
-                                                <AnnouncementsContextProvider>
-                                                  <NotificationContextProvider>
-                                                    <PopOverContextProvider>
-                                                      <BottomSheetProvider>
-                                                        <FeedbackQuestionsProvider>
-                                                          <BeaconsContextProvider>
-                                                            <OnboardingContextProvider>
-                                                              <RootStack />
-                                                            </OnboardingContextProvider>
-                                                          </BeaconsContextProvider>
-                                                        </FeedbackQuestionsProvider>
-                                                      </BottomSheetProvider>
-                                                    </PopOverContextProvider>
-                                                  </NotificationContextProvider>
-                                                </AnnouncementsContextProvider>
-                                              </GlobalMessagesContextProvider>
+                                              <MapContextProvider>
+                                                <GlobalMessagesContextProvider>
+                                                  <AnnouncementsContextProvider>
+                                                    <NotificationContextProvider>
+                                                      <PopOverContextProvider>
+                                                        <BottomSheetProvider>
+                                                          <FeedbackQuestionsProvider>
+                                                            <BeaconsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
+                                                            </BeaconsContextProvider>
+                                                          </FeedbackQuestionsProvider>
+                                                        </BottomSheetProvider>
+                                                      </PopOverContextProvider>
+                                                    </NotificationContextProvider>
+                                                  </AnnouncementsContextProvider>
+                                                </GlobalMessagesContextProvider>
+                                              </MapContextProvider>
                                             </GeolocationContextProvider>
                                           </AppLanguageProvider>
                                         </MobileTokenContextProvider>

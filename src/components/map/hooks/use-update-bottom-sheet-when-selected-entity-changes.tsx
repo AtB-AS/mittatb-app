@@ -1,5 +1,5 @@
 import {MapFilterType, MapProps, MapSelectionActionType} from '../types';
-import React, {RefObject, useEffect, useState} from 'react';
+import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
@@ -35,7 +35,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   closeCallback: () => void,
 ): {
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
-  closeWithCallback: () => void;
+  onReportParkingViolation: () => void;
 } => {
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
@@ -43,10 +43,16 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const analytics = useMapSelectionAnalytics();
   const navigation = useNavigation<RootNavigationProps>();
 
-  const closeWithCallback = () => {
+  const closeWithCallback = useCallback(() => {
     closeBottomSheet();
     closeCallback();
-  };
+  }, [closeBottomSheet, closeCallback]);
+
+  const onReportParkingViolation = useCallback(() => {
+    closeWithCallback();
+    analytics.logEvent('Mobility', 'Report parking violation clicked');
+    navigation.navigate('Root_ParkingViolationsSelectScreen');
+  }, [closeWithCallback, analytics, navigation]);
 
   useEffect(() => {
     (async function () {
@@ -145,14 +151,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             <ScooterSheet
               vehicleId={selectedFeature.properties.id}
               onClose={closeCallback}
-              onReportParkingViolation={() => {
-                closeWithCallback();
-                analytics.logEvent(
-                  'Mobility',
-                  'Report parking violation clicked',
-                );
-                navigation.navigate('Root_ParkingViolationsSelectScreen');
-              }}
+              onReportParkingViolation={onReportParkingViolation}
             />
           );
         }, false);
@@ -189,5 +188,5 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
 
-  return {selectedFeature, closeWithCallback};
+  return {selectedFeature, onReportParkingViolation};
 };

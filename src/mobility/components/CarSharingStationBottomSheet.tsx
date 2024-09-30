@@ -12,7 +12,10 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
-import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
+import {
+  CarAvailabilityFragment,
+  CarStationFragment,
+} from '@atb/api/types/generated/fragments/stations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
@@ -22,17 +25,20 @@ import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {CarPreviews} from '@atb/mobility/components/CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
+import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
+  onStationReceived?: (station: CarStationFragment) => void;
 };
 
 export const CarSharingStationBottomSheet = ({
   stationId,
   distance,
   onClose,
+  onStationReceived,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -49,6 +55,8 @@ export const CarSharingStationBottomSheet = ({
     stationName,
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  useDoOnceOnTruthy(onStationReceived, station);
 
   return (
     <BottomSheetContainer

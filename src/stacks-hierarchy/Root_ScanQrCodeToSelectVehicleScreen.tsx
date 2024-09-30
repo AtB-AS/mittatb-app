@@ -8,34 +8,25 @@ import {ScreenContainer} from './Root_ParkingViolationsReporting/components/Scre
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {ScooterSheet} from '@atb/mobility';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {
-  VehicleExtendedFragment,
-  VehicleId,
-} from '@atb/api/types/generated/fragments/vehicles';
-import {flyToLocation} from '@atb/components/map';
-import {Alert, InteractionManager} from 'react-native';
+import {Alert} from 'react-native';
 
-import {
-  SLIGHTLY_RAISED_MAP_PADDING,
-  SCOOTERS_CLUSTER_RADIUS,
-} from '@atb/utils/map-spec';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
 
 export type Props =
   RootStackScreenProps<'Root_ScanQrCodeToSelectVehicleScreen'>;
 
 export const Root_ScanQrCodeToSelectVehicleScreen: React.FC<Props> = ({
   navigation,
-  route: {
-    params: {mapCameraRef},
-  },
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const isFocused = useIsFocusedAndActive();
   const {currentCoordinatesRef} = useGeolocationState();
+  const {setBottomSheetToAutoSelect} = useMapState();
+  const [hasCapturedQr, setHasCapturedQr] = useState(false);
 
   const {
     mutateAsync: getIdsFromQrCode,
@@ -43,24 +34,48 @@ export const Root_ScanQrCodeToSelectVehicleScreen: React.FC<Props> = ({
     isError: getIdsFromQrCodeIsError,
   } = useGetIdsFromQrCodeMutation();
 
-  const isFocused = useIsFocusedAndActive();
-  const [hasCapturedQr, setHasCapturedQr] = useState(false);
-
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-
-  const flyToVehicle = useCallback(
-    (vehicle: VehicleExtendedFragment) => {
-      flyToLocation({
-        coordinates: {
-          latitude: vehicle.lat,
-          longitude: vehicle.lon,
+  const alertResultError = useCallback(() => {
+    Alert.alert(
+      t(MapTexts.qr.notFound.title),
+      t(MapTexts.qr.notFound.description),
+      [
+        {
+          text: t(MapTexts.qr.notFound.ok),
+          style: 'default',
+          onPress: async () => navigation.goBack(),
         },
-        padding: SLIGHTLY_RAISED_MAP_PADDING,
-        mapCameraRef,
-        zoomLevel: SCOOTERS_CLUSTER_RADIUS + 0.01, // ensure no clustering
-      });
+      ],
+    );
+  }, [navigation, t]);
+
+  const idsFromQrCodeReceivedHandler = useCallback(
+    (idsFromQrCode: IdsFromQrCodeResponse) => {
+      // NB come back and fix this once the Shmo QR endpoint is updated!
+      // the AutoSelectableBottomSheetType should then be decided based on FormFactor(s)
+      const isBysykkelOperator = idsFromQrCode.operatorId.includes('bysykkel');
+
+      if (idsFromQrCode.vehicleId) {
+        setBottomSheetToAutoSelect({
+          type: isBysykkelOperator
+            ? AutoSelectableBottomSheetType.Bicycle
+            : AutoSelectableBottomSheetType.Scooter,
+          id: idsFromQrCode.vehicleId,
+        });
+      } else if (idsFromQrCode.stationId) {
+        setBottomSheetToAutoSelect({
+          type: isBysykkelOperator
+            ? AutoSelectableBottomSheetType.BikeStation
+            : AutoSelectableBottomSheetType.CarStation,
+          id: idsFromQrCode.stationId,
+        });
+      } else {
+        alertResultError();
+        return;
+      }
+
+      navigation.goBack();
     },
-    [mapCameraRef],
+    [alertResultError, navigation, setBottomSheetToAutoSelect],
   );
 
   const onQrCodeScanned = useCallback(
@@ -69,63 +84,37 @@ export const Root_ScanQrCodeToSelectVehicleScreen: React.FC<Props> = ({
 
       const idsFromQrCode = await getIdsFromQrCode({
         qrCodeUrl: qr,
-        latitude: currentCoordinatesRef?.current?.latitude || 0,
-        longitude: currentCoordinatesRef?.current?.longitude || 0,
+        latitude: currentCoordinatesRef?.current?.latitude ?? 0,
+        longitude: currentCoordinatesRef?.current?.longitude ?? 0,
       });
-      navigation.goBack();
-      if (idsFromQrCode.vehicleId) {
-        const vehicleId: VehicleId = idsFromQrCode.vehicleId || '';
-
-        InteractionManager.runAfterInteractions(() => {
-          openBottomSheet(() => {
-            return (
-              <ScooterSheet
-                vehicleId={vehicleId}
-                onClose={() => closeBottomSheet()}
-                onReportParkingViolation={() => {}}
-                onVehicleReceived={flyToVehicle}
-              />
-            );
-          }, false);
-        });
-      }
+      idsFromQrCodeReceivedHandler(idsFromQrCode);
     },
-    [
-      closeBottomSheet,
-      currentCoordinatesRef,
-      flyToVehicle,
-      getIdsFromQrCode,
-      navigation,
-      openBottomSheet,
-    ],
+    [getIdsFromQrCode, currentCoordinatesRef, idsFromQrCodeReceivedHandler],
   );
 
   useEffect(() => {
     if (isFocused) {
       setHasCapturedQr(false);
+
+      // useful for testing:
+      // setTimeout(() => {
+      //   alertResultError();
+      //   idsFromQrCodeReceivedHandler({
+      //     operatorId: 'YRY:Operator:Ryde',
+      //     vehicleId: 'YRY:Vehicle:ea157103-05bb-3afd-ba77-0bfd643cdc93',
+      //   });
+      // }, 800);
     }
-  }, [isFocused]);
+  }, [isFocused]); // , idsFromQrCodeReceivedHandler, navigation
 
   useEffect(() => {
-    if (getIdsFromQrCodeIsError) {
-      Alert.alert(
-        t(MapTexts.qr.notFound.title),
-        t(MapTexts.qr.notFound.description),
-        [
-          {
-            text: t(MapTexts.qr.notFound.ok),
-            style: 'default',
-            onPress: async () => navigation.goBack(),
-          },
-        ],
-      );
-    }
-  }, [getIdsFromQrCodeIsError, navigation, t]);
+    getIdsFromQrCodeIsError && alertResultError();
+  }, [alertResultError, getIdsFromQrCodeIsError]);
 
   return (
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      //secondaryText={t(ParkingViolationTexts.qr.instructions)}
       leftHeaderButton={
         getIdsFromQrCodeIsLoading ? undefined : {type: 'back', withIcon: true}
       }
