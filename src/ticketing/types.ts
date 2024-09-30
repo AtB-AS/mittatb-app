@@ -202,6 +202,12 @@ export type ReserveOfferRequestBody = {
   auto_sale: boolean;
 };
 
+export type TicketRecipientType = {
+  accountId: string;
+  phoneNumber: string;
+  name?: string;
+};
+
 export type OfferReservation = {
   order_id: string;
   payment_id: number;

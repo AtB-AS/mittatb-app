@@ -1,7 +1,12 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {OfferReservation, ReserveOffer, reserveOffers} from '@atb/ticketing';
+import {
+  OfferReservation,
+  ReserveOffer,
+  TicketRecipientType,
+  reserveOffers,
+} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
-import {PaymentMethod, TicketRecipientType} from '@atb/stacks-hierarchy/types';
+import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 

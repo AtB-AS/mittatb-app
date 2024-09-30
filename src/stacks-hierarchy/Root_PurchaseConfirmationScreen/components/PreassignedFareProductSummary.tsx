@@ -21,7 +21,7 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 import React from 'react';
 import {View} from 'react-native';
 import {useShowValidTimeInfoEnabled} from '../../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
-import {TicketRecipientType} from '../../types';
+import {TicketRecipientType} from '@atb/ticketing';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
