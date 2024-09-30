@@ -23,7 +23,7 @@ export const useReserveOfferMutation = ({
   recipient,
   shouldSavePaymentMethod,
 }: Args) => {
-  const {abtCustomerId} = useAuthState();
+  const {abtCustomerId, phoneNumber} = useAuthState();
   const {enable_auto_sale: autoSale} = useRemoteConfig();
   const queryClient = useQueryClient();
 
@@ -40,9 +40,9 @@ export const useReserveOfferMutation = ({
         opts: {retry: true},
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
-        customerAlias: recipient?.name,
-        phoneNumber: recipient?.phoneNumber,
+        phoneNumber,
         autoSale,
+        recipient,
       });
     },
     onSuccess: () => {

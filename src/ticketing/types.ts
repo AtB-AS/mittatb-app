@@ -197,9 +197,17 @@ export type ReserveOfferRequestBody = {
   recurring_payment_id: number | undefined;
   sca_exemption: boolean;
   customer_account_id: string;
-  customer_alias: string | undefined;
+  /** Paying customer's phone number, with country prefix */
   phone_number: string | undefined;
   auto_sale: boolean;
+  /** Recipient to be stored after the purchase is made */
+  store_alias:
+    | {
+        alias: string;
+        /** With country prefix */
+        phone_number: string;
+      }
+    | undefined;
 };
 
 export type TicketRecipientType = {
