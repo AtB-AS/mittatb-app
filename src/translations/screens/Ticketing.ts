@@ -1,4 +1,3 @@
-import {orgSpecificTranslations} from '../orgSpecificTranslations';
 import {TranslatedString, translation as _} from '../commons';
 import {TicketHistoryMode} from '@atb/ticket-history';
 
@@ -219,26 +218,6 @@ const TicketingTexts = {
     ),
     paymentErrorButton: _('Lukk', 'Close', 'Lukk'),
   },
-  travelCardInformation: {
-    reisebevis: _('Reisebevis', 'Travel token', 'Reisebevis'),
-    onInspection: _(
-      'I billettkontroll må du vise t:kortet ditt',
-      'In the event of an inspection, please present your t:card',
-      'I billettkontrollen må du vise t:kortet ditt',
-    ),
-    changeInstructions: _(
-      'Kan endres fra "Min profil"',
-      'Can be changed from "My profile"',
-      'Kan endrast frå "Min profil"',
-    ),
-    cardType: _('t:kort', 't:card', 't:kort'),
-    illustrationa11yLabel: (travelCardId: string) =>
-      _(
-        `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
-        `Illustration of t card with card number that contains ${travelCardId}`,
-        `Illustrasjon av t kort med kortnummer som inneheld ${travelCardId}`,
-      ),
-  },
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets', 'Prøv billettkjøp'),
     description: _(
@@ -321,42 +300,4 @@ const TicketingTexts = {
   },
 };
 
-export default orgSpecificTranslations(TicketingTexts, {
-  nfk: {
-    travelCardInformation: {
-      illustrationa11yLabel: (travelCardId: string) =>
-        _(
-          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
-          `Illustration of travel card with card number that contains ${travelCardId}`,
-          `Illustrasjon av reisekort med kortnummer som inneheld ${travelCardId}`,
-        ),
-      cardType: _('reisekort', 'travel card', 'reisekort'),
-      onInspection: _(
-        'I billettkontroll må du vise reisekortet ditt',
-        'In the event of an inspection, please present your travel card',
-        'I billettkontrollen må du vise reisekortet ditt',
-      ),
-    },
-  },
-  fram: {
-    travelCardInformation: {
-      illustrationa11yLabel: (travelCardId: string) =>
-        _(
-          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
-          `Illustration of travel card with card number that contains ${travelCardId}`,
-          `Illustrasjon av reisekort med kortnummer som inneheld ${travelCardId}`,
-        ),
-      cardType: _('reisekort', 'travel card', 'reisekort'),
-      onInspection: _(
-        'I billettkontroll må du vise reisekortet ditt',
-        'In the event of an inspection, please present your travel card',
-        'I billettkontroll må du vise reisekortet ditt',
-      ),
-      changeInstructions: _(
-        'Kan endres fra "Min bruker"',
-        'Can be changed from "My user"',
-        'Kan endrast frå "Min brukar"',
-      ),
-    },
-  },
-});
+export default TicketingTexts;
