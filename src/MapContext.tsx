@@ -5,6 +5,10 @@ type MapContextState = {
   setBottomSheetToAutoSelect: (
     bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
   ) => void;
+  bottomSheetCurrentlyAutoSelected?: AutoSelectableBottomSheet;
+  setBottomSheetCurrentlyAutoSelected: (
+    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
+  ) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -27,11 +31,18 @@ export const MapContextProvider: React.FC = ({children}) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
 
+  const [
+    bottomSheetCurrentlyAutoSelected,
+    setBottomSheetCurrentlyAutoSelected,
+  ] = useState<AutoSelectableBottomSheet>();
+
   return (
     <MapContext.Provider
       value={{
         bottomSheetToAutoSelect,
         setBottomSheetToAutoSelect,
+        bottomSheetCurrentlyAutoSelected,
+        setBottomSheetCurrentlyAutoSelected,
       }}
     >
       {children}

@@ -42,6 +42,7 @@ import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integra
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
+import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -72,13 +73,23 @@ export const Map = (props: MapProps) => {
     startingCoordinates,
   );
 
+  const {bottomSheetCurrentlyAutoSelected} = useMapState();
+
+  const aVehicleIsAutoSelected =
+    bottomSheetCurrentlyAutoSelected?.type ===
+      AutoSelectableBottomSheetType.Scooter ||
+    bottomSheetCurrentlyAutoSelected?.type ===
+      AutoSelectableBottomSheetType.Bicycle;
+
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
 
   const showGeofencingZones =
     geofencingZonesEnabled &&
     geofencingZonesEnabledDebugOverrideReady &&
-    (isScooter(selectedFeature) || isBicycle(selectedFeature));
+    (isScooter(selectedFeature) ||
+      isBicycle(selectedFeature) ||
+      aVehicleIsAutoSelected);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -98,7 +109,7 @@ export const Map = (props: MapProps) => {
     showShmoTesting &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
-    (!selectedFeature || isScooter(selectedFeature));
+    (!selectedFeature || isScooter(selectedFeature) || aVehicleIsAutoSelected);
 
   useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
@@ -254,7 +265,11 @@ export const Map = (props: MapProps) => {
 
           {showGeofencingZones && (
             <GeofencingZones
-              selectedVehicleId={selectedFeature.properties.id}
+              selectedVehicleId={
+                aVehicleIsAutoSelected
+                  ? bottomSheetCurrentlyAutoSelected.id
+                  : selectedFeature?.properties?.id
+              }
             />
           )}
 

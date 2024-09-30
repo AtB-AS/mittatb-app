@@ -23,9 +23,18 @@ export const useAutoSelectMapItem = (
   mapCameraRef: React.RefObject<CameraRef>,
   onReportParkingViolation: () => void,
 ) => {
-  const {bottomSheetToAutoSelect, setBottomSheetToAutoSelect} = useMapState();
+  const {
+    bottomSheetToAutoSelect,
+    setBottomSheetToAutoSelect,
+    setBottomSheetCurrentlyAutoSelected,
+  } = useMapState();
   const isFocused = useIsFocusedAndActive();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close} = useBottomSheet();
+
+  const closeBottomSheet = useCallback(() => {
+    close();
+    setBottomSheetCurrentlyAutoSelected(undefined);
+  }, [close, setBottomSheetCurrentlyAutoSelected]);
 
   const flyToMapItemLocation = useCallback(
     (mapItem: VehicleExtendedFragment | BikeStationFragment) => {
@@ -98,6 +107,7 @@ export const useAutoSelectMapItem = (
         if (!!BottomSheetComponent) {
           openBottomSheet(() => BottomSheetComponent, false);
         }
+        setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);
       }
     } catch (e) {
@@ -112,5 +122,6 @@ export const useAutoSelectMapItem = (
     flyToMapItemLocation,
     setBottomSheetToAutoSelect,
     onReportParkingViolation,
+    setBottomSheetCurrentlyAutoSelected,
   ]);
 };
