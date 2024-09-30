@@ -114,9 +114,8 @@ export const Root_ScanQrCodeToSelectVehicleScreen: React.FC<Props> = ({
   return (
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      //secondaryText={t(ParkingViolationTexts.qr.instructions)}
       leftHeaderButton={
-        getIdsFromQrCodeIsLoading ? undefined : {type: 'back', withIcon: true}
+        getIdsFromQrCodeIsLoading ? undefined : {type: 'close', withIcon: true}
       }
       isLoading={getIdsFromQrCodeIsLoading}
     >
