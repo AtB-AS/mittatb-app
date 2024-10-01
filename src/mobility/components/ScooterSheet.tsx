@@ -138,7 +138,7 @@ export const ScooterSheet = ({
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={styles.errorMessage}>
+          <View style={styles.footer}>
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -167,9 +167,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-    },
-    errorMessage: {
-      marginHorizontal: theme.spacings.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
