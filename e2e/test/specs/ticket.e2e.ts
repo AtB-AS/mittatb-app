@@ -146,6 +146,7 @@ describe('Ticket', () => {
       await TicketPage.chooseFareProduct('single');
       await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
+      await AppHelper.removeGlobalMessages();
 
       // Check on-behalf-of
       await PurchaseOverviewPage.selectTraveller();
@@ -173,6 +174,7 @@ describe('Ticket', () => {
       await TicketPage.chooseFareProduct('single');
       await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
+      await AppHelper.removeGlobalMessages();
 
       expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
 
