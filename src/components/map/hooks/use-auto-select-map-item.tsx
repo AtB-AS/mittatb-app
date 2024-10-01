@@ -12,7 +12,10 @@ import {flyToLocation} from '../utils';
 
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
-import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {
+  BikeStationFragment,
+  CarStationFragment,
+} from '@atb/api/types/generated/fragments/stations';
 import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 
 /**
@@ -37,7 +40,12 @@ export const useAutoSelectMapItem = (
   }, [close, setBottomSheetCurrentlyAutoSelected]);
 
   const flyToMapItemLocation = useCallback(
-    (mapItem: VehicleExtendedFragment | BikeStationFragment) => {
+    (
+      mapItem:
+        | VehicleExtendedFragment
+        | BikeStationFragment
+        | CarStationFragment,
+    ) => {
       mapCameraRef &&
         flyToLocation({
           coordinates: {
@@ -99,6 +107,7 @@ export const useAutoSelectMapItem = (
                 stationId={bottomSheetToAutoSelect.id}
                 distance={undefined}
                 onClose={closeBottomSheet}
+                onStationReceived={flyToMapItemLocation}
               />
             );
             break;
