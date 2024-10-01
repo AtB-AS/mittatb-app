@@ -14,12 +14,9 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
 
-export type Props =
-  RootStackScreenProps<'Root_ScanQrCodeToSelectVehicleScreen'>;
+export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
-export const Root_ScanQrCodeToSelectVehicleScreen: React.FC<Props> = ({
-  navigation,
-}) => {
+export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const styles = useStyles();
   const {t} = useTranslation();
 

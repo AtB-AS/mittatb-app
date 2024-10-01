@@ -27,7 +27,7 @@ export const ScanButton = () => {
       onPress={() => {
         closeBottomSheet();
         analytics.logEvent('Map', 'Scan');
-        navigation.navigate('Root_ScanQrCodeToSelectVehicleScreen');
+        navigation.navigate('Root_ScanQrCodeScreen');
       }}
       text={t(MapTexts.qr.scan)}
       rightIcon={{svg: Qr}}
