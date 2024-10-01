@@ -68,6 +68,7 @@ describe('Ticket', () => {
       await TicketPage.chooseFareProduct('single');
       await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
+      await AppHelper.removeGlobalMessages();
 
       // Pre
       expect(await PurchaseOverviewPage.getZone()).toContain('Zone A');
@@ -78,11 +79,9 @@ describe('Ticket', () => {
       await PurchaseOverviewPage.decreaseTravellerCount('adult');
       await PurchaseOverviewPage.increaseTravellerCount('child');
       await PurchaseOverviewPage.confirmTravellers();
-      // Note! Not working at the moment due to the location prompts
-      /*
-        await PurchaseOverviewPage.setZones('B2', 'B2')
-        expect(await PurchaseOverviewPage.getZone()).toContain('Zone B2')
-     */
+      await PurchaseOverviewPage.setZones('B2', 'B2');
+      expect(await PurchaseOverviewPage.getZone()).toContain('Zone B2');
+
       expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Child');
 
       const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
@@ -93,7 +92,9 @@ describe('Ticket', () => {
 
         // Ticket summary
         await ElementHelper.waitForElement('text', 'Ticket summary');
-        //expect(await PurchaseSummaryPage.summaryText.getText()).toContain('Valid in zone B2')
+        expect(await PurchaseSummaryPage.summaryText.getText()).toContain(
+          'Valid in zone B2',
+        );
         expect(
           await PurchaseSummaryPage.userProfileCountAndName.getText(),
         ).toContain('1 Child');

@@ -25,6 +25,14 @@ class AlertHelper {
     const id = `//*[@resource-id="android:id/button2"]`;
     return $(id);
   }
+
+  /**
+   * Cancel button in system settings modal
+   */
+  get systemSettingsCancel() {
+    const id = `//*[@resource-id="android:id/button1"]`;
+    return $(id);
+  }
 }
 
 export default new AlertHelper();
