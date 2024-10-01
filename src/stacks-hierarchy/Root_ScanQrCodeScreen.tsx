@@ -39,7 +39,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         {
           text: t(MapTexts.qr.notFound.ok),
           style: 'default',
-          onPress: async () => navigation.goBack(),
+          onPress: navigation.goBack,
         },
       ],
     );
@@ -90,19 +90,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   );
 
   useEffect(() => {
-    if (isFocused) {
-      setHasCapturedQr(false);
-
-      // useful for testing:
-      // setTimeout(() => {
-      //   alertResultError();
-      //   idsFromQrCodeReceivedHandler({
-      //     operatorId: 'YRY:Operator:Ryde',
-      //     vehicleId: 'YRY:Vehicle:ea157103-05bb-3afd-ba77-0bfd643cdc93',
-      //   });
-      // }, 800);
-    }
-  }, [isFocused]); // , idsFromQrCodeReceivedHandler, navigation
+    isFocused && setHasCapturedQr(false);
+  }, [isFocused, idsFromQrCodeReceivedHandler]);
 
   useEffect(() => {
     getIdsFromQrCodeIsError && alertResultError();
