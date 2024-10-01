@@ -76,7 +76,7 @@ export function createClient(baseUrl: string | undefined) {
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
-  client.interceptors.request.use(undefined, handleUnauthorizedError);
+  client.interceptors.response.use(undefined, handleUnauthorizedError);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
   axiosRetry(client, {retries: RETRY_COUNT, retryCondition: shouldRetry});
