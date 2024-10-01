@@ -130,7 +130,7 @@ export function addGeofencingZoneCustomProps(
           isSlowArea =
             rule.maximumSpeedKph !== undefined &&
             rule.maximumSpeedKph !== null &&
-            Number(rule.maximumSpeedKph) < 20;
+            Number(rule.maximumSpeedKph) < 13;
           isStationParking = !!rule.stationParking;
         }
 
