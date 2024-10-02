@@ -638,7 +638,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - BugsnagReactNative (7.25.0):
+  - BugsnagReactNative (7.25.1):
     - React-Core
   - BVLinearGradient (2.8.3):
     - React-Core
@@ -1840,7 +1840,7 @@ PODS:
     - react-native-flipper-performance-plugin/FBDefines (= 0.4.0)
   - react-native-flipper-performance-plugin/FBDefines (0.4.0):
     - React-Core
-  - react-native-geolocation (3.3.0):
+  - react-native-geolocation (3.4.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1851,17 +1851,17 @@ PODS:
     - KettleKit (= 1.3.1)
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-pager-view (6.3.3):
+  - react-native-pager-view (6.4.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-safe-area-context (4.10.8):
+  - react-native-safe-area-context (4.11.0):
     - React-Core
   - react-native-slider (4.5.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-webview (13.10.5):
+  - react-native-webview (13.12.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2035,9 +2035,9 @@ PODS:
   - ReactNativeCameraKit (14.0.0-beta12):
     - React-Core
   - RecaptchaInterop (100.0.0)
-  - RNBootSplash (6.1.1):
+  - RNBootSplash (6.1.3):
     - React-Core
-  - RNCAsyncStorage (1.19.8):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCClipboard (1.14.1):
     - React-Core
@@ -2070,7 +2070,7 @@ PODS:
     - Firebase/RemoteConfig (= 10.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.18.1):
+  - RNGestureHandler (2.19.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2078,13 +2078,13 @@ PODS:
     - React-Core
   - RNLocalize (3.2.1):
     - React-Core
-  - rnmapbox-maps (10.1.28):
+  - rnmapbox-maps (10.1.31):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.28)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.31)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.28):
+  - rnmapbox-maps/DynamicLibrary (10.1.31):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
@@ -2096,7 +2096,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - React-RCTImage
-  - RNSVG (15.5.0):
+  - RNSVG (15.6.0):
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
@@ -2109,6 +2109,10 @@ PODS:
     - TokenCore
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
+  - TrueSheet (0.12.4):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - Turf (2.7.0)
   - VisualCodeModeliOSLib (1.0.0)
   - VisualCodeViewiOSLib (1.0.0):
@@ -2229,6 +2233,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - "TokenStateReactNativeLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib`)"
+  - "TrueSheet (from `../node_modules/@lodev09/react-native-true-sheet`)"
   - "VisualCodeModeliOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - "VisualCodeViewiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -2454,6 +2459,8 @@ EXTERNAL SOURCES:
     :tag: release-2.1.6
   TokenStateReactNativeLib:
     :path: "../node_modules/@entur-private/abt-token-state-react-native-lib"
+  TrueSheet:
+    :path: "../node_modules/@lodev09/react-native-true-sheet"
   VisualCodeModeliOSLib:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
     :tag: release-2.1.6
@@ -2486,7 +2493,7 @@ SPEC CHECKSUMS:
   BarcodeiOSLib: 9f460686e7d7150cde46c652e5244d9fa6b516ab
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
+  BugsnagReactNative: 0e335dab2447e0cb761ca271d6d26699e4ae61db
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
@@ -2558,13 +2565,13 @@ SPEC CHECKSUMS:
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-flipper: 1733f4a047493bb631ac9edaf87f714ca216a375
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
-  react-native-geolocation: 4b12da636bf33b15b537fe8de141942b63101ee1
+  react-native-geolocation: 167798574694849024cb093222bd158e84ac8d21
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-kettle-module: e61ea63ecfb741d7e23fb9ea121d3039bab0b0cb
-  react-native-pager-view: 4cc7e44dbc04cad0ca9e0a49c62c593d0fa793cc
-  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
+  react-native-pager-view: 7c45504fe805a954ebabd005d369937ea1c04de1
+  react-native-safe-area-context: 851c62c48dce80ccaa5637b6aa5991a1bc36eca9
   react-native-slider: 7a39874fc1fcdfee48e448fa72cce0a8f2c7c5d6
-  react-native-webview: 998fc075d16458361ef89ce34c263b659da5531f
+  react-native-webview: 8600348afad520e40ac629eb7963a514f16cdd17
   React-nativeconfig: 754233aac2a769578f828093b672b399355582e6
   React-NativeModulesApple: a03b2da2b8e127d5f5ee29c683e0deba7a9e1575
   React-perflogger: 68ec84e2f858a3e35009aef8866b55893e5e0a1f
@@ -2587,8 +2594,8 @@ SPEC CHECKSUMS:
   ReactCommon: 8cae78d3c3eceff20ee4bbca8bb73b675a45fd5d
   ReactNativeCameraKit: 80ee467bdc72ab04dea312eb275c0d2cd682f2db
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RNBootSplash: 5951974a5271183d06d3279bd4b9d7d093f4e2fc
-  RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
+  RNBootSplash: 0177d81b7c094bbb9d7af80e77f8694922dae46d
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
   RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
@@ -2598,22 +2605,23 @@ SPEC CHECKSUMS:
   RNFBFirestore: efd8996a791bb9edbd0a3b3acfd80d7a60d9a1d9
   RNFBMessaging: 3c573398dced30f6cbaf55a195080916ea23f819
   RNFBRemoteConfig: 3b872da757ed617b83d4a780d7bd0915cc82bd03
-  RNGestureHandler: 1155b1898ceddefeebf77792927360d44fe11e77
+  RNGestureHandler: 75e2ebf4e8ac521f2b3c9afdc048fcbc2e2c9ea4
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
-  rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
+  rnmapbox-maps: 9c97553f3587ed2bd092c8b4f3af8f34c154f19d
   RNPermissions: 47db57715014b92750634e0fd5c0287fa7156007
   RNScreens: 29418ceffb585b8f0ebd363de304288c3dce8323
-  RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
+  RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
-  TokenStateReactNativeLib: 24ac2ffe1fc294ad23df4b7b12d2bcc0b0f8aa69
+  TokenStateReactNativeLib: b888b8ec3a54fa649362d68170009a7bf9c416b9
+  TrueSheet: 940aae3a95aaef30521daef58aaeec15ea65466c
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   VisualCodeModeliOSLib: 826875ce13fe87af1517d5d730a23181ca3b21be
   VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948
-  Yoga: c716aea2ee01df6258550c7505fa61b248145ced
+  Yoga: 47d399a73c0c0caa9ff824e5c657eae31215bfee
 
 PODFILE CHECKSUM: 5d9e9c06fdbbd9a216ddd8596063fda334bef2cf
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

@@ -3,7 +3,12 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {SearchTime, StopPlaceView, useStopPlaceParentIdQuery, useStopsDetailsDataQuery} from '@atb/place-screen';
+import {
+  SearchTime,
+  StopPlaceView,
+  useStopPlaceParentIdQuery,
+  useStopsDetailsDataQuery,
+} from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
@@ -154,16 +159,15 @@ export const DeparturesDialogSheet = ({
       onClose={onClose}
       fullHeight
     >
-      <View style={styles.departuresContainer}>
-        <StopPlaceViewOrError />
-      </View>
+      <StopPlaceViewOrError />
     </BottomSheetContainer>
   );
 };
 
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
-    flex: 1,
+    // flex: 1,
+    height: '100%',
   },
   paddingHorizontal: {
     paddingHorizontal: theme.spacings.medium,

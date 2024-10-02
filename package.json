@@ -38,6 +38,7 @@
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.2.1",
     "@miblanchard/react-native-slider": "^2.6.0",
+    "@lodev09/react-native-true-sheet": "^0.12.3",
     "@react-native-async-storage/async-storage": "^1.19.8",
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-community/datetimepicker": "^8.2.0",
