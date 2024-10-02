@@ -57,6 +57,26 @@ class AppHelper {
   }
 
   /**
+   * Remove dismissible global messages
+   */
+  async removeGlobalMessages() {
+    const closeId = `//*[@resource-id="globalMessageClose"]`;
+    // Check for n sec
+    const exists = await ElementHelper.isElementExisting(
+      'globalMessageClose',
+      3,
+    );
+    if (exists) {
+      const noGMs = await $$(closeId).length;
+      for (let i = 0; i < noGMs; i++) {
+        await $$(closeId)[0].click();
+        await this.pause(100);
+      }
+    }
+    await this.pause(200);
+  }
+
+  /**
    * Wait until the loading screen is finished
    * @param numberOfRetries used internally to count retries, max = 2
    */
