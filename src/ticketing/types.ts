@@ -190,16 +190,44 @@ export type ReserveOffer = {
 };
 
 export type ReserveOfferRequestBody = {
-  payment_redirect_url: string | undefined;
   offers: ReserveOffer[];
-  payment_type: PaymentType;
-  store_payment: boolean | undefined;
-  recurring_payment_id: number | undefined;
-  sca_exemption: boolean;
-  customer_account_id: string;
-  customer_alias: string | undefined;
-  phone_number: string | undefined;
-  auto_sale: boolean;
+  /**
+   * Recurring payment id should be provided if using a previously stored
+   * payment card
+   */
+  recurring_payment_id?: number;
+  /**
+   * Payment type and the store payment flag should be provided if not using a
+   * previously stored payment card
+   */
+  payment_type?: PaymentType;
+  store_payment?: boolean;
+  /**
+   * Paying customer's phone number, with country prefix. The phone number and
+   * redirect URL is only required for mobile payments types, e.g. Vipps.
+   */
+  phone_number?: string;
+  payment_redirect_url?: string;
+  sca_exemption?: boolean;
+  /** Only needed if fare contract should be created on a different account */
+  customer_account_id?: string;
+  /**
+   * Only needed if fare contract should be created on a different account
+   * which should be saved.
+   */
+  store_alias?: {
+    alias: string;
+    /** With country prefix */
+    phone_number: string;
+  };
+  /** Experimental */
+  auto_sale?: boolean;
+};
+
+export type TicketRecipientType = {
+  accountId: string;
+  phoneNumber: string;
+  name?: string;
 };
 
 export type OfferReservation = {

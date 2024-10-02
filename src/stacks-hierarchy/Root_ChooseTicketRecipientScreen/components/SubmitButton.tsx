@@ -2,7 +2,7 @@ import {
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
+import {TicketRecipientType} from '@atb/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   OnBehalfOfTexts,
