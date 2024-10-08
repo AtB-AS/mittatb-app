@@ -50,7 +50,9 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
-  const controlStyles = useControlPositionsStyle();
+  const controlStyles = useControlPositionsStyle(
+    props.selectionMode === 'ExploreLocation',
+  );
 
   const startingCoordinates = useMemo(
     () =>
@@ -108,6 +110,7 @@ export const Map = (props: MapProps) => {
 
   const showScanButton =
     showShmoTesting &&
+    props.selectionMode === 'ExploreEntities' &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);

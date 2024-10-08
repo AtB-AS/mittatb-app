@@ -5,8 +5,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
-export function useControlPositionsStyle() {
-  const {top} = useSafeAreaInsets();
+export function useControlPositionsStyle(extraPaddingBottom = false) {
+  const {top, bottom} = useSafeAreaInsets();
   const {theme} = useTheme();
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight} = useBottomNavigationStyles();
@@ -29,7 +29,10 @@ export function useControlPositionsStyle() {
       },
       controlsContainer: {
         position: 'absolute',
-        bottom: bottomPaddingIfBottomSheetIsOpen + theme.spacings.medium,
+        bottom:
+          (extraPaddingBottom ? bottom : 0) +
+          bottomPaddingIfBottomSheetIsOpen +
+          theme.spacings.medium,
         right: theme.spacings.medium,
       },
       locationContainer: {
@@ -39,6 +42,12 @@ export function useControlPositionsStyle() {
         width: '100%',
       },
     }),
-    [theme, top, bottomPaddingIfBottomSheetIsOpen],
+    [
+      top,
+      theme.spacings.medium,
+      extraPaddingBottom,
+      bottom,
+      bottomPaddingIfBottomSheetIsOpen,
+    ],
   );
 }
