@@ -28,7 +28,7 @@ import {MobilityStats} from '@atb/mobility/components//MobilityStats';
 import {MobilityStat} from '@atb/mobility/components//MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
-import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 
 type Props = {
   vehicleId: VehicleId;
@@ -54,7 +54,7 @@ export const BicycleSheet = ({
   } = useVehicle(id);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  useDoOnceOnTruthy(onVehicleReceived, vehicle);
+  useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   return (
     <BottomSheetContainer

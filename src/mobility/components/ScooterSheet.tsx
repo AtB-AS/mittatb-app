@@ -30,7 +30,7 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedScooter} from '@atb/theme/ThemedAssets';
-import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 
 type Props = {
   vehicleId: VehicleId;
@@ -38,6 +38,7 @@ type Props = {
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
 };
+
 export const ScooterSheet = ({
   vehicleId: id,
   onClose,
@@ -59,7 +60,7 @@ export const ScooterSheet = ({
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  useDoOnceOnTruthy(onVehicleReceived, vehicle);
+  useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   const [isParkingViolationsReportingEnabled] =
     useParkingViolationsReportingEnabled();

@@ -25,7 +25,7 @@ import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {CarPreviews} from '@atb/mobility/components/CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
-import {useDoOnceOnTruthy} from '@atb/utils/use-do-once-on-truthy';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 
 type Props = {
   stationId: string;
@@ -56,7 +56,7 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  useDoOnceOnTruthy(onStationReceived, station);
+  useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
     <BottomSheetContainer
