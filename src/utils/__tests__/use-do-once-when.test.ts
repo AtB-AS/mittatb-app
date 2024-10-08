@@ -2,7 +2,8 @@ import {renderHook} from '@testing-library/react-hooks';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 let functionRunCount = 0;
-describe('useDelayGate', () => {
+
+describe('useDoOnceWhen', () => {
   beforeEach(() => (functionRunCount = 0));
 
   it('Should run on initial render when condition true', async () => {
@@ -48,5 +49,40 @@ describe('useDelayGate', () => {
     expect(functionRunCount).toBe(0);
     hook.rerender({func: () => (functionRunCount += 2), cond: true});
     expect(functionRunCount).toBe(2);
+  });
+
+  it('Should run only once even if condition switches when onlyOnce is true', async () => {
+    const hook = renderHook(
+      ({condition}) => useDoOnceWhen(() => functionRunCount++, condition, true),
+      {initialProps: {condition: false}},
+    );
+
+    expect(functionRunCount).toBe(0);
+
+    hook.rerender({condition: true});
+    expect(functionRunCount).toBe(1); // Function runs once
+
+    hook.rerender({condition: false});
+
+    hook.rerender({condition: true});
+    expect(functionRunCount).toBe(1); // No additional runs
+  });
+
+  it('Should run multiple times when condition changes back to true if onlyOnce is false', async () => {
+    const hook = renderHook(
+      ({condition}) =>
+        useDoOnceWhen(() => functionRunCount++, condition, false),
+      {initialProps: {condition: false}},
+    );
+
+    expect(functionRunCount).toBe(0);
+
+    hook.rerender({condition: true});
+    expect(functionRunCount).toBe(1); // Function runs once
+
+    hook.rerender({condition: false});
+
+    hook.rerender({condition: true});
+    expect(functionRunCount).toBe(2); // Function runs again
   });
 });
