@@ -22,7 +22,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const isFocused = useIsFocusedAndActive();
   const {currentCoordinatesRef} = useGeolocationState();
-  const {setBottomSheetToAutoSelect} = useMapState();
+  const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
+    useMapState();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
 
   const {
@@ -66,13 +67,20 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
           id: idsFromQrCode.stationId,
         });
       } else {
+        setBottomSheetToAutoSelect(undefined);
+        setBottomSheetCurrentlyAutoSelected(undefined);
         alertResultError();
         return;
       }
 
       navigation.goBack();
     },
-    [alertResultError, navigation, setBottomSheetToAutoSelect],
+    [
+      alertResultError,
+      navigation,
+      setBottomSheetCurrentlyAutoSelected,
+      setBottomSheetToAutoSelect,
+    ],
   );
 
   const onQrCodeScanned = useCallback(
