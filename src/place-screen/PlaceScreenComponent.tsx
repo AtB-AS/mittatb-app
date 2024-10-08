@@ -57,9 +57,7 @@ export const PlaceScreenComponent = ({
   );
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
-    useStopsDetailsDataQuery(
-      place.quays === undefined ? [place.id] : undefined,
-    );
+    useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
 
   const isFocused = useIsFocused();
 

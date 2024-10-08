@@ -52,24 +52,17 @@ export const DeparturesDialogSheet = ({
 
   const {
     data: stopDetailsData,
-    isFetching: isStopDetailsLoading,
-    isError: isStopDetailsError,
-    refetch: refetchStopDetailsData,
-  } = useStopsDetailsDataQuery(stopPlaceIds.length ? stopPlaceIds : undefined);
+    status: stopDetailsStatus,
+    refetch: refetchStopDetails,
+  } = useStopsDetailsDataQuery(stopPlaceIds);
 
   const thereIsSomeQuays = stopDetailsData?.stopPlaces?.some(
     (sp) => sp.quays?.length,
   );
 
-  const refresh = () => {
-    if (isStopDetailsError) {
-      return refetchStopDetailsData();
-    }
-  };
-
   const StopPlaceViewOrError = () => {
-    if (!isStopDetailsLoading && !isStopDetailsError) {
-      if (stopDetailsData && thereIsSomeQuays) {
+    if (stopDetailsStatus === 'success') {
+      if (thereIsSomeQuays) {
         return (
           <StopPlacesView
             stopPlaces={stopDetailsData?.stopPlaces}
@@ -102,14 +95,14 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (!isStopDetailsLoading && isStopDetailsError) {
+    if (stopDetailsStatus === 'error') {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
             onPressConfig={{
-              action: refresh,
+              action: refetchStopDetails,
               text: t(dictionary.retry),
             }}
           />
