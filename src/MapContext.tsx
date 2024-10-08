@@ -1,5 +1,18 @@
 import React, {createContext, useContext, useState} from 'react';
 
+/**
+ * Originally, all map items were only possible to select by clicking on an item on the map.
+ * This meant the user was always in the map already, and the map item already existed,
+ * which allowed the BottomSheet to be opened immediately based on the map item.
+ *
+ * Now, with QR code scan to select, a different flow is used. The bottom sheet should only
+ * be opened once returning to the map screen, and also there is no guarantee that the map
+ * is already in the right place with the map item in state or view.
+ *
+ * This new flow is what autoSelect is about. First you update the state for what you want
+ * to be selected in the bottomSheet. Then the next time the map is in view, useAutoSelectMapItem
+ * will select it automatically.
+ */
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
   setBottomSheetToAutoSelect: (
