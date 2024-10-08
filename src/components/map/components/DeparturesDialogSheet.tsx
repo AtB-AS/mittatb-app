@@ -3,7 +3,12 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {SearchTime, StopPlaceView, useStopPlaceParentIdQuery, useStopsDetailsDataQuery} from '@atb/place-screen';
+import {
+  SearchTime,
+  StopPlacesView,
+  useStopPlaceParentIdQuery,
+  useStopsDetailsDataQuery,
+} from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
@@ -79,13 +84,11 @@ export const DeparturesDialogSheet = ({
     ) {
       if (stopPlace?.quays?.length) {
         return (
-          <StopPlaceView
-            stopPlace={stopPlace}
+          <StopPlacesView
+            stopPlaces={[stopPlace]}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => {
-              navigateToQuay(stopPlace, quay);
-            }}
+            navigateToQuay={navigateToQuay}
             isFocused={appStateStatus === 'active'}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
