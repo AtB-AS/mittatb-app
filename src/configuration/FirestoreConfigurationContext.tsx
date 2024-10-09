@@ -45,6 +45,7 @@ export const defaultVatPercent: number = 12;
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
+  travelAidSubText: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
@@ -491,7 +492,15 @@ function getAppTextsFromSnapshot(
     return undefined;
   }
 
-  return {discountInfo};
+  const travelAidSubText = mapLanguageAndTextType(appTextsRaw.get('travelAidSubText'));
+  if (!travelAidSubText) {
+    Bugsnag.notify(
+      `App text field "travelAidSubText" should conform: "LanguageAndTextType"`,
+    );
+    return undefined;
+  }
+
+  return {discountInfo, travelAidSubText};
 }
 
 function getConfigurableLinksFromSnapshot(
