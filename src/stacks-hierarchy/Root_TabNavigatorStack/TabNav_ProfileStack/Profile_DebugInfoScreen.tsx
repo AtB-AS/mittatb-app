@@ -70,7 +70,7 @@ import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-
 import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
 import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
 import {useIsTravelAidEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-enabled';
-import {useIsTravelAidEnabledStopButtonDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
+import {useIsTravelAidStopButtonEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -152,7 +152,7 @@ export const Profile_DebugInfoScreen = () => {
     useOnlyStopPlacesCheckboxEnabledDebugOverride();
   const travelAidEnabledDebugOverride = useIsTravelAidEnabledDebugOverride();
   const travelAidStopButtonEnabledDebugOverride =
-    useIsTravelAidEnabledStopButtonDebugOverride();
+    useIsTravelAidStopButtonEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
