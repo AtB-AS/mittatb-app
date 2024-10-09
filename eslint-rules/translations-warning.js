@@ -5,7 +5,7 @@ module.exports = {
   },
   create: function (context) {
     const config = {
-      translateFunctionIdentifier: 't',
+      translateFunctionIdentifiers: ['t', 'tStatic'],
       translateModulePrefix: '@atb/translations',
     };
 
@@ -33,9 +33,9 @@ module.exports = {
       },
       Identifier(node) {
         if (!identifiers.hasOwnProperty(node.name)) return;
-        const validParent = parentCallExpressionWithIdentifier(
+        const validParent = parentCallExpressionWithIdentifiers(
           node.parent,
-          config.translateFunctionIdentifier,
+          config.translateFunctionIdentifiers,
         );
         if (node.parent.type !== 'MemberExpression' || validParent) {
           return;
@@ -48,7 +48,7 @@ module.exports = {
             'Expected {{ identifier }} to be argument of translate function {{ translateFunction }}',
           data: {
             identifier: name,
-            translateFunction: config.translateFunctionIdentifier,
+            translateFunction: config.translateFunctionIdentifiers.join(' or '),
           },
         });
       },
@@ -56,16 +56,16 @@ module.exports = {
   },
 };
 
-function parentCallExpressionWithIdentifier(node, identifier) {
+function parentCallExpressionWithIdentifiers(node, identifiers) {
   if (!node) return false;
   if (
     node.type === 'CallExpression' &&
     node.callee &&
-    node.callee.name === identifier
+    identifiers.includes(node.callee.name)
   ) {
     return node;
   }
-  return parentCallExpressionWithIdentifier(node.parent, identifier);
+  return parentCallExpressionWithIdentifiers(node.parent, identifiers);
 }
 
 function translationTextFullName(node) {

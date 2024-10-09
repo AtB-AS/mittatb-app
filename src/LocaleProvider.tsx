@@ -6,8 +6,9 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_REGION,
   FALLBACK_LANGUAGE,
+  setStaticLanguage,
 } from '@atb/translations/commons';
-import { AppState } from 'react-native';
+import {AppState} from 'react-native';
 
 export type Locale = {
   language: Language;
@@ -68,6 +69,8 @@ function useLocale(): Locale {
       setLanguage(mapLanguageStringToEnum(userPreferencedLanguage));
     }
   }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
+
+  useEffect(() => setStaticLanguage(language), [language]);
 
   return {
     language: language,

@@ -24,6 +24,20 @@ export const useTranslation: typeof lobot.useTranslation = () => {
   };
 };
 
+let currentStaticLanguage: Language = DEFAULT_LANGUAGE;
+/**
+ * tStatic can be used instead of the t function for when you don't want
+ * language changes to potentially retrigger an action (such as e.g. an alert box)
+ */
+export const tStatic: TFunc<typeof Language> = (translatable) =>
+  translatable[currentStaticLanguage];
+/**
+ * update language for tStatic
+ */
+export const setStaticLanguage = (language: Language) => {
+  currentStaticLanguage = language;
+};
+
 export type TranslateFunction = TFunc<typeof Language>;
 export function translation(
   norwegian: string,
