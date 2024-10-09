@@ -12,7 +12,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
-import {StopPlaceView} from './components/StopPlaceView';
+import {StopPlacesView} from './components/StopPlacesView';
 import {useStopsDetailsDataQuery} from '@atb/place-screen';
 
 export type PlaceScreenParams = {
@@ -57,9 +57,7 @@ export const PlaceScreenComponent = ({
   );
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
-    useStopsDetailsDataQuery(
-      place.quays === undefined ? [place.id] : undefined,
-    );
+    useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
 
   const isFocused = useIsFocused();
 
@@ -145,13 +143,13 @@ export const PlaceScreenComponent = ({
             mode={mode}
           />
         ) : (
-          <StopPlaceView
-            stopPlace={place}
+          <StopPlacesView
+            stopPlaces={[place]}
             isFocused={isFocused}
             navigateToDetails={
               mode === 'Departure' ? navigateToDetails : undefined
             }
-            navigateToQuay={navigateToQuay}
+            navigateToQuay={(_, quay) => navigateToQuay(quay)}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
             showOnlyFavorites={showOnlyFavorites}
