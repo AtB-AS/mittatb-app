@@ -63,14 +63,13 @@ function useLocale(): Locale {
 
   // listen for updates to language settings
   useEffect(() => {
-    if (useSystemLanguage) {
-      setLanguage(systemLocale.language);
-    } else {
-      setLanguage(mapLanguageStringToEnum(userPreferencedLanguage));
-    }
-  }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
+    const newLanguage = useSystemLanguage
+      ? systemLocale.language
+      : mapLanguageStringToEnum(userPreferencedLanguage);
 
-  useEffect(() => setStaticLanguage(language), [language]);
+    setStaticLanguage(newLanguage);
+    setLanguage(newLanguage);
+  }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
 
   return {
     language: language,
