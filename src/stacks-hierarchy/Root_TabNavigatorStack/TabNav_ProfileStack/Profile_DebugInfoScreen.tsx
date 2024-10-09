@@ -69,6 +69,8 @@ import Bugsnag from '@bugsnag/react-native';
 import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
 import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
 import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
+import {useIsTravelAidEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-enabled';
+import {useIsTravelAidStopButtonEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -148,6 +150,9 @@ export const Profile_DebugInfoScreen = () => {
     useBackendSmsAuthEnabledDebugOverride();
   const onlyStopPlacesCheckboxEnabledDebugOverride =
     useOnlyStopPlacesCheckboxEnabledDebugOverride();
+  const travelAidEnabledDebugOverride = useIsTravelAidEnabledDebugOverride();
+  const travelAidStopButtonEnabledDebugOverride =
+    useIsTravelAidStopButtonEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -491,6 +496,18 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable only stop places checkbox"
               override={onlyStopPlacesCheckboxEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable travel aid feature"
+              override={travelAidEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable travel aid stop button"
+              override={travelAidStopButtonEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
