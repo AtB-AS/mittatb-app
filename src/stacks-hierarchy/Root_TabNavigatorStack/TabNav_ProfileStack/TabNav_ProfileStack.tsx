@@ -24,6 +24,7 @@ import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelectionScreen';
+import { Profile_TravelAidScreen } from './Profile_TravelAidScreen';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -119,6 +120,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_PlaceScreen"
         component={Profile_PlaceScreen}
+      />
+      <Stack.Screen
+        name="Profile_TravelAidScreen"
+        component={Profile_TravelAidScreen}
       />
     </Stack.Navigator>
   );
