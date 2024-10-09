@@ -60,12 +60,12 @@ describe('useDoOnceWhen', () => {
     expect(functionRunCount).toBe(0);
 
     hook.rerender({condition: true});
-    expect(functionRunCount).toBe(1); // Function runs once
+    expect(functionRunCount).toBe(1);
 
     hook.rerender({condition: false});
 
     hook.rerender({condition: true});
-    expect(functionRunCount).toBe(1); // No additional runs
+    expect(functionRunCount).toBe(1);
   });
 
   it('Should run multiple times when condition changes back to true if onlyOnce is false', async () => {
@@ -78,11 +78,55 @@ describe('useDoOnceWhen', () => {
     expect(functionRunCount).toBe(0);
 
     hook.rerender({condition: true});
-    expect(functionRunCount).toBe(1); // Function runs once
+    expect(functionRunCount).toBe(1);
 
     hook.rerender({condition: false});
 
     hook.rerender({condition: true});
-    expect(functionRunCount).toBe(2); // Function runs again
+    expect(functionRunCount).toBe(2);
+  });
+
+  it('Should rerun when onlyOnce changes from true to false', async () => {
+    const hook = renderHook(
+      ({condition, onlyOnce}) =>
+        useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
+      {initialProps: {condition: false, onlyOnce: true}},
+    );
+
+    expect(functionRunCount).toBe(0);
+
+    hook.rerender({condition: true, onlyOnce: true});
+    expect(functionRunCount).toBe(1);
+
+    hook.rerender({condition: false, onlyOnce: false});
+    expect(functionRunCount).toBe(1);
+
+    hook.rerender({condition: true, onlyOnce: false});
+    expect(functionRunCount).toBe(2);
+  });
+
+  it('Should stop rerunning when onlyOnce is set back to true', async () => {
+    const hook = renderHook(
+      ({condition, onlyOnce}) =>
+        useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
+      {initialProps: {condition: false, onlyOnce: false}},
+    );
+
+    expect(functionRunCount).toBe(0);
+
+    hook.rerender({condition: true, onlyOnce: false});
+    expect(functionRunCount).toBe(1);
+
+    hook.rerender({condition: false, onlyOnce: true});
+    expect(functionRunCount).toBe(1);
+
+    hook.rerender({condition: true, onlyOnce: true});
+    expect(functionRunCount).toBe(2);
+
+    hook.rerender({condition: false, onlyOnce: true});
+    expect(functionRunCount).toBe(2);
+
+    hook.rerender({condition: true, onlyOnce: true});
+    expect(functionRunCount).toBe(2);
   });
 });
