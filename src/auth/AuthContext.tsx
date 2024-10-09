@@ -31,6 +31,7 @@ import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from "@atb/auth/use-update-intercom-on-user-change";
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {useInterval} from '@atb/utils/use-interval';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -45,6 +46,10 @@ type AuthReducer = (
   prevState: AuthReducerState,
   action: AuthReducerAction,
 ) => AuthReducerState;
+
+export const SHOULD_FORCE_REFRESH = {
+  value: false
+}
 
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
@@ -154,6 +159,13 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     dispatch({type: 'RESET_AUTH_STATUS'});
     resubscribe();
   }, [resubscribe]);
+
+  useInterval(() => {
+    if (SHOULD_FORCE_REFRESH.value) {
+      retryAuth();
+      SHOULD_FORCE_REFRESH.value = false;
+    }
+  }, [retryAuth], 10000 /* 10 secs */, false, false);
 
   return (
     <AuthContext.Provider
