@@ -142,6 +142,10 @@ type AuthContextState = {
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
   retryAuth: () => void;
+  debug: {
+    user?: FirebaseAuthTypes.User;
+    idTokenResult?: FirebaseAuthTypes.IdTokenResult;
+  };
 };
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -208,6 +212,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authenticationType: mapAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
+        debug: {
+          user: state.user,
+          idTokenResult: state.idToken,
+        },
       }}
     >
       {children}

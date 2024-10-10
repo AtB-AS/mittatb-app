@@ -6,7 +6,6 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {usePreferences, UserPreferences} from '@atb/preferences';
@@ -97,11 +96,7 @@ export const Profile_DebugInfoScreen = () => {
     getPrivacyTermsUrl,
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
-  const {userId} = useAuthState();
-  const user = auth().currentUser;
-  const [idToken, setIdToken] = useState<
-    FirebaseAuthTypes.IdTokenResult | undefined
-  >(undefined);
+  const {userId, retryAuth, debug: {user, idTokenResult}} = useAuthState();
 
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
@@ -153,13 +148,6 @@ export const Profile_DebugInfoScreen = () => {
   const travelAidEnabledDebugOverride = useIsTravelAidEnabledDebugOverride();
   const travelAidStopButtonEnabledDebugOverride =
     useIsTravelAidStopButtonEnabledDebugOverride();
-
-  useEffect(() => {
-    (async function () {
-      const idToken = await user?.getIdTokenResult();
-      setIdToken(idToken);
-    })();
-  }, [user]);
 
   const {
     tokens,
@@ -289,8 +277,8 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
-            text="Force refresh id token"
-            onPress={() => auth().currentUser?.getIdToken(true)}
+            text="Force refresh auth state"
+            onPress={retryAuth}
           />
 
           <LinkSectionItem
@@ -532,8 +520,8 @@ export const Profile_DebugInfoScreen = () => {
             showIconText={true}
             expandContent={
               <View>
-                {!!idToken ? (
-                  Object.entries(idToken).map(([key, value]) => (
+                {!!idTokenResult ? (
+                  Object.entries(idTokenResult).map(([key, value]) => (
                     <MapEntry key={key} title={key} value={value} />
                   ))
                 ) : (
