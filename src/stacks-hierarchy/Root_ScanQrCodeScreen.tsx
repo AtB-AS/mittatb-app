@@ -10,9 +10,10 @@ import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-fro
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
-import {useGeolocationState} from '@atb/GeolocationContext';
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
+import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
+import {tGlobal} from '@atb/LocaleProvider';
 
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
@@ -21,7 +22,6 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
-  const {currentCoordinatesRef} = useGeolocationState();
   const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
     useMapState();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
@@ -34,17 +34,17 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const alertResultError = useCallback(() => {
     Alert.alert(
-      t(MapTexts.qr.notFound.title),
-      t(MapTexts.qr.notFound.description),
+      tGlobal(MapTexts.qr.notFound.title),
+      tGlobal(MapTexts.qr.notFound.description),
       [
         {
-          text: t(MapTexts.qr.notFound.ok),
+          text: tGlobal(MapTexts.qr.notFound.ok),
           style: 'default',
           onPress: navigation.goBack,
         },
       ],
     );
-  }, [navigation, t]);
+  }, [navigation]);
 
   const idsFromQrCodeReceivedHandler = useCallback(
     (idsFromQrCode: IdsFromQrCodeResponse) => {
@@ -87,19 +87,21 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     async (qr: string) => {
       setHasCapturedQr(true);
 
+      const coordinates = getCurrentCoordinatesGlobal();
+
       const idsFromQrCode = await getIdsFromQrCode({
         qrCodeUrl: qr,
-        latitude: currentCoordinatesRef?.current?.latitude ?? 0,
-        longitude: currentCoordinatesRef?.current?.longitude ?? 0,
+        latitude: coordinates?.latitude ?? 0,
+        longitude: coordinates?.longitude ?? 0,
       });
       idsFromQrCodeReceivedHandler(idsFromQrCode);
     },
-    [getIdsFromQrCode, currentCoordinatesRef, idsFromQrCodeReceivedHandler],
+    [getIdsFromQrCode, idsFromQrCodeReceivedHandler],
   );
 
   useEffect(() => {
     isFocused && setHasCapturedQr(false);
-  }, [isFocused, idsFromQrCodeReceivedHandler]);
+  }, [isFocused]);
 
   useEffect(() => {
     getIdsFromQrCodeIsError && alertResultError();
