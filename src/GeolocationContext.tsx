@@ -4,7 +4,6 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-  useRef,
 } from 'react';
 import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
@@ -146,7 +145,6 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
-  const currentCoordinatesRef = useRef<Coordinates | undefined>();
   const {updateMetadata} = useIntercomMetadata();
 
   const openSettingsAlert = useCallback(() => {
@@ -285,17 +283,13 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [state.status, updateMetadata]);
 
-  useEffect(() => {
-    currentCoordinatesRef.current = state.location?.coordinates;
-  }, [state.location?.coordinates]);
-
   const getCurrentCoordinates = useCallback(
     (
       askForPermissionIfBlocked: boolean | undefined = false,
     ): Promise<Coordinates | undefined> => {
       return new Promise(async (resolve) => {
-        if (currentCoordinatesRef.current) {
-          resolve(currentCoordinatesRef.current);
+        if (currentCoordinatesGlobal) {
+          resolve(currentCoordinatesGlobal);
         } else {
           if (state.status === 'blocked' && !askForPermissionIfBlocked) {
             resolve(undefined);
