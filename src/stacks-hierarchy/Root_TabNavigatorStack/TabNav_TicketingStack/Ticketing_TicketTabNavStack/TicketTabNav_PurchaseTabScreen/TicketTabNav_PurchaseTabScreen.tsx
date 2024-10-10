@@ -22,6 +22,7 @@ import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
+import {AccountWrongMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AccountWrongMessage.tsx';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -42,7 +43,8 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
-  const hasMobileTokenError = mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
+  const hasMobileTokenError =
+    mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -136,6 +138,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   return authenticationType !== 'none' ? (
     <ScrollView>
+      <AccountWrongMessage style={styles.accountWrongMessage} />
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
         loading={loading}
@@ -198,5 +201,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
     marginTop: theme.spacings.large,
+  },
+  accountWrongMessage: {
+    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
 }));
