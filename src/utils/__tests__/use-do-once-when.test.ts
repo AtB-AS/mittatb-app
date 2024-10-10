@@ -2,7 +2,7 @@ import {renderHook} from '@testing-library/react-hooks';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 let functionRunCount = 0;
-describe('useDelayGate', () => {
+describe('useDoOnceWhen', () => {
   beforeEach(() => (functionRunCount = 0));
 
   it('Should run on initial render when condition true', async () => {
