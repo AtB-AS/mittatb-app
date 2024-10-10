@@ -35,7 +35,7 @@ import {useLocaleContext} from '@atb/LocaleProvider';
 export type AuthReducerState = {
   authStatus: AuthStatus;
   user?: FirebaseAuthTypes.User;
-  idToken?: FirebaseAuthTypes.IdTokenResult;
+  idTokenResult?: FirebaseAuthTypes.IdTokenResult;
   phoneNumberToBeVerified?: string;
   /** @deprecated Remove once legacy login is removed */
   confirmationHandler?: FirebaseAuthTypes.ConfirmationResult;
@@ -75,7 +75,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       }
     }
     case 'SET_ID_TOKEN': {
-      const tokenSub = action.idToken.claims['sub'];
+      const tokenSub = action.idTokenResult.claims['sub'];
       if (tokenSub !== prevState.user?.uid) {
         /*
         This is a precaution against race conditions. It might be that there has
@@ -91,16 +91,16 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         );
         return prevState;
       }
-      const customerNumber = action.idToken.claims['customer_number'];
+      const customerNumber = action.idTokenResult.claims['customer_number'];
       const authStatus = customerNumber ? 'authenticated' : 'creating-account';
       Bugsnag.leaveBreadcrumb('Retrieved id token', {
         customerNumber,
         authStatus,
       });
-      idTokenGlobal = action.idToken.token;
+      idTokenGlobal = action.idTokenResult.token;
       return {
         ...prevState,
-        idToken: action.idToken,
+        idTokenResult: action.idTokenResult,
         authStatus: 'authenticated',
       };
     }
@@ -170,8 +170,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authStatus: state.authStatus,
         userId: state.user?.uid,
         phoneNumber: state.user?.phoneNumber || undefined,
-        customerNumber: state.idToken?.claims['customer_number'],
-        abtCustomerId: state.idToken?.claims['abt_id'],
+        customerNumber: state.idTokenResult?.claims['customer_number'],
+        abtCustomerId: state.idTokenResult?.claims['abt_id'],
         signInWithPhoneNumber: useCallback(
           async (phoneNumberWithPrefix: string, forceResend?: boolean) => {
             if (!backendSmsEnabled) {
