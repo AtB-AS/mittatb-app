@@ -1,11 +1,27 @@
 const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = 'eslint-rules/';
 
+const restrictedImportComponents = {
+  group: ['@atb/components/*/'],
+  message:
+    'Not allowed to import components without going through their index file',
+};
+const restrictedImportAuth = {
+  group: ['@react-native-firebase/auth'],
+  message: 'Not allowed to import Firebase Auth outside the auth module',
+};
+const restrictedImportStacksHierarchy = {
+  group: ['@atb/stacks-hierarchy/**'],
+  message:
+    'Not allowed to import stuff from stacks-hierarchy from the outside. An exception may be made for ScreenParams types, and you can disable the eslint check for those imports.',
+};
+
+const notPattern = (toRemove) => (pattern) => pattern !== toRemove;
+
 const noRestrictedImportsPatterns = [
-  {
-    group: ['@atb/components/*/'],
-    message: 'Components should be imported through their index file',
-  },
+  restrictedImportComponents,
+  restrictedImportAuth,
+  restrictedImportStacksHierarchy,
 ];
 
 module.exports = {
@@ -140,19 +156,27 @@ module.exports = {
     },
     // Error on imports from stacks-hierarchy from paths outside of stacks-hierarchy
     {
-      files: ['!src/stacks-hierarchy/**'],
+      files: ['src/auth/**', 'src/setup.ts'],
       rules: {
         'no-restricted-imports': [
           'error',
           {
-            patterns: [
-              ...noRestrictedImportsPatterns,
-              {
-                group: ['@atb/stacks-hierarchy/**'],
-                message:
-                  'Not allowed to import stuff from stacks-hierarchy from the outside. An exception may be made for ScreenParams types, and you can disable the eslint check for those imports.',
-              },
-            ],
+            patterns: noRestrictedImportsPatterns.filter(
+              notPattern(restrictedImportAuth),
+            ),
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/stacks-hierarchy/**'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: noRestrictedImportsPatterns.filter(
+              notPattern(restrictedImportStacksHierarchy),
+            ),
           },
         ],
       },

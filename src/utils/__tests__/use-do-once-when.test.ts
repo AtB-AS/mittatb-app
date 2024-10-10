@@ -105,7 +105,7 @@ describe('useDoOnceWhen', () => {
     expect(functionRunCount).toBe(2);
   });
 
-  it('Should rerun immediately when onlyOnce switches to true with condition set to true', async () => {
+  it('Should not rerun when onlyOnce switches to true with condition set to true from before', async () => {
     const hook = renderHook(
       ({condition, onlyOnce}) =>
         useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
@@ -121,10 +121,7 @@ describe('useDoOnceWhen', () => {
     expect(functionRunCount).toBe(1);
 
     hook.rerender({condition: true, onlyOnce: true});
-    expect(functionRunCount).toBe(2);
-
-    hook.rerender({condition: false, onlyOnce: true});
-    expect(functionRunCount).toBe(2);
+    expect(functionRunCount).toBe(1);
   });
 
   it('Should stop rerunning when onlyOnce is set back to true', async () => {

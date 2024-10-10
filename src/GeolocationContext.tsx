@@ -1,11 +1,9 @@
 import React, {
-  MutableRefObject,
   createContext,
   useCallback,
   useContext,
   useEffect,
   useReducer,
-  useRef,
 } from 'react';
 import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
@@ -33,6 +31,12 @@ const config: GeolocationOptions = {
   distanceFilter: 20,
 };
 
+let currentCoordinatesGlobal: Coordinates | undefined = undefined;
+export const getCurrentCoordinatesGlobal = () =>
+  currentCoordinatesGlobal && {
+    ...currentCoordinatesGlobal,
+  };
+
 type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
@@ -42,7 +46,6 @@ type GeolocationState = {
   getCurrentCoordinates: (
     askForPermissionIfBlocked?: boolean,
   ) => Promise<Coordinates | undefined>;
-  currentCoordinatesRef?: MutableRefObject<Coordinates | undefined>;
 };
 
 type GeolocationReducerAction =
@@ -76,9 +79,14 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
         locationError: null,
       };
     case 'LOCATION_CHANGED':
+      const location = mapPositionToLocation(
+        action.position,
+        action.locationName,
+      );
+      currentCoordinatesGlobal = location?.coordinates;
       return {
         ...prevState,
-        location: mapPositionToLocation(action.position, action.locationName),
+        location,
         locationError: null,
       };
     case 'LOCATION_ERROR':
@@ -122,7 +130,6 @@ const defaultState: GeolocationState = {
   location: null,
   locationError: null,
   getCurrentCoordinates: () => Promise.resolve(undefined),
-  currentCoordinatesRef: undefined,
 };
 
 Geolocation.setRNConfiguration({
@@ -138,7 +145,6 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
-  const currentCoordinatesRef = useRef<Coordinates | undefined>();
   const {updateMetadata} = useIntercomMetadata();
 
   const openSettingsAlert = useCallback(() => {
@@ -221,7 +227,10 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const locationIsAvailable =
     state.status === 'granted' && state.locationEnabled;
 
-  const updateLocation = (position: GeolocationResponse | null, locationName: string) =>
+  const updateLocation = (
+    position: GeolocationResponse | null,
+    locationName: string,
+  ) =>
     dispatch({
       type: 'LOCATION_CHANGED',
       position,
@@ -274,17 +283,13 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [state.status, updateMetadata]);
 
-  useEffect(() => {
-    currentCoordinatesRef.current = state.location?.coordinates;
-  }, [state.location?.coordinates]);
-
   const getCurrentCoordinates = useCallback(
     (
       askForPermissionIfBlocked: boolean | undefined = false,
     ): Promise<Coordinates | undefined> => {
       return new Promise(async (resolve) => {
-        if (currentCoordinatesRef.current) {
-          resolve(currentCoordinatesRef.current);
+        if (currentCoordinatesGlobal) {
+          resolve(currentCoordinatesGlobal);
         } else {
           if (state.status === 'blocked' && !askForPermissionIfBlocked) {
             resolve(undefined);
@@ -320,7 +325,6 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         locationIsAvailable,
         requestLocationPermission,
         getCurrentCoordinates,
-        currentCoordinatesRef,
       }}
     >
       {children}

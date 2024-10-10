@@ -1,27 +1,36 @@
 import {useEffect, useRef} from 'react';
-
+/**
+ * @param fn The function to run.
+ * @param condition fn will be run when condition is true, unless it has already run once and onlyOnce is true.
+ * @param onlyOnce Set to true if fn should not be re-run after condition goes back between true and false.
+ */
 export function useDoOnceWhen(
   fn: () => void,
   condition: boolean,
   onlyOnce?: boolean,
 ) {
-  const isFirstTimeRef = useRef(true);
-  const fnRef = useRef(fn);
+  const hasRunRef = useRef(false);
 
+  const fnRef = useRef(fn);
   useEffect(() => {
     fnRef.current = fn;
   }, [fn]);
 
+  const onlyOnceRef = useRef(onlyOnce);
   useEffect(() => {
-    if (isFirstTimeRef.current && condition) {
+    onlyOnceRef.current = onlyOnce;
+  }, [onlyOnce]);
+
+  useEffect(() => {
+    if (!hasRunRef.current && condition) {
       fnRef.current();
-      isFirstTimeRef.current = false;
+      hasRunRef.current = true;
     }
 
     return () => {
-      if (!onlyOnce) {
-        isFirstTimeRef.current = true;
+      if (!onlyOnceRef.current) {
+        hasRunRef.current = false;
       }
     };
-  }, [condition, onlyOnce]);
+  }, [condition]);
 }

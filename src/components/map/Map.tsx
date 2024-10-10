@@ -1,4 +1,7 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {
+  getCurrentCoordinatesGlobal,
+  useGeolocationState,
+} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
@@ -46,7 +49,7 @@ import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
-  const {currentCoordinatesRef, getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
@@ -58,8 +61,8 @@ export const Map = (props: MapProps) => {
     () =>
       initialLocation && initialLocation?.resultType !== 'geolocation'
         ? initialLocation.coordinates
-        : currentCoordinatesRef?.current || FOCUS_ORIGIN,
-    [currentCoordinatesRef, initialLocation],
+        : getCurrentCoordinatesGlobal() || FOCUS_ORIGIN,
+    [initialLocation],
   );
 
   const {
