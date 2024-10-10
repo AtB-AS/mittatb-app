@@ -1,6 +1,6 @@
 import {Dispatch, useEffect} from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {AuthReducerAction} from './types';
+import auth from '@react-native-firebase/auth';
+import {AuthReducerAction, AuthStateChangeListenerCallback} from './types';
 import Bugsnag from '@bugsnag/react-native';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
@@ -38,7 +38,7 @@ export const useSubscribeToAuthUserChange = (
 };
 
 export const useOnAuthStateChanged = (
-  callback: (user: FirebaseAuthTypes.User | null) => void,
+  callback: AuthStateChangeListenerCallback,
 ) => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(callback);
