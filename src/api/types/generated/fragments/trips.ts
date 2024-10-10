@@ -138,6 +138,7 @@ export type TripPatternFragment = {
       };
     };
     datedServiceJourney?: {
+      id: string;
       estimatedCalls?: Array<{
         actualDepartureTime?: any;
         predictionInaccurate: boolean;
