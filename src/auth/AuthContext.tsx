@@ -28,7 +28,7 @@ import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
-import {useUpdateIntercomOnUserChange} from "@atb/auth/use-update-intercom-on-user-change";
+import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
@@ -133,6 +133,10 @@ type AuthContextState = {
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
   retryAuth: () => void;
+  debug: {
+    user?: FirebaseAuthTypes.User;
+    idTokenResult?: FirebaseAuthTypes.IdTokenResult;
+  };
 };
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -148,7 +152,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
-  useUpdateIntercomOnUserChange(state)
+  useUpdateIntercomOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     dispatch({type: 'RESET_AUTH_STATUS'});
@@ -199,6 +203,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authenticationType: mapAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
+        debug: {
+          user: state.user,
+          idTokenResult: state.idToken,
+        },
       }}
     >
       {children}
