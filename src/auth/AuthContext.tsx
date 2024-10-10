@@ -28,7 +28,7 @@ import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
-import {useUpdateIntercomOnUserChange} from "@atb/auth/use-update-intercom-on-user-change";
+import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
@@ -45,6 +45,12 @@ type AuthReducer = (
   prevState: AuthReducerState,
   action: AuthReducerAction,
 ) => AuthReducerState;
+
+let idTokenGlobal: string | undefined = undefined;
+export const getIdTokenGlobal = () => idTokenGlobal;
+
+let currentUserIdGlobal: string | undefined = undefined;
+export const getCurrentUserIdGlobal = () => currentUserIdGlobal;
 
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
@@ -63,6 +69,8 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
           userId: action.user.uid,
           authType: mapAuthenticationType(action.user),
         });
+        currentUserIdGlobal = action.user.uid;
+        idTokenGlobal = undefined;
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -89,6 +97,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         customerNumber,
         authStatus,
       });
+      idTokenGlobal = action.idToken.token;
       return {
         ...prevState,
         idToken: action.idToken,
@@ -148,7 +157,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
-  useUpdateIntercomOnUserChange(state)
+  useUpdateIntercomOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     dispatch({type: 'RESET_AUTH_STATUS'});
