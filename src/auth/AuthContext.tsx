@@ -214,7 +214,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         retryAuth,
         debug: {
           user: state.user,
-          idTokenResult: state.idToken,
+          idTokenResult: state.idTokenResult,
         },
       }}
     >
