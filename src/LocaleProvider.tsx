@@ -11,7 +11,6 @@ import {
 import {AppState} from 'react-native';
 
 let globalLanguage: Language = DEFAULT_LANGUAGE;
-export const getGlobalLanguage = () => globalLanguage;
 const setGlobalLanguage = (language: Language) => {
   globalLanguage = language;
 };
