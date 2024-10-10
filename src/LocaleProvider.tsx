@@ -11,9 +11,6 @@ import {
 import {AppState} from 'react-native';
 
 let globalLanguage: Language = DEFAULT_LANGUAGE;
-const setGlobalLanguage = (language: Language) => {
-  globalLanguage = language;
-};
 /**
  * tGlobal can be used instead of the t function for when you don't want
  * language changes to potentially retrigger an action (such as e.g. an alert box)
@@ -78,7 +75,7 @@ function useLocale(): Locale {
       ? systemLocale.language
       : mapLanguageStringToEnum(userPreferencedLanguage);
 
-    setGlobalLanguage(newLanguage);
+    globalLanguage = newLanguage;
     setLanguage(newLanguage);
   }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
 
