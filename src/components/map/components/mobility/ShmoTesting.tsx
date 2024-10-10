@@ -62,7 +62,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
   const getVehicleIdFromQrCode = async () => {
     const idsFromQrCode = await getIdsFromQrCode({
-      qrCodeUrl: 'https://open.voi.com/scan/EN57',
+      qrCodeUrl: 'https://m.ryde.vip/scooter.html?n=154197',
       latitude: 0,
       longitude: 0,
     });

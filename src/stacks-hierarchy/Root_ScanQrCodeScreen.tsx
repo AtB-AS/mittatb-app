@@ -14,6 +14,7 @@ import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {tGlobal} from '@atb/LocaleProvider';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
@@ -48,24 +49,42 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const idsFromQrCodeReceivedHandler = useCallback(
     (idsFromQrCode: IdsFromQrCodeResponse) => {
-      // NB come back and fix this once the Shmo QR endpoint is updated!
-      // the AutoSelectableBottomSheetType should then be decided based on FormFactor(s)
-      const isBysykkelOperator = idsFromQrCode.operatorId.includes('bysykkel');
+      let type: AutoSelectableBottomSheetType | undefined = undefined;
+      let id: string | undefined = undefined;
+      if (idsFromQrCode.formFactor) {
+        if (idsFromQrCode.vehicleId) {
+          id = idsFromQrCode.vehicleId;
+          if (
+            [
+              FormFactor.Scooter,
+              FormFactor.ScooterSeated,
+              FormFactor.ScooterStanding,
+            ].includes(idsFromQrCode.formFactor)
+          ) {
+            type = AutoSelectableBottomSheetType.Scooter;
+          } else if (
+            [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
+              idsFromQrCode.formFactor,
+            )
+          ) {
+            type = AutoSelectableBottomSheetType.Bicycle;
+          }
+        } else if (idsFromQrCode.stationId) {
+          id = idsFromQrCode.stationId;
+          if (
+            [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
+              idsFromQrCode.formFactor,
+            )
+          ) {
+            type = AutoSelectableBottomSheetType.BikeStation;
+          } else if ([FormFactor.Car].includes(idsFromQrCode.formFactor)) {
+            type = AutoSelectableBottomSheetType.CarStation;
+          }
+        }
+      }
 
-      if (idsFromQrCode.vehicleId) {
-        setBottomSheetToAutoSelect({
-          type: isBysykkelOperator
-            ? AutoSelectableBottomSheetType.Bicycle
-            : AutoSelectableBottomSheetType.Scooter,
-          id: idsFromQrCode.vehicleId,
-        });
-      } else if (idsFromQrCode.stationId) {
-        setBottomSheetToAutoSelect({
-          type: isBysykkelOperator
-            ? AutoSelectableBottomSheetType.BikeStation
-            : AutoSelectableBottomSheetType.CarStation,
-          id: idsFromQrCode.stationId,
-        });
+      if (!!type && !!id) {
+        setBottomSheetToAutoSelect({type, id});
       } else {
         setBottomSheetToAutoSelect(undefined);
         setBottomSheetCurrentlyAutoSelected(undefined);
