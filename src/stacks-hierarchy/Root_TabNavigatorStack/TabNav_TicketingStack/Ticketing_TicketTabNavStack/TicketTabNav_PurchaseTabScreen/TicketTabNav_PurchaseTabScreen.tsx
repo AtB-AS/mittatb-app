@@ -22,7 +22,7 @@ import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
-import {AccountWrongMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AccountWrongMessage.tsx';
+import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage.tsx';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -138,7 +138,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   return authenticationType !== 'none' ? (
     <ScrollView>
-      <AccountWrongMessage style={styles.accountWrongMessage} />
+      <ErrorWithAccountMessage style={styles.accountWrongMessage} />
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
         loading={loading}

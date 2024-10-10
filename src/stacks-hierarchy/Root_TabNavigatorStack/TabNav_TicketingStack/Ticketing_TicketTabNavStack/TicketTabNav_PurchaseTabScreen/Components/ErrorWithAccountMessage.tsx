@@ -6,7 +6,7 @@ import {useAnalytics} from '@atb/analytics';
 
 type Props = {style?: StyleProp<ViewStyle>};
 
-export const AccountWrongMessage = ({style}: Props) => {
+export const ErrorWithAccountMessage = ({style}: Props) => {
     const {authStatus, retryAuth} = useAuthState();
     const {t} = useTranslation();
     const {logEvent} = useAnalytics();
