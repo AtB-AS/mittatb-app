@@ -66,7 +66,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
     try {
       await remoteConfig().fetchAndActivate();
       const currentConfig = await getConfig();
-      console.log("CURRENT CONFIG", currentConfig)
+      setConfig(currentConfig);
       setFetchError(false);
     } catch (e) {
       setFetchError(true);
