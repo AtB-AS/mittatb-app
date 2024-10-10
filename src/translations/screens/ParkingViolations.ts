@@ -57,15 +57,11 @@ export const ParkingViolationTexts = {
     retryButton: _('Ta nytt bilde', 'Retake photo', 'Ta nytt bilete'),
   },
   qr: {
-    title: _(
-      'Scan QR-koden på sykkelstyret',
-      'Scan the QR code on the handlebars',
-      'Scan QR-koden på sykkelstyret',
-    ),
+    title: _('Skann QR-kode', 'Scan the QR code', 'Skann QR-kode'),
     instructions: _(
-      'QR-koden innholder informasjon om merke og registreringsnummer på sparkesykkelen.',
-      'The QR contains information about brand and id of the scooter',
-      'QR-koden inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
+      'QR-koden på sykkelstyret innholder informasjon om merke og registreringsnummer på sparkesykkelen.',
+      'The QR code on the handlebars contains information about brand and id of the scooter',
+      'QR-koden på sykkelstyret inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
     ),
     scanningNotPossible: _(
       'Ikke mulig å scanne',

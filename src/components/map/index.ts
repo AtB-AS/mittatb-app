@@ -2,7 +2,14 @@ export {BackArrow} from './components/BackArrow';
 export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {SelectionPin} from './components/SelectionPin';
-export {MapViewConfig, MapCameraConfig} from './MapConfig';
+export {
+  MapViewConfig,
+  MapCameraConfig,
+  SCOOTERS_MAX_CLUSTER_LEVEL,
+  SCOOTERS_MAX_ZOOM_LEVEL,
+  SCOOTERS_CLUSTER_RADIUS,
+  SLIGHTLY_RAISED_MAP_PADDING,
+} from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';
 export {

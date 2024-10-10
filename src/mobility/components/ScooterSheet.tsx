@@ -1,4 +1,7 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
+import {
+  VehicleExtendedFragment,
+  VehicleId,
+} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
@@ -27,16 +30,20 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedScooter} from '@atb/theme/ThemedAssets';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 
 type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
+  onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
 };
+
 export const ScooterSheet = ({
   vehicleId: id,
   onClose,
   onReportParkingViolation,
+  onVehicleReceived,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
@@ -50,7 +57,10 @@ export const ScooterSheet = ({
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
+
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   const [isParkingViolationsReportingEnabled] =
     useParkingViolationsReportingEnabled();

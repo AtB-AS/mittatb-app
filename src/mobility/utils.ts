@@ -70,7 +70,7 @@ export const getAvailableVehicles = (
     .reduce((sum, count) => sum + count, 0) ?? 0;
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
-  t: T | undefined,
+  t: T | undefined | null,
 ) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
 
 export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
