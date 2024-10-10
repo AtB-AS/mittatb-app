@@ -33,3 +33,7 @@ export type VippsSignInErrorCode =
   | 'access_denied'
   | 'outdated_app_version'
   | 'unknown_error';
+
+export type AuthStateChangeListenerCallback = (
+    user: FirebaseAuthTypes.User | null,
+) => void;
