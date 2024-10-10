@@ -1,4 +1,5 @@
 import {getLocales} from 'react-native-localize';
+import {TFunc} from '@leile/lobo-t';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Language} from '@atb/translations';
 import {usePreferences} from '@atb/preferences';
@@ -7,7 +8,15 @@ import {
   DEFAULT_REGION,
   FALLBACK_LANGUAGE,
 } from '@atb/translations/commons';
-import { AppState } from 'react-native';
+import {AppState} from 'react-native';
+
+let globalLanguage: Language = DEFAULT_LANGUAGE;
+/**
+ * tGlobal can be used instead of the t function for when you don't want
+ * language changes to potentially retrigger an action (such as e.g. an alert box)
+ */
+export const tGlobal: TFunc<typeof Language> = (translatable) =>
+  translatable[globalLanguage];
 
 export type Locale = {
   language: Language;
@@ -62,11 +71,12 @@ function useLocale(): Locale {
 
   // listen for updates to language settings
   useEffect(() => {
-    if (useSystemLanguage) {
-      setLanguage(systemLocale.language);
-    } else {
-      setLanguage(mapLanguageStringToEnum(userPreferencedLanguage));
-    }
+    const newLanguage = useSystemLanguage
+      ? systemLocale.language
+      : mapLanguageStringToEnum(userPreferencedLanguage);
+
+    globalLanguage = newLanguage;
+    setLanguage(newLanguage);
   }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
 
   return {

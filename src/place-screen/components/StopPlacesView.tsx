@@ -1,7 +1,7 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
 import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
-import {SearchTime} from '../types';
+import {SearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
@@ -21,10 +21,10 @@ import {useAnalytics} from '@atb/analytics';
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
 
-type StopPlaceViewProps = {
-  stopPlace: StopPlace;
+type Props = {
+  stopPlaces: StopPlace[];
   showTimeNavigation?: boolean;
-  navigateToQuay: (quay: Quay) => void;
+  navigateToQuay: (sp: StopPlace, quay: Quay) => void;
   navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
@@ -53,9 +53,9 @@ type StopPlaceViewProps = {
     }
 );
 
-export const StopPlaceView = (props: StopPlaceViewProps) => {
+export const StopPlacesView = (props: Props) => {
   const {
-    stopPlace,
+    stopPlaces,
     showTimeNavigation = true,
     navigateToQuay,
     navigateToDetails,
@@ -74,8 +74,23 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
   const analytics = useAnalytics();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
+
+  const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
+    () =>
+      stopPlaces
+        .flatMap(
+          (sp) => sp.quays?.map((quay) => ({stopPlace: sp, quay: quay})) || [],
+        )
+        .sort((a, b) =>
+          publicCodeCompare(a.quay.publicCode, b.quay.publicCode),
+        ),
+    [stopPlaces],
+  );
+
+  const quays: Quay[] = stopPlaceAndQuays.map(({quay}) => quay);
+
   const {state, forceRefresh} = useDeparturesData(
-    stopPlace.quays?.map((q) => q.id) ?? [],
+    quays.map((q) => q.id),
     NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
     showOnlyFavorites,
     isFocused,
@@ -83,14 +98,16 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     searchStartTime,
   );
   const didLoadingDataFail = !!state.error;
-  const quayListData: SectionListData<Quay>[] = stopPlace.quays
-    ? [{data: stopPlace.quays}]
-    : [];
 
-  const placeHasFavorites = hasFavorites(
-    favoriteDepartures,
-    stopPlace.id,
-    stopPlace.quays?.map((q) => q.id),
+  const quayListData: SectionListData<StopPlaceAndQuay>[] =
+    stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
+
+  const placeHasFavorites = stopPlaces.some((sp) =>
+    hasFavorites(
+      favoriteDepartures,
+      sp.id,
+      sp.quays?.map((q) => q.id),
+    ),
   );
 
   // If all favorites are removed while setShowOnlyFavorites is true, reset the
@@ -100,15 +117,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoriteDepartures]);
 
-  useMemo(
-    () =>
-      stopPlace.quays?.sort((a, b) =>
-        publicCodeCompare(a.publicCode, b.publicCode),
-      ),
-    [stopPlace],
-  );
-
-  const lastIndex = stopPlace?.quays?.length ? stopPlace.quays.length - 1 : 0;
+  const lastIndex = quays?.length ? quays.length - 1 : 0;
 
   return (
     <SectionList
@@ -145,7 +154,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                       analytics.logEvent(
                         'Map',
                         'Stop place travelFrom button clicked',
-                        {id: stopPlace.id},
+                        {id: stopPlaces[0].id},
                       );
                       props.setTravelTarget &&
                         props.setTravelTarget('fromLocation');
@@ -161,7 +170,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                       analytics.logEvent(
                         'Map',
                         'Stop place travelTo button clicked',
-                        {id: stopPlace.id},
+                        {id: stopPlaces[0].id},
                       );
                       props.setTravelTarget &&
                         props.setTravelTarget('toLocation');
@@ -209,19 +218,19 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
       }
       sections={quayListData}
       testID={testID}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.quay.id}
       renderItem={({item, index}) => (
         <>
           <QuaySection
-            quay={item}
+            quay={item.quay}
             isLoading={state.isLoading}
             departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
             data={state.data}
             didLoadingDataFail={didLoadingDataFail}
             navigateToDetails={navigateToDetails}
-            navigateToQuay={navigateToQuay}
+            navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
             testID={'quaySection' + index}
-            stopPlace={stopPlace}
+            stopPlace={item.stopPlace}
             showOnlyFavorites={showOnlyFavorites}
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             searchDate={searchStartTime}

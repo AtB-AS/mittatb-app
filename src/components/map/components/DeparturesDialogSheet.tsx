@@ -3,13 +3,18 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {SearchTime, StopPlaceView, useStopPlaceParentIdQuery, useStopsDetailsDataQuery} from '@atb/place-screen';
+import {
+  SearchTime,
+  StopPlacesView,
+  useStopsDetailsDataQuery,
+} from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {isDefined} from '@atb/utils/presence.ts';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -43,49 +48,27 @@ export const DeparturesDialogSheet = ({
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
   const appStateStatus = useAppStateStatus();
 
-  const stopPlaceId = stopPlaceFeature.properties?.['id'];
-
-  const {
-    data: parentId,
-    isFetched: hasFinishedFetchingParentId,
-    isError: isParentIdError,
-    refetch: refetchParentId,
-  } = useStopPlaceParentIdQuery(stopPlaceId);
+  const stopPlaceIds = getStopPlaceIds(stopPlaceFeature);
 
   const {
     data: stopDetailsData,
-    isFetching: isStopDetailsLoading,
-    isError: isStopDetailsError,
-    refetch: refetchStopDetailsData,
-  } = useStopsDetailsDataQuery(parentId ? [parentId] : undefined);
+    status: stopDetailsStatus,
+    refetch: refetchStopDetails,
+  } = useStopsDetailsDataQuery(stopPlaceIds);
 
-  const stopPlace = stopDetailsData?.stopPlaces?.[0];
-
-  const refresh = () => {
-    if (isParentIdError) {
-      return refetchParentId();
-    }
-
-    if (isStopDetailsError) {
-      return refetchStopDetailsData();
-    }
-  };
+  const thereIsSomeQuays = stopDetailsData?.stopPlaces?.some(
+    (sp) => sp.quays?.length,
+  );
 
   const StopPlaceViewOrError = () => {
-    if (
-      hasFinishedFetchingParentId &&
-      !isStopDetailsLoading &&
-      !isStopDetailsError
-    ) {
-      if (stopPlace?.quays?.length) {
+    if (stopDetailsStatus === 'success') {
+      if (thereIsSomeQuays) {
         return (
-          <StopPlaceView
-            stopPlace={stopPlace}
+          <StopPlacesView
+            stopPlaces={stopDetailsData?.stopPlaces}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => {
-              navigateToQuay(stopPlace, quay);
-            }}
+            navigateToQuay={navigateToQuay}
             isFocused={appStateStatus === 'active'}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
@@ -112,18 +95,14 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (
-      hasFinishedFetchingParentId &&
-      !isStopDetailsLoading &&
-      isStopDetailsError
-    ) {
+    if (stopDetailsStatus === 'error') {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
             onPressConfig={{
-              action: refresh,
+              action: refetchStopDetails,
               text: t(dictionary.retry),
             }}
           />
@@ -149,7 +128,10 @@ export const DeparturesDialogSheet = ({
 
   return (
     <BottomSheetContainer
-      title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
+      title={
+        stopPlaceFeature.properties?.name ??
+        stopDetailsData?.stopPlaces[0]?.name
+      }
       maxHeightValue={0.5}
       onClose={onClose}
       fullHeight
@@ -159,6 +141,19 @@ export const DeparturesDialogSheet = ({
       </View>
     </BottomSheetContainer>
   );
+};
+
+const getStopPlaceIds = (feature: Feature<Point>): string[] => {
+  const stopPlaceId: string | undefined = feature.properties?.['id'];
+  const adjSitesRaw: string | undefined = feature.properties?.['adjacentSites'];
+
+  let adjacentSiteIds: string[];
+  try {
+    adjacentSiteIds = adjSitesRaw ? JSON.parse(adjSitesRaw) : [];
+  } catch (_) {
+    adjacentSiteIds = [];
+  }
+  return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({

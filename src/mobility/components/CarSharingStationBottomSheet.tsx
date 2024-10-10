@@ -132,7 +132,7 @@ export const CarSharingStationBottomSheet = ({
           </>
         )}
         {!isLoading && (isError || !station) && (
-          <View style={styles.errorMessage}>
+          <View style={styles.footer}>
             <MessageInfoBox
               type="error"
               message={t(CarSharingTexts.loadingFailed)}
@@ -163,9 +163,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     container: {
       marginHorizontal: theme.spacings.medium,
       marginBottom: theme.spacings.medium,
-    },
-    errorMessage: {
-      marginHorizontal: theme.spacings.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),

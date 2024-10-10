@@ -1,5 +1,4 @@
 import ElementHelper from '../utils/element.helper.ts';
-import AppHelper from '../utils/app.helper.ts';
 
 class FrontPagePage {
   /**
@@ -110,25 +109,6 @@ class FrontPagePage {
   get noFavoriteInfo() {
     const noMsgId = `//*[@resource-id="noFavoriteWidget"]`;
     return $(noMsgId);
-  }
-
-  /**
-   * Remove dismissible global messages
-   */
-  async removeGlobalMessages() {
-    const closeId = `//*[@resource-id="globalMessageClose"]`;
-    // Check for n sec
-    const exists = await ElementHelper.isElementExisting(
-      'globalMessageClose',
-      3,
-    );
-    if (exists) {
-      const noGMs = await $$(closeId).length;
-      for (let i = 0; i < noGMs; i++) {
-        await $$(closeId)[0].click();
-        await AppHelper.pause(100);
-      }
-    }
   }
 
   /**

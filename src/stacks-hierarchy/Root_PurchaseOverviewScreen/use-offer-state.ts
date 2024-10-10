@@ -119,6 +119,7 @@ const getOfferReducer =
           offerSearchTime: undefined,
           isSearchingOffer: false,
           totalPrice: 0,
+          originalPrice: 0,
           error: undefined,
           userProfilesWithCountAndOffer: [],
         };

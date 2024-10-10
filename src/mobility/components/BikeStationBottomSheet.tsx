@@ -145,7 +145,7 @@ export const BikeStationBottomSheet = ({
           </>
         )}
         {!isLoading && (isError || !station) && (
-          <View style={styles.errorMessage}>
+          <View style={styles.footer}>
             <MessageInfoBox
               type="error"
               message={t(BicycleTexts.loadingFailed)}
@@ -178,10 +178,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       display: 'flex',
       flexDirection: 'row',
       marginTop: theme.spacings.small,
-    },
-    errorMessage: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),

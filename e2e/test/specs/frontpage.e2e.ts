@@ -27,7 +27,7 @@ describe('Frontpage', () => {
    */
   it('should remove messages', async () => {
     try {
-      await FrontPagePage.removeGlobalMessages();
+      await AppHelper.removeGlobalMessages();
       await AppHelper.pause(1000);
       await FrontPagePage.removeAnnouncements();
     } catch (errMsg) {

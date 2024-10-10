@@ -1,3 +1,4 @@
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const ActiveTokenRequiredTexts = {
@@ -6,6 +7,7 @@ const ActiveTokenRequiredTexts = {
     'The ticket is not available on',
     'Billetten er ikkje tilgjengeleg på',
   ),
+  travelCard: _('t:kort', 't:card', 't:kort'),
   switchToMobile: _(
     'Bytt til mobil for å gjennomføre kjøpet.',
     'Switch to mobile to complete the purchase.',
@@ -18,4 +20,11 @@ const ActiveTokenRequiredTexts = {
   ),
 };
 
-export default ActiveTokenRequiredTexts;
+export default orgSpecificTranslations(ActiveTokenRequiredTexts, {
+  nfk: {
+    travelCard: _('reisekort', 'travel card', 'reisekort'),
+  },
+  fram: {
+    travelCard: _('reisekort', 'travel card', 'reisekort'),
+  },
+});

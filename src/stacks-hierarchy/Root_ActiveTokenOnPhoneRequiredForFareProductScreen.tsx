@@ -16,7 +16,6 @@ import {RadioGroupSection} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import Ticketing from '@atb/translations/screens/Ticketing';
 import {getDeviceNameWithUnitInfo} from '@atb/select-travel-token-screen/utils';
 import {useToggleTokenMutation} from '@atb/mobile-token';
 
@@ -84,7 +83,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
               color={themeColor}
               style={styles.text}
             >
-              {t(Ticketing.travelCardInformation.cardType)}
+              {t(ActiveTokenRequiredTexts.travelCard)}
             </ThemeText>
           </View>
         </View>

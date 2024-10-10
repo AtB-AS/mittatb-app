@@ -25,9 +25,3 @@ type VippsPaymentMethod = {
   recurringCard?: undefined;
 };
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
-
-export type TicketRecipientType = {
-  accountId: string;
-  phoneNumber: string;
-  name?: string;
-};

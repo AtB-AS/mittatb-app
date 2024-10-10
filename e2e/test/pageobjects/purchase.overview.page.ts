@@ -109,20 +109,24 @@ class PurchaseOverviewPage {
     // Open
     await $(openZoneSelectorId).click();
 
-    // Note! Not working at the moment
-    await OnboardingPage.denyLocation();
-    await AlertHelper.alertCancel.click();
+    // Deny to share location
+    await OnboardingPage.denyLocationAndDontAskAgain();
+    await AlertHelper.systemSettingsCancel.click();
 
     // Set from zone
     await ElementHelper.waitForElement('text', 'Select stops/zones');
     await $(searchFromId).click();
     await ElementHelper.waitForElement('id', `tariffZone${zoneFrom}Button`);
+    // One click to opt out of the search input field
+    await $(zoneFromId).click();
     await $(zoneFromId).click();
     await ElementHelper.waitForElement('text', 'Select stops/zones');
 
     // Set to zone
     await $(searchToId).click();
     await ElementHelper.waitForElement('id', `tariffZone${zoneTo}Button`);
+    // One click to opt out of the search input field
+    await $(zoneToId).click();
     await $(zoneToId).click();
     await ElementHelper.waitForElement('id', `saveZonesButton`);
 

@@ -24,6 +24,8 @@ export enum StorageModelKeysEnum {
   EnableTicketInformationDebugOverride = '@ATB_enable_ticket_information_debug_override',
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
   EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
+  EnableTravelAid = '@ATB_enable_travel_aid_debug_override',
+  EnableTravelAidStopButton = '@ATB_enable_travel_aid_stop_button_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableSaveTicketRecipientsDebugOverride = '@ATB_enable_save_ticket_recipients_debug_override',
   EnableShmoDeepIntegrationDebugOverride = '@ATB_enable_shmo_deep_integration_debug_override',

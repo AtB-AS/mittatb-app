@@ -143,7 +143,7 @@ export const BicycleSheet = ({
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={styles.errorMessage}>
+          <View style={styles.footer}>
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -171,9 +171,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     operatorBenefit: {
       marginBottom: theme.spacings.medium,
-    },
-    errorMessage: {
-      marginHorizontal: theme.spacings.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
