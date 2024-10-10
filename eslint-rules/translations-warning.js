@@ -5,7 +5,7 @@ module.exports = {
   },
   create: function (context) {
     const config = {
-      translateFunctionIdentifiers: ['t', 'tStatic'],
+      translateFunctionIdentifiers: ['t', 'tGlobal'],
       translateModulePrefix: '@atb/translations',
     };
 
