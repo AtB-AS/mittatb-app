@@ -15,7 +15,7 @@ export type AuthReducerAction =
       confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
     }
   | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
-  | {type: 'SET_ID_TOKEN'; idToken: FirebaseAuthTypes.IdTokenResult}
+  | {type: 'SET_ID_TOKEN'; idTokenResult: FirebaseAuthTypes.IdTokenResult}
   | {type: 'SET_FETCH_ID_TOKEN_TIMEOUT'}
   | {type: 'RETRY_FETCH_ID_TOKEN'}
   | {type: 'RESET_AUTH_STATUS'};

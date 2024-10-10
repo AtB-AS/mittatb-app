@@ -62,7 +62,7 @@ export const useFetchIdTokenWithCustomClaims = (
 
   useEffect(() => {
     if (query.data) {
-      dispatch({type: 'SET_ID_TOKEN', idToken: query.data});
+      dispatch({type: 'SET_ID_TOKEN', idTokenResult: query.data});
     }
   }, [dispatch, query.data]);
 
