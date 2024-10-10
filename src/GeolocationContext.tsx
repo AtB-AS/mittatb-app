@@ -1,5 +1,4 @@
 import React, {
-  MutableRefObject,
   createContext,
   useCallback,
   useContext,
@@ -33,6 +32,12 @@ const config: GeolocationOptions = {
   distanceFilter: 20,
 };
 
+let currentCoordinatesGlobal: Coordinates | undefined = undefined;
+export const getCurrentCoordinatesGlobal = () =>
+  currentCoordinatesGlobal && {
+    ...currentCoordinatesGlobal,
+  };
+
 type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
@@ -42,7 +47,6 @@ type GeolocationState = {
   getCurrentCoordinates: (
     askForPermissionIfBlocked?: boolean,
   ) => Promise<Coordinates | undefined>;
-  currentCoordinatesRef?: MutableRefObject<Coordinates | undefined>;
 };
 
 type GeolocationReducerAction =
@@ -76,9 +80,14 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
         locationError: null,
       };
     case 'LOCATION_CHANGED':
+      const location = mapPositionToLocation(
+        action.position,
+        action.locationName,
+      );
+      currentCoordinatesGlobal = location?.coordinates;
       return {
         ...prevState,
-        location: mapPositionToLocation(action.position, action.locationName),
+        location,
         locationError: null,
       };
     case 'LOCATION_ERROR':
@@ -122,7 +131,6 @@ const defaultState: GeolocationState = {
   location: null,
   locationError: null,
   getCurrentCoordinates: () => Promise.resolve(undefined),
-  currentCoordinatesRef: undefined,
 };
 
 Geolocation.setRNConfiguration({
@@ -221,7 +229,10 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const locationIsAvailable =
     state.status === 'granted' && state.locationEnabled;
 
-  const updateLocation = (position: GeolocationResponse | null, locationName: string) =>
+  const updateLocation = (
+    position: GeolocationResponse | null,
+    locationName: string,
+  ) =>
     dispatch({
       type: 'LOCATION_CHANGED',
       position,
@@ -320,7 +331,6 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         locationIsAvailable,
         requestLocationPermission,
         getCurrentCoordinates,
-        currentCoordinatesRef,
       }}
     >
       {children}
