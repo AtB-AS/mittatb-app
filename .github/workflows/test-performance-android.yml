@@ -24,7 +24,7 @@ on:
 jobs:
   run_tests:
     name: Performance measures for Android
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
     environment: atb
