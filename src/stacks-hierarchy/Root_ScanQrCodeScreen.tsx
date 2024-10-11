@@ -33,7 +33,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     isError: getIdsFromQrCodeIsError,
   } = useGetIdsFromQrCodeMutation();
 
-  const alertResultError = useCallback(() => {
+  const clearStateAndAlertResultError = useCallback(() => {
+    setBottomSheetToAutoSelect(undefined);
+    setBottomSheetCurrentlyAutoSelected(undefined);
     Alert.alert(
       tGlobal(MapTexts.qr.notFound.title),
       tGlobal(MapTexts.qr.notFound.description),
@@ -45,7 +47,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         },
       ],
     );
-  }, [navigation]);
+  }, [
+    navigation.goBack,
+    setBottomSheetCurrentlyAutoSelected,
+    setBottomSheetToAutoSelect,
+  ]);
 
   const idsFromQrCodeReceivedHandler = useCallback(
     (idsFromQrCode: IdsFromQrCodeResponse) => {
@@ -86,20 +92,13 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       if (!!type && !!id) {
         setBottomSheetToAutoSelect({type, id});
       } else {
-        setBottomSheetToAutoSelect(undefined);
-        setBottomSheetCurrentlyAutoSelected(undefined);
-        alertResultError();
+        clearStateAndAlertResultError();
         return;
       }
 
       navigation.goBack();
     },
-    [
-      alertResultError,
-      navigation,
-      setBottomSheetCurrentlyAutoSelected,
-      setBottomSheetToAutoSelect,
-    ],
+    [clearStateAndAlertResultError, navigation, setBottomSheetToAutoSelect],
   );
 
   const onQrCodeScanned = useCallback(
@@ -123,8 +122,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   }, [isFocused]);
 
   useEffect(() => {
-    getIdsFromQrCodeIsError && alertResultError();
-  }, [alertResultError, getIdsFromQrCodeIsError]);
+    getIdsFromQrCodeIsError && clearStateAndAlertResultError();
+  }, [clearStateAndAlertResultError, getIdsFromQrCodeIsError]);
 
   return (
     <ScreenContainer
