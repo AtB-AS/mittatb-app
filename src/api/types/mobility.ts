@@ -184,7 +184,7 @@ export const IdsFromQrCodeResponseSchema = z.object({
   operatorId: z.string(),
   vehicleId: z.string().nullable().optional(),
   stationId: z.string().nullable().optional(),
-  formFactor: FormFactorSchema.optional(),
+  formFactor: FormFactorSchema.nullable().optional(),
 });
 
 export type IdsFromQrCodeResponse = z.infer<typeof IdsFromQrCodeResponseSchema>;
