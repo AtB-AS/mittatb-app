@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
@@ -47,8 +47,6 @@ export function ProductSelectionByProducts({
     .filter((product) => product.type === selectedProduct.type)
     .filter(onlyUniquesBasedOnField('productAliasId', true));
 
-  const [selected, setProduct] = useState(selectedProduct);
-
   const alias = (fareProduct: PreassignedFareProduct) =>
     fareProduct.productAlias &&
     getTextForLanguage(fareProduct.productAlias, language);
@@ -83,11 +81,8 @@ export function ProductSelectionByProducts({
             itemToText={(fp) => productDisplayName(fp)}
             hideSubtext={hideProductDescriptions}
             itemToSubtext={(fp) => subText(fp)}
-            selected={selected}
-            onSelect={(fp) => {
-              setProduct(fp);
-              setSelectedProduct(fp);
-            }}
+            selected={selectedProduct}
+            onSelect={setSelectedProduct}
             color="interactive_2"
             accessibilityHint={t(
               PurchaseOverviewTexts.productSelection.a11yTitle,

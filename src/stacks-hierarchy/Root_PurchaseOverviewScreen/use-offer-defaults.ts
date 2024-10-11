@@ -16,6 +16,8 @@ import {
 import {useMemo} from 'react';
 import {useDefaultPreassignedFareProduct} from '@atb/fare-contracts/utils';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
+import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types.ts';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -23,19 +25,24 @@ type UserProfileTypeWithCount = {
 };
 
 export function useOfferDefaults(
-  preassignedFareProduct?: PreassignedFareProduct,
-  selectableProductType?: string,
+  preassignedFareProduct: PreassignedFareProduct | undefined,
+  fareProductTypeConfig: FareProductTypeConfig,
   userProfilesWithCount?: UserProfileWithCount[],
   fromPlace?: TariffZoneWithMetadata | StopPlaceFragment,
   toPlace?: TariffZoneWithMetadata | StopPlaceFragment,
-) {
+  travelDate?: string,
+): {
+  selection: PurchaseSelectionType;
+  preassignedFareProductAlternatives: PreassignedFareProduct[];
+} {
   const {data: fareProducts} = useGetFareProductsQuery();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
   // Get default PreassignedFareProduct alternatives
-  const productType = preassignedFareProduct?.type ?? selectableProductType;
+  const productType =
+    preassignedFareProduct?.type ?? fareProductTypeConfig.type;
   const selectableProducts = fareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
@@ -92,12 +99,29 @@ export function useOfferDefaults(
     defaultSelection,
   );
 
+  const selection = useMemo(
+    () => ({
+      fareProductTypeConfig,
+      preassignedFareProduct: defaultPreassignedFareProduct,
+      userProfilesWithCount: defaultSelectableTravellers,
+      fromPlace: defaultFromPlace,
+      toPlace: defaultToPlace,
+      travelDate,
+    }),
+    [
+      defaultFromPlace,
+      defaultPreassignedFareProduct,
+      defaultSelectableTravellers,
+      defaultToPlace,
+      fareProductTypeConfig,
+      travelDate,
+    ],
+  );
+
   return {
+    selection,
     preassignedFareProductAlternatives:
       defaultPreassignedFareProductAlternatives,
-    selectableTravellers: defaultSelectableTravellers,
-    fromPlace: defaultFromPlace,
-    toPlace: defaultToPlace,
   };
 }
 
