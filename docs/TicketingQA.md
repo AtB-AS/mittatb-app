@@ -26,3 +26,15 @@ To download the app, go to one of these links:
 For details on how to use the Vipps MT (phone number, etc), see: [Vipps MT in testing](https://github.com/AtB-AS/docs-private/blob/main/vipps-mt.md)
 
 When testing the QA-version on the device, the payment process will launch the **Vipps MT**-app. Therefore it should not be possible to pay with the production version (and your own money), unless you make a mistake and open _our_ production app.
+
+
+## Webshop Debug Tickets
+
+For testing tickets on the webshop, you need to set a cookie through the browser's developer tool, and set this cookie:
+
+```
+Cookie name: secret-all-products-mode
+Cookie value: true 
+```
+
+Once set, refresh your browser and the hidden/unavailable tickets will show up.
