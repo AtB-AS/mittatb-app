@@ -14,6 +14,7 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
+  subtextMarkdown?: boolean;
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
@@ -26,6 +27,7 @@ type Props = SectionItemProps<{
 export function ToggleSectionItem({
   text,
   subtext,
+  subtextMarkdown = false,
   label,
   onValueChange,
   leftImage,
@@ -97,6 +99,7 @@ export function ToggleSectionItem({
             <ThemeText
               type="body__secondary"
               color="secondary"
+              isMarkdown={subtextMarkdown}
               style={styles.subtext}
             >
               {subtext}
