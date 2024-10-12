@@ -44,9 +44,8 @@ import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 export const defaultVatPercent: number = 12;
 
 export type AppTexts = {
-  discountInfo: LanguageAndTextType[];
-  travelAidSubText: LanguageAndTextType[];
-};
+  getAppText: (key: string) => LanguageAndTextType[] | undefined;
+}
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -484,23 +483,18 @@ function getAppTextsFromSnapshot(
   const appTextsRaw = snapshot.docs.find((doc) => doc.id == 'appTexts');
   if (!appTextsRaw) return undefined;
 
-  const discountInfo = mapLanguageAndTextType(appTextsRaw.get('discountInfo'));
-  if (!discountInfo) {
-    Bugsnag.notify(
-      `App text field "discountInfo" should conform: "LanguageAndTextType"`,
-    );
-    return undefined;
+  const getAppText = (key: string): LanguageAndTextType[] | undefined => {
+    const text = mapLanguageAndTextType(appTextsRaw.get(key));
+    if (!text) {
+      Bugsnag.notify(
+        `App text field ${key} should conform: "LanguageAndTextType"`,
+      );
+      return undefined;
+    }
+    return text;
   }
 
-  const travelAidSubText = mapLanguageAndTextType(appTextsRaw.get('travelAidSubText'));
-  if (!travelAidSubText) {
-    Bugsnag.notify(
-      `App text field "travelAidSubText" should conform: "LanguageAndTextType"`,
-    );
-    return undefined;
-  }
-
-  return {discountInfo, travelAidSubText};
+  return {getAppText};
 }
 
 function getConfigurableLinksFromSnapshot(

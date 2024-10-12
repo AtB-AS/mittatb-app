@@ -38,7 +38,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
 
   const description =
-    getTextForLanguage(appTexts?.discountInfo, language) ||
+    getTextForLanguage(appTexts?.getAppText('discountInfo'), language) ||
     t(PurchaseOverviewTexts.flexDiscount.description);
 
   return (

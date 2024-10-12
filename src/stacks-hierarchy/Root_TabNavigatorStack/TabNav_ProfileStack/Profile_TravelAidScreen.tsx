@@ -14,8 +14,11 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {Button} from '@atb/components/button';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_TravelAidScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
+
+export const Profile_TravelAidScreen = ({}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {appTexts} = useFirestoreConfiguration();
@@ -23,10 +26,10 @@ export const Profile_TravelAidScreen = () => {
   const {setPreference, preferences} = usePreferences();
 
   const firestoreSubText = getTextForLanguage(
-    appTexts?.travelAidSubText,
+    appTexts?.getAppText('travelAidSubText'),
     language,
   )?.replace(/\\n/g, '\n'); // need this to remove escape characters
-  
+
   const subtext = firestoreSubText || t(TravelAidSettingsTexts.toggle.subText);
 
   return (
