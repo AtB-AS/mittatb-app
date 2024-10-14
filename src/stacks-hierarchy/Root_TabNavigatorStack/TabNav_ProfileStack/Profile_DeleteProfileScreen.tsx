@@ -8,7 +8,7 @@ import {
 } from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Alert, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
@@ -17,6 +17,7 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {tGlobal} from '@atb/LocaleProvider.tsx';
 
 export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();
@@ -27,7 +28,6 @@ export const Profile_DeleteProfileScreen = () => {
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
-  const [deleteError, setDeleteError] = useState<boolean>(false);
   const {deleteCollectedData} = useBeaconsState();
 
   const handleDeleteProfile = async () => {
@@ -36,7 +36,10 @@ export const Profile_DeleteProfileScreen = () => {
       await deleteCollectedData();
       await signOut();
     } else {
-      setDeleteError(true);
+      Alert.alert(
+        tGlobal(DeleteProfileTexts.deleteError.title),
+        tGlobal(DeleteProfileTexts.deleteError.message),
+      );
     }
   };
 
@@ -58,15 +61,6 @@ export const Profile_DeleteProfileScreen = () => {
     );
   };
 
-  useEffect(() => {
-    if (deleteError) {
-      Alert.alert(
-        t(DeleteProfileTexts.deleteError.title),
-        t(DeleteProfileTexts.deleteError.message),
-      );
-    }
-    setDeleteError(false);
-  }, [deleteError, setDeleteError, t]);
   const {theme} = useTheme();
 
   return (

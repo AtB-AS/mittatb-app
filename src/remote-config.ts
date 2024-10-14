@@ -69,6 +69,7 @@ export type RemoteConfig = {
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
   vehicles_poll_interval: number;
+  fetch_id_token_retry_count: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -138,6 +139,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
   vehicles_poll_interval: 20000,
+  fetch_id_token_retry_count: 3,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -323,6 +325,9 @@ export function getConfig(): RemoteConfig {
   const vehicles_poll_interval =
     values['vehicles_poll_interval']?.asNumber() ??
     defaultRemoteConfig.vehicles_poll_interval;
+  const fetch_id_token_retry_count =
+    values['fetch_id_token_retry_count']?.asNumber() ??
+    defaultRemoteConfig.fetch_id_token_retry_count;
 
   return {
     contact_phone_number,
@@ -387,6 +392,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
+    fetch_id_token_retry_count,
   };
 }
 

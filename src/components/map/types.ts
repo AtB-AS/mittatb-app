@@ -79,6 +79,7 @@ export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
 ) => void;
+
 export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,

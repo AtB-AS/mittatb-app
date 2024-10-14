@@ -15,8 +15,11 @@ import {
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
-import auth from '@react-native-firebase/auth';
 import {Platform} from 'react-native';
+import {
+  getCurrentUserIdGlobal,
+  getIdTokenGlobal,
+} from '@atb/auth/AuthContext.tsx';
 
 type InternalUpstreamServerError = {
   errorCode: 602;
@@ -49,11 +52,9 @@ function shouldRetry(error: AxiosError): boolean {
   const shouldForceRefresh = error.config?.forceRefreshIdToken;
   if (shouldForceRefresh) return true;
 
-  const shouldRetryOnNetworkErrorOrIdempotentRequest =
-    Boolean(error.config?.retry) &&
+  return Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
-  return shouldRetryOnNetworkErrorOrIdempotentRequest;
 }
 
 export function createClient(baseUrl: string | undefined) {
@@ -80,14 +81,16 @@ export function setInstallId(installId: string) {
 export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
 
-function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
+function requestHandler(
+  config: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig {
   config.headers[RequestIdHeaderName] = uuid();
 
   if (installIdHeaderValue) {
     config.headers[InstallIdHeaderName] = installIdHeaderValue;
   }
 
-  const authId = auth().currentUser?.uid;
+  const authId = getCurrentUserIdGlobal();
   if (authId) {
     config.headers[FirebaseAuthIdHeaderName] = authId;
   }
@@ -102,9 +105,7 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
 
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    const user = auth().currentUser;
-    const idToken = await user?.getIdToken(config.forceRefreshIdToken);
-    config.headers[Authorization] = 'Bearer ' + idToken;
+    config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
   }
   return config;
 }

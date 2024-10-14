@@ -4,7 +4,11 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {Cluster, VehicleFeatures} from '../../types';
 import {Scooters} from './Scooters';
 import {Bicycles} from './Bicycles';
-import {flyToLocation, isClusterFeature} from '@atb/components/map';
+import {
+  flyToLocation,
+  isClusterFeature,
+  SLIGHTLY_RAISED_MAP_PADDING,
+} from '@atb/components/map';
 import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
@@ -37,6 +41,7 @@ export const Vehicles = ({
 
       flyToLocation({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
+        padding: SLIGHTLY_RAISED_MAP_PADDING,
         mapCameraRef,
         zoomLevel: toZoomLevel,
         animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,

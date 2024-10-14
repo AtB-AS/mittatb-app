@@ -298,6 +298,19 @@ const TicketingTexts = {
       'Aktiver for å få tips og informasjon om billettar',
     ),
   },
+  accountError: {
+    title: _('Noe gikk galt', 'Something went wrong', 'Noko gjekk gale'),
+    message: _(
+      'Billettkjøp fungerer ikke. Sjekk din internett-tilkobling og last inn appen på nytt. Hvis du fortsatt får denne meldingen, kontakt kundeservice.',
+      'Ticket purchase is not working. Check your internet connection and reload the app. If you keep seeing this message, contact customer service.',
+      'Billettkjøp fungerer ikkje. Sjekk internett-tilkoplinga di og last inn appen på nytt. Dersom du framleis får denne meldinga, kontakt kundeservice.',
+    ),
+    actionText: _(
+      'Last inn appen på nytt',
+      'Reload app',
+      'Last inn appen på nytt',
+    ),
+  },
 };
 
 export default TicketingTexts;

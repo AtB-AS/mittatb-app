@@ -7,6 +7,7 @@ import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedEntityChanges} from './use-update-bottom-sheet-when-selected-entity-changes';
 import {Coordinates} from '@atb/utils/coordinates';
+import {useMapState} from '@atb/MapContext';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
@@ -29,6 +30,7 @@ export const useMapSelectionChangeEffect = (
   >({source: 'my-position', coords: startingCoordinates});
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
+  const {setBottomSheetCurrentlyAutoSelected} = useMapState();
 
   const cameraFocusMode = useDecideCameraFocusMode(
     mapProps.selectionMode,
@@ -42,13 +44,14 @@ export const useMapSelectionChangeEffect = (
       : undefined;
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
-  const selectedFeature = useUpdateBottomSheetWhenSelectedEntityChanges(
-    mapProps,
-    distance,
-    mapSelectionAction,
-    mapViewRef,
-    () => setMapSelectionAction(undefined),
-  );
+  const {selectedFeature, onReportParkingViolation} =
+    useUpdateBottomSheetWhenSelectedEntityChanges(
+      mapProps,
+      distance,
+      mapSelectionAction,
+      mapViewRef,
+      () => setMapSelectionAction(undefined),
+    );
 
   return {
     mapLines:
@@ -56,6 +59,7 @@ export const useMapSelectionChangeEffect = (
         ? cameraFocusMode.mapLines
         : undefined,
     onMapClick: (sc: MapSelectionActionType) => {
+      setBottomSheetCurrentlyAutoSelected(undefined);
       setMapSelectionAction(sc);
       setFromCoords(currentLocation?.coordinates);
     },
@@ -63,5 +67,6 @@ export const useMapSelectionChangeEffect = (
       ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
       : undefined,
     selectedFeature,
+    onReportParkingViolation,
   };
 };

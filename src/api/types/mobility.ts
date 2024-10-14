@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -175,10 +176,15 @@ type FinishEvent = {
 
 export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
 
+const FormFactorSchema = z.enum(
+  Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
+);
+
 export const IdsFromQrCodeResponseSchema = z.object({
   operatorId: z.string(),
   vehicleId: z.string().nullable().optional(),
   stationId: z.string().nullable().optional(),
+  formFactor: FormFactorSchema.nullable().optional(),
 });
 
 export type IdsFromQrCodeResponse = z.infer<typeof IdsFromQrCodeResponseSchema>;
