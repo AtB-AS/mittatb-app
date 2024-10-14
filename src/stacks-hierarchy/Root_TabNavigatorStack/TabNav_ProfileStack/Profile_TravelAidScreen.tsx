@@ -26,12 +26,12 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const {contact_phone_number} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
 
-  const firestoreSubText = getUnescapedTextForLanguage(
+  const profileTravelAidSubText = getUnescapedTextForLanguage(
     appTexts?.getAppText('travelAidSubText'),
     language,
   );
 
-  const subtext = firestoreSubText || t(TravelAidSettingsTexts.toggle.subText);
+  const subtext = profileTravelAidSubText || t(TravelAidSettingsTexts.toggle.subText);
 
   return (
     <FullScreenView
