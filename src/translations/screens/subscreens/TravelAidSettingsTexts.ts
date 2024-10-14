@@ -2,7 +2,12 @@ import {translation as _} from '../../commons';
 
 const TravelAidSettingsTexts = {
   header: {
-    title: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
+    accessibility: {
+      title: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
+    },
+    howTo: {
+      title: _('Viktig å vite', 'Important information', 'Viktig å vite'),
+    },
   },
 
   toggle: {

@@ -43,13 +43,13 @@ export const Profile_TravelAidInformationScreen = () => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(TravelAidSettingsTexts.header.title),
+        title: t(TravelAidSettingsTexts.header.howTo.title),
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
-          text={t(TravelAidSettingsTexts.header.title)}
+          text={t(TravelAidSettingsTexts.header.howTo.title)}
         />
       )}
     >

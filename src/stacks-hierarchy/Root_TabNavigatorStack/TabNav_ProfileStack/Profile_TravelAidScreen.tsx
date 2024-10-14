@@ -15,6 +15,7 @@ import {Button} from '@atb/components/button';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ProfileScreenProps} from './navigation-types';
+import Bugsnag from '@bugsnag/react-native';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
@@ -35,13 +36,13 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(TravelAidSettingsTexts.header.title),
+        title: t(TravelAidSettingsTexts.header.accessibility.title),
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
-          text={t(TravelAidSettingsTexts.header.title)}
+          text={t(TravelAidSettingsTexts.header.accessibility.title)}
         />
       )}
     >
@@ -77,10 +78,20 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                 accessibilityHint={t(
                   TravelAidSettingsTexts.button.contact.a11yHint,
                 )}
+                active={!!contact_phone_number}
                 accessibilityRole="button"
                 testID="travelAidContactCustomerServiceButton"
-                onPress={() => {
-                  Linking.openURL(`tel:${contact_phone_number}`);
+                onPress={() => async () => {
+                  const phoneNumber = `tel:${contact_phone_number}`;
+                  if (await Linking.canOpenURL(phoneNumber)) {
+                    Linking.openURL(phoneNumber);
+                  } else {
+                    Bugsnag.notify(
+                      new Error(
+                        'Could not open phone number in accessiblity settings',
+                      ),
+                    );
+                  }
                 }}
               />
             </View>
