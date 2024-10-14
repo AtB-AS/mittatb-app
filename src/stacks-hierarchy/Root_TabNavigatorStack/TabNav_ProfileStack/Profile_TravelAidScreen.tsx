@@ -18,7 +18,7 @@ import {ProfileScreenProps} from './navigation-types';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
-export const Profile_TravelAidScreen = ({}: Props) => {
+export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {appTexts} = useFirestoreConfiguration();
@@ -66,7 +66,9 @@ export const Profile_TravelAidScreen = ({}: Props) => {
                 )}
                 accessibilityRole="button"
                 testID="travelAidImportantInformationButton"
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('Profile_TravelAidInformationScreen');
+                }}
               />
               <Button
                 mode="secondary"
