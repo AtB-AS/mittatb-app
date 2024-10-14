@@ -47,7 +47,7 @@ $RNMapboxMapsImpl = 'mapbox'
 # Fix for: Apple Invalid Privacy Manifest
 # https://github.com/mapbox/mapbox-maps-ios/releases/tag/v10.17.0
 # This is a temporary fix until the next release of the Mapbox Maps SDK for React Native.
-$RNMapboxMapsVersion = '~> 10.17.0'
+$RNMapboxMapsVersion = '~> 10.18.2'
 
 target 'app' do
   pod 'Firebase', :modular_headers => true
@@ -93,6 +93,17 @@ target 'app' do
 
     # Patch for issue using use_frameworks with hermes
     installer.pods_project.targets.each do |target|
+      # Workaround fix for GRPC https://github.com/grpc/grpc/pull/36904 & Xcode 16
+      if target.name == 'BoringSSL-GRPC'
+        target.source_build_phase.files.each do |file|
+          if file.settings && file.settings['COMPILER_FLAGS']
+            flags = file.settings['COMPILER_FLAGS'].split
+            flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+            file.settings['COMPILER_FLAGS'] = flags.join(' ')
+          end
+        end
+      end
+
       target.build_configurations.each do |config|
         # Workaround fix for https://github.com/facebook/react-native/issues/34106#issuecomment-1417685116
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
