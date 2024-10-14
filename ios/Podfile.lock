@@ -940,14 +940,14 @@ PODS:
   - KettleKit (1.3.1)
   - leveldb-library (1.22.4)
   - libevent (2.1.12)
-  - MapboxCommon (23.9.2)
-  - MapboxCoreMaps (10.17.0):
-    - MapboxCommon (~> 23.9)
-  - MapboxMaps (10.17.0):
-    - MapboxCommon (= 23.9.2)
-    - MapboxCoreMaps (= 10.17.0)
+  - MapboxCommon (23.10.1)
+  - MapboxCoreMaps (10.18.0):
+    - MapboxCommon (~> 23.10)
+  - MapboxMaps (10.18.2):
+    - MapboxCommon (= 23.10.1)
+    - MapboxCoreMaps (= 10.18.0)
     - MapboxMobileEvents (= 1.0.10)
-    - Turf (= 2.7.0)
+    - Turf (= 2.8.0)
   - MapboxMobileEvents (1.0.10)
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
@@ -2078,14 +2078,14 @@ PODS:
     - React-Core
   - RNLocalize (3.2.1):
     - React-Core
-  - rnmapbox-maps (10.1.28):
-    - MapboxMaps (~> 10.17.0)
+  - rnmapbox-maps (10.1.31):
+    - MapboxMaps (~> 10.18.2)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.28)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.31)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.28):
-    - MapboxMaps (~> 10.17.0)
+  - rnmapbox-maps/DynamicLibrary (10.1.31):
+    - MapboxMaps (~> 10.18.2)
     - React
     - React-Core
     - Turf
@@ -2109,7 +2109,7 @@ PODS:
     - TokenCore
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
-  - Turf (2.7.0)
+  - Turf (2.8.0)
   - VisualCodeModeliOSLib (1.0.0)
   - VisualCodeViewiOSLib (1.0.0):
     - VisualCodeModeliOSLib
@@ -2526,9 +2526,9 @@ SPEC CHECKSUMS:
   KettleKit: 607b72ed627477a08450e5e5762c21dba1f461e3
   leveldb-library: 06a69cc7582d64b29424a63e085e683cc188230a
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: 768660d6fca8193529ecf82eb6f5f9ae7a5acdf9
-  MapboxCoreMaps: be412ff97b16aa7820922c818115a9a0d8211caa
-  MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
+  MapboxCommon: 0ff437e44988da6856e280d00ffb266564ed0487
+  MapboxCoreMaps: f1bd9405f5b9d3e343f2fe4138775299699a22fb
+  MapboxMaps: e76b14f52c54c40b76ddecd04f40448e6f35a864
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -2601,19 +2601,19 @@ SPEC CHECKSUMS:
   RNGestureHandler: 1155b1898ceddefeebf77792927360d44fe11e77
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
-  rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
+  rnmapbox-maps: 86b215fe77632a897b34a2dbf0c3ad4e9e8c3570
   RNPermissions: 47db57715014b92750634e0fd5c0287fa7156007
   RNScreens: 29418ceffb585b8f0ebd363de304288c3dce8323
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
-  TokenStateReactNativeLib: 24ac2ffe1fc294ad23df4b7b12d2bcc0b0f8aa69
-  Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
+  TokenStateReactNativeLib: 7d0ff81bceaa26361ad7fc5e90cf161eb1a4b921
+  Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   VisualCodeModeliOSLib: 826875ce13fe87af1517d5d730a23181ca3b21be
   VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948
   Yoga: c716aea2ee01df6258550c7505fa61b248145ced
 
-PODFILE CHECKSUM: 5d9e9c06fdbbd9a216ddd8596063fda334bef2cf
+PODFILE CHECKSUM: 1379ffa3dfb4fef08c9b1973f83c992e336715c2
 
 COCOAPODS: 1.14.3
