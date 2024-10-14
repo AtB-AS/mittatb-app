@@ -36,6 +36,29 @@ const TravelAidSettingsTexts = {
       ),
     },
   },
+
+  information: {
+    howTo: {
+      title: _(
+        'Hvordan sende stopp:',
+        'How to send a stop:',
+        'Hvordan sende stopp:',
+      ),
+      content: _(
+        'Stoppsignal fra appen varsler sjåfør om at noen med ekstra behov skal av eller på.\n\n<br/>* I “Avganger”-fanen, velg holdeplassen du skal reise fra.\n* Fra buss-listen, velg riktig buss/trikk.\n* I visningen for bussen/trikken, trykk på Reisehjelp.\n* I Reisehjelp-modusen, trykk “Send stopp”.',
+        '',
+        '',
+      ),
+    },
+    keepInMind: {
+      title: _('Husk:', 'Keep in mind:', 'Husk:'),
+      content: _(
+        '* Følg retningslinjer, som å stå på ledelinjen eller lengst frem på holdeplassen, for å vise at du skal på.\n* Du kan bare stoppe én buss/ trikk om gangen.\n* Du kan ikke angre et stoppsignal som er sendt.',
+        '* Follow guidelines, such as standing on the tactile guiding line or at the front of the stop, to signal that you’re boarding.\n* You can only stop one bus/tram at a time.\n * You cannot cancel a stop signal once it has been sent.',
+        '',
+      ),
+    },
+  },
 };
 
 export default TravelAidSettingsTexts;

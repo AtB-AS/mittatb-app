@@ -38,6 +38,16 @@ export const getTextForLanguage = (
 };
 
 /**
+ * Removes any escape characters for markdown text on Firestore 
+ */
+export const getUnescapedTextForLanguage = (
+  texts: LanguageAndTextType[] | undefined,
+  language: Language,
+): string | undefined => {
+  return getTextForLanguage(texts, language)?.replace(/\\n/g, '\n');
+}
+
+/**
  * Get the text in the current language. If English is requested, it will
  * fall back to Norwegian if no English text is found. If neither English nor
  * Norwegian is found the first text in the provided texts array is returned.

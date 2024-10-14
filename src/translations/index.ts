@@ -9,7 +9,7 @@ export {
 } from './commons';
 
 export type {LanguageAndTextType} from './types';
-export {getTextForLanguage} from './utils';
+export {getTextForLanguage, getUnescapedTextForLanguage} from './utils';
 export {default as ForceUpdateTexts} from './screens/ForceUpdate';
 export {default as FavoriteTexts} from './components/FavoriteChips';
 export {default as PaginationTexts} from './components/Pagination';

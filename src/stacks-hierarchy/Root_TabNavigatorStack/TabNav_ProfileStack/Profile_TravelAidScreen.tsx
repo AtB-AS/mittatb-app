@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {getUnescapedTextForLanguage, useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import TravelAidSettingsTexts from '@atb/translations/screens/subscreens/TravelAidSettingsTexts';
@@ -25,10 +25,10 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const {contact_phone_number} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
 
-  const firestoreSubText = getTextForLanguage(
+  const firestoreSubText = getUnescapedTextForLanguage(
     appTexts?.getAppText('travelAidSubText'),
     language,
-  )?.replace(/\\n/g, '\n'); // need this to remove escape characters
+  );
 
   const subtext = firestoreSubText || t(TravelAidSettingsTexts.toggle.subText);
 
