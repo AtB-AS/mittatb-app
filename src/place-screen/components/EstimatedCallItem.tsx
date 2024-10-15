@@ -1,14 +1,10 @@
 import {EstimatedCall} from '@atb/api/types/departures';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {getTransportModeSvg} from '@atb/components/icon-box';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {screenReaderPause} from '@atb/components/text';
 import {
   FavouriteDepartureToggle,
   StoredFavoriteDeparture,
 } from '@atb/favorites';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   formatDestinationDisplay,
   getNoticesForEstimatedCall,
@@ -16,7 +12,6 @@ import {
   getBookingStatus,
 } from '@atb/travel-details-screens/utils';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
-
 import {
   CancelledDepartureTexts,
   DeparturesTexts,
@@ -29,11 +24,8 @@ import {
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
-  formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
-import {useFontScale} from '@atb/utils/use-font-scale';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {memo} from 'react';
 import {View} from 'react-native';
 import {GenericClickableSectionItem} from '@atb/components/sections';
@@ -43,11 +35,10 @@ import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
 } from '@atb/situations/utils';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {Statuses} from '@atb-as/theme';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {PinInvalid} from '@atb/assets/svg/mono-icons/map';
-import {usePreferences} from '@atb/preferences';
+import {EstimatedCallInfo} from '@atb/components/estimated-call';
+import {DepartureTime} from '@atb/components/estimated-call';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
@@ -75,9 +66,6 @@ export const EstimatedCallItem = memo(
     const styles = useStyles();
     const {t, language} = useTranslation();
     const testID = 'estimatedCallItem';
-    const {
-      preferences: {debugPredictionInaccurate},
-    } = usePreferences();
 
     const onPress =
       mode === 'Favourite'
@@ -94,10 +82,6 @@ export const EstimatedCallItem = memo(
         ? t(DeparturesTexts.a11yMarkFavouriteHint)
         : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
-    const {destinationDisplay} = departure;
-    const lineName = formatDestinationDisplay(t, destinationDisplay);
-
-    const showAsCancelled = departure.cancellation && mode !== 'Favourite';
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
@@ -113,22 +97,11 @@ export const EstimatedCallItem = memo(
             style={styles.lineAndDepartureTime}
             importantForAccessibility="yes"
           >
-            <View style={styles.transportInfo}>
-              <LineChip departure={departure} mode={mode} testID={testID} />
-              {debugPredictionInaccurate && departure.predictionInaccurate && (
-                <ThemeIcon svg={PinInvalid} colorType="warning" />
-              )}
-              <ThemeText
-                type={
-                  showAsCancelled ? 'body__primary--strike' : 'body__primary'
-                }
-                color={showAsCancelled ? 'secondary' : 'primary'}
-                style={styles.lineName}
-                testID={`${testID}LineName`}
-              >
-                {lineName}
-              </ThemeText>
-            </View>
+            <EstimatedCallInfo
+              departure={departure}
+              ignoreSituationsAndCancellations={mode === 'Favourite'}
+              testID={`${testID}LineName`}
+            />
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
           </View>
 
@@ -178,49 +151,6 @@ export const EstimatedCallItem = memo(
   },
 );
 
-const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
-  const {t, language} = useTranslation();
-  const styles = useStyles();
-  const {themeName} = useTheme();
-
-  return (
-    <View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        {departure.realtime && !departure.cancellation && (
-          <ThemeIcon
-            style={styles.realtimeIcon}
-            svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-            size="xSmall"
-          />
-        )}
-        <ThemeText
-          type={
-            departure.cancellation
-              ? 'body__primary--strike'
-              : 'body__primary--bold'
-          }
-          color={departure.cancellation ? 'secondary' : 'primary'}
-        >
-          {formatToClockOrRelativeMinutes(
-            departure.expectedDepartureTime,
-            language,
-            t(dictionary.date.units.now),
-          )}
-        </ThemeText>
-      </View>
-      {isMoreThanOneMinuteDelayed(departure) && (
-        <ThemeText
-          type="body__tertiary--strike"
-          color="secondary"
-          style={styles.aimedTime}
-        >
-          {formatLocaleTime(departure.aimedDepartureTime, language)}
-        </ThemeText>
-      )}
-    </View>
-  );
-};
-
 export function getLineAndTimeA11yLabel(
   departure: EstimatedCall,
   t: TranslateFunction,
@@ -260,57 +190,6 @@ export function getLineA11yLabel(
   const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
   const a11yLineName = lineName ? `${lineName}.` : '';
   return `${a11yLine} ${a11yLineName}`;
-}
-
-function LineChip({
-  departure,
-  mode,
-  testID = '',
-}: Pick<EstimatedCallItemProps, 'departure' | 'mode' | 'testID'>) {
-  const styles = useStyles();
-  const fontScale = useFontScale();
-  const {theme, themeName} = useTheme();
-  const publicCode = departure.serviceJourney.line.publicCode;
-  const {transportMode, transportSubmode} = departure.serviceJourney;
-  const {svg} = getTransportModeSvg(transportMode, transportSubmode);
-  const transportColor = useTransportationColor(
-    transportMode,
-    transportSubmode,
-  );
-  const transportTextColor = useTransportationColor(
-    transportMode,
-    transportSubmode,
-    false,
-    'text',
-  );
-
-  const msgType = mode !== 'Favourite' && getMsgTypeForEstimatedCall(departure);
-  const icon = msgType && messageTypeToIcon(msgType, true, themeName);
-
-  if (!publicCode && !transportMode) return null;
-
-  return (
-    <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
-      <ThemeIcon
-        fill={transportTextColor}
-        style={{marginRight: publicCode ? theme.spacings.small : 0}}
-        svg={svg}
-      />
-      {publicCode && (
-        <ThemeText
-          style={[
-            styles.lineChipText,
-            {color: transportTextColor, minWidth: fontScale * 20},
-          ]}
-          type="body__primary--bold"
-          testID={`${testID}PublicCode`}
-        >
-          {publicCode}
-        </ThemeText>
-      )}
-      {icon && <ThemeIcon svg={icon} style={styles.lineChipIcon} />}
-    </View>
-  );
 }
 
 const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
@@ -364,38 +243,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  transportInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexShrink: 1,
-    flexWrap: 'wrap',
-  },
-  lineName: {
-    flexGrow: 1,
-    flexShrink: 1,
-    marginRight: theme.spacings.medium,
-    minWidth: '30%',
-  },
-  realtimeIcon: {
-    marginRight: theme.spacings.xSmall,
-  },
-  lineChip: {
-    padding: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    marginRight: theme.spacings.medium,
-    flexDirection: 'row',
-  },
-  lineChipIcon: {
-    position: 'absolute',
-    top: -theme.spacings.small,
-    left: -theme.spacings.small,
-  },
-  lineChipText: {
-    color: theme.static.background.background_accent_3.text,
-    textAlign: 'center',
-  },
-  realtimeAndText: {flexDirection: 'row', alignItems: 'center'},
-  realtime: {flexDirection: 'row', alignItems: 'center'},
-  aimedTime: {textAlign: 'right'},
-  warningIcon: {marginRight: theme.spacings.small},
 }));
