@@ -109,11 +109,11 @@ export function useOfferDefaults(
       travelDate,
     }),
     [
-      defaultFromPlace,
+      fareProductTypeConfig,
       defaultPreassignedFareProduct,
       defaultSelectableTravellers,
+      defaultFromPlace,
       defaultToPlace,
-      fareProductTypeConfig,
       travelDate,
     ],
   );
