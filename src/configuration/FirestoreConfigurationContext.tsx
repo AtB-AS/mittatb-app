@@ -43,9 +43,18 @@ import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
 export const defaultVatPercent: number = 12;
 
+export type AppTextKey =
+  | 'travelAidSubText'
+  | 'travelAidHowToTitle'
+  | 'travelAidHowToContent'
+  | 'travelAidKeepInMindTitle'
+  | 'travelAidKeepInMindContent'
+
+  | 'discountInfo';
+
 export type AppTexts = {
-  getAppText: (key: string) => LanguageAndTextType[] | undefined;
-}
+  getAppText: (key: AppTextKey) => LanguageAndTextType[] | undefined;
+};
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
