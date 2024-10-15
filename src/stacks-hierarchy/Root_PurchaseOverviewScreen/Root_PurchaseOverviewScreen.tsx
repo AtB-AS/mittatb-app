@@ -161,7 +161,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const handleTicketInfoButtonPress = () => {
     const parameters = {
-      fareProductTypeConfigType: params.fareProductTypeConfig.type,
+      fareProductTypeConfigType: selection.fareProductTypeConfig.type,
       preassignedFareProductId: preassignedFareProduct.id,
     };
     analytics.logEvent(
@@ -190,7 +190,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   return (
     <FullScreenView
       headerProps={{
-        title: getTextForLanguage(params.fareProductTypeConfig.name, language),
+        title: getTextForLanguage(selection.fareProductTypeConfig.name, language),
         leftButton: {
           type: 'cancel',
           onPress: closeModal,
@@ -202,7 +202,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
-          fareProductTypeConfig={params.fareProductTypeConfig}
+          fareProductTypeConfig={selection.fareProductTypeConfig}
           preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
@@ -242,7 +242,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <ProductSelection
             preassignedFareProduct={selection.preassignedFareProduct}
-            fareProductTypeConfig={params.fareProductTypeConfig}
+            fareProductTypeConfig={selection.fareProductTypeConfig}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
           />
@@ -257,7 +257,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
           <FromToSelection
-            fareProductTypeConfig={params.fareProductTypeConfig}
+            fareProductTypeConfig={selection.fareProductTypeConfig}
             fromPlace={selection.fromPlace}
             toPlace={selection.toPlace}
             preassignedFareProduct={selection.preassignedFareProduct}
@@ -350,7 +350,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             }
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
-                fareProduct: params.fareProductTypeConfig.name,
+                fareProduct: selection.fareProductTypeConfig.name,
                 tariffZone: {
                   from: selection.fromPlace.id,
                   to: selection.toPlace.id,
