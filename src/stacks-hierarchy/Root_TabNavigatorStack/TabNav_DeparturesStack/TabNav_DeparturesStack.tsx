@@ -9,6 +9,7 @@ import {Departures_DepartureDetailsScreen} from './Departures_DepartureDetailsSc
 import {Departures_TravelDetailsMapScreen} from './Departures_TravelDetailsMapScreen';
 import {Departures_PlaceScreen} from './Departures_PlaceScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {Departures_TravelAidScreen} from './Departures_TravelAidScreen';
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
@@ -36,6 +37,10 @@ export const TabNav_DeparturesStack = ({}: RootDeparturesScreenProps) => {
       <Stack.Screen
         name="Departures_TravelDetailsMapScreen"
         component={Departures_TravelDetailsMapScreen}
+      />
+      <Stack.Screen
+        name="Departures_TravelAidScreen"
+        component={Departures_TravelAidScreen}
       />
     </Stack.Navigator>
   );
