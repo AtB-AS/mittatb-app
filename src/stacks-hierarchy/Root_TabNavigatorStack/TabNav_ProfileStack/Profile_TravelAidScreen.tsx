@@ -31,7 +31,8 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
     language,
   );
 
-  const subtext = profileTravelAidSubText || t(TravelAidSettingsTexts.toggle.subText);
+  const subtext =
+    profileTravelAidSubText || t(TravelAidSettingsTexts.toggle.subText);
 
   return (
     <FullScreenView
@@ -81,7 +82,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                 active={!!contact_phone_number}
                 accessibilityRole="button"
                 testID="travelAidContactCustomerServiceButton"
-                onPress={() => async () => {
+                onPress={async () => {
                   const phoneNumber = `tel:${contact_phone_number}`;
                   if (await Linking.canOpenURL(phoneNumber)) {
                     Linking.openURL(phoneNumber);
