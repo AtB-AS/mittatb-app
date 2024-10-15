@@ -17,6 +17,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ProfileScreenProps} from './navigation-types';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeText} from '@atb/components/text';
+import {BorderlessButton} from 'react-native-gesture-handler';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
@@ -59,13 +60,10 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
             text={travelAidToggleTitle}
             value={preferences.travelAid}
             onValueChange={(checked) => setPreference({travelAid: checked})}
+            subtext={travelAidSubtext}
+            isMarkdown
             testID="toggleTravelAid"
           />
-          {travelAidSubtext && (
-            <GenericSectionItem>
-              <ThemeText isMarkdown>{travelAidSubtext}</ThemeText>
-            </GenericSectionItem>
-          )}
           <GenericSectionItem style={styles.buttonContainer}>
             <View style={styles.buttonContainer}>
               <Button
