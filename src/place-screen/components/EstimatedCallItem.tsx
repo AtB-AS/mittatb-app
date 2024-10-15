@@ -46,6 +46,8 @@ import {
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {Statuses} from '@atb-as/theme';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {PinInvalid} from '@atb/assets/svg/mono-icons/map';
+import {usePreferences} from '@atb/preferences';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
@@ -73,6 +75,9 @@ export const EstimatedCallItem = memo(
     const styles = useStyles();
     const {t, language} = useTranslation();
     const testID = 'estimatedCallItem';
+    const {
+      preferences: {debugPredictionInaccurate},
+    } = usePreferences();
 
     const onPress =
       mode === 'Favourite'
@@ -110,6 +115,9 @@ export const EstimatedCallItem = memo(
           >
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
+              {debugPredictionInaccurate && departure.predictionInaccurate && (
+                <ThemeIcon svg={PinInvalid} colorType="warning" />
+              )}
               <ThemeText
                 type={
                   showAsCancelled ? 'body__primary--strike' : 'body__primary'

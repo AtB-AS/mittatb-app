@@ -192,7 +192,8 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, debugShowSeconds} = preferences;
+  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
+    preferences;
 
   return (
     <View style={styles.container}>
@@ -239,6 +240,13 @@ export const Profile_DebugInfoScreen = () => {
             value={debugShowSeconds}
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
+            }}
+          />
+          <ToggleSectionItem
+            text="Show prediction inaccurate info"
+            value={debugPredictionInaccurate}
+            onValueChange={(value) => {
+              setPreference({debugPredictionInaccurate: value});
             }}
           />
           <LinkSectionItem
