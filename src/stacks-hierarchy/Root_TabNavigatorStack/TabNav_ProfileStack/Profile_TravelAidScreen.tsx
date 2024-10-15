@@ -23,7 +23,8 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {appTexts} = useFirestoreConfiguration();
-  const {contact_phone_number} = useRemoteConfig();
+  const {contact_phone_number, enable_travel_aid_stop_button} =
+    useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
 
   const hasContactPhoneNumber =
@@ -38,6 +39,10 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
   const travelAidSubtext =
     profileTravelAidSubtext ?? t(TravelAidSettingsTexts.toggle.subText);
+
+  const toggleValue = !enable_travel_aid_stop_button
+    ? false
+    : preferences.travelAid;
 
   return (
     <FullScreenView
@@ -56,9 +61,10 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
         <Section>
           <ToggleSectionItem
             text={travelAidToggleTitle}
-            value={preferences.travelAid}
+            value={toggleValue}
             onValueChange={(checked) => setPreference({travelAid: checked})}
             subtext={travelAidSubtext}
+            disabled={!enable_travel_aid_stop_button}
             isMarkdown
             testID="toggleTravelAid"
           />
