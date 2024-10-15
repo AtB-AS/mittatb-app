@@ -23,6 +23,11 @@ export const Departures_DepartureDetailsScreen = ({
           mode: 'Departure',
         })
       }
+      onPressTravelAid={(serviceJourney) =>
+        navigation.push('Departures_TravelAidScreen', {
+          serviceJourney,
+        })
+      }
     />
   );
 };

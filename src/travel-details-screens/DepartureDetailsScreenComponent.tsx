@@ -61,6 +61,8 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
+import {useIsTravelAidEnabled} from '@atb/travel-aid/use-is-travel-aid-enabled';
+import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -70,6 +72,9 @@ export type DepartureDetailsScreenParams = {
 type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
+  onPressTravelAid: (
+    serviceJourney: ServiceJourneyWithEstCallsFragment,
+  ) => void;
 };
 
 export const DepartureDetailsScreenComponent = ({
@@ -77,6 +82,7 @@ export const DepartureDetailsScreenComponent = ({
   activeItemIndex,
   onPressDetailsMap,
   onPressQuay,
+  onPressTravelAid,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
@@ -91,7 +97,15 @@ export const DepartureDetailsScreenComponent = ({
   const {t, language} = useTranslation();
 
   const [
-    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
+    {
+      estimatedCallsWithMetadata,
+      title,
+      mode,
+      subMode,
+      situations,
+      notices,
+      serviceJourney,
+    },
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
@@ -103,6 +117,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+  const travelAidEnabled = useIsTravelAidEnabled();
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
@@ -177,6 +192,14 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
+            {travelAidEnabled && serviceJourney && (
+              <Button
+                style={styles.travelAidButton}
+                onPress={onPressTravelAid}
+                text={t(DepartureDetailsTexts.header.journeyAid)}
+                interactiveColor="interactive_0"
+              />
+            )}
             {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
                 {realtimeText && !activeItem.isTripCancelled && (
@@ -663,6 +686,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   liveButton: {
     marginLeft: theme.spacings.small,
+  },
+  travelAidButton: {
+    marginTop: theme.spacings.medium,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,

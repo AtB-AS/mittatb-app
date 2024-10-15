@@ -9,6 +9,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
+import {TravelAidScreenParams} from '@atb/travel-aid/TravelAidScreenComponent';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
@@ -30,6 +31,7 @@ export type DashboardStackParams = StackParams<{
   Dashboard_JourneyDatePickerScreen: JourneyDatePickerScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;
   Dashboard_NearbyStopPlacesScreen: Dashboard_NearbyStopPlacesScreenParams;
+  Dashboard_TravelAidScreen: TravelAidScreenParams;
 }>;
 
 export type RootDashboardScreenProps =

@@ -7,12 +7,14 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {MapScreenParams} from './Map_RootScreen';
+import {TravelAidScreenParams} from '@atb/travel-aid/TravelAidScreenComponent';
 
 export type MapStackParams = StackParams<{
   Map_RootScreen: MapScreenParams;
   Map_PlaceScreen: PlaceScreenParams;
   Map_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Map_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
+  Map_TravelAidScreen: TravelAidScreenParams;
 }>;
 
 type RootMapScreenProps = TabNavigatorScreenProps<'TabNav_MapStack'>;

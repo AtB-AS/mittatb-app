@@ -20,6 +20,11 @@ export const Map_DepartureDetailsScreen = ({navigation, route}: Props) => {
           mode: 'Departure',
         })
       }
+      onPressTravelAid={(serviceJourney) => {
+        navigation.push('Map_TravelAidScreen', {
+          serviceJourney,
+        });
+      }}
     />
   );
 };
