@@ -26,6 +26,10 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const {contact_phone_number} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
 
+  const hasContactPhoneNumber =
+    typeof contact_phone_number === 'string' &&
+    contact_phone_number.trim() !== '';
+
   const profileTravelAidSubText = getUnescapedTextForLanguage(
     appTexts?.getAppText('travelAidSubText'),
     language,
@@ -72,29 +76,30 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                   navigation.navigate('Profile_TravelAidInformationScreen');
                 }}
               />
-              <Button
-                mode="secondary"
-                backgroundColor="background_0"
-                text={t(TravelAidSettingsTexts.button.contact.title)}
-                accessibilityHint={t(
-                  TravelAidSettingsTexts.button.contact.a11yHint,
-                )}
-                active={!!contact_phone_number}
-                accessibilityRole="button"
-                testID="travelAidContactCustomerServiceButton"
-                onPress={async () => {
-                  const phoneNumber = `tel:${contact_phone_number}`;
-                  if (await Linking.canOpenURL(phoneNumber)) {
-                    Linking.openURL(phoneNumber);
-                  } else {
-                    Bugsnag.notify(
-                      new Error(
-                        'Could not open phone number in accessiblity settings',
-                      ),
-                    );
-                  }
-                }}
-              />
+              {hasContactPhoneNumber && (
+                <Button
+                  mode="secondary"
+                  backgroundColor="background_0"
+                  text={t(TravelAidSettingsTexts.button.contact.title)}
+                  accessibilityHint={t(
+                    TravelAidSettingsTexts.button.contact.a11yHint,
+                  )}
+                  accessibilityRole="button"
+                  testID="travelAidContactCustomerServiceButton"
+                  onPress={async () => {
+                    const phoneNumber = `tel:${contact_phone_number}`;
+                    if (await Linking.canOpenURL(phoneNumber)) {
+                      Linking.openURL(phoneNumber);
+                    } else {
+                      Bugsnag.notify(
+                        new Error(
+                          'Could not open phone number in accessiblity settings',
+                        ),
+                      );
+                    }
+                  }}
+                />
+              )}
             </View>
           </GenericSectionItem>
         </Section>
