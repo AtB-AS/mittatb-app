@@ -16,6 +16,7 @@ import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ProfileScreenProps} from './navigation-types';
 import Bugsnag from '@bugsnag/react-native';
+import {ThemeText} from '@atb/components/text';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
@@ -30,13 +31,13 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
     typeof contact_phone_number === 'string' &&
     contact_phone_number.trim() !== '';
 
-  const profileTravelAidSubText = getUnescapedTextForLanguage(
+  const profileTravelAidSubtext = getUnescapedTextForLanguage(
     appTexts?.getAppText('travelAidSubText'),
     language,
   );
 
-  const subtext =
-    profileTravelAidSubText || t(TravelAidSettingsTexts.toggle.subText);
+  const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
+  const travelAidSubtext =t(TravelAidSettingsTexts.toggle.subText);
 
   return (
     <FullScreenView
@@ -54,13 +55,16 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
       <View style={styles.content}>
         <Section>
           <ToggleSectionItem
-            text={t(TravelAidSettingsTexts.toggle.title)}
-            subtext={subtext}
-            subtextMarkdown={true}
+            text={travelAidToggleTitle}
             value={preferences.travelAid}
             onValueChange={(checked) => setPreference({travelAid: checked})}
             testID="toggleTravelAid"
           />
+          {travelAidSubtext && (
+            <GenericSectionItem>
+              <ThemeText isMarkdown={true}>{travelAidSubtext}</ThemeText>
+            </GenericSectionItem>
+          )}
           <GenericSectionItem style={styles.buttonContainer}>
             <View style={styles.buttonContainer}>
               <Button
