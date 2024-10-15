@@ -49,7 +49,6 @@ export type AppTextKey =
   | 'travelAidHowToContent'
   | 'travelAidKeepInMindTitle'
   | 'travelAidKeepInMindContent'
-
   | 'discountInfo';
 
 export type AppTexts = {

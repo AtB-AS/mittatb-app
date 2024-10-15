@@ -23,6 +23,7 @@ export const Profile_TravelAidInformationScreen = () => {
       appTexts?.getAppText('travelAidHowToTitle'),
       language,
     ) ?? t(TravelAidSettingsTexts.information.howTo.title);
+
   const howToContent =
     getUnescapedTextForLanguage(
       appTexts?.getAppText('travelAidHowToContent'),
@@ -34,6 +35,7 @@ export const Profile_TravelAidInformationScreen = () => {
       appTexts?.getAppText('travelAidKeepInMindTitle'),
       language,
     ) ?? t(TravelAidSettingsTexts.information.keepInMind.title);
+
   const keepInMindContent =
     getUnescapedTextForLanguage(
       appTexts?.getAppText('travelAidKeepInMindContent'),
