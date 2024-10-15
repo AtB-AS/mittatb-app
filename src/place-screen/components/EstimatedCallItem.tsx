@@ -82,6 +82,8 @@ export const EstimatedCallItem = memo(
         ? t(DeparturesTexts.a11yMarkFavouriteHint)
         : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
+    const msgType = getMsgTypeForEstimatedCall(departure);
+
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
@@ -100,6 +102,7 @@ export const EstimatedCallItem = memo(
             <EstimatedCallInfo
               departure={departure}
               ignoreSituationsAndCancellations={mode === 'Favourite'}
+              messageType={msgType}
               testID={`${testID}LineName`}
             />
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
