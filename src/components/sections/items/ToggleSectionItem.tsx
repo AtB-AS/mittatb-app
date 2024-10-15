@@ -23,6 +23,7 @@ type Props = SectionItemProps<{
   accessibility?: AccessibilityProps;
   textType?: TextNames;
   disabled?: boolean;
+  isMarkdown?: boolean;
 }>;
 export function ToggleSectionItem({
   text,
@@ -36,6 +37,7 @@ export function ToggleSectionItem({
   interactiveColor,
   textType,
   disabled = false,
+  isMarkdown = false,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -97,6 +99,7 @@ export function ToggleSectionItem({
               type="body__secondary"
               color="secondary"
               style={styles.subtext}
+              isMarkdown={isMarkdown}
             >
               {subtext}
             </ThemeText>
@@ -113,5 +116,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     justifyContent: 'center',
   },
   textContainer: {flex: 1, marginRight: theme.spacings.small},
-  subtext: {marginTop: theme.spacings.xSmall},
+  subtext: {marginTop: theme.spacings.xSmall, marginRight: theme.spacings.small},
 }));
