@@ -12,7 +12,7 @@ import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types.ts';
+import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
