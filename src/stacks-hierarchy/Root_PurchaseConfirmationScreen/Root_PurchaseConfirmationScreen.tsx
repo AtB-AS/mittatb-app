@@ -61,24 +61,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
 
-  const {
-    fareProductTypeConfig,
-    fromPlace,
-    toPlace,
-    preassignedFareProduct,
-    userProfilesWithCount,
-    travelDate,
-    recipient,
-  } = params;
+  const {selection, recipient} = params;
 
   const offerEndpoint = getOfferEndpoint(
-    fareProductTypeConfig.configuration.zoneSelectionMode,
+    selection.fareProductTypeConfig.configuration.zoneSelectionMode,
   );
   const isOnBehalfOf = !!recipient;
 
   const preassignedFareProductAlternatives = useMemo(
-    () => [preassignedFareProduct],
-    [preassignedFareProduct],
+    () => [selection.preassignedFareProduct],
+    [selection.preassignedFareProduct],
   );
 
   const {
@@ -90,13 +82,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
+    selection,
     offerEndpoint,
     preassignedFareProductAlternatives,
-    fromPlace,
-    toPlace,
-    userProfilesWithCount,
     isOnBehalfOf,
-    travelDate,
   );
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
@@ -265,17 +254,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         )}
         <PreassignedFareContractSummary
-          fareProductTypeConfig={fareProductTypeConfig}
-          fromPlace={fromPlace}
-          toPlace={toPlace}
+          fareProductTypeConfig={selection.fareProductTypeConfig}
+          fromPlace={selection.fromPlace}
+          toPlace={selection.toPlace}
           isSearchingOffer={isSearchingOffer}
-          preassignedFareProduct={preassignedFareProduct}
+          preassignedFareProduct={selection.preassignedFareProduct}
           recipient={recipient}
-          travelDate={travelDate}
+          travelDate={selection.travelDate}
           validDurationSeconds={validDurationSeconds}
         />
         <PriceSummary
-          fareProductTypeConfig={fareProductTypeConfig}
+          fareProductTypeConfig={selection.fareProductTypeConfig}
           isSearchingOffer={isSearchingOffer}
           totalPrice={totalPrice}
           userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
@@ -295,7 +284,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }
           textColor="primary"
           ruleVariables={{
-            preassignedFareProductType: preassignedFareProduct.type,
+            preassignedFareProductType: selection.preassignedFareProduct.type,
           }}
         />
         {reserveMutation.isError && (
