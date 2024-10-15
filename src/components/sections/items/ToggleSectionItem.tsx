@@ -27,7 +27,6 @@ type Props = SectionItemProps<{
 export function ToggleSectionItem({
   text,
   subtext,
-  subtextMarkdown = false,
   label,
   onValueChange,
   leftImage,
@@ -75,9 +74,7 @@ export function ToggleSectionItem({
     >
       <View style={{flexDirection: 'row'}}>
         {leftImage && (
-          <View style={styles.leftImageContainer}>
-            {leftImage}
-          </View>
+          <View style={styles.leftImageContainer}>{leftImage}</View>
         )}
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={sectionStyle.spaceBetween}>
@@ -99,7 +96,6 @@ export function ToggleSectionItem({
             <ThemeText
               type="body__secondary"
               color="secondary"
-              isMarkdown={subtextMarkdown}
               style={styles.subtext}
             >
               {subtext}
