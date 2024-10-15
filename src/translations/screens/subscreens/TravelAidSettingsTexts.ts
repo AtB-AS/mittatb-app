@@ -45,9 +45,9 @@ const TravelAidSettingsTexts = {
   information: {
     howTo: {
       title: _(
-        'Hvordan sende stopp:',
-        'How to send a stop:',
-        'Hvordan sende stopp:',
+        'Hvordan sende stopp',
+        'How to send a stop',
+        'Hvordan sende stopp',
       ),
       content: _(
         'Stoppsignal fra appen varsler sjåfør om at noen med ekstra behov skal av eller på.\n\n<br/>* I “Avganger”-fanen, velg holdeplassen du skal reise fra.\n* Fra buss-listen, velg riktig buss/trikk.\n* I visningen for bussen/trikken, trykk på Reisehjelp.\n* I Reisehjelp-modusen, trykk “Send stopp”.',
