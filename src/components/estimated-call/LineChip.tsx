@@ -1,30 +1,37 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {getMsgTypeForEstimatedCall} from '@atb/place-screen/components/EstimatedCallItem';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {getTransportModeSvg} from '../icon-box';
 import {View} from 'react-native';
-import {EstimatedCall} from '@atb/api/types/departures';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
+export type LineChipServiceJourney = {
+  line?: {publicCode?: string | undefined};
+  transportMode?: TransportMode;
+  transportSubmode?: TransportSubmode;
+};
 type LineChipProps = {
-  departure: EstimatedCall;
-  ignoreSituationsAndCancellations?: boolean;
+  serviceJourney: LineChipServiceJourney;
+  messageType?: Exclude<Statuses, 'valid'>;
   testID?: string;
 };
 export function LineChip({
-  departure,
-  ignoreSituationsAndCancellations = false,
+  serviceJourney,
+  messageType,
   testID = '',
 }: LineChipProps) {
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme, themeName} = useTheme();
-  const publicCode = departure.serviceJourney.line.publicCode;
-  const {transportMode, transportSubmode} = departure.serviceJourney;
-  const {svg} = getTransportModeSvg(transportMode, transportSubmode);
+  const {transportMode, transportSubmode} = serviceJourney;
+  const publicCode = serviceJourney.line?.publicCode;
+
   const transportColor = useTransportationColor(
     transportMode,
     transportSubmode,
@@ -35,10 +42,8 @@ export function LineChip({
     false,
     'text',
   );
-
-  const msgType =
-    !ignoreSituationsAndCancellations && getMsgTypeForEstimatedCall(departure);
-  const icon = msgType && messageTypeToIcon(msgType, true, themeName);
+  const {svg} = getTransportModeSvg(transportMode, transportSubmode);
+  const icon = messageType && messageTypeToIcon(messageType, true, themeName);
 
   if (!publicCode && !transportMode) return null;
 
