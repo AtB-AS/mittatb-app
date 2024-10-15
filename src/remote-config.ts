@@ -148,7 +148,7 @@ export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
 
   const contact_phone_number =
-    values['contact_phonenumber']?.asString() ??
+    values['contact_phone_number']?.asString() ??
     defaultRemoteConfig.contact_phone_number;
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??

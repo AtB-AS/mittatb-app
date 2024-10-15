@@ -37,7 +37,8 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   );
 
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
-  const travelAidSubtext =t(TravelAidSettingsTexts.toggle.subText);
+  const travelAidSubtext =
+    profileTravelAidSubtext ?? t(TravelAidSettingsTexts.toggle.subText);
 
   return (
     <FullScreenView
@@ -62,7 +63,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
           />
           {travelAidSubtext && (
             <GenericSectionItem>
-              <ThemeText isMarkdown={true}>{travelAidSubtext}</ThemeText>
+              <ThemeText isMarkdown>{travelAidSubtext}</ThemeText>
             </GenericSectionItem>
           )}
           <GenericSectionItem style={styles.buttonContainer}>
