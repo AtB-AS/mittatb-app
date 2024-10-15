@@ -16,8 +16,6 @@ import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ProfileScreenProps} from './navigation-types';
 import Bugsnag from '@bugsnag/react-native';
-import {ThemeText} from '@atb/components/text';
-import {BorderlessButton} from 'react-native-gesture-handler';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
