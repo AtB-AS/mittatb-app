@@ -56,12 +56,15 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     if (!recommendedTicketSummary) return;
     const purchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
       {
-        fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
-        fromPlace: recommendedTicketSummary.tariffZones[0],
-        toPlace: recommendedTicketSummary.tariffZones[1],
-        userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
-        preassignedFareProduct: recommendedTicketSummary.preassignedFareProduct,
-        travelDate: undefined,
+        selection: {
+          fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
+          fromPlace: recommendedTicketSummary.tariffZones[0],
+          toPlace: recommendedTicketSummary.tariffZones[1],
+          userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
+          preassignedFareProduct:
+            recommendedTicketSummary.preassignedFareProduct,
+          travelDate: undefined,
+        },
         mode: 'Ticket',
       };
     const {fareProductTypeConfig} = recommendedTicketSummary;
