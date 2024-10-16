@@ -23,7 +23,6 @@ type Props = SectionItemProps<{
   accessibility?: AccessibilityProps;
   textType?: TextNames;
   disabled?: boolean;
-  isMarkdown?: boolean;
 }>;
 export function ToggleSectionItem({
   text,
