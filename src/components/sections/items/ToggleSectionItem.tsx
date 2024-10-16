@@ -14,7 +14,7 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  subtextMarkdown?: boolean;
+  isSubtextMarkdown?: boolean;
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
@@ -37,7 +37,7 @@ export function ToggleSectionItem({
   interactiveColor,
   textType,
   disabled = false,
-  isMarkdown = false,
+  isSubtextMarkdown = false,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -99,7 +99,7 @@ export function ToggleSectionItem({
               type="body__secondary"
               color="secondary"
               style={styles.subtext}
-              isMarkdown={isMarkdown}
+              isMarkdown={isSubtextMarkdown}
             >
               {subtext}
             </ThemeText>
@@ -116,5 +116,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     justifyContent: 'center',
   },
   textContainer: {flex: 1, marginRight: theme.spacings.small},
-  subtext: {marginTop: theme.spacings.xSmall, marginRight: theme.spacings.small},
+  subtext: {
+    marginTop: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
+  },
 }));
