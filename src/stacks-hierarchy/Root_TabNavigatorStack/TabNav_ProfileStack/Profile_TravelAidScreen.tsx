@@ -65,7 +65,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
             onValueChange={(checked) => setPreference({travelAid: checked})}
             subtext={travelAidSubtext}
             disabled={!enable_travel_aid_stop_button}
-            isMarkdown
+            isSubtextMarkdown
             testID="toggleTravelAid"
           />
           <GenericSectionItem style={styles.buttonContainer}>
