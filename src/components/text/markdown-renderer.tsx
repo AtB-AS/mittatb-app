@@ -40,7 +40,6 @@ function renderToken(
           key={index}
           {...props.textProps}
           style={{fontWeight: textTypeStyles['body__primary--bold'].fontWeight}}
-          {...props.textProps}
         >
           {token.text}
         </Text>
