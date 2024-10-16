@@ -70,7 +70,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     isMarkdown && typeof children === 'string'
       ? renderMarkdown(children, {
           textProps,
-          spacingBetweenListElements: theme.spacings.small,
+          spacingBetweenListElements: theme.spacings.xSmall,
         })
       : children;
 
