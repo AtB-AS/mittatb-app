@@ -62,7 +62,6 @@ import {
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
 import {useIsTravelAidEnabled} from '@atb/travel-aid/use-is-travel-aid-enabled';
-import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -72,9 +71,7 @@ export type DepartureDetailsScreenParams = {
 type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
-  onPressTravelAid: (
-    serviceJourney: ServiceJourneyWithEstCallsFragment,
-  ) => void;
+  onPressTravelAid: () => void;
 };
 
 export const DepartureDetailsScreenComponent = ({
