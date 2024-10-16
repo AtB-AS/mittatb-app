@@ -38,8 +38,8 @@ function renderToken(
       return (
         <Text
           key={index}
-          style={{fontWeight: textTypeStyles['body__primary--bold'].fontWeight}}
           {...props.textProps}
+          style={{fontWeight: textTypeStyles['body__primary--bold'].fontWeight}}
         >
           {token.text}
         </Text>
@@ -56,9 +56,9 @@ function renderToken(
 
     case 'paragraph':
       return (
-        <React.Fragment key={index}>
+        <Text key={index} {...props.textProps}>
           {token.tokens.map((t, i) => renderToken(t, i, props))}
-        </React.Fragment>
+        </Text>
       );
 
     case 'br':
@@ -67,7 +67,7 @@ function renderToken(
 
     case 'em':
       return (
-        <Text key={index} style={{fontStyle: 'italic'}} {...props.textProps}>
+        <Text key={index} {...props.textProps} style={{fontStyle: 'italic'}}>
           {token.text}
         </Text>
       );
@@ -84,9 +84,9 @@ function renderToken(
       return (
         <Text
           key={index}
-          style={{textDecorationLine: 'underline'}}
           onPress={openLink}
           {...props.textProps}
+          style={{textDecorationLine: 'underline'}}
         >
           {token.text}
         </Text>
