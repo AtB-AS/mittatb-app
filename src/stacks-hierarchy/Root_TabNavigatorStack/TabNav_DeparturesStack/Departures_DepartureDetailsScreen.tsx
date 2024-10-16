@@ -8,6 +8,7 @@ export const Departures_DepartureDetailsScreen = ({
   route,
 }: Props) => {
   const {items, activeItemIndex} = route.params;
+  const activeItem = items[activeItemIndex];
 
   return (
     <DepartureDetailsScreenComponent
@@ -23,9 +24,9 @@ export const Departures_DepartureDetailsScreen = ({
           mode: 'Departure',
         })
       }
-      onPressTravelAid={(serviceJourney) =>
+      onPressTravelAid={() =>
         navigation.push('Departures_TravelAidScreen', {
-          serviceJourney,
+          serviceJourneyDeparture: activeItem,
         })
       }
     />

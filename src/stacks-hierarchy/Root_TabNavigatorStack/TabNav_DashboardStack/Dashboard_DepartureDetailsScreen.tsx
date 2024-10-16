@@ -23,9 +23,9 @@ export const Dashboard_DepartureDetailsScreen = ({
           mode: 'Departure',
         })
       }
-      onPressTravelAid={(serviceJourney) => {
+      onPressTravelAid={() => {
         navigation.push('Dashboard_TravelAidScreen', {
-          serviceJourney,
+          serviceJourneyDeparture: items[activeItemIndex],
         });
       }}
     />
