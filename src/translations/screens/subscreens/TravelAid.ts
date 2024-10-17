@@ -1,9 +1,11 @@
 import {translation as _} from '../../commons';
 export const TravelAidTexts = {
   close: _('Lukk Reisehjelp', 'Close Journey Aid', 'Lukk Reisehjelp'),
-  arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer'),
-  from: _('Fra:', 'From:', 'Frå'),
-  nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste holdeplass'),
+  stopPlaceHeader: {
+    from: _('Fra:', 'From:', 'Frå'),
+    arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer'),
+    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste holdeplass'),
+  },
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
   noRealtimeError: {
