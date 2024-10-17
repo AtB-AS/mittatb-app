@@ -46,7 +46,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-import { useIsTravelAidEnabled } from '@atb/travel-aid/use-is-travel-aid-enabled';
+import {useIsTravelAidEnabled} from '@atb/travel-aid/use-is-travel-aid-enabled';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
