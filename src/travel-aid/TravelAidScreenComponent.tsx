@@ -3,7 +3,6 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {addMetadataToEstimatedCalls} from '@atb/travel-details-screens/use-departure-data';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
@@ -18,15 +17,14 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
 };
-
 type Props = TravelAidScreenParams & {
   goBack: () => void;
 };
-
 export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
@@ -39,14 +37,14 @@ export const TravelAidScreenComponent = ({
     serviceJourneyDeparture.serviceJourneyId,
     new Date(serviceJourneyDeparture.serviceDate),
   );
-  const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
-    serviceJourney?.estimatedCalls || [],
-    serviceJourneyDeparture.fromQuayId,
-    serviceJourneyDeparture.toQuayId,
-  );
-  const focusedEstimatedCall = estimatedCallsWithMetadata.find(
-    (e) => e.metadata.group === 'trip',
-  );
+
+  // TODO: Change focused stop over time
+  const focusedEstimatedCall =
+    serviceJourney?.estimatedCalls && serviceJourney.estimatedCalls.length > 0
+      ? serviceJourney.estimatedCalls.find(
+          (ec) => ec.quay.id === serviceJourneyDeparture.fromQuayId,
+        )
+      : undefined;
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -71,45 +69,54 @@ export const TravelAidScreenComponent = ({
                   cancellation: false,
                   predictionInaccurate: false,
                   serviceJourney: serviceJourney ?? {},
-                  destinationDisplay: focusedEstimatedCall?.destinationDisplay,
+                  destinationDisplay: focusedEstimatedCall.destinationDisplay,
                 }}
               />
             </GenericSectionItem>
-            <GenericSectionItem style={styles.sectionContainer}>
-              <View style={styles.subContainer}>
-                <ThemeText type="body__tertiary--bold">
-                  {t(TravelAidTexts.arrivesAt)}
-                </ThemeText>
-                <ThemeText type="heading__title">
-                  {focusedEstimatedCall.quay.stopPlace?.name}{' '}
-                  {focusedEstimatedCall.quay.publicCode}
-                </ThemeText>
-              </View>
-              <View>
-                <View style={styles.realTime}>
-                  <ThemeIcon
-                    svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
-                    size="xSmall"
+            <GenericSectionItem>
+              <View style={styles.sectionContainer}>
+                {!focusedEstimatedCall.realtime && (
+                  <MessageInfoBox
+                    type="error"
+                    title={t(TravelAidTexts.noRealtimeError.title)}
+                    message={t(TravelAidTexts.noRealtimeError.message)}
                   />
+                )}
+                <View style={styles.subContainer}>
+                  <ThemeText type="body__tertiary--bold">
+                    {t(TravelAidTexts.stopPlaceHeader.from)}
+                  </ThemeText>
                   <ThemeText type="heading__title">
-                    {formatToClockOrRelativeMinutes(
-                      focusedEstimatedCall.expectedDepartureTime,
-                      language,
-                      t(dictionary.date.units.now),
+                    {focusedEstimatedCall.quay.stopPlace?.name}{' '}
+                    {focusedEstimatedCall.quay.publicCode}
+                  </ThemeText>
+                </View>
+                <View>
+                  <View style={styles.realTime}>
+                    <ThemeIcon
+                      svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+                      size="xSmall"
+                    />
+                    <ThemeText type="heading__title">
+                      {formatToClockOrRelativeMinutes(
+                        focusedEstimatedCall.expectedDepartureTime,
+                        language,
+                        t(dictionary.date.units.now),
+                      )}
+                    </ThemeText>
+                  </View>
+                  <ThemeText type="body__secondary--bold">
+                    {t(
+                      TravelAidTexts.scheduledTime(
+                        formatToClock(
+                          focusedEstimatedCall.aimedDepartureTime,
+                          language,
+                          'round',
+                        ),
+                      ),
                     )}
                   </ThemeText>
                 </View>
-                <ThemeText type="body__secondary--bold">
-                  {t(
-                    TravelAidTexts.scheduledTime(
-                      formatToClock(
-                        focusedEstimatedCall.aimedDepartureTime,
-                        language,
-                        'round',
-                      ),
-                    ),
-                  )}
-                </ThemeText>
               </View>
             </GenericSectionItem>
           </Section>
