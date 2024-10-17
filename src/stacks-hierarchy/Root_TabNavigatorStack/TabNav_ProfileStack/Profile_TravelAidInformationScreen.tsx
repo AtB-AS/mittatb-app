@@ -6,41 +6,23 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfiguration} from '@atb/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
-import {getUnescapedTextForLanguage, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import TravelAidSettingsTexts from '@atb/translations/screens/subscreens/TravelAidSettingsTexts';
 import {View} from 'react-native';
 
 export const Profile_TravelAidInformationScreen = () => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
-  const {appTexts} = useFirestoreConfiguration();
-
-  const howToTitle =
-    getUnescapedTextForLanguage(
-      appTexts?.getAppText('travelAidHowToTitle'),
-      language,
-    ) ?? t(TravelAidSettingsTexts.information.howTo.title);
-
-  const howToContent =
-    getUnescapedTextForLanguage(
-      appTexts?.getAppText('travelAidHowToContent'),
-      language,
-    ) ?? t(TravelAidSettingsTexts.information.howTo.content);
-
-  const keepInMindTitle =
-    getUnescapedTextForLanguage(
-      appTexts?.getAppText('travelAidKeepInMindTitle'),
-      language,
-    ) ?? t(TravelAidSettingsTexts.information.keepInMind.title);
-
-  const keepInMindContent =
-    getUnescapedTextForLanguage(
-      appTexts?.getAppText('travelAidKeepInMindContent'),
-      language,
-    ) ?? t(TravelAidSettingsTexts.information.keepInMind.content);
+  const howToTitle = t(TravelAidSettingsTexts.information.howTo.title);
+  const howToContent = t(TravelAidSettingsTexts.information.howTo.content);
+  const keepInMindTitle = t(
+    TravelAidSettingsTexts.information.keepInMind.title,
+  );
+  const keepInMindContent = t(
+    TravelAidSettingsTexts.information.keepInMind.content,
+  );
 
   return (
     <FullScreenView

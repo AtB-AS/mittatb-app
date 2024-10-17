@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
-import {getUnescapedTextForLanguage, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import TravelAidSettingsTexts from '@atb/translations/screens/subscreens/TravelAidSettingsTexts';
@@ -10,7 +10,6 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {useFirestoreConfiguration} from '@atb/configuration';
 import {Button} from '@atb/components/button';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -21,8 +20,7 @@ type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
 export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
-  const {appTexts} = useFirestoreConfiguration();
+  const {t} = useTranslation();
   const {contact_phone_number, enable_travel_aid_stop_button} =
     useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
@@ -31,14 +29,8 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
     typeof contact_phone_number === 'string' &&
     contact_phone_number.trim() !== '';
 
-  const profileTravelAidSubtext = getUnescapedTextForLanguage(
-    appTexts?.getAppText('travelAidSubText'),
-    language,
-  );
-
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
-  const travelAidSubtext =
-    profileTravelAidSubtext ?? t(TravelAidSettingsTexts.toggle.subText);
+  const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
 
   const toggleValue = !enable_travel_aid_stop_button
     ? false
