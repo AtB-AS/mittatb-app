@@ -307,7 +307,7 @@ const TicketingTexts = {
     message: _(
       'Sjekk din internett-tilkobling og last inn appen på nytt. Hvis dette ikke hjelper, kontakt kundeservice.',
       'Check your internet connection and reload the app. If this does not help, contact customer service.',
-      'Sjekk internett-tilkoplinga di og last inn appen på nytt. Om dette ikkje hjelper, kontakt kundeservice.',
+      'Sjekk internett-tilkoplinga di og last inn appen på nytt. Om dette ikkje hjelp, kontakt kundeservice.',
     ),
     actionText: _(
       'Last inn appen på nytt',
