@@ -1,4 +1,3 @@
-import {formatISO} from 'date-fns';
 import {client} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
@@ -7,11 +6,10 @@ import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragm
 
 export async function getServiceJourneyWithEstimatedCalls(
   id: string,
-  date: Date,
+  isoDate: string,
 ): Promise<ServiceJourneyWithEstCallsFragment> {
   const encodedId = encodeURIComponent(id);
-  const formattedDate = formatISO(date, {representation: 'date'});
-  const url = `bff/v2/servicejourney/${encodedId}/calls?date=${formattedDate}`;
+  const url = `bff/v2/servicejourney/${encodedId}/calls?date=${isoDate}`;
   const response = await client.get<{
     value: ServiceJourneyWithEstCallsFragment;
   }>(url);
