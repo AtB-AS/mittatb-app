@@ -40,7 +40,7 @@ export const useThemeColorForTransportMode = (
     case 'water':
       return 'transport_boat';
     case 'air':
-      return 'transport_plane';
+      return 'transport_other';
     case 'metro':
       return 'transport_train';
     default:
