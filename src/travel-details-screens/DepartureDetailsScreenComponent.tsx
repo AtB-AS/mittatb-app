@@ -94,15 +94,7 @@ export const DepartureDetailsScreenComponent = ({
   const {t, language} = useTranslation();
 
   const [
-    {
-      estimatedCallsWithMetadata,
-      title,
-      mode,
-      subMode,
-      situations,
-      notices,
-      serviceJourney,
-    },
+    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
@@ -189,7 +181,7 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {travelAidEnabled && serviceJourney && (
+            {travelAidEnabled && (
               <Button
                 style={styles.travelAidButton}
                 onPress={onPressTravelAid}
