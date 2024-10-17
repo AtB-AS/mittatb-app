@@ -299,11 +299,15 @@ const TicketingTexts = {
     ),
   },
   accountError: {
-    title: _('Noe gikk galt', 'Something went wrong', 'Noko gjekk gale'),
+    title: _(
+      'Billettkjøp fungerer ikke på din mobil',
+      'Your device is not able to buy tickets',
+      'Billettkjøp fungerer ikkje på mobilen din',
+    ),
     message: _(
-      'Billettkjøp fungerer ikke. Sjekk din internett-tilkobling og last inn appen på nytt. Hvis du fortsatt får denne meldingen, kontakt kundeservice.',
-      'Ticket purchase is not working. Check your internet connection and reload the app. If you keep seeing this message, contact customer service.',
-      'Billettkjøp fungerer ikkje. Sjekk internett-tilkoplinga di og last inn appen på nytt. Dersom du framleis får denne meldinga, kontakt kundeservice.',
+      'Sjekk din internett-tilkobling og last inn appen på nytt. Hvis dette ikke hjelper, kontakt kundeservice.',
+      'Check your internet connection and reload the app. If this does not help, contact customer service.',
+      'Sjekk internett-tilkoplinga di og last inn appen på nytt. Om dette ikkje hjelper, kontakt kundeservice.',
     ),
     actionText: _(
       'Last inn appen på nytt',
