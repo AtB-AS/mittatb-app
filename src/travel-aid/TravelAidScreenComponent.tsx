@@ -10,7 +10,11 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToClockOrRelativeMinutes,
+  formatToISODate,
+} from '@atb/utils/date';
 import {dictionary, useTranslation} from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -35,7 +39,7 @@ export const TravelAidScreenComponent = ({
 
   const {data: serviceJourney} = useTravelAidDataQuery(
     serviceJourneyDeparture.serviceJourneyId,
-    new Date(serviceJourneyDeparture.serviceDate),
+    formatToISODate(serviceJourneyDeparture.serviceDate),
   );
 
   // TODO: Change focused stop over time

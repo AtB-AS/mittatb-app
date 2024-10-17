@@ -10,6 +10,7 @@ import {
   format as fnsFormat,
   isAfter as fnsIsAfter,
   isBefore as fnsIsBefore,
+  formatISO,
   getHours,
   getMinutes,
   getSeconds,
@@ -351,6 +352,10 @@ export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),
   });
+}
+
+export function formatToISODate(date: Date | string) {
+  return formatISO(parseIfNeeded(date), {representation: 'date'});
 }
 
 export function formatToShortDateWithYear(
