@@ -135,6 +135,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   sectionContainer: {
+    flex: 1,
     gap: theme.spacings.xLarge,
   },
   subContainer: {
