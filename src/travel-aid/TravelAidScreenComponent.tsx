@@ -58,9 +58,7 @@ export const TravelAidScreenComponent = ({
       <Button
         onPress={goBack}
         text={t(TravelAidTexts.close)}
-        leftIcon={{
-          svg: Close,
-        }}
+        leftIcon={{svg: Close}}
         mode="tertiary"
         type="medium"
       />
