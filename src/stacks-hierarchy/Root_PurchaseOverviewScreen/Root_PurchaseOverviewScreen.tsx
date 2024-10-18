@@ -127,15 +127,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       (p) => p.id === userProfilesWithCountAndOffer[0]?.offer.fare_product,
     ) ?? preassignedFareProductAlternatives[0];
 
-  useEffect(() => {
-    if (selection.preassignedFareProduct.id !== preassignedFareProduct.id) {
-      navigation.setParams({preassignedFareProduct});
-    }
-  }, [navigation, selection, preassignedFareProduct]);
-
   const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
     {
-      selection,
+      selection: {
+        ...selection,
+        preassignedFareProduct,
+      },
       mode: params.mode,
     };
 
@@ -165,7 +162,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const handleTicketInfoButtonPress = () => {
     const parameters = {
       fareProductTypeConfigType: params.fareProductTypeConfig.type,
-      preassignedFareProductId: selection.preassignedFareProduct?.id,
+      preassignedFareProductId: preassignedFareProduct.id,
     };
     analytics.logEvent(
       'Ticketing',
@@ -206,7 +203,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={params.fareProductTypeConfig}
-          preassignedFareProduct={selection.preassignedFareProduct}
+          preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
@@ -225,7 +222,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 type="info"
                 message={t(
                   PurchaseOverviewTexts.errorMessageBox.productUnavailable(
-                    getReferenceDataName(selection.preassignedFareProduct, language),
+                    getReferenceDataName(preassignedFareProduct, language),
                   ),
                 )}
                 style={styles.selectionComponent}
