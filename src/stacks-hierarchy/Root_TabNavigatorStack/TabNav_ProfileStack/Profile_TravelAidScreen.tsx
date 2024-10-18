@@ -34,7 +34,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
 
   const toggleValue = !enable_travel_aid_stop_button
     ? false
-    : preferences.travelAid;
+    : preferences.journeyAidEnabled;
 
   return (
     <FullScreenView
@@ -54,7 +54,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
           <ToggleSectionItem
             text={travelAidToggleTitle}
             value={toggleValue}
-            onValueChange={(checked) => setPreference({travelAid: checked})}
+            onValueChange={(checked) => setPreference({journeyAidEnabled: checked})}
             subtext={travelAidSubtext}
             disabled={!enable_travel_aid_stop_button}
             isSubtextMarkdown
