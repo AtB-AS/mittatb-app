@@ -277,7 +277,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
 
-          {travelAidEnabled? (
+          {travelAidEnabled ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.settings.linkSectionItems.travelAid
