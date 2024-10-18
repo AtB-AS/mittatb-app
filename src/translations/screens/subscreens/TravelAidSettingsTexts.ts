@@ -58,9 +58,9 @@ const TravelAidSettingsTexts = {
     keepInMind: {
       title: _('Husk:', 'Keep in mind:', 'Husk:'),
       content: _(
-        '* Følg retningslinjer, som å stå på ledelinjen eller lengst frem på holdeplassen, for å vise at du skal på.\n* Du kan bare stoppe én buss/ trikk om gangen.\n* Du kan ikke angre et stoppsignal som er sendt.',
+        '* Følg retningslinjer, som å stå på ledelinjen eller lengst frem på holdeplassen, for å vise at du skal på.\n* Du kan bare stoppe én buss/trikk om gangen.\n* Du kan ikke angre et stoppsignal som er sendt.',
         '* Follow guidelines, such as standing on the tactile guiding line or at the front of the stop, to signal that you’re boarding.\n* You can only stop one bus/tram at a time.\n * You cannot cancel a stop signal once it has been sent.',
-        '',
+        '* Følg retningslinjer, som å stå på ledelinja eller lengst fram på haldeplassen, for å vise at du skal på.\n* Du kan berre stoppe ein buss/trikk om gongen.\n* Du kan ikkje angre eit stoppsignal som er sendt.',
       ),
     },
   },
