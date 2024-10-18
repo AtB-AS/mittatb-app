@@ -4,10 +4,12 @@ export const TravelAidTexts = {
   stopPlaceHeader: {
     from: _('Fra:', 'From:', 'Frå'),
     arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer'),
-    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste holdeplass'),
+    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste haldeplass'),
+    endOfLine: _('Siste holdeplass', 'Last stop', 'Siste haldeplass'),
   },
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
+  clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
   noRealtimeError: {
     title: _(
       'Ingen kontakt med kjøretøy',
