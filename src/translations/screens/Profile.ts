@@ -196,6 +196,13 @@ const ProfileTexts = {
         enrollment: {
           label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
         },
+        travelAid: {
+          label: _(
+            'Tilgjengelighet',
+            'Accessibility',
+            'Tilgjengelegheit',
+          ),
+        },
       },
     },
     favorites: {
