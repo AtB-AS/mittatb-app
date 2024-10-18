@@ -15,6 +15,7 @@ import {
   NotificationIndicatorProps,
 } from './NotificationIndicator';
 import React from 'react';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils.ts';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
@@ -33,12 +34,17 @@ export const ThemeIcon = ({
   style,
   allowFontScaling = true,
   ...props
-}: ThemeIconProps): JSX.Element => {
+}: ThemeIconProps): JSX.Element | null => {
   const {theme, themeName} = useTheme();
+  const fontScale = useFontScale();
+
+  if (!svg) {
+    notifyBugsnag('Undefined SVG provided to ThemeIcon');
+    return null;
+  }
 
   const fillToUse = fill || getFill(theme, themeName, colorType);
 
-  const fontScale = useFontScale();
   const iconSize = allowFontScaling
     ? theme.icon.size[size] * fontScale
     : theme.icon.size[size];
