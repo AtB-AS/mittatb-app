@@ -51,8 +51,8 @@ const TravelAidSettingsTexts = {
       ),
       content: _(
         'Stoppsignal fra appen varsler sjåfør om at noen med ekstra behov skal av eller på.\n\n<br/>* I “Avganger”-fanen, velg holdeplassen du skal reise fra.\n* Fra buss-listen, velg riktig buss/trikk.\n* I visningen for bussen/trikken, trykk på Reisehjelp.\n* I Reisehjelp-modusen, trykk “Send stopp”.',
-        '',
-        '',
+        'A stop signal from the app alerts the driver that someone with extra needs wants to get off or on.\n\n<br/>* In the "Departures" tab, select the stop you are departing from.\n* From the bus list, choose the correct bus/tram.\n* In the view for the bus/tram, tap on "Travel Assistance."\n* In Travel Assistance mode, press "Send Stop."',
+        'Stoppsignal frå appen varslar sjåføren om at nokon med ekstra behov skal av eller på.\n\n<br/>* I "Avganger"-fanen, vel haldeplassen du skal reise frå.\n* Frå busslista, vel rett buss/trikk.\n* I visninga for bussen/trikken, trykk på "Reisehjelp."\n* I Reisehjelp-modusen, trykk "Send stopp."',
       ),
     },
     keepInMind: {
