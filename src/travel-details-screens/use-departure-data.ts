@@ -14,7 +14,6 @@ import {
   getNoticesForServiceJourney,
 } from '@atb/travel-details-screens/utils';
 import {useTranslation} from '@atb/translations';
-import {formatToISODate} from '@atb/utils/date';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -46,7 +45,7 @@ export function useDepartureData(
     async function (): Promise<DepartureData> {
       const serviceJourney = await getServiceJourneyWithEstimatedCalls(
         activeItem.serviceJourneyId,
-        formatToISODate(activeItem.serviceDate),
+        activeItem.serviceDate,
       );
       const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
         serviceJourney.estimatedCalls || [],

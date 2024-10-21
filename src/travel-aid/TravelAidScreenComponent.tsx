@@ -10,11 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {
-  formatToClock,
-  formatToClockOrRelativeMinutes,
-  formatToISODate,
-} from '@atb/utils/date';
+import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {dictionary, useTranslation} from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -40,7 +36,7 @@ export const TravelAidScreenComponent = ({
   // TODO: Add error handling and loading state
   const {data: serviceJourney} = useTravelAidDataQuery(
     serviceJourneyDeparture.serviceJourneyId,
-    formatToISODate(serviceJourneyDeparture.serviceDate),
+    serviceJourneyDeparture.serviceDate,
   );
 
   // TODO: Change focused stop over time
