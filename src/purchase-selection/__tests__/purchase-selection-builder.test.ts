@@ -10,7 +10,7 @@ describe('purchaseSelectionBuilder', () => {
   it('Selected zone is the first one if no zone specified as default', () => {
     const input = {
       ...DEFAULT_INPUT,
-      tariffZones: [{id: 'A'}, {id: 'B'}, {id: 'A'}],
+      tariffZones: [{id: 'A'}, {id: 'B'}, {id: 'C'}],
     } as PurchaseSelectionBuilderInput;
 
     const selection = createEmptyBuilder(input).forType('single').build();
@@ -21,7 +21,7 @@ describe('purchaseSelectionBuilder', () => {
   it('Selected zone is the zone specified as default', () => {
     const input = {
       ...DEFAULT_INPUT,
-      tariffZones: [{id: 'A'}, {id: 'B', isDefault: true}, {id: 'A'}],
+      tariffZones: [{id: 'A'}, {id: 'B', isDefault: true}, {id: 'C'}],
     } as PurchaseSelectionBuilderInput;
 
     const selection = createEmptyBuilder(input).forType('single').build();
