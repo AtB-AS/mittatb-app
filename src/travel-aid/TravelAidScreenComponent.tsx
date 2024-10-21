@@ -8,7 +8,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
@@ -23,6 +23,7 @@ import {
   TravelAidStatus,
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
+import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -38,19 +39,15 @@ export const TravelAidScreenComponent = ({
   const {t} = useTranslation();
   const {themeName} = useTheme();
 
-  // TODO: Add error handling and loading state
-  const {data: serviceJourney} = useTravelAidDataQuery(
+  const {
+    data: serviceJourney,
+    isLoading,
+    isError,
+    refetch,
+  } = useTravelAidDataQuery(
     serviceJourneyDeparture.serviceJourneyId,
     serviceJourneyDeparture.serviceDate,
   );
-
-  const state =
-    serviceJourney?.estimatedCalls && serviceJourney.estimatedCalls.length > 0
-      ? getFocusedEstimatedCall(
-          serviceJourney.estimatedCalls,
-          serviceJourneyDeparture.fromQuayId,
-        )
-      : undefined;
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -65,44 +62,74 @@ export const TravelAidScreenComponent = ({
         type="medium"
       />
       <ScrollView contentContainerStyle={styles.container}>
-        {state && (
-          <Section>
-            <GenericSectionItem style={styles.sectionContainer}>
-              <EstimatedCallInfo
-                departure={{
-                  cancellation: false,
-                  predictionInaccurate: false,
-                  serviceJourney: serviceJourney ?? {},
-                  destinationDisplay:
-                    state.focusedEstimatedCall.destinationDisplay,
-                }}
-              />
-            </GenericSectionItem>
-            <GenericSectionItem>
-              <View style={styles.sectionContainer}>
-                {state.status === TravelAidStatus.NoRealtime && (
-                  <MessageInfoBox
-                    type="error"
-                    title={t(TravelAidTexts.noRealtimeError.title)}
-                    message={t(TravelAidTexts.noRealtimeError.message)}
-                  />
-                )}
-                <View style={styles.subContainer}>
-                  <ThemeText type="body__tertiary--bold">
-                    {getStopHeader(state.status, t)}
-                  </ThemeText>
-                  <ThemeText type="heading__title">
-                    {state.focusedEstimatedCall.quay.stopPlace?.name}{' '}
-                    {state.focusedEstimatedCall.quay.publicCode}
-                  </ThemeText>
-                </View>
-                <TimeInfo state={state} />
-              </View>
-            </GenericSectionItem>
-          </Section>
+        {isLoading && <ActivityIndicator size="large" />}
+        {(isError || (!isLoading && !serviceJourney?.estimatedCalls)) && (
+          <MessageInfoBox
+            type="error"
+            message={t(TravelAidTexts.error.message)}
+            onPressConfig={{action: refetch, text: t(dictionary.retry)}}
+          />
+        )}
+        {serviceJourney?.estimatedCalls && (
+          <TravelAidSection
+            serviceJourney={serviceJourney}
+            fromQuayId={serviceJourneyDeparture.fromQuayId}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const TravelAidSection = ({
+  serviceJourney,
+  fromQuayId,
+}: {
+  serviceJourney: ServiceJourneyWithEstCallsFragment;
+  fromQuayId?: string;
+}) => {
+  const styles = useStyles();
+  const {t} = useTranslation();
+
+  const {status, focusedEstimatedCall} = getFocusedEstimatedCall(
+    serviceJourney.estimatedCalls!,
+    fromQuayId,
+  );
+
+  return (
+    <Section>
+      <GenericSectionItem style={styles.sectionContainer}>
+        <EstimatedCallInfo
+          departure={{
+            cancellation: false,
+            predictionInaccurate: false,
+            serviceJourney: serviceJourney ?? {},
+            destinationDisplay: focusedEstimatedCall.destinationDisplay,
+          }}
+        />
+      </GenericSectionItem>
+      <GenericSectionItem>
+        <View style={styles.sectionContainer}>
+          {status === TravelAidStatus.NoRealtime && (
+            <MessageInfoBox
+              type="error"
+              title={t(TravelAidTexts.noRealtimeError.title)}
+              message={t(TravelAidTexts.noRealtimeError.message)}
+            />
+          )}
+          <View style={styles.subContainer}>
+            <ThemeText type="body__tertiary--bold">
+              {getStopHeader(status, t)}
+            </ThemeText>
+            <ThemeText type="heading__title">
+              {focusedEstimatedCall.quay.stopPlace?.name}{' '}
+              {focusedEstimatedCall.quay.publicCode}
+            </ThemeText>
+          </View>
+          <TimeInfo state={{status, focusedEstimatedCall}} />
+        </View>
+      </GenericSectionItem>
+    </Section>
   );
 };
 
@@ -174,6 +201,7 @@ const getStopHeader = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
+    gap: theme.spacings.medium,
   },
   sectionContainer: {
     flex: 1,
