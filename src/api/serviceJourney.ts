@@ -1,17 +1,19 @@
-import {formatISO} from 'date-fns';
 import {client} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
+/**
+ * @param id Service Journey ID
+ * @param serviceDate Service Journey date on the format "YYYY-MM-DD"
+ */
 export async function getServiceJourneyWithEstimatedCalls(
   id: string,
-  date: Date,
+  serviceDate: string,
 ): Promise<ServiceJourneyWithEstCallsFragment> {
   const encodedId = encodeURIComponent(id);
-  const formattedDate = formatISO(date, {representation: 'date'});
-  const url = `bff/v2/servicejourney/${encodedId}/calls?date=${formattedDate}`;
+  const url = `bff/v2/servicejourney/${encodedId}/calls?date=${serviceDate}`;
   const response = await client.get<{
     value: ServiceJourneyWithEstCallsFragment;
   }>(url);
