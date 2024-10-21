@@ -1,4 +1,7 @@
-import {getFocusedEstimatedCall} from '../get-focused-estimated-call';
+import {
+  TravelAidStatus,
+  getFocusedEstimatedCall,
+} from '../get-focused-estimated-call';
 
 const onGoingJourney: any[] = [
   {
@@ -19,12 +22,12 @@ const onGoingJourney: any[] = [
 describe('getFocusedEstimatedCall for ongoing journey', () => {
   it('next stop is Kattemsenteret', () => {
     const focus = getFocusedEstimatedCall(onGoingJourney, 'NSR:Quay:102721');
-    expect(focus.status).toBe('departed');
+    expect(focus.status).toBe(TravelAidStatus.BetweenStops);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Kattemsenteret');
   });
   it('has not yet arrived at Kattemsenteret', () => {
     const focus = getFocusedEstimatedCall(onGoingJourney, 'NSR:Quay:74027');
-    expect(focus.status).toBe('not-yet-arrived');
+    expect(focus.status).toBe(TravelAidStatus.NotYetArrived);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Kattemsenteret');
   });
 });
@@ -51,7 +54,7 @@ describe('getFocusedEstimatedCall for not started journey', () => {
     jest.useFakeTimers().setSystemTime(new Date('2024-10-18T12:10:00+02:00'));
     const focus = getFocusedEstimatedCall(notStartedJourney, 'NSR:Quay:102721');
 
-    expect(focus.status).toBe('not-yet-arrived');
+    expect(focus.status).toBe(TravelAidStatus.NotYetArrived);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Østre Lund');
   });
 
@@ -60,7 +63,7 @@ describe('getFocusedEstimatedCall for not started journey', () => {
     jest.useFakeTimers().setSystemTime(new Date('2024-10-18T12:20:00+02:00'));
 
     const focus = getFocusedEstimatedCall(notStartedJourney, 'NSR:Quay:102721');
-    expect(focus.status).toBe('not-getting-updates');
+    expect(focus.status).toBe(TravelAidStatus.NotGettingUpdates);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Østre Lund');
   });
 });
@@ -84,7 +87,7 @@ const endedJourney: any[] = [
 describe('getFocusedEstimatedCall for ended journey', () => {
   it('end-of-line is Kattemsenteret', () => {
     const focus = getFocusedEstimatedCall(endedJourney, 'NSR:Quay:102721');
-    expect(focus.status).toBe('end-of-line');
+    expect(focus.status).toBe(TravelAidStatus.EndOfLine);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Kattemsenteret');
   });
 });
@@ -108,7 +111,7 @@ const noRealtimeJourney: any[] = [
 describe('getFocusedEstimatedCall for no realtime journey', () => {
   it('no realtime for Østre Lund', () => {
     const focus = getFocusedEstimatedCall(noRealtimeJourney, 'NSR:Quay:74027');
-    expect(focus.status).toBe('no-realtime');
+    expect(focus.status).toBe(TravelAidStatus.NoRealtime);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Kattemsenteret');
   });
 });
@@ -135,7 +138,7 @@ describe('getFocusedEstimatedCall for arrived but not departed journey', () => {
       arrivedButNotDepartedJourney,
       'NSR:Quay:102721',
     );
-    expect(focus.status).toBe('arrived');
+    expect(focus.status).toBe(TravelAidStatus.Arrived);
     expect(focus.focusedEstimatedCall.quay.name).toBe('Kattemsenteret');
   });
 });

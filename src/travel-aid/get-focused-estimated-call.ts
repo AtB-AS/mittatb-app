@@ -1,16 +1,24 @@
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {isInThePast} from '@atb/utils/date';
 
+export enum TravelAidStatus {
+  /** Not yet arrived at the selected stop */
+  NotYetArrived,
+  /** Arrived, but not yet departed a stop */
+  Arrived,
+  /** Departed a stop, but not yet arrived at the next */
+  BetweenStops,
+  /** Departed from the last stop */
+  EndOfLine,
+  /** No realtime data */
+  NoRealtime,
+  /** Has realtime, should have started, but no actual departure time */
+  NotGettingUpdates,
+}
+
 type EstimatedCall = Required<
   Required<ServiceJourneyWithEstCallsFragment>['estimatedCalls']
 >[0];
-export type TravelAidStatus =
-  | 'not-yet-arrived'
-  | 'arrived'
-  | 'departed'
-  | 'end-of-line'
-  | 'no-realtime'
-  | 'not-getting-updates';
 export type FocusedEstimatedCallState = {
   status: TravelAidStatus;
   focusedEstimatedCall: EstimatedCall;
@@ -43,17 +51,17 @@ export const getFocusedEstimatedCall = (
   // No realtime data
   if (!selectedStop.realtime) {
     return {
-      status: 'no-realtime',
+      status: TravelAidStatus.NoRealtime,
       focusedEstimatedCall: selectedStop,
     };
   }
 
-  // Has data on service journey progress
+  // Data on service journey progress
   if (previousOrCurrentStop) {
     // Has not yet arrived at the selected stop
     if (selectedStopIndex > previousOrCurrentStopIndex) {
       return {
-        status: 'not-yet-arrived',
+        status: TravelAidStatus.NotYetArrived,
         focusedEstimatedCall: selectedStop,
       };
     }
@@ -64,7 +72,7 @@ export const getFocusedEstimatedCall = (
       !previousOrCurrentStop.actualDepartureTime
     ) {
       return {
-        status: 'arrived',
+        status: TravelAidStatus.Arrived,
         focusedEstimatedCall: previousOrCurrentStop,
       };
     }
@@ -72,7 +80,7 @@ export const getFocusedEstimatedCall = (
     // Has passed the last stop
     if (nextStop === undefined) {
       return {
-        status: 'end-of-line',
+        status: TravelAidStatus.EndOfLine,
         focusedEstimatedCall: previousOrCurrentStop,
       };
     }
@@ -80,7 +88,7 @@ export const getFocusedEstimatedCall = (
     // On its way to the next stop
     if (previousOrCurrentStop.actualDepartureTime && nextStop) {
       return {
-        status: 'departed',
+        status: TravelAidStatus.BetweenStops,
         focusedEstimatedCall: nextStop,
       };
     }
@@ -89,18 +97,16 @@ export const getFocusedEstimatedCall = (
   // No data on service journey progress
 
   // Has realtime, should have started, but no actual departure time
-  if (isInThePast(selectedStop.aimedDepartureTime)) {
-    // TODO: Should we check against aimed departure time from the first or selected stop?
-    // if (isInThePast(estimatedCalls[0].aimedDepartureTime)) {
+  if (isInThePast(estimatedCalls[0].aimedDepartureTime)) {
     return {
-      status: 'not-getting-updates',
+      status: TravelAidStatus.NotGettingUpdates,
       focusedEstimatedCall: selectedStop,
     };
   }
 
   // Has not yet started
   return {
-    status: 'not-yet-arrived',
+    status: TravelAidStatus.NotYetArrived,
     focusedEstimatedCall: selectedStop,
   };
 };

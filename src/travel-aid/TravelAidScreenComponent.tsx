@@ -80,7 +80,7 @@ export const TravelAidScreenComponent = ({
             </GenericSectionItem>
             <GenericSectionItem>
               <View style={styles.sectionContainer}>
-                {state.status === 'no-realtime' && (
+                {state.status === TravelAidStatus.NoRealtime && (
                   <MessageInfoBox
                     type="error"
                     title={t(TravelAidTexts.noRealtimeError.title)}
@@ -118,50 +118,53 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
     'round',
   );
 
-  if (status === 'end-of-line') {
-    return null;
-  }
-
-  if (status === 'no-realtime' || status === 'not-getting-updates') {
-    return (
-      <ThemeText type="body__secondary--bold">
-        {t(TravelAidTexts.clock(clock))}
-      </ThemeText>
-    );
-  }
-
-  return (
-    <View>
-      <View style={styles.realTime}>
-        <ThemeIcon
-          svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
-          size="xSmall"
-        />
-        <ThemeText type="heading__title">
-          {formatToClockOrRelativeMinutes(
-            focusedEstimatedCall.expectedDepartureTime,
-            language,
-            t(dictionary.date.units.now),
-          )}
+  switch (status) {
+    case TravelAidStatus.EndOfLine:
+      return null;
+    case TravelAidStatus.NoRealtime:
+    case TravelAidStatus.NotGettingUpdates:
+      return (
+        <ThemeText type="body__secondary--bold">
+          {t(TravelAidTexts.clock(clock))}
         </ThemeText>
-      </View>
-      <ThemeText type="body__secondary--bold">
-        {t(TravelAidTexts.scheduledTime(clock))}
-      </ThemeText>
-    </View>
-  );
+      );
+    default:
+      return (
+        <View>
+          <View style={styles.realTime}>
+            <ThemeIcon
+              svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+              size="xSmall"
+            />
+            <ThemeText type="heading__title">
+              {formatToClockOrRelativeMinutes(
+                focusedEstimatedCall.expectedDepartureTime,
+                language,
+                t(dictionary.date.units.now),
+              )}
+            </ThemeText>
+          </View>
+          <ThemeText type="body__secondary--bold">
+            {t(TravelAidTexts.scheduledTime(clock))}
+          </ThemeText>
+        </View>
+      );
+  }
 };
 
-const getStopHeader = (state: TravelAidStatus, t: TranslateFunction) => {
+const getStopHeader = (
+  state: TravelAidStatus,
+  t: TranslateFunction,
+): string => {
   switch (state) {
-    case 'not-yet-arrived':
-    case 'no-realtime':
-    case 'not-getting-updates':
+    case TravelAidStatus.NotYetArrived:
+    case TravelAidStatus.NoRealtime:
+    case TravelAidStatus.NotGettingUpdates:
       return t(TravelAidTexts.stopPlaceHeader.from);
-    case 'arrived':
-    case 'departed':
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
       return t(TravelAidTexts.stopPlaceHeader.nextStop);
-    case 'end-of-line':
+    case TravelAidStatus.EndOfLine:
       return t(TravelAidTexts.stopPlaceHeader.endOfLine);
   }
 };
