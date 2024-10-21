@@ -100,7 +100,7 @@ export function useDepartureData(
   return [data, isLoading];
 }
 
-export function addMetadataToEstimatedCalls(
+function addMetadataToEstimatedCalls(
   estimatedCalls: EstimatedCallWithQuayFragment[],
   fromQuayId?: string,
   toQuayId?: string,

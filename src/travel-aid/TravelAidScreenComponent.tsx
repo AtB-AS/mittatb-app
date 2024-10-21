@@ -37,6 +37,7 @@ export const TravelAidScreenComponent = ({
   const {language, t} = useTranslation();
   const {themeName} = useTheme();
 
+  // TODO: Add error handling and loading state
   const {data: serviceJourney} = useTravelAidDataQuery(
     serviceJourneyDeparture.serviceJourneyId,
     formatToISODate(serviceJourneyDeparture.serviceDate),
