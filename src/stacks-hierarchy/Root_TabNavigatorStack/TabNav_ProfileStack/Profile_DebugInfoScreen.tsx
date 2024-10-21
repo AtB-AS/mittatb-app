@@ -61,15 +61,14 @@ import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
-import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 import {useOnboardingState} from '@atb/onboarding';
 import {useServerTimeEnabledDebugOverride} from '@atb/time';
 import Bugsnag from '@bugsnag/react-native';
-import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
 import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
 import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
 import {useIsTravelAidEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-enabled';
 import {useIsTravelAidStopButtonEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -97,6 +96,10 @@ export const Profile_DebugInfoScreen = () => {
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId, retryAuth, debug: {user, idTokenResult}} = useAuthState();
+
+  const {
+    debug: {setOverride, overrides},
+  } = useFeatureToggles();
 
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
@@ -137,10 +140,7 @@ export const Profile_DebugInfoScreen = () => {
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
   const ticketInformationEnabledDebugOverride =
     useTicketInformationEnabledDebugOverride();
-  const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
   const serverTimeEnabledDebugOverride = useServerTimeEnabledDebugOverride();
-  const activateTicketNowEnabledDebugOverride =
-    useActivateTicketNowEnabledDebugOverride();
   const backendSmsAuthEnabledDebugOverride =
     useBackendSmsAuthEnabledDebugOverride();
   const onlyStopPlacesCheckboxEnabledDebugOverride =
@@ -466,20 +466,8 @@ export const Profile_DebugInfoScreen = () => {
           </GenericSectionItem>
           <GenericSectionItem>
             <DebugOverride
-              description="Enable PostHog"
-              override={posthogEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
               description="Enable server time"
               override={serverTimeEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable activate ticket now"
-              override={activateTicketNowEnabledDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -506,6 +494,14 @@ export const Profile_DebugInfoScreen = () => {
               override={travelAidStopButtonEnabledDebugOverride}
             />
           </GenericSectionItem>
+          {overrides.map((o) => (
+            <GenericSectionItem key={o.name}>
+              <DebugOverride
+                description={`Override for '${o.name}'`}
+                override={[o.value, (v) => setOverride(o.key, v), true]}
+              />
+            </GenericSectionItem>
+          ))}
         </Section>
 
         <Section style={styles.section}>
