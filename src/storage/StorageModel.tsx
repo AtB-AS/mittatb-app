@@ -65,7 +65,12 @@ const errorHandler = (error: any) => {
 };
 
 const leaveBreadCrumb = (
-  action: 'read-single' | 'save-single' | 'remove-single' | 'read-all',
+  action:
+    | 'read-single'
+    | 'save-single'
+    | 'remove-single'
+    | 'read-multi'
+    | 'read-all',
   key?: string,
   value?: string | null,
 ) => {
@@ -97,6 +102,10 @@ export const storage = {
   remove: async (key: string) => {
     leaveBreadCrumb('remove-single', key);
     return AsyncStorage.removeItem(key).catch(errorHandler);
+  },
+  getMulti: async (keys: string[]) => {
+    leaveBreadCrumb('read-multi');
+    return AsyncStorage.multiGet(keys).catch(errorHandler);
   },
   getAll: async () => {
     leaveBreadCrumb('read-all');

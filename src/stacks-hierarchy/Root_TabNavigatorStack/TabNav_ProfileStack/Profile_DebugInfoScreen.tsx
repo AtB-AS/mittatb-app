@@ -70,6 +70,7 @@ import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sm
 import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
 import {useIsTravelAidEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-enabled';
 import {useIsTravelAidStopButtonEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -97,6 +98,10 @@ export const Profile_DebugInfoScreen = () => {
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId, retryAuth, debug: {user, idTokenResult}} = useAuthState();
+
+  const {
+    debug: {overrides, setOverride},
+  } = useFeatureToggles();
 
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
@@ -322,9 +327,8 @@ export const Profile_DebugInfoScreen = () => {
         </Section>
         <Section style={styles.section}>
           <HeaderSectionItem
-            text="Remote config override"
-            subtitle="If undefined the value
-        from Remote Config will be used. Needs reload of app after change."
+            text="Remote config overrides"
+            subtitle="If undefined the value from Remote Config will be used."
           />
           <GenericSectionItem>
             <DebugOverride
@@ -506,6 +510,14 @@ export const Profile_DebugInfoScreen = () => {
               override={travelAidStopButtonEnabledDebugOverride}
             />
           </GenericSectionItem>
+          {overrides.map((o) => (
+            <GenericSectionItem key={o.name}>
+              <DebugOverride
+                description={`Override for '${o.name}'`}
+                override={[o.value, (v) => setOverride(o.name, v), true]}
+              />
+            </GenericSectionItem>
+          ))}
         </Section>
 
         <Section style={styles.section}>
