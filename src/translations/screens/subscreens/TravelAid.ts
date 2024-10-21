@@ -2,10 +2,10 @@ import {translation as _} from '../../commons';
 export const TravelAidTexts = {
   close: _('Lukk Reisehjelp', 'Close Journey Aid', 'Lukk Reisehjelp'),
   stopPlaceHeader: {
-    from: _('Fra:', 'From:', 'Frå'),
-    arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer'),
-    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste haldeplass'),
-    endOfLine: _('Siste holdeplass', 'Last stop', 'Siste haldeplass'),
+    from: _('Fra:', 'From:', 'Frå:'),
+    arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer til:'),
+    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste haldeplass:'),
+    endOfLine: _('Siste holdeplass:', 'Last stop:', 'Siste haldeplass:'),
   },
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
