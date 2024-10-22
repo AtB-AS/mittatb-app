@@ -18,6 +18,7 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {SituationMessageBox} from '@atb/situations';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -46,6 +47,9 @@ export const TravelAidScreenComponent = ({
           (ec) => ec.quay.id === serviceJourneyDeparture.fromQuayId,
         )
       : undefined;
+
+  const situations = focusedEstimatedCall?.situations ?? [];
+  const notices = focusedEstimatedCall?.notices ?? [];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -80,6 +84,23 @@ export const TravelAidScreenComponent = ({
                     title={t(TravelAidTexts.noRealtimeError.title)}
                     message={t(TravelAidTexts.noRealtimeError.message)}
                   />
+                )}
+                {(situations.length > 0 || notices.length > 0) && (
+                  <View style={styles.subContainer}>
+                    {situations.map((situation) => (
+                      <SituationMessageBox
+                        key={situation.id}
+                        situation={situation}
+                      />
+                    ))}
+
+                    {notices.map(
+                      (notice) =>
+                        notice.text && (
+                          <MessageInfoBox type="info" message={notice.text} />
+                        ),
+                    )}
+                  </View>
                 )}
                 <View style={styles.subContainer}>
                   <ThemeText type="body__tertiary--bold">
