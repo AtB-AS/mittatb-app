@@ -16,8 +16,10 @@ export const MapViewConfig = {
     default: {bottom: 8, left: 95},
     android: {bottom: 5, left: 120},
   }),
-  styleURL: MAPBOX_STOP_PLACES_STYLE_URL,
+  styleURL: 'mapbox://styles/mittatb/cm28ybge2000s01pk1h7573xd', //'mapbox://styles/mittatb/cm2aea66n00ib01piaa300ojq', // 'mapbox://styles/mittatb/cm28ybge2000s01pk1h7573xd', // MAPBOX_STOP_PLACES_STYLE_URL,
 };
+
+// rawStyleUrl: 'https://api.mapbox.com/styles/v1/mittatb/cm28ybge2000s01pk1h7573xd',
 
 export const MapCameraConfig: CameraStop = {
   animationMode: 'moveTo',

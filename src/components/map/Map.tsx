@@ -22,6 +22,26 @@ import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effe
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
 
+//import {MapPin} from '../../assets/svg/mono-icons/map';
+// import TestImg from './TestImg.png';
+// import AndroidIcon from './AndroidIcon.jpg';
+// import ParkingIcon from './Parking.png';
+
+// const mapIcons2 = {
+//   Park_and_ride: require('./sprite_images/Mapbox-Park_and_ride.svg'),
+//   Ferry: require('./sprite_images/Mapbox-Ferry.svg'),
+//   Tram: require('./sprite_images/Mapbox-Tram.svg'),
+//   TramSubway: require('./sprite_images/Mapbox-TramSubway.svg'),
+//   Subway: require('./sprite_images/Mapbox-Subway.svg'),
+//   Carferry: require('./sprite_images/Mapbox-Carferry.svg'),
+//   Helicopter: require('./sprite_images/Mapbox-Helicopter.svg'),
+//   Train: require('./sprite_images/Mapbox-Train.svg'),
+//   BusTram: require('./sprite_images/Mapbox-BusTram.svg'),
+//   Plane: require('./sprite_images/Mapbox-Plane.svg'),
+//   Bus: require('./icons/Bus.png'),
+//   BusSelected: require('./icons/BusSelected.png'),
+// }
+
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -42,10 +62,20 @@ import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
 import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
-import {ShmoTesting} from './components/mobility/ShmoTesting';
+//import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {
+  mapIcons,
+  mapStyleItemToCircleStyle,
+  mapStyleItemToSymbolStyle,
+  mapStyleToSymbolOrCircle,
+  nsrStyleCircleItems,
+  nsrStyleItems,
+  nsrStyleSymbolItems,
+} from './nsrItemsMapStyle';
+//import {iconSizes} from '@atb-as/theme';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -191,6 +221,7 @@ export const Map = (props: MapProps) => {
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
 
+      mapViewRef.current?.clearData(); // refreshes style
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
         return;
@@ -240,6 +271,20 @@ export const Map = (props: MapProps) => {
     ],
   );
 
+  //const featureEntityType = ['get', 'entityType'];
+  //const featureStopPlaceType = ['get', 'stopPlaceType'];
+  const featureId = ['get', 'id'];
+
+  const selectedFeatureId = selectedFeature?.properties?.id || '';
+  //const isSelected = ['==', featureId, selectedFeatureId];
+  // const [refreshKey, setRefreshKey] = useState('someKey');
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log('SET THE KEY');
+  //     setRefreshKey('anotherKey');
+  //   }, 5000);
+  // }, []);
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -269,6 +314,46 @@ export const Map = (props: MapProps) => {
             ]}
             {...MapCameraConfig}
           />
+          <MapboxGL.Images images={mapIcons} />
+
+          <MapboxGL.VectorSource
+            id="stop-places-source"
+            url="mapbox://mittatb.3hi4kb3o"
+            //key={refreshKey}
+            // minZoomLevel={14} // limit requests to zoom level
+            // maxZoomLevel={14} // limit requests to zoom level
+            //tileUrlTemplates={[`localhost:8082/${refreshKey}/{z}/{x}/{y}.pbf`]}
+          >
+            <>
+              {nsrStyleSymbolItems.map((nsrStyleSymbolItem) => (
+                <MapboxGL.SymbolLayer
+                  key={nsrStyleSymbolItem.id}
+                  id={nsrStyleSymbolItem.id}
+                  //maxZoomLevel={10}
+                  sourceID="composite"
+                  //sourceLayerID="foo-6pzjnl"
+                  sourceLayerID={nsrStyleSymbolItem['source-layer']}
+                  // Filter to include relevant entity types
+                  filter={nsrStyleSymbolItem.filter}
+                  style={mapStyleItemToSymbolStyle(
+                    nsrStyleSymbolItem,
+                    selectedFeatureId,
+                  )}
+                />
+              ))}
+              {nsrStyleCircleItems.map((nsrStyleCircleItem) => (
+                <MapboxGL.CircleLayer
+                  key={nsrStyleCircleItem.id}
+                  id={nsrStyleCircleItem.id}
+                  sourceID="composite"
+                  sourceLayerID={nsrStyleCircleItem['source-layer']} // Make sure to access source-layer dynamically
+                  filter={nsrStyleCircleItem.filter}
+                  style={mapStyleItemToCircleStyle(nsrStyleCircleItem)} // Apply the mapped circle style
+                  minZoomLevel={nsrStyleCircleItem.minzoom || 0} // Optional: minZoom level from item
+                />
+              ))}
+            </>
+          </MapboxGL.VectorSource>
 
           {showGeofencingZones && (
             <GeofencingZones
@@ -279,7 +364,6 @@ export const Map = (props: MapProps) => {
               }
             />
           )}
-
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
@@ -335,9 +419,9 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {showShmoTesting && (
+        {/* {showShmoTesting && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-        )}
+        )} */}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
@@ -371,3 +455,73 @@ function getFeatureWeight(feature: Feature, positionClicked: Position): number {
     return 0;
   }
 }
+
+// (entity_type, stop_place_type, finalStopPlaceType)
+
+// ('TariffZone', None, None)
+// ('Quay', None, None)
+// ('Parking', None, None)
+
+// ('StopPlace', None, None)
+
+// ('StopPlace', 'onstreetBus', 'onstreetBus')
+// ('StopPlace', 'onstreetBus', 'onstreetBus_onstreetTram')
+// ('StopPlace', 'onstreetBus', 'localBus')
+// ('StopPlace', 'onstreetBus', 'localBus_onstreetTram')
+// ('StopPlace', 'onstreetBus', 'localTram_onstreetBus')
+
+// ('StopPlace', 'onstreetBus', 'schoolBus')
+// ('StopPlace', 'onstreetBus', 'regionalBus')
+// ('StopPlace', 'onstreetBus', 'shuttleBus')
+// ('StopPlace', 'onstreetBus', 'expressBus')
+// ('StopPlace', 'onstreetBus', 'railReplacementBus')
+// ('StopPlace', 'onstreetBus', 'airportLinkBus')
+// ('StopPlace', 'onstreetBus', 'sightseeingBus')
+
+// ('StopPlace', 'harbourPort', 'localCarFerry')
+// ('StopPlace', 'harbourPort', 'nationalCarFerry')
+// ('StopPlace', 'harbourPort', 'internationalCarFerry')
+// ('StopPlace', 'harbourPort', 'highSpeedPassengerService')
+// ('StopPlace', 'harbourPort', 'highSpeedVehicleService')
+// ('StopPlace', 'harbourPort', 'harbourPort')
+
+// ('StopPlace', 'onstreetTram', 'onstreetTram')
+// ('StopPlace', 'onstreetTram', 'localTram')
+// ('StopPlace', 'onstreetTram', 'localTram_onstreetBus')
+// ('StopPlace', 'onstreetTram', 'localTram_metroStation')
+// ('StopPlace', 'onstreetTram', 'onstreetBus_onstreetTram')
+
+// ('StopPlace', 'ferryStop', 'sightseeingService')
+// ('StopPlace', 'ferryStop', 'highSpeedPassengerService')
+// ('StopPlace', 'ferryStop', 'localPassengerFerry')
+// ('StopPlace', 'ferryStop', 'ferryStop')
+
+// ('StopPlace', 'liftStation', 'liftStation')
+// ('StopPlace', 'liftStation', 'telecabin')
+
+// ('StopPlace', 'airport', 'airport')
+// ('StopPlace', 'airport', 'helicopterService')
+
+// ('StopPlace', 'metroStation', 'metroStation')
+// ('StopPlace', 'metroStation', 'metro')
+
+// ('StopPlace', 'railStation', 'railStation')
+// ('StopPlace', 'railStation', 'touristRailway')
+
+// ('StopPlace', 'busStation', 'busStation')
+
+// https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/728727661/stops#StopPlace.1
+// stop_place_type:
+// onstreetBus (bus stops)
+// onstreetTram (tram stops)
+// taxiStand (taxi stations)
+// airport (airports)
+// railStation (railway stations)
+// metroStation (metro or subway stations)
+// busStation (bus terminals (different from regular bus stops))
+// harbourPort (ports where cars may board or disembark a ship)
+// ferryStop (ports where people can board or disembark a ship)
+// liftStation (station for a cable borne vehicle)
+// --
+// Mandatory when StopPlace has one or more subordinate Quay.
+// Not mandatory if the StopPlace is a parentStop.
