@@ -1,5 +1,5 @@
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
-import {isInThePast} from '@atb/utils/date';
+import {minutesBetween} from '@atb/utils/date';
 
 export enum TravelAidStatus {
   /** Not yet arrived at the selected stop */
@@ -95,7 +95,7 @@ export const getFocusedEstimatedCall = (
   // No data on service journey progress
 
   // Has realtime, should have started, but no actual departure time
-  if (isInThePast(estimatedCalls[0].aimedDepartureTime)) {
+  if (minutesBetween(estimatedCalls[0].aimedDepartureTime, new Date()) > 2) {
     return {
       status: TravelAidStatus.NotGettingUpdates,
       focusedEstimatedCall: selectedCall,
