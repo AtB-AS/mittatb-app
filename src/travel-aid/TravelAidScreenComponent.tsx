@@ -91,8 +91,10 @@ const TravelAidSection = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
+  if (!serviceJourney.estimatedCalls) return null;
+
   const {status, focusedEstimatedCall} = getFocusedEstimatedCall(
-    serviceJourney.estimatedCalls!,
+    serviceJourney.estimatedCalls,
     fromQuayId,
   );
 
