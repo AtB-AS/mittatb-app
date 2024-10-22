@@ -39,12 +39,11 @@ export const getFocusedEstimatedCall = (
       previousOrCurrentCallIndex = index;
     }
   });
-  const previousOrCurrentCall = estimatedCalls[previousOrCurrentCallIndex] as
-    | EstimatedCallWithQuayFragment
-    | undefined;
-  const nextCall = estimatedCalls[previousOrCurrentCallIndex + 1] as
-    | EstimatedCallWithQuayFragment
-    | undefined;
+  const previousOrCurrentCall =
+    previousOrCurrentCallIndex >= 0
+      ? estimatedCalls.at(previousOrCurrentCallIndex)
+      : undefined;
+  const nextCall = estimatedCalls.at(previousOrCurrentCallIndex + 1);
 
   // No realtime data
   if (!selectedCall.realtime) {
