@@ -1,4 +1,4 @@
-import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {isInThePast} from '@atb/utils/date';
 
 export enum TravelAidStatus {
@@ -16,16 +16,13 @@ export enum TravelAidStatus {
   NotGettingUpdates,
 }
 
-type EstimatedCall = Required<
-  Required<ServiceJourneyWithEstCallsFragment>['estimatedCalls']
->[0];
 export type FocusedEstimatedCallState = {
   status: TravelAidStatus;
-  focusedEstimatedCall: EstimatedCall;
+  focusedEstimatedCall: EstimatedCallWithQuayFragment;
 };
 
 export const getFocusedEstimatedCall = (
-  estimatedCalls: EstimatedCall[],
+  estimatedCalls: EstimatedCallWithQuayFragment[],
   fromQuayId?: string,
 ): FocusedEstimatedCallState => {
   const selectedStopIndex =
@@ -33,7 +30,8 @@ export const getFocusedEstimatedCall = (
       // TODO: This can be wrong if there are multiple stops on the same quay
       (estimatedCall) => estimatedCall.quay?.id === fromQuayId,
     ) ?? 0;
-  const selectedStop: EstimatedCall = estimatedCalls[selectedStopIndex];
+  const selectedStop: EstimatedCallWithQuayFragment =
+    estimatedCalls[selectedStopIndex];
 
   let previousOrCurrentStopIndex = -1;
   estimatedCalls.forEach((estimatedCall, index) => {
@@ -42,10 +40,10 @@ export const getFocusedEstimatedCall = (
     }
   });
   const previousOrCurrentStop = estimatedCalls[previousOrCurrentStopIndex] as
-    | EstimatedCall
+    | EstimatedCallWithQuayFragment
     | undefined;
   const nextStop = estimatedCalls[previousOrCurrentStopIndex + 1] as
-    | EstimatedCall
+    | EstimatedCallWithQuayFragment
     | undefined;
 
   // No realtime data
