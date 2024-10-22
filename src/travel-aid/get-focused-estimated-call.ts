@@ -25,69 +25,69 @@ export const getFocusedEstimatedCall = (
   estimatedCalls: EstimatedCallWithQuayFragment[],
   fromQuayId?: string,
 ): FocusedEstimatedCallState => {
-  const selectedStopIndex =
+  const selectedCallIndex =
     estimatedCalls.findIndex(
       // TODO: This can be wrong if there are multiple stops on the same quay
       (estimatedCall) => estimatedCall.quay?.id === fromQuayId,
     ) ?? 0;
-  const selectedStop: EstimatedCallWithQuayFragment =
-    estimatedCalls[selectedStopIndex];
+  const selectedCall: EstimatedCallWithQuayFragment =
+    estimatedCalls[selectedCallIndex];
 
-  let previousOrCurrentStopIndex = -1;
+  let previousOrCurrentCallIndex = -1;
   estimatedCalls.forEach((estimatedCall, index) => {
     if (estimatedCall.actualDepartureTime || estimatedCall.actualArrivalTime) {
-      previousOrCurrentStopIndex = index;
+      previousOrCurrentCallIndex = index;
     }
   });
-  const previousOrCurrentStop = estimatedCalls[previousOrCurrentStopIndex] as
+  const previousOrCurrentCall = estimatedCalls[previousOrCurrentCallIndex] as
     | EstimatedCallWithQuayFragment
     | undefined;
-  const nextStop = estimatedCalls[previousOrCurrentStopIndex + 1] as
+  const nextCall = estimatedCalls[previousOrCurrentCallIndex + 1] as
     | EstimatedCallWithQuayFragment
     | undefined;
 
   // No realtime data
-  if (!selectedStop.realtime) {
+  if (!selectedCall.realtime) {
     return {
       status: TravelAidStatus.NoRealtime,
-      focusedEstimatedCall: selectedStop,
+      focusedEstimatedCall: selectedCall,
     };
   }
 
   // Data on service journey progress
-  if (previousOrCurrentStop) {
+  if (previousOrCurrentCall) {
     // Has not yet arrived at the selected stop
-    if (selectedStopIndex > previousOrCurrentStopIndex) {
+    if (selectedCallIndex > previousOrCurrentCallIndex) {
       return {
         status: TravelAidStatus.NotYetArrived,
-        focusedEstimatedCall: selectedStop,
+        focusedEstimatedCall: selectedCall,
       };
     }
 
     // Has arrived, but not departed the stop
     if (
-      previousOrCurrentStop.actualArrivalTime &&
-      !previousOrCurrentStop.actualDepartureTime
+      previousOrCurrentCall.actualArrivalTime &&
+      !previousOrCurrentCall.actualDepartureTime
     ) {
       return {
         status: TravelAidStatus.Arrived,
-        focusedEstimatedCall: previousOrCurrentStop,
+        focusedEstimatedCall: previousOrCurrentCall,
       };
     }
 
     // Has passed the last stop
-    if (nextStop === undefined) {
+    if (nextCall === undefined) {
       return {
         status: TravelAidStatus.EndOfLine,
-        focusedEstimatedCall: previousOrCurrentStop,
+        focusedEstimatedCall: previousOrCurrentCall,
       };
     }
 
     // On its way to the next stop
-    if (previousOrCurrentStop.actualDepartureTime && nextStop) {
+    if (previousOrCurrentCall.actualDepartureTime && nextCall) {
       return {
         status: TravelAidStatus.BetweenStops,
-        focusedEstimatedCall: nextStop,
+        focusedEstimatedCall: nextCall,
       };
     }
   }
@@ -98,13 +98,13 @@ export const getFocusedEstimatedCall = (
   if (isInThePast(estimatedCalls[0].aimedDepartureTime)) {
     return {
       status: TravelAidStatus.NotGettingUpdates,
-      focusedEstimatedCall: selectedStop,
+      focusedEstimatedCall: selectedCall,
     };
   }
 
   // Has not yet started
   return {
     status: TravelAidStatus.NotYetArrived,
-    focusedEstimatedCall: selectedStop,
+    focusedEstimatedCall: selectedCall,
   };
 };
