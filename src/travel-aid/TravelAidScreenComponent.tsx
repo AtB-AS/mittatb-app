@@ -128,7 +128,9 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
           {t(TravelAidTexts.clock(clock))}
         </ThemeText>
       );
-    default:
+    case TravelAidStatus.NotYetArrived:
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
       return (
         <View>
           <View style={styles.realTime}>
