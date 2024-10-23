@@ -40,7 +40,6 @@ import {
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
-import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const defaultVatPercent: number = 12;
 
