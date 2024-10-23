@@ -10,6 +10,13 @@ export const TravelAidTexts = {
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
   clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
+  error: {
+    message: _(
+      'Det oppstod en feil ved henting av reisedata for denne avgangen.',
+      'There was a problem loading travel data for this trip.',
+      'Det oppstod ein feil då vi prøvde å hente reisedata for denne avgangen.',
+    ),
+  },
   noRealtimeError: {
     title: _(
       'Ingen kontakt med kjøretøy',

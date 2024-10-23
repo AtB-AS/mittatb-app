@@ -17,7 +17,7 @@ export async function getServiceJourneyWithEstimatedCalls(
   const response = await client.get<{
     value: ServiceJourneyWithEstCallsFragment;
   }>(url);
-  return response.data?.value;
+  return response.data.value;
 }
 
 export async function getServiceJourneyMapLegs(
