@@ -41,8 +41,7 @@ export const TravelAidScreenComponent = ({
 
   const {
     data: serviceJourney,
-    isLoading,
-    isError,
+    status,
     refetch,
   } = useTravelAidDataQuery(
     serviceJourneyDeparture.serviceJourneyId,
@@ -62,15 +61,15 @@ export const TravelAidScreenComponent = ({
         type="medium"
       />
       <ScrollView contentContainerStyle={styles.container}>
-        {isLoading && <ActivityIndicator size="large" />}
-        {(isError || (!isLoading && !serviceJourney?.estimatedCalls)) && (
+        {status === 'loading' && <ActivityIndicator size="large" />}
+        {status === 'error' && (
           <MessageInfoBox
             type="error"
             message={t(TravelAidTexts.error.message)}
             onPressConfig={{action: refetch, text: t(dictionary.retry)}}
           />
         )}
-        {serviceJourney?.estimatedCalls && (
+        {status === 'success' && (
           <TravelAidSection
             serviceJourney={serviceJourney}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
