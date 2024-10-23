@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, Ref} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ContainerSizingType} from './types';
@@ -8,6 +8,7 @@ export type SectionProps = PropsWithChildren<{
   type?: ContainerSizingType;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  ref?: Ref<View>;
 }> &
   AccessibilityProps;
 
