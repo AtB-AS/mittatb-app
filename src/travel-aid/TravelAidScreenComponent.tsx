@@ -30,6 +30,7 @@ import {
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -44,6 +45,7 @@ export const TravelAidScreenComponent = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
+  const focusRef = useFocusOnLoad();
 
   const {
     data: serviceJourney,
@@ -79,6 +81,7 @@ export const TravelAidScreenComponent = ({
           <TravelAidSection
             serviceJourney={serviceJourney}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
+            focusRef={focusRef}
           />
         )}
       </ScrollView>
@@ -89,9 +92,11 @@ export const TravelAidScreenComponent = ({
 const TravelAidSection = ({
   serviceJourney,
   fromQuayId,
+  focusRef,
 }: {
   serviceJourney: ServiceJourneyWithEstCallsFragment;
   fromQuayId?: string;
+  focusRef: Ref<any>;
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -104,7 +109,7 @@ const TravelAidSection = ({
   );
 
   return (
-    <Section>
+    <Section ref={focusRef}>
       <GenericSectionItem
         style={styles.sectionContainer}
         accessibility={{
