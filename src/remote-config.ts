@@ -2,7 +2,6 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 
 export type RemoteConfig = {
-  contact_phone_number: string;
   customer_feedback_url: string;
   customer_service_url: string;
   default_map_filter: string;
@@ -73,7 +72,6 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  contact_phone_number: '',
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
@@ -147,9 +145,6 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
 
-  const contact_phone_number =
-    values['contact_phone_number']?.asString() ??
-    defaultRemoteConfig.contact_phone_number;
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??
     defaultRemoteConfig.customer_feedback_url;
@@ -330,7 +325,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.fetch_id_token_retry_count;
 
   return {
-    contact_phone_number,
     customer_feedback_url,
     customer_service_url,
     default_map_filter,

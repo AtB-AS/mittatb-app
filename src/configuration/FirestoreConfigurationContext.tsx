@@ -40,6 +40,7 @@ import {
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const defaultVatPercent: number = 12;
 
@@ -56,6 +57,7 @@ type ConfigurationContextState = {
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
   vatPercent: number;
+  contactPhoneNumber: string | undefined;
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
@@ -84,6 +86,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
   const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
   const [vatPercent, setVatPercent] = useState<number>(defaultVatPercent);
+  const [contactPhoneNumber, setContactPhoneNumber] = useState<
+    string | undefined
+  >();
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >([]);
@@ -150,6 +155,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const vatPercent = getVatPercentFromSnapshot(snapshot);
           if (vatPercent) {
             setVatPercent(vatPercent);
+          }
+
+          const contactPhoneNumber =
+            getContactPhoneNumberFromSnapshot(snapshot);
+          if (contactPhoneNumber) {
+            setContactPhoneNumber(contactPhoneNumber);
           }
 
           const fareProductTypeConfigs =
@@ -221,6 +232,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     setModesWeSellTicketsFor([]);
     setPaymentTypes([]);
     setVatPercent(defaultVatPercent);
+    setContactPhoneNumber(undefined);
     setFareProductTypeConfigs([]);
     setFareProductGroups([]);
     setTravelSearchFilters(undefined);
@@ -250,6 +262,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       modesWeSellTicketsFor,
       paymentTypes,
       vatPercent,
+      contactPhoneNumber,
       fareProductTypeConfigs,
       travelSearchFilters,
       appTexts,
@@ -269,6 +282,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     modesWeSellTicketsFor,
     paymentTypes,
     vatPercent,
+    contactPhoneNumber,
     fareProductTypeConfigs,
     travelSearchFilters,
     appTexts,
@@ -387,6 +401,14 @@ function getVatPercentFromSnapshot(
   return snapshot.docs
     .find((doc) => doc.id == 'other')
     ?.get<number>('vatPercent');
+}
+
+function getContactPhoneNumberFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): string | undefined {
+  return snapshot.docs
+    .find((doc) => doc.id == 'other')
+    ?.get<string>('contactPhoneNumber');
 }
 
 function getPaymentTypesFromSnapshot(

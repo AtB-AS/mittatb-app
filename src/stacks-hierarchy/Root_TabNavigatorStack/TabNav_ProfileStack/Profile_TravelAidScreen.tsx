@@ -15,19 +15,18 @@ import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ProfileScreenProps} from './navigation-types';
 import Bugsnag from '@bugsnag/react-native';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 
 export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {contact_phone_number, enable_travel_aid_stop_button} =
-    useRemoteConfig();
+  const {enable_travel_aid_stop_button} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
+  const {contactPhoneNumber} = useFirestoreConfiguration();
 
-  const hasContactPhoneNumber =
-    typeof contact_phone_number === 'string' &&
-    contact_phone_number.trim() !== '';
+  const hasContactPhoneNumber = !!contactPhoneNumber;
 
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
   const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
@@ -54,7 +53,9 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
           <ToggleSectionItem
             text={travelAidToggleTitle}
             value={toggleValue}
-            onValueChange={(checked) => setPreference({journeyAidEnabled: checked})}
+            onValueChange={(checked) =>
+              setPreference({journeyAidEnabled: checked})
+            }
             subtext={travelAidSubtext}
             disabled={!enable_travel_aid_stop_button}
             isSubtextMarkdown
@@ -86,7 +87,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                   accessibilityRole="button"
                   testID="travelAidContactCustomerServiceButton"
                   onPress={async () => {
-                    const phoneNumber = `tel:${contact_phone_number}`;
+                    const phoneNumber = `tel:${contactPhoneNumber}`;
                     if (await Linking.canOpenURL(phoneNumber)) {
                       Linking.openURL(phoneNumber);
                     } else {
