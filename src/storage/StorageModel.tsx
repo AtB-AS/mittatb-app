@@ -3,7 +3,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
-  EnableActivateTicketNowDebugOverride = '@ATB_enable_activate_ticket_now_debug_override',
   EnableBackendSmsAuth = '@ATB_backend_sms_auth',
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
   EnableCarSharingInMapDebugOverride = 'ATB_enable_car_sharing_in_map_debug_override',
@@ -17,7 +16,6 @@ export enum StorageModelKeysEnum {
   EnableNonTransitTripSearch = '@ATB_enable_non_transit_trip_search',
   EnableOnBehalfOfDebugOverride = '@ATB_enable_on_behalf_of_debug_override',
   EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
-  EnablePosthogDebugOverride = '@ATB_enable_posthog_debug_override',
   EnablePushNotificationsDebugOverride = '@ATB_enable_push_notifications_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
   EnableServerTimeDebugOverride = '@ATB_server_time_debug_override',
@@ -65,7 +63,12 @@ const errorHandler = (error: any) => {
 };
 
 const leaveBreadCrumb = (
-  action: 'read-single' | 'save-single' | 'remove-single' | 'read-all',
+  action:
+    | 'read-single'
+    | 'save-single'
+    | 'remove-single'
+    | 'read-multi'
+    | 'read-all',
   key?: string,
   value?: string | null,
 ) => {
@@ -97,6 +100,10 @@ export const storage = {
   remove: async (key: string) => {
     leaveBreadCrumb('remove-single', key);
     return AsyncStorage.removeItem(key).catch(errorHandler);
+  },
+  getMulti: async (keys: string[]) => {
+    leaveBreadCrumb('read-multi');
+    return AsyncStorage.multiGet(keys).catch(errorHandler);
   },
   getAll: async () => {
     leaveBreadCrumb('read-all');
