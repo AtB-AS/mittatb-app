@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import React from 'react';
+import React, {Ref} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -11,8 +11,14 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
-import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
+import {
+  Language,
+  TranslateFunction,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
+import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -88,7 +94,7 @@ const TravelAidSection = ({
   fromQuayId?: string;
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (!serviceJourney.estimatedCalls) return null;
 
@@ -99,7 +105,18 @@ const TravelAidSection = ({
 
   return (
     <Section>
-      <GenericSectionItem style={styles.sectionContainer}>
+      <GenericSectionItem
+        style={styles.sectionContainer}
+        accessibility={{
+          accessible: true,
+          accessibilityLabel: getLineA11yLabel(
+            focusedEstimatedCall.destinationDisplay,
+            serviceJourney.line.publicCode,
+            t,
+          ),
+          importantForAccessibility: 'yes',
+        }}
+      >
         <EstimatedCallInfo
           departure={{
             cancellation: false,
@@ -109,7 +126,18 @@ const TravelAidSection = ({
           }}
         />
       </GenericSectionItem>
-      <GenericSectionItem>
+      <GenericSectionItem
+        accessibility={{
+          accessible: true,
+          accessibilityLabel:
+            getStopHeader(status, t) +
+            ' ' +
+            focusedEstimatedCall.quay.stopPlace?.name +
+            focusedEstimatedCall.quay.publicCode +
+            '. ' +
+            getTimeInfoA11yLabel({status, focusedEstimatedCall}, t, language),
+        }}
+      >
         <View style={styles.sectionContainer}>
           {status === TravelAidStatus.NoRealtime && (
             <MessageInfoBox
@@ -179,6 +207,36 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
           </ThemeText>
         </View>
       );
+  }
+};
+
+const getTimeInfoA11yLabel = (
+  state: FocusedEstimatedCallState,
+  t: TranslateFunction,
+  language: Language,
+) => {
+  const scheduledClock = formatToClock(
+    state.focusedEstimatedCall.aimedDepartureTime,
+    language,
+    'round',
+  );
+  const relativeRealtime = formatToClockOrRelativeMinutes(
+    state.focusedEstimatedCall.expectedDepartureTime,
+    language,
+    t(dictionary.date.units.now),
+  );
+  switch (state.status) {
+    case TravelAidStatus.EndOfLine:
+      return '';
+    case TravelAidStatus.NoRealtime:
+    case TravelAidStatus.NotGettingUpdates:
+      return t(TravelAidTexts.clock(scheduledClock));
+    case TravelAidStatus.NotYetArrived:
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
+      return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}, ${t(
+        TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
+      )}`;
   }
 };
 
