@@ -31,6 +31,7 @@ import {
 } from './get-focused-estimated-call';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {getQuayName} from '@atb/utils/transportation-names.ts';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -108,6 +109,8 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
+  const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
+
   return (
     <Section ref={focusRef}>
       <GenericSectionItem
@@ -137,8 +140,7 @@ const TravelAidSection = ({
           accessibilityLabel:
             getStopHeader(status, t) +
             ' ' +
-            focusedEstimatedCall.quay.stopPlace?.name +
-            focusedEstimatedCall.quay.publicCode +
+            quayName +
             '. ' +
             getTimeInfoA11yLabel({status, focusedEstimatedCall}, t, language),
         }}
@@ -155,10 +157,7 @@ const TravelAidSection = ({
             <ThemeText type="body__tertiary--bold">
               {getStopHeader(status, t)}
             </ThemeText>
-            <ThemeText type="heading__title">
-              {focusedEstimatedCall.quay.stopPlace?.name}{' '}
-              {focusedEstimatedCall.quay.publicCode}
-            </ThemeText>
+            <ThemeText type="heading__title">{quayName}</ThemeText>
           </View>
           <TimeInfo state={{status, focusedEstimatedCall}} />
         </View>
