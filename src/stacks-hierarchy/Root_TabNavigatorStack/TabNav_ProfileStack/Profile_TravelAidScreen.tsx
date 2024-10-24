@@ -63,19 +63,6 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
           />
           <GenericSectionItem style={styles.buttonContainer}>
             <View style={styles.buttonContainer}>
-              <Button
-                mode="secondary"
-                backgroundColor="background_0"
-                text={t(TravelAidSettingsTexts.button.importantInfo.title)}
-                accessibilityHint={t(
-                  TravelAidSettingsTexts.button.importantInfo.a11yHint,
-                )}
-                accessibilityRole="button"
-                testID="travelAidImportantInformationButton"
-                onPress={() => {
-                  navigation.navigate('Profile_TravelAidInformationScreen');
-                }}
-              />
               {hasContactPhoneNumber && (
                 <Button
                   mode="secondary"
