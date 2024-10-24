@@ -158,9 +158,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
 
           const contactPhoneNumber =
             getContactPhoneNumberFromSnapshot(snapshot);
-          if (contactPhoneNumber) {
-            setContactPhoneNumber(contactPhoneNumber);
-          }
+          setContactPhoneNumber(contactPhoneNumber);
 
           const fareProductTypeConfigs =
             getFareProductTypeConfigsFromSnapshot(snapshot);
