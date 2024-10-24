@@ -13,13 +13,10 @@ import {
 import {Button} from '@atb/components/button';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {ProfileScreenProps} from './navigation-types';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
-type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
-
-export const Profile_TravelAidScreen = ({navigation}: Props) => {
+export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {enable_travel_aid_stop_button} = useRemoteConfig();
