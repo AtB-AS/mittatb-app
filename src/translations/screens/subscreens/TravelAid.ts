@@ -9,6 +9,12 @@ export const TravelAidTexts = {
   },
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
+  scheduledTimeA11yLabel: (time: string) =>
+    _(
+      `Rutetid klokken. ${time}`,
+      `Scheduled at ${time}`,
+      `Rutetid klokken. ${time}`,
+    ),
   clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
   error: {
     message: _(

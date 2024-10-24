@@ -40,20 +40,7 @@ const dictionary = {
         `Ukjent transportmiddel`,
       ),
     },
-    quay: {
-      defaultName: _(
-        'Ukjent stoppestedsnavn',
-        'Unknown name of stop place',
-        `Ukjent namn på stoppestad`,
-      ),
-    },
-    line: {
-      defaultName: _(
-        'Ukjent linjenavn',
-        'Unknown line name',
-        `Ukjent namn på linje`,
-      ),
-    },
+    line: _('Linje', 'Line', 'Linje'),
     time: {
       aimedPrefix: _('Rutetid', 'Route time', `Rutetid`),
       expectedPrefix: _('Sanntid', 'Realtime', `Sanntid`),

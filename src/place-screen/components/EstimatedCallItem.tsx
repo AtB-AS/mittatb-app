@@ -6,10 +6,10 @@ import {
 } from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {
-  formatDestinationDisplay,
   getNoticesForEstimatedCall,
   bookingStatusToMsgType,
   getBookingStatus,
+  getLineA11yLabel,
 } from '@atb/travel-details-screens/utils';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
@@ -74,7 +74,11 @@ export const EstimatedCallItem = memo(
 
     const a11yLabel =
       mode === 'Favourite'
-        ? getLineA11yLabel(departure, t)
+        ? getLineA11yLabel(
+            departure.destinationDisplay,
+            departure.serviceJourney.line.publicCode,
+            t,
+          )
         : getLineAndTimeA11yLabel(departure, t, language);
 
     const a11yHint =
@@ -162,7 +166,11 @@ export function getLineAndTimeA11yLabel(
   const msgType = getMsgTypeForEstimatedCall(departure);
   return [
     departure.cancellation ? t(CancelledDepartureTexts.message) : undefined,
-    getLineA11yLabel(departure, t),
+    getLineA11yLabel(
+      departure.destinationDisplay,
+      departure.serviceJourney.line.publicCode,
+      t,
+    ),
     msgType && t(SituationsTexts.a11yLabel[msgType]),
     departure.realtime
       ? t(dictionary.a11yRealTimePrefix)
@@ -180,19 +188,6 @@ export function getLineAndTimeA11yLabel(
   ]
     .filter(isDefined)
     .join(screenReaderPause);
-}
-
-export function getLineA11yLabel(
-  departure: EstimatedCall,
-  t: TranslateFunction,
-) {
-  const line = departure.serviceJourney?.line;
-  const a11yLine = line?.publicCode
-    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-    : '';
-  const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
-  const a11yLineName = lineName ? `${lineName}.` : '';
-  return `${a11yLine} ${a11yLineName}`;
 }
 
 const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>

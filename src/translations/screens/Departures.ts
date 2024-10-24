@@ -97,7 +97,6 @@ const DeparturesTexts = {
       'Sjå fleire avgangar',
     ),
   },
-  line: _('Linje', 'Line', 'Linje'),
   a11yViewDepartureDetailsHint: _(
     'Aktiver for å se detaljer',
     'Activate to view details',
