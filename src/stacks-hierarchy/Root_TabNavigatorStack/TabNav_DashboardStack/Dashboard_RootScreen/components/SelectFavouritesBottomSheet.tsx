@@ -197,7 +197,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       backgroundColor: theme.color.background.neutral[0].background,
       margin: theme.spacing.medium,
       marginBottom: theme.spacing.xLarge,
-      borderRadius: theme.border.radius.medium,
+      borderRadius: theme.border.radius.regular,
     },
     selectableDeparture: {
       flexDirection: 'row',

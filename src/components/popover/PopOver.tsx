@@ -64,7 +64,7 @@ export const PopOver = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   popover: {
     maxWidth: Dimensions.get('window').width * 0.6,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     padding: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[0].background,
   },

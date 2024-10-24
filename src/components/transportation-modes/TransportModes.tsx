@@ -8,7 +8,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {ContrastColor, TextNames} from '@atb-as/theme';
+import {TextNames} from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 import _ from 'lodash';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 

@@ -287,7 +287,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   prefixList: {
     maxHeight: 300,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   countryItem: {
     flexDirection: 'row',

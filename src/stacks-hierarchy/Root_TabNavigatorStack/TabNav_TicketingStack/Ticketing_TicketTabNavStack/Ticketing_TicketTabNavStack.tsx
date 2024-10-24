@@ -135,8 +135,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flexDirection: 'row', paddingHorizontal: theme.spacing.medium},
   button: {
     flex: 1,
-    borderTopLeftRadius: theme.border.radius.medium,
-    borderTopRightRadius: theme.border.radius.medium,
+    borderTopLeftRadius: theme.border.radius.regular,
+    borderTopRightRadius: theme.border.radius.regular,
     alignItems: 'center',
     padding: theme.spacing.small,
   },

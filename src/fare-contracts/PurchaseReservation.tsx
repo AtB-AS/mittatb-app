@@ -128,7 +128,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacing.medium,
   },
   extraText: {

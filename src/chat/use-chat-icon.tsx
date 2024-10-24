@@ -62,6 +62,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     height: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
 }));

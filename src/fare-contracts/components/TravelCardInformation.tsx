@@ -1,4 +1,4 @@
-import { ContrastColor } from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {TravelCard} from '@atb/ticketing';
@@ -112,7 +112,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacing.large,
     backgroundColor: theme.color.background.neutral[0].background,
     padding: theme.spacing.xLarge,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   scrollView: {
     flex: 1,
@@ -133,7 +133,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   activeTravelCard: {
     padding: theme.spacing.large,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     marginTop: theme.spacing.large,
     marginBottom: theme.spacing.medium,
     alignSelf: 'center',

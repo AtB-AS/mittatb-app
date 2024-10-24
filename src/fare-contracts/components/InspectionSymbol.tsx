@@ -13,7 +13,7 @@ import {
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
-import {ContrastColor} from '@atb-as/theme';
+import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type InspectionSymbolProps = {

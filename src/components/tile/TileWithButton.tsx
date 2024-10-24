@@ -81,7 +81,7 @@ const useStyles = (interactiveColor: InteractiveColor) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
       backgroundColor: interactiveColor.default.background,
-      borderRadius: theme.border.radius.medium,
+      borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
       borderWidth: theme.border.width.slim,
       borderColor: theme.color.background.neutral[2].background,

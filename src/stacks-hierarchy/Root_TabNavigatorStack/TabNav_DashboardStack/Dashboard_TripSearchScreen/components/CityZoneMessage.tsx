@@ -213,7 +213,7 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     padding: theme.spacing.medium,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
   },
   icon: {

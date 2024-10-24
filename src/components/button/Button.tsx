@@ -15,7 +15,7 @@ import {
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shadows} from '@atb/components/map';
-import { ContrastColor, InteractiveColor } from '@atb-as/theme';
+import { ContrastColor, InteractiveColor } from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -148,7 +148,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         borderRadius:
           type === 'small'
             ? theme.border.radius.circle
-            : theme.border.radius.medium,
+            : theme.border.radius.regular,
       },
     ];
 

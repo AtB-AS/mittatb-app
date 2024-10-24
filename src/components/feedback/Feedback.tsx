@@ -324,7 +324,7 @@ export const Feedback = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: getThemeColor(theme).background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     padding: theme.spacing.xLarge,
   },
   infoBoxText: theme.typography.body__primary,

@@ -20,7 +20,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
-import {ContrastColor} from '@atb-as/theme';
+import {ContrastColor} from '@atb/theme/colors';
 
 export const SubmitButton = ({
   state: {settingName, recipient, phone, prefix, name, error},

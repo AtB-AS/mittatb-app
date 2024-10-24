@@ -254,7 +254,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[0].background,
     margin: theme.spacing.medium,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     gap: theme.spacing.medium,
   },
   a11yTitle: {
@@ -282,7 +282,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   categoriesContainer: {
     marginTop: theme.spacing.xLarge,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.color.background.neutral[1].background,
     marginHorizontal: theme.spacing.xLarge,
   },

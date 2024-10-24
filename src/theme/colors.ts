@@ -2,18 +2,22 @@ import { Platform, StatusBarProps, TextStyle } from 'react-native';
 import { APP_ORG } from '@env';
 
 import {
-  ContrastColor,
+  ContrastColorFs,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
-  Mode,
+  InteractiveColor,
   Statuses,
   TextColor,
   TextNames,
   textNames,
+  ThemeFs,
   ThemeVariant
 } from '@atb-as/theme';
 import { AppOrgs } from '../../types/app-orgs';
+
+type ContrastColor = ContrastColorFs
+type Mode = keyof Themes
 
 export type { Statuses, Mode, TextColor, ContrastColor, TextNames };
 export { textNames };
@@ -32,7 +36,9 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   }
 };
 
-const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
+const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG), {
+  useFigmaStructure: true
+});
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
@@ -66,7 +72,7 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
+export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(mainThemes, {
   light: {
     tripLegDetail,
     statusBarStyle: 'light-content',
@@ -88,6 +94,6 @@ export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
 
 export type Themes = typeof themes;
 export type Theme = typeof themes['light'];
-export type InteractiveColor = Theme['color']['interactive'][0];
+export type InteractiveColor = InteractiveColor<ContrastColor>;
 export type TransportColor = Theme['color']['transport'];
 export type StatusColor = Theme['color']['status'];

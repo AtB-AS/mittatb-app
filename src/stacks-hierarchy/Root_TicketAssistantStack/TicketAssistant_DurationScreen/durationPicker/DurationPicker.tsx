@@ -196,7 +196,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.medium,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.color.background.neutral[0].background,
     marginVertical: theme.spacing.xLarge,
   },
@@ -226,7 +226,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'flex-end',
     backgroundColor: theme.color.background.neutral[1].background,
     padding: theme.spacing.small,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   sliderContainer: {
     width: '100%',

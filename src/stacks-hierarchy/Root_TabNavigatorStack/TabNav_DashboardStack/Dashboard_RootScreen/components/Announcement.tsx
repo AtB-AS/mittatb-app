@@ -148,8 +148,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   imageContainer: {
     marginRight: theme.spacing.medium,
-    borderRadius: theme.border.radius.medium,
-    padding: -theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
+    padding: -theme.border.radius.regular,
     overflow: 'hidden',
   },
   textContainer: {

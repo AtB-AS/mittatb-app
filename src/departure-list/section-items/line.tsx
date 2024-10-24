@@ -318,7 +318,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   departure: {
     padding: theme.spacing.small,
     backgroundColor: theme.color.background.neutral[1].background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

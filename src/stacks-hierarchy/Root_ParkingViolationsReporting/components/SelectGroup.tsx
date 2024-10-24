@@ -140,7 +140,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   item: {
     backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     borderWidth: 2,
     paddingVertical: theme.spacing.medium,
     paddingHorizontal: theme.spacing.xLarge,

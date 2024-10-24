@@ -37,7 +37,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   consequence: {
     backgroundColor: getAccentColor(theme).background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     marginTop: theme.spacing.medium,
     flexDirection: 'row',
     padding: theme.spacing.medium,

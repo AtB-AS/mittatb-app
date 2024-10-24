@@ -1,4 +1,4 @@
-import {ContrastColor} from '@atb-as/theme';
+import {ContrastColor} from '@atb/theme/colors';
 import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';

@@ -110,8 +110,8 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   mapContainer: {
     height: 120,
-    borderTopRightRadius: theme.border.radius.medium,
-    borderTopLeftRadius: theme.border.radius.medium,
+    borderTopRightRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
   button: {
@@ -119,8 +119,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[1].background,
-    borderBottomRightRadius: theme.border.radius.medium,
-    borderBottomLeftRadius: theme.border.radius.medium,
+    borderBottomRightRadius: theme.border.radius.regular,
+    borderBottomLeftRadius: theme.border.radius.regular,
   },
   map: {
     width: '100%',

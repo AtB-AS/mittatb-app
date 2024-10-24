@@ -14,7 +14,7 @@ import {
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {ThemeText} from '@atb/components/text';
-import { ContrastColor } from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 

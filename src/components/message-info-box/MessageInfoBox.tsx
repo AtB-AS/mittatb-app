@@ -143,7 +143,7 @@ const useStyles = (type: Statuses) =>
     container: {
       backgroundColor: theme.color.status[type].secondary.background,
       borderColor: theme.color.status[type].primary.background,
-      borderRadius: theme.border.radius.medium,
+      borderRadius: theme.border.radius.regular,
       borderWidth: theme.border.width.medium,
       flexDirection: 'row',
       padding: theme.spacing.medium,

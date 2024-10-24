@@ -114,7 +114,7 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacing.medium,
     backgroundColor: getInteractiveColor(theme).default.background,
     borderWidth: theme.border.width.medium,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     borderColor: getInteractiveColor(theme).default.background,
   },
   checked: {

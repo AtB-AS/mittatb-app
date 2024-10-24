@@ -194,7 +194,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   ticketContainer: {
     marginHorizontal: theme.spacing.large,
     backgroundColor: getInteractiveColor(theme).default.background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
   transportModes: {

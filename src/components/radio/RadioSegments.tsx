@@ -113,7 +113,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: 0,
     justifyContent: 'center',
     margin: theme.spacing.xSmall,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   optionText: {
     textAlign: 'center',

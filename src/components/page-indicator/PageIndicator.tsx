@@ -30,7 +30,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: theme.spacing.medium,
     width: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium / 2,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.color.background.neutral[0].background,
   },
   activeDot: {

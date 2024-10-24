@@ -429,7 +429,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   column: {flex: 1, flexDirection: 'column'},
   card: {
     marginVertical: theme.spacing.xSmall,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     backgroundColor: theme.color.background.neutral[0].background,
   },
   saveOptionSection: {
@@ -449,7 +449,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'column',
     padding: theme.spacing.xLarge,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   centerRow: {
     flex: 1,

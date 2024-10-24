@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {useTranslation, TravelTokenTexts} from '@atb/translations';
 import {Token} from '@atb/mobile-token';
 import {View} from 'react-native';
-import {ContrastColor, Theme} from '@atb-as/theme';
+import {ContrastColor, Theme} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 
 export const TravelTokenDeviceTitle = ({

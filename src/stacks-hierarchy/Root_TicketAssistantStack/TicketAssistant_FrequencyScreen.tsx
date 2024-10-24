@@ -199,7 +199,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.medium,
     paddingTop: theme.spacing.large,
     paddingHorizontal: theme.spacing.large,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   slider: {
     width: '100%',

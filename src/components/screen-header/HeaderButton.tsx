@@ -13,7 +13,7 @@ import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-dis
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
-import { ContrastColor } from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 
 export type ButtonModes =
   | 'back'

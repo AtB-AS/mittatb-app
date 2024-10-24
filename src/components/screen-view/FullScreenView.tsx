@@ -7,7 +7,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
-import { ContrastColor } from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 
 type Props = {
   headerProps: ScreenHeaderProps;

@@ -92,7 +92,7 @@ export const SubmittedComponent = ({
 const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: getThemeColor(theme).background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     padding: theme.spacing.xLarge,
   },
   centerText: {

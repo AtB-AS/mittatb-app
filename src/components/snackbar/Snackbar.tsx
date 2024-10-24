@@ -179,7 +179,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '88%',
     paddingLeft: theme.spacing.large,
     paddingRight: theme.spacing.xSmall,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   snackbarTexts: {
     flex: 1,

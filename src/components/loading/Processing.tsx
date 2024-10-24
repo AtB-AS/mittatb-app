@@ -26,7 +26,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: getThemeColor(theme).background,
     paddingHorizontal: theme.spacing.medium,
     paddingVertical: theme.spacing.large,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     margin: theme.spacing.xLarge,
     alignItems: 'center',
   },

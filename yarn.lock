@@ -40,33 +40,24 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.0.1.tgz#ce8e7bc3b6e3fd97ad499a5f5710ca219ff32f8a"
-  integrity sha512-G9oHXW78emN9xjDGJOLOr13FahJX8xwzQG30GmP01dmKjVTBdEiTkgmZX26riA7s84z4CObjFtd+jC40LKK39g==
+"@atb-as/generate-assets@^13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.2.0.tgz#1f178e9d004ab517f4141bf1bfe7d590913593c2"
+  integrity sha512-tJ3Vux1mNxlrj6ZyMYUViaXfTXedHyFhxXP1YX4KEdysWV+ov6IhlLLUD0YVlT7io0a9AhGF5z0/iVYwb39PCA==
   dependencies:
-    "@atb-as/theme" "^10.4.1"
+    "@atb-as/theme" "^11.0.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@11.0.0-alpha.6":
-  version "11.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0-alpha.6.tgz#bc824ebb209dc98dc0fe83c919c8872e4824f0ed"
-  integrity sha512-eYYxOw1SFpbm7i2jk7bKTkqVHeDZQh8PxNkTtWvUYu3L6Ztob75ctbwxepR1BJFos4Yv/euogTCZNprg/SehBA==
+"@atb-as/theme@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0.tgz#39aa48e25b5fda9856d230270b9613080f7c4414"
+  integrity sha512-TgknxsEGPBeR/ldn06bXX22hzqkjljz1x8MZUHNIBUg/3Hq7khSbYSqp5KW0PjsdBrJNQ+ZCTdRoqMUUQdiApQ==
   dependencies:
-    "@tfk-samf/figma-to-dtcg" "0.3.2"
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
-    typescript "^4.4.3"
-
-"@atb-as/theme@^10.4.1":
-  version "10.4.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-10.4.1.tgz#2ac1b4d467e78dd2b91d50ecaa7e90d00a8626be"
-  integrity sha512-EXq4FvgkCuFea7qhSX+IkHIpttMGa0zKtZ5Hcsulw7F8jaXLTPcdbSwT12WgPZh3tgrNmwNnaA8GkqJ48IY43w==
-  dependencies:
+    "@tfk-samf/figma-to-dtcg" "0.3.8"
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
@@ -5441,10 +5432,10 @@
     "@babel/runtime" "^7.12.5"
     react-error-boundary "^3.1.0"
 
-"@tfk-samf/figma-to-dtcg@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.2.tgz#5fa1e3460109c1b5573c5b3a493b88a38620c1ed"
-  integrity sha512-Yk8mE/vCh2otUQ9YoQWNh0gyZa0yQcINpIgd4wWH/pwv82vhtajfpert35o3DkP6ET1h1whT0DQb13L4iViX/A==
+"@tfk-samf/figma-to-dtcg@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.8.tgz#5a5a0c17ade9d99ada03c1ee4153d519cd238bae"
+  integrity sha512-GOpUmaGQUv7Ddzi28m4ERYutv51yWtSxPXXf2nNsB1U9VWERB4AlOqP0pE5ot5Lq8HAZAc3ufj4pdmMWG5cqxg==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -16213,11 +16204,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typescript@^4.4.3:
-  version "4.9.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
-  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 typescript@^5.1.6:
   version "5.1.6"

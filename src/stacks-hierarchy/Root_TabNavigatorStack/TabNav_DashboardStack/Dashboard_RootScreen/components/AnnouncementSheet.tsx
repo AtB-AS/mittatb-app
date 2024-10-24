@@ -49,7 +49,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       width: '100%',
       maxHeight: 150,
       marginBottom: theme.spacing.medium,
-      borderRadius: theme.border.radius.medium,
+      borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
     },
   };

@@ -136,7 +136,7 @@ const useStyles = (interactiveColor: InteractiveColor) =>
     container: {
       backgroundColor: interactiveColor.default.background,
       padding: theme.spacing.xLarge,
-      borderRadius: theme.border.radius.medium,
+      borderRadius: theme.border.radius.regular,
       marginBottom: theme.spacing.medium,
     },
     content: {

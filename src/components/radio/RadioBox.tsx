@@ -106,7 +106,7 @@ function useSpacing(type: ContainerSizingType) {
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     justifyContent: 'space-between',
     alignContent: 'center',
   },

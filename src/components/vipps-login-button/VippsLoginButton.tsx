@@ -50,7 +50,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     justifyContent: 'center',
     borderWidth: theme.border.width.medium,
     borderColor: VIPPS_BACKGROUND_COLOR,

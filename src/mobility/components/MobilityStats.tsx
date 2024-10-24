@@ -24,7 +24,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   vehicleStat: {
     backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   vehicleStat__first: {
     marginBottom: theme.spacing.small,

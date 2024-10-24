@@ -158,7 +158,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   zonesSelectorMapContainer: {
     flexGrow: 1,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
   zonesSelectorContainer: {

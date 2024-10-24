@@ -367,7 +367,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   lineChip: {
     padding: theme.spacing.small,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     marginRight: theme.spacing.medium,
     flexDirection: 'row',
   },

@@ -379,7 +379,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   result: {
     backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
   },
   resultInPast: {
     backgroundColor: theme.color.background.neutral[2].background,
@@ -398,7 +398,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   legLine: {
     backgroundColor: theme.color.background.neutral[3].background,
     flexDirection: 'row',
-    borderRadius: theme.border.radius.medium,
+    borderRadius: theme.border.radius.regular,
     width: 5,
   },
   leftLegLine: {
@@ -419,14 +419,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   destinationLine_grow: {
     backgroundColor: theme.color.background.neutral[3].background,
     marginLeft: theme.spacing.xSmall,
-    borderBottomLeftRadius: theme.border.radius.medium,
-    borderTopLeftRadius: theme.border.radius.medium,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
     backgroundColor: theme.color.background.neutral[3].background,
     marginRight: theme.spacing.xSmall,
-    borderBottomRightRadius: theme.border.radius.medium,
-    borderTopRightRadius: theme.border.radius.medium,
+    borderBottomRightRadius: theme.border.radius.regular,
+    borderTopRightRadius: theme.border.radius.regular,
   },
   iconContainer: {
     backgroundColor: theme.color.background.neutral[2].background,

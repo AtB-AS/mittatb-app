@@ -11,7 +11,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import { ContrastColor } from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 import { useTheme } from '@atb/theme';
 
 export const useServiceDisruptionIcon = (
