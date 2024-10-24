@@ -498,7 +498,7 @@ export const Profile_DebugInfoScreen = () => {
             <GenericSectionItem key={o.name}>
               <DebugOverride
                 description={`Override for '${o.name}'`}
-                override={[o.value, (v) => setOverride(o.key, v), true]}
+                override={[o.value, (v) => setOverride(o.name, v), true]}
               />
             </GenericSectionItem>
           ))}

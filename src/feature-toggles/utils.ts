@@ -1,5 +1,6 @@
 import {
   DebugOverride,
+  FeatureToggleNames,
   FeatureToggles,
   OverridesMap,
 } from '@atb/feature-toggles/types';
@@ -14,7 +15,7 @@ import {isDefined} from '@atb/utils/presence.ts';
  * and map it to an object. Will return empty object if something fails.
  */
 export const getStoredOverrides = async (): Promise<OverridesMap> => {
-  const keys = toggleSpecifications.map((s) => s.debugOverrideKey);
+  const keys = toggleSpecifications.map((s) => toStorageKey(s.name));
   const storedPairs = await storage.getMulti(keys);
   const overridesMap = storedPairs?.reduce<OverridesMap>((all, [k, v]) => {
     all[k] = parseBoolean(v);
@@ -32,7 +33,7 @@ export const getFeatureTogglesFromSpecs = (
   overrides: OverridesMap,
 ) =>
   toggleSpecifications.reduce<FeatureToggles>((acc, spec) => {
-    const override = overrides[spec.debugOverrideKey];
+    const override = overrides[toStorageKey(spec.name)];
     acc[spec.name] = isDefined(override)
       ? override
       : remoteConfig[spec.remoteConfigKey];
@@ -48,6 +49,7 @@ export const getDebugOverridesFromSpecs = (
 ): DebugOverride[] =>
   toggleSpecifications.map((spec) => ({
     name: spec.name,
-    key: spec.debugOverrideKey,
-    value: overrides[spec.debugOverrideKey],
+    value: overrides[toStorageKey(spec.name)],
   }));
+
+export const toStorageKey = (name: FeatureToggleNames) => `@ATB_${name}`;

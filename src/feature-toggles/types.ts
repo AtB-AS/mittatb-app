@@ -1,4 +1,4 @@
-import {FeatureToggleSpecification, toggleSpecifications} from './toggle-specifications';
+import {toggleSpecifications} from './toggle-specifications';
 
 export type FeatureToggleNames = (typeof toggleSpecifications)[number]['name'];
 export type FeatureToggles = {
@@ -9,11 +9,10 @@ export type OverridesMap = Record<string, boolean | undefined>;
 
 export type DebugOverride = {
   name: FeatureToggleNames;
-  key: FeatureToggleSpecification['debugOverrideKey'];
   value: boolean | undefined;
 };
 
 export type SetDebugOverride = (
-  key: FeatureToggleSpecification['debugOverrideKey'],
+  name: FeatureToggleNames,
   val: boolean | undefined,
 ) => void;

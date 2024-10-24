@@ -11,6 +11,7 @@ import {
   getDebugOverridesFromSpecs,
   getFeatureTogglesFromSpecs,
   getStoredOverrides,
+  toStorageKey,
 } from './utils.ts';
 
 type FeatureTogglesContextState = FeatureToggles & {
@@ -43,7 +44,8 @@ export const FeatureTogglesProvider: React.FC = ({children}) => {
     ...featureToggles,
     debug: {
       overrides: getDebugOverridesFromSpecs(overridesMap),
-      setOverride: (key, val) => {
+      setOverride: (name, val) => {
+        const key = toStorageKey(name);
         storage.set(key, JSON.stringify(val === undefined ? null : val));
         setOverridesMap({...overridesMap, ...{[key]: val}});
       },
