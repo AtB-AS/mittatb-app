@@ -31,7 +31,6 @@ import {
 } from './get-focused-estimated-call';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls.ts';
 import {getQuayName} from '@atb/utils/transportation-names.ts';
 
 export type TravelAidScreenParams = {
