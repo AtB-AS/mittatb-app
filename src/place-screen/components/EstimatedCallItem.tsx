@@ -103,7 +103,7 @@ export const EstimatedCallItem = memo(
               departure={departure}
               ignoreSituationsAndCancellations={mode === 'Favourite'}
               messageType={msgType}
-              testID={`${testID}LineName`}
+              testID={testID}
             />
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
           </View>

@@ -31,6 +31,7 @@ import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {useRefreshIdTokenWhenNecessary} from "@atb/auth/use-refresh-id-token-when-necessary.ts";
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -159,6 +160,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useClearQueriesOnUserChange(state);
   useFetchIdTokenWithCustomClaims(state, dispatch);
+  useRefreshIdTokenWhenNecessary(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
   useUpdateIntercomOnUserChange(state);
