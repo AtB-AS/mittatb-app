@@ -106,7 +106,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
-  const travelAidEnabled = useIsTravelAidEnabled();
+  const [travelAidEnabled] = useIsTravelAidEnabled();
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
