@@ -30,7 +30,7 @@ export const ExistingRecipientsList = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
   const recipientsQuery = useFetchOnBehalfOfAccountsQuery({enabled: true});
   const {mutation: deleteMutation, activeDeletions} =
