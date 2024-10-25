@@ -83,3 +83,5 @@ export const storage = {
       .catch(errorHandler);
   },
 };
+
+export type StorageService = typeof storage;

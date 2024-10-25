@@ -1,5 +1,12 @@
 import {toggleSpecifications} from './toggle-specifications';
 
+export type FeatureTogglesContextState = FeatureToggles & {
+  debug: {
+    overrides: DebugOverride[];
+    setOverride: SetDebugOverride;
+  };
+};
+
 export type FeatureToggleNames = (typeof toggleSpecifications)[number]['name'];
 export type FeatureToggles = {
   [K in (typeof toggleSpecifications)[number]['name']]: boolean;

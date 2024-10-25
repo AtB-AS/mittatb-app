@@ -3,20 +3,22 @@ import {
   FeatureToggleNames,
   FeatureToggles,
   OverridesMap,
-} from '@atb/feature-toggles/types';
-import {storage} from '@atb/storage';
+} from './types';
 import {parseBoolean} from '@atb/utils/parse-boolean';
-import {RemoteConfig} from '@atb/remote-config';
+import type {RemoteConfig} from '@atb/remote-config';
 import {toggleSpecifications} from './toggle-specifications';
-import {isDefined} from '@atb/utils/presence.ts';
+import {isDefined} from '@atb/utils/presence';
+import {StorageService} from '@atb/storage';
 
 /**
  * Get stored overrides from local storage for all entries in OverrideKeysEnum,
  * and map it to an object. Will return empty object if something fails.
  */
-export const getStoredOverrides = async (): Promise<OverridesMap> => {
+export const getStoredOverrides = async (
+  storageService: StorageService,
+): Promise<OverridesMap> => {
   const keys = toggleSpecifications.map((s) => toStorageKey(s.name));
-  const storedPairs = await storage.getMulti(keys);
+  const storedPairs = await storageService.getMulti(keys);
   const overridesMap = storedPairs?.reduce<OverridesMap>((all, [k, v]) => {
     all[k] = parseBoolean(v);
     return all;

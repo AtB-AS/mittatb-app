@@ -1,25 +1,8 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext} from 'react';
 import {storage} from '@atb/storage';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {
-  DebugOverride,
-  FeatureToggles,
-  OverridesMap,
-  SetDebugOverride,
-} from './types';
-import {
-  getDebugOverridesFromSpecs,
-  getFeatureTogglesFromSpecs,
-  getStoredOverrides,
-  toStorageKey,
-} from './utils.ts';
-
-type FeatureTogglesContextState = FeatureToggles & {
-  debug: {
-    overrides: DebugOverride[];
-    setOverride: SetDebugOverride;
-  };
-};
+import {FeatureTogglesContextState} from './types';
+import {useFeatureTogglesContextState} from './use-feature-toggle-context-state';
 
 /**
  * A contexts for retrieving feature toggle values.
@@ -32,28 +15,11 @@ const FeatureTogglesContext = createContext<
 
 export const FeatureTogglesProvider: React.FC = ({children}) => {
   const remoteConfig = useRemoteConfig();
-  const [overridesMap, setOverridesMap] = useState<OverridesMap>({});
 
-  useEffect(() => {
-    getStoredOverrides().then(setOverridesMap);
-  }, []);
-
-  const featureToggles = getFeatureTogglesFromSpecs(remoteConfig, overridesMap);
-
-  const value: FeatureTogglesContextState = {
-    ...featureToggles,
-    debug: {
-      overrides: getDebugOverridesFromSpecs(overridesMap),
-      setOverride: (name, val) => {
-        const key = toStorageKey(name);
-        storage.set(key, JSON.stringify(val === undefined ? null : val));
-        setOverridesMap({...overridesMap, ...{[key]: val}});
-      },
-    },
-  };
+  const state = useFeatureTogglesContextState(remoteConfig, storage);
 
   return (
-    <FeatureTogglesContext.Provider value={value}>
+    <FeatureTogglesContext.Provider value={state}>
       {children}
     </FeatureTogglesContext.Provider>
   );
