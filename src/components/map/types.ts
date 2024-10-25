@@ -23,6 +23,7 @@ import {
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -195,7 +196,7 @@ export type ParkingType = {
 export type PolylineEncodedMultiPolygon = String[][];
 
 type GeofencingZoneProps<GZKey extends GeofencingZoneKeys> =
-  GeofencingZoneStyle & {
+  GeofencingZoneStyle<ContrastColor> & {
     code: GZKey;
     isStationParking?: boolean;
   };

@@ -40,7 +40,7 @@ export const BottomSheetHeader = ({
     <View style={styles.container}>
       {/*Placeholder to center the title correctly*/}
       <View style={[styles.button, {opacity: 0}]}>
-        <ThemeIcon svg={Close} size="medium" />
+        <ThemeIcon svg={Close} size="normal" />
       </View>
       <View
         accessibilityLabel={title}
@@ -64,7 +64,7 @@ export const BottomSheetHeader = ({
         accessibilityRole="button"
         testID="closeButton"
       >
-        <ThemeIcon color={textColor} svg={Close} size="medium" />
+        <ThemeIcon color={textColor} svg={Close} size="normal" />
       </TouchableOpacity>
     </View>
   );

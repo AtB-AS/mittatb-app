@@ -6,7 +6,7 @@ import {
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
-  InteractiveColor,
+  InteractiveColor as  GenericInteractiveColor,
   Statuses,
   TextColor,
   TextNames,
@@ -94,6 +94,6 @@ export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
 
 export type Themes = typeof themes;
 export type Theme = typeof themes['light'];
-export type InteractiveColor = InteractiveColor<ContrastColor>;
+export type InteractiveColor = GenericInteractiveColor<ContrastColor>;
 export type TransportColor = Theme['color']['transport'];
 export type StatusColor = Theme['color']['status'];

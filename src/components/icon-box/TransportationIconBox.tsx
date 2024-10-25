@@ -27,7 +27,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   subMode,
   isFlexible = false,
   lineNumber,
-  size = 'medium',
+  size = 'normal',
   type = 'compact',
   style,
   disabled,

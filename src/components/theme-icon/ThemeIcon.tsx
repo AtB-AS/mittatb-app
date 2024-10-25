@@ -27,7 +27,7 @@ export type ThemeIconProps = {
 export const ThemeIcon = ({
   svg,
   color,
-  size = "medium",
+  size = "normal",
   notification,
   style,
   allowFontScaling = true,

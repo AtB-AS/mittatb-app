@@ -8,7 +8,7 @@ import {Button} from '@atb/components/button';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 export const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 export const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];

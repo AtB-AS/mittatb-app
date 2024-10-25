@@ -225,7 +225,7 @@ export function TravellerSelection({
         )}
       </View>
 
-      {canSelectUserProfile && <ThemeIcon svg={Edit} size="medium" />}
+      {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
     </View>
   );
 

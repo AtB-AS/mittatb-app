@@ -147,7 +147,7 @@ const SnackbarInstance = ({
                 accessibilityRole="button"
                 testID="closeSnackbarButton"
               >
-                <ThemeIcon svg={Close} size="medium" />
+                <ThemeIcon svg={Close} size="normal" />
               </TouchableOpacity>
             )}
           </View>

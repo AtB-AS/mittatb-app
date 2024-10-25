@@ -199,7 +199,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
   const iconHeight = {
-    height: theme.icon.size['medium'] * fontScale + theme.spacing.small * 2,
+    height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
   };
   const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
 

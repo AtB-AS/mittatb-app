@@ -11,7 +11,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 export const useChatIcon = (
   color?: ContrastColor,

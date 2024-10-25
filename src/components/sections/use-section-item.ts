@@ -56,7 +56,7 @@ function useSpacing(type: ContainerSizingType) {
 
 function mapToBorderRadius(
   theme: Theme,
-  radiusSize: keyof Theme['border']['radius'] = 'medium',
+  radiusSize: keyof Theme['border']['radius'] = 'regular',
   radius?: RadiusModeType,
 ): ViewStyle {
   if (!radius) {

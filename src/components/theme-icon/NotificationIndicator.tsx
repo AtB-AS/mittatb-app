@@ -58,7 +58,7 @@ const getIndicatorSize = (
       return (hasBorder ? 6 : 4) * fontScale;
     case 'small':
       return (hasBorder ? 8 : 6) * fontScale;
-    case 'medium':
+    case 'normal':
       return (hasBorder ? 10 : 6) * fontScale;
     case 'large':
       return (hasBorder ? 12 : 8) * fontScale;

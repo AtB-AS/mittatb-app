@@ -16,7 +16,7 @@ import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useAnalytics} from '@atb/analytics';
 import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type Props = {
   onReportParkingViolation: () => void;

@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;

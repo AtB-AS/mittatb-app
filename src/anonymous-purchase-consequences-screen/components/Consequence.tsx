@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 const getAccentColor = (theme: Theme) => theme.color.background.accent[1];

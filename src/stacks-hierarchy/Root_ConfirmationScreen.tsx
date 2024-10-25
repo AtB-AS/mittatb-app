@@ -5,7 +5,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 

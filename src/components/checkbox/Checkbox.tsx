@@ -2,7 +2,7 @@ import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type CheckedProps = {
   checked: boolean;

@@ -1,6 +1,6 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   ActivityIndicator,
@@ -246,8 +246,8 @@ const useTextMarginHorizontal = (
   if (isInline) return 0;
   if (!leftIcon && !rightIcon) return 0;
   const maxIconSize = Math.max(
-    theme.icon.size[leftIcon?.size || 'medium'],
-    theme.icon.size[rightIcon?.size || 'medium'],
+    theme.icon.size[leftIcon?.size || 'normal'],
+    theme.icon.size[rightIcon?.size || 'normal'],
   );
   return maxIconSize + theme.spacing.xSmall;
 };

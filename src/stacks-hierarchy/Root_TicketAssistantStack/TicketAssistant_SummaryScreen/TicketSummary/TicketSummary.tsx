@@ -11,7 +11,7 @@ import {getReferenceDataName} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {daysInWeek} from '@atb/utils/date';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 

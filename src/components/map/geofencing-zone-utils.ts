@@ -10,6 +10,7 @@ import {
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {GeofencingZoneStyles} from '@atb-as/theme';
+import { ContrastColor } from '@atb/theme/colors';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -102,7 +103,7 @@ export function decodePolylineEncodedMultiPolygons(
 
 export function addGeofencingZoneCustomProps(
   geofencingZones: PreProcessedGeofencingZones[],
-  geofencingZoneStyles: GeofencingZoneStyles,
+  geofencingZoneStyles: GeofencingZoneStyles<ContrastColor>,
   vehicleTypeId?: string,
 ) {
   if (!vehicleTypeId) return geofencingZones;

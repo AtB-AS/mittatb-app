@@ -10,7 +10,7 @@ const getTransportColor = (theme: Theme) => theme.color.transport.other;
 export const CounterIconBox = ({
   count,
   textType,
-  size = 'medium',
+  size = 'normal',
   spacing = 'compact',
   style,
 }: {

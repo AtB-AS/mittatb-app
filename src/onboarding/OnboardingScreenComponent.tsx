@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {OnboardingFullScreenView} from '@atb/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type DescriptionLink = {
   text: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';

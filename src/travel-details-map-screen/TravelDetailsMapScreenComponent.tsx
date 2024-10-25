@@ -291,7 +291,7 @@ const LiveVehicleMarker = ({
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
   const iconBorderWidth = theme.border.width.medium;
-  const iconCircleSize = (theme.icon.size.medium + iconBorderWidth) * 2;
+  const iconCircleSize = (theme.icon.size.normal + iconBorderWidth) * 2;
 
   const iconScaleFactor = 2; // fix android transform rendering bugs by scaling up parent and child back down
   const iconSize = iconCircleSize * 0.9 * iconScaleFactor;

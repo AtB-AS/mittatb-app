@@ -13,7 +13,7 @@ import {OnboardingFullScreenView} from '@atb/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
-import {Theme} from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type Props = {
   onPressContinueWithoutLogin: () => void;

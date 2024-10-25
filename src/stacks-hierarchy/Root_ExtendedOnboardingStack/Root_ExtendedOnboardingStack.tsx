@@ -10,7 +10,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ExtendedOnboardingStackParams} from './navigation-types';
 import {ExtendedOnboarding_GoodToKnowScreen} from './ExtendedOnboarding_GoodToKnowScreen';
 import {ExtendedOnboarding_AlsoGoodToKnowScreen} from './ExtendedOnboarding_AlsoGoodToKnowScreen';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 const Tab = createMaterialTopTabNavigator<ExtendedOnboardingStackParams>();
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

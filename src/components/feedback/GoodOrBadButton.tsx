@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;

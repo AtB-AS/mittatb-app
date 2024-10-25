@@ -17,7 +17,7 @@ import {
     FETCH_RECIPIENTS_QUERY_KEY,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
-import { Theme } from '@atb-as/theme';
+import {Theme} from '@atb/theme/colors';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

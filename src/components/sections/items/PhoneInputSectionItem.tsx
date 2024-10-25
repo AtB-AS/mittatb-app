@@ -181,7 +181,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                 <ThemeIcon
                   style={styles.expandIcon}
                   svg={isSelectingPrefix ? ExpandLess : ExpandMore}
-                  size="medium"
+                  size="normal"
                 />
               </PressableOpacity>
             )}
