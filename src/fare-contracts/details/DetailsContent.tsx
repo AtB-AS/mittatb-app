@@ -46,7 +46,7 @@ import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
-import {useIsActivateTicketNowEnabled} from '../use-is-activate-now-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem.tsx';
 
@@ -72,7 +72,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesState();
-  const isActivateTicketNowEnabled = useIsActivateTicketNowEnabled();
+  const {isActivateTicketNowEnabled} = useFeatureToggles();
 
   const {
     isCarnetFareContract,

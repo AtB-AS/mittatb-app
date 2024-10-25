@@ -10,7 +10,6 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {useRealtimeMapEnabled} from '@atb/components/map';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -61,7 +60,7 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {useIsTravelAidEnabled} from '@atb/travel-aid/use-is-travel-aid-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -104,13 +103,12 @@ export const DepartureDetailsScreenComponent = ({
     activeItem.toQuayId,
   );
 
-  const realtimeMapEnabled = useRealtimeMapEnabled();
+  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureToggles();
   const screenReaderEnabled = useIsScreenReaderEnabled();
-  const travelAidEnabled = useIsTravelAidEnabled();
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
-    realtimeMapEnabled,
+    isRealtimeMapEnabled,
   );
 
   const {vehiclePositions} = useGetServiceJourneyVehicles(
@@ -181,7 +179,7 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {travelAidEnabled && (
+            {isTravelAidEnabled && (
               <Button
                 style={styles.travelAidButton}
                 onPress={onPressTravelAid}

@@ -39,13 +39,13 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -90,7 +90,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
   const {enable_vipps_login} = useRemoteConfig();
-  const isPushNotificationsEnabled = usePushNotificationsEnabled();
+  const {isPushNotificationsEnabled} = useFeatureToggles();
 
   const {logEvent} = useAnalytics();
 

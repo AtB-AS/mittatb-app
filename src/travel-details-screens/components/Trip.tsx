@@ -26,7 +26,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {MapFilterType, useRealtimeMapEnabled} from '@atb/components/map';
+import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,
@@ -45,6 +45,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -71,13 +72,13 @@ export const Trip: React.FC<TripProps> = ({
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
-  const realtimeMapEnabled = useRealtimeMapEnabled();
+  const {isRealtimeMapEnabled} = useFeatureToggles();
 
   const liveVehicleIds = tripPattern.legs
     .filter((leg) =>
       getShouldShowLiveVehicle(
         leg.serviceJourneyEstimatedCalls,
-        realtimeMapEnabled,
+        isRealtimeMapEnabled,
       ),
     )
     .map((leg) => leg.serviceJourney?.id)

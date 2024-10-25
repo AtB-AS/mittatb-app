@@ -12,11 +12,11 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
 import {TipsAndInformation} from '@atb/tips-and-information';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/mobility/components/MobilitySingleBenefitInfoSectionItem';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -25,7 +25,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const styles = useStyle();
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
-  const showTipsAndInformation = useTipsAndInformationEnabled();
+  const {isTipsAndInformationEnabled} = useFeatureToggles();
   const {benefits} = useOperatorBenefitsForFareProduct(
     props.route.params.preassignedFareProductId,
   );
@@ -83,7 +83,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-        {showTipsAndInformation && (
+        {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
               color="background_accent_0"

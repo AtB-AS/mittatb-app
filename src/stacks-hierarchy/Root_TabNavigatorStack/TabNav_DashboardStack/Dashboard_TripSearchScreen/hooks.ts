@@ -6,14 +6,9 @@ import {
   Modes,
   StreetMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
-import {StorageModelKeysEnum} from '@atb/storage';
-import {useDebugOverride} from '@atb/debug';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {RemoteConfigKeys} from '@atb/remote-config';
 
-import {useNonTransitTripSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {defaultJourneyModes} from './utils';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -35,86 +30,29 @@ export const useFindCityZoneInLocation = (
   ]);
 };
 
-export function useJourneyModes(): [Modes, boolean] {
-  const [nonTransitTripSearchEnabled] = useNonTransitTripSearchEnabled();
-  const [
-    isFlexibleTransportEnabledInRemoteConfig,
-    flexTransportDebugOverrideReady,
-  ] = useFlexibleTransportEnabled();
-  const [
-    flexibleTransportAccessModeEnabledInRemoteConfig,
-    flexAccessModeDebugOverrideReady,
-  ] = useFlexibleTransportAccessModeEnabled();
+export function useJourneyModes(): Modes {
+  const {
+    isFlexibleTransportEnabled,
+    isFlexibleTransportOnAccessModeEnabled,
+    isFlexibleTransportOnDirectModeEnabled,
+    isFlexibleTransportOnEgressModeEnabled,
+    isNonTransitTripSearchEnabled,
+  } = useFeatureToggles();
 
-  const [
-    flexibleTransportDirectModeEnabledInRemoteConfig,
-    flexDirectModeDebugOverrideReady,
-  ] = useFlexibleTransportDirectModeEnabled();
-  const [
-    flexibleTransportEgressModeEnabledInRemoteConfig,
-    flexEgressModeDebugOverrideReady,
-  ] = useFlexibleTransportEgressModeEnabled();
-
-  const journeyModes = {
+  return {
     accessMode:
-      isFlexibleTransportEnabledInRemoteConfig &&
-      flexibleTransportAccessModeEnabledInRemoteConfig
+      isFlexibleTransportEnabled && isFlexibleTransportOnAccessModeEnabled
         ? StreetMode.Flexible
         : defaultJourneyModes.accessMode,
     directMode:
-      isFlexibleTransportEnabledInRemoteConfig &&
-      flexibleTransportDirectModeEnabledInRemoteConfig
+      isFlexibleTransportEnabled && isFlexibleTransportOnDirectModeEnabled
         ? StreetMode.Flexible
-        : nonTransitTripSearchEnabled
+        : isNonTransitTripSearchEnabled
         ? undefined
         : defaultJourneyModes.directMode,
     egressMode:
-      isFlexibleTransportEnabledInRemoteConfig &&
-      flexibleTransportEgressModeEnabledInRemoteConfig
+      isFlexibleTransportEnabled && isFlexibleTransportOnEgressModeEnabled
         ? StreetMode.Flexible
         : defaultJourneyModes.egressMode,
   };
-
-  const allDebugOverridesReady =
-    flexTransportDebugOverrideReady &&
-    flexAccessModeDebugOverrideReady &&
-    flexDirectModeDebugOverrideReady &&
-    flexEgressModeDebugOverrideReady;
-
-  return [journeyModes, allDebugOverridesReady];
 }
-
-export const useFlexibleTransportDebugOverrideOrRemote = (
-  remoteConfigKey: RemoteConfigKeys,
-  storageModelKey: StorageModelKeysEnum,
-): [string | number | boolean, boolean] => {
-  const [debugOverride, _, debugOverrideValueReady] =
-    useDebugOverride(storageModelKey);
-  const remoteConfig = useRemoteConfig();
-
-  return [
-    debugOverride === undefined ? remoteConfig[remoteConfigKey] : debugOverride,
-    debugOverrideValueReady,
-  ];
-};
-
-export const useFlexibleTransportAccessModeEnabled = () => {
-  return useFlexibleTransportDebugOverrideOrRemote(
-    'use_flexible_on_accessMode',
-    StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
-  );
-};
-
-export const useFlexibleTransportDirectModeEnabled = () => {
-  return useFlexibleTransportDebugOverrideOrRemote(
-    'use_flexible_on_directMode',
-    StorageModelKeysEnum.UseFlexibleTransportDirectModeDebugOverride,
-  );
-};
-
-export const useFlexibleTransportEgressModeEnabled = () => {
-  return useFlexibleTransportDebugOverrideOrRemote(
-    'use_flexible_on_egressMode',
-    StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
-  );
-};
