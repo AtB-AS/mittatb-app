@@ -77,7 +77,8 @@ export const Profile_TravelAidScreen = () => {
                     } else {
                       Bugsnag.notify(
                         new Error(
-                          'Could not open phone number in accessiblity settings',
+                          'Could not open phone number in accessiblity settings' +
+                            contactPhoneNumber,
                         ),
                       );
                     }
