@@ -124,29 +124,46 @@ export type PaymentResponse = {
 export type FlexDiscountLadder = {
   current: number;
   steps: {
-    expires: string;
+    expires?: string;
     discount: number; // The discount percentage
   }[];
 };
 
 export type OfferPrice = {
-  amount?: string;
+  amount: string;
   amount_float?: number;
   currency: string;
   vat_group?: string;
   tax_amount?: string;
-  original_amount?: string;
+  original_amount: string;
   original_amount_float?: number;
   original_tax_amount?: string;
+};
+
+enum RouteType {
+  Zones,
+  StopPlaces,
+  Authority,
+}
+
+type Route = {
+  type: RouteType;
+  from?: string;
+  to?: string;
 };
 
 export type Offer = {
   offer_id: string;
   traveller_id: string;
+  route?: Route;
+  user_profile_id?: string;
+  user_profile_ids: string[];
   prices: OfferPrice[];
+  fare_product?: string;
   flex_discount_ladder?: FlexDiscountLadder;
-  valid_from: string;
-  valid_to: string;
+  valid_from?: string;
+  valid_to?: string;
+  should_start_now: boolean;
 };
 
 export type OfferSearchResponse = Offer[];
@@ -173,16 +190,44 @@ export type ReserveOffer = {
 };
 
 export type ReserveOfferRequestBody = {
-  payment_redirect_url: string | undefined;
   offers: ReserveOffer[];
-  payment_type: PaymentType;
-  store_payment: boolean | undefined;
-  recurring_payment_id: number | undefined;
-  sca_exemption: boolean;
-  customer_account_id: string;
-  customer_alias: string | undefined;
-  phone_number: string | undefined;
-  auto_sale: boolean;
+  /**
+   * Recurring payment id should be provided if using a previously stored
+   * payment card
+   */
+  recurring_payment_id?: number;
+  /**
+   * Payment type and the store payment flag should be provided if not using a
+   * previously stored payment card
+   */
+  payment_type?: PaymentType;
+  store_payment?: boolean;
+  /**
+   * Paying customer's phone number, with country prefix. The phone number and
+   * redirect URL is only required for mobile payments types, e.g. Vipps.
+   */
+  phone_number?: string;
+  payment_redirect_url?: string;
+  sca_exemption?: boolean;
+  /** Only needed if fare contract should be created on a different account */
+  customer_account_id?: string;
+  /**
+   * Only needed if fare contract should be created on a different account
+   * which should be saved.
+   */
+  store_alias?: {
+    alias: string;
+    /** With country prefix */
+    phone_number: string;
+  };
+  /** Experimental */
+  auto_sale?: boolean;
+};
+
+export type TicketRecipientType = {
+  accountId: string;
+  phoneNumber: string;
+  name?: string;
 };
 
 export type OfferReservation = {

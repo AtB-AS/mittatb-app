@@ -1,10 +1,14 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {
+  getCurrentCoordinatesGlobal,
+  useGeolocationState,
+} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
+import {Feature, Polygon, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {polygon} from '@turf/helpers';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -15,7 +19,9 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
+import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -35,30 +41,53 @@ import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
+import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {ScanButton} from './components/ScanButton';
+import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
+import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
-  const {currentCoordinatesRef, getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
-  const controlStyles = useControlPositionsStyle();
+  const controlStyles = useControlPositionsStyle(
+    props.selectionMode === 'ExploreLocation',
+  );
 
   const startingCoordinates = useMemo(
     () =>
       initialLocation && initialLocation?.resultType !== 'geolocation'
         ? initialLocation.coordinates
-        : currentCoordinatesRef?.current || FOCUS_ORIGIN,
-    [currentCoordinatesRef, initialLocation],
+        : getCurrentCoordinatesGlobal() || FOCUS_ORIGIN,
+    [initialLocation],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick, selectedFeature} =
-    useMapSelectionChangeEffect(
-      props,
-      mapViewRef,
-      mapCameraRef,
-      startingCoordinates,
-    );
+  const {
+    mapLines,
+    selectedCoordinates,
+    onMapClick,
+    selectedFeature,
+    onReportParkingViolation,
+  } = useMapSelectionChangeEffect(
+    props,
+    mapViewRef,
+    mapCameraRef,
+    startingCoordinates,
+  );
+
+  const {bottomSheetCurrentlyAutoSelected} = useMapState();
+
+  const aVehicleIsAutoSelected =
+    bottomSheetCurrentlyAutoSelected?.type ===
+      AutoSelectableBottomSheetType.Scooter ||
+    bottomSheetCurrentlyAutoSelected?.type ===
+      AutoSelectableBottomSheetType.Bicycle;
+
+  const selectedFeatureIsAVehicle =
+    isScooter(selectedFeature) || isBicycle(selectedFeature);
 
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
@@ -66,10 +95,30 @@ export const Map = (props: MapProps) => {
   const showGeofencingZones =
     geofencingZonesEnabled &&
     geofencingZonesEnabledDebugOverrideReady &&
-    (isScooter(selectedFeature) || isBicycle(selectedFeature));
+    (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+
+  const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
+    useActiveShmoBookingQuery();
+
+  const [
+    shmoDeepIntegrationEnabled,
+    shmoDeepIntegrationEnabledDebugOverrideReady,
+  ] = useShmoDeepIntegrationEnabled();
+
+  const showShmoTesting =
+    shmoDeepIntegrationEnabled && shmoDeepIntegrationEnabledDebugOverrideReady;
+
+  const showScanButton =
+    showShmoTesting &&
+    props.selectionMode === 'ExploreEntities' &&
+    !activeShmoBooking &&
+    !activeShmoBookingIsLoading &&
+    (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
+
+  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -223,7 +272,11 @@ export const Map = (props: MapProps) => {
 
           {showGeofencingZones && (
             <GeofencingZones
-              selectedVehicleId={selectedFeature.properties.id}
+              selectedVehicleId={
+                aVehicleIsAutoSelected
+                  ? bottomSheetCurrentlyAutoSelected.id
+                  : selectedFeature?.properties?.id
+              }
             />
           )}
 
@@ -282,7 +335,10 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-
+        {showShmoTesting && (
+          <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
+        )}
+        {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>
@@ -304,9 +360,11 @@ function getFeatureWeight(feature: Feature, positionClicked: Position): number {
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
+    const coordinates = (feature.geometry as Polygon).coordinates;
+    const polygonGeometry = polygon(coordinates);
     const positionClickedIsInsidePolygon = turfBooleanPointInPolygon(
       positionClicked,
-      feature.geometry,
+      polygonGeometry,
     );
     return positionClickedIsInsidePolygon ? 2 : 0;
   } else {

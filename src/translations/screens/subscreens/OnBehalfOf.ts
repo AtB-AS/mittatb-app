@@ -15,6 +15,11 @@ const OnBehalfOfTexts = {
       'Husk at mottakaren må ha AtB-appen for å få billetten.',
     ),
   },
+  tooManyRecipients: _(
+    'Du kan ikke legge til flere mottakere. Om du ønsker å sende til noen andre, må du fjerne en av mottakerne i listen ovenfor.',
+    "You can't add more recipients. If you wish to send to someone else, then you need to remove one of the recipients in the list above.",
+    'Du kan ikkje leggje til fleire mottakarar. Om du ønskjer sende til nokon andre, må du fjerne ein av mottakarane i lista ovanfor.',
+  ),
   newRecipientLabel: _('Ny mottaker', 'New recipient', 'Ny mottakar'),
   nameInputLabel: _('Navn', 'Name', 'Namn'),
   nameInputPlaceholder: _('Skriv inn navn', 'Enter name', 'Skriv inn namn'),
@@ -28,20 +33,44 @@ const OnBehalfOfTexts = {
     'Save this recipient for later',
     'Lagre denne mottakaren til seinare',
   ),
+  deleteAlert: {
+    title: (name: string) =>
+      _(`Fjern ${name}?`, `Remove ${name}?`, `Fjern ${name}?`),
+    message: _(
+      'Er du sikker på at du vil fjerne denne mottakeren?',
+      'Are you sure you want to remove this recipient?',
+      'Er du sikker på at du vil fjerne denne mottakaren?',
+    ),
+  },
   errors: {
-    fetchRecipients: _(
-      'Kunne ikke hente mottakere',
+    fetch_recipients_failed: _(
+      'Kunne ikke laste mottakere',
       "Couldn't retrieve recipients",
-      'Kunne ikkje hente mottakarar',
+      'Kunne ikkje laste mottakarar',
+    ),
+    no_recipient_selected: _(
+      'Du må velge mottaker',
+      'You need to choose recipient',
+      'Du må velje mottakar',
+    ),
+    delete_recipient_failed: _(
+      'Klarte ikke å slette mottaker',
+      "Weren't able to delete recipient",
+      'Klarte ikkje å slette mottakar',
     ),
     missing_recipient_name: _(
       'Du må legge inn navn på mottaker',
       'You need too add recipient name',
       'Du må leggja inn namn på mottakar',
     ),
+    too_long_recipient_name: _(
+      'Navnet er for langt',
+      'The name is too long',
+      'Namnet er for langt',
+    ),
     name_already_exists: _(
       'Navnet er allerede tilknyttet en annen mottaker',
-      'The phone number is used for another recipient',
+      'The name is already used for another recipient',
       'Namnet er allerede knytta til ein annan mottakar',
     ),
   },

@@ -1,10 +1,14 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
-import {TouchableOpacity} from 'react-native';
+import {dictionary, OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {Checkbox} from '@atb/components/checkbox';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors.ts';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+
+const MAX_RECIPIENTS = 10;
 
 export const SaveRecipientToggle = ({
   state: {settingPhone, settingName},
@@ -17,20 +21,38 @@ export const SaveRecipientToggle = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {data: recipients} = useFetchOnBehalfOfAccountsQuery({enabled: true});
   if (!settingPhone) return null;
 
+  const isAtMaxRecipients = (recipients?.length || 0) >= MAX_RECIPIENTS;
+
+  const a11yLabel =
+    t(OnBehalfOfTexts.saveCheckBoxLabel) +
+    screenReaderPause +
+    t(settingName ? dictionary.checked : dictionary.unchecked);
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      accessibilityRole="checkbox"
-      accessibilityState={{checked: settingPhone}}
-    >
-      <Checkbox checked={settingName} />
-      <ThemeText color={themeColor}>
-        {t(OnBehalfOfTexts.saveCheckBoxLabel)}
-      </ThemeText>
-    </TouchableOpacity>
+    <>
+      {isAtMaxRecipients && (
+        <MessageInfoBox
+          type="warning"
+          message={t(OnBehalfOfTexts.tooManyRecipients)}
+          style={styles.maxRecipientsWarning}
+        />
+      )}
+      <PressableOpacity
+        style={[styles.container, isAtMaxRecipients && {opacity: 0.2}]}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={a11yLabel}
+        disabled={isAtMaxRecipients}
+      >
+        <Checkbox checked={settingName} />
+        <ThemeText color={themeColor}>
+          {t(OnBehalfOfTexts.saveCheckBoxLabel)}
+        </ThemeText>
+      </PressableOpacity>
+    </>
   );
 };
 
@@ -40,4 +62,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing.medium,
   },
+  maxRecipientsWarning: {marginTop: theme.spacing.medium},
 }));

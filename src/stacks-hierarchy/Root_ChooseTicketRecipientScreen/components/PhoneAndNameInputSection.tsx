@@ -70,6 +70,7 @@ export const PhoneAndNameInputSection = ({
             autoFocus={true}
             errorText={
               error === 'missing_recipient_name' ||
+              error === 'too_long_recipient_name' ||
               error === 'name_already_exists'
                 ? t(OnBehalfOfTexts.errors[error])
                 : undefined

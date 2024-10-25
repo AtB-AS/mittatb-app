@@ -17,6 +17,7 @@ import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {useTicketingState} from '@atb/ticketing';
 import {ContentHeading} from '@atb/components/heading';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type Props = {
   color: InteractiveColor;
@@ -40,7 +41,8 @@ export function ProductSelectionByAlias({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type);
+    .filter((product) => product.type === selectedProduct.type)
+    .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const title = useTextForLanguage(
     fareProductTypeConfig.configuration.productSelectionTitle,
@@ -66,7 +68,11 @@ export function ProductSelectionByAlias({
             <ProductAliasChip
               color={color}
               text={text}
-              selected={selectedProduct.id === fp.id}
+              selected={
+                selectedProduct.productAliasId
+                  ? selectedProduct.productAliasId === fp.productAliasId
+                  : selectedProduct.id === fp.id
+              }
               onPress={() => setSelectedProduct(fp)}
               key={i}
             />

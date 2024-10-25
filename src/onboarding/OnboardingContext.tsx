@@ -24,11 +24,10 @@ import {
   usePushNotificationsEnabled,
 } from '@atb/notifications';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useAuthState} from '@atb/auth';
+import {AuthStateChangeListenerCallback, useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {useMobileTokenContextState} from '@atb/mobile-token';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
 
 export type OnboardingState = {
@@ -175,8 +174,8 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
     [loadedOnboardingSections],
   );
 
-  const onAuthStateChanged = useCallback(
-    (user: FirebaseAuthTypes.User | null) => {
+  const onAuthStateChanged: AuthStateChangeListenerCallback = useCallback(
+    (user) => {
       if (user && !user.isAnonymous) {
         completeOnboardingSection('userCreation');
       }

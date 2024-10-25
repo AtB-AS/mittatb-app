@@ -1,11 +1,11 @@
 import {
-  ExistingRecipientType,
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
+import {TicketRecipientType} from '@atb/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  OnBehalfOfTexts,
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
@@ -17,13 +17,11 @@ import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
-import {useQueryClient} from '@tanstack/react-query';
-import {useAuthState} from '@atb/auth';
 import {ContrastColor} from '@atb/theme/colors';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 export const SubmitButton = ({
-  state: {settingName, recipient, phone, prefix, name, error},
+  state: {settingPhone, settingName, recipient, phone, prefix, name, error},
   onSubmit,
   onError,
   themeColor,
@@ -36,18 +34,24 @@ export const SubmitButton = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const queryClient = useQueryClient();
-  const {userId} = useAuthState();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {data: recipients} = useFetchOnBehalfOfAccountsQuery({enabled: true});
 
   const onPress = async () => {
     if (recipient) {
       onSubmit(recipient);
+      return;
     }
 
     setIsSubmitting(true);
     onError(undefined);
+
+    if (!settingPhone) {
+      setIsSubmitting(false);
+      onError('no_recipient_selected');
+      return;
+    }
 
     if (!phone) {
       setIsSubmitting(false);
@@ -67,11 +71,6 @@ export const SubmitButton = ({
       return;
     }
 
-    const recipients = queryClient.getQueryData<ExistingRecipientType[]>([
-      FETCH_RECIPIENTS_QUERY_KEY,
-      userId,
-    ]);
-
     const phoneAlreadyExists = recipients?.some(
       (r) => r.phoneNumber === fullPhoneNumber,
     );
@@ -89,10 +88,16 @@ export const SubmitButton = ({
       return;
     }
 
-    if (settingName && !name) {
-      setIsSubmitting(false);
-      onError('missing_recipient_name');
-      return;
+    if (settingName) {
+      if (!name) {
+        setIsSubmitting(false);
+        onError('missing_recipient_name');
+        return;
+      } else if (name.length > 30) {
+        setIsSubmitting(false);
+        onError('too_long_recipient_name');
+        return;
+      }
     }
 
     try {
@@ -100,7 +105,11 @@ export const SubmitButton = ({
       setIsSubmitting(false);
 
       if (accountId) {
-        onSubmit({accountId, name, phoneNumber: fullPhoneNumber});
+        onSubmit({
+          accountId,
+          name: settingName ? name : undefined,
+          phoneNumber: fullPhoneNumber,
+        });
       } else {
         onError('no_associated_account');
       }
@@ -124,6 +133,14 @@ export const SubmitButton = ({
           style={styles.errorMessage}
           type="error"
           message={t(PhoneInputTexts.errors[error])}
+        />
+      )}
+
+      {error === 'no_recipient_selected' && !isSubmitting && (
+        <MessageInfoBox
+          style={styles.errorMessage}
+          type="error"
+          message={t(OnBehalfOfTexts.errors[error])}
         />
       )}
 

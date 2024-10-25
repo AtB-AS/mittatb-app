@@ -2,10 +2,13 @@ import {Dispatch, useEffect} from 'react';
 import {AuthReducerAction} from './types';
 import {AuthReducerState} from '@atb/auth/AuthContext';
 import {useQuery} from '@tanstack/react-query';
-import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {
+  errorToMetadata,
+  logToBugsnag,
+  notifyBugsnag,
+} from '@atb/utils/bugsnag-utils';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-
-const RETRY_COUNT = 3;
+import {useRemoteConfig} from '@atb/RemoteConfigContext.tsx';
 
 /**
  * Variable signalling whether the next fetch id token request should be force
@@ -29,6 +32,8 @@ export const useFetchIdTokenWithCustomClaims = (
   useEffect(() => {
     shouldForceRefresh = false;
   }, [state.user]);
+
+  const {fetch_id_token_retry_count: retryCount} = useRemoteConfig();
 
   const query = useQuery({
     queryKey: ['FETCH_ID_TOKEN'],
@@ -56,20 +61,22 @@ export const useFetchIdTokenWithCustomClaims = (
       return idToken;
     },
     enabled: !!state.user && state.authStatus === 'fetching-id-token',
-    retry: RETRY_COUNT,
+    retry: retryCount,
     retryDelay: (attempt) => (attempt + 1) * 2000,
   });
 
   useEffect(() => {
     if (query.data) {
-      dispatch({type: 'SET_ID_TOKEN', idToken: query.data});
+      dispatch({type: 'SET_ID_TOKEN', idTokenResult: query.data});
     }
   }, [dispatch, query.data]);
 
   useEffect(() => {
     if (query.error) {
       notifyBugsnag(
-        `No id token with custom claims received after ${RETRY_COUNT} retries`,
+        `No id token with custom claims received after ${
+          query.failureCount - 1
+        } retries`,
         {
           errorGroupHash: 'AuthError',
           metadata: errorToMetadata(query.error),
@@ -77,8 +84,5 @@ export const useFetchIdTokenWithCustomClaims = (
       );
       dispatch({type: 'SET_FETCH_ID_TOKEN_TIMEOUT'});
     }
-  }, [dispatch, query.error]);
+  }, [dispatch, query.error, query.failureCount]);
 };
-
-const errorToMetadata = (error: any) =>
-  'message' in error ? {errorMessage: error.message} : undefined;

@@ -5,7 +5,12 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {
+  hitboxCoveringIconOnly,
+  SCOOTERS_CLUSTER_RADIUS,
+  SCOOTERS_MAX_CLUSTER_LEVEL,
+  SCOOTERS_MAX_ZOOM_LEVEL,
+} from '@atb/components/map';
 
 type Props = {
   scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
@@ -29,9 +34,9 @@ export const Scooters = ({scooters, onClusterClick}: Props) => {
         tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
-        maxZoomLevel={22}
-        clusterMaxZoomLevel={21}
-        clusterRadius={40}
+        maxZoomLevel={SCOOTERS_MAX_ZOOM_LEVEL}
+        clusterMaxZoomLevel={SCOOTERS_MAX_CLUSTER_LEVEL}
+        clusterRadius={SCOOTERS_CLUSTER_RADIUS}
         onPress={(e) => onClusterClick(e, clustersSource)}
       >
         <MapboxGL.SymbolLayer
@@ -76,9 +81,9 @@ export const Scooters = ({scooters, onClusterClick}: Props) => {
         tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
-        maxZoomLevel={22}
-        clusterRadius={40}
-        clusterMaxZoomLevel={21}
+        maxZoomLevel={SCOOTERS_MAX_ZOOM_LEVEL}
+        clusterRadius={SCOOTERS_CLUSTER_RADIUS}
+        clusterMaxZoomLevel={SCOOTERS_MAX_CLUSTER_LEVEL}
       >
         <MapboxGL.SymbolLayer
           id="scooterIcon"

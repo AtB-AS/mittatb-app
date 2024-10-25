@@ -18,6 +18,9 @@ import {LocationResults} from './LocationResults';
 import {StyleSheet} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
+import {CheckboxWithLabel} from '@atb/components/checkbox';
+import {useOnlyStopPlacesCheckboxEnabled} from '../use-only-stop-places-checkbox-enabled.tsx';
+import {useAnalytics} from '@atb/analytics';
 
 type LocationSearchContentProps = {
   label: string;
@@ -48,6 +51,7 @@ export function LocationSearchContent({
   const {favorites} = useFavorites();
   const {history, addSearchEntry} = useSearchHistory();
   const {t} = useTranslation();
+  const analytics = useAnalytics();
 
   const [text, setText] = useState<string>(defaultText ?? '');
   const debouncedText = useDebounce(text, 200);
@@ -60,12 +64,16 @@ export function LocationSearchContent({
     onlyLocalTariffZoneAuthority,
   );
 
+  const onlyStopPlacesCheckboxEnabled = useOnlyStopPlacesCheckboxEnabled();
+  const [onlyStopPlaces, setOnlyStopPlaces] = useState(false);
+
   const {location: geolocation} = useGeolocationState();
 
   const {locations, error, isSearching} = useGeocoder(
     debouncedText,
     geolocation?.coordinates ?? null,
     onlyLocalTariffZoneAuthority,
+    onlyStopPlaces,
   );
 
   const locationSearchResults: LocationSearchResultType[] =
@@ -141,6 +149,22 @@ export function LocationSearchContent({
             onAddFavorite={onAddFavorite}
           />
         )}
+        {onlyStopPlacesCheckboxEnabled && (
+          <CheckboxWithLabel
+            label={t(LocationSearchTexts.onlyStopPlacesCheckbox)}
+            checked={onlyStopPlaces}
+            onPress={(v) => {
+              analytics.logEvent(
+                'Location search',
+                'Only stop places checkbox pressed',
+                {checked: v},
+              );
+              setOnlyStopPlaces(v);
+            }}
+            color="background_accent_0"
+            style={styles.onlyStopPlacesCheckbox}
+          />
+        )}
       </View>
       {error && (
         <View style={styles.withMargin}>
@@ -209,6 +233,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacing.medium,
   },
   chipBox: {
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
+  },
+  onlyStopPlacesCheckbox: {
     marginTop: theme.spacing.medium,
     paddingHorizontal: theme.spacing.medium,
   },

@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosRequestConfig} from 'axios';
+import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
@@ -11,11 +11,15 @@ import {
   PlatformHeaderName,
   PlatformVersionHeaderName,
   RequestIdHeaderName,
+  Authorization,
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
-import auth from '@react-native-firebase/auth';
 import {Platform} from 'react-native';
+import {
+  getCurrentUserIdGlobal,
+  getIdTokenGlobal,
+} from '@atb/auth/AuthContext.tsx';
 
 type InternalUpstreamServerError = {
   errorCode: 602;
@@ -48,11 +52,9 @@ function shouldRetry(error: AxiosError): boolean {
   const shouldForceRefresh = error.config?.forceRefreshIdToken;
   if (shouldForceRefresh) return true;
 
-  const shouldRetryOnNetworkErrorOrIdempotentRequest =
-    Boolean(error.config?.retry) &&
+  return Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
-  return shouldRetryOnNetworkErrorOrIdempotentRequest;
 }
 
 export function createClient(baseUrl: string | undefined) {
@@ -79,17 +81,16 @@ export function setInstallId(installId: string) {
 export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
 
-function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
-  if (!config.headers) {
-    config.headers = {};
-  }
+function requestHandler(
+  config: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig {
   config.headers[RequestIdHeaderName] = uuid();
 
   if (installIdHeaderValue) {
     config.headers[InstallIdHeaderName] = installIdHeaderValue;
   }
 
-  const authId = auth().currentUser?.uid;
+  const authId = getCurrentUserIdGlobal();
   if (authId) {
     config.headers[FirebaseAuthIdHeaderName] = authId;
   }
@@ -102,14 +103,9 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   return config;
 }
 
-async function requestIdTokenHandler(config: AxiosRequestConfig) {
+async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    const user = auth().currentUser;
-    const idToken = await user?.getIdToken(config.forceRefreshIdToken);
-    config.headers = {
-      ...(config.headers || {}),
-      Authorization: 'Bearer ' + idToken,
-    };
+    config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
   }
   return config;
 }
@@ -176,7 +172,7 @@ export type TimeoutRequest = {
 export const useTimeoutRequest = (): TimeoutRequest => {
   const controller = new AbortController();
   let didTimeout = false;
-  let timerId: NodeJS.Timeout | undefined;
+  let timerId: number | undefined;
 
   const start = () => {
     timerId = setTimeout(() => {

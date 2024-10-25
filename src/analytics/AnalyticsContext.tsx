@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import PostHog, {PostHogProvider} from 'posthog-react-native';
+import {PostHog, PostHogProvider} from 'posthog-react-native'
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
 import {useAuthState} from '@atb/auth';
@@ -15,6 +15,8 @@ import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {useIsPosthogEnabled} from '@atb/analytics/use-is-posthog-enabled';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
+
+
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
@@ -29,9 +31,10 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY && !client) {
-      PostHog.initAsync(POSTHOG_API_KEY, {
-        host: POSTHOG_HOST,
-      }).then(setClient);
+      const postHog = new PostHog(POSTHOG_API_KEY, {
+        host: POSTHOG_HOST
+      })
+      setClient(postHog);
     }
   }, [isPosthogEnabled, client]);
 
@@ -52,9 +55,12 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
   return (
     <AnalyticsContext.Provider value={client}>
-      <PostHogProvider autocapture={false} client={client}>
-        {children}
-      </PostHogProvider>
+      {client && (
+        <PostHogProvider autocapture={false} client={client}>
+          {children}
+        </PostHogProvider>
+      )}
+      {!client && children}
     </AnalyticsContext.Provider>
   );
 };

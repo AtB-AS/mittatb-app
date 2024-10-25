@@ -1,4 +1,7 @@
-import {HarborConnectionOverrideType} from '@atb/configuration';
+import {
+  HarborConnectionOverrideType,
+  ProductTypeTransportModes,
+} from '@atb/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-overrides';
 import {useHarborsQuery} from '@atb/queries';
@@ -6,9 +9,15 @@ import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
 
-export const useHarbors = (fromHarborId?: string) => {
-  const harborsQuery = useHarborsQuery();
-  const connectionsQuery = useHarborsQuery(fromHarborId);
+export const useHarbors = ({
+  fromHarborId,
+  transportModes,
+}: {
+  fromHarborId?: string;
+  transportModes?: ProductTypeTransportModes[];
+} = {}) => {
+  const harborsQuery = useHarborsQuery({fromHarborId, transportModes});
+  const connectionsQuery = useHarborsQuery({fromHarborId, transportModes});
   const overrides = useHarborConnectionOverrides(fromHarborId);
 
   const isLoading = harborsQuery.isLoading || connectionsQuery.isLoading;

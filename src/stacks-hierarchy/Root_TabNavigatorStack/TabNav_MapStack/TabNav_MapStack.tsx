@@ -2,6 +2,7 @@ import React from 'react';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {Map_RootScreen} from './Map_RootScreen';
 import {Map_DepartureDetailsScreen} from './Map_DepartureDetailsScreen';
+import {Map_TravelAidScreen} from './Map_TravelAidScreen';
 import {Map_TravelDetailsMapScreen} from './Map_TravelDetailsMapScreen';
 import {Map_PlaceScreen} from './Map_PlaceScreen';
 import {MapStackParams} from './navigation-types';
@@ -26,6 +27,10 @@ export const TabNav_MapStack = () => {
       <Stack.Screen
         name="Map_TravelDetailsMapScreen"
         component={Map_TravelDetailsMapScreen}
+      />
+      <Stack.Screen
+        name="Map_TravelAidScreen"
+        component={Map_TravelAidScreen}
       />
     </Stack.Navigator>
   );

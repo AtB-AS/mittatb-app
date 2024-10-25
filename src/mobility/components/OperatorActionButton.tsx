@@ -1,6 +1,6 @@
 import {useAnalytics} from '@atb/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {useAppMissingAlert} from '@atb/mobility/use-app-missing-alert';
+import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert.tsx';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
@@ -28,7 +28,6 @@ export const OperatorActionButton = ({
 }: OperatorActionButtonProps) => {
   const analytics = useAnalytics();
   const {t, language} = useTranslation();
-  const {showAppMissingAlert} = useAppMissingAlert();
   const {
     isUserEligibleForBenefit,
     benefitRequiresValueCodeToUnlock,
@@ -49,7 +48,7 @@ export const OperatorActionButton = ({
       valueCode,
     });
     await Linking.openURL(url).catch(() =>
-      showAppMissingAlert({appStoreUri, operatorName}),
+      showAppMissingAlert(operatorName, appStoreUri),
     );
   };
 

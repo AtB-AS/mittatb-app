@@ -27,13 +27,13 @@ import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
+import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
-import {Root_PurchasePaymentScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
@@ -51,14 +51,12 @@ import {
   LoadingScreenBoundary,
   useIsLoadingAppState,
 } from '@atb/loading-screen';
-import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 import {
   Root_ParkingViolationsConfirmationScreen,
   Root_ParkingViolationsPhotoScreen,
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
-import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
@@ -290,10 +288,6 @@ export const RootStack = () => {
                 component={Root_ExtendedOnboardingStack}
               />
               <Stack.Screen
-                name="Root_TermsInformationScreen"
-                component={Root_TermsInformationScreen}
-              />
-              <Stack.Screen
                 name="Root_ConsiderTravelTokenChangeScreen"
                 component={Root_ConsiderTravelTokenChangeScreen}
               />
@@ -309,6 +303,10 @@ export const RootStack = () => {
                 name="Root_LocationSearchByMapScreen"
                 component={Root_LocationSearchByMapScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_ScanQrCodeScreen"
+                component={Root_ScanQrCodeScreen}
               />
               <Stack.Screen
                 name="Root_PurchaseOverviewScreen"
@@ -332,11 +330,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_PurchaseHarborSearchScreen"
                 component={Root_PurchaseHarborSearchScreen}
-                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-              />
-              <Stack.Screen
-                name="Root_PurchasePaymentScreen"
-                component={Root_PurchasePaymentScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen
@@ -402,10 +395,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
                 component={Root_ActiveTokenOnPhoneRequiredForFareProductScreen}
-              />
-              <Stack.Screen
-                name="Root_AddPaymentMethodScreen"
-                component={Root_AddPaymentMethodScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

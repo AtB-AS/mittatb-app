@@ -141,7 +141,7 @@ class TravelSearchOverviewPage {
    * NOTE! Only bus and rail modes
    * @param numberOfResults the number of results to check
    */
-  async getNumberOfTransportModesInSearch(numberOfResults: number = 5) {
+  async getNumberOfTransportModesInSearch(numberOfResults: number = 10) {
     let noBusLegs = 0;
     let noRailLegs = 0;
     // Loop through the search results and count the different modes
@@ -151,21 +151,25 @@ class TravelSearchOverviewPage {
       const railModeId = `//*[@resource-id="railLeg"]`;
 
       // Scroll down if trip result is not displayed
-      const resultExists = await ElementHelper.isElementExisting(
+      // Handle if the visible trip results are less than the default
+      let resultExists = await ElementHelper.isElementExisting(
         `tripSearchSearchResult${i}`,
-        2,
+        1,
       );
       if (!resultExists) {
-        await AppHelper.scrollDownUntilId(
-          'tripSearchContentView',
+        await AppHelper.scrollDown('tripSearchContentView');
+        resultExists = await ElementHelper.isElementExisting(
           `tripSearchSearchResult${i}`,
+          1,
         );
+        if (!resultExists) {
+          break;
+        }
       }
 
       noBusLegs += await $(tripId).$$(busModeId).length;
       noRailLegs += await $(tripId).$$(railModeId).length;
     }
-    await AppHelper.scrollUp('tripSearchContentView');
 
     // Find and return number of different transport modes
     const busLegsExists: number = noBusLegs > 0 ? 1 : 0;

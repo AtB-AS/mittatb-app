@@ -118,11 +118,17 @@ const dictionary = {
     error: _('Feil', 'Error', `Feil`),
   },
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
+  cancel: _('Avbryt', 'Cancel', `Avbryt`),
+  remove: _('Fjern', 'Remove', `Fjern`),
   seeMore: _('Vis mer', 'See more', `Vis meir`),
   readMore: _('Les mer', 'Read more', `Les meir`),
   loading: _('Laster…', 'Loading…', `Lastar…`),
   listConcatWord: _('og', 'and', 'og'),
   via: _('via', 'via', 'via'),
+  checked: _('avhuket', 'checked', 'avhuket'),
+  unchecked: _('ikke avhuket', 'unchecked', 'Ikkje avhuket'),
+  selected: _('Valgt', 'selected', 'Valgt'),
+  unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
 };
 
 export default orgSpecificTranslations(dictionary, {

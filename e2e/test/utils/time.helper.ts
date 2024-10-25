@@ -38,6 +38,25 @@ class TimeHelper {
   }
 
   /**
+   * Check if two times (HH:MM) are equal within an allowed margin
+   * @param time1 HH:MM of first time
+   * @param time2 HH:MM of second time
+   * @param minMargin allowed margin in min (default: 2 min)
+   */
+  timeIsEqualWithMargin(time1: string, time2: string, minMargin: number = 2) {
+    const hr1 = parseInt(time1.split(':')[0]);
+    const min1 = parseInt(time1.split(':')[1]);
+    const hr2 = parseInt(time2.split(':')[0]);
+    const min2 = parseInt(time2.split(':')[1]);
+    let date1 = new Date();
+    let date2 = new Date();
+    date1.setHours(hr1, min1);
+    date2.setHours(hr2, min2);
+
+    return Math.abs(date1.getTime() - date2.getTime()) <= minMargin * 60 * 1000;
+  }
+
+  /**
    * Helper method to parse the minutes from a non-transit travel. Checks if the minutes are acceptable.
    * E.g. "Bike 1 h 30 min" and "Walk 19 min"
    * @param travelTime The travel time from the button text

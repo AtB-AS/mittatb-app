@@ -18,19 +18,17 @@ import {
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {APP_ORG} from '@env';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -107,7 +105,7 @@ export const Root_LoginOptionsScreen = ({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
-        InAppBrowser.close();
+        closeInAppBrowser();
         setIsLoading(true);
         const code = queryString.parseUrl(event.url).query.code;
         if (code) {
@@ -187,6 +185,10 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
+            disabled={isLoading}
+          />
           <Button
             interactiveColor={theme.color.interactive[0]}
             mode="primary"
@@ -198,10 +200,6 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
             rightIcon={{svg: ArrowRight}}
             testID="chooseLoginPhoneButton"
-          />
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
           />
           <Button
             mode="secondary"
@@ -220,30 +218,17 @@ export const Root_LoginOptionsScreen = ({
             testID="useAppAnonymouslyButton"
           />
         </View>
-        {APP_ORG === 'atb' ? (
-          <View style={styles.termsOfUseButtonContainer}>
-            <PressableOpacity
-              onPress={() => navigation.navigate('Root_TermsInformationScreen')}
-              role="button"
-            >
-              <ThemeText color={themeColor} style={styles.termsOfUseText}>
-                {t(LoginTexts.logInOptions.termsOfUse)}
-              </ThemeText>
-            </PressableOpacity>
+        {termsInfoUrl && (
+          <View style={styles.termsOfUseLinkContainer}>
+            <Button
+              backgroundColor={themeColor}
+              mode="tertiary"
+              rightIcon={{svg: ExternalLink}}
+              onPress={() => openInAppBrowser(termsInfoUrl, 'done')}
+              text={t(LoginTexts.logInOptions.termsOfUse)}
+              accessibilityRole="link"
+            />
           </View>
-        ) : (
-          termsInfoUrl && (
-            <View style={styles.termsOfUseLinkContainer}>
-              <Button
-                backgroundColor={themeColor}
-                mode="tertiary"
-                rightIcon={{svg: ExternalLink}}
-                onPress={() => Linking.openURL(termsInfoUrl)}
-                text={t(LoginTexts.logInOptions.termsOfUse)}
-                accessibilityRole="link"
-              />
-            </View>
-          )
         )}
       </ScrollView>
     </View>

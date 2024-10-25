@@ -38,6 +38,10 @@ static void InitializeFlipper(UIApplication *application) {
     return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+- (void)customizeRootView:(RCTRootView *)rootView {
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.launchOptions = launchOptions;

@@ -39,14 +39,11 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
-  const offerDefaults = useOfferDefaults(
-    undefined,
-    fareProductTypeConfigs[0].type,
-  );
+  const offerDefaults = useOfferDefaults(undefined, fareProductTypeConfigs[0]);
   const {updateInputParams} = useTicketAssistantState();
 
-  const {selectableTravellers} = offerDefaults;
-  const defaultTravellerIndex = selectableTravellers.findIndex(
+  const {selection} = offerDefaults;
+  const defaultTravellerIndex = selection.userProfilesWithCount.findIndex(
     (a) => a.count > 0,
   );
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(
@@ -62,7 +59,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      const traveller = selectableTravellers[currentlyOpen];
+      const traveller = selection.userProfilesWithCount[currentlyOpen];
       updateCategory({
         id: traveller.userTypeString,
         userType: traveller.userTypeString,
@@ -72,7 +69,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
     return () => {
       unsubscribe();
     };
-  }, [navigation, selectableTravellers, currentlyOpen, updateCategory]);
+  }, [navigation, selection, currentlyOpen, updateCategory]);
 
   function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {
@@ -133,7 +130,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
         {!a11yContext.isScreenReaderEnabled ? (
           <Section style={styles.categoriesContainer}>
-            {selectableTravellers.map((u, index) => {
+            {selection.userProfilesWithCount.map((u, index) => {
               return (
                 <ExpandableSectionItem
                   key={index}
@@ -184,7 +181,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
           </Section>
         ) : (
           <>
-            {selectableTravellers.map((u, index) => {
+            {selection.userProfilesWithCount.map((u, index) => {
               const title = getReferenceDataName(u, language);
               const description = getTextForLanguage(
                 u.alternativeDescriptions,

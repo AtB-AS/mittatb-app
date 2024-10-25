@@ -153,6 +153,33 @@ describe('Function onlyUniqueBasedOnField', () => {
       expected.sort(),
     );
   });
+
+  it('removes undefined if treatUndefinedAsUnique is false', () => {
+    const testData = [
+      {field1: 'id-1'},
+      {field1: 'id-1'},
+      {field1: 'id-2'},
+      {field1: undefined},
+      {field1: undefined},
+    ];
+
+    const deduped1 = testData.filter(onlyUniquesBasedOnField('field1'));
+    expect(deduped1.length).toEqual(3);
+
+    const deduped2 = testData.filter(onlyUniquesBasedOnField('field1', false));
+    expect(deduped2.length).toEqual(3);
+  });
+
+  it('does not remove undefined if treatUndefinedAsUnique is true', () => {
+    const testData = [
+      {field1: 'id-1'},
+      {field1: 'id-2'},
+      {field1: undefined},
+      {field1: undefined},
+    ];
+    const deduped = testData.filter(onlyUniquesBasedOnField('field1', true));
+    expect(deduped.length).toEqual(4);
+  });
 });
 
 describe('Function compareVersion', () => {

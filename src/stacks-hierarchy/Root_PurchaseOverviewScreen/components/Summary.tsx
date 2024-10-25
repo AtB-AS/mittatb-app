@@ -60,7 +60,7 @@ export function Summary({
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
       )}
-      {originalPrice !== price && (
+      {!isLoading && originalPrice !== price && (
         <ThemeText
           type="body__tertiary--strike"
           style={styles.originalPrice}

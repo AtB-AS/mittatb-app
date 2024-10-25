@@ -9,14 +9,14 @@ const SelectPaymentMethodTexts = {
     ),
   },
   confirm_button: {
-    text: _('Til betaling', 'Confirm option', 'Til betaling'),
+    text: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
     a11yhint: _(
-      'Aktiver for å gå videre til betaling',
-      'Activate to go ahead with payment with selected option',
-      'Aktiver for å gå vidare til betaling',
+      'Aktiver for å bekrefte valg av betalingsmåte',
+      'Activate to confirm payment method',
+      'Aktiver for å bekrefte val av betalingsmåte',
     ),
   },
-  save_payment_option_description: {
+  save_payment_method_description: {
     text: _(
       'Lagre bankkortet for fremtidige betalinger',
       'Save the payment card for future usage',

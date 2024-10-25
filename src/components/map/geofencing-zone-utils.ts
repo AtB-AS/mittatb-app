@@ -25,7 +25,7 @@ function getApplicableGeofencingZoneRules(
 }
 
 export function filterOutFeaturesNotApplicableForCurrentVehicle(
-  geofencingZones?: GeofencingZones[],
+  geofencingZones?: GeofencingZones[] | null,
   vehicleTypeId?: string,
 ): GeofencingZones[] {
   if (!vehicleTypeId || !geofencingZones) {

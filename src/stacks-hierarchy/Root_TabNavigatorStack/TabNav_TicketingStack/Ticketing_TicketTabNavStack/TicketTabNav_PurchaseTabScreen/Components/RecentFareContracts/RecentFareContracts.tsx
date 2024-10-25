@@ -12,6 +12,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type Props = {
   recentFareContracts: RecentFareContract[];
@@ -19,6 +20,7 @@ type Props = {
   onSelect: (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
+    harbors?: StopPlaceFragment[],
   ) => void;
 };
 

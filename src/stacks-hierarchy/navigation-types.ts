@@ -11,8 +11,6 @@ import {
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {ReserveOffer} from '@atb/ticketing';
-import {PaymentMethod, TicketRecipientType} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
@@ -83,13 +81,6 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
 };
 
-type Root_PurchasePaymentScreenParams = {
-  offers: ReserveOffer[];
-  preassignedFareProduct: PreassignedFareProduct;
-  paymentMethod: PaymentMethod;
-  recipient?: TicketRecipientType;
-};
-
 type Root_ConfirmationScreenParams = {
   message: string;
   // Time that must be wait until onComplete is called (in milliseconds)
@@ -108,13 +99,13 @@ export type NextScreenParams<
 
 export type RootStackParamList = StackParams<{
   Root_ExtendedOnboardingStack: undefined;
-  Root_TermsInformationScreen: undefined;
   Root_ConsiderTravelTokenChangeScreen: undefined;
   Root_SelectTravelTokenScreen: undefined;
   Root_TicketAssistantStack: undefined;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
+  Root_ScanQrCodeScreen: undefined;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
   Root_SearchStopPlaceScreen: undefined;
   Root_ShareTravelHabitsScreen: undefined;
@@ -124,7 +115,6 @@ export type RootStackParamList = StackParams<{
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
-  Root_PurchasePaymentScreen: Root_PurchasePaymentScreenParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
@@ -134,7 +124,6 @@ export type RootStackParamList = StackParams<{
   Root_LoginPhoneInputScreen: undefined;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
-  Root_AddPaymentMethodScreen: undefined;
   Root_ParkingViolationsSelectScreen: undefined;
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;

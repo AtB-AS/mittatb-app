@@ -16,7 +16,7 @@ class MainActivity : ReactActivity() {
   override fun getMainComponentName(): String = "atb"
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    RNBootSplash.init(this)
+    RNBootSplash.init(this, R.style.AppTheme);
     super.onCreate(null)
   }
 

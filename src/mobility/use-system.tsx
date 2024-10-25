@@ -8,7 +8,7 @@ import {Platform} from 'react-native';
 import {useTheme} from '@atb/theme';
 
 export const useSystem = <T extends {system: SystemFragment}>(
-  entity: T | undefined,
+  entity: T | undefined | null,
   operator: TranslatedStringFragment | undefined = entity?.system.name,
 ) => {
   const {t, language} = useTranslation();

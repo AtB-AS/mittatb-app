@@ -1,7 +1,7 @@
 import React from 'react';
 import {AccessibilityProps, ActivityIndicator, View} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -11,6 +11,7 @@ import {SvgProps} from 'react-native-svg';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {RadioIcon} from '@atb/components/radio';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {dictionary, useTranslation} from '@atb/translations';
 
 type Props = SectionItemProps<{
   text: string;
@@ -19,13 +20,14 @@ type Props = SectionItemProps<{
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => JSX.Element;
   selected: boolean;
-  accessibility?: AccessibilityProps;
   color?: InteractiveColor;
   rightAction?: {
     icon: (props: SvgProps) => JSX.Element;
     onPress: () => void;
     isLoading?: boolean;
   };
+  accessibilityLabel?: AccessibilityProps['accessibilityLabel'];
+  accessibilityHint?: AccessibilityProps['accessibilityHint'];
 }>;
 
 export function RadioSectionItem({
@@ -35,7 +37,8 @@ export function RadioSectionItem({
   onPress,
   leftIcon,
   selected,
-  accessibility,
+  accessibilityLabel,
+  accessibilityHint,
   testID,
   color,
   rightAction,
@@ -45,6 +48,7 @@ export function RadioSectionItem({
   const style = useSectionStyle();
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const interactiveColor = color;
 
   const backgroundColor = interactiveColor
@@ -63,15 +67,20 @@ export function RadioSectionItem({
     ? interactiveColor.outline.background
     : theme.color.foreground.dynamic.primary;
 
+  const a11yLabel =
+    (accessibilityLabel || `${text}, ${hideSubtext ? '' : subtext}`) +
+    screenReaderPause +
+    t(selected ? dictionary.selected : dictionary.unselected);
+
   return (
     <View style={[style.spaceBetween, topContainer, {backgroundColor}]}>
       <PressableOpacity
         onPress={() => onPress(!selected)}
         style={styles.mainContent}
         testID={testID}
-        accessibilityRole="radio"
-        accessibilityState={{selected: selected}}
-        {...accessibility}
+        accessibilityRole="button"
+        accessibilityLabel={a11yLabel}
+        accessibilityHint={accessibilityHint}
       >
         <View style={styles.radioIcon}>
           <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />

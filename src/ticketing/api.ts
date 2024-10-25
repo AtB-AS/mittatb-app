@@ -10,6 +10,7 @@ import {
   RecurringPayment,
   ReserveOffer,
   SendReceiptResponse,
+  TicketRecipientType,
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
 
@@ -57,12 +58,11 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
 
 export async function addPaymentMethod(paymentRedirectUrl: string) {
   const url = `ticket/v3/recurring-payments`;
-  const response = await client.post<AddPaymentMethodResponse>(
+  return client.post<AddPaymentMethodResponse>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
   );
-  return response.data;
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
@@ -112,11 +112,11 @@ type ReserveOfferParams = {
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
   customerAccountId: string;
-  savePaymentMethod: boolean;
+  shouldSavePaymentMethod: boolean;
   recurringPaymentId?: number;
   autoSale: boolean;
-  customerAlias?: string;
   phoneNumber?: string;
+  recipient?: TicketRecipientType;
 };
 
 export async function searchOffers(
@@ -153,8 +153,8 @@ export async function reserveOffers({
   scaExemption,
   customerAccountId,
   autoSale,
-  customerAlias,
   phoneNumber,
+  recipient,
   ...rest
 }: ReserveOfferParams): Promise<OfferReservation> {
   const url = 'ticket/v3/reserve';
@@ -162,13 +162,15 @@ export async function reserveOffers({
     payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
     offers,
     payment_type: paymentType,
-    store_payment: rest.savePaymentMethod,
+    store_payment: rest.shouldSavePaymentMethod,
     recurring_payment_id: rest.recurringPaymentId,
     sca_exemption: scaExemption,
     customer_account_id: customerAccountId,
     auto_sale: autoSale,
-    customer_alias: customerAlias,
     phone_number: phoneNumber,
+    store_alias: recipient?.name
+      ? {alias: recipient.name, phone_number: recipient.phoneNumber}
+      : undefined,
   };
   const response = await client.post<OfferReservation>(url, body, {
     ...opts,

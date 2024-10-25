@@ -45,6 +45,8 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install imagemagick
+        run: sudo apt-get update && sudo apt-get install imagemagick
       - name: install node v18
         uses: actions/setup-node@v1
         with:

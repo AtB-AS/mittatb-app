@@ -136,7 +136,7 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje dette kortet',
     ),
   },
-  choosePaymentOption: {
+  choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
     a11yHint: _(
       'Aktiver for å velge betalingsmåte',
@@ -144,7 +144,7 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje betalingsmåte',
     ),
   },
-  changePaymentOption: {
+  changePaymentMethod: {
     text: _(
       'Endre betalingsmåte',
       'Change payment option',
@@ -189,6 +189,16 @@ const PurchaseConfirmationTexts = {
     `Ordinær pris`,
     `Ordinary price`,
     `Ordinær pris`,
+  ),
+  reserveError: _(
+    'Oops - vi feila når vi prøvde å sette i gang betalingen. Supert om du prøver igjen 🤞',
+    'Whoops - we failed when trying to set up the payment. Please try again 🤞',
+    'Oops - vi feila då vi prøvde å sette i gang betalinga. Supert om du prøver igjen 🤞',
+  ),
+  vippsInstalledError: _(
+    'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
+    'We were unable to set up the payment. Do you have the Vipps app installed?',
+    'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
   ),
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {

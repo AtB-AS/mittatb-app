@@ -9,3 +9,7 @@
 "NSBluetoothPeripheralUsageDescription" = "Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
 
 "NSMotionUsageDescription" = "Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
+
+"NSCameraUsageDescription" = "Vi bruker kamera til å ta bilde av feilparkerte elsparkesykler, og å skanne QR-koden på elsparkesykler.";
+
+"NSPhotoLibraryUsageDescription" = "Send bilder for å hjelpe til med å løse problemer i appen.";

@@ -27,7 +27,7 @@ class PurchaseSummaryPage {
    * Get the button for going to payment
    */
   get choosePayment() {
-    const reqId = `//*[@resource-id="choosePaymentOptionButton"]`;
+    const reqId = `//*[@resource-id="choosePaymentMethodButton"]`;
     return $(reqId);
   }
 

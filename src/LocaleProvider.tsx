@@ -1,4 +1,5 @@
-import RNLocalize from 'react-native-localize';
+import {getLocales} from 'react-native-localize';
+import {TFunc} from '@leile/lobo-t';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Language} from '@atb/translations';
 import {usePreferences} from '@atb/preferences';
@@ -7,6 +8,15 @@ import {
   DEFAULT_REGION,
   FALLBACK_LANGUAGE,
 } from '@atb/translations/commons';
+import {AppState} from 'react-native';
+
+let globalLanguage: Language = DEFAULT_LANGUAGE;
+/**
+ * tGlobal can be used instead of the t function for when you don't want
+ * language changes to potentially retrigger an action (such as e.g. an alert box)
+ */
+export const tGlobal: TFunc<typeof Language> = (translatable) =>
+  translatable[globalLanguage];
 
 export type Locale = {
   language: Language;
@@ -47,26 +57,26 @@ function useLocale(): Locale {
   const {
     preferences: {useSystemLanguage = true, language: userPreferencedLanguage},
   } = usePreferences();
-
   // listen for updates to system Locale
   useEffect(() => {
     setSystemLocale(getPreferredSystemLocale);
     const onChange = () => {
       setSystemLocale(getPreferredSystemLocale);
     };
-    RNLocalize.addEventListener('change', onChange);
+    const subscription = AppState.addEventListener('change', onChange);
     return () => {
-      RNLocalize.removeEventListener('change', onChange);
+      subscription.remove();
     };
   }, []);
 
   // listen for updates to language settings
   useEffect(() => {
-    if (useSystemLanguage) {
-      setLanguage(systemLocale.language);
-    } else {
-      setLanguage(mapLanguageStringToEnum(userPreferencedLanguage));
-    }
+    const newLanguage = useSystemLanguage
+      ? systemLocale.language
+      : mapLanguageStringToEnum(userPreferencedLanguage);
+
+    globalLanguage = newLanguage;
+    setLanguage(newLanguage);
   }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
 
   return {
@@ -78,7 +88,7 @@ function useLocale(): Locale {
 
 // Fetch the preferred supported system locale or fallback
 function getPreferredSystemLocale(): Locale {
-  const systemLocale = RNLocalize.getLocales().find((locale) => {
+  const systemLocale = getLocales().find((locale) => {
     return (
       locale.languageCode === Language.Norwegian ||
       Language.English ||

@@ -8,11 +8,11 @@ import {
   searchOffers,
 } from '@atb/ticketing';
 import {CancelToken} from 'axios';
-import {useCallback, useEffect, useMemo, useReducer} from 'react';
+import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
+import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -50,19 +50,33 @@ const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
 const getOriginalPriceAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.original_amount_float ?? 0;
 
-const getValidDurationSeconds = (offer: Offer): number =>
-  secondsBetween(offer.valid_from, offer.valid_to);
+const getValidDurationSeconds = (offer: Offer): number | undefined =>
+  offer.valid_from && offer.valid_to
+    ? secondsBetween(offer.valid_from, offer.valid_to)
+    : undefined;
+
+const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
+  const offersForTraveller = offers.filter(
+    (o) => o.traveller_id === userTypeString,
+  );
+
+  // If there are multiple offers for the same traveller, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
+  const offersSortedByPrice = offersForTraveller.sort(
+    (a, b) =>
+      getCurrencyAsFloat(a.prices, 'NOK') - getCurrencyAsFloat(b.prices, 'NOK'),
+  );
+  return offersSortedByPrice[0];
+};
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getCurrencyAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -72,11 +86,9 @@ const calculateOriginalPrice = (
   offers: Offer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
-    const maybeOffer = offers.find(
-      (o) => o.traveller_id === traveller.userTypeString,
-    );
-    const price = maybeOffer
-      ? getOriginalPriceAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+    const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const price = offer
+      ? getOriginalPriceAsFloat(offer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -88,7 +100,7 @@ const mapToUserProfilesWithCountAndOffer = (
   userProfileWithCounts
     .map((u) => ({
       ...u,
-      offer: offers.find((o) => o.traveller_id === u.userTypeString),
+      offer: getOfferForTraveller(offers, u.userTypeString),
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
@@ -107,6 +119,7 @@ const getOfferReducer =
           offerSearchTime: undefined,
           isSearchingOffer: false,
           totalPrice: 0,
+          originalPrice: 0,
           error: undefined,
           userProfilesWithCountAndOffer: [],
         };
@@ -150,29 +163,22 @@ const initialState: OfferState = {
 };
 
 export function useOfferState(
+  selection: PurchaseSelectionType,
   offerEndpoint: 'zones' | 'authority' | 'stop-places',
-  preassignedFareProduct: PreassignedFareProduct,
-  fromPlace: TariffZone | StopPlaceFragmentWithIsFree,
-  toPlace: TariffZone | StopPlaceFragmentWithIsFree,
-  userProfilesWithCount: UserProfileWithCount[],
+  preassignedFareProductAlternatives: PreassignedFareProduct[],
   isOnBehalfOf: boolean = false,
-  travelDate?: string,
 ) {
-  const offerReducer = getOfferReducer(userProfilesWithCount);
+  const offerReducer = getOfferReducer(selection.userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
-  const zones = useMemo(
-    () => [...new Set([fromPlace.id, toPlace.id])],
-    [fromPlace, toPlace],
-  );
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if ('isFree' in toPlace && toPlace.isFree) {
+      if ('isFree' in selection.toPlace && selection.toPlace.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
 
-      const offerTravellers = userProfilesWithCount
+      const offerTravellers = selection.userProfilesWithCount
         .filter((t) => t.count)
         .map((t) => ({
           id: t.userTypeString,
@@ -186,21 +192,27 @@ export function useOfferState(
         try {
           if (
             offerEndpoint === 'stop-places' &&
-            (isTariffZone(fromPlace) || isTariffZone(toPlace))
+            (isTariffZone(selection.fromPlace) ||
+              isTariffZone(selection.toPlace))
           ) {
             dispatch({type: 'CLEAR_OFFER'});
             return;
           }
+
+          const zones = [
+            ...new Set([selection.fromPlace.id, selection.toPlace.id]),
+          ];
+
           const placeParams =
             offerEndpoint === 'stop-places'
-              ? {from: fromPlace.id, to: toPlace.id}
+              ? {from: selection.fromPlace.id, to: selection.toPlace.id}
               : {zones};
           const params = {
             ...placeParams,
             is_on_behalf_of: isOnBehalfOf,
             travellers: offerTravellers,
-            products: [preassignedFareProduct.id],
-            travel_date: travelDate,
+            products: preassignedFareProductAlternatives.map((p) => p.id),
+            travel_date: selection.travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
           const response = await searchOffers(offerEndpoint, params, {
@@ -236,15 +248,10 @@ export function useOfferState(
       }
     },
     [
-      dispatch,
-      userProfilesWithCount,
-      preassignedFareProduct,
+      selection,
+      preassignedFareProductAlternatives,
       offerEndpoint,
-      zones,
-      travelDate,
-      fromPlace,
-      toPlace,
-      isOnBehalfOf
+      isOnBehalfOf,
     ],
   );
 
@@ -252,14 +259,7 @@ export function useOfferState(
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [
-    dispatch,
-    updateOffer,
-    userProfilesWithCount,
-    preassignedFareProduct,
-    zones,
-    travelDate,
-  ]);
+  }, [dispatch, updateOffer, selection]);
 
   const refreshOffer = useCallback(
     async function () {

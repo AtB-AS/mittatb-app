@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-
 import {
-  PurchaseOverviewTexts,
   getTextForLanguage,
+  PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
 import {
   FareProductTypeConfig,
+  getReferenceDataName,
   TravellerSelectionMode,
 } from '@atb/configuration';
 import {
@@ -16,10 +16,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-
 import {StyleSheet} from '@atb/theme';
-import {getReferenceDataName} from '@atb/configuration';
-
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
@@ -34,8 +31,8 @@ import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
 
 type TravellerSelectionProps = {
-  selectableUserProfiles: UserProfileWithCount[];
-  setTravellerSelection: (
+  userProfilesWithCount: UserProfileWithCount[];
+  setUserProfilesWithCount: (
     userProfilesWithCount: UserProfileWithCount[],
   ) => void;
   style?: StyleProp<ViewStyle>;
@@ -46,9 +43,9 @@ type TravellerSelectionProps = {
 };
 
 export function TravellerSelection({
-  setTravellerSelection,
+  setUserProfilesWithCount,
   style,
-  selectableUserProfiles,
+  userProfilesWithCount,
   selectionMode,
   fareProductTypeConfig,
   setIsOnBehalfOfToggle,
@@ -75,35 +72,10 @@ export function TravellerSelection({
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
-  const [userProfilesState, setUserProfilesState] = useState<
-    UserProfileWithCount[]
-  >(selectableUserProfiles);
-
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
-    selectableUserProfiles,
+    userProfilesWithCount,
   );
-
-  useEffect(() => {
-    setUserProfilesState((prevState) => {
-      const updatedState = selectableUserProfiles.map((u) => ({
-        ...u,
-        count: prevState.find((p) => u.id === p.id)?.count || 0,
-      }));
-
-      return updatedState.some(({count}) => count)
-        ? updatedState
-        : selectableUserProfiles;
-    });
-  }, [selectableUserProfiles]);
-
-  useEffect(() => {
-    const filteredSelection = userProfilesState.filter((u) =>
-      selectableUserProfiles.find((i) => i.id === u.id),
-    );
-    setTravellerSelection(filteredSelection);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectionMode, userProfilesState]);
 
   useFocusEffect(
     useCallback(() => {
@@ -120,7 +92,7 @@ export function TravellerSelection({
     return null;
   }
 
-  const selectedUserProfiles = userProfilesState.filter(({count}) => count);
+  const selectedUserProfiles = userProfilesWithCount.filter(({count}) => count);
   const totalTravellersCount = selectedUserProfiles.reduce(
     (acc, {count}) => acc + count,
     0,
@@ -140,7 +112,10 @@ export function TravellerSelection({
     : '';
 
   const travellerInfo = !canSelectUserProfile
-    ? getTextForLanguage(userProfilesState[0].alternativeDescriptions, language)
+    ? getTextForLanguage(
+        userProfilesWithCount[0].alternativeDescriptions,
+        language,
+      )
     : '';
 
   const accessibility: AccessibilityProps = {
@@ -172,14 +147,14 @@ export function TravellerSelection({
       <TravellerSelectionSheet
         selectionMode={selectionMode}
         fareProductTypeConfig={fareProductTypeConfig}
-        selectableUserProfilesWithCountInit={userProfilesState}
+        selectableUserProfilesWithCountInit={userProfilesWithCount}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         onConfirmSelection={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
           onBehalfOfToggle?: boolean,
         ) => {
           if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setUserProfilesState(chosenSelectableUserProfilesWithCounts);
+            setUserProfilesWithCount(chosenSelectableUserProfilesWithCounts);
           }
           if (onBehalfOfToggle !== undefined) {
             setIsOnBehalfOfToggle(onBehalfOfToggle);

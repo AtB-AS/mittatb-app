@@ -178,7 +178,7 @@ const PurchaseOverviewTexts = {
   travellerSelectionSheet: {
     title: _('Reisende', 'Travellers', 'Reisande'),
     close: _('Lukk', 'Close', 'Lukk'),
-    confirm: _('Bekreft valg', 'Confirm choice', 'Stadfest val'),
+    confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
   },
   startTime: {
     title: _(

@@ -2,6 +2,22 @@ import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const MapTexts = {
+  qr: {
+    scan: _('Skann', 'Scan', 'Skann'),
+    notFound: {
+      title: _(
+        'Kunne ikke lese QR-kode',
+        "Couldn't read the QR code.",
+        'Kunne ikkje lese QR-kode.',
+      ),
+      description: _(
+        'Det kan hende at vi ikke kan vise dette innholdet i appen eller at lenken er ugyldig.',
+        'It could be that we are unable to show this content in the app or that the link is broken.',
+        'Det kan hende at vi ikkje kan vise dette innhaldet i appen eller at lenken er ugyldig.',
+      ),
+      ok: _('OK', 'OK', 'OK'),
+    },
+  },
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back', 'Gå tilbake'),
   },

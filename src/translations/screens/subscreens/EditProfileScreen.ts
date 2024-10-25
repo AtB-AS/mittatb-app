@@ -21,7 +21,7 @@ export const EditProfileTexts = {
     },
     phone: {
       header: _('Telefon', 'Phone', 'Telefon'),
-      loggedIn: (phoneNumber: string | undefined) =>
+      loggedIn: (phoneNumber: string) =>
         _(
           `${phoneNumber} kan ikke endres fordi telefonnummeret er brukt til innlogging.`,
           `${phoneNumber} cannot be changed because the phone number is used for logging in.`,

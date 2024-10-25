@@ -20,12 +20,14 @@ import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
   onSelect: (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
+    harbors?: StopPlaceFragment[],
   ) => void;
   testID: string;
 };
@@ -52,12 +54,14 @@ export const RecentFareContractComponent = ({
   const {width} = Dimensions.get('window');
   const interactiveColor = theme.color.interactive[2];
 
-  const harborsQuery = useHarborsQuery();
-
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
+
+  const harborsQuery = useHarborsQuery({
+    transportModes: fareProductTypeConfig?.transportModes,
+  });
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -138,7 +142,9 @@ export const RecentFareContractComponent = ({
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}
       interactiveColor={interactiveColor}
       mode="spacious"
-      onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
+      onPress={() =>
+        onSelect(recentFareContract, fareProductTypeConfig, harborsQuery.data)
+      }
       style={{minWidth: width * 0.6}}
     >
       <View style={styles.travelModeWrapper}>
@@ -164,6 +170,7 @@ export const RecentFareContractComponent = ({
             showTwoWayIcon={showTwoWayIcon}
             fromStopPlaceId={pointToPointValidity?.fromPlace}
             toStopPlaceId={pointToPointValidity?.toPlace}
+            transportModes={fareProductTypeConfig.transportModes}
           />
         </View>
       )}

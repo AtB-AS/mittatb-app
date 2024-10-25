@@ -24,6 +24,7 @@ export type UserPreferences = {
   showTestIds?: boolean;
   hideProductDescriptions?: boolean;
   debugShowSeconds?: boolean;
+  debugPredictionInaccurate?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

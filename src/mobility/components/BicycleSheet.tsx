@@ -1,4 +1,7 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
+import {
+  VehicleExtendedFragment,
+  VehicleId,
+} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
@@ -25,12 +28,18 @@ import {MobilityStats} from '@atb/mobility/components//MobilityStats';
 import {MobilityStat} from '@atb/mobility/components//MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 
 type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
+  onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
 };
-export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
+export const BicycleSheet = ({
+  vehicleId: id,
+  onClose,
+  onVehicleReceived,
+}: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
   const {
@@ -44,6 +53,8 @@ export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
     appStoreUri,
   } = useVehicle(id);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   return (
     <BottomSheetContainer
@@ -132,7 +143,7 @@ export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={styles.errorMessage}>
+          <View style={styles.footer}>
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -160,9 +171,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
-    },
-    errorMessage: {
-      marginHorizontal: theme.spacing.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacing.medium),

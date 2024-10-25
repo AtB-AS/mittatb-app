@@ -28,14 +28,15 @@ import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
-import {useUpdateIntercomOnUserChange} from "@atb/auth/use-update-intercom-on-user-change";
+import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {useRefreshIdTokenWhenNecessary} from "@atb/auth/use-refresh-id-token-when-necessary.ts";
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
   user?: FirebaseAuthTypes.User;
-  idToken?: FirebaseAuthTypes.IdTokenResult;
+  idTokenResult?: FirebaseAuthTypes.IdTokenResult;
   phoneNumberToBeVerified?: string;
   /** @deprecated Remove once legacy login is removed */
   confirmationHandler?: FirebaseAuthTypes.ConfirmationResult;
@@ -45,6 +46,12 @@ type AuthReducer = (
   prevState: AuthReducerState,
   action: AuthReducerAction,
 ) => AuthReducerState;
+
+let idTokenGlobal: string | undefined = undefined;
+export const getIdTokenGlobal = () => idTokenGlobal;
+
+let currentUserIdGlobal: string | undefined = undefined;
+export const getCurrentUserIdGlobal = () => currentUserIdGlobal;
 
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
@@ -63,11 +70,13 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
           userId: action.user.uid,
           authType: mapAuthenticationType(action.user),
         });
+        currentUserIdGlobal = action.user.uid;
+        idTokenGlobal = undefined;
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
     case 'SET_ID_TOKEN': {
-      const tokenSub = action.idToken.claims['sub'];
+      const tokenSub = action.idTokenResult.claims['sub'];
       if (tokenSub !== prevState.user?.uid) {
         /*
         This is a precaution against race conditions. It might be that there has
@@ -83,15 +92,16 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         );
         return prevState;
       }
-      const customerNumber = action.idToken.claims['customer_number'];
+      const customerNumber = action.idTokenResult.claims['customer_number'];
       const authStatus = customerNumber ? 'authenticated' : 'creating-account';
       Bugsnag.leaveBreadcrumb('Retrieved id token', {
         customerNumber,
         authStatus,
       });
+      idTokenGlobal = action.idTokenResult.token;
       return {
         ...prevState,
-        idToken: action.idToken,
+        idTokenResult: action.idTokenResult,
         authStatus: 'authenticated',
       };
     }
@@ -133,6 +143,10 @@ type AuthContextState = {
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
   retryAuth: () => void;
+  debug: {
+    user?: FirebaseAuthTypes.User;
+    idTokenResult?: FirebaseAuthTypes.IdTokenResult;
+  };
 };
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -146,9 +160,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useClearQueriesOnUserChange(state);
   useFetchIdTokenWithCustomClaims(state, dispatch);
+  useRefreshIdTokenWhenNecessary(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
-  useUpdateIntercomOnUserChange(state)
+  useUpdateIntercomOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     dispatch({type: 'RESET_AUTH_STATUS'});
@@ -161,8 +176,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authStatus: state.authStatus,
         userId: state.user?.uid,
         phoneNumber: state.user?.phoneNumber || undefined,
-        customerNumber: state.idToken?.claims['customer_number'],
-        abtCustomerId: state.idToken?.claims['abt_id'],
+        customerNumber: state.idTokenResult?.claims['customer_number'],
+        abtCustomerId: state.idTokenResult?.claims['abt_id'],
         signInWithPhoneNumber: useCallback(
           async (phoneNumberWithPrefix: string, forceResend?: boolean) => {
             if (!backendSmsEnabled) {
@@ -199,6 +214,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authenticationType: mapAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
+        debug: {
+          user: state.user,
+          idTokenResult: state.idTokenResult,
+        },
       }}
     >
       {children}

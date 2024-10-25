@@ -4,6 +4,7 @@ import {
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
+  useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -38,6 +39,8 @@ import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 
 export type FareContractInfoProps = {
   travelRight: NormalTravelRight;
@@ -69,6 +72,7 @@ export const FareContractInfoHeader = ({
 }: FareContractInfoProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
     travelRight;
 
@@ -84,6 +88,20 @@ export const FareContractInfoHeader = ({
   const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
     sentToCustomerAccountId,
   );
+
+  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
+    enabled: !!phoneNumber,
+  });
+  const recipientName =
+    phoneNumber &&
+    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
+
+  const fareProductTypeConfig = preassignedFareProduct
+    ? fareProductTypeConfigs.find(
+        (fareProductTypeConfig) =>
+          fareProductTypeConfig.type === preassignedFareProduct.type,
+      )
+    : undefined;
 
   return (
     <View style={styles.header}>
@@ -110,12 +128,17 @@ export const FareContractInfoHeader = ({
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
           showTwoWayIcon={showTwoWayIcon}
+          transportModes={fareProductTypeConfig?.transportModes}
         />
       )}
       {phoneNumber && (
         <MessageInfoText
           type="warning"
-          message={t(FareContractTexts.details.sentTo(phoneNumber))}
+          message={t(
+            FareContractTexts.details.sentTo(
+              recipientName || formatPhoneNumber(phoneNumber),
+            ),
+          )}
         />
       )}
       {status === 'valid' && warning && (

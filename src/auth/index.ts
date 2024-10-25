@@ -4,4 +4,5 @@ export type {
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
   AuthStatus,
+  AuthStateChangeListenerCallback,
 } from './types';

@@ -10,6 +10,7 @@ export function useGeocoder(
   text: string | null,
   coords: Coordinates | null,
   onlyLocalTariffZoneAuthority?: boolean,
+  onlyStopPlaces?: boolean,
 ): GeocoderState {
   const [state, dispatch] = useGeocoderReducer();
 
@@ -25,6 +26,7 @@ export function useGeocoder(
             text,
             coords,
             onlyLocalTariffZoneAuthority,
+            onlyStopPlaces,
             {
               cancelToken: source.token,
             },
@@ -48,7 +50,7 @@ export function useGeocoder(
     textLookup();
     return () => source.cancel('Cancelling previous autocomplete');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coords?.latitude, coords?.longitude, text]);
+  }, [coords?.latitude, coords?.longitude, text, onlyStopPlaces]);
 
   return state;
 }

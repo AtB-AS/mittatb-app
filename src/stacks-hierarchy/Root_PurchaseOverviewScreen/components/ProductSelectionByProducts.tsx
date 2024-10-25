@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
@@ -23,6 +23,7 @@ import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverv
 import {usePreferenceItems} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
 import { useTheme } from '@atb/theme';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -46,8 +47,8 @@ export function ProductSelectionByProducts({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type);
-  const [selected, setProduct] = useState(selectedProduct);
+    .filter((product) => product.type === selectedProduct.type)
+    .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const alias = (fareProduct: PreassignedFareProduct) =>
     fareProduct.productAlias &&
@@ -79,16 +80,13 @@ export function ProductSelectionByProducts({
           <ProductDescriptionToggle title={title} />
           <RadioGroupSection<PreassignedFareProduct>
             items={selectableProducts}
-            keyExtractor={(u) => u.id}
+            keyExtractor={(u) => u.productAliasId ?? u.id}
             itemToText={(fp) => productDisplayName(fp)}
             hideSubtext={hideProductDescriptions}
             itemToSubtext={(fp) => subText(fp)}
-            selected={selected}
-            onSelect={(fp) => {
-              setProduct(fp);
-              setSelectedProduct(fp);
-            }}
+            selected={selectedProduct}
             color={interactiveColor}
+            onSelect={setSelectedProduct}
             accessibilityHint={t(
               PurchaseOverviewTexts.productSelection.a11yTitle,
             )}

@@ -1,12 +1,12 @@
 import {Dispatch, useReducer} from 'react';
 import {
-  ExistingRecipientType,
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {OnBehalfOfAccountType} from "@atb/on-behalf-of/types.ts";
 
 type RecipientSelectionAction =
-  | {type: 'SELECT_RECIPIENT'; recipient: ExistingRecipientType}
+  | {type: 'SELECT_RECIPIENT'; recipient?: OnBehalfOfAccountType}
   | {type: 'SELECT_SEND_TO_OTHER'}
   | {type: 'SET_PREFIX'; prefix: string}
   | {type: 'SET_PHONE'; phoneNumber: string}

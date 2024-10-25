@@ -1,4 +1,3 @@
-import {orgSpecificTranslations} from '../orgSpecificTranslations';
 import {TranslatedString, translation as _} from '../commons';
 import {TicketHistoryMode} from '@atb/ticket-history';
 
@@ -219,26 +218,6 @@ const TicketingTexts = {
     ),
     paymentErrorButton: _('Lukk', 'Close', 'Lukk'),
   },
-  travelCardInformation: {
-    reisebevis: _('Reisebevis', 'Travel token', 'Reisebevis'),
-    onInspection: _(
-      'I billettkontroll må du vise t:kortet ditt',
-      'In the event of an inspection, please present your t:card',
-      'I billettkontrollen må du vise t:kortet ditt',
-    ),
-    changeInstructions: _(
-      'Kan endres fra "Min profil"',
-      'Can be changed from "My profile"',
-      'Kan endrast frå "Min profil"',
-    ),
-    cardType: _('t:kort', 't:card', 't:kort'),
-    illustrationa11yLabel: (travelCardId: string) =>
-      _(
-        `Illustrasjon av t kort med kortnummer som inneholder ${travelCardId}`,
-        `Illustration of t card with card number that contains ${travelCardId}`,
-        `Illustrasjon av t kort med kortnummer som inneheld ${travelCardId}`,
-      ),
-  },
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets', 'Prøv billettkjøp'),
     description: _(
@@ -319,44 +298,23 @@ const TicketingTexts = {
       'Aktiver for å få tips og informasjon om billettar',
     ),
   },
+  accountError: {
+    title: _(
+      'Billettkjøp fungerer ikke på din mobil',
+      'Your device is not able to buy tickets',
+      'Billettkjøp fungerer ikkje på mobilen din',
+    ),
+    message: _(
+      'Sjekk din internett-tilkobling og last inn appen på nytt. Hvis dette ikke hjelper, kontakt kundeservice.',
+      'Check your internet connection and reload the app. If this does not help, contact customer service.',
+      'Sjekk internett-tilkoplinga di og last inn appen på nytt. Om dette ikkje hjelp, kontakt kundeservice.',
+    ),
+    actionText: _(
+      'Last inn appen på nytt',
+      'Reload app',
+      'Last inn appen på nytt',
+    ),
+  },
 };
 
-export default orgSpecificTranslations(TicketingTexts, {
-  nfk: {
-    travelCardInformation: {
-      illustrationa11yLabel: (travelCardId: string) =>
-        _(
-          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
-          `Illustration of travel card with card number that contains ${travelCardId}`,
-          `Illustrasjon av reisekort med kortnummer som inneheld ${travelCardId}`,
-        ),
-      cardType: _('reisekort', 'travel card', 'reisekort'),
-      onInspection: _(
-        'I billettkontroll må du vise reisekortet ditt',
-        'In the event of an inspection, please present your travel card',
-        'I billettkontrollen må du vise reisekortet ditt',
-      ),
-    },
-  },
-  fram: {
-    travelCardInformation: {
-      illustrationa11yLabel: (travelCardId: string) =>
-        _(
-          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
-          `Illustration of travel card with card number that contains ${travelCardId}`,
-          `Illustrasjon av reisekort med kortnummer som inneheld ${travelCardId}`,
-        ),
-      cardType: _('reisekort', 'travel card', 'reisekort'),
-      onInspection: _(
-        'I billettkontroll må du vise reisekortet ditt',
-        'In the event of an inspection, please present your travel card',
-        'I billettkontroll må du vise reisekortet ditt',
-      ),
-      changeInstructions: _(
-        'Kan endres fra "Min bruker"',
-        'Can be changed from "My user"',
-        'Kan endrast frå "Min brukar"',
-      ),
-    },
-  },
-});
+export default TicketingTexts;

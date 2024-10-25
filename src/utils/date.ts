@@ -14,7 +14,7 @@ import {
   getMinutes,
   getSeconds,
   isPast,
-  isSameDay,
+  isSameDay as isSameDayInternal,
   isSameYear,
   isToday,
   isWithinInterval,
@@ -27,6 +27,7 @@ import {
   FormatOptionsWithTZ,
   formatInTimeZone,
   fromZonedTime,
+  toZonedTime,
 } from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
@@ -346,8 +347,6 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
   });
 }
 
-export {isSameDay};
-
 export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),
@@ -431,6 +430,10 @@ export function formatToShortSimpleDate(
   });
 }
 
+export function parseISOFromCET(isoDate: string) {
+  return toZonedTime(parseISO(isoDate), CET);
+}
+
 export function formatToWeekday(
   date: Date | string,
   language: Language,
@@ -442,7 +445,16 @@ export function formatToWeekday(
 }
 
 export function daysBetween(base: string | Date, target: string | Date) {
-  return differenceInCalendarDays(parseIfNeeded(target), parseIfNeeded(base));
+  return differenceInCalendarDays(
+    toZonedTime(parseIfNeeded(target), CET),
+    toZonedTime(parseIfNeeded(base), CET),
+  );
+}
+export function isSameDay(base: string | Date, target: string | Date) {
+  return isSameDayInternal(
+    toZonedTime(parseIfNeeded(target), CET),
+    toZonedTime(parseIfNeeded(base), CET),
+  );
 }
 
 export function isSeveralDays(items: string[]) {
@@ -464,14 +476,25 @@ export function dateWithReplacedTime(
     ignoreTimeZone?: boolean;
   } = {},
 ) {
-  let parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
   const parsedDate = parseIfNeeded(date);
-
   if (!options.ignoreTimeZone) {
-    // Time pickers show dates in CET timezone, so when updating
-    // time we want to convert from CET before replacing hour/minute/second.
-    parsedTime = fromZonedTime(parsedTime, CET);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Convert the parsed date to CET
+    const cetDate = toZonedTime(parsedDate, CET);
+
+    // Set the time in CET
+    const updatedCETDate = set(cetDate, {
+      hours,
+      minutes,
+      seconds: 0,
+    });
+
+    // Convert back to UTC
+    return fromZonedTime(updatedCETDate, CET);
   }
+
+  const parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
 
   return set(parsedDate, {
     hours: getHours(parsedTime),

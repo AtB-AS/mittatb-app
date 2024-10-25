@@ -1,7 +1,7 @@
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
-import {SvgCssUri} from 'react-native-svg';
+import {SvgCssUri} from 'react-native-svg/css';
 
 const LOGO_SIZE = 50;
 

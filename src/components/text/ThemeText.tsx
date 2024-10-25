@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTheme} from '@atb/theme';
-import {ColorValue, Platform, Text, TextProps, TextStyle} from 'react-native';
+import {ColorValue, Platform, Text, TextProps, TextStyle, View} from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
@@ -56,20 +56,29 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     };
   }
 
+  const textProps = {
+    style: [textStyle, style],
+    maxFontSizeMultiplier: MAX_FONT_SCALE,
+    ...props,
+  };
+
   const content =
     isMarkdown && typeof children === 'string'
-      ? renderMarkdown(children)
+      ? renderMarkdown(children, {
+          textProps,
+          spacingBetweenListElements: theme.spacing.xSmall,
+        })
       : children;
 
-  return (
-    <Text
-      style={[textStyle, style]}
-      maxFontSizeMultiplier={MAX_FONT_SCALE}
-      {...props}
-    >
-      {content}
-    </Text>
-  );
+  // If markdown is enabled, we need to wrap the content in a <View></View> to properly align the <Text></Text> elements,
+  // by doing this we also avoid to wrap the list elements inside the markdown render in a Text component, which is not allowed.
+  if (isMarkdown) {
+    return (
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{content}</View>
+    );
+  }
+
+  return <Text {...textProps}>{content}</Text>;
 };
 
 function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {

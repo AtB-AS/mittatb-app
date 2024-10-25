@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {SnackbarProps} from './Snackbar';
 import {getSnackbarHasTextContent} from './utils';
 
@@ -6,11 +6,11 @@ export const useSnackbar = () => {
   const [snackbarProps, setSnackbarProps] = useState<SnackbarProps>();
   const [messageKey, setMessageKey] = useState(0);
 
-  const showSnackbar = (snackbarProps?: SnackbarProps) => {
+  const showSnackbar = useCallback((snackbarProps?: SnackbarProps) => {
     setMessageKey((messageKey) => messageKey + 1);
     setSnackbarProps(snackbarProps);
-  };
-  const hideSnackbar = () => setSnackbarProps(undefined);
+  }, []);
+  const hideSnackbar = useCallback(() => setSnackbarProps(undefined), []);
 
   const snackbarTextContent = getSnackbarHasTextContent(
     snackbarProps?.textContent,

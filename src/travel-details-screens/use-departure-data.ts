@@ -45,7 +45,7 @@ export function useDepartureData(
     async function (): Promise<DepartureData> {
       const serviceJourney = await getServiceJourneyWithEstimatedCalls(
         activeItem.serviceJourneyId,
-        new Date(activeItem.serviceDate),
+        activeItem.serviceDate,
       );
       const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
         serviceJourney.estimatedCalls || [],

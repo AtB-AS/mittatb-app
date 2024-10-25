@@ -55,13 +55,13 @@ const getIndicatorSize = (
 ) => {
   switch (size) {
     case 'xSmall':
-      return (hasBorder ? 6 : 4) * fontScale;
+      return (hasBorder ? 6 : 5) * fontScale;
     case 'small':
-      return (hasBorder ? 8 : 6) * fontScale;
+      return (hasBorder ? 8 : 7) * fontScale;
     case 'normal':
-      return (hasBorder ? 10 : 6) * fontScale;
+      return (hasBorder ? 11 : 9) * fontScale;
     case 'large':
-      return (hasBorder ? 12 : 8) * fontScale;
+      return (hasBorder ? 13 : 11) * fontScale;
   }
 };
 

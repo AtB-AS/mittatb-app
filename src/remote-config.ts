@@ -41,10 +41,14 @@ export type RemoteConfig = {
   enable_tips_and_information: boolean;
   enable_token_fallback: boolean;
   enable_token_fallback_on_timeout: boolean;
+  enable_travel_aid: boolean;
+  enable_travel_aid_stop_button: boolean;
   enable_vehicle_operator_logo: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
   enable_save_ticket_recipients: boolean;
+  enable_shmo_deep_integration: boolean;
+  enable_only_stop_places_checkbox: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   flex_booking_number_of_days_available: number;
@@ -64,6 +68,7 @@ export type RemoteConfig = {
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
   vehicles_poll_interval: number;
+  fetch_id_token_retry_count: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -105,10 +110,14 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_tips_and_information: false,
   enable_token_fallback: true,
   enable_token_fallback_on_timeout: true,
+  enable_travel_aid: false,
+  enable_travel_aid_stop_button: false,
   enable_vehicle_operator_logo: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
   enable_save_ticket_recipients: false,
+  enable_shmo_deep_integration: false,
+  enable_only_stop_places_checkbox: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   flex_booking_number_of_days_available: 7,
@@ -128,6 +137,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
   vehicles_poll_interval: 20000,
+  fetch_id_token_retry_count: 3,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -230,6 +240,12 @@ export function getConfig(): RemoteConfig {
   const enable_token_fallback_on_timeout =
     values['enable_token_fallback_on_timeout']?.asBoolean() ??
     defaultRemoteConfig.enable_token_fallback_on_timeout;
+  const enable_travel_aid =
+    values['enable_travel_aid']?.asBoolean() ??
+    defaultRemoteConfig.enable_travel_aid;
+  const enable_travel_aid_stop_button =
+    values['enable_travel_aid_stop_button']?.asBoolean() ??
+    defaultRemoteConfig.enable_travel_aid_stop_button;
   const enable_vehicle_operator_logo =
     values['enable_vehicle_operator_logo']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicle_operator_logo;
@@ -242,6 +258,12 @@ export function getConfig(): RemoteConfig {
   const enable_save_ticket_recipients =
     values['enable_save_ticket_recipients']?.asBoolean() ??
     defaultRemoteConfig.enable_save_ticket_recipients;
+  const enable_shmo_deep_integration =
+    values['enable_shmo_deep_integration']?.asBoolean() ??
+    defaultRemoteConfig.enable_shmo_deep_integration;
+  const enable_only_stop_places_checkbox =
+    values['enable_only_stop_places_checkbox']?.asBoolean() ??
+    defaultRemoteConfig.enable_only_stop_places_checkbox;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -298,6 +320,9 @@ export function getConfig(): RemoteConfig {
   const vehicles_poll_interval =
     values['vehicles_poll_interval']?.asNumber() ??
     defaultRemoteConfig.vehicles_poll_interval;
+  const fetch_id_token_retry_count =
+    values['fetch_id_token_retry_count']?.asNumber() ??
+    defaultRemoteConfig.fetch_id_token_retry_count;
 
   return {
     customer_feedback_url,
@@ -334,10 +359,14 @@ export function getConfig(): RemoteConfig {
     enable_tips_and_information,
     enable_token_fallback,
     enable_token_fallback_on_timeout,
+    enable_travel_aid,
+    enable_travel_aid_stop_button,
     enable_vehicle_operator_logo,
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_save_ticket_recipients,
+    enable_shmo_deep_integration,
+    enable_only_stop_places_checkbox,
     favourite_departures_poll_interval,
     feedback_questions,
     flex_booking_number_of_days_available,
@@ -357,6 +386,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
+    fetch_id_token_retry_count,
   };
 }
 

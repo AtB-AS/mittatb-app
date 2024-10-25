@@ -1,82 +1,43 @@
+import {useAnalytics} from '@atb/analytics';
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {
-  getReferenceDataName,
-  TariffZone,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
+import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
-  dictionary,
-  getTextForLanguage,
-  Language,
   PurchaseConfirmationTexts,
+  dictionary,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {formatDecimalNumber} from '@atb/utils/numbers';
-import {addMinutes, parseISO} from 'date-fns';
-import React, {useEffect, useState} from 'react';
+import {addMinutes} from 'date-fns';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleProp,
-  View,
-  ViewStyle,
-} from 'react-native';
-import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
-import {
-  useOfferState,
-  UserProfileWithCountAndOffer,
-} from '../Root_PurchaseOverviewScreen/use-offer-state';
+  saveLastUsedRecurringPaymentOrType,
+  usePreviousPaymentMethods,
+} from '../saved-payment-utils';
+import {PaymentMethod} from '../types';
+import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
-import {usePreviousPaymentMethod} from '../saved-payment-utils';
-import {PaymentMethod, SavedPaymentOption} from '../types';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {GenericSectionItem, Section} from '@atb/components/sections';
-import {useAnalytics} from '@atb/analytics';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {MessageInfoText} from '@atb/components/message-info-text';
-
-function getPreviousPaymentMethod(
-  previousPaymentMethod: SavedPaymentOption | undefined,
-  paymentTypes: PaymentType[],
-): PaymentMethod | undefined {
-  if (!previousPaymentMethod) return undefined;
-
-  if (!paymentTypes.includes(previousPaymentMethod.paymentType))
-    return undefined;
-
-  switch (previousPaymentMethod.savedType) {
-    case 'normal':
-      if (previousPaymentMethod.paymentType === PaymentType.Vipps) {
-        return {paymentType: PaymentType.Vipps};
-      } else {
-        return {
-          paymentType: previousPaymentMethod.paymentType,
-          save: false,
-        };
-      }
-    case 'recurring':
-      const notExpired =
-        parseISO(previousPaymentMethod.recurringCard.expires_at).getTime() >
-        Date.now();
-      return notExpired
-        ? {
-            paymentType: previousPaymentMethod.paymentType,
-            recurringPaymentId: previousPaymentMethod.recurringCard.id,
-          }
-        : undefined;
-  }
-}
+import {ZoneSelectionMode} from '@atb-as/config-specs';
+import {PriceSummary} from './components/PriceSummary';
+import {useReserveOfferMutation} from './use-reserve-offer-mutation';
+import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
+import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
+import {useOnFareContractReceived} from './use-on-fare-contract-received';
+import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
+import {closeInAppBrowser} from '@atb/in-app-browser';
+import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
+import {APP_SCHEME} from '@env';
+import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -86,62 +47,48 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
+  const {userId} = useAuthState();
+
   const interactiveColor = theme.color.interactive[0];
-  const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {paymentTypes, vatPercent} = useFirestoreConfiguration();
-  const [previousMethod, setPreviousMethod] = useState<
-    PaymentMethod | undefined
-  >(undefined);
-  const previousPaymentMethod = usePreviousPaymentMethod();
-  const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
+  const {previousPaymentMethod, recurringPaymentMethods} =
+    usePreviousPaymentMethods();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod>();
+  const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
+  const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
+  const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
 
-  const {
-    fareProductTypeConfig,
-    fromPlace,
-    toPlace,
-    preassignedFareProduct,
-    userProfilesWithCount,
-    travelDate,
-    headerLeftButton,
-    recipient,
-  } = params;
+  const {selection, recipient} = params;
 
-  const {travellerSelectionMode, zoneSelectionMode} =
-    fareProductTypeConfig.configuration;
-
-  const offerEndpoint =
-    zoneSelectionMode === 'none'
-      ? 'authority'
-      : zoneSelectionMode === 'multiple-stop-harbor'
-      ? 'stop-places'
-      : 'zones';
-
+  const offerEndpoint = getOfferEndpoint(
+    selection.fareProductTypeConfig.configuration.zoneSelectionMode,
+  );
   const isOnBehalfOf = !!recipient;
+
+  const preassignedFareProductAlternatives = useMemo(
+    () => [selection.preassignedFareProduct],
+    [selection.preassignedFareProduct],
+  );
 
   const {
     offerSearchTime,
     isSearchingOffer,
-    error,
+    error: offerError,
     validDurationSeconds,
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
+    selection,
     offerEndpoint,
-    preassignedFareProduct,
-    fromPlace,
-    toPlace,
-    userProfilesWithCount,
+    preassignedFareProductAlternatives,
     isOnBehalfOf,
-    travelDate,
   );
-
-  const offerExpirationTime =
-    offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offer_id}}) => ({
@@ -149,52 +96,92 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offer_id,
     }),
   );
-  const fromPlaceName = getPlaceName(fromPlace, language);
 
-  const toPlaceName = getPlaceName(toPlace, language);
-  const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
+  const reserveMutation = useReserveOfferMutation({
+    offers,
+    paymentMethod,
+    recipient,
+    shouldSavePaymentMethod,
+  });
+  const cancelPaymentMutation = useCancelPaymentMutation();
 
-  const vatAmountString = formatDecimalNumber(vatAmount, language);
-  const vatPercentString = formatDecimalNumber(vatPercent, language);
-  const totalPriceString = formatDecimalNumber(totalPrice, language, 2);
+  useOpenVippsAfterReservation(
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+    useCallback(() => setVippsNotInstalledError(true), []),
+  );
 
-  const travelDateText = travelDate
-    ? t(
-        PurchaseConfirmationTexts.travelDate.futureDate(
-          formatToLongDateTime(travelDate, language),
-        ),
-      )
-    : t(PurchaseConfirmationTexts.travelDate.now);
+  const onPaymentCompleted = useCallback(async () => {
+    saveLastUsedRecurringPaymentOrType(
+      userId,
+      paymentMethod?.paymentType,
+      reserveMutation.data?.recurring_payment_id,
+    );
+    closeInAppBrowser();
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_TicketingStack',
+      params: {
+        screen: 'Ticketing_RootScreen',
+        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+      },
+    });
+  }, [
+    navigation,
+    userId,
+    paymentMethod?.paymentType,
+    reserveMutation.data?.recurring_payment_id,
+  ]);
 
   useEffect(() => {
-    const prevMethod = getPreviousPaymentMethod(
-      previousPaymentMethod,
-      paymentTypes,
-    );
-    setPreviousMethod(prevMethod);
-  }, [previousPaymentMethod, paymentTypes]);
+    if (
+      reserveMutation.isSuccess &&
+      paymentMethod?.paymentType !== PaymentType.Vipps &&
+      reserveMutation.data.url
+    ) {
+      openInAppBrowser(
+        reserveMutation.data.url,
+        'cancel',
+        `${APP_SCHEME}://purchase-callback`,
+        onPaymentCompleted,
+      );
+    }
+  }, [
+    reserveMutation.isSuccess,
+    reserveMutation.data?.url,
+    paymentMethod?.paymentType,
+    onPaymentCompleted,
+  ]);
 
-  function goToPayment(option: PaymentMethod) {
+  // When deep link {APP_SCHEME}://purchase-callback is called, save payment
+  // method and navigate to active tickets.
+  usePurchaseCallbackListener(onPaymentCompleted);
+
+  // In edge cases where the fare contract appears before the callback is
+  // called, we can cancel the payment flow and navigate to active tickets.
+  useOnFareContractReceived({
+    orderId: reserveMutation.data?.order_id,
+    callback: onPaymentCompleted,
+  });
+
+  function goToPayment() {
+    setVippsNotInstalledError(false);
+    const offerExpirationTime =
+      offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
         analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod: option,
+          paymentMethod,
         });
-        navigation.push('Root_PurchasePaymentScreen', {
-          offers,
-          preassignedFareProduct: params.preassignedFareProduct,
-          paymentMethod: option,
-          recipient,
-        });
+        reserveMutation.mutate();
       }
     }
   }
 
-  function getPaymentOptionTexts(option: PaymentMethod): string {
+  function getPaymentMethodTexts(method: PaymentMethod): string {
     let str;
-    switch (option.paymentType) {
+    switch (method.paymentType) {
       case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
         break;
@@ -205,11 +192,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
     }
-    if (previousPaymentMethod) {
-      const paymentOption = previousPaymentMethod;
-      if (paymentOption?.savedType === 'recurring') {
-        str = str + ` (**** ${paymentOption.recurringCard.masked_pan})`;
-      }
+    if (method.recurringCard) {
+      str = str + ` (**** ${method.recurringCard.masked_pan})`;
     }
     return str;
   }
@@ -218,196 +202,75 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     openBottomSheet(() => {
       return (
         <SelectPaymentMethodSheet
-          onSelect={(option: PaymentMethod) => {
-            goToPayment(option);
+          recurringPaymentMethods={recurringPaymentMethods}
+          onSelect={(
+            paymentMethod: PaymentMethod,
+            shouldSavePaymentMethod: boolean,
+          ) => {
+            reserveMutation.reset();
+            setVippsNotInstalledError(false);
+            if (reserveMutation.isSuccess) {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+              analytics.logEvent('Ticketing', 'Payment cancelled');
+            }
+            setSelectedPaymentMethod(paymentMethod);
+            setShouldSavePaymentMethod(shouldSavePaymentMethod);
             closeBottomSheet();
           }}
-          previousPaymentMethod={previousPaymentMethod}
+          currentOptions={{
+            paymentMethod,
+            shouldSavePaymentMethod,
+          }}
         />
       );
     });
   }
-  function summary(text?: string) {
-    // Don't render the text if the text is undefined or empty.
-    if (!text) return null;
-
-    return (
-      <ThemeText
-        style={styles.smallTopMargin}
-        type="body__secondary"
-        color="secondary"
-        testID="summaryText"
-      >
-        {text}
-      </ThemeText>
-    );
-  }
-
-  const SummaryText = () => {
-    switch (zoneSelectionMode) {
-      case 'multiple-stop-harbor':
-        return summary(
-          t(
-            PurchaseConfirmationTexts.validityTexts.harbor.messageInHarborZones,
-          ),
-        );
-      case 'none':
-        return summary(
-          getTextForLanguage(
-            preassignedFareProduct.description ?? [],
-            language,
-          ),
-        );
-      default:
-        return summary(
-          fromPlace.id === toPlace.id
-            ? t(
-                PurchaseConfirmationTexts.validityTexts.zone.single(
-                  fromPlaceName,
-                ),
-              )
-            : t(
-                PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                  fromPlaceName,
-                  toPlaceName,
-                ),
-              ),
-        );
-    }
-  };
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={t(PurchaseConfirmationTexts.title)}
-        leftButton={headerLeftButton}
+        leftButton={{
+          type: 'back',
+          onPress: () => {
+            if (reserveMutation.isSuccess) {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+              analytics.logEvent('Ticketing', 'Payment cancelled');
+            }
+            navigation.pop();
+          },
+        }}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
-        <View>
-          {error && (
-            <MessageInfoBox
-              type="error"
-              title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
-              message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
-              onPressConfig={{
-                action: refreshOffer,
-                text: t(dictionary.retry),
-              }}
-              style={styles.errorMessage}
-            />
-          )}
-          <Section>
-            <GenericSectionItem>
-              <View accessible={true} style={styles.ticketInfoContainer}>
-                <ThemeText>
-                  {getReferenceDataName(preassignedFareProduct, language)}
-                </ThemeText>
-                {recipient && (
-                  <ThemeText
-                    type="body__secondary"
-                    color="secondary"
-                    style={styles.sendingToText}
-                    testID="onBehalfOfText"
-                  >
-                    {t(
-                      PurchaseConfirmationTexts.sendingTo(
-                        recipient.phoneNumber,
-                      ),
-                    )}
-                  </ThemeText>
-                )}
-                {fareProductTypeConfig.direction &&
-                  summary(
-                    t(
-                      PurchaseConfirmationTexts.validityTexts.direction[
-                        fareProductTypeConfig.direction
-                      ](fromPlaceName, toPlaceName),
-                    ),
-                  )}
-                <SummaryText />
-                {!isSearchingOffer &&
-                  validDurationSeconds &&
-                  isShowValidTimeInfoEnabled &&
-                  summary(
-                    t(
-                      PurchaseConfirmationTexts.validityTexts.time(
-                        secondsToDuration(validDurationSeconds, language),
-                      ),
-                    ),
-                  )}
-                {fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-                  summary(
-                    t(
-                      PurchaseConfirmationTexts.validityTexts.harbor
-                        .onlyOnPhone,
-                    ),
-                  )}
-                <GlobalMessage
-                  style={styles.globalMessage}
-                  globalMessageContext={
-                    GlobalMessageContextEnum.appPurchaseConfirmation
-                  }
-                  textColor="secondary"
-                  ruleVariables={{
-                    preassignedFareProductType: preassignedFareProduct.type,
-                  }}
-                />
-                {!fareProductTypeConfig.isCollectionOfAccesses && (
-                  <MessageInfoText
-                    style={styles.smallTopMargin}
-                    type="info"
-                    message={travelDateText}
-                    textColor="secondary"
-                  />
-                )}
-              </View>
-            </GenericSectionItem>
-          </Section>
-        </View>
-
-        <Section style={styles.paymentSummaryContainer}>
-          {travellerSelectionMode !== 'none' && (
-            <GenericSectionItem>
-              {userProfilesWithCountAndOffer.map((u, i) => (
-                <PricePerUserProfile
-                  key={u.id}
-                  userProfile={u}
-                  style={i != 0 ? styles.smallTopMargin : undefined}
-                />
-              ))}
-            </GenericSectionItem>
-          )}
-          <GenericSectionItem>
-            <View style={styles.totalPaymentContainer} accessible={true}>
-              <View style={styles.totalContainerHeadings}>
-                <ThemeText type="body__primary">
-                  {t(PurchaseConfirmationTexts.totalCost.title)}
-                </ThemeText>
-                <ThemeText type="body__tertiary" color="secondary">
-                  {t(
-                    PurchaseConfirmationTexts.totalCost.label(
-                      vatPercentString,
-                      vatAmountString,
-                    ),
-                  )}
-                </ThemeText>
-              </View>
-
-              {!isSearchingOffer ? (
-                <ThemeText type="body__primary--jumbo" testID="totalPrice">
-                  {totalPriceString} kr
-                </ThemeText>
-              ) : (
-                <ActivityIndicator
-                  size={theme.spacing.medium}
-                  color={theme.color.foreground.dynamic.primary}
-                  style={{margin: theme.spacing.medium}}
-                />
-              )}
-            </View>
-          </GenericSectionItem>
-        </Section>
+        {offerError && (
+          <MessageInfoBox
+            type="error"
+            title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
+            message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
+            onPressConfig={{
+              action: refreshOffer,
+              text: t(dictionary.retry),
+            }}
+            style={styles.errorMessage}
+          />
+        )}
+        <PreassignedFareContractSummary
+          fareProductTypeConfig={selection.fareProductTypeConfig}
+          fromPlace={selection.fromPlace}
+          toPlace={selection.toPlace}
+          isSearchingOffer={isSearchingOffer}
+          preassignedFareProduct={selection.preassignedFareProduct}
+          recipient={recipient}
+          travelDate={selection.travelDate}
+          validDurationSeconds={validDurationSeconds}
+        />
+        <PriceSummary
+          fareProductTypeConfig={selection.fareProductTypeConfig}
+          isSearchingOffer={isSearchingOffer}
+          totalPrice={totalPrice}
+          userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
+        />
         {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox
             type="warning"
@@ -423,9 +286,23 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }
           textColor="primary"
           ruleVariables={{
-            preassignedFareProductType: preassignedFareProduct.type,
+            preassignedFareProductType: selection.preassignedFareProduct.type,
           }}
         />
+        {reserveMutation.isError && (
+          <MessageInfoBox
+            style={{marginBottom: theme.spacing.medium}}
+            message={t(PurchaseConfirmationTexts.reserveError)}
+            type="error"
+          />
+        )}
+        {vippsNotInstalledError && (
+          <MessageInfoBox
+            style={{marginBottom: theme.spacing.medium}}
+            message={t(PurchaseConfirmationTexts.vippsInstalledError)}
+            type="error"
+          />
+        )}
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -434,53 +311,49 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           />
         ) : (
           <View>
-            {previousMethod ? (
+            {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
-                  text={getPaymentOptionTexts(previousMethod)}
+                  text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor={interactiveColor}
-                  disabled={!!error}
+                  disabled={!!offerError}
                   rightIcon={{
-                    svg:
-                      previousMethod.paymentType === PaymentType.Mastercard
-                        ? MasterCard
-                        : previousMethod.paymentType === PaymentType.Vipps
-                        ? Vipps
-                        : Visa,
+                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
                   }}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
                       'Pay with previous payment method clicked',
                       {
-                        paymentMethod: previousMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
-                    goToPayment(previousMethod);
+                    goToPayment();
                   }}
+                  loading={reserveMutation.isLoading}
                 />
                 <PressableOpacity
                   style={styles.buttonTopSpacing}
-                  disabled={!!error}
+                  disabled={!!offerError}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
                       'Change payment method clicked',
                       {
-                        paymentMethod: previousMethod?.paymentType,
+                        paymentMethod: paymentMethod?.paymentType,
                         mode: params.mode,
                       },
                     );
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
-                    PurchaseConfirmationTexts.changePaymentOption.a11yHint,
+                    PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
                   )}
                 >
                   <View style={styles.flexRowCenter}>
                     <ThemeText type="body__primary--bold">
-                      {t(PurchaseConfirmationTexts.changePaymentOption.text)}
+                      {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
                     </ThemeText>
                   </View>
                 </PressableOpacity>
@@ -488,10 +361,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             ) : (
               <Button
                 interactiveColor={interactiveColor}
-                text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
-                disabled={!!error}
+                text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
+                disabled={!!offerError}
                 accessibilityHint={t(
-                  PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
+                  PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
                 )}
                 onPress={() => {
                   analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
@@ -499,7 +372,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                testID="choosePaymentOptionButton"
+                testID="choosePaymentMethodButton"
               />
             )}
           </View>
@@ -509,79 +382,26 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 };
 
-const PricePerUserProfile = ({
-  userProfile,
-  style,
-}: {
-  userProfile: UserProfileWithCountAndOffer;
-  style: StyleProp<ViewStyle>;
-}) => {
-  const styles = useStyles();
-  const {t, language} = useTranslation();
-  const {count, offer} = userProfile;
+function getPaymentTypeSvg(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Mastercard:
+      return MasterCard;
+    case PaymentType.Vipps:
+      return Vipps;
+    case PaymentType.Visa:
+      return Visa;
+  }
+}
 
-  const price = count * (offer.prices[0].amount_float || 0);
-  const originalPrice = count * (offer.prices[0].original_amount_float || 0);
-
-  const priceString = formatDecimalNumber(price, language, 2);
-  const originalPriceString = originalPrice
-    ? formatDecimalNumber(originalPrice, language, 2)
-    : undefined;
-
-  const hasFlexDiscount = price < originalPrice;
-
-  const userProfileName = getReferenceDataName(userProfile, language);
-  const a11yLabel = [
-    `${count} ${userProfileName}`,
-    `${priceString} kr`,
-    `${
-      hasFlexDiscount
-        ? `${t(
-            PurchaseConfirmationTexts.ordinaryPricePrefixA11yLabel,
-          )} ${originalPriceString} kr`
-        : ''
-    }`,
-  ].join(',');
-
-  return (
-    <View
-      accessible={true}
-      accessibilityLabel={a11yLabel}
-      style={[style, styles.userProfileItem]}
-    >
-      <ThemeText
-        style={styles.userProfileCountAndName}
-        color="secondary"
-        type="body__secondary"
-        testID="userProfileCountAndName"
-      >
-        {count} {userProfileName}
-      </ThemeText>
-      <View style={styles.userProfilePrice}>
-        {hasFlexDiscount && (
-          <ThemeText
-            type="body__tertiary"
-            color="secondary"
-            style={styles.userProfileOriginalPriceAmount}
-          >
-            {originalPriceString} kr
-          </ThemeText>
-        )}
-        <ThemeText color="secondary" type="body__secondary">
-          {priceString} kr
-        </ThemeText>
-      </View>
-    </View>
-  );
-};
-
-function getPlaceName(
-  place: TariffZone | StopPlaceFragment,
-  language: Language,
-) {
-  return 'geometry' in place
-    ? getReferenceDataName(place, language)
-    : place.name;
+function getOfferEndpoint(zoneSelectionMode: ZoneSelectionMode) {
+  switch (zoneSelectionMode) {
+    case 'none':
+      return 'authority';
+    case 'multiple-stop-harbor':
+      return 'stop-places';
+    default:
+      return 'zones';
+  }
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -608,44 +428,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacing.medium,
   },
   infoSection: {padding: theme.spacing.medium},
-  userProfileItem: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  userProfileCountAndName: {marginRight: theme.spacing.small},
-  userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
-  userProfileOriginalPriceAmount: {
-    marginEnd: theme.spacing.small,
-    alignSelf: 'flex-end',
-    textDecorationLine: 'line-through',
-  },
-  paymentSummaryContainer: {
-    marginVertical: theme.spacing.medium,
-  },
-  sendingToText: {
-    marginTop: theme.spacing.xSmall,
-  },
-  ticketInfoContainer: {
-    flex: 1,
-  },
-  totalPaymentContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  totalContainerHeadings: {
-    paddingVertical: theme.spacing.xSmall,
-  },
-  globalMessage: {
-    marginTop: theme.spacing.small,
-  },
   purchaseInformation: {
     marginBottom: theme.spacing.medium,
-  },
-  smallTopMargin: {
-    marginTop: theme.spacing.xSmall,
   },
 }));

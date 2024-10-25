@@ -47,6 +47,8 @@ import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useIsActivateTicketNowEnabled} from '../use-is-activate-now-enabled';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem.tsx';
 
 type Props = {
   fareContract: FareContract;
@@ -79,6 +81,7 @@ export const DetailsContent: React.FC<Props> = ({
     validityStatus,
     validFrom,
     validTo,
+    usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   } = getFareContractInfo(now, fc, currentUserId);
@@ -204,7 +207,9 @@ export const DetailsContent: React.FC<Props> = ({
           <MessageInfoText
             type="info"
             message={t(
-              FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
+              FareContractTexts.details.purchasedBy(
+                formatPhoneNumber(purchaserPhoneNumber),
+              ),
             )}
           />
         </GenericSectionItem>
@@ -214,6 +219,9 @@ export const DetailsContent: React.FC<Props> = ({
           benefits={benefits}
           onNavigateToMap={onNavigateToMap}
         />
+      )}
+      {usedAccesses?.length && (
+        <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
       <GenericSectionItem>
         <OrderDetails fareContract={fc} />

@@ -4,10 +4,10 @@ import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Boat, Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {
   getReferenceDataName,
   PreassignedFareProduct,
+  ProductTypeTransportModes,
   TariffZone,
   useFirestoreConfiguration,
 } from '@atb/configuration';
@@ -15,6 +15,8 @@ import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {SvgProps} from 'react-native-svg';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
@@ -94,14 +96,10 @@ const InspectableContent = ({
     fareProductTypeConfig?.illustration === 'hour24' ||
     fareProductTypeConfig?.illustration === 'youth';
 
-  const InspectionSvg =
-    fareProductTypeConfig?.illustration === 'night'
-      ? Moon
-      : fareProductTypeConfig?.illustration?.includes('boat')
-      ? Boat
-      : fareProductTypeConfig?.illustration === 'youth'
-      ? Youth
-      : Bus;
+  const InspectionSvg = getInspectionSvg(
+    fareProductTypeConfig?.illustration,
+    fareProductTypeConfig?.transportModes,
+  );
 
   const fromTariffZoneName =
     fromTariffZone && getReferenceDataName(fromTariffZone, language);
@@ -160,6 +158,19 @@ const NotInspectableContent = () => {
       </ThemeText>
     </View>
   );
+};
+
+const getInspectionSvg = (
+  illustration: string | undefined,
+  transportModes: ProductTypeTransportModes[] | undefined,
+): ((props: SvgProps) => JSX.Element) => {
+  if (illustration === 'night') return Moon;
+  if (illustration === 'youth') return Youth;
+
+  return getTransportModeSvg(
+    transportModes?.[0].mode,
+    transportModes?.[0].subMode,
+  ).svg;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
