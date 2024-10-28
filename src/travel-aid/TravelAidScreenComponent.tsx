@@ -144,12 +144,11 @@ const TravelAidSection = ({
       <GenericSectionItem
         accessibility={{
           accessible: true,
-          accessibilityLabel:
-            getStopHeader(status, t) +
-            ' ' +
-            quayName +
-            '. ' +
-            getTimeInfoA11yLabel({status, focusedEstimatedCall}, t, language),
+          accessibilityLabel: getFocussedStateA11yLabel(
+            {status, focusedEstimatedCall},
+            t,
+            language,
+          ),
         }}
       >
         <View style={styles.sectionContainer}>
@@ -176,14 +175,7 @@ const TravelAidSection = ({
 const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
-
-  const quayName = getQuayName(state.focusedEstimatedCall.quay) ?? '';
-  const message =
-    getStopHeader(state.status, t) +
-    ' ' +
-    quayName +
-    '. ' +
-    getTimeInfoA11yLabel(state, t, language);
+  const message = getFocussedStateA11yLabel(state, t, language);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -240,6 +232,22 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         </View>
       );
   }
+};
+
+const getFocussedStateA11yLabel = (
+  state: FocusedEstimatedCallState,
+  t: TranslateFunction,
+  language: Language,
+) => {
+  const quayName = getQuayName(state.focusedEstimatedCall.quay) ?? '';
+
+  return (
+    getStopHeader(state.status, t) +
+    ' ' +
+    quayName +
+    '. ' +
+    getTimeInfoA11yLabel(state, t, language)
+  );
 };
 
 const getTimeInfoA11yLabel = (
