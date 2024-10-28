@@ -18,7 +18,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
-import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
+import {
+  getLineA11yLabel,
+  getNoticesForServiceJourney,
+} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -32,6 +35,8 @@ import {
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names.ts';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {SituationMessageBox} from '@atb/situations';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -111,6 +116,16 @@ const TravelAidSection = ({
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
+  var notices: NoticeFragment[] = [];
+  if (serviceJourney !== undefined) {
+    notices = getNoticesForServiceJourney(serviceJourney, fromQuayId);
+  }
+
+  const situations =
+    focusedEstimatedCall?.situations.sort((n1, n2) =>
+      n1.id.localeCompare(n2.id),
+    ) ?? [];
+
   return (
     <Section ref={focusRef}>
       <GenericSectionItem
@@ -152,6 +167,20 @@ const TravelAidSection = ({
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
+          )}
+          {(situations.length > 0 || notices.length > 0) && (
+            <View style={styles.subContainer}>
+              {situations.map((situation) => (
+                <SituationMessageBox key={situation.id} situation={situation} />
+              ))}
+
+              {notices.map(
+                (notice) =>
+                  notice.text && (
+                    <MessageInfoBox type="info" message={notice.text} />
+                  ),
+              )}
+            </View>
           )}
           <View style={styles.subContainer}>
             <ThemeText type="body__tertiary--bold">
