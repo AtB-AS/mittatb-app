@@ -4,12 +4,9 @@ import {StorageModelKeysEnum} from '@atb/storage';
 
 export const useIsTravelAidEnabled = () => {
   const {enable_travel_aid} = useRemoteConfig();
-  const [debugOverride, _, debugOverrideReady] =
+  const [debugOverride] =
     useIsTravelAidEnabledDebugOverride();
-  return [
-    debugOverride !== undefined ? debugOverride : enable_travel_aid,
-    debugOverrideReady,
-  ];
+  return debugOverride !== undefined ? debugOverride : enable_travel_aid;
 };
 
 export const useIsTravelAidEnabledDebugOverride = () => {
