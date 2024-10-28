@@ -14,6 +14,16 @@ export type Flattened<T> = T extends object
   : T;
 
 /**
+ * Make values in T required.
+ *
+ * @example
+ * type A = { a: number, b?: string, c: boolean | undefined};
+ * type B = RequireValue<A, 'b' | 'c'>;
+ * // B is { a: number, b: string, c: boolean }
+ */
+export type RequireValue<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+/**
  * Flatten an object, non-recursively
  *
  * E.g.
