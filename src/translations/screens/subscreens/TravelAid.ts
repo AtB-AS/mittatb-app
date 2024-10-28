@@ -2,12 +2,27 @@ import {translation as _} from '../../commons';
 export const TravelAidTexts = {
   close: _('Lukk Reisehjelp', 'Close Journey Aid', 'Lukk Reisehjelp'),
   stopPlaceHeader: {
-    from: _('Fra:', 'From:', 'Frå'),
-    arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer'),
-    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste holdeplass'),
+    from: _('Fra:', 'From:', 'Frå:'),
+    arrivesAt: _('Kommer til:', 'Arrives at:', 'Kommer til:'),
+    nextStop: _('Neste holdeplass:', 'Next stop:', 'Neste haldeplass:'),
+    endOfLine: _('Siste holdeplass:', 'Last stop:', 'Siste haldeplass:'),
   },
   scheduledTime: (time: string) =>
     _(`Rutetid kl. ${time}`, `Scheduled at ${time}`, `Rutetid kl. ${time}`),
+  scheduledTimeA11yLabel: (time: string) =>
+    _(
+      `Rutetid klokken. ${time}`,
+      `Scheduled at ${time}`,
+      `Rutetid klokken. ${time}`,
+    ),
+  clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
+  error: {
+    message: _(
+      'Det oppstod en feil ved henting av reisedata for denne avgangen.',
+      'There was a problem loading travel data for this trip.',
+      'Det oppstod ein feil då vi prøvde å hente reisedata for denne avgangen.',
+    ),
+  },
   noRealtimeError: {
     title: _(
       'Ingen kontakt med kjøretøy',
