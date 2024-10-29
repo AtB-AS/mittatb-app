@@ -31,7 +31,7 @@ export function Section({
 
         const additionalProps: Partial<BaseSectionItemProps> = {
           radius: toRadius(index, lastIndex, firstIndex),
-          radiusSize: 'medium',
+          radiusSize: 'regular',
           type,
           ...child.props,
         };
