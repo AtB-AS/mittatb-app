@@ -123,7 +123,7 @@ const TravelAidSection = ({
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
-  var notices: NoticeFragment[] = [];
+  let notices: NoticeFragment[] = [];
   if (serviceJourney !== undefined) {
     notices = getNoticesForServiceJourney(serviceJourney, fromQuayId);
   }
