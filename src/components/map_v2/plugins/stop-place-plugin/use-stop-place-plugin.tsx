@@ -1,9 +1,9 @@
 import {Feature, Point} from 'geojson';
-import {isStopPlace} from '../../utils.ts';
 import {DeparturesDialogSheet} from '../../../map/components/DeparturesDialogSheet';
 import React from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import type {MapPluginType} from '@atb/components/map_v2/plugins/types.ts';
+import {isStopPlace} from "@atb/components/map/utils.ts";
 
 export const useStopPlacePlugin: MapPluginType = (_) => {
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -31,6 +31,6 @@ export const useStopPlacePlugin: MapPluginType = (_) => {
 
       return true;
     },
-    renderedFeatures: undefined,
+    renderedFeature: undefined,
   };
 };

@@ -1,7 +1,7 @@
 import {useStopPlacePlugin} from './stop-place-plugin/use-stop-place-plugin';
 import {Feature, Point} from 'geojson';
 import {useElScootersPlugin} from '@atb/components/map_v2/plugins/el-scooter-plugin/use-el-scooters-plugin.tsx';
-import {MapRegion} from '@atb/components/map_v2';
+import {MapRegion} from '@atb/components/map';
 import {MapPluginsSharedState} from '@atb/components/map_v2/plugins/types.ts';
 import {useState} from 'react';
 import {useGeofencingZonesPlugin} from '@atb/components/map_v2/plugins/geofencing-zones-plugin/use-geofencing-zones-plugin.tsx';

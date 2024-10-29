@@ -1,5 +1,5 @@
 import {Feature, Point} from 'geojson';
-import {MapRegion} from '@atb/components/map_v2';
+import {MapRegion} from '@atb/components/map';
 
 export type MapPluginsSharedState = {
   selectedEntityId: string | undefined;

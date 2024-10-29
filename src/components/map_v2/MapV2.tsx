@@ -1,12 +1,12 @@
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import React, {useRef, useState} from 'react';
+import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
+import React, {useRef} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, MapViewConfig} from './MapConfig';
-import {getFeaturesAtClick} from '@atb/components/map_v2/utils.ts';
-import {isFeaturePoint, MapRegion} from '@atb/components/map';
+import {MapCameraConfig, MapViewConfig} from '@atb/components/map/MapConfig';
+import {getFeaturesAtClick} from '@atb/components/map/utils.ts';
+import {isFeaturePoint} from '@atb/components/map';
 import {usePlugins} from '@atb/components/map_v2/plugins/use-plugins.tsx';
 import {useMapRegion} from '@atb/components/map_v2/use-map-region.ts';
 
@@ -32,7 +32,9 @@ export const MapV2 = () => {
           onMapIdle={onMapIdle}
           onPress={(f) => {
             if (isFeaturePoint(f)) {
-              getFeaturesAtClick(f, mapViewRef).then(handleClick);
+              getFeaturesAtClick(f, mapViewRef).then(
+                (f) => f && handleClick(f as any),
+              );
             }
           }}
           {...MapViewConfig}

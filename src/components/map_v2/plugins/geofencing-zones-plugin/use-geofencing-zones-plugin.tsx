@@ -1,8 +1,6 @@
-import {isScooter, ScooterSheet} from '@atb/mobility';
 import React from 'react';
 import {Feature, FeatureCollection, Point} from 'geojson';
 import {MapPluginType} from '@atb/components/map_v2/plugins/types.ts';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useVehicleQuery} from '@atb/mobility/queries/use-vehicle-query.tsx';
 import {
   hitboxCoveringIconOnly,
@@ -19,7 +17,7 @@ export const useGeofencingZonesPlugin: MapPluginType = ({sharedState}) => {
     handlePress: (_features: Feature<Point>[]) => {
       return true;
     },
-    renderedFeatures: vehicle ? (
+    renderedFeature: vehicle ? (
       <GeofencingZonesForVehicle vehicle={vehicle} />
     ) : undefined,
   };
