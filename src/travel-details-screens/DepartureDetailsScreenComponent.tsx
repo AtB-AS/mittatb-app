@@ -194,6 +194,7 @@ export const DepartureDetailsScreenComponent = ({
                 onPress={onPressTravelAid}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor="interactive_0"
+                disabled={!fromQuay?.realtime}
               />
             )}
             {shouldShowMapButton || realtimeText ? (
