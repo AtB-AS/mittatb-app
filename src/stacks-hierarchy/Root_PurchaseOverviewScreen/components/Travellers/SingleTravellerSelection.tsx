@@ -14,9 +14,9 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
 import {useAuthState} from '@atb/auth';
+import {useFeatureToggles} from "@atb/feature-toggles";
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -32,7 +32,7 @@ export function SingleTravellerSelection({
   const {authenticationType} = useAuthState();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
   const isOnBehalfOfEnabled =
-    useOnBehalfOfEnabled() &&
+    useFeatureToggles().isOnBehalfOfEnabled &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const isLoggedIn = authenticationType === 'phone';

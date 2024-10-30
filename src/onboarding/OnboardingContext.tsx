@@ -19,16 +19,14 @@ import {
 } from '@atb/onboarding';
 import {ShouldShowArgsType} from '@atb/onboarding/types';
 import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
-import {
-  useNotifications,
-  usePushNotificationsEnabled,
-} from '@atb/notifications';
+import {useNotifications} from '@atb/notifications';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {AuthStateChangeListenerCallback, useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -284,7 +282,7 @@ const useShouldShowArgs = (
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
 
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {isPushNotificationsEnabled} = useFeatureToggles();
   const {permissionStatus: pushNotificationPermissionStatus} =
     useNotifications();
 
@@ -310,7 +308,7 @@ const useShouldShowArgs = (
     () => ({
       hasFareContractWithActivatedNotification,
       pushNotificationPermissionStatus,
-      pushNotificationsEnabled,
+      isPushNotificationsEnabled,
       locationPermissionStatus,
       authenticationType,
       extendedOnboardingEnabled,
@@ -322,7 +320,7 @@ const useShouldShowArgs = (
     [
       hasFareContractWithActivatedNotification,
       pushNotificationPermissionStatus,
-      pushNotificationsEnabled,
+      isPushNotificationsEnabled,
       locationPermissionStatus,
       authenticationType,
       extendedOnboardingEnabled,

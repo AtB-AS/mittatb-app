@@ -6,23 +6,21 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {PostHog, PostHogProvider} from 'posthog-react-native'
+import {PostHog, PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
 import {useAuthState} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {useIsPosthogEnabled} from '@atb/analytics/use-is-posthog-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
-
-
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
   const {userId, authenticationType} = useAuthState();
   const appStatus = useAppStateStatus();
-  const [isPosthogEnabled] = useIsPosthogEnabled();
+  const {isPosthogEnabled} = useFeatureToggles();
 
   const authTypeRef = useRef(authenticationType);
   useEffect(() => {
@@ -32,8 +30,8 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     if (isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY && !client) {
       const postHog = new PostHog(POSTHOG_API_KEY, {
-        host: POSTHOG_HOST
-      })
+        host: POSTHOG_HOST,
+      });
       setClient(postHog);
     }
   }, [isPosthogEnabled, client]);

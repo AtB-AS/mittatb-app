@@ -17,10 +17,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {
-  useFromTravelSearchToTicketEnabled,
-  useFromTravelSearchToTicketForBoatEnabled,
-} from './use_from_travel_search_to_ticket_enabled';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
@@ -34,6 +30,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/harbors';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -156,10 +153,10 @@ function useTicketInfoFromTrip(
   tripPattern: TripPattern,
 ): TicketInfoForBus | TicketInfoForBoat | undefined {
   const {enable_ticketing} = useRemoteConfig();
-  const isFromTravelSearchToTicketEnabled =
-    useFromTravelSearchToTicketEnabled();
-  const isFromTravelSearchToTicketForBoatEnabled =
-    useFromTravelSearchToTicketForBoatEnabled();
+  const {
+    isFromTravelSearchToTicketEnabled,
+    isFromTravelSearchToTicketBoatEnabled,
+  } = useFeatureToggles();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {tariffZones} = useFirestoreConfiguration();
   const {data: harbors} = useHarbors();
@@ -191,7 +188,7 @@ function useTicketInfoFromTrip(
   );
   if (ticketInfoForBus) return ticketInfoForBus;
 
-  if (!isFromTravelSearchToTicketForBoatEnabled) {
+  if (!isFromTravelSearchToTicketBoatEnabled) {
     // Boat ticket is disabled, avoid returning any ticket info
     return;
   }

@@ -21,7 +21,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
@@ -31,6 +30,7 @@ import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedScooter} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   vehicleId: VehicleId;
@@ -62,8 +62,7 @@ export const ScooterSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const [isParkingViolationsReportingEnabled] =
-    useParkingViolationsReportingEnabled();
+  const {isParkingViolationsReportingEnabled} = useFeatureToggles();
 
   return (
     <BottomSheetContainer

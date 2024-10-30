@@ -28,10 +28,10 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -47,8 +47,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const [isFlexibleTransportEnabledInRemoteConfig, _] =
-    useFlexibleTransportEnabled();
+  const {isFlexibleTransportEnabled} = useFeatureToggles();
 
   const [selectedModeOptions, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
@@ -80,7 +79,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
   const showFlexibleTransportFilterOption =
-    isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
+      isFlexibleTransportEnabled && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer

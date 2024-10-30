@@ -1,7 +1,5 @@
 import {FormFactorFilter} from '@atb/mobility/components/filter/FormFactorFilter';
 import React, {useState} from 'react';
-import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
-import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
 import {StyleSheet} from '@atb/theme';
 import {
   Bicycle,
@@ -11,6 +9,7 @@ import {
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -19,9 +18,11 @@ type Props = {
 
 export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   const styles = useStyle();
-  const isVehiclesEnabled = useIsVehiclesEnabled();
-  const isCityBikesEnabled = useIsCityBikesEnabled();
-  const isCarSharingEnabled = useIsCarSharingEnabled();
+  const {
+    isCarSharingInMapEnabled,
+    isCityBikesInMapEnabled,
+    isVehiclesInMapEnabled,
+  } = useFeatureToggles();
   const [mobilityFilter, setMobilityFilter] =
     useState<MobilityMapFilterType>(filter);
 
@@ -37,7 +38,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
 
   return (
     <View style={styles.container}>
-      {isVehiclesEnabled && (
+      {isVehiclesInMapEnabled && (
         <FormFactorFilter
           formFactor={FormFactor.Scooter}
           icon={Scooter}
@@ -45,7 +46,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
           onFilterChange={onFormFactorFilterChanged(FormFactor.Scooter)}
         />
       )}
-      {isCityBikesEnabled && (
+      {isCityBikesInMapEnabled && (
         <FormFactorFilter
           formFactor={FormFactor.Bicycle}
           icon={Bicycle}
@@ -53,7 +54,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
           onFilterChange={onFormFactorFilterChanged(FormFactor.Bicycle)}
         />
       )}
-      {isCarSharingEnabled && (
+      {isCarSharingInMapEnabled && (
         <FormFactorFilter
           formFactor={FormFactor.Car}
           icon={Car}

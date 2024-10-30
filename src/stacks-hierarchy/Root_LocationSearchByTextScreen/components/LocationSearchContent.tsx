@@ -19,8 +19,8 @@ import {StyleSheet} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
-import {useOnlyStopPlacesCheckboxEnabled} from '../use-only-stop-places-checkbox-enabled.tsx';
 import {useAnalytics} from '@atb/analytics';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type LocationSearchContentProps = {
   label: string;
@@ -64,7 +64,7 @@ export function LocationSearchContent({
     onlyLocalTariffZoneAuthority,
   );
 
-  const onlyStopPlacesCheckboxEnabled = useOnlyStopPlacesCheckboxEnabled();
+  const {isOnlyStopPlacesCheckboxEnabled} = useFeatureToggles();
   const [onlyStopPlaces, setOnlyStopPlaces] = useState(false);
 
   const {location: geolocation} = useGeolocationState();
@@ -149,7 +149,7 @@ export function LocationSearchContent({
             onAddFavorite={onAddFavorite}
           />
         )}
-        {onlyStopPlacesCheckboxEnabled && (
+        {isOnlyStopPlacesCheckboxEnabled && (
           <CheckboxWithLabel
             label={t(LocationSearchTexts.onlyStopPlacesCheckbox)}
             checked={onlyStopPlaces}

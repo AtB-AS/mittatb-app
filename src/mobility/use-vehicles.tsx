@@ -10,7 +10,6 @@ import {
   VehicleFeatures,
   VehiclesState,
 } from '@atb/components/map';
-import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
 import {
   AreaState,
   getOperators,
@@ -22,6 +21,7 @@ import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFeatureToggles} from "@atb/feature-toggles";
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -36,7 +36,7 @@ export const useVehicles: (
   initialFilter?: MobilityMapFilterType,
 ) => VehiclesState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
-  const isVehiclesEnabled = useIsVehiclesEnabled();
+  const {isVehiclesInMapEnabled} = useFeatureToggles();
   const {getMapFilter} = useUserMapFilters();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
@@ -49,7 +49,7 @@ export const useVehicles: (
       setFilter(userFilter.mobility);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVehiclesEnabled]);
+  }, [isVehiclesInMapEnabled]);
 
   useEffect(() => {
     if (isFocused) {
@@ -62,7 +62,7 @@ export const useVehicles: (
 
   const loadVehicles = useCallback(
     async (signal) => {
-      if (isVehiclesEnabled && area) {
+      if (isVehiclesInMapEnabled && area) {
         const scooterOperators = getOperators(filter, FormFactor.Scooter);
         const includeScooters =
           isShowAll(filter, FormFactor.Scooter) || scooterOperators.length > 0;
@@ -96,7 +96,7 @@ export const useVehicles: (
       }
       return emptyVehicles;
     },
-    [area, isVehiclesEnabled, filter],
+    [area, isVehiclesInMapEnabled, filter],
   );
 
   const [vehicles, reload, isLoading] = usePollableResource(loadVehicles, {
@@ -113,7 +113,7 @@ export const useVehicles: (
     setFilter(filter);
   };
 
-  return isVehiclesEnabled
+  return isVehiclesInMapEnabled
     ? {
         vehicles,
         onFilterChange,
