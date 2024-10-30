@@ -40,22 +40,22 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^13.2.0":
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.2.0.tgz#1f178e9d004ab517f4141bf1bfe7d590913593c2"
-  integrity sha512-tJ3Vux1mNxlrj6ZyMYUViaXfTXedHyFhxXP1YX4KEdysWV+ov6IhlLLUD0YVlT7io0a9AhGF5z0/iVYwb39PCA==
+"@atb-as/generate-assets@^13.2.1":
+  version "13.2.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.2.1.tgz#3d77f441c12a7a603bf48959c3f9d1b91138d59b"
+  integrity sha512-EaH6vokuXPhkqqSMs7mWUfhpGHqKtQ4961FlAOcDLAMAEfsd41AeEasJwkrt5rNPtAAn7tgW+LRZyc1CqDTBxw==
   dependencies:
-    "@atb-as/theme" "^11.0.0"
+    "@atb-as/theme" "^11.0.1"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.0.tgz#39aa48e25b5fda9856d230270b9613080f7c4414"
-  integrity sha512-TgknxsEGPBeR/ldn06bXX22hzqkjljz1x8MZUHNIBUg/3Hq7khSbYSqp5KW0PjsdBrJNQ+ZCTdRoqMUUQdiApQ==
+"@atb-as/theme@^11.0.1":
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.1.tgz#da8f17ae0a3c79db01dd08255c6d372f0b73e5ef"
+  integrity sha512-43XcjcML+e1PvrZgJZxZcTxIQ6cTICTnYeyzmf43NANPh+vV7atZAjjFzmFpMJhM4RTi1sd2CPLOVUiwF2iO4Q==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.3.8"
     hex-to-rgba "^2.0.1"

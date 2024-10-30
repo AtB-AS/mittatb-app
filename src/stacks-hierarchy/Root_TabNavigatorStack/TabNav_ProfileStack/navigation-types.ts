@@ -31,6 +31,8 @@ export type ProfileStackParams = StackParams<{
   Profile_DebugInfoScreen: undefined;
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Profile_PlaceScreen: PlaceScreenParams;
+  Profile_TravelAidScreen: undefined;
+  Profile_TravelAidInformationScreen: undefined;
 }>;
 
 export type ProfileStackRootProps =
