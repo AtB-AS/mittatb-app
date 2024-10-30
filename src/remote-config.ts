@@ -28,6 +28,7 @@ export type RemoteConfig = {
   enable_loading_error_screen: boolean;
   enable_loading_screen: boolean;
   enable_non_transit_trip_search: boolean;
+  enable_nynorsk: boolean;
   enable_on_behalf_of: boolean;
   enable_parking_violations_reporting: boolean;
   enable_posthog: boolean;
@@ -96,6 +97,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_error_screen: false,
   enable_loading_screen: true,
   enable_non_transit_trip_search: true,
+  enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_parking_violations_reporting: false,
   enable_posthog: false,
@@ -201,6 +203,8 @@ export function getConfig(): RemoteConfig {
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
+  const enable_nynorsk =
+    values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
     values['enable_on_behalf_of']?.asBoolean() ??
     defaultRemoteConfig.enable_on_behalf_of;
@@ -345,6 +349,7 @@ export function getConfig(): RemoteConfig {
     enable_loading_error_screen,
     enable_loading_screen,
     enable_non_transit_trip_search,
+    enable_nynorsk,
     enable_on_behalf_of,
     enable_parking_violations_reporting,
     enable_posthog,
