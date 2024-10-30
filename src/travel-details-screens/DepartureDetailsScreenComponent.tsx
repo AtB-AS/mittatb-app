@@ -61,6 +61,7 @@ import {
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {usePreferences} from '@atb/preferences';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -105,6 +106,12 @@ export const DepartureDetailsScreenComponent = ({
 
   const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureToggles();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+
+  const {
+    preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
+  } = usePreferences();
+  const shouldShowTravelAid =
+    travelAidPreferenceEnabled && isTravelAidEnabled;
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
@@ -179,12 +186,13 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {isTravelAidEnabled && (
+            {shouldShowTravelAid && (
               <Button
                 style={styles.travelAidButton}
                 onPress={onPressTravelAid}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor="interactive_0"
+                disabled={!fromQuay?.realtime}
               />
             )}
             {shouldShowMapButton || realtimeText ? (

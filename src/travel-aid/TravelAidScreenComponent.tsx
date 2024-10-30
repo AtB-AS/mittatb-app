@@ -3,16 +3,22 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import React from 'react';
+import React, {Ref, useEffect, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {ActivityIndicator, View} from 'react-native';
+import {AccessibilityInfo, ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
-import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
+import {
+  Language,
+  TranslateFunction,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
+import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -24,6 +30,9 @@ import {
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {getQuayName} from '@atb/utils/transportation-names.ts';
+import {RequireValue} from '@atb/utils/object';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -38,6 +47,7 @@ export const TravelAidScreenComponent = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
+  const focusRef = useFocusOnLoad();
 
   const {
     data: serviceJourney,
@@ -69,10 +79,14 @@ export const TravelAidScreenComponent = ({
             onPressConfig={{action: refetch, text: t(dictionary.retry)}}
           />
         )}
-        {status === 'success' && (
+        {status === 'success' && serviceJourney.estimatedCalls && (
           <TravelAidSection
-            serviceJourney={serviceJourney}
+            serviceJourney={{
+              ...serviceJourney,
+              estimatedCalls: serviceJourney.estimatedCalls,
+            }}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
+            focusRef={focusRef}
           />
         )}
       </ScrollView>
@@ -83,23 +97,41 @@ export const TravelAidScreenComponent = ({
 const TravelAidSection = ({
   serviceJourney,
   fromQuayId,
+  focusRef,
 }: {
-  serviceJourney: ServiceJourneyWithEstCallsFragment;
+  serviceJourney: RequireValue<
+    ServiceJourneyWithEstCallsFragment,
+    'estimatedCalls'
+  >;
   fromQuayId?: string;
+  focusRef: Ref<any>;
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
-
-  if (!serviceJourney.estimatedCalls) return null;
+  const {t, language} = useTranslation();
 
   const {status, focusedEstimatedCall} = getFocusedEstimatedCall(
     serviceJourney.estimatedCalls,
     fromQuayId,
   );
 
+  useTravelAidAnnouncements({status, focusedEstimatedCall});
+
+  const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
+
   return (
-    <Section>
-      <GenericSectionItem style={styles.sectionContainer}>
+    <Section ref={focusRef}>
+      <GenericSectionItem
+        style={styles.sectionContainer}
+        accessibility={{
+          accessible: true,
+          accessibilityLabel: getLineA11yLabel(
+            focusedEstimatedCall.destinationDisplay,
+            serviceJourney.line.publicCode,
+            t,
+          ),
+          importantForAccessibility: 'yes',
+        }}
+      >
         <EstimatedCallInfo
           departure={{
             cancellation: false,
@@ -109,7 +141,16 @@ const TravelAidSection = ({
           }}
         />
       </GenericSectionItem>
-      <GenericSectionItem>
+      <GenericSectionItem
+        accessibility={{
+          accessible: true,
+          accessibilityLabel: getFocussedStateA11yLabel(
+            {status, focusedEstimatedCall},
+            t,
+            language,
+          ),
+        }}
+      >
         <View style={styles.sectionContainer}>
           {status === TravelAidStatus.NoRealtime && (
             <MessageInfoBox
@@ -122,16 +163,27 @@ const TravelAidSection = ({
             <ThemeText type="body__tertiary--bold">
               {getStopHeader(status, t)}
             </ThemeText>
-            <ThemeText type="heading__title">
-              {focusedEstimatedCall.quay.stopPlace?.name}{' '}
-              {focusedEstimatedCall.quay.publicCode}
-            </ThemeText>
+            <ThemeText type="heading__title">{quayName}</ThemeText>
           </View>
           <TimeInfo state={{status, focusedEstimatedCall}} />
         </View>
       </GenericSectionItem>
     </Section>
   );
+};
+
+const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
+  const {language, t} = useTranslation();
+  const isFirstRender = useRef(true);
+  const message = getFocussedStateA11yLabel(state, t, language);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    AccessibilityInfo.announceForAccessibility(message);
+  }, [message]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
@@ -179,6 +231,52 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
           </ThemeText>
         </View>
       );
+  }
+};
+
+const getFocussedStateA11yLabel = (
+  state: FocusedEstimatedCallState,
+  t: TranslateFunction,
+  language: Language,
+) => {
+  const quayName = getQuayName(state.focusedEstimatedCall.quay) ?? '';
+
+  return (
+    getStopHeader(state.status, t) +
+    ' ' +
+    quayName +
+    '. ' +
+    getTimeInfoA11yLabel(state, t, language)
+  );
+};
+
+const getTimeInfoA11yLabel = (
+  state: FocusedEstimatedCallState,
+  t: TranslateFunction,
+  language: Language,
+) => {
+  const scheduledClock = formatToClock(
+    state.focusedEstimatedCall.aimedDepartureTime,
+    language,
+    'round',
+  );
+  const relativeRealtime = formatToClockOrRelativeMinutes(
+    state.focusedEstimatedCall.expectedDepartureTime,
+    language,
+    t(dictionary.date.units.now),
+  );
+  switch (state.status) {
+    case TravelAidStatus.EndOfLine:
+      return '';
+    case TravelAidStatus.NoRealtime:
+    case TravelAidStatus.NotGettingUpdates:
+      return t(TravelAidTexts.clock(scheduledClock));
+    case TravelAidStatus.NotYetArrived:
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
+      return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}, ${t(
+        TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
+      )}`;
   }
 };
 

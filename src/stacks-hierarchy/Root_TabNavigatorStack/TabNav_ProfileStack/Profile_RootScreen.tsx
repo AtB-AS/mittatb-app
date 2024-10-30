@@ -53,7 +53,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing, enable_vipps_login} = useRemoteConfig();
   const {clearTokenAtLogout} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
@@ -89,8 +89,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {enable_vipps_login} = useRemoteConfig();
-  const {isPushNotificationsEnabled} = useFeatureToggles();
+  const {isPushNotificationsEnabled, isTravelAidEnabled} = useFeatureToggles();
 
   const {logEvent} = useAnalytics();
 
@@ -275,6 +274,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
+
+          {isTravelAidEnabled ? (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.settings.linkSectionItems.travelAid
+                    .label,
+                )}
+                onPress={() =>
+                  navigation.navigate('Profile_TravelAidScreen')
+                }
+                testID="travelAidButton"
+              />
+            ) : null}
+
             {enable_ticketing ? (
               <LinkSectionItem
                 text={t(
