@@ -9,7 +9,7 @@ import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {AccessibilityInfo, ActivityIndicator, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {
   Language,
@@ -38,6 +38,8 @@ import {getQuayName} from '@atb/utils/transportation-names.ts';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationMessageBox} from '@atb/situations';
 import {RequireValue} from '@atb/utils/object';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {getSituationSummary} from '@atb/situations/utils';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -119,19 +121,23 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
-  useTravelAidAnnouncements({status, focusedEstimatedCall});
-
-  const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
-
   let notices: NoticeFragment[] = [];
   if (serviceJourney !== undefined) {
-    notices = getNoticesForServiceJourney(serviceJourney, fromQuayId);
+    notices = getNoticesForServiceJourney(serviceJourney, fromQuayId) ?? [];
   }
 
   const situations =
     focusedEstimatedCall?.situations.sort((n1, n2) =>
       n1.id.localeCompare(n2.id),
     ) ?? [];
+
+  useTravelAidAnnouncements(
+    {status, focusedEstimatedCall},
+    situations,
+    notices,
+  );
+
+  const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
   return (
     <Section ref={focusRef}>
@@ -161,6 +167,8 @@ const TravelAidSection = ({
           accessible: true,
           accessibilityLabel: getFocussedStateA11yLabel(
             {status, focusedEstimatedCall},
+            situations,
+            notices,
             t,
             language,
           ),
@@ -201,10 +209,20 @@ const TravelAidSection = ({
   );
 };
 
-const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
+const useTravelAidAnnouncements = (
+  state: FocusedEstimatedCallState,
+  situations: SituationFragment[],
+  notices: NoticeFragment[],
+) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
-  const message = getFocussedStateA11yLabel(state, t, language);
+  const message = getFocussedStateA11yLabel(
+    state,
+    situations,
+    notices,
+    t,
+    language,
+  );
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -265,17 +283,37 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
 
 const getFocussedStateA11yLabel = (
   state: FocusedEstimatedCallState,
+  situations: SituationFragment[],
+  notices: NoticeFragment[],
   t: TranslateFunction,
   language: Language,
 ) => {
   const quayName = getQuayName(state.focusedEstimatedCall.quay) ?? '';
 
   return (
+    getSituationOrNoticeA11yLabel(situations, notices, language) +
     getStopHeader(state.status, t) +
     ' ' +
     quayName +
     '. ' +
     getTimeInfoA11yLabel(state, t, language)
+  );
+};
+
+const getSituationOrNoticeA11yLabel = (
+  situations: SituationFragment[],
+  notices: NoticeFragment[],
+  language: Language,
+) => {
+  return (
+    situations
+      .map((s) => getSituationSummary(s, language))
+      .filter((s) => s)
+      .join(screenReaderPause) +
+    notices
+      .filter((notice) => notice.text)
+      .map((notice) => notice.text)
+      .join(screenReaderPause)
   );
 };
 
