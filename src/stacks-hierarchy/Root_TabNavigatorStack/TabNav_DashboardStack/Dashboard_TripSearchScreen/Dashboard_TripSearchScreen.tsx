@@ -46,7 +46,6 @@ import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigat
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
-import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
@@ -55,6 +54,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOver} from '@atb/popover';
 import {areDefaultFiltersSelected} from './utils';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -88,8 +88,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-  const [isFlexibleTransportEnabledInRemoteConfig, _] =
-    useFlexibleTransportEnabled();
+  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
+    useFeatureToggles();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
   const {nonTransitTrips} = useNonTransitTripsQuery(
@@ -340,7 +340,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   language,
                 )}
                 mode="primary"
-                interactiveColor='interactive_1'
+                interactiveColor="interactive_1"
                 compact={true}
                 style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
@@ -359,7 +359,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
-                    interactiveColor='interactive_1'
+                    interactiveColor="interactive_1"
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}

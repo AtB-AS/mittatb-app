@@ -15,7 +15,7 @@ import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useAnalytics} from '@atb/analytics';
-import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   onReportParkingViolation: () => void;
@@ -29,8 +29,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {customer_service_url, enable_intercom, customer_feedback_url} =
     useRemoteConfig();
   const analytics = useAnalytics();
-  const [isParkingViolationsReportingEnabled] =
-    useParkingViolationsReportingEnabled();
+  const {isParkingViolationsReportingEnabled} = useFeatureToggles();
 
   const showWebsiteFeedback = !!customer_feedback_url;
   const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;

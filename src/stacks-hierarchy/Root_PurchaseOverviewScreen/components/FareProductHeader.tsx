@@ -14,8 +14,8 @@ import {StyleSheet} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
-import {useIsTicketInformationEnabled} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {stripMarkdown} from '@atb/components/text';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -35,7 +35,7 @@ export const FareProductHeader = forwardRef<View, Props>(
   ) => {
     const {t, language} = useTranslation();
     const styles = useStyle();
-    const [isTicketInformationEnabled] = useIsTicketInformationEnabled();
+    const {isTicketInformationEnabled} = useFeatureToggles();
 
     const productDescription = stripMarkdown(
       getTextForLanguage(

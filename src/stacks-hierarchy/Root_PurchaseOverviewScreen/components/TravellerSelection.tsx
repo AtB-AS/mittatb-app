@@ -24,11 +24,11 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
-import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
+import {useFeatureToggles} from "@atb/feature-toggles";
 
 type TravellerSelectionProps = {
   userProfilesWithCount: UserProfileWithCount[];
@@ -62,7 +62,7 @@ export function TravellerSelection({
   } = useBottomSheet();
 
   const isOnBehalfOfEnabled =
-    useOnBehalfOfEnabled() &&
+    useFeatureToggles().isOnBehalfOfEnabled &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const isLoggedIn = authenticationType === 'phone';

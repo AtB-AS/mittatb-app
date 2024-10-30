@@ -51,7 +51,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
       },
       shouldShowPredicate: ({
         pushNotificationPermissionStatus,
-        pushNotificationsEnabled,
+        isPushNotificationsEnabled,
         hasFareContractWithActivatedNotification,
       }) => {
         const pushNotificationPermissionsNotGranted =
@@ -60,7 +60,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
             : pushNotificationPermissionStatus === 'denied';
 
         return (
-          pushNotificationsEnabled &&
+          isPushNotificationsEnabled &&
           pushNotificationPermissionsNotGranted &&
           hasFareContractWithActivatedNotification
         );

@@ -39,14 +39,13 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-import {useIsTravelAidEnabled} from '@atb/travel-aid/use-is-travel-aid-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -90,8 +89,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const isPushNotificationsEnabled = usePushNotificationsEnabled();
-  const travelAidEnabled = useIsTravelAidEnabled();
+  const {isPushNotificationsEnabled, isTravelAidEnabled} = useFeatureToggles();
 
   const {logEvent} = useAnalytics();
 
@@ -277,7 +275,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
 
-          {travelAidEnabled ? (
+          {isTravelAidEnabled ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.settings.linkSectionItems.travelAid

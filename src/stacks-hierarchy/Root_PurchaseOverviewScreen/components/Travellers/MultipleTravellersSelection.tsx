@@ -14,12 +14,12 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {TravellerSelectionBottomSheetType} from './types';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,
@@ -35,7 +35,7 @@ export function MultipleTravellersSelection({
   const travellersModified = useRef(false);
 
   const isOnBehalfOfEnabled =
-    useOnBehalfOfEnabled() &&
+    useFeatureToggles().isOnBehalfOfEnabled &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const isLoggedIn = useAuthState().authenticationType === 'phone';

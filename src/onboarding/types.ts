@@ -26,14 +26,14 @@ export type ShouldShowArgsType = {
   locationPermissionStatus: PermissionStatus | null;
   pushNotificationPermissionStatus: NotificationPermissionStatus;
   authenticationType: AuthenticationType;
-  pushNotificationsEnabled: boolean;
+  isPushNotificationsEnabled: boolean;
   hasFareContractWithActivatedNotification: boolean;
   travelCardDisabled: boolean;
   mobileTokenStatus: MobileTokenStatus;
   extendedOnboardingEnabled: boolean;
   userCreationIsOnboarded: boolean;
   shouldShowShareTravelHabitsScreen: boolean;
-}
+};
 
 export type OnboardingSectionConfig = {
   isOnboardedStoreKey: IsOnboardedStoreKey;
@@ -43,7 +43,7 @@ export type OnboardingSectionConfig = {
     params?: any;
   };
   shouldShowBeforeUserCreated?: boolean;
-  shouldShowPredicate: (args: ShouldShowArgsType) => boolean
+  shouldShowPredicate: (args: ShouldShowArgsType) => boolean;
 };
 
 export type LoadedOnboardingSection = OnboardingSectionConfig & {

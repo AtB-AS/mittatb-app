@@ -29,9 +29,9 @@ import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
-import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
 import {useLocaleContext} from '@atb/LocaleProvider';
-import {useRefreshIdTokenWhenNecessary} from "@atb/auth/use-refresh-id-token-when-necessary.ts";
+import {useRefreshIdTokenWhenNecessary} from '@atb/auth/use-refresh-id-token-when-necessary.ts';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -155,7 +155,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const {language} = useLocaleContext();
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
-  const backendSmsEnabled = useIsBackendSmsAuthEnabled();
+  const {isBackendSmsAuthEnabled: backendSmsEnabled} = useFeatureToggles();
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useClearQueriesOnUserChange(state);

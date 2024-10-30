@@ -16,8 +16,8 @@ import {NotificationConfig} from './types';
 import {useNotificationConfig} from './use-notification-config';
 import {useRegister} from './use-register';
 import {getLanguageAndTextEnum} from '@atb/translations/utils';
-import {usePushNotificationsEnabled} from '@atb/notifications/use-push-notifications-enabled';
 import {useAuthState} from '@atb/auth';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type NotificationPermissionStatus =
   | 'granted'
@@ -43,13 +43,14 @@ const NotificationContext = createContext<NotificationContextState | undefined>(
 
 export const NotificationContextProvider: React.FC = ({children}) => {
   const {language} = useLocaleContext();
-  const [permissionStatus, setStatus] = useState<NotificationPermissionStatus>('loading');
+  const [permissionStatus, setStatus] =
+    useState<NotificationPermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
   const {mutate: mutateRegister} = registerMutation;
   const {query: configQuery, mutation: configMutation} =
     useNotificationConfig();
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {isPushNotificationsEnabled} = useFeatureToggles();
   const {authStatus} = useAuthState();
 
   const getFcmToken = useCallback(async () => {
@@ -128,9 +129,9 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   // opened. This useEffect will also trigger when language is changed manually
   // in the app.
   useEffect(() => {
-    if (pushNotificationsEnabled && authStatus === 'authenticated')
+    if (isPushNotificationsEnabled && authStatus === 'authenticated')
       checkPermissions();
-  }, [pushNotificationsEnabled, checkPermissions, authStatus]);
+  }, [isPushNotificationsEnabled, checkPermissions, authStatus]);
 
   // Get FCM token when component mounts
   useEffect(() => {
