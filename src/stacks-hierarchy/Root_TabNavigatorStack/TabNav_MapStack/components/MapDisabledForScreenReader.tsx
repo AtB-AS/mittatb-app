@@ -42,12 +42,12 @@ export const MapDisabledForScreenReader = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   header: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
     textAlign: 'center',
   },
   description: {

@@ -18,6 +18,6 @@ export const CancelledDepartureMessage = () => {
 
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   cancellationContainer: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
 }));

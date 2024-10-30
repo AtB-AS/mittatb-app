@@ -1,9 +1,9 @@
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getInteractiveColor, getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
@@ -20,6 +20,9 @@ type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
   const {authenticationType} = useAuthState();
   const analytics = useAnalytics();
   const {loading, inputParams, recommendedTicketSummary, error} =
@@ -150,7 +153,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               />
             )}
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={onBuyButtonPress}
               text={t(TicketAssistantTexts.summary.buyButton)}
               testID="nextButton"
@@ -185,32 +188,32 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   infoBox: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     width: '100%',
   },
   mainView: {
     flex: 1,
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
     width: '100%',
     justifyContent: 'space-between',
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   header: {
     textAlign: 'center',
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
+    paddingHorizontal: theme.spacing.xLarge,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.large,
   },
   backdrop: {
     position: 'absolute',
@@ -224,17 +227,17 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   notice: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
   noticeText: {
     textAlign: 'center',
     flexShrink: 1,
   },
   feedback: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   loadingSpinner: {
     flex: 1,

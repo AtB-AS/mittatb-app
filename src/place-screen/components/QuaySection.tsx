@@ -219,8 +219,8 @@ function compareByLineNameAndDesc(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginVertical: theme.spacing.medium,
   },
   stopPlaceHeader: {
     flexDirection: 'row',
@@ -232,7 +232,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
   rightMargin: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
   messageBox: {
     width: '100%',

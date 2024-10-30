@@ -111,12 +111,12 @@ export function ToggleSectionItem({
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   leftImageContainer: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
     justifyContent: 'center',
   },
-  textContainer: {flex: 1, marginRight: theme.spacings.small},
+  textContainer: {flex: 1, marginRight: theme.spacing.small},
   subtext: {
-    marginTop: theme.spacings.xSmall,
-    marginRight: theme.spacings.small,
+    marginTop: theme.spacing.xSmall,
+    marginRight: theme.spacing.small,
   },
 }));

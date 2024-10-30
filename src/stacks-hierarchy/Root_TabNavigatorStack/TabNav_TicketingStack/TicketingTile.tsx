@@ -5,9 +5,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {
-  getStaticColor,
-  getTransportationColor,
-  StaticColor,
   TransportColor,
 } from '@atb/theme/colors';
 
@@ -28,28 +25,18 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  transportColor: TransportColor;
+  transportColor: TransportColor['city'];
   title?: string;
   description?: string;
   accessibilityLabel?: string;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
-  const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
-  const themeColor = getStaticColor(themeName, color);
-
-  const themePrimaryColor = getTransportationColor(
-    themeName,
-    transportColor,
-    'primary',
-  );
-  const themeSecondaryColor = getTransportationColor(
-    themeName,
-    transportColor,
-    'secondary',
-  );
+  const themeColor = accented ? theme.color.background.accent[3] : theme.color.background.neutral[0];
+  const themePrimaryColor = transportColor.primary;
+  const themeSecondaryColor = transportColor.secondary
 
   return (
     <PressableOpacity
@@ -101,9 +88,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flexShrink: 1,
     alignSelf: 'stretch',
-    marginRight: theme.spacings.medium,
-    padding: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge - 2 * theme.border.width.medium,
+    marginRight: theme.spacing.medium,
+    padding: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge - 2 * theme.border.width.medium,
     borderBottomWidth: 2 * theme.border.width.medium,
     borderRadius: theme.border.radius.small,
   },
@@ -119,12 +106,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     justifyContent: 'space-between',
   },
-  label: {marginLeft: theme.spacings.xSmall},
+  label: {marginLeft: theme.spacing.xSmall},
   illustration: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   title: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
-  description: {marginBottom: theme.spacings.small},
+  description: {marginBottom: theme.spacing.small},
 }));

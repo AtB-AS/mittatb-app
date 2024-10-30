@@ -1,6 +1,6 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
@@ -43,6 +43,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const {authenticationType} = useAuthState();
 
   const isFree = params.toPlace
@@ -276,7 +277,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <StartTimeSelection
             selectionMode={timeSelectionMode}
-            color="interactive_2"
+            color={theme.color.interactive[2]}
             travelDate={selection.travelDate}
             setTravelDate={(travelDate) => navigation.setParams({travelDate})}
             validFromTime={selection.travelDate}
@@ -325,7 +326,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview
                 }
-                textColor="background_0"
+                textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
                   fromTariffZone: selection.fromPlace.id,
@@ -390,22 +391,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     header: {
-      marginHorizontal: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
     },
     contentContainer: {
-      rowGap: theme.spacings.medium,
-      margin: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      rowGap: theme.spacing.medium,
+      margin: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     messages: {
-      rowGap: theme.spacings.medium,
-      marginTop: theme.spacings.medium,
+      rowGap: theme.spacing.medium,
+      marginTop: theme.spacing.medium,
     },
     selectionComponent: {
-      rowGap: theme.spacings.medium,
+      rowGap: theme.spacing.medium,
     },
     summary: {
-      marginVertical: theme.spacings.medium,
+      marginVertical: theme.spacing.medium,
     },
   };
 });

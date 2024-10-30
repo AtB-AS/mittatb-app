@@ -1,12 +1,12 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingFullScreenView} from '@atb/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {Theme} from '@atb/theme/colors';
 
 type DescriptionLink = {
   text: string;
@@ -25,7 +25,7 @@ type OnboardingScreenComponentParams = {
   testID?: string;
 };
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor= (theme: Theme) => theme.color.background.accent[0];
 
 export const OnboardingScreenComponent = ({
   illustration,
@@ -38,6 +38,8 @@ export const OnboardingScreenComponent = ({
   testID,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
 
   return (
@@ -91,11 +93,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     textAlign: 'center',
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
     textAlign: 'center',
   },
   descriptionLink: {

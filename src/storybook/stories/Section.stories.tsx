@@ -32,6 +32,7 @@ import {
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
+import { themes } from '@atb/theme/colors';
 
 type SectionMetaProps = SectionProps & ThemedStoryProps;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
@@ -54,7 +55,7 @@ const SectionMeta: Meta<SectionMetaProps> = {
 export default SectionMeta;
 
 export const ListedSectionItems: Meta<SectionMetaProps> = {
-  args: {style: {margin: 12}, backgroundColor: 'background_2'},
+  args: {style: {margin: 12}, backgroundColor: themes.light.color.background.neutral[2]},
   decorators: [
     (Story, {args}) => (
       <ScrollView>
@@ -181,7 +182,7 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
 };
 
 export const RadioSection: Meta<SectionMetaProps> = {
-  args: {style: {margin: 12}, backgroundColor: 'background_1'},
+  args: {style: {margin: 12}, backgroundColor: themes.light.color.background.neutral[1]},
   decorators: [
     (Story, {args}) => (
       <Story

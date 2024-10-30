@@ -37,7 +37,7 @@ export const ValidityLine = (props: Props): ReactElement => {
       return (
         <LineWithVerticalBars
           backgroundColor={
-            theme.static.background.background_accent_3.background
+            theme.color.background.accent[3].background
           }
           lineColor={lineColor}
         />
@@ -50,7 +50,7 @@ export const ValidityLine = (props: Props): ReactElement => {
 
       return isInspectable ? (
         <LineWithVerticalBars
-          backgroundColor={backgroundColor}
+          backgroundColor={backgroundColor.background}
           lineColor={lineColor}
           validityPercent={validityPercent}
           animate={animate}
@@ -113,7 +113,7 @@ const LineWithVerticalBars = ({
       <View
         style={{
           width: `${100 - validityPercent}%`,
-          backgroundColor: theme.static.background.background_1.background,
+          backgroundColor: theme.color.background.neutral[1].background,
         }}
       />
     </View>
@@ -204,8 +204,8 @@ const VerticalLine = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginVertical: theme.spacings.medium,
-    marginHorizontal: -theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
+    marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },
   progressBar: {

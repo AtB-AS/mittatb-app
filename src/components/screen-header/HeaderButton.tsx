@@ -6,7 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
-import {StaticColor, TextColor} from '@atb/theme/colors';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -14,6 +13,7 @@ import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-dis
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
+import { ContrastColor } from '@atb/theme/colors';
 
 export type ButtonModes =
   | 'back'
@@ -27,7 +27,7 @@ export type ButtonModes =
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
-  color?: StaticColor | TextColor;
+  color?: ContrastColor;
   text?: string;
   testID?: string;
   withIcon?: boolean;
@@ -113,7 +113,7 @@ const useHeaderButton = (
     case 'info':
       const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeIcon svg={Info} colorType={color}/>,
+        children: <ThemeIcon svg={Info} color={color}/>,
         accessibilityLabel: t(ScreenHeaderTexts.headerButton[type].text),
         onPress: onPress,
         ...accessibilityProps
@@ -134,12 +134,12 @@ const HeaderButtonIcon = ({
   color,
 }: {
   mode: ButtonModes;
-  color?: StaticColor | TextColor;
+  color?: ContrastColor;
 }) => {
   const {theme} = useTheme();
   const iconProps: Omit<ThemeIconProps, 'svg'> = {
-    colorType: color,
-    style: {marginRight: theme.spacings.xSmall},
+    color: color,
+    style: {marginRight: theme.spacing.xSmall},
   };
 
   switch (mode) {

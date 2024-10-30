@@ -299,24 +299,24 @@ const getStopHeader = (
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
-    gap: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   sectionContainer: {
     flex: 1,
-    gap: theme.spacings.xLarge,
+    gap: theme.spacing.xLarge,
   },
   subContainer: {
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   horizontalRule: {
     borderBottomWidth: 1,
-    borderBottomColor: theme.static.background.background_0.text,
+    borderBottomColor: theme.color.background.neutral[0].foreground.primary,
     width: '100%',
   },
   realTime: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacings.xSmall,
+    gap: theme.spacing.xSmall,
   },
 }));

@@ -65,8 +65,8 @@ export const Profile_SelectStartScreenScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
-    marginTop: theme.spacings.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
+    marginTop: theme.spacing.large,
   },
 }));

@@ -89,8 +89,8 @@ const CityZoneBox = ({
   const {theme} = useTheme();
   const styles = useStyle();
   const {t} = useTranslation();
-  const generalColor = theme.static.background.background_0;
-  const {background: backgroundColor, text: textColor} = generalColor;
+  const generalColor = theme.color.background.neutral[0];
+  const {background: backgroundColor, foreground: {primary: textColor}} = generalColor;
   return (
     <View style={[styles.container, {backgroundColor}]} accessible={false}>
       <View style={styles.icon}>
@@ -127,9 +127,9 @@ const CityZoneBox = ({
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
             accessibilityRole="button"
-            hitSlop={insets.all(theme.spacings.medium)}
+            hitSlop={insets.all(theme.spacing.medium)}
           >
-            <ThemeIcon fill={textColor} svg={Close} />
+            <ThemeIcon color={textColor} svg={Close} />
           </PressableOpacity>
         </View>
       )}
@@ -139,6 +139,9 @@ const CityZoneBox = ({
 
 const useActionButtons = (cityZone?: CityZone) => {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
+  const interactiveAccentColor = theme.color.interactive[3];
   const analytics = useAnalytics();
 
   if (!cityZone) {
@@ -152,7 +155,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `book_online_action`,
       text: t(CityBoxMessageTexts.actionButtons.bookOnline),
       icon: ExternalLink,
-      interactiveColor: 'interactive_0',
+      interactiveColor: interactiveColor,
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book online url opened', {
@@ -170,7 +173,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `book_by_phone_action`,
       icon: Phone,
       text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
-      interactiveColor: 'interactive_0',
+      interactiveColor: interactiveColor,
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book by phone url opened', {
@@ -188,7 +191,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `more_info_action`,
       icon: ExternalLink,
       text: t(CityBoxMessageTexts.actionButtons.moreInfo),
-      interactiveColor: 'interactive_3',
+      interactiveColor: interactiveAccentColor,
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'More info url opened', {
@@ -205,27 +208,27 @@ const useActionButtons = (cityZone?: CityZone) => {
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
   cityZoneMessage: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   container: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
   },
   icon: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     justifyContent: 'center',
   },
   content: {
     flex: 1,
   },
   message: {
-    paddingRight: theme.spacings.small,
+    paddingRight: theme.spacing.small,
   },
   action: {
-    marginTop: theme.spacings.medium,
-    marginRight: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginRight: theme.spacing.medium,
   },
   actions: {
     flexWrap: 'wrap',

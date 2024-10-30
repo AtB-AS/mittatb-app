@@ -133,11 +133,11 @@ const getLocationIconAccessibilityLabel = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     margin: 0,
   },
   subLabel: {
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
     fontSize: 12,
     marginRight: 12,
   },
@@ -167,6 +167,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: 4,
   },
   locationIcon: {
-    backgroundColor: theme.text.colors.primary,
+    backgroundColor: theme.color.foreground.dynamic.primary,
   },
 }));

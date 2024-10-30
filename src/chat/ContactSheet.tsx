@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ContactSheetTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -15,15 +15,20 @@ import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useAnalytics} from '@atb/analytics';
+import {Theme} from '@atb/theme/colors';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   onReportParkingViolation: () => void;
 };
 
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
+
 export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme()
 
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
@@ -42,7 +47,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
         <View style={styles.buttonContainer}>
           {showWebsiteFeedback ? (
             <Button
-              interactiveColor="interactive_2"
+              interactiveColor={getInteractiveColor(theme)}
               text={t(ContactSheetTexts.customer_feedback_website.button)}
               accessibilityHint={t(
                 ContactSheetTexts.customer_feedback_website.a11yHint,
@@ -75,14 +80,14 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
                 svg: Chat,
                 notification: unreadCount
                   ? {
-                      color: 'valid',
+                      color: theme.color.status.valid.primary,
                     }
                   : undefined,
               }}
             />
           ) : undefined}
           <Button
-            backgroundColor="background_0"
+            backgroundColor={getBackgroundColor(theme)}
             text={t(ContactSheetTexts.customer_service.button)}
             accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
             mode="secondary"
@@ -96,7 +101,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
           />
           {isParkingViolationsReportingEnabled && (
             <Button
-              backgroundColor="background_0"
+              backgroundColor={getBackgroundColor(theme)}
               text={t(ContactSheetTexts.parking_violations.buttonText)}
               accessibilityHint={t(
                 ContactSheetTexts.parking_violations.a11yHint,
@@ -119,6 +124,6 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  return {buttonContainer: {gap: theme.spacings.small}};
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
+  return {buttonContainer: {gap: theme.spacing.small}};
 });

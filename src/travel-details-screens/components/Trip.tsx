@@ -1,6 +1,6 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
@@ -66,6 +66,7 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfig();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
@@ -136,7 +137,7 @@ export const Trip: React.FC<TripProps> = ({
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
         style={styles.messageBox}
-        textColor="background_0"
+        textColor={theme.color.background.neutral[0]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
@@ -234,22 +235,22 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   date: {
     alignItems: 'center',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   divider: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   messageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   trip: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xSmall,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.xSmall,
   },
 }));
 

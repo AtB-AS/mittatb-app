@@ -1,5 +1,4 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {RefreshControlProps, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
@@ -8,6 +7,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
+import { ContrastColor } from '@atb/theme/colors';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -20,7 +20,7 @@ type Props = {
   children?: React.ReactNode;
   footer?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
-  contentColor?: StaticColor;
+  contentColor?: ContrastColor;
 };
 
 type PropsWithParallaxContent = Props &
@@ -28,9 +28,9 @@ type PropsWithParallaxContent = Props &
 
 export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
-  const {themeName} = useTheme();
-  const themeColor = props.headerProps.color ?? 'background_accent_0';
-  const backgroundColor = getStaticColor(themeName, themeColor).background;
+  const {theme} = useTheme();
+  const themeColor = props.headerProps.color ?? theme.color.background.accent[0];
+  const backgroundColor = themeColor.background;
   const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
@@ -114,11 +114,9 @@ const ChildrenInNormalScrollView = ({
   refreshControl,
   children,
   contentColor,
-}: Props & {contentColor?: StaticColor}) => {
-  const {themeName} = useTheme();
-  const backgroundColor = contentColor
-    ? getStaticColor(themeName, contentColor).background
-    : undefined;
+}: Props & {contentColor?: ContrastColor}) => {
+  const backgroundColor = contentColor?.background;
+
   return (
     <ScrollView
       refreshControl={refreshControl}
@@ -135,9 +133,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   headerContainer: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   childrenContainer: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
 }));

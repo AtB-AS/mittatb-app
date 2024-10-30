@@ -36,29 +36,23 @@ export function LineChip({
     transportMode,
     transportSubmode,
   );
-  const transportTextColor = useTransportationColor(
-    transportMode,
-    transportSubmode,
-    false,
-    'text',
-  );
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const icon = messageType && messageTypeToIcon(messageType, true, themeName);
 
   if (!publicCode && !transportMode) return null;
 
   return (
-    <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
+    <View style={[styles.lineChip, {backgroundColor: transportColor.background}]}>
       <ThemeIcon
-        fill={transportTextColor}
-        style={{marginRight: publicCode ? theme.spacings.small : 0}}
+        color={transportColor.foreground.primary}
+        style={{marginRight: publicCode ? theme.spacing.small : 0}}
         svg={svg}
       />
       {publicCode && (
         <ThemeText
           style={[
             styles.lineChipText,
-            {color: transportTextColor, minWidth: fontScale * 20},
+            {color: transportColor.foreground.primary, minWidth: fontScale * 20},
           ]}
           type="body__primary--bold"
           testID={`${testID}PublicCode`}
@@ -73,18 +67,18 @@ export function LineChip({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineChip: {
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
     borderRadius: theme.border.radius.regular,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     flexDirection: 'row',
   },
   lineChipIcon: {
     position: 'absolute',
-    top: -theme.spacings.small,
-    left: -theme.spacings.small,
+    top: -theme.spacing.small,
+    left: -theme.spacing.small,
   },
   lineChipText: {
-    color: theme.static.background.background_accent_3.text,
+    color: theme.color.background.accent[3].foreground.primary,
     textAlign: 'center',
   },
 }));

@@ -80,7 +80,7 @@ export const QuaySection = React.memo(function QuaySection({
           />
         ))}
       </Section>
-      <View style={{marginBottom: theme.spacings.medium}} />
+      <View style={{marginBottom: theme.spacing.medium}} />
     </Fragment>
   );
 });

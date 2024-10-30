@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import React from 'react';
@@ -15,6 +15,7 @@ import {TokenToggleInfo} from '@atb/token-toggle-info';
 export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {disable_travelcard} = useRemoteConfig();
   const {data} = useTokenToggleDetailsQuery();
 
@@ -32,7 +33,7 @@ export const Profile_TravelTokenScreen = () => {
         <TravelTokenBox
           showIfThisDevice={true}
           alwaysShowErrors={true}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
         />
         <Section style={styles.tokenInfoSection}>
           {data?.toggleLimit !== undefined && (
@@ -49,14 +50,14 @@ export const Profile_TravelTokenScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
   scrollView: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   tokenInfoSection: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   tokenInfoView: {flexDirection: 'row'},
 }));

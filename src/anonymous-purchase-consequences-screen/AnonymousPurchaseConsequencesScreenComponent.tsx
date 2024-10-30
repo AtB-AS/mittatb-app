@@ -5,8 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 import {Consequence} from './components/Consequence';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -14,8 +13,7 @@ import {OnboardingFullScreenView} from '@atb/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
-
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+import {Theme} from '@atb/theme/colors';
 
 type Props = {
   onPressContinueWithoutLogin: () => void;
@@ -23,14 +21,19 @@ type Props = {
   leftButton: LeftButtonProps;
 };
 
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0]
+
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
   leftButton,
 }: Props) => {
   const styles = useStyle();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
+
+  const themeColor = getThemeColor(theme);
 
   const loginButton = {
     onPress: onPressLogin || (() => {}),
@@ -66,15 +69,15 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       </View>
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
+        icon={<ThemeIcon svg={Phone} color={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="large" />}
+        icon={<ThemeIcon svg={Receipt} color={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-        icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
+        icon={<ThemeIcon svg={Support} color={themeColor} size="large" />}
       />
     </OnboardingFullScreenView>
   );
@@ -82,24 +85,24 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   contentContainer: {
     flexGrow: 1,
-    marginHorizontal: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
   },
   mainContent: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   header: {
-    margin: theme.spacings.xLarge,
+    margin: theme.spacing.xLarge,
     textAlign: 'center',
     fontWeight: '700',
   },
   button: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

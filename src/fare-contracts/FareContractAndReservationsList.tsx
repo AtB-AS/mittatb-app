@@ -10,6 +10,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
+import { useTheme } from '@atb/theme';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -35,6 +36,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2];
 
   const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];
 
@@ -52,7 +55,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       {showTokenInfo && (
         <TravelTokenBox
           showIfThisDevice={false}
-          interactiveColor="interactive_2"
+          interactiveColor={interactiveColor}
         />
       )}
       {!fareContractsAndReservationsSorted.length && (

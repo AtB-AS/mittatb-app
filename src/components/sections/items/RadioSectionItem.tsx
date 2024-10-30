@@ -49,7 +49,7 @@ export function RadioSectionItem({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const interactiveColor = color ? theme.interactive[color] : undefined;
+  const interactiveColor = color;
 
   const backgroundColor = interactiveColor
     ? selected
@@ -59,13 +59,13 @@ export function RadioSectionItem({
 
   const textColor = interactiveColor
     ? selected
-      ? interactiveColor.active.text
-      : interactiveColor.default.text
-    : theme.text.colors.primary;
+      ? interactiveColor.active.foreground.primary
+      : interactiveColor.default.foreground.primary
+    : theme.color.foreground.dynamic.primary;
 
   const selectedRadioColor = interactiveColor
     ? interactiveColor.outline.background
-    : theme.text.colors.primary;
+    : theme.color.foreground.dynamic.primary;
 
   const a11yLabel =
     (accessibilityLabel || `${text}, ${hideSubtext ? '' : subtext}`) +
@@ -97,7 +97,7 @@ export function RadioSectionItem({
             <ThemeText
               type="body__secondary"
               color="secondary"
-              style={{marginTop: theme.spacings.small}}
+              style={{marginTop: theme.spacing.small}}
             >
               {subtext}
             </ThemeText>
@@ -124,8 +124,8 @@ export function RadioSectionItem({
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   mainContent: {flex: 1, flexDirection: 'row', alignItems: 'center'},
-  radioIcon: {marginRight: theme.spacings.medium},
-  leftIcon: {marginRight: theme.spacings.small},
-  rightAction: {marginLeft: theme.spacings.medium},
+  radioIcon: {marginRight: theme.spacing.medium},
+  leftIcon: {marginRight: theme.spacing.small},
+  rightAction: {marginLeft: theme.spacing.medium},
   textContainer: {flex: 1},
 }));

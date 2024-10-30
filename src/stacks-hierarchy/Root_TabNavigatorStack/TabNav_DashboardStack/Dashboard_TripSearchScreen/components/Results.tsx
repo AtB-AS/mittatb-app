@@ -149,21 +149,21 @@ const getDetailsTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
   },
   errorContainer: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
   infoBoxText: theme.typography.body__primary,
   messageBoxContainer: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
   emptyStateContainer: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   emptySearchResultsIllustration: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

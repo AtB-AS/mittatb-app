@@ -234,7 +234,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
   lineAndDepartureTime: {
     flex: 1,

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalytics} from '@atb/analytics';
 
@@ -10,6 +10,8 @@ type MapFilterProps = {
 };
 export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
   const style = useStyle();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2]
   const analytics = useAnalytics();
 
   return (
@@ -17,7 +19,7 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
       style={style.filterButton}
       type="medium"
       compact={true}
-      interactiveColor="interactive_2"
+      interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() => {
         analytics.logEvent('Map', 'Filter button clicked');
@@ -32,6 +34,6 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   filterButton: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
 }));

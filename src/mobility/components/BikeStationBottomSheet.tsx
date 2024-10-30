@@ -161,14 +161,14 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     operatorBenefit: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     stationName: {
       flex: 1,
@@ -177,11 +177,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     stationText: {
       display: 'flex',
       flexDirection: 'row',
-      marginTop: theme.spacings.small,
+      marginTop: theme.spacing.small,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginHorizontal: theme.spacing.medium,
     },
     mobilityStatContainer: {
       flexDirection: 'row',

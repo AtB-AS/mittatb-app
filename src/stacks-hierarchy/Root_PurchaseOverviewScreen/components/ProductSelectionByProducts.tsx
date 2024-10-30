@@ -22,6 +22,7 @@ import {useTicketingState} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferenceItems} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
+import { useTheme } from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type ProductSelectionByProductsProps = {
@@ -38,6 +39,8 @@ export function ProductSelectionByProducts({
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2];
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
   const {hideProductDescriptions} = usePreferenceItems();
@@ -82,8 +85,8 @@ export function ProductSelectionByProducts({
             hideSubtext={hideProductDescriptions}
             itemToSubtext={(fp) => subText(fp)}
             selected={selectedProduct}
+            color={interactiveColor}
             onSelect={setSelectedProduct}
-            color="interactive_2"
             accessibilityHint={t(
               PurchaseOverviewTexts.productSelection.a11yTitle,
             )}

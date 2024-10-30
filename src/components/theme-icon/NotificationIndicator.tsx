@@ -1,23 +1,19 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeIconProps} from './ThemeIcon';
 import {
-  flatStaticColors,
-  isInteractiveColor,
-  isStaticColor,
-  isStatusColor,
+  ContrastColor,
 } from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import type {NotificationColor} from './types';
 
 export type NotificationIndicatorProps = {
-  color: NotificationColor;
+  color: ContrastColor;
   /**
    * An optional background color that will be applied as a border/spacing
    * around the indicator. Use the same color as the background under the
    * ThemeIcon to make the notification indicator "pop" out a little more.
    */
-  backgroundColor?: NotificationColor;
+  backgroundColor?: ContrastColor;
   iconSize: ThemeIconProps['size'];
 };
 
@@ -27,8 +23,8 @@ export const NotificationIndicator = ({
   iconSize,
 }: NotificationIndicatorProps) => {
   const styles = useStyles();
-  const notificationColor = useNotificationColor(color);
-  const borderColor = useNotificationColor(backgroundColor);
+  const notificationColor = color.background;
+  const borderColor = backgroundColor?.background;
   const fontScale = useFontScale();
   const indicatorSize = getIndicatorSize(iconSize, !!borderColor, fontScale);
   const borderWidth = (iconSize === 'xSmall' ? 1 : 2) * fontScale;
@@ -51,22 +47,6 @@ export const NotificationIndicator = ({
     </View>
   );
 };
-
-function useNotificationColor(color?: NotificationColor): string | undefined {
-  const {theme, themeName} = useTheme();
-  if (!color) return undefined;
-  if (typeof color !== 'string') {
-    return color.background;
-  } else if (isStatusColor(color)) {
-    return theme.status[color].primary.background;
-  } else if (isStaticColor(color)) {
-    return flatStaticColors[themeName][color].background;
-  } else if (isInteractiveColor(color)) {
-    return theme.interactive[color].outline.background;
-  } else {
-    return theme.text.colors[color];
-  }
-}
 
 const getIndicatorSize = (
   size: ThemeIconProps['size'],

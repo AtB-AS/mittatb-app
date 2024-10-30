@@ -44,5 +44,5 @@ export const CheckboxWithLabel = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row', gap: theme.spacings.small},
+  container: {flexDirection: 'row', gap: theme.spacing.small},
 }));

@@ -54,19 +54,19 @@ export const RecentFareContracts = ({
       {loading && (
         <View
           style={{
-            paddingVertical: theme.spacings.xLarge,
+            paddingVertical: theme.spacing.xLarge,
           }}
           accessible={true}
           accessibilityLabel={t(RecentFareContractsTexts.titles.loading)}
         >
           <ThemeText
             type="body__primary"
-            style={{textAlign: 'center', marginBottom: theme.spacings.large}}
+            style={{textAlign: 'center', marginBottom: theme.spacing.large}}
           >
             {t(TicketingTexts.recentFareContracts.loading)}
           </ThemeText>
           <ActivityIndicator
-            color={theme.static.background.background_0.text}
+            color={theme.color.background.neutral[0].foreground.primary}
           />
         </View>
       )}
@@ -103,16 +103,16 @@ export const RecentFareContracts = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalScrollView: {
-    marginVertical: theme.spacings.medium,
-    columnGap: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
+    columnGap: theme.spacing.medium,
   },
   scrollViewContent: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacings.medium,
-    columnGap: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
+    columnGap: theme.spacing.medium,
   },
   header: {
-    marginTop: theme.spacings.xLarge,
-    marginLeft: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
+    marginLeft: theme.spacing.xLarge,
   },
 }));

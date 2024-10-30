@@ -81,7 +81,7 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     margin: 0,
   },
   rowContainer: {
@@ -98,10 +98,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginLeft: theme.spacings.large,
+    marginLeft: theme.spacing.large,
     flex: 1,
   },
   currentLocationIcon: {
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacing.small,
   },
 }));

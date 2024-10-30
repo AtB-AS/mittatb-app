@@ -62,6 +62,7 @@ export const Profile_DeleteProfileScreen = () => {
   };
 
   const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   return (
     <FullScreenView
@@ -71,13 +72,13 @@ export const Profile_DeleteProfileScreen = () => {
       }}
       parallaxContent={(focusRef) => (
         <View
-          style={{marginHorizontal: theme.spacings.medium}}
+          style={{marginHorizontal: theme.spacing.medium}}
           accessible={true}
           ref={focusRef}
         >
           <ThemeText
             type="heading--medium"
-            color="background_accent_0"
+            color={themeColor}
             style={{flexShrink: 1}}
           >
             {t(DeleteProfileTexts.header.title)}
@@ -110,7 +111,7 @@ export const Profile_DeleteProfileScreen = () => {
           }}
           onPress={() => showDeleteAlert()}
           disabled={activeFareContracts}
-          icon={<ThemeIcon svg={Delete} colorType="error" />}
+          icon={<ThemeIcon svg={Delete} color="error" />}
         />
       </Section>
     </FullScreenView>
@@ -119,14 +120,14 @@ export const Profile_DeleteProfileScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   contentMargin: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
 }));

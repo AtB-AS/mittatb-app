@@ -108,9 +108,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
+  textsContainer: {flex: 1, paddingTop: theme.spacing.xSmall},
   expireTime: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   symbolContainer: {
     minHeight: 72,

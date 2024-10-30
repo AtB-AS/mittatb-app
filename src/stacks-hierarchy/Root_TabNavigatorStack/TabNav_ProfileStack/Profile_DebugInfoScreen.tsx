@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -46,6 +46,8 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
 
   const {
     onboardingSections,
@@ -494,7 +496,7 @@ export const Profile_DebugInfoScreen = () => {
                     }`}</ThemeText>
                   </View>
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const granted = await onboardForBeacons(true);
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
@@ -504,7 +506,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Onboard and give consent"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       await revokeBeacons();
                     }}
@@ -513,7 +515,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Revoke"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       await deleteCollectedData();
                     }}
@@ -521,7 +523,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Delete Collected Data"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
@@ -533,7 +535,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Open Privacy Dashboard"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
@@ -640,30 +642,30 @@ function MapEntry({title, value}: {title: string; value: any}) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   icons: {
     flexDirection: 'row',
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   buttons: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   button: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacing.small,
   },
   remoteToken: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   objectEntry: {
     flexDirection: 'column',
     marginVertical: 12,
-    borderLeftColor: theme.text.colors.secondary,
+    borderLeftColor: theme.color.foreground.dynamic.secondary,
     borderLeftWidth: 1,
     paddingLeft: 4,
   },

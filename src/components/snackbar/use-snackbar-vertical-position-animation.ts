@@ -16,7 +16,7 @@ export const useSnackbarVerticalPositionAnimation = (
 
   const {theme} = useTheme();
   const withSnackbarPadding = (safeAreaHeight: number) =>
-    Math.max(safeAreaHeight, theme.spacings.medium) + theme.spacings.small;
+    Math.max(safeAreaHeight, theme.spacing.medium) + theme.spacing.small;
 
   const {top: safeAreaTop, bottom: safeAreaBottom} = useSafeAreaInsets();
   const top = withSnackbarPadding(safeAreaTop);

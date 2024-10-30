@@ -2,8 +2,10 @@ import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {getTransportationColor, TextNames} from '@atb/theme/colors';
+import {TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
+
+const getTransportColor = (theme: Theme) => theme.color.transport.other;
 
 export const CounterIconBox = ({
   count,
@@ -19,7 +21,7 @@ export const CounterIconBox = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const fontScale = useFontScale();
   const lineHeight = theme.icon.size[size];
 
@@ -33,18 +35,14 @@ export const CounterIconBox = ({
         {
           padding:
             spacing === 'compact'
-              ? theme.spacings.xSmall
-              : theme.spacings.small,
+              ? theme.spacing.xSmall
+              : theme.spacing.small,
         },
       ]}
       importantForAccessibility="no-hide-descendants"
     >
       <ThemeText
-        color={getTransportationColor(
-          themeName,
-          'transport_other',
-          'secondary',
-        )}
+        color={getTransportColor(theme).secondary}
         type={textType}
         testID="tripLegMore"
         style={{
@@ -62,7 +60,7 @@ export const CounterIconBox = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   counterContainer: {
-    backgroundColor: theme.transport.transport_other.primary.background,
+    backgroundColor: getTransportColor(theme).primary.background,
     borderRadius: theme.border.radius.small,
   },
 }));

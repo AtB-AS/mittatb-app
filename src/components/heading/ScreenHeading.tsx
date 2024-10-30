@@ -1,12 +1,12 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '../text';
-import {ContrastColor, StaticColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor, TextColor} from '@atb/theme/colors';
 
 type ScreenHeadingProps = {
   text: string;
-  color?: TextColor | StaticColor | ContrastColor;
+  color?: TextColor | ContrastColor;
   accessibilityLabel?: string;
 };
 
@@ -14,12 +14,14 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
   (
     {
       text,
-      color = 'background_accent_0',
+      color,
       accessibilityLabel,
     }: ScreenHeadingProps,
     ref,
   ) => {
     const styles = useStyles();
+    const {theme} = useTheme();
+    color = color ?? theme.color.background.accent[0]
 
     return (
       <View style={styles.container} ref={ref} accessible role="heading">
@@ -37,6 +39,6 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

@@ -5,14 +5,14 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {InteractiveColor, StaticColor} from '@atb/theme/colors';
+import {Theme} from '@atb/theme/colors';
 
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
 const CIRCLE_SIZE = 80;
-const themeColor: StaticColor = 'background_accent_0';
-const circleColor: InteractiveColor = 'interactive_2';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getCircleColor = (theme: Theme) => theme.color.interactive[2];
 
 export const Root_ConfirmationScreen = ({
   navigation,
@@ -22,6 +22,8 @@ export const Root_ConfirmationScreen = ({
 }: Props) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const circleColor = getCircleColor(theme);
 
   useEffect(() => {
     const timer = setTimeout(
@@ -41,7 +43,7 @@ export const Root_ConfirmationScreen = ({
         {message}
       </ThemeText>
       <View style={styles.circle}>
-        <ThemeIcon size="large" svg={ConfirmSvg} colorType={theme.interactive[circleColor].outline} />
+        <ThemeIcon size="large" svg={ConfirmSvg} color={circleColor.outline} />
       </View>
     </View>
   );
@@ -52,19 +54,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   circle: {
     width: CIRCLE_SIZE,
     height: CIRCLE_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     borderRadius: CIRCLE_SIZE / 2,
-    backgroundColor: theme.interactive[circleColor].outline.background,
+    backgroundColor: getCircleColor(theme).outline.background,
   },
   message: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
 }));

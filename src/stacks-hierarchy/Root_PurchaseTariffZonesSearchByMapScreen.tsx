@@ -118,15 +118,15 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   headerContainer: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   saveButton: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   selectorButtons: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

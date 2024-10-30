@@ -3,7 +3,7 @@ import {
   ShmoBookingEvent,
   ShmoBookingEventType,
 } from '@atb/api/types/mobility';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
@@ -23,6 +23,10 @@ type ShmoTestingProps = {selectedVehicleId?: string};
 export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   const [previousBookingId, setPreviousBookingId] = useState<string>();
   const [vehicleId, setVehicleId] = useState<string>();
+
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2];
+  const destructiveColor = theme.color.interactive.destructive;
 
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
@@ -121,8 +125,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         compact={true}
         interactiveColor={
           initShmoOneStopBookingIsError
-            ? 'interactive_destructive'
-            : 'interactive_2'
+            ? destructiveColor
+            : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {
@@ -140,8 +144,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         compact={true}
         interactiveColor={
           sendShmoBookingEventIsError
-            ? 'interactive_destructive'
-            : 'interactive_2'
+            ? destructiveColor
+            : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {
@@ -159,8 +163,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         compact={true}
         interactiveColor={
           sendShmoBookingEventIsError
-            ? 'interactive_destructive'
-            : 'interactive_2'
+            ? destructiveColor
+            : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {
@@ -177,7 +181,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         type="medium"
         compact={true}
         interactiveColor={
-          getIdsFromQrCodeIsError ? 'interactive_destructive' : 'interactive_2'
+          getIdsFromQrCodeIsError ? destructiveColor : interactiveColor
         }
         accessibilityRole="button"
         onPress={async () => {
@@ -255,7 +259,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filterButton: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
     pointerEvents: 'auto',
   },
 }));

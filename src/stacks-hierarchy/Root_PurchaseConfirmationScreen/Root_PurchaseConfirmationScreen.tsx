@@ -49,6 +49,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {userId} = useAuthState();
+
+  const interactiveColor = theme.color.interactive[0];
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
@@ -289,14 +291,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         />
         {reserveMutation.isError && (
           <MessageInfoBox
-            style={{marginBottom: theme.spacings.medium}}
+            style={{marginBottom: theme.spacing.medium}}
             message={t(PurchaseConfirmationTexts.reserveError)}
             type="error"
           />
         )}
         {vippsNotInstalledError && (
           <MessageInfoBox
-            style={{marginBottom: theme.spacings.medium}}
+            style={{marginBottom: theme.spacing.medium}}
             message={t(PurchaseConfirmationTexts.vippsInstalledError)}
             type="error"
           />
@@ -304,8 +306,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
-            color={theme.text.colors.primary}
-            style={{margin: theme.spacings.medium}}
+            color={theme.color.foreground.dynamic.primary}
+            style={{margin: theme.spacing.medium}}
           />
         ) : (
           <View>
@@ -313,7 +315,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentMethodTexts(paymentMethod)}
-                  interactiveColor="interactive_0"
+                  interactiveColor={interactiveColor}
                   disabled={!!offerError}
                   rightIcon={{
                     svg: getPaymentTypeSvg(paymentMethod.paymentType),
@@ -358,7 +360,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
             ) : (
               <Button
-                interactiveColor="interactive_0"
+                interactiveColor={interactiveColor}
                 text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
                 disabled={!!offerError}
                 accessibilityHint={t(
@@ -405,7 +407,7 @@ function getOfferEndpoint(zoneSelectionMode: ZoneSelectionMode) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   flexColumn: {
     flex: 1,
@@ -417,16 +419,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   buttonTopSpacing: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
   },
   errorMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   warningMessage: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
-  infoSection: {padding: theme.spacings.medium},
+  infoSection: {padding: theme.spacing.medium},
   purchaseInformation: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

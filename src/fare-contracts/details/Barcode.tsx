@@ -171,7 +171,7 @@ const LoadingBarcode = () => {
   const {theme} = useTheme();
   return (
     <View style={{flex: 1}}>
-      <ActivityIndicator animating={true} color={theme.text.colors.primary} />
+      <ActivityIndicator animating={true} color={theme.color.foreground.dynamic.primary} />
     </View>
   );
 };
@@ -242,7 +242,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   aztecCode: {
     width: '100%',
     aspectRatio: 1,
-    padding: theme.spacings.large,
+    padding: theme.spacing.large,
     backgroundColor: '#FFFFFF',
   },
   staticBottomContainer: {

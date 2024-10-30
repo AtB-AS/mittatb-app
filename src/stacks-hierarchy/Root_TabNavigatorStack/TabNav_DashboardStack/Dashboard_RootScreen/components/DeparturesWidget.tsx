@@ -10,7 +10,7 @@ import {
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   DeparturesTexts,
   FavoriteDeparturesTexts,
@@ -29,7 +29,6 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {StaticColorByType} from '@atb/theme/colors';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -38,7 +37,6 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export const DeparturesWidget = ({
   onEditFavouriteDeparture,
   onAddFavouriteDeparture,
@@ -47,6 +45,8 @@ export const DeparturesWidget = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
   const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
@@ -161,7 +161,7 @@ function compareStopsByDistance(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   noFavouritesView: {
     flexDirection: 'row',
@@ -169,15 +169,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noFavouritesTextContainer: {
     flex: 1,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacing.small,
   },
   noFavouritesText: {
-    marginHorizontal: theme.spacings.small,
+    marginHorizontal: theme.spacing.small,
   },
   noFavouritesUrl: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   activityIndicator: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
 }));

@@ -10,7 +10,7 @@ export const Divider = ({style}: {style?: ViewStyle}) => {
       style={[
         {
           borderTopWidth: theme.border.width.slim,
-          borderColor: theme.static.background.background_1.background,
+          borderColor: theme.color.background.neutral[1].background,
         },
         style,
       ]}

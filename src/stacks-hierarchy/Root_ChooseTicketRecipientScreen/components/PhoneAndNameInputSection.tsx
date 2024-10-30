@@ -10,7 +10,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import {StyleSheet} from '@atb/theme';
 
 export const PhoneAndNameInputSection = ({
@@ -24,7 +24,7 @@ export const PhoneAndNameInputSection = ({
   onChangePrefix: (p: string) => void;
   onChangePhone: (p: string) => void;
   onChangeName: (n: string) => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -84,7 +84,7 @@ export const PhoneAndNameInputSection = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   newRecipientLabel: {
-    marginLeft: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginLeft: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
 }));

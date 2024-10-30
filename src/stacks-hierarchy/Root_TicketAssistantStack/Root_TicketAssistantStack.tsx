@@ -6,8 +6,6 @@ import {
 import {PageIndicator} from '@atb/components/page-indicator';
 import {useTheme} from '@atb/theme';
 
-import {StaticColorByType} from '@atb/theme/colors';
-
 import {TicketAssistant_WelcomeScreen} from './TicketAssistant_WelcomeScreen';
 import {TicketAssistantStackParams} from './navigation-types';
 import {TicketAssistant_FrequencyScreen} from './TicketAssistant_FrequencyScreen';
@@ -24,18 +22,17 @@ import {Platform} from 'react-native';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 
 export const TICKET_ASSISTANT_WELCOME_SCREEN = 'TicketAssistant_WelcomeScreen';
 export const TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN =
-  'TicketAssistant_CategoryPickerScreen';
+'TicketAssistant_CategoryPickerScreen';
 export const TICKET_ASSISTANT_FREQUENCY_SCREEN =
-  'TicketAssistant_FrequencyScreen';
+'TicketAssistant_FrequencyScreen';
 export const TICKET_ASSISTANT_DURATION_SCREEN =
-  'TicketAssistant_DurationScreen';
+'TicketAssistant_DurationScreen';
 export const TICKET_ASSISTANT_ZONE_PICKER_SCREEN =
-  'TicketAssistant_ZonePickerScreen';
+'TicketAssistant_ZonePickerScreen';
 export const TICKET_ASSISTANT_SUMMARY_SCREEN = 'TicketAssistant_SummaryScreen';
 
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
@@ -44,6 +41,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const [tabCount, setTabCount] = useState(0);
   const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
   const [previousTab, setPreviousTab] = useState<any>();
 
   return (
@@ -79,9 +77,9 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           return <PageIndicator {...props} />;
         }}
         style={{
-          paddingTop: theme.spacings.xLarge,
-          paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
-          backgroundColor: theme.static.background[themeColor].background,
+          paddingTop: theme.spacing.xLarge,
+          paddingBottom: Math.max(safeAreaBottom, theme.spacing.medium),
+          backgroundColor: themeColor.background,
         }}
         tabBarPosition="bottom"
         initialRouteName="TicketAssistant_WelcomeScreen"

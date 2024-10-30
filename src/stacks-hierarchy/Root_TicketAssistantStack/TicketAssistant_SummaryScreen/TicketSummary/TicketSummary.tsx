@@ -2,24 +2,25 @@ import {View} from 'react-native';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
-import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {getReferenceDataName} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {daysInWeek} from '@atb/utils/date';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import {Theme} from '@atb/theme/colors';
 
-const interactiveColorName: InteractiveColor = 'interactive_2';
-const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
+
 export const TicketSummary = () => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
-  const interactiveColor = theme.interactive[interactiveColorName];
+  const interactiveColor = getInteractiveColor(theme);
+  const themeColor = getThemeColor(theme);
 
   const {recommendedTicketSummary, inputParams} = useTicketAssistantState();
   if (!recommendedTicketSummary) return null;
@@ -143,7 +144,7 @@ export const TicketSummary = () => {
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
               <BorderedInfoBox
-                backgroundColor={interactiveColorName}
+                backgroundColor={interactiveColor.default}
                 type="small"
                 style={styles.infoChip}
                 text={travellerName}
@@ -155,7 +156,7 @@ export const TicketSummary = () => {
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
               <BorderedInfoBox
-                backgroundColor={interactiveColorName}
+                backgroundColor={interactiveColor.default}
                 type="small"
                 style={styles.infoChip}
                 text={zonesString}
@@ -191,8 +192,8 @@ export const TicketSummary = () => {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   ticketContainer: {
-    marginHorizontal: theme.spacings.large,
-    backgroundColor: theme.interactive[interactiveColorName].default.background,
+    marginHorizontal: theme.spacing.large,
+    backgroundColor: getInteractiveColor(theme).default.background,
     borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
@@ -200,45 +201,45 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 2,
   },
   upperPart: {
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
     flexGrow: 1,
     minWidth: '60%',
   },
   travelModeWrapper: {
     flexShrink: 1,
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   transportationIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   productName: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    gap: theme.spacings.large,
+    gap: theme.spacing.large,
   },
   infoChip: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   infoChip_travellers: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   additionalCategories: {
-    marginHorizontal: theme.spacings.small,
-    marginVertical: theme.spacings.xSmall,
+    marginHorizontal: theme.spacing.small,
+    marginVertical: theme.spacing.xSmall,
   },
   ticketFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.medium,
-    backgroundColor: theme.static.background[themeColor_1].background,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingVertical: theme.spacing.medium,
+    backgroundColor: theme.color.background.accent[1].background,
   },
   savingsText: {
     textAlign: 'center',
-    paddingVertical: theme.spacings.large,
+    paddingVertical: theme.spacing.large,
   },
 }));

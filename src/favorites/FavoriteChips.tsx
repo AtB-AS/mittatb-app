@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -27,8 +27,6 @@ type Props = {
   onAddFavorite: () => void;
 };
 
-const themeColor = 'background_accent_0';
-
 export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   style,
@@ -39,6 +37,9 @@ export const FavoriteChips: React.FC<Props> = ({
 }) => {
   const {favorites} = useFavorites();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
+
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
   const styles = useStyles();
@@ -120,7 +121,7 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   staticChipsContainer: {
     flexDirection: 'row',
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
 }));
 

@@ -163,14 +163,14 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     operatorBenefit: {
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
     },
     container: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     content: {
       flexDirection: 'row',
@@ -178,11 +178,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       justifyContent: 'space-between',
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginHorizontal: theme.spacing.medium,
     },
     parkingViolationsButton: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
     operatorNameAndLogo: {
       flexDirection: 'row',

@@ -104,11 +104,11 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 
     const getBorderColor = () => {
       if (isFocused) {
-        return {borderColor: theme.border.focus};
+        return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
           borderColor:
-            theme.interactive.interactive_destructive.destructive.background,
+            theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;
@@ -188,7 +188,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             <InternalTextInput
               ref={combinedRef}
               style={[styles.input, padding, style]}
-              placeholderTextColor={theme.text.colors.secondary}
+              placeholderTextColor={theme.color.foreground.dynamic.secondary}
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
               maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -251,38 +251,38 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
     fontSize: theme.typography.body__primary.fontSize,
     flexGrow: 1,
   },
   container: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.static.background.background_0.background,
+    borderColor: theme.color.background.neutral[0].background,
   },
   containerInline: {
     alignItems: 'center',
     flexDirection: 'row',
   },
   containerMultiline: {
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
   },
   label: {
-    minWidth: 60 - theme.spacings.medium,
-    paddingRight: theme.spacings.xSmall,
+    minWidth: 60 - theme.spacing.medium,
+    paddingRight: theme.spacing.xSmall,
   },
   prefix: {
     flexDirection: 'row',
   },
   expandIcon: {
-    marginLeft: theme.spacings.xSmall,
-    marginRight: theme.spacings.small,
+    marginLeft: theme.spacing.xSmall,
+    marginRight: theme.spacing.small,
   },
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacings.medium,
+    bottom: theme.spacing.medium,
     alignSelf: 'center',
   },
   prefixList: {
@@ -299,6 +299,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     width: '83%',
   },
   error: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
 }));

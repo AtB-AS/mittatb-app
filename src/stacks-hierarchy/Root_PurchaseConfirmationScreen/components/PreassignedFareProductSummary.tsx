@@ -187,15 +187,15 @@ function getPlaceName(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   sendingToText: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   ticketInfoContainer: {
     flex: 1,
   },
   globalMessage: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   smallTopMargin: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
 }));

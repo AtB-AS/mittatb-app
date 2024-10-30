@@ -71,18 +71,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       flexGrow: 1,
       flexShrink: 0,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginHorizontal: theme.spacing.medium,
     },
     imageAndPosition: {
       flexDirection: 'row',
-      columnGap: theme.spacings.medium,
+      columnGap: theme.spacing.medium,
     },
     fullHeight: {
       flex: 1,
     },
     button: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
   };
 });

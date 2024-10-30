@@ -1,6 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
@@ -19,6 +20,9 @@ type SubmittedComponentProps = {
   firebaseId?: string;
 };
 
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
+
 export const SubmittedComponent = ({
   viewContext,
   opinion,
@@ -27,6 +31,7 @@ export const SubmittedComponent = ({
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const focusRef = useFocusOnLoad();
   const {customer_service_url, enable_intercom} = useRemoteConfig();
 
@@ -68,7 +73,7 @@ export const SubmittedComponent = ({
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.intercomButton)}
             rightIcon={{svg: Chat}}
-            interactiveColor="interactive_0"
+            interactiveColor={getInteractiveColor(theme)}
           />
         ) : (
           <Button
@@ -76,7 +81,7 @@ export const SubmittedComponent = ({
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
             rightIcon={{svg: ExternalLink}}
             accessibilityRole="link"
-            interactiveColor="interactive_0"
+            interactiveColor={getInteractiveColor(theme)}
           />
         )}
       </View>
@@ -86,18 +91,18 @@ export const SubmittedComponent = ({
 
 const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: getThemeColor(theme).background,
     borderRadius: theme.border.radius.regular,
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
   },
   centerText: {
     textAlign: 'center',
   },
   questionText: {
     textAlign: 'center',
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   button: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
 }));

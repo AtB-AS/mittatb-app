@@ -31,9 +31,8 @@ function MapLineItem({line, index}: MapLineItemProps) {
     line?.faded ? undefined : line?.travelType,
     line?.subMode,
     line.isFlexible,
-    undefined,
     'secondary',
-  );
+  ).background;
 
   const lineColor = line?.faded
     ? hexToRgba(lineColorInput, 0.5)

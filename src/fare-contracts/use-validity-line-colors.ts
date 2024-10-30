@@ -12,13 +12,13 @@ export function useValidityLineColors(fareProductType?: string) {
 
   const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
 
-  const lineColor = theme.static.background.background_2.background;
+  const lineColor = theme.color.background.neutral[2].background;
   const backgroundColor = useTransportationColor(mode, subMode);
 
   return {
     lineColor,
     backgroundColor: mode
       ? backgroundColor
-      : theme.status.valid.primary.background,
+      : theme.color.status.valid.primary,
   };
 }

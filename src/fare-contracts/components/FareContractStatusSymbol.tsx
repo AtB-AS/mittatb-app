@@ -21,7 +21,7 @@ export const FareContractStatusSymbol = ({
       return (
         <ThemeIcon
           svg={TicketInvalid}
-          colorType="error"
+          color="error"
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
@@ -31,7 +31,6 @@ export const FareContractStatusSymbol = ({
       return (
         <ThemeIcon
           svg={Time}
-          colorType="primary"
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
@@ -50,7 +49,7 @@ export const FareContractStatusSymbol = ({
       return (
         <ThemeIcon
           svg={SentTicket}
-          colorType="secondary"
+          color="secondary"
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}

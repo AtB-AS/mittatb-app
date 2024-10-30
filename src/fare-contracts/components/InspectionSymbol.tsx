@@ -13,8 +13,7 @@ import {
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
-import {ContrastColor} from '@atb-as/theme';
-import {getTransportationColor} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
@@ -33,7 +32,7 @@ export const InspectionSymbol = ({
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -48,8 +47,8 @@ export const InspectionSymbol = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
 
   const themeColor = isInspectable
-    ? getTransportationColor(themeName, transportColor)
-    : theme.status['warning'].primary;
+    ? theme.color.transport[transportColor].primary
+    : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
@@ -126,7 +125,7 @@ const InspectableContent = ({
         <ThemeText
           type="body__primary--bold"
           allowFontScaling={false}
-          color={shouldFill ? themeColor : undefined}
+          color={shouldFill ? themeColor.foreground.primary : undefined}
         >
           {fromTariffZoneName}
           {fromTariffZone.id !== toTariffZone.id && '-' + toTariffZoneName}
@@ -134,7 +133,7 @@ const InspectableContent = ({
       )}
       <ThemeIcon
         svg={InspectionSvg}
-        fill={shouldFill ? themeColor.text : undefined}
+        color={shouldFill ? themeColor : undefined}
         size="large"
       />
     </View>
@@ -182,13 +181,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     alignSelf: 'center',
     borderRadius: 1000,
-    borderColor: theme.status.warning.primary.background,
+    borderColor: theme.color.status.warning.primary.background,
     borderWidth: 5,
   },
   symbolContent: {
     height: '100%',
     width: '100%',
-    padding: theme.spacings.small,
+    padding: theme.spacing.small,
     justifyContent: 'center',
     alignItems: 'center',
   },

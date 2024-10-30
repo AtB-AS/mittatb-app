@@ -227,22 +227,22 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   sectionContainer: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   travelSearchPreference: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   saveOptionSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: theme.spacings.xSmall,
-    paddingVertical: theme.spacings.xSmall,
+    paddingHorizontal: theme.spacing.xSmall,
+    paddingVertical: theme.spacing.xSmall,
   },
   saveOptionSectionCheckbox: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

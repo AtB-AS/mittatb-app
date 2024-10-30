@@ -286,7 +286,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Du kan ikkje køyre inn i dette området',
     ),
   },
-  Unspecified: {
+  unspecified: {
     title: _('Uspesifisert', 'Unspecified', 'Uspesifisert'),
     description: _(
       'Ingen regler angitt for dette området',

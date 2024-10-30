@@ -1,24 +1,26 @@
-import {Platform, StatusBarProps, TextStyle} from 'react-native';
-import {APP_ORG} from '@env';
+import { Platform, StatusBarProps, TextStyle } from 'react-native';
+import { APP_ORG } from '@env';
 
 import {
-  ContrastColor,
+  ContrastColorFs,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
-  Mode,
-  RadiusSizes,
+  InteractiveColor as  GenericInteractiveColor,
   Statuses,
   TextColor,
   TextNames,
   textNames,
-  ThemeVariant,
+  ThemeFs,
+  ThemeVariant
 } from '@atb-as/theme';
-import {Flattened, flattenObject} from '@atb/utils/object';
-import {AppOrgs} from '../../types/app-orgs';
+import { AppOrgs } from '../../types/app-orgs';
 
-export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
-export {textNames};
+type ContrastColor = ContrastColorFs
+type Mode = keyof Themes
+
+export type { Statuses, Mode, TextColor, ContrastColor, TextNames };
+export { textNames };
 
 const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   switch (appOrg) {
@@ -34,7 +36,9 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   }
 };
 
-const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
+const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG), {
+  useFigmaStructure: true
+});
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
@@ -68,7 +72,7 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
+export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(mainThemes, {
   light: {
     tripLegDetail,
     statusBarStyle: 'light-content',
@@ -83,91 +87,13 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   },
 });
 
+export const isStatusColor = (color: unknown, theme: Theme): color is Statuses => Object.keys(theme.color.status).includes(color as string)
+export const isTextColor = (color: unknown, theme: Theme): color is TextColor => Object.keys(theme.color.foreground.dynamic).includes(color as string)
+
 // @TODO: Make part of @AtB-as/theme
 
 export type Themes = typeof themes;
-export type Theme = Themes['light'];
-
-export type InteractiveColor = keyof Theme['interactive'];
-export type TransportColor = keyof Theme['transport'];
-export type StatusColor = keyof Theme['status'];
-
-export const isInteractiveColor = (
-  color?: string,
-): color is InteractiveColor => {
-  return !!color && color in themes.light.interactive;
-};
-export const getInteractiveColor = (
-  mode: Mode,
-  interactiveColor: InteractiveColor,
-) => {
-  return themes[mode].interactive[interactiveColor];
-};
-
-/**
- * Static colors object structure:
- * {background: {...}, transport: {...}, status: {...}}
- */
-type StaticColorsObj = Theme['static'];
-
-/**
- * Names of static color categories:
- * 'background' | 'transport' | 'status'
- */
-export type StaticColorType = keyof StaticColorsObj;
-
-/**
- * Names of static colors, for a given static color type:
- * E.g. 'background_0' | 'background_1' | ... for StaticColor<'background'>
- */
-export type StaticColorByType<Key extends StaticColorType> =
-  keyof StaticColorsObj[Key];
-
-/**
- * Flat object with every static color:
- * {background_0: ..., background_1: ..., valid: ...}
- */
-export type FlatStaticColors = Flattened<StaticColorsObj>;
-
-/**
- * Names of every static color:
- * 'background_0' | 'background_1' | 'valid' ...
- */
-export type StaticColor = keyof FlatStaticColors;
-
-export type FlatStaticColorObj = {
-  light: Flattened<StaticColorsObj>;
-  dark: Flattened<StaticColorsObj>;
-};
-
-export const flatStaticColors: FlatStaticColorObj = {
-  light: flattenObject(themes.light.static) as FlatStaticColors,
-  dark: flattenObject(themes.dark.static) as FlatStaticColors,
-};
-
-export const isStaticColor = (color?: string): color is StaticColor => {
-  return !!color && color in flatStaticColors.light;
-};
-
-export const getStaticColor = (mode: Mode, color: StaticColor) => {
-  return flatStaticColors[mode][color];
-};
-export const getTransportationColor = (
-  mode: Mode,
-  color: TransportColor,
-  type?: 'primary' | 'secondary',
-) => {
-  return themes[mode].transport[color][type ?? 'primary'];
-};
-
-export const getStaticColorType = (color: StaticColor): StaticColorType => {
-  return Object.keys(themes.light.static).find(
-    (colorType) => color in themes.light.static[colorType as StaticColorType],
-  ) as StaticColorType;
-};
-
-export const isStatusColor = (
-  color?: string,
-): color is StatusColor => {
-  return !!color && color in themes.light.status;
-};
+export type Theme = typeof themes['light'];
+export type InteractiveColor = GenericInteractiveColor<ContrastColor>;
+export type TransportColor = Theme['color']['transport'];
+export type StatusColor = Theme['color']['status'];

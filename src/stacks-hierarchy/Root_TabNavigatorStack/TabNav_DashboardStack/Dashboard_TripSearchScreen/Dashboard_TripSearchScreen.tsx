@@ -24,8 +24,7 @@ import {
 } from '@atb/journey-date-picker';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
 import {
@@ -58,10 +57,8 @@ import {useFeatureToggles} from '@atb/feature-toggles';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
-const headerBackgroundColor: StaticColorByType<'background'> =
-  'background_accent_0';
-
-const resultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
+const getHeaderBackgroundColor = (theme: Theme) => theme.color.background.accent[0];
+const getResultsBackgroundColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   navigation,
@@ -70,6 +67,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {callerRoute} = route.params;
   const styles = useStyles();
   const {theme} = useTheme();
+  const headerBackgroundColor = getHeaderBackgroundColor(theme);
+  const interactiveColor = theme.color.interactive[1];
+  const statusColor = theme.color.status.valid.primary;
+
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
@@ -340,7 +341,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   language,
                 )}
                 mode="primary"
-                interactiveColor="interactive_1"
+                interactiveColor={interactiveColor}
                 compact={true}
                 style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
@@ -349,7 +350,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   svg: Time,
                   notification:
                     searchTime.option !== 'now'
-                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      ? {color: statusColor, backgroundColor: headerBackgroundColor}
                       : undefined,
                 }}
               />
@@ -359,7 +360,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
-                    interactiveColor="interactive_1"
+                    interactiveColor={interactiveColor}
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
@@ -370,8 +371,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                         filtersState.filtersSelection?.transportModes,
                       )
                         ? {
-                            color: 'valid',
-                            backgroundColor: 'background_accent_0',
+                            color: statusColor,
+                            backgroundColor: headerBackgroundColor,
                           }
                         : undefined,
                     }}
@@ -459,9 +460,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   {tripPatterns.length ? (
                     <>
                       <ActivityIndicator
-                        color={theme.text.colors.secondary}
+                        color={theme.color.foreground.dynamic.secondary}
                         style={{
-                          marginRight: theme.spacings.medium,
+                          marginRight: theme.spacing.medium,
                         }}
                       />
                       <ThemeText color="secondary" testID="searchingForResults">
@@ -479,7 +480,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   {loadMore ? (
                     <>
                       <ThemeIcon
-                        colorType="secondary"
+                        color="secondary"
                         svg={ExpandMore}
                         size="normal"
                       />
@@ -638,38 +639,38 @@ function computeNoResultReasons(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[resultsBackgroundColor].background,
+    backgroundColor: getResultsBackgroundColor(theme).background,
     flex: 1,
   },
   scrollView: {
-    paddingBottom: theme.spacings.medium,
-    backgroundColor: theme.static.background[resultsBackgroundColor].background,
+    paddingBottom: theme.spacing.medium,
+    backgroundColor: getResultsBackgroundColor(theme).background,
   },
   searchParametersButtons: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   searchTimeButton: {flexGrow: 1},
   searchHeader: {
-    marginHorizontal: theme.spacings.medium,
-    backgroundColor: theme.static.background[headerBackgroundColor].background,
+    marginHorizontal: theme.spacing.medium,
+    backgroundColor: getHeaderBackgroundColor(theme).background,
   },
   loadingIndicator: {
     flexDirection: 'row',
   },
   missingLocationText: {
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
     textAlign: 'center',
   },
   loadMoreButton: {
-    paddingVertical: theme.spacings.xLarge,
-    marginBottom: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.xLarge,
+    marginBottom: theme.spacing.xLarge,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   emptyResultsSpacer: {
-    marginTop: theme.spacings.xLarge * 3,
+    marginTop: theme.spacing.xLarge * 3,
   },
 }));

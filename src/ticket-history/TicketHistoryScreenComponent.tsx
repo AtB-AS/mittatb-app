@@ -115,7 +115,7 @@ const displayReservations = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
-    padding: theme.spacings.medium,
+    backgroundColor: theme.color.background.neutral[1].background,
+    padding: theme.spacing.medium,
   },
 }));

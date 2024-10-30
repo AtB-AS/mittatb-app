@@ -10,7 +10,7 @@ import {
 } from '@atb/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
@@ -34,6 +34,8 @@ export const FareProductHeader = forwardRef<View, Props>(
     ref,
   ) => {
     const {t, language} = useTranslation();
+    const {theme} = useTheme();
+    const themeColor = theme.color.background.accent[0];
     const styles = useStyle();
     const {isTicketInformationEnabled} = useFeatureToggles();
 
@@ -53,7 +55,7 @@ export const FareProductHeader = forwardRef<View, Props>(
           />
           <ThemeText
             type="heading--medium"
-            color="background_accent_0"
+            color={themeColor}
             style={styles.headerText}
           >
             {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
@@ -63,7 +65,7 @@ export const FareProductHeader = forwardRef<View, Props>(
           <View style={styles.headerSubSection}>
             <ThemeText
               type="body__secondary"
-              color="background_accent_0"
+              color={themeColor}
               style={styles.ticketDescription}
               numberOfLines={1}
             >
@@ -72,7 +74,7 @@ export const FareProductHeader = forwardRef<View, Props>(
             <Button
               type="small"
               leftIcon={{svg: Info}}
-              interactiveColor="interactive_1"
+              interactiveColor={theme.color.interactive[1]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
             />
@@ -91,20 +93,20 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   headerSubSection: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.static.background.background_accent_1.background,
-    paddingTop: theme.spacings.medium,
+    borderTopColor: theme.color.background.accent[1].background,
+    paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'nowrap',
   },
   icon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   ticketDescription: {
     flexShrink: 1,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
 }));

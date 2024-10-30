@@ -66,7 +66,7 @@ const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   realtimeIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   aimedTime: {textAlign: 'right'},
 }));

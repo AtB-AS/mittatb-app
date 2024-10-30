@@ -6,7 +6,7 @@ import {Linking} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -16,6 +16,7 @@ export const ServiceDisruptionSheet = () => {
   const {service_disruption_url} = useRemoteConfig();
   const hasValidServiceDisruptionUrl = !!service_disruption_url;
   const style = useStyle();
+  const {theme} = useTheme();
 
   return (
     <BottomSheetContainer
@@ -27,7 +28,7 @@ export const ServiceDisruptionSheet = () => {
           style={style.globalMessages}
           globalMessageContext={GlobalMessageContextEnum.appServiceDisruptions}
           includeDismissed={true}
-          textColor="background_1"
+          textColor={theme.color.background.neutral[1]}
         />
 
         {hasValidServiceDisruptionUrl && (
@@ -55,9 +56,9 @@ export const ServiceDisruptionSheet = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   serviceDisruptionText: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

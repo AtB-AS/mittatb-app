@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -38,6 +38,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   currentOptions,
 }) => {
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const [shouldSave, setShouldSave] = useState(
     currentOptions?.shouldSavePaymentMethod ?? false,
@@ -107,7 +108,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <FullScreenFooter>
           <Button
             style={styles.confirmButton}
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             text={t(SelectPaymentMethodTexts.confirm_button.text)}
             accessibilityHint={t(
               SelectPaymentMethodTexts.confirm_button.a11yhint,
@@ -274,16 +275,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingBottom: theme.spacings.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   listHeading: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: theme.spacings.large,
-    paddingBottom: theme.spacings.small,
+    paddingTop: theme.spacing.large,
+    paddingBottom: theme.spacing.small,
   },
   spinner: {
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
   },
   row: {
     flex: 1,
@@ -291,27 +292,27 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   column: {flex: 1, flexDirection: 'column'},
   card: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   saveMethodSection: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
-    paddingHorizontal: theme.spacings.medium,
+    backgroundColor: theme.color.background.neutral[1].background,
+    paddingHorizontal: theme.spacing.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
   paymentMethods: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   paymentMethod: {
     flex: 1,
     flexDirection: 'column',
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
     borderRadius: theme.border.radius.regular,
   },
   centerRow: {
@@ -320,18 +321,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   radioSelected: {
-    backgroundColor: theme.static.background.background_accent_3.background,
+    backgroundColor: theme.color.background.accent[3].background,
   },
   radioBlank: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   radio: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     height: 24,
     width: 24,
     borderRadius: 12,
     borderWidth: theme.border.width.medium,
-    borderColor: theme.static.background.background_accent_3.background,
+    borderColor: theme.color.background.accent[3].background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -339,30 +340,30 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   saveButton: {
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
   },
   saveButtonCheckbox: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   expireDate: {
     opacity: 0.6,
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
     paddingLeft: 36,
   },
   confirmButton: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   maskedPanPadding: {
-    paddingLeft: theme.spacings.small,
+    paddingLeft: theme.spacing.small,
   },
   saveMethodTextPadding: {
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
     opacity: 0.6,
   },
 }));

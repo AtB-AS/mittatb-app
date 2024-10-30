@@ -113,7 +113,7 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',
@@ -127,12 +127,12 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   label: {
     // @TODO Find a better way to do this.
-    minWidth: 60 - theme.spacings.medium,
+    minWidth: 60 - theme.spacing.medium,
   },
   faded: {
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
   },
   inlineValueStyle: {
-    paddingTop: theme.spacings.xSmall,
+    paddingTop: theme.spacing.xSmall,
   },
 }));

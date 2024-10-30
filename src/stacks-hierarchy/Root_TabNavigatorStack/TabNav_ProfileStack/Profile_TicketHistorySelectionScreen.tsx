@@ -58,5 +58,5 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  content: {flex: 1, padding: theme.spacings.medium},
+  content: {flex: 1, padding: theme.spacing.medium},
 }));

@@ -30,7 +30,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
           mode="date"
           locale={locale.localeString}
           minimumDate={new Date()}
-          textColor={theme.text.colors.primary}
+          textColor={theme.color.foreground.dynamic.primary}
           onChange={(_: Event, date?: Date) => {
             if (date) onChange(date.toISOString());
             setShow(false);

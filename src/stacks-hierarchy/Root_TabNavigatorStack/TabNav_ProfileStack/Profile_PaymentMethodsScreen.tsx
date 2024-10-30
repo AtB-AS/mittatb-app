@@ -176,7 +176,7 @@ const Card = (props: {
                 card.masked_pan,
               ),
             )}
-            style={{marginLeft: theme.spacings.medium}}
+            style={{marginLeft: theme.spacing.medium}}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentMethodsTexts.deleteModal.title),
@@ -195,7 +195,7 @@ const Card = (props: {
               height={21 * fontScale}
               width={21 * fontScale}
               fill={
-                theme.interactive.interactive_destructive.default.background
+                theme.color.interactive.destructive.default.background
               }
             />
           </PressableOpacity>
@@ -235,8 +235,8 @@ const GenericError = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    padding: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
   card: {flex: 1},
   cardTop: {

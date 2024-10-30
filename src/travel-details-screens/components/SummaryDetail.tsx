@@ -21,7 +21,7 @@ export const SummaryDetail = ({
 
   return (
     <View style={styles.summaryDetail}>
-      <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={icon} />
+      <ThemeIcon color="secondary" style={styles.leftIcon} svg={icon} />
       <ThemeText
         color="secondary"
         accessible={true}
@@ -40,12 +40,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   summaryDetail: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   leftIcon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

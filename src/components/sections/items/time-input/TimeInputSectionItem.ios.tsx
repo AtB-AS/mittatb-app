@@ -28,7 +28,7 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
           })}
           mode="time"
           locale={locale.localeString}
-          textColor={theme.text.colors.primary}
+          textColor={theme.color.foreground.dynamic.primary}
           display="inline"
           onChange={(_, date) => {
             onChange(dateToTimeString(date, locale.language));

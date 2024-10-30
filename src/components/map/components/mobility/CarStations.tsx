@@ -15,13 +15,12 @@ type Props = {
 };
 
 export const CarStations = ({stations, onClusterClick}: Props) => {
-  const stationBackgroundColor = useTransportationColor(Mode.Car);
+  const stationBackgroundColor = useTransportationColor(Mode.Car).background;
   const stationTextColor = useTransportationColor(
     Mode.Car,
     undefined,
-    false,
-    'text',
-  );
+    false
+  ).foreground.primary;
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
 
   const symbolStyling = {

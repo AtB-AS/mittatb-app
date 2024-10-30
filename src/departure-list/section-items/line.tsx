@@ -301,35 +301,35 @@ const addDatePrefixIfNecessary = (
 
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   lineHeader: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   scrollContainer: {
-    marginBottom: theme.spacings.medium,
-    paddingLeft: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium,
   },
   strikethrough: {
     textDecorationLine: 'line-through',
     fontWeight: 'normal',
   },
   departure: {
-    padding: theme.spacings.small,
-    backgroundColor: theme.static.background.background_1.background,
+    padding: theme.spacing.small,
+    backgroundColor: theme.color.background.neutral[1].background,
     borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: theme.spacings.xSmall,
-    marginRight: theme.spacings.small,
+    gap: theme.spacing.xSmall,
+    marginRight: theme.spacing.small,
   },
   departureText: {
     fontVariant: ['tabular-nums'],
   },
   favoriteButton: {
-    paddingLeft: theme.spacings.medium,
+    paddingLeft: theme.spacing.medium,
   },
 }));
 

@@ -59,13 +59,13 @@ export const StopPlaces = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
-    margin: theme.spacings.medium,
+    rowGap: theme.spacing.small,
+    margin: theme.spacing.medium,
   },
   noStopMessage: {
-    marginHorizontal: theme.spacings.large,
+    marginHorizontal: theme.spacing.large,
   },
   emptyStopPlacesIllustration: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

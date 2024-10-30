@@ -61,10 +61,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   spacing: {
-    width: theme.spacings.medium,
+    width: theme.spacing.medium,
   },
   questionText: {
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
     textAlign: 'center',
   },
 }));

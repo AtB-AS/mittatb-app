@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useFirestoreConfiguration} from '@atb/configuration';
@@ -13,6 +13,9 @@ export const ExternalRealtimeMapButton = ({
   onMapClick,
 }: ExternalRealtimeMapButtonProps) => {
   const style = useStyle();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2]
+  
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfiguration();
 
@@ -30,7 +33,7 @@ export const ExternalRealtimeMapButton = ({
       style={style.button}
       type="medium"
       compact={true}
-      interactiveColor="interactive_2"
+      interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() =>
         onMapClick({
@@ -46,6 +49,6 @@ export const ExternalRealtimeMapButton = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
 }));

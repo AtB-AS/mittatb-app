@@ -70,7 +70,7 @@ const useStyles = ({iconSize}: Pick<Props, 'iconSize'>) =>
   StyleSheet.createThemeHook((theme) => ({
     icon: {
       marginRight:
-        iconSize === 'xSmall' ? theme.spacings.xSmall : theme.spacings.small,
+        iconSize === 'xSmall' ? theme.spacing.xSmall : theme.spacing.small,
     },
   }));
 

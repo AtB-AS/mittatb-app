@@ -149,7 +149,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           styles.container,
           {
             backgroundColor: hasRecentFareContracts
-              ? theme.static.background.background_2.background
+              ? theme.color.background.neutral[2].background
               : undefined,
           },
         ]}
@@ -194,16 +194,16 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
   },
   heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
+    margin: theme.spacing.medium,
+    marginLeft: theme.spacing.xLarge,
+    marginTop: theme.spacing.large,
   },
   accountWrongMessage: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

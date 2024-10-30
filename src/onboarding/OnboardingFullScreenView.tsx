@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
 
 import {Button, ButtonProps} from '@atb/components/button';
@@ -6,11 +6,9 @@ import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {ScreenHeaderProps} from '@atb/components/screen-header';
-import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenView} from '@atb/components/screen-view';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type OnboardingFullScreenViewProps = PropsWithChildren<{
   footerButton: ButtonProps;
@@ -31,6 +29,9 @@ export const OnboardingFullScreenView = ({
   secondaryTestID,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
+  const interactiveColor = theme.color.interactive[0];
 
   return (
     <FullScreenView
@@ -53,7 +54,7 @@ export const OnboardingFullScreenView = ({
             </ScrollView>
           )}
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             mode="primary"
             onPress={footerButton.onPress}
             style={styles.footerButton}
@@ -85,18 +86,18 @@ export const OnboardingFullScreenView = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   mainContent: {
     flexGrow: 1,
-    marginHorizontal: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
     justifyContent: 'center',
   },
   footerScrollView: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
     maxHeight: 180,
   },
   footerDescription: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   footerButton: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

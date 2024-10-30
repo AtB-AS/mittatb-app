@@ -88,11 +88,11 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
 
     const getBorderColor = () => {
       if (isFocused) {
-        return {borderColor: theme.border.focus};
+        return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
           borderColor:
-            theme.interactive.interactive_destructive.destructive.background,
+            theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;
@@ -130,7 +130,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           <InternalTextInput
             ref={combinedRef}
             style={[styles.input, padding, style]}
-            placeholderTextColor={theme.text.colors.secondary}
+            placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
             maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -170,15 +170,15 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
-    color: theme.text.colors.primary,
+    color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
 
     fontSize: theme.typography.body__primary.fontSize,
   },
   container: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.static.background.background_0.background,
+    borderColor: theme.color.background.neutral[0].background,
   },
   containerInline: {
     alignItems: 'center',
@@ -186,11 +186,11 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     justifyContent: 'space-between',
   },
   containerMultiline: {
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
   },
   label: {
-    minWidth: 60 - theme.spacings.medium,
-    paddingRight: theme.spacings.xSmall,
+    minWidth: 60 - theme.spacing.medium,
+    paddingRight: theme.spacing.xSmall,
   },
   inputContainer: {
     position: 'relative',
@@ -198,12 +198,12 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacings.medium,
+    bottom: theme.spacing.medium,
   },
   clearButton: {
     alignSelf: 'center',
   },
   error: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
 }));

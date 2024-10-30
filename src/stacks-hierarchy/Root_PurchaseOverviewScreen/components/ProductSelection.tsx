@@ -3,6 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
+import { useTheme } from '@atb/theme';
 
 type ProductSelectionProps = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -17,6 +18,8 @@ export function ProductSelection({
   setSelectedProduct,
   style,
 }: ProductSelectionProps) {
+  const {theme} = useTheme();
+
   switch (fareProductTypeConfig.configuration.productSelectionMode) {
     case 'product':
       return (
@@ -31,7 +34,7 @@ export function ProductSelection({
     case 'duration':
       return (
         <ProductSelectionByAlias
-          color="interactive_2"
+          color={theme.color.interactive[2]}
           selectedProduct={preassignedFareProduct}
           fareProductTypeConfig={fareProductTypeConfig}
           setSelectedProduct={setSelectedProduct}

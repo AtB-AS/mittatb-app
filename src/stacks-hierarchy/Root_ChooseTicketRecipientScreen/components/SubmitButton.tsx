@@ -14,10 +14,10 @@ import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-
 import {useState} from 'react';
 import phoneValidator from 'phone';
 import {ActivityIndicator, View} from 'react-native';
-import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ContrastColor} from '@atb/theme/colors';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 export const SubmitButton = ({
@@ -29,10 +29,10 @@ export const SubmitButton = ({
   state: RecipientSelectionState;
   onSubmit: (r: TicketRecipientType) => void;
   onError: (c?: OnBehalfOfErrorCode) => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +124,7 @@ export const SubmitButton = ({
       {isSubmitting && (
         <ActivityIndicator
           size="large"
-          color={getStaticColor(themeName, themeColor).text}
+          color={themeColor.foreground.primary}
         />
       )}
 
@@ -146,7 +146,7 @@ export const SubmitButton = ({
 
       {!isSubmitting && (
         <Button
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
           onPress={onPress}
           text={t(PurchaseOverviewTexts.summary.button.payment)}
           testID="toPaymentButton"
@@ -158,6 +158,6 @@ export const SubmitButton = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {marginTop: theme.spacings.xLarge},
-  errorMessage: {marginBottom: theme.spacings.medium},
+  container: {marginTop: theme.spacing.xLarge},
+  errorMessage: {marginBottom: theme.spacing.medium},
 }));

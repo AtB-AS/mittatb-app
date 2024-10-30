@@ -1,7 +1,7 @@
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
 import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
@@ -31,7 +31,6 @@ export const BenefitTile = ({
   onNavigateToMap,
 }: BenefitCardProps): JSX.Element => {
   const styles = useStyles();
-  const {themeName} = useTheme();
   const {t, language} = useTranslation();
   const title = t(
     MobilityTexts.formFactor(benefit.formFactors[0] as FormFactor),
@@ -86,7 +85,7 @@ export const BenefitTile = ({
         />
         <ThemeText
           type="body__tertiary--bold"
-          color={getInteractiveColor(themeName, interactiveColor).default}
+          color={interactiveColor.default}
         >
           {title}
         </ThemeText>
@@ -135,10 +134,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   image: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   description: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   benefits: {
     flexDirection: 'row',

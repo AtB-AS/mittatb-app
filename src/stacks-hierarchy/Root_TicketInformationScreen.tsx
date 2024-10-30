@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
@@ -23,6 +23,8 @@ type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
   const {isTipsAndInformationEnabled} = useFeatureToggles();
@@ -45,13 +47,13 @@ export const Root_TicketInformationScreen = (props: Props) => {
         ),
         leftButton: {type: 'close'},
       }}
-      contentColor="background_accent_0"
+      contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
         {preassignedFareProduct?.productDescription && (
           <>
             <ContentHeading
-              color="background_accent_0"
+              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
@@ -86,7 +88,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
-              color="background_accent_0"
+              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
@@ -104,14 +106,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-      rowGap: theme.spacings.small,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
+      rowGap: theme.spacing.small,
     },
     descriptionHeading: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
       flexShrink: 1,
     },
   };

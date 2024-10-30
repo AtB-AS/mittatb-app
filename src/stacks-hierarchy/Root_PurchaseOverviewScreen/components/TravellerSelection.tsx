@@ -236,7 +236,7 @@ export function TravellerSelection({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   multipleTravellersDetails: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   sectionContentContainer: {
     display: 'flex',

@@ -11,8 +11,8 @@ export type LabelInfoProps = {
 
 export const LabelInfo = ({label}: LabelInfoProps) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const linkSectionItemStyle = useStyles();
+  const {theme} = useTheme();
 
   const flagTranslated = t(LabelInfoTexts.labels[label]);
 
@@ -22,7 +22,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText color={theme.status.info.primary} type="body__tertiary">
+      <ThemeText color={theme.color.status.info.primary} type="body__tertiary">
         {flagTranslated}
       </ThemeText>
     </View>
@@ -31,10 +31,10 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flag: {
-    backgroundColor: theme.status.info.primary.background,
-    marginRight: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.xSmall,
+    backgroundColor: theme.color.status.info.primary.background,
+    marginRight: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.small,
+    paddingVertical: theme.spacing.xSmall,
     borderRadius: theme.border.radius.circle,
   },
 }));

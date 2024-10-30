@@ -1,30 +1,26 @@
 import React from 'react';
 import {useTheme} from '@atb/theme';
-import {Platform, Text, TextProps, TextStyle, View} from 'react-native';
+import {ColorValue, Platform, Text, TextProps, TextStyle, View} from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
-  getStaticColor,
-  isStaticColor,
-  isStatusColor,
-  StaticColor,
-  StatusColor,
+  ContrastColor,
+  Statuses,
   TextColor,
   TextNames,
+  isStatusColor,
+  isTextColor
 } from '@atb/theme/colors';
-import {ContrastColor} from '@atb-as/theme';
-
-type ColorType = TextColor | StaticColor | ContrastColor | StatusColor;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: ColorType;
+  color?: ContrastColor | Statuses | TextColor | ColorValue;
   isMarkdown?: boolean;
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
   type: fontType = 'body__primary',
-  color = 'primary',
+  color,
   isMarkdown = false,
   style,
   children,
@@ -70,7 +66,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     isMarkdown && typeof children === 'string'
       ? renderMarkdown(children, {
           textProps,
-          spacingBetweenListElements: theme.spacings.xSmall,
+          spacingBetweenListElements: theme.spacing.xSmall,
         })
       : children;
 
@@ -85,15 +81,15 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   return <Text {...textProps}>{content}</Text>;
 };
 
-const useColor = (color: ColorType): string => {
-  const {theme, themeName} = useTheme();
-
-  if (typeof color !== 'string') {
-    return color.text;
-  } else if (isStatusColor(color)) {
-    return theme.status[color].secondary.text;
+function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
+  const {theme} = useTheme();
+  if (typeof color === 'object') {
+    return color.foreground.primary;
+  } else if (isStatusColor(color, theme)) {
+    return theme.color.status[color].secondary.foreground.primary;
+  } else if (isTextColor(color, theme) || color === undefined) {
+    return theme.color.foreground.dynamic[color ?? 'primary']
+  } else {
+    return color
   }
-  return isStaticColor(color)
-    ? getStaticColor(themeName, color).text
-    : theme.text.colors[color];
-};
+}

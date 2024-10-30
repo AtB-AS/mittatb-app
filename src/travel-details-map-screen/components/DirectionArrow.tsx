@@ -40,7 +40,7 @@ export const DirectionArrow: React.FC<DirectionArrowProps> = ({
     >
       <ThemeIcon
         svg={BusLiveArrow}
-        fill={fill}
+        color={fill}
         width={iconSize}
         height={iconSize}
         style={{

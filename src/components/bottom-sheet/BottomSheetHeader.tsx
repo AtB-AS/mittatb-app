@@ -32,9 +32,9 @@ export const BottomSheetHeader = ({
     closeBottomSheetDefault();
   };
 
-  const themeColor = 'interactive_3';
-  const {background: backgroundColor, text: textColor} =
-    theme.interactive[themeColor]['default'];
+  const themeColor = theme.color.interactive[3];
+  const {background: backgroundColor, foreground: { primary: textColor }} =
+    themeColor.default;
 
   return (
     <View style={styles.container}>
@@ -64,7 +64,7 @@ export const BottomSheetHeader = ({
         accessibilityRole="button"
         testID="closeButton"
       >
-        <ThemeIcon fill={textColor} svg={Close} size="normal" />
+        <ThemeIcon color={textColor} svg={Close} size="normal" />
       </TouchableOpacity>
     </View>
   );
@@ -73,8 +73,8 @@ export const BottomSheetHeader = ({
 const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginVertical: theme.spacings.large,
+      marginHorizontal: theme.spacing.medium,
+      marginVertical: theme.spacing.large,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -82,7 +82,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
     button: {
       justifyContent: 'center',
       alignItems: 'center',
-      padding: theme.spacings.small,
+      padding: theme.spacing.small,
       borderRadius: 100,
     },
 

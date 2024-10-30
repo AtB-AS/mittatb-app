@@ -47,7 +47,7 @@ export function EstimatedCallInfo({
         testID={testID}
       />
       {debugPredictionInaccurate && departure.predictionInaccurate && (
-        <ThemeIcon svg={PinInvalid} colorType="warning" />
+        <ThemeIcon svg={PinInvalid} color="warning" />
       )}
       <ThemeText
         type={showAsCancelled ? 'body__primary--strike' : 'body__primary'}
@@ -71,7 +71,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
     minWidth: '30%',
   },
 }));

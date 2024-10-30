@@ -142,11 +142,11 @@ export function QuayView({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   messageBox: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   marginBottom: {
     marginBottom: 100,

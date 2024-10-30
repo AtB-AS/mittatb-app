@@ -52,13 +52,13 @@ export function SortableList({data, onSort}: SortableListFallbackProps) {
 }
 const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   item: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   moveIcon: {
-    paddingHorizontal: theme.spacings.small,
+    paddingHorizontal: theme.spacing.small,
   },
 }));
 
@@ -120,7 +120,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === 0 && !isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType="disabled" />
+        <ThemeIcon svg={Icon} color="disabled" />
       </View>
     );
   }
@@ -128,7 +128,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === length - 1 && isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType="disabled" />
+        <ThemeIcon svg={Icon} color="disabled" />
       </View>
     );
   }
@@ -141,7 +141,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
       accessibilityLabel={label}
       accessibilityHint={hint}
       style={styles.moveIcon}
-      hitSlop={insets.symmetric(theme.spacings.small, theme.spacings.xSmall)}
+      hitSlop={insets.symmetric(theme.spacing.small, theme.spacing.xSmall)}
       testID={direction}
     >
       <ThemeIcon svg={Icon} />

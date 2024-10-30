@@ -51,13 +51,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: theme.spacings.medium,
-      padding: theme.spacings.medium,
-      margin: theme.spacings.medium,
+      gap: theme.spacing.medium,
+      padding: theme.spacing.medium,
+      margin: theme.spacing.medium,
     },
     footer: {
-      margin: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      margin: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

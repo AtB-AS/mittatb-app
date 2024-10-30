@@ -175,23 +175,23 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   snackbar: {
     ...shadows,
     ...flowHorizontallyAndCenterAlignVertically,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
     width: '88%',
-    paddingLeft: theme.spacings.large,
-    paddingRight: theme.spacings.xSmall,
+    paddingLeft: theme.spacing.large,
+    paddingRight: theme.spacing.xSmall,
     borderRadius: theme.border.radius.regular,
   },
   snackbarTexts: {
     flex: 1,
-    paddingVertical: theme.spacings.medium,
-    marginRight: theme.spacings.medium,
-    rowGap: theme.spacings.xSmall,
+    paddingVertical: theme.spacing.medium,
+    marginRight: theme.spacing.medium,
+    rowGap: theme.spacing.xSmall,
   },
   snackbarButtons: {
     ...flowHorizontallyAndCenterAlignVertically,
   },
   closeButton: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   parentMeasurer: {
     position: 'absolute',

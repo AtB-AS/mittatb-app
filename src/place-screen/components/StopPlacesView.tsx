@@ -275,39 +275,39 @@ function publicCodeCompare(a?: string, b?: string): number {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerWithNavigation: {
-    paddingTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   headerWithoutNavigation: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   messageBox: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   marginBottom: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonsContainer: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     flexDirection: 'row',
   },
   travelButton: {
     flex: 1,
   },
   travelFromButtonPadding: {
-    marginRight: theme.spacings.medium / 2,
+    marginRight: theme.spacing.medium / 2,
   },
   travelToButtonPadding: {
-    marginLeft: theme.spacings.medium / 2,
+    marginLeft: theme.spacing.medium / 2,
   },
   loadingIndicator: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   title: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   walkingDistance: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
 }));

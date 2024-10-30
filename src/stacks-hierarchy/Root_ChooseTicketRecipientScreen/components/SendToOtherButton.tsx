@@ -1,9 +1,9 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {Button} from '@atb/components/button';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
-import {StaticColor} from '@atb/theme/colors.ts';
 import {useTranslation} from '@atb/translations';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf.ts';
+import {ContrastColor} from '@atb/theme/colors';
 
 export const SendToOtherButton = ({
   state: {settingPhone},
@@ -12,7 +12,7 @@ export const SendToOtherButton = ({
 }: {
   state: RecipientSelectionState;
   onPress: () => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const {t} = useTranslation();
   if (settingPhone) return null;

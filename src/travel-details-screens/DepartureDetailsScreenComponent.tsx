@@ -83,6 +83,11 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[1];
+  const ctaColor = theme.color.interactive[0];
+  const backgroundColor = theme.color.background.neutral[0];
+  const themeColor = theme.color.background.accent[0];
+
   const analytics = useAnalytics();
   const {enable_ticketing} = useRemoteConfig();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
@@ -180,7 +185,7 @@ export const DepartureDetailsScreenComponent = ({
               )}
               <ThemeText
                 type="heading--medium"
-                color="background_accent_0"
+                color={themeColor}
                 style={{flexShrink: 1}}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
@@ -191,7 +196,7 @@ export const DepartureDetailsScreenComponent = ({
                 style={styles.travelAidButton}
                 onPress={onPressTravelAid}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
-                interactiveColor="interactive_0"
+                interactiveColor={ctaColor}
                 disabled={!fromQuay?.realtime}
               />
             )}
@@ -210,7 +215,7 @@ export const DepartureDetailsScreenComponent = ({
                         ? DepartureDetailsTexts.live(t(translatedModeName))
                         : DepartureDetailsTexts.map,
                     )}
-                    interactiveColor="interactive_1"
+                    interactiveColor={interactiveColor}
                     onPress={() => {
                       vehiclePosition &&
                         analytics.logEvent(
@@ -304,7 +309,7 @@ export const DepartureDetailsScreenComponent = ({
           {isLoading && (
             <View>
               <ActivityIndicator
-                color={theme.text.colors.primary}
+                color={theme.color.foreground.dynamic.primary}
                 style={styles.spinner}
                 animating={true}
                 size="large"
@@ -326,7 +331,7 @@ export const DepartureDetailsScreenComponent = ({
               toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
             }}
             style={styles.messageBox}
-            textColor="background_0"
+            textColor={backgroundColor}
           />
 
           <EstimatedCallRows
@@ -345,6 +350,8 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   return (
     <View style={styles.passedSection}>
@@ -355,7 +362,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
       />
       <ThemeText
         type="body__secondary"
-        color="background_accent_0"
+        color={themeColor}
         style={styles.passedText}
       >
         {realtimeText}
@@ -485,7 +492,7 @@ function EstimatedCallRow({
   const iconColor = useTransportationColor(
     group === 'trip' ? mode : undefined,
     subMode,
-  );
+  ).background;
 
   const {flex_booking_number_of_days_available} = useRemoteConfig();
   const bookingStatus = getBookingStatus(
@@ -625,44 +632,44 @@ function CollapseButtonRow({
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
     marginLeft:
       theme.tripLegDetail.labelWidth +
       theme.tripLegDetail.decorationContainerWidth,
   },
   text: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
 }));
 
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   headerTitle: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  parallaxContent: {marginHorizontal: theme.spacing.medium},
   date: {
     alignItems: 'center',
   },
   headerTitleIcon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
   headerSubSection: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.static.background.background_accent_1.background,
-    paddingTop: theme.spacings.medium,
+    borderTopColor: theme.color.background.accent[1].background,
+    paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
   border: {
-    borderColor: theme.static.background.background_3.background,
-    marginVertical: theme.spacings.medium,
+    borderColor: theme.color.background.neutral[3].background,
+    marginVertical: theme.spacing.medium,
   },
   passedSection: {
     flexDirection: 'row',
@@ -671,48 +678,48 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   passedSectionRealtimeIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   passedText: {
     flexShrink: 1,
   },
   startPlace: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   liveButton: {
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacing.small,
   },
   travelAidButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
   },
   row: {
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacing.small,
   },
   middleRow: {
     minHeight: 60,
   },
   estimatedCallRows: {
-    backgroundColor: theme.static.background.background_1.background,
-    marginBottom: theme.spacings.xLarge,
+    backgroundColor: theme.color.background.neutral[1].background,
+    marginBottom: theme.spacing.xLarge,
   },
   spinner: {
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
   },
   messageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   scrollView__content: {
-    padding: theme.spacings.medium,
-    paddingBottom: theme.spacings.large,
+    padding: theme.spacing.medium,
+    paddingBottom: theme.spacing.large,
   },
   boardingInfo: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   situationTripRow: {
     paddingTop: 0,
-    paddingBottom: theme.spacings.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
 }));

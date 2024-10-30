@@ -1,15 +1,15 @@
 import {useTheme} from '@atb/theme';
 import {
-  flatStaticColors,
-  isStaticColor,
-  isStatusColor,
-  Mode,
+  ContrastColor,
+  Statuses,
+  TextColor,
   Theme,
+  isStatusColor,
+  isTextColor
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {View} from 'react-native';
-import type {IconColor} from './types';
+import {ColorValue, View} from 'react-native';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
@@ -19,38 +19,36 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils.ts';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: IconColor;
+  color?: ContrastColor | TextColor | ColorValue;
   size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
-} & SvgProps;
+} & Omit<SvgProps, 'color' | 'fill'>;
 
 export const ThemeIcon = ({
   svg,
-  colorType,
-  size = 'normal',
-  fill,
+  color,
+  size = "normal",
   notification,
   style,
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element | null => {
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const fontScale = useFontScale();
+  const fill = useColor(color)
 
   if (!svg) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
     return null;
   }
 
-  const fillToUse = fill || getFill(theme, themeName, colorType);
-
   const iconSize = allowFontScaling
     ? theme.icon.size[size] * fontScale
     : theme.icon.size[size];
 
   const settings = {
-    fill: fillToUse,
+    fill,
     height: iconSize,
     width: iconSize,
     ...props,
@@ -68,14 +66,15 @@ export const ThemeIcon = ({
   );
 };
 
-function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
-  if (colorType && typeof colorType !== 'string') {
-    return colorType.text;
-  } else if (isStatusColor(colorType)) {
-    return theme.status[colorType].primary.background;
-  } else if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType].text;
+function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
+  const {theme} = useTheme();
+  if (typeof color === 'object') {
+    return color.foreground.primary;
+  } else if (isStatusColor(color, theme)) {
+    return theme.color.status[color].primary.background;
+  } else if (isTextColor(color, theme) || color === undefined) {
+    return theme.color.foreground.dynamic[color ?? 'primary']
   } else {
-    return theme.text.colors[colorType ?? 'primary'];
+    return color
   }
 }

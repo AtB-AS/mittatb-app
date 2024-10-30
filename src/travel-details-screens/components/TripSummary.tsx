@@ -66,7 +66,7 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   tripSummary: {
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));
 

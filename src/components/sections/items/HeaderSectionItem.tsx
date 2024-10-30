@@ -42,6 +42,6 @@ export function HeaderSectionItem({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   subtitle: {
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacing.small,
   },
 }));

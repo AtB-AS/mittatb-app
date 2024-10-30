@@ -49,7 +49,7 @@ export function LocationInputSectionItem({
       }
       icon={
         updatingLocation ? (
-          <ActivityIndicator color={theme.text.colors.primary} />
+          <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
         ) : (
           inputIcon
         )

@@ -111,9 +111,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   stopDescription: {
-    marginVertical: theme.spacings.xSmall,
+    marginVertical: theme.spacing.xSmall,
   },
   stopPlaceIcon: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacing.medium,
   },
 }));

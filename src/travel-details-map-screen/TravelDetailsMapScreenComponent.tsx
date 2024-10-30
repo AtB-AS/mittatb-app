@@ -254,7 +254,7 @@ const LiveVehicleMarker = ({
   isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, false, 'background');
+  const fillColor = useTransportationColor(mode, subMode, false).background;
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const [isStale, setIsStale] = useState(false);
@@ -273,19 +273,19 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  const circleColor = useTransportationColor(mode, subMode);
+  const circleColor = useTransportationColor(mode, subMode).background;
 
   let circleBackgroundColor = circleColor;
   let circleBorderColor = 'transparent';
   if (isError) {
     circleBackgroundColor =
-      theme.interactive.interactive_destructive.disabled.background;
+      theme.color.interactive.destructive.disabled.background;
     circleBorderColor =
-      theme.interactive.interactive_destructive.default.background;
+      theme.color.interactive.destructive.default.background;
   }
   if (isStale) {
-    circleBackgroundColor = theme.interactive.interactive_1.disabled.background;
-    circleBorderColor = theme.interactive.interactive_1.default.background;
+    circleBackgroundColor = theme.color.interactive[1].disabled.background;
+    circleBorderColor = theme.color.interactive[1].default.background;
   }
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
@@ -338,9 +338,9 @@ const LiveVehicleMarker = ({
               iconScale={iconScale}
               fill={
                 isError
-                  ? theme.interactive.interactive_destructive.default.background
+                  ? theme.color.interactive.destructive.default.background
                   : isStale
-                  ? theme.interactive.interactive_1.default.background
+                  ? theme.color.interactive[1].default.background
                   : fillColor
               }
             />
@@ -363,25 +363,25 @@ const LiveVehicleIcon = ({
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, false, 'text');
+  const fillColor = useTransportationColor(mode, subMode).foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)
     return (
       <ThemeIcon
         svg={svg}
-        fill={theme.interactive.interactive_destructive.default.background}
+        color={theme.color.interactive.destructive.default.background}
         allowFontScaling={false}
       />
     );
   if (isStale)
     return (
       <ActivityIndicator
-        color={theme.interactive.interactive_1.disabled.text}
+        color={theme.color.interactive[1].disabled.foreground.primary}
       />
     );
 
-  return <ThemeIcon svg={svg} fill={fillColor} allowFontScaling={false} />;
+  return <ThemeIcon svg={svg} color={fillColor} allowFontScaling={false} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({

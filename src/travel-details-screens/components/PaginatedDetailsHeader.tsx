@@ -95,11 +95,11 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   wrapper: {
     borderBottomWidth: theme.border.width.slim,
-    borderColor: theme.static.background.background_1.background,
+    borderColor: theme.color.background.neutral[1].background,
   },
   buttonLeft: {
     position: 'absolute',
@@ -115,7 +115,7 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   },
   subline: {
     alignItems: 'center',
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
   },
   strikethrough: {
     textDecorationLine: 'line-through',

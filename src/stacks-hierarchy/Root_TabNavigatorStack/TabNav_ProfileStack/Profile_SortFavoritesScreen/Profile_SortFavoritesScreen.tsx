@@ -4,7 +4,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFavorites} from '@atb/favorites';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -20,6 +20,7 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   const saveOrder = async () => {
     try {
@@ -48,7 +49,7 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
           onPress={saveOrder}
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           rightIcon={{svg: Confirm}}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
         />
       </FullScreenFooter>
     </View>
@@ -56,13 +57,13 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
 };
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.color.background.neutral[3].background,
     flex: 1,
   },
   error: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   orderContainer: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

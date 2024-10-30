@@ -92,8 +92,8 @@ export const TravellerSelectionSheet = ({
 const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
   };
 });

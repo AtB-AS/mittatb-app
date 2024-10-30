@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Theme} from '@atb/theme/colors';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -14,6 +15,8 @@ export interface RenderQuestionProps {
   question: QuestionType;
   handleAnswerPress: (o: {questionId: number; alternativeId: number}) => void;
 }
+
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
 
 export const RenderQuestion = ({
   selectedOpinion,
@@ -106,20 +109,20 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
   alternativeBox: {
     alignSelf: 'flex-start',
     justifyContent: 'center',
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
-    paddingVertical: theme.spacings.medium,
-    backgroundColor: theme.interactive.interactive_2.default.background,
+    padding: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
+    paddingVertical: theme.spacing.medium,
+    backgroundColor: getInteractiveColor(theme).default.background,
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.interactive.interactive_2.default.background,
+    borderColor: getInteractiveColor(theme).default.background,
   },
   checked: {
-    backgroundColor: theme.interactive.interactive_2.active.background,
-    borderColor: theme.interactive.interactive_2.outline.background,
+    backgroundColor: getInteractiveColor(theme).active.background,
+    borderColor: getInteractiveColor(theme).outline.background,
   },
   questionTitleView: {
-    marginTop: theme.spacings.xLarge,
-    marginBottom: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

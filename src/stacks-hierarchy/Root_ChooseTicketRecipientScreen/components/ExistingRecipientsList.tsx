@@ -5,7 +5,7 @@ import {ActivityIndicator, Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf.ts';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation.ts';
@@ -26,11 +26,11 @@ export const ExistingRecipientsList = ({
   onSelect: (r?: OnBehalfOfAccountType) => void;
   onEmptyRecipients: () => void;
   onDelete: () => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
   const recipientsQuery = useFetchOnBehalfOfAccountsQuery({enabled: true});
   const {mutation: deleteMutation, activeDeletions} =
@@ -72,7 +72,7 @@ export const ExistingRecipientsList = ({
         <ActivityIndicator
           style={styles.loadingSpinner}
           size="large"
-          color={getStaticColor(themeName, themeColor).text}
+          color={themeColor.foreground.primary}
         />
       )}
       {recipientsQuery.status === 'error' && (
@@ -108,11 +108,11 @@ export const ExistingRecipientsList = ({
           onSelect={(item) =>
             !activeDeletions.includes(item.accountId) && onSelect(item)
           }
-          color="interactive_2"
+          color={theme.color.interactive[2]}
           style={styles.recipientList}
           itemToRightAction={(item) => ({
             icon: (props) => (
-              <Delete {...props} fill={theme.status.error.primary.background} />
+              <Delete {...props} fill={theme.color.status.error.primary.background} />
             ),
             onPress: () => onDeletePress(item),
             isLoading: activeDeletions.includes(item.accountId),
@@ -124,7 +124,7 @@ export const ExistingRecipientsList = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  loadingSpinner: {marginBottom: theme.spacings.medium},
-  errorMessage: {marginBottom: theme.spacings.medium},
-  recipientList: {marginBottom: theme.spacings.medium},
+  loadingSpinner: {marginBottom: theme.spacing.medium},
+  errorMessage: {marginBottom: theme.spacing.medium},
+  recipientList: {marginBottom: theme.spacing.medium},
 }));

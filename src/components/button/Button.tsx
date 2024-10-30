@@ -1,12 +1,6 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {
-  getInteractiveColor,
-  getStaticColor,
-  InteractiveColor,
-  isStaticColor,
-  StaticColor,
-} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {Theme} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   ActivityIndicator,
@@ -21,6 +15,7 @@ import {
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shadows} from '@atb/components/map';
+import { ContrastColor, InteractiveColor } from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -59,7 +54,7 @@ type ButtonModeAwareProps =
   | {mode?: 'primary'; interactiveColor?: InteractiveColor}
   | {
       mode: Exclude<ButtonMode, 'primary'>;
-      backgroundColor?: StaticColor | InteractiveColor;
+      backgroundColor?: ContrastColor;
     };
 
 export type ButtonProps = {
@@ -96,18 +91,19 @@ export const Button = React.forwardRef<any, ButtonProps>(
     },
     ref,
   ) => {
-    const interactiveColor =
-      'interactiveColor' in props && props.interactiveColor
-        ? props.interactiveColor
-        : 'interactive_0';
-    const backgroundColor =
-      'backgroundColor' in props && props.backgroundColor
-        ? props.backgroundColor
-        : 'background_0';
-
     const modeData = DefaultModeStyles[mode];
     const styles = useButtonStyle();
     const {theme} = useTheme();
+
+    const interactiveColor =
+      'interactiveColor' in props && props.interactiveColor
+        ? props.interactiveColor
+        : theme.color.interactive[0];
+    const backgroundColor =
+      'backgroundColor' in props && props.backgroundColor
+        ? props.backgroundColor
+        : theme.color.background.neutral[0];
+
     const fadeAnim = useRef(
       new Animated.Value(disabled ? DISABLED_OPACITY : 1),
     ).current;
@@ -123,20 +119,20 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const isInline = type === 'medium' || type === 'small';
 
-    const spacing = compact ? theme.spacings.small : theme.spacings.medium;
+    const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =
-      theme.interactive[interactiveColor][active ? 'active' : 'default'];
+      interactiveColor[active ? 'active' : 'default'];
 
-    const textColorBasedOnBackground = useColor(backgroundColor);
+    const textColorBasedOnBackground = backgroundColor.foreground.primary;
     const textColor =
       mode !== 'primary'
         ? textColorBasedOnBackground
-        : theme.interactive[interactiveColor][active ? 'active' : 'default']
-            .text;
+        : interactiveColor[active ? 'active' : 'default']
+            .foreground.primary;
 
     const borderColor =
       active && mode === 'primary'
-        ? theme.interactive[interactiveColor].default.background
+        ? interactiveColor.default.background
         : modeData.visibleBorder
         ? textColor
         : 'transparent';
@@ -147,7 +143,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
         borderColor: borderColor,
         paddingHorizontal: spacing,
-        paddingVertical: type === 'small' ? theme.spacings.xSmall : spacing,
+        paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
         borderRadius:
           type === 'small'
@@ -176,14 +172,14 @@ export const Button = React.forwardRef<any, ButtonProps>(
       position: isInline ? 'relative' : 'absolute',
       left: isInline ? undefined : spacing,
       marginRight:
-        isInline && (text || rightIcon) ? theme.spacings.xSmall : undefined,
+        isInline && (text || rightIcon) ? theme.spacing.xSmall : undefined,
     };
 
     const rightStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
       right: isInline ? undefined : spacing,
       marginLeft:
-        isInline && (text || leftIcon) ? theme.spacings.xSmall : undefined,
+        isInline && (text || leftIcon) ? theme.spacing.xSmall : undefined,
     };
 
     return (
@@ -206,7 +202,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon fill={textColor} {...leftIcon} />
+              <ThemeIcon color={textColor} {...leftIcon} />
             </View>
           )}
           {text && (
@@ -225,7 +221,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
               {loading ? (
                 <ActivityIndicator size="small" color={styleText.color} />
               ) : (
-                rightIcon && <ThemeIcon fill={textColor} {...rightIcon} />
+                rightIcon && <ThemeIcon color={textColor} {...rightIcon} />
               )}
             </View>
           )}
@@ -253,7 +249,7 @@ const useTextMarginHorizontal = (
     theme.icon.size[leftIcon?.size || 'normal'],
     theme.icon.size[rightIcon?.size || 'normal'],
   );
-  return maxIconSize + theme.spacings.xSmall;
+  return maxIconSize + theme.spacing.xSmall;
 };
 
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
@@ -263,14 +259,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderWidth: theme.border.width.medium,
   },
 }));
-
-const useColor = (color: StaticColor | InteractiveColor): string => {
-  const {themeName} = useTheme();
-
-  return isStaticColor(color)
-    ? getStaticColor(themeName, color).text
-    : getInteractiveColor(themeName, color).default.text;
-};
 
 function getTextType(mode: string, type: string) {
   if (mode === 'tertiary') return 'body__primary';
