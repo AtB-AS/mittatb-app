@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -19,10 +19,12 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {enable_travel_aid_stop_button} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
   const {contactPhoneNumber} = useFirestoreConfiguration();
 
+  const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
 
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
@@ -63,7 +65,7 @@ export const Profile_TravelAidScreen = () => {
               {hasContactPhoneNumber && (
                 <Button
                   mode="secondary"
-                  backgroundColor="background_0"
+                  backgroundColor={backgroundColor}
                   text={t(TravelAidSettingsTexts.button.contact.title)}
                   accessibilityHint={t(
                     TravelAidSettingsTexts.button.contact.a11yHint,
@@ -95,11 +97,11 @@ export const Profile_TravelAidScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.small,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
   buttonContainer: {
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
     flex: 1,
   },
 }));

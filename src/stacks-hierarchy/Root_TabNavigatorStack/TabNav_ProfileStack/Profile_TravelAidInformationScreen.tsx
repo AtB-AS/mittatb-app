@@ -57,11 +57,11 @@ export const Profile_TravelAidInformationScreen = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.small,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
   buttonContainer: {
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
     flex: 1,
   },
 }));
