@@ -11,7 +11,7 @@ type MapFilterProps = {
 export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {theme} = useTheme();
-  const interactiveColor = theme.color.interactive[2]
+  const interactiveColor = theme.color.interactive[2];
   const analytics = useAnalytics();
 
   return (
@@ -28,6 +28,7 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
       loading={isLoading}
       rightIcon={{svg: Filter}}
       hasShadow={true}
+      testID="mapFilter"
     />
   );
 };
