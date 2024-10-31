@@ -18,10 +18,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
-import {
-  getLineA11yLabel,
-  getNoticesForServiceJourney,
-} from '@atb/travel-details-screens/utils';
+import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -38,7 +35,6 @@ import {getQuayName} from '@atb/utils/transportation-names.ts';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationMessageBox} from '@atb/situations';
 import {RequireValue} from '@atb/utils/object';
-import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 
@@ -145,7 +141,7 @@ const TravelAidSection = ({
   const accessibilityLabel =
     getSituationA11yLabel(situationsForSelected, language) +
     screenReaderPause +
-    getNoticesA11yLabel(noticesForSelected, language) +
+    getNoticesA11yLabel(noticesForSelected) +
     screenReaderPause +
     getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
 
@@ -233,12 +229,12 @@ const useTravelAidAnnouncements = (
     if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
       previousQuayId.current = state.focusedEstimatedCall.quay.id;
       AccessibilityInfo.announceForAccessibility(
-        message + screenReaderPause + situationsForFocusedStop,
+        message + screenReaderPause + situations,
       );
     } else {
       AccessibilityInfo.announceForAccessibility(message);
     }
-  }, [message]);
+  }, [message, situations, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
@@ -315,7 +311,7 @@ const getSituationA11yLabel = (
     .join(screenReaderPause);
 };
 
-const getNoticesA11yLabel = (notices: NoticeFragment[], language: Language) => {
+const getNoticesA11yLabel = (notices: NoticeFragment[]) => {
   return notices
     .map((notice) => notice.text)
     .filter((text) => text)
