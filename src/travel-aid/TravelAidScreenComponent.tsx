@@ -71,13 +71,17 @@ export const TravelAidScreenComponent = ({
         type="medium"
       />
       <ScrollView contentContainerStyle={styles.container}>
-        {status === 'loading' && <ActivityIndicator size="large" />}
+        {status === 'loading' && (
+          <ActivityIndicator size="large" ref={focusRef} />
+        )}
         {status === 'error' && (
-          <MessageInfoBox
-            type="error"
-            message={t(TravelAidTexts.error.message)}
-            onPressConfig={{action: refetch, text: t(dictionary.retry)}}
-          />
+          <View ref={focusRef}>
+            <MessageInfoBox
+              type="error"
+              message={t(TravelAidTexts.error.message)}
+              onPressConfig={{action: refetch, text: t(dictionary.retry)}}
+            />
+          </View>
         )}
         {status === 'success' && serviceJourney.estimatedCalls && (
           <TravelAidSection
