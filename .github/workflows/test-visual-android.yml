@@ -19,7 +19,7 @@ on:
 jobs:
   run_tests:
     name: Visual tests Android
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: atb
     timeout-minutes: 90
     steps:
