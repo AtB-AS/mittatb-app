@@ -69,12 +69,6 @@ jobs:
       # Emulator cache
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
-
-      - name: list
-        run: |
-          ls -la ~/
-          ls -la /home/runner/
-
       - name: AVD cache
         uses: actions/cache@v4
         id: avd-cache
@@ -83,12 +77,6 @@ jobs:
             ~/.android/avd/*
             ~/.android/adb*
           key: avd-pixel_5-${{ env.INPUT_API_LEVEL }}
-
-      - name: list 2
-        run: |
-          ls -la ~/
-          ls -la /home/runner/
-
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -105,12 +93,7 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      - name: list 3
-        run: |
-          ls -la ~/
-          ls -la /home/runner/
-
-        # E2E run
+      # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -150,11 +133,6 @@ jobs:
       #    APP_PATH: ${{ github.workspace }}
       #    IS_CI: "true"
 
-      - name: list 4
-        run: |
-          ls -la ~/
-          ls -la /home/runner/
-
       # Results
       - name: Upload diff screenshots
         if: failure()
@@ -164,21 +142,21 @@ jobs:
           path: ./e2e/screenshots/visualTests/diff/*.png
           retention-days: 1
       - name: Upload actual screenshots
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-actual-screenshots
           path: ./e2e/screenshots/visualTests/actual/*.png
           retention-days: 1
       - name: Upload screenshots
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
           retention-days: 1
       - name: Upload test reports
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-results

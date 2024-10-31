@@ -9,9 +9,7 @@ import VisualHelper from '../../utils/visual.helper.js';
  */
 describe('Visual tests', () => {
   // Waiting time between actions in ms
-  //const waitingTime = AppHelper.isCI() ? 10000 : 5000;
-  const waitingTime = 5000
-  // SYSTEM_UI_FLAG_HIDE_NAVIGATION
+  const waitingTime = 2000
 
   // Set test options
   const testOptions = {
@@ -32,7 +30,7 @@ describe('Visual tests', () => {
     try {
       // frontpage
       await AppHelper.removeGlobalMessages();
-      await AppHelper.pause(1000);
+      await AppHelper.pause(500);
       await FrontPagePage.removeAnnouncements();
       await AppHelper.pause(waitingTime);
       await VisualHelper.saveVisualTestScreen('frontpage', testOptions);
@@ -55,11 +53,9 @@ describe('Visual tests', () => {
   it('frontpage should be equal to baseline', async () => {
     try {
       await AppHelper.removeGlobalMessages();
-      await AppHelper.pause(1000);
+      await AppHelper.pause(500);
       await FrontPagePage.removeAnnouncements();
-      await AppHelper.screenshot('frontpage_before')
       await AppHelper.pause(waitingTime);
-      await AppHelper.screenshot('frontpage_after')
 
       await VisualHelper.visualTestScreen('frontpage', testOptions);
     } catch (errMsg) {
