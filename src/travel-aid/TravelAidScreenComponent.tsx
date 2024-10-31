@@ -131,13 +131,14 @@ const TravelAidSection = ({
       n1.id.localeCompare(n2.id),
     ) ?? [];
 
-  useTravelAidAnnouncements(
-    {status, focusedEstimatedCall},
-    situations,
-    notices,
-  );
+  useTravelAidAnnouncements({status, focusedEstimatedCall});
+  useAnnounceSituationOrNotices(situations, notices, language);
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
+
+  const accessibilityLabel =
+    getSituationOrNoticeA11yLabel(situations, notices, language) +
+    getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
 
   return (
     <Section ref={focusRef}>
@@ -165,13 +166,7 @@ const TravelAidSection = ({
       <GenericSectionItem
         accessibility={{
           accessible: true,
-          accessibilityLabel: getFocussedStateA11yLabel(
-            {status, focusedEstimatedCall},
-            situations,
-            notices,
-            t,
-            language,
-          ),
+          accessibilityLabel: accessibilityLabel,
         }}
       >
         <View style={styles.sectionContainer}>
@@ -209,20 +204,27 @@ const TravelAidSection = ({
   );
 };
 
-const useTravelAidAnnouncements = (
-  state: FocusedEstimatedCallState,
-  situations: SituationFragment[],
-  notices: NoticeFragment[],
-) => {
+const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
-  const message = getFocussedStateA11yLabel(
-    state,
-    situations,
-    notices,
-    t,
-    language,
-  );
+  const message = getFocussedStateA11yLabel(state, t, language);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    AccessibilityInfo.announceForAccessibility(message);
+  }, [message]);
+};
+
+const useAnnounceSituationOrNotices = (
+  situations: SituationFragment[],
+  notices: NoticeFragment[],
+  language: Language,
+) => {
+  const isFirstRender = useRef(true);
+  const message = getSituationOrNoticeA11yLabel(situations, notices, language);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -283,15 +285,12 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
 
 const getFocussedStateA11yLabel = (
   state: FocusedEstimatedCallState,
-  situations: SituationFragment[],
-  notices: NoticeFragment[],
   t: TranslateFunction,
   language: Language,
 ) => {
   const quayName = getQuayName(state.focusedEstimatedCall.quay) ?? '';
 
   return (
-    getSituationOrNoticeA11yLabel(situations, notices, language) +
     getStopHeader(state.status, t) +
     ' ' +
     quayName +
