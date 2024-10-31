@@ -1,5 +1,8 @@
 name: Visual tests on Android
 on:
+  push:
+    branches:
+      - tor/visual-tests
   workflow_dispatch:
     inputs:
       api_level:
