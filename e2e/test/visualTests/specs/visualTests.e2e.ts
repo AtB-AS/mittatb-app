@@ -28,7 +28,7 @@ describe('Visual tests', () => {
   });
 
   // NOTE! Run this as 'it.only' to save new baseline images. For test runs, this is 'xit'
-  it.only('should save baseline images', async () => {
+  xit('should save baseline images', async () => {
     try {
       // frontpage
       await AppHelper.removeGlobalMessages();
