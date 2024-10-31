@@ -132,7 +132,7 @@ const TravelAidSection = ({
     ) ?? [];
 
   useTravelAidAnnouncements({status, focusedEstimatedCall});
-  useAnnounceSituationOrNotices(situations, notices, language);
+  useAnnounceSituationsOrNotices(situations, notices, language);
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
@@ -218,7 +218,7 @@ const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
   }, [message]);
 };
 
-const useAnnounceSituationOrNotices = (
+const useAnnounceSituationsOrNotices = (
   situations: SituationFragment[],
   notices: NoticeFragment[],
   language: Language,
