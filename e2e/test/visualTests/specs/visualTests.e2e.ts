@@ -9,7 +9,9 @@ import VisualHelper from '../../utils/visual.helper.js';
  */
 describe('Visual tests', () => {
   // Waiting time between actions in ms
-  const waitingTime = 5000;
+  const waitingTime = AppHelper.isCI() ? 10000 : 5000;
+  //const waitingTime = 10000
+  // SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
   // Set test options
   const testOptions = {
