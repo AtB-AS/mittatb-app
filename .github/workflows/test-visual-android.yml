@@ -34,7 +34,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.INPUT_BRANCH }}
+          ref: tor/visual-tests
 
       # Download APK
       - name: Get AppCenter APK
