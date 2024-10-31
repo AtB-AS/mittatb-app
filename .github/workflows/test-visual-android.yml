@@ -79,7 +79,7 @@ jobs:
           disable-spellchecker: true
           disable-animations: true
           script: yarn test:android --spec test/visualTests/specs/visualTests.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -105,7 +105,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-screenshots
-          path: ./e2e/screenshots/visualTests/*.png
+          path: ./e2e/screenshots/*.png
           retention-days: 1
       - name: Upload test reports
         if: always()

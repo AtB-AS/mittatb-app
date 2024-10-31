@@ -9,8 +9,8 @@ import VisualHelper from '../../utils/visual.helper.js';
  */
 describe('Visual tests', () => {
   // Waiting time between actions in ms
-  const waitingTime = AppHelper.isCI() ? 10000 : 5000;
-  //const waitingTime = 10000
+  //const waitingTime = AppHelper.isCI() ? 10000 : 5000;
+  const waitingTime = 5000
   // SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
   // Set test options
@@ -28,7 +28,7 @@ describe('Visual tests', () => {
   });
 
   // NOTE! Run this as 'it.only' to save new baseline images. For test runs, this is 'xit'
-  xit('should save baseline images', async () => {
+  it.only('should save baseline images', async () => {
     try {
       // frontpage
       await AppHelper.removeGlobalMessages();
