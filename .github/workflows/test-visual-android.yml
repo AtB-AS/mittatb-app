@@ -1,8 +1,5 @@
 name: Visual tests on Android
 on:
-  push:
-    branches:
-      - tor/visual-tests
   workflow_dispatch:
     inputs:
       api_level:
@@ -32,7 +29,7 @@ jobs:
           echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: tor/visual-tests
 
@@ -114,50 +111,31 @@ jobs:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
 
-      # E2E run
-      #- name: Run tests on Android emulator
-      #  uses: reactivecircus/android-emulator-runner@v2
-      #  with:
-      #    avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
-      #    api-level: ${{ env.INPUT_API_LEVEL }}
-      #    arch: x86_64
-      #    profile: pixel_5
-      #    emulator-build: 11237101
-      #    emulator-boot-timeout: 900
-      #    disable-spellchecker: true
-      #    disable-animations: true
-      #    script: yarn test:android --spec test/visualTests/specs/visualTests.e2e.ts
-      #    pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
-      #    working-directory: e2e
-      #  env:
-      #    APP_PATH: ${{ github.workspace }}
-      #    IS_CI: "true"
-
       # Results
       - name: Upload diff screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-diff-screenshots
           path: ./e2e/screenshots/visualTests/diff/*.png
           retention-days: 1
       - name: Upload actual screenshots
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-actual-screenshots
           path: ./e2e/screenshots/visualTests/actual/*.png
           retention-days: 1
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
           retention-days: 1
       - name: Upload test reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: ./e2e/screenshots/visualTests/actual/*.json
