@@ -57,7 +57,9 @@ describe('Visual tests', () => {
       await AppHelper.removeGlobalMessages();
       await AppHelper.pause(1000);
       await FrontPagePage.removeAnnouncements();
+      await AppHelper.screenshot('frontpage_before')
       await AppHelper.pause(waitingTime);
+      await AppHelper.screenshot('frontpage_after')
 
       await VisualHelper.visualTestScreen('frontpage', testOptions);
     } catch (errMsg) {

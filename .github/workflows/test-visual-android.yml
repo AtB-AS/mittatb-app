@@ -93,6 +93,20 @@ jobs:
           name: test-diff-screenshots
           path: ./e2e/screenshots/visualTests/diff/*.png
           retention-days: 1
+      - name: Upload actual screenshots
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-actual-screenshots
+          path: ./e2e/screenshots/visualTests/actual/*.png
+          retention-days: 1
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-screenshots
+          path: ./e2e/screenshots/visualTests/*.png
+          retention-days: 1
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
