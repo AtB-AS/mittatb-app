@@ -156,6 +156,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   toFromLabel: {
     minWidth: 40,
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

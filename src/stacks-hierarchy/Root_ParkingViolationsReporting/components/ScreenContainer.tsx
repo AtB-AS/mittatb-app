@@ -1,17 +1,15 @@
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StaticColorByType} from '@atb/theme/colors';
 import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const themeColor: StaticColorByType<'background'> =
-  'background_accent_0';
+export const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = PropsWithChildren<{
   title?: string;
@@ -24,12 +22,15 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ScreenContainer = (props: Props) => {
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+
   return (
     <FullScreenView
       headerProps={{
         leftButton: props.leftHeaderButton,
         rightButton: props.rightHeaderButton,
-        color: 'background_accent_0',
+        color: themeColor,
         setFocusOnLoad: false,
       }}
       contentColor={themeColor}
@@ -52,6 +53,8 @@ const LoadingBody = () => {
 
 const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
   const style = useStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
   return (
     <>
@@ -80,22 +83,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     content: {
       flex: 1,
-      paddingVertical: theme.spacings.medium,
+      paddingVertical: theme.spacing.medium,
     },
     header: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.large,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.large,
     },
     secondaryText: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
     centered: {
       flex: 1,
       justifyContent: 'center',
     },
     actionButtons: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

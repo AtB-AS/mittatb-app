@@ -1,11 +1,11 @@
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {forwardRef} from 'react';
 
-export const TitleAndDescription = forwardRef<any, {themeColor: StaticColor}>(
+export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
   ({themeColor}, focusRef) => {
     const styles = useStyles();
     const {t} = useTranslation();
@@ -35,10 +35,10 @@ export const TitleAndDescription = forwardRef<any, {themeColor: StaticColor}>(
 );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  title: {marginTop: theme.spacings.medium, textAlign: 'center'},
+  title: {marginTop: theme.spacing.medium, textAlign: 'center'},
   description: {
     textAlign: 'center',
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

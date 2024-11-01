@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   ActiveTokenRequiredTexts,
   TravelTokenTexts,
@@ -9,7 +9,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
 import {RadioGroupSection} from '@atb/components/sections';
@@ -19,7 +18,7 @@ import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTo
 import {getDeviceNameWithUnitInfo} from '@atb/select-travel-token-screen/utils';
 import {useToggleTokenMutation} from '@atb/mobile-token';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props =
   RootStackScreenProps<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
@@ -37,6 +36,9 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
   const toggleMutation = useToggleTokenMutation();
   const [selectedToken, setSelectedToken] = useState<Token>();
   const mobileTokens = tokens.filter((t) => t.type === 'mobile');
+
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
 
   useEffect(() => {
     if (toggleMutation.isSuccess) {
@@ -139,7 +141,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           <Button
             onPress={onSave}
             text={t(MobileTokenOnboarding.tCard.button)}
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             disabled={!selectedToken}
             testID="confirmSelectionButton"
             style={styles.buttonStyle}
@@ -153,26 +155,26 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   mainView: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   text: {
     textAlign: 'center',
   },
   textSpacing: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacing.small,
   },
   selectDeviceSection: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   errorMessageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   buttonStyle: {
-    paddingVertical: theme.spacings.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));

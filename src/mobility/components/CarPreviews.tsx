@@ -71,13 +71,13 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flexShrink: 1,
       flexGrow: 0,
       flexDirection: 'row',
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacing.small,
     },
     carImageLast: {
       marginRight: 0,
     },
     duplicateImage: {
-      marginLeft: theme.spacings.small,
+      marginLeft: theme.spacing.small,
     },
     moreCarsContainer: {
       height: 40,

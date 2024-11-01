@@ -37,7 +37,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   mobilityBenefit: {
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap: theme.spacings.medium,
+    columnGap: theme.spacing.medium,
   },
   mobilityBenefitText: {
     flexShrink: 1,

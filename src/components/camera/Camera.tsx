@@ -68,7 +68,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
           zoom={zoom}
           scanBarcode={mode === 'qr'}
           showFrame={mode === 'qr'}
-          frameColor={theme.interactive.interactive_0.default.background}
+          frameColor={theme.color.interactive[0].default.background}
           laserColor="transparent"
           onReadCode={(e: unknown) => {
             if (
@@ -110,7 +110,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   loadingIndicator: {
     flex: 1,
     justifyContent: 'center',
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   camera: {
     flex: 1,
@@ -118,8 +118,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   captureButton: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.large,
     alignItems: 'center',
   },
 }));

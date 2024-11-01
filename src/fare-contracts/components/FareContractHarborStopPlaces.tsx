@@ -47,7 +47,7 @@ export function FareContractHarborStopPlaces({
 
   if (!fromName || !toName) return null;
 
-  const color = theme.transport.transport_boat.primary.background;
+  const color = theme.color.transport.boat.primary.background;
   const decorationLineWidth = theme.tripLegDetail.decorationLineWidth;
   const verticalLinePaddingLeft =
     theme.tripLegDetail.decorationLineEndWidth - decorationLineWidth;
@@ -93,7 +93,7 @@ export function FareContractHarborStopPlaces({
             <View
               style={{
                 backgroundColor:
-                  theme.static.background.background_0.background,
+                  theme.color.background.neutral[0].background,
               }}
             >
               <ArrowUpDown
@@ -123,7 +123,7 @@ export function FareContractHarborStopPlaces({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
   },
   loading: {alignItems: 'flex-start', marginTop: 12},
   errorMessage: {marginTop: 12},

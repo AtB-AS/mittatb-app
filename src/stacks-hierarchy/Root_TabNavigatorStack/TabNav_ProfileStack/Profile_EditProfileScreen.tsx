@@ -6,7 +6,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
@@ -45,6 +45,8 @@ export const Profile_EditProfileScreen = ({
     isRefetching: isRefetchingProfile,
   } = useProfileQuery();
   const {disable_email_field_in_profile_page} = useRemoteConfig();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -96,7 +98,7 @@ export const Profile_EditProfileScreen = ({
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
             type="heading--medium"
-            color="background_accent_0"
+            color={themeColor}
             style={{flexShrink: 1}}
           >
             {t(EditProfileTexts.header.title)}
@@ -274,7 +276,7 @@ export const Profile_EditProfileScreen = ({
           <View style={styles.deleteProfile}>
             <Button
               mode="primary"
-              interactiveColor="interactive_destructive"
+              interactiveColor={theme.color.interactive.destructive}
               leftIcon={{svg: Delete}}
               text={t(EditProfileTexts.button.deleteProfile)}
               onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
@@ -288,43 +290,43 @@ export const Profile_EditProfileScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   personalDetails: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
-    marginTop: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
+    marginTop: theme.spacing.xLarge,
   },
   noAccount: {
-    marginHorizontal: theme.spacings.medium,
-    marginVertical: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.medium,
+    marginVertical: theme.spacing.xLarge,
   },
-  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  parallaxContent: {marginHorizontal: theme.spacing.medium},
   profileError: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   phone: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
   },
   submitSection: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   submitContent: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   sectionBottomPadding: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   profileContainer: {
-    marginHorizontal: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
   },
-  profileItem: {marginBottom: theme.spacings.large},
+  profileItem: {marginBottom: theme.spacing.large},
   deleteProfile: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

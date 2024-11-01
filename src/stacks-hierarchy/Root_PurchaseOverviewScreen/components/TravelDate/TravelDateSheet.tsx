@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   DateInputSectionItem,
   Section,
@@ -41,6 +41,7 @@ export const TravelDateSheet = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const defaultDate = travelDate ?? new Date().toISOString();
   const [dateString, setDate] = useState(defaultDate);
@@ -118,7 +119,7 @@ export const TravelDateSheet = ({
       <FullScreenFooter>
         <Button
           onPress={onSave}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
           text={t(TravelDateTexts.primaryButton)}
           style={[styles.saveButton, {marginBottom: keyboardHeight}]}
           testID="confirmTimeButton"
@@ -133,18 +134,18 @@ export const TravelDateSheet = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   contentContainer: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   saveButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   messageBox: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   dateWarningMessageBox: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
 }));

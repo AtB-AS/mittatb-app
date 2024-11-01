@@ -2,7 +2,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {StyleProp, TextStyle, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type MobilityStatProps = {
@@ -44,14 +44,12 @@ type StatWithIconProps = {
 
 export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
   const styles = useSheetStyle();
-  const {theme} = useTheme();
   return (
     <View style={styles.statWithIcon}>
       {svg && (
         <ThemeIcon
           svg={svg}
-          color={theme.text.colors.secondary}
-          fill={theme.text.colors.secondary}
+          color="secondary"
           style={styles.statIcon}
         />
       )}
@@ -65,12 +63,12 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    gap: theme.spacings.xSmall,
+    gap: theme.spacing.xSmall,
   },
   statWithIcon: {
     flexDirection: 'row',
   },
   statIcon: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

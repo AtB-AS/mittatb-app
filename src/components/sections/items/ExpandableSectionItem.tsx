@@ -139,9 +139,9 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   expandIcon__text: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   expandContent: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

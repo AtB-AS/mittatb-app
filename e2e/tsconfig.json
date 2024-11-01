@@ -19,7 +19,8 @@
       "@wdio/globals/types",
       "expect-webdriverio",
       "@wdio/mocha-framework",
-      "@wdio/appium-service"
+      "@wdio/appium-service",
+      "@wdio/visual-service"
     ]
   },
   "ts-node": {

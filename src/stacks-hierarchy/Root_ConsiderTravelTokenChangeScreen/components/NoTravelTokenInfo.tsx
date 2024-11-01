@@ -3,15 +3,14 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import React from 'react';
-import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {OnboardingFullScreenView} from '@atb/onboarding';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export function NoTravelTokenInfo({
   onPressFooterButton,
@@ -20,6 +19,8 @@ export function NoTravelTokenInfo({
 }): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -47,17 +48,17 @@ export function NoTravelTokenInfo({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
     textAlign: 'center',
   },
   illustration: {
     minHeight: 180,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: theme.spacings.xLarge,
+    marginVertical: theme.spacing.xLarge,
   },
   description: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     textAlign: 'center',
   },
 }));

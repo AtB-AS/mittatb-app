@@ -32,7 +32,7 @@ import {
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
-import {useIsActivateTicketNowEnabled} from './use-is-activate-now-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   now: number;
@@ -51,7 +51,7 @@ export const FareContractView: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthState();
   const {isInspectable} = useMobileTokenContextState();
-  const isActivateTicketNowEnabled = useIsActivateTicketNowEnabled();
+  const {isActivateTicketNowEnabled} = useFeatureToggles();
 
   const {t} = useTranslation();
   const styles = useStyles();
@@ -175,6 +175,6 @@ export const FareContractView: React.FC<Props> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
 }));

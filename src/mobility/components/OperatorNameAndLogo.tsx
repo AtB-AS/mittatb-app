@@ -60,7 +60,7 @@ export const OperatorNameAndLogo = ({
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
     logo: {
-      marginEnd: theme.spacings.small,
+      marginEnd: theme.spacing.small,
     },
   };
 });

@@ -1,12 +1,11 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
@@ -18,7 +17,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginActiveFareContractWarningScreen'>;
 
@@ -28,6 +27,8 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
   const {fareContracts, reservations} = useTicketingState();
   const {serverNow} = useTimeContextState();
@@ -92,7 +93,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
-          interactiveColor="interactive_destructive"
+          interactiveColor={theme.color.interactive.destructive}
           onPress={onNext}
           text={t(LoginTexts.activeFareContractPrompt.logInAndDeleteButton)}
           style={styles.logInAndDeleteButton}
@@ -100,7 +101,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         <Button
           onPress={navigation.goBack}
           text={t(LoginTexts.activeFareContractPrompt.cancelButton)}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
         />
       </FullScreenFooter>
     </View>
@@ -109,27 +110,27 @@ export const Root_LoginActiveFareContractWarningScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {
-    padding: theme.spacings.large,
+    padding: theme.spacing.large,
   },
   title: {
     textAlign: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   description: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
     textAlign: 'center',
   },
   fareContract: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
     opacity: 0.6,
     pointerEvents: 'none',
   },
   logInAndDeleteButton: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

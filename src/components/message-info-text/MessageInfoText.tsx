@@ -4,7 +4,7 @@ import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {StaticColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor, TextColor} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
   type: Statuses;
@@ -12,7 +12,7 @@ export type MessageInfoTextProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
-  textColor?: StaticColor | TextColor;
+  textColor?: ContrastColor | TextColor;
   isMarkdown?: boolean;
 };
 
@@ -28,7 +28,7 @@ export const MessageInfoText = ({
   const styles = useStyles();
   const {themeName} = useTheme();
 
-  const iconColorProps = {colorType: textColor};
+  const iconColorProps = {color: textColor};
 
   return (
     <View
@@ -66,7 +66,7 @@ export const MessageInfoText = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   text: {
     flexShrink: 1,

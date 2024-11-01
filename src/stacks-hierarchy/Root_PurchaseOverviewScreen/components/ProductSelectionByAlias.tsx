@@ -85,12 +85,12 @@ export function ProductSelectionByAlias({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   durationScrollView: {
-    marginLeft: -theme.spacings.medium,
-    marginRight: -theme.spacings.medium,
+    marginLeft: -theme.spacing.medium,
+    marginRight: -theme.spacing.medium,
   },
   durationContentContainer: {
     flexDirection: 'row',
-    marginLeft: theme.spacings.medium,
-    paddingRight: theme.spacings.medium,
+    marginLeft: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
   },
 }));

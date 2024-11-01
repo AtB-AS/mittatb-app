@@ -89,7 +89,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
 };
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    padding: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
 }));

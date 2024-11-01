@@ -94,7 +94,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {themeName} = useTheme();
+  const {theme, themeName} = useTheme();
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
@@ -104,8 +104,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
-  );
-  const iconColor = useTransportationColor();
+  ).background;
+  const iconColor = useTransportationColor().background;
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -289,7 +289,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               type="small"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              interactiveColor="interactive_3"
+              interactiveColor={theme.color.interactive[3]}
               onPress={() => onPressShowLive(mapData)}
             />
           </TripRow>
@@ -475,6 +475,8 @@ const BikeSection = (leg: Leg) => {
 const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[3];
 
   if (id === AUTHORITY) return null;
   if (!url) {
@@ -503,7 +505,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           onPress={() => url && Linking.openURL(url)}
           mode="primary"
           type="small"
-          interactiveColor="interactive_3"
+          interactiveColor={interactiveColor}
           text={name}
         />
       </View>
@@ -639,11 +641,11 @@ function getStopRowA11yTranslated(
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   a11yHelper: {
     position: 'absolute',
-    top: -theme.spacings.medium,
+    top: -theme.spacing.medium,
     left: 0,
     width: '100%',
   },
@@ -651,25 +653,25 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   onDemandTransportLabel: {
-    paddingTop: theme.spacings.xSmall,
+    paddingTop: theme.spacing.xSmall,
   },
   flexBookingOptions: {
-    paddingVertical: theme.spacings.medium / 2,
+    paddingVertical: theme.spacing.medium / 2,
   },
   realtime: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   realtimeIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   realtimeText: {
     flex: 1,
   },
   authoritySection: {
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
   },
   interchangeSection: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
 }));

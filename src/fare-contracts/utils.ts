@@ -10,6 +10,7 @@ import {
   isSentOrReceivedFareContract,
   getLastUsedAccess,
   isNormalTravelRight,
+  CarnetTravelRightUsedAccess,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
@@ -262,6 +263,7 @@ type FareContractInfoProps = {
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
+  usedAccesses?: CarnetTravelRightUsedAccess[];
   maximumNumberOfAccesses?: number;
   numberOfUsedAccesses?: number;
 };
@@ -301,6 +303,7 @@ export function getFareContractInfo(
     ? lastUsedAccess.validTo
     : fareContractValidTo;
 
+  const usedAccesses = carnetTravelRightAccesses?.usedAccesses;
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
@@ -311,6 +314,7 @@ export function getFareContractInfo(
     validityStatus,
     validFrom,
     validTo,
+    usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   };

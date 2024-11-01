@@ -11,7 +11,6 @@ import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
-import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token';
@@ -23,6 +22,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage.tsx';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -37,7 +37,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const showTicketAssistant = useTicketingAssistantEnabled();
+  const {isTicketingAssistantEnabled} = useFeatureToggles();
   const analytics = useAnalytics();
 
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
@@ -149,7 +149,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           styles.container,
           {
             backgroundColor: hasRecentFareContracts
-              ? theme.static.background.background_2.background
+              ? theme.color.background.neutral[2].background
               : undefined,
           },
         ]}
@@ -173,7 +173,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           onProductSelect={onProductSelect}
         />
 
-        {showTicketAssistant && (
+        {isTicketingAssistantEnabled && (
           <>
             <ThemeText style={styles.heading} type="body__secondary">
               {t(TicketingTexts.ticketAssistantTile.title)}
@@ -194,16 +194,16 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
   },
   heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
+    margin: theme.spacing.medium,
+    marginLeft: theme.spacing.xLarge,
+    marginTop: theme.spacing.large,
   },
   accountWrongMessage: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

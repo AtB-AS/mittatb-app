@@ -14,6 +14,14 @@ export const config: WebdriverIO.Config = {
           //command: 'appium',
         },
       ],
+      ['visual',
+        {
+          // folder options are set in the tests
+          formatImageName: "{tag}-{deviceName}-{width}x{height}",
+          createJsonReportFiles: true,
+          autoSaveBaseline: false,
+          isHybridApp: true,
+        }],
     ],
     capabilities: [
       {

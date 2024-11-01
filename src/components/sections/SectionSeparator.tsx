@@ -11,6 +11,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   separator: {
     height: 1,
     width: '100%',
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
 }));

@@ -1,20 +1,14 @@
-import {
-  flatStaticColors,
-  InteractiveColor,
-  isStaticColor,
-  StaticColor,
-} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {addOpacity} from '@atb/utils/add-opacity';
-import {ContrastColor} from '@atb-as/theme';
+import {ContrastColor} from '@atb/theme/colors';
 
 export type BorderedInfoBoxProps =
   | {
       /** The background color of the component where this box is placed */
-      backgroundColor: StaticColor | InteractiveColor;
+      backgroundColor: ContrastColor;
       type: 'large' | 'small';
       style?: StyleProp<ViewStyle>;
       testID?: string;
@@ -33,12 +27,11 @@ export const BorderedInfoBox = ({
   testID,
   ...props
 }: BorderedInfoBoxProps) => {
-  const contrastColor = useContrastColor(backgroundColor);
-  const styles = useStyles(type, contrastColor.text);
+  const styles = useStyles(type, backgroundColor.foreground.primary);
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={contrastColor} testID={testID}>
+        <ThemeText type="body__tertiary" color={backgroundColor} testID={testID}>
           {props.text}
         </ThemeText>
       ) : (
@@ -48,19 +41,6 @@ export const BorderedInfoBox = ({
   );
 };
 
-/**
- * Find the contrast color to use, based on given static or interactive color
- */
-function useContrastColor(
-  backgroundColor: BorderedInfoBoxProps['backgroundColor'],
-): ContrastColor {
-  const {theme, themeName} = useTheme();
-  if (isStaticColor(backgroundColor)) {
-    return flatStaticColors[themeName][backgroundColor];
-  }
-  return theme.interactive[backgroundColor].default;
-}
-
 const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
@@ -68,9 +48,9 @@ const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
       borderWidth: theme.border.width.slim,
       borderRadius: theme.border.radius.regular,
       paddingHorizontal:
-        type === 'large' ? theme.spacings.medium : theme.spacings.small,
+        type === 'large' ? theme.spacing.medium : theme.spacing.small,
       paddingVertical:
-        type === 'large' ? theme.spacings.medium : theme.spacings.xSmall,
+        type === 'large' ? theme.spacing.medium : theme.spacing.xSmall,
       width: type === 'large' ? '100%' : undefined,
       alignSelf: 'flex-start',
     },

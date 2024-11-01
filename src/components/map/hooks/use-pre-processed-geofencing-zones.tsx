@@ -29,7 +29,7 @@ export const usePreProcessedGeofencingZones = (
     );
   const geofencingZonesWithCustomProps = addGeofencingZoneCustomProps(
     applicableGeofencingZones,
-    theme.geofencingZones,
+    theme.color.geofencingZone,
     vehicleTypeId,
   );
   const geofencingZonesWithDecodedCoordinates =

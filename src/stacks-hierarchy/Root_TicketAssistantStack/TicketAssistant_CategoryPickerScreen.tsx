@@ -1,5 +1,5 @@
 import {Linking, ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 
 import {
   getTextForLanguage,
@@ -10,7 +10,7 @@ import {
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {getThemeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
@@ -31,20 +31,19 @@ export const TicketAssistant_CategoryPickerScreen = ({
 }: CategoryPickerProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const a11yContext = useAccessibilityContext();
 
   const focusRef = useFocusOnLoad();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
-  const offerDefaults = useOfferDefaults(
-    undefined,
-    fareProductTypeConfigs[0].type,
-  );
+  const offerDefaults = useOfferDefaults(undefined, fareProductTypeConfigs[0]);
   const {updateInputParams} = useTicketAssistantState();
 
-  const {selectableTravellers} = offerDefaults;
-  const defaultTravellerIndex = selectableTravellers.findIndex(
+  const {selection} = offerDefaults;
+  const defaultTravellerIndex = selection.userProfilesWithCount.findIndex(
     (a) => a.count > 0,
   );
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(
@@ -60,7 +59,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      const traveller = selectableTravellers[currentlyOpen];
+      const traveller = selection.userProfilesWithCount[currentlyOpen];
       updateCategory({
         id: traveller.userTypeString,
         userType: traveller.userTypeString,
@@ -70,7 +69,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
     return () => {
       unsubscribe();
     };
-  }, [navigation, selectableTravellers, currentlyOpen, updateCategory]);
+  }, [navigation, selection, currentlyOpen, updateCategory]);
 
   function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {
@@ -131,7 +130,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
         {!a11yContext.isScreenReaderEnabled ? (
           <Section style={styles.categoriesContainer}>
-            {selectableTravellers.map((u, index) => {
+            {selection.userProfilesWithCount.map((u, index) => {
               return (
                 <ExpandableSectionItem
                   key={index}
@@ -182,7 +181,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
           </Section>
         ) : (
           <>
-            {selectableTravellers.map((u, index) => {
+            {selection.userProfilesWithCount.map((u, index) => {
               const title = getReferenceDataName(u, language);
               const description = getTextForLanguage(
                 u.alternativeDescriptions,
@@ -249,39 +248,39 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
   a11yCategoryCards: {
     flexDirection: 'row',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
-    margin: theme.spacings.medium,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    margin: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
   a11yTitle: {
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   header: {
     textAlign: 'center',
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   scrollView: {
     flex: 1,
   },
   test: {
     flex: 1,
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
   },
   chooseButton: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   expandedContent: {
-    color: theme.text.colors.secondary,
+    color: theme.color.foreground.dynamic.secondary,
   },
   categoriesContainer: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_1.background,
-    marginHorizontal: theme.spacings.xLarge,
+    backgroundColor: theme.color.background.neutral[1].background,
+    marginHorizontal: theme.spacing.xLarge,
   },
 }));

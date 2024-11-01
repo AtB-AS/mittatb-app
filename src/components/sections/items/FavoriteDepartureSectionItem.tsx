@@ -86,7 +86,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       </View>
       {icon ?? (
         <SvgDelete
-          fill={theme.interactive.interactive_destructive.default.background}
+          fill={theme.color.interactive.destructive.default.background}
         />
       )}
     </View>
@@ -99,6 +99,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     justifyContent: 'center',
   },
   transportation__icon: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacing.medium,
   },
 }));

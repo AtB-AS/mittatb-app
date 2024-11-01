@@ -88,6 +88,6 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   marginTop: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
 }));

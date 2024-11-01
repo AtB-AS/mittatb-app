@@ -1,6 +1,5 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {StaticColorByType} from '@atb/theme/colors';
 
 import {
   ConsiderTravelTokenChangeTexts,
@@ -20,11 +19,12 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useCallback} from 'react';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
-
 export const Root_ConsiderTravelTokenChangeScreen = () => {
   const styles = useStyle();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
+  const interactiveColor = theme.color.interactive[1];
   const focusRef = useFocusOnLoad();
   const {disable_travelcard} = useRemoteConfig();
 
@@ -77,7 +77,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
       <TravelTokenBox
         showIfThisDevice={true}
         alwaysShowErrors={true}
-        interactiveColor="interactive_1"
+        interactiveColor={interactiveColor}
       />
     </OnboardingFullScreenView>
   );
@@ -85,12 +85,12 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    margin: theme.spacings.xLarge,
+    margin: theme.spacing.xLarge,
     textAlign: 'center',
     fontWeight: '700',
   },
   description: {
     textAlign: 'center',
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

@@ -179,20 +179,20 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   header: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   favouriteChips: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacing.medium,
   },
   withMargin: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   contentBlock: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   scroll: {
     flex: 1,

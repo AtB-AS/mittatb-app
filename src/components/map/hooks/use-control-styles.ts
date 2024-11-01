@@ -19,32 +19,32 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
     () => ({
       backArrowContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium,
-        left: theme.spacings.medium,
+        top: top + theme.spacing.medium,
+        left: theme.spacing.medium,
       },
       positionArrowContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium,
-        right: theme.spacings.medium,
+        top: top + theme.spacing.medium,
+        right: theme.spacing.medium,
       },
       controlsContainer: {
         position: 'absolute',
         bottom:
           (extraPaddingBottom ? bottom : 0) +
           bottomPaddingIfBottomSheetIsOpen +
-          theme.spacings.medium,
-        right: theme.spacings.medium,
+          theme.spacing.medium,
+        right: theme.spacing.medium,
       },
       locationContainer: {
         position: 'absolute',
-        top: top + theme.spacings.medium + 28 + theme.spacings.medium,
-        paddingHorizontal: theme.spacings.medium,
+        top: top + theme.spacing.medium + 28 + theme.spacing.medium,
+        paddingHorizontal: theme.spacing.medium,
         width: '100%',
       },
     }),
     [
       top,
-      theme.spacings.medium,
+      theme.spacing.medium,
       extraPaddingBottom,
       bottom,
       bottomPaddingIfBottomSheetIsOpen,

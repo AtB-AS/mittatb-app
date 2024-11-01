@@ -13,8 +13,6 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {APP_ORG, IS_QA_ENV} from '@env';
-import {useTicketingState} from '@atb/ticketing';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 
@@ -27,21 +25,8 @@ export const Profile_LanguageScreen = () => {
 
   const style = useStyle();
   const {t} = useTranslation();
-  const {customerProfile} = useTicketingState();
 
   const languages = Array.from(appLanguages);
-
-  const isDebug =
-    !!JSON.parse(IS_QA_ENV || 'false') || __DEV__ || customerProfile?.debug;
-
-  const languagesExceptNynorsk = languages.filter((lang) => lang !== 'nn');
-
-  const selectableLanguages =
-    APP_ORG === 'fram'
-      ? languages
-      : isDebug
-      ? languages
-      : languagesExceptNynorsk;
 
   return (
     <FullScreenView
@@ -72,7 +57,7 @@ export const Profile_LanguageScreen = () => {
         </Section>
         {!useSystemLanguage && (
           <RadioGroupSection<Preference_Language>
-            items={selectableLanguages}
+            items={languages}
             keyExtractor={identity}
             itemToText={(item) => {
               return t(LanguageSettingsTexts.options[item]);
@@ -88,7 +73,7 @@ export const Profile_LanguageScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    margin: theme.spacings.medium,
-    rowGap: theme.spacings.small,
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));

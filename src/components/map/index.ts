@@ -50,10 +50,6 @@ export type {
   GeofencingZoneCustomProps,
   GeofencingZoneExplanationsType,
 } from './types';
-export {
-  useRealtimeMapEnabled,
-  useRealtimeMapDebugOverride,
-} from './hooks/use-realtime-map-enabled';
 export {useUserMapFilters} from './hooks/use-map-filter';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
 export {Stations, GeofencingZones} from './components/mobility';

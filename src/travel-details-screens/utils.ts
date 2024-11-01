@@ -147,6 +147,19 @@ export function getLineName(t: TranslateFunction, leg: Leg) {
     : name;
 }
 
+export function getLineA11yLabel(
+  destinationDisplay: DestinationDisplay | undefined,
+  publicCode: string | undefined,
+  t: TranslateFunction,
+) {
+  const a11yLine = publicCode
+    ? `${t(dictionary.travel.line)} ${publicCode},`
+    : '';
+  const lineName = formatDestinationDisplay(t, destinationDisplay);
+  const a11yLineName = lineName ? `${lineName}.` : '';
+  return `${a11yLine} ${a11yLineName}`;
+}
+
 export function hasShortWaitTime(legs: Leg[]) {
   return iterateWithNext(legs)
     .map((pair) => {

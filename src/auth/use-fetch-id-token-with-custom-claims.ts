@@ -2,7 +2,11 @@ import {Dispatch, useEffect} from 'react';
 import {AuthReducerAction} from './types';
 import {AuthReducerState} from '@atb/auth/AuthContext';
 import {useQuery} from '@tanstack/react-query';
-import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {
+  errorToMetadata,
+  logToBugsnag,
+  notifyBugsnag,
+} from '@atb/utils/bugsnag-utils';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext.tsx';
 
@@ -82,6 +86,3 @@ export const useFetchIdTokenWithCustomClaims = (
     }
   }, [dispatch, query.error, query.failureCount]);
 };
-
-const errorToMetadata = (error: any) =>
-  'message' in error ? {errorMessage: error.message} : undefined;

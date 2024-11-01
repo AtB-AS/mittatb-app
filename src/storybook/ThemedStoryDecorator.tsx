@@ -1,25 +1,25 @@
-import {StaticColor, getStaticColor, themes} from '@atb/theme/colors';
+import { useTheme } from '@atb/theme';
+import {ContrastColor, themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react-native';
 import {View, ViewStyle} from 'react-native';
 
 export type ThemedStoryProps = {
   theme: 'light' | 'dark';
-  backgroundColor: StaticColor;
+  backgroundColor?: ContrastColor;
 };
 
 export const ThemedStoryDecorator = (
   Story: React.ComponentType,
   {args}: {args: any},
 ) => {
+  const {theme} = useTheme();
   return (
     <View
       style={
         {
           justifyContent: 'center',
           flex: 1,
-          backgroundColor:
-            getStaticColor(args.theme, args.backgroundColor).background ||
-            getStaticColor('light', 'background_0').background,
+          backgroundColor: args.backgroundColor.background || theme.color.background.neutral[0].background
         } as ViewStyle
       }
     >
@@ -36,13 +36,13 @@ export const themedStoryControls: Meta['argTypes'] = {
   backgroundColor: {
     control: 'select',
     options: [
-      ...Object.keys(themes['light'].static.background),
-      ...Object.keys(themes['light'].status),
+      ...Object.keys(themes['light'].color.background.neutral[0]),
+      ...Object.keys(themes['light'].color.background.accent[0]),
+      ...Object.keys(themes['light'].color.status),
     ],
   },
 };
 
 export const themedStoryDefaultArgs: ThemedStoryProps = {
   theme: 'light',
-  backgroundColor: 'background_0',
 };

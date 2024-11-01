@@ -1,10 +1,11 @@
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {Theme} from '@atb/theme/colors';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getAccentColor = (theme: Theme) => theme.color.background.accent[1];
 
 export const Consequence = ({
   value,
@@ -14,10 +15,11 @@ export const Consequence = ({
   icon: JSX.Element;
 }) => {
   const styles = useStyle();
+  const { theme } = useTheme()
   return (
     <View style={styles.consequence}>
       <View style={styles.icon}>{icon}</View>
-      <ThemeText style={styles.description} color={themeColor}>
+      <ThemeText style={styles.description} color={getThemeColor(theme)}>
         {value}
       </ThemeText>
     </View>
@@ -26,18 +28,18 @@ export const Consequence = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   description: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
     flex: 1,
   },
   icon: {
     justifyContent: 'center',
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   consequence: {
-    backgroundColor: theme.static.background.background_accent_1.background,
+    backgroundColor: getAccentColor(theme).background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
 }));

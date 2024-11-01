@@ -7,13 +7,13 @@ import {
   formatToVerboseFullDate,
 } from '@atb/utils/date';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Mode, StaticColor} from '@atb/theme/colors';
+import {ContrastColor, Mode} from '@atb/theme/colors';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
-  textColor?: StaticColor;
+  textColor?: ContrastColor;
 };
 
 export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
@@ -36,7 +36,7 @@ export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
 type TokenToggleContentProps = {
   style?: StyleProp<ViewStyle>;
   toggleLimit: number;
-  textColor?: StaticColor;
+  textColor?: ContrastColor;
 };
 
 const TokenToggleContent = ({
@@ -113,7 +113,7 @@ const getToggleInfoIcon = (toggleLimit: number, themeName: Mode) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
-    marginLeft: theme.spacings.xSmall,
+    marginLeft: theme.spacing.xSmall,
     flex: 1,
   },
   loader: {

@@ -65,20 +65,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   popover: {
     maxWidth: Dimensions.get('window').width * 0.6,
     borderRadius: theme.border.radius.regular,
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   closeIcon: {
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacing.small,
   },
   heading: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
   },
   backdrop: {
-    backgroundColor: theme.static.background.background_accent_1.background,
+    backgroundColor: theme.color.background.accent[1].background,
     opacity: 0.5,
   },
 }));

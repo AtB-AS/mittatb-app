@@ -57,7 +57,7 @@ export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   svgContainer: {
     aspectRatio: 1,

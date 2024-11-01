@@ -13,8 +13,7 @@ import {View} from 'react-native';
 import {RenderQuestion} from './RenderQuestions';
 import {Button} from '@atb/components/button';
 import {GoodOrBadQuestion} from './GoodOrBadQuestion';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, useTheme, Theme} from '@atb/theme';
 
 export enum Opinions {
   Good = 'GOOD',
@@ -22,7 +21,8 @@ export enum Opinions {
   NotClickedYet = 'NOTCLICKEDYET',
 }
 
-const themeColor: StaticColorByType<'background'> = 'background_1';
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];
 
 type VersionStats = {
   // answered is a number so that we know at which render the user answered
@@ -50,6 +50,7 @@ export const Feedback = ({
 }: FeedbackProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const feedbackConfig = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -299,7 +300,7 @@ export const Feedback = ({
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
-              interactiveColor="interactive_0"
+              interactiveColor={getInteractiveColor(theme)}
             />
           </View>
         )}
@@ -311,7 +312,7 @@ export const Feedback = ({
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
               mode="tertiary"
-              backgroundColor={themeColor}
+              backgroundColor={getThemeColor(theme)}
             />
           )}
       </View>
@@ -322,9 +323,9 @@ export const Feedback = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     borderRadius: theme.border.radius.regular,
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
   },
   infoBoxText: theme.typography.body__primary,
   centerText: {
@@ -336,14 +337,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   spacing: {
-    width: theme.spacings.medium,
+    width: theme.spacing.medium,
   },
   questionText: {
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacing.xLarge,
     textAlign: 'center',
   },
   submitButtonView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   submittedView: {
     flex: 1,

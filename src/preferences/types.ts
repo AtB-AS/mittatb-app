@@ -24,6 +24,10 @@ export type UserPreferences = {
   showTestIds?: boolean;
   hideProductDescriptions?: boolean;
   debugShowSeconds?: boolean;
+  // A toggle inside the accessibility settings: it only disables the travel aid feature in the app,
+  // not the entire accessibility settings
+  journeyAidEnabled?: boolean;
+  debugPredictionInaccurate?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

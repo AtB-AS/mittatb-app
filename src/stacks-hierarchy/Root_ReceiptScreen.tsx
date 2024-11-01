@@ -5,7 +5,7 @@ import {
   MessageInfoBoxProps,
 } from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -37,6 +37,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalytics();
 
@@ -112,7 +113,7 @@ export function Root_ReceiptScreen({route}: Props) {
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
-          interactiveColor="interactive_0"
+          interactiveColor={theme.color.interactive[0]}
         />
       </View>
     </View>
@@ -159,13 +160,13 @@ function translateStateToMessage(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   content: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginBottom: theme.spacings.large,
+    marginTop: theme.spacing.large,
+    marginBottom: theme.spacing.large,
   }
 }));

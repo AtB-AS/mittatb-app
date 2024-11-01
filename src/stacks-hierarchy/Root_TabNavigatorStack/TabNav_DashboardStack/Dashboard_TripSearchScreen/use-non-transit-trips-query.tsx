@@ -8,12 +8,12 @@ import {nonTransitTripSearch} from '@atb/api/trips';
 import {sanitizeSearchTime, SearchInput} from './utils';
 import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';
-import {useNonTransitTripSearchEnabled} from './use-non-transit-trip-search-enabled';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
@@ -29,17 +29,10 @@ export const useNonTransitTripsQuery = (
   );
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
-  const [
-    isNonTransitTripSearchEnabled,
-    nonTransitTripSearchDebugOverrideReady,
-  ] = useNonTransitTripSearchEnabled();
+  const {isNonTransitTripSearchEnabled} = useFeatureToggles();
 
   useEffect(() => {
-    if (
-      !isNonTransitTripSearchEnabled ||
-      !nonTransitTripSearchDebugOverrideReady
-    )
-      return;
+    if (!isNonTransitTripSearchEnabled) return;
 
     setSearchState('searching');
 
@@ -92,7 +85,6 @@ export const useNonTransitTripsQuery = (
     };
   }, [
     isNonTransitTripSearchEnabled,
-    nonTransitTripSearchDebugOverrideReady,
     fromLocation,
     toLocation,
     searchTime,

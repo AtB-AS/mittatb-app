@@ -57,8 +57,7 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const [journeySearchModes, journeySearchModesAllDebugOverridesReady] =
-    useJourneyModes();
+  const journeySearchModes = useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -168,18 +167,12 @@ export function useTripsQuery(
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      fromLocation,
-      toLocation,
-      searchTime,
-      filtersSelection,
-      journeySearchModesAllDebugOverridesReady,
-    ],
+    [fromLocation, toLocation, searchTime, filtersSelection],
   );
 
   useEffect(() => {
-    journeySearchModesAllDebugOverridesReady && search();
-  }, [search, journeySearchModesAllDebugOverridesReady]);
+    search();
+  }, [search]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);

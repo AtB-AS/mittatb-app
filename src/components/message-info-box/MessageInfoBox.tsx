@@ -51,8 +51,8 @@ export const MessageInfoBox = ({
   const {theme, themeName} = useTheme();
   const styles = useStyles(type)();
   const {t} = useTranslation();
-  const iconColorProps = {fill: theme.status[type].secondary.text};
-  const textColor = theme.status[type].secondary;
+  const iconColorProps = {color: theme.color.status[type].secondary.foreground.primary};
+  const textColor = theme.color.status[type].secondary.foreground.primary;
 
   const onPress =
     onPressConfig &&
@@ -127,7 +127,7 @@ export const MessageInfoBox = ({
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
             accessibilityRole="button"
-            hitSlop={insets.all(theme.spacings.medium)}
+            hitSlop={insets.all(theme.spacing.medium)}
             testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
@@ -141,23 +141,23 @@ export const MessageInfoBox = ({
 const useStyles = (type: Statuses) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
-      backgroundColor: theme.status[type].secondary.background,
-      borderColor: theme.status[type].primary.background,
+      backgroundColor: theme.color.status[type].secondary.background,
+      borderColor: theme.color.status[type].primary.background,
       borderRadius: theme.border.radius.regular,
       borderWidth: theme.border.width.medium,
       flexDirection: 'row',
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
     },
     content: {
       flex: 1,
     },
     icon: {
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacing.small,
     },
     linkText: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
     title: {
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
     },
   }));

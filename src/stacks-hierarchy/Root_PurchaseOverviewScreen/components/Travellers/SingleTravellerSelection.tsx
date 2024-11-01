@@ -12,11 +12,11 @@ import {
 } from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
 import {useAuthState} from '@atb/auth';
+import {useFeatureToggles} from "@atb/feature-toggles";
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -27,11 +27,12 @@ export function SingleTravellerSelection({
   isTravelerOnBehalfOfToggle,
 }: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
   const isOnBehalfOfEnabled =
-    useOnBehalfOfEnabled() &&
+    useFeatureToggles().isOnBehalfOfEnabled &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const isLoggedIn = authenticationType === 'phone';
@@ -56,7 +57,7 @@ export function SingleTravellerSelection({
         }
         selected={selectedProfile}
         onSelect={select}
-        color="interactive_2"
+        color={theme.color.interactive[2]}
         accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
       />
       {isOnBehalfOfAllowed && (
@@ -81,7 +82,7 @@ export function SingleTravellerSelection({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     onBehalfOfContainer: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
     },
   };
 });

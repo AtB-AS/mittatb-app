@@ -19,8 +19,8 @@ import {StyleSheet} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
-import {useOnlyStopPlacesCheckboxEnabled} from '../use-only-stop-places-checkbox-enabled.tsx';
 import {useAnalytics} from '@atb/analytics';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type LocationSearchContentProps = {
   label: string;
@@ -64,7 +64,7 @@ export function LocationSearchContent({
     onlyLocalTariffZoneAuthority,
   );
 
-  const onlyStopPlacesCheckboxEnabled = useOnlyStopPlacesCheckboxEnabled();
+  const {isOnlyStopPlacesCheckboxEnabled} = useFeatureToggles();
   const [onlyStopPlaces, setOnlyStopPlaces] = useState(false);
 
   const {location: geolocation} = useGeolocationState();
@@ -149,7 +149,7 @@ export function LocationSearchContent({
             onAddFavorite={onAddFavorite}
           />
         )}
-        {onlyStopPlacesCheckboxEnabled && (
+        {isOnlyStopPlacesCheckboxEnabled && (
           <CheckboxWithLabel
             label={t(LocationSearchTexts.onlyStopPlacesCheckbox)}
             checked={onlyStopPlaces}
@@ -226,28 +226,28 @@ export function LocationSearchContent({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.static.background.background_accent_0.background,
-    paddingBottom: theme.spacings.medium,
+    backgroundColor: theme.color.background.accent[0].background,
+    paddingBottom: theme.spacing.medium,
   },
   withMargin: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   chipBox: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   onlyStopPlacesCheckbox: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   contentBlock: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   marginTop: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   fullFlex: {
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
     flex: 1,
   },
 }));

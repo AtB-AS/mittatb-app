@@ -21,8 +21,7 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   DashboardTexts,
   TripSearchTexts,
@@ -45,8 +44,7 @@ const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 
-const themeBackgroundColor: StaticColorByType<'background'> =
-  'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const Dashboard_RootScreen: React.FC<RootProps> = ({
   navigation,
@@ -401,11 +399,11 @@ function translateLocation(location: Location | undefined): string {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeBackgroundColor].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   scrollView: {
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacing.medium,
     backgroundColor: 'transparent',
   },
   backdrop: {
@@ -418,8 +416,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   contentSection: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   contentSection__horizontalScroll: {
     marginHorizontal: 0,
@@ -428,14 +426,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: 0,
   },
   favoriteChips: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   searchHeader: {
     marginTop: 0,
-    backgroundColor: theme.static.background[themeBackgroundColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   dashboardGlobalmessages: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

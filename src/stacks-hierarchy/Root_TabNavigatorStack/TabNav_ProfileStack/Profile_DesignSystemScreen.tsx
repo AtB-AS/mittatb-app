@@ -1,4 +1,4 @@
-import {ContrastColor} from '@atb-as/theme';
+import {ContrastColor} from '@atb/theme/colors';
 import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
@@ -12,11 +12,8 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   InteractiveColor,
-  StaticColorByType,
-  StatusColor,
   textNames,
   TextNames,
-  TransportColor,
 } from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -58,13 +55,13 @@ export const Profile_DesignSystemScreen = ({
 
   const [segmentedSelection, setSegmentedSelection] = useState(0);
 
-  const buttons = Object.keys(theme.interactive).map((color) => (
+  const buttons = Object.entries(theme.color.interactive).map(([key, color]) => (
     <Button
-      key={color}
-      text={color}
+      key={key}
+      text={`interactive ${key}`}
       onPress={() =>
         Alert.alert(
-          theme.interactive[color as InteractiveColor].default.background,
+          color.default.background,
         )
       }
       interactiveColor={color as InteractiveColor}
@@ -78,48 +75,48 @@ export const Profile_DesignSystemScreen = ({
     <ThemeText
       style={{
         backgroundColor: color.background,
-        color: color.text,
-        padding: theme.spacings.medium,
+        color: color.foreground.primary,
+        padding: theme.spacing.medium,
       }}
     >
-      {name} {color.text} / {color.background}
+      {name} {color.foreground.primary} / {color.background}
     </ThemeText>
   );
 
-  const backgroundSwatches = Object.keys(theme.static.background).map(
-    (color) => {
-      const staticColor =
-        theme.static.background[color as StaticColorByType<'background'>];
-      return <Swatch color={staticColor} name={color} key={color} />;
+  const backgroundSwatches = [
+    ...Object.entries(theme.color.background.neutral).map(
+      ([key, color]) => {
+        return <Swatch color={color} name={`background neutral ${key}`} key={key} />;
+      }
+    ),
+    ...Object.entries(theme.color.background.accent).map(
+      ([key, color]) => {
+        return <Swatch color={color} name={`background accent ${key}`} key={key} />;
+      }
+    )
+  ];
+
+  const transportSwatches = Object.entries(theme.color.transport).map(([key, color]) => {
+    return <Swatch color={color.primary} name={key} key={key} />;
+  });
+  const secondaryTransportSwatches = Object.entries(theme.color.transport).map(([key, color]) => {
+      return <Swatch color={color.secondary} name={key} key={key} />;
     },
   );
 
-  const transportSwatches = Object.keys(theme.transport).map((color) => {
-    const staticColor = theme.transport[color as TransportColor];
-    return <Swatch color={staticColor.primary} name={color} key={color} />;
-  });
-  const secondaryTransportSwatches = Object.keys(theme.transport).map(
-    (color) => {
-      const staticColor = theme.transport[color as TransportColor];
-      return <Swatch color={staticColor.secondary} name={color} key={color} />;
-    },
-  );
-
-  const statusSwatches = Object.keys(theme.status).map((color) => {
-    const staticColor = theme.status[color as StatusColor];
-    return <Swatch color={staticColor.primary} name={color} key={color} />;
+  const statusSwatches = Object.entries(theme.color.status).map(([key, color]) => {
+    return <Swatch color={color.primary} name={key} key={key} />;
   });
 
-  const textSwatches = Object.keys(theme.text.colors).map((color) => {
-    const textColors = theme.text.colors;
+  const textSwatches = Object.entries(theme.color.foreground.dynamic).map(([key, color]) => {
     return (
       <Swatch
         color={{
-          text: theme.static.background.background_0.background,
-          background: textColors[color as keyof typeof textColors],
+          foreground: {primary: theme.color.background.neutral[0].background, secondary: "", disabled: ""},
+          background: color,
         }}
-        name={color}
-        key={color}
+        name={key}
+        key={key}
       />
     );
   });
@@ -137,12 +134,12 @@ export const Profile_DesignSystemScreen = ({
     },
   ];
 
-  const radioSegments = Object.keys(theme.interactive).map((color) => (
+  const radioSegments = Object.entries(theme.color.interactive).map(([key, color]) => (
     <RadioSegments
-      key={color}
+      key={key}
       activeIndex={segmentedSelection}
       style={{
-        marginTop: theme.spacings.small,
+        marginTop: theme.spacing.small,
       }}
       color={color as InteractiveColor}
       options={radioSegmentsOptions}
@@ -175,12 +172,12 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem>
             <View style={styles.icons}>
               <ThemeIcon svg={Check} />
-              <ThemeIcon svg={Check} colorType="info" />
-              <ThemeIcon svg={Check} colorType="warning" />
+              <ThemeIcon svg={Check} color="info" />
+              <ThemeIcon svg={Check} color="warning" />
 
-              <ThemeIcon svg={Ticket} colorType="disabled" size="xSmall" />
-              <ThemeIcon svg={Ticket} colorType="info" size="small" />
-              <ThemeIcon svg={Ticket} colorType="error" />
+              <ThemeIcon svg={Ticket} color="disabled" size="xSmall" />
+              <ThemeIcon svg={Ticket} color="info" size="small" />
+              <ThemeIcon svg={Ticket} color="error" />
               <ThemeIcon svg={Ticket} size="large" />
             </View>
             <View style={styles.icons}>
@@ -192,26 +189,26 @@ export const Profile_DesignSystemScreen = ({
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="xSmall"
-                notification={{color: 'valid'}}
+                notification={{color: theme.color.status.valid.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="small"
-                notification={{color: 'warning'}}
+                notification={{color: theme.color.status.warning.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                colorType="error"
-                notification={{color: 'info'}}
+                color="error"
+                notification={{color: theme.color.status.info.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                colorType="disabled"
+                color="disabled"
                 size="large"
-                notification={{color: 'error'}}
+                notification={{color: theme.color.status.error.primary}}
               />
             </View>
             <View style={styles.icons}>
@@ -223,29 +220,29 @@ export const Profile_DesignSystemScreen = ({
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="xSmall"
-                notification={{color: 'valid', backgroundColor: 'background_0'}}
+                notification={{color: theme.color.status.valid.primary, backgroundColor: theme.color.background.neutral[0]}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="small"
                 notification={{
-                  color: 'warning',
-                  backgroundColor: 'background_0',
+                  color: theme.color.status.warning.primary, 
+                  backgroundColor: theme.color.background.neutral[0]
                 }}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                colorType="error"
-                notification={{color: 'info', backgroundColor: 'background_0'}}
+                color="error"
+                notification={{color: theme.color.status.info.primary, backgroundColor: theme.color.background.neutral[0]}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                colorType="disabled"
+                color="disabled"
                 size="large"
-                notification={{color: 'error', backgroundColor: 'background_0'}}
+                notification={{color: theme.color.status.error.primary, backgroundColor: theme.color.background.neutral[0]}}
               />
             </View>
             <View style={styles.icons}>
@@ -370,7 +367,7 @@ export const Profile_DesignSystemScreen = ({
               type="info"
               isMarkdown={true}
               message="This is a message text"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -378,7 +375,7 @@ export const Profile_DesignSystemScreen = ({
               type="warning"
               isMarkdown={true}
               message="This is a warning text"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -386,7 +383,7 @@ export const Profile_DesignSystemScreen = ({
               type="error"
               isMarkdown={true}
               message="This is an error text"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -394,7 +391,7 @@ export const Profile_DesignSystemScreen = ({
               type="valid"
               isMarkdown={true}
               message="This is a valid text"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -403,7 +400,7 @@ export const Profile_DesignSystemScreen = ({
               isMarkdown={true}
               iconPosition="right"
               message="This is a text with right sided icon"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -411,7 +408,7 @@ export const Profile_DesignSystemScreen = ({
               type="valid"
               isMarkdown={true}
               message="This is a valid **markdown** message"
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
         </Section>
@@ -426,7 +423,7 @@ export const Profile_DesignSystemScreen = ({
                 style={{
                   flexDirection: 'row',
                   flexWrap: 'wrap',
-                  marginTop: -theme.spacings.small,
+                  marginTop: -theme.spacing.small,
                 }}
               >
                 <LabelInfo label="new" />
@@ -454,28 +451,28 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                   />
                 </View>
 
@@ -490,28 +487,28 @@ export const Profile_DesignSystemScreen = ({
                     text="Default - block"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor="interactive_1"
+                    interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor="interactive_1"
+                    interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor="interactive_1"
+                    interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor="interactive_1"
+                    interactiveColor={theme.color.interactive[1]}
                   />
                 </View>
 
@@ -526,28 +523,28 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                   />
                 </View>
 
@@ -562,28 +559,28 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor="interactive_destructive"
+                    interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor="interactive_destructive"
+                    interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor="interactive_destructive"
+                    interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor="interactive_destructive"
+                    interactiveColor={theme.color.interactive.destructive}
                   />
                 </View>
 
@@ -655,7 +652,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="medium"
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -664,7 +661,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     active={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -673,7 +670,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     disabled={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -682,7 +679,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     compact={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -737,7 +734,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="small"
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -746,7 +743,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="small"
                     active={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -755,7 +752,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="small"
                     disabled={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -764,7 +761,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="small"
                     compact={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
@@ -817,7 +814,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor="interactive_0"
+                  interactiveColor={theme.color.interactive[0]}
                   leftIcon={{svg: Add}}
                   style={{margin: 4}}
                 />
@@ -825,10 +822,10 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor="interactive_0"
+                  interactiveColor={theme.color.interactive[0]}
                   rightIcon={{
                     svg: Delete,
-                    notification: {color: 'interactive_0'},
+                    notification: {color: theme.color.interactive[0].default},
                   }}
                   style={{margin: 4}}
                 />
@@ -836,7 +833,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor="interactive_0"
+                  interactiveColor={theme.color.interactive[0]}
                   disabled={true}
                   leftIcon={{svg: Add}}
                   rightIcon={{svg: Delete}}
@@ -846,7 +843,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Loading button"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor="interactive_0"
+                  interactiveColor={theme.color.interactive[0]}
                   loading={true}
                   style={{margin: 4}}
                 />
@@ -861,8 +858,8 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="medium"
-                    interactiveColor="interactive_0"
-                    leftIcon={{svg: Add, notification: {color: 'valid'}}}
+                    interactiveColor={theme.color.interactive[0]}
+                    leftIcon={{svg: Add, notification: {color: theme.color.status.valid.primary}}}
                     style={{margin: 4}}
                   />
                   <Button
@@ -871,7 +868,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     active={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -899,7 +896,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     active={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -907,7 +904,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="medium"
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
                   />
@@ -916,7 +913,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="medium"
                     compact={true}
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -939,7 +936,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="small"
-                    interactiveColor="interactive_0"
+                    interactiveColor={theme.color.interactive[0]}
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
                   />
@@ -976,7 +973,7 @@ export const Profile_DesignSystemScreen = ({
             text="Some short text and interactive color"
             selected={selected}
             onPress={() => setSelected(!selected)}
-            color="interactive_2"
+            color={theme.color.interactive[2]}
           />
           <RadioSectionItem
             text="Some very long text over here which goes over multiple lines"
@@ -1032,14 +1029,14 @@ export const Profile_DesignSystemScreen = ({
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} colorType="error" />}
+            icon={<ThemeIcon svg={Delete} color="error" />}
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} colorType="error" />}
+            icon={<ThemeIcon svg={Delete} color="error" />}
           />
           <LinkSectionItem text="Link with label" label="new" />
         </Section>
@@ -1145,7 +1142,7 @@ export const Profile_DesignSystemScreen = ({
           {textSwatches}
         </View>
 
-        <View style={{margin: theme.spacings.medium}}>
+        <View style={{margin: theme.spacing.medium}}>
           <ThemeText>Segmented controls:</ThemeText>
           {radioSegments}
         </View>
@@ -1160,26 +1157,26 @@ function presser() {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   buttonContainer: {
-    gap: theme.spacings.small,
+    gap: theme.spacing.small,
   },
   transportationIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacing.xSmall,
   },
   icons: {
     flexDirection: 'row',
-    marginBottom: theme.spacings.small,
+    marginBottom: theme.spacing.small,
     flexWrap: 'wrap',
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   swatchGroup: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
 }));

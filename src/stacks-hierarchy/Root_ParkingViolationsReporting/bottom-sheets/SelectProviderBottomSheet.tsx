@@ -56,8 +56,8 @@ export const SelectProviderBottomSheet = ({
                     styles.providerLogo,
                     {
                       borderColor: isSeleted
-                        ? theme.interactive.interactive_0.default.background
-                        : theme.static.background.background_0.background,
+                        ? theme.color.interactive[0].default.background
+                        : theme.color.background.neutral[0].background,
                     },
                   ]}
                   provider={provider}
@@ -85,19 +85,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     content: {
-      marginHorizontal: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
     },
     providerList: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacing.medium,
       flexGrow: 1,
     },
     providerLogo: {
       borderWidth: 1,
-      marginRight: theme.spacings.medium,
+      marginRight: theme.spacing.medium,
     },
     footer: {
-      marginTop: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginTop: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

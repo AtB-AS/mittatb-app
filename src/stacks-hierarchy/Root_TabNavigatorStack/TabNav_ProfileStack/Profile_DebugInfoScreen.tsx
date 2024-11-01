@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -19,57 +19,25 @@ import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {useRealtimeMapDebugOverride} from '@atb/components/map';
-import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
-import {useTipsAndInformationDebugOverride} from '@atb/tips-and-information/use-tips-and-information-enabled';
-import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
-import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
-import {useShowValidTimeInfoDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {
   ButtonSectionItem,
   ExpandableSectionItem,
   GenericSectionItem,
-  HeaderSectionItem,
   LinkSectionItem,
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {useDebugOverride} from '@atb/debug';
-import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
-import {useGeofencingZonesDebugOverride} from '@atb/mobility/use-geofencing-zones-enabled';
-import {useShmoDeepIntegrationDebugOverride} from '@atb/mobility/use-shmo-deep-integration-enabled';
-import {
-  useFromTravelSearchToTicketDebugOverride,
-  useFromTravelSearchToTicketForBoatDebugOverride,
-} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
-import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
-import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
-import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
-import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
 import {useAnnouncementsState} from '@atb/announcements';
-import {
-  useNotifications,
-  usePushNotificationsEnabledDebugOverride,
-} from '@atb/notifications';
+import {useNotifications} from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
-import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
-import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 import {useOnboardingState} from '@atb/onboarding';
-import {useServerTimeEnabledDebugOverride} from '@atb/time';
 import Bugsnag from '@bugsnag/react-native';
-import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
-import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
-import {useOnlyStopPlacesCheckboxEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen/use-only-stop-places-checkbox-enabled.tsx';
-import {useIsTravelAidEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-enabled';
-import {useIsTravelAidStopButtonEnabledDebugOverride} from '@atb/travel-aid/use-is-travel-aid-stop-button-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -78,6 +46,8 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
 
   const {
     onboardingSections,
@@ -96,58 +66,17 @@ export const Profile_DebugInfoScreen = () => {
     getPrivacyTermsUrl,
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
-  const {userId, retryAuth, debug: {user, idTokenResult}} = useAuthState();
+  const {
+    userId,
+    retryAuth,
+    debug: {user, idTokenResult},
+  } = useAuthState();
 
-  const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
-  const flexibleTransportAccessModeDebugOverride = useDebugOverride(
-    StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
-  );
-  const flexibleTransportDirectModeDebugOverride = useDebugOverride(
-    StorageModelKeysEnum.UseFlexibleTransportDirectModeDebugOverride,
-  );
-  const flexibleTransportEgressModeDebugOverride = useDebugOverride(
-    StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
-  );
-  const fromTravelSearchToTicketDebugOverride =
-    useFromTravelSearchToTicketDebugOverride();
-  const fromTravelSearchToTicketForBoatDebugOverride =
-    useFromTravelSearchToTicketForBoatDebugOverride();
-  const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
-  const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
-  const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
-  const geofencingZonesDebugOverride = useGeofencingZonesDebugOverride();
-  const shmoDeepIntegrationDebugOverride =
-    useShmoDeepIntegrationDebugOverride();
+  const {
+    debug: {overrides, setOverride},
+  } = useFeatureToggles();
 
-  const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
-  const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
-  const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
-  const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
-  const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
-  const loadingScreenEnabledDebugOverride =
-    useLoadingScreenEnabledDebugOverride();
-  const loadingErrorScreenEnabledDebugOverride =
-    useLoadingErrorScreenEnabledDebugOverride();
-  const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
-  const parkingViolationsReportingEnabledDebugOverride =
-    useParkingViolationsReportingEnabledDebugOverride();
   const {resetDismissedAnnouncements} = useAnnouncementsState();
-  const pushNotificationsEnabledDebugOverride =
-    usePushNotificationsEnabledDebugOverride();
-  const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
-  const ticketInformationEnabledDebugOverride =
-    useTicketInformationEnabledDebugOverride();
-  const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
-  const serverTimeEnabledDebugOverride = useServerTimeEnabledDebugOverride();
-  const activateTicketNowEnabledDebugOverride =
-    useActivateTicketNowEnabledDebugOverride();
-  const backendSmsAuthEnabledDebugOverride =
-    useBackendSmsAuthEnabledDebugOverride();
-  const onlyStopPlacesCheckboxEnabledDebugOverride =
-    useOnlyStopPlacesCheckboxEnabledDebugOverride();
-  const travelAidEnabledDebugOverride = useIsTravelAidEnabledDebugOverride();
-  const travelAidStopButtonEnabledDebugOverride =
-    useIsTravelAidStopButtonEnabledDebugOverride();
 
   const {
     tokens,
@@ -192,7 +121,8 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, debugShowSeconds} = preferences;
+  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
+    preferences;
 
   return (
     <View style={styles.container}>
@@ -239,6 +169,13 @@ export const Profile_DebugInfoScreen = () => {
             value={debugShowSeconds}
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
+            }}
+          />
+          <ToggleSectionItem
+            text="Show prediction inaccurate info"
+            value={debugPredictionInaccurate}
+            onValueChange={(value) => {
+              setPreference({debugPredictionInaccurate: value});
             }}
           />
           <LinkSectionItem
@@ -313,191 +250,23 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
         <Section style={styles.section}>
-          <HeaderSectionItem
-            text="Remote config override"
-            subtitle="If undefined the value
-        from Remote Config will be used. Needs reload of app after change."
+          <ExpandableSectionItem
+            text="Feature toggle overrides"
+            showIconText={true}
+            expandContent={
+              <View>
+                {overrides.map((o) => (
+                  <GenericSectionItem key={o.name}>
+                    <DebugOverride
+                      description={`Override for '${o.name}'`}
+                      overrideVal={o.value}
+                      setOverride={(v) => setOverride(o.name, v)}
+                    />
+                  </GenericSectionItem>
+                ))}
+              </View>
+            }
           />
-          <GenericSectionItem>
-            <DebugOverride
-              description="Flexible transport enabled"
-              override={flexibleTransportDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Use Flexible on AccessMode"
-              override={flexibleTransportAccessModeDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Use Flexible on DirectMode"
-              override={flexibleTransportDirectModeDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Use Flexible on EgressMode"
-              override={flexibleTransportEgressModeDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable from travel search to ticket purchase."
-              override={fromTravelSearchToTicketDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable from travel search to ticket purchase specifically for boats."
-              override={fromTravelSearchToTicketForBoatDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable vehicles in map."
-              override={vehiclesInMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable city bike stations in map."
-              override={cityBikesInMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable car sharing in map."
-              override={carSharingInMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable geofencing zones"
-              override={geofencingZonesDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable shared mobility deep integration"
-              override={shmoDeepIntegrationDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable realtime positions in map."
-              override={realtimeMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable ticketing assistant"
-              override={ticketingAssistantOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable tips and information for tickets"
-              override={tipsAndInformationOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable non-transit trip search"
-              override={nonTransitTripSearchOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Shows valid time info in ticket details"
-              override={showValidTimeInfoDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable loading screen on app startup and user change"
-              override={loadingScreenEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable loading error screen on app startup and user change"
-              override={loadingErrorScreenEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable beacons"
-              override={beaconsEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable parking violations reporting"
-              override={parkingViolationsReportingEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable push notifications"
-              override={pushNotificationsEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable onBehalfOf"
-              override={onBehalfOfEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable ticket information"
-              override={ticketInformationEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable PostHog"
-              override={posthogEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable server time"
-              override={serverTimeEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable activate ticket now"
-              override={activateTicketNowEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable new backend sms auth"
-              override={backendSmsAuthEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable only stop places checkbox"
-              override={onlyStopPlacesCheckboxEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable travel aid feature"
-              override={travelAidEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable travel aid stop button"
-              override={travelAidStopButtonEnabledDebugOverride}
-            />
-          </GenericSectionItem>
         </Section>
 
         <Section style={styles.section}>
@@ -727,7 +496,7 @@ export const Profile_DebugInfoScreen = () => {
                     }`}</ThemeText>
                   </View>
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const granted = await onboardForBeacons(true);
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
@@ -737,7 +506,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Onboard and give consent"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       await revokeBeacons();
                     }}
@@ -746,7 +515,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Revoke"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       await deleteCollectedData();
                     }}
@@ -754,7 +523,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Delete Collected Data"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
@@ -766,7 +535,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Open Privacy Dashboard"
                   />
                   <Button
-                    interactiveColor="interactive_0"
+                    interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
@@ -873,30 +642,30 @@ function MapEntry({title, value}: {title: string; value: any}) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   icons: {
     flexDirection: 'row',
   },
   section: {
-    marginTop: theme.spacings.large,
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginTop: theme.spacing.large,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   buttons: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   button: {
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacing.small,
   },
   remoteToken: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   objectEntry: {
     flexDirection: 'column',
     marginVertical: 12,
-    borderLeftColor: theme.text.colors.secondary,
+    borderLeftColor: theme.color.foreground.dynamic.secondary,
     borderLeftWidth: 1,
     paddingLeft: 4,
   },

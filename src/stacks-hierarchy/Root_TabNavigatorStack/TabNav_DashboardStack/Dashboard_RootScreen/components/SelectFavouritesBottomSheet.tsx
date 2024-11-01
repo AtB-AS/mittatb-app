@@ -9,7 +9,7 @@ import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -96,6 +96,7 @@ export const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
@@ -152,7 +153,7 @@ export const SelectFavouritesBottomSheet = ({
       <FullScreenFooter>
         <View style={styles.buttonContainer}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             text={t(SelectFavouriteDeparturesText.confirm_button.text)}
             accessibilityHint={t(
               SelectFavouriteDeparturesText.confirm_button.a11yhint,
@@ -187,36 +188,36 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flex: 1,
     },
     buttonContainer: {
-      gap: theme.spacings.small,
+      gap: theme.spacing.small,
     },
     questionText: {
-      padding: theme.spacings.medium,
+      padding: theme.spacing.medium,
     },
     flatListArea: {
-      backgroundColor: theme.static.background.background_0.background,
-      margin: theme.spacings.medium,
-      marginBottom: theme.spacings.xLarge,
+      backgroundColor: theme.color.background.neutral[0].background,
+      margin: theme.spacing.medium,
+      marginBottom: theme.spacing.xLarge,
       borderRadius: theme.border.radius.regular,
     },
     selectableDeparture: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: theme.spacings.medium,
+      paddingHorizontal: theme.spacing.medium,
     },
     selectableDepartureTextView: {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      paddingVertical: theme.spacings.medium,
+      paddingVertical: theme.spacing.medium,
     },
     secondaryText: {
-      color: theme.text.colors.secondary,
+      color: theme.color.foreground.dynamic.secondary,
     },
     lineModeIcon: {
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacing.small,
     },
     lineIdentifierText: {
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacing.small,
     },
   };
 });

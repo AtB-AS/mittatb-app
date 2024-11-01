@@ -45,6 +45,7 @@ const TariffZonesSelectorMap = ({
 
   const {t, language} = useTranslation();
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[0];
   const a11yContext = useAccessibilityContext();
 
   const {location} = useGeolocationState();
@@ -101,14 +102,14 @@ const TariffZonesSelectorMap = ({
                 {
                   paddingBottom: Math.max(
                     safeAreaBottom,
-                    theme.spacings.medium,
+                    theme.spacing.medium,
                   ),
                 },
               ]}
             >
               <Button
                 onPress={onSave}
-                interactiveColor="interactive_0"
+                interactiveColor={interactiveColor}
                 text={t(TariffZonesTexts.saveButton.text)}
                 accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
@@ -143,11 +144,11 @@ const TariffZonesSelectorMap = ({
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    hexToRgba(theme.static.zone_selection.from.background, 0.6),
+                    hexToRgba(theme.color.zone.from.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
                     !isApplicableOnSingleZoneOnly
                       ? hexToRgba(
-                          theme.static.zone_selection.to.background,
+                          theme.color.zone.to.background,
                           0.6,
                         )
                       : 'transparent',
@@ -212,7 +213,7 @@ const TariffZonesSelectorMap = ({
               <View style={styles.saveButton}>
                 <Button
                   onPress={onSave}
-                  interactiveColor="interactive_0"
+                  interactiveColor={interactiveColor}
                   text={t(TariffZonesTexts.saveButton.text)}
                   accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
                   testID="saveZonesButton"
@@ -247,7 +248,7 @@ export {TariffZonesSelectorMap};
 
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   saveButton: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   bottomControls: {
     position: 'absolute',
@@ -256,12 +257,12 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mapControls: {
     position: 'absolute',
-    bottom: theme.spacings.medium,
-    right: theme.spacings.medium,
+    bottom: theme.spacing.medium,
+    right: theme.spacing.medium,
   },
   waitingForInitialCoords: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
 }));

@@ -1,5 +1,5 @@
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 
 import React, {useEffect, useState} from 'react';
 import {
@@ -24,9 +24,8 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useDefaultTariffZone} from '../utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
-import {StaticColorByType} from '@atb/theme/colors';
+import { getThemeColor, getInteractiveColor } from './TicketAssistant_WelcomeScreen';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -36,10 +35,13 @@ export const TicketAssistant_ZonePickerScreen = ({
   const styles = useThemeStyles();
   const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
-
+  
   const focusRef = useFocusOnLoad();
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
 
   const isApplicableOnSingleZoneOnly = false;
 
@@ -130,7 +132,7 @@ export const TicketAssistant_ZonePickerScreen = ({
         </View>
         <View style={styles.bottomView}>
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={interactiveColor}
             onPress={() => {
               navigation.navigate(TICKET_ASSISTANT_SUMMARY_SCREEN);
             }}
@@ -149,10 +151,10 @@ export const TicketAssistant_ZonePickerScreen = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   zonesSelectorButtonsContainer: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   zonesSelectorMapContainer: {
     flexGrow: 1,
@@ -161,24 +163,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   zonesSelectorContainer: {
     flex: 1,
-    marginHorizontal: theme.spacings.xLarge,
-    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacing.xLarge,
+    marginVertical: theme.spacing.medium,
   },
   contentContainer: {
     flexGrow: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   loadingGif: {
     width: 200,
     height: 200,
     alignSelf: 'center',
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacing.large,
   },
 }));

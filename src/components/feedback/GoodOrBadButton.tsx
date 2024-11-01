@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
-import {StaticColorByType} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Theme} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -13,7 +13,8 @@ export type GoodOrBadButtonProps = {
   setSelectedOpinion: (value: Opinions) => void;
 };
 
-const themeColor: StaticColorByType<'background'> = 'background_0';
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export const GoodOrBadButton = ({
   checked,
@@ -22,6 +23,7 @@ export const GoodOrBadButton = ({
 }: GoodOrBadButtonProps) => {
   const styles = useButtonStyle();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   return (
     <View style={styles.outerGoodOrBad}>
@@ -47,7 +49,7 @@ export const GoodOrBadButton = ({
           }
         >
           <ThemeText
-            color={themeColor}
+            color={getThemeColor(theme)}
             type={checked ? 'body__primary--bold' : 'body__primary'}
           >
             {opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)}
@@ -73,20 +75,20 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   emoji: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
   },
   button: {
-    backgroundColor: theme.interactive.interactive_2.default.background,
+    backgroundColor: getInteractiveColor(theme).default.background,
     flex: 1,
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.interactive.interactive_2.default.background,
+    borderColor: getInteractiveColor(theme).default.background,
   },
   selectedButton: {
-    backgroundColor: theme.interactive.interactive_2.active.background,
-    borderColor: theme.interactive.interactive_2.outline.background,
+    backgroundColor: getInteractiveColor(theme).active.background,
+    borderColor: getInteractiveColor(theme).outline.background,
   },
 }));

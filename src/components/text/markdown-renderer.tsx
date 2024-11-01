@@ -1,24 +1,44 @@
 import React from 'react';
 import {marked} from 'marked';
-import {Linking, Text} from 'react-native';
+import {Linking, Text, View} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
+import {ThemeTextProps} from './ThemeText';
 
-export function renderMarkdown(markdown: string): React.ReactElement[] {
+type MarkdownRendererProps = {
+  // When rendering a list, this is the spacing between the list elements
+  spacingBetweenListElements?: number;
+  // The props to pass to the Text component
+  textProps?: ThemeTextProps;
+};
+
+export function renderMarkdown(
+  markdown: string,
+  props: MarkdownRendererProps,
+): React.ReactElement[] {
   const tree = marked.lexer(markdown, {smartypants: true});
-  return tree.map(renderToken);
+  return tree.map((token, index) => renderToken(token, index, props));
 }
 
-function renderToken(token: marked.Token, index: number): React.ReactElement {
+function renderToken(
+  token: marked.Token,
+  index: number,
+  props: MarkdownRendererProps,
+): React.ReactElement {
   switch (token.type) {
     case 'text':
-      return <Text key={index}>{token.text}</Text>;
+      return (
+        <Text key={index} {...props.textProps}>
+          {token.text}
+        </Text>
+      );
 
     case 'heading':
     case 'strong':
       return (
         <Text
           key={index}
+          {...props.textProps}
           style={{fontWeight: textTypeStyles['body__primary--bold'].fontWeight}}
         >
           {token.text}
@@ -29,14 +49,16 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
       return token.raw === '<br>' ? (
         <Text key={index}>{'\n'}</Text>
       ) : (
-        <Text key={index}>{token.raw}</Text>
+        <Text key={index} {...props.textProps}>
+          {token.raw}
+        </Text>
       );
 
     case 'paragraph':
       return (
-        <React.Fragment key={index}>
-          {token.tokens.map(renderToken)}
-        </React.Fragment>
+        <Text key={index} {...props.textProps}>
+          {token.tokens.map((t, i) => renderToken(t, i, props))}
+        </Text>
       );
 
     case 'br':
@@ -45,7 +67,7 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
 
     case 'em':
       return (
-        <Text key={index} style={{fontStyle: 'italic'}}>
+        <Text key={index} {...props.textProps} style={{fontStyle: 'italic'}}>
           {token.text}
         </Text>
       );
@@ -62,23 +84,39 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
       return (
         <Text
           key={index}
-          style={{textDecorationLine: 'underline'}}
           onPress={openLink}
+          {...props.textProps}
+          style={{textDecorationLine: 'underline'}}
         >
           {token.text}
         </Text>
       );
     case 'list':
       return (
-        <Text key={index}>
-          {token.items.map((item) => `\u2022 ${item.text}\n`)}
-        </Text>
+        <React.Fragment key={index}>
+          {token.items.map((item, itemIndex) => (
+            <View
+              key={itemIndex}
+              style={{
+                flexDirection: 'row',
+                paddingTop: props.spacingBetweenListElements ?? 0,
+              }}
+            >
+              <Text {...props.textProps}>{'\u2022 '}</Text>
+              <Text {...props.textProps}>{item.text}</Text>
+            </View>
+          ))}
+        </React.Fragment>
       );
 
     default:
       console.warn(
         `We haven't defined a renderer for markdown type: "${token.type}", rendering raw: "${token.raw}"`,
       );
-      return <Text key={index}>{token.raw}</Text>;
+      return (
+        <Text key={index} {...props.textProps}>
+          {token.raw}
+        </Text>
+      );
   }
 }

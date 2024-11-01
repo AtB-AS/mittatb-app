@@ -56,23 +56,24 @@ import {
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
-import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {useShmoDeepIntegrationEnabled} from '@atb/mobility/use-shmo-deep-integration-enabled';
-//import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {useFeatureToggles} from '@atb/feature-toggles';
+
+//import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {
   mapIcons,
   mapStyleItemToCircleStyle,
   mapStyleItemToSymbolStyle,
-  mapStyleToSymbolOrCircle,
+  //mapStyleToSymbolOrCircle,
   nsrStyleCircleItems,
-  nsrStyleItems,
+  //nsrStyleItems,
   nsrStyleSymbolItems,
 } from './nsrItemsMapStyle';
 //import {iconSizes} from '@atb-as/theme';
@@ -119,12 +120,11 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
-  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
-    useGeofencingZonesEnabled();
+  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureToggles();
 
   const showGeofencingZones =
-    geofencingZonesEnabled &&
-    geofencingZonesEnabledDebugOverrideReady &&
+    isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
@@ -133,16 +133,8 @@ export const Map = (props: MapProps) => {
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
 
-  const [
-    shmoDeepIntegrationEnabled,
-    shmoDeepIntegrationEnabledDebugOverrideReady,
-  ] = useShmoDeepIntegrationEnabled();
-
-  const showShmoTesting =
-    shmoDeepIntegrationEnabled && shmoDeepIntegrationEnabledDebugOverrideReady;
-
   const showScanButton =
-    showShmoTesting &&
+    isShmoDeepIntegrationEnabled &&
     props.selectionMode === 'ExploreEntities' &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
@@ -273,7 +265,7 @@ export const Map = (props: MapProps) => {
 
   //const featureEntityType = ['get', 'entityType'];
   //const featureStopPlaceType = ['get', 'stopPlaceType'];
-  const featureId = ['get', 'id'];
+  ////const featureId = ['get', 'id'];
 
   const selectedFeatureId = selectedFeature?.properties?.id || '';
   //const isSelected = ['==', featureId, selectedFeatureId];
@@ -303,6 +295,7 @@ export const Map = (props: MapProps) => {
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
           onPress={onFeatureClick}
+          testID="mapView"
           {...MapViewConfig}
         >
           <MapboxGL.Camera
@@ -419,9 +412,9 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {/* {showShmoTesting && (
+        {isShmoDeepIntegrationEnabled && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-        )} */}
+        )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

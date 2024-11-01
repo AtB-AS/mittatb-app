@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {KETTLE_API_KEY} from '@env';
 import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
@@ -20,6 +19,7 @@ import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 import Bugsnag from '@bugsnag/react-native';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type BeaconsInfo = {
   /**
@@ -94,11 +94,10 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const {rationaleMessages} = useBeaconsMessages();
   const [beaconsInfo, setBeaconsInfo] = useState<BeaconsInfo>();
   const [isConsentGranted, setIsConsentGranted] = useState<boolean>(false);
-  const [isBeaconsEnabled, debugOverrideReady] = useIsBeaconsEnabled();
+  const {isBeaconsEnabled} = useFeatureToggles();
 
   const isInitializedRef = useRef(false);
-  const isBeaconsSupported =
-    isBeaconsEnabled && debugOverrideReady && !!KETTLE_API_KEY;
+  const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY;
 
   const updateBeaconsInfo = () => getBeaconsInfo().then(setBeaconsInfo);
 

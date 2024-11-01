@@ -98,12 +98,12 @@ function Distance({distance}: DistanceProps) {
 }
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   situations: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   itemStyle: {
     flexDirection: 'row',
   },
   icon: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacing.medium,
   },
 }));

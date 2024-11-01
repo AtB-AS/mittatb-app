@@ -2,6 +2,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
+import {useTheme} from '@atb/theme';
 import React from 'react';
 
 export type EmptyStateProps = {
@@ -23,6 +24,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   testID,
 }) => {
   const styles = useStyles();
+  const {theme} = useTheme()
+  const interactiveColor = theme.color.interactive[3]
 
   return (
     <View
@@ -46,7 +49,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </ThemeText>
       {buttonProps && (
         <Button
-          interactiveColor="interactive_3"
+          interactiveColor={interactiveColor}
           text={buttonProps.text}
           mode="primary"
           onPress={buttonProps.onPress}
@@ -60,18 +63,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyStateContainer: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   emptyStateTitle: {
-    marginTop: theme.spacings.xSmall,
-    marginBottom: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
+    marginBottom: theme.spacing.xSmall,
     textAlign: 'center',
   },
   emptyStateDetails: {
     textAlign: 'center',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

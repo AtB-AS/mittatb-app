@@ -61,7 +61,7 @@ export const Bicycles = ({bicycles, onClusterClick}: Props) => {
           aboveLayerID="bicycleClusterCountCircle"
           style={{
             textField: ['get', 'point_count'],
-            textColor: bicycleColor,
+            textColor: bicycleColor.background,
             textSize: 11,
             textTranslate: [13, -13],
             textAllowOverlap: true,

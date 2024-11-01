@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -7,7 +7,6 @@ import {HeaderButton} from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
 
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
@@ -19,7 +18,7 @@ type ScreenHeaderProps = ViewProps & {
   setFocusOnLoad?: boolean;
 };
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 const BASE_HEADER_HEIGHT = 20;
 
@@ -34,10 +33,12 @@ export const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   ...props
 }) => {
   const style = useHeaderStyle();
+  const {theme} = useTheme();
   const insets = useSafeAreaInsets();
 
   const fontScale = useFontScale();
   const headerHeight = BASE_HEADER_HEIGHT * fontScale;
+  const themeColor = getThemeColor(theme);
 
   const titleOffset = showAlternativeTitle
     ? scrollRef!.interpolate({
@@ -99,22 +100,22 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background[themeColor].background,
+    padding: theme.spacing.medium,
+    backgroundColor: getThemeColor(theme).background,
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'absolute',
-    left: theme.spacings.medium,
+    left: theme.spacing.medium,
     width: '100%',
   },
   titleContainers: {
     flex: 1,
     alignItems: 'stretch',
     overflow: 'hidden',
-    marginHorizontal: theme.spacings.medium + 30,
+    marginHorizontal: theme.spacing.medium + 30,
   },
   regularContainer: {
     flex: 1,

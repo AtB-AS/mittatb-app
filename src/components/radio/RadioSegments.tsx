@@ -32,7 +32,7 @@ export function RadioSegments({
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const interactiveColor = theme.interactive[color];
+  const interactiveColor = color;
 
   return (
     <View
@@ -49,8 +49,8 @@ export function RadioSegments({
         const selected = activeIndex === i;
         const currentColor = interactiveColor[selected ? 'active' : 'default'];
         const textColor = enabled
-          ? currentColor.text
-          : theme.text.colors.disabled;
+          ? currentColor.foreground.primary
+          : currentColor.foreground.disabled;
         const borderWidth = selected && enabled ? theme.border.width.medium : 0;
 
         return (
@@ -71,7 +71,7 @@ export function RadioSegments({
                 borderWidth,
                 // To make items with and without border the same size, we
                 // subtract the border width from the padding.
-                padding: theme.spacings.medium - borderWidth,
+                padding: theme.spacing.medium - borderWidth,
               },
             ]}
           >
@@ -112,7 +112,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
     width: 0,
     justifyContent: 'center',
-    margin: theme.spacings.xSmall,
+    margin: theme.spacing.xSmall,
     borderRadius: theme.border.radius.regular,
   },
   optionText: {

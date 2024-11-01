@@ -3,7 +3,7 @@ import {dictionary, OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {Checkbox} from '@atb/components/checkbox';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {StaticColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
@@ -17,7 +17,7 @@ export const SaveRecipientToggle = ({
 }: {
   state: RecipientSelectionState;
   onPress: () => void;
-  themeColor: StaticColor;
+  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -58,9 +58,9 @@ export const SaveRecipientToggle = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
-  maxRecipientsWarning: {marginTop: theme.spacings.medium},
+  maxRecipientsWarning: {marginTop: theme.spacing.medium},
 }));

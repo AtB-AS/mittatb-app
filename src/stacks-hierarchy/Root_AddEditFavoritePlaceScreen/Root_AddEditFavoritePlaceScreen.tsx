@@ -10,7 +10,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
@@ -23,11 +23,10 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {StaticColorByType} from '@atb/theme/colors';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
-const themeColor: StaticColorByType<'background'> = 'background_3';
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[3];
 
 export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   const styles = useStyles();
@@ -38,6 +37,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   } = useFavorites();
   const editItem = route?.params?.editItem;
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -222,7 +223,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           {editItem && (
             <Button
               onPress={deleteItem}
-              interactiveColor="interactive_destructive"
+              interactiveColor={theme.color.interactive.destructive}
               rightIcon={{svg: SvgDelete}}
               text={t(AddEditFavoriteTexts.delete.label)}
               testID="deleteButton"
@@ -230,7 +231,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           )}
 
           <Button
-            interactiveColor="interactive_0"
+            interactiveColor={theme.color.interactive[0]}
             onPress={save}
             rightIcon={{svg: SvgConfirm}}
             text={t(AddEditFavoriteTexts.save.label)}
@@ -244,25 +245,25 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   buttonContainer: {
-    marginBottom: theme.spacings.large,
-    rowGap: theme.spacings.medium,
+    marginBottom: theme.spacing.large,
+    rowGap: theme.spacing.medium,
   },
   emojiContainer: {
     width: '50%',
   },
   section: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.small,
   },
   innerContainer: {
     flex: 1,
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacing.medium,
   },
   errorMessageBox: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
 }));

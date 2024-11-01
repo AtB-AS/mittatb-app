@@ -30,8 +30,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      paddingBottom: Math.max(bottom, theme.spacings.medium),
-      paddingHorizontal: theme.spacings.medium,
+      paddingBottom: Math.max(bottom, theme.spacing.medium),
+      paddingHorizontal: theme.spacing.medium,
     },
   };
 });

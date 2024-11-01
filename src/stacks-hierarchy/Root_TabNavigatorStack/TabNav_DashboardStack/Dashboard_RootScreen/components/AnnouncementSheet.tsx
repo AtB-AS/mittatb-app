@@ -41,14 +41,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      paddingHorizontal: theme.spacings.medium,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
       minHeight: 350,
     },
     imageContainer: {
       width: '100%',
       maxHeight: 150,
-      marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacing.medium,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
     },

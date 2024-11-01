@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   dictionary,
   LoadingScreenTexts,
@@ -15,11 +15,14 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAnalytics} from '@atb/analytics';
 
-const themeColor = 'background_accent_0';
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+
 export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
   const styles = useStyles();
   const localConfig = useLocalConfig();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
   const {customer_service_url} = useRemoteConfig();
   const analytics = useAnalytics();
@@ -93,17 +96,17 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
   },
   scrollView: {
     flexGrow: 1,
     justifyContent: 'space-between',
-    padding: theme.spacings.xLarge,
+    padding: theme.spacing.xLarge,
   },
   header: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacing.xLarge,
     textAlign: 'center',
   },
-  description: {marginVertical: theme.spacings.medium},
-  customerServiceButton: {marginTop: theme.spacings.medium},
+  description: {marginVertical: theme.spacing.medium},
+  customerServiceButton: {marginTop: theme.spacing.medium},
 }));

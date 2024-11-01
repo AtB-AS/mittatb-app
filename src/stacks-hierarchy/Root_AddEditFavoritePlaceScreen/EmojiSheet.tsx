@@ -105,14 +105,14 @@ const PADDING = 5;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerText: {
-    padding: theme.spacings.xSmall,
-    color: theme.text.colors.primary,
+    padding: theme.spacing.xSmall,
+    color: theme.color.foreground.dynamic.primary,
     justifyContent: 'center',
     textAlignVertical: 'center',
   },
 
   categoryOuter: {
-    margin: theme.spacings.medium,
+    margin: theme.spacing.medium,
   },
   categoryInner: {
     flexWrap: 'wrap',
@@ -120,7 +120,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-start',
   },
   clearButton: {
-    padding: theme.spacings.medium,
+    padding: theme.spacing.medium,
     textAlign: 'center',
     textAlignVertical: 'center',
   },

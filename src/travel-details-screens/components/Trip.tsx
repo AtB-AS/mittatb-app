@@ -1,6 +1,6 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
@@ -26,7 +26,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {MapFilterType, useRealtimeMapEnabled} from '@atb/components/map';
+import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,
@@ -45,6 +45,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -65,19 +66,20 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfig();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
-  const realtimeMapEnabled = useRealtimeMapEnabled();
+  const {isRealtimeMapEnabled} = useFeatureToggles();
 
   const liveVehicleIds = tripPattern.legs
     .filter((leg) =>
       getShouldShowLiveVehicle(
         leg.serviceJourneyEstimatedCalls,
-        realtimeMapEnabled,
+        isRealtimeMapEnabled,
       ),
     )
     .map((leg) => leg.serviceJourney?.id)
@@ -135,7 +137,7 @@ export const Trip: React.FC<TripProps> = ({
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
         style={styles.messageBox}
-        textColor="background_0"
+        textColor={theme.color.background.neutral[0]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
@@ -233,22 +235,22 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   date: {
     alignItems: 'center',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   divider: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   messageBox: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   trip: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xSmall,
+    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.xSmall,
   },
 }));
 

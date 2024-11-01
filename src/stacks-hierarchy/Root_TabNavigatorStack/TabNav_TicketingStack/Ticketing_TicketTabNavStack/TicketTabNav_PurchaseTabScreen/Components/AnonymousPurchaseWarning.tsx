@@ -27,7 +27,7 @@ export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   warning: {
-    marginTop: theme.spacings.xLarge,
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacing.xLarge,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

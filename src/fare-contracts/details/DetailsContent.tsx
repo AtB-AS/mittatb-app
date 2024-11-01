@@ -28,7 +28,7 @@ import {
   useGlobalMessagesState,
 } from '@atb/global-messages';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {
   findReferenceDataById,
@@ -46,8 +46,9 @@ import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
-import {useIsActivateTicketNowEnabled} from '../use-is-activate-now-enabled';
+import {useFeatureToggles} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem.tsx';
 
 type Props = {
   fareContract: FareContract;
@@ -69,9 +70,10 @@ export const DetailsContent: React.FC<Props> = ({
   const {abtCustomerId: currentUserId} = useAuthState();
 
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesState();
-  const isActivateTicketNowEnabled = useIsActivateTicketNowEnabled();
+  const {isActivateTicketNowEnabled} = useFeatureToggles();
 
   const {
     isCarnetFareContract,
@@ -79,6 +81,7 @@ export const DetailsContent: React.FC<Props> = ({
     validityStatus,
     validFrom,
     validTo,
+    usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   } = getFareContractInfo(now, fc, currentUserId);
@@ -192,7 +195,7 @@ export const DetailsContent: React.FC<Props> = ({
               globalMessageContext={
                 GlobalMessageContextEnum.appFareContractDetails
               }
-              textColor="background_0"
+              textColor={theme.color.background.neutral[0]}
               ruleVariables={globalMessageRuleVariables}
               style={styles.globalMessages}
             />
@@ -217,6 +220,9 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
+      {usedAccesses?.length && (
+        <UsedAccessesSectionItem usedAccesses={usedAccesses} />
+      )}
       <GenericSectionItem>
         <OrderDetails fareContract={fc} />
       </GenericSectionItem>
@@ -239,13 +245,13 @@ export const DetailsContent: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
     flex: 1,
-    rowGap: theme.spacings.medium,
+    rowGap: theme.spacing.medium,
   },
   section: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
-    paddingVertical: theme.spacings.xLarge * 2,
+    paddingVertical: theme.spacing.xLarge * 2,
   },
 }));

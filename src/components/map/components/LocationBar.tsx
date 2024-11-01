@@ -8,7 +8,7 @@ import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -30,6 +30,9 @@ type Props = {
  * icon be and still be considered "My position"
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
+
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0]
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
 
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
@@ -89,7 +92,7 @@ const Icon: React.FC<{
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator animating={true} color={theme.text.colors.primary} />
+        <ActivityIndicator animating={true} color={getBackgroundColor(theme).foreground.primary} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (
@@ -163,14 +166,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    padding: theme.spacing.medium,
+    backgroundColor: getThemeColor(theme).background,
   },
   innerContainer: {
-    paddingRight: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
+    paddingRight: theme.spacing.small,
+    paddingVertical: theme.spacing.small,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: getBackgroundColor(theme).background,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',

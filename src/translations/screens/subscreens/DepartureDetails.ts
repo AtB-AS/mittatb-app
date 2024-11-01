@@ -6,6 +6,7 @@ const DepartureDetailsTexts = {
       _(departureName, departureName, departureName),
     alternateTitle: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
     notFound: _('Detaljer', 'Details', 'Detaljar'),
+    journeyAid: _('Reisehjelp', 'Journey Aid', 'Reisehjelp'),
   },
   collapse: {
     label: (numberStops: number) =>

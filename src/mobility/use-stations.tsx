@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
 import {AreaState, getOperators, isShowAll, updateAreaState} from './utils';
-import {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 import {
   MapRegion,
   MobilityMapFilterType,
@@ -13,9 +12,9 @@ import {
 import {Point} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useIsFocused} from '@react-navigation/native';
-import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
 import {getStations} from '@atb/api/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 const MIN_ZOOM_LEVEL = 11;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -30,8 +29,8 @@ export const useStations: (
   initialFilter?: MobilityMapFilterType,
 ) => StationsState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
-  const isCityBikesEnabled = useIsCityBikesEnabled();
-  const isCarSharingEnabled = useIsCarSharingEnabled();
+  const {isCityBikesInMapEnabled, isCarSharingInMapEnabled} =
+    useFeatureToggles();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
   );
@@ -41,7 +40,7 @@ export const useStations: (
 
   const [stations, setStations] = useState<StationFeatures>(emptyStations);
 
-  const enableStations = isCityBikesEnabled || isCarSharingEnabled;
+  const enableStations = isCityBikesInMapEnabled || isCarSharingInMapEnabled;
 
   useEffect(() => {
     if (!initialFilter) {

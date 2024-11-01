@@ -1,6 +1,8 @@
 import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
+
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1]
 
 export function AnimatedBottomSheet({
   animatedOffset,
@@ -41,7 +43,7 @@ export function AnimatedBottomSheet({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   bottomSheet: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: getThemeColor(theme).background,
     width: '100%',
     position: 'absolute',
     bottom: 0,

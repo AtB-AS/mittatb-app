@@ -17,12 +17,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {
-  useFromTravelSearchToTicketEnabled,
-  useFromTravelSearchToTicketForBoatEnabled,
-} from './use_from_travel_search_to_ticket_enabled';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -35,8 +30,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/harbors';
-
-const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -58,6 +52,8 @@ export const TripDetailsScreenComponent = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
+  const {theme} = useTheme();
+  const themeColor = theme.color.background.accent[0];
 
   const {updatedTripPattern, error} =
     useCurrentTripPatternWithUpdates(tripPattern);
@@ -100,7 +96,7 @@ export const TripDetailsScreenComponent = ({
               <ThemeIcon
                 svg={SvgDuration}
                 style={styles.durationIcon}
-                colorType={themeColor}
+                color={themeColor}
               />
               <ThemeText
                 type="body__secondary"
@@ -157,10 +153,10 @@ function useTicketInfoFromTrip(
   tripPattern: TripPattern,
 ): TicketInfoForBus | TicketInfoForBoat | undefined {
   const {enable_ticketing} = useRemoteConfig();
-  const isFromTravelSearchToTicketEnabled =
-    useFromTravelSearchToTicketEnabled();
-  const isFromTravelSearchToTicketForBoatEnabled =
-    useFromTravelSearchToTicketForBoatEnabled();
+  const {
+    isFromTravelSearchToTicketEnabled,
+    isFromTravelSearchToTicketBoatEnabled,
+  } = useFeatureToggles();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {tariffZones} = useFirestoreConfiguration();
   const {data: harbors} = useHarbors();
@@ -192,7 +188,7 @@ function useTicketInfoFromTrip(
   );
   if (ticketInfoForBus) return ticketInfoForBus;
 
-  if (!isFromTravelSearchToTicketForBoatEnabled) {
+  if (!isFromTravelSearchToTicketBoatEnabled) {
     // Boat ticket is disabled, avoid returning any ticket info
     return;
   }
@@ -386,31 +382,31 @@ function getFirstTariffZoneWeSellTicketFor(
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
-  heading: {marginBottom: theme.spacings.medium},
-  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  heading: {marginBottom: theme.spacing.medium},
+  parallaxContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   purchaseButton: {
     position: 'absolute',
-    marginHorizontal: theme.spacings.large,
-    marginBottom: theme.spacings.large,
+    marginHorizontal: theme.spacing.large,
+    marginBottom: theme.spacing.large,
     bottom: 0,
     right: 0,
-    shadowRadius: theme.spacings.small,
+    shadowRadius: theme.spacing.small,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     elevation: 3,
   },
   purchaseButtonAccessible: {
-    marginHorizontal: theme.spacings.medium,
-    marginVertical: theme.spacings.xSmall,
+    marginHorizontal: theme.spacing.medium,
+    marginVertical: theme.spacing.xSmall,
   },
   borderTop: {
-    borderTopColor: theme.border.primary,
+    borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
   },
-  durationIcon: {marginRight: theme.spacings.small},
+  durationIcon: {marginRight: theme.spacing.small},
 }));

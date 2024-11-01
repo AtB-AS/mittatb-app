@@ -1,8 +1,7 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
 import {ScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
-import {StaticColor} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useWindowDimensions, View} from 'react-native';
@@ -13,15 +12,16 @@ export const Ticketing_NotEnabledScreen = () => {
   const styles = useStyles();
   const {width: windowWidth} = useWindowDimensions();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
-  const bgcolor: StaticColor = 'background_accent_0';
+  const bgColor = theme.color.background.accent[0];
 
   return (
     <SafeAreaView style={styles.container}>
       <ScreenHeader
         title={t(TicketingSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
-        color={bgcolor}
+        color={bgColor}
       />
       <View style={styles.bannerContainer}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
@@ -31,12 +31,12 @@ export const Ticketing_NotEnabledScreen = () => {
           <View style={styles.textContent}>
             <ThemeText
               type="body__primary--jumbo--bold"
-              color={bgcolor}
+              color={bgColor}
               style={styles.text}
             >
               {t(TicketingSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText color={bgcolor} style={styles.text}>
+            <ThemeText color={bgColor} style={styles.text}>
               {t(TicketingSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
@@ -49,35 +49,35 @@ export const Ticketing_NotEnabledScreen = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.color.background.accent[0].background,
   },
   scrollContainer: {
     flexGrow: 1,
   },
   contentContainer: {
-    paddingVertical: theme.spacings.xLarge,
+    paddingVertical: theme.spacing.xLarge,
     flex: 1,
     height: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   textContent: {
-    paddingHorizontal: theme.spacings.large,
-    marginBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    marginBottom: theme.spacing.xLarge,
     boxShadow: 'inset 0',
   },
   buttonContainer: {
-    paddingHorizontal: theme.spacings.large,
+    paddingHorizontal: theme.spacing.large,
     width: '100%',
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacing.medium,
   },
   text: {
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacing.large,
   },
   bannerContainer: {
     position: 'absolute',
-    bottom: theme.spacings.large,
+    bottom: theme.spacing.large,
   },
   underline: {textDecorationLine: 'underline'},
-  button: {marginBottom: theme.spacings.small},
+  button: {marginBottom: theme.spacing.small},
 }));

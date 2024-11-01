@@ -35,6 +35,7 @@ const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
 export const Root_TabNavigatorStack = () => {
   const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
@@ -59,13 +60,12 @@ export const Root_TabNavigatorStack = () => {
       screenOptions={{
         headerShown: false,
         tabBarLabelPosition: 'below-icon',
-        tabBarActiveTintColor:
-          theme.interactive.interactive_2.outline.background,
-        tabBarInactiveTintColor: theme.text.colors.secondary,
+        tabBarActiveTintColor: interactiveColor.outline.background,
+        tabBarInactiveTintColor: theme.color.foreground.dynamic.secondary,
         tabBarStyle: {
           borderTopWidth: theme.border.width.slim,
-          borderTopColor: theme.border.primary,
-          backgroundColor: theme.interactive.interactive_2.default.background,
+          borderTopColor: theme.color.border.primary.background,
+          backgroundColor: interactiveColor.default.background,
           ...useBottomNavigationStyles(),
         },
       }}
@@ -124,7 +124,7 @@ export const Root_TabNavigatorStack = () => {
           Profile,
           lineHeight,
           'profileTab',
-          customerNumber === undefined ? {color: 'error'} : undefined,
+          customerNumber === undefined ? {color: theme.color.status.error.primary} : undefined,
         )}
       />
     </Tab.Navigator>
@@ -165,7 +165,7 @@ function tabSettings(
       </ThemeText>
     ),
     tabBarIcon: ({color}) => (
-      <ThemeIcon svg={Icon} fill={color} notification={notification} />
+      <ThemeIcon svg={Icon} color={color} notification={notification} />
     ),
   };
 }

@@ -72,9 +72,9 @@ export const PriceSummary = ({
             </ThemeText>
           ) : (
             <ActivityIndicator
-              size={theme.spacings.medium}
-              color={theme.text.colors.primary}
-              style={{margin: theme.spacings.medium}}
+              size={theme.spacing.medium}
+              color={theme.color.foreground.dynamic.primary}
+              style={{margin: theme.spacing.medium}}
             />
           )}
         </View>
@@ -156,15 +156,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  userProfileCountAndName: {marginRight: theme.spacings.small},
+  userProfileCountAndName: {marginRight: theme.spacing.small},
   userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
   userProfileOriginalPriceAmount: {
-    marginEnd: theme.spacings.small,
+    marginEnd: theme.spacing.small,
     alignSelf: 'flex-end',
     textDecorationLine: 'line-through',
   },
   paymentSummaryContainer: {
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   totalPaymentContainer: {
     flexDirection: 'row',
@@ -173,9 +173,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   totalContainerHeadings: {
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacing.xSmall,
   },
   smallTopMargin: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
 }));

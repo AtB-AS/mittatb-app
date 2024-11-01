@@ -73,6 +73,7 @@ export const MapFilterSheet = ({
             closeBottomSheet();
           }}
           rightIcon={{svg: Confirm}}
+          testID="confirmFilters"
         />
       </FullScreenFooter>
     </BottomSheetContainer>
@@ -83,11 +84,11 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
+      marginHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
   };
 });

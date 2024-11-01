@@ -7,7 +7,7 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
@@ -25,6 +25,8 @@ type Props = {
 
 export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   const {t, language} = useTranslation();
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
 
   return (
@@ -48,7 +50,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
             style={style.tripMode}
             key={modeText}
             type="small"
-            interactiveColor="interactive_2"
+            interactiveColor={interactiveColor}
             text={`${modeText} ${durationShort}`}
             leftIcon={{svg: getTransportModeSvg(mode).svg}}
             rightIcon={{svg: arrowRight}}
@@ -86,12 +88,12 @@ const getMode = (
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   scrollView: {
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
   container: {
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   tripMode: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacing.small,
   },
 }));

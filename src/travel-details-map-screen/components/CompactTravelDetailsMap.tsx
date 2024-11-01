@@ -117,8 +117,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   button: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_1.background,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[1].background,
     borderBottomRightRadius: theme.border.radius.regular,
     borderBottomLeftRadius: theme.border.radius.regular,
   },

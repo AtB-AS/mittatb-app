@@ -1,23 +1,25 @@
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {useChatUnreadCount} from './use-chat-unread-count';
-import {StaticColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {Theme} from '@atb/theme/colors';
 
 export const useChatIcon = (
-  color?: StaticColor | TextColor,
+  color?: ContrastColor,
   testID?: string,
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
+  const {theme} = useTheme();
   const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
@@ -36,12 +38,12 @@ export const useChatIcon = (
     children: (
       <View style={styles.chatContainer} testID={testID}>
         <ThemeIcon
-          colorType={color}
+          color={color}
           svg={Chat}
           notification={
             unreadCount
               ? {
-                  color: 'valid',
+                  color: theme.color.status.valid.primary,
                   backgroundColor: color,
                 }
               : undefined
@@ -54,7 +56,7 @@ export const useChatIcon = (
   };
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   chatContainer: {
     width: 36,
     height: 28,

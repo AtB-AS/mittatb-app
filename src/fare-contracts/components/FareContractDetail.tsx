@@ -2,10 +2,8 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {StaticColor} from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-
-const themeColor: StaticColor = 'background_0';
 
 export function FareContractDetail({
   header,
@@ -15,9 +13,14 @@ export function FareContractDetail({
   content: string[];
 }) {
   const styles = useStyles();
+  const {theme} = useTheme();
+
+  const themeColor = theme.color.background.neutral[0]
+  const textColor = theme.color.foreground.dynamic.secondary
+
   return (
     <View style={styles.container}>
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText type="body__secondary" color={textColor}>
         {header}
       </ThemeText>
       {content.map((c) => (
@@ -34,6 +37,6 @@ export function FareContractDetail({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacings.small,
+    rowGap: theme.spacing.small,
   },
 }));

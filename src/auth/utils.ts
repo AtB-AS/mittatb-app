@@ -1,5 +1,6 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {AuthenticationType} from './types';
+import {secondsBetween} from "@atb/utils/date.ts";
 
 export const mapAuthenticationType = (
   user: FirebaseAuthTypes.User | undefined,
@@ -8,3 +9,7 @@ export const mapAuthenticationType = (
   else if (user?.isAnonymous) return 'anonymous';
   else return 'none';
 };
+
+export const secondsToTokenExpiry = (
+  idTokenResult: FirebaseAuthTypes.IdTokenResult,
+) => secondsBetween(new Date(), new Date(idTokenResult.expirationTime));

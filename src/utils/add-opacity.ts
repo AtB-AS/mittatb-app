@@ -8,7 +8,7 @@
  * without adding opacity.
  *
  * Example usage:
- * addOpacity(theme.static.background.background_0.background, 0.2)
+ * addOpacity(theme.color.background.neutral[0].background, 0.2)
  */
 export const addOpacity = (hex: string, opacity: number) => {
   const isSupportedHexFormat = hex.startsWith('#') && hex.length === 7;

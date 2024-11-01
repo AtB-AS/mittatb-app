@@ -20,8 +20,8 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 import React from 'react';
 import {View} from 'react-native';
-import {useShowValidTimeInfoEnabled} from '../../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {TicketRecipientType} from '@atb/ticketing';
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -46,7 +46,7 @@ export const PreassignedFareContractSummary = ({
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
+  const {isShowValidTimeInfoEnabled} = useFeatureToggles();
 
   const {zoneSelectionMode} = fareProductTypeConfig.configuration;
 
@@ -187,15 +187,15 @@ function getPlaceName(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   sendingToText: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   ticketInfoContainer: {
     flex: 1,
   },
   globalMessage: {
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacing.small,
   },
   smallTopMargin: {
-    marginTop: theme.spacings.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
 }));

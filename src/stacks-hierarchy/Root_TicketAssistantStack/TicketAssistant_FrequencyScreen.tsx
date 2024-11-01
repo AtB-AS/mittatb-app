@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {getThemeColor, getInteractiveColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
@@ -24,6 +24,9 @@ export const TicketAssistant_FrequencyScreen = ({
 }: FrequencyScreenProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
+  const themeColor = getThemeColor(theme);
+  const interactiveColor = getInteractiveColor(theme);
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
@@ -99,7 +102,7 @@ export const TicketAssistant_FrequencyScreen = ({
                 return (
                   <Button
                     key={number}
-                    interactiveColor="interactive_2"
+                    interactiveColor={theme.color.interactive[2]}
                     onPress={() => {
                       setSliderValue(number);
                       navigation.navigate(TICKET_ASSISTANT_DURATION_SCREEN);
@@ -157,7 +160,7 @@ export const TicketAssistant_FrequencyScreen = ({
         {!a11yContext.isScreenReaderEnabled && (
           <View style={styles.bottomView}>
             <Button
-              interactiveColor="interactive_0"
+              interactiveColor={interactiveColor}
               onPress={() => {
                 navigation.navigate('TicketAssistant_DurationScreen');
               }}
@@ -180,43 +183,43 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: getThemeColor(theme).background,
     width: '100%',
   },
   mainView: {
     flex: 1,
-    gap: theme.spacings.xLarge,
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
+    gap: theme.spacing.xLarge,
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: theme.spacing.xLarge,
     width: '100%',
   },
   sliderContainer: {
     width: '100%',
-    backgroundColor: theme.static.background.background_0.background,
-    paddingBottom: theme.spacings.medium,
-    paddingTop: theme.spacings.large,
-    paddingHorizontal: theme.spacings.large,
+    backgroundColor: theme.color.background.neutral[0].background,
+    paddingBottom: theme.spacing.medium,
+    paddingTop: theme.spacing.large,
+    paddingHorizontal: theme.spacing.large,
     borderRadius: theme.border.radius.regular,
   },
   slider: {
     width: '100%',
     alignSelf: 'center',
-    marginVertical: theme.spacings.medium,
+    marginVertical: theme.spacing.medium,
   },
   textBox: {
-    gap: theme.spacings.medium,
+    gap: theme.spacing.medium,
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   header: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
   },
   bottomView: {
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacing.xLarge,
+    paddingBottom: theme.spacing.xLarge,
   },
   backdrop: {
     position: 'absolute',
@@ -239,11 +242,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flex: 1,
     alignSelf: 'center',
-    paddingHorizontal: theme.spacings.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   travelText: {
     width: '100%',
     textAlign: 'center',
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacing.medium,
   },
 }));

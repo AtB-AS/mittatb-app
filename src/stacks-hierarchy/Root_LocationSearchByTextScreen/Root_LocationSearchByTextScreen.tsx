@@ -78,7 +78,7 @@ export const Root_LocationSearchByTextScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.color.background.neutral[2].background,
     flex: 1,
   },
 }));
