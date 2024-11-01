@@ -66,6 +66,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
   {
+    name: 'isNynorskEnabled',
+    remoteConfigKey: 'enable_nynorsk',
+  },
+  {
     name: 'isOnBehalfOfEnabled',
     remoteConfigKey: 'enable_on_behalf_of',
   },
