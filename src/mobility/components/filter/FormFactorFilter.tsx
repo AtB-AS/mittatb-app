@@ -45,6 +45,7 @@ export const FormFactorFilter = ({
             text={t(MobilityTexts.filter.selectAll)}
             value={showAll()}
             onValueChange={onAllToggle}
+            testID={`${formFactor.toLowerCase()}ToggleAll`}
           />
         )}
         {operators.map((operator) => (
@@ -54,6 +55,7 @@ export const FormFactorFilter = ({
             leftImage={<ThemeIcon svg={icon} />}
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
+            testID={`${operator.name.toLowerCase().replace(' ', '')}Toggle`}
           />
         ))}
       </Section>

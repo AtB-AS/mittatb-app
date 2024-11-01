@@ -73,6 +73,7 @@ export const MapFilterSheet = ({
             closeBottomSheet();
           }}
           rightIcon={{svg: Confirm}}
+          testID="confirmFilters"
         />
       </FullScreenFooter>
     </BottomSheetContainer>

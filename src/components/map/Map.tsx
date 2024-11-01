@@ -248,6 +248,7 @@ export const Map = (props: MapProps) => {
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
           onPress={onFeatureClick}
+          testID="mapView"
           {...MapViewConfig}
         >
           <MapboxGL.Camera
