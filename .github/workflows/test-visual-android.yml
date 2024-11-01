@@ -1,0 +1,142 @@
+name: Visual tests on Android
+on:
+  workflow_dispatch:
+    inputs:
+      api_level:
+        description: 'Define API level'
+        required: true
+        default: 30
+      branch:
+        description: 'Define branch to test'
+        required: true
+        default: 'master'
+  #schedule:
+  #  - cron: '0 6 * * *'
+
+jobs:
+  run_tests:
+    name: Visual tests Android
+    runs-on: ubuntu-24.04
+    environment: atb
+    timeout-minutes: 90
+    steps:
+      - name: Set env variables
+        env:
+          DEFAULT_BRANCH: 'master'
+          DEFAULT_API_LEVEL: 30
+        run: |
+          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
+          echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: tor/visual-tests
+
+      # Download APK
+      - name: Get AppCenter APK
+        run: bash ./scripts/get-appcenter-apk.sh
+        working-directory: e2e
+        env:
+          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
+          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+
+      # E2E init
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      #- name: Install Appium
+      #  run: npm install -g appium
+      #- name: Install uiautomator2 driver
+      #  run: appium driver install uiautomator2
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install E2E tests
+        working-directory: e2e
+        run: yarn install
+      - name: tsc
+        working-directory: e2e
+        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
+
+      # Emulator cache
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-${{ env.INPUT_API_LEVEL }}
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 11237101
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      # E2E run
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 11237101
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          disable-animations: true
+          script: yarn test:android --spec test/visualTests/specs/visualTests.e2e.ts
+          pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+
+      # Results
+      - name: Upload diff screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diff-screenshots
+          path: ./e2e/screenshots/visualTests/diff/*.png
+          retention-days: 1
+      - name: Upload actual screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-actual-screenshots
+          path: ./e2e/screenshots/visualTests/actual/*.png
+          retention-days: 1
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: ./e2e/screenshots/*.png
+          retention-days: 1
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ./e2e/screenshots/visualTests/actual/*.json
+          retention-days: 1
