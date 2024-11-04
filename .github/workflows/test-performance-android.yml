@@ -51,7 +51,7 @@ jobs:
       - name: Get AppCenter APK
         id: get-appcenter-apk
         run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: mittatb-app-e2e
+        working-directory: e2e
         env:
           APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
           APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
@@ -69,7 +69,7 @@ jobs:
         uses: ./.github/actions/python-setup
       - name: Install E2E tests
         run: yarn install
-        working-directory: mittatb-app-e2e
+        working-directory: e2e
       - name: tsc
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
@@ -127,14 +127,14 @@ jobs:
       # Results
       #- name: Check for performance report
       #  run: |
-      #    if [ ! -f ./mittatb-app-e2e/performance_measures_*.json ];
+      #    if [ ! -f ./e2e/performance_measures_*.json ];
       #    then
       #      exit 1
       #    else
-      #      cp -f ./mittatb-app-e2e/performance_measures_*.json ./mittatb-app-e2e/performance/performance_measures.json
+      #      cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
       #    fi
       #- name: Create performance summary
-      #  working-directory: mittatb-app-e2e/performance
+      #  working-directory: e2e/performance
       #  run: npx tsx createPerformanceSummary.ts
       #  env:
       #    TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
