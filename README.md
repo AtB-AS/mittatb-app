@@ -1,13 +1,8 @@
+<img width="500px" src="https://github.com/user-attachments/assets/1e16f1fd-516a-4538-9699-cd96ce89113c">
+
 # AtB - Application Mobile
 
-[![iOS build status](https://build.appcenter.ms/v0.1/apps/ae9e8aeb-77a8-4071-937e-61a0e3cab5d3/branches/master/badge)](https://appcenter.ms)
-[![Android build status](https://build.appcenter.ms/v0.1/apps/f737d38e-497f-413d-9d44-be78ac1b25c0/branches/master/badge)](https://appcenter.ms)
-
-![AtB Illustration](https://atbeta-git-new-landingpage.atb.vercel.app/illustration.svg)
-
 This repo contains documentation and code for the AtB app with travel assistance and ticketing.
-
-Read more on AtB development, blogposts and projects at [the AtBeta page and blog](https://beta.atb.no).
 
 You can submit a new bug report or feature proposal by [creating a new issue](https://github.com/AtB-AS/mittatb-app/issues/new/choose).
 
