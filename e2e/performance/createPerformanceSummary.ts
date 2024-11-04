@@ -97,6 +97,7 @@ const createSummary = (): void => {
         'RN JS Thread': getAvgProcessCPU('mqt_js'),
         'Render Thread': getAvgProcessCPU('RenderThread'),
         'UI Thread': getAvgProcessCPU('UI Thread'),
+        MapboxRenderThr: getAvgProcessCPU('MapboxRenderThr'),
       },
     },
     fps: getAvgFPS(),

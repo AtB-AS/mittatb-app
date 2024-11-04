@@ -16,7 +16,7 @@ on:
 jobs:
   run_tests:
     name: E2E test Android
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: atb
     timeout-minutes: 90
     steps:
@@ -29,7 +29,7 @@ jobs:
           echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.INPUT_BRANCH }}
 
@@ -84,14 +84,14 @@ jobs:
       # Results
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
           retention-days: 1
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
