@@ -10,9 +10,6 @@ runs:
         python-version: '3.9'
         cache: 'pip'
         cache-dependency-path: '**/requirements.txt'
-    - name: Install Python packages
-      shell: bash
-      run: pip install -r webshop/requirements.txt
-    - name: Install Python packages Intercom
-      shell: bash
-      run: pip install -r intercomStatistics/requirements.txt
+    #- name: Install Python packages
+    #  shell: bash
+    #  run: pip install -r e2e/performance/requirements.txt
