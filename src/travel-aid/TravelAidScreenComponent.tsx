@@ -184,7 +184,8 @@ const TravelAidSection = ({
             />
           )}
           {(situationsForSelected.length > 0 ||
-            noticesForSelected.length > 0) && (
+            noticesForSelected.length > 0 ||
+            situationsForFocusedStop.length > 0) && (
             <View style={styles.subContainer}>
               {situationsForSelected.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
@@ -196,6 +197,10 @@ const TravelAidSection = ({
                     <MessageInfoBox type="info" message={notice.text} />
                   ),
               )}
+
+              {situationsForFocusedStop.map((situation) => (
+                <SituationMessageBox key={situation.id} situation={situation} />
+              ))}
             </View>
           )}
           <View style={styles.subContainer}>
