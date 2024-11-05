@@ -9,7 +9,7 @@ import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {AccessibilityInfo, ActivityIndicator, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {
   Language,
@@ -32,7 +32,12 @@ import {
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names.ts';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {SituationMessageBox} from '@atb/situations';
 import {RequireValue} from '@atb/utils/object';
+import {getSituationSummary} from '@atb/situations/utils';
+import {SituationType} from '@atb/situations/types';
+import {isDefined} from '@atb/utils/presence';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -118,9 +123,32 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
-  useTravelAidAnnouncements({status, focusedEstimatedCall});
+  const selectedEstimatedCall = serviceJourney.estimatedCalls.find(
+    (e) => e.quay.id === fromQuayId,
+  );
+  const situationsForSelected =
+    selectedEstimatedCall?.situations.sort((n1, n2) =>
+      n1.id.localeCompare(n2.id),
+    ) ?? [];
+  const noticesForSelected = selectedEstimatedCall?.notices ?? [];
+  const situationsForFocusedStop =
+    focusedEstimatedCall.situations.filter((situation) =>
+      situationsForSelected?.find((s) => s.id !== situation.id),
+    ) ?? [];
+
+  useTravelAidAnnouncements(
+    {status, focusedEstimatedCall},
+    situationsForFocusedStop,
+  );
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
+
+  const accessibilityLabel =
+    getSituationA11yLabel(situationsForSelected, language) +
+    screenReaderPause +
+    getNoticesA11yLabel(noticesForSelected) +
+    screenReaderPause +
+    getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
 
   return (
     <Section ref={focusRef}>
@@ -148,11 +176,7 @@ const TravelAidSection = ({
       <GenericSectionItem
         accessibility={{
           accessible: true,
-          accessibilityLabel: getFocussedStateA11yLabel(
-            {status, focusedEstimatedCall},
-            t,
-            language,
-          ),
+          accessibilityLabel: accessibilityLabel,
         }}
       >
         <View style={styles.sectionContainer}>
@@ -162,6 +186,26 @@ const TravelAidSection = ({
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
+          )}
+          {(situationsForSelected.length > 0 ||
+            noticesForSelected.length > 0 ||
+            situationsForFocusedStop.length > 0) && (
+            <View style={styles.subContainer}>
+              {situationsForSelected.map((situation) => (
+                <SituationMessageBox key={situation.id} situation={situation} />
+              ))}
+
+              {noticesForSelected.map(
+                (notice) =>
+                  notice.text && (
+                    <MessageInfoBox type="info" message={notice.text} />
+                  ),
+              )}
+
+              {situationsForFocusedStop.map((situation) => (
+                <SituationMessageBox key={situation.id} situation={situation} />
+              ))}
+            </View>
           )}
           <View style={styles.subContainer}>
             <ThemeText type="body__tertiary--bold">
@@ -176,18 +220,31 @@ const TravelAidSection = ({
   );
 };
 
-const useTravelAidAnnouncements = (state: FocusedEstimatedCallState) => {
+const useTravelAidAnnouncements = (
+  state: FocusedEstimatedCallState,
+  situationsForFocusedStop: SituationType[],
+) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
   const message = getFocussedStateA11yLabel(state, t, language);
+  const situations = getSituationA11yLabel(situationsForFocusedStop, language);
+  const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
 
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    AccessibilityInfo.announceForAccessibility(message);
-  }, [message]);
+
+    if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
+      previousQuayId.current = state.focusedEstimatedCall.quay.id;
+      AccessibilityInfo.announceForAccessibility(
+        message + screenReaderPause + situations,
+      );
+    } else {
+      AccessibilityInfo.announceForAccessibility(message);
+    }
+  }, [message, situations, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
@@ -252,6 +309,23 @@ const getFocussedStateA11yLabel = (
     '. ' +
     getTimeInfoA11yLabel(state, t, language)
   );
+};
+
+const getSituationA11yLabel = (
+  situations: SituationType[],
+  language: Language,
+) => {
+  return situations
+    .map((s) => getSituationSummary(s, language))
+    .filter(isDefined)
+    .join(screenReaderPause);
+};
+
+const getNoticesA11yLabel = (notices: NoticeFragment[]) => {
+  return notices
+    .map((notice) => notice.text)
+    .filter(isDefined)
+    .join(screenReaderPause);
 };
 
 const getTimeInfoA11yLabel = (
