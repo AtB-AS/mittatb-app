@@ -37,6 +37,7 @@ import {SituationMessageBox} from '@atb/situations';
 import {RequireValue} from '@atb/utils/object';
 import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
+import {isDefined} from '@atb/utils/presence';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -307,14 +308,14 @@ const getSituationA11yLabel = (
 ) => {
   return situations
     .map((s) => getSituationSummary(s, language))
-    .filter((s) => s)
+    .filter(isDefined)
     .join(screenReaderPause);
 };
 
 const getNoticesA11yLabel = (notices: NoticeFragment[]) => {
   return notices
     .map((notice) => notice.text)
-    .filter((text) => text)
+    .filter(isDefined)
     .join(screenReaderPause);
 };
 
