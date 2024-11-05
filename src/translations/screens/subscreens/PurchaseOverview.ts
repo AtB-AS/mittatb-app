@@ -27,7 +27,7 @@ const PurchaseOverviewTexts = {
         ),
       message: _(
         `Du må velge en annen billett fra billettoversikten.`,
-        `You must choose another ticket from the ticket overview.`,
+        `You need to choose a different ticket from the ticket overview.`,
         `Du må velje ein annan billett frå billettoversikta.`,
       ),
     },
