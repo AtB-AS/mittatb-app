@@ -117,6 +117,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   textContainer: {flex: 1, marginRight: theme.spacing.small},
   subtext: {
     marginTop: theme.spacing.xSmall,
-    marginRight: theme.spacing.small,
+    marginRight: theme.spacing.xSmall,
   },
 }));
