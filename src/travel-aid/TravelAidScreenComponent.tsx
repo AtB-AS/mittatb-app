@@ -136,10 +136,10 @@ const TravelAidSection = ({
     focusedEstimatedCall.quay.id,
   );
 
-  const uniqueSituations: SituationType[] = [];
-  [...selectedEstimatedCall, ...focusedEstimatedCall.situations].filter(
-    onlyUniquesBasedOnField('id'),
-  );
+  const uniqueSituations = [
+    ...selectedEstimatedCall,
+    ...focusedEstimatedCall.situations,
+  ].filter(onlyUniquesBasedOnField('id'));
 
   useTravelAidAnnouncements({status, focusedEstimatedCall}, uniqueSituations);
 
