@@ -38,8 +38,6 @@ import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from './notifications';
 import {BeaconsContextProvider} from './beacons/BeaconsContext';
-// @ts-ignore since rn-flipper-async-storage-advanced doesn't support typescript
-import FlipperAsyncStorage from 'rn-flipper-async-storage-advanced';
 import {IS_QA_OR_DEV} from '@atb/utils/is-qa-or-dev';
 import {FeatureTogglesProvider} from '@atb/feature-toggles';
 
@@ -80,7 +78,6 @@ export const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
-        {IS_QA_OR_DEV && <FlipperAsyncStorage />}
         <StorybookContextProvider>
           <ErrorBoundary type="full-screen">
             <PreferencesContextProvider>

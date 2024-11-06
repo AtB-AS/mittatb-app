@@ -45,7 +45,6 @@ import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfi
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
-import {useFlipper} from '@react-navigation/devtools';
 import {
   LoadingScreen,
   LoadingScreenBoundary,
@@ -81,8 +80,6 @@ export const RootStack = () => {
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
   const {minimum_app_version} = useRemoteConfig();
-
-  useFlipper(navRef);
 
   useBeaconsState();
   useTestIds();

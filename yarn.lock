@@ -14318,16 +14318,6 @@ react-native-dotenv@^3.4.11:
   dependencies:
     dotenv "^16.4.5"
 
-react-native-flipper-performance-plugin@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper-performance-plugin/-/react-native-flipper-performance-plugin-0.4.0.tgz#961ff2f9ccc942d2a4cabd4f6d401034c5402007"
-  integrity sha512-D9Z5VrktJjUenYB4X9qfKcqg9YSyQWOD7fKoxkzXoKxbyalGoWib79iD3OBHOBZEsk5RbQ006zYL7VQwA3D4Wg==
-
-react-native-flipper@^0.262.0:
-  version "0.262.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.262.0.tgz#324395aeda1fb7e31db08ffdbac90a12ab2d20ba"
-  integrity sha512-C+YwWFJok/fIJbl7qWgT2+amLZBKozcsPHz8E/0r4bNP56xm7ZJN3T/kjbpXNcGScoGBiXDMFZhDkywu0oiVNg==
-
 react-native-gesture-handler@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.18.1.tgz#ec9206f34cd2f34a66c0430b2c416d31ee6dff17"
@@ -14972,11 +14962,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
-
-rn-flipper-async-storage-advanced@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/rn-flipper-async-storage-advanced/-/rn-flipper-async-storage-advanced-1.0.5.tgz#908467faf55ed64b6d2eceb95a15e030d99ecd4e"
-  integrity sha512-IW2qXGyf+wgZKNV01li02e7c/DR/NQGIdQZ5CKynhVtl0Od8tO4AS/mZtRjmPbRtqSSGTdOUBSJ4d2JsCVZUPw==
 
 run-applescript@^5.0.0:
   version "5.0.0"
