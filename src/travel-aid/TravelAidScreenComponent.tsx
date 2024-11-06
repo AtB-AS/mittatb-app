@@ -18,7 +18,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
-import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
+import {
+  getLineA11yLabel,
+  getNoticesForServiceJourney,
+} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -123,28 +126,33 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
-  const selectedEstimatedCall = serviceJourney.estimatedCalls.find(
-    (e) => e.quay.id === fromQuayId,
-  );
-  const situationsForSelected =
-    selectedEstimatedCall?.situations.sort((n1, n2) =>
-      n1.id.localeCompare(n2.id),
-    ) ?? [];
-  const noticesForSelected = selectedEstimatedCall?.notices ?? [];
-  const situationsForFocusedStop =
-    focusedEstimatedCall.situations.filter((situation) =>
-      situationsForSelected?.find((s) => s.id !== situation.id),
-    ) ?? [];
+  const selectedEstimatedCall =
+    serviceJourney.estimatedCalls.find((e) => e.quay.id === fromQuayId)
+      ?.situations ?? [];
 
-  useTravelAidAnnouncements(
-    {status, focusedEstimatedCall},
-    situationsForFocusedStop,
+  const noticesForSelected = getNoticesForServiceJourney(
+    serviceJourney,
+    focusedEstimatedCall.quay.id,
   );
+
+  const uniqueSituations: SituationType[] = [];
+  const seenIds = new Set();
+
+  [...selectedEstimatedCall, ...focusedEstimatedCall.situations].forEach(
+    (situation) => {
+      if (!seenIds.has(situation.id)) {
+        seenIds.add(situation.id);
+        uniqueSituations.push(situation);
+      }
+    },
+  );
+
+  useTravelAidAnnouncements({status, focusedEstimatedCall}, uniqueSituations);
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
   const accessibilityLabel =
-    getSituationA11yLabel(situationsForSelected, language) +
+    getSituationA11yLabel(uniqueSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(noticesForSelected) +
     screenReaderPause +
@@ -187,11 +195,9 @@ const TravelAidSection = ({
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
           )}
-          {(situationsForSelected.length > 0 ||
-            noticesForSelected.length > 0 ||
-            situationsForFocusedStop.length > 0) && (
+          {(uniqueSituations.length > 0 || noticesForSelected.length > 0) && (
             <View style={styles.subContainer}>
-              {situationsForSelected.map((situation) => (
+              {uniqueSituations.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
               ))}
 
@@ -201,10 +207,6 @@ const TravelAidSection = ({
                     <MessageInfoBox type="info" message={notice.text} />
                   ),
               )}
-
-              {situationsForFocusedStop.map((situation) => (
-                <SituationMessageBox key={situation.id} situation={situation} />
-              ))}
             </View>
           )}
           <View style={styles.subContainer}>
