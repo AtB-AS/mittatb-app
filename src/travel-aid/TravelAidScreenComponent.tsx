@@ -183,7 +183,7 @@ const TravelAidSection = ({
         <View style={styles.sectionContainer}>
           {status === TravelAidStatus.NoRealtime && (
             <MessageInfoBox
-              type="error"
+              type="warning"
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
