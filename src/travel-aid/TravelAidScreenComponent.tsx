@@ -41,6 +41,7 @@ import {RequireValue} from '@atb/utils/object';
 import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 import {isDefined} from '@atb/utils/presence';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -130,21 +131,14 @@ const TravelAidSection = ({
     serviceJourney.estimatedCalls.find((e) => e.quay.id === fromQuayId)
       ?.situations ?? [];
 
-  const noticesForSelected = getNoticesForServiceJourney(
+  const noticesForFocused = getNoticesForServiceJourney(
     serviceJourney,
     focusedEstimatedCall.quay.id,
   );
 
   const uniqueSituations: SituationType[] = [];
-  const seenIds = new Set();
-
-  [...selectedEstimatedCall, ...focusedEstimatedCall.situations].forEach(
-    (situation) => {
-      if (!seenIds.has(situation.id)) {
-        seenIds.add(situation.id);
-        uniqueSituations.push(situation);
-      }
-    },
+  [...selectedEstimatedCall, ...focusedEstimatedCall.situations].filter(
+    onlyUniquesBasedOnField('id'),
   );
 
   useTravelAidAnnouncements({status, focusedEstimatedCall}, uniqueSituations);
@@ -154,7 +148,7 @@ const TravelAidSection = ({
   const accessibilityLabel =
     getSituationA11yLabel(uniqueSituations, language) +
     screenReaderPause +
-    getNoticesA11yLabel(noticesForSelected) +
+    getNoticesA11yLabel(noticesForFocused) +
     screenReaderPause +
     getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
 
@@ -195,13 +189,13 @@ const TravelAidSection = ({
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
           )}
-          {(uniqueSituations.length > 0 || noticesForSelected.length > 0) && (
+          {(uniqueSituations.length > 0 || noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
               {uniqueSituations.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
               ))}
 
-              {noticesForSelected.map(
+              {noticesForFocused.map(
                 (notice) =>
                   notice.text && (
                     <MessageInfoBox type="info" message={notice.text} />
