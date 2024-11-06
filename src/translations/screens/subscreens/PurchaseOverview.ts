@@ -23,7 +23,7 @@ const PurchaseOverviewTexts = {
         _(
           `${productName} er ikke gyldig nå`,
           `${productName} is not valid now`,
-          `${productName} er ikkje gyldig nå`,
+          `${productName} er ikkje gyldig no`,
         ),
       message: _(
         `Du må velge en annen billett fra billettoversikten.`,
