@@ -309,8 +309,6 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         </ThemeText>
       );
     case TravelAidStatus.NotYetArrived:
-    case TravelAidStatus.Arrived:
-    case TravelAidStatus.BetweenStops:
       return (
         <View>
           <View style={styles.realTime}>
@@ -328,6 +326,23 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
           </View>
           <ThemeText type="body__secondary--bold">
             {t(TravelAidTexts.scheduledTime(clock))}
+          </ThemeText>
+        </View>
+      );
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
+      return (
+        <View style={styles.realTime}>
+          <ThemeIcon
+            svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+            size="xSmall"
+          />
+          <ThemeText type="heading__title">
+            {formatToClockOrRelativeMinutes(
+              focusedEstimatedCall.expectedDepartureTime,
+              language,
+              t(dictionary.date.units.now),
+            )}
           </ThemeText>
         </View>
       );
@@ -388,9 +403,10 @@ const getTimeInfoA11yLabel = (
     case TravelAidStatus.NoRealtime:
     case TravelAidStatus.NotGettingUpdates:
       return t(TravelAidTexts.clock(scheduledClock));
-    case TravelAidStatus.NotYetArrived:
     case TravelAidStatus.Arrived:
     case TravelAidStatus.BetweenStops:
+      return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}`;
+    case TravelAidStatus.NotYetArrived:
       return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}, ${t(
         TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
       )}`;
