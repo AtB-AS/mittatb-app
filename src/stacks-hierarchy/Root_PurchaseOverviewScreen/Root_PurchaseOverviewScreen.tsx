@@ -158,8 +158,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selection.userProfilesWithCount.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
 
-  const isEmptyOffer = error?.type === 'empty-offers';
-
   const handleTicketInfoButtonPress = () => {
     const parameters = {
       fareProductTypeConfigType: params.fareProductTypeConfig.type,
@@ -218,13 +216,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           )}
           {error &&
-            (isEmptyOffer ? (
+            (error.type === 'not-available' ? (
               <MessageInfoBox
-                type="info"
-                message={t(
-                  PurchaseOverviewTexts.errorMessageBox.productUnavailable(
+                type="warning"
+                title={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable.title(
                     getReferenceDataName(preassignedFareProduct, language),
                   ),
+                )}
+                message={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable
+                    .message,
                 )}
                 style={styles.selectionComponent}
               />
