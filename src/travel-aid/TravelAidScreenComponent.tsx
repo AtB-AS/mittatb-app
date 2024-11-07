@@ -241,7 +241,6 @@ const useTravelAidAnnouncements = (
     useState<string[]>(announcedNoticeIds);
 
   useEffect(() => {
-    // Get the unique IDs for the current situations and notices
     const newSituations = situationsForFocusedStop.filter(
       (s) => !currentAnnouncedSituationIds.includes(s.id),
     );
