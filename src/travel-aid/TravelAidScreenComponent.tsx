@@ -232,9 +232,6 @@ const useTravelAidAnnouncements = (
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
   const message = getFocussedStateA11yLabel(state, t, language);
-  const situations = getSituationA11yLabel(situationsForFocusedStop, language);
-  const notices = getNoticesA11yLabel(noticesForFocusedStop);
-  const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
   const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
     useState<string[]>(announcedSituationIds);
   const [currentAnnouncedNoticeIds, setCurrentAnnouncedNoticeIds] =
@@ -267,22 +264,13 @@ const useTravelAidAnnouncements = (
       return;
     }
 
-    if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
-      previousQuayId.current = state.focusedEstimatedCall.quay.id;
-      AccessibilityInfo.announceForAccessibility(
-        message +
-          screenReaderPause +
-          newSituations +
-          screenReaderPause +
-          newNotices,
-      );
-    } else {
-      AccessibilityInfo.announceForAccessibility(message);
-    }
+    const situations = getSituationA11yLabel(newSituations, language);
+    const notices = getNoticesA11yLabel(newNotices);
+    AccessibilityInfo.announceForAccessibility(
+      message + screenReaderPause + situations + screenReaderPause + notices,
+    );
   }, [
     message,
-    situations,
-    notices,
     state.focusedEstimatedCall.quay.id,
     currentAnnouncedSituationIds,
     currentAnnouncedNoticeIds,
