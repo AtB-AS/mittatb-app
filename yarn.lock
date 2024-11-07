@@ -27,10 +27,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-4.1.1.tgz#14664e880e767f2eb97de21790357361c26a8d7a"
-  integrity sha512-rsiQwaHHvC2dnY7hq5TVKkDrwW+j9VM8xwBbLizVDQTuBqRY/hgyE9950HB7+vp4UFi4mEqTJuqzrD+nlAK6qw==
+"@atb-as/config-specs@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.0.0.tgz#60c70df82f3c45b11c39f6a409378dfaa8624ea0"
+  integrity sha512-oFAQA7DGutnmvVUMF6BkmjACiiu/AH6DZEx38f7O6wEXBMiLTzdVm13PdpNpawWXRobxnRO3CBL7x4cjsGgKyQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -14858,16 +14858,6 @@ react-native-dotenv@^3.4.11:
   dependencies:
     dotenv "^16.4.5"
 
-react-native-flipper-performance-plugin@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper-performance-plugin/-/react-native-flipper-performance-plugin-0.4.0.tgz#961ff2f9ccc942d2a4cabd4f6d401034c5402007"
-  integrity sha512-D9Z5VrktJjUenYB4X9qfKcqg9YSyQWOD7fKoxkzXoKxbyalGoWib79iD3OBHOBZEsk5RbQ006zYL7VQwA3D4Wg==
-
-react-native-flipper@^0.262.0:
-  version "0.262.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.262.0.tgz#324395aeda1fb7e31db08ffdbac90a12ab2d20ba"
-  integrity sha512-C+YwWFJok/fIJbl7qWgT2+amLZBKozcsPHz8E/0r4bNP56xm7ZJN3T/kjbpXNcGScoGBiXDMFZhDkywu0oiVNg==
-
 react-native-gesture-handler@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.18.1.tgz#ec9206f34cd2f34a66c0430b2c416d31ee6dff17"
@@ -15512,11 +15502,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
-
-rn-flipper-async-storage-advanced@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/rn-flipper-async-storage-advanced/-/rn-flipper-async-storage-advanced-1.0.5.tgz#908467faf55ed64b6d2eceb95a15e030d99ecd4e"
-  integrity sha512-IW2qXGyf+wgZKNV01li02e7c/DR/NQGIdQZ5CKynhVtl0Od8tO4AS/mZtRjmPbRtqSSGTdOUBSJ4d2JsCVZUPw==
 
 run-applescript@^5.0.0:
   version "5.0.0"

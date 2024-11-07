@@ -22,7 +22,6 @@ import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
-import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
@@ -33,7 +32,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthState} from '@atb/auth';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -63,20 +62,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     navigation.setParams({
       preassignedFareProduct: fp,
     });
-    if (fp.limitations.latestActivationDate && selection.travelDate) {
-      if (
-        isAfter(
-          selection.travelDate,
-          new Date(fp.limitations.latestActivationDate * 1000),
-        )
-      )
-        navigation.setParams({travelDate: undefined});
-      else if (showActivationDateWarning) {
-        setShowActivationDateWarning(false);
-      }
-    } else if (showActivationDateWarning) {
-      setShowActivationDateWarning(false);
-    }
   };
 
   const setUserProfilesWithCount = useCallback(
@@ -88,8 +73,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
 
-  const [showActivationDateWarning, setShowActivationDateWarning] =
-    useState<boolean>(false);
   const analytics = useAnalytics();
 
   const {
@@ -137,18 +120,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       mode: params.mode,
     };
 
-  const maximumDateObjectIfExisting = selection.preassignedFareProduct.limitations
-    ?.latestActivationDate
-    ? new Date(selection.preassignedFareProduct.limitations.latestActivationDate * 1000)
-    : undefined;
-
   const canSelectUserProfile = isUserProfileSelectable(
     travellerSelectionMode,
     selection.userProfilesWithCount,
   );
 
   const isOnBehalfOfEnabled =
-      useFeatureToggles().isOnBehalfOfEnabled && fareProductOnBehalfOfEnabled;
+    useFeatureToggles().isOnBehalfOfEnabled && fareProductOnBehalfOfEnabled;
 
   const isLoggedIn = authenticationType === 'phone';
 
@@ -157,8 +135,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const hasSelection =
     selection.userProfilesWithCount.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
-
-  const isEmptyOffer = error?.type === 'empty-offers';
 
   const handleTicketInfoButtonPress = () => {
     const parameters = {
@@ -218,13 +194,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           )}
           {error &&
-            (isEmptyOffer ? (
+            (error.type === 'not-available' ? (
               <MessageInfoBox
-                type="info"
-                message={t(
-                  PurchaseOverviewTexts.errorMessageBox.productUnavailable(
+                type="warning"
+                title={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable.title(
                     getReferenceDataName(preassignedFareProduct, language),
                   ),
+                )}
+                message={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable
+                    .message,
                 )}
                 style={styles.selectionComponent}
               />
@@ -281,10 +261,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             travelDate={selection.travelDate}
             setTravelDate={(travelDate) => navigation.setParams({travelDate})}
             validFromTime={selection.travelDate}
-            maximumDate={maximumDateObjectIfExisting}
             style={styles.selectionComponent}
-            showActivationDateWarning={showActivationDateWarning}
-            setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
           {isOnBehalfOfAllowed && !canSelectUserProfile && (

@@ -31,7 +31,6 @@ runs:
       - name: Set global env vars
         shell: bash
         run: |
-          echo "NO_FLIPPER=1" >> $GITHUB_ENV
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
       - name: Decrypt env files

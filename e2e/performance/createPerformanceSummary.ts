@@ -22,15 +22,36 @@ type cpuProcessItemType = {
 
 type SummaryType = {
   version: string;
-  cpu: {
-    avg: number;
-    threads: {
-      [thread: string]: number;
-    };
-  };
-  fps: number;
-  ram: number;
-  score: number;
+  status: string;
+  results:
+    | {
+        cpu: {
+          avg: number;
+          threads: {
+            [thread: string]: number;
+          };
+        };
+        fps: number;
+        ram: number;
+        score: number;
+      }
+    | {};
+};
+
+/**
+ * Iterations may have statuses:
+ *    status: 'FAILURE'
+ *    isRetriedIteration: true
+ *    ==> Failure, but still retries left. Not part of summary nor 'flashlight report'
+ *   status: 'FAILURE'
+ *    ==> Failure, and no retries left. Not part of summary nor 'flashlight report'
+ *   status: 'SUCCESS'
+ *    ==> Success, and part of summary and 'flashlight report'
+ */
+const removeFailedIterations = (): any => {
+  performanceMeasures.iterations = performanceMeasures.iterations.filter(
+    (iter) => iter.status === 'SUCCESS',
+  );
 };
 
 const getAvgCPU = (): number => {
@@ -73,36 +94,36 @@ const getAvgRAM = (): number => {
 
 const testStatus: string = performanceMeasures.status;
 
-const iterationStatuses: string[] = performanceMeasures.iterations.map(
-  (iteration) => iteration.status,
-);
-
 const getTestScore = (results: any): number => {
   return getScore(averageTestCaseResult(results));
 };
 
 const createSummary = (): void => {
-  const status =
-    testStatus === 'SUCCESS' &&
-    iterationStatuses.filter((it) => it !== 'SUCCESS').length === 0;
-  if (!status) {
-    throw new Error("Status is NOT 'Success'");
-  }
+  // Remove failed iterations - these are also not part of the 'flashlight report'
+  removeFailedIterations();
 
   const summary: SummaryType = {
     version: testedVersion,
-    cpu: {
-      avg: getAvgCPU(),
-      threads: {
-        'RN JS Thread': getAvgProcessCPU('mqt_js'),
-        'Render Thread': getAvgProcessCPU('RenderThread'),
-        'UI Thread': getAvgProcessCPU('UI Thread'),
-      },
-    },
-    fps: getAvgFPS(),
-    ram: getAvgRAM(),
-    score: getTestScore(performanceMeasures),
+    status: testStatus,
+    results: {},
   };
+
+  if (testStatus === 'SUCCESS') {
+    summary.results = {
+      cpu: {
+        avg: getAvgCPU(),
+        threads: {
+          'RN JS Thread': getAvgProcessCPU('mqt_js'),
+          'Render Thread': getAvgProcessCPU('RenderThread'),
+          'UI Thread': getAvgProcessCPU('UI Thread'),
+          MapboxRenderThr: getAvgProcessCPU('MapboxRenderThr'),
+        },
+      },
+      fps: getAvgFPS(),
+      ram: getAvgRAM(),
+      score: getTestScore(performanceMeasures),
+    };
+  }
 
   fs.writeFile(
     'performance_measures_summary.json',
