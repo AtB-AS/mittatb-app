@@ -276,6 +276,7 @@ const useTravelAidAnnouncements = (
     currentAnnouncedNoticeIds,
     noticesForFocusedStop,
     situationsForFocusedStop,
+    language,
   ]);
 };
 
