@@ -221,7 +221,7 @@ const useTravelAidAnnouncements = (
   const isFirstRender = useRef(true);
   const message = getFocussedStateA11yLabel(state, t, language);
   const situations = getSituationA11yLabel(situationsForFocusedStop, language);
-  const noticies = getNoticesA11yLabel(noticesForFocusedStop);
+  const notices = getNoticesA11yLabel(noticesForFocusedStop);
   const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
 
   useEffect(() => {
