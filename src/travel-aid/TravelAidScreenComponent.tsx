@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import React, {Ref, useEffect, useRef} from 'react';
+import React, {Ref, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -41,6 +41,7 @@ import {RequireValue} from '@atb/utils/object';
 import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 import {isDefined} from '@atb/utils/presence';
+import {onlyUniques} from '@atb/utils/only-uniques';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -132,20 +133,28 @@ const TravelAidSection = ({
     focusedEstimatedCall.quay.id,
   );
 
+  const announcedSituationIds = situationsForFocused
+    .map((s) => s.id)
+    .filter(onlyUniques);
+  const announcedNoticeIds = noticesForFocused
+    .map((s) => s.id)
+    .filter(onlyUniques);
+
   useTravelAidAnnouncements(
     {status, focusedEstimatedCall},
     situationsForFocused,
     noticesForFocused,
+    announcedSituationIds,
+    announcedNoticeIds,
   );
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
-  const accessibilityLabel =
-    getNoticesA11yLabel(noticesForFocused) +
-    screenReaderPause +
-    getSituationA11yLabel(situationsForFocused, language) +
-    screenReaderPause +
-    getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
+  const accessibilityLabel = getFocussedStateA11yLabel(
+    {status, focusedEstimatedCall},
+    t,
+    language,
+  );
 
   return (
     <Section ref={focusRef}>
@@ -170,12 +179,7 @@ const TravelAidSection = ({
           }}
         />
       </GenericSectionItem>
-      <GenericSectionItem
-        accessibility={{
-          accessible: true,
-          accessibilityLabel: accessibilityLabel,
-        }}
-      >
+      <GenericSectionItem>
         <View style={styles.sectionContainer}>
           {status === TravelAidStatus.NoRealtime && (
             <MessageInfoBox
@@ -199,13 +203,19 @@ const TravelAidSection = ({
               )}
             </View>
           )}
-          <View style={styles.subContainer}>
-            <ThemeText type="body__tertiary--bold">
-              {getStopHeader(status, t)}
-            </ThemeText>
-            <ThemeText type="heading__title">{quayName}</ThemeText>
+          <View
+            accessible
+            accessibilityLabel={accessibilityLabel}
+            style={styles.stopHeaderContainer}
+          >
+            <View>
+              <ThemeText type="body__tertiary--bold">
+                {getStopHeader(status, t)}
+              </ThemeText>
+              <ThemeText type="heading__title">{quayName}</ThemeText>
+            </View>
+            <TimeInfo state={{status, focusedEstimatedCall}} />
           </View>
-          <TimeInfo state={{status, focusedEstimatedCall}} />
         </View>
       </GenericSectionItem>
     </Section>
@@ -216,6 +226,8 @@ const useTravelAidAnnouncements = (
   state: FocusedEstimatedCallState,
   situationsForFocusedStop: SituationType[],
   noticesForFocusedStop: NoticeFragment[],
+  announcedSituationIds: string[],
+  announcedNoticeIds: string[],
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
@@ -223,8 +235,34 @@ const useTravelAidAnnouncements = (
   const situations = getSituationA11yLabel(situationsForFocusedStop, language);
   const notices = getNoticesA11yLabel(noticesForFocusedStop);
   const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
+  const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
+    useState<string[]>(announcedSituationIds);
+  const [currentAnnouncedNoticeIds, setCurrentAnnouncedNoticeIds] =
+    useState<string[]>(announcedNoticeIds);
 
   useEffect(() => {
+    // Get the unique IDs for the current situations and notices
+    const newSituations = situationsForFocusedStop.filter(
+      (s) => !currentAnnouncedSituationIds.includes(s.id),
+    );
+    const newNotices = noticesForFocusedStop.filter(
+      (s) => !currentAnnouncedNoticeIds.includes(s.id),
+    );
+
+    if (newSituations.length > 0) {
+      setCurrentAnnouncedSituationIds((prev) => [
+        ...prev,
+        ...newSituations.map((s) => s.id),
+      ]);
+    }
+
+    if (newNotices.length > 0) {
+      setCurrentAnnouncedNoticeIds((prev) => [
+        ...prev,
+        ...newNotices.map((s) => s.id),
+      ]);
+    }
+
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
@@ -233,12 +271,25 @@ const useTravelAidAnnouncements = (
     if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
       previousQuayId.current = state.focusedEstimatedCall.quay.id;
       AccessibilityInfo.announceForAccessibility(
-        message + screenReaderPause + notices + screenReaderPause + situations,
+        message +
+          screenReaderPause +
+          newSituations +
+          screenReaderPause +
+          newNotices,
       );
     } else {
       AccessibilityInfo.announceForAccessibility(message);
     }
-  }, [message, situations, notices, state.focusedEstimatedCall.quay.id]);
+  }, [
+    message,
+    situations,
+    notices,
+    state.focusedEstimatedCall.quay.id,
+    currentAnnouncedSituationIds,
+    currentAnnouncedNoticeIds,
+    noticesForFocusedStop,
+    situationsForFocusedStop,
+  ]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
@@ -380,6 +431,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   subContainer: {
     gap: theme.spacing.small,
+  },
+  stopHeaderContainer: {
+    gap: theme.spacing.large,
   },
   horizontalRule: {
     borderBottomWidth: 1,
