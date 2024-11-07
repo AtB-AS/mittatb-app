@@ -233,12 +233,12 @@ const useTravelAidAnnouncements = (
     if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
       previousQuayId.current = state.focusedEstimatedCall.quay.id;
       AccessibilityInfo.announceForAccessibility(
-        message + screenReaderPause + noticies + screenReaderPause + situations,
+        message + screenReaderPause + notices + screenReaderPause + situations,
       );
     } else {
       AccessibilityInfo.announceForAccessibility(message);
     }
-  }, [message, situations, noticies, state.focusedEstimatedCall.quay.id]);
+  }, [message, situations, notices, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
