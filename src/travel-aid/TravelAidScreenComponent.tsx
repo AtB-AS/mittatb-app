@@ -235,53 +235,48 @@ const useTravelAidAnnouncements = (
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
-  const message = getFocussedStateA11yLabel(state, t, language);
+
   const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
     useState<string[]>(announcedSituationIds);
   const [currentAnnouncedNoticeIds, setCurrentAnnouncedNoticeIds] =
     useState<string[]>(announcedNoticeIds);
 
+  const newSituations = situationsForFocusedStop.filter(
+    (s) => !currentAnnouncedSituationIds.includes(s.id),
+  );
+  const newNotices = noticesForFocusedStop.filter(
+    (s) => !currentAnnouncedNoticeIds.includes(s.id),
+  );
+
+  const message =
+    getFocussedStateA11yLabel(state, t, language) +
+    screenReaderPause +
+    getSituationA11yLabel(newSituations, language) +
+    screenReaderPause +
+    getNoticesA11yLabel(newNotices);
+
+  if (newSituations.length > 0) {
+    setCurrentAnnouncedSituationIds((prev) => [
+      ...prev,
+      ...newSituations.map((s) => s.id),
+    ]);
+  }
+
+  if (newNotices.length > 0) {
+    setCurrentAnnouncedNoticeIds((prev) => [
+      ...prev,
+      ...newNotices.map((s) => s.id),
+    ]);
+  }
+
   useEffect(() => {
-    const newSituations = situationsForFocusedStop.filter(
-      (s) => !currentAnnouncedSituationIds.includes(s.id),
-    );
-    const newNotices = noticesForFocusedStop.filter(
-      (s) => !currentAnnouncedNoticeIds.includes(s.id),
-    );
-
-    if (newSituations.length > 0) {
-      setCurrentAnnouncedSituationIds((prev) => [
-        ...prev,
-        ...newSituations.map((s) => s.id),
-      ]);
-    }
-
-    if (newNotices.length > 0) {
-      setCurrentAnnouncedNoticeIds((prev) => [
-        ...prev,
-        ...newNotices.map((s) => s.id),
-      ]);
-    }
-
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
 
-    const situations = getSituationA11yLabel(newSituations, language);
-    const notices = getNoticesA11yLabel(newNotices);
-    AccessibilityInfo.announceForAccessibility(
-      message + screenReaderPause + situations + screenReaderPause + notices,
-    );
-  }, [
-    message,
-    state.focusedEstimatedCall.quay.id,
-    currentAnnouncedSituationIds,
-    currentAnnouncedNoticeIds,
-    noticesForFocusedStop,
-    situationsForFocusedStop,
-    language,
-  ]);
+    AccessibilityInfo.announceForAccessibility(message);
+  }, [message, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
