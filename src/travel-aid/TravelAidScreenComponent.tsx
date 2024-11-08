@@ -127,11 +127,15 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
-  const situationsForFocused = focusedEstimatedCall.situations ?? [];
-  const noticesForFocused = getNoticesForServiceJourney(
-    serviceJourney,
-    focusedEstimatedCall.quay.id,
-  );
+  const situationsForFocused =
+    focusedEstimatedCall.situations.sort((n1, n2) =>
+      n1.id.localeCompare(n2.id),
+    ) ?? [];
+  const noticesForFocused =
+    getNoticesForServiceJourney(
+      serviceJourney,
+      focusedEstimatedCall.quay.id,
+    ).sort((n1, n2) => n1.id.localeCompare(n2.id)) ?? [];
 
   const announcedSituationIds = situationsForFocused
     .map((s) => s.id)
@@ -238,12 +242,12 @@ const useTravelAidAnnouncements = (
     useState<string[]>(announcedNoticeIds);
 
   useEffect(() => {
-    const newSituations = situationsForFocusedStop
-      .filter((s) => !currentAnnouncedSituationIds.includes(s.id))
-      .sort((n1, n2) => n1.id.localeCompare(n2.id));
-    const newNotices = noticesForFocusedStop
-      .filter((s) => !currentAnnouncedNoticeIds.includes(s.id))
-      .sort((n1, n2) => n1.id.localeCompare(n2.id));
+    const newSituations = situationsForFocusedStop.filter(
+      (s) => !currentAnnouncedSituationIds.includes(s.id),
+    );
+    const newNotices = noticesForFocusedStop.filter(
+      (s) => !currentAnnouncedNoticeIds.includes(s.id),
+    );
 
     if (newSituations.length > 0) {
       setCurrentAnnouncedSituationIds((prev) => [
