@@ -12,6 +12,7 @@ import {AccessibilityInfo, ActivityIndicator, View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {
+  CancelledDepartureTexts,
   Language,
   TranslateFunction,
   dictionary,
@@ -42,6 +43,7 @@ import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
+import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -98,6 +100,7 @@ export const TravelAidScreenComponent = ({
               ...serviceJourney,
               estimatedCalls: serviceJourney.estimatedCalls,
             }}
+            isTripCancelled={serviceJourneyDeparture.isTripCancelled}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
             focusRef={focusRef}
           />
@@ -109,6 +112,7 @@ export const TravelAidScreenComponent = ({
 
 const TravelAidSection = ({
   serviceJourney,
+  isTripCancelled,
   fromQuayId,
   focusRef,
 }: {
@@ -116,6 +120,7 @@ const TravelAidSection = ({
     ServiceJourneyWithEstCallsFragment,
     'estimatedCalls'
   >;
+  isTripCancelled?: boolean;
   fromQuayId?: string;
   focusRef: Ref<any>;
 }) => {
@@ -148,6 +153,7 @@ const TravelAidSection = ({
     {status, focusedEstimatedCall},
     situationsForFocused,
     noticesForFocused,
+    isTripCancelled ?? false,
     announcedSituationIds,
     announcedNoticeIds,
   );
@@ -192,9 +198,13 @@ const TravelAidSection = ({
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
           )}
-          {(situationsForFocused.length > 0 ||
+
+          {(isTripCancelled ||
+            situationsForFocused.length > 0 ||
             noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
+              {isTripCancelled && <CancelledDepartureMessage />}
+
               {situationsForFocused.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
               ))}
@@ -230,6 +240,7 @@ const useTravelAidAnnouncements = (
   state: FocusedEstimatedCallState,
   situationsForFocusedStop: SituationType[],
   noticesForFocusedStop: NoticeFragment[],
+  isTripCancelled: boolean,
   announcedSituationIds: string[],
   announcedNoticeIds: string[],
 ) => {
@@ -250,7 +261,10 @@ const useTravelAidAnnouncements = (
 
   const message =
     getFocussedStateA11yLabel(state, t, language) +
-    screenReaderPause +
+    (isTripCancelled
+      ? screenReaderPause + t(CancelledDepartureTexts.message)
+      : '');
+  screenReaderPause +
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(newNotices);
@@ -276,7 +290,7 @@ const useTravelAidAnnouncements = (
     }
 
     AccessibilityInfo.announceForAccessibility(message);
-  }, [message, state.focusedEstimatedCall.quay.id]);
+  }, [message]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
