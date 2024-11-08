@@ -238,12 +238,12 @@ const useTravelAidAnnouncements = (
     useState<string[]>(announcedNoticeIds);
 
   useEffect(() => {
-    const newSituations = situationsForFocusedStop.filter(
-      (s) => !currentAnnouncedSituationIds.includes(s.id),
-    );
-    const newNotices = noticesForFocusedStop.filter(
-      (s) => !currentAnnouncedNoticeIds.includes(s.id),
-    );
+    const newSituations = situationsForFocusedStop
+      .filter((s) => !currentAnnouncedSituationIds.includes(s.id))
+      .sort((n1, n2) => n1.id.localeCompare(n2.id));
+    const newNotices = noticesForFocusedStop
+      .filter((s) => !currentAnnouncedNoticeIds.includes(s.id))
+      .sort((n1, n2) => n1.id.localeCompare(n2.id));
 
     if (newSituations.length > 0) {
       setCurrentAnnouncedSituationIds((prev) => [
