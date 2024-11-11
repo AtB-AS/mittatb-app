@@ -256,8 +256,8 @@ const useTravelAidAnnouncements = (
 
   const message =
     getFocussedStateA11yLabel(state, t, language) +
-    (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '');
-  screenReaderPause +
+    (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '') +
+    screenReaderPause +
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(newNotices);
