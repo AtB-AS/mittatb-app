@@ -11,7 +11,7 @@ import {
   isSelectableProduct,
   isSelectableProfile,
   isSelectableZone,
-  validateSelection,
+  isValidSelection,
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 
@@ -24,10 +24,10 @@ export const createEmptyBuilder = (
       return createBuilder(input, selection);
     },
     fromSelection: (selection) => {
-      const isSelectionValid = validateSelection(input, selection);
+      const isValid = isValidSelection(input, selection);
       return createBuilder(
         input,
-        isSelectionValid
+        isValid
           ? selection
           : createSelectionForType(input, selection.fareProductTypeConfig.type),
       );

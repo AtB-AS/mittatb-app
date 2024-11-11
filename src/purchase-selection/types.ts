@@ -19,6 +19,10 @@ export type PurchaseSelectionType = {
   travelDate: string | undefined;
 };
 
+/**
+ * The purchase selection builder input contains all the relevant data needed
+ * for the purchase selection business logic.
+ */
 export type PurchaseSelectionBuilderInput = {
   userProfiles: UserProfile[];
   preassignedFareProducts: PreassignedFareProduct[];

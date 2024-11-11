@@ -87,10 +87,12 @@ export const getSelectableUserProfiles = (
 
 export const isSelectableProduct = (
   input: PurchaseSelectionBuilderInput,
-  selection: PurchaseSelectionType,
+  currentSelection: PurchaseSelectionType,
   product: PreassignedFareProduct,
 ) => {
-  if (selection.fareProductTypeConfig.type !== product.type) return false;
+  if (currentSelection.fareProductTypeConfig.type !== product.type) {
+    return false;
+  }
   return isProductSellableInApp(input, product);
 };
 
@@ -99,8 +101,9 @@ export const isSelectableProfile = (
   profile: UserProfile,
 ) => {
   const profileLimitations = product.limitations.userProfileRefs;
+  const emptyLimitations = !profileLimitations.length;
   return (
-    !profileLimitations.length ||
+    emptyLimitations ||
     profileLimitations.some(
       (allowedProfileId) => profile.id === allowedProfileId,
     )
@@ -112,13 +115,14 @@ export const isSelectableZone = (
   zone: TariffZone,
 ) => {
   const zoneLimitations = product.limitations.tariffZoneRefs;
+  const emptyLimitations = !zoneLimitations?.length;
   return (
-    !zoneLimitations?.length ||
+    emptyLimitations ||
     zoneLimitations.some((allowedZoneId) => zone.id === allowedZoneId)
   );
 };
 
-export const validateSelection = (
+export const isValidSelection = (
   input: PurchaseSelectionBuilderInput,
   selection: PurchaseSelectionType,
 ) => {
