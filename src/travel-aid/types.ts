@@ -1,7 +1,7 @@
-import {RequireValue} from '@atb/utils/object';
-import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import type {RequireValue} from '@atb/utils/object';
+import type {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
-export type ServiceJourneyDepartureWithGuaranteedCalls = RequireValue<
-    ServiceJourneyWithEstCallsFragment,
-    'estimatedCalls'
+export type ServiceJourneyWithGuaranteedCalls = RequireValue<
+  ServiceJourneyWithEstCallsFragment,
+  'estimatedCalls'
 >;

@@ -40,7 +40,7 @@ import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 import {isDefined} from '@atb/utils/presence';
 import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
-import type {ServiceJourneyDepartureWithGuaranteedCalls} from '@atb/travel-aid/types';
+import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
 import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
@@ -125,7 +125,7 @@ const TravelAidSection = ({
   sendStopSignal,
   sendStopSignalStatus,
 }: {
-  serviceJourney: ServiceJourneyDepartureWithGuaranteedCalls;
+  serviceJourney: ServiceJourneyWithGuaranteedCalls;
   fromQuayId?: string;
   focusRef: Ref<any>;
   sendStopSignal: (args: SendStopSignalRequestType) => void;

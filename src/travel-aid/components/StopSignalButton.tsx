@@ -7,7 +7,7 @@ import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragm
 import {AUTHORITY} from '@env';
 import {addMinutes, isBetween} from '@atb/utils/date';
 import React from 'react';
-import type {ServiceJourneyDepartureWithGuaranteedCalls} from '@atb/travel-aid/types';
+import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
 import {View} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -20,7 +20,7 @@ export const StopSignalButton = ({
   onPress,
   status,
 }: {
-  serviceJourney: ServiceJourneyDepartureWithGuaranteedCalls;
+  serviceJourney: ServiceJourneyWithGuaranteedCalls;
   fromQuayId?: string;
   onPress: (args: SendStopSignalRequestType) => void;
   status: MutationStatus;
@@ -74,7 +74,7 @@ export const StopSignalButton = ({
 };
 
 const shouldShowStopButton = (
-  serviceJourney: ServiceJourneyDepartureWithGuaranteedCalls,
+  serviceJourney: ServiceJourneyWithGuaranteedCalls,
   call: EstimatedCallWithQuayFragment,
 ) => {
   return (
