@@ -4,7 +4,7 @@ export const throttle = <F extends (...args: any[]) => any>(
 ) => {
   const now = () => new Date().getTime();
   const resetStartTime = () => (startTime = now());
-  let timeout: number;
+  let timeout: NodeJS.Timeout;
   let startTime: number = now() - waitFor;
 
   return (...args: Parameters<F>): Promise<ReturnType<F>> =>
