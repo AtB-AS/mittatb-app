@@ -100,7 +100,6 @@ export const TravelAidScreenComponent = ({
               ...serviceJourney,
               estimatedCalls: serviceJourney.estimatedCalls,
             }}
-            isTripCancelled={serviceJourneyDeparture.isTripCancelled}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
             focusRef={focusRef}
           />
@@ -112,7 +111,6 @@ export const TravelAidScreenComponent = ({
 
 const TravelAidSection = ({
   serviceJourney,
-  isTripCancelled,
   fromQuayId,
   focusRef,
 }: {
@@ -120,7 +118,6 @@ const TravelAidSection = ({
     ServiceJourneyWithEstCallsFragment,
     'estimatedCalls'
   >;
-  isTripCancelled?: boolean;
   fromQuayId?: string;
   focusRef: Ref<any>;
 }) => {
@@ -142,11 +139,13 @@ const TravelAidSection = ({
       focusedEstimatedCall.quay.id,
     ).sort((n1, n2) => n1.id.localeCompare(n2.id)) ?? [];
 
+  const isCancelled = focusedEstimatedCall.cancellation;
+
   useTravelAidAnnouncements(
     {status, focusedEstimatedCall},
     situationsForFocused,
     noticesForFocused,
-    isTripCancelled ?? false,
+    isCancelled,
   );
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
@@ -190,11 +189,11 @@ const TravelAidSection = ({
             />
           )}
 
-          {(isTripCancelled ||
+          {(isCancelled ||
             situationsForFocused.length > 0 ||
             noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
-              {isTripCancelled && <CancelledDepartureMessage />}
+              {isCancelled && <CancelledDepartureMessage />}
 
               {situationsForFocused.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
@@ -231,7 +230,7 @@ const useTravelAidAnnouncements = (
   state: FocusedEstimatedCallState,
   situationsForFocusedStop: SituationType[],
   noticesForFocusedStop: NoticeFragment[],
-  isTripCancelled: boolean,
+  cancelled: boolean,
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
@@ -257,9 +256,7 @@ const useTravelAidAnnouncements = (
 
   const message =
     getFocussedStateA11yLabel(state, t, language) +
-    (isTripCancelled
-      ? screenReaderPause + t(CancelledDepartureTexts.message)
-      : '');
+    (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '');
   screenReaderPause +
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
