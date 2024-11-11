@@ -157,3 +157,40 @@ export const isValidSelection = (
 
   return true;
 };
+
+/**
+ * Apply product change on a purcase selection, returning a new selection with
+ * the new product applied, and also the existing user profiles and zones
+ * selection are validated in regard to limitations on the new product. If the
+ * current profiles/zones are not applicable, then defaults are applied.
+ */
+export const applyProductChange = (
+  input: PurchaseSelectionBuilderInput,
+  currentSelection: PurchaseSelectionType,
+  product: PreassignedFareProduct,
+): PurchaseSelectionType => {
+  const selectableProfiles = currentSelection.userProfilesWithCount.filter(
+    (up) => isSelectableProfile(product, up),
+  );
+
+  const isFromZoneValid =
+    'geometry' in currentSelection.fromPlace &&
+    isSelectableZone(product, currentSelection.fromPlace);
+
+  const isToZoneValid =
+    'geometry' in currentSelection.toPlace &&
+    isSelectableZone(product, currentSelection.toPlace);
+
+  const bothZonesValid = isFromZoneValid && isToZoneValid;
+  const newZone = bothZonesValid ? undefined : getDefaultZone(input, product);
+
+  return {
+    ...currentSelection,
+    preassignedFareProduct: product,
+    userProfilesWithCount: selectableProfiles.length
+      ? selectableProfiles
+      : getDefaultUserProfiles(input, product),
+    fromPlace: newZone ?? currentSelection.fromPlace,
+    toPlace: newZone ?? currentSelection.toPlace,
+  };
+};

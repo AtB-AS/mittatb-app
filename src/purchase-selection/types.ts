@@ -52,7 +52,9 @@ export type PurchaseSelectionEmptyBuilder = {
 export type PurchaseSelectionBuilder = {
   /**
    * Apply the given product to the purchase selection. If the given product is
-   * not applicable the purchase selection will stay unmodified.
+   * not applicable the purchase selection will stay unmodified. Change of
+   * product can modify profile or zones if the new product has limitations
+   * which makes the currently selected profile/zone not applicable.
    */
   product: (p: PreassignedFareProduct) => PurchaseSelectionBuilder;
 

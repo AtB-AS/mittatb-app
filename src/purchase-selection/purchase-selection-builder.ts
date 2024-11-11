@@ -5,6 +5,7 @@ import type {
   PurchaseSelectionType,
 } from './types';
 import {
+  applyProductChange,
   getDefaultProduct,
   getDefaultUserProfiles,
   getDefaultZone,
@@ -45,8 +46,13 @@ const createBuilder = (
       if (
         isSelectableProduct(input, currentSelection, preassignedFareProduct)
       ) {
-        currentSelection = {...currentSelection, preassignedFareProduct};
+        currentSelection = applyProductChange(
+          input,
+          currentSelection,
+          preassignedFareProduct,
+        );
       }
+
       return builder;
     },
     from: (fromPlace) => {
