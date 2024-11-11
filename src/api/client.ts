@@ -172,7 +172,7 @@ export type TimeoutRequest = {
 export const useTimeoutRequest = (): TimeoutRequest => {
   const controller = new AbortController();
   let didTimeout = false;
-  let timerId: number | undefined;
+  let timerId: NodeJS.Timeout | undefined;
 
   const start = () => {
     timerId = setTimeout(() => {
