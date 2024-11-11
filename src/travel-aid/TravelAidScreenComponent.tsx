@@ -142,25 +142,16 @@ const TravelAidSection = ({
       focusedEstimatedCall.quay.id,
     ).sort((n1, n2) => n1.id.localeCompare(n2.id)) ?? [];
 
-  const announcedSituationIds = situationsForFocused
-    .map((s) => s.id)
-    .filter(onlyUniques);
-  const announcedNoticeIds = noticesForFocused
-    .map((s) => s.id)
-    .filter(onlyUniques);
-
   useTravelAidAnnouncements(
     {status, focusedEstimatedCall},
     situationsForFocused,
     noticesForFocused,
     isTripCancelled ?? false,
-    announcedSituationIds,
-    announcedNoticeIds,
   );
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
-  const accessibilityLabel = getFocussedStateA11yLabel(
+  const focussedStateA11yLabel = getFocussedStateA11yLabel(
     {status, focusedEstimatedCall},
     t,
     language,
@@ -219,7 +210,7 @@ const TravelAidSection = ({
           )}
           <View
             accessible
-            accessibilityLabel={accessibilityLabel}
+            accessibilityLabel={focussedStateA11yLabel}
             style={styles.stopHeaderContainer}
           >
             <View>
@@ -241,11 +232,16 @@ const useTravelAidAnnouncements = (
   situationsForFocusedStop: SituationType[],
   noticesForFocusedStop: NoticeFragment[],
   isTripCancelled: boolean,
-  announcedSituationIds: string[],
-  announcedNoticeIds: string[],
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
+
+  const announcedSituationIds = situationsForFocusedStop
+    .map((s) => s.id)
+    .filter(onlyUniques);
+  const announcedNoticeIds = noticesForFocusedStop
+    .map((s) => s.id)
+    .filter(onlyUniques);
 
   const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
     useState<string[]>(announcedSituationIds);
