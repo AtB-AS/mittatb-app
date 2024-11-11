@@ -32,15 +32,18 @@ import {
   TravelAidStatus,
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
-import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names.ts';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationMessageBox} from '@atb/situations';
-import {RequireValue} from '@atb/utils/object';
 import {getSituationSummary} from '@atb/situations/utils';
 import {SituationType} from '@atb/situations/types';
 import {isDefined} from '@atb/utils/presence';
+import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
+import type {ServiceJourneyDepartureWithGuaranteedCalls} from '@atb/travel-aid/types';
+import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
+import {MutationStatus} from '@tanstack/react-query';
+import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -52,6 +55,7 @@ export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
 }: Props) => {
+  const stopSignalMutation = useStopSignalMutation();
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
@@ -67,7 +71,13 @@ export const TravelAidScreenComponent = ({
   );
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView
+      style={
+        stopSignalMutation.status === 'success'
+          ? styles.container_afterSentSignal
+          : styles.container_notSentSignal
+      }
+    >
       <StatusBarOnFocus
         barStyle={themeName === 'light' ? 'dark-content' : 'light-content'}
       />
@@ -78,7 +88,7 @@ export const TravelAidScreenComponent = ({
         mode="tertiary"
         type="medium"
       />
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
         {status === 'loading' && (
           <ActivityIndicator size="large" ref={focusRef} />
         )}
@@ -99,6 +109,8 @@ export const TravelAidScreenComponent = ({
             }}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
             focusRef={focusRef}
+            sendStopSignal={stopSignalMutation.mutate}
+            sendStopSignalStatus={stopSignalMutation.status}
           />
         )}
       </ScrollView>
@@ -110,13 +122,14 @@ const TravelAidSection = ({
   serviceJourney,
   fromQuayId,
   focusRef,
+  sendStopSignal,
+  sendStopSignalStatus,
 }: {
-  serviceJourney: RequireValue<
-    ServiceJourneyWithEstCallsFragment,
-    'estimatedCalls'
-  >;
+  serviceJourney: ServiceJourneyDepartureWithGuaranteedCalls;
   fromQuayId?: string;
   focusRef: Ref<any>;
+  sendStopSignal: (args: SendStopSignalRequestType) => void;
+  sendStopSignalStatus: MutationStatus;
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -206,6 +219,12 @@ const TravelAidSection = ({
             <ThemeText type="heading__title">{quayName}</ThemeText>
           </View>
           <TimeInfo state={{status, focusedEstimatedCall}} />
+          <StopSignalButton
+            serviceJourney={serviceJourney}
+            fromQuayId={fromQuayId}
+            onPress={sendStopSignal}
+            status={sendStopSignalStatus}
+          />
         </View>
       </GenericSectionItem>
     </Section>
@@ -370,7 +389,15 @@ const getStopHeader = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
+  container_notSentSignal: {
+    flex: 1,
+    backgroundColor: theme.color.background.neutral['1'].background,
+  },
+  container_afterSentSignal: {
+    flex: 1,
+    backgroundColor: theme.color.background.accent['3'].background,
+  },
+  scrollView: {
     paddingHorizontal: theme.spacing.medium,
     gap: theme.spacing.medium,
   },

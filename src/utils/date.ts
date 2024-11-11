@@ -4,6 +4,7 @@ import {
   Locale,
   RoundingMethod,
   addHours,
+  addMinutes as fnsAddMinutes,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
@@ -509,6 +510,9 @@ export function differenceInMinutesStrings(
 ) {
   return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }
+
+export const addMinutes = (date: string | Date, minutes: number): Date =>
+  fnsAddMinutes(parseIfNeeded(date), minutes);
 
 const languageToLocale = (language: Language): Locale => {
   switch (language) {
