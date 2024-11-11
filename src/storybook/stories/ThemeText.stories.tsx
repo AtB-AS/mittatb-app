@@ -1,7 +1,7 @@
 import {textNames} from '@atb-as/theme';
 import {ThemeText, ThemeTextProps} from '@atb/components/text';
 import {themes} from '@atb/theme/colors';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {
   ThemedStoryDecorator,
   ThemedStoryProps,

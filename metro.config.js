@@ -1,13 +1,13 @@
+const path = require('path');
+const withStorybook = require('@storybook/react-native/metro/withStorybook');
 const {getDefaultConfig} = require('@react-native/metro-config');
 
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
-const config = getDefaultConfig(__dirname);
+const defaultConfig = getDefaultConfig(__dirname);
 
-config.resolver.resolverMainFields.unshift("sbmodern");
-
-module.exports = config;
+module.exports = withStorybook(defaultConfig, {
+  // set to false to disable storybook specific settings
+  // you can use a env variable to toggle this
+  enabled: true,
+  // path to your storybook config folder
+  configPath: path.resolve(__dirname, './.storybook'),
+});

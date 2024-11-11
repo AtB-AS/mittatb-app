@@ -11,7 +11,7 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {ThemeText} from '@atb/components/text';
 
 type MetaPropsInputLayer = SnackbarTextContent & {
