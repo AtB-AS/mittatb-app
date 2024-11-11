@@ -5,7 +5,11 @@ export type ServiceJourneyWithEstCallsFragment = {
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
   publicCode?: string;
-  line: {publicCode?: string; notices: Array<{id: string; text?: string}>};
+  line: {
+    publicCode?: string;
+    authority?: {id: string; name: string; url?: string};
+    notices: Array<{id: string; text?: string}>;
+  };
   journeyPattern?: {notices: Array<{id: string; text?: string}>};
   notices: Array<{id: string; text?: string}>;
   estimatedCalls?: Array<{
@@ -30,6 +34,7 @@ export type ServiceJourneyWithEstCallsFragment = {
         name: string;
         latitude?: number;
         longitude?: number;
+        transportMode?: Array<Types.TransportMode>;
       };
       tariffZones: Array<{id: string; name?: string}>;
     };
