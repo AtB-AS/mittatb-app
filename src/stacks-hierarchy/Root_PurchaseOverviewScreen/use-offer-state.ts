@@ -19,7 +19,7 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 };
 
 export type OfferError = {
-  type: ErrorType | 'empty-offers';
+  type: ErrorType | 'empty-offers' | 'not-available';
 };
 
 type OfferState = {
@@ -233,8 +233,13 @@ export function useOfferState(
               },
             });
           }
-        } catch (err) {
-          const errorType = getAxiosErrorType(err);
+        } catch (err: any) {
+          const isNotAvailableError =
+            err.response?.status === 400 &&
+            err.response?.data === 'NotAvailable';
+          const errorType = isNotAvailableError
+            ? 'not-available'
+            : getAxiosErrorType(err);
           if (errorType !== 'cancel') {
             console.warn(err);
             dispatch({

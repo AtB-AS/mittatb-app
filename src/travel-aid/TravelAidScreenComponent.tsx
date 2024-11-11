@@ -18,7 +18,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
-import {getLineA11yLabel} from '@atb/travel-details-screens/utils';
+import {
+  getLineA11yLabel,
+  getNoticesForServiceJourney,
+} from '@atb/travel-details-screens/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -123,30 +126,24 @@ const TravelAidSection = ({
     fromQuayId,
   );
 
-  const selectedEstimatedCall = serviceJourney.estimatedCalls.find(
-    (e) => e.quay.id === fromQuayId,
+  const situationsForFocused = focusedEstimatedCall.situations ?? [];
+  const noticesForFocused = getNoticesForServiceJourney(
+    serviceJourney,
+    focusedEstimatedCall.quay.id,
   );
-  const situationsForSelected =
-    selectedEstimatedCall?.situations.sort((n1, n2) =>
-      n1.id.localeCompare(n2.id),
-    ) ?? [];
-  const noticesForSelected = selectedEstimatedCall?.notices ?? [];
-  const situationsForFocusedStop =
-    focusedEstimatedCall.situations.filter((situation) =>
-      situationsForSelected?.find((s) => s.id !== situation.id),
-    ) ?? [];
 
   useTravelAidAnnouncements(
     {status, focusedEstimatedCall},
-    situationsForFocusedStop,
+    situationsForFocused,
+    noticesForFocused,
   );
 
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
   const accessibilityLabel =
-    getSituationA11yLabel(situationsForSelected, language) +
+    getNoticesA11yLabel(noticesForFocused) +
     screenReaderPause +
-    getNoticesA11yLabel(noticesForSelected) +
+    getSituationA11yLabel(situationsForFocused, language) +
     screenReaderPause +
     getFocussedStateA11yLabel({status, focusedEstimatedCall}, t, language);
 
@@ -187,24 +184,19 @@ const TravelAidSection = ({
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
           )}
-          {(situationsForSelected.length > 0 ||
-            noticesForSelected.length > 0 ||
-            situationsForFocusedStop.length > 0) && (
+          {(situationsForFocused.length > 0 ||
+            noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
-              {situationsForSelected.map((situation) => (
+              {situationsForFocused.map((situation) => (
                 <SituationMessageBox key={situation.id} situation={situation} />
               ))}
 
-              {noticesForSelected.map(
+              {noticesForFocused.map(
                 (notice) =>
                   notice.text && (
                     <MessageInfoBox type="info" message={notice.text} />
                   ),
               )}
-
-              {situationsForFocusedStop.map((situation) => (
-                <SituationMessageBox key={situation.id} situation={situation} />
-              ))}
             </View>
           )}
           <View style={styles.subContainer}>
@@ -223,11 +215,13 @@ const TravelAidSection = ({
 const useTravelAidAnnouncements = (
   state: FocusedEstimatedCallState,
   situationsForFocusedStop: SituationType[],
+  noticesForFocusedStop: NoticeFragment[],
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
   const message = getFocussedStateA11yLabel(state, t, language);
   const situations = getSituationA11yLabel(situationsForFocusedStop, language);
+  const notices = getNoticesA11yLabel(noticesForFocusedStop);
   const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
 
   useEffect(() => {
@@ -239,12 +233,12 @@ const useTravelAidAnnouncements = (
     if (state.focusedEstimatedCall.quay.id !== previousQuayId.current) {
       previousQuayId.current = state.focusedEstimatedCall.quay.id;
       AccessibilityInfo.announceForAccessibility(
-        message + screenReaderPause + situations,
+        message + screenReaderPause + notices + screenReaderPause + situations,
       );
     } else {
       AccessibilityInfo.announceForAccessibility(message);
     }
-  }, [message, situations, state.focusedEstimatedCall.quay.id]);
+  }, [message, situations, notices, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {

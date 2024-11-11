@@ -7,8 +7,7 @@ through APIs defined in [WebdriverIO API](https://webdriver.io/docs/api).
 In order to measure the app's performance, there is also added a script for this that relies on [Flashlight](https://docs.flashlight.dev/). 
 Flashlight is a stand-alone command line tool that will measure FPS, CPU, CPU per thread and memory usage while the app
 is used. It supports either manual start and stop while the app is used, or it can be started with a testscript like
-WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure). Flashlight kan also be used as a plugin to 
-Flipper as the `android-performance-profiler` plugin (same organization as is behind the `RN Perf Monitor` Flipper plugin).
+WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure).
 
 ## Install
 

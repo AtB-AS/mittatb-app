@@ -23,22 +23,9 @@ setup_permissions([
   'Notifications',
 ])
 
-# If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
-# because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
-#
-# To fix this you can also exclude `react-native-flipper` using a `react-native.config.js`
-# ```js
-# module.exports = {
-#   dependencies: {
-#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
-# ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+use_frameworks! :linkage => :static
+$RNFirebaseAsStaticFramework = true
 
 production = ENV["PRODUCTION"] == "1"
 
@@ -50,20 +37,11 @@ $RNMapboxMapsImpl = 'mapbox'
 $RNMapboxMapsVersion = '~> 10.18.2'
 
 target 'app' do
-  pod 'Firebase', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
-  pod 'GoogleUtilities', :modular_headers => true
-
   config = use_native_modules!
 
   use_react_native!(
     :path => config[:reactNativePath],
     :production => production,
-    # Enables Flipper.
-    #
-    # Note that if you have use_frameworks! enabled, Flipper will not work and
-    # you should disable the next line.
-    :flipper_configuration => flipper_config,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -121,18 +99,6 @@ target 'app' do
     # https://stackoverflow.com/questions/48122769/facebook-cocoapods-sharedapplication-is-unavailable-not-available-on-ios-app
     # TODO: Find a better way to exclude react-native from extensions
     installer.pods_project.targets.each do |target|
-      # Workaround fix for Xcode 15.3
-      # https://github.com/facebook/react-native/issues/43335#issuecomment-1980708164
-      if target.name == 'Flipper'
-        file_path = 'Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h'
-        contents = File.read(file_path)
-        unless contents.include?('#include <functional>')
-          File.open(file_path, 'w') do |file|
-            file.puts('#include <functional>')
-            file.puts(contents)
-          end
-        end
-      end
       if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
         target.build_configurations.each do |config|
             config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
@@ -143,6 +109,15 @@ target 'app' do
 
   pre_install do |installer|
     $RNMapboxMaps.pre_install(installer)
+    # Workaround to get ReactNativeCameraKit to work with statically linked frameworks
+    # https://github.com/teslamotors/react-native-camera-kit/issues/578#issuecomment-1920367530
+    installer.pod_targets.each do |pod|
+      if pod.name.eql?('ReactNativeCameraKit')
+        def pod.build_type
+          Pod::BuildType.static_library
+        end
+      end
+    end
   end
 
 end

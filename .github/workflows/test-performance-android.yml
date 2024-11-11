@@ -19,12 +19,12 @@ on:
         required: true
         default: 'master'
   schedule:
-    - cron: '0 7 * * *'
+    - cron: '0 7 * * 1-5'
 
 jobs:
   run_tests:
     name: Performance measures for Android
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
     environment: atb
@@ -43,7 +43,7 @@ jobs:
           echo "INPUT_MAX_RETRIES=${{ github.event.inputs.max_retries || env.DEFAULT_MAX_RETRIES }}" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.INPUT_BRANCH }}
 
@@ -65,16 +65,8 @@ jobs:
       - name: Install Flashlight
         #run: sh ./scripts/install-flashlight.sh
         run: curl https://get.flashlight.dev | bash
-        #working-directory: e2e
-      #- name: Install Appium
-      #  run: npm install -g appium
-      #- name: Install uiautomator2 driver
-      #  run: appium driver install uiautomator2
-      - name: Add Entur private registry credentials
-        run: bash ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Setup Python and its dependencies
+        uses: ./.github/actions/python-setup
       - name: Install E2E tests
         run: yarn install
         working-directory: e2e
@@ -82,11 +74,23 @@ jobs:
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
-      # E2E run
-      - name: Run tests on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        continue-on-error: true
+      # Emulator cache
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
         with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-${{ env.INPUT_API_LEVEL }}
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
@@ -94,35 +98,54 @@ jobs:
           emulator-build: 11237101
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
-          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      # E2E run
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
+        with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 11237101
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          disable-animations: true
+          script: ./scripts/run-flashlight-tests.sh ${{ env.INPUT_TEST_ITERATIONS }} ${{ env.INPUT_MAX_RETRIES }}
+          pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
+          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
 
       # Results
-      - name: Check for performance report
-        run: |
-          if [ ! -f ./e2e/performance_measures_*.json ];
-          then
-            exit 1
-          else
-            cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
-          fi
-      - name: Create performance summary
-        working-directory: e2e/performance
-        run: npx tsx createPerformanceSummary.ts
-        env:
-          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
-      - name: Print performance summary
-        working-directory: e2e/performance
-        run: cat performance_measures_summary.json | jq .
+      #- name: Check for performance report
+      #  run: |
+      #    if [ ! -f ./e2e/performance_measures_*.json ];
+      #    then
+      #      exit 1
+      #    else
+      #      cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
+      #    fi
+      #- name: Create performance summary
+      #  working-directory: e2e/performance
+      #  run: npx tsx createPerformanceSummary.ts
+      #  env:
+      #    TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      #- name: Print performance summary
+      #  working-directory: e2e/performance
+      #  run: cat performance_measures_summary.json | jq .
 
       # Uploads
       - name: Upload performance reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance_measures
           path: |
@@ -130,15 +153,15 @@ jobs:
           retention-days: 1
       - name: Upload performance summary
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance_measures_summary
           path: |
-            ./e2e/performance/performance_measures_summary.json
+            ./e2e/performance_measures_summary_*.json
           retention-days: 1
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png

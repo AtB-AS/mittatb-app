@@ -18,12 +18,19 @@ const PurchaseOverviewTexts = {
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
       'Oops - vi klarte ikkje å finne prisinformasjonen. Prøv igjen 🤞',
     ),
-    productUnavailable: (productName: string) =>
-      _(
-        `${productName} er ikke tilgjengelig akkurat nå.`,
-        `${productName} is not available right now.`,
-        `${productName} er ikkje tilgjengeleg nett no.`,
+    productUnavailable: {
+      title: (productName: string) =>
+        _(
+          `${productName} er ikke gyldig nå`,
+          `${productName} is not valid now`,
+          `${productName} er ikkje gyldig no`,
+        ),
+      message: _(
+        `Du må velge en annen billett fra billettoversikten.`,
+        `You need to choose a different ticket from the ticket overview.`,
+        `Du må velje ein annan billett frå billettoversikta.`,
       ),
+    },
   },
   travellers: {
     prefix: _('Nåværende valg: ', 'Current selection: ', 'Noverande val: '),

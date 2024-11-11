@@ -105,7 +105,7 @@ android {
         }
         uploadReactNativeMappings = true // enables upload of React Native source maps
     }
-    
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -186,8 +186,6 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.0"
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.6'
-
-    debugImplementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

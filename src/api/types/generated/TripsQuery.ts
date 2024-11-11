@@ -4,14 +4,14 @@ import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
-  arriveBy: Types.Scalars['Boolean'];
-  when?: Types.Maybe<Types.Scalars['DateTime']>;
-  cursor?: Types.Maybe<Types.Scalars['String']>;
-  transferSlack?: Types.Maybe<Types.Scalars['Int']>;
-  transferPenalty?: Types.Maybe<Types.Scalars['Int']>;
-  waitReluctance?: Types.Maybe<Types.Scalars['Float']>;
-  walkReluctance?: Types.Maybe<Types.Scalars['Float']>;
-  walkSpeed?: Types.Maybe<Types.Scalars['Float']>;
+  arriveBy: Types.Scalars['Boolean']['input'];
+  when?: Types.Maybe<Types.Scalars['DateTime']['input']>;
+  cursor?: Types.Maybe<Types.Scalars['String']['input']>;
+  transferSlack?: Types.Maybe<Types.Scalars['Int']['input']>;
+  transferPenalty?: Types.Maybe<Types.Scalars['Int']['input']>;
+  waitReluctance?: Types.Maybe<Types.Scalars['Float']['input']>;
+  walkReluctance?: Types.Maybe<Types.Scalars['Float']['input']>;
+  walkSpeed?: Types.Maybe<Types.Scalars['Float']['input']>;
   modes?: Types.Modes;
 }>;
 

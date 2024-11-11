@@ -2,8 +2,8 @@ import * as Types_v3 from './generated/journey_planner_v3_types';
 
 export type ServiceJourneyMapInfoData_v3 = {
   mapLegs: MapLeg_v3[];
-  start?: Types_v3.Scalars['Coordinates'];
-  stop?: Types_v3.Scalars['Coordinates'];
+  start?: Types_v3.Scalars['Coordinates']['output'];
+  stop?: Types_v3.Scalars['Coordinates']['output'];
 };
 
 export type MapLeg_v3 = {

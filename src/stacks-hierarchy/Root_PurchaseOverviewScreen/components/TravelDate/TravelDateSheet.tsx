@@ -8,13 +8,7 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravelDateTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {
-  dateWithReplacedTime,
-  formatLocaleTime,
-  formatToVerboseFullDate,
-  isAfter,
-} from '@atb/utils/date';
+import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {
   BottomSheetContainer,
   useBottomSheet,
@@ -22,51 +16,19 @@ import {
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
-import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   travelDate?: string;
   save: (dateString?: string) => void;
-  maximumDate?: Date;
-  showActivationDateWarning?: boolean;
-  setShowActivationDateWarning: (value: boolean) => void;
 };
 
-export const TravelDateSheet = ({
-  travelDate,
-  save,
-  maximumDate,
-  showActivationDateWarning,
-  setShowActivationDateWarning,
-}: Props) => {
+export const TravelDateSheet = ({travelDate, save}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useTheme();
 
   const defaultDate = travelDate ?? new Date().toISOString();
   const [dateString, setDate] = useState(defaultDate);
-  const [
-    replicatedShowActivationDateWarning,
-    setReplicatedShowActivationDateWarning,
-  ] = useState<boolean | undefined>(showActivationDateWarning);
-
-  const setInternalAndExternalWarningState = (value: boolean) => {
-    setShowActivationDateWarning(value);
-    setReplicatedShowActivationDateWarning(value);
-  };
-
-  const onSetDate = (date: string) => {
-    if (!maximumDate) setDate(date);
-    else {
-      if (isAfter(date, maximumDate)) {
-        setInternalAndExternalWarningState(true);
-      } else if (replicatedShowActivationDateWarning) {
-        setInternalAndExternalWarningState(false);
-      }
-
-      setDate(date);
-    }
-  };
 
   const [timeString, setTime] = useState(() =>
     formatLocaleTime(defaultDate, language),
@@ -85,36 +47,10 @@ export const TravelDateSheet = ({
         contentContainerStyle={styles.contentContainer}
         centerContent={true}
       >
-        {maximumDate && (
-          <MessageInfoText
-            type="info"
-            style={styles.messageBox}
-            message={t(
-              TravelDateTexts.latestActivationDate.warning(
-                formatToVerboseFullDate(maximumDate, language),
-              ),
-            )}
-          />
-        )}
-
         <Section>
-          <DateInputSectionItem
-            value={dateString}
-            onChange={onSetDate}
-            maximumDate={maximumDate}
-          />
+          <DateInputSectionItem value={dateString} onChange={setDate} />
           <TimeInputSectionItem value={timeString} onChange={setTime} />
         </Section>
-        {replicatedShowActivationDateWarning && (
-          <MessageInfoBox
-            style={styles.dateWarningMessageBox}
-            type="warning"
-            message={t(
-              TravelDateTexts.latestActivationDate
-                .selectedDateShouldBeEarlierWarning,
-            )}
-          />
-        )}
       </ScrollView>
       <FullScreenFooter>
         <Button
@@ -124,7 +60,6 @@ export const TravelDateSheet = ({
           style={[styles.saveButton, {marginBottom: keyboardHeight}]}
           testID="confirmTimeButton"
           rightIcon={{svg: SvgConfirm}}
-          disabled={replicatedShowActivationDateWarning}
         />
       </FullScreenFooter>
     </BottomSheetContainer>
