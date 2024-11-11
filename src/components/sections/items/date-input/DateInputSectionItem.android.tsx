@@ -1,7 +1,9 @@
 import {useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {formatToSimpleDate} from '@atb/utils/date';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
 import React, {useState} from 'react';
 import {ButtonSectionItem} from '../ButtonSectionItem';
@@ -31,7 +33,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
           locale={locale.localeString}
           minimumDate={new Date()}
           textColor={theme.color.foreground.dynamic.primary}
-          onChange={(_: Event, date?: Date) => {
+          onChange={(_: DateTimePickerEvent, date?: Date) => {
             if (date) onChange(date.toISOString());
             setShow(false);
           }}
