@@ -2354,6 +2354,29 @@ PODS:
     - Turf
   - RNPermissions (4.1.5):
     - React-Core
+  - RNReanimated (3.16.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated (= 3.16.1)
+    - RNReanimated/worklets (= 3.16.1)
+  - RNReanimated/reanimated (3.16.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated/apple (= 3.16.1)
+  - RNReanimated/reanimated/apple (3.16.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNReanimated/worklets (3.16.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.34.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -2461,6 +2484,7 @@ DEPENDENCIES:
   - RNLocalize (from `../node_modules/react-native-localize`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
@@ -2670,6 +2694,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@rnmapbox/maps"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -2819,6 +2845,7 @@ SPEC CHECKSUMS:
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   rnmapbox-maps: 91a8a19f9ad55c88024e4cee59c20f905d3a1195
   RNPermissions: 47db57715014b92750634e0fd5c0287fa7156007
+  RNReanimated: 7203f932c68e763b00af46d2e8a2983d10dc94b9
   RNScreens: b7eeec2c5d2658dac8c30d2de57dcaabd368d239
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

@@ -1,13 +1,25 @@
 const path = require('path');
 const withStorybook = require('@storybook/react-native/metro/withStorybook');
-const {getDefaultConfig} = require('@react-native/metro-config');
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const {
+  wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config');
 
 const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = withStorybook(defaultConfig, {
-  // set to false to disable storybook specific settings
-  // you can use a env variable to toggle this
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+let config = {};
+
+config = mergeConfig(defaultConfig, config);
+config = withStorybook(config, {
   enabled: true,
-  // path to your storybook config folder
   configPath: path.resolve(__dirname, './.storybook'),
 });
+config = wrapWithReanimatedMetroConfig(config);
+
+module.exports = config;
