@@ -15,7 +15,7 @@ import {
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shadows} from '@atb/components/map';
-import { ContrastColor, InteractiveColor } from '@atb/theme/colors';
+import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -127,8 +127,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const textColor =
       mode !== 'primary'
         ? textColorBasedOnBackground
-        : interactiveColor[active ? 'active' : 'default']
-            .foreground.primary;
+        : interactiveColor[active ? 'active' : 'default'].foreground.primary;
 
     const borderColor =
       active && mode === 'primary'
@@ -193,8 +192,8 @@ export const Button = React.forwardRef<any, ButtonProps>(
       >
         <PressableOpacity
           style={[styleContainer, hasShadow ? shadows : undefined]}
-          onPress={disabled ? undefined : onPress}
-          disabled={disabled}
+          onPress={disabled || loading ? undefined : onPress}
+          disabled={disabled || loading}
           accessibilityRole="button"
           accessibilityState={{disabled: !!disabled}}
           ref={ref}
