@@ -15,6 +15,15 @@ export const TravelAidTexts = {
       `Scheduled at ${time}`,
       `Rutetid klokken. ${time}`,
     ),
+  stopButton: {
+    text: _('Send stopp', 'Send stop', 'Send stopp'),
+    textAfterSubmit: _('Stopp sendt', 'Stop sent', 'Stopp sendt'),
+    notAvailable: _(
+      'Ikke mulig å sende stopp signal nå',
+      'Not possible to send stop signal now',
+      'Ikke mogleg å sende stopp signal no',
+    ),
+  },
   clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
   error: {
     message: _(
