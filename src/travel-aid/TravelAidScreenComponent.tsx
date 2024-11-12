@@ -72,9 +72,9 @@ export const TravelAidScreenComponent = ({
   );
 
   const bgContrastColor: ContrastColor =
-      stopSignalMutation.status === 'success'
-          ? theme.color.background.neutral['1']
-          : theme.color.background.accent['2'];
+    stopSignalMutation.status === 'success'
+      ? theme.color.background.accent['2']
+      : theme.color.background.neutral['1'];
 
   return (
     <SafeAreaView
