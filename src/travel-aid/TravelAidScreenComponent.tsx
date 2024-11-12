@@ -234,6 +234,7 @@ const useTravelAidAnnouncements = (
 ) => {
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
+  const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
 
   const announcedSituationIds = situationsForFocusedStop
     .map((s) => s.id)
@@ -261,6 +262,7 @@ const useTravelAidAnnouncements = (
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(newNotices);
+  const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
 
   if (newSituations.length > 0) {
     setCurrentAnnouncedSituationIds((prev) => [
@@ -281,9 +283,14 @@ const useTravelAidAnnouncements = (
       isFirstRender.current = false;
       return;
     }
-
-    AccessibilityInfo.announceForAccessibility(message);
-  }, [message]);
+    if (previousQuayId.current === state.focusedEstimatedCall.quay.id) {
+      // Only announce the time if the focused estimated call hasn't changed
+      AccessibilityInfo.announceForAccessibility(timeInfoMessage);
+    } else {
+      AccessibilityInfo.announceForAccessibility(message);
+    }
+    previousQuayId.current = state.focusedEstimatedCall.quay.id;
+  }, [message, timeInfoMessage, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
