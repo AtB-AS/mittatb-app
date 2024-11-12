@@ -1,6 +1,8 @@
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import React, {useMemo, useState} from 'react';
 import {ButtonSectionItem} from '../ButtonSectionItem';
 import {dateToTimeString, TimeInputSectionItemProps} from './utils';
@@ -36,7 +38,7 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
           value={time}
           mode="time"
           is24Hour
-          onChange={(_: Event, date?: Date) => {
+          onChange={(_: DateTimePickerEvent, date?: Date) => {
             setShow(false);
             onChange(dateToTimeString(date, language));
           }}

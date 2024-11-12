@@ -1,5 +1,5 @@
 import {TicketRecipientType} from '@atb/ticketing';
-import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types.ts';
+import {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type Root_PurchaseConfirmationScreenParams = {
   selection: PurchaseSelectionType;

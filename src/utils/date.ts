@@ -23,6 +23,7 @@ import {
   parseISO,
   roundToNearestMinutes,
   set,
+  isValid,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -595,4 +596,9 @@ function getHumanizer(
   };
 
   return humanizer(ms, opts);
+}
+
+export const isValidDateString = (dateString: string) => {
+  const parsedDate = parseISO(dateString);
+  return isValid(parsedDate);
 }

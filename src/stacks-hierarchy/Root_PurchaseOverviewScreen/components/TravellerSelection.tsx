@@ -9,6 +9,7 @@ import {
   FareProductTypeConfig,
   getReferenceDataName,
   TravellerSelectionMode,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {
   GenericClickableSectionItem,
@@ -29,6 +30,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
 import {useFeatureToggles} from "@atb/feature-toggles";
+import {getSelectableUserProfiles} from '@atb/purchase-selection';
+import {PreassignedFareProduct} from '@atb-as/config-specs';
 
 type TravellerSelectionProps = {
   userProfilesWithCount: UserProfileWithCount[];
@@ -38,6 +41,7 @@ type TravellerSelectionProps = {
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
   fareProductTypeConfig: FareProductTypeConfig;
+  preassignedFareProduct: PreassignedFareProduct;
   setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -48,12 +52,14 @@ export function TravellerSelection({
   userProfilesWithCount,
   selectionMode,
   fareProductTypeConfig,
+  preassignedFareProduct,
   setIsOnBehalfOfToggle,
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
+  const {userProfiles} = useFirestoreConfiguration();
 
   const {
     open: openBottomSheet,
@@ -72,9 +78,19 @@ export function TravellerSelection({
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
+  const selectableUserProfiles = getSelectableUserProfiles(
+    userProfiles,
+    preassignedFareProduct,
+  );
+
+  const userProfilesWithCountToShow = selectableUserProfiles.map((u) => ({
+    ...u,
+    count: userProfilesWithCount.find(({id}) => id === u.id)?.count ?? 0,
+  }));
+
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
-    userProfilesWithCount,
+    userProfilesWithCountToShow,
   );
 
   useFocusEffect(
@@ -92,7 +108,9 @@ export function TravellerSelection({
     return null;
   }
 
-  const selectedUserProfiles = userProfilesWithCount.filter(({count}) => count);
+  const selectedUserProfiles = userProfilesWithCountToShow.filter(
+    ({count}) => count,
+  );
   const totalTravellersCount = selectedUserProfiles.reduce(
     (acc, {count}) => acc + count,
     0,
@@ -147,14 +165,16 @@ export function TravellerSelection({
       <TravellerSelectionSheet
         selectionMode={selectionMode}
         fareProductTypeConfig={fareProductTypeConfig}
-        selectableUserProfilesWithCountInit={userProfilesWithCount}
+        selectableUserProfilesWithCountInit={userProfilesWithCountToShow}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         onConfirmSelection={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
           onBehalfOfToggle?: boolean,
         ) => {
           if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setUserProfilesWithCount(chosenSelectableUserProfilesWithCounts);
+            setUserProfilesWithCount(
+              chosenSelectableUserProfilesWithCounts.filter((u) => u.count),
+            );
           }
           if (onBehalfOfToggle !== undefined) {
             setIsOnBehalfOfToggle(onBehalfOfToggle);

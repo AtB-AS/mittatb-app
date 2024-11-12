@@ -12,7 +12,7 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
 };
 
 jest.mock('@atb/auth/AuthContext', () => {});
-jest.mock('@atb/mobile-token/MobileTokenContext', () => {});
+jest.mock('@atb/mobile-token', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
 jest.mock('@atb/configuration/FirestoreConfigurationContext', () => {});
 jest.mock('@atb/api', () => {});

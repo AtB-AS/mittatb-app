@@ -2,9 +2,8 @@ const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = 'eslint-rules/';
 
 const restrictedImportComponents = {
-  group: ['@atb/components/*/'],
-  message:
-    'Not allowed to import components without going through their index file',
+  group: ['@atb/components/*/', '@atb/purchase-selection/'],
+  message: 'Not allowed to import without going through their index file',
 };
 const restrictedImportAuth = {
   group: ['@react-native-firebase/auth'],
