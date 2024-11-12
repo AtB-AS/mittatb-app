@@ -16,13 +16,23 @@ const preview: Preview = {
     (Story, {args}) => {
       const themeName = args.theme ?? 'light';
       return (
-        <ThemeContext.Provider value={{theme: themes[themeName], themeName}}>
+        <ThemeContext.Provider
+          value={{
+            theme: themes[themeName],
+            themeName,
+            storedColorScheme: 'light',
+            useAndroidSystemFont: false,
+            overrideSystemAppearance: false,
+            updateThemePreference: () => {},
+            updateAndroidFontOverride: () => {},
+            overrideOSThemePreference: () => {},
+          }}
+        >
           <Story />
         </ThemeContext.Provider>
       );
     },
   ],
-  tags: ['autodocs'],
 };
 
 export default preview;
