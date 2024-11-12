@@ -15,6 +15,8 @@ import {isDefined} from '@atb/utils/presence';
 import {
   FlexibleTransportOption,
   NotificationConfig,
+  StopSignalButtonConfig,
+  type StopSignalButtonConfigType,
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
@@ -180,3 +182,12 @@ export function mapToNotificationConfig(config?: any) {
   }
   return parseResult.data;
 }
+
+export const mapToStopSignalButtonConfig = (
+  config?: any,
+): StopSignalButtonConfigType => {
+  const parseResult = StopSignalButtonConfig.safeParse(config);
+  return parseResult.success
+    ? parseResult.data
+    : StopSignalButtonConfig.parse({});
+};

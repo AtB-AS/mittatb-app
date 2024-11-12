@@ -13,6 +13,9 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import type {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
+import {isApplicableTransportMode} from '@atb/travel-aid/utils';
 
 export const StopSignalButton = ({
   serviceJourney,
@@ -29,6 +32,7 @@ export const StopSignalButton = ({
   const {theme} = useTheme();
   const {t} = useTranslation();
   const styles = useStyles();
+  const {stopSignalButtonConfig: config} = useFirestoreConfiguration();
 
   if (!isTravelAidStopButtonEnabled) return null;
 
@@ -36,10 +40,11 @@ export const StopSignalButton = ({
     cur.quay.id === fromQuayId ? cur : selected,
   );
 
-  const shouldShow = shouldShowStopButton(serviceJourney, selectedCall);
+  const shouldShow = shouldShowStopButton(serviceJourney, selectedCall, config);
   if (!shouldShow) return null;
 
-  const isDisabled = status !== 'success' && !isStopButtonEnabled(selectedCall);
+  const isDisabled =
+    status !== 'success' && !isStopButtonEnabled(selectedCall, config);
 
   return (
     <View>
@@ -78,20 +83,29 @@ export const StopSignalButton = ({
 const shouldShowStopButton = (
   serviceJourney: ServiceJourneyWithGuaranteedCalls,
   call: EstimatedCallWithQuayFragment,
+  config: StopSignalButtonConfigType,
 ) => {
   return (
     !call.actualDepartureTime &&
-    serviceJourney.transportMode &&
-    ['bus', 'tram'].includes(serviceJourney.transportMode) &&
+    isApplicableTransportMode(config.modes, serviceJourney) &&
     AUTHORITY === serviceJourney.line.authority?.id
   );
 };
 
-const isStopButtonEnabled = (call: EstimatedCallWithQuayFragment) => {
+const isStopButtonEnabled = (
+  call: EstimatedCallWithQuayFragment,
+  config: StopSignalButtonConfigType,
+) => {
   if (!call.realtime) return false;
 
-  const activationWindowStart = addMinutes(call.expectedArrivalTime, -60);
-  const activationWindowEnd = addMinutes(call.expectedArrivalTime, -2);
+  const activationWindowStart = addMinutes(
+    call.expectedArrivalTime,
+    -config.activationWindowStartMinutesBefore,
+  );
+  const activationWindowEnd = addMinutes(
+    call.expectedArrivalTime,
+    -config.activationWindowEndMinutesBefore,
+  );
   return isBetween(new Date(), activationWindowStart, activationWindowEnd);
 };
 
