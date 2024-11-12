@@ -44,6 +44,7 @@ import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
 import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
+import type {ContrastColor} from '@atb/theme/colors';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -58,7 +59,7 @@ export const TravelAidScreenComponent = ({
   const stopSignalMutation = useStopSignalMutation();
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {theme, themeName} = useTheme();
   const focusRef = useFocusOnLoad();
 
   const {
@@ -70,13 +71,17 @@ export const TravelAidScreenComponent = ({
     serviceJourneyDeparture.serviceDate,
   );
 
+  const bgContrastColor: ContrastColor =
+      stopSignalMutation.status === 'success'
+          ? theme.color.background.neutral['1']
+          : theme.color.background.accent['2'];
+
   return (
     <SafeAreaView
-      style={
-        stopSignalMutation.status === 'success'
-          ? styles.container_afterSentSignal
-          : styles.container_notSentSignal
-      }
+      style={{
+        ...styles.container,
+        backgroundColor: bgContrastColor.background,
+      }}
     >
       <StatusBarOnFocus
         barStyle={themeName === 'light' ? 'dark-content' : 'light-content'}
@@ -87,6 +92,7 @@ export const TravelAidScreenComponent = ({
         leftIcon={{svg: Close}}
         mode="tertiary"
         type="medium"
+        backgroundColor={bgContrastColor}
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         {status === 'loading' && (
@@ -389,14 +395,7 @@ const getStopHeader = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container_notSentSignal: {
-    flex: 1,
-    backgroundColor: theme.color.background.neutral['1'].background,
-  },
-  container_afterSentSignal: {
-    flex: 1,
-    backgroundColor: theme.color.background.accent['3'].background,
-  },
+  container: {flex: 1},
   scrollView: {
     paddingHorizontal: theme.spacing.medium,
     gap: theme.spacing.medium,
@@ -407,11 +406,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   subContainer: {
     gap: theme.spacing.small,
-  },
-  horizontalRule: {
-    borderBottomWidth: 1,
-    borderBottomColor: theme.color.background.neutral[0].foreground.primary,
-    width: '100%',
   },
   realTime: {
     flexDirection: 'row',

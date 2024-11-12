@@ -39,7 +39,7 @@ export const StopSignalButton = ({
   const shouldShow = shouldShowStopButton(serviceJourney, selectedCall);
   if (!shouldShow) return null;
 
-  const isEnabled = isStopButtonEnabled(selectedCall);
+  const isDisabled = status !== 'success' && !isStopButtonEnabled(selectedCall);
 
   return (
     <View>
@@ -50,19 +50,21 @@ export const StopSignalButton = ({
             ? TravelAidTexts.stopButton.textAfterSubmit
             : TravelAidTexts.stopButton.text,
         )}
-        onPress={() =>
-          onPress({
-            serviceJourneyId: serviceJourney.id,
-            quayId: selectedCall.quay.id,
-            date: selectedCall.date,
-          })
-        }
+        onPress={() => {
+          if (status !== 'success') {
+            onPress({
+              serviceJourneyId: serviceJourney.id,
+              quayId: selectedCall.quay.id,
+              date: selectedCall.date,
+            });
+          }
+        }}
         loading={status === 'loading'}
         active={status === 'success'}
-        disabled={!isEnabled}
+        disabled={isDisabled}
         rightIcon={status === 'success' ? {svg: Confirm} : undefined}
       />
-      {!isEnabled && (
+      {isDisabled && (
         <MessageInfoText
           type="warning"
           message={t(TravelAidTexts.stopButton.notAvailable)}
