@@ -24,7 +24,6 @@ export const TravelAidTexts = {
       'Ikke mogleg å sende stopp signal no',
     ),
   },
-  clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
   error: {
     message: _(
       'Det oppstod en feil ved henting av reisedata for denne avgangen.',

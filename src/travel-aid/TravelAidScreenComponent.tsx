@@ -239,12 +239,12 @@ const TravelAidSection = ({
             </View>
             <TimeInfo state={{status, focusedEstimatedCall}} />
           </View>
-            <StopSignalButton
-                serviceJourney={serviceJourney}
-                fromQuayId={fromQuayId}
-                onPress={sendStopSignal}
-                status={sendStopSignalStatus}
-            />
+          <StopSignalButton
+            serviceJourney={serviceJourney}
+            fromQuayId={fromQuayId}
+            onPress={sendStopSignal}
+            status={sendStopSignalStatus}
+          />
         </View>
       </GenericSectionItem>
     </Section>
@@ -338,7 +338,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
     case TravelAidStatus.NotGettingUpdates:
       return (
         <ThemeText type="body__secondary--bold">
-          {t(TravelAidTexts.clock(clock))}
+          {t(TravelAidTexts.scheduledTime(clock))}
         </ThemeText>
       );
     case TravelAidStatus.NotYetArrived:
@@ -435,7 +435,7 @@ const getTimeInfoA11yLabel = (
       return '';
     case TravelAidStatus.NoRealtime:
     case TravelAidStatus.NotGettingUpdates:
-      return t(TravelAidTexts.clock(scheduledClock));
+      return t(TravelAidTexts.scheduledTime(scheduledClock));
     case TravelAidStatus.Arrived:
     case TravelAidStatus.BetweenStops:
       return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}`;
