@@ -233,8 +233,7 @@ const useTravelAidAnnouncements = (
   cancelled: boolean,
 ) => {
   const {language, t} = useTranslation();
-  const isFirstRender = useRef(true);
-  const previousQuayId = useRef(state.focusedEstimatedCall.quay.id);
+  const previousQuayId = useRef<string | null>(null);
 
   const announcedSituationIds = situationsForFocusedStop
     .map((s) => s.id)
@@ -279,8 +278,10 @@ const useTravelAidAnnouncements = (
   }
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!previousQuayId.current) {
+      // If previousQuayId is null, it is the first render, and we should not
+      // announce the time
+      previousQuayId.current = state.focusedEstimatedCall.quay.id;
       return;
     }
     if (previousQuayId.current === state.focusedEstimatedCall.quay.id) {
