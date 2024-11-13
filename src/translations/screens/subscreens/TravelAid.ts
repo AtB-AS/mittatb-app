@@ -34,14 +34,14 @@ export const TravelAidTexts = {
   },
   noRealtimeError: {
     title: _(
-      'Ingen kontakt med kjøretøy',
-      'No connection with vehicle',
-      'Ingen kontakt med køyretøy',
+      'Reisehjelp utilgjengelig for avgangen',
+      'Journey aid unavailable for this departure',
+      'Reisehjelp utilgjengeleg for denne avgangen',
     ),
     message: _(
-      'Vi får ikke oppdatert kjøretøyets posisjon, og Reisehjelp er derfor utilgjengelig for denne avgangen. Vi jobber med å få kontakt.',
-      "We're not receiving updates on the vehicle's position, so Journey Aid is unavailable for this trip. We're working to establish a connection.",
-      'Vi får ikkje oppdatert køyretøyets posisjon, og Reisehjelp er difor utilgjengeleg for denne avgangen. Vi jobbar med å få kontakt.',
+      'Vi har ingen kontakt med kjøretøyet. Prøv igjen senere eller velg en annen avgang.',
+      'We currently have no contact with the vehicle. Please try again later or choose a different departure.',
+      'Vi har ingen kontakt med køyretøyet. Prøv igjen seinare eller velg ein annan avgang.',
     ),
   },
 };

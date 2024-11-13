@@ -202,7 +202,7 @@ const TravelAidSection = ({
         <View style={styles.sectionContainer}>
           {status === TravelAidStatus.NoRealtime && (
             <MessageInfoBox
-              type="error"
+              type="warning"
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
             />
@@ -258,7 +258,7 @@ const useTravelAidAnnouncements = (
   cancelled: boolean,
 ) => {
   const {language, t} = useTranslation();
-  const isFirstRender = useRef(true);
+  const previousQuayId = useRef<string | null>(null);
 
   const announcedSituationIds = situationsForFocusedStop
     .map((s) => s.id)
@@ -286,6 +286,7 @@ const useTravelAidAnnouncements = (
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(newNotices);
+  const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
 
   if (newSituations.length > 0) {
     setCurrentAnnouncedSituationIds((prev) => [
@@ -302,13 +303,20 @@ const useTravelAidAnnouncements = (
   }
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!previousQuayId.current) {
+      // If previousQuayId is null, it is the first render, and we should not
+      // announce the time
+      previousQuayId.current = state.focusedEstimatedCall.quay.id;
       return;
     }
-
-    AccessibilityInfo.announceForAccessibility(message);
-  }, [message]);
+    if (previousQuayId.current === state.focusedEstimatedCall.quay.id) {
+      // Only announce the time if the focused estimated call hasn't changed
+      AccessibilityInfo.announceForAccessibility(timeInfoMessage);
+    } else {
+      AccessibilityInfo.announceForAccessibility(message);
+    }
+    previousQuayId.current = state.focusedEstimatedCall.quay.id;
+  }, [message, timeInfoMessage, state.focusedEstimatedCall.quay.id]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
@@ -334,8 +342,6 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         </ThemeText>
       );
     case TravelAidStatus.NotYetArrived:
-    case TravelAidStatus.Arrived:
-    case TravelAidStatus.BetweenStops:
       return (
         <View>
           <View style={styles.realTime}>
@@ -353,6 +359,23 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
           </View>
           <ThemeText type="body__secondary--bold">
             {t(TravelAidTexts.scheduledTime(clock))}
+          </ThemeText>
+        </View>
+      );
+    case TravelAidStatus.Arrived:
+    case TravelAidStatus.BetweenStops:
+      return (
+        <View style={styles.realTime}>
+          <ThemeIcon
+            svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+            size="xSmall"
+          />
+          <ThemeText type="heading__title">
+            {formatToClockOrRelativeMinutes(
+              focusedEstimatedCall.expectedDepartureTime,
+              language,
+              t(dictionary.date.units.now),
+            )}
           </ThemeText>
         </View>
       );
@@ -413,9 +436,10 @@ const getTimeInfoA11yLabel = (
     case TravelAidStatus.NoRealtime:
     case TravelAidStatus.NotGettingUpdates:
       return t(TravelAidTexts.clock(scheduledClock));
-    case TravelAidStatus.NotYetArrived:
     case TravelAidStatus.Arrived:
     case TravelAidStatus.BetweenStops:
+      return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}`;
+    case TravelAidStatus.NotYetArrived:
       return `${t(dictionary.a11yRealTimePrefix)} ${relativeRealtime}, ${t(
         TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
       )}`;
