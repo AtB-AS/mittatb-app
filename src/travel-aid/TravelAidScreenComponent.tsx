@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import React, {Ref, useEffect, useRef} from 'react';
+import React, {Ref, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -235,18 +235,23 @@ const useTravelAidAnnouncements = (
   const {language, t} = useTranslation();
   const isFirstRender = useRef(true);
 
-  const currentAnnouncedSituationIds = useRef<string[]>(
-    situationsForFocusedStop.map((s) => s.id).filter(onlyUniques),
-  );
-  const currentAnnouncedNoticeIds = useRef<string[]>(
-    noticesForFocusedStop.map((s) => s.id).filter(onlyUniques),
-  );
+  const announcedSituationIds = situationsForFocusedStop
+    .map((s) => s.id)
+    .filter(onlyUniques);
+  const announcedNoticeIds = noticesForFocusedStop
+    .map((s) => s.id)
+    .filter(onlyUniques);
+
+  const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
+    useState<string[]>(announcedSituationIds);
+  const [currentAnnouncedNoticeIds, setCurrentAnnouncedNoticeIds] =
+    useState<string[]>(announcedNoticeIds);
 
   const newSituations = situationsForFocusedStop.filter(
-    (s) => !currentAnnouncedSituationIds.current.includes(s.id),
+    (s) => !currentAnnouncedSituationIds.includes(s.id),
   );
   const newNotices = noticesForFocusedStop.filter(
-    (s) => !currentAnnouncedNoticeIds.current.includes(s.id),
+    (s) => !currentAnnouncedNoticeIds.includes(s.id),
   );
 
   const message =
@@ -258,17 +263,17 @@ const useTravelAidAnnouncements = (
     getNoticesA11yLabel(newNotices);
 
   if (newSituations.length > 0) {
-    currentAnnouncedSituationIds.current = [
-      ...currentAnnouncedSituationIds.current,
+    setCurrentAnnouncedSituationIds((prev) => [
+      ...prev,
       ...newSituations.map((s) => s.id),
-    ];
+    ]);
   }
 
   if (newNotices.length > 0) {
-    currentAnnouncedNoticeIds.current = [
-      ...currentAnnouncedNoticeIds.current,
+    setCurrentAnnouncedNoticeIds((prev) => [
+      ...prev,
       ...newNotices.map((s) => s.id),
-    ];
+    ]);
   }
 
   useEffect(() => {
