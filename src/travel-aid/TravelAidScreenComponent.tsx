@@ -48,7 +48,7 @@ import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
-import {sentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
+import {createSentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -56,6 +56,9 @@ export type TravelAidScreenParams = {
 type Props = TravelAidScreenParams & {
   goBack: () => void;
 };
+
+const sentStopSignalsCache = createSentStopSignalsCache();
+
 export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
