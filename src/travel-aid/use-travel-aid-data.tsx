@@ -5,5 +5,5 @@ export const useTravelAidDataQuery = (id: string, serviceDate: string) =>
   useQuery({
     queryKey: ['travelAidData', id, serviceDate],
     queryFn: () => getServiceJourneyWithEstimatedCalls(id, serviceDate),
-    refetchInterval: 10000,
+    refetchInterval: 5000,
   });
