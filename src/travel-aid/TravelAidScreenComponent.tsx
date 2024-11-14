@@ -278,7 +278,7 @@ const useTravelAidAnnouncements = (
     situationsForFocusedStop.map((s) => s.id).filter(onlyUniques),
   );
   const [announcedNoticeIds, setAnnouncedNoticeIds] = useState<string[]>(
-    noticesForFocusedStop.map((s) => s.id).filter(onlyUniques),
+    noticesForFocusedStop.map((n) => n.id).filter(onlyUniques),
   );
 
   const newSituations = situationsForFocusedStop.filter(
