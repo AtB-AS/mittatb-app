@@ -368,7 +368,12 @@ const useTravelAidAnnouncements = (
     }
 
     previousQuayId.current = state.focusedEstimatedCall.quay.id;
-  }, [message, state.focusedEstimatedCall.quay.id, announceMessage]);
+  }, [
+    message,
+    timeInfoMessage,
+    state.focusedEstimatedCall.quay.id,
+    announceMessage,
+  ]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
