@@ -193,7 +193,16 @@ export const DepartureDetailsScreenComponent = ({
             {shouldShowTravelAid && (
               <Button
                 style={styles.travelAidButton}
-                onPress={onPressTravelAid}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Journey aid',
+                    'Open journey aid clicked',
+                    {
+                      screenReaderEnabled,
+                    },
+                  );
+                  onPressTravelAid();
+                }}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
               />
