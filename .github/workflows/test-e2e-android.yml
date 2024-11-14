@@ -81,22 +81,6 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-      - name: Run tests ORIG 86
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          avd-name: emulatorORIG86-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
-          arch: x86
-          profile: pixel_5
-          emulator-build: 11237101
-          emulator-boot-timeout: 900
-          disable-spellchecker: true
-          script: yarn test:android --spec test/specs/departure.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
-          working-directory: e2e
-        env:
-          APP_PATH: ${{ github.workspace }}
-          IS_CI: "true"
       - name: Run tests NEW 86 64
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -105,6 +89,22 @@ jobs:
           arch: x86_64
           profile: pixel_5
           emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: yarn test:android --spec test/specs/departure.e2e.ts
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+      - name: Run tests ORIG 86
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulatorORIG86-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86
+          profile: pixel_5
+          emulator-build: 11237101
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
