@@ -47,9 +47,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      #- name: Install Appium
       #  run: npm install -g appium
-      #- name: Install uiautomator2 driver
       #  run: appium driver install uiautomator2
       - name: Add Entur private registry credentials
         run: bash ./scripts/add-entur-private-registry.sh
@@ -64,18 +62,71 @@ jobs:
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
       # E2E run
-      - name: Run tests on Android emulator
+      # Test ORIG x86_64 / x86 vs NEW x86_64 / x86
+      # Only run 'travelsearch'
+      # Changed avd-name
+      # Removed pre-script except for first test
+      - name: Run tests ORIG 86 64
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          avd-name: emulatorORIG8664-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
           profile: pixel_5
           emulator-build: 11237101
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: yarn test:android
+          script: yarn test:android --spec test/specs/travelsearch.e2e.ts
           pre-emulator-launch-script: ./scripts/restart-adb.sh
+          # pre-emulator-launch-script /usr/local/lib/android/sdk/emulator/emulator -accel-check
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+      - name: Run tests ORIG 86
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulatorORIG86-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86
+          profile: pixel_5
+          emulator-build: 11237101
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: yarn test:android --spec test/specs/travelsearch.e2e.ts
+          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+      - name: Run tests NEW 86 64
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulatorNEW8664-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: yarn test:android --spec test/specs/travelsearch.e2e.ts
+          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+      - name: Run tests NEW 86
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulatorNEW86-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: yarn test:android --spec test/specs/travelsearch.e2e.ts
+          # pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -88,13 +139,4 @@ jobs:
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
-          retention-days: 1
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            ./e2e/results/*.xml
-            ./e2e/results/results-mochawesome.json
           retention-days: 1
