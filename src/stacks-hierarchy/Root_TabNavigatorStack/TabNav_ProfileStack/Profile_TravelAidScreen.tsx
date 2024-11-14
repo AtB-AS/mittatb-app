@@ -15,6 +15,8 @@ import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration';
+import {useAnalytics} from '@atb/analytics';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
@@ -23,6 +25,8 @@ export const Profile_TravelAidScreen = () => {
   const {enable_travel_aid_stop_button} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
   const {contactPhoneNumber} = useFirestoreConfiguration();
+  const analytics = useAnalytics();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
@@ -52,9 +56,17 @@ export const Profile_TravelAidScreen = () => {
           <ToggleSectionItem
             text={travelAidToggleTitle}
             value={toggleValue}
-            onValueChange={(checked) =>
-              setPreference({journeyAidEnabled: checked})
-            }
+            onValueChange={(checked) => {
+              analytics.logEvent(
+                'Journey aid',
+                'Journey aid preference toggled',
+                {
+                  enabled: checked,
+                  screenReaderEnabled,
+                },
+              );
+              setPreference({journeyAidEnabled: checked});
+            }}
             subtext={travelAidSubtext}
             disabled={!enable_travel_aid_stop_button}
             isSubtextMarkdown

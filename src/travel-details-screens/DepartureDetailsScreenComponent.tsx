@@ -115,8 +115,7 @@ export const DepartureDetailsScreenComponent = ({
   const {
     preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
   } = usePreferences();
-  const shouldShowTravelAid =
-    travelAidPreferenceEnabled && isTravelAidEnabled;
+  const shouldShowTravelAid = travelAidPreferenceEnabled && isTravelAidEnabled;
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
@@ -194,10 +193,18 @@ export const DepartureDetailsScreenComponent = ({
             {shouldShowTravelAid && (
               <Button
                 style={styles.travelAidButton}
-                onPress={onPressTravelAid}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Journey aid',
+                    'Open journey aid clicked',
+                    {
+                      screenReaderEnabled,
+                    },
+                  );
+                  onPressTravelAid();
+                }}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
-                disabled={!fromQuay?.realtime}
               />
             )}
             {shouldShowMapButton || realtimeText ? (
