@@ -65,7 +65,6 @@ jobs:
       # Test ORIG x86_64 / x86 vs NEW x86_64 / x86
       # Only run 'travelsearch'
       # Changed avd-name
-      # Removed pre-script
       - name: Run tests ORIG 86 64
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -77,7 +76,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          # pre-emulator-launch-script /usr/local/lib/android/sdk/emulator/emulator -accel-check
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -93,7 +92,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -109,7 +108,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -125,7 +124,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}

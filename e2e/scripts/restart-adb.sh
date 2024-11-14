@@ -1,4 +1,5 @@
 #!/bin/bash
 
-# TODO
-/usr/local/lib/android/sdk/emulator/emulator -accel-check
+adb kill-server
+sleep 20
+adb start-server
