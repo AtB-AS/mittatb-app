@@ -67,13 +67,13 @@ jobs:
       # Changed avd-name
       # Test  target: default vs google_apis vs google_apis_playstore
       # Try without pre-script
-      - name: Run tests default
+      - name: Run tests google_apis_playstore
         uses: reactivecircus/android-emulator-runner@v2
         with:
           avd-name: emulator-default-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
-          target: 'default'
+          target: 'google_apis_playstore'
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
@@ -101,13 +101,13 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-      - name: Run tests google_apis_playstore
+      - name: Run tests default
         uses: reactivecircus/android-emulator-runner@v2
         with:
           avd-name: emulator-google-apis-playstore-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
-          target: 'google_apis_playstore'
+          target: 'default'
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
