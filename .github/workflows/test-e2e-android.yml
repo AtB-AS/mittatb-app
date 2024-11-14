@@ -62,31 +62,32 @@ jobs:
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
       # E2E run
-      # Test ORIG x86_64 / x86 vs NEW x86_64 / x86
-      # Only run 'travelsearch'
+      # New build with x86_64
+      # Only run 'departures'
       # Changed avd-name
-      # Added target: default -> google_apis
-      - name: Run tests ORIG 86 64
+      # Test  target: default vs google_apis vs google_apis_playstore
+      # Try without pre-script
+      - name: Run tests default
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          avd-name: emulatorORIG8664-api${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-default-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
-          target: 'google_apis'
+          target: 'default'
           profile: pixel_5
-          emulator-build: 11237101
+          emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          #pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-      - name: Run tests NEW 86 64
+      - name: Run tests google_apis
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          avd-name: emulatorNEW8664-api${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-google-apis-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
           target: 'google_apis'
@@ -95,41 +96,24 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          #pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-      - name: Run tests ORIG 86
+      - name: Run tests google_apis_playstore
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          avd-name: emulatorORIG86-api${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-google-apis-playstore-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
-          arch: x86
-          target: 'google_apis'
-          profile: pixel_5
-          emulator-build: 11237101
-          emulator-boot-timeout: 900
-          disable-spellchecker: true
-          script: yarn test:android --spec test/specs/departure.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
-          working-directory: e2e
-        env:
-          APP_PATH: ${{ github.workspace }}
-          IS_CI: "true"
-      - name: Run tests NEW 86
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          avd-name: emulatorNEW86-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
-          arch: x86
-          target: 'google_apis'
+          arch: x86_64
+          target: 'google_apis_playstore'
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android --spec test/specs/departure.e2e.ts
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          #pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
