@@ -329,13 +329,16 @@ const useTravelAidAnnouncements = (
     if (Platform.OS !== 'ios') return;
 
     const processQueue = async () => {
+      if (isAnnouncing || announcementQueue.length === 0) return;
+
       setIsAnnouncing(true);
-      while (announcementQueue.length > 0) {
-        const nextMessage = announcementQueue[0];
-        AccessibilityInfo.announceForAccessibility(nextMessage);
-        await new Promise((resolve) => setTimeout(resolve, ANNOUNCE_LIFETIME));
-        setAnnouncementQueue((prevQueue) => prevQueue.slice(1));
-      }
+
+      const nextMessage = announcementQueue[0];
+      AccessibilityInfo.announceForAccessibility(nextMessage);
+      await new Promise((resolve) => setTimeout(resolve, ANNOUNCE_LIFETIME));
+
+      setAnnouncementQueue((prevQueue) => prevQueue.slice(1));
+
       setIsAnnouncing(false);
     };
 
