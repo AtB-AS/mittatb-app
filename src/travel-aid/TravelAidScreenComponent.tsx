@@ -272,7 +272,7 @@ const useTravelAidAnnouncements = (
 ) => {
   const {language, t} = useTranslation();
 
-  const isFirstRender = useRef<boolean>(true);
+  const previousQuayId = useRef<string | null>(null);
 
   const [announcedSituationIds, setAnnouncedSituationIds] = useState<string[]>(
     situationsForFocusedStop.map((s) => s.id).filter(onlyUniques),
@@ -291,12 +291,14 @@ const useTravelAidAnnouncements = (
   const newSituationIds = newSituations.map((s) => s.id);
   const newNoticeIds = newNotices.map((n) => n.id);
 
-  const timeInfoMessageWithCancelled =
+  const focusedStateWithCancelled =
     getFocussedStateA11yLabel(state, t, language) +
     (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '');
 
+  const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
+
   const message =
-    timeInfoMessageWithCancelled +
+    focusedStateWithCancelled +
     screenReaderPause +
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
@@ -351,13 +353,22 @@ const useTravelAidAnnouncements = (
   }, [newSituationIds, newNoticeIds]);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!previousQuayId.current) {
+      // If previousQuayId is null, it is the first render, and we should not
+      // announce the time or situations/notifications.
+      previousQuayId.current = state.focusedEstimatedCall.quay.id;
       return;
     }
 
-    announceMessage(message);
-  }, [message, announceMessage]);
+    if (previousQuayId.current === state.focusedEstimatedCall.quay.id) {
+      // Only announce the time if the focused estimated call hasn't changed
+      announceMessage(timeInfoMessage);
+    } else {
+      announceMessage(message);
+    }
+
+    previousQuayId.current = state.focusedEstimatedCall.quay.id;
+  }, [message, state.focusedEstimatedCall.quay.id, announceMessage]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
