@@ -65,12 +65,14 @@ jobs:
       # Test ORIG x86_64 / x86 vs NEW x86_64 / x86
       # Only run 'travelsearch'
       # Changed avd-name
+      # Added target: default -> google_apis
       - name: Run tests ORIG 86 64
         uses: reactivecircus/android-emulator-runner@v2
         with:
           avd-name: emulatorORIG8664-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
+          target: 'google_apis'
           profile: pixel_5
           emulator-build: 11237101
           emulator-boot-timeout: 900
@@ -87,6 +89,7 @@ jobs:
           avd-name: emulatorNEW8664-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
+          target: 'google_apis'
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
@@ -103,6 +106,7 @@ jobs:
           avd-name: emulatorORIG86-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86
+          target: 'google_apis'
           profile: pixel_5
           emulator-build: 11237101
           emulator-boot-timeout: 900
@@ -119,6 +123,7 @@ jobs:
           avd-name: emulatorNEW86-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86
+          target: 'google_apis'
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
