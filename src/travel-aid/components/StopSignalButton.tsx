@@ -1,6 +1,6 @@
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
 import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
@@ -16,6 +16,7 @@ import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '@atb/travel-aid/utils';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 export const StopSignalButton = ({
   serviceJourney,
@@ -48,6 +49,13 @@ export const StopSignalButton = ({
 
   return (
     <View>
+      {status === 'error' && (
+        <MessageInfoBox
+          type="error"
+          message={t(dictionary.standardErrorMsg)}
+          style={styles.requestError}
+        />
+      )}
       <Button
         interactiveColor={theme.color.interactive['0']}
         text={t(
@@ -60,7 +68,7 @@ export const StopSignalButton = ({
             onPress({
               serviceJourneyId: serviceJourney.id,
               quayId: selectedCall.quay.id,
-              date: selectedCall.date,
+              serviceDate: selectedCall.date,
             });
           }
         }}
@@ -110,5 +118,6 @@ const isStopButtonEnabled = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  requestError: {marginBottom: theme.spacing.medium},
   notAvailableWarning: {marginTop: theme.spacing.small},
 }));
