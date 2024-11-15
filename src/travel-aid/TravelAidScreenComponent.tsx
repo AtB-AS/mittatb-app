@@ -291,9 +291,14 @@ const useTravelAidAnnouncements = (
   const newSituationIds = newSituations.map((s) => s.id);
   const newNoticeIds = newNotices.map((n) => n.id);
 
+  const cancelledA11yLabel =
+    t(dictionary.messageTypes['error']) +
+    screenReaderPause +
+    t(CancelledDepartureTexts.message);
+
   const focusedStateWithCancelled =
     getFocussedStateA11yLabel(state, t, language) +
-    (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '');
+    (cancelled ? screenReaderPause + cancelledA11yLabel : '');
 
   const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
 
