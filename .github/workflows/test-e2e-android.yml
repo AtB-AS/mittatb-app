@@ -8,6 +8,7 @@ on:
         default: 30
       system_image:
         description: 'Define system image'
+        type: choice
         required: true
         default: 'default'
         options:
