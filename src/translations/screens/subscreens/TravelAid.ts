@@ -17,7 +17,11 @@ export const TravelAidTexts = {
     ),
   stopButton: {
     text: _('Send stopp', 'Send stop', 'Send stopp'),
-    textAfterSubmit: _('Stopp sendt', 'Stop sent', 'Stopp sendt'),
+    successMessage: _(
+      'Stoppet er sendt!',
+      'The stop is sent!',
+      'Stoppet er sendt!',
+    ),
     notAvailable: _(
       'Ikke mulig å sende stopp signal nå',
       'Not possible to send stop signal now',
