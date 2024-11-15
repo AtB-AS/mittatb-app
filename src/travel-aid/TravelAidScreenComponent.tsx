@@ -63,9 +63,9 @@ export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
 }: Props) => {
-  const stopSignalMutation = useStopSignalMutation(() =>
-    sentStopSignalsCache.addSent(serviceJourneyDeparture),
-  );
+  const stopSignalMutation = useStopSignalMutation({
+    onSuccess: () => sentStopSignalsCache.addSent(serviceJourneyDeparture),
+  });
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme, themeName} = useTheme();
