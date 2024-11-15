@@ -115,7 +115,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: yarn test:android --spec test/specs/departure.e2e.ts
+          script: yarn test:android
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}

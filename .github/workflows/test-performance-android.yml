@@ -84,7 +84,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-pixel_5-${{ env.INPUT_API_LEVEL }}
+          key: avd-pixel_5-default-${{ env.INPUT_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -94,8 +94,9 @@ jobs:
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
+          target: default
           profile: pixel_5
-          emulator-build: 11237101
+          emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
           disable-animations: false
@@ -111,8 +112,9 @@ jobs:
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
+          target: default
           profile: pixel_5
-          emulator-build: 11237101
+          emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
           disable-animations: true
