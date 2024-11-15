@@ -12,7 +12,6 @@ import {
 } from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {usePreferences} from '@atb/preferences';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useAnalytics} from '@atb/analytics';
@@ -22,7 +21,6 @@ export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const {enable_travel_aid_stop_button} = useRemoteConfig();
   const {setPreference, preferences} = usePreferences();
   const {contactPhoneNumber} = useFirestoreConfiguration();
   const analytics = useAnalytics();
@@ -33,10 +31,6 @@ export const Profile_TravelAidScreen = () => {
 
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
   const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
-
-  const toggleValue = !enable_travel_aid_stop_button
-    ? false
-    : preferences.journeyAidEnabled;
 
   return (
     <FullScreenView
@@ -55,7 +49,7 @@ export const Profile_TravelAidScreen = () => {
         <Section>
           <ToggleSectionItem
             text={travelAidToggleTitle}
-            value={toggleValue}
+            value={preferences.journeyAidEnabled}
             onValueChange={(checked) => {
               analytics.logEvent(
                 'Journey aid',
@@ -68,7 +62,6 @@ export const Profile_TravelAidScreen = () => {
               setPreference({journeyAidEnabled: checked});
             }}
             subtext={travelAidSubtext}
-            disabled={!enable_travel_aid_stop_button}
             isSubtextMarkdown
             testID="toggleTravelAid"
           />
