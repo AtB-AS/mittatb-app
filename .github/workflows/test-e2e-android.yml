@@ -74,10 +74,10 @@ jobs:
 
       # Emulator cache
       - name: Gradle cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default
+        if: env.INPUT_SYSTEM_IMAGE == 'default'
         uses: gradle/actions/setup-gradle@v3
       - name: AVD cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default
+        if: env.INPUT_SYSTEM_IMAGE == 'default'
         uses: actions/cache@v4
         id: avd-cache
         with:
@@ -86,7 +86,7 @@ jobs:
             ~/.android/adb*
           key: avd-pixel_5-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           force-avd-creation: false
