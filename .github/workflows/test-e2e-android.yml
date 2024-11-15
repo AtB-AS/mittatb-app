@@ -44,20 +44,88 @@ jobs:
         with:
           ref: ${{ env.INPUT_BRANCH }}
 
-      - name: My cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default'
+      # Download APK
+      - name: Get AppCenter APK
+        run: bash ./scripts/get-appcenter-apk.sh
+        working-directory: e2e
+        env:
+          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
+          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+
+      # E2E init
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      #  run: npm install -g appium
+      #  run: appium driver install uiautomator2
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install E2E tests
+        working-directory: e2e
+        run: yarn install
+      - name: tsc
+        working-directory: e2e
+        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
+
+      # Emulator cache
+      - name: Gradle cache
+        if: env.INPUT_SYSTEM_IMAGE == 'default
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        if: env.INPUT_SYSTEM_IMAGE == 'default
         uses: actions/cache@v4
-        id: my-cache
+        id: avd-cache
         with:
           path: |
-            ~/myDir/*
-          key: my-cache-id-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
-        if: steps.my-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default'
-        run: |
-          echo "***** HIT ******"
-          cd ~ && mkdir myDir
-          touch myDir/myFile.txt
-          ls -l myDir
-      - name: Test
-        run: echo "${{ steps.my-cache.outputs.cache-hit }}"
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-${{ env.INPUT_SYSTEM_IMAGE }}-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.INPUT_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: echo "Generated AVD snapshot for caching."
+
+      # E2E run
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.INPUT_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: yarn test:android --spec test/specs/departure.e2e.ts
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+
+      # Results
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: ./e2e/screenshots/*.png
+          retention-days: 1
