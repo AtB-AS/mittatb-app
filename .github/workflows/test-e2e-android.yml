@@ -45,7 +45,7 @@ jobs:
           ref: ${{ env.INPUT_BRANCH }}
 
       - name: My cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default
+        if: env.INPUT_SYSTEM_IMAGE == 'default'
         uses: actions/cache@v4
         id: my-cache
         with:
@@ -53,7 +53,7 @@ jobs:
             ~/myDir/*
           key: my-cache-id-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
-        if: steps.my-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default
+        if: steps.my-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default'
         run: |
           echo "***** HIT ******"
           cd ~ && mkdir myDir
