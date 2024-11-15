@@ -37,11 +37,17 @@ import {
   mapToNotificationConfig,
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
+  mapToStopSignalButtonConfig,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {
+  StopSignalButtonConfig,
+  type StopSignalButtonConfigType,
+} from '@atb-as/config-specs';
 
 export const defaultVatPercent: number = 12;
+export const defaultStopSignalButtonConfig = StopSignalButtonConfig.parse({});
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -66,6 +72,7 @@ type ConfigurationContextState = {
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
   notificationConfig: NotificationConfigType | undefined;
+  stopSignalButtonConfig: StopSignalButtonConfigType;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -110,6 +117,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [notificationConfig, setNotificationConfig] = useState<
     NotificationConfigType | undefined
   >();
+  const [stopSignalButtonConfig, setStopSignalButtonConfig] =
+    useState<StopSignalButtonConfigType>(defaultStopSignalButtonConfig);
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
@@ -210,6 +219,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (notificationConfig) {
             setNotificationConfig(notificationConfig);
           }
+
+          const stopSignalButtonConfig =
+            getStopSignalButtonConfigFromSnapshot(snapshot);
+          setStopSignalButtonConfig(stopSignalButtonConfig);
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -239,6 +252,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     setBenefitIdsRequiringValueCode([]);
     setHarborConnectionOverrides([]);
     setNotificationConfig(undefined);
+    setStopSignalButtonConfig(defaultStopSignalButtonConfig);
   };
 
   useEffect(() => {
@@ -268,6 +282,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
       notificationConfig,
+      stopSignalButtonConfig,
       firestoreConfigStatus,
     };
   }, [
@@ -288,6 +303,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
     notificationConfig,
+    stopSignalButtonConfig,
     firestoreConfigStatus,
   ]);
 
@@ -585,4 +601,13 @@ function getNotificationConfigFromSnapshot(
     (doc) => doc.id == 'notificationConfig',
   );
   return mapToNotificationConfig(notificationConfig?.data());
+}
+
+function getStopSignalButtonConfigFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): StopSignalButtonConfigType {
+  const config = snapshot.docs.find(
+    (doc) => doc.id == 'stopSignalButtonConfig',
+  );
+  return mapToStopSignalButtonConfig(config?.data());
 }
