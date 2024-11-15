@@ -13,7 +13,7 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 
 type BorderedInfoBoxMetaProps = BorderedInfoBoxProps & ThemedStoryProps;
 

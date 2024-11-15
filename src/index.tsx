@@ -39,8 +39,12 @@ import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from './notifications';
 import {BeaconsContextProvider} from './beacons/BeaconsContext';
 import {FeatureTogglesProvider} from '@atb/feature-toggles';
+import {configureReanimatedLogger} from 'react-native-reanimated';
 
 configureAndStartBugsnag();
+configureReanimatedLogger({
+  strict: false,
+});
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 

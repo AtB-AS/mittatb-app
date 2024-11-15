@@ -6,7 +6,7 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {TileWithButton, TileWithButtonProps} from '@atb/components/tile';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {themes} from '@atb/theme/colors';

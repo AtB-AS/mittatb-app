@@ -1,6 +1,6 @@
 import { useTheme } from '@atb/theme';
 import {ContrastColor, themes} from '@atb/theme/colors';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {View, ViewStyle} from 'react-native';
 
 export type ThemedStoryProps = {
