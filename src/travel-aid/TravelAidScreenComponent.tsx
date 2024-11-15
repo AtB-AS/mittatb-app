@@ -48,6 +48,7 @@ import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
+import {createSentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -55,15 +56,27 @@ export type TravelAidScreenParams = {
 type Props = TravelAidScreenParams & {
   goBack: () => void;
 };
+
+const sentStopSignalsCache = createSentStopSignalsCache();
+
 export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
 }: Props) => {
-  const stopSignalMutation = useStopSignalMutation();
+  const stopSignalMutation = useStopSignalMutation({
+    onSuccess: () => sentStopSignalsCache.addSent(serviceJourneyDeparture),
+  });
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme, themeName} = useTheme();
   const focusRef = useFocusOnLoad();
+
+  const hasSentStopSignal = sentStopSignalsCache.hasSent(
+    serviceJourneyDeparture,
+  );
+  const sendStopSignalStatus = hasSentStopSignal
+    ? 'success'
+    : stopSignalMutation.status;
 
   const {
     data: serviceJourney,
@@ -75,7 +88,7 @@ export const TravelAidScreenComponent = ({
   );
 
   const bgContrastColor: ContrastColor =
-    stopSignalMutation.status === 'success'
+    sendStopSignalStatus === 'success'
       ? theme.color.background.accent['2']
       : theme.color.background.neutral['1'];
 
@@ -119,7 +132,7 @@ export const TravelAidScreenComponent = ({
             fromQuayId={serviceJourneyDeparture.fromQuayId}
             focusRef={focusRef}
             sendStopSignal={stopSignalMutation.mutate}
-            sendStopSignalStatus={stopSignalMutation.status}
+            sendStopSignalStatus={sendStopSignalStatus}
           />
         )}
       </ScrollView>
