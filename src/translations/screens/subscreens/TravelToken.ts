@@ -249,7 +249,6 @@ const SelectTravelTokenTexts = {
       },
     },
     saveButton: _('Lagre valg', 'Confirm selection', `Lagre valet`),
-    errorMessage: _('Noe gikk galt', 'Something went wrong', `Noko gjekk gale`),
     noTravelCard: _(
       'Du har ikke et t:kort registrert. Hvis du ønsker å bruke t:kort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).',
       'You have no t:card registered, if you wish to use t:card as travel token you may add this to your profile in the [webshop](https://nettbutikk.atb.no).',

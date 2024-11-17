@@ -116,6 +116,11 @@ const dictionary = {
   unchecked: _('ikke avhuket', 'unchecked', 'Ikkje avhuket'),
   selected: _('Valgt', 'selected', 'Valgt'),
   unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
+  genericErrorMsg: _(
+    'Noe gikk galt',
+    'Something went wrong',
+    `Noko gjekk gale`,
+  ),
 };
 
 export default orgSpecificTranslations(dictionary, {

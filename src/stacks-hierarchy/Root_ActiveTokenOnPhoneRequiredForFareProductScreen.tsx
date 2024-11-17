@@ -2,6 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   ActiveTokenRequiredTexts,
+  dictionary,
   TravelTokenTexts,
   useTranslation,
 } from '@atb/translations';
@@ -123,7 +124,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
-            message={t(TravelTokenTexts.toggleToken.errorMessage)}
+            message={t(dictionary.genericErrorMsg)}
             style={styles.errorMessageBox}
           />
         )}

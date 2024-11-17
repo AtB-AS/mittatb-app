@@ -10,6 +10,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {
+  dictionary,
   getTextForLanguage,
   TravelTokenTexts,
   useTranslation,
@@ -239,7 +240,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
-            message={t(TravelTokenTexts.toggleToken.errorMessage)}
+            message={t(dictionary.genericErrorMsg)}
             style={styles.errorMessageBox}
           />
         )}

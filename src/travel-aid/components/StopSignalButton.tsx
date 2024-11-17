@@ -1,6 +1,6 @@
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
 import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
@@ -48,6 +48,13 @@ export const StopSignalButton = ({
 
   return (
     <View>
+      {status === 'error' && (
+        <MessageInfoBox
+          type="error"
+          message={t(dictionary.genericErrorMsg)}
+          style={styles.requestError}
+        />
+      )}
       {status !== 'success' && (
         <Button
           interactiveColor={theme.color.interactive['0']}
@@ -56,7 +63,7 @@ export const StopSignalButton = ({
             onPress({
               serviceJourneyId: serviceJourney.id,
               quayId: selectedCall.quay.id,
-              date: selectedCall.date,
+              serviceDate: selectedCall.date,
             });
           }}
           loading={status === 'loading'}
@@ -110,5 +117,6 @@ const isStopButtonEnabled = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  requestError: {marginBottom: theme.spacing.medium},
   notAvailableWarning: {marginTop: theme.spacing.small},
 }));
