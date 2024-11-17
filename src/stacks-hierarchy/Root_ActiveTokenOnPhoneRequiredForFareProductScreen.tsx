@@ -1,7 +1,8 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
-  ActiveTokenRequiredTexts, dictionary,
+  ActiveTokenRequiredTexts,
+  dictionary,
   TravelTokenTexts,
   useTranslation,
 } from '@atb/translations';
