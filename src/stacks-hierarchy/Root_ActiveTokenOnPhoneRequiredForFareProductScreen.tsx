@@ -123,7 +123,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
-            message={t(dictionary.standardErrorMsg)}
+            message={t(dictionary.genericErrorMsg)}
             style={styles.errorMessageBox}
           />
         )}

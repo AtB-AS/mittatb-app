@@ -52,7 +52,7 @@ export const StopSignalButton = ({
       {status === 'error' && (
         <MessageInfoBox
           type="error"
-          message={t(dictionary.standardErrorMsg)}
+          message={t(dictionary.genericErrorMsg)}
           style={styles.requestError}
         />
       )}

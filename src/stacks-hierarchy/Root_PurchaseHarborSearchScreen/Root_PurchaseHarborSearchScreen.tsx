@@ -104,11 +104,11 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         {harborsQuery.isError && (
           <>
             <ScreenReaderAnnouncement
-              message={t(dictionary.standardErrorMsg)}
+              message={t(dictionary.genericErrorMsg)}
             />
             <MessageInfoBox
               type="error"
-              message={t(dictionary.standardErrorMsg)}
+              message={t(dictionary.genericErrorMsg)}
               onPressConfig={{
                 text: t(dictionary.retry),
                 action: harborsQuery.refetch,

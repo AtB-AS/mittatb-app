@@ -240,7 +240,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
-            message={t(dictionary.standardErrorMsg)}
+            message={t(dictionary.genericErrorMsg)}
             style={styles.errorMessageBox}
           />
         )}
