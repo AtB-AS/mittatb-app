@@ -242,6 +242,7 @@ const TravelAidSection = ({
           <View
             accessible
             accessibilityLabel={focussedStateA11yLabel}
+            accessibilityLiveRegion="none"
             style={styles.stopHeaderContainer}
           >
             <View>
