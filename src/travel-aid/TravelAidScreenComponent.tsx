@@ -484,7 +484,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sectionContainer: {
     flex: 1,
-    gap: theme.spacing.xLarge,
+    gap: theme.spacing.large,
   },
   subContainer: {
     gap: theme.spacing.small,
