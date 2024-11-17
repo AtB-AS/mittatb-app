@@ -10,7 +10,6 @@ import React from 'react';
 import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
 import {View} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import type {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import {useFirestoreConfiguration} from '@atb/configuration';
@@ -56,32 +55,32 @@ export const StopSignalButton = ({
           style={styles.requestError}
         />
       )}
-      <Button
-        interactiveColor={theme.color.interactive['0']}
-        text={t(
-          status === 'success'
-            ? TravelAidTexts.stopButton.textAfterSubmit
-            : TravelAidTexts.stopButton.text,
-        )}
-        onPress={() => {
-          if (status !== 'success') {
+      {status !== 'success' && (
+        <Button
+          interactiveColor={theme.color.interactive['0']}
+          text={t(TravelAidTexts.stopButton.text)}
+          onPress={() => {
             onPress({
               serviceJourneyId: serviceJourney.id,
               quayId: selectedCall.quay.id,
               serviceDate: selectedCall.date,
             });
-          }
-        }}
-        loading={status === 'loading'}
-        active={status === 'success'}
-        disabled={isDisabled}
-        rightIcon={status === 'success' ? {svg: Confirm} : undefined}
-      />
+          }}
+          loading={status === 'loading'}
+          disabled={isDisabled}
+        />
+      )}
       {isDisabled && (
         <MessageInfoText
           type="warning"
           message={t(TravelAidTexts.stopButton.notAvailable)}
           style={styles.notAvailableWarning}
+        />
+      )}
+      {status === 'success' && (
+        <MessageInfoBox
+          type="valid"
+          message={t(TravelAidTexts.stopButton.successMessage)}
         />
       )}
     </View>
