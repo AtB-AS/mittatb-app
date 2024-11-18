@@ -40,7 +40,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
     expect(selection.stopPlaces?.to?.id).toBe(undefined);
   });
 
-  it('Should not apply from to when no stop places object', () => {
+  it('Should not apply to stop when no stop places object', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .toStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})

@@ -82,8 +82,8 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   fareProductTypeConfig: TEST_TYPE_CONFIG,
   preassignedFareProduct: TEST_PRODUCT,
   zones: {
-    from: {...TEST_ZONE, resultType: 'zone'},
-    to: {...TEST_ZONE, resultType: 'zone'},
+    from: TEST_ZONE_WITH_MD,
+    to: TEST_ZONE_WITH_MD,
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],

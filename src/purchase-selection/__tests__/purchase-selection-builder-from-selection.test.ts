@@ -69,7 +69,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
     expect(selection.travelDate).toBeUndefined();
   });
 
-  it('Should create new selection with defaults when input selection to-place is invalid', () => {
+  it('Should create new selection with defaults when input selection to-zone is invalid', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({
         ...TEST_SELECTION,
