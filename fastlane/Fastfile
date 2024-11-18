@@ -180,6 +180,13 @@ platform :ios do
         timeout: 10800,
         lock_when_sleeps: false
       )
+
+      # Retrieve the keychain path from lane_context
+      keychain_path = lane_context[SharedValues::KEYCHAIN_PATH]
+
+      # Update Apple WWDR Certificate using the keychain path
+      download_and_install_wwdr_cert(keychain: keychain_path)
+
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: identifiers,
@@ -212,17 +219,18 @@ platform :ios do
     )
   end
 
-  lane :download_and_install_wwdr_cert do
+  private_lane :download_and_install_wwdr_cert do |options|
     require 'open-uri'
-  
-    wwdr_cert_url = "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer"
+
+    keychain = options[:keychain] || "/Library/Keychains/System.keychain"
+    wwdr_cert_url = "https://developer.apple.com/certificationauthority/AppleWWDRCAG3.cer"
     cert_file_path = File.join(Dir.tmpdir, "AppleWWDRCAG3.cer")
-  
+
     UI.message("Downloading the latest Apple WWDR Certificate...")
     File.write(cert_file_path, URI.open(wwdr_cert_url).read)
-  
-    UI.message("Installing the Apple WWDR Certificate...")
-    sh("sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain #{cert_file_path}")
+
+    UI.message("Installing the Apple WWDR Certificate into #{keychain}...")
+    sh("security add-trusted-cert -d -r trustRoot -k #{keychain} #{cert_file_path}")
     
     UI.message("Cleaning up temporary files...")
     File.delete(cert_file_path)
