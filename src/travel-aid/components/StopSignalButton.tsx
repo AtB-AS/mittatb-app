@@ -16,6 +16,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '@atb/travel-aid/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAnalytics} from '@atb/analytics';
 
 export const StopSignalButton = ({
   serviceJourney,
@@ -33,6 +34,7 @@ export const StopSignalButton = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const {stopSignalButtonConfig: config} = useFirestoreConfiguration();
+  const analytics = useAnalytics();
 
   if (!isTravelAidStopButtonEnabled) return null;
 
@@ -60,6 +62,7 @@ export const StopSignalButton = ({
           interactiveColor={theme.color.interactive['0']}
           text={t(TravelAidTexts.stopButton.text)}
           onPress={() => {
+            analytics.logEvent('Journey aid', 'Stop signal button pressed');
             onPress({
               serviceJourneyId: serviceJourney.id,
               quayId: selectedCall.quay.id,
