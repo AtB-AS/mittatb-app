@@ -235,11 +235,27 @@ platform :ios do
     UI.message("Installing the Apple WWDR Certificate into #{keychain}...")
     import_certificate(
       certificate_path: cert_file_path,
-      keychain_name: keychain
+      keychain_name: keychain,
+      keychain_password: ENV['MATCH_PASSWORD']
     )
 
     UI.message("Cleaning up temporary files...")
     File.delete(cert_file_path)
+
+    verify_installed_certificates(keychain: keychain)
+  end
+
+  lane :verify_installed_certificates do |options|
+    keychain = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
+  
+    UI.message("Listing installed certificates in #{keychain}...")
+    installed_certs = `security find-certificate -c "Apple Worldwide Developer Relations Certification Authority" -a -Z -k #{keychain}`
+    
+    if installed_certs.empty?
+      UI.user_error!("WWDR Certificate is missing in #{keychain}.")
+    else
+      UI.success("WWDR Certificate is installed in #{keychain}.")
+    end
   end
 
   # iOS Lanes
