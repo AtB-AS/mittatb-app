@@ -77,6 +77,8 @@ jobs:
       - name: Remove use of beacons
         if: ${{ env.KETTLE_API_KEY == '' }}
         run: bundle exec fastlane ios remove_use_of_beacons
+      - name: Update WWDR certificate
+        run: bundle exec fastlane ios download_and_install_wwdr_cert
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
