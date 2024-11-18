@@ -11,6 +11,8 @@ import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view'
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useLiveRegionAnnouncement} from '@atb/components/screen-reader-announcement';
+import {isDefined} from '@atb/utils/presence';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -35,6 +37,7 @@ export type MessageInfoBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
+  a11yAnnounce?: boolean;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -46,6 +49,7 @@ export const MessageInfoBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
+  a11yAnnounce,
   testID,
 }: MessageInfoBoxProps) => {
   const {theme, themeName} = useTheme();
@@ -62,8 +66,12 @@ export const MessageInfoBox = ({
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
   const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
-    .filter((s): s is string => !!s)
+    .filter(isDefined)
     .join(screenReaderPause);
+  const liveRegionA11yProps = useLiveRegionAnnouncement(
+    a11yLabel,
+    a11yAnnounce,
+  );
 
   return (
     <PressableOpacityOrView
@@ -81,17 +89,16 @@ export const MessageInfoBox = ({
       )}
       <View
         style={styles.content}
-        accessible={true}
         accessibilityRole={
           onPressConfig && ('action' in onPressConfig ? 'button' : 'link')
         }
-        accessibilityLabel={a11yLabel}
         accessibilityHint={
           onPressConfig &&
           ('action' in onPressConfig
             ? t(MessageBoxTexts.a11yHintActionPrefix)
             : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
         }
+        {...liveRegionA11yProps}
       >
         {title && (
           <ThemeText

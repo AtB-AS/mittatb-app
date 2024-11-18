@@ -12,12 +12,14 @@ export type Props = {
   situation: SituationType;
   noStatusIcon?: MessageInfoBoxProps['noStatusIcon'];
   style?: MessageInfoBoxProps['style'];
+  a11yAnnounce?: boolean;
 };
 
 export const SituationMessageBox = ({
   situation,
   noStatusIcon,
   style,
+  a11yAnnounce,
 }: Props) => {
   const {language} = useTranslation();
 
@@ -34,6 +36,7 @@ export const SituationMessageBox = ({
       noStatusIcon={noStatusIcon}
       style={style}
       message={text}
+      a11yAnnounce={a11yAnnounce}
       onPressConfig={{
         text: t(dictionary.readMore),
         action: () => openSituation(situation),
