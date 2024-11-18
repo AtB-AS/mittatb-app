@@ -237,7 +237,7 @@ platform :ios do
     UI.message("Installing the Apple WWDR Certificate into #{keychain_path}...")
     import_certificate(
       certificate_path: cert_file_path,
-      keychain_path: keychain_path,
+      keychain_name: keychain_path,
       keychain_password: ENV['MATCH_PASSWORD']
     )
 
