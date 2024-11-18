@@ -223,7 +223,7 @@ platform :ios do
     require 'open-uri'
 
     keychain = options[:keychain] || "/Library/Keychains/System.keychain"
-    wwdr_cert_url = "https://developer.apple.com/certificationauthority/AppleWWDRCAG3.cer"
+    wwdr_cert_url = "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer"
     cert_file_path = File.join(Dir.tmpdir, "AppleWWDRCAG3.cer")
 
     UI.message("Downloading the latest Apple WWDR Certificate...")
