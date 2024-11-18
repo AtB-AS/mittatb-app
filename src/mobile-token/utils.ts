@@ -1,9 +1,17 @@
 import {RemoteToken} from './types';
 import {
+  buildReattestation,
+  ClientNetworkError,
+  Token,
   TokenAction,
   TokenErrorResolution,
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
+import {
+  Attestation,
+  parseRemoteError,
+  TokenReattestationRemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
 import {isDefined} from '@atb/utils/presence';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
@@ -47,6 +55,7 @@ export const getSdkErrorHandlingStrategy = (
       case TokenErrorResolution.ASK_USER:
       case TokenErrorResolution.IGNORE:
       case TokenErrorResolution.RETRY_LATER:
+      case TokenErrorResolution.NONE:
         return 'unspecified';
     }
   }
@@ -58,5 +67,46 @@ export const getSdkErrorHandlingStrategy = (
  */
 export const getSdkErrorTokenIds = (err: any): string[] =>
   err instanceof TokenFactoryError
-    ? [err.pendingTokenId, err.activatedTokenId].filter(isDefined)
+    ? [err.pendingTokenId?.tokenId, err.activatedTokenId?.tokenId].filter(
+        isDefined,
+      )
     : [];
+
+/**
+ * from https://github.com/entur/abt-mobile-client-sdk/pull/368
+ */
+export const parseBffCallErrors = (error: any) => {
+  if (
+    error instanceof TypeError &&
+    error.message === 'Network request failed'
+  ) {
+    return new ClientNetworkError(error.message);
+  }
+
+  return parseRemoteError(error) ?? error;
+};
+
+/**
+ * Local handling of remote token state error, the version 3.x.x of the new SDK doesn't handle this,
+ * and uses a non-attested token instead. Therefore we added this from the old SDK,
+ * to handle the reattestation on our own.
+ */
+export async function handleRemoteTokenReattestationError<T>(
+  fn: (reattestation?: Attestation) => Promise<T>,
+  token: Token,
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    if (error instanceof TokenReattestationRemoteTokenStateError) {
+      const reattestation = await buildReattestation(
+        token.getContextId(),
+        token.getTokenId(),
+        error.reattestationData,
+      );
+
+      return fn(reattestation);
+    }
+    throw error;
+  }
+}
