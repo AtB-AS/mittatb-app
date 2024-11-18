@@ -226,6 +226,9 @@ platform :ios do
     wwdr_cert_url = "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer"
     cert_file_path = File.join(Dir.tmpdir, "AppleWWDRCAG3.cer")
 
+    UI.message("Unlocking the keychain (if required)...")
+    sh("security unlock-keychain -p #{ENV['MATCH_PASSWORD']} #{keychain}")
+
     UI.message("Downloading the latest Apple WWDR Certificate...")
     File.write(cert_file_path, URI.open(wwdr_cert_url).read)
 
