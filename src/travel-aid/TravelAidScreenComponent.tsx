@@ -3,12 +3,17 @@ import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import React, {Ref, useEffect, useRef, useState} from 'react';
+import React, {Ref, useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {AccessibilityInfo, ActivityIndicator, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  ActivityIndicator,
+  Platform,
+  View,
+} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {
@@ -49,6 +54,14 @@ import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
 import {createSentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
+
+// Each situation/notification has a lifetime since the accessibility does not queue the messages, this is a time
+// for them not being interrupted too early.
+const ANNOUNCE_LIFETIME = 10000;
+
+// Delay restriction between adding new messages to the announcement queue.
+// This prevents adding part of the same message when announced situations/notices are marked as announced.
+const MIN_ANNOUNCE_DELAY = 2000;
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -271,65 +284,117 @@ const useTravelAidAnnouncements = (
   cancelled: boolean,
 ) => {
   const {language, t} = useTranslation();
+
   const previousQuayId = useRef<string | null>(null);
 
-  const announcedSituationIds = situationsForFocusedStop
-    .map((s) => s.id)
-    .filter(onlyUniques);
-  const announcedNoticeIds = noticesForFocusedStop
-    .map((s) => s.id)
-    .filter(onlyUniques);
-
-  const [currentAnnouncedSituationIds, setCurrentAnnouncedSituationIds] =
-    useState<string[]>(announcedSituationIds);
-  const [currentAnnouncedNoticeIds, setCurrentAnnouncedNoticeIds] =
-    useState<string[]>(announcedNoticeIds);
+  const [announcedSituationIds, setAnnouncedSituationIds] = useState<string[]>(
+    situationsForFocusedStop.map((s) => s.id).filter(onlyUniques),
+  );
+  const [announcedNoticeIds, setAnnouncedNoticeIds] = useState<string[]>(
+    noticesForFocusedStop.map((n) => n.id).filter(onlyUniques),
+  );
 
   const newSituations = situationsForFocusedStop.filter(
-    (s) => !currentAnnouncedSituationIds.includes(s.id),
+    (s) => !announcedSituationIds.includes(s.id),
   );
   const newNotices = noticesForFocusedStop.filter(
-    (s) => !currentAnnouncedNoticeIds.includes(s.id),
+    (n) => !announcedNoticeIds.includes(n.id),
   );
 
-  const message =
+  const newSituationIds = newSituations.map((s) => s.id);
+  const newNoticeIds = newNotices.map((n) => n.id);
+
+  const cancelledA11yLabel =
+    t(dictionary.messageTypes['error']) +
+    screenReaderPause +
+    t(CancelledDepartureTexts.message);
+
+  const focusedStateWithCancelled =
     getFocussedStateA11yLabel(state, t, language) +
-    (cancelled ? screenReaderPause + t(CancelledDepartureTexts.message) : '') +
+    (cancelled ? screenReaderPause + cancelledA11yLabel : '');
+
+  const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
+
+  const message =
+    focusedStateWithCancelled +
     screenReaderPause +
     getSituationA11yLabel(newSituations, language) +
     screenReaderPause +
     getNoticesA11yLabel(newNotices);
-  const timeInfoMessage = getTimeInfoA11yLabel(state, t, language);
 
-  if (newSituations.length > 0) {
-    setCurrentAnnouncedSituationIds((prev) => [
-      ...prev,
-      ...newSituations.map((s) => s.id),
-    ]);
-  }
+  const [announcementQueue, setAnnouncementQueue] = useState<string[]>([]);
+  const [isAnnouncing, setIsAnnouncing] = useState(false);
+  const [lastAnnounceTime, setLastAnnounceTime] = useState<number>(0);
 
-  if (newNotices.length > 0) {
-    setCurrentAnnouncedNoticeIds((prev) => [
-      ...prev,
-      ...newNotices.map((s) => s.id),
-    ]);
-  }
+  const announceMessage = useCallback(
+    (msg: string) => {
+      const currentTime = Date.now();
+      if (currentTime - lastAnnounceTime >= MIN_ANNOUNCE_DELAY) {
+        if (Platform.OS === 'ios') {
+          AccessibilityInfo.announceForAccessibilityWithOptions(msg, {
+            queue: true,
+          });
+        } else {
+          setAnnouncementQueue((prevQueue) => [...prevQueue, msg]);
+        }
+        setLastAnnounceTime(currentTime);
+      }
+    },
+    [lastAnnounceTime],
+  );
+
+  useEffect(() => {
+    if (Platform.OS !== 'ios') return;
+
+    const processQueue = async () => {
+      if (isAnnouncing || announcementQueue.length === 0) return;
+
+      setIsAnnouncing(true);
+
+      const nextMessage = announcementQueue[0];
+      AccessibilityInfo.announceForAccessibility(nextMessage);
+      await new Promise((resolve) => setTimeout(resolve, ANNOUNCE_LIFETIME));
+
+      setAnnouncementQueue((prevQueue) => prevQueue.slice(1));
+
+      setIsAnnouncing(false);
+    };
+
+    processQueue();
+  }, [announcementQueue, isAnnouncing]);
+
+  useEffect(() => {
+    if (newSituationIds.length > 0) {
+      setAnnouncedSituationIds((prev) => [...prev, ...newSituationIds]);
+    }
+
+    if (newNoticeIds.length > 0) {
+      setAnnouncedNoticeIds((prev) => [...prev, ...newNoticeIds]);
+    }
+  }, [newSituationIds, newNoticeIds]);
 
   useEffect(() => {
     if (!previousQuayId.current) {
       // If previousQuayId is null, it is the first render, and we should not
-      // announce the time
+      // announce the time or situations/notifications.
       previousQuayId.current = state.focusedEstimatedCall.quay.id;
       return;
     }
+
     if (previousQuayId.current === state.focusedEstimatedCall.quay.id) {
       // Only announce the time if the focused estimated call hasn't changed
-      AccessibilityInfo.announceForAccessibility(timeInfoMessage);
+      announceMessage(timeInfoMessage);
     } else {
-      AccessibilityInfo.announceForAccessibility(message);
+      announceMessage(message);
     }
+
     previousQuayId.current = state.focusedEstimatedCall.quay.id;
-  }, [message, timeInfoMessage, state.focusedEstimatedCall.quay.id]);
+  }, [
+    message,
+    timeInfoMessage,
+    state.focusedEstimatedCall.quay.id,
+    announceMessage,
+  ]);
 };
 
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
