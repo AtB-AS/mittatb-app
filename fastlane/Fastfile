@@ -249,7 +249,7 @@ platform :ios do
     keychain = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
   
     UI.message("Listing installed certificates in #{keychain}...")
-    installed_certs = `security find-certificate -c "Apple Worldwide Developer Relations Certification Authority" -a -Z -k #{keychain}`
+    installed_certs = `security find-certificate -c "Apple Worldwide Developer Relations Certification Authority" -a -Z #{keychain}`
     
     if installed_certs.empty?
       UI.user_error!("WWDR Certificate is missing in #{keychain}.")
