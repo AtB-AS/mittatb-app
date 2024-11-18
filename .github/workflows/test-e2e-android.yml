@@ -6,6 +6,15 @@ on:
         description: 'Define API level'
         required: true
         default: 30
+      system_image:
+        description: 'Define system image'
+        type: choice
+        required: true
+        default: 'default'
+        options:
+          - 'default'
+          - 'google_apis'
+          - 'google_apis_playstore'
       branch:
         description: 'Define branch to test'
         required: true
@@ -24,9 +33,11 @@ jobs:
         env:
           DEFAULT_BRANCH: 'master'
           DEFAULT_API_LEVEL: 30
+          DEFAULT_SYSTEM_IMAGE: 'default'
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
           echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
+          echo "INPUT_SYSTEM_IMAGE=${{ github.event.inputs.system_image || env.DEFAULT_SYSTEM_IMAGE }}" >> $GITHUB_ENV          
           echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v4
@@ -47,9 +58,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      #- name: Install Appium
       #  run: npm install -g appium
-      #- name: Install uiautomator2 driver
       #  run: appium driver install uiautomator2
       - name: Add Entur private registry credentials
         run: bash ./scripts/add-entur-private-registry.sh
@@ -63,19 +72,50 @@ jobs:
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
+      # Emulator cache
+      - name: Gradle cache
+        if: env.INPUT_SYSTEM_IMAGE == 'default'
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        if: env.INPUT_SYSTEM_IMAGE == 'default'
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-${{ env.INPUT_SYSTEM_IMAGE }}-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.INPUT_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: echo "Generated AVD snapshot for caching."
+
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
+          target: ${{ env.INPUT_SYSTEM_IMAGE }}
           profile: pixel_5
-          emulator-build: 11237101
+          emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
@@ -88,13 +128,4 @@ jobs:
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
-          retention-days: 1
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            ./e2e/results/*.xml
-            ./e2e/results/results-mochawesome.json
           retention-days: 1

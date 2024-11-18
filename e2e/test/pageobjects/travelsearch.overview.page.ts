@@ -63,6 +63,14 @@ class TravelSearchOverviewPage {
   }
 
   /**
+   * Check if there are any travel search results
+   */
+  async hasTravelSearchResults() {
+    await ElementHelper.waitForElement('id', `tripSearchContentView`, 20000);
+    return ElementHelper.isElementExisting('tripSearchSearchResult0', 20);
+  }
+
+  /**
    * Confirm the travel search onboarding - if it exists
    * @param timeoutValue How long to search for the onboarding confirmation button
    */
