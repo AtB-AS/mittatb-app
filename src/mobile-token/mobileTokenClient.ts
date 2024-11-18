@@ -1,20 +1,31 @@
 import {
   ActivatedToken,
   createClient,
+  DefaultAttestationCreationErrorStrategy,
+  DefaultAttestationVerificationErrorStrategy,
   encodeAsSecureContainer,
   Token,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
 import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
-import {HALF_DAY_MS} from '@atb/utils/durations';
+import {HALF_DAY_MS} from '@atb/utils/durations.ts';
+import {Platform} from 'react-native';
 
 const CONTEXT_ID = 'main';
 
-const abtClient = createClient({
+const attestationCreationErrorStrategy =
+  new DefaultAttestationCreationErrorStrategy(true, false, true, true);
+const attestationVerificationErrorStrategy =
+  new DefaultAttestationVerificationErrorStrategy(true, true, true);
+
+export const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
   attestation: {
-    attestationType: 'PlayIntegrityAPIAttestation',
+    attestationType:
+      Platform.OS === 'android' ? 'PlayIntegrityAPIAttestation' : undefined,
+    attestationCreationErrorStrategy: attestationCreationErrorStrategy,
+    attestationVerificationErrorStrategy: attestationVerificationErrorStrategy,
   },
   remoteTokenService: tokenService,
   localLogger,
