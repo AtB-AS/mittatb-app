@@ -8,6 +8,7 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
+import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -53,6 +54,11 @@ export const TEST_ZONE: TariffZone = {
   },
 };
 
+export const TEST_ZONE_WITH_MD: TariffZoneWithMetadata = {
+  ...TEST_ZONE,
+  resultType: 'zone',
+};
+
 export const TEST_USER_PROFILE: UserProfile = {
   id: 'UP1',
   name: {lang: 'no', value: 'Passasjerprofil1'},
@@ -75,8 +81,11 @@ export const TEST_INPUT: PurchaseSelectionBuilderInput = {
 export const TEST_SELECTION: PurchaseSelectionType = {
   fareProductTypeConfig: TEST_TYPE_CONFIG,
   preassignedFareProduct: TEST_PRODUCT,
-  fromPlace: {...TEST_ZONE, resultType: 'zone'},
-  toPlace: {...TEST_ZONE, resultType: 'zone'},
+  zones: {
+    from: {...TEST_ZONE, resultType: 'zone'},
+    to: {...TEST_ZONE, resultType: 'zone'},
+  },
+  stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
   travelDate: undefined,
 };

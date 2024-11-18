@@ -180,8 +180,10 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(input)
       .fromSelection({
         ...TEST_SELECTION,
-        fromPlace: {...TEST_ZONE, id: 'T3', resultType: 'zone'},
-        toPlace: {...TEST_ZONE, id: 'T1', resultType: 'zone'},
+        zones: {
+          from: {...TEST_ZONE, id: 'T3', resultType: 'zone'},
+          to: {...TEST_ZONE, id: 'T1', resultType: 'zone'},
+        },
       })
       .product({
         ...TEST_PRODUCT,
@@ -194,7 +196,7 @@ describe('purchaseSelectionBuilder - product', () => {
       .build();
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
-    expect(selection.fromPlace.id).toBe('T2');
-    expect(selection.toPlace.id).toBe('T2');
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe('T2');
   });
 });
