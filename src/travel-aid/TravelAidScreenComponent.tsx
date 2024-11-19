@@ -202,13 +202,15 @@ const TravelAidSection = ({
             situationsForFocused.length > 0 ||
             noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
-              {isCancelled && <CancelledDepartureMessage a11yAnnounce={true} />}
+              {isCancelled && (
+                <CancelledDepartureMessage a11yLiveRegion="polite" />
+              )}
 
               {situationsForFocused.map((situation) => (
                 <SituationMessageBox
                   key={situation.id}
                   situation={situation}
-                  a11yAnnounce={true}
+                  a11yLiveRegion="polite"
                 />
               ))}
 
@@ -218,7 +220,7 @@ const TravelAidSection = ({
                     <MessageInfoBox
                       type="info"
                       message={notice.text}
-                      a11yAnnounce={true}
+                      a11yLiveRegion="polite"
                     />
                   ),
               )}

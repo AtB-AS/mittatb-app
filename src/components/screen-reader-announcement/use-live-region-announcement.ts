@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
-import {AccessibilityInfo, AccessibilityProps, Platform} from 'react-native';
+import {AccessibilityInfo, Platform} from 'react-native';
+import type {A11yLiveRegion, A11yLiveRegionProps} from './types';
 
 /**
  * When a11yLabel changes, announce it to screen readers without interrupting
@@ -11,21 +12,23 @@ import {AccessibilityInfo, AccessibilityProps, Platform} from 'react-native';
  */
 export const useLiveRegionAnnouncement = (
   a11yLabel?: string,
-  enabled?: boolean,
-): AccessibilityProps => {
+  a11yLiveRegion?: A11yLiveRegion,
+): A11yLiveRegionProps => {
   // Since iOS does not support accessibilityLiveRegion, we trigger screen
   // reader announcements when a11yLabel changes for a equivalent effect.
   useEffect(() => {
+    const enabled =
+      a11yLiveRegion === 'polite' || a11yLiveRegion === 'assertive';
     if (enabled && a11yLabel && Platform.OS === 'ios') {
       AccessibilityInfo.announceForAccessibilityWithOptions(a11yLabel, {
-        queue: true,
+        queue: a11yLiveRegion === 'polite',
       });
     }
-  }, [a11yLabel, enabled]);
+  }, [a11yLabel, a11yLiveRegion]);
 
   return {
     accessible: true,
     accessibilityLabel: a11yLabel,
-    accessibilityLiveRegion: enabled ? 'polite' : undefined,
+    accessibilityLiveRegion: a11yLiveRegion,
   };
 };

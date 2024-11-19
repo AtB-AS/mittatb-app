@@ -11,7 +11,10 @@ import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view'
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useLiveRegionAnnouncement} from '@atb/components/screen-reader-announcement';
+import {
+  type A11yLiveRegion,
+  useLiveRegionAnnouncement,
+} from '@atb/components/screen-reader-announcement';
 import {isDefined} from '@atb/utils/presence';
 
 /**
@@ -37,7 +40,7 @@ export type MessageInfoBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
-  a11yAnnounce?: boolean;
+  a11yLiveRegion?: A11yLiveRegion;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -49,13 +52,15 @@ export const MessageInfoBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
-  a11yAnnounce,
+  a11yLiveRegion,
   testID,
 }: MessageInfoBoxProps) => {
   const {theme, themeName} = useTheme();
   const styles = useStyles(type)();
   const {t} = useTranslation();
-  const iconColorProps = {color: theme.color.status[type].secondary.foreground.primary};
+  const iconColorProps = {
+    color: theme.color.status[type].secondary.foreground.primary,
+  };
   const textColor = theme.color.status[type].secondary.foreground.primary;
 
   const onPress =
@@ -70,7 +75,7 @@ export const MessageInfoBox = ({
     .join(screenReaderPause);
   const liveRegionA11yProps = useLiveRegionAnnouncement(
     a11yLabel,
-    a11yAnnounce,
+    a11yLiveRegion,
   );
 
   return (
