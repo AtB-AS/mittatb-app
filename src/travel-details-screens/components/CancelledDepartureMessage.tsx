@@ -3,7 +3,11 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {CancelledDepartureTexts, useTranslation} from '@atb/translations';
 
-export const CancelledDepartureMessage = () => {
+export const CancelledDepartureMessage = ({
+  a11yAnnounce,
+}: {
+  a11yAnnounce?: boolean;
+}) => {
   const styles = useStopsStyle();
   const {t} = useTranslation();
 
@@ -12,6 +16,7 @@ export const CancelledDepartureMessage = () => {
       type="error"
       style={styles.cancellationContainer}
       message={t(CancelledDepartureTexts.message)}
+      a11yAnnounce={a11yAnnounce}
     />
   );
 };
