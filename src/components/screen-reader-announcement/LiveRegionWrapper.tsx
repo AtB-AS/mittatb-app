@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {useLiveRegionAnnouncement} from './use-live-region-announcement';
-import type {A11yLiveRegion} from '@atb/components/screen-reader-announcement/types';
+import type {A11yLiveRegion} from './types';
 
 /**
  * Wrapper for components that should be announced to screen readers on mount
