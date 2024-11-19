@@ -16,7 +16,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {TravellerSelectionBottomSheetType} from './types';
 import {useAuthState} from '@atb/auth';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,

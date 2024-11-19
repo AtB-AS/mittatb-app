@@ -42,7 +42,9 @@ export function LineChip({
   if (!publicCode && !transportMode) return null;
 
   return (
-    <View style={[styles.lineChip, {backgroundColor: transportColor.background}]}>
+    <View
+      style={[styles.lineChip, {backgroundColor: transportColor.background}]}
+    >
       <ThemeIcon
         color={transportColor.foreground.primary}
         style={{marginRight: publicCode ? theme.spacing.small : 0}}
@@ -52,7 +54,10 @@ export function LineChip({
         <ThemeText
           style={[
             styles.lineChipText,
-            {color: transportColor.foreground.primary, minWidth: fontScale * 20},
+            {
+              color: transportColor.foreground.primary,
+              minWidth: fontScale * 20,
+            },
           ]}
           type="body__primary--bold"
           testID={`${testID}PublicCode`}

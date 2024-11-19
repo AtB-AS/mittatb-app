@@ -23,8 +23,8 @@ export function useChatUnreadCount() {
     const countListener = Intercom.addEventListener(
       IntercomEvents.IntercomUnreadCountDidChange,
       (response) => {
-        setCount(response.count as number)
-      }
+        setCount(response.count as number);
+      },
     );
 
     return () => {

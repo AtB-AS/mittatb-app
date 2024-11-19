@@ -14,7 +14,7 @@ export function PageIndicator(props: MaterialTopTabBarProps) {
         <View
           key={i}
           style={[styles.pageDot, index === i && styles.activeDot]}
-         />
+        />
       ))}
     </View>
   );

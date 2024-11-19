@@ -15,7 +15,7 @@ export const Consequence = ({
   icon: JSX.Element;
 }) => {
   const styles = useStyle();
-  const { theme } = useTheme()
+  const {theme} = useTheme();
   return (
     <View style={styles.consequence}>
       <View style={styles.icon}>{icon}</View>

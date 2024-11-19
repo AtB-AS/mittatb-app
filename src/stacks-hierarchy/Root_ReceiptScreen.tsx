@@ -168,5 +168,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     marginTop: theme.spacing.large,
     marginBottom: theme.spacing.large,
-  }
+  },
 }));

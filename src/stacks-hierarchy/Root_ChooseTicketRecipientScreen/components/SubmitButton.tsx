@@ -122,10 +122,7 @@ export const SubmitButton = ({
   return (
     <View style={styles.container}>
       {isSubmitting && (
-        <ActivityIndicator
-          size="large"
-          color={themeColor.foreground.primary}
-        />
+        <ActivityIndicator size="large" color={themeColor.foreground.primary} />
       )}
 
       {error === 'unknown_error' && !isSubmitting && (

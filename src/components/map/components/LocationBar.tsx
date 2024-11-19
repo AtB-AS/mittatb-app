@@ -31,8 +31,8 @@ type Props = {
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0]
-const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
@@ -92,7 +92,10 @@ const Icon: React.FC<{
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator animating={true} color={getBackgroundColor(theme).foreground.primary} />
+        <ActivityIndicator
+          animating={true}
+          color={getBackgroundColor(theme).foreground.primary}
+        />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (

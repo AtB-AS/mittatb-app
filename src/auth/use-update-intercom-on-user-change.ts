@@ -8,8 +8,8 @@ export const useUpdateIntercomOnUserChange = (state: AuthReducerState) => {
 
   useEffect(() => {
     updateMetadata({
-        'AtB-Firebase-Auth-Id': state.user?.uid,
-        'AtB-Auth-Type': mapAuthenticationType(state.user),
-      });
+      'AtB-Firebase-Auth-Id': state.user?.uid,
+      'AtB-Auth-Type': mapAuthenticationType(state.user),
+    });
   }, [state.user, updateMetadata]);
 };

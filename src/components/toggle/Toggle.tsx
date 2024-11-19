@@ -23,8 +23,8 @@ export function Toggle({
 }: Props) {
   const [checked, setChecked] = useState(value);
   const {theme} = useTheme();
-  const interactiveColorValue = interactiveColor ?? theme.color.interactive[1]
-  const backgroundColor = theme.color.background.neutral[3].background
+  const interactiveColorValue = interactiveColor ?? theme.color.interactive[1];
+  const backgroundColor = theme.color.background.neutral[3].background;
   const styles = useStyles();
 
   // Preserve outside changes

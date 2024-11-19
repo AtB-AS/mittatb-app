@@ -5,7 +5,7 @@ import {
   TextColor,
   Theme,
   isStatusColor,
-  isTextColor
+  isTextColor,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -28,7 +28,7 @@ export type ThemeIconProps = {
 export const ThemeIcon = ({
   svg,
   color,
-  size = "normal",
+  size = 'normal',
   notification,
   style,
   allowFontScaling = true,
@@ -36,7 +36,7 @@ export const ThemeIcon = ({
 }: ThemeIconProps): JSX.Element | null => {
   const {theme} = useTheme();
   const fontScale = useFontScale();
-  const fill = useColor(color)
+  const fill = useColor(color);
 
   if (!svg) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
@@ -73,8 +73,8 @@ function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
   } else if (isStatusColor(color, theme)) {
     return theme.color.status[color].primary.background;
   } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary']
+    return theme.color.foreground.dynamic[color ?? 'primary'];
   } else {
-    return color
+    return color;
   }
 }

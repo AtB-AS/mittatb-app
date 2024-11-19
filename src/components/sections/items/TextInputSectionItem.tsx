@@ -91,8 +91,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor:
-            theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;

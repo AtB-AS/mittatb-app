@@ -2,7 +2,7 @@ import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 
-const getThemeColor = (theme: Theme) => theme.color.background.neutral[1]
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export function AnimatedBottomSheet({
   animatedOffset,

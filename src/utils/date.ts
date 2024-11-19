@@ -601,4 +601,4 @@ function getHumanizer(
 export const isValidDateString = (dateString: string) => {
   const parsedDate = parseISO(dateString);
   return isValid(parsedDate);
-}
+};

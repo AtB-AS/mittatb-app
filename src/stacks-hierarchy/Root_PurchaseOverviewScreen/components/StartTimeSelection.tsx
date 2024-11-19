@@ -34,10 +34,7 @@ export function StartTimeSelection({
 
   const openTravelDateSheet = () => {
     openBottomSheet(() => (
-      <TravelDateSheet
-        save={setTravelDate}
-        travelDate={travelDate}
-      />
+      <TravelDateSheet save={setTravelDate} travelDate={travelDate} />
     ));
   };
 

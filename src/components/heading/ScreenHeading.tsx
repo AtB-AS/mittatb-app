@@ -11,17 +11,10 @@ type ScreenHeadingProps = {
 };
 
 export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
-  (
-    {
-      text,
-      color,
-      accessibilityLabel,
-    }: ScreenHeadingProps,
-    ref,
-  ) => {
+  ({text, color, accessibilityLabel}: ScreenHeadingProps, ref) => {
     const styles = useStyles();
     const {theme} = useTheme();
-    color = color ?? theme.color.background.accent[0]
+    color = color ?? theme.color.background.accent[0];
 
     return (
       <View style={styles.container} ref={ref} accessible role="heading">

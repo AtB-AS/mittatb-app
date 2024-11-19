@@ -25,7 +25,7 @@ type OnboardingScreenComponentParams = {
   testID?: string;
 };
 
-const getThemeColor= (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const OnboardingScreenComponent = ({
   illustration,

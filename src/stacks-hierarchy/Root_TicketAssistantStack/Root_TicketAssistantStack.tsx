@@ -26,13 +26,13 @@ type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 
 export const TICKET_ASSISTANT_WELCOME_SCREEN = 'TicketAssistant_WelcomeScreen';
 export const TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN =
-'TicketAssistant_CategoryPickerScreen';
+  'TicketAssistant_CategoryPickerScreen';
 export const TICKET_ASSISTANT_FREQUENCY_SCREEN =
-'TicketAssistant_FrequencyScreen';
+  'TicketAssistant_FrequencyScreen';
 export const TICKET_ASSISTANT_DURATION_SCREEN =
-'TicketAssistant_DurationScreen';
+  'TicketAssistant_DurationScreen';
 export const TICKET_ASSISTANT_ZONE_PICKER_SCREEN =
-'TicketAssistant_ZonePickerScreen';
+  'TicketAssistant_ZonePickerScreen';
 export const TICKET_ASSISTANT_SUMMARY_SCREEN = 'TicketAssistant_SummaryScreen';
 
 export const Root_TicketAssistantStack = ({navigation}: Props) => {

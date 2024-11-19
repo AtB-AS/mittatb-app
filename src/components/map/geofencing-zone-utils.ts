@@ -10,7 +10,7 @@ import {
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {GeofencingZoneStyles} from '@atb-as/theme';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,

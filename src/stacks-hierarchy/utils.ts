@@ -79,12 +79,15 @@ export const useFilterTariffZone = (
   tariffZones: TariffZone[],
   allowedTariffZoneRefs: string[],
 ): TariffZone[] => {
-
   return useMemo<TariffZone[]>(() => {
     if (allowedTariffZoneRefs.length === 0) {
       return tariffZones;
-    } 
-  
-    return tariffZones.filter((tariffZone) => allowedTariffZoneRefs.some((allowedZone) => tariffZone.id === allowedZone));
+    }
+
+    return tariffZones.filter((tariffZone) =>
+      allowedTariffZoneRefs.some(
+        (allowedZone) => tariffZone.id === allowedZone,
+      ),
+    );
   }, [tariffZones, allowedTariffZoneRefs]);
-}
+};

@@ -48,11 +48,7 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
       'Oversikt over endringar, forseinkingar og avvik finn du på svipper.no:',
     ),
     button: {
-      text: _(
-	'Trafikkmeldinger',
-	'Customer information',
-	'Trafikkmeldingar',
-      ),
+      text: _('Trafikkmeldinger', 'Customer information', 'Trafikkmeldingar'),
     },
   },
 });

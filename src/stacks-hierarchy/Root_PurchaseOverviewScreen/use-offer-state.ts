@@ -12,7 +12,7 @@ import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {PurchaseSelectionType} from "@atb/purchase-selection";
+import {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -282,4 +282,4 @@ function isTariffZone(place: TariffZone | StopPlaceFragment) {
 }
 
 const isNotAvailableError = (err: any) =>
-    err.response?.status === 400 && err.response?.data === 'NotAvailable';
+  err.response?.status === 400 && err.response?.data === 'NotAvailable';

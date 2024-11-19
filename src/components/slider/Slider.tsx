@@ -28,7 +28,7 @@ export function Slider({
   maximumValue,
   minimumValue,
   minimumTrackTintColor,
-  maximumTrackTintColor ,
+  maximumTrackTintColor,
   step,
   trackClickable = true,
   thumbTintColor,
@@ -42,7 +42,7 @@ export function Slider({
   trackMarks,
 }: Props) {
   const {theme} = useTheme();
-  const themeColor = theme.color.interactive[0]
+  const themeColor = theme.color.interactive[0];
   const minColor = (minimumTrackTintColor ?? themeColor).default.background;
   const maxColor = (maximumTrackTintColor ?? themeColor).active.background;
   const thumbColor = (thumbTintColor ?? themeColor).default.background;

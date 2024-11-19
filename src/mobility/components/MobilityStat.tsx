@@ -46,13 +46,7 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
   const styles = useSheetStyle();
   return (
     <View style={styles.statWithIcon}>
-      {svg && (
-        <ThemeIcon
-          svg={svg}
-          color="secondary"
-          style={styles.statIcon}
-        />
-      )}
+      {svg && <ThemeIcon svg={svg} color="secondary" style={styles.statIcon} />}
       <ThemeText type="body__secondary--bold" color="secondary">
         {text}
       </ThemeText>

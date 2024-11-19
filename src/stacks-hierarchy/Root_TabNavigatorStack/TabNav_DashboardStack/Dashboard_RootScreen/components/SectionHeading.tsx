@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{
 }>;
 export const SectionHeading = ({accessibilityLabel, children}: Props) => {
   const style = useStyle();
-  const {theme} = useTheme()
+  const {theme} = useTheme();
   const themeColor = theme.color.background.accent[0];
   return (
     <ThemeText

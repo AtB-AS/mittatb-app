@@ -9,7 +9,6 @@ import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenView} from '@atb/components/screen-view';
 
-
 export type OnboardingFullScreenViewProps = PropsWithChildren<{
   footerButton: ButtonProps;
   secondaryFooterButton?: ButtonProps;

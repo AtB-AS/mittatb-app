@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
 import {
@@ -34,13 +34,16 @@ export const Dashboard_NearbyStopPlacesScreen = ({
           initialLocation: location,
         })
       }
-      onSelectStopPlace={useCallback((place: StopPlace) => {
+      onSelectStopPlace={useCallback(
+        (place: StopPlace) => {
           navigation.navigate('Dashboard_PlaceScreen', {
             place,
             mode: route.params.mode,
             onCloseRoute: route.params.onCloseRoute,
           });
-      }, [navigation, route.params.mode, route.params.onCloseRoute])}
+        },
+        [navigation, route.params.mode, route.params.onCloseRoute],
+      )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
     />

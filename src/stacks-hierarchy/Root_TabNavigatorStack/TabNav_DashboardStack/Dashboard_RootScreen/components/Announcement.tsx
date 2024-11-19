@@ -121,7 +121,9 @@ export const Announcement = ({announcement, style}: Props) => {
             analytics.logEvent('Dashboard', 'Announcement pressed', {
               id: announcement.id,
             });
-            if (announcement.actionButton.actionType === ActionType.bottom_sheet) {
+            if (
+              announcement.actionButton.actionType === ActionType.bottom_sheet
+            ) {
               openBottomSheet(() => (
                 <AnnouncementSheet announcement={announcement} />
               ));

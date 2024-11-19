@@ -35,5 +35,5 @@ export type VippsSignInErrorCode =
   | 'unknown_error';
 
 export type AuthStateChangeListenerCallback = (
-    user: FirebaseAuthTypes.User | null,
+  user: FirebaseAuthTypes.User | null,
 ) => void;

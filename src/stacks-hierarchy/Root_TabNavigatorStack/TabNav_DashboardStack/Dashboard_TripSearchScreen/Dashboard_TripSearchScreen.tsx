@@ -57,8 +57,10 @@ import {useFeatureToggles} from '@atb/feature-toggles';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
-const getHeaderBackgroundColor = (theme: Theme) => theme.color.background.accent[0];
-const getResultsBackgroundColor = (theme: Theme) => theme.color.background.neutral[1];
+const getHeaderBackgroundColor = (theme: Theme) =>
+  theme.color.background.accent[0];
+const getResultsBackgroundColor = (theme: Theme) =>
+  theme.color.background.neutral[1];
 
 export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   navigation,
@@ -350,7 +352,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   svg: Time,
                   notification:
                     searchTime.option !== 'now'
-                      ? {color: statusColor, backgroundColor: headerBackgroundColor}
+                      ? {
+                          color: statusColor,
+                          backgroundColor: headerBackgroundColor,
+                        }
                       : undefined,
                 }}
               />

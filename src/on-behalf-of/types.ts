@@ -4,7 +4,7 @@ export type GetAccountByPhoneErrorCode =
   | 'unknown_error';
 
 export type OnBehalfOfAccountType = {
-    accountId: string;
-    phoneNumber: string;
-    name: string;
+  accountId: string;
+  phoneNumber: string;
+  name: string;
 };

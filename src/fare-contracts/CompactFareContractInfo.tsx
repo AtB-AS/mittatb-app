@@ -160,9 +160,7 @@ export const useFareContractInfoTexts = (
   let accessibilityLabel: string = '';
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
-    (u) =>
-      userProfileCountAndName(u, language) +
-      screenReaderPause,
+    (u) => userProfileCountAndName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += tariffZoneSummary + screenReaderPause;

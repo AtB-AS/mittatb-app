@@ -63,7 +63,7 @@ function renderToken(
 
     case 'br':
     case 'space':
-      return <Text key={index}/>
+      return <Text key={index} />;
 
     case 'em':
       return (

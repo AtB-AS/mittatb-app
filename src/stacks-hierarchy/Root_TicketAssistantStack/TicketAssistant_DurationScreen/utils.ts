@@ -1,6 +1,6 @@
 import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
 import {daysInWeek} from '@atb/utils/date';
-import {ONE_DAY_MS} from "@atb/utils/durations.ts";
+import {ONE_DAY_MS} from '@atb/utils/durations.ts';
 
 export function dateDiffInDays(a: Date, b: Date) {
   // Discard the time and time-zone information.

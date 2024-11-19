@@ -36,7 +36,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
     const styles = useStyles();
     const {theme} = useTheme();
     const interactiveColor = theme.color.interactive[0];
-  
+
     const summary = getTextForLanguage(situation.summary, language);
     const description = getTextForLanguage(situation.description, language);
     const advice = getTextForLanguage(situation.advice, language);

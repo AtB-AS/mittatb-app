@@ -14,8 +14,8 @@ export const ExternalRealtimeMapButton = ({
 }: ExternalRealtimeMapButtonProps) => {
   const style = useStyle();
   const {theme} = useTheme();
-  const interactiveColor = theme.color.interactive[2]
-  
+  const interactiveColor = theme.color.interactive[2];
+
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfiguration();
 

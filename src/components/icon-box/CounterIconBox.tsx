@@ -34,9 +34,7 @@ export const CounterIconBox = ({
         style,
         {
           padding:
-            spacing === 'compact'
-              ? theme.spacing.xSmall
-              : theme.spacing.small,
+            spacing === 'compact' ? theme.spacing.xSmall : theme.spacing.small,
         },
       ]}
       importantForAccessibility="no-hide-descendants"

@@ -31,7 +31,11 @@ export const BorderedInfoBox = ({
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={backgroundColor} testID={testID}>
+        <ThemeText
+          type="body__tertiary"
+          color={backgroundColor}
+          testID={testID}
+        >
           {props.text}
         </ThemeText>
       ) : (

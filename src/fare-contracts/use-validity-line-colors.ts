@@ -17,8 +17,6 @@ export function useValidityLineColors(fareProductType?: string) {
 
   return {
     lineColor,
-    backgroundColor: mode
-      ? backgroundColor
-      : theme.color.status.valid.primary,
+    backgroundColor: mode ? backgroundColor : theme.color.status.valid.primary,
   };
 }

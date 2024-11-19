@@ -124,9 +124,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         type="medium"
         compact={true}
         interactiveColor={
-          initShmoOneStopBookingIsError
-            ? destructiveColor
-            : interactiveColor
+          initShmoOneStopBookingIsError ? destructiveColor : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {
@@ -143,9 +141,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         type="medium"
         compact={true}
         interactiveColor={
-          sendShmoBookingEventIsError
-            ? destructiveColor
-            : interactiveColor
+          sendShmoBookingEventIsError ? destructiveColor : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {
@@ -162,9 +158,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         type="medium"
         compact={true}
         interactiveColor={
-          sendShmoBookingEventIsError
-            ? destructiveColor
-            : interactiveColor
+          sendShmoBookingEventIsError ? destructiveColor : interactiveColor
         }
         accessibilityRole="button"
         onPress={() => {

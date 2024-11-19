@@ -21,7 +21,7 @@ type Props = {
   leftButton: LeftButtonProps;
 };
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0]
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
