@@ -61,8 +61,11 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       {
         selection: {
           fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
-          fromPlace: recommendedTicketSummary.tariffZones[0],
-          toPlace: recommendedTicketSummary.tariffZones[1],
+          zones: {
+            from: recommendedTicketSummary.tariffZones[0],
+            to: recommendedTicketSummary.tariffZones[1],
+          },
+          stopPlaces: undefined,
           userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
           preassignedFareProduct:
             recommendedTicketSummary.preassignedFareProduct,

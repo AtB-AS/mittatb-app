@@ -7,8 +7,9 @@ import type {
 import {
   applyProductChange,
   getDefaultProduct,
+  getDefaultStopPlaces,
   getDefaultUserProfiles,
-  getDefaultZone,
+  getDefaultZones,
   isSelectableProduct,
   isSelectableProfile,
   isSelectableZone,
@@ -55,27 +56,45 @@ const createBuilder = (
 
       return builder;
     },
-    from: (fromPlace) => {
-      const isZone = 'geometry' in fromPlace;
+    fromZone: (from) => {
       if (
-        isZone &&
-        isSelectableZone(currentSelection.preassignedFareProduct, fromPlace)
+        currentSelection.zones &&
+        isSelectableZone(currentSelection.preassignedFareProduct, from)
       ) {
-        currentSelection = {...currentSelection, fromPlace};
-      } else if (!isZone) {
-        currentSelection = {...currentSelection, fromPlace};
+        currentSelection = {
+          ...currentSelection,
+          zones: {...currentSelection.zones, from},
+        };
       }
       return builder;
     },
-    to: (toPlace) => {
-      const isZone = 'geometry' in toPlace;
+    toZone: (to) => {
       if (
-        isZone &&
-        isSelectableZone(currentSelection.preassignedFareProduct, toPlace)
+        currentSelection.zones &&
+        isSelectableZone(currentSelection.preassignedFareProduct, to)
       ) {
-        currentSelection = {...currentSelection, toPlace};
-      } else if (!isZone) {
-        currentSelection = {...currentSelection, toPlace};
+        currentSelection = {
+          ...currentSelection,
+          zones: {...currentSelection.zones, to},
+        };
+      }
+      return builder;
+    },
+    fromStopPlace: (from) => {
+      if (currentSelection.stopPlaces) {
+        currentSelection = {
+          ...currentSelection,
+          stopPlaces: {...currentSelection.stopPlaces, from},
+        };
+      }
+      return builder;
+    },
+    toStopPlace: (to) => {
+      if (currentSelection.stopPlaces) {
+        currentSelection = {
+          ...currentSelection,
+          stopPlaces: {...currentSelection.stopPlaces, to},
+        };
       }
       return builder;
     },
@@ -114,7 +133,12 @@ const createSelectionForType = (
     input,
     fareProductTypeConfig.type,
   );
-  const tariffZone = getDefaultZone(input, preassignedFareProduct);
+  const zones = getDefaultZones(
+    input,
+    fareProductTypeConfig,
+    preassignedFareProduct,
+  );
+  const stopPlaces = getDefaultStopPlaces(fareProductTypeConfig);
   const userProfilesWithCount = getDefaultUserProfiles(
     input,
     preassignedFareProduct,
@@ -123,8 +147,8 @@ const createSelectionForType = (
   return {
     fareProductTypeConfig,
     preassignedFareProduct,
-    fromPlace: tariffZone,
-    toPlace: tariffZone,
+    zones,
+    stopPlaces,
     userProfilesWithCount,
     travelDate: undefined,
   };

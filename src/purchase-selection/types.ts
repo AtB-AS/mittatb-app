@@ -14,8 +14,18 @@ export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
-  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
-  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
+  stopPlaces:
+    | {
+        from: StopPlaceFragmentWithIsFree | undefined;
+        to: StopPlaceFragmentWithIsFree | undefined;
+      }
+    | undefined;
+  zones:
+    | {
+        from: TariffZoneWithMetadata;
+        to: TariffZoneWithMetadata;
+      }
+    | undefined;
   travelDate: string | undefined;
 };
 
@@ -59,20 +69,28 @@ export type PurchaseSelectionBuilder = {
   product: (p: PreassignedFareProduct) => PurchaseSelectionBuilder;
 
   /**
-   * Apply the given from place to the purchase selection. If the given place is
+   * Apply the given from zone to the purchase selection. If the given zone is
    * not applicable the purchase selection will stay unmodified.
    */
-  from: (
-    f: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree,
-  ) => PurchaseSelectionBuilder;
+  fromZone: (f: TariffZoneWithMetadata) => PurchaseSelectionBuilder;
 
   /**
-   * Apply the given to place to the purchase selection. If the given place is
+   * Apply the given to zone to the purchase selection. If the given zone is
    * not applicable the purchase selection will stay unmodified.
    */
-  to: (
-    t: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree,
-  ) => PurchaseSelectionBuilder;
+  toZone: (t: TariffZoneWithMetadata) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply the given from stop place to the purchase selection. If the given
+   * stop place is not applicable the purchase selection will stay unmodified.
+   */
+  fromStopPlace: (f?: StopPlaceFragmentWithIsFree) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply the given to stop place to the purchase selection. If the given stop
+   * place is not applicable the purchase selection will stay unmodified.
+   */
+  toStopPlace: (t?: StopPlaceFragmentWithIsFree) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given user profiles with count to the purchase selection. If one

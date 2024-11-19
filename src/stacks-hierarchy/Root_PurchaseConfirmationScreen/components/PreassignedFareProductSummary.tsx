@@ -28,8 +28,8 @@ type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   recipient?: TicketRecipientType;
   isSearchingOffer: boolean;
-  fromPlace: TariffZone | StopPlaceFragment;
-  toPlace: TariffZone | StopPlaceFragment;
+  fromPlace: TariffZone | StopPlaceFragment | undefined;
+  toPlace: TariffZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
   travelDate?: string;
 };
@@ -50,8 +50,8 @@ export const PreassignedFareContractSummary = ({
 
   const {zoneSelectionMode} = fareProductTypeConfig.configuration;
 
-  const fromPlaceName = getPlaceName(fromPlace, language);
-  const toPlaceName = getPlaceName(toPlace, language);
+  const fromPlaceName = fromPlace ? getPlaceName(fromPlace, language) : '';
+  const toPlaceName = toPlace ? getPlaceName(toPlace, language) : '';
 
   const travelDateText = travelDate
     ? t(
@@ -92,7 +92,7 @@ export const PreassignedFareContractSummary = ({
         );
       default:
         return summary(
-          fromPlace.id === toPlace.id
+          fromPlace?.id === toPlace?.id
             ? t(
                 PurchaseConfirmationTexts.validityTexts.zone.single(
                   fromPlaceName,

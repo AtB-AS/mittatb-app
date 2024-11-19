@@ -85,13 +85,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const fareProductOnBehalfOfEnabled =
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const offerEndpoint =
-    zoneSelectionMode === 'none'
-      ? 'authority'
-      : zoneSelectionMode === 'multiple-stop-harbor'
-      ? 'stop-places'
-      : 'zones';
-
   const {
     isSearchingOffer,
     error,
@@ -101,7 +94,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     selection,
-    offerEndpoint,
     preassignedFareProductAlternatives,
     isOnBehalfOfToggle,
   );
@@ -243,8 +235,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
           <FromToSelection
             fareProductTypeConfig={selection.fareProductTypeConfig}
-            fromPlace={selection.fromPlace}
-            toPlace={selection.toPlace}
+            fromPlace={selection.zones?.from || selection.stopPlaces?.from}
+            toPlace={selection.zones?.to || selection.stopPlaces?.to}
             preassignedFareProduct={selection.preassignedFareProduct}
             style={styles.selectionComponent}
             onSelect={(params) => {
@@ -310,8 +302,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
-                  fromTariffZone: selection.fromPlace.id,
-                  toTariffZone: selection.toPlace.id,
+                  fromTariffZone: selection.zones?.from.id || 'none',
+                  toTariffZone: selection.zones?.to.id || 'none',
                   userTypes: userTypeStrings,
                 }}
               />
@@ -334,8 +326,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: selection.fareProductTypeConfig.name,
                 tariffZone: {
-                  from: selection.fromPlace.id,
-                  to: selection.toPlace.id,
+                  from: selection.zones?.from.id,
+                  to: selection.zones?.to.id,
+                },
+                stopPlaces: {
+                  from: selection.stopPlaces?.from?.id,
+                  to: selection.stopPlaces?.to?.id,
                 },
                 userProfilesWithCount: selection.userProfilesWithCount.map(
                   (t) => ({

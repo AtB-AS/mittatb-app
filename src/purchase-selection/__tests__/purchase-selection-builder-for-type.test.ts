@@ -2,10 +2,12 @@ import {createEmptyBuilder} from '../purchase-selection-builder';
 import {
   TEST_INPUT,
   TEST_PRODUCT,
+  TEST_TYPE_CONFIG,
   TEST_USER_PROFILE,
   TEST_ZONE,
 } from './test-utils';
 import {PurchaseSelectionBuilderInput} from '../types';
+import type {ZoneSelectionMode} from '@atb-as/config-specs';
 
 describe('purchaseSelectionBuilder - forType', () => {
   it("Throw error if config type doesn't exist", () => {
@@ -125,8 +127,8 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     const selection = createEmptyBuilder(input).forType('single').build();
 
-    expect(selection.fromPlace.id).toBe('T1');
-    expect(selection.toPlace.id).toBe('T1');
+    expect(selection.zones?.from.id).toBe('T1');
+    expect(selection.zones?.to.id).toBe('T1');
   });
 
   it('Selected place is the zone specified as default', () => {
@@ -142,8 +144,8 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     const selection = createEmptyBuilder(input).forType('single').build();
 
-    expect(selection.fromPlace.id).toBe('T2');
-    expect(selection.toPlace.id).toBe('T2');
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe('T2');
   });
 
   it('Selected place is the zone within current coordinates', () => {
@@ -174,8 +176,51 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     const selection = createEmptyBuilder(input).forType('single').build();
 
-    expect(selection.fromPlace.id).toBe('T3');
-    expect(selection.toPlace.id).toBe('T3');
+    expect(selection.zones?.from.id).toBe('T3');
+    expect(selection.zones?.to.id).toBe('T3');
+  });
+
+  it('Stop places are undefined for all zoneSelectionModes which signals that zones should be selected', () => {
+    const input = (mode: ZoneSelectionMode): PurchaseSelectionBuilderInput => ({
+      ...TEST_INPUT,
+      fareProductTypeConfigs: [
+        {
+          ...TEST_TYPE_CONFIG,
+          configuration: {
+            ...TEST_TYPE_CONFIG.configuration,
+            zoneSelectionMode: mode,
+          },
+        },
+      ],
+    });
+
+    let selection = createEmptyBuilder(input('single'))
+      .forType('single')
+      .build();
+    expect(selection.stopPlaces).toBe(undefined);
+
+    selection = createEmptyBuilder(input('single-zone'))
+      .forType('single')
+      .build();
+    expect(selection.stopPlaces).toBe(undefined);
+
+    selection = createEmptyBuilder(input('single-stop'))
+      .forType('single')
+      .build();
+    expect(selection.stopPlaces).toBe(undefined);
+
+    selection = createEmptyBuilder(input('multiple')).forType('single').build();
+    expect(selection.stopPlaces).toBe(undefined);
+
+    selection = createEmptyBuilder(input('multiple-zone'))
+      .forType('single')
+      .build();
+    expect(selection.stopPlaces).toBe(undefined);
+
+    selection = createEmptyBuilder(input('multiple-stop'))
+      .forType('single')
+      .build();
+    expect(selection.stopPlaces).toBe(undefined);
   });
 
   it('Should select zone which is in product limitations', () => {
@@ -196,8 +241,50 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     const selection = createEmptyBuilder(input).forType('single').build();
 
-    expect(selection.fromPlace.id).toBe('T3');
-    expect(selection.toPlace.id).toBe('T3');
+    expect(selection.zones?.from.id).toBe('T3');
+    expect(selection.zones?.to.id).toBe('T3');
+    expect(selection.stopPlaces).toBe(undefined);
+  });
+
+  it('Should have stop places object if zone selection mode for harbors', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      fareProductTypeConfigs: [
+        {
+          ...TEST_TYPE_CONFIG,
+          configuration: {
+            ...TEST_TYPE_CONFIG.configuration,
+            zoneSelectionMode: 'multiple-stop-harbor',
+          },
+        },
+      ],
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.stopPlaces?.from?.id).toBe(undefined);
+    expect(selection.stopPlaces?.to?.id).toBe(undefined);
+    expect(selection.zones).toBe(undefined);
+  });
+
+  it('Should neither have zones nor stop places object if zone selection mode none', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      fareProductTypeConfigs: [
+        {
+          ...TEST_TYPE_CONFIG,
+          configuration: {
+            ...TEST_TYPE_CONFIG.configuration,
+            zoneSelectionMode: 'none',
+          },
+        },
+      ],
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.stopPlaces).toBe(undefined);
+    expect(selection.zones).toBe(undefined);
   });
 
   it('Selected user profile is the first one if no user type specified as default in preferences', () => {

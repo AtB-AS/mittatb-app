@@ -11,6 +11,7 @@ import {
   PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/purchase-selection';
+import {isValidTariffZone} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 
 export function useOfferDefaults(
   preassignedFareProduct: PreassignedFareProduct | undefined,
@@ -31,8 +32,12 @@ export function useOfferDefaults(
       const builder = selectionBuilder.forType(fareProductTypeConfig.type);
 
       if (preassignedFareProduct) builder.product(preassignedFareProduct);
-      if (fromPlace) builder.from(fromPlace);
-      if (toPlace) builder.to(toPlace);
+      if (fromPlace && isValidTariffZone(fromPlace))
+        builder.fromZone(fromPlace);
+      if (toPlace && isValidTariffZone(toPlace)) builder.toZone(toPlace);
+      if (fromPlace && !isValidTariffZone(fromPlace))
+        builder.fromStopPlace(fromPlace);
+      if (toPlace && !isValidTariffZone(toPlace)) builder.toStopPlace(toPlace);
       if (userProfilesWithCount) builder.userProfiles(userProfilesWithCount);
       if (travelDate) builder.date(travelDate);
 

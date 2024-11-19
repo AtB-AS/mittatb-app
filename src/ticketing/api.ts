@@ -24,24 +24,16 @@ export async function listRecentFareContracts(): Promise<
   return response.data;
 }
 
-export type OfferSearchParams = SearchParams &
-  (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
-
-type SearchParams = {
+export type OfferSearchParams = {
   is_on_behalf_of: boolean;
   travellers: Traveller[];
   products: string[];
   travel_date?: string;
+  zones?: string[];
+  from?: string;
+  to?: string;
 };
 
-type ZoneOfferSearchParams = {
-  zones: string[];
-};
-
-type StopPlaceOfferSearchParams = {
-  from: string;
-  to: string;
-};
 type Traveller = {
   id: string;
   user_type: string;

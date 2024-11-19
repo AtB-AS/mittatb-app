@@ -12,8 +12,8 @@ import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
-  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
+  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree | undefined;
+  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree | undefined;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (
     params:
@@ -43,8 +43,10 @@ export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
     if (selectionMode === 'multiple-stop-harbor') {
       return (
         <HarborSelection
-          fromHarbor={isValidTariffZone(fromPlace) ? undefined : fromPlace}
-          toHarbor={isValidTariffZone(toPlace) ? undefined : toPlace}
+          fromHarbor={
+            fromPlace && isValidTariffZone(fromPlace) ? undefined : fromPlace
+          }
+          toHarbor={toPlace && isValidTariffZone(toPlace) ? undefined : toPlace}
           fareProductTypeConfig={fareProductTypeConfig}
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}
@@ -64,7 +66,10 @@ export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
     ) {
       selectionMode = 'single';
     }
-    return isValidTariffZone(fromPlace) && isValidTariffZone(toPlace) ? (
+    return fromPlace &&
+      isValidTariffZone(fromPlace) &&
+      toPlace &&
+      isValidTariffZone(toPlace) ? (
       <ZonesSelection
         fromTariffZone={fromPlace}
         toTariffZone={toPlace}
