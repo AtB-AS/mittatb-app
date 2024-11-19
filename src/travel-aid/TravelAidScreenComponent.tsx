@@ -189,7 +189,7 @@ const TravelAidSection = ({
             situationsForFocused.length > 0 ||
             noticesForFocused.length > 0) && (
             <View style={styles.subContainer}>
-              {isCancelled && <CancelledDepartureMessage />}
+              {isCancelled && <CancelledDepartureMessage a11yAnnounce={true} />}
 
               {situationsForFocused.map((situation) => (
                 <SituationMessageBox
