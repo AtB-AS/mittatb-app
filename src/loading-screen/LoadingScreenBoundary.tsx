@@ -18,8 +18,8 @@ export const LoadingScreenBoundary = ({
   const {status, retry, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
   useNotifyBugsnagOnTimeoutStatus(status, paramsRef);
 
-  // Wait one second after load success to let the app "settle".
-  const waitFinished = useDelayGate(1000, status === 'success');
+  // Wait 200ms after load success to let the app "settle".
+  const waitFinished = useDelayGate(200, status === 'success');
 
   if (!isLoadingScreenEnabled) return children;
 
