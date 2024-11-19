@@ -11,8 +11,8 @@ import type {A11yLiveRegion, A11yLiveRegionProps} from './types';
  * Docs: https://reactnative.dev/docs/accessibility#accessibilityliveregion-android
  */
 export const useLiveRegionAnnouncement = (
-  a11yLabel?: string,
-  a11yLiveRegion?: A11yLiveRegion,
+  a11yLabel: string,
+  a11yLiveRegion: A11yLiveRegion,
 ): A11yLiveRegionProps => {
   // Since iOS does not support accessibilityLiveRegion, we trigger screen
   // reader announcements when a11yLabel changes for a equivalent effect.
