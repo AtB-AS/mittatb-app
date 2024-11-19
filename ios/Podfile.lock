@@ -948,7 +948,7 @@ PODS:
   - abseil/xcprivacy (1.20240116.2)
   - AbtCommoniOSLib (3.0.10):
     - DevicePpi (~> 1.2.19)
-  - AbtProtobufTokenIosStubs (2.828.0):
+  - AbtProtobufTokenIosStubs (2.884.0):
     - SwiftProtobuf (~> 1.22.0)
   - BarcodeiOSLib (3.0.10):
     - AbtCommoniOSLib
@@ -2399,15 +2399,17 @@ PODS:
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (2.8.0)
-  - VisualCodeModeliOSLib (3.0.10)
+  - VisualCodeModeliOSLib (3.0.10):
+    - AbtCommoniOSLib
   - VisualCodeViewiOSLib (3.0.10):
+    - AbtCommoniOSLib
     - VisualCodeModeliOSLib
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - "AbtCommoniOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-3.0.10`)"
-  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.828.0`)"
-  - "BarcodeiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-3.0.10`)"
+  - "AbtCommoniOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/common-ios-lib`)"
+  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.884.0`)"
+  - "BarcodeiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -2491,10 +2493,10 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-3.0.10`)"
+  - "TokenCore (from `../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib`)"
   - "TokenStateReactNativeLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib`)"
-  - "VisualCodeModeliOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-3.0.10`)"
-  - "VisualCodeViewiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-3.0.10`)"
+  - "VisualCodeModeliOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib`)"
+  - "VisualCodeViewiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-view-ios-lib`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2541,14 +2543,14 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   AbtCommoniOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/common-ios-lib"
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.828.0
+    :tag: 2.884.0
   BarcodeiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -2709,44 +2711,29 @@ EXTERNAL SOURCES:
   RNSVG:
     :path: "../node_modules/react-native-svg"
   TokenCore:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib"
   TokenStateReactNativeLib:
     :path: "../node_modules/@entur-private/abt-token-state-react-native-lib"
   VisualCodeModeliOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib"
   VisualCodeViewiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-view-ios-lib"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
-  AbtCommoniOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.828.0
-  BarcodeiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
-  TokenCore:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
-  VisualCodeModeliOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
-  VisualCodeViewiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-3.0.10
+    :tag: 2.884.0
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AbtCommoniOSLib: f370604e1257e4e7c9e7307df973879503303a08
-  AbtProtobufTokenIosStubs: b8d55473b0996915f7d75297e089b3af2f3f8831
-  BarcodeiOSLib: f066689034ef6cf9860aba59070f96ee78f7044c
+  AbtProtobufTokenIosStubs: b12f2c9bc2931e9351b64ad69deb4f5cdfc24fee
+  BarcodeiOSLib: ae923e9d9b77f09e8f4e10643131399dc78b57e0
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
@@ -2863,13 +2850,13 @@ SPEC CHECKSUMS:
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  TokenCore: 8f85ed746175344ce9758117c66333bae9c73479
+  TokenCore: d4e7ca8860156808915506a6409ffe8ef316e5c0
   TokenStateReactNativeLib: 44be6519022cabb67de8eb566dfe6e6d535bd087
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
-  VisualCodeModeliOSLib: 81f6374c43f11ad37523794bf96a5a4779bd7775
-  VisualCodeViewiOSLib: fe07e0ae9ef6cbab3acf1393886d1a0c2c89227d
+  VisualCodeModeliOSLib: 9845c4989158776090a21bd330616db86f2236b4
+  VisualCodeViewiOSLib: 6459969bea66a55e59163cbf3a0a49cf58b59249
   Yoga: 6d01ccde54c9f8b92492beb05d468dbfed1d9881
 
-PODFILE CHECKSUM: d8e66ce55983a5b23992a12f48faf5892f3a9a50
+PODFILE CHECKSUM: c15ba7df7b88a8e5796d5e933199f670172f2e40
 
 COCOAPODS: 1.14.3
