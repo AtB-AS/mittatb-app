@@ -36,7 +36,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
-  const transportationColor = theme.color.transport[themeColor].primary
+  const transportationColor = theme.color.transport[themeColor].primary;
   const backgroundColor = disabled
     ? transportationColor.foreground.disabled
     : transportationColor.background;

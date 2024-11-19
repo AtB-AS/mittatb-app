@@ -13,7 +13,7 @@ const PrivacySettingsTexts = {
         title: _(
           'Les om hvordan vi bruker dine personopplysninger',
           'Read about how we use your personal data',
-          'Les om korleis vi bruker personopplysningane dine'
+          'Les om korleis vi bruker personopplysningane dine',
         ),
         a11yHint: _(
           'Aktiver for å lese mer på ekstern side',

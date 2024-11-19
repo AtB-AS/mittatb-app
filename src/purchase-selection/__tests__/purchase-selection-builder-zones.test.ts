@@ -1,5 +1,10 @@
 import {createEmptyBuilder} from '../purchase-selection-builder';
-import {TEST_INPUT, TEST_PRODUCT, TEST_SELECTION, TEST_ZONE_WITH_MD} from './test-utils';
+import {
+  TEST_INPUT,
+  TEST_PRODUCT,
+  TEST_SELECTION,
+  TEST_ZONE_WITH_MD,
+} from './test-utils';
 import type {PurchaseSelectionType} from '../types';
 
 describe('purchaseSelectionBuilder - zones', () => {
@@ -25,9 +30,9 @@ describe('purchaseSelectionBuilder - zones', () => {
 
   it('Should not apply from zone when no zones object', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
-        .fromSelection({...TEST_SELECTION, zones: undefined})
-        .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-        .build();
+      .fromSelection({...TEST_SELECTION, zones: undefined})
+      .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
+      .build();
 
     expect(selection.zones?.from.id).toBe(undefined);
     expect(selection.zones?.to.id).toBe(undefined);
@@ -35,9 +40,9 @@ describe('purchaseSelectionBuilder - zones', () => {
 
   it('Should not apply to zone when no zones object', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
-        .fromSelection({...TEST_SELECTION, zones: undefined})
-        .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-        .build();
+      .fromSelection({...TEST_SELECTION, zones: undefined})
+      .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
+      .build();
 
     expect(selection.zones?.from.id).toBe(undefined);
     expect(selection.zones?.to.id).toBe(undefined);

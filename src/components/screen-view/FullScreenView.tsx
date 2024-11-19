@@ -7,7 +7,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -29,7 +29,8 @@ type PropsWithParallaxContent = Props &
 export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
   const {theme} = useTheme();
-  const themeColor = props.headerProps.color ?? theme.color.background.accent[0];
+  const themeColor =
+    props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
   const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
 

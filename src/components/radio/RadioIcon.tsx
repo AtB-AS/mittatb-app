@@ -1,16 +1,16 @@
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {View} from 'react-native';
-import { ColorValue } from 'react-native';
+import {ColorValue} from 'react-native';
 
 type CheckedProps = {
   checked: boolean;
   color: ColorValue;
 };
 
-export function RadioIcon({checked, color }: CheckedProps) {
+export function RadioIcon({checked, color}: CheckedProps) {
   const styles = useStyles();
- 
+
   return (
     <View style={[styles.radio, {borderColor: color}]}>
       {checked ? (

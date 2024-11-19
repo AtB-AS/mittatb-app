@@ -1,4 +1,4 @@
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 import {ContrastColor, themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
 import {View, ViewStyle} from 'react-native';
@@ -19,7 +19,9 @@ export const ThemedStoryDecorator = (
         {
           justifyContent: 'center',
           flex: 1,
-          backgroundColor: args.backgroundColor.background || theme.color.background.neutral[0].background
+          backgroundColor:
+            args.backgroundColor.background ||
+            theme.color.background.neutral[0].background,
         } as ViewStyle
       }
     >

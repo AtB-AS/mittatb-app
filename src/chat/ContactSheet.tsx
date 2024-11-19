@@ -22,13 +22,13 @@ type Props = {
   onReportParkingViolation: () => void;
 };
 
-const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
-const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme()
+  const {theme} = useTheme();
 
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =

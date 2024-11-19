@@ -112,7 +112,10 @@ export const ExistingRecipientsList = ({
           style={styles.recipientList}
           itemToRightAction={(item) => ({
             icon: (props) => (
-              <Delete {...props} fill={theme.color.status.error.primary.background} />
+              <Delete
+                {...props}
+                fill={theme.color.status.error.primary.background}
+              />
             ),
             onPress: () => onDeletePress(item),
             isLoading: activeDeletions.includes(item.accountId),

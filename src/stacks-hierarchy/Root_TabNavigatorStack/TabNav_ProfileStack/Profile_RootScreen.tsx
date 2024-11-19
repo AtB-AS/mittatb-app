@@ -274,16 +274,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
-
-          {isTravelAidEnabled ? (
+            {isTravelAidEnabled ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.settings.linkSectionItems.travelAid
                     .label,
                 )}
-                onPress={() =>
-                  navigation.navigate('Profile_TravelAidScreen')
-                }
+                onPress={() => navigation.navigate('Profile_TravelAidScreen')}
                 testID="travelAidButton"
               />
             ) : null}

@@ -14,7 +14,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
-const getThemeColor = (theme: Theme) =>  theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const ForceUpdateScreen = () => {
   const [error, setError] = useState<boolean>(false);

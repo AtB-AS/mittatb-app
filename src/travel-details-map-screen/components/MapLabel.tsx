@@ -21,8 +21,7 @@ export const MapLabel: React.FC<{
           id={id + '-label'}
           style={{
             textColor: theme.color.background.accent[0].foreground.primary,
-            textHaloColor:
-              theme.color.background.accent[0].background,
+            textHaloColor: theme.color.background.accent[0].background,
             textHaloWidth: 2,
             textField: text,
           }}

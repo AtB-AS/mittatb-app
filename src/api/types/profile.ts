@@ -19,4 +19,4 @@ export type OnBehalfOfAccountsResponse = {
   sentToAccountId: string;
   sentToAlias: string;
   sentToPhoneNumber: string;
-}[]
+}[];

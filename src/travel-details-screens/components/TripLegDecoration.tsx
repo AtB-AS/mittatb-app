@@ -21,17 +21,17 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
       {hasStart && (
         <View
           style={[style.decorationMarker, style.decorationStart, colorStyle]}
-         />
+        />
       )}
       {hasCenter && (
         <View
           style={[style.decorationMarker, style.decorationCenter, colorStyle]}
-         />
+        />
       )}
       {hasEnd && (
         <View
           style={[style.decorationMarker, style.decorationEnd, colorStyle]}
-         />
+        />
       )}
     </View>
   );

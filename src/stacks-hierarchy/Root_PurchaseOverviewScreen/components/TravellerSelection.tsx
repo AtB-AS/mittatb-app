@@ -29,7 +29,7 @@ import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useFeatureToggles} from '@atb/feature-toggles';
 import {getSelectableUserProfiles} from '@atb/purchase-selection';
 import {PreassignedFareProduct} from '@atb-as/config-specs';
 

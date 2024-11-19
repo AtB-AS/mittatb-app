@@ -4,5 +4,5 @@ export type {
   RootStackScreenProps,
   RootStackParamList,
   RootStackProps,
-  NextScreenParams
+  NextScreenParams,
 } from './navigation-types';

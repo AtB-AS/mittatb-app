@@ -100,10 +100,7 @@ const TariffZonesSelectorMap = ({
               style={[
                 styles.saveButton,
                 {
-                  paddingBottom: Math.max(
-                    safeAreaBottom,
-                    theme.spacing.medium,
-                  ),
+                  paddingBottom: Math.max(safeAreaBottom, theme.spacing.medium),
                 },
               ]}
             >
@@ -147,10 +144,7 @@ const TariffZonesSelectorMap = ({
                     hexToRgba(theme.color.zone.from.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
                     !isApplicableOnSingleZoneOnly
-                      ? hexToRgba(
-                          theme.color.zone.to.background,
-                          0.6,
-                        )
+                      ? hexToRgba(theme.color.zone.to.background, 0.6)
                       : 'transparent',
                     'transparent',
                   ],

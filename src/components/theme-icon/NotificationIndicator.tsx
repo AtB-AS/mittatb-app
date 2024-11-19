@@ -1,9 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeIconProps} from './ThemeIcon';
-import {
-  ContrastColor,
-} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type NotificationIndicatorProps = {

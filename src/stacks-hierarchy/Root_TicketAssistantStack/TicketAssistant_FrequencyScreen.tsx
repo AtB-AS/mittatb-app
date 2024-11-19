@@ -1,6 +1,9 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getThemeColor, getInteractiveColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
+import {
+  getThemeColor,
+  getInteractiveColor,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';

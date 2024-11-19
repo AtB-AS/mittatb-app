@@ -280,8 +280,7 @@ const LiveVehicleMarker = ({
   if (isError) {
     circleBackgroundColor =
       theme.color.interactive.destructive.disabled.background;
-    circleBorderColor =
-      theme.color.interactive.destructive.default.background;
+    circleBorderColor = theme.color.interactive.destructive.default.background;
   }
   if (isStale) {
     circleBackgroundColor = theme.color.interactive[1].disabled.background;

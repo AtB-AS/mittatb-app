@@ -21,7 +21,7 @@ import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useFeatureToggles} from '@atb/feature-toggles';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;

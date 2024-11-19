@@ -107,8 +107,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor:
-            theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;

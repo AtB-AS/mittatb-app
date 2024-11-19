@@ -10,7 +10,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

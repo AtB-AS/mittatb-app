@@ -3,7 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 type ProductSelectionProps = {
   preassignedFareProduct: PreassignedFareProduct;

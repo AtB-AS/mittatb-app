@@ -1,1 +1,1 @@
-export {TokenToggleInfo} from './TokenToggleInfo'
+export {TokenToggleInfo} from './TokenToggleInfo';

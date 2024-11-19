@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {RadioSegments} from '@atb/components/radio';
 import React from 'react';
 import {View} from 'react-native';
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 type Props = {
   description?: String;
@@ -16,7 +16,7 @@ export const DebugOverride = ({
   setOverride,
 }: Props) => {
   const {theme} = useTheme();
-  
+
   return (
     <View style={{flex: 1}}>
       <ThemeText>{description}</ThemeText>

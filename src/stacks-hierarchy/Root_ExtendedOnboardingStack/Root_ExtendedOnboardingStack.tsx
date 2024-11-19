@@ -20,9 +20,7 @@ export const Root_ExtendedOnboardingStack = () => {
   const {theme} = useTheme();
   return (
     <>
-      <StatusBar
-        backgroundColor={getThemeColor(theme).background}
-      />
+      <StatusBar backgroundColor={getThemeColor(theme).background} />
       <SafeAreaView style={styles.container}>
         <Tab.Navigator
           tabBar={(props: MaterialTopTabBarProps) => {

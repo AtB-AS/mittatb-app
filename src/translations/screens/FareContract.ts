@@ -171,7 +171,7 @@ const FareContractTexts = {
       'Activate to go to ticket information',
       'Aktivér for å gå til billetinformasjon',
     ),
-    usedAccesses: _("Brukte klipp", "Used tickets", "Brukte klipp")
+    usedAccesses: _('Brukte klipp', 'Used tickets', 'Brukte klipp'),
   },
   activateNow: {
     startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),

@@ -19,7 +19,7 @@ export const WalkingDistance = ({style, distance}: Props) => {
 
   return (
     <View style={[style, sheetStyles.distanceLabel]}>
-      <ThemeIcon svg={Walk} color="secondary" style={sheetStyles.icon}/>
+      <ThemeIcon svg={Walk} color="secondary" style={sheetStyles.icon} />
       <ThemeText type="body__secondary" color="secondary">
         {humanizedDistance}
       </ThemeText>

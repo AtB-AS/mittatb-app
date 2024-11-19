@@ -28,9 +28,7 @@ type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
  * @returns [T, () => Promise<void>, boolean, E]
  */
 export const usePollableResource = <T, E extends Error = Error>(
-  callback: (
-    signal?: AbortSignal,
-  ) => Promise<T>,
+  callback: (signal?: AbortSignal) => Promise<T>,
   opts: PollableResourceOptions<T>,
 ): [
   T,

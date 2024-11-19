@@ -46,7 +46,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
       .toStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})
       .build();
 
-      expect(selection.stopPlaces?.from?.id).toBe(undefined);
-      expect(selection.stopPlaces?.to?.id).toBe(undefined);
+    expect(selection.stopPlaces?.from?.id).toBe(undefined);
+    expect(selection.stopPlaces?.to?.id).toBe(undefined);
   });
 });

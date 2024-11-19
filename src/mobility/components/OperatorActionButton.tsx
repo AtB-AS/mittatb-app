@@ -10,7 +10,7 @@ import {ActivityIndicator, Linking} from 'react-native';
 import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -94,20 +94,20 @@ type AppSwitchButtonProps = {
 };
 
 const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
-
   const {theme} = useTheme();
   const interactiveColor = theme.color.interactive[0];
 
   return (
-  <Button
-    text={buttonText}
-    onPress={() => buttonOnPress()}
-    mode="primary"
-    interactiveColor={interactiveColor}
-    rightIcon={{svg: ExternalLink}}
-    accessibilityRole="link"
-  />
-)};
+    <Button
+      text={buttonText}
+      onPress={() => buttonOnPress()}
+      mode="primary"
+      interactiveColor={interactiveColor}
+      rightIcon={{svg: ExternalLink}}
+      accessibilityRole="link"
+    />
+  );
+};
 
 type OperatorActionButtonWithValueCodeProps = AppSwitchButtonProps & {
   operatorId: string | undefined;

@@ -79,14 +79,18 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
   const showFlexibleTransportFilterOption =
-      isFlexibleTransportEnabled && selectedFlexibleTransportOption;
+    isFlexibleTransportEnabled && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer
       maxHeightValue={0.9}
       title={t(TripSearchTexts.filters.bottomSheet.heading)}
     >
-      <ScrollView style={styles.filtersContainer} ref={focusRef} testID="filterView">
+      <ScrollView
+        style={styles.filtersContainer}
+        ref={focusRef}
+        testID="filterView"
+      >
         <Section>
           <HeaderSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}

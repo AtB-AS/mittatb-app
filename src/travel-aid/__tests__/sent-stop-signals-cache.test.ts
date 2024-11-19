@@ -21,7 +21,6 @@ describe('sentStopSignalsCache', () => {
     sentStopSignalsCache.addSent({...testInput, serviceJourneyId: 'id2'});
     expect(sentStopSignalsCache.hasSent(testInput)).toBe(true);
     expect(sentStopSignalsCache.hasSent({...testInput})).toBe(true);
-
   });
 
   it('hasSent is false if no existing entry with all fields equal', () => {

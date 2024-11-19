@@ -90,7 +90,10 @@ const CityZoneBox = ({
   const styles = useStyle();
   const {t} = useTranslation();
   const generalColor = theme.color.background.neutral[0];
-  const {background: backgroundColor, foreground: {primary: textColor}} = generalColor;
+  const {
+    background: backgroundColor,
+    foreground: {primary: textColor},
+  } = generalColor;
   return (
     <View style={[styles.container, {backgroundColor}]} accessible={false}>
       <View style={styles.icon}>

@@ -28,8 +28,8 @@ export function TravelTokenBox({
 
   const styles = useStyles(themeTextColor)();
   const {t} = useTranslation();
-  const {mobileTokenStatus, isInspectable, tokens, retry} = useMobileTokenContextState();
-
+  const {mobileTokenStatus, isInspectable, tokens, retry} =
+    useMobileTokenContextState();
 
   const navigation = useNavigation<RootNavigationProps>();
   const onPressChangeButton = () =>

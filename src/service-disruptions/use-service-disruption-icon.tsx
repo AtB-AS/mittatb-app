@@ -11,15 +11,15 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import { ContrastColor } from '@atb/theme/colors';
-import { useTheme } from '@atb/theme';
+import {ContrastColor} from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 
 export const useServiceDisruptionIcon = (
   color?: ContrastColor,
   testID?: string,
 ): IconButtonProps | undefined => {
   const {t} = useTranslation();
-  const {theme} = useTheme()
+  const {theme} = useTheme();
   const {findGlobalMessages} = useGlobalMessagesState();
   const {open: openBottomSheet} = useBottomSheet();
   const now = useNow(2500);

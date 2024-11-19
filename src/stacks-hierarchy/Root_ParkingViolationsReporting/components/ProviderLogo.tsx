@@ -37,7 +37,7 @@ export const ProviderLogo = ({provider, size = 50, style}: Props) => {
 
 const UnknownProvider = ({height, width}: {height: number; width: number}) => {
   const {theme} = useTheme();
-  const themeColor = theme.color.background.accent[0]
+  const themeColor = theme.color.background.accent[0];
   return (
     <View
       style={{

@@ -16,7 +16,7 @@ export interface RenderQuestionProps {
   handleAnswerPress: (o: {questionId: number; alternativeId: number}) => void;
 }
 
-const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export const RenderQuestion = ({
   selectedOpinion,
