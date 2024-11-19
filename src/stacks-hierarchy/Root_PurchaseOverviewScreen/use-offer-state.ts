@@ -217,6 +217,7 @@ export function useOfferState(
             cancelToken,
             retry: true,
             authWithIdToken: true,
+            skipErrorLogging: isNotAvailableError,
           });
 
           cancelToken?.throwIfRequested();
@@ -232,10 +233,7 @@ export function useOfferState(
             });
           }
         } catch (err: any) {
-          const isNotAvailableError =
-            err.response?.status === 400 &&
-            err.response?.data === 'NotAvailable';
-          const errorType = isNotAvailableError
+          const errorType = isNotAvailableError(err)
             ? 'not-available'
             : getAxiosErrorType(err);
           if (errorType !== 'cancel') {
@@ -271,3 +269,6 @@ export function useOfferState(
     refreshOffer,
   };
 }
+
+const isNotAvailableError = (err: any) =>
+    err.response?.status === 400 && err.response?.data === 'NotAvailable';
