@@ -27,7 +27,6 @@ import {
 import {PaymentMethod} from '../types';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
-import {ZoneSelectionMode} from '@atb-as/config-specs';
 import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
@@ -65,9 +64,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const {selection, recipient} = params;
 
-  const offerEndpoint = getOfferEndpoint(
-    selection.fareProductTypeConfig.configuration.zoneSelectionMode,
-  );
   const isOnBehalfOf = !!recipient;
 
   const preassignedFareProductAlternatives = useMemo(
@@ -85,7 +81,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     selection,
-    offerEndpoint,
     preassignedFareProductAlternatives,
     isOnBehalfOf,
   );
@@ -257,8 +252,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         )}
         <PreassignedFareContractSummary
           fareProductTypeConfig={selection.fareProductTypeConfig}
-          fromPlace={selection.fromPlace}
-          toPlace={selection.toPlace}
+          fromPlace={selection.zones?.from || selection.stopPlaces?.from}
+          toPlace={selection.zones?.to || selection.stopPlaces?.to}
           isSearchingOffer={isSearchingOffer}
           preassignedFareProduct={selection.preassignedFareProduct}
           recipient={recipient}
@@ -390,17 +385,6 @@ function getPaymentTypeSvg(paymentType: PaymentType) {
       return Vipps;
     case PaymentType.Visa:
       return Visa;
-  }
-}
-
-function getOfferEndpoint(zoneSelectionMode: ZoneSelectionMode) {
-  switch (zoneSelectionMode) {
-    case 'none':
-      return 'authority';
-    case 'multiple-stop-harbor':
-      return 'stop-places';
-    default:
-      return 'zones';
   }
 }
 

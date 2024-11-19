@@ -5,6 +5,7 @@ import {
   TEST_PRODUCT,
   TEST_ZONE,
   TEST_USER_PROFILE,
+  TEST_ZONE_WITH_MD,
 } from './test-utils';
 import type {PurchaseSelectionType} from '../types';
 
@@ -20,8 +21,10 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
   it('Should return same selection unaltered, with stop places', () => {
     const originalSelection: PurchaseSelectionType = {
       ...TEST_SELECTION,
-      fromPlace: {id: 'abc', name: 'Trondheim S'},
-      toPlace: {id: 'cba', name: 'Solsiden'},
+      stopPlaces: {
+        from: {id: 'abc', name: 'Trondheim S'},
+        to: {id: 'cba', name: 'Solsiden'},
+      },
     };
 
     const selection = createEmptyBuilder(TEST_INPUT)
@@ -44,7 +47,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
     expect(selection.travelDate).toBeUndefined();
   });
 
-  it('Should create new selection with defaults when input selection from-place is invalid', () => {
+  it('Should create new selection with defaults when input selection from-zone is invalid', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({
         ...TEST_SELECTION,
@@ -53,17 +56,20 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
           id: 'P_X',
           limitations: {...TEST_PRODUCT.limitations, tariffZoneRefs: ['T1']},
         },
-        fromPlace: {...TEST_ZONE, id: 'T_X', resultType: 'zone'},
+        zones: {
+          from: {...TEST_ZONE_WITH_MD, id: 'T_X'},
+          to: TEST_ZONE_WITH_MD,
+        },
         travelDate: new Date().toISOString(),
       })
       .build();
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
-    expect(selection.fromPlace.id).toBe(TEST_ZONE.id);
+    expect(selection.zones?.from.id).toBe(TEST_ZONE.id);
     expect(selection.travelDate).toBeUndefined();
   });
 
-  it('Should create new selection with defaults when input selection to-place is invalid', () => {
+  it('Should create new selection with defaults when input selection to-zone is invalid', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({
         ...TEST_SELECTION,
@@ -72,13 +78,16 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
           id: 'P_X',
           limitations: {...TEST_PRODUCT.limitations, tariffZoneRefs: ['T1']},
         },
-        toPlace: {...TEST_ZONE, id: 'T_X', resultType: 'zone'},
+        zones: {
+          from: TEST_ZONE_WITH_MD,
+          to: {...TEST_ZONE_WITH_MD, id: 'T_X'},
+        },
         travelDate: new Date().toISOString(),
       })
       .build();
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
-    expect(selection.toPlace.id).toBe(TEST_ZONE.id);
+    expect(selection.zones?.to.id).toBe(TEST_ZONE.id);
     expect(selection.travelDate).toBeUndefined();
   });
 
