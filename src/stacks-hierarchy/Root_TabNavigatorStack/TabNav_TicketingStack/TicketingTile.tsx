@@ -4,9 +4,7 @@ import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {
-  TransportColor,
-} from '@atb/theme/colors';
+import {TransportColor} from '@atb/theme/colors';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -34,9 +32,11 @@ export const TicketingTile = ({
   const {t} = useTranslation();
   const {theme} = useTheme();
 
-  const themeColor = accented ? theme.color.background.accent[3] : theme.color.background.neutral[0];
+  const themeColor = accented
+    ? theme.color.background.accent[3]
+    : theme.color.background.neutral[0];
   const themePrimaryColor = transportColor.primary;
-  const themeSecondaryColor = transportColor.secondary
+  const themeSecondaryColor = transportColor.secondary;
 
   return (
     <PressableOpacity

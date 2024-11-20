@@ -95,11 +95,6 @@ describe('getShouldShowLiveVehicle', () => {
   });
 
   it('returns false if estimated call list is empty', () => {
-    expect(
-      getShouldShowLiveVehicle(
-        [],
-        true,
-      ),
-    ).toBe(false);
+    expect(getShouldShowLiveVehicle([], true)).toBe(false);
   });
 });

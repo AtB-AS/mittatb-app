@@ -52,7 +52,8 @@ export const LinkSectionItem = forwardRef<View, Props>(
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
     const {theme} = useTheme();
-    const themeColor = interactiveColor?.default ?? theme.color.interactive[2].default;
+    const themeColor =
+      interactiveColor?.default ?? theme.color.interactive[2].default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
         <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />

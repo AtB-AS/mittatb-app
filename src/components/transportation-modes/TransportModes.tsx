@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {TextNames} from '@atb-as/theme';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import _ from 'lodash';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 
@@ -85,10 +85,7 @@ export const TransportModes = ({
         iconSize={iconSize}
         disabled={disabled}
       />
-      <ThemeText
-        type={textType ?? 'label__uppercase'}
-        color={textColor}
-      >
+      <ThemeText type={textType ?? 'label__uppercase'} color={textColor}>
         {customTransportModeText ?? description}
       </ThemeText>
     </View>

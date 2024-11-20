@@ -24,8 +24,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   testID,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme()
-  const interactiveColor = theme.color.interactive[3]
+  const {theme} = useTheme();
+  const interactiveColor = theme.color.interactive[3];
 
   return (
     <View

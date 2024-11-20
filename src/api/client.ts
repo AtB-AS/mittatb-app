@@ -52,9 +52,11 @@ function shouldRetry(error: AxiosError): boolean {
   const shouldForceRefresh = error.config?.forceRefreshIdToken;
   if (shouldForceRefresh) return true;
 
-  return Boolean(error.config?.retry) &&
+  return (
+    Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
-      isIdempotentRequestError(error));
+      isIdempotentRequestError(error))
+  );
 }
 
 export function createClient(baseUrl: string | undefined) {

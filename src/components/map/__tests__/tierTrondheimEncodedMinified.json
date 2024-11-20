@@ -1,1 +1,2202 @@
-{"data":{"geofencingZones":[{"systemId":"tiertrondheim","geojson":{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Dragvoll BA","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["cke}wBukv|RnDg@vO}IaCei@cIs_ByKylAaGy|@yHy_AiDm`@iDmf@oGy~@cGkq@sEc]OukA_F}x@aEij@{J_u@iDkh@sHydAGgp@lCyx@vK`@xEiFnPm@|YcGrHeTtRu_@tVeyA`Ge`DzL}BxxArZnCyuA?eW}WgEib@_Haz@mP{k@sQ}VyR`OgqFbFkcHqsA{tRiQnWvYv|IxGlqAvPd^fUnuG{RbyJwB`k@aBhl@wDlp@wC|g@LzYiEnp@{Gpu@yJd|@kLppAgXv[ePvIrBvUvAlOtArQlCl]vHiCpDbMOj]vB~KzJgAxGja@bJrl@hIxi@zHzi@xE~f@fDbq@_@vh@n@th@rGlnAhJhqAtOzlBbMf~ArMn`BhIdcAa@jQ"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Charlottelund","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["gij~wB}|p_Sr`@fg@`n@jShQndA|EhtBfS`_AzYrYn^l\\hX`StKrv@tDvlDjHKtN_BuCygEuc@erB_y@oh@qMuyBeKuyBxm@|q@~\\bOx}AeWpN~gDlMtjD~DxtAsHj_Aym@j_Awg@`GmaEjDkcAq_BqZmzBs`@rl@xUfbBxa@loAvg@~q@rl@lTxeA`G|hCyQxm@wQl_@za@px@?xy@yQl{Aya@jk@wIrdAwQrpA{YyCmoA_sDt|@yeAd_@maBd_@sl@`GeLeWlS_z@~Dq_B_EsoByOemCsBeg@~VyQrTmTdd@mLxUkLxUjDjSaGx_AjDxs@?l}@bWxkAfo@~DtoBjS`bArl@~y@hF}aAi_@w]wSss@{BykAzLo}A`h@dj@zk@d}@GhkBsFvnAhQnX~Msl@xCqbDjk@jLr~@qd@`c@cS~PrcBrOcZsRogCgs@bWykApd@_c@?gd@st@ql@k_AsZcOjGst@fRio@gXo\\qTlgAaKrt@koA{i@mcAcOys@uIkVe_@uL_x@yGqb@|y@k}@}Gef@ak@ln@m`@xf@zXnwBoQbDs~@bOwOerAmY}q@dRa}BlM{wC~VuoBd^o\\xL}Grb@p{@iGd~@bXxKrJy{@aj@{dC_]yY_o@fo@sZj_AqTf}CmMxzDev@wwByUwQ_i@gg@kq@o\\y[st@sNsl@~b@imD_b@u^qFuy@yFth@pDjh@`O`YeXv_CyIj_AsHho@dR`OfF_z@vO|q@d^t|@f^zYp`@jLd^n\\lS~q@j_@brA~b@nwArHrt@mcAza@w_AnTgp@hDqf@_z@_i@wQkYlTsZvIke@mTmMsl@wI}i@s`@rgBjYbW~PjD"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Brundalen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["o}w}wBaur~RaAdvAFn{AfF`~@m_@lT_o@|i@_l@pl@y^fg@kSvdAyXaGsKfg@lPxY~MaGx^|m@j_@xtArf@rcBv^|hBrZvdAr`@brArr@jvBxg@p_BvOsl@xXajAfUq_BfTq{Axd@imDhc@ygCbh@soB|o@ukB~JruExFnvCrZvmFpQroB~M`uB`QbmCyUkHsc@aCga@iDeIyhAkSudAya@}`Bmb@ezAyd@{e@yc@e\\uHhi@ny@rw@lV~}@xj@jzBvLbnAxI`bA``@ze@xv@uE~\\bO~StdArHvhHy@tnDmb@}m@ev@evA_Qza@pcC|sEhMme@mHivA?orCy@a}B_H{kCyFssByLeqCeLusBsTojC_Q_uB_KyoCmYyjLzv@m~B~w@uwB~AmkAjA_uBf@mbCv@emC_T?e@fk@sBzjEkDheDsNpl@_Ths@qEmLsNmsAy^cnA_]qd@si@mPyj@_Cg[{]qT{e@_Qq`@_ByYjGqd@_WkHeCxlAjMfs@f[~u@~_@~u@xs@vIrr@vQd^lkArZtoByLx]sx@twBmiAneEed@|hBsr@teFej@bdEsZj_Asc@crAyd@osA_W_v@yXu`AeFoX_]{|AeRgk@yRkcA_f@evAkSe[pl@wlArWe[rgAwdA~~Aec@?gfBjJsp@qKyQgOpd@RxpAep@bSyCu`AP_mB~AuwBkMaCyFv`A"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"TND_Main_14_March 21","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["scz}wBi_yxR|WdqBaTpS_[xm@uNvUyOhXj\\n{AfQrlBsj@bf@cl@zc@ed@~d@_QzF{F~BoItGmGnKkGfHcPnI{QnKgN|Js\\xYaIhKsR~[eKdXoFxWmDhUmGvTeHl[aInSiXtf@aLvNoAt@sO|JaRjFed@[kTaNmRyOgSib@uV_[kJaKmB~@K}AkDaVoJcXwEcKuJ_U_W}`CzDyXrDcGlGkD`H}HrDcQbCgQrBmE~a@_KrEw@j@zSAbTgArWUzS?|VxAdZpCtNpGdP~IpRbMjKlPzFbTq@bLwHr[sZ~BsK`N_UrMea@bD_SbTay@jGwVzKic@bLud@nQg]~T{XxXgb@b^ih@xEuNxQ_ZrH}TvLkHhH_S`RmUnGuL~Fq@pEsG~C_GvGyHn^ie@zTg[jNgQvQiInI{FjC{D`HkJ^[rIgH|ImHxPeLtTcIpGwFhIcEvEsCzBqAdMuCfC}C`C}DlJkHrEe@dLs@pB`AjIgE~I{DrL{CzLw@xC~AxLMxLzC~GuAnC}ChBmEhF_EdEwFzFgLjDiFjKsIzBgEr@cGlCoD`DuUzDsV`DiWHcGzAeMxAoPnC}XxDeh@rDic@jB{A~A}PV_\\vHwbAdFwa@|Kwg@xBaRbKcZdKuRdAqDHeE`GgObOkTvDu@jKw@`NkNzQ{NiNcsAEaBvEtBtLaEbNmGxOd@tLLvHr@xGnp@~K|QfGzGhGr@pFMpHXJ`b@lB`KdFnKzNhPfOhLhCtHvHtLtUmAlOgBlKiPtNcWnCiJ`@iNs@cSa@kTy@iVxRMpW|MzNd@nLuJvJsF`IaEfOKnP?xTlEd{@l`@xp@vTnAo_AdKvCtUd@pJiI~FtErG`DhKpFnLhE`SnHxd@vOpf@rNpZbOj_AqJ`m@nc@~HhCpaCtcAbeAkIx^omBqYmdAqq@i`Asw@rDmz@muA{Hsf@}Eua@ek@urEpj@_g@j{@oZ~AuJjM}MhIgDng@qd@ju@qgAo[}wAYs|Ax]ahBkGC}XpmAwRx@yFqRp@uaAsLgcBec@Lwe@~l@oe@ft@oEhnDa{BzO}fAtc@wr@lm@q_@ycBmCcQyAoNqGo\\gIw`@{IqTwL_b@g]uoAoUgr@}Rar@uG{ZcIcOoIoWuLuJyCkHmCeHaQ}n@mK{a@qMye@_\\ynAiDeSh@qL`A{PDsSpUau@rkBd_IzoBnyGlv@lhEvWkAeh@grC~@oh@vl@oq@xbAxh@|wApe@xi@uh@Me_CnL{IfGwBnK|IxA_c@oRoJcCgTkAgG{BaMcBgNmFcM|o@FvOae@oFyaArYuhCbI{s@}Cu|@y|@}IgfAmT}v@gRgYiEwY}V}oAo`CjEc_@y@cYjb@c{A||Aj|BdhD{jCcDqr@w`FubAiSiTsIxx@{SlnAwrAkw@cIex@os@xjAcd@~k@kl@zs@iZps@ya@n~@cRtl@oC~cAc[h`A~@`IAvL{CnOyC}\\eGsy@qImlAeLgqB}Ey`@cEab@Q_Z~CkW|U_lAfHyf@yLehA?a\\`Bu^vDk]rBk]dDq\\pD}\\nAs_@Oqr@{Aqi@yGgfAcDuYkG_[}HkX{KgZeFuR}DqO_AmJiGiA}If@_GbA_G`AuBi@kA{AKyAN}QnE_]lAcU|C_]bDsWrFy_@tFuXzEoe@fAqQqIub@vZcwAMco@oBsRkFeQ~PuXwHsy@mZol@iUfNee@rk@ya@~g@kIzUsJf\\mEvY_Fz`@mHjh@eMa[_MaNiYsz@yi@}|@s`@su@mXcj@wPm\\eK_\\}Ue^{b@cfA{Q{[a_@o~@kf@a|Aga@{qA_a@wa@qZbEmCdmA\\zl@lA`z@pEteBlO`sCf@|bAqIkDwGJsRUmP?sU_D{c@qL}b@iMYpLo]qLiVwJo\\yPeFyJcHiNyEyUkMci@{_@kjBsGe[cKac@qHwYyJmZmNo]oO_Zwb@a`AsV_k@oZ_i@eIaS{a@a`AsJaPaYk\\{FcDgIySbOe`@joCgeI|rC|eIrXnk@zWt@d_Cm|GgQsn@_eC~aEsvCsxG`xBmqGqNeWc}Bz}F_pArtDul@qhB_Tgk@aVst@oKm]sl@ycBmOx`@hAfeFxn@cmBrPbl@|pAvpDsa@btAeIjS_NrVyXb_@_~@cDgNhz@oq@}IvAe_AvPyVla@wVeDui@ad@jTmY}Lwa@wm@{RkDoXwo@aj@ciFcUmqBmSmg@iOxdBuFrpAyJ~w@sHv`@aKbkAgJn_AqMp|@kQl{AmPdjAsMpy@eRxtAkHzo@yLsHqL{PoOaBkk@_t@wFePxGscAzO_z@j_BqgCve@guCzVs|CpNcfEMsx@}MkA_F}aA|RsM_EgT{a@s]fQd}Bs]xQmQxBmLoE_OaFoJRcWPc`@{L}IrzC_p@vOwf@xJja@kgCjVuwCbBow@yUm}GyTpOgWg`@a[{aAuCaCis@l{Al`@tkBlh@~kCnh@~kCmEhe@fBvj@mUpcA}k@hsDkpAl~F}ICwLcSmSk[wRm[_TkVaMiIaGvRmGpNaGhQcQvd@yU~c@ql@d}A_Ydk@uIbWmDzOqD|@mEqyCmi@{Hcw@ok@{m@_Ism@laAyi@zsAyh@{McAykBmTyd@aOwBwXfHwXfb@qViXal@bMa]zd@_x@b]uSxdAzUtzArj@_EduA_K~\\f}CjLvItZkAfvA~Pho@`_@dv@vhAtV~YfLvWvi@xeAxq@rpAnWth@{G|]sQxt@}g@b}Bof@juBaRnt@_Lrj@gVd`A}DlFyD|CmCbB_C]cCaGcDm_@{Bok@qJtJoFz@uGkBsc@am@oRmSsz@s{A`RwwAgxAecBxOdpHcCh`AmAz[iIp@kA|Pb@fUaO|a@{Vpw@mb@xx@ob@qy@vJgu@n@ml@eDe[_Okc@aOy@kIvNkIhWurBw}BuMe_BfEuw@zB_cAwDcf@kNsLkLhb@eNtOwm@nSsKrp@rB|}Ad`@bu@z\\jiCta@f|@pc@lnAbVrtAtGxf@rb@f{@|\\|@lj@rh@da@gy@pq@z|A`c@vr@xOpdAnKpk@bIza@nRmQfPX~Hp{@zIpr@zIva@Gbp@~Jt|AfInc@fKv_@tMvWbL~SrNv[fLbW`Fb_@wL`l@aSjn@fAtRtPhP~S{A~ReX`Hap@dNhe@jA|Pk@hP_CdMgDzZQfL`@xI`BlFn@dAjAtB|E~GpGSrEoEtDuKfD_TvAsLvRud@pGwd@rIqj@vJep@R}@fDyCzAgDxCe@lG`CfD?dIr@pIxCfGrApGd@dK|@`ILlItDfXzQfNto@x]fb@}AhVpFbEfQgA|FtGvFbKt`@xp@~m@d}@bOxVlXle@uLpi@oPz}@mk@waAkHdr@sHbs@{Hvq@gEl^wEzg@eEt\\mEzd@wD~YiEzYdLhJvM`KrM|J~XbV|X|TrOhLpM|JvPrQrO~KfMdJjLdH`\\fVj@hPgDr_@aBfFgGjIqBpIc@vP`AjLsGnm@_Q~lBaJpK_F~b@eWtg@oh@d_Aum@v{AihAnyCpFbHxIjUrUldAlHp]lUdr@vQsXpE{OfL{ZdP}c@`NuWdBiDnCtHxCrKtOdb@dYxcA|P~k@nJxZjKda@tC~KpEjQfKj^xPfi@rEfKdD~KrDjSjC`OzGb`@nH`c@bH~^~Fh`@`Hpd@~M|cA|Pnz@|d@pyB`u@~vCp[`|AbTfgAdKdy@`Rv{A~PtlAlWr]tMpSqBtUaClS}DdEo@vKp@nH`BbGxGt@tDS|@|BbC|o@ZlMq@bP?hIw@jFaPuAQfHMzK_C~}@{Dd@uCf~@cChdAk@db@{Aha@_Arf@qAh{@cAz[gC~`@mEb`@}Knl@_Ibf@mZdjBkIpc@oD~ZgGjZRrK`CtRrHtd@fJfq@jGj\\bJkJ|b@c`CbGyYnBsEdDzEhFdNx@pJ}A~cA{BhOiFjOaDv`@kC~]KdSNjaApAh^lBpSNdSbBxVh@`I|@x_@m@jH_AbBiBbDgMfKmFxOc@jHrMfWk@bJuGzb@}Hva@sA|HwChEsDmBqC|FWlFW`\\}AnSqKx^qFjU_DzRyAtNA|LrBbEnEuDhEuGxKfl@xU{O`S_YtNu]|ZilAlLwx@hDch@jI_t@hIur@hHel@lDod@zAuAfHnLpWzNlErUju@ge@~OjkA{NvXmiAlg@sWpj@yCvj@vAj`@bO`KrKkRnJmS`PqTjM@nSfKpN|WlOba@xPlFnUwMtc@}t@yLtcDukBd{F{o@t]w@hrAft@fv@~m@kI~o@esAxUm{A~Yud@xLzdDdbA`zAn{@kh@~u@kgAxo@wuHjAaS~Wmv@lTqn@dGm^j@mWLs`@e@}ScBmW~F_v@nLebAxv@dq@fg@bd@vaAtw@jt@zl@~f@`Zx}@x[~}@pW|nA``@reAx`@vj@tQrq@dS~_B~Uv[fQfBsa@jOlFzCyTtBaKxB_F~F}@`n@n^t[`Y`T~LhNnB`K{Bxe@{g@jKw[nGy[`Dkb@fLggBlQcpCtNscCd@_hAwDk`@gAsIiOesEqkBnZmHcSmJhK_Hwg@cGsTqIcSyOkYoFkJcGaPgDmMkBmMU}Q\\sYrBqRtCa\\vAaU\\iWe@oVsAiWqCw^cDmh@s@cf@pAma@~Dsb@tIcr@|Ea\\lHa~@yVejAfsA}vDgi@ePgl@fBsLjd@sSpwBkh@}EwXbRkOdhAue@jX{\\ggAyE_KlD_a@dHqCdF}FnDyOtCu[tAi]Pi|@`@cp@^_^lDkXjFcO|ZmQjFqIxF}`@tCym@zCmOnYm@~Y`TpPivAaZmx@kSqLw_@_g@g[qbA}QcoAuJyaBsh@_dLiVlTpZ~|Hg^huBzU~s@xF~oGmRsCe`@eGyIxIqRlPyIjDyReEmFyDwEmFsFqDaMe@wa@vLsa@`TcOvGqLfCgHtAyFe@yN~@}JRaMP_LvAaUvDgQvDuH|AaEwD_E{V{FsL_IPsTrNsOrMaA~@q[wmBsGjG"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Ranheim","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ss~~wByqs~R|GwNvLmW~Ps^wA{MsIgGoXUrBu|@jJmgAaAalAlCuqBbMkcA~M`Klm@`K|HoeEvj@cYtYmJ~_@xSdg@wOue@`cCtb@lgApl@a}B~_@ihBnX}q@dv@moA~PihBje@jFzBqj@rGgeAjE_ZbYmKp^}InZtZpEfyB\\lUjDhOnGlFfFmThFuXbEoUhG}W|D~CfGyXg|@qoAwPqRyTk@qi@`Pai@xf@eX`KgWea@uiA{pE~SkkDdL}hBzWkuDhf@wzDz]xU`j@rn@nWbX`PhZor@rhFtr@jk@x_AsgFri@qqBffC|mEbGqi@yaCwvE`F{{@vTykCjb@{}Azc@gv@pcA{m@zHke@hLsf@hEg[eKoM_yA}]{VaUomEbdR{aA_kAiZuNbMsaAd^siB`Y_z@bP{a@nd@gi@tk@k{@`w@whAbPylAfZ{yCxUueFdLquEzRoCtl@nXn\\waA~ZkdC`f@iiEef@}l@mq@z_@}nA`Dwz@cwDeUk`As~@gxFvHccB~VuqBeD_h@p[qyE`GobFaQ|AuF`qE}\\bdFqi@rpE`Hx_Cvi@`sE`Qt{@wTtw@nXlmEn[`uAj\\f_A`L|oA{q@vn@aP|k@_ZhaHdOvGxX}mGtMqj@tVmNnXxWiBj_Ai]liHgQvcCcPliAa\\~w@mh@nb@ah@|m@s]dWu\\`bAgZbnAsi@duCoOfdB{Qz~AwrB?~Gu|@yR_C_ZjuD{NtwBoIz`BrBza@tPfc@vj@jeAdg@dxAyAlc@oJns@uCjAiWf_@}TvTqNta@kd@fa@i{@`bBpeApnDoOjNhEt|@k{Ad]{NxQtDn}AeCnsAuYyUoFxSsExMsEgGeVpx@~HzRuGn~@gAxVWb[~Fd|@mBdr@yCj_AZjeAzAdlAnJmS"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Kongens Old people","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["_an~wBwarxRhQdAN{IjH`@T}p@nM?HeK{k@?d@vdA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Alemegan","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["c_|}wB{de`SxDyAxFeA}Dcr@}KzGfDfn@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"FP T","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["sjv}wBoo}{ROnDfjAoAc@yuAaG_@TivAu{@n@FxwAiE?NxpA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ Carma","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["sfq~wBs`vyRB|F|Rm@NaZmSICzS"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Gamle Åsvei 35","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["efy}wBkafxR~WeSoGit@{YrUjIzq@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ Erling Skakkes gate","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ghk~wB}xtyRg@lOxOgEPuLQm{@RqIgMyLQpS[`f@@xPQzI"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ Mellomveien 18","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["oq}~wBmzl{RtQie@y\\{dAqPnf@t[tcA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Sverresberg","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ku`~wBaqjwRnh@ll@zy@`z@lh@ph@hKffAbr@hk@`hAjnAxl@tZr\\{p@hTuuAcQiw@xCecBhOobA~Sy_AqZwk@e[qYw`@`\\oa@st@sJ_eA_b@wd@_\\aCmVfr@sY}ZiXgYo[gTcXuI_Z_QeCsqAmGeLuTvc@aE~w@yJngAmKloBmClyArX|j@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NTNU Park 1","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["{j~}wB{zmyRtxAsh@_M{bDke@sNid@b|E"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Perron 35","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["uxn~wB{ju{RjGgBu@wVoIsEC~Cb@rJjAnMLnA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Ilelve","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["oqj~wBytewRlC|@tCdDvD]`AmDtE}IaBiDcLcCmBs]SgRgA}d@hC_d@iBmZsJs@iEyRuNqx@iFww@qGgbAkFyHcL{F{Af]lKdf@{Ali@jLbm@fEfVrOhn@jGfQfAjP]nNfBta@eA~TfCze@lAhGt@rBlAbAjBfB"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Iladalen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["y~o~wBadowRvIbANd}@}BdbAbIjDbIwBa@gVnFwEiDsb@dAgdAdEcVlWk_@nX`TzHou@gPkKxIkdAil@xJce@rBsEplBKln@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"16","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["goo~wBu~oyRwCnyB@V@VBTDRFNFJHHHBbw@~GH?HEHIFKFQDSBU?UnCayB?WAUCUESGOIMIGICyv@oHI@IBIHGJGPERCTAT"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Sirkus","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["obz~wB_ea}RnKmYnGuy@rNeI`LifAmVy`@eq@`aD|Vje@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Ila Church","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["ssm~wBykgxRHAHGHIFMDQlB}IvE}GzD{CHIFMDQDSBU?WJqT?ADsVHuOJwL?WAUEUyBqMGUGOIKIGKAoDFmGe@E?sFf@IBKHGLGPETCVAVE`M?BBdWGnQ?D@lM?@JlW?jI?BDvH@VBTBRDNFNHHHDH@bFD"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Bike Course","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["ooy}wBs_`|RpKn^ro@bs@tMpQ|FOzIqT?m{@yFeL]au@vAsWyRvA_Hz@cIbBmHd@sKsHmQ}QgGzr@_@|f@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Byåsen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["imc}wB_ccwRaSsW{]oH~Alv@cArTiLjYcArTgPfOqp@nJoD|S}OjBwWt_@}]~cAtd@fHxV_Vdd@iS`h@n~@zMwiAz@ul@vC}Kfm@{o@vCat@y@ye@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NTNU Dragvoll NPZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ycb}wB{dc~RdLfC|LbFxQhRrG{QJqVmt@gMo@~X"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Trondheim 18","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["mnp}wBocjyRAUEUGQGMKIIEI?KBcdChyACBke@x_@KJGNERETAVAX@VbGtcAsp@z`BENEPCTAT?V@TnO|{BBTDRFNFLHHlk@`^HBJ?roAkNJEt[qSJIHOd`@}cAFOBQBSzXo`E@S?S?U}NcvC"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Singsaker Skole","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["kna~wBuvnzRrv@_f@gBeJvFiD}Ey]qIkc@sMe[aDuBk^bVmJ~\\lVjvAkDbEx@|F"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NTNU REMA","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["}rq}wB{wuyRpQ}Gi@oKoQhIf@bJ"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NTNU T SPZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["afr}wBw~_zRa@sEmEcb@yS|JC@{d@hNko@nn@aXv`@hEp]BT@TAVATCTEPGNa@x@EFaKxNLrJpEdYdm@y[dcAwgArV}f@fAcO"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Trondheim 24","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["}{s~wBgla}R|@sL@U?W?UCUESGQGKIIgKgHIEI?KBIFGLGNERCT_AhMAV?V@TBTDRFPFJHHfKpGJBH?HCHGFMFODSBU"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Bratsbergvegen 23","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["e}q|wB_t_zRw@hIpFlc@`Wq^oGwg@uIjFuIdQ"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Ranheim NRZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["{j__xB{ag~Rpr@uPwZ{lCmbAob@sd@ofEsh@ofEsl@c|Atf@uuCnr@tPpr@sx@pl@ymB}BwuCnv@grBpt@mhCftAiqCxPgrBwZkk@qn@{G|FuvBjdAqnOjfAdUjhAmCxPa}@?caFxRq_Crn@{lClbAa}@rf@}eAu`@acD_AmhCrh@o`Bqn@miBvZc`GahB_^o~@|sNgrAfhQwoC|dBshGt`Kov@vzGxaCjtI|FlnFexAvyHcfBhLgpAlrK|wBlrKbbBnlHfnAgt@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"23","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["gou}wBq~qwRbVywABW@Y?YSsJCYCYGSuIyUGMuRm\\e]sl@GKIEGCI@IDIFGJENwDpN}D~JCF}AfFiB~CiF`FGHGLwE`MgB|BoDnDKLGPwBzHCPERAT?T@T@TDRbA|EFRFLhJ~NzT~_@@@bk@j~@HJFDH@HAHCdCkBHGFKDMDQ"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ-8","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["syq~wBuioxRuB}JWiOdO}D`E{H~CkYbBiZwOyjBTyFoNsqAmXejByTijAuUgeAq`@{cBuo@{mCsJa@qAuAcKe\\mCdAWoAFKfBeQe@sPyHam@v@sF_LotAaGevAiKcdDfDcJvIcAZsp@_It@]iDMmpDhRwfA|AdB~OkmAyFo@eBnPiCbSuC`JwE{FeBtK_CdOcMyGcObz@mHj]Y|d@Afj@Mht@j@|i@|R|Dw@xUCvZdLhpDdG~wAzJvlAcAbHjJ`t@PfGa@vDqEdH|I|`@fDsAnH~UdElE|GXvl@jeCn`@tcBnUrdAlT~hA`XlhBvAlSjCzXnAtSQ|EmBx@aAnCkCbEeCpAoCk@{VgbBad@}eC_\\g`B_WmrAoT_w@cQ}s@wUedAwNql@eSqpAwKkq@iJg_AgCs}@gCsc@uE_{Agd@vVpLloCwBn\\qEsB_Vmu@oKc]iLm_@_BcEmClKsCtIgByFg@oDgA_Db@sChAuDdAgD|AoHsAuD}AmD}AyD{AuFcB}FaEuMcB{HeDwIuBmIaCkIqEgOwFyOsE{N}FgSiFeP_EgKsHxBcFpOgD`HkPld@mLf[aGeU{IoY{D_RiIsCaTgu@kJe^yH{Wa\\o_Awb@na@kH~jAd|@f`AtWf}@zMje@znF`bQfNupAapDmdMeKw_@`FsLpIqZ|Jo`@nGeMpEzJpEdQxHzU|Qvm@rJ|]`H~Pwb@|oA`ZjfAxTwo@xFsMdDyMf^loA`CpHlAhHvDjNrDxPzDjP`Gh`@nFnb@dFnZzEtTsVdb@~ExdAth@hnBfv@|wAnd@dgBza@lrAbYpsAtLdx@lVpsAbLf`Am}@duFbMp]tkAw|EnOiN"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NTNU T","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["qkq}wB_`_zRDIDMbO{i@DQBS@U@UAUCSyFah@~Sa\\FOFQBSBW@WAWAUgUwyBCUGQGOIKgK_IGCGAyM{@K@KFeXtWMg@GQGOs@_AIIICIAKBGFsK|LGJGLEPyAfI}JrJIJGNEPETATAV@TBV|ClXwKzIaFug@EUEQGMGKIGuAq@AAyAg@KCKD}Az@IFcDxDKNoJxTw_@j`@?@{d@nf@GHgq@`mAA@k[|m@INERCVAV?V@VfFds@@FpQlfBDRzFhZFPFNFJHD|ZbLbLthABTFPFNHJHDH@JAHGxYsYFKFMDQDS@U@WAUAUuL}lArs@wm@DEvy@{fAt`@k^@AxQ{RDEhNkT"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Trondheim 22","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["gvy|wBwfqwRH@HCHIHKDOFQbHob@BUBUxB}}@?M\\i}A?Io@{{@?GiBm{@B{K?UCSAQEQwUk~@EKwOmb@cEcNsDqm@cBmYCUESEQkKwW?Aup@o}Aic@w|BEQGMkZ_m@MQy]kXIEI?I@_PrFIFGHGLGNCRqNliACRAT?T@TBRfOrcA\\b|D@XBVBR|EvSFRp_@r~@FLHHHBJ?HCHGFMlQo`@r]~HxTvj@de@fuA_s@jtBEPCRCRAT@T@TBRDPtV~}@~Iva@?@~Jpc@FPFLHHdQtM@?~\\pUJD|VhE"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"19","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["iyj}wBuei|RBS@S@UAUASi_@umDCUGQGOIIIGK?yQh@sh@j@i`Aq]ICK@IFGHGLGPgJ|b@wm@rmAyc@uVmOeaA?A}Nc}@GSGOGKIGKCI@IDIHINEPETgWb`CCXmCz|@?V@VBVBRvGnXDNFJnQnZJLJDJ?fRiC~L|Go@dc@?V@XDThNhw@FTHPvTv]HHd[bYHDH@nzAbEJAJGdbAebAFIFMhPoe@DKBO|Ma}@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Sunnlandsskrenten 30","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["us}|wBcqmzRxT_YsIgh@{V|[tKhe@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Lade Kirke","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["een_xByip{RvQ~\\xJws@nFc`BuAqpAkLucEs@k_@~c@ep@oUikCmLeLqe@jw@y`@p~@PhkC}Dpx@wJhyBs@pjAvId^fJeLgBkcAhReLr^`tD"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Nidaros","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["_zh~wB_`nyRhzB|GH?FEHIFKFQBQBS@U?Wu@gp@t[omADQBS@S@UASkAiY?AoCon@ASCQEQyQkn@EMuHkPGKeSsWCCgPwPAA}OkMIEIAI@GFIHGLUp@wAzCm@YiCaDIIICmGoAIAKBGFq@r@EF}@zAGLEPeA`FAFcBxJmEhA??yDfAsDh@_EiACAsEc@CAmDGG?yMnBIDIHGLGPERCTAV@XzRj~G@VDRDRFNHJHDHB"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Bakkelandet","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["}eh~wBer`zRd_@ZXwRlG?fKpG|@uLjDof@yQyTpFuk@ePnJeBaJm@oLkEpIaDbEjHfS~EtPqAlMuAnOeEpAgUdPXvd@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Duedalen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["_ng~wBcnizRr_@~b@zT_K|EmZpWh[lTi[vXs_@hFi[bJmf@{Tk}AaQYyLzQkN~D_LlHkNha@kDpSiAlZwDvXug@rw@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"62","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["icp~wBk}|dSvE|W`G_DnFqSt@oSoFuPyN|EUz^"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Rinnans","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["i_k}wBo`z{R`ZyU_VgjBa]vDmCvv@dIfIfShy@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Trondheim 9","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["yom~wBmtqyRcY}FtAc}@?UAWCUEQEQIKGIKEI?e~A|MRgtAAWAUCSESGMIKIGICuAII@IDIHGNGPERAVAVUnuAw@?A@qf@fD?w~BAUAUCUEQGMIKIGIA_Lk@I@IDIJINEPETAVAVn@xbCcQtBIBIHILGPERCTAV@VlAdh@@TBTDPDNHJFHHBH@nPmApHvaDBVBTDRFNHJHFJ@HA|GyBHGHKHODSBUBY?WeE{_Df{AsOoCbyA?VbC|hB@VBTDRDPHJHHHB~C\\@?hLf@q@bxA?T@VBRFRFNFJHFH@nSz@HAHCHIFMFQBQBU@W`B}vArPbBJ?HEHIFMFODSBU?Wx@qv@zHwDHGHMFODSBU@U?Ys@ii@AWCUEUGOIMIGICK?cB`@HeGvF_o@@W\\wL?WAYCUEUGOGMIIKCeDY"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Boretlasg ranheim","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["c~o~wB_op`SzGzMdIw\\bCaRcKoPvImj@oUid@e_@ffBz_@|["]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"New Harbour","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["w~}~wBelhzRdf@eeFcuEm{DvdAuyJ|[snBedAi_B{OhByh@}h@ih@eYg`@iX{NkFwp@roHkb@pe@qg@vSHgs@bUwp@{p@hRc`@ulAsG{[gDoUsP?cr@eb@cr@}zGgOqaDsg@qhA{j@y~CilB{rC}kAsWijA}iBsCj}@|vAz|Djv@taAfk@rpA|pAhfEzc@rxD~g@nvFtzC`tDviAxl@mjCfzDduA~_Chv@~rThhCbfBdGavA~g@ka@rYd_An{D}oJ"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ River E","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["avh}wBklmyRcGgn@kbAkmB{k@bb@an@ldAgr@bzBqbBnpA_fBpmA_I|MkU|LuU~Sc`@b\\pKxwBla@_PxMvhC}zBfsAqmAt}@u|B~|CwoAjrB_~@xdCuTyc@cTqUhe@}dDqK{l@mBgJyHcLmQHiFmEl]{}@`n@gyA|gAouCdjAmbM`Bi~FoSubB}V{d@u{BmeDel@}Iwf@fR}i@fRw^|L{RmOeaAe{@cjBsmBgpAoiA_mCitBhP{jAtXgp@}AsIwCzFgBaDuFsM^uMuFkGuRlfAmRdkA{C~EwEaDyOc`EwE_}CeNd@@tr@cDnTVtfBErt@oLrYeVrg@oQel@ip@yh@iNhiAcGrm@yDnr@~uA`u@xkAfw@dT|H~F`Gt@vWnG^hNrF~Ca\\vPtJpGnJgFvl@zHzHxKnKtJfItDzBnZtPpy@|NneCheBzsAhlAbd@jTxP~RbLxHpU|Ax]yUlm@zFnJ~R_F~b@nRvf@zNjlA^l]lInCfCdc@ZtnAoArcAfPsGq@hZo@z|BsC`rAu^b_Aum@foAsg@ngAql@jnBgg@taCq^fuCo_@lcE_Nf^aULOlz@jDhr@``@uK|NxrCnq@xeBjlAfeA|pAux@piBabDbtIqqIbnBihBdoDabDrrBcb@bcDpz@lB{zC_iAq`GeRsxH"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Our Lady","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["akn~wBguqyRtZhGJ?HCHGFKFQDQBUBWnEmuB?WAWCUESEQIMIGIEo\\mEK?IDIFGLGNERCTAVuCrsB?V@TBRBRFNFLHHHB"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Tyholt","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ef{}wBkir{RmAzQGh_@`]po@dGsE~IyV~UeDoLwnAoOsNeKaJsNuBaBvJiAnKkEvT"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Falkenberg","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["svx~wB_fo}RxnAmlBud@mgAi}@pkAiIdq@dSddAhIaM"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"stasjon","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["kry~wB{owyRqFkVut@jq@cW`EhAvJ`l@uHlVwL?uHhMaCFsF"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ Bisheps school","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["yiq~wBsyrzRd_@nAzJiUsn@{|B}[vv@n_@|xA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"14","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["u_s~wBkzjzRhYyl@FQFSBW@W?WCWCUESaSgp@EMIKGGICI?IBIFGL}HlPiEpIuCvFADwBbFEPEPCTAT?V@TBTDPhQ`s@FPFJHHHDH?JCHGFM"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Air Force school","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["_{o~wBuh{{R~Rzc@lVbGlg@hRxPiWrSmeApFuUb@q@{AwJcAyHm@bAsLmv@kNyT}d@kMid@z@ub@?qAtVGro@fFv|@BnErBtFdFrN"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Flats","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ifq~wBejr{RfTELa]cMKmF~RCrI"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Øvre Nyhavna NPZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["uwg_xBq~m{RY_RoDae@qLccAkGcq@kG}e@oW|GhGhg@fIr_A~Gz{@nHns@`W_L"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ Brøsetvegen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["}kn~wBaxm}Rx]f@Bss@s\\fFq@hTFxU"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"FP TY2","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["{vs}wBmvx{RrQw`A}q@gbAgQxdApq@d~@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Joker Festningen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["{pe~wB}|xzR~Ah@`A_Bn@wAb@cFk@iEYmCS{Cg@kDy@wE_IxMQr@b@`YrFeB"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Skyåsvegen 64","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["a_v~wBeo_|RlEkEmDcPqBqWIeQ~AoRqD_@{AbOHxNj@dTjAnQfCbN"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Tidemans Gate 26b","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["wfu}wB}{lzRrJ~E~Cd\\zR}SgHmg@oN~QkIwDk@|J"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"TND_NPA_Water_West_14_May","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["knt~wBq_xvRtEeHgDcR}DbGyAnA?oChAaLtCqQfFmTbLg`@lBcWXo\\FsAd@aAfDdBrFcIhBiK~H}a@~Gkd@nAwRqM_WnDkKxL{JxB{DjBgDhAmNcAec@m@{I}AsUQsSoBeTmAm\\Oc`AJkQbCq\\qHwEqCj_@M`UPrbAtAd`@hBzRNxRhB`Xd@fHv@h\\OjBsBdBD`AABwMrKaHrSkAtRrMbWInAiGla@{Hna@aAtFy@jA}DsB_GzLg@dKWr[mAzO_Kj]yFjVkDdTgBhQCrTzFjLpHkG"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Eikvegen","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["cs|}wByic`ShD]TeKkBkNyF?}ArEbGzT"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Local","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["}wq~wBectyRlFELia@cGKFza@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Ladekaia","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["omj_xB_tb{ReUhq@Fvp@|j@mQj_@ki@tL}lAbg@oqFyq@aUkx@fnH"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"BKL 12","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":12,"stationParking":null}],"polylineEncodedMultiPolygon":[["kxg~wBmn}yRHEFKFMFQBQBU?U?Wo@sTAUCSEQGOGKIIICI?IBwIhEaJ|@_FYiDi@K?gQbDqStDIBIJILERETCVmAl[oJv|B?T?V@TDRDPDLHJFFpHzDHBJ?HEHIFMFOBUBUrMe|BtRiAHA`By@HEFKFMDQBQBU@UByGjDo@pF@B?lDUDA~IeCBAfHsC"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Solsiden SPZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["_qw~wBm|izRf[qiBpEnIHJFFH@H?HCHIFKDODQpA_IBU@W?WAWCWESGOGMgFiGtS_nAjCmE|@nCGxI?P?Pr@nMBVDVvQtr@FNFJHHHDH?HCHGFIFODQBSpAkM@W@YAYCUEU_O{k@tCkHDQDSBS@W?UAUCUEQiMif@EOGMIGIEI?I@IFIJEN_BbFwEcMuLs]GOGIIGIAI@IDIHGLwJjWGNCRCTAT?T@TBTDPDNxN`]FJFHHBH@HCHEFIFM|D_LnF`L{Jjd@AFwRzhAmYj~ACRCT?T@V@TDRDPFLrCfFHJHFJ@HCHEHMFOFS"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Byåsen Football","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["awg}wBmiswRyDe`@}Fwx@uHsmAcC?mBgR}EceAsQ?gGtu@cCtk@yLX?lX`KiAIb`@lBvd@lB`g@lAh\\hHdYlMvI|OuF~S{`@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Kong Park","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["gtq~wBuznyRtG`@nDff@t[kNbBgpBmk@mFq@v~A"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Bratsberg gas station","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["olr|wBuj{yRlXa[iHoh@iHmZmDwH}^va@jOruAdMsM"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ 2","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["_tk~wBgsgyRFw[yBj@q@r@q@jDUbEGvLrFN"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Grave Yard Charlottelund","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["s`w}wBwpx_SvB`MtfAdCzb@slBzVp\\eiAc`KstBw`@gVt_AkCxu@rDn\\fnAhuGaDxHxBv`@RxH"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"12 TRYM","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["{`_}wBsmk{RjDuC|EsKyEiWqJlT`EdS"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Rosenborg","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":null,"stationParking":null},{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":5,"stationParking":null}],"polylineEncodedMultiPolygon":[["yrj~wB{c|zRdj@miCym@urA{j@ffCnn@zuA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Parkveien NPZ","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["sga~wBumbzRjHrWnGiN{HoW_GdN"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Tempe","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ew`}wBqqpyRc\\|FyUqAgQYgLfvAik@`V_xAu_Awa@xpAnUdbH~p@hdAn{AudG|i@al@hg@yNt^~Cm[}mD"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Dødens dal","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["qgz}wByrbzRsGl`@`NzTtFjGbL\\bJgEhJ_LfI_IjK_Oro@cfA`FsFna@mq@sLcdAsZ`X_Y`Qa[uUqTfMeKbV{^zv@p@fe@cB~Y"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Lademoen Kirkegaard","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":2,"stationParking":null},{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["uv~~wBe`{{RvkAacA??dIaHFIFMDODQv@wFBU?S@UO_Mz@uJ@Q?SFw[?UAS}E{l@?GcLyfAsBgVCUESGOIKyNiPAAq\\a\\iAeQ|Ce^BU?WAUAUEQEQGMGKmi@ih@??mu@iq@AAgi@m`@IEI?I@IFGJGNEPER_AnJATAXNlf@?BdBf|B?TBTDRDPFLHHHDH@zFQlGnCbKtPcKlz@CPmHjkAAZ?ZbFlmA?B~J|mB@N`Hrr@BRFRFLFJJFH@HAHGxlAigA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Britiannia","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":12,"stationParking":null}],"polylineEncodedMultiPolygon":[["mmq~wBmksyRpGWNwyA{GDEhzA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"BKL 6","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":true,"rideThroughAllowed":true,"maximumSpeedKph":6,"stationParking":null}],"polylineEncodedMultiPolygon":[["adj~wBk_}yRp@mR@WAWCUCSGQGOIIIEgVgHi@iKCSCSEQGMIIGEmJqD}JcLGEmLcH_KcPIIIGK?I@IFIJGNEPCT{Dpb@CT?V@V@TDRDPFLHHvYbW|RtRNH``@|HH@HCHGFKFMDSBSBU"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Nedre bakklandet 29","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["grl~wBkn_zRb@`AtAsKwA_GsDpGvAxIx@Y"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Bilradio","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["{{_}wB{wyzR|b@}IuXicAgLca@iUhk@hX`dA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ 3t","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["ksi}wBoz{{RnFjEnNiU|WmZ~NcTtKiQlC_Z~Cm^xHuUfF{V|B}RgSqKqDdb@mG{E|Dud@d\\dQnEui@TeQy@cQoIkKuj@qk@mFxb@zY|w@yC`\\oFde@wJr]qi@co@eEv|BwDdnA"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"NPZ-6","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["cjr~wB}xnxRrOvc@pJpOcBlMkDfVyBfFa@bOpApL`EfIlGuAzBExDzo@DdMWvRK~G]xBmLs@wEfGu@lKmB~u@yDb@kD`gAcCtdAk@|a@{Ada@_A`g@qA`{@aAzZ_Ct_@gEp^wK~k@aIjf@kZ|iBoI`d@oDzZaH|\\^pQlCvTtHzd@hJnq@xI`e@nOyOtc@ybCtFkXFMt@dA~DlK^rEwAj_A_BzKsF~OmDdc@nHdFvCg^~EuNrCyRdEcm@lFcFpCmLh^aEIyRUeKuX_AT{o@bIs{@_G{\\aH{w@fAaq@xAif@fBeq@`AsXd@cQXuOZoPZiNf@gR\\{SrAi^`@iVj@}RXePr@eRLiKgFu@XyQ{ZmHBwLGeJnC_fAF}@RWxO~@`DgSPwLXcTGaQmFu}@wCqDiGJ}Cr@Q_@KeA@s@lAsCjEmZzDgZtBmS`BaD|KiOyDqYX]Go@pOwQ@ag@eAeh@uAqy@{Bgc@mDcZkFeo@}Dmc@_J{`@eEaZqHak@oHok@iD}_@s@gPtEqIzD}JgE{SeM~HmEqW{FwVwEa@kCuCuLei@mEkS}Gi`@{H_b@kK_^_G_Y_F{Us@yFxEkG^ao@}Py@aCLgIsc@}C{SkDaVkAYkBuH}AdAeIon@SwB[gM{A}d@gAsZqCo}@PaJG_OsB{x@}@wb@HgEd@iM?_IJ{eACkd@?g_@QuYJoVwBcJq@yEZuCdNgnAbF{c@sNsF_PjmAvEdFsDh\\wAlM`CzPdAjEGlON`Z?x^Bfd@Ihz@qNpA[rp@fN_Bt@r^pB~w@D`LUlKzCz`AfAtZxAld@^tOf@~EbM~`ArCmBn@hCf@J~A~KdDtTpLjo@jEjXbEn[lFhWjGdZdKt]jHd`@`Hz`@tEdTfNxm@jG`H`CRxClMdI~e@lC|\\vDnb@vHpl@pHhk@rEx[rIv_@jDf`@nF`p@fD`YnBx_@rAdx@bA~f@A|WaRrTH~@qJzLnCt_@k@vFqGwLsGa[oOvO"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"17C","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["_hb_xBk}y|RtJwqAuRqMuJ~rAtRhL"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Lade graveyard","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":false,"maximumSpeedKph":2,"stationParking":null}],"polylineEncodedMultiPolygon":[["{cl_xBat_|RsS{hBsHec@wEyGce@rp@uA|F`RzjAtSt`A`e@go@"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Harry bothers vei 12","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["qy}_xBehu|RgCdd@~O`GrJgE@e^wJmFuKK"]]}},{"type":"Feature","geometry":{"type":"MultiPolygon"},"properties":{"name":"Klaebu veien Old","start":null,"end":null,"rules":[{"vehicleTypeIds":["YTI:VehicleType:escooter_trondheim","YTI:VehicleType:ebicycle_trondheim"],"rideAllowed":false,"rideThroughAllowed":true,"maximumSpeedKph":null,"stationParking":null}],"polylineEncodedMultiPolygon":[["gcp|wBw|gzRBwH[mEkDkJeCcG{GiGkGsBcEv{@t`@cL"]]}}]}}]}}
+{
+  "data": {
+    "geofencingZones": [
+      {
+        "systemId": "tiertrondheim",
+        "geojson": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Dragvoll BA",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "cke}wBukv|RnDg@vO}IaCei@cIs_ByKylAaGy|@yHy_AiDm`@iDmf@oGy~@cGkq@sEc]OukA_F}x@aEij@{J_u@iDkh@sHydAGgp@lCyx@vK`@xEiFnPm@|YcGrHeTtRu_@tVeyA`Ge`DzL}BxxArZnCyuA?eW}WgEib@_Haz@mP{k@sQ}VyR`OgqFbFkcHqsA{tRiQnWvYv|IxGlqAvPd^fUnuG{RbyJwB`k@aBhl@wDlp@wC|g@LzYiEnp@{Gpu@yJd|@kLppAgXv[ePvIrBvUvAlOtArQlCl]vHiCpDbMOj]vB~KzJgAxGja@bJrl@hIxi@zHzi@xE~f@fDbq@_@vh@n@th@rGlnAhJhqAtOzlBbMf~ArMn`BhIdcAa@jQ"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Charlottelund",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "gij~wB}|p_Sr`@fg@`n@jShQndA|EhtBfS`_AzYrYn^l\\hX`StKrv@tDvlDjHKtN_BuCygEuc@erB_y@oh@qMuyBeKuyBxm@|q@~\\bOx}AeWpN~gDlMtjD~DxtAsHj_Aym@j_Awg@`GmaEjDkcAq_BqZmzBs`@rl@xUfbBxa@loAvg@~q@rl@lTxeA`G|hCyQxm@wQl_@za@px@?xy@yQl{Aya@jk@wIrdAwQrpA{YyCmoA_sDt|@yeAd_@maBd_@sl@`GeLeWlS_z@~Dq_B_EsoByOemCsBeg@~VyQrTmTdd@mLxUkLxUjDjSaGx_AjDxs@?l}@bWxkAfo@~DtoBjS`bArl@~y@hF}aAi_@w]wSss@{BykAzLo}A`h@dj@zk@d}@GhkBsFvnAhQnX~Msl@xCqbDjk@jLr~@qd@`c@cS~PrcBrOcZsRogCgs@bWykApd@_c@?gd@st@ql@k_AsZcOjGst@fRio@gXo\\qTlgAaKrt@koA{i@mcAcOys@uIkVe_@uL_x@yGqb@|y@k}@}Gef@ak@ln@m`@xf@zXnwBoQbDs~@bOwOerAmY}q@dRa}BlM{wC~VuoBd^o\\xL}Grb@p{@iGd~@bXxKrJy{@aj@{dC_]yY_o@fo@sZj_AqTf}CmMxzDev@wwByUwQ_i@gg@kq@o\\y[st@sNsl@~b@imD_b@u^qFuy@yFth@pDjh@`O`YeXv_CyIj_AsHho@dR`OfF_z@vO|q@d^t|@f^zYp`@jLd^n\\lS~q@j_@brA~b@nwArHrt@mcAza@w_AnTgp@hDqf@_z@_i@wQkYlTsZvIke@mTmMsl@wI}i@s`@rgBjYbW~PjD"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Brundalen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "o}w}wBaur~RaAdvAFn{AfF`~@m_@lT_o@|i@_l@pl@y^fg@kSvdAyXaGsKfg@lPxY~MaGx^|m@j_@xtArf@rcBv^|hBrZvdAr`@brArr@jvBxg@p_BvOsl@xXajAfUq_BfTq{Axd@imDhc@ygCbh@soB|o@ukB~JruExFnvCrZvmFpQroB~M`uB`QbmCyUkHsc@aCga@iDeIyhAkSudAya@}`Bmb@ezAyd@{e@yc@e\\uHhi@ny@rw@lV~}@xj@jzBvLbnAxI`bA``@ze@xv@uE~\\bO~StdArHvhHy@tnDmb@}m@ev@evA_Qza@pcC|sEhMme@mHivA?orCy@a}B_H{kCyFssByLeqCeLusBsTojC_Q_uB_KyoCmYyjLzv@m~B~w@uwB~AmkAjA_uBf@mbCv@emC_T?e@fk@sBzjEkDheDsNpl@_Ths@qEmLsNmsAy^cnA_]qd@si@mPyj@_Cg[{]qT{e@_Qq`@_ByYjGqd@_WkHeCxlAjMfs@f[~u@~_@~u@xs@vIrr@vQd^lkArZtoByLx]sx@twBmiAneEed@|hBsr@teFej@bdEsZj_Asc@crAyd@osA_W_v@yXu`AeFoX_]{|AeRgk@yRkcA_f@evAkSe[pl@wlArWe[rgAwdA~~Aec@?gfBjJsp@qKyQgOpd@RxpAep@bSyCu`AP_mB~AuwBkMaCyFv`A"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "TND_Main_14_March 21",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "scz}wBi_yxR|WdqBaTpS_[xm@uNvUyOhXj\\n{AfQrlBsj@bf@cl@zc@ed@~d@_QzF{F~BoItGmGnKkGfHcPnI{QnKgN|Js\\xYaIhKsR~[eKdXoFxWmDhUmGvTeHl[aInSiXtf@aLvNoAt@sO|JaRjFed@[kTaNmRyOgSib@uV_[kJaKmB~@K}AkDaVoJcXwEcKuJ_U_W}`CzDyXrDcGlGkD`H}HrDcQbCgQrBmE~a@_KrEw@j@zSAbTgArWUzS?|VxAdZpCtNpGdP~IpRbMjKlPzFbTq@bLwHr[sZ~BsK`N_UrMea@bD_SbTay@jGwVzKic@bLud@nQg]~T{XxXgb@b^ih@xEuNxQ_ZrH}TvLkHhH_S`RmUnGuL~Fq@pEsG~C_GvGyHn^ie@zTg[jNgQvQiInI{FjC{D`HkJ^[rIgH|ImHxPeLtTcIpGwFhIcEvEsCzBqAdMuCfC}C`C}DlJkHrEe@dLs@pB`AjIgE~I{DrL{CzLw@xC~AxLMxLzC~GuAnC}ChBmEhF_EdEwFzFgLjDiFjKsIzBgEr@cGlCoD`DuUzDsV`DiWHcGzAeMxAoPnC}XxDeh@rDic@jB{A~A}PV_\\vHwbAdFwa@|Kwg@xBaRbKcZdKuRdAqDHeE`GgObOkTvDu@jKw@`NkNzQ{NiNcsAEaBvEtBtLaEbNmGxOd@tLLvHr@xGnp@~K|QfGzGhGr@pFMpHXJ`b@lB`KdFnKzNhPfOhLhCtHvHtLtUmAlOgBlKiPtNcWnCiJ`@iNs@cSa@kTy@iVxRMpW|MzNd@nLuJvJsF`IaEfOKnP?xTlEd{@l`@xp@vTnAo_AdKvCtUd@pJiI~FtErG`DhKpFnLhE`SnHxd@vOpf@rNpZbOj_AqJ`m@nc@~HhCpaCtcAbeAkIx^omBqYmdAqq@i`Asw@rDmz@muA{Hsf@}Eua@ek@urEpj@_g@j{@oZ~AuJjM}MhIgDng@qd@ju@qgAo[}wAYs|Ax]ahBkGC}XpmAwRx@yFqRp@uaAsLgcBec@Lwe@~l@oe@ft@oEhnDa{BzO}fAtc@wr@lm@q_@ycBmCcQyAoNqGo\\gIw`@{IqTwL_b@g]uoAoUgr@}Rar@uG{ZcIcOoIoWuLuJyCkHmCeHaQ}n@mK{a@qMye@_\\ynAiDeSh@qL`A{PDsSpUau@rkBd_IzoBnyGlv@lhEvWkAeh@grC~@oh@vl@oq@xbAxh@|wApe@xi@uh@Me_CnL{IfGwBnK|IxA_c@oRoJcCgTkAgG{BaMcBgNmFcM|o@FvOae@oFyaArYuhCbI{s@}Cu|@y|@}IgfAmT}v@gRgYiEwY}V}oAo`CjEc_@y@cYjb@c{A||Aj|BdhD{jCcDqr@w`FubAiSiTsIxx@{SlnAwrAkw@cIex@os@xjAcd@~k@kl@zs@iZps@ya@n~@cRtl@oC~cAc[h`A~@`IAvL{CnOyC}\\eGsy@qImlAeLgqB}Ey`@cEab@Q_Z~CkW|U_lAfHyf@yLehA?a\\`Bu^vDk]rBk]dDq\\pD}\\nAs_@Oqr@{Aqi@yGgfAcDuYkG_[}HkX{KgZeFuR}DqO_AmJiGiA}If@_GbA_G`AuBi@kA{AKyAN}QnE_]lAcU|C_]bDsWrFy_@tFuXzEoe@fAqQqIub@vZcwAMco@oBsRkFeQ~PuXwHsy@mZol@iUfNee@rk@ya@~g@kIzUsJf\\mEvY_Fz`@mHjh@eMa[_MaNiYsz@yi@}|@s`@su@mXcj@wPm\\eK_\\}Ue^{b@cfA{Q{[a_@o~@kf@a|Aga@{qA_a@wa@qZbEmCdmA\\zl@lA`z@pEteBlO`sCf@|bAqIkDwGJsRUmP?sU_D{c@qL}b@iMYpLo]qLiVwJo\\yPeFyJcHiNyEyUkMci@{_@kjBsGe[cKac@qHwYyJmZmNo]oO_Zwb@a`AsV_k@oZ_i@eIaS{a@a`AsJaPaYk\\{FcDgIySbOe`@joCgeI|rC|eIrXnk@zWt@d_Cm|GgQsn@_eC~aEsvCsxG`xBmqGqNeWc}Bz}F_pArtDul@qhB_Tgk@aVst@oKm]sl@ycBmOx`@hAfeFxn@cmBrPbl@|pAvpDsa@btAeIjS_NrVyXb_@_~@cDgNhz@oq@}IvAe_AvPyVla@wVeDui@ad@jTmY}Lwa@wm@{RkDoXwo@aj@ciFcUmqBmSmg@iOxdBuFrpAyJ~w@sHv`@aKbkAgJn_AqMp|@kQl{AmPdjAsMpy@eRxtAkHzo@yLsHqL{PoOaBkk@_t@wFePxGscAzO_z@j_BqgCve@guCzVs|CpNcfEMsx@}MkA_F}aA|RsM_EgT{a@s]fQd}Bs]xQmQxBmLoE_OaFoJRcWPc`@{L}IrzC_p@vOwf@xJja@kgCjVuwCbBow@yUm}GyTpOgWg`@a[{aAuCaCis@l{Al`@tkBlh@~kCnh@~kCmEhe@fBvj@mUpcA}k@hsDkpAl~F}ICwLcSmSk[wRm[_TkVaMiIaGvRmGpNaGhQcQvd@yU~c@ql@d}A_Ydk@uIbWmDzOqD|@mEqyCmi@{Hcw@ok@{m@_Ism@laAyi@zsAyh@{McAykBmTyd@aOwBwXfHwXfb@qViXal@bMa]zd@_x@b]uSxdAzUtzArj@_EduA_K~\\f}CjLvItZkAfvA~Pho@`_@dv@vhAtV~YfLvWvi@xeAxq@rpAnWth@{G|]sQxt@}g@b}Bof@juBaRnt@_Lrj@gVd`A}DlFyD|CmCbB_C]cCaGcDm_@{Bok@qJtJoFz@uGkBsc@am@oRmSsz@s{A`RwwAgxAecBxOdpHcCh`AmAz[iIp@kA|Pb@fUaO|a@{Vpw@mb@xx@ob@qy@vJgu@n@ml@eDe[_Okc@aOy@kIvNkIhWurBw}BuMe_BfEuw@zB_cAwDcf@kNsLkLhb@eNtOwm@nSsKrp@rB|}Ad`@bu@z\\jiCta@f|@pc@lnAbVrtAtGxf@rb@f{@|\\|@lj@rh@da@gy@pq@z|A`c@vr@xOpdAnKpk@bIza@nRmQfPX~Hp{@zIpr@zIva@Gbp@~Jt|AfInc@fKv_@tMvWbL~SrNv[fLbW`Fb_@wL`l@aSjn@fAtRtPhP~S{A~ReX`Hap@dNhe@jA|Pk@hP_CdMgDzZQfL`@xI`BlFn@dAjAtB|E~GpGSrEoEtDuKfD_TvAsLvRud@pGwd@rIqj@vJep@R}@fDyCzAgDxCe@lG`CfD?dIr@pIxCfGrApGd@dK|@`ILlItDfXzQfNto@x]fb@}AhVpFbEfQgA|FtGvFbKt`@xp@~m@d}@bOxVlXle@uLpi@oPz}@mk@waAkHdr@sHbs@{Hvq@gEl^wEzg@eEt\\mEzd@wD~YiEzYdLhJvM`KrM|J~XbV|X|TrOhLpM|JvPrQrO~KfMdJjLdH`\\fVj@hPgDr_@aBfFgGjIqBpIc@vP`AjLsGnm@_Q~lBaJpK_F~b@eWtg@oh@d_Aum@v{AihAnyCpFbHxIjUrUldAlHp]lUdr@vQsXpE{OfL{ZdP}c@`NuWdBiDnCtHxCrKtOdb@dYxcA|P~k@nJxZjKda@tC~KpEjQfKj^xPfi@rEfKdD~KrDjSjC`OzGb`@nH`c@bH~^~Fh`@`Hpd@~M|cA|Pnz@|d@pyB`u@~vCp[`|AbTfgAdKdy@`Rv{A~PtlAlWr]tMpSqBtUaClS}DdEo@vKp@nH`BbGxGt@tDS|@|BbC|o@ZlMq@bP?hIw@jFaPuAQfHMzK_C~}@{Dd@uCf~@cChdAk@db@{Aha@_Arf@qAh{@cAz[gC~`@mEb`@}Knl@_Ibf@mZdjBkIpc@oD~ZgGjZRrK`CtRrHtd@fJfq@jGj\\bJkJ|b@c`CbGyYnBsEdDzEhFdNx@pJ}A~cA{BhOiFjOaDv`@kC~]KdSNjaApAh^lBpSNdSbBxVh@`I|@x_@m@jH_AbBiBbDgMfKmFxOc@jHrMfWk@bJuGzb@}Hva@sA|HwChEsDmBqC|FWlFW`\\}AnSqKx^qFjU_DzRyAtNA|LrBbEnEuDhEuGxKfl@xU{O`S_YtNu]|ZilAlLwx@hDch@jI_t@hIur@hHel@lDod@zAuAfHnLpWzNlErUju@ge@~OjkA{NvXmiAlg@sWpj@yCvj@vAj`@bO`KrKkRnJmS`PqTjM@nSfKpN|WlOba@xPlFnUwMtc@}t@yLtcDukBd{F{o@t]w@hrAft@fv@~m@kI~o@esAxUm{A~Yud@xLzdDdbA`zAn{@kh@~u@kgAxo@wuHjAaS~Wmv@lTqn@dGm^j@mWLs`@e@}ScBmW~F_v@nLebAxv@dq@fg@bd@vaAtw@jt@zl@~f@`Zx}@x[~}@pW|nA``@reAx`@vj@tQrq@dS~_B~Uv[fQfBsa@jOlFzCyTtBaKxB_F~F}@`n@n^t[`Y`T~LhNnB`K{Bxe@{g@jKw[nGy[`Dkb@fLggBlQcpCtNscCd@_hAwDk`@gAsIiOesEqkBnZmHcSmJhK_Hwg@cGsTqIcSyOkYoFkJcGaPgDmMkBmMU}Q\\sYrBqRtCa\\vAaU\\iWe@oVsAiWqCw^cDmh@s@cf@pAma@~Dsb@tIcr@|Ea\\lHa~@yVejAfsA}vDgi@ePgl@fBsLjd@sSpwBkh@}EwXbRkOdhAue@jX{\\ggAyE_KlD_a@dHqCdF}FnDyOtCu[tAi]Pi|@`@cp@^_^lDkXjFcO|ZmQjFqIxF}`@tCym@zCmOnYm@~Y`TpPivAaZmx@kSqLw_@_g@g[qbA}QcoAuJyaBsh@_dLiVlTpZ~|Hg^huBzU~s@xF~oGmRsCe`@eGyIxIqRlPyIjDyReEmFyDwEmFsFqDaMe@wa@vLsa@`TcOvGqLfCgHtAyFe@yN~@}JRaMP_LvAaUvDgQvDuH|AaEwD_E{V{FsL_IPsTrNsOrMaA~@q[wmBsGjG"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Ranheim",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ss~~wByqs~R|GwNvLmW~Ps^wA{MsIgGoXUrBu|@jJmgAaAalAlCuqBbMkcA~M`Klm@`K|HoeEvj@cYtYmJ~_@xSdg@wOue@`cCtb@lgApl@a}B~_@ihBnX}q@dv@moA~PihBje@jFzBqj@rGgeAjE_ZbYmKp^}InZtZpEfyB\\lUjDhOnGlFfFmThFuXbEoUhG}W|D~CfGyXg|@qoAwPqRyTk@qi@`Pai@xf@eX`KgWea@uiA{pE~SkkDdL}hBzWkuDhf@wzDz]xU`j@rn@nWbX`PhZor@rhFtr@jk@x_AsgFri@qqBffC|mEbGqi@yaCwvE`F{{@vTykCjb@{}Azc@gv@pcA{m@zHke@hLsf@hEg[eKoM_yA}]{VaUomEbdR{aA_kAiZuNbMsaAd^siB`Y_z@bP{a@nd@gi@tk@k{@`w@whAbPylAfZ{yCxUueFdLquEzRoCtl@nXn\\waA~ZkdC`f@iiEef@}l@mq@z_@}nA`Dwz@cwDeUk`As~@gxFvHccB~VuqBeD_h@p[qyE`GobFaQ|AuF`qE}\\bdFqi@rpE`Hx_Cvi@`sE`Qt{@wTtw@nXlmEn[`uAj\\f_A`L|oA{q@vn@aP|k@_ZhaHdOvGxX}mGtMqj@tVmNnXxWiBj_Ai]liHgQvcCcPliAa\\~w@mh@nb@ah@|m@s]dWu\\`bAgZbnAsi@duCoOfdB{Qz~AwrB?~Gu|@yR_C_ZjuD{NtwBoIz`BrBza@tPfc@vj@jeAdg@dxAyAlc@oJns@uCjAiWf_@}TvTqNta@kd@fa@i{@`bBpeApnDoOjNhEt|@k{Ad]{NxQtDn}AeCnsAuYyUoFxSsExMsEgGeVpx@~HzRuGn~@gAxVWb[~Fd|@mBdr@yCj_AZjeAzAdlAnJmS"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Kongens Old people",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["_an~wBwarxRhQdAN{IjH`@T}p@nM?HeK{k@?d@vdA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Alemegan",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["c_|}wB{de`SxDyAxFeA}Dcr@}KzGfDfn@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "FP T",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["sjv}wBoo}{ROnDfjAoAc@yuAaG_@TivAu{@n@FxwAiE?NxpA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ Carma",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["sfq~wBs`vyRB|F|Rm@NaZmSICzS"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Gamle Åsvei 35",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["efy}wBkafxR~WeSoGit@{YrUjIzq@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ Erling Skakkes gate",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["ghk~wB}xtyRg@lOxOgEPuLQm{@RqIgMyLQpS[`f@@xPQzI"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ Mellomveien 18",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["oq}~wBmzl{RtQie@y\\{dAqPnf@t[tcA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Sverresberg",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ku`~wBaqjwRnh@ll@zy@`z@lh@ph@hKffAbr@hk@`hAjnAxl@tZr\\{p@hTuuAcQiw@xCecBhOobA~Sy_AqZwk@e[qYw`@`\\oa@st@sJ_eA_b@wd@_\\aCmVfr@sY}ZiXgYo[gTcXuI_Z_QeCsqAmGeLuTvc@aE~w@yJngAmKloBmClyArX|j@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NTNU Park 1",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["{j~}wB{zmyRtxAsh@_M{bDke@sNid@b|E"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Perron 35",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["uxn~wB{ju{RjGgBu@wVoIsEC~Cb@rJjAnMLnA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Ilelve",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "oqj~wBytewRlC|@tCdDvD]`AmDtE}IaBiDcLcCmBs]SgRgA}d@hC_d@iBmZsJs@iEyRuNqx@iFww@qGgbAkFyHcL{F{Af]lKdf@{Ali@jLbm@fEfVrOhn@jGfQfAjP]nNfBta@eA~TfCze@lAhGt@rBlAbAjBfB"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Iladalen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "y~o~wBadowRvIbANd}@}BdbAbIjDbIwBa@gVnFwEiDsb@dAgdAdEcVlWk_@nX`TzHou@gPkKxIkdAil@xJce@rBsEplBKln@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "16",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "goo~wBu~oyRwCnyB@V@VBTDRFNFJHHHBbw@~GH?HEHIFKFQDSBU?UnCayB?WAUCUESGOIMIGICyv@oHI@IBIHGJGPERCTAT"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Sirkus",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["obz~wB_ea}RnKmYnGuy@rNeI`LifAmVy`@eq@`aD|Vje@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Ila Church",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ssm~wBykgxRHAHGHIFMDQlB}IvE}GzD{CHIFMDQDSBU?WJqT?ADsVHuOJwL?WAUEUyBqMGUGOIKIGKAoDFmGe@E?sFf@IBKHGLGPETCVAVE`M?BBdWGnQ?D@lM?@JlW?jI?BDvH@VBTBRDNFNHHHDH@bFD"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Bike Course",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ooy}wBs_`|RpKn^ro@bs@tMpQ|FOzIqT?m{@yFeL]au@vAsWyRvA_Hz@cIbBmHd@sKsHmQ}QgGzr@_@|f@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Byåsen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "imc}wB_ccwRaSsW{]oH~Alv@cArTiLjYcArTgPfOqp@nJoD|S}OjBwWt_@}]~cAtd@fHxV_Vdd@iS`h@n~@zMwiAz@ul@vC}Kfm@{o@vCat@y@ye@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NTNU Dragvoll NPZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["ycb}wB{dc~RdLfC|LbFxQhRrG{QJqVmt@gMo@~X"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Trondheim 18",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "mnp}wBocjyRAUEUGQGMKIIEI?KBcdChyACBke@x_@KJGNERETAVAX@VbGtcAsp@z`BENEPCTAT?V@TnO|{BBTDRFNFLHHlk@`^HBJ?roAkNJEt[qSJIHOd`@}cAFOBQBSzXo`E@S?S?U}NcvC"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Singsaker Skole",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "kna~wBuvnzRrv@_f@gBeJvFiD}Ey]qIkc@sMe[aDuBk^bVmJ~\\lVjvAkDbEx@|F"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NTNU REMA",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["}rq}wB{wuyRpQ}Gi@oKoQhIf@bJ"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NTNU T SPZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "afr}wBw~_zRa@sEmEcb@yS|JC@{d@hNko@nn@aXv`@hEp]BT@TAVATCTEPGNa@x@EFaKxNLrJpEdYdm@y[dcAwgArV}f@fAcO"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Trondheim 24",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "}{s~wBgla}R|@sL@U?W?UCUESGQGKIIgKgHIEI?KBIFGLGNERCT_AhMAV?V@TBTDRFPFJHHfKpGJBH?HCHGFMFODSBU"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Bratsbergvegen 23",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["e}q|wB_t_zRw@hIpFlc@`Wq^oGwg@uIjFuIdQ"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Ranheim NRZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "{j__xB{ag~Rpr@uPwZ{lCmbAob@sd@ofEsh@ofEsl@c|Atf@uuCnr@tPpr@sx@pl@ymB}BwuCnv@grBpt@mhCftAiqCxPgrBwZkk@qn@{G|FuvBjdAqnOjfAdUjhAmCxPa}@?caFxRq_Crn@{lClbAa}@rf@}eAu`@acD_AmhCrh@o`Bqn@miBvZc`GahB_^o~@|sNgrAfhQwoC|dBshGt`Kov@vzGxaCjtI|FlnFexAvyHcfBhLgpAlrK|wBlrKbbBnlHfnAgt@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "23",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "gou}wBq~qwRbVywABW@Y?YSsJCYCYGSuIyUGMuRm\\e]sl@GKIEGCI@IDIFGJENwDpN}D~JCF}AfFiB~CiF`FGHGLwE`MgB|BoDnDKLGPwBzHCPERAT?T@T@TDRbA|EFRFLhJ~NzT~_@@@bk@j~@HJFDH@HAHCdCkBHGFKDMDQ"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ-8",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "syq~wBuioxRuB}JWiOdO}D`E{H~CkYbBiZwOyjBTyFoNsqAmXejByTijAuUgeAq`@{cBuo@{mCsJa@qAuAcKe\\mCdAWoAFKfBeQe@sPyHam@v@sF_LotAaGevAiKcdDfDcJvIcAZsp@_It@]iDMmpDhRwfA|AdB~OkmAyFo@eBnPiCbSuC`JwE{FeBtK_CdOcMyGcObz@mHj]Y|d@Afj@Mht@j@|i@|R|Dw@xUCvZdLhpDdG~wAzJvlAcAbHjJ`t@PfGa@vDqEdH|I|`@fDsAnH~UdElE|GXvl@jeCn`@tcBnUrdAlT~hA`XlhBvAlSjCzXnAtSQ|EmBx@aAnCkCbEeCpAoCk@{VgbBad@}eC_\\g`B_WmrAoT_w@cQ}s@wUedAwNql@eSqpAwKkq@iJg_AgCs}@gCsc@uE_{Agd@vVpLloCwBn\\qEsB_Vmu@oKc]iLm_@_BcEmClKsCtIgByFg@oDgA_Db@sChAuDdAgD|AoHsAuD}AmD}AyD{AuFcB}FaEuMcB{HeDwIuBmIaCkIqEgOwFyOsE{N}FgSiFeP_EgKsHxBcFpOgD`HkPld@mLf[aGeU{IoY{D_RiIsCaTgu@kJe^yH{Wa\\o_Awb@na@kH~jAd|@f`AtWf}@zMje@znF`bQfNupAapDmdMeKw_@`FsLpIqZ|Jo`@nGeMpEzJpEdQxHzU|Qvm@rJ|]`H~Pwb@|oA`ZjfAxTwo@xFsMdDyMf^loA`CpHlAhHvDjNrDxPzDjP`Gh`@nFnb@dFnZzEtTsVdb@~ExdAth@hnBfv@|wAnd@dgBza@lrAbYpsAtLdx@lVpsAbLf`Am}@duFbMp]tkAw|EnOiN"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NTNU T",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "qkq}wB_`_zRDIDMbO{i@DQBS@U@UAUCSyFah@~Sa\\FOFQBSBW@WAWAUgUwyBCUGQGOIKgK_IGCGAyM{@K@KFeXtWMg@GQGOs@_AIIICIAKBGFsK|LGJGLEPyAfI}JrJIJGNEPETATAV@TBV|ClXwKzIaFug@EUEQGMGKIGuAq@AAyAg@KCKD}Az@IFcDxDKNoJxTw_@j`@?@{d@nf@GHgq@`mAA@k[|m@INERCVAV?V@VfFds@@FpQlfBDRzFhZFPFNFJHD|ZbLbLthABTFPFNHJHDH@JAHGxYsYFKFMDQDS@U@WAUAUuL}lArs@wm@DEvy@{fAt`@k^@AxQ{RDEhNkT"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Trondheim 22",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "gvy|wBwfqwRH@HCHIHKDOFQbHob@BUBUxB}}@?M\\i}A?Io@{{@?GiBm{@B{K?UCSAQEQwUk~@EKwOmb@cEcNsDqm@cBmYCUESEQkKwW?Aup@o}Aic@w|BEQGMkZ_m@MQy]kXIEI?I@_PrFIFGHGLGNCRqNliACRAT?T@TBRfOrcA\\b|D@XBVBR|EvSFRp_@r~@FLHHHBJ?HCHGFMlQo`@r]~HxTvj@de@fuA_s@jtBEPCRCRAT@T@TBRDPtV~}@~Iva@?@~Jpc@FPFLHHdQtM@?~\\pUJD|VhE"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "19",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "iyj}wBuei|RBS@S@UAUASi_@umDCUGQGOIIIGK?yQh@sh@j@i`Aq]ICK@IFGHGLGPgJ|b@wm@rmAyc@uVmOeaA?A}Nc}@GSGOGKIGKCI@IDIHINEPETgWb`CCXmCz|@?V@VBVBRvGnXDNFJnQnZJLJDJ?fRiC~L|Go@dc@?V@XDThNhw@FTHPvTv]HHd[bYHDH@nzAbEJAJGdbAebAFIFMhPoe@DKBO|Ma}@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Sunnlandsskrenten 30",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["us}|wBcqmzRxT_YsIgh@{V|[tKhe@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Lade Kirke",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "een_xByip{RvQ~\\xJws@nFc`BuAqpAkLucEs@k_@~c@ep@oUikCmLeLqe@jw@y`@p~@PhkC}Dpx@wJhyBs@pjAvId^fJeLgBkcAhReLr^`tD"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Nidaros",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "_zh~wB_`nyRhzB|GH?FEHIFKFQBQBS@U?Wu@gp@t[omADQBS@S@UASkAiY?AoCon@ASCQEQyQkn@EMuHkPGKeSsWCCgPwPAA}OkMIEIAI@GFIHGLUp@wAzCm@YiCaDIIICmGoAIAKBGFq@r@EF}@zAGLEPeA`FAFcBxJmEhA??yDfAsDh@_EiACAsEc@CAmDGG?yMnBIDIHGLGPERCTAV@XzRj~G@VDRDRFNHJHDHB"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Bakkelandet",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "}eh~wBer`zRd_@ZXwRlG?fKpG|@uLjDof@yQyTpFuk@ePnJeBaJm@oLkEpIaDbEjHfS~EtPqAlMuAnOeEpAgUdPXvd@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Duedalen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "_ng~wBcnizRr_@~b@zT_K|EmZpWh[lTi[vXs_@hFi[bJmf@{Tk}AaQYyLzQkN~D_LlHkNha@kDpSiAlZwDvXug@rw@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "62",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["icp~wBk}|dSvE|W`G_DnFqSt@oSoFuPyN|EUz^"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Rinnans",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["i_k}wBo`z{R`ZyU_VgjBa]vDmCvv@dIfIfShy@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Trondheim 9",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "yom~wBmtqyRcY}FtAc}@?UAWCUEQEQIKGIKEI?e~A|MRgtAAWAUCSESGMIKIGICuAII@IDIHGNGPERAVAVUnuAw@?A@qf@fD?w~BAUAUCUEQGMIKIGIA_Lk@I@IDIJINEPETAVAVn@xbCcQtBIBIHILGPERCTAV@VlAdh@@TBTDPDNHJFHHBH@nPmApHvaDBVBTDRFNHJHFJ@HA|GyBHGHKHODSBUBY?WeE{_Df{AsOoCbyA?VbC|hB@VBTDRDPHJHHHB~C\\@?hLf@q@bxA?T@VBRFRFNFJHFH@nSz@HAHCHIFMFQBQBU@W`B}vArPbBJ?HEHIFMFODSBU?Wx@qv@zHwDHGHMFODSBU@U?Ys@ii@AWCUEUGOIMIGICK?cB`@HeGvF_o@@W\\wL?WAYCUEUGOGMIIKCeDY"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Boretlasg ranheim",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["c~o~wB_op`SzGzMdIw\\bCaRcKoPvImj@oUid@e_@ffBz_@|["]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "New Harbour",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "w~}~wBelhzRdf@eeFcuEm{DvdAuyJ|[snBedAi_B{OhByh@}h@ih@eYg`@iX{NkFwp@roHkb@pe@qg@vSHgs@bUwp@{p@hRc`@ulAsG{[gDoUsP?cr@eb@cr@}zGgOqaDsg@qhA{j@y~CilB{rC}kAsWijA}iBsCj}@|vAz|Djv@taAfk@rpA|pAhfEzc@rxD~g@nvFtzC`tDviAxl@mjCfzDduA~_Chv@~rThhCbfBdGavA~g@ka@rYd_An{D}oJ"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ River E",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "avh}wBklmyRcGgn@kbAkmB{k@bb@an@ldAgr@bzBqbBnpA_fBpmA_I|MkU|LuU~Sc`@b\\pKxwBla@_PxMvhC}zBfsAqmAt}@u|B~|CwoAjrB_~@xdCuTyc@cTqUhe@}dDqK{l@mBgJyHcLmQHiFmEl]{}@`n@gyA|gAouCdjAmbM`Bi~FoSubB}V{d@u{BmeDel@}Iwf@fR}i@fRw^|L{RmOeaAe{@cjBsmBgpAoiA_mCitBhP{jAtXgp@}AsIwCzFgBaDuFsM^uMuFkGuRlfAmRdkA{C~EwEaDyOc`EwE_}CeNd@@tr@cDnTVtfBErt@oLrYeVrg@oQel@ip@yh@iNhiAcGrm@yDnr@~uA`u@xkAfw@dT|H~F`Gt@vWnG^hNrF~Ca\\vPtJpGnJgFvl@zHzHxKnKtJfItDzBnZtPpy@|NneCheBzsAhlAbd@jTxP~RbLxHpU|Ax]yUlm@zFnJ~R_F~b@nRvf@zNjlA^l]lInCfCdc@ZtnAoArcAfPsGq@hZo@z|BsC`rAu^b_Aum@foAsg@ngAql@jnBgg@taCq^fuCo_@lcE_Nf^aULOlz@jDhr@``@uK|NxrCnq@xeBjlAfeA|pAux@piBabDbtIqqIbnBihBdoDabDrrBcb@bcDpz@lB{zC_iAq`GeRsxH"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Our Lady",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "akn~wBguqyRtZhGJ?HCHGFKFQDQBUBWnEmuB?WAWCUESEQIMIGIEo\\mEK?IDIFGLGNERCTAVuCrsB?V@TBRBRFNFLHHHB"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Tyholt",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ef{}wBkir{RmAzQGh_@`]po@dGsE~IyV~UeDoLwnAoOsNeKaJsNuBaBvJiAnKkEvT"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Falkenberg",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["svx~wB_fo}RxnAmlBud@mgAi}@pkAiIdq@dSddAhIaM"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "stasjon",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["kry~wB{owyRqFkVut@jq@cW`EhAvJ`l@uHlVwL?uHhMaCFsF"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ Bisheps school",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["yiq~wBsyrzRd_@nAzJiUsn@{|B}[vv@n_@|xA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "14",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "u_s~wBkzjzRhYyl@FQFSBW@W?WCWCUESaSgp@EMIKGGICI?IBIFGL}HlPiEpIuCvFADwBbFEPEPCTAT?V@TBTDPhQ`s@FPFJHHHDH?JCHGFM"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Air Force school",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "_{o~wBuh{{R~Rzc@lVbGlg@hRxPiWrSmeApFuUb@q@{AwJcAyHm@bAsLmv@kNyT}d@kMid@z@ub@?qAtVGro@fFv|@BnErBtFdFrN"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Flats",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["ifq~wBejr{RfTELa]cMKmF~RCrI"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Øvre Nyhavna NPZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "uwg_xBq~m{RY_RoDae@qLccAkGcq@kG}e@oW|GhGhg@fIr_A~Gz{@nHns@`W_L"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ Brøsetvegen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["}kn~wBaxm}Rx]f@Bss@s\\fFq@hTFxU"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "FP TY2",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["{vs}wBmvx{RrQw`A}q@gbAgQxdApq@d~@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Joker Festningen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "{pe~wB}|xzR~Ah@`A_Bn@wAb@cFk@iEYmCS{Cg@kDy@wE_IxMQr@b@`YrFeB"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Skyåsvegen 64",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["a_v~wBeo_|RlEkEmDcPqBqWIeQ~AoRqD_@{AbOHxNj@dTjAnQfCbN"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Tidemans Gate 26b",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["wfu}wB}{lzRrJ~E~Cd\\zR}SgHmg@oN~QkIwDk@|J"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "TND_NPA_Water_West_14_May",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "knt~wBq_xvRtEeHgDcR}DbGyAnA?oChAaLtCqQfFmTbLg`@lBcWXo\\FsAd@aAfDdBrFcIhBiK~H}a@~Gkd@nAwRqM_WnDkKxL{JxB{DjBgDhAmNcAec@m@{I}AsUQsSoBeTmAm\\Oc`AJkQbCq\\qHwEqCj_@M`UPrbAtAd`@hBzRNxRhB`Xd@fHv@h\\OjBsBdBD`AABwMrKaHrSkAtRrMbWInAiGla@{Hna@aAtFy@jA}DsB_GzLg@dKWr[mAzO_Kj]yFjVkDdTgBhQCrTzFjLpHkG"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Eikvegen",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["cs|}wByic`ShD]TeKkBkNyF?}ArEbGzT"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Local",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["}wq~wBectyRlFELia@cGKFza@"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Ladekaia",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["omj_xB_tb{ReUhq@Fvp@|j@mQj_@ki@tL}lAbg@oqFyq@aUkx@fnH"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "BKL 12",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 12,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "kxg~wBmn}yRHEFKFMFQBQBU?U?Wo@sTAUCSEQGOGKIIICI?IBwIhEaJ|@_FYiDi@K?gQbDqStDIBIJILERETCVmAl[oJv|B?T?V@TDRDPDLHJFFpHzDHBJ?HEHIFMFOBUBUrMe|BtRiAHA`By@HEFKFMDQBQBU@UByGjDo@pF@B?lDUDA~IeCBAfHsC"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Solsiden SPZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "_qw~wBm|izRf[qiBpEnIHJFFH@H?HCHIFKDODQpA_IBU@W?WAWCWESGOGMgFiGtS_nAjCmE|@nCGxI?P?Pr@nMBVDVvQtr@FNFJHHHDH?HCHGFIFODQBSpAkM@W@YAYCUEU_O{k@tCkHDQDSBS@W?UAUCUEQiMif@EOGMIGIEI?I@IFIJEN_BbFwEcMuLs]GOGIIGIAI@IDIHGLwJjWGNCRCTAT?T@TBTDPDNxN`]FJFHHBH@HCHEFIFM|D_LnF`L{Jjd@AFwRzhAmYj~ACRCT?T@V@TDRDPFLrCfFHJHFJ@HCHEHMFOFS"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Byåsen Football",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "awg}wBmiswRyDe`@}Fwx@uHsmAcC?mBgR}EceAsQ?gGtu@cCtk@yLX?lX`KiAIb`@lBvd@lB`g@lAh\\hHdYlMvI|OuF~S{`@"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Kong Park",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["gtq~wBuznyRtG`@nDff@t[kNbBgpBmk@mFq@v~A"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Bratsberg gas station",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["olr|wBuj{yRlXa[iHoh@iHmZmDwH}^va@jOruAdMsM"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ 2",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["_tk~wBgsgyRFw[yBj@q@r@q@jDUbEGvLrFN"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Grave Yard Charlottelund",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "s`w}wBwpx_SvB`MtfAdCzb@slBzVp\\eiAc`KstBw`@gVt_AkCxu@rDn\\fnAhuGaDxHxBv`@RxH"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "12 TRYM",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["{`_}wBsmk{RjDuC|EsKyEiWqJlT`EdS"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Rosenborg",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  },
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 5,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["yrj~wB{c|zRdj@miCym@urA{j@ffCnn@zuA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Parkveien NPZ",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["sga~wBumbzRjHrWnGiN{HoW_GdN"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Tempe",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ew`}wBqqpyRc\\|FyUqAgQYgLfvAik@`V_xAu_Awa@xpAnUdbH~p@hdAn{AudG|i@al@hg@yNt^~Cm[}mD"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Dødens dal",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "qgz}wByrbzRsGl`@`NzTtFjGbL\\bJgEhJ_LfI_IjK_Oro@cfA`FsFna@mq@sLcdAsZ`X_Y`Qa[uUqTfMeKbV{^zv@p@fe@cB~Y"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Lademoen Kirkegaard",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  },
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "uv~~wBe`{{RvkAacA??dIaHFIFMDODQv@wFBU?S@UO_Mz@uJ@Q?SFw[?UAS}E{l@?GcLyfAsBgVCUESGOIKyNiPAAq\\a\\iAeQ|Ce^BU?WAUAUEQEQGMGKmi@ih@??mu@iq@AAgi@m`@IEI?I@IFGJGNEPER_AnJATAXNlf@?BdBf|B?TBTDRDPFLHHHDH@zFQlGnCbKtPcKlz@CPmHjkAAZ?ZbFlmA?B~J|mB@N`Hrr@BRFRFLFJJFH@HAHGxlAigA"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Britiannia",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 12,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [["mmq~wBmksyRpGWNwyA{GDEhzA"]]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "BKL 6",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": true,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": 6,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "adj~wBk_}yRp@mR@WAWCUCSGQGOIIIEgVgHi@iKCSCSEQGMIIGEmJqD}JcLGEmLcH_KcPIIIGK?I@IFIJGNEPCT{Dpb@CT?V@V@TDRDPFLHHvYbW|RtRNH``@|HH@HCHGFKFMDSBSBU"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Nedre bakklandet 29",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["grl~wBkn_zRb@`AtAsKwA_GsDpGvAxIx@Y"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Bilradio",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["{{_}wB{wyzR|b@}IuXicAgLca@iUhk@hX`dA"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ 3t",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "ksi}wBoz{{RnFjEnNiU|WmZ~NcTtKiQlC_Z~Cm^xHuUfF{V|B}RgSqKqDdb@mG{E|Dud@d\\dQnEui@TeQy@cQoIkKuj@qk@mFxb@zY|w@yC`\\oFde@wJr]qi@co@eEv|BwDdnA"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "NPZ-6",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  [
+                    "cjr~wB}xnxRrOvc@pJpOcBlMkDfVyBfFa@bOpApL`EfIlGuAzBExDzo@DdMWvRK~G]xBmLs@wEfGu@lKmB~u@yDb@kD`gAcCtdAk@|a@{Ada@_A`g@qA`{@aAzZ_Ct_@gEp^wK~k@aIjf@kZ|iBoI`d@oDzZaH|\\^pQlCvTtHzd@hJnq@xI`e@nOyOtc@ybCtFkXFMt@dA~DlK^rEwAj_A_BzKsF~OmDdc@nHdFvCg^~EuNrCyRdEcm@lFcFpCmLh^aEIyRUeKuX_AT{o@bIs{@_G{\\aH{w@fAaq@xAif@fBeq@`AsXd@cQXuOZoPZiNf@gR\\{SrAi^`@iVj@}RXePr@eRLiKgFu@XyQ{ZmHBwLGeJnC_fAF}@RWxO~@`DgSPwLXcTGaQmFu}@wCqDiGJ}Cr@Q_@KeA@s@lAsCjEmZzDgZtBmS`BaD|KiOyDqYX]Go@pOwQ@ag@eAeh@uAqy@{Bgc@mDcZkFeo@}Dmc@_J{`@eEaZqHak@oHok@iD}_@s@gPtEqIzD}JgE{SeM~HmEqW{FwVwEa@kCuCuLei@mEkS}Gi`@{H_b@kK_^_G_Y_F{Us@yFxEkG^ao@}Py@aCLgIsc@}C{SkDaVkAYkBuH}AdAeIon@SwB[gM{A}d@gAsZqCo}@PaJG_OsB{x@}@wb@HgEd@iM?_IJ{eACkd@?g_@QuYJoVwBcJq@yEZuCdNgnAbF{c@sNsF_PjmAvEdFsDh\\wAlM`CzPdAjEGlON`Z?x^Bfd@Ihz@qNpA[rp@fN_Bt@r^pB~w@D`LUlKzCz`AfAtZxAld@^tOf@~EbM~`ArCmBn@hCf@J~A~KdDtTpLjo@jEjXbEn[lFhWjGdZdKt]jHd`@`Hz`@tEdTfNxm@jG`H`CRxClMdI~e@lC|\\vDnb@vHpl@pHhk@rEx[rIv_@jDf`@nF`p@fD`YnBx_@rAdx@bA~f@A|WaRrTH~@qJzLnCt_@k@vFqGwLsGa[oOvO"
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "17C",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["_hb_xBk}y|RtJwqAuRqMuJ~rAtRhL"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Lade graveyard",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": false,
+                    "maximumSpeedKph": 2,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["{cl_xBat_|RsS{hBsHec@wEyGce@rp@uA|F`RzjAtSt`A`e@go@"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Harry bothers vei 12",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["qy}_xBehu|RgCdd@~O`GrJgE@e^wJmFuKK"]
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {"type": "MultiPolygon"},
+              "properties": {
+                "name": "Klaebu veien Old",
+                "start": null,
+                "end": null,
+                "rules": [
+                  {
+                    "vehicleTypeIds": [
+                      "YTI:VehicleType:escooter_trondheim",
+                      "YTI:VehicleType:ebicycle_trondheim"
+                    ],
+                    "rideAllowed": false,
+                    "rideThroughAllowed": true,
+                    "maximumSpeedKph": null,
+                    "stationParking": null
+                  }
+                ],
+                "polylineEncodedMultiPolygon": [
+                  ["gcp|wBw|gzRBwH[mEkDkJeCcG{GiGkGsBcEv{@t`@cL"]
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

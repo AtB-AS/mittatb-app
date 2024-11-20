@@ -23,7 +23,7 @@ import {
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map

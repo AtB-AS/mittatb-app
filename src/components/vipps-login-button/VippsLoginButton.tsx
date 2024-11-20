@@ -19,7 +19,7 @@ export const VippsLoginButton = ({
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const interactiveColor = theme.color.interactive[0].default
+  const interactiveColor = theme.color.interactive[0].default;
 
   const styles = useStyles();
 

@@ -1,26 +1,26 @@
-import { Platform, StatusBarProps, TextStyle } from 'react-native';
-import { APP_ORG } from '@env';
+import {Platform, StatusBarProps, TextStyle} from 'react-native';
+import {APP_ORG} from '@env';
 
 import {
   ContrastColorFs,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
-  InteractiveColor as  GenericInteractiveColor,
+  InteractiveColor as GenericInteractiveColor,
   Statuses,
   TextColor,
   TextNames,
   textNames,
   ThemeFs,
-  ThemeVariant
+  ThemeVariant,
 } from '@atb-as/theme';
-import { AppOrgs } from '../../types/app-orgs';
+import {AppOrgs} from '../../types/app-orgs';
 
-type ContrastColor = ContrastColorFs
-type Mode = keyof Themes
+type ContrastColor = ContrastColorFs;
+type Mode = keyof Themes;
 
-export type { Statuses, Mode, TextColor, ContrastColor, TextNames };
-export { textNames };
+export type {Statuses, Mode, TextColor, ContrastColor, TextNames};
+export {textNames};
 
 const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   switch (appOrg) {
@@ -37,7 +37,7 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
 };
 
 const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG), {
-  useFigmaStructure: true
+  useFigmaStructure: true,
 });
 
 // Override semibold with bold to avoid Android Roboto bold bug.
@@ -72,28 +72,36 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(mainThemes, {
-  light: {
-    tripLegDetail,
-    statusBarStyle: 'light-content',
+export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(
+  mainThemes,
+  {
+    light: {
+      tripLegDetail,
+      statusBarStyle: 'light-content',
 
-    typography: textTypeStyles,
+      typography: textTypeStyles,
+    },
+    dark: {
+      tripLegDetail,
+      statusBarStyle: 'light-content',
+
+      typography: textTypeStyles,
+    },
   },
-  dark: {
-    tripLegDetail,
-    statusBarStyle: 'light-content',
+);
 
-    typography: textTypeStyles,
-  },
-});
-
-export const isStatusColor = (color: unknown, theme: Theme): color is Statuses => Object.keys(theme.color.status).includes(color as string)
-export const isTextColor = (color: unknown, theme: Theme): color is TextColor => Object.keys(theme.color.foreground.dynamic).includes(color as string)
+export const isStatusColor = (
+  color: unknown,
+  theme: Theme,
+): color is Statuses =>
+  Object.keys(theme.color.status).includes(color as string);
+export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
+  Object.keys(theme.color.foreground.dynamic).includes(color as string);
 
 // @TODO: Make part of @AtB-as/theme
 
 export type Themes = typeof themes;
-export type Theme = typeof themes['light'];
+export type Theme = (typeof themes)['light'];
 export type InteractiveColor = GenericInteractiveColor<ContrastColor>;
 export type TransportColor = Theme['color']['transport'];
 export type StatusColor = Theme['color']['status'];

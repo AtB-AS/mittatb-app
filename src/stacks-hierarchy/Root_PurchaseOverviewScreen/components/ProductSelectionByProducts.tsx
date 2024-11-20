@@ -22,7 +22,7 @@ import {useTicketingState} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferenceItems} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
-import { useTheme } from '@atb/theme';
+import {useTheme} from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type ProductSelectionByProductsProps = {

@@ -7,7 +7,11 @@ import type {
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {TariffZone, UserProfile} from '@atb-as/config-specs';
+import {
+  type FareProductTypeConfig,
+  TariffZone,
+  UserProfile,
+} from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
 
 export const isProductSellableInApp = (
@@ -41,28 +45,43 @@ export const getDefaultProduct = (
     .filter((product) => product.type === configType)
     .reduce((selected, current) => (current.isDefault ? current : selected));
 
-export const getDefaultZone = (
+export const getDefaultZones = (
   input: PurchaseSelectionBuilderInput,
+  typeConfig: FareProductTypeConfig,
   product: PreassignedFareProduct,
-): TariffZoneWithMetadata => {
+): PurchaseSelectionType['zones'] | undefined => {
+  if (getPlaceSelectionMode(typeConfig) !== 'zones') return undefined;
+
   const selectableZones = input.tariffZones.filter((zone) =>
     isSelectableZone(product, zone),
   );
 
+  let zoneWithMetadata: TariffZoneWithMetadata | undefined = undefined;
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
       turfBooleanPointInPolygon([longitude, latitude], t.geometry),
     );
     if (zoneFromLocation) {
-      return {...zoneFromLocation, resultType: 'geolocation'};
+      zoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};
     }
   }
 
-  const zone = selectableZones.reduce((selected, current) =>
-    current.isDefault ? current : selected,
-  );
-  return {...zone, resultType: 'zone'};
+  if (!zoneWithMetadata) {
+    const zone = selectableZones.reduce((selected, current) =>
+      current.isDefault ? current : selected,
+    );
+    zoneWithMetadata = {...zone, resultType: 'zone'};
+  }
+
+  return {from: zoneWithMetadata, to: zoneWithMetadata};
+};
+
+export const getDefaultStopPlaces = (
+  typeConfig: FareProductTypeConfig,
+): PurchaseSelectionType['stopPlaces'] | undefined => {
+  if (getPlaceSelectionMode(typeConfig) !== 'stop-places') return undefined;
+  return {from: undefined, to: undefined};
 };
 
 export const getDefaultUserProfiles = (
@@ -138,16 +157,14 @@ export const isValidSelection = (
   );
   if (!areProfilesValid) return false;
 
-  const isFromZoneValid =
-    'geometry' in selection.fromPlace
-      ? isSelectableZone(selection.preassignedFareProduct, selection.fromPlace)
-      : true;
+  const isFromZoneValid = selection.zones
+    ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
+    : true;
   if (!isFromZoneValid) return false;
 
-  const isToZoneValid =
-    'geometry' in selection.toPlace
-      ? isSelectableZone(selection.preassignedFareProduct, selection.toPlace)
-      : true;
+  const isToZoneValid = selection.zones
+    ? isSelectableZone(selection.preassignedFareProduct, selection.zones.to)
+    : true;
   if (!isToZoneValid) return false;
 
   const isDateValid = selection.travelDate
@@ -156,6 +173,24 @@ export const isValidSelection = (
   if (!isDateValid) return false;
 
   return true;
+};
+
+export const getPlaceSelectionMode = (
+  typeConfig: FareProductTypeConfig,
+): 'zones' | 'stop-places' | 'none' => {
+  switch (typeConfig.configuration.zoneSelectionMode) {
+    case 'multiple':
+    case 'multiple-zone':
+    case 'multiple-stop':
+    case 'single':
+    case 'single-zone':
+    case 'single-stop':
+      return 'zones';
+    case 'multiple-stop-harbor':
+      return 'stop-places';
+    case 'none':
+      return 'none';
+  }
 };
 
 /**
@@ -174,15 +209,17 @@ export const applyProductChange = (
   );
 
   const isFromZoneValid =
-    'geometry' in currentSelection.fromPlace &&
-    isSelectableZone(product, currentSelection.fromPlace);
+    !currentSelection.zones ||
+    isSelectableZone(product, currentSelection.zones.from);
 
   const isToZoneValid =
-    'geometry' in currentSelection.toPlace &&
-    isSelectableZone(product, currentSelection.toPlace);
+    !currentSelection.zones ||
+    isSelectableZone(product, currentSelection.zones.to);
 
   const bothZonesValid = isFromZoneValid && isToZoneValid;
-  const newZone = bothZonesValid ? undefined : getDefaultZone(input, product);
+  const newZones = bothZonesValid
+    ? undefined
+    : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   return {
     ...currentSelection,
@@ -190,7 +227,6 @@ export const applyProductChange = (
     userProfilesWithCount: selectableProfiles.length
       ? selectableProfiles
       : getDefaultUserProfiles(input, product),
-    fromPlace: newZone ?? currentSelection.fromPlace,
-    toPlace: newZone ?? currentSelection.toPlace,
+    zones: newZones ?? currentSelection.zones,
   };
 };

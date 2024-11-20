@@ -197,11 +197,7 @@ const ProfileTexts = {
           label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
         },
         travelAid: {
-          label: _(
-            'Tilgjengelighet',
-            'Accessibility',
-            'Tilgjengelegheit',
-          ),
+          label: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
         },
       },
     },

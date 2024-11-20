@@ -45,7 +45,14 @@ export const FareProductGroup = ({
           iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
-          textColor={{foreground: { primary: theme.color.foreground.dynamic.primary, secondary: "", disabled: "" }, background: ""}}
+          textColor={{
+            foreground: {
+              primary: theme.color.foreground.dynamic.primary,
+              secondary: '',
+              disabled: '',
+            },
+            background: '',
+          }}
           customTransportModeText={heading}
         />
       ) : (
@@ -54,7 +61,14 @@ export const FareProductGroup = ({
           iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
-          textColor={{foreground: { primary: theme.color.foreground.dynamic.primary, secondary: "", disabled: "" }, background: ""}}
+          textColor={{
+            foreground: {
+              primary: theme.color.foreground.dynamic.primary,
+              secondary: '',
+              disabled: '',
+            },
+            background: '',
+          }}
           customTransportModeText={
             transportModes.length === 0
               ? t(FareContractTexts.otherFareContracts)

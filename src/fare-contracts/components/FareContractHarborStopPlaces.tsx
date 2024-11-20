@@ -92,8 +92,7 @@ export function FareContractHarborStopPlaces({
           {showTwoWayIcon && (
             <View
               style={{
-                backgroundColor:
-                  theme.color.background.neutral[0].background,
+                backgroundColor: theme.color.background.neutral[0].background,
               }}
             >
               <ArrowUpDown

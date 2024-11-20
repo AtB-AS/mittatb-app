@@ -13,7 +13,7 @@ import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-dis
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 export type ButtonModes =
   | 'back'
@@ -113,10 +113,10 @@ const useHeaderButton = (
     case 'info':
       const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeIcon svg={Info} color={color}/>,
+        children: <ThemeIcon svg={Info} color={color} />,
         accessibilityLabel: t(ScreenHeaderTexts.headerButton[type].text),
         onPress: onPress,
-        ...accessibilityProps
+        ...accessibilityProps,
       };
     case 'custom': {
       const {text, color, onPress, ...accessibilityProps} = buttonProps;

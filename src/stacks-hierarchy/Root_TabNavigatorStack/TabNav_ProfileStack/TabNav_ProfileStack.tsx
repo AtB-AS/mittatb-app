@@ -27,7 +27,6 @@ import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelec
 import {Profile_TravelAidScreen} from './Profile_TravelAidScreen';
 import {Profile_TravelAidInformationScreen} from './Profile_TravelAidInformationScreen.tsx';
 
-
 const Stack = createStackNavigator<ProfileStackParams>();
 
 export const TabNav_ProfileStack = () => {

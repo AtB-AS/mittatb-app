@@ -47,7 +47,7 @@ const ScreenHeaderTexts = {
     },
     info: {
       text: _('Info', 'Info', 'Info'),
-    }
+    },
   },
 };
 
@@ -73,11 +73,7 @@ export default orgSpecificTranslations(ScreenHeaderTexts, {
   troms: {
     headerButton: {
       chat: {
-	a11yHint: _(
-	  'Kontakt Svipper',
-	  'Contact Svipper',
-	  'Kontakt Svipper',
-	),
+        a11yHint: _('Kontakt Svipper', 'Contact Svipper', 'Kontakt Svipper'),
       },
     },
   },

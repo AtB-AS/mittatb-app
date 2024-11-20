@@ -313,25 +313,25 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
   troms: {
     ticketSafetyInfo: {
       description: _(
-	'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du bytter mobil.',
-	"Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you switch phones.",
-	'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du byter mobil.',
+        'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du bytter mobil.',
+        "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you switch phones.",
+        'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du byter mobil.',
       ),
     },
     withoutTravelcard: {
       optionsInfo: {
-	description: _(
+        description: _(
           'Du kan bruke billetten din på en mobil med appen Svipper installert — men kun på én mobil av gangen.',
           'You can use your ticket on a phone with the app Svipper installed — but only on one phone at a time.',
           'Du kan bruke billetten din på ein mobil med appen Svipper installert - men berre på éin mobil av gangen.',
-	),
+        ),
       },
       error: {
-	description: _(
+        description: _(
           'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Svipper kundeservice.',
           "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Svipper customer service.",
           'Vi får ikkje knytt ein mobil til brukaren din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nTa kontakt med Svipper kundeservice.',
-	),
+        ),
       },
     },
   },

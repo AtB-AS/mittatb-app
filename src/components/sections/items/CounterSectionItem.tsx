@@ -41,8 +41,7 @@ export function CounterSectionItem({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const removeButtonDisabled = count === 0;
-  const activeColor =
-    count > 0 && color ? color.active : undefined;
+  const activeColor = count > 0 && color ? color.active : undefined;
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>

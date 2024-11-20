@@ -21,7 +21,7 @@ type MetaData = {[key: string]: any};
  */
 export const notifyBugsnag = (
   error: NotifiableError,
-  options?: {errorGroupHash?: string,  metadata?: MetaData},
+  options?: {errorGroupHash?: string; metadata?: MetaData},
 ) =>
   Bugsnag.notify(
     error,
@@ -37,4 +37,4 @@ export const logToBugsnag = (message: string, metadata?: MetaData) =>
   Bugsnag.leaveBreadcrumb(message, metadata);
 
 export const errorToMetadata = (error: any) =>
-    'message' in error ? {errorMessage: error.message} : undefined
+  'message' in error ? {errorMessage: error.message} : undefined;

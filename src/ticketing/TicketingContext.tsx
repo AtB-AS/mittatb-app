@@ -85,8 +85,11 @@ const ticketingReducer: TicketingReducer = (
       );
       const sentToOthersFareContractOrderIds = prevState.sentFareContracts.map(
         (fc) => fc.orderId,
-      )
-      const combinedOrderIds = [...currentFareContractOrderIds, ...sentToOthersFareContractOrderIds];
+      );
+      const combinedOrderIds = [
+        ...currentFareContractOrderIds,
+        ...sentToOthersFareContractOrderIds,
+      ];
       return {
         ...prevState,
         reservations: action.reservations.filter(

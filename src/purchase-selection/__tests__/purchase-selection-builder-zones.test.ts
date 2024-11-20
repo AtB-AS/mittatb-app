@@ -1,46 +1,51 @@
 import {createEmptyBuilder} from '../purchase-selection-builder';
-import {TEST_INPUT, TEST_PRODUCT, TEST_SELECTION} from './test-utils';
+import {
+  TEST_INPUT,
+  TEST_PRODUCT,
+  TEST_SELECTION,
+  TEST_ZONE_WITH_MD,
+} from './test-utils';
 import type {PurchaseSelectionType} from '../types';
 
-describe('purchaseSelectionBuilder - places', () => {
+describe('purchaseSelectionBuilder - zones', () => {
   it('Should apply a valid from zone', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
-      .from({...TEST_SELECTION.fromPlace, id: 'T2'})
+      .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection.fromPlace.id).toBe('T2');
-    expect(selection.toPlace.id).toBe(TEST_SELECTION.toPlace.id);
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe(TEST_SELECTION.zones?.to.id);
   });
 
   it('Should apply a valid to zone', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
-      .to({...TEST_SELECTION.toPlace, id: 'T2'})
+      .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection.fromPlace.id).toBe(TEST_SELECTION.fromPlace.id);
-    expect(selection.toPlace.id).toBe('T2');
+    expect(selection.zones?.from.id).toBe(TEST_SELECTION.zones?.from.id);
+    expect(selection.zones?.to.id).toBe('T2');
   });
 
-  it('Should apply a valid from stop', () => {
+  it('Should not apply from zone when no zones object', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
-      .fromSelection(TEST_SELECTION)
-      .from({id: 'a-stop-id', name: 'Trondheim Kai'})
+      .fromSelection({...TEST_SELECTION, zones: undefined})
+      .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection.fromPlace.id).toBe('a-stop-id');
-    expect(selection.toPlace.id).toBe(TEST_SELECTION.toPlace.id);
+    expect(selection.zones?.from.id).toBe(undefined);
+    expect(selection.zones?.to.id).toBe(undefined);
   });
 
-  it('Should apply a valid to stop', () => {
+  it('Should not apply to zone when no zones object', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
-      .fromSelection(TEST_SELECTION)
-      .to({id: 'a-stop-id', name: 'Trondheim Kai'})
+      .fromSelection({...TEST_SELECTION, zones: undefined})
+      .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection.fromPlace.id).toBe(TEST_SELECTION.toPlace.id);
-    expect(selection.toPlace.id).toBe('a-stop-id');
+    expect(selection.zones?.from.id).toBe(undefined);
+    expect(selection.zones?.to.id).toBe(undefined);
   });
 
   it('Should not apply a from zone which is not in product limitations', () => {
@@ -57,7 +62,7 @@ describe('purchaseSelectionBuilder - places', () => {
 
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(originalSelection)
-      .from({...TEST_SELECTION.fromPlace, id: 'T2'})
+      .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
     expect(selection).toBe(originalSelection);
@@ -77,7 +82,7 @@ describe('purchaseSelectionBuilder - places', () => {
 
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(originalSelection)
-      .to({...TEST_SELECTION.fromPlace, id: 'T2'})
+      .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
     expect(selection).toBe(originalSelection);

@@ -6,15 +6,11 @@ import {
 } from 'react-native';
 import React, {useMemo, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  ButtonModes,
-  HeaderButton,
-  HeaderButtonProps,
-} from './HeaderButton';
+import {ButtonModes, HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {ThemeText} from '@atb/components/text';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
@@ -27,8 +23,8 @@ export type RightButtonProps =
       type: 'chat' | 'skip' | 'close';
     })
   | (HeaderButtonProps & {
-      type: 'info',
-      onPress: () => void; 
+      type: 'info';
+      onPress: () => void;
     })
   | (HeaderButtonProps & {
       type: 'custom';

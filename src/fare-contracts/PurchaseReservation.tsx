@@ -44,7 +44,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
   );
-  
+
   // filter out reservations for subaccount
   if (isSubAccountReservation) {
     return null;
@@ -59,7 +59,9 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         <View style={styles.validityContainer}>
           <View style={styles.validityHeader}>
             {status === 'reserving' ? (
-              <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
+              <ActivityIndicator
+                color={theme.color.foreground.dynamic.primary}
+              />
             ) : (
               <FareContractStatusSymbol status={status} />
             )}

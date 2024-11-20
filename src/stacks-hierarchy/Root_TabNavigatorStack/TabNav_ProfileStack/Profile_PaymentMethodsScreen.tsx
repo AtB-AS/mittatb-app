@@ -194,9 +194,7 @@ const Card = (props: {
             <SvgDelete
               height={21 * fontScale}
               width={21 * fontScale}
-              fill={
-                theme.color.interactive.destructive.default.background
-              }
+              fill={theme.color.interactive.destructive.default.background}
             />
           </PressableOpacity>
         </View>

@@ -48,7 +48,7 @@ export const JourneyDatePickerScreenComponent = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const interactiveColor = theme.color.interactive[0];
- 
+
   const dateItems = Array.from(DateOptions);
 
   const [dateString, setDate] = useState<string>(searchTime.date);

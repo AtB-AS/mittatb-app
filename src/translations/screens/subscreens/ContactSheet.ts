@@ -73,11 +73,7 @@ export default orgSpecificTranslations(ContactSheetTexts, {
   },
   troms: {
     header: {
-      title: _(
-	'Kontakt Svipper',
-	'Contact Svipper',
-	'Kontakt Svipper',
-      ),
+      title: _('Kontakt Svipper', 'Contact Svipper', 'Kontakt Svipper'),
     },
   },
 });

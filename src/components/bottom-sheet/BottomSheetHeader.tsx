@@ -33,8 +33,10 @@ export const BottomSheetHeader = ({
   };
 
   const themeColor = theme.color.interactive[3];
-  const {background: backgroundColor, foreground: { primary: textColor }} =
-    themeColor.default;
+  const {
+    background: backgroundColor,
+    foreground: {primary: textColor},
+  } = themeColor.default;
 
   return (
     <View style={styles.container}>

@@ -22,7 +22,7 @@ export const MobilityBenefitsInfoSectionItem = ({
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const { theme } = useTheme();
+  const {theme} = useTheme();
 
   const accessibilityLabel =
     t(MobilityTexts.includedWithTheTicket) +

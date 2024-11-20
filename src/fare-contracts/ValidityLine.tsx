@@ -36,9 +36,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'approved':
       return (
         <LineWithVerticalBars
-          backgroundColor={
-            theme.color.background.accent[3].background
-          }
+          backgroundColor={theme.color.background.accent[3].background}
           lineColor={lineColor}
         />
       );

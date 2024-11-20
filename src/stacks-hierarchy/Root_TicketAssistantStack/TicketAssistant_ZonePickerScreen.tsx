@@ -24,8 +24,10 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useDefaultTariffZone} from '../utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
-import { getThemeColor, getInteractiveColor } from './TicketAssistant_WelcomeScreen';
-
+import {
+  getThemeColor,
+  getInteractiveColor,
+} from './TicketAssistant_WelcomeScreen';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -35,7 +37,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   const styles = useThemeStyles();
   const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
-  
+
   const focusRef = useFocusOnLoad();
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {t} = useTranslation();

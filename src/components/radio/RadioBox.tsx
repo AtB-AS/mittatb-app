@@ -40,9 +40,13 @@ export function RadioBox({
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const currentInteractiveColor = interactiveColor ?? theme.color.interactive[2]
+  const currentInteractiveColor =
+    interactiveColor ?? theme.color.interactive[2];
   const themeColor = currentInteractiveColor[selected ? 'active' : 'default'];
-  const {background: backgroundColor, foreground: { primary: textColor }} = themeColor;
+  const {
+    background: backgroundColor,
+    foreground: {primary: textColor},
+  } = themeColor;
 
   return (
     <PressableOpacity

@@ -1,7 +1,7 @@
 import {StopPlace} from '@atb/api/types/departures';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
@@ -33,12 +33,15 @@ export const Departures_NearbyStopPlacesScreen = ({
           initialLocation: location,
         })
       }
-      onSelectStopPlace={useCallback((place: StopPlace) => {
-        navigation.navigate('Departures_PlaceScreen', {
-          place,
-          mode: route.params.mode,
-        });
-      }, [navigation, route.params.mode])}
+      onSelectStopPlace={useCallback(
+        (place: StopPlace) => {
+          navigation.navigate('Departures_PlaceScreen', {
+            place,
+            mode: route.params.mode,
+          });
+        },
+        [navigation, route.params.mode],
+      )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
     />
