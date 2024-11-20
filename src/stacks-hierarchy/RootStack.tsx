@@ -12,7 +12,9 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {
+  StatusBar
+} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
 import {RootStackParamList} from './navigation-types';
