@@ -7,19 +7,20 @@ import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {dictionary, useTranslation} from '@atb/translations';
 import {SituationType} from './types';
 import {useSituationBottomSheet} from './use-situation-bottom-sheet';
+import type {A11yLiveRegion} from '@atb/components/screen-reader-announcement';
 
 export type Props = {
   situation: SituationType;
   noStatusIcon?: MessageInfoBoxProps['noStatusIcon'];
   style?: MessageInfoBoxProps['style'];
-  a11yAnnounce?: boolean;
+  a11yLiveRegion?: A11yLiveRegion;
 };
 
 export const SituationMessageBox = ({
   situation,
   noStatusIcon,
   style,
-  a11yAnnounce,
+  a11yLiveRegion,
 }: Props) => {
   const {language} = useTranslation();
 
@@ -36,7 +37,7 @@ export const SituationMessageBox = ({
       noStatusIcon={noStatusIcon}
       style={style}
       message={text}
-      a11yAnnounce={a11yAnnounce}
+      a11yLiveRegion={a11yLiveRegion}
       onPressConfig={{
         text: t(dictionary.readMore),
         action: () => openSituation(situation),

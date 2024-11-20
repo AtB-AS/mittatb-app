@@ -54,6 +54,7 @@ export const StopSignalButton = ({
         <MessageInfoBox
           type="error"
           message={t(dictionary.genericErrorMsg)}
+          a11yLiveRegion="assertive"
           style={styles.requestError}
         />
       )}
@@ -84,6 +85,7 @@ export const StopSignalButton = ({
         <MessageInfoBox
           type="valid"
           message={t(TravelAidTexts.stopButton.successMessage)}
+          a11yLiveRegion="assertive"
         />
       )}
     </View>
