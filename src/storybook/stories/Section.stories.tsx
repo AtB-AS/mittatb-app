@@ -34,7 +34,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {themes} from '@atb/theme/colors';
 
-type SectionMetaProps = SectionProps & ThemedStoryProps;
+type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
 
 const SectionMeta: Meta<SectionMetaProps> = {

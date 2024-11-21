@@ -12,7 +12,7 @@ import {
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
 
-type MessageInfoTextMetaProps = MessageInfoTextProps & ThemedStoryProps;
+type MessageInfoTextMetaProps = ThemedStoryProps<MessageInfoTextProps>;
 
 const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
   title: 'MessageInfoText',

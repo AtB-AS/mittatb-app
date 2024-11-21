@@ -1,17 +1,18 @@
+import {ThemeText} from '@atb/components/text';
 import {useTheme} from '@atb/theme';
 import {ContrastColor, themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
 import {View, ViewStyle} from 'react-native';
 
-export type ThemedStoryProps = {
+export type ThemedStoryProps<T> = {
   theme: 'light' | 'dark';
   backgroundColor?: ContrastColor;
-};
+} & T;
 
-export const ThemedStoryDecorator = (
+export function ThemedStoryDecorator<T>(
   Story: React.ComponentType,
-  {args}: {args: any},
-) => {
+  {args}: {args: ThemedStoryProps<T>},
+) {
   const {theme} = useTheme();
   return (
     <View
@@ -20,7 +21,7 @@ export const ThemedStoryDecorator = (
           justifyContent: 'center',
           flex: 1,
           backgroundColor:
-            args.backgroundColor.background ||
+            args.backgroundColor?.background ||
             theme.color.background.neutral[0].background,
         } as ViewStyle
       }
@@ -28,7 +29,7 @@ export const ThemedStoryDecorator = (
       <Story />
     </View>
   );
-};
+}
 
 export const themedStoryControls: Meta['argTypes'] = {
   theme: {

@@ -10,7 +10,7 @@ import {
 } from '../ThemedStoryDecorator';
 import {View} from 'react-native';
 
-type ThemeTextMetaProps = ThemeTextProps & ThemedStoryProps;
+type ThemeTextMetaProps = ThemedStoryProps<ThemeTextProps>;
 
 const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
   title: 'ThemeText',
@@ -44,7 +44,7 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
         <Story />
       </View>
     ),
-    ThemedStoryDecorator,
+    ThemedStoryDecorator<ThemeTextMetaProps>,
   ],
 };
 

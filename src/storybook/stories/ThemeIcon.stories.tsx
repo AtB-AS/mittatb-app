@@ -149,7 +149,7 @@ import {
 } from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 
-type ThemeIconMetaProps = ThemeIconProps & ThemedStoryProps;
+type ThemeIconMetaProps = ThemedStoryProps<ThemeIconProps>;
 type IconSize = ThemeIconProps['size'];
 
 const ThemeIconMeta: Meta<ThemeIconMetaProps> = {

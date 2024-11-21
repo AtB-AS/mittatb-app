@@ -11,7 +11,7 @@ import {
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
 
-type ButtonMetaProps = ButtonProps & ThemedStoryProps;
+type ButtonMetaProps = ThemedStoryProps<ButtonProps>;
 
 const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',

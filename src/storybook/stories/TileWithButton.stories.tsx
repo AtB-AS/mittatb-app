@@ -11,7 +11,7 @@ import {TileWithButton, TileWithButtonProps} from '@atb/components/tile';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {themes} from '@atb/theme/colors';
 
-type TileWithButtonMetaProps = TileWithButtonProps & ThemedStoryProps;
+type TileWithButtonMetaProps = ThemedStoryProps<TileWithButtonProps>;
 
 const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
   title: 'TileWithButton',

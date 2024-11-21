@@ -15,7 +15,7 @@ import {
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
 
-type BorderedInfoBoxMetaProps = BorderedInfoBoxProps & ThemedStoryProps;
+type BorderedInfoBoxMetaProps = ThemedStoryProps<BorderedInfoBoxProps>;
 
 const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
   title: 'BorderedInfoBox',
