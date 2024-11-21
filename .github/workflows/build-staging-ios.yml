@@ -89,7 +89,6 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Run fastlane cert match
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
