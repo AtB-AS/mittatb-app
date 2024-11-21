@@ -1,30 +1,28 @@
-import {ThemeText} from '@atb/components/text';
-import {useTheme} from '@atb/theme';
-import {ContrastColor, themes} from '@atb/theme/colors';
+import {themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
-import {View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
+import {getCommonColorMappings, getCommonColorOptions} from './utils';
 
 export type ThemedStoryProps<T> = {
   theme: 'light' | 'dark';
-  backgroundColor?: ContrastColor;
+  storyColor?: string;
 } & T;
 
 export function ThemedStoryDecorator<T>(
   Story: React.ComponentType,
   {args}: {args: ThemedStoryProps<T>},
 ) {
-  const {theme} = useTheme();
+  const colorMappings = getCommonColorMappings(args.theme);
+  const storyContrastColor =
+    colorMappings[args.storyColor ?? ''] ??
+    themes[args.theme].color.background.neutral[0];
+
   return (
     <View
-      style={
-        {
-          justifyContent: 'center',
-          flex: 1,
-          backgroundColor:
-            args.backgroundColor?.background ||
-            theme.color.background.neutral[0].background,
-        } as ViewStyle
-      }
+      style={{
+        flex: 1,
+        backgroundColor: storyContrastColor.background,
+      }}
     >
       <Story />
     </View>
@@ -36,16 +34,12 @@ export const themedStoryControls: Meta['argTypes'] = {
     control: {type: 'radio'},
     options: ['light', 'dark'],
   },
-  backgroundColor: {
+  storyColor: {
     control: 'select',
-    options: [
-      ...Object.keys(themes['light'].color.background.neutral[0]),
-      ...Object.keys(themes['light'].color.background.accent[0]),
-      ...Object.keys(themes['light'].color.status),
-    ],
+    options: getCommonColorOptions(),
   },
 };
 
-export const themedStoryDefaultArgs: ThemedStoryProps = {
+export const themedStoryDefaultArgs: ThemedStoryProps<{}> = {
   theme: 'light',
 };
