@@ -30,8 +30,8 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^5.1.0",
-    "@atb-as/generate-assets": "../design-system/packages/assets",
-    "@atb-as/theme": "../design-system/packages/theme",
+    "@atb-as/generate-assets": "^13.4.0",
+    "@atb-as/theme": "^12.0.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "2.1.6",
