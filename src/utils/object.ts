@@ -14,6 +14,11 @@ export type Flattened<T> = T extends object
   : T;
 
 /**
+ * An object of any shape, where each leaf node is a value of type T.
+ */
+export type Nested<T> = T | {[key: string]: Nested<T>};
+
+/**
  * Make values in T required.
  *
  * @example
