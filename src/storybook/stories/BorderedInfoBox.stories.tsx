@@ -14,8 +14,7 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
-import {getCommonColorMappings, getCommonColorOptions} from '../utils';
-import {themes} from '@atb/theme/colors';
+import {getColorByOption} from '../utils';
 
 type BorderedInfoBoxMetaProps = ThemedStoryProps<BorderedInfoBoxProps>;
 
@@ -30,11 +29,7 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
   },
   decorators: [
     (Story, {args}) => {
-      const colorMappings = getCommonColorMappings(args.theme);
-      const storyContrastColor =
-        colorMappings[args.storyColor ?? ''] ??
-        themes[args.theme].color.background.neutral[0];
-
+      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
       return (
         <View
           style={{

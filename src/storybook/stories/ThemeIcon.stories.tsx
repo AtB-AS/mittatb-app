@@ -1,4 +1,3 @@
-import {themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
 import {
   ThemedStoryDecorator,
@@ -148,6 +147,7 @@ import {
   Walk as WalkEntur,
 } from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {getColorByOption} from '../utils';
 
 type ThemeIconMetaProps = ThemedStoryProps<ThemeIconProps>;
 type IconSize = ThemeIconProps['size'];
@@ -159,15 +159,6 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
     size: {
       control: 'select',
       options: ['large', 'medium', 'small', 'xSmall'] as IconSize[],
-    },
-    color: {
-      control: 'select',
-      options: [
-        ...Object.keys(themes['light'].color.background.neutral),
-        ...Object.keys(themes['light'].color.background.accent),
-        ...Object.keys(themes['light'].color.status),
-        ...Object.keys(themes['light'].color.foreground.dynamic),
-      ],
     },
     notification: {
       control: 'select',
@@ -441,9 +432,11 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (Story, args) => (
+    (Story, {args}) => (
       <View style={{alignItems: 'center'}}>
-        <Story args={{...args.args}} />
+        <Story
+          args={{...args, color: getColorByOption(args.theme, args.storyColor)}}
+        />
       </View>
     ),
     ThemedStoryDecorator,

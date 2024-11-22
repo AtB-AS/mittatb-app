@@ -1,7 +1,6 @@
-import {themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
 import {View} from 'react-native';
-import {getCommonColorMappings, getCommonColorOptions} from './utils';
+import {getColorByOption, getColorOptions} from './utils';
 
 export type ThemedStoryProps<T> = {
   theme: 'light' | 'dark';
@@ -12,16 +11,12 @@ export function ThemedStoryDecorator<T>(
   Story: React.ComponentType,
   {args}: {args: ThemedStoryProps<T>},
 ) {
-  const colorMappings = getCommonColorMappings(args.theme);
-  const storyContrastColor =
-    colorMappings[args.storyColor ?? ''] ??
-    themes[args.theme].color.background.neutral[0];
-
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: storyContrastColor.background,
+        backgroundColor: getColorByOption(args.theme, args.storyColor)
+          .background,
       }}
     >
       <Story />
@@ -36,7 +31,7 @@ export const themedStoryControls: Meta['argTypes'] = {
   },
   storyColor: {
     control: 'select',
-    options: getCommonColorOptions(),
+    options: getColorOptions(),
   },
 };
 

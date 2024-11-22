@@ -1,4 +1,4 @@
-import {ThemeFs, ThemeVariant} from '@atb-as/theme';
+import {ContrastColorFs, ThemeFs} from '@atb-as/theme';
 import {ContrastColor, themes} from '@atb/theme/colors';
 import {isDefined} from '@atb/utils/presence';
 
@@ -8,17 +8,15 @@ import {isDefined} from '@atb/utils/presence';
  *
  * @example
  * let backgrounds = flattenColorsWithPrefix('background', {
+ *   vibrant: {background: '#ff0', foreground: {...}},
  *   neutral: {
  *     0: {background: '#fff', foreground: {...}},
- *   },
- *   accent: {
- *     vibrant: {background: '#ff0', foreground: {...}},
  *   },
  * });
  * // returns
  * {
- *   'background neutral 0': { background: '#fff', foreground: {...} } }
- *   'background accent vibrant': { background: '#ff0', foreground: {...} } }
+ *   'background vibrant': { background: '#ff0', foreground: {...} }
+ *   'background neutral 0': { background: '#fff', foreground: {...} }
  * }
  */
 function flattenColorsWithPrefix(
@@ -58,11 +56,13 @@ const commonColors = (theme: ThemeFs) => {
 const commonLightColors = commonColors(themes.light);
 const commonDarkColors = commonColors(themes.dark);
 
-export function getCommonColorOptions(): string[] {
+export function getColorOptions(): string[] {
   return Object.keys(commonLightColors);
 }
-export function getCommonColorMappings(themeName: 'light' | 'dark'): {
-  [key: string]: ContrastColor;
-} {
-  return themeName === 'light' ? commonLightColors : commonDarkColors;
+export function getColorByOption(
+  themeName: 'light' | 'dark',
+  option: string | undefined,
+): ContrastColorFs {
+  const colors = themeName === 'light' ? commonLightColors : commonDarkColors;
+  return option ? colors[option] : colors[Object.keys(colors)[0]];
 }
