@@ -11,21 +11,18 @@ import {
 } from '@atb-as/theme';
 import {AppOrgs} from '../../types/app-orgs';
 
-
 export type {
-  StatusColorName as Statuses, 
-  Mode, 
-  TextColor, 
-  ContrastColor, 
-  TextNames, 
-  InteractiveColor, 
-  TransportColors as TransportColor, 
-  StatusColors as StatusColor
+  StatusColorName as Statuses,
+  Mode,
+  TextColor,
+  ContrastColor,
+  TextNames,
+  InteractiveColor,
+  TransportColors as TransportColor,
+  StatusColors as StatusColor,
 } from '@atb-as/theme';
 
-export {
-  textNames
-} from '@atb-as/theme';
+export {textNames} from '@atb-as/theme';
 
 const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   switch (appOrg) {
@@ -75,23 +72,20 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension>(
-  mainThemes,
-  {
-    light: {
-      tripLegDetail,
-      statusBarStyle: 'light-content',
+export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
+  light: {
+    tripLegDetail,
+    statusBarStyle: 'light-content',
 
-      typography: textTypeStyles,
-    },
-    dark: {
-      tripLegDetail,
-      statusBarStyle: 'light-content',
-
-      typography: textTypeStyles,
-    },
+    typography: textTypeStyles,
   },
-);
+  dark: {
+    tripLegDetail,
+    statusBarStyle: 'light-content',
+
+    typography: textTypeStyles,
+  },
+});
 
 export const isStatusColor = (
   color: unknown,
