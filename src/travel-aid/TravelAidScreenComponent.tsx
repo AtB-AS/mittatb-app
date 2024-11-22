@@ -77,6 +77,11 @@ export const TravelAidScreenComponent = ({
     serviceJourneyDeparture.serviceDate,
   );
 
+  // Skip cancelled calls, since they won't get actualDepartureTimes
+  const estimatedCalls = serviceJourney?.estimatedCalls?.filter(
+    (ec) => !ec.cancellation,
+  );
+
   const bgContrastColor: ContrastColor =
     sendStopSignalStatus === 'success'
       ? theme.color.background.accent['2']
@@ -113,11 +118,11 @@ export const TravelAidScreenComponent = ({
             />
           </View>
         )}
-        {status === 'success' && serviceJourney.estimatedCalls && (
+        {status === 'success' && estimatedCalls && (
           <TravelAidSection
             serviceJourney={{
               ...serviceJourney,
-              estimatedCalls: serviceJourney.estimatedCalls,
+              estimatedCalls,
             }}
             fromQuayId={serviceJourneyDeparture.fromQuayId}
             focusRef={focusRef}
