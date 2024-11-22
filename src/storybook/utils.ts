@@ -3,19 +3,19 @@ import {ContrastColor, themes} from '@atb/theme/colors';
 import {isDefined} from '@atb/utils/presence';
 
 /**
- * Recursively adds a key prefix to a set of contast colors, and returns the
+ * Recursively adds a key prefix to a set of contrast colors, and returns the
  * flattened object.
  *
  * @example
  * let backgrounds = flattenColorsWithPrefix('background', {
- *   vibrant: {background: '#ff0', foreground: {...}},
+ *   accent: {background: '#ff0', foreground: {...}},
  *   neutral: {
  *     0: {background: '#fff', foreground: {...}},
  *   },
  * });
  * // returns
  * {
- *   'background vibrant': { background: '#ff0', foreground: {...} }
+ *   'background accent': { background: '#ff0', foreground: {...} }
  *   'background neutral 0': { background: '#fff', foreground: {...} }
  * }
  */
