@@ -21,9 +21,9 @@ const PurchaseOverviewTexts = {
     productUnavailable: {
       title: (productName: string) =>
         _(
-          `${productName} er ikke gyldig nå`,
-          `${productName} is not valid now`,
-          `${productName} er ikkje gyldig no`,
+          `${productName} er ikke gyldig på dette tidspunktet`,
+          `${productName} is not valid at this time`,
+          `${productName} er ikkje gyldig på dette tidspunktet`,
         ),
       message: _(
         `Du må velge en annen billett fra billettoversikten.`,
