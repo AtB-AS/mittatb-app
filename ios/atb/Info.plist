@@ -65,8 +65,6 @@
 	<true/>
 	<key>MBXAccessToken</key>
 	<string>$(MAPBOX_PUBLIC_TOKEN)</string>
-	<key>NFCReaderUsageDescription</key>
-	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
