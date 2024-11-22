@@ -1,5 +1,6 @@
 import {ContrastColorFs, ThemeFs} from '@atb-as/theme';
 import {ContrastColor, themes} from '@atb/theme/colors';
+import {Nested} from '@atb/utils/object';
 import {isDefined} from '@atb/utils/presence';
 
 /**
@@ -21,7 +22,7 @@ import {isDefined} from '@atb/utils/presence';
  */
 function flattenColorsWithPrefix(
   prefix: string,
-  options: object,
+  options: Nested<ContrastColor>,
 ): {[key: string]: ContrastColor} {
   const s = Object.entries(options)
     .map(([key, value]) => {
