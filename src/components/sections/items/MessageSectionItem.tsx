@@ -4,7 +4,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
