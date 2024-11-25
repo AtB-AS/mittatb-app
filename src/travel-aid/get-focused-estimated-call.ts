@@ -25,13 +25,13 @@ export const getFocusedEstimatedCall = (
   estimatedCalls: EstimatedCallWithQuayFragment[],
   fromQuayId?: string,
 ): FocusedEstimatedCallState => {
-  const selectedCallIndex =
-    estimatedCalls.findIndex(
-      // TODO: This can be wrong if there are multiple stops on the same quay
-      (estimatedCall) => estimatedCall.quay?.id === fromQuayId,
-    ) ?? 0;
+  const selectedCallIndex = estimatedCalls.findIndex(
+    // TODO: This can be wrong if there are multiple stops on the same quay
+    (estimatedCall) => estimatedCall.quay?.id === fromQuayId,
+  );
+
   const selectedCall: EstimatedCallWithQuayFragment =
-    estimatedCalls[selectedCallIndex];
+    estimatedCalls[selectedCallIndex] ?? estimatedCalls[0];
 
   let previousOrCurrentCallIndex = -1;
   estimatedCalls.forEach((estimatedCall, index) => {
