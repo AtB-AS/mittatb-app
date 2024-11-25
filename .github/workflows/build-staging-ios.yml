@@ -25,6 +25,8 @@ jobs:
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-13
+    env:
+      KEYCHAIN_NAME: "CI"
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
@@ -82,6 +84,7 @@ jobs:
         run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
@@ -93,12 +96,15 @@ jobs:
           EXPORT_METHOD: 'ad-hoc'
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Distribute to Firebase App Distribution
         if: matrix.org != 'atb'
         run: |

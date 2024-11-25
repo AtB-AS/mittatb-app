@@ -8,13 +8,17 @@ if [[
     || -z "${APP_NAME}"
     || -z "${IOS_CODE_SIGN_IDENTITY}"
     || -z "${BUILD_ID}"
+    || -z "${MATCH_PASSWORD}"
+    || -z "${KEYCHAIN_NAME}"
    ]]; then
     echo "Argument error!"
     echo "Expected four env variables: 
   - BUILD_ID
   - IPA_FILE_NAME
   - APP_NAME
-  - IOS_CODE_SIGN_IDENTITY"
+  - IOS_CODE_SIGN_IDENTITY
+  - MATCH_PASSWORD
+  - KEYCHAIN_NAME"
     exit 1
 else 
     mkdir -p bundle
@@ -33,6 +37,11 @@ else
 
     echo "Set CFBundleVersion to build id: $BUILD_ID"
     plutil -replace CFBundleVersion -string "${BUILD_ID}" "Payload/$APP_NAME/Info.plist"
+
+    echo "Set up the correct keychain"
+    KEYCHAIN_PATH=~/Library/Keychains/$KEYCHAIN_NAME-db
+    security list-keychains -s "$KEYCHAIN_PATH"
+    security unlock-keychain -p "$MATCH_PASSWORD" "$KEYCHAIN_PATH"
 
     echo "Generated entitlements file from ipa content"
     codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist
