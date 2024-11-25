@@ -1,5 +1,6 @@
 import {
   ActivatedToken,
+  AttestationSabotage,
   createClient,
   DefaultAttestationCreationErrorStrategy,
   DefaultAttestationVerificationErrorStrategy,
@@ -61,4 +62,6 @@ export const mobileTokenClient = {
   shouldRenew: (token: ActivatedToken) =>
     abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 10),
   currentTimeMillis: () => abtClient.getCurrentTimeMillis(),
+  setDebugSabotage: (attestationSabotage: AttestationSabotage) => abtClient.setAttestationSabotage(attestationSabotage),
+  clearDebugSabotage: () => abtClient.clearAttestationSabotage(),
 };

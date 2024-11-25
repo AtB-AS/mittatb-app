@@ -38,6 +38,7 @@ import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -91,6 +92,8 @@ export const Profile_DebugInfoScreen = () => {
       removeRemoteToken,
       renewToken,
       wipeToken,
+      setSabotage,
+      sabotage,
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
@@ -479,6 +482,15 @@ export const Profile_DebugInfoScreen = () => {
                       />
                     </View>
                   ))}
+                />
+                <ExpandableSectionItem
+                  text="Sabotage Tokens"
+                  showIconText={true}
+                  expandContent={
+                    <View>
+                      <DebugSabotage sabotage={sabotage} setSabotage={setSabotage}/>
+                    </View>
+                  }
                 />
               </View>
             }
