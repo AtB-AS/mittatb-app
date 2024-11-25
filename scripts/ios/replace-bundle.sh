@@ -42,13 +42,17 @@ else
     KEYCHAIN_PATH=~/Library/Keychains/$KEYCHAIN_NAME-db
     security list-keychains -s "$KEYCHAIN_PATH"
     security unlock-keychain -p "$MATCH_PASSWORD" "$KEYCHAIN_PATH"
+    security default-keychain -s "$KEYCHAIN_PATH"
 
     echo "Generated entitlements file from ipa content"
     codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist
 
     echo "Re-sign new Payload"
-    codesign -f -s "$IOS_CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
+    codesign -vvvv -f -s "$IOS_CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
 
     echo "Generate new ipa"
     zip -qr $IPA_FILE_NAME Payload/
+
+    echo "Check integrity"
+    codesign -dvvvv Payload/$IPA_FILE_NAME
 fi
