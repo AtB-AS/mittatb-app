@@ -45,7 +45,7 @@ else
     security default-keychain -s "$KEYCHAIN_PATH"
 
     echo "Generated entitlements file from ipa content"
-    codesign -d --entitlements :- "Payload/$APP_NAME" > entitlements.plist
+    codesign -d --entitlements entitlements.plist Payload/$APP_NAME
 
     echo "Re-sign new Payload"
     codesign -vvvv -f -s "$IOS_CODE_SIGN_IDENTITY" --entitlements entitlements.plist Payload/$APP_NAME/
