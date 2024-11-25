@@ -6,7 +6,7 @@ import {FareContract, Reservation} from '@atb/ticketing/types';
 
 import {LoadingParams} from '@atb/loading-screen/types';
 import React from 'react';
-import {addMinutes, addSeconds} from 'date-fns';
+import {addMinutes} from 'date-fns';
 
 const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: false,
@@ -45,9 +45,6 @@ type MockedReservation = Reservation & {
   validityStatus: ValidityStatus;
 };
 
-const currentYear = new Date().getFullYear();
-const TimeNow = new Date(`${currentYear}-01-01T00:00:00Z`);
-
 function mockupFareContract(
   id: string,
   validityStatus: ValidityStatus,
@@ -55,7 +52,7 @@ function mockupFareContract(
 ): MockedFareContract {
   return {
     id: id,
-    created: addMinutes(TimeNow, minutes),
+    created: addMinutes(new Date(), minutes),
     version: '1',
     customerAccountId: '1',
     purchasedBy: '1',
@@ -76,7 +73,7 @@ function mockupReservation(
 ): MockedReservation {
   return {
     orderId: id,
-    created: addMinutes(TimeNow, minutes),
+    created: addMinutes(new Date(), minutes),
     paymentId: 1,
     transactionId: 1,
     paymentType: 2,
@@ -86,6 +83,8 @@ function mockupReservation(
 }
 
 describe('Sort by Validity', () => {
+  const now = Date.now();
+
   it('Should sort fc or reservation by validity first', async () => {
     const fcOrReservations: (FareContract | Reservation)[] = [
       mockupFareContract('1', 'valid', -1),
@@ -94,7 +93,7 @@ describe('Sort by Validity', () => {
     ];
 
     const result = useSortFcOrReservationByValidityAndCreation(
-      addSeconds(TimeNow, 1).getMilliseconds(),
+      now,
       fcOrReservations,
       (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
     );
@@ -118,7 +117,7 @@ describe('Sort by Validity', () => {
     ];
 
     const result = useSortFcOrReservationByValidityAndCreation(
-      addSeconds(TimeNow, 1).getMilliseconds(),
+      now,
       fcOrReservations,
       (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
     );
