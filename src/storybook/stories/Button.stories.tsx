@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, ButtonProps} from '@atb/components/button';
 import {ScrollView} from 'react-native';
-import {themes} from '@atb/theme/colors';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {
   ThemedStoryDecorator,
@@ -10,77 +9,124 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
+import {getColorByOption} from '../utils';
+import {themes} from '@atb/theme/colors';
 
-type ButtonMetaProps = ButtonProps & ThemedStoryProps;
+type ButtonMetaProps = ThemedStoryProps<
+  ButtonProps & {interactiveColorType: string}
+>;
 
 const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',
   component: Button,
   argTypes: {
-    interactiveColor: {
-      control: 'select',
-      options: [...Object.keys(themes['light'].color.interactive)],
-    },
-    backgroundColor: {
-      control: 'select',
-      options: [...Object.keys(themes['light'].color.background)],
-    },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
     hasShadow: {control: 'boolean'},
+    interactiveColorType: {
+      options: [...Object.keys(themes['light'].color.interactive)],
+      control: {
+        type: 'select',
+      },
+    },
     ...themedStoryControls,
   },
   args: {
     text: 'text',
+    interactiveColorType: '0',
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (Story, {args}) => (
-      <ScrollView
-        contentContainerStyle={{
-          justifyContent: 'center',
-          padding: 12,
-          width: '100%',
-          rowGap: 12,
-        }}
-      >
-        <Story args={{...args}} />
-        <Story args={{...args, leftIcon: {svg: Add}}} />
-        <Story args={{...args, rightIcon: {svg: Add}}} />
-        <Story args={{...args, mode: 'secondary'}} />
-        <Story
-          args={{
-            ...args,
-            mode: 'secondary',
-            leftIcon: {svg: Add},
+    (Story, {args}) => {
+      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
+      const interactiveColors = themes[args.theme].color.interactive;
+      const storyInteractiveColor =
+        interactiveColors[
+          args.interactiveColorType as keyof typeof interactiveColors
+        ];
+      return (
+        <ScrollView
+          contentContainerStyle={{
+            justifyContent: 'center',
+            padding: 12,
+            width: '100%',
+            rowGap: 12,
           }}
-        />
-        <Story
-          args={{
-            ...args,
-            mode: 'secondary',
-            rightIcon: {svg: Add},
-          }}
-        />
-        <Story args={{...args, mode: 'tertiary'}} />
-        <Story
-          args={{
-            ...args,
-            mode: 'tertiary',
-            leftIcon: {svg: Add},
-          }}
-        />
-        <Story
-          args={{
-            ...args,
-            mode: 'tertiary',
-            rightIcon: {svg: Add},
-          }}
-        />
-      </ScrollView>
-    ),
+        >
+          <Story
+            args={{
+              ...args,
+              mode: 'primary',
+              interactiveColor: storyInteractiveColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              leftIcon: {svg: Add},
+              mode: 'primary',
+              interactiveColor: storyInteractiveColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              rightIcon: {svg: Add},
+              mode: 'primary',
+              interactiveColor: storyInteractiveColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'secondary',
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'secondary',
+              leftIcon: {svg: Add},
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'secondary',
+              rightIcon: {svg: Add},
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'tertiary',
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'tertiary',
+              leftIcon: {svg: Add},
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              mode: 'tertiary',
+              rightIcon: {svg: Add},
+              backgroundColor: storyContrastColor,
+            }}
+          />
+        </ScrollView>
+      );
+    },
     ThemedStoryDecorator,
   ],
 };
