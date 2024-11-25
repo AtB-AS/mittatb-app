@@ -54,5 +54,5 @@ else
     zip -qr $IPA_FILE_NAME Payload/
 
     echo "Check integrity"
-    codesign -dvvvv Payload/$IPA_FILE_NAME
+    codesign -dvvvv $IPA_FILE_NAME
 fi
