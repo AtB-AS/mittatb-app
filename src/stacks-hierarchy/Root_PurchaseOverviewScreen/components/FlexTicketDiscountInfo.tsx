@@ -49,7 +49,6 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
-          label="new"
           expanded={expanded}
           onPress={setExpanded}
         />

@@ -44,7 +44,7 @@ import {
   toMostCriticalStatus,
 } from '@atb/situations/utils';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {Mode, Statuses} from '@atb-as/theme';
+import type {Mode, Statuses} from '@atb/theme';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;

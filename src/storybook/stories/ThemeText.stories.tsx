@@ -1,6 +1,5 @@
 import {textNames} from '@atb-as/theme';
 import {ThemeText, ThemeTextProps} from '@atb/components/text';
-import {themes} from '@atb/theme/colors';
 import {Meta} from '@storybook/react';
 import {
   ThemedStoryDecorator,
@@ -9,22 +8,14 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {View} from 'react-native';
+import {getColorByOption} from '../utils';
 
-type ThemeTextMetaProps = ThemeTextProps & ThemedStoryProps;
+type ThemeTextMetaProps = ThemedStoryProps<ThemeTextProps>;
 
 const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
   title: 'ThemeText',
   component: ThemeText,
   argTypes: {
-    color: {
-      control: 'select',
-      options: [
-        ...Object.keys(themes['light'].color.background.accent),
-        ...Object.keys(themes['light'].color.background.neutral),
-        ...Object.keys(themes['light'].color.status),
-        ...Object.keys(themes['light'].color.foreground.dynamic),
-      ],
-    },
     type: {
       control: 'select',
       options: textNames,
@@ -32,16 +23,17 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
     ...themedStoryControls,
   },
   args: {
-    color: themes.light.color.background.neutral[0],
     type: 'body__primary',
     isMarkdown: false,
     children: 'Hello world',
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (Story) => (
+    (Story, {args}) => (
       <View style={{alignItems: 'center'}}>
-        <Story />
+        <Story
+          args={{...args, color: getColorByOption(args.theme, args.storyColor)}}
+        />
       </View>
     ),
     ThemedStoryDecorator,
