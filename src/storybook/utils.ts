@@ -1,5 +1,4 @@
-import {ContrastColorFs, ThemeFs} from '@atb-as/theme';
-import {ContrastColor, themes} from '@atb/theme/colors';
+import {ContrastColor, Theme, themes} from '@atb/theme/colors';
 import {Nested} from '@atb/utils/object';
 import {isDefined} from '@atb/utils/presence';
 
@@ -46,7 +45,7 @@ function isContrastColor(value: any): value is ContrastColor {
   );
 }
 
-const commonColors = (theme: ThemeFs) => {
+const commonColors = (theme: Theme) => {
   return {
     ...flattenColorsWithPrefix('background', theme.color.background),
     ...flattenColorsWithPrefix('status', theme.color.status),
@@ -63,7 +62,7 @@ export function getColorOptions(): string[] {
 export function getColorByOption(
   themeName: 'light' | 'dark',
   option: string | undefined,
-): ContrastColorFs {
+): ContrastColor {
   const colors = themeName === 'light' ? commonLightColors : commonDarkColors;
   return option ? colors[option] : colors[Object.keys(colors)[0]];
 }
