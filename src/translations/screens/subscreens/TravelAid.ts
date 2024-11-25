@@ -28,11 +28,18 @@ export const TravelAidTexts = {
       'Ikke mogleg å sende stopp signal no',
     ),
   },
-  error: {
+  apiError: {
     message: _(
       'Det oppstod en feil ved henting av reisedata for denne avgangen.',
       'There was a problem loading travel data for this trip.',
       'Det oppstod ein feil då vi prøvde å hente reisedata for denne avgangen.',
+    ),
+  },
+  noEstimatedCallsError: {
+    message: _(
+      'Denne reisen har ingen kommende avganger.',
+      'This journey has no upcoming departures.',
+      'Denne reisa har ingen kommende avgangar.',
     ),
   },
   noRealtimeError: {

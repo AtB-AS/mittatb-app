@@ -113,23 +113,33 @@ export const TravelAidScreenComponent = ({
           <View ref={focusRef}>
             <MessageInfoBox
               type="error"
-              message={t(TravelAidTexts.error.message)}
+              message={t(TravelAidTexts.apiError.message)}
               onPressConfig={{action: refetch, text: t(dictionary.retry)}}
             />
           </View>
         )}
-        {status === 'success' && estimatedCalls && (
-          <TravelAidSection
-            serviceJourney={{
-              ...serviceJourney,
-              estimatedCalls,
-            }}
-            fromQuayId={serviceJourneyDeparture.fromQuayId}
-            focusRef={focusRef}
-            sendStopSignal={stopSignalMutation.mutate}
-            sendStopSignalStatus={sendStopSignalStatus}
-          />
+        {estimatedCalls && estimatedCalls.length === 0 && (
+          <View ref={focusRef}>
+            <MessageInfoBox
+              type="error"
+              message={t(TravelAidTexts.noEstimatedCallsError.message)}
+            />
+          </View>
         )}
+        {status === 'success' &&
+          estimatedCalls &&
+          estimatedCalls.length > 0 && (
+            <TravelAidSection
+              serviceJourney={{
+                ...serviceJourney,
+                estimatedCalls,
+              }}
+              fromQuayId={serviceJourneyDeparture.fromQuayId}
+              focusRef={focusRef}
+              sendStopSignal={stopSignalMutation.mutate}
+              sendStopSignalStatus={sendStopSignalStatus}
+            />
+          )}
       </ScrollView>
     </SafeAreaView>
   );
