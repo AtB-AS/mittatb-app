@@ -33,24 +33,24 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^13.2.1":
-  version "13.2.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.2.1.tgz#3d77f441c12a7a603bf48959c3f9d1b91138d59b"
-  integrity sha512-EaH6vokuXPhkqqSMs7mWUfhpGHqKtQ4961FlAOcDLAMAEfsd41AeEasJwkrt5rNPtAAn7tgW+LRZyc1CqDTBxw==
+"@atb-as/generate-assets@^13.4.1":
+  version "13.4.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-13.4.1.tgz#b31a49aee4a99667076a90732b52c4db1358cab0"
+  integrity sha512-5tzujavXljTFtMKTIrXvAvwriz/cOt4LTU5eoxe9ncD2OSYD3PrYCSffzRgDRaOgDP1svH6OC/z117sm6Czfag==
   dependencies:
-    "@atb-as/theme" "^11.0.1"
+    "@atb-as/theme" "^12.0.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-11.0.1.tgz#da8f17ae0a3c79db01dd08255c6d372f0b73e5ef"
-  integrity sha512-43XcjcML+e1PvrZgJZxZcTxIQ6cTICTnYeyzmf43NANPh+vV7atZAjjFzmFpMJhM4RTi1sd2CPLOVUiwF2iO4Q==
+"@atb-as/theme@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-12.0.0.tgz#27bb8bc4db0574af5ec8b9d15b71de70014f51ad"
+  integrity sha512-OI6U3HgiIOBec1usPZ+2v7OF8nyw07mk3IanbZx/dtfux5Xre3usTLshZbybajFti1NOCp15V6FOsffLCawc5Q==
   dependencies:
-    "@tfk-samf/figma-to-dtcg" "0.3.8"
+    "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
@@ -3301,10 +3301,10 @@
     "@babel/runtime" "^7.12.5"
     react-error-boundary "^3.1.0"
 
-"@tfk-samf/figma-to-dtcg@0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.3.8.tgz#5a5a0c17ade9d99ada03c1ee4153d519cd238bae"
-  integrity sha512-GOpUmaGQUv7Ddzi28m4ERYutv51yWtSxPXXf2nNsB1U9VWERB4AlOqP0pE5ot5Lq8HAZAc3ufj4pdmMWG5cqxg==
+"@tfk-samf/figma-to-dtcg@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.4.0.tgz#6ee320293b89d9d64499b9c058cc34c630ad1453"
+  integrity sha512-B8PTx1nP0YyWhTavBUEh/+FDJhctoMzBD3WZe2NPaxOCx+eibLc7/a12cMPpAaxTqqdreEnyL5es7JZRdldtlg==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"

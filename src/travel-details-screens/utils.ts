@@ -20,7 +20,7 @@ import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
