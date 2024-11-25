@@ -185,11 +185,12 @@ platform :ios do
 
       # Retrieve the keychain path from lane_context
       keychain_path = lane_context[SharedValues::KEYCHAIN_PATH]
+      keychain_file_path = "#{keychain_path}-db"
         
-      sh "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['MATCH_PASSWORD']} #{keychain_path}"
+      sh "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['MATCH_PASSWORD']} #{keychain_file_path}"
 
       # Update Apple WWDR Certificate using the keychain path
-      download_and_install_wwdr_cert(keychain: keychain_path, keychain_name: keychain_name)
+      download_and_install_wwdr_cert(keychain: keychain_file_path, keychain_name: keychain_name)
 
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
@@ -202,7 +203,7 @@ platform :ios do
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
 
-      sh "security find-identity -v -p codesigning #{keychain_path}"
+      sh "security find-identity -v -p codesigning #{keychain_file_path}"
     else
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
