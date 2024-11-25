@@ -80,7 +80,7 @@ jobs:
         if: ${{ env.KETTLE_API_KEY == '' }}
         run: bundle exec fastlane ios remove_use_of_beacons
       - name: Run fastlane cert match
-        if: inputs.force-build == 'false'
+        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
