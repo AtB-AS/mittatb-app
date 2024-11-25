@@ -1,11 +1,11 @@
 import {useQuery} from '@tanstack/react-query';
-import {PreassignedFareProductId} from '@atb/configuration/types';
+import {PreassignedFareProduct} from '@atb/configuration/types';
 import {getFareProductBenefits} from '@atb/mobility/api/api';
 import {useAuthState} from '@atb/auth';
 import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
 
 export const useFareProductBenefitsQuery = (
-  productId: PreassignedFareProductId | undefined,
+  productId: PreassignedFareProduct['id'] | undefined,
 ) => {
   const {userId, authStatus} = useAuthState();
   return useQuery({
