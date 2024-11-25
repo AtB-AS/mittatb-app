@@ -187,9 +187,6 @@ platform :ios do
       keychain_path = lane_context[SharedValues::KEYCHAIN_PATH]
       keychain_file_path = "#{keychain_path}-db"
 
-      # Update Apple WWDR Certificate using the keychain path
-      download_and_install_wwdr_cert(keychain: keychain_file_path, keychain_name: keychain_name)
-
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: identifiers,
@@ -200,6 +197,8 @@ platform :ios do
         keychain_password: ENV["MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
+
+      verify_installed_certificates(keychain: keychain_file_path)
     else
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
@@ -222,42 +221,12 @@ platform :ios do
     )
   end
 
-  private_lane :download_and_install_wwdr_cert do |options|
-    require 'open-uri'
-
-    keychain_path = options[:keychain] || "/Library/Keychains/System.keychain"
-    keychain_name = options[:keychain_name] || "CI"
-    wwdr_cert_url = "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer"
-    cert_file_path = File.join(Dir.tmpdir, "AppleWWDRCAG3.cer")
-
-    unlock_keychain(
-      path: keychain_path,
-      password: ENV['MATCH_PASSWORD']
-    )
-
-    UI.message("Downloading the latest Apple WWDR Certificate...")
-    File.write(cert_file_path, URI.open(wwdr_cert_url).read)
-
-    UI.message("Installing the Apple WWDR Certificate into #{keychain_path}...")
-    import_certificate(
-      certificate_path: cert_file_path,
-      keychain_name: keychain_name,
-      keychain_password: ENV['MATCH_PASSWORD'],
-      log_output: true
-    )
-
-    UI.message("Cleaning up temporary files...")
-    File.delete(cert_file_path)
-
-    verify_installed_certificates(keychain: keychain_path)
-  end
-
   lane :verify_installed_certificates do |options|
     keychain_path = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
-  
+
     UI.message("Listing installed certificates in #{keychain_path}...")
     installed_certs = `security find-certificate -c "Apple Worldwide Developer Relations Certification Authority" -a -Z #{keychain_path}`
-    
+
     if installed_certs.empty?
       UI.user_error!("WWDR Certificate is missing in #{keychain_path}.")
     else
