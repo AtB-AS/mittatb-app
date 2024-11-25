@@ -200,10 +200,6 @@ platform :ios do
         keychain_password: ENV["MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
-
-      sh "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV['MATCH_PASSWORD']} #{keychain_file_path}"
-
-      sh "security find-identity -v -p codesigning #{keychain_file_path}"
     else
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
