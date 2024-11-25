@@ -77,6 +77,11 @@ jobs:
       - name: Remove use of beacons
         if: ${{ env.KETTLE_API_KEY == '' }}
         run: bundle exec fastlane ios remove_use_of_beacons
+      - name: Run fastlane cert match
+        if: inputs.force-build == 'false'
+        run: bundle exec fastlane ios get_certs
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
@@ -87,10 +92,6 @@ jobs:
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 1
           EXPORT_METHOD: 'ad-hoc'
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-      - name: Run fastlane cert match
-        run: bundle exec fastlane ios get_certs
-        env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
