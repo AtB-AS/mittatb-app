@@ -12,7 +12,7 @@ if [[
     || -z "${KEYCHAIN_NAME}"
    ]]; then
     echo "Argument error!"
-    echo "Expected four env variables: 
+    echo "Expected 6 env variables: 
   - BUILD_ID
   - IPA_FILE_NAME
   - APP_NAME
