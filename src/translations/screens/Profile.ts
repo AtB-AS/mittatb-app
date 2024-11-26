@@ -352,6 +352,14 @@ const ProfileTexts = {
       'Klikk for å kopiere id. Denne blir brukt til teknisk feilsøk.',
     ),
   },
+  orgNumber: (orgNr: string) =>
+    _(`Org.nr: ${orgNr}`, `Org.nr: ${orgNr}`, `Org.nr: ${orgNr}`),
+  orgNumberA11yLabel: (orgNr: string) =>
+    _(
+      `Organisasjonsnummer ${orgNr}`,
+      `Organization number ${orgNr}`,
+      `Organisasjonsnummer ${orgNr}`,
+    ),
 };
 export default orgSpecificTranslations(ProfileTexts, {
   nfk: {

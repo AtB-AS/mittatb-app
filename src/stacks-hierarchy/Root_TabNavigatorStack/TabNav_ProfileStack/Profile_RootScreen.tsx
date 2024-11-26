@@ -22,7 +22,7 @@ import {
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
-import {IS_QA_ENV} from '@env';
+import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
 import React from 'react';
 import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
@@ -543,6 +543,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 </ThemeText>
               </ClickableCopy>
             )}
+            <ThemeText
+              type="body__secondary"
+              color="secondary"
+              accessibilityLabel={t(
+                ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),
+              )}
+            >
+              {t(ProfileTexts.orgNumber(APP_ORG_NUMBER))}
+            </ThemeText>
           </View>
         </View>
       </FullScreenView>
