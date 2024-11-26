@@ -5,6 +5,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {usePreferences} from '@atb/preferences';
 import {useTicketingState} from '@atb/ticketing';
 import {APP_VERSION} from '@env';
+import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 /**
  * Returns a purchase selection builder for creating or modifying a
@@ -19,16 +20,13 @@ import {APP_VERSION} from '@env';
  * should be invoked by user actions and not as a side effect of state change.
  */
 export const usePurchaseSelectionBuilder = () => {
-  const {
-    fareProductTypeConfigs,
-    userProfiles,
-    preassignedFareProducts,
-    tariffZones,
-  } = useFirestoreConfiguration();
+  const {fareProductTypeConfigs, userProfiles, tariffZones} =
+    useFirestoreConfiguration();
   const {
     preferences: {defaultUserTypeString},
   } = usePreferences();
   const {customerProfile} = useTicketingState();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const builderInput: PurchaseSelectionBuilderInput = {
     fareProductTypeConfigs,
