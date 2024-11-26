@@ -284,24 +284,30 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
       );
     case TravelAidStatus.NotYetArrived:
       return (
-        <LiveRegionWrapper
-          accessibilityLabel={`${t(
-            dictionary.a11yRealTimePrefix,
-          )} ${relativeRealtime}, ${t(
-            TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
-          )}`}
-        >
-          <View style={styles.realTime}>
-            <ThemeIcon
-              svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
-              size="xSmall"
-            />
-            <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
-          </View>
-          <ThemeText type="body__secondary--bold">
-            {t(TravelAidTexts.scheduledTime(scheduledClock))}
-          </ThemeText>
-        </LiveRegionWrapper>
+        <View>
+          <LiveRegionWrapper
+            accessibilityLabel={`${t(
+              dictionary.a11yRealTimePrefix,
+            )} ${relativeRealtime}`}
+          >
+            <View style={styles.realTime}>
+              <ThemeIcon
+                svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+                size="xSmall"
+              />
+              <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
+            </View>
+          </LiveRegionWrapper>
+          <LiveRegionWrapper
+            accessibilityLabel={`${t(
+              TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
+            )}`}
+          >
+            <ThemeText type="body__secondary--bold">
+              {t(TravelAidTexts.scheduledTime(scheduledClock))}
+            </ThemeText>
+          </LiveRegionWrapper>
+        </View>
       );
     case TravelAidStatus.Arrived:
     case TravelAidStatus.BetweenStops:
