@@ -2,14 +2,12 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingState,
@@ -92,19 +90,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {isPushNotificationsEnabled, isTravelAidEnabled} = useFeatureToggles();
 
   const {logEvent} = useAnalytics();
-
-  const {open: openBottomSheet} = useBottomSheet();
-  async function selectFavourites() {
-    openBottomSheet(() => {
-      return (
-        <SelectFavouritesBottomSheet
-          onEditFavouriteDeparture={() =>
-            navigation.navigate('Profile_FavoriteDeparturesScreen')
-          }
-        />
-      );
-    });
-  }
 
   return (
     <>
@@ -512,20 +497,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <>
               <ContentHeading text="Developer menu" />
               <Section>
-                <LinkSectionItem
-                  text={t(
-                    ProfileTexts.sections.favorites.linkSectionItems
-                      .frontpageFavourites.label,
-                  )}
-                  accessibility={{
-                    accessibilityHint: t(
-                      ProfileTexts.sections.favorites.linkSectionItems
-                        .frontpageFavourites.a11yHint,
-                    ),
-                  }}
-                  testID="favoriteDeparturesButton"
-                  onPress={selectFavourites}
-                />
                 <LinkSectionItem
                   text="Design system"
                   testID="designSystemButton"
