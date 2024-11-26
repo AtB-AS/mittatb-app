@@ -53,7 +53,7 @@ export const DeparturesWidget = ({
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet(() => {
@@ -131,7 +131,7 @@ export const DeparturesWidget = ({
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
-          ref={onCloseFocusRef}
+          // ref={onCloseFocusRef}
           testID="selectFavoriteDepartures"
         />
       )}
