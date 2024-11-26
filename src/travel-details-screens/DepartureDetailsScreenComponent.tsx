@@ -115,7 +115,10 @@ export const DepartureDetailsScreenComponent = ({
   const {
     preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
   } = usePreferences();
-  const shouldShowTravelAid = travelAidPreferenceEnabled && isTravelAidEnabled;
+  const shouldShowTravelAid =
+    travelAidPreferenceEnabled &&
+    isTravelAidEnabled &&
+    !activeItem.isTripCancelled;
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
