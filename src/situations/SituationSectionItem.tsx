@@ -12,7 +12,8 @@ type Props = {
 export const SituationSectionItem = ({situation}: Props) => {
   const {t, language} = useTranslation();
   const situationText = getSituationSummary(situation, language);
-  const {openSituation} = useSituationBottomSheet();
+  const onCloseRef = React.useRef(null);
+  const {openSituation} = useSituationBottomSheet({onCloseRef});
 
   if (!situationText) return null;
 
@@ -24,6 +25,7 @@ export const SituationSectionItem = ({situation}: Props) => {
         text: t(dictionary.readMore),
         action: () => openSituation(situation),
       }}
+      focusRef={onCloseRef}
     />
   );
 };

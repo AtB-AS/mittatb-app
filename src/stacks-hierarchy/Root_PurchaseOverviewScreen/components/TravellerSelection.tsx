@@ -61,11 +61,7 @@ export function TravellerSelection({
   const {authenticationType} = useAuthState();
   const {userProfiles} = useFirestoreConfiguration();
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onCloseFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const isOnBehalfOfEnabled =
     useFeatureToggles().isOnBehalfOfEnabled &&
@@ -241,7 +237,7 @@ export function TravellerSelection({
         {canSelectUserProfile ? (
           <GenericClickableSectionItem
             onPress={travellerSelectionOnPress}
-            ref={onCloseFocusRef}
+            // ref={onCloseFocusRef}
             testID="selectTravellerButton"
           >
             {content}

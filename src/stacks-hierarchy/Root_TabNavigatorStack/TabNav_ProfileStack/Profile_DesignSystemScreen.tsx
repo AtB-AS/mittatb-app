@@ -37,6 +37,7 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {LabelInfo} from '@atb/components/label-info';
+import {SituationSectionItem} from '@atb/situations';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -164,6 +165,22 @@ export const Profile_DesignSystemScreen = ({
       />
 
       <ScrollView>
+        <SituationSectionItem
+          situation={{
+            id: 'a',
+            advice: [],
+            description: [],
+            summary: [{value: 'test', language: 'en'}],
+          }}
+        />
+        <SituationSectionItem
+          situation={{
+            id: 'b',
+            advice: [],
+            description: [],
+            summary: [{value: 'test2', language: 'en'}],
+          }}
+        />
         <Section style={styles.section}>
           <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}

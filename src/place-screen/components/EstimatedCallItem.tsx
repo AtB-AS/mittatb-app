@@ -52,6 +52,7 @@ export type EstimatedCallItemProps = {
   ) => void;
   showBottomBorder: boolean;
   testID?: string;
+  focusRef?: React.Ref<any>;
 };
 
 export const EstimatedCallItem = memo(
@@ -62,6 +63,7 @@ export const EstimatedCallItem = memo(
     onPressFavorite,
     existingFavorite,
     showBottomBorder,
+    focusRef,
   }: EstimatedCallItemProps): JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
@@ -102,6 +104,7 @@ export const EstimatedCallItem = memo(
             accessibilityHint={a11yHint}
             style={styles.lineAndDepartureTime}
             importantForAccessibility="yes"
+            ref={focusRef}
           >
             <EstimatedCallInfo
               departure={departure}

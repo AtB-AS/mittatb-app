@@ -381,7 +381,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           }
                         : undefined,
                     }}
-                    ref={filtersState.onCloseFocusRef}
                   />
                 </View>
               )}

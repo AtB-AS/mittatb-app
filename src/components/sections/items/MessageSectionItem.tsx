@@ -16,6 +16,7 @@ type Props = SectionItemProps<{
   title?: MessageInfoBoxProps['title'];
   message: MessageInfoBoxProps['message'];
   onPressConfig?: MessageInfoBoxProps['onPressConfig'];
+  focusRef?: React.Ref<any>;
 }>;
 
 export function MessageSectionItem({
@@ -23,6 +24,7 @@ export function MessageSectionItem({
   title,
   message,
   onPressConfig,
+  focusRef,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -52,6 +54,7 @@ export function MessageSectionItem({
       accessibilityRole={accessibilityRole}
       accessibilityLabel={a11yLabel}
       style={[topContainer, styles.container]}
+      focusRef={focusRef}
     >
       <ThemeIcon
         style={styles.icon}
