@@ -23,11 +23,12 @@ export const SituationMessageBox = ({
   a11yLiveRegion,
 }: Props) => {
   const {language} = useTranslation();
+  const onCloseFocusRef = React.useRef(null);
 
   const messageType = getMessageTypeForSituation(situation);
   const text = getSituationSummary(situation, language);
   const {t} = useTranslation();
-  const {openSituation} = useSituationBottomSheet();
+  const {openSituation} = useSituationBottomSheet({onCloseFocusRef});
 
   if (!text) return null;
 
@@ -42,6 +43,7 @@ export const SituationMessageBox = ({
         text: t(dictionary.readMore),
         action: () => openSituation(situation),
       }}
+      focusRef={onCloseFocusRef}
     />
   );
 };
