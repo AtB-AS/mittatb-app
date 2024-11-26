@@ -50,6 +50,7 @@ export const DeparturesWidget = ({
   const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
+  const onCloseFocusRef = React.useRef(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
@@ -62,7 +63,7 @@ export const DeparturesWidget = ({
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    });
+    }, onCloseFocusRef);
   }
 
   const sortedStopPlaceGroups = location
@@ -131,7 +132,7 @@ export const DeparturesWidget = ({
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
-          // ref={onCloseFocusRef}
+          ref={onCloseFocusRef}
           testID="selectFavoriteDepartures"
         />
       )}

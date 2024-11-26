@@ -14,7 +14,7 @@ import {
 } from '@atb/utils/date';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {addDays, isToday, parseISO} from 'date-fns';
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {SearchTime} from '../types';
 import {DepartureTimeSheet} from './DepartureTimeSheet';
@@ -33,6 +33,7 @@ export const DateSelection = ({
   const disablePreviousDayNavigation = isToday(
     parseISOFromCET(searchTime.date),
   );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const fontScale = useFontScale();
   const shouldShowNextPrevTexts = fontScale < 1.3;
@@ -70,14 +71,17 @@ export const DateSelection = ({
 
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const onLaterTimePress = () => {
-    openBottomSheet(() => (
-      <DepartureTimeSheet
-        ref={onOpenFocusRef}
-        initialTime={searchTime}
-        setSearchTime={onSetSearchTime}
-        allowTimeInPast={false}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <DepartureTimeSheet
+          ref={onOpenFocusRef}
+          initialTime={searchTime}
+          setSearchTime={onSetSearchTime}
+          allowTimeInPast={false}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return (
@@ -117,6 +121,7 @@ export const DateSelection = ({
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         testID="setDateButton"
+        ref={onCloseFocusRef}
       />
       <Button
         onPress={() => {

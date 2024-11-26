@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle, StyleProp} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -12,6 +12,7 @@ export type SegmentOptions = {
   selected?: boolean;
   accessibilityHint?: string;
   accessibilityLabel?: string;
+  ref?: RefObject<any>;
 };
 
 type RadioSegmentsProps = {
@@ -63,6 +64,7 @@ export function RadioSegments({
             accessibilityState={{selected}}
             accessibilityLabel={getAccessibilityLabel(option)}
             accessibilityHint={option.accessibilityHint}
+            ref={option.ref}
             style={[
               styles.optionBox,
               {

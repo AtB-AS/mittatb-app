@@ -13,7 +13,6 @@ export const useSituationBottomSheet = ({
   const openSituation = (situation: SituationType) => {
     openBottomSheet(
       () => <SituationBottomSheet situation={situation} ref={onOpenFocusRef} />,
-      undefined,
       onCloseFocusRef,
     );
   };

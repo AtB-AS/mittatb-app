@@ -22,6 +22,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import {useAnalytics} from '@atb/analytics';
 import {useAnnouncementsState} from '@atb/announcements';
 import Bugsnag from '@bugsnag/react-native';
+import {RefObject, useRef} from 'react';
 
 type Props = {
   announcement: AnnouncementType;
@@ -36,6 +37,7 @@ export const Announcement = ({announcement, style}: Props) => {
   const analytics = useAnalytics();
   const {dismissAnnouncement} = useAnnouncementsState();
   const {open: openBottomSheet} = useBottomSheet();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handleDismiss = () => {
     animateNextChange();
@@ -117,6 +119,7 @@ export const Announcement = ({announcement, style}: Props) => {
                 ? 'button'
                 : 'link',
           }}
+          ref={onCloseFocusRef}
           onPress={async () => {
             analytics.logEvent('Dashboard', 'Announcement pressed', {
               id: announcement.id,
@@ -124,9 +127,10 @@ export const Announcement = ({announcement, style}: Props) => {
             if (
               announcement.actionButton.actionType === ActionType.bottom_sheet
             ) {
-              openBottomSheet(() => (
-                <AnnouncementSheet announcement={announcement} />
-              ));
+              openBottomSheet(
+                () => <AnnouncementSheet announcement={announcement} />,
+                onCloseFocusRef,
+              );
             } else {
               const actionButtonURL = announcement.actionButton.url;
               try {

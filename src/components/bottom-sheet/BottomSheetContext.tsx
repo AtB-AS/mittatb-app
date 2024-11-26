@@ -27,9 +27,9 @@ type BottomSheetContentFunction = () => ReactNode;
 type BottomSheetState = {
   open: (
     contentFunction: BottomSheetContentFunction,
-    useBackdrop?: boolean,
     /** Ref to component which should be focused on sheet close */
-    onCloseFocusRef?: RefObject<any>,
+    onCloseFocusRef: RefObject<any>,
+    useBackdrop?: boolean,
   ) => void;
   isOpen: () => boolean;
   close: () => void;
@@ -77,8 +77,8 @@ export const BottomSheetProvider: React.FC = ({children}) => {
 
   const open = (
     contentFunction: () => ReactNode,
+    onCloseFocusRef: RefObject<any>,
     useBackdrop: boolean = true,
-    onCloseFocusRef?: RefObject<any>,
   ) => {
     setContentFunction(() => contentFunction);
     setBackdropEnabled(useBackdrop);

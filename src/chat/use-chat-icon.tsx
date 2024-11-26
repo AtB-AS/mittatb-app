@@ -1,7 +1,7 @@
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import {ContrastColor} from '@atb/theme/colors';
@@ -23,15 +23,19 @@ export const useChatIcon = (
   const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const openContactSheet = () => {
-    openBottomSheet(() => (
-      <ContactSheet
-        onReportParkingViolation={() =>
-          navigation.navigate('Root_ParkingViolationsSelectScreen')
-        }
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <ContactSheet
+          onReportParkingViolation={() =>
+            navigation.navigate('Root_ParkingViolationsSelectScreen')
+          }
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return {
@@ -53,6 +57,7 @@ export const useChatIcon = (
     ),
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
     onPress: () => openContactSheet(),
+    focusRef: onCloseFocusRef,
   };
 };
 
