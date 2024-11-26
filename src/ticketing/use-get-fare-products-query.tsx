@@ -9,9 +9,11 @@ export const useGetFareProductsQuery = () => {
   const {userId, authStatus} = useAuthState();
   return useQuery({
     initialData: preassignedFareProducts,
+    initialDataUpdatedAt: 0,
     queryKey: ['getProducts', userId],
     queryFn: getFareProducts,
     cacheTime: ONE_HOUR_MS,
+    staleTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
   });
 };
