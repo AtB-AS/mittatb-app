@@ -537,13 +537,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   </>
                 }
                 copyContent={config.installId}
+                accessibilityLabel={t(
+                  ProfileTexts.installId.a11yLabel(config.installId),
+                )}
+                accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText
-                  accessibilityHint={t(ProfileTexts.installId.a11yHint)}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {t(ProfileTexts.installId.label)}: {config.installId}
+                <ThemeText type="body__secondary" color="secondary">
+                  {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}

@@ -14,6 +14,7 @@ import {screenReaderPause} from '@atb/components/text';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {spellOut} from '@atb/utils/accessibility';
 
 export const ExistingRecipientsList = ({
   state: {recipient},
@@ -99,9 +100,7 @@ export const ExistingRecipientsList = ({
           itemToText={(i) => i.name}
           itemToSubtext={(i) => formatPhoneNumber(i.phoneNumber)}
           itemToA11yLabel={(i) =>
-            i.name +
-            screenReaderPause +
-            i.phoneNumber.split('').join(screenReaderPause)
+            i.name + screenReaderPause + spellOut(i.phoneNumber)
           }
           keyExtractor={(i) => i.accountId}
           selected={recipient}
