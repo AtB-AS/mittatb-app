@@ -99,7 +99,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           rightButton: {type: 'chat'},
         }}
       >
-        <View testID="profileHomeScrollView" style={style.contentContainer}>
+        <View
+          testID="profileHomeScrollView"
+          importantForAccessibility="no"
+          style={style.contentContainer}
+        >
           <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
           <Section>
             {authenticationType === 'phone' && (
