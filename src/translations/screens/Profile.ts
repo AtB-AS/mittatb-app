@@ -1,3 +1,4 @@
+import {spellOut} from '@atb/utils/accessibility';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
@@ -340,7 +341,9 @@ const ProfileTexts = {
     },
   },
   installId: {
-    label: _('ID', 'ID', 'ID'),
+    label: (id: string) => _(`ID: ${id}`, `ID: ${id}`, `ID: ${id}`),
+    a11yLabel: (id: string) =>
+      _(`ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`),
     wasCopiedAlert: _(
       'ID ble kopiert!',
       'ID was copied to clipboard!',
