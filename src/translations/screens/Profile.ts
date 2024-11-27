@@ -353,11 +353,11 @@ const ProfileTexts = {
     ),
   },
   orgNumber: (orgNr: string) =>
-    _(`Org.nr: ${orgNr}`, `Org.nr: ${orgNr}`, `Org.nr: ${orgNr}`),
+    _(`Org.nr: ${orgNr}`, `Org.no: ${orgNr}`, `Org.nr: ${orgNr}`),
   orgNumberA11yLabel: (orgNr: string) =>
     _(
       `Organisasjonsnummer ${orgNr}`,
-      `Organization number ${orgNr}`,
+      `Organisation number ${orgNr}`,
       `Organisasjonsnummer ${orgNr}`,
     ),
 };
