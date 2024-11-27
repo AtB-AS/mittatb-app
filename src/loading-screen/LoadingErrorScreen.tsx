@@ -14,6 +14,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAnalytics} from '@atb/analytics';
+import {spellOut} from '@atb/utils/accessibility';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -49,7 +50,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
               type="body__secondary"
               accessibilityLabel={t(
                 LoadingScreenTexts.error.installId(
-                  localConfig.installId.split('').join(' '),
+                  spellOut(localConfig.installId),
                 ),
               )}
             >
