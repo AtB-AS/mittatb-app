@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {useChatIcon} from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
@@ -36,6 +36,7 @@ export type HeaderButtonProps = {
    * pressed. If no context provided, then no analytics event will be logged.
    */
   analyticsEventContext?: AnalyticsEventContext;
+  focusRef?: RefObject<any>;
 } & AccessibilityProps;
 
 export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
@@ -49,7 +50,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
     return null;
   }
 
-  const {onPress, children, ...accessibilityProps} = iconButton;
+  const {onPress, children, focusRef, ...accessibilityProps} = iconButton;
 
   const onPressWithLogEvent = () => {
     if (buttonProps.analyticsEventContext) {
@@ -66,6 +67,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
       onPress={onPressWithLogEvent}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
+      ref={focusRef}
       {...accessibilityProps}
     >
       {children}

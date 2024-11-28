@@ -30,7 +30,7 @@ type Props = SectionItemProps<{
   interactiveColor?: InteractiveColor;
 }>;
 
-export const LinkSectionItem = forwardRef<View, Props>(
+export const LinkSectionItem = forwardRef<any, Props>(
   (
     {
       text,

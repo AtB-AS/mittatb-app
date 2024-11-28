@@ -13,7 +13,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
-import React, {useEffect, useState} from 'react';
+import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
@@ -183,7 +183,11 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
-  const onOpenBarcodePress = useStaticBarcodeBottomSheet(aztecXml);
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onOpenBarcodePress = useStaticBarcodeBottomSheet(
+    aztecXml,
+    onCloseFocusRef,
+  );
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -202,6 +206,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
           FareContractTexts.details.barcodeA11yLabelWithActivation,
         )}
         testID="staticBarcode"
+        ref={onCloseFocusRef}
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
       </PressableOpacity>
@@ -213,7 +218,11 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
-  const onOpenBarcodePress = useStaticBarcodeBottomSheet(qrCodeSvg);
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onOpenBarcodePress = useStaticBarcodeBottomSheet(
+    qrCodeSvg,
+    onCloseFocusRef,
+  );
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -234,6 +243,7 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
           FareContractTexts.details.barcodeA11yLabelWithActivation,
         )}
         testID="staticQRCode"
+        ref={onCloseFocusRef}
       >
         <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
       </PressableOpacity>
@@ -263,7 +273,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
+function useStaticBarcodeBottomSheet(
+  qrCodeSvg: string | undefined,
+  onCloseFocusRef: RefObject<any>,
+) {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -274,29 +287,32 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
   } = useBottomSheet();
 
   const onOpenBarcodePress = () => {
-    openBottomSheet(() => (
-      <BottomSheetContainer
-        title={t(FareContractTexts.details.bottomSheetTitle)}
-        testID="barcodeBottomSheet"
-        fullHeight
-      >
-        <View style={styles.staticBottomContainer}>
-          <View style={[styles.aztecCode, styles.staticQrCode]}>
-            <PressableOpacity
-              ref={onOpenFocusRef}
-              onPress={closeBottomSheet}
-              accessible={true}
-              accessibilityLabel={t(
-                FareContractTexts.details.barcodeBottomSheetA11yLabel,
-              )}
-              testID="staticBigQRCode"
-            >
-              <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
-            </PressableOpacity>
+    openBottomSheet(
+      () => (
+        <BottomSheetContainer
+          title={t(FareContractTexts.details.bottomSheetTitle)}
+          testID="barcodeBottomSheet"
+          fullHeight
+        >
+          <View style={styles.staticBottomContainer}>
+            <View style={[styles.aztecCode, styles.staticQrCode]}>
+              <PressableOpacity
+                ref={onOpenFocusRef}
+                onPress={closeBottomSheet}
+                accessible={true}
+                accessibilityLabel={t(
+                  FareContractTexts.details.barcodeBottomSheetA11yLabel,
+                )}
+                testID="staticBigQRCode"
+              >
+                <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+              </PressableOpacity>
+            </View>
           </View>
-        </View>
-      </BottomSheetContainer>
-    ));
+        </BottomSheetContainer>
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return onOpenBarcodePress;

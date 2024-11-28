@@ -8,6 +8,7 @@ import {ScreenContainer} from './components/ScreenContainer';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from '@atb/parking-violations-reporting';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {RefObject, useRef} from 'react';
 
 export type PhotoScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsPhotoScreen'>;
@@ -21,21 +22,25 @@ export const Root_ParkingViolationsPhotoScreen = ({
   const style = useStyles();
   const {coordinates, isLoading} = useParkingViolations();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handlePhotoCapture = (file: PhotoFile) => {
-    openBottomSheet(() => (
-      <ImageConfirmationBottomSheet
-        onConfirm={() => {
-          closeBottomSheet();
-          navigation.navigate('Root_ParkingViolationsQrScreen', {
-            ...params,
-            photo: file.path,
-          });
-        }}
-        coordinates={coordinates}
-        file={file}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <ImageConfirmationBottomSheet
+          onConfirm={() => {
+            closeBottomSheet();
+            navigation.navigate('Root_ParkingViolationsQrScreen', {
+              ...params,
+              photo: file.path,
+            });
+          }}
+          coordinates={coordinates}
+          file={file}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return (
@@ -50,6 +55,7 @@ export const Root_ParkingViolationsPhotoScreen = ({
           mode="photo"
           style={style.camera}
           onCapture={handlePhotoCapture}
+          focusRef={onCloseFocusRef}
         />
       )}
     </ScreenContainer>

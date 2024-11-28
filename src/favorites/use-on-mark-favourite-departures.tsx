@@ -3,7 +3,7 @@ import {AccessibilityInfo, Alert} from 'react-native';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
-import React from 'react';
+import React, {RefObject} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
@@ -87,6 +87,7 @@ export function useOnMarkFavouriteDepartures(
   const onMarkFavourite = (
     line: FavouriteDepartureLine,
     existing: StoredFavoriteDeparture | undefined,
+    onCloseFocusRef: RefObject<any>,
   ) => {
     if (existing && line.lineNumber) {
       Alert.alert(
@@ -131,7 +132,7 @@ export function useOnMarkFavouriteDepartures(
         ) : (
           <></>
         );
-      });
+      }, onCloseFocusRef);
     }
   };
 

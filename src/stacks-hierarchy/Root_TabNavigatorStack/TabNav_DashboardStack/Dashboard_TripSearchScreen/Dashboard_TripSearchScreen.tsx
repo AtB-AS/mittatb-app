@@ -90,7 +90,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     date: new Date().toISOString(),
   });
 
-  const filtersState = useTravelSearchFiltersState();
+  const filtersState = useTravelSearchFiltersState({
+    onCloseFocusRef: filterButtonWrapperRef,
+  });
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureToggles();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
@@ -381,7 +383,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           }
                         : undefined,
                     }}
-                    ref={filtersState.onCloseFocusRef}
                   />
                 </View>
               )}

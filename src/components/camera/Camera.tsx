@@ -1,6 +1,6 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {hasProp} from '@atb/utils/object';
-import {useRef} from 'react';
+import {RefObject, useRef} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {Camera as CameraKitCamera, CameraType} from 'react-native-camera-kit';
 import {Processing} from '../loading';
@@ -23,9 +23,16 @@ type QrProps = {
 type Props = {
   style?: StyleProp<ViewStyle>;
   zoom?: number;
+  focusRef?: RefObject<any>;
 } & (PhotoProps | QrProps);
 
-export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
+export const Camera = ({
+  style = {},
+  zoom = 1,
+  mode,
+  onCapture,
+  focusRef,
+}: Props) => {
   const camera = useRef<CameraKitCamera>(null);
   const styles = useStyles();
   const {isAuthorized} = usePermissions();
@@ -85,6 +92,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
           <CaptureButton
             style={styles.captureButton}
             onCapture={handleCapture}
+            focusRef={focusRef}
           />
         )}
       </View>

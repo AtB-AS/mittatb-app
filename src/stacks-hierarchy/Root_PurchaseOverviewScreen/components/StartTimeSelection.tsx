@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
@@ -31,11 +31,13 @@ export function StartTimeSelection({
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const openTravelDateSheet = () => {
-    openBottomSheet(() => (
-      <TravelDateSheet save={setTravelDate} travelDate={travelDate} />
-    ));
+    openBottomSheet(
+      () => <TravelDateSheet save={setTravelDate} travelDate={travelDate} />,
+      onCloseFocusRef,
+    );
   };
 
   const subtext = validFromTime
@@ -69,6 +71,7 @@ export function StartTimeSelection({
             onPress: openTravelDateSheet,
             accessibilityLabel,
             accessibilityHint: t(PurchaseOverviewTexts.startTime.a11yLaterHint),
+            ref: onCloseFocusRef,
           },
         ]}
       />
