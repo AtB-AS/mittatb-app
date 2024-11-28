@@ -99,12 +99,17 @@ const createBuilder = (
       return builder;
     },
     userProfiles: (userProfilesWithCount) => {
+      const onlyWithActualCount = userProfilesWithCount.filter((u) => u.count);
       if (
-        userProfilesWithCount.every((up) =>
-          isSelectableProfile(currentSelection.preassignedFareProduct, up),
+        onlyWithActualCount.length &&
+        onlyWithActualCount.every((p) =>
+          isSelectableProfile(currentSelection.preassignedFareProduct, p),
         )
       ) {
-        currentSelection = {...currentSelection, userProfilesWithCount};
+        currentSelection = {
+          ...currentSelection,
+          userProfilesWithCount: onlyWithActualCount,
+        };
       }
       return builder;
     },
