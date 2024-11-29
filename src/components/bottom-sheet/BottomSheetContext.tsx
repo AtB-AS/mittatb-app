@@ -9,7 +9,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   Animated,
   BackHandler,
@@ -43,28 +42,14 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
 );
 
 export const BottomSheetProvider: React.FC = ({children}) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
-
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
   const [contentFunction, setContentFunction] = useState<() => ReactNode>(
     () => () => null,
   );
 
-  const animatedOffset = useMemo(() => new Animated.Value(0), []);
   const onOpenFocusRef = useFocusOnLoad();
   const refToFocusOnClose = useRef<RefObject<any>>();
-
-  useEffect(
-    () => () =>
-      Animated.timing(animatedOffset, {
-        toValue: isOpen ? 0 : 1,
-        duration: 400,
-        easing: Easing.out(Easing.exp),
-        useNativeDriver: true,
-      }).start(),
-    [animatedOffset, isOpen],
-  );
 
   const close = () => {
     setContentFunction(() => () => null);
@@ -101,35 +86,6 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   }, [isOpen]);
 
   const [height, setHeight] = useState<number>(0);
-  const onLayout = ({nativeEvent}: LayoutChangeEvent) => {
-    setHeight(nativeEvent.layout.height);
-  };
-
-  const bottomSheet = useMemo(
-    () => (
-      <>
-        {isBackdropEnabled && (
-          <>
-            <Backdrop animatedOffset={animatedOffset} />
-            <ClickableBackground
-              isOpen={isOpen}
-              close={close}
-              height={height}
-            />
-          </>
-        )}
-        <AnimatedBottomSheet
-          animatedOffset={animatedOffset}
-          onLayout={onLayout}
-        >
-          {contentFunction()}
-        </AnimatedBottomSheet>
-      </>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isOpen, close, animatedOffset, safeAreaBottom],
-  );
-
   const state = {
     open,
     close,
@@ -147,8 +103,61 @@ export const BottomSheetProvider: React.FC = ({children}) => {
       >
         {children}
       </View>
-      {bottomSheet}
+      <BottomSheetOnBackDrop
+        isBackdropEnabled={isBackdropEnabled}
+        isOpen={isOpen}
+        close={close}
+        height={height}
+        setHeight={setHeight}
+        contentFunction={contentFunction}
+      />
     </BottomSheetContext.Provider>
+  );
+};
+
+const BottomSheetOnBackDrop = ({
+  isBackdropEnabled,
+  isOpen,
+  close,
+  height,
+  setHeight,
+  contentFunction,
+}: {
+  isBackdropEnabled: boolean;
+  isOpen: boolean;
+  close: () => void;
+  height: number;
+  setHeight: (height: number) => void;
+  contentFunction: () => ReactNode;
+}) => {
+  const onLayout = ({nativeEvent}: LayoutChangeEvent) => {
+    setHeight(nativeEvent.layout.height);
+  };
+
+  const animatedOffset = useMemo(() => new Animated.Value(0), []);
+  useEffect(
+    () => () =>
+      Animated.timing(animatedOffset, {
+        toValue: isOpen ? 0 : 1,
+        duration: 400,
+        easing: Easing.out(Easing.exp),
+        useNativeDriver: true,
+      }).start(),
+    [animatedOffset, isOpen],
+  );
+
+  return (
+    <>
+      {isBackdropEnabled && (
+        <>
+          <Backdrop animatedOffset={animatedOffset} />
+          <ClickableBackground isOpen={isOpen} close={close} height={height} />
+        </>
+      )}
+      <AnimatedBottomSheet animatedOffset={animatedOffset} onLayout={onLayout}>
+        {contentFunction()}
+      </AnimatedBottomSheet>
+    </>
   );
 };
 
