@@ -111,7 +111,9 @@ You might be missing iOS dependencies (Cocopods). See dependency step in [Starti
 
 ## Design system and assets
 
-Assets such as icons, logos, and illustrations are set up by running `yarn setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files. When adding or changing assets in the design system, run setup again:
+Assets such as icons, logos, and illustrations are set up by running `yarn setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
+
+When adding or changing assets in the design system, run setup again:
 
 ```
 yarn setup dev <organization>
