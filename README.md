@@ -20,6 +20,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 ### Requirements
 
 1. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
+   > ⓘ When installing cocoapods, use `gem install cocoapods -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`COCOAPODS: 1.x.x`).
 2. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
 3. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 4. Ruby v2.7: With something like [rbenv](https://github.com/rbenv/rbenv)
