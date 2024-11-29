@@ -13,9 +13,9 @@ const WEBSOCKET_BASE_URL = WS_API_BASE_URL;
 export const getServiceJourneyVehicles = async (
   serviceJourneyIds?: string[],
   opts?: AxiosRequestConfig,
-): Promise<GetServiceJourneyVehicles | undefined> => {
+): Promise<GetServiceJourneyVehicles | null> => {
   if (!serviceJourneyIds?.length) {
-    return;
+    return null;
   }
   const url = '/bff/v2/vehicles/service-journeys';
   const query = qs.stringify({

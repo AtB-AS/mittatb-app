@@ -25,7 +25,7 @@ import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
-import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';
 import {
@@ -84,7 +84,8 @@ export const Trip: React.FC<TripProps> = ({
     )
     .map((leg) => leg.serviceJourney?.id)
     .filter(isDefined);
-  const {vehiclePositions} = useGetServiceJourneyVehicles(liveVehicleIds);
+  const {data: vehiclePositions} =
+    useGetServiceJourneyVehiclesQuery(liveVehicleIds);
 
   const tripPatternLegs = tripPattern?.legs;
 
