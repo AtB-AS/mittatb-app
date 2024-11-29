@@ -114,8 +114,7 @@ export const StopPlacesView = (props: Props) => {
   // value to false
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favoriteDepartures]);
+  }, [placeHasFavorites, setShowOnlyFavorites]);
 
   const lastIndex = quays?.length ? quays.length - 1 : 0;
 
