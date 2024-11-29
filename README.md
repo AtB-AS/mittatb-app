@@ -1,16 +1,21 @@
-<img width="500px" src="https://github.com/user-attachments/assets/1e16f1fd-516a-4538-9699-cd96ce89113c">
+<img width="500px" src="https://github.com/user-attachments/assets/ba3d33f5-58a1-4d17-b097-7bf6b589d7e1">
 
-# AtB - Application Mobile
+# AtB app
 
-This repo contains documentation and code for the AtB app with travel assistance and ticketing.
+This repo contains code for the AtB app, a travel assistant and ticketing app for public transportation and mobility in Norway. In addition to AtB in Trøndelag, the app is also used by [FRAM](https://frammr.no/) (Møre og Romsdal), [Reis Nordland](https://www.reisnordland.no/) and [Svipper](https://svipper.no/) (Troms).
 
 You can submit a new bug report or feature proposal by [creating a new issue](https://github.com/AtB-AS/mittatb-app/issues/new/choose).
 
 ## Contribution
 
-We love feedback and suggestions. The AtB app and service is continously improved over time by working with users and observing real usage. If you have any issues or suggestions for improvement we would also love Pull Requests. See our [contribution guide](./CONTRIBUTING.md).
+We love feedback and suggestions. The AtB app is continously improved over time by working with users and observing real usage. If you have any issues or suggestions for improvement we would also love Pull Requests. See our [contribution guide](./CONTRIBUTING.md).
 
 ## Getting started
+
+> [!NOTE]
+> For external contributors, we should set up default environment files to make it easier to run the app without access to git-crypt secrets and Firebase.
+
+Since iOS development is only supported on MacOS, we recommend using MacOS for development. There are some workarounds to get the Android app running on Windows with WSL and Git Bash, that are documented in [docs/WindowsSetup.md](./docs/WindowsSetup.md).
 
 ### Requirements
 
@@ -23,8 +28,6 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
 #### First time setup
 
-> 🪟 Windows users: use Git Bash to run .sh scripts 
-
 1. Setup Entur private registry in `.npmrc` and `gradle.properties`.
 
    a. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
@@ -36,22 +39,17 @@ We love feedback and suggestions. The AtB app and service is continously improve
    ```
    ENTUR_REGISTRY_USER=<USER_EMAIL> ENTUR_REGISTRY_TOKEN=<IDENTITY_TOKEN> ./scripts/add-entur-private-registry.sh
    ```
-   Note: Access token from jfrog has a one-year expiry
+   > ⓘ Access token from jfrog has a one-year expiry
 2. Install dependencies:
 
    a. React Native: `yarn`
 
    b. Install Ruby dependencies `bundle install`
 
-   > 🪟 Windows users: install [ImageMagick](https://imagemagick.org/script/download.php) and check `Install legacy utilities (e.g. convert)` during the installation. 
-   > Add `C:\Program Files\ImageMagick-7.1.1-Q16-HDRI` (or similar) to PATH
-
    c. Install ImageMagick `brew install imagemagick`
 
-> 🪟 Windows users: run in WSL (Windows Subsystem for Linux). 
 3. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
 
-> 🪟 Windows users: skip this step
 4. Install iOS Pods:
 
    a. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
@@ -61,25 +59,17 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
    b. Pod install: `cd ios/` and `pod install`
 
-> 🪟 Windows users: run in Git Bash
-5. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+5. From root folder run: `yarn setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
 
-> 🪟 Windows users: skip this step
-6. Run `yarn get_ios_certs` to install certificates. NOTE: In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
+6. Run `yarn get_ios_certs` to install certificates.
+   > ⓘ In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
-For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
+#### Building and running the app
 
-#### Starting projects
-
-1. iOS: `yarn ios`
-
-You may select which simulator/device the application will be deployed on in xcode.
-
-2. Android: `yarn android`
-
-You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
-
-When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
+- iOS: Run `yarn ios --list-devices`
+- Android: Run `yarn android`
+   - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
+   - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
 
 ### External design system and assets
 
@@ -95,12 +85,6 @@ yarn setup dev atb
 
 See [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) in design system for more details. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
 
-### Building on Windows
-
-Scripts for developing for and building the app do not support Windows natively. Expect to run into issues when using Windows. 
-
-Using `Git Bash` and `WSL` it _is possible_ to work around these issues. These steps are tagged in the setup with the `🪟 Windows users` tag.
-
 ### Common errors
 
 #### Missing `ANDROID_SDK_ROOT`
@@ -113,8 +97,8 @@ export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 
 You may also add relevant tools to your path:
 
-```                                                                                                                                                                      │    at ThemeProvider (http://localhost:8081/index.bundle?platform=android&dev=true&minify=false&app=no.mittatb.debug&modulesOnly=false&runModule=true:145236:21)
-export PATH=$PATH:$ANDROID_HOME/emulator                                                                                                                                                                              │    at NavigationContainerInner (http://localhost:8081/index.bundle?platform=android&dev=true&minify=false&app=no.mittatb.debug&modulesOnly=false&runModule=true:145129:26)
+```
+export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
@@ -138,55 +122,14 @@ error: /mittatb-app/ios/Pods/Target Support Files/Pods-atb/Pods-atb.debug.xcconf
 
 You might be missing iOS dependencies (Cocopods). See dependency step in [Starting locally](#starting-locally).
 
-### Building and running on Apple Silicon Macs with Rosetta enabled
-
-Some steps may fail when building on an Apple Silicon Mac.
-We got it building on a Macbook pro M1 by doing a few extra steps:
-
-#### Set xcode to run with Rosetta
-
-Open finder, navigate to Applications, right click xcode and select "get info", tick checkbox "Open using Rosetta".
-
-#### Set Terminal to run with Rosetta
-
-Open finder, navigate to Applications/Utilities , right click Terminal and select "get info", tick checkbox "Open using Rosetta".
-Restart your terminals.
-
-#### Update LibFFI
-
-Run `sudo gem install ffi -- --enable-system-libffi`
-
-Running `yarn ios` should now build and start the app in the ios simulator.
-
 ## Distributing new app versions (deploy)
 
-For test devices and developer devices we do continuous distribution through direct groups on AppCenter. For an internal alpha version release we do periodic deploy through syncing the `alpha-release` branch which distributes the build to TestFlight/Google Play Alpha-channel.
+For test devices and developer devices we do continuous distribution through direct groups on AppCenter and Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
 
-### Requirements
-
-- `gh` (Github CLI): https://cli.github.com/
-- `bash` 😬
-
-### Steps
-
-1. `yarn release-draft` (from project root, on `master`)
-1. Revise and review PR on Github, making sure all checks pass.
-
-This will eventually (after review in the Stores) distribute a new app version. See [more details](./tools/release/README.md).
-
-### QA
-
-Before distributing a new app version to the `alpha-release` channels, we have to QA the new features and fixes.
-
-Specific notes on QA:
-
-- [QA Ticketing](./docs/TicketingQA.md)
-
-### Debugging
-- [Debugging](./docs/Debugging.md)
 
 ## Storybook
-Storybook for the app can be enabled in the developer menu in 'My profile'.
+
+Storybook for the app can be viewed in debug build of the app through the developer section in 'My profile'.
 
 When adding or removing stories, the command `yarn storybook-generate` must be used to update the references in the `storybook.requires.js` file.
 
