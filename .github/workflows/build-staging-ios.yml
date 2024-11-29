@@ -15,7 +15,6 @@ on:
       external-test-groups:
         description: 'A comma-separated list of group names / IDs to which distribute the build'
         required: false
-        default: 'Alpha'
   push:
     branches:
       - master
@@ -112,13 +111,13 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Distribute to TestFlight
-        if: input.upload-to-testflight == 'true'
+        if: inputs.upload-to-testflight == 'true'
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
           bundle exec fastlane ios testflight_prod
         env:
           APP_DISTRIBUTION_EXTERNAL: true
-          APP_GROUPS: ${{ input.external-test-groups }}
+          APP_GROUPS: ${{ inputs.external-test-groups }}
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Distribute to Firebase App Distribution
         if: matrix.org != 'atb'
