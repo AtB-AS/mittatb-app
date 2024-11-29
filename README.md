@@ -65,8 +65,6 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 6. Run `yarn get_ios_certs` to install certificates.
    > ⓘ In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
-7. Run `yarn setup dev <organization>` to generate assets.
-
 #### Building and running the app
 
 - iOS: Run `yarn ios --list-devices`
