@@ -380,9 +380,13 @@ platform :ios do
     ensure_env_vars(
       env_vars: ['APPCONNECT_API_KEY_PATH']
     )
+    distribute_external = ENV['APP_DISTRIBUTION_EXTERNAL'] == true
+    distribution_groups = ENV['APP_GROUPS']
     pilot(
       api_key_path:ENV['APPCONNECT_API_KEY_PATH'],
-      skip_waiting_for_build_processing:true,
+      skip_waiting_for_build_processing: true,
+      distribute_external: distribute_external
+      groups: distribution_groups
     )
   end
 
