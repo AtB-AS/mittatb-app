@@ -385,7 +385,7 @@ platform :ios do
     pilot(
       api_key_path:ENV['APPCONNECT_API_KEY_PATH'],
       skip_waiting_for_build_processing: true,
-      distribute_external: distribute_external
+      distribute_external: distribute_external,
       groups: distribution_groups
     )
   end
