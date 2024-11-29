@@ -207,6 +207,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               )
             }
             testID="iconButton"
+            focusRef={onCloseFocusRef}
           />
         </Section>
         {emoji && (
@@ -218,7 +219,6 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             onPress={() => {
               setEmoji(undefined);
             }}
-            ref={onCloseFocusRef}
           />
         )}
       </ScrollView>
