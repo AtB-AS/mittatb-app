@@ -5,13 +5,11 @@ on:
       force-build:
         description: 'Forces a new build and ignores the cache'
         required: false
-        type: choice
+        type: boolean
         default: false
-        options:
-          - true
-          - false
       upload-to-testfligth:
         description: 'Upload the build for external distribution in Testflight'
+        type: boolean
         required: false
         default: false
       external-test-groups:
