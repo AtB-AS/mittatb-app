@@ -111,7 +111,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Distribute to TestFlight
-        if: github.event.inputs.upload-to-testflight == 'true'
+        if: github.event.inputs.upload-to-testflight == 'true' && matrix.org == 'atb'
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
           bundle exec fastlane ios testflight_prod
