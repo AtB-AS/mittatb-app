@@ -35,7 +35,6 @@ import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/R
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
-import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginActiveFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginActiveFareContractWarningScreen';
@@ -357,11 +356,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ShareTravelHabitsScreen"
                 component={Root_ShareTravelHabitsScreen}
-              />
-              <Stack.Screen
-                name="Root_TicketAssistantStack"
-                component={Root_TicketAssistantStack}
-                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen
                 name="Root_LoginActiveFareContractWarningScreen"
