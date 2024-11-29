@@ -12,17 +12,13 @@ import {getReferenceDataName} from '@atb/configuration';
 import {TariffZoneSelection, TariffZoneWithMetadata} from './types';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
-// eslint-disable-next-line no-restricted-imports
-import {TicketAssistant_ZonePickerScreenParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {ViewStyle} from 'react-native';
 
 type Props = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
   onVenueSearchClick: (
-    callerRouteParam:
-      | keyof Root_PurchaseTariffZonesSearchByMapScreenParams
-      | keyof TicketAssistant_ZonePickerScreenParams,
+    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
   style?: ViewStyle;
 };
