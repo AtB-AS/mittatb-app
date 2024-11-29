@@ -15,14 +15,14 @@ We love feedback and suggestions. The AtB app is continously improved over time 
 > [!NOTE]
 > For external contributors, we should set up default environment files to make it easier to run the app without access to git-crypt secrets and Firebase.
 
-Since iOS development is only supported on MacOS, we recommend using MacOS for development. There are some workarounds to get the Android app running on Windows with WSL and Git Bash, that are documented in [docs/WindowsSetup.md](./docs/WindowsSetup.md).
+Since iOS development is only supported on MacOS, using MacOS for development is recommended. However, there are some workarounds to get the Android app running on Windows with WSL and Git Bash, that are documented in [docs/WindowsSetup.md](./docs/WindowsSetup.md).
 
 ### Requirements
 
-1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
-2. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
-3. git-crypt: MacOS: `brew install git-crypt`, Linux: `apt install git-crypt`
-4. Ruby 2.7.6
+1. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
+2. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
+3. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
+4. Ruby v2.7: With something like [rbenv](https://github.com/rbenv/rbenv)
 
 ### Starting locally
 
@@ -64,26 +64,14 @@ Since iOS development is only supported on MacOS, we recommend using MacOS for d
 6. Run `yarn get_ios_certs` to install certificates.
    > ⓘ In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
+7. Run `yarn setup dev <organization>` to generate assets.
+
 #### Building and running the app
 
 - iOS: Run `yarn ios --list-devices`
 - Android: Run `yarn android`
    - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
    - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
-
-### External design system and assets
-
-Assets such as icons, logos, and illustrations are copied into the static folder of the application when the application in build time.
-For development assets can be copied manually by running `yarn setup dev atb` in the terminal. This is also triggered on CIs.
-
-When adding or changing assets in the design system, run setup again:
-
-```
-# Example
-yarn setup dev atb
-```
-
-See [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) in design system for more details. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
 
 ### Common errors
 
@@ -121,6 +109,23 @@ error: /mittatb-app/ios/Pods/Target Support Files/Pods-atb/Pods-atb.debug.xcconf
 ```
 
 You might be missing iOS dependencies (Cocopods). See dependency step in [Starting locally](#starting-locally).
+
+## Design system and assets
+
+Assets such as icons, logos, and illustrations are set up by running `yarn setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files. When adding or changing assets in the design system, run setup again:
+
+```
+yarn setup dev <organization>
+```
+
+Then restart metro and clear cache:
+
+```
+yarn start --reset-cache
+```
+
+See the [design system](https://github.com/AtB-AS/design-system) and [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) for more details.
+
 
 ## Distributing new app versions (deploy)
 
