@@ -337,6 +337,7 @@ export const DepartureDetailsScreenComponent = ({
               ticketingEnabled: enable_ticketing,
               canSellTicketsForDeparture: canSellTicketsForDeparture,
               mode: mode || null,
+              subMode: subMode || null,
               fromZones:
                 fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,

@@ -143,6 +143,9 @@ export const Trip: React.FC<TripProps> = ({
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
           modes: tripPattern.legs.map((l) => l.mode),
+          subModes: tripPattern.legs
+            .map((l) => l.transportSubmode)
+            .filter(isDefined),
           withinZoneIds: containingZones,
         }}
       />
