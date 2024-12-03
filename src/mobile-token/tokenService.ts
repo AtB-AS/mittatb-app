@@ -57,7 +57,7 @@ export const tokenService: TokenService = {
       name: deviceName,
     };
     return client
-      .post<InitiateTokenResponse>('/tokens/v4/init', data, {
+      .post<InitiateTokenResponse>('/tokens/v5/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [IsEmulatorHeaderName]: String(await isEmulator()),
@@ -72,7 +72,7 @@ export const tokenService: TokenService = {
   activateNewMobileToken: async (pendingToken, correlationId) =>
     client
       .post<CompleteTokenInitializationResponse>(
-        '/tokens/v4/activate',
+        '/tokens/v5/activate',
         pendingToken.toJSON(),
         {
           headers: {
@@ -87,7 +87,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   initiateMobileTokenRenewal: (token, secureContainer, correlationId) =>
     client
-      .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', undefined, {
+      .post<InitiateTokenRenewalResponse>('/tokens/v5/renew', undefined, {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
           [SignedTokenHeaderName]: secureContainer,
@@ -106,7 +106,7 @@ export const tokenService: TokenService = {
   ) =>
     client
       .post<CompleteTokenRenawalResponse>(
-        '/tokens/v4/complete',
+        '/tokens/v5/complete',
         pendingToken.toJSON(),
         {
           headers: {
@@ -122,7 +122,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   getMobileTokenDetails: (token, secureContainer, traceId) =>
     client
-      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
+      .get<GetTokenDetailsResponse>('/tokens/v5/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -136,7 +136,7 @@ export const tokenService: TokenService = {
   removeToken: async (tokenId: string, traceId: string): Promise<boolean> =>
     client
       .post<RemoveTokenResponse>(
-        '/tokens/v4/remove',
+        '/tokens/v5/remove',
         {tokenId},
         {
           headers: {
@@ -152,7 +152,7 @@ export const tokenService: TokenService = {
 
   listTokens: async (traceId: string) =>
     client
-      .get<ListResponse>('/tokens/v4/list', {
+      .get<ListResponse>('/tokens/v5/list', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
         },
@@ -169,7 +169,7 @@ export const tokenService: TokenService = {
   ) =>
     client
       .post<ToggleResponse>(
-        '/tokens/v4/toggle',
+        '/tokens/v5/toggle',
         {tokenId, bypassRestrictions},
         {
           headers: {
@@ -185,7 +185,7 @@ export const tokenService: TokenService = {
 
   getTokenToggleDetails: async () =>
     client
-      .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
+      .get<TokenLimitResponse>('/tokens/v5/toggle/details', {
         authWithIdToken: true,
         timeout: 15000,
         skipErrorLogging: isRemoteTokenStateError,
@@ -205,7 +205,7 @@ export const tokenService: TokenService = {
       traceId,
       async (secureContainerToken, attestation) => {
         client
-          .get('/tokens/v4/validate', {
+          .get('/tokens/v5/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainerToken,
