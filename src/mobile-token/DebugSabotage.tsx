@@ -5,14 +5,11 @@ import {AttestationSabotage} from '@entur-private/abt-token-state-react-native-l
 import {Platform, View} from 'react-native';
 
 type SabotageProps = {
-    sabotage?: AttestationSabotage
-    setSabotage: (sabotage?: AttestationSabotage) => void
-}
+  sabotage?: AttestationSabotage;
+  setSabotage: (sabotage?: AttestationSabotage) => void;
+};
 
-export const DebugSabotage = ({
-  sabotage,
-  setSabotage
-}: SabotageProps) => {
+export const DebugSabotage = ({sabotage, setSabotage}: SabotageProps) => {
   return (
     <View>
       <SabotageButtonsModalContainer setSabotage={setSabotage} />
