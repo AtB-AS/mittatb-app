@@ -11,9 +11,10 @@ import {
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data.ts';
 
 type DepartureTimeProps = {
-  departure: EstimatedCall;
+  departure: EstimatedCall | EstimatedCallWithMetadata;
 };
 export const DepartureTime = ({departure}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
@@ -58,7 +59,9 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
   );
 };
 
-const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
+const isMoreThanOneMinuteDelayed = (
+  departure: EstimatedCall | EstimatedCallWithMetadata,
+) =>
   secondsBetween(
     departure.aimedDepartureTime,
     departure.expectedDepartureTime,
