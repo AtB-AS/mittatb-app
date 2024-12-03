@@ -54,6 +54,7 @@ import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   getBookingStatus,
+  getLineA11yLabel,
   getShouldShowLiveVehicle,
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
@@ -176,6 +177,12 @@ export const DepartureDetailsScreenComponent = ({
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
 
+  const a11yLabel = getLineA11yLabel(
+    fromQuay?.destinationDisplay,
+    serviceJourney?.line.publicCode,
+    t,
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -185,7 +192,12 @@ export const DepartureDetailsScreenComponent = ({
         }}
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
-            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
+            <View
+              style={styles.headerTitle}
+              ref={focusRef}
+              accessible={true}
+              accessibilityLabel={a11yLabel}
+            >
               {serviceJourney && <LineChip serviceJourney={serviceJourney} />}
               <ThemeText
                 type="heading__title"
@@ -213,8 +225,8 @@ export const DepartureDetailsScreenComponent = ({
                 interactiveColor={ctaColor}
               />
             )}
-            <View style={styles.actionButtons}>
-              {shouldShowMapButton ? (
+            {shouldShowMapButton ? (
+              <View style={styles.actionButtons}>
                 <Button
                   type="small"
                   expand={true}
@@ -247,11 +259,8 @@ export const DepartureDetailsScreenComponent = ({
                     });
                   }}
                 />
-              ) : null}
-              {
-                // TODO:  Add to favourite button goes here
-              }
-            </View>
+              </View>
+            ) : null}
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />

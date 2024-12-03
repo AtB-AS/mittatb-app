@@ -59,9 +59,7 @@ export function useDepartureData(
         (e) => e.metadata.group === 'trip',
       )!;
 
-      const publicCode =
-        serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = `${publicCode} ${formatDestinationDisplay(
+      const title = `${formatDestinationDisplay(
         t,
         focusedEstimatedCall.destinationDisplay,
       )}`;
