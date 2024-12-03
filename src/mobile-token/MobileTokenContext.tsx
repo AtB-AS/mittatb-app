@@ -20,7 +20,6 @@ import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
   AttestationSabotage,
-  TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
 
@@ -185,13 +184,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           nativeTokenStatus,
           remoteTokensStatus,
           validateToken: () =>
-            mobileTokenClient
-              .encode(nativeToken!, [
-                TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-              ])
-              .then((signed) =>
-                tokenService.validate(nativeToken!, signed, uuid()),
-              ),
+            tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
