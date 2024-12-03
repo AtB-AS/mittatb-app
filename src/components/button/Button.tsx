@@ -61,6 +61,7 @@ export type ButtonProps = {
   onPress(): void;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
+  expand?: boolean;
   active?: boolean;
   compact?: boolean;
   loading?: boolean;
@@ -85,6 +86,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
+      expand = false,
       hasShadow = false,
       style,
       ...props
@@ -117,7 +119,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'medium' || type === 'small';
+    const isInline = (type === 'medium' || type === 'small') && !expand;
 
     const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =
@@ -144,6 +146,8 @@ export const Button = React.forwardRef<any, ButtonProps>(
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
+        justifyContent: expand ? 'center' : undefined,
+        alignItems: expand ? 'center' : undefined,
         borderRadius:
           type === 'small'
             ? theme.border.radius.circle
@@ -153,6 +157,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const textMarginHorizontal = useTextMarginHorizontal(
       isInline,
+      expand,
       leftIcon,
       rightIcon,
     );
@@ -162,16 +167,18 @@ export const Button = React.forwardRef<any, ButtonProps>(
       width: isInline ? '100%' : undefined,
     };
     const textContainer: TextStyle = {
-      flex: isInline ? undefined : 1,
+      flex: isInline ? undefined : !expand ? 1 : undefined,
       alignItems: 'center',
       marginHorizontal: textMarginHorizontal,
       flexShrink: isInline ? 1 : undefined,
     };
     const leftStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      left: isInline ? undefined : spacing,
+      position: isInline ? 'relative' : !expand ? 'absolute' : undefined,
+      left: isInline ? undefined : !expand ? spacing : undefined,
       marginRight:
-        isInline && (text || rightIcon) ? theme.spacing.xSmall : undefined,
+        isInline || (expand && (text || rightIcon))
+          ? theme.spacing.xSmall
+          : undefined,
     };
 
     const rightStyling: ViewStyle = {
@@ -186,6 +193,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         style={[
           {
             opacity: fadeAnim,
+            flex: expand ? 1 : undefined,
           },
           style,
         ]}
@@ -238,6 +246,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
  */
 const useTextMarginHorizontal = (
   isInline: boolean,
+  expand: boolean,
   leftIcon?: ButtonIconProps,
   rightIcon?: ButtonIconProps,
 ) => {
@@ -248,7 +257,7 @@ const useTextMarginHorizontal = (
     theme.icon.size[leftIcon?.size || 'normal'],
     theme.icon.size[rightIcon?.size || 'normal'],
   );
-  return maxIconSize + theme.spacing.xSmall;
+  return !expand ? maxIconSize + theme.spacing.xSmall : 0;
 };
 
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
