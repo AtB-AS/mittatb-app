@@ -2,7 +2,6 @@ import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
 import {
   ActivatedToken,
-  TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
@@ -106,10 +105,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
        */
       try {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
-        const signedToken = await mobileTokenClient.encode(token, [
-          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-        ]);
-        await tokenService.validate(token, signedToken, traceId);
+        await tokenService.validate(token, traceId);
       } catch (err) {
         if (
           err instanceof TokenMustBeReplacedRemoteTokenStateError ||
