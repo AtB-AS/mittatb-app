@@ -5,7 +5,6 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
@@ -379,11 +378,6 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
 
   return (
     <View style={styles.passedSection}>
-      <ThemeIcon
-        svg={RealtimeDark}
-        size="xSmall"
-        style={styles.passedSectionRealtimeIcon}
-      />
       <ThemeText
         type="body__secondary"
         color={themeColor}
@@ -698,14 +692,12 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     minWidth: '50%',
     flex: 1,
   },
-  passedSectionRealtimeIcon: {
-    marginRight: theme.spacing.xSmall,
-  },
   passedText: {
-    flexShrink: 1,
+    alignItems: 'center',
   },
   startPlace: {
     marginTop: theme.spacing.medium,
