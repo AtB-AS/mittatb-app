@@ -99,7 +99,15 @@ export const DepartureDetailsScreenComponent = ({
   const {t, language} = useTranslation();
 
   const [
-    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
+    {
+      estimatedCallsWithMetadata,
+      title,
+      publicCode,
+      mode,
+      subMode,
+      situations,
+      notices,
+    },
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
@@ -182,6 +190,7 @@ export const DepartureDetailsScreenComponent = ({
                 <TransportationIconBox
                   mode={mode}
                   subMode={subMode}
+                  lineNumber={publicCode}
                   style={styles.headerTitleIcon}
                 />
               )}
@@ -210,45 +219,50 @@ export const DepartureDetailsScreenComponent = ({
                 interactiveColor={ctaColor}
               />
             )}
+            <View style={styles.actionButtons}>
+              {shouldShowMapButton ? (
+                <Button
+                  type="small"
+                  expand={true}
+                  leftIcon={{svg: Map}}
+                  text={t(
+                    vehiclePosition
+                      ? DepartureDetailsTexts.live(t(translatedModeName))
+                      : DepartureDetailsTexts.map,
+                  )}
+                  interactiveColor={interactiveColor}
+                  onPress={() => {
+                    vehiclePosition &&
+                      analytics.logEvent(
+                        'Departure details',
+                        'See live bus clicked',
+                        {
+                          fromPlace: mapData.start,
+                          toPlace: mapData?.stop,
+                          mode: mode,
+                          subMode: subMode,
+                        },
+                      );
+                    onPressDetailsMap({
+                      legs: mapData.mapLegs,
+                      fromPlace: mapData.start,
+                      toPlace: mapData.stop,
+                      vehicleWithPosition: vehiclePosition,
+                      mode: mode,
+                      subMode: subMode,
+                    });
+                  }}
+                />
+              ) : null}
+              {
+                // TODO:  Add to favourite button goes here
+              }
+            </View>
             {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
                 {realtimeText && !activeItem.isTripCancelled && (
                   <LastPassedStop realtimeText={realtimeText} />
                 )}
-                {shouldShowMapButton ? (
-                  <Button
-                    type="small"
-                    leftIcon={{svg: Map}}
-                    style={realtimeText ? styles.liveButton : undefined}
-                    text={t(
-                      vehiclePosition
-                        ? DepartureDetailsTexts.live(t(translatedModeName))
-                        : DepartureDetailsTexts.map,
-                    )}
-                    interactiveColor={interactiveColor}
-                    onPress={() => {
-                      vehiclePosition &&
-                        analytics.logEvent(
-                          'Departure details',
-                          'See live bus clicked',
-                          {
-                            fromPlace: mapData.start,
-                            toPlace: mapData?.stop,
-                            mode: mode,
-                            subMode: subMode,
-                          },
-                        );
-                      onPressDetailsMap({
-                        legs: mapData.mapLegs,
-                        fromPlace: mapData.start,
-                        toPlace: mapData.stop,
-                        vehicleWithPosition: vehiclePosition,
-                        mode: mode,
-                        subMode: subMode,
-                      });
-                    }}
-                  />
-                ) : null}
               </View>
             ) : null}
           </View>
@@ -696,8 +710,11 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   startPlace: {
     marginTop: theme.spacing.medium,
   },
-  liveButton: {
-    marginLeft: theme.spacing.small,
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
   travelAidButton: {
     marginTop: theme.spacing.medium,
