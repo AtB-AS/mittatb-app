@@ -8,7 +8,6 @@ import {
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -61,6 +60,7 @@ import {BookingOptions} from '@atb/travel-details-screens/components/BookingOpti
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {usePreferences} from '@atb/preferences';
+import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -101,11 +101,11 @@ export const DepartureDetailsScreenComponent = ({
     {
       estimatedCallsWithMetadata,
       title,
-      publicCode,
       mode,
       subMode,
       situations,
       notices,
+      serviceJourney,
     },
     isLoading,
   ] = useDepartureData(activeItem, 20);
@@ -154,6 +154,7 @@ export const DepartureDetailsScreenComponent = ({
   const fromQuay = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
+
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
     modesWeSellTicketsFor,
@@ -185,21 +186,15 @@ export const DepartureDetailsScreenComponent = ({
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
             <View style={styles.headerTitle} ref={focusRef} accessible={true}>
-              {mode && (
-                <TransportationIconBox
-                  mode={mode}
-                  subMode={subMode}
-                  lineNumber={publicCode}
-                  style={styles.headerTitleIcon}
-                />
-              )}
+              {serviceJourney && <LineChip serviceJourney={serviceJourney} />}
               <ThemeText
-                type="heading--medium"
+                type="heading__title"
                 color={themeColor}
-                style={{flexShrink: 1}}
+                style={{flex: 1}}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
+              {fromQuay && <DepartureTime departure={fromQuay} />}
             </View>
             {shouldShowTravelAid && (
               <Button
@@ -257,13 +252,11 @@ export const DepartureDetailsScreenComponent = ({
                 // TODO:  Add to favourite button goes here
               }
             </View>
-            {shouldShowMapButton || realtimeText ? (
+            {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
-                {realtimeText && !activeItem.isTripCancelled && (
-                  <LastPassedStop realtimeText={realtimeText} />
-                )}
+                <LastPassedStop realtimeText={realtimeText} />
               </View>
-            ) : null}
+            )}
           </View>
         )}
       >
@@ -491,6 +484,7 @@ type TripItemProps = {
   situations: SituationFragment[];
   onPressQuay: Props['onPressQuay'];
 };
+
 function EstimatedCallRow({
   call,
   mode,
@@ -613,6 +607,7 @@ type CollapseButtonRowProps = {
   setCollapsed(collapsed: boolean): void;
   testID?: string;
 };
+
 function CollapseButtonRow({
   label,
   collapsed,
@@ -647,6 +642,7 @@ function CollapseButtonRow({
     </PressableOpacity>
   );
 }
+
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
