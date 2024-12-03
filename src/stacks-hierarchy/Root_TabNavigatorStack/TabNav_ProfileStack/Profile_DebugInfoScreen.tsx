@@ -480,7 +480,10 @@ export const Profile_DebugInfoScreen = () => {
                   showIconText={true}
                   expandContent={
                     <View>
-                      <DebugSabotage sabotage={sabotage} setSabotage={setSabotage}/>
+                      <DebugSabotage
+                        sabotage={sabotage}
+                        setSabotage={setSabotage}
+                      />
                     </View>
                   }
                 />
