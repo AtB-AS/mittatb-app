@@ -14,12 +14,13 @@ import {
   getNoticesForServiceJourney,
 } from '@atb/travel-details-screens/utils';
 import {useTranslation} from '@atb/translations';
+import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys.ts';
 
 export type DepartureData = {
+  serviceJourney?: ServiceJourneyWithEstCallsFragment;
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   title?: string;
-  publicCode?: string;
   subMode?: TransportSubmode;
   situations: SituationFragment[];
   notices: NoticeFragment[];
@@ -60,8 +61,10 @@ export function useDepartureData(
 
       const publicCode =
         serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = formatDestinationDisplay(t, focusedEstimatedCall.destinationDisplay);
-
+      const title = `${publicCode} ${formatDestinationDisplay(
+        t,
+        focusedEstimatedCall.destinationDisplay,
+      )}`;
       const notices = getNoticesForServiceJourney(
         serviceJourney,
         activeItem.fromQuayId,
@@ -72,9 +75,9 @@ export function useDepartureData(
       );
 
       return {
+        serviceJourney,
         mode: serviceJourney.transportMode,
         title,
-        publicCode,
         subMode: serviceJourney.transportSubmode,
         estimatedCallsWithMetadata,
         situations,
