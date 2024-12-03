@@ -90,7 +90,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>()
+  const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
 
   useEffect(() => setIsLoggingOut(false), [userId]);
 
@@ -183,8 +183,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
-          validateToken: () =>
-            tokenService.validate(nativeToken!, uuid()),
+          validateToken: () => tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
@@ -211,8 +210,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
             [queryClient, nativeToken],
           ),
           setSabotage: (attestationSabotage?: AttestationSabotage) => {
-            setSabotage(attestationSabotage)
-        
+            setSabotage(attestationSabotage);
             if (attestationSabotage) {
               mobileTokenClient.setDebugSabotage(attestationSabotage);
             } else {
