@@ -5,7 +5,6 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  getReferenceDataName,
   PreassignedFareProduct,
   ProductTypeTransportModes,
   TariffZone,
@@ -77,7 +76,6 @@ const InspectableContent = ({
   toTariffZone?: TariffZone;
   themeColor: ContrastColor;
 }) => {
-  const {language} = useTranslation();
   const styles = useStyles();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
