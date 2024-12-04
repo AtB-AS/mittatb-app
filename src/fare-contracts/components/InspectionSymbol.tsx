@@ -27,8 +27,6 @@ export type InspectionSymbolProps = {
 
 export const InspectionSymbol = ({
   preassignedFareProduct,
-  fromTariffZone,
-  toTariffZone,
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
@@ -61,8 +59,6 @@ export const InspectionSymbol = ({
       {isInspectable && !sentTicket ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
           themeColor={themeColor}
         />
       ) : (
@@ -73,8 +69,6 @@ export const InspectionSymbol = ({
 };
 
 const InspectableContent = ({
-  fromTariffZone,
-  toTariffZone,
   preassignedFareProduct,
   themeColor,
 }: {
@@ -101,17 +95,6 @@ const InspectableContent = ({
     fareProductTypeConfig?.transportModes,
   );
 
-  const fromTariffZoneName =
-    fromTariffZone && getReferenceDataName(fromTariffZone, language);
-  const toTariffZoneName =
-    toTariffZone && getReferenceDataName(toTariffZone, language);
-
-  const shouldShowZoneNames =
-    fromTariffZoneName &&
-    toTariffZoneName &&
-    fromTariffZoneName.length < 3 &&
-    toTariffZoneName.length < 3;
-
   return (
     <View
       style={[
@@ -121,16 +104,6 @@ const InspectableContent = ({
         },
       ]}
     >
-      {shouldShowZoneNames && (
-        <ThemeText
-          type="body__primary--bold"
-          allowFontScaling={false}
-          color={shouldFill ? themeColor.foreground.primary : undefined}
-        >
-          {fromTariffZoneName}
-          {fromTariffZone.id !== toTariffZone.id && '-' + toTariffZoneName}
-        </ThemeText>
-      )}
       <ThemeIcon
         svg={InspectionSvg}
         color={shouldFill ? themeColor : undefined}
@@ -182,7 +155,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     borderRadius: 1000,
     borderColor: theme.color.status.warning.primary.background,
-    borderWidth: 5,
+    borderWidth: 2,
   },
   symbolContent: {
     height: '100%',
