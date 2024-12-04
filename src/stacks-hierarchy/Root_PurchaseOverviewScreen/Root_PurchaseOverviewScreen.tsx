@@ -49,7 +49,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? 'isFree' in params.toPlace && !!params.toPlace.isFree
     : false;
 
-  const {selection, preassignedFareProductAlternatives, selectableUserProfiles} = useOfferDefaults(
+  const {
+    selection,
+    preassignedFareProductAlternatives,
+    selectableUserProfiles,
+  } = useOfferDefaults(
     params.preassignedFareProduct,
     params.fareProductTypeConfig,
     params.userProfilesWithCount,
