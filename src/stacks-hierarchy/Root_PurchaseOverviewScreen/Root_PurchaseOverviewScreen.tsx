@@ -49,7 +49,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? 'isFree' in params.toPlace && !!params.toPlace.isFree
     : false;
 
-  const {selection, preassignedFareProductAlternatives} = useOfferDefaults(
+  const {selection, preassignedFareProductAlternatives, selectableUserProfiles} = useOfferDefaults(
     params.preassignedFareProduct,
     params.fareProductTypeConfig,
     params.userProfilesWithCount,
@@ -114,7 +114,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const canSelectUserProfile = isUserProfileSelectable(
     travellerSelectionMode,
-    selection.userProfilesWithCount,
+    selectableUserProfiles,
   );
 
   const isOnBehalfOfEnabled =
