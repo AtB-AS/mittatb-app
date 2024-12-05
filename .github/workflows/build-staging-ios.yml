@@ -5,11 +5,16 @@ on:
       force-build:
         description: 'Forces a new build and ignores the cache'
         required: false
-        type: choice
+        type: boolean
         default: false
-        options:
-          - true
-          - false
+      upload-to-testflight:
+        description: 'Upload the build for external distribution in Testflight'
+        type: boolean
+        required: false
+        default: false
+      external-test-groups:
+        description: 'A comma-separated list of group names / IDs to which distribute the build'
+        required: false
   push:
     branches:
       - master
@@ -105,6 +110,15 @@ jobs:
           APP_NAME: 'AtB.app'
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Distribute to TestFlight
+        if: github.event.inputs.upload-to-testflight == 'true' && matrix.org == 'atb'
+        run: |
+          echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
+          bundle exec fastlane ios testflight_prod
+        env:
+          APP_DISTRIBUTION_EXTERNAL: true
+          APP_GROUPS: ${{ github.event.inputs.external-test-groups }}
+          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Distribute to Firebase App Distribution
         if: matrix.org != 'atb'
         run: |
