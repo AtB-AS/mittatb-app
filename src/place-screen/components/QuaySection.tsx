@@ -69,20 +69,23 @@ export function QuaySection({
     mode === 'Favourite'
       ? departures.sort((a, b) => compareByLineNameAndDesc(t, a, b))
       : departures;
+
+  const navigateToQuayEnabled = !!navigateToQuay;
+
+  // If the user has toggled "Show only favorites" and there are no favorites on
+  // this quay, we should minimize the quay section.
+  const hasFavorites = !!favoriteDepartures.find((f) => quay.id === f.quayId);
+  const shouldBeMinimized =
+    navigateToQuayEnabled && !hasFavorites && showOnlyFavorites;
   useEffect(() => {
-    if (!showOnlyFavorites) return setIsMinimized(false);
-    setIsMinimized(
-      !!navigateToQuay &&
-        !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showOnlyFavorites]);
+    setIsMinimized(shouldBeMinimized);
+  }, [shouldBeMinimized]);
 
   const hasMoreItemsThanDisplayLimit =
     !!departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
   const shouldShowMoreItemsLink =
-    !!navigateToQuay &&
+    navigateToQuayEnabled &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
