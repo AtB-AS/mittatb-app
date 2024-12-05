@@ -33,6 +33,7 @@ import {isUserProfileSelectable} from './utils';
 import {useAuthState} from '@atb/auth';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {useSelectableUserProfiles} from '@atb/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -49,17 +50,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? 'isFree' in params.toPlace && !!params.toPlace.isFree
     : false;
 
-  const {
-    selection,
-    preassignedFareProductAlternatives,
-    selectableUserProfiles,
-  } = useOfferDefaults(
+  const {selection, preassignedFareProductAlternatives} = useOfferDefaults(
     params.preassignedFareProduct,
     params.fareProductTypeConfig,
     params.userProfilesWithCount,
     params.fromPlace,
     params.toPlace,
     params.travelDate,
+  );
+
+  const selectableUserProfiles = useSelectableUserProfiles(
+    selection.preassignedFareProduct,
   );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {

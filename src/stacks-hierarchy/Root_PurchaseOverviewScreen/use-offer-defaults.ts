@@ -6,7 +6,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useMemo} from 'react';
-import {FareProductTypeConfig, UserProfile} from '@atb-as/config-specs';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
 import {
   PurchaseSelectionType,
   usePurchaseSelectionBuilder,
@@ -23,10 +23,9 @@ export function useOfferDefaults(
 ): {
   selection: PurchaseSelectionType;
   preassignedFareProductAlternatives: PreassignedFareProduct[];
-  selectableUserProfiles: UserProfile[];
 } {
   const selectionBuilder = usePurchaseSelectionBuilder();
-  const {preassignedFareProducts, userProfiles} = useFirestoreConfiguration();
+  const {preassignedFareProducts} = useFirestoreConfiguration();
 
   const selection = useMemo(
     () => {
@@ -60,10 +59,6 @@ export function useOfferDefaults(
     ],
   );
 
-  const selectableUserProfiles = userProfiles.filter((u) =>
-    selection.preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-  );
-
   const preassignedFareProductAlternatives = useMemo(() => {
     const productAliasId = selection.preassignedFareProduct?.productAliasId;
     return productAliasId
@@ -75,7 +70,6 @@ export function useOfferDefaults(
 
   return {
     selection,
-    selectableUserProfiles,
     preassignedFareProductAlternatives,
   };
 }
