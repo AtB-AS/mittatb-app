@@ -11,7 +11,6 @@ import {
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
-import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data.ts';
 
 type DepartureTimeProps = {
   departure: EstimatedCall;
