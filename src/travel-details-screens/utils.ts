@@ -18,11 +18,7 @@ import {
   Mode,
   TariffZone,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {
-  dictionary,
-  Language,
-  TranslateFunction,
-} from '@atb/translations';
+import {dictionary, Language, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
