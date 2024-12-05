@@ -2,7 +2,7 @@ import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ThemeText} from '@atb/components/text';
 import {FlatList} from 'react-native-gesture-handler';
-import React, {useCallback} from 'react';
+import React, {RefObject, useCallback, useRef} from 'react';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   EstimatedCallItem,
@@ -51,6 +51,11 @@ export const EstimatedCallList = ({
     addedFavoritesVisibleOnDashboard,
   );
 
+  // TODO: This ref isn't hooked up anywhere for now. Since the favorite feature
+  // is due to be moved out of EstimatedCallList, it should be fixed when that
+  // happens. (https://github.com/AtB-AS/kundevendt/issues/19124)
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+
   const onPressFavorite = useCallback(
     (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) =>
       onMarkFavourite(
@@ -60,6 +65,7 @@ export const EstimatedCallList = ({
           destinationDisplay: departure.destinationDisplay,
         },
         existingFavorite,
+        onCloseFocusRef,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

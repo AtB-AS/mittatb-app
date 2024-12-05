@@ -50,10 +50,11 @@ export const DeparturesWidget = ({
   const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
+  const onCloseFocusRef = React.useRef(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet(() => {
@@ -62,7 +63,7 @@ export const DeparturesWidget = ({
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    });
+    }, onCloseFocusRef);
   }
 
   const sortedStopPlaceGroups = location

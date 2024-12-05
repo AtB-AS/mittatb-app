@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {RefObject, useCallback, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
@@ -9,7 +9,6 @@ import {
   FareProductTypeConfig,
   getReferenceDataName,
   TravellerSelectionMode,
-  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {
   GenericClickableSectionItem,
@@ -30,7 +29,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
 import {useFeatureToggles} from '@atb/feature-toggles';
-import {getSelectableUserProfiles} from '@atb/purchase-selection';
+import {useSelectableUserProfiles} from '@atb/purchase-selection';
 import {PreassignedFareProduct} from '@atb-as/config-specs';
 
 type TravellerSelectionProps = {
@@ -59,13 +58,9 @@ export function TravellerSelection({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
-  const {userProfiles} = useFirestoreConfiguration();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onCloseFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const isOnBehalfOfEnabled =
     useFeatureToggles().isOnBehalfOfEnabled &&
@@ -78,8 +73,7 @@ export function TravellerSelection({
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
-  const selectableUserProfiles = getSelectableUserProfiles(
-    userProfiles,
+  const selectableUserProfiles = useSelectableUserProfiles(
     preassignedFareProduct,
   );
 
@@ -161,28 +155,31 @@ export function TravellerSelection({
   };
 
   const travellerSelectionOnPress = () => {
-    openBottomSheet(() => (
-      <TravellerSelectionSheet
-        selectionMode={selectionMode}
-        fareProductTypeConfig={fareProductTypeConfig}
-        selectableUserProfilesWithCountInit={userProfilesWithCountToShow}
-        isOnBehalfOfToggle={isOnBehalfOfToggle}
-        onConfirmSelection={(
-          chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
-          onBehalfOfToggle?: boolean,
-        ) => {
-          if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setUserProfilesWithCount(
-              chosenSelectableUserProfilesWithCounts.filter((u) => u.count),
-            );
-          }
-          if (onBehalfOfToggle !== undefined) {
-            setIsOnBehalfOfToggle(onBehalfOfToggle);
-          }
-          closeBottomSheet();
-        }}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <TravellerSelectionSheet
+          selectionMode={selectionMode}
+          fareProductTypeConfig={fareProductTypeConfig}
+          selectableUserProfilesWithCountInit={userProfilesWithCountToShow}
+          isOnBehalfOfToggle={isOnBehalfOfToggle}
+          onConfirmSelection={(
+            chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
+            onBehalfOfToggle?: boolean,
+          ) => {
+            if (chosenSelectableUserProfilesWithCounts !== undefined) {
+              setUserProfilesWithCount(
+                chosenSelectableUserProfilesWithCounts.filter((u) => u.count),
+              );
+            }
+            if (onBehalfOfToggle !== undefined) {
+              setIsOnBehalfOfToggle(onBehalfOfToggle);
+            }
+            closeBottomSheet();
+          }}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const content = (

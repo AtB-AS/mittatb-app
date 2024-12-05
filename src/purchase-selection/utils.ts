@@ -88,21 +88,15 @@ export const getDefaultUserProfiles = (
   input: PurchaseSelectionBuilderInput,
   product: PreassignedFareProduct,
 ): UserProfileWithCount[] => {
-  const selectableProfiles = getSelectableUserProfiles(
-    input.userProfiles,
-    product,
-  );
-  const profile = selectableProfiles.reduce((selected, current) =>
-    current.userTypeString === input.defaultUserTypeString ? current : selected,
-  );
+  const profile = input.userProfiles
+    .filter((profile) => isSelectableProfile(product, profile))
+    .reduce((selected, current) =>
+      current.userTypeString === input.defaultUserTypeString
+        ? current
+        : selected,
+    );
   return [{...profile, count: 1}];
 };
-
-export const getSelectableUserProfiles = (
-  userProfiles: UserProfile[],
-  product: PreassignedFareProduct,
-): UserProfile[] =>
-  userProfiles.filter((profile) => isSelectableProfile(product, profile));
 
 export const isSelectableProduct = (
   input: PurchaseSelectionBuilderInput,
@@ -204,8 +198,8 @@ export const applyProductChange = (
   currentSelection: PurchaseSelectionType,
   product: PreassignedFareProduct,
 ): PurchaseSelectionType => {
-  const selectableProfiles = currentSelection.userProfilesWithCount.filter(
-    (up) => isSelectableProfile(product, up),
+  const userCount = currentSelection.userProfilesWithCount.filter((up) =>
+    isSelectableProfile(product, up),
   );
 
   const isFromZoneValid =
@@ -224,8 +218,8 @@ export const applyProductChange = (
   return {
     ...currentSelection,
     preassignedFareProduct: product,
-    userProfilesWithCount: selectableProfiles.length
-      ? selectableProfiles
+    userProfilesWithCount: userCount.length
+      ? userCount
       : getDefaultUserProfiles(input, product),
     zones: newZones ?? currentSelection.zones,
   };

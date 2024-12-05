@@ -17,7 +17,14 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -61,6 +68,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const {selection, recipient} = params;
 
@@ -218,7 +226,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }}
         />
       );
-    });
+    }, onCloseFocusRef);
   }
 
   return (
@@ -345,6 +353,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   accessibilityHint={t(
                     PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
                   )}
+                  ref={onCloseFocusRef}
                 >
                   <View style={styles.flexRowCenter}>
                     <ThemeText type="body__primary--bold">
@@ -368,6 +377,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   selectPaymentMethod();
                 }}
                 testID="choosePaymentMethodButton"
+                ref={onCloseFocusRef}
               />
             )}
           </View>

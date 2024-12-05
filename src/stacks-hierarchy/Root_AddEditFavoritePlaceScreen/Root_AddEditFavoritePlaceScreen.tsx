@@ -12,7 +12,7 @@ import {useFavorites} from '@atb/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -49,6 +49,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     'searchLocation',
     editItem?.location,
   );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -107,29 +108,32 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   const {open: openBottomSheet} = useBottomSheet();
 
   const openEmojiSheet = () => {
-    openBottomSheet(() => (
-      <EmojiSheet
-        localizedCategories={[
-          t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
-          t(AddEditFavoriteTexts.emojiSheet.categories.people),
-          t(AddEditFavoriteTexts.emojiSheet.categories.animals),
-          t(AddEditFavoriteTexts.emojiSheet.categories.food),
-          t(AddEditFavoriteTexts.emojiSheet.categories.activities),
-          t(AddEditFavoriteTexts.emojiSheet.categories.travel),
-          t(AddEditFavoriteTexts.emojiSheet.categories.objects),
-          t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
-        ]}
-        value={emoji ?? null}
-        closeOnSelect={true}
-        onEmojiSelected={(emoji) => {
-          if (emoji == null) {
-            setEmoji(undefined);
-          } else {
-            setEmoji(emoji);
-          }
-        }}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <EmojiSheet
+          localizedCategories={[
+            t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
+            t(AddEditFavoriteTexts.emojiSheet.categories.people),
+            t(AddEditFavoriteTexts.emojiSheet.categories.animals),
+            t(AddEditFavoriteTexts.emojiSheet.categories.food),
+            t(AddEditFavoriteTexts.emojiSheet.categories.activities),
+            t(AddEditFavoriteTexts.emojiSheet.categories.travel),
+            t(AddEditFavoriteTexts.emojiSheet.categories.objects),
+            t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
+          ]}
+          value={emoji ?? null}
+          closeOnSelect={true}
+          onEmojiSelected={(emoji) => {
+            if (emoji == null) {
+              setEmoji(undefined);
+            } else {
+              setEmoji(emoji);
+            }
+          }}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const openEmojiPopup = () => {
@@ -203,6 +207,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               )
             }
             testID="iconButton"
+            focusRef={onCloseFocusRef}
           />
         </Section>
         {emoji && (

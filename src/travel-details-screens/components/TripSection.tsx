@@ -95,6 +95,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {theme, themeName} = useTheme();
+  const onCloseFocusRef = React.useRef(null);
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
@@ -139,7 +140,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
-    openBottomSheet(() => <FlexibleTransportBookingDetailsSheet leg={leg} />);
+    openBottomSheet(
+      () => <FlexibleTransportBookingDetailsSheet leg={leg} />,
+      onCloseFocusRef,
+    );
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
@@ -249,6 +253,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
               now={now}
+              focusRef={onCloseFocusRef}
               onPressConfig={
                 shouldShowButtonForOpeningFlexBottomSheet
                   ? {

@@ -4,7 +4,7 @@ import {Camera} from '@atb/components/camera';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect, useMemo, useState} from 'react';
+import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -37,6 +37,7 @@ export const Root_ParkingViolationsQrScreen = ({
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers, coordinates} = useParkingViolations();
   const {userId} = useAuthState();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const providersList = useMemo(
     () => [
@@ -111,14 +112,17 @@ export const Root_ParkingViolationsQrScreen = ({
       disableScanning(qr);
       const providerAndVehicleId = await getProviderByQr(qr);
       if (providerAndVehicleId) {
-        openBottomSheet(() => (
-          <VehicleLookupConfirmationBottomSheet
-            vehicleId={providerAndVehicleId.vehicle_id}
-            provider={providerAndVehicleId.provider}
-            onReportSubmit={submitReport}
-            onClose={enableScanning}
-          />
-        ));
+        openBottomSheet(
+          () => (
+            <VehicleLookupConfirmationBottomSheet
+              vehicleId={providerAndVehicleId.vehicle_id}
+              provider={providerAndVehicleId.provider}
+              onReportSubmit={submitReport}
+              onClose={enableScanning}
+            />
+          ),
+          onCloseFocusRef,
+        );
       } else {
         selectProvider(true);
       }
@@ -126,16 +130,19 @@ export const Root_ParkingViolationsQrScreen = ({
   };
 
   const selectProvider = (qrScanFailed?: boolean) => {
-    openBottomSheet(() => (
-      <SelectProviderBottomSheet
-        providers={providersList}
-        qrScanFailed={qrScanFailed}
-        onSelect={(provider) => {
-          submitReport(provider.id);
-        }}
-        onClose={enableScanning}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <SelectProviderBottomSheet
+          providers={providersList}
+          qrScanFailed={qrScanFailed}
+          onSelect={(provider) => {
+            submitReport(provider.id);
+          }}
+          onClose={enableScanning}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const disableScanning = (qr: string) => {
@@ -160,6 +167,7 @@ export const Root_ParkingViolationsQrScreen = ({
           backgroundColor={themeColor}
           onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+          ref={onCloseFocusRef}
         />
       }
       isLoading={isLoading}

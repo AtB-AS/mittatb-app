@@ -110,10 +110,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_ticket_information',
   },
   {
-    name: 'isTicketingAssistantEnabled',
-    remoteConfigKey: 'enable_ticketing_assistant',
-  },
-  {
     name: 'isTipsAndInformationEnabled',
     remoteConfigKey: 'enable_tips_and_information',
   },

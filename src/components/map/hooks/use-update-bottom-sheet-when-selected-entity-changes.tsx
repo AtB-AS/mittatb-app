@@ -1,5 +1,11 @@
 import {MapFilterType, MapProps, MapSelectionActionType} from '../types';
-import React, {RefObject, useCallback, useEffect, useState} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
@@ -43,6 +49,10 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const analytics = useMapSelectionAnalytics();
   const navigation = useNavigation<RootNavigationProps>();
 
+  // NOTE: This ref is not used for anything since the map doesn't support
+  // screen readers, but a ref is required when opening bottom sheets.
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+
   const closeWithCallback = useCallback(() => {
     closeBottomSheet();
     closeCallback();
@@ -73,26 +83,32 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       if (mapProps.selectionMode !== 'ExploreEntities') return;
 
       if (mapSelectionAction?.source === 'filters-button') {
-        openBottomSheet(() => (
-          <MapFilterSheet
-            onFilterChanged={(filter: MapFilterType) => {
-              analytics.logEvent('Map', 'Filter changed', {filter});
-              mapProps.vehicles?.onFilterChange(filter.mobility);
-              mapProps.stations?.onFilterChange(filter.mobility);
-            }}
-            onClose={closeCallback}
-          />
-        ));
+        openBottomSheet(
+          () => (
+            <MapFilterSheet
+              onFilterChanged={(filter: MapFilterType) => {
+                analytics.logEvent('Map', 'Filter changed', {filter});
+                mapProps.vehicles?.onFilterChange(filter.mobility);
+                mapProps.stations?.onFilterChange(filter.mobility);
+              }}
+              onClose={closeCallback}
+            />
+          ),
+          onCloseFocusRef,
+        );
         return;
       }
 
       if (mapSelectionAction?.source === 'external-map-button') {
-        openBottomSheet(() => (
-          <ExternalRealtimeMapSheet
-            onClose={closeCallback}
-            url={mapSelectionAction.url}
-          />
-        ));
+        openBottomSheet(
+          () => (
+            <ExternalRealtimeMapSheet
+              onClose={closeCallback}
+              url={mapSelectionAction.url}
+            />
+          ),
+          onCloseFocusRef,
+        );
         return;
       }
 
@@ -121,6 +137,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               }}
             />
           ),
+          onCloseFocusRef,
           false,
         );
       } else if (isBikeStation(selectedFeature)) {
@@ -132,6 +149,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               onClose={closeCallback}
             />
           ),
+          onCloseFocusRef,
           false,
         );
       } else if (isCarStation(selectedFeature)) {
@@ -143,44 +161,57 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               onClose={closeCallback}
             />
           ),
+          onCloseFocusRef,
           false,
         );
       } else if (isScooter(selectedFeature)) {
-        openBottomSheet(() => {
-          return (
-            <ScooterSheet
-              vehicleId={selectedFeature.properties.id}
-              onClose={closeCallback}
-              onReportParkingViolation={onReportParkingViolation}
-            />
-          );
-        }, false);
+        openBottomSheet(
+          () => {
+            return (
+              <ScooterSheet
+                vehicleId={selectedFeature.properties.id}
+                onClose={closeCallback}
+                onReportParkingViolation={onReportParkingViolation}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+        );
       } else if (isBicycle(selectedFeature)) {
-        openBottomSheet(() => {
-          return (
-            <BicycleSheet
-              vehicleId={selectedFeature.properties.id}
-              onClose={closeCallback}
-            />
-          );
-        }, false);
+        openBottomSheet(
+          () => {
+            return (
+              <BicycleSheet
+                vehicleId={selectedFeature.properties.id}
+                onClose={closeCallback}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+        );
       } else if (isParkAndRide(selectedFeature)) {
-        openBottomSheet(() => {
-          return (
-            <ParkAndRideBottomSheet
-              name={selectedFeature.properties.name}
-              capacity={selectedFeature.properties.totalCapacity}
-              parkingFor={selectedFeature.properties.parkingVehicleTypes}
-              feature={selectedFeature}
-              distance={distance}
-              onClose={closeCallback}
-              navigateToTripSearch={(...params) => {
-                closeBottomSheet();
-                mapProps.navigateToTripSearch(...params);
-              }}
-            />
-          );
-        }, false);
+        openBottomSheet(
+          () => {
+            return (
+              <ParkAndRideBottomSheet
+                name={selectedFeature.properties.name}
+                capacity={selectedFeature.properties.totalCapacity}
+                parkingFor={selectedFeature.properties.parkingVehicleTypes}
+                feature={selectedFeature}
+                distance={distance}
+                onClose={closeCallback}
+                navigateToTripSearch={(...params) => {
+                  closeBottomSheet();
+                  mapProps.navigateToTripSearch(...params);
+                }}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+        );
       } else {
         closeBottomSheet();
       }

@@ -1,6 +1,6 @@
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {
@@ -23,13 +23,14 @@ export const useServiceDisruptionIcon = (
   const {findGlobalMessages} = useGlobalMessagesState();
   const {open: openBottomSheet} = useBottomSheet();
   const now = useNow(2500);
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const globalMessages = findGlobalMessages(
     GlobalMessageContextEnum.appServiceDisruptions,
   ).filter((gm) => isWithinTimeRange(gm, now));
 
   const openServiceDisruptionSheet = () => {
-    openBottomSheet(() => <ServiceDisruptionSheet />);
+    openBottomSheet(() => <ServiceDisruptionSheet />, onCloseFocusRef);
   };
 
   return {
@@ -52,5 +53,6 @@ export const useServiceDisruptionIcon = (
     accessibilityHint: t(
       ScreenHeaderTexts.headerButton['status-disruption'].a11yHint,
     ),
+    focusRef: onCloseFocusRef,
   };
 };

@@ -10,12 +10,14 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingArrangement} from '@atb/api/types/generated/journey_planner_v3_types';
+import {RefObject} from 'react';
 
 type Props = {
   bookingArrangements?: BookingArrangementFragment;
   aimedStartTime: string;
   now: number;
   onPressConfig?: OnPressConfig;
+  focusRef?: RefObject<any>;
 };
 
 export const BookingInfoBox = ({
@@ -23,6 +25,7 @@ export const BookingInfoBox = ({
   aimedStartTime,
   now,
   onPressConfig,
+  focusRef,
 }: Props) => {
   const bookingMessage = useBookingMessage(
     bookingArrangements,
@@ -43,6 +46,7 @@ export const BookingInfoBox = ({
       type={bookingStatus === 'late' ? 'error' : 'warning'}
       message={bookingMessage}
       onPressConfig={onPressConfig}
+      focusRef={focusRef}
     />
   );
 };

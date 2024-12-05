@@ -41,6 +41,7 @@ export type MessageInfoBoxProps = {
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
   a11yLiveRegion?: A11yLiveRegion;
+  focusRef?: React.Ref<any>;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -53,6 +54,7 @@ export const MessageInfoBox = ({
   onPressConfig,
   onDismiss,
   a11yLiveRegion,
+  focusRef,
   testID,
 }: MessageInfoBoxProps) => {
   const {theme, themeName} = useTheme();
@@ -84,6 +86,7 @@ export const MessageInfoBox = ({
       style={[styles.container, style]}
       accessible={false}
       testID={testID}
+      focusRef={focusRef}
     >
       {!noStatusIcon && (
         <ThemeIcon

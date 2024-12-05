@@ -1,3 +1,4 @@
+import {spellOut} from '@atb/utils/accessibility';
 import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '../../orgSpecificTranslations';
 
@@ -13,21 +14,15 @@ const DeleteProfileTexts = {
   buttonA11ytext: (customerNumber: string | undefined) =>
     _(
       `Aktiver for å slette kundeprofil ${
-        customerNumber
-          ? 'med kundenummer ' + customerNumber?.split('').join(', ')
-          : ''
+        customerNumber ? 'med kundenummer ' + spellOut(customerNumber) : ''
       }`,
 
       `Activate to delete customer profile ${
-        customerNumber
-          ? 'with customer number ' + customerNumber?.split('').join(', ')
-          : ''
+        customerNumber ? 'with customer number ' + spellOut(customerNumber) : ''
       }`,
 
       `Aktiver for å slette kundeprofil ${
-        customerNumber
-          ? 'med kundenummer ' + customerNumber?.split('').join(', ')
-          : ''
+        customerNumber ? 'med kundenummer ' + spellOut(customerNumber) : ''
       }`,
     ),
   unableToDeleteWithFareContracts: _(
@@ -81,21 +76,17 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
     buttonA11ytext: (customerNumber: string | undefined) =>
       _(
         `Aktiver for å slette brukeren ${
-          customerNumber
-            ? 'med kundenummer ' + customerNumber?.split('').join(', ')
-            : ''
+          customerNumber ? 'med kundenummer ' + spellOut(customerNumber) : ''
         }`,
 
         `Activate to delete user ${
           customerNumber
-            ? 'with customer number ' + customerNumber?.split('').join(', ')
+            ? 'with customer number ' + spellOut(customerNumber)
             : ''
         }`,
 
         `Aktiver for å slette brukaren ${
-          customerNumber
-            ? 'med kundenummer ' + customerNumber?.split('').join(', ')
-            : ''
+          customerNumber ? 'med kundenummer ' + spellOut(customerNumber) : ''
         }`,
       ),
     deleteConfirmation: {
