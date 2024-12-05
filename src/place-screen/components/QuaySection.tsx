@@ -75,16 +75,17 @@ export function QuaySection({
   // If the user has toggled "Show only favorites" and there are no favorites on
   // this quay, we should minimize the quay section.
   const hasFavorites = !!favoriteDepartures.find((f) => quay.id === f.quayId);
+  const shouldBeMinimized =
+    navigateToQuayEnabled && !hasFavorites && showOnlyFavorites;
   useEffect(() => {
-    if (!showOnlyFavorites) return setIsMinimized(false);
-    setIsMinimized(navigateToQuayEnabled && !hasFavorites);
-  }, [showOnlyFavorites, navigateToQuayEnabled, hasFavorites]);
+    setIsMinimized(shouldBeMinimized);
+  }, [shouldBeMinimized]);
 
   const hasMoreItemsThanDisplayLimit =
     !!departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
   const shouldShowMoreItemsLink =
-    !!navigateToQuay &&
+    navigateToQuayEnabled &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
