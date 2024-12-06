@@ -19,7 +19,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
-  TokenAction,
+  AttestationSabotage,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
 
@@ -71,6 +71,8 @@ type MobileTokenContextState = {
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
     wipeToken: () => void;
+    setSabotage: (attestationSabotage?: AttestationSabotage) => void;
+    sabotage: AttestationSabotage | undefined;
   };
 };
 
@@ -88,6 +90,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+
   useEffect(() => setIsLoggingOut(false), [userId]);
 
   const enabled =
@@ -179,14 +183,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
-          validateToken: () =>
-            mobileTokenClient
-              .encode(nativeToken!, [
-                TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-              ])
-              .then((signed) =>
-                tokenService.validate(nativeToken!, signed, uuid()),
-              ),
+          validateToken: () => tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
@@ -212,6 +209,15 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               ),
             [queryClient, nativeToken],
           ),
+          setSabotage: (attestationSabotage?: AttestationSabotage) => {
+            setSabotage(attestationSabotage);
+            if (attestationSabotage) {
+              mobileTokenClient.setDebugSabotage(attestationSabotage);
+            } else {
+              mobileTokenClient.clearDebugSabotage();
+            }
+          },
+          sabotage: sabotage,
         },
       }}
     >
