@@ -152,6 +152,7 @@ export const DetailsContent: React.FC<Props> = ({
           fareProductType={preassignedFareProduct?.type}
         />
         <FareContractInfoHeader
+          fareContract={fc}
           travelRight={firstTravelRight}
           status={validityStatus}
           testID="details"
