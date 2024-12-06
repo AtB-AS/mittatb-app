@@ -132,8 +132,6 @@ export const RecentFareContractComponent = ({
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
-  const showTwoWayIcon = direction === TravelRightDirection.Both;
-
   return (
     <TileWithButton
       buttonSvg={ArrowRight}
@@ -167,7 +165,7 @@ export const RecentFareContractComponent = ({
       {direction !== undefined && pointToPointValidity && (
         <View style={styles.harbors}>
           <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
+            direction={direction}
             fromStopPlaceId={pointToPointValidity?.fromPlace}
             toStopPlaceId={pointToPointValidity?.toPlace}
             transportModes={fareProductTypeConfig.transportModes}

@@ -15,7 +15,6 @@ import {
   isCarnet,
   isCarnetTravelRight,
   NormalTravelRight,
-  TravelRightDirection,
 } from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -83,7 +82,6 @@ export const FareContractInfoHeader = ({
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
   const warning = useNonInspectableTokenWarning();
-  const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
   const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
     sentToCustomerAccountId,
@@ -127,7 +125,7 @@ export const FareContractInfoHeader = ({
         <FareContractHarborStopPlaces
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
-          showTwoWayIcon={showTwoWayIcon}
+          direction={travelRight.direction}
           transportModes={fareProductTypeConfig?.transportModes}
         />
       )}
