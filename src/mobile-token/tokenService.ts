@@ -204,7 +204,7 @@ export const tokenService: TokenService = {
       tokenEncodingRequest,
       traceId,
       async (secureContainerToken, attestation) => {
-        client
+        return client
           .get('/tokens/v5/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
