@@ -66,7 +66,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            type="body__primary--jumbo--bold"
+            typography="body__primary--jumbo--bold"
             style={styles.title}
             color={themeColor}
           >
@@ -100,7 +100,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
         >
           <ThemeText
             style={styles.laterButtonText}
-            type="body__primary"
+            typography="body__primary"
             color={themeColor}
           >
             {t(LoginTexts.onboarding.laterButton)}
@@ -110,12 +110,12 @@ export const Root_LoginRequiredForFareProductScreen = ({
           <Psst />
           <ThemeText
             style={styles.carrotTitle}
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={themeColor}
           >
             {t(LoginTexts.onboarding.carrotTitle)}
           </ThemeText>
-          <ThemeText type="body__primary" color={themeColor}>
+          <ThemeText typography="body__primary" color={themeColor}>
             {t(LoginTexts.onboarding.carrotBody)}
           </ThemeText>
         </View>

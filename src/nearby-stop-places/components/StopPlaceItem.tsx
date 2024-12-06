@@ -71,14 +71,17 @@ export const StopPlaceItem = ({
       >
         <View style={styles.stopPlaceContainer} testID={testID}>
           <View style={styles.stopPlaceInfo}>
-            <ThemeText type="heading__component" testID={testID + 'Name'}>
+            <ThemeText typography="heading__component" testID={testID + 'Name'}>
               {place.name}
             </ThemeText>
-            <ThemeText type="body__secondary" style={styles.stopDescription}>
+            <ThemeText
+              typography="body__secondary"
+              style={styles.stopDescription}
+            >
               {description}
             </ThemeText>
             {humanizedDistance && (
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {humanizedDistance}
               </ThemeText>
             )}

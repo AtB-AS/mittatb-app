@@ -120,7 +120,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             ]}
           >
             <ThemeText
-              type={isFocused ? 'body__primary--bold' : 'body__primary'}
+              typography={isFocused ? 'body__primary--bold' : 'body__primary'}
               color={tabColor}
               testID={options.tabBarTestID}
             >

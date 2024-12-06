@@ -41,7 +41,7 @@ export function DayLabel({
 
   if (isFirst || !isSameDay(prevDate, departureDate)) {
     return (
-      <ThemeText type="body__secondary" style={style.title}>
+      <ThemeText typography="body__secondary" style={style.title}>
         {dateLabel}
       </ThemeText>
     );

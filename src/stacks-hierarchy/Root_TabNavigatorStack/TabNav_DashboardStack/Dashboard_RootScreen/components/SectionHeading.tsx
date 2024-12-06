@@ -11,7 +11,7 @@ export const SectionHeading = ({accessibilityLabel, children}: Props) => {
   const themeColor = theme.color.background.accent[0];
   return (
     <ThemeText
-      type="body__secondary"
+      typography="body__secondary"
       color={themeColor}
       style={style.heading}
       accessibilityLabel={accessibilityLabel}

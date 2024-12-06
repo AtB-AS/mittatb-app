@@ -25,7 +25,7 @@ export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
       </View>
       <View style={styles.container}>
         <View>
-          <ThemeText type="body__primary--bold" style={styles.title}>
+          <ThemeText typography="body__primary--bold" style={styles.title}>
             Appen krasja - håper du lander mykt!
           </ThemeText>
           <ThemeText style={styles.message}>

@@ -34,12 +34,12 @@ export function InternalLabeledSectionItem({
     <View style={[style.spaceBetween, topContainer, wrapperStyle]}>
       {leftIcon && <ThemeIcon svg={leftIcon} style={itemStyle.icon} />}
       <View accessible={accessibleLabel} style={itemStyle.label}>
-        <ThemeText accessible={accessibleLabel} type="body__primary">
+        <ThemeText accessible={accessibleLabel} typography="body__primary">
           {label}
         </ThemeText>
         {subtext && (
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={itemStyle.label}
             accessible={accessibleLabel}

@@ -34,7 +34,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
         <View>
           <View ref={focusRef} accessible={true}>
             <ThemeText
-              type="heading--jumbo"
+              typography="heading--jumbo"
               style={styles.header}
               color={themeColor}
             >
@@ -47,7 +47,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
           {localConfig && (
             <ThemeText
               color={themeColor}
-              type="body__secondary"
+              typography="body__secondary"
               accessibilityLabel={t(
                 LoadingScreenTexts.error.installId(
                   spellOut(localConfig.installId),

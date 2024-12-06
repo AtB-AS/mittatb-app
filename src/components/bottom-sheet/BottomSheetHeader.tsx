@@ -52,7 +52,7 @@ export const BottomSheetHeader = ({
         style={styles.headerTitle}
         ref={focusTitleOnLoad ? onOpenFocusRef : undefined}
       >
-        <ThemeText accessible={false} type="body__primary--bold">
+        <ThemeText accessible={false} typography="body__primary--bold">
           {title}
         </ThemeText>
       </View>

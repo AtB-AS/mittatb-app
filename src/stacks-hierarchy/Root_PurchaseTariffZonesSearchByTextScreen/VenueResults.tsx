@@ -29,7 +29,7 @@ export const VenueResults: React.FC<Props> = ({
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText typography="body__secondary" color="secondary">
           {t(TariffZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>
@@ -64,10 +64,10 @@ export const VenueResults: React.FC<Props> = ({
                   />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type="body__primary--bold">
+                  <ThemeText typography="body__primary--bold">
                     {location.name}
                   </ThemeText>
-                  <ThemeText type="body__secondary">
+                  <ThemeText typography="body__secondary">
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
                         getReferenceDataName(tariffZone, language),

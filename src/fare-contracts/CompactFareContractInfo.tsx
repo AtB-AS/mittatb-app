@@ -80,21 +80,21 @@ const CompactFareContractInfoTexts = (
 
   return (
     <View style={styles.textsContainer}>
-      <ThemeText type="body__primary--bold" style={styles.expireTime}>
+      <ThemeText typography="body__primary--bold" style={styles.expireTime}>
         {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
-        <ThemeText key={u.id} type="body__secondary" color="secondary">
+        <ThemeText key={u.id} typography="body__secondary" color="secondary">
           {userProfileCountAndName(u, language)}
         </ThemeText>
       ))}
       {productName && (
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText typography="body__secondary" color="secondary">
           {productName}
         </ThemeText>
       )}
       {tariffZoneSummary && (
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText typography="body__secondary" color="secondary">
           {tariffZoneSummary}
         </ThemeText>
       )}

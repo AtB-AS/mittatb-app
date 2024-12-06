@@ -53,7 +53,7 @@ export function Summary({
         <ActivityIndicator size="large" />
       ) : (
         <ThemeText
-          type="body__primary--bold"
+          typography="body__primary--bold"
           style={styles.price}
           testID="offerTotalPriceText"
         >
@@ -62,7 +62,7 @@ export function Summary({
       )}
       {!isLoading && originalPrice !== price && (
         <ThemeText
-          type="body__tertiary--strike"
+          typography="body__tertiary--strike"
           style={styles.originalPrice}
           testID="offerTotalPriceText"
           accessibilityLabel={t(

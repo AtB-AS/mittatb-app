@@ -80,7 +80,7 @@ export function ToggleSectionItem({
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>
-              <ThemeText type={textType}>{text}</ThemeText>
+              <ThemeText typography={textType}>{text}</ThemeText>
             </View>
             {label && <LabelInfo label={label} />}
             <Toggle
@@ -95,7 +95,7 @@ export function ToggleSectionItem({
           </View>
           {subtext && (
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color="secondary"
               style={styles.subtext}
               isMarkdown={isSubtextMarkdown}

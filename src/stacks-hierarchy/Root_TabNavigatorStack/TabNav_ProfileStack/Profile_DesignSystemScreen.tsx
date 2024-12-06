@@ -458,7 +458,7 @@ export const Profile_DesignSystemScreen = ({
               <View>
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/0
                 </ThemeText>
@@ -494,7 +494,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/1
                 </ThemeText>
@@ -530,7 +530,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/2
                 </ThemeText>
@@ -566,7 +566,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
@@ -602,7 +602,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Secondary - block
                 </ThemeText>
@@ -630,7 +630,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   tertiary - block
                 </ThemeText>
@@ -658,7 +658,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Medium button examples (interactive_0)
                 </ThemeText>
@@ -740,7 +740,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Pill button examples (interactive_0)
                 </ThemeText>
@@ -822,7 +822,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   With icons examples (interactive_0)
                 </ThemeText>
@@ -1106,7 +1106,7 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem>
             {textNames.map(function (t: TextNames) {
               return (
-                <ThemeText type={t} key={t}>
+                <ThemeText typography={t} key={t}>
                   {t}
                 </ThemeText>
               );

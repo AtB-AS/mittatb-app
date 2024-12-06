@@ -50,7 +50,7 @@ export function EstimatedCallInfo({
         <ThemeIcon svg={PinInvalid} color="warning" />
       )}
       <ThemeText
-        type={showAsCancelled ? 'body__primary--strike' : 'body__primary'}
+        typography={showAsCancelled ? 'body__primary--strike' : 'body__primary'}
         color={showAsCancelled ? 'secondary' : 'primary'}
         style={styles.lineName}
         testID={`${testID}LineName`}

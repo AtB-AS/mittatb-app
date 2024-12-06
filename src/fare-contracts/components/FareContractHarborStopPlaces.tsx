@@ -82,7 +82,7 @@ export function FareContractHarborStopPlaces({
           borderLeftWidth: decorationLineWidth,
         }}
       >
-        <ThemeText type="body__secondary" color="primary">
+        <ThemeText typography="body__secondary" color="primary">
           {fromName}
         </ThemeText>
 
@@ -110,7 +110,7 @@ export function FareContractHarborStopPlaces({
           )}
         </View>
 
-        <ThemeText type="body__secondary" color="primary">
+        <ThemeText typography="body__secondary" color="primary">
           {toName}
         </ThemeText>
       </View>

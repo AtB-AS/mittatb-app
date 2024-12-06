@@ -33,7 +33,7 @@ export const PhoneAndNameInputSection = ({
     <>
       {settingName && (
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color={themeColor}
           style={styles.newRecipientLabel}
         >

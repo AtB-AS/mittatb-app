@@ -30,7 +30,7 @@ export const Ticketing_NotEnabledScreen = () => {
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
             <ThemeText
-              type="body__primary--jumbo--bold"
+              typography="body__primary--jumbo--bold"
               color={bgColor}
               style={styles.text}
             >

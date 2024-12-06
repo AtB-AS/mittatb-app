@@ -56,7 +56,7 @@ export const SubmittedComponent = ({
     <View style={styles.container}>
       <View accessible={true} accessibilityRole="header" ref={focusRef}>
         <ThemeText
-          type="body__primary--bold"
+          typography="body__primary--bold"
           style={[styles.questionText, styles.centerText]}
         >
           {t(FeedbackTexts.submittedText.thanks)}

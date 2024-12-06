@@ -97,7 +97,7 @@ export const Profile_EditProfileScreen = ({
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
-            type="heading--medium"
+            typography="heading--medium"
             color={themeColor}
             style={{flexShrink: 1}}
           >
@@ -169,7 +169,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.email.label)}
                   </ThemeText>
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.email
                         .disabledWithRemoteConfig,
@@ -203,7 +203,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.phone.loggedIn(
                         phoneNumber,
@@ -248,7 +248,7 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
             {phoneNumber && (
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 color="secondary"
                 style={styles.profileItem}
               >
@@ -261,7 +261,7 @@ export const Profile_EditProfileScreen = ({
                   {t(EditProfileTexts.profileInfo.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,

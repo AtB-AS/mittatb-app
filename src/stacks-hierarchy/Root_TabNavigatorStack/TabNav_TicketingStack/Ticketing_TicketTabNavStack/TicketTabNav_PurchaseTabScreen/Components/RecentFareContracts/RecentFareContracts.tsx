@@ -60,7 +60,7 @@ export const RecentFareContracts = ({
           accessibilityLabel={t(RecentFareContractsTexts.titles.loading)}
         >
           <ThemeText
-            type="body__primary"
+            typography="body__primary"
             style={{textAlign: 'center', marginBottom: theme.spacing.large}}
           >
             {t(TicketingTexts.recentFareContracts.loading)}
@@ -73,7 +73,7 @@ export const RecentFareContracts = ({
 
       {!loading && !!memoizedRecentFareContracts.length && (
         <>
-          <ThemeText type="body__secondary" style={styles.header}>
+          <ThemeText typography="body__secondary" style={styles.header}>
             {t(RecentFareContractsTexts.repeatPurchase.label)}
           </ThemeText>
           <ScrollView

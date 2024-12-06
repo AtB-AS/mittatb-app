@@ -100,7 +100,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           <ThemeText
             accessible={false}
             onLayout={setLayoutFor('title')}
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={themeColor}
           >
             {title && textOpacity > 0 ? title : '\u00a0'}

@@ -10,6 +10,7 @@ type Props = SectionItemProps<{
   subtitle?: string;
   mode?: 'heading' | 'subheading';
 }>;
+
 export function HeaderSectionItem({
   text,
   subtitle,
@@ -23,7 +24,9 @@ export function HeaderSectionItem({
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        type={mode === 'heading' ? 'body__primary--bold' : 'body__secondary'}
+        typography={
+          mode === 'heading' ? 'body__primary--bold' : 'body__secondary'
+        }
       >
         {text}
       </ThemeText>
@@ -31,7 +34,7 @@ export function HeaderSectionItem({
         <ThemeText
           style={[styles.subtitle, contentContainer]}
           color="secondary"
-          type={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
+          typography={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
         >
           {subtitle}
         </ThemeText>

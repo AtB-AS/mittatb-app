@@ -25,7 +25,7 @@ export const LoadingScreen = React.memo(() => {
       />
       <ThemeText
         style={styles.loadingText}
-        type="body__primary"
+        typography="body__primary"
         color={themeColor}
         testID="loadingScreenText"
       >

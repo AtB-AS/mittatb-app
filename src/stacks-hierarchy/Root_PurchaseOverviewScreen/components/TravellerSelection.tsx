@@ -160,7 +160,7 @@ export function TravellerSelection({
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
-        <ThemeText type="body__primary--bold" testID="selectedTravellers">
+        <ThemeText typography="body__primary--bold" testID="selectedTravellers">
           {multipleTravellerCategoriesSelectedFrom
             ? t(
                 PurchaseOverviewTexts.travellerSelection.travellers_title(
@@ -170,19 +170,19 @@ export function TravellerSelection({
             : travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {travellerInfo}
           </ThemeText>
         )}
         {isOnBehalfOfToggle && canSelectUserProfile && (
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           </ThemeText>
         )}
 
         {multipleTravellerCategoriesSelectedFrom && (
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.multipleTravellersDetails}
             testID="selectedTravellers"

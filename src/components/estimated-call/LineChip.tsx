@@ -59,7 +59,7 @@ export function LineChip({
               minWidth: fontScale * 20,
             },
           ]}
-          type="body__primary--bold"
+          typography="body__primary--bold"
           testID={`${testID}PublicCode`}
         >
           {publicCode}

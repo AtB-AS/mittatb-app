@@ -112,7 +112,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                 </ThemeText>
                 {phoneNumber && (
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {phoneNumber}
                   </ThemeText>
                 )}
@@ -124,7 +124,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
@@ -521,7 +521,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             </>
           )}
           <View style={style.debugInfoContainer}>
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               v{version} ({buildNumber})
             </ThemeText>
             {config?.installId && (
@@ -531,7 +531,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     <ScreenReaderAnnouncement
                       message={t(ProfileTexts.installId.wasCopiedAlert)}
                     />
-                    <ThemeText type="body__secondary" color="secondary">
+                    <ThemeText typography="body__secondary" color="secondary">
                       ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
                     </ThemeText>
                   </>
@@ -542,13 +542,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText type="body__secondary" color="secondary">
+                <ThemeText typography="body__secondary" color="secondary">
                   {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color="secondary"
               accessibilityLabel={t(
                 ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),

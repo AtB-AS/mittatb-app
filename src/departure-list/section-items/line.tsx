@@ -254,7 +254,7 @@ function DepartureTimeItem({
       {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
 
       <ThemeText
-        type="body__primary--bold"
+        typography="body__primary--bold"
         style={[
           styles.departureText,
           departure.cancellation && styles.strikethrough,

@@ -64,7 +64,7 @@ export function MessageSectionItem({
       <View style={styles.textContent}>
         {title && (
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             style={styles.title}
             color={messageType}
             testID="title"
@@ -77,7 +77,7 @@ export function MessageSectionItem({
           <ThemeText
             color={messageType}
             style={styles.linkText}
-            type="body__primary--underline"
+            typography="body__primary--underline"
           >
             {onPressConfig.text}
           </ThemeText>

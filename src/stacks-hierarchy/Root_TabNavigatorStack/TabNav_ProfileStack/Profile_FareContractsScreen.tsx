@@ -192,14 +192,14 @@ export const Profile_FareContractsScreen = () => {
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
       <ScrollView style={styles.content}>
-        <ThemeText type="heading--jumbo">Reservation</ThemeText>
+        <ThemeText typography="heading--jumbo">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
         />
-        <ThemeText type="heading--jumbo">Fare Contracts</ThemeText>
+        <ThemeText typography="heading--jumbo">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
           <FareContractOrReservation
             key={i}
@@ -209,7 +209,7 @@ export const Profile_FareContractsScreen = () => {
             onPressFareContract={() => {}}
           />
         ))}
-        <ThemeText type="heading--jumbo">Fare contract details</ThemeText>
+        <ThemeText typography="heading--jumbo">Fare contract details</ThemeText>
         {fareContracts.map((fc, i) => (
           <DetailsContent
             key={i}

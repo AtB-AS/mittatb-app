@@ -84,7 +84,7 @@ export const ParkAndRideBottomSheet = ({
           <Section>
             <GenericSectionItem>
               <View style={styles.parkingName}>
-                <ThemeText type="body__secondary" color="secondary">
+                <ThemeText typography="body__secondary" color="secondary">
                   {heading}
                 </ThemeText>
                 <WalkingDistance distance={distance} />

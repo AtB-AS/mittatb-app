@@ -50,7 +50,7 @@ export const GoodOrBadButton = ({
         >
           <ThemeText
             color={getThemeColor(theme)}
-            type={checked ? 'body__primary--bold' : 'body__primary'}
+            typography={checked ? 'body__primary--bold' : 'body__primary'}
           >
             {opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)}
             {opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
@@ -58,10 +58,10 @@ export const GoodOrBadButton = ({
 
           <View style={styles.emoji}>
             {opinion === Opinions.Good && (
-              <ThemeText type="body__primary--jumbo">🙌</ThemeText>
+              <ThemeText typography="body__primary--jumbo">🙌</ThemeText>
             )}
             {opinion === Opinions.Bad && (
-              <ThemeText type="body__primary--jumbo">👎</ThemeText>
+              <ThemeText typography="body__primary--jumbo">👎</ThemeText>
             )}
           </View>
         </View>

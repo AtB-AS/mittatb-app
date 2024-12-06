@@ -35,7 +35,7 @@ export const LocationResults: React.FC<Props> = ({
     <>
       {title && (
         <View accessibilityRole="header" style={styles.subHeader}>
-          <ThemeText type="body__secondary">{title}</ThemeText>
+          <ThemeText typography="body__secondary">{title}</ThemeText>
         </View>
       )}
       <View>

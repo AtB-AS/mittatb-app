@@ -22,7 +22,7 @@ export function ContentHeading({
   return (
     <View style={[styles.container, style]}>
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color={color}
         accessibilityLabel={accessibilityLabel}
       >

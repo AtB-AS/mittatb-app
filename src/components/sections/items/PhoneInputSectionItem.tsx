@@ -162,7 +162,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           onAccessibilityEscape={accessibilityEscapeKeyboard}
         >
           {label && (
-            <ThemeText type="body__secondary" style={styles.label}>
+            <ThemeText typography="body__secondary" style={styles.label}>
               {label}
             </ThemeText>
           )}

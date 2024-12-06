@@ -122,7 +122,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
-        <ThemeText type="body__secondary" style={styles.label}>
+        <ThemeText typography="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
         <View style={inlineLabel ? contentContainer : undefined}>

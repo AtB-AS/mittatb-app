@@ -33,7 +33,7 @@ export const Root_ParkingViolationsConfirmationScreen = ({
       rightHeaderButton={{type: 'close', onPress: closeReporting}}
     >
       <View style={styles.confirmation}>
-        <ThemeText color={themeColor} type="heading--big">
+        <ThemeText color={themeColor} typography="heading--big">
           {t(ParkingViolationTexts.confirmation.title)}
         </ThemeText>
         <ThemeText style={styles.description} color={themeColor}>

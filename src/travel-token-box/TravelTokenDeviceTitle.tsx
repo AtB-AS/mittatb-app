@@ -29,21 +29,21 @@ export const TravelTokenDeviceTitle = ({
         accessibilityLabel={a11yLabel}
       >
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color={themeTextColor}
           style={styles.transparent}
         >
           {prefixX}
         </ThemeText>
         <ThemeText
-          type="body__secondary--bold"
+          typography="body__secondary--bold"
           color={themeTextColor}
           testID="travelCardNumber"
         >
           {travelCardIdOuttake}
         </ThemeText>
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color={themeTextColor}
           style={styles.transparent}
         >
@@ -54,7 +54,7 @@ export const TravelTokenDeviceTitle = ({
   } else {
     return (
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color={themeTextColor}
         style={styles.tokenName}
         testID="mobileTokenName"

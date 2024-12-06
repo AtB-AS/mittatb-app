@@ -44,7 +44,7 @@ export const MobilityBenefitsInfoSectionItem = ({
       accessible={true}
       accessibilityLabel={accessibilityLabel}
     >
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox
@@ -82,7 +82,7 @@ const BenefitInfo = ({
           ))}
         </View>
       )}
-      <ThemeText type="body__tertiary" style={styles.benefitText}>
+      <ThemeText typography="body__tertiary" style={styles.benefitText}>
         {getTextForLanguage(ticketDescription, language)}
       </ThemeText>
     </View>

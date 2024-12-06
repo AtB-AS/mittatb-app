@@ -16,15 +16,20 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
   title: 'ThemeText',
   component: ThemeText,
   argTypes: {
-    type: {
+    typography: {
       control: 'select',
       options: textNames,
+    },
+    type: {
+      control: 'select',
+      options: ['primary', 'secondary', 'disabled'],
     },
     ...themedStoryControls,
   },
   args: {
-    type: 'body__primary',
+    typography: 'body__primary',
     isMarkdown: false,
+    type: 'primary',
     children: 'Hello world',
     ...themedStoryDefaultArgs,
   },

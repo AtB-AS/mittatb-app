@@ -180,7 +180,7 @@ export const StopPlacesView = (props: Props) => {
                 </View>
               </View>
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 color="secondary"
                 style={styles.title}
               >

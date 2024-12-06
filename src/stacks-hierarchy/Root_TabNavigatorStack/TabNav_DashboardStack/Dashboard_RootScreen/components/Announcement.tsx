@@ -69,7 +69,7 @@ export const Announcement = ({announcement, style}: Props) => {
             <View style={styles.summaryTitle}>
               <ThemeText
                 style={styles.summaryTitleText}
-                type="body__primary--bold"
+                typography="body__primary--bold"
               >
                 {summaryTitle}
               </ThemeText>

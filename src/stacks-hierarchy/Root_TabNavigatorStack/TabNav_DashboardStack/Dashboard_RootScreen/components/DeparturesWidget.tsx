@@ -86,7 +86,7 @@ export const DeparturesWidget = ({
               <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   style={styles.noFavouritesText}
                   testID="noFavoriteWidget"

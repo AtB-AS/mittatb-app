@@ -20,13 +20,15 @@ import {
 } from '@atb/theme/colors';
 
 export type ThemeTextProps = TextProps & {
-  type?: TextNames;
+  typography?: TextNames;
+  type?: keyof ContrastColor['foreground'];
   color?: ContrastColor | Statuses | TextColor | ColorValue;
   isMarkdown?: boolean;
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
-  type: fontType = 'body__primary',
+  typography: fontType = 'body__primary',
+  type = 'primary',
   color,
   isMarkdown = false,
   style,
@@ -34,7 +36,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   ...props
 }) => {
   const {theme, useAndroidSystemFont} = useTheme();
-  const textColor = useColor(color);
+  const textColor = useColor(color, type);
 
   const typeStyle = {
     ...theme.typography[fontType],
@@ -86,12 +88,15 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   return <Text {...textProps}>{content}</Text>;
 };
 
-function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
+function useColor(
+  color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
+  type: keyof ContrastColor['foreground'],
+) {
   const {theme} = useTheme();
   if (typeof color === 'object') {
-    return color.foreground.primary;
+    return color.foreground[type];
   } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].secondary.foreground.primary;
+    return theme.color.status[color].secondary.foreground[type];
   } else if (isTextColor(color, theme) || color === undefined) {
     return theme.color.foreground.dynamic[color ?? 'primary'];
   } else {

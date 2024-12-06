@@ -77,7 +77,7 @@ export const Profile_DeleteProfileScreen = () => {
           ref={focusRef}
         >
           <ThemeText
-            type="heading--medium"
+            typography="heading--medium"
             color={themeColor}
             style={{flexShrink: 1}}
           >

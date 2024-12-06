@@ -54,7 +54,7 @@ export const FareProductHeader = forwardRef<View, Props>(
             iconSize="normal"
           />
           <ThemeText
-            type="heading--medium"
+            typography="heading--medium"
             color={themeColor}
             style={styles.headerText}
           >
@@ -64,7 +64,7 @@ export const FareProductHeader = forwardRef<View, Props>(
         {isTicketInformationEnabled && (
           <View style={styles.headerSubSection}>
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color={themeColor}
               style={styles.ticketDescription}
               numberOfLines={1}

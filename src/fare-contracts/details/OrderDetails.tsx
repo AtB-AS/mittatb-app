@@ -26,7 +26,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
 
   return (
     <View accessible={true}>
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {t(
           FareContractTexts.details.purchaseTime(
             fullDateTime(
@@ -39,7 +39,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
       {isNormalTravelRight(firstTravelRight) && (
         <>
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={style.marginTop}
           >
@@ -50,7 +50,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
             )}
           </ThemeText>
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={style.marginTop}
           >
@@ -64,7 +64,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
       )}
       {fareContract.state !== FareContractState.Refunded && priceString && (
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color="secondary"
           style={style.marginTop}
         >
@@ -73,7 +73,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
       )}
       {fareContract.state !== FareContractState.Refunded && (
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color="secondary"
           style={style.marginTop}
         >

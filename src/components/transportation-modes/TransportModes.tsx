@@ -85,7 +85,7 @@ export const TransportModes = ({
         iconSize={iconSize}
         disabled={disabled}
       />
-      <ThemeText type={textType ?? 'label__uppercase'} color={textColor}>
+      <ThemeText typography={textType ?? 'label__uppercase'} color={textColor}>
         {customTransportModeText ?? description}
       </ThemeText>
     </View>

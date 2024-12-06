@@ -61,7 +61,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            type="body__primary--big--bold"
+            typography="body__primary--big--bold"
             style={styles.title}
             color={themeColor}
           >

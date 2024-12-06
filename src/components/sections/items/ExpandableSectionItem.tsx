@@ -91,7 +91,7 @@ export function ExpandableSectionItem({
         testID={testID}
         {...accessibility}
       >
-        <ThemeText style={contentContainer} type={textType}>
+        <ThemeText style={contentContainer} typography={textType}>
           {text}
         </ThemeText>
         {label && <LabelInfo label={label} />}
@@ -123,7 +123,7 @@ function ExpandIcon({
   return (
     <View style={styles.expandIcon}>
       {text && (
-        <ThemeText style={styles.expandIcon__text} type="body__secondary">
+        <ThemeText style={styles.expandIcon__text} typography="body__secondary">
           {text}
         </ThemeText>
       )}

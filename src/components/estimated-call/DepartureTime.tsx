@@ -11,11 +11,13 @@ import {
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
+import {ContrastColor} from '@atb-as/theme';
 
 type DepartureTimeProps = {
+  color?: ContrastColor;
   departure: EstimatedCall;
 };
-export const DepartureTime = ({departure}: DepartureTimeProps) => {
+export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
@@ -31,12 +33,13 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
           />
         )}
         <ThemeText
-          type={
+          typography={
             departure.cancellation
               ? 'body__primary--strike'
               : 'body__primary--bold'
           }
-          color={departure.cancellation ? 'secondary' : 'primary'}
+          color={color}
+          type={departure.cancellation ? 'secondary' : 'primary'}
         >
           {formatToClockOrRelativeMinutes(
             departure.expectedDepartureTime,
@@ -47,8 +50,9 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
       </View>
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
-          type="body__tertiary--strike"
-          color="secondary"
+          typography="body__tertiary--strike"
+          color={color}
+          type="secondary"
           style={styles.aimedTime}
         >
           {formatLocaleTime(departure.aimedDepartureTime, language)}

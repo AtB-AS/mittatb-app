@@ -41,7 +41,7 @@ export const CounterIconBox = ({
     >
       <ThemeText
         color={getTransportColor(theme).secondary}
-        type={textType}
+        typography={textType}
         testID="tripLegMore"
         style={{
           height: lineHeight * fontScale,

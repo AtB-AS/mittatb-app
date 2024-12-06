@@ -20,7 +20,7 @@ export function FareContractDetail({
 
   return (
     <View style={styles.container}>
-      <ThemeText type="body__secondary" color={textColor}>
+      <ThemeText typography="body__secondary" color={textColor}>
         {header}
       </ThemeText>
       {content.map((c) => (

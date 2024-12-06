@@ -19,7 +19,7 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
     return (
       <View style={styles.container} ref={ref} accessible role="heading">
         <ThemeText
-          type="heading--medium"
+          typography="heading--medium"
           color={color}
           accessibilityLabel={accessibilityLabel}
         >

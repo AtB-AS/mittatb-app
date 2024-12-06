@@ -75,14 +75,14 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         >
           <View style={styles.textSpacing}>
             <ThemeText
-              type="body__primary--big"
+              typography="body__primary--big"
               color={themeColor}
               style={styles.text}
             >
               {t(ActiveTokenRequiredTexts.ticketNotAvailable)}
             </ThemeText>
             <ThemeText
-              type="body__primary--big--bold"
+              typography="body__primary--big--bold"
               color={themeColor}
               style={styles.text}
             >
@@ -92,7 +92,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         </View>
 
         <ThemeText
-          type="body__primary"
+          typography="body__primary"
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >
@@ -130,7 +130,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         )}
 
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >

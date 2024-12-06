@@ -116,7 +116,7 @@ export const Trip: React.FC<TripProps> = ({
       {shouldShowDate && (
         <>
           <View style={styles.date}>
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
             </ThemeText>
           </View>

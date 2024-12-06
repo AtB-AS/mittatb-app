@@ -68,7 +68,7 @@ export function QuayHeaderItem({
         accessibilityLabel={`${accessibilityLabel} ${label} ${screenReaderPause}`}
         accessibilityRole="header"
       >
-        <ThemeText type="body__primary--bold" testID={testID + 'Title'}>
+        <ThemeText typography="body__primary--bold" testID={testID + 'Title'}>
           {title}
         </ThemeText>
         <Distance distance={humanized} />
