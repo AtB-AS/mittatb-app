@@ -2,7 +2,7 @@ import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
-import {RecentFareContract} from '../../types';
+import type {RecentFareContractType} from './types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
 import {
@@ -23,16 +23,16 @@ import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type RecentFareContractProps = {
-  recentFareContract: RecentFareContract;
+  recentFareContract: RecentFareContractType;
   onSelect: (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => void;
   testID: string;
 };
 
-export const RecentFareContractComponent = ({
+export const RecentFareContract = ({
   recentFareContract,
   onSelect,
   testID,

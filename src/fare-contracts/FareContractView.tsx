@@ -121,6 +121,7 @@ export const FareContractView: React.FC<Props> = ({
           animate={!isStatic}
         />
         <FareContractInfoHeader
+          fareContract={fareContract}
           travelRight={firstTravelRight}
           status={validityStatus}
           testID={testID}
