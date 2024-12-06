@@ -15,9 +15,9 @@ import {
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {enumFromString} from '@atb/utils/enum-from-string';
+import {RecentFareContractType} from '@atb/recent-fare-contracts/types.ts';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques.ts';
+import {enumFromString} from '@atb/utils/enum-from-string.ts';
 
 type State = {
   error: boolean;
@@ -92,7 +92,7 @@ const mapBackendRecentFareContracts = (
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
-): RecentFareContract | null => {
+): RecentFareContractType | null => {
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts.filter((p) => isProductSellableInApp(p)),
     recentFareContract.products[0],
@@ -175,21 +175,24 @@ const mapToLastThreeUniqueRecentFareContracts = (
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
-): RecentFareContract[] => {
+): RecentFareContractType[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
-    .reduce<RecentFareContract[]>((mappedFareContracts, recentFareContract) => {
-      const maybeFareContract = mapBackendRecentFareContracts(
-        recentFareContract,
-        preassignedFareProducts,
-        fareProductTypeConfigs,
-        tariffZones,
-        userProfiles,
-      );
-      return maybeFareContract
-        ? mappedFareContracts.concat(maybeFareContract)
-        : mappedFareContracts;
-    }, [])
+    .reduce<RecentFareContractType[]>(
+      (mappedFareContracts, recentFareContract) => {
+        const maybeFareContract = mapBackendRecentFareContracts(
+          recentFareContract,
+          preassignedFareProducts,
+          fareProductTypeConfigs,
+          tariffZones,
+          userProfiles,
+        );
+        return maybeFareContract
+          ? mappedFareContracts.concat(maybeFareContract)
+          : mappedFareContracts;
+      },
+      [],
+    )
     .filter(onlyUniquesBasedOnField('id'))
     .slice(0, 3);
 };
