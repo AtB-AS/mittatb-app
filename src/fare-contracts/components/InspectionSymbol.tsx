@@ -19,8 +19,6 @@ import {SvgProps} from 'react-native-svg';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
   sentTicket?: boolean;
 };
 
