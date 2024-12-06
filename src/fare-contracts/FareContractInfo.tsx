@@ -7,7 +7,7 @@ import {
   useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   flattenCarnetTravelRightAccesses,
@@ -40,7 +40,6 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-import {FareContractFromTo} from './components/FareContractFromTo.tsx';
 
 export type FareContractInfoProps = {
   travelRight: NormalTravelRight;
@@ -65,7 +64,6 @@ export type FareContractInfoDetailsProps = {
 };
 
 export const FareContractInfoHeader = ({
-  fareContract,
   travelRight,
   status,
   testID,
@@ -104,8 +102,6 @@ export const FareContractInfoHeader = ({
       )
     : undefined;
 
-  const {theme} = useTheme();
-
   return (
     <View style={styles.header}>
       {productName && (
@@ -126,10 +122,6 @@ export const FareContractInfoHeader = ({
           {productDescription}
         </ThemeText>
       )}
-      <FareContractFromTo
-        fc={fareContract}
-        backgroundColor={theme.color.background.neutral[0]}
-      />
       {fromStopPlaceId && toStopPlaceId && (
         <FareContractHarborStopPlaces
           fromStopPlaceId={fromStopPlaceId}
