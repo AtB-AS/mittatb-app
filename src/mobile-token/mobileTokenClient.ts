@@ -17,7 +17,7 @@ const CONTEXT_ID = 'main';
 const attestationCreationErrorStrategy =
   new DefaultAttestationCreationErrorStrategy(true, false, true, true);
 const attestationVerificationErrorStrategy =
-  new DefaultAttestationVerificationErrorStrategy(true,true,true);
+  new DefaultAttestationVerificationErrorStrategy(true, true, true);
 
 export const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
