@@ -1,18 +1,12 @@
 import {RemoteToken} from './types';
 import {
-  buildReattestation,
   ClientNetworkError,
-  Token,
   TokenAction,
   TokenErrorResolution,
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
-import {
-  Attestation,
-  parseRemoteError,
-  TokenReattestationRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
 import {isDefined} from '@atb/utils/presence';
+import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -85,28 +79,3 @@ export const parseBffCallErrors = (error: any) => {
 
   return parseRemoteError(error) ?? error;
 };
-
-/**
- * Local handling of remote token state error, the version 3.x.x of the new SDK doesn't handle this,
- * and uses a non-attested token instead. Therefore we added this from the old SDK,
- * to handle the reattestation on our own.
- */
-export async function handleRemoteTokenReattestationError<T>(
-  fn: (reattestation?: Attestation) => Promise<T>,
-  token: Token,
-): Promise<T> {
-  try {
-    return await fn();
-  } catch (error) {
-    if (error instanceof TokenReattestationRemoteTokenStateError) {
-      const reattestation = await buildReattestation(
-        token.getContextId(),
-        token.getTokenId(),
-        error.reattestationData,
-      );
-
-      return fn(reattestation);
-    }
-    throw error;
-  }
-}
