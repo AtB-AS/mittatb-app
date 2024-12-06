@@ -20,11 +20,16 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
       control: 'select',
       options: textNames,
     },
+    type: {
+      control: 'select',
+      options: ['primary', 'secondary', 'disabled'],
+    },
     ...themedStoryControls,
   },
   args: {
     typography: 'body__primary',
     isMarkdown: false,
+    type: 'primary',
     children: 'Hello world',
     ...themedStoryDefaultArgs,
   },
