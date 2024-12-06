@@ -1,6 +1,9 @@
 import {getShouldShowLiveVehicle} from '@atb/travel-details-screens/utils';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
+jest.mock('@react-native-async-storage/async-storage', () => ({}));
+jest.mock('@bugsnag/react-native', () => ({}));
+
 const estimatedCallsWhichDepartInGivenMinutes = (
   minutesToDeparture: number,
 ): EstimatedCallWithMetadata[] => {

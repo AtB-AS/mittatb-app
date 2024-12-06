@@ -1,6 +1,9 @@
 import {hasShortWaitTimeAndNotGuaranteedCorrespondence} from '../utils';
 import {Leg} from '@atb/api/types/trips';
 
+jest.mock('@react-native-async-storage/async-storage', () => ({}));
+jest.mock('@bugsnag/react-native', () => ({}));
+
 describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
   it('should be false when no short wait time.', () => {
     const legs = [

@@ -19,6 +19,9 @@ import {
 } from '@atb/utils/date';
 import {Language} from '@atb/translations/commons';
 
+jest.mock('@react-native-async-storage/async-storage', () => ({}));
+jest.mock('@bugsnag/react-native', () => ({}));
+
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
     const empty_array = [] as number[];
