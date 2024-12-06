@@ -88,7 +88,10 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   return <Text {...textProps}>{content}</Text>;
 };
 
-function useColor(color: ContrastColor | TextColor | Statuses | ColorValue | undefined, type: keyof ContrastColor['foreground']) {
+function useColor(
+  color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
+  type: keyof ContrastColor['foreground'],
+) {
   const {theme} = useTheme();
   if (typeof color === 'object') {
     return color.foreground[type];

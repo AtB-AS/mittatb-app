@@ -485,6 +485,7 @@ type TripItemProps = {
   situations: SituationFragment[];
   onPressQuay: Props['onPressQuay'];
 };
+
 function EstimatedCallRow({
   call,
   mode,
@@ -607,6 +608,7 @@ type CollapseButtonRowProps = {
   setCollapsed(collapsed: boolean): void;
   testID?: string;
 };
+
 function CollapseButtonRow({
   label,
   collapsed,
@@ -641,6 +643,7 @@ function CollapseButtonRow({
     </PressableOpacity>
   );
 }
+
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
