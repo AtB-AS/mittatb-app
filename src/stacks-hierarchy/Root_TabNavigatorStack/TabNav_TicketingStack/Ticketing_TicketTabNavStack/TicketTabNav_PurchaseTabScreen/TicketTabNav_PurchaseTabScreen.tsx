@@ -11,18 +11,14 @@ import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
-import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
-import {ThemeText} from '@atb/components/text';
-import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage.tsx';
-import {useFeatureToggles} from '@atb/feature-toggles';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -35,9 +31,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
-  const {t} = useTranslation();
-
-  const {isTicketingAssistantEnabled} = useFeatureToggles();
   const analytics = useAnalytics();
 
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
@@ -172,21 +165,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           fareProducts={fareProducts}
           onProductSelect={onProductSelect}
         />
-
-        {isTicketingAssistantEnabled && (
-          <>
-            <ThemeText style={styles.heading} type="body__secondary">
-              {t(TicketingTexts.ticketAssistantTile.title)}
-            </ThemeText>
-            <TicketAssistantTile
-              onPress={() => {
-                analytics.logEvent('Ticketing', 'Ticket assistant opened');
-                navigation.navigate('Root_TicketAssistantStack');
-              }}
-              testID="ticketAssistant"
-            />
-          </>
-        )}
       </View>
     </ScrollView>
   ) : null;

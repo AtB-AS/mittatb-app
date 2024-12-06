@@ -79,6 +79,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isFocused = useIsFocusedAndActive();
   const {addPopOver} = usePopOver();
   const filterButtonWrapperRef = useRef(null);
+  const filterButtonRef = useRef(null);
 
   const {location, requestLocationPermission} = useGeolocationState();
 
@@ -91,7 +92,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState({
-    onCloseFocusRef: filterButtonWrapperRef,
+    onCloseFocusRef: filterButtonRef,
   });
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureToggles();
@@ -372,6 +373,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     compact={true}
                     onPress={filtersState.openBottomSheet}
                     testID="filterButton"
+                    ref={filterButtonRef}
                     rightIcon={{
                       svg: Filter,
                       notification: !areDefaultFiltersSelected(

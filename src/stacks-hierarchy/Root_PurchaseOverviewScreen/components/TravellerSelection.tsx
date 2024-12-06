@@ -5,10 +5,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {
-  getReferenceDataName,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -29,7 +26,7 @@ import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {
-  getSelectableUserProfiles,
+  useSelectableUserProfiles,
   type PurchaseSelectionType,
 } from '@atb/purchase-selection';
 
@@ -52,7 +49,6 @@ export function TravellerSelection({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthState();
-  const {userProfiles} = useFirestoreConfiguration();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -69,8 +65,7 @@ export function TravellerSelection({
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
-  const selectableUserProfiles = getSelectableUserProfiles(
-    userProfiles,
+  const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
 

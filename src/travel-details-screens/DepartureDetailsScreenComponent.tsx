@@ -17,7 +17,7 @@ import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {SituationMessageBox} from '@atb/situations';
-import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   DepartureDetailsTexts,
@@ -125,8 +125,9 @@ export const DepartureDetailsScreenComponent = ({
     isRealtimeMapEnabled,
   );
 
-  const {vehiclePositions} = useGetServiceJourneyVehicles(
-    shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
+  const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
+    [activeItem.serviceJourneyId],
+    shouldShowLive,
   );
 
   const translatedModeName = getTranslatedModeName(mode);
@@ -336,6 +337,7 @@ export const DepartureDetailsScreenComponent = ({
               ticketingEnabled: enable_ticketing,
               canSellTicketsForDeparture: canSellTicketsForDeparture,
               mode: mode || null,
+              subMode: subMode || null,
               fromZones:
                 fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,

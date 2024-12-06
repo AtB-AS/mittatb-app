@@ -2,10 +2,9 @@ import {useCallback, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {UserCountState} from './types';
 import {
-  getSelectableUserProfiles,
+  useSelectableUserProfiles,
   type PurchaseSelectionType,
 } from '@atb/purchase-selection';
-import {useFirestoreConfiguration} from '@atb/configuration';
 
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
@@ -58,9 +57,7 @@ const countReducer: CountReducer = (prevState, action): ReducerState => {
 export function useUserCountState(
   selection: PurchaseSelectionType,
 ): UserCountState {
-  const {userProfiles} = useFirestoreConfiguration();
-  const selectableUserProfiles = getSelectableUserProfiles(
-    userProfiles,
+  const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
   const initialUserProfilesWithCount = selectableUserProfiles.map((u) => ({

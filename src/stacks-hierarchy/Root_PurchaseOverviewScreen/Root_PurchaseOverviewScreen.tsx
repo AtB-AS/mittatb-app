@@ -33,6 +33,7 @@ import {isUserProfileSelectable} from './utils';
 import {useAuthState} from '@atb/auth';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {useSelectableUserProfiles} from '@atb/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -56,6 +57,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     params.fromPlace,
     params.toPlace,
     params.travelDate,
+  );
+
+  const selectableUserProfiles = useSelectableUserProfiles(
+    selection.preassignedFareProduct,
   );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
@@ -114,7 +119,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const canSelectUserProfile = isUserProfileSelectable(
     travellerSelectionMode,
-    selection.userProfilesWithCount,
+    selectableUserProfiles,
   );
 
   const isOnBehalfOfEnabled =

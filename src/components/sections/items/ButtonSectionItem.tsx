@@ -6,7 +6,7 @@ import {
 } from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
-import React from 'react';
+import React, {RefObject} from 'react';
 import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -25,6 +25,7 @@ export type ButtonSectionItemProps = SectionItemProps<{
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
   testID?: string;
+  focusRef?: RefObject<any>;
 }> &
   AccessibilityProps;
 
@@ -35,6 +36,7 @@ export function ButtonSectionItem({
   placeholder,
   label,
   highlighted,
+  focusRef,
 
   icon,
   onIconPress,
@@ -89,6 +91,7 @@ export function ButtonSectionItem({
       <PressableOpacity
         onPress={onPress}
         style={[topContainer, styles.container, containerPadding]}
+        ref={focusRef}
         {...props}
       >
         <View style={sectionStyles.spaceBetween}>
