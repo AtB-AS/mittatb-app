@@ -99,7 +99,9 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
                     accessibilityLabel={stepNumberText + stepInstructionText}
                     accessibilityRole="text"
                   >
-                    <ThemeText typography="body__primary">{stepNumberText}</ThemeText>
+                    <ThemeText typography="body__primary">
+                      {stepNumberText}
+                    </ThemeText>
                     <ThemeText typography="body__primary">
                       {stepInstructionText}
                     </ThemeText>

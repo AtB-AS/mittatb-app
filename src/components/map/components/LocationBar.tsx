@@ -116,7 +116,9 @@ const LocationText: React.FC<{
   return (
     <>
       <ThemeText typography="body__secondary">{title}</ThemeText>
-      {subtitle && <ThemeText typography="body__tertiary">{subtitle}</ThemeText>}
+      {subtitle && (
+        <ThemeText typography="body__tertiary">{subtitle}</ThemeText>
+      )}
     </>
   );
 };

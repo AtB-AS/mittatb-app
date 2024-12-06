@@ -29,6 +29,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
       Bugsnag.notify(err);
     }
   }
+
   const getStatus = () => {
     const paymentStatus = reservation.paymentStatus;
     switch (paymentStatus) {
@@ -65,7 +66,10 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <FareContractStatusSymbol status={status} />
             )}
-            <ThemeText typography="body__secondary" style={styles.reservationStatus}>
+            <ThemeText
+              typography="body__secondary"
+              style={styles.reservationStatus}
+            >
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </View>

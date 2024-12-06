@@ -333,7 +333,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View>
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
-              <ThemeText typography="body__tertiary" color="primary" testID="endTime">
+              <ThemeText
+                typography="body__tertiary"
+                color="primary"
+                testID="endTime"
+              >
                 {(lastLegIsFlexible
                   ? t(dictionary.missingRealTimePrefix)
                   : '') +

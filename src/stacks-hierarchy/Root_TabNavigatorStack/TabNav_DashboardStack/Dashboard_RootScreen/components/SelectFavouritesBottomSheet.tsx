@@ -123,7 +123,10 @@ export const SelectFavouritesBottomSheet = ({
       <ScrollView style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
           <>
-            <ThemeText style={styles.questionText} typography="heading__component">
+            <ThemeText
+              style={styles.questionText}
+              typography="heading__component"
+            >
               {t(SelectFavouriteDeparturesText.title.text)}
             </ThemeText>
 

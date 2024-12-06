@@ -66,7 +66,10 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                       situation={situation}
                       style={styles.summaryIcon}
                     />
-                    <ThemeText typography="heading__title" style={styles.summaryText}>
+                    <ThemeText
+                      typography="heading__title"
+                      style={styles.summaryText}
+                    >
                       {summary || description}
                     </ThemeText>
                   </View>

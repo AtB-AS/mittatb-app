@@ -23,7 +23,11 @@ export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
         {t(FareContractTexts.details.usedAccesses)}
       </ThemeText>
       {dateStrings.map((dateString) => (
-        <ThemeText key={dateString} typography="body__secondary" color="secondary">
+        <ThemeText
+          key={dateString}
+          typography="body__secondary"
+          color="secondary"
+        >
           {dateString}
         </ThemeText>
       ))}

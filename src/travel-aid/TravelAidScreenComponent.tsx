@@ -310,7 +310,9 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
                 svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
                 size="xSmall"
               />
-              <ThemeText typography="heading__title">{relativeRealtime}</ThemeText>
+              <ThemeText typography="heading__title">
+                {relativeRealtime}
+              </ThemeText>
             </View>
           </LiveRegionWrapper>
           <LiveRegionWrapper
@@ -337,7 +339,9 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
               size="xSmall"
             />
-            <ThemeText typography="heading__title">{relativeRealtime}</ThemeText>
+            <ThemeText typography="heading__title">
+              {relativeRealtime}
+            </ThemeText>
           </View>
         </LiveRegionWrapper>
       );

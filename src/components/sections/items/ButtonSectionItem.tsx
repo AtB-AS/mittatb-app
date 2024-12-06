@@ -75,7 +75,9 @@ export function ButtonSectionItem({
     isStringText(value) || !value ? (
       <ThemeText
         numberOfLines={1}
-        typography={value && highlighted ? 'body__primary--bold' : 'body__primary'}
+        typography={
+          value && highlighted ? 'body__primary--bold' : 'body__primary'
+        }
         style={!value && styles.faded}
       >
         {value ?? placeholder}

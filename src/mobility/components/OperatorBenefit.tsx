@@ -49,7 +49,9 @@ export const OperatorBenefit = ({benefit, formFactor, style}: Props) => {
             />
             <View style={styles.benefitContent}>
               {heading && (
-                <ThemeText typography="body__primary--bold">{heading}</ThemeText>
+                <ThemeText typography="body__primary--bold">
+                  {heading}
+                </ThemeText>
               )}
               <ThemeText typography="body__secondary" color="secondary">
                 {text}

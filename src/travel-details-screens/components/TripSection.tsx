@@ -139,6 +139,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
     isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
   const {open: openBottomSheet} = useBottomSheet();
+
   function openBookingDetails() {
     openBottomSheet(
       () => <FlexibleTransportBookingDetailsSheet leg={leg} />,
@@ -498,7 +499,11 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText typography="body__secondary" color="secondary" accessible={false}>
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          accessible={false}
+        >
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
         </ThemeText>
         <Button
@@ -525,6 +530,7 @@ type InterchangeSectionProps = {
   maximumWaitTime?: number;
   staySeated?: boolean;
 };
+
 function InterchangeSection({
   iconColor,
   publicCode,
@@ -587,6 +593,7 @@ export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
+
 export function mapLegToTimeValues(leg: Leg) {
   const legIsMissingRealTime = !leg.realtime;
   return {
@@ -602,6 +609,7 @@ export function mapLegToTimeValues(leg: Leg) {
     },
   };
 }
+
 function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,

@@ -78,7 +78,9 @@ export function RadioSegments({
             ]}
           >
             <ThemeText
-              typography={selected ? 'body__secondary--bold' : 'body__secondary'}
+              typography={
+                selected ? 'body__secondary--bold' : 'body__secondary'
+              }
               style={[styles.optionText, {color: textColor}]}
             >
               {option.text}

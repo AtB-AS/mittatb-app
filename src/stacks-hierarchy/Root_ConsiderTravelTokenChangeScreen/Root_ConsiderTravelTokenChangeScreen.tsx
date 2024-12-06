@@ -60,7 +60,11 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
       }}
     >
       <View ref={focusRef} accessible>
-        <ThemeText typography="heading--big" color={themeColor} style={styles.header}>
+        <ThemeText
+          typography="heading--big"
+          color={themeColor}
+          style={styles.header}
+        >
           {t(ConsiderTravelTokenChangeTexts.title)}
         </ThemeText>
       </View>

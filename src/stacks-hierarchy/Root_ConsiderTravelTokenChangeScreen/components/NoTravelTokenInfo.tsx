@@ -31,7 +31,11 @@ export function NoTravelTokenInfo({
         text: t(MobileTokenOnboardingTexts.ok),
       }}
     >
-      <ThemeText typography="heading--big" style={styles.header} color={themeColor}>
+      <ThemeText
+        typography="heading--big"
+        style={styles.header}
+        color={themeColor}
+      >
         {t(MobileTokenOnboardingTexts.error.heading)}
       </ThemeText>
       <ThemeText style={styles.description} color={themeColor}>

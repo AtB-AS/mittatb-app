@@ -74,7 +74,10 @@ export const StopPlaceItem = ({
             <ThemeText typography="heading__component" testID={testID + 'Name'}>
               {place.name}
             </ThemeText>
-            <ThemeText typography="body__secondary" style={styles.stopDescription}>
+            <ThemeText
+              typography="body__secondary"
+              style={styles.stopDescription}
+            >
               {description}
             </ThemeText>
             {humanizedDistance && (
