@@ -55,7 +55,7 @@ export const TicketingTile = ({
       <View style={styles.spreadContent} testID={testID}>
         <View style={styles.contentContainer}>
           <ThemeText
-            type="body__secondary--bold"
+            typography="body__secondary--bold"
             style={styles.title}
             accessibilityLabel={title}
             color={themeColor}
@@ -64,7 +64,7 @@ export const TicketingTile = ({
             {title}
           </ThemeText>
           <ThemeText
-            type="body__tertiary"
+            typography="body__tertiary"
             style={styles.description}
             color="secondary"
           >

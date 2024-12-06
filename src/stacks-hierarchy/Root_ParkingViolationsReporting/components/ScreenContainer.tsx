@@ -61,7 +61,7 @@ const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
       <View style={style.content}>
         <View style={style.header}>
           <View ref={focusRef} accessible>
-            <ThemeText color={themeColor} type="heading--medium">
+            <ThemeText color={themeColor} typography="heading--medium">
               {title}
             </ThemeText>
           </View>

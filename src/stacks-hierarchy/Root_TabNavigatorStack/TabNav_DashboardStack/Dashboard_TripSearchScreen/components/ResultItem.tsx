@@ -91,7 +91,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <ThemeText
         style={styles.fromPlaceText}
-        type="body__secondary--bold"
+        typography="body__secondary--bold"
         testID="resultDeparturePlace"
       >
         {startName
@@ -111,7 +111,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          type="body__secondary"
+          typography="body__secondary"
           color="secondary"
           testID="resultDuration"
           prefix={t(TripSearchTexts.results.resultItem.header.totalDuration)}
@@ -274,7 +274,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       <View style={styles.departureTimes}>
                         {staySeated(i) ? null : (
                           <ThemeText
-                            type="body__tertiary"
+                            typography="body__tertiary"
                             color="primary"
                             testID={'schTime' + i}
                           >
@@ -291,7 +291,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         {isSignificantDifference(leg) && (
                           <ThemeText
                             style={styles.scheduledTime}
-                            type="body__tertiary--strike"
+                            typography="body__tertiary--strike"
                             color="secondary"
                             testID={'aimTime' + i}
                           >
@@ -333,7 +333,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View>
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
-              <ThemeText type="body__tertiary" color="primary" testID="endTime">
+              <ThemeText typography="body__tertiary" color="primary" testID="endTime">
                 {(lastLegIsFlexible
                   ? t(dictionary.missingRealTimePrefix)
                   : '') +
@@ -374,7 +374,7 @@ const ResultItemFooter: React.FC<{
         )}
       </View>
       <View style={styles.detailsTextWrapper}>
-        <ThemeText type="body__secondary">
+        <ThemeText typography="body__secondary">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />

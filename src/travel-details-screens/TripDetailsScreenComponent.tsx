@@ -75,7 +75,7 @@ export const TripDetailsScreenComponent = ({
             <View accessible={true} ref={focusRef}>
               <ThemeText
                 color={themeColor}
-                type="heading--medium"
+                typography="heading--medium"
                 style={styles.heading}
                 accessibilityLabel={
                   fromToNames
@@ -99,7 +99,7 @@ export const TripDetailsScreenComponent = ({
                 color={themeColor}
               />
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 color={themeColor}
                 accessibilityLabel={t(
                   TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),

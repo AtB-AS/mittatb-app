@@ -59,7 +59,7 @@ export function CounterSectionItem({
         <ThemeText>{text}</ThemeText>
         {subtext && !hideSubtext && (
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={counterStyles.infoSubtext}
           >
@@ -112,7 +112,7 @@ export function CounterSectionItem({
               counterStyles.countText,
               activeColor && {color: activeColor.foreground.primary},
             ]}
-            type="body__primary--bold"
+            typography="body__primary--bold"
             testID={testID + '_count'}
           >
             {count}

@@ -75,7 +75,7 @@ export function ButtonSectionItem({
     isStringText(value) || !value ? (
       <ThemeText
         numberOfLines={1}
-        type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
+        typography={value && highlighted ? 'body__primary--bold' : 'body__primary'}
         style={!value && styles.faded}
       >
         {value ?? placeholder}
@@ -95,7 +95,7 @@ export function ButtonSectionItem({
         {...props}
       >
         <View style={sectionStyles.spaceBetween}>
-          <ThemeText type="body__secondary" style={styles.label}>
+          <ThemeText typography="body__secondary" style={styles.label}>
             {label}
           </ThemeText>
           {inlineValue && (

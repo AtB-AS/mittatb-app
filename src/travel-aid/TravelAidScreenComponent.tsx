@@ -247,10 +247,10 @@ const TravelAidSection = ({
                 getStopHeader(status, t) + screenReaderPause + quayName
               }
             >
-              <ThemeText type="body__tertiary--bold">
+              <ThemeText typography="body__tertiary--bold">
                 {getStopHeader(status, t)}
               </ThemeText>
-              <ThemeText type="heading__title">{quayName}</ThemeText>
+              <ThemeText typography="heading__title">{quayName}</ThemeText>
             </LiveRegionWrapper>
             <TimeInfo state={{status, focusedEstimatedCall}} />
           </View>
@@ -292,7 +292,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         <LiveRegionWrapper
           accessibilityLabel={t(TravelAidTexts.scheduledTime(scheduledClock))}
         >
-          <ThemeText type="body__secondary--bold">
+          <ThemeText typography="body__secondary--bold">
             {t(TravelAidTexts.scheduledTime(scheduledClock))}
           </ThemeText>
         </LiveRegionWrapper>
@@ -310,7 +310,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
                 svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
                 size="xSmall"
               />
-              <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
+              <ThemeText typography="heading__title">{relativeRealtime}</ThemeText>
             </View>
           </LiveRegionWrapper>
           <LiveRegionWrapper
@@ -318,7 +318,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
             )}`}
           >
-            <ThemeText type="body__secondary--bold">
+            <ThemeText typography="body__secondary--bold">
               {t(TravelAidTexts.scheduledTime(scheduledClock))}
             </ThemeText>
           </LiveRegionWrapper>
@@ -337,7 +337,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
               size="xSmall"
             />
-            <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
+            <ThemeText typography="heading__title">{relativeRealtime}</ThemeText>
           </View>
         </LiveRegionWrapper>
       );

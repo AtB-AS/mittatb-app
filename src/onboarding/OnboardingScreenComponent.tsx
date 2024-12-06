@@ -54,7 +54,7 @@ export const OnboardingScreenComponent = ({
       <View style={styles.header}>{illustration}</View>
       <View ref={focusRef} accessible collapsable={false}>
         <ThemeText
-          type="body__primary--big--bold"
+          typography="body__primary--big--bold"
           color={themeColor}
           style={styles.title}
           accessibilityRole="header"
@@ -63,7 +63,7 @@ export const OnboardingScreenComponent = ({
         </ThemeText>
       </View>
       <ThemeText
-        type="body__primary"
+        typography="body__primary"
         color={themeColor}
         style={styles.description}
       >
@@ -76,7 +76,7 @@ export const OnboardingScreenComponent = ({
           accessibilityHint={descriptionLink.a11yHint}
         >
           <ThemeText
-            type="body__primary--underline"
+            typography="body__primary--underline"
             color={themeColor}
             style={styles.descriptionLink}
           >

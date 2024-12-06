@@ -25,7 +25,7 @@ export const MobilitySingleBenefitInfoSectionItem = ({
         {benefit.formFactors.map((ff) => (
           <BenefitImageAsset formFactor={toFormFactorEnum(ff)} key={ff} />
         ))}
-        <ThemeText type="body__secondary" style={styles.mobilityBenefitText}>
+        <ThemeText typography="body__secondary" style={styles.mobilityBenefitText}>
           {getTextForLanguage(benefit.ticketDescription, language)}
         </ThemeText>
       </View>

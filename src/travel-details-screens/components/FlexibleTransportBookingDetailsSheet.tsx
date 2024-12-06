@@ -82,7 +82,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             </View>
           )}
 
-          <ThemeText type="heading__title" style={style.title}>
+          <ThemeText typography="heading__title" style={style.title}>
             {t(TripDetailsTexts.flexibleTransport.contentTitle(publicCode))}
           </ThemeText>
           <View style={style.steps} accessibilityRole="list">
@@ -99,8 +99,8 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
                     accessibilityLabel={stepNumberText + stepInstructionText}
                     accessibilityRole="text"
                   >
-                    <ThemeText type="body__primary">{stepNumberText}</ThemeText>
-                    <ThemeText type="body__primary">
+                    <ThemeText typography="body__primary">{stepNumberText}</ThemeText>
+                    <ThemeText typography="body__primary">
                       {stepInstructionText}
                     </ThemeText>
                   </View>
@@ -128,7 +128,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             <ThemeText
               color="secondary"
               style={style.linkText}
-              type="body__primary--underline"
+              typography="body__primary--underline"
             >
               {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
             </ThemeText>

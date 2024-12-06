@@ -65,11 +65,11 @@ const SelectableFavouriteDeparture = ({
         subMode={favorite.lineTransportationSubMode}
       />
       <View style={styles.selectableDepartureTextView}>
-        <ThemeText type="body__primary" style={styles.lineIdentifierText}>
+        <ThemeText typography="body__primary" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}
         </ThemeText>
 
-        <ThemeText type="body__secondary" style={styles.secondaryText}>
+        <ThemeText typography="body__secondary" style={styles.secondaryText}>
           {t(SelectFavouriteDeparturesText.departures.from)} {favorite.quayName}
           {departureQuay && ' ' + departureQuay}
         </ThemeText>
@@ -123,7 +123,7 @@ export const SelectFavouritesBottomSheet = ({
       <ScrollView style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
           <>
-            <ThemeText style={styles.questionText} type="heading__component">
+            <ThemeText style={styles.questionText} typography="heading__component">
               {t(SelectFavouriteDeparturesText.title.text)}
             </ThemeText>
 

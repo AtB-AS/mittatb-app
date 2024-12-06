@@ -115,8 +115,8 @@ const LocationText: React.FC<{
   const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
-      <ThemeText type="body__secondary">{title}</ThemeText>
-      {subtitle && <ThemeText type="body__tertiary">{subtitle}</ThemeText>}
+      <ThemeText typography="body__secondary">{title}</ThemeText>
+      {subtitle && <ThemeText typography="body__tertiary">{subtitle}</ThemeText>}
     </>
   );
 };

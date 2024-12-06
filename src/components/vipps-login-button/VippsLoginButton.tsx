@@ -33,7 +33,7 @@ export const VippsLoginButton = ({
         style={[styles.container, disabled && styles.disabledOpacity, style]}
       >
         <ThemeText
-          type="body__primary--bold"
+          typography="body__primary--bold"
           style={styles.label}
           color={interactiveColor}
         >

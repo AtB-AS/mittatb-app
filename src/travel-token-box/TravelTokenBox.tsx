@@ -92,7 +92,7 @@ export function TravelTokenBox({
         )}
         <View style={styles.activeTravelTokenInfo}>
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={themeTextColor.default}
             style={styles.travelTokenBoxTitle}
           >

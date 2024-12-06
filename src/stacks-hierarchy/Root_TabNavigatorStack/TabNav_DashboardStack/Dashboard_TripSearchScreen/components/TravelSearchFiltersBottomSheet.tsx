@@ -209,7 +209,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 }}
                 testID="saveFilter"
               />
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
               </ThemeText>
             </View>
