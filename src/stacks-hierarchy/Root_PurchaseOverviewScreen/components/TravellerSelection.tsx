@@ -5,11 +5,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {
-  FareProductTypeConfig,
-  getReferenceDataName,
-  TravellerSelectionMode,
-} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -29,31 +25,26 @@ import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
 import {useFeatureToggles} from '@atb/feature-toggles';
-import {useSelectableUserProfiles} from '@atb/purchase-selection';
-import {PreassignedFareProduct} from '@atb-as/config-specs';
+import {
+  useSelectableUserProfiles,
+  type PurchaseSelectionType,
+} from '@atb/purchase-selection';
 
 type TravellerSelectionProps = {
-  userProfilesWithCount: UserProfileWithCount[];
-  setUserProfilesWithCount: (
+  selection: PurchaseSelectionType;
+  isOnBehalfOfToggle: boolean;
+  onSave: (
     userProfilesWithCount: UserProfileWithCount[],
+    onBehalfOfToggle: boolean,
   ) => void;
   style?: StyleProp<ViewStyle>;
-  selectionMode: TravellerSelectionMode;
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-  setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
-  isOnBehalfOfToggle: boolean;
 };
 
 export function TravellerSelection({
-  setUserProfilesWithCount,
-  style,
-  userProfilesWithCount,
-  selectionMode,
-  fareProductTypeConfig,
-  preassignedFareProduct,
-  setIsOnBehalfOfToggle,
+  selection,
   isOnBehalfOfToggle,
+  onSave,
+  style,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -64,27 +55,23 @@ export function TravellerSelection({
 
   const isOnBehalfOfEnabled =
     useFeatureToggles().isOnBehalfOfEnabled &&
-    fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const isLoggedIn = authenticationType === 'phone';
-
-  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
+  const selectionMode =
+    selection.fareProductTypeConfig.configuration.travellerSelectionMode;
+  const isOnBehalfOfAllowed =
+    isOnBehalfOfEnabled && authenticationType === 'phone';
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
   const selectableUserProfiles = useSelectableUserProfiles(
-    preassignedFareProduct,
+    selection.preassignedFareProduct,
   );
-
-  const userProfilesWithCountToShow = selectableUserProfiles.map((u) => ({
-    ...u,
-    count: userProfilesWithCount.find(({id}) => id === u.id)?.count ?? 0,
-  }));
 
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
-    userProfilesWithCountToShow,
+    selectableUserProfiles,
   );
 
   useFocusEffect(
@@ -102,20 +89,17 @@ export function TravellerSelection({
     return null;
   }
 
-  const selectedUserProfiles = userProfilesWithCountToShow.filter(
-    ({count}) => count,
-  );
-  const totalTravellersCount = selectedUserProfiles.reduce(
+  const totalTravellersCount = selection.userProfilesWithCount.reduce(
     (acc, {count}) => acc + count,
     0,
   );
   const multipleTravellerCategoriesSelectedFrom =
-    selectedUserProfiles.length > 1;
+    selection.userProfilesWithCount.length > 1;
 
   const travellersDetailsText =
     selectionMode == 'single'
-      ? getReferenceDataName(selectedUserProfiles?.[0], language)
-      : selectedUserProfiles
+      ? getReferenceDataName(selection.userProfilesWithCount?.[0], language)
+      : selection.userProfilesWithCount
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
@@ -125,7 +109,7 @@ export function TravellerSelection({
 
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(
-        userProfilesWithCount[0].alternativeDescriptions,
+        selection.userProfilesWithCount[0].alternativeDescriptions,
         language,
       )
     : '';
@@ -158,22 +142,13 @@ export function TravellerSelection({
     openBottomSheet(
       () => (
         <TravellerSelectionSheet
-          selectionMode={selectionMode}
-          fareProductTypeConfig={fareProductTypeConfig}
-          selectableUserProfilesWithCountInit={userProfilesWithCountToShow}
+          selection={selection}
           isOnBehalfOfToggle={isOnBehalfOfToggle}
-          onConfirmSelection={(
-            chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
-            onBehalfOfToggle?: boolean,
+          onSave={(
+            userProfilesWithCounts: UserProfileWithCount[],
+            onBehalfOfToggle: boolean,
           ) => {
-            if (chosenSelectableUserProfilesWithCounts !== undefined) {
-              setUserProfilesWithCount(
-                chosenSelectableUserProfilesWithCounts.filter((u) => u.count),
-              );
-            }
-            if (onBehalfOfToggle !== undefined) {
-              setIsOnBehalfOfToggle(onBehalfOfToggle);
-            }
+            onSave(userProfilesWithCounts, onBehalfOfToggle);
             closeBottomSheet();
           }}
         />

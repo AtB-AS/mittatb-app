@@ -8,40 +8,20 @@ import {
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {
-  CounterSectionItem,
-  Section,
-  ToggleSectionItem,
-} from '@atb/components/sections';
+import {CounterSectionItem, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {HoldingHands} from '@atb/assets/svg/color/images';
-import {View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useAuthState} from '@atb/auth';
-import {TravellerSelectionBottomSheetType} from './types';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useTheme} from '@atb/theme';
+import type {UserCountState} from './types';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
-  fareProductTypeConfig,
-  setIsTravelerOnBehalfOfToggle,
-  isTravelerOnBehalfOfToggle,
-}: TravellerSelectionBottomSheetType) {
+}: UserCountState) {
   const {t, language} = useTranslation();
   const {theme} = useTheme();
-  const styles = useStyles();
 
   const travellersModified = useRef(false);
-
-  const isOnBehalfOfEnabled =
-    useFeatureToggles().isOnBehalfOfEnabled &&
-    fareProductTypeConfig.configuration.onBehalfOfEnabled;
-
-  const isLoggedIn = useAuthState().authenticationType === 'phone';
-
-  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
@@ -59,38 +39,21 @@ export function MultipleTravellersSelection({
   );
 
   return (
-    <View>
-      <Section>
-        {userProfilesWithCount.map((u) => (
-          <CounterSectionItem
-            key={u.userTypeString}
-            text={getReferenceDataName(u, language)}
-            count={u.count}
-            addCount={() => addTraveller(u.userTypeString)}
-            removeCount={() => removeTraveller(u.userTypeString)}
-            type="spacious"
-            testID={'counterInput_' + u.userTypeString.toLowerCase()}
-            color={theme.color.interactive[2]}
-            subtext={getTextForLanguage(u.alternativeDescriptions, language)}
-          />
-        ))}
-      </Section>
-      {isOnBehalfOfAllowed && (
-        <Section style={styles.onBehalfOfContainer}>
-          <ToggleSectionItem
-            leftImage={<HoldingHands />}
-            text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-            subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
-            value={isTravelerOnBehalfOfToggle}
-            textType="body__primary--bold"
-            onValueChange={(checked) => {
-              setIsTravelerOnBehalfOfToggle(checked);
-            }}
-            testID="onBehalfOfToggle"
-          />
-        </Section>
-      )}
-    </View>
+    <Section>
+      {userProfilesWithCount.map((u) => (
+        <CounterSectionItem
+          key={u.userTypeString}
+          text={getReferenceDataName(u, language)}
+          count={u.count}
+          addCount={() => addTraveller(u.userTypeString)}
+          removeCount={() => removeTraveller(u.userTypeString)}
+          type="spacious"
+          testID={'counterInput_' + u.userTypeString.toLowerCase()}
+          color={theme.color.interactive[2]}
+          subtext={getTextForLanguage(u.alternativeDescriptions, language)}
+        />
+      ))}
+    </Section>
   );
 }
 
@@ -132,11 +95,3 @@ function createTravellersText(
     );
   }
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  return {
-    onBehalfOfContainer: {
-      marginTop: theme.spacing.medium,
-    },
-  };
-});
