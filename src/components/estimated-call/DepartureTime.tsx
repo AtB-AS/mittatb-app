@@ -1,22 +1,24 @@
 import {EstimatedCall} from '@atb/api/types/departures';
 import {dictionary, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {ColorValue, View} from 'react-native';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {
   formatLocaleTime,
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data.ts';
+import {ContrastColor, TextColor} from '@atb/theme/colors.ts';
 
 type DepartureTimeProps = {
   departure: EstimatedCall | EstimatedCallWithMetadata;
+  color?: ContrastColor | Statuses | TextColor | ColorValue;
 };
-export const DepartureTime = ({departure}: DepartureTimeProps) => {
+export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
@@ -37,7 +39,9 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
               ? 'body__primary--strike'
               : 'body__primary--bold'
           }
-          color={departure.cancellation ? 'secondary' : 'primary'}
+          color={
+            color ? color : departure.cancellation ? 'secondary' : 'primary'
+          }
         >
           {formatToClockOrRelativeMinutes(
             departure.expectedDepartureTime,
@@ -49,7 +53,7 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
           type="body__tertiary--strike"
-          color="secondary"
+          color={color ? color : 'secondary'}
           style={styles.aimedTime}
         >
           {formatLocaleTime(departure.aimedDepartureTime, language)}

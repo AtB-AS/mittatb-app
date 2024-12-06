@@ -198,7 +198,7 @@ export const DepartureDetailsScreenComponent = ({
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
             <View
-              style={styles.headerTitle}
+              style={styles.headerContainer}
               ref={focusRef}
               accessible={true}
               accessibilityLabel={a11yLabel}
@@ -207,11 +207,13 @@ export const DepartureDetailsScreenComponent = ({
               <ThemeText
                 type="heading__title"
                 color={themeColor}
-                style={{flex: 1}}
+                style={styles.headerTitle}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
-              {fromQuay && <DepartureTime departure={fromQuay} />}
+              {fromQuay && (
+                <DepartureTime departure={fromQuay} color={themeColor} />
+              )}
             </View>
             {shouldShowTravelAid && (
               <Button
@@ -675,9 +677,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
-  headerTitle: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  headerTitle: {
+    flex: 1,
+    marginRight: theme.spacing.medium,
   },
   parallaxContent: {marginHorizontal: theme.spacing.medium},
   date: {
