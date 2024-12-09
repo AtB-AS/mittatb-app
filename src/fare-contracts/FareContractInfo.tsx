@@ -47,6 +47,7 @@ export type FareContractInfoProps = {
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
   sentToCustomerAccountId?: string;
+  fareContract: FareContract;
 };
 
 export type FareContractInfoDetailsProps = {
