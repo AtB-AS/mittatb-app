@@ -16,10 +16,11 @@ import {
 
 import {v4 as uuid} from 'uuid';
 import Bugsnag from '@bugsnag/react-native';
-import {mobileTokenClient} from './mobileTokenClient';
+import {abtClient, mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
   AttestationSabotage,
+  TokenErrorResolution,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
 
@@ -71,6 +72,9 @@ type MobileTokenContextState = {
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
     wipeToken: () => void;
+    getTokenErrorResolution: (
+      activatedToken: ActivatedToken,
+    ) => TokenErrorResolution;
     setSabotage: (attestationSabotage?: AttestationSabotage) => void;
     sabotage: AttestationSabotage | undefined;
   };
@@ -209,6 +213,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               ),
             [queryClient, nativeToken],
           ),
+          getTokenErrorResolution: abtClient.getTokenErrorResolution,
           setSabotage: (attestationSabotage?: AttestationSabotage) => {
             setSabotage(attestationSabotage);
             if (attestationSabotage) {
