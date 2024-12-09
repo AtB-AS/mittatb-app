@@ -1,11 +1,11 @@
 import {EstimatedCall} from '@atb/api/types/departures';
 import {dictionary, useTranslation} from '@atb/translations';
-import {ColorValue, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatLocaleTime,
   formatToClockOrRelativeMinutes,
