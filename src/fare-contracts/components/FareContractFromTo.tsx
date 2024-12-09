@@ -214,7 +214,7 @@ const BorderedFromToBox = ({
           svg={
             direction === TravelRightDirection.Both ? ArrowUpDown : ArrowDown
           }
-          size="xSmall"
+          size="small"
         />
         <View style={styles.smallContentText}>
           <ThemeText color={backgroundColor} typography="body__tertiary">

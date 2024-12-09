@@ -20,7 +20,7 @@ import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -164,11 +164,10 @@ export const RecentFareContract = ({
 
       {direction !== undefined && pointToPointValidity && (
         <View style={styles.harbors}>
-          <FareContractHarborStopPlaces
-            direction={direction}
-            fromStopPlaceId={pointToPointValidity?.fromPlace}
-            toStopPlaceId={pointToPointValidity?.toPlace}
-            transportModes={fareProductTypeConfig.transportModes}
+          <FareContractFromTo
+            backgroundColor={theme.color.background.neutral['0']}
+            mode="small"
+            rfc={recentFareContract}
           />
         </View>
       )}
