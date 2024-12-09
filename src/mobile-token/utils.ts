@@ -1,10 +1,12 @@
 import {RemoteToken} from './types';
 import {
+  ClientNetworkError,
   TokenAction,
   TokenErrorResolution,
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isDefined} from '@atb/utils/presence';
+import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -47,6 +49,7 @@ export const getSdkErrorHandlingStrategy = (
       case TokenErrorResolution.ASK_USER:
       case TokenErrorResolution.IGNORE:
       case TokenErrorResolution.RETRY_LATER:
+      case TokenErrorResolution.NONE:
         return 'unspecified';
     }
   }
@@ -58,5 +61,21 @@ export const getSdkErrorHandlingStrategy = (
  */
 export const getSdkErrorTokenIds = (err: any): string[] =>
   err instanceof TokenFactoryError
-    ? [err.pendingTokenId, err.activatedTokenId].filter(isDefined)
+    ? [err.pendingTokenId?.tokenId, err.activatedTokenId?.tokenId].filter(
+        isDefined,
+      )
     : [];
+
+/**
+ * from https://github.com/entur/abt-mobile-client-sdk/pull/368
+ */
+export const parseBffCallErrors = (error: any) => {
+  if (
+    error instanceof TypeError &&
+    error.message === 'Network request failed'
+  ) {
+    return new ClientNetworkError(error.message);
+  }
+
+  return parseRemoteError(error) ?? error;
+};

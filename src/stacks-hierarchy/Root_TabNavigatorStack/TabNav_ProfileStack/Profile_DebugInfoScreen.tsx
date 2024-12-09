@@ -38,6 +38,8 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnboardingState} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
+import {TokenErrorResolution} from '@entur-private/abt-token-state-react-native-lib';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -91,6 +93,9 @@ export const Profile_DebugInfoScreen = () => {
       removeRemoteToken,
       renewToken,
       wipeToken,
+      setSabotage,
+      getTokenErrorResolution,
+      sabotage,
     },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
@@ -420,6 +425,11 @@ export const Profile_DebugInfoScreen = () => {
                     <ThemeText>{`Token end: ${new Date(
                       nativeToken.getValidityEnd(),
                     ).toISOString()}`}</ThemeText>
+                    <ThemeText>{`Is native token attested: ${nativeToken.isAttested()}`}</ThemeText>
+                    <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
+                    <ThemeText>{`Token error resolution: ${
+                      TokenErrorResolution[getTokenErrorResolution(nativeToken)]
+                    }`}</ThemeText>
                   </View>
                 )}
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
@@ -471,6 +481,18 @@ export const Profile_DebugInfoScreen = () => {
                       />
                     </View>
                   ))}
+                />
+                <ExpandableSectionItem
+                  text="Sabotage Tokens"
+                  showIconText={true}
+                  expandContent={
+                    <View>
+                      <DebugSabotage
+                        sabotage={sabotage}
+                        setSabotage={setSabotage}
+                      />
+                    </View>
+                  }
                 />
               </View>
             }
