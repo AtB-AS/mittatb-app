@@ -255,7 +255,7 @@ export const Profile_EditProfileScreen = ({
                 {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
               </ThemeText>
             )}
-            {customerNumber && (
+            {!!customerNumber && (
               <>
                 <ThemeText>
                   {t(EditProfileTexts.profileInfo.customerNumber)}

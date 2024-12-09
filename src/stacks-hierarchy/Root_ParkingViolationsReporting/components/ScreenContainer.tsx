@@ -73,7 +73,7 @@ const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
         </View>
         {children}
       </View>
-      {buttons && <View style={style.actionButtons}>{buttons}</View>}
+      {!!buttons && <View style={style.actionButtons}>{buttons}</View>}
     </>
   );
 };

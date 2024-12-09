@@ -71,7 +71,7 @@ export function FullScreenView(props: Props) {
           contentColor={props.contentColor}
         />
       )}
-      {props.footer && (
+      {!!props.footer && (
         <FullScreenFooter footerColor={backgroundColor}>
           {props.footer}
         </FullScreenFooter>
