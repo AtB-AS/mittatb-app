@@ -31,6 +31,9 @@ export type TripPatternFragment = {
       quay: {publicCode?: string; name: string};
       notices: Array<{id: string; text?: string}>;
     };
+    toEstimatedCall?: {
+      notices: Array<{id: string; text?: string}>;
+    };
     situations: Array<{
       id: string;
       situationNumber?: string;
