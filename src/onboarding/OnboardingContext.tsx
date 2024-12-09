@@ -282,7 +282,8 @@ const useShouldShowArgs = (
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
 
-  const {isPushNotificationsEnabled} = useFeatureToggles();
+  const {isPushNotificationsEnabled, isOnboardingLoginEnabled} =
+    useFeatureToggles();
   const {permissionStatus: pushNotificationPermissionStatus} =
     useNotifications();
 
@@ -308,6 +309,7 @@ const useShouldShowArgs = (
     () => ({
       hasFareContractWithActivatedNotification,
       pushNotificationPermissionStatus,
+      isOnboardingLoginEnabled,
       isPushNotificationsEnabled,
       locationPermissionStatus,
       authenticationType,
@@ -320,6 +322,7 @@ const useShouldShowArgs = (
     [
       hasFareContractWithActivatedNotification,
       pushNotificationPermissionStatus,
+      isOnboardingLoginEnabled,
       isPushNotificationsEnabled,
       locationPermissionStatus,
       authenticationType,

@@ -26,6 +26,7 @@ export type ShouldShowArgsType = {
   locationPermissionStatus: PermissionStatus | null;
   pushNotificationPermissionStatus: NotificationPermissionStatus;
   authenticationType: AuthenticationType;
+  isOnboardingLoginEnabled: boolean;
   isPushNotificationsEnabled: boolean;
   hasFareContractWithActivatedNotification: boolean;
   travelCardDisabled: boolean;
