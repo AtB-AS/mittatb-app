@@ -30,9 +30,10 @@ import {
   isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type Props = {
   now: number;
@@ -55,6 +56,7 @@ export const FareContractView: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const {
     isCarnetFareContract,
@@ -121,14 +123,17 @@ export const FareContractView: React.FC<Props> = ({
           animate={!isStatic}
         />
         <FareContractInfoHeader
-          fareContract={fareContract}
-          travelRight={firstTravelRight}
           status={validityStatus}
           testID={testID}
           preassignedFareProduct={preassignedFareProduct}
           sentToCustomerAccountId={
             isSent ? fareContract.customerAccountId : undefined
           }
+        />
+        <FareContractFromTo
+          backgroundColor={theme.color.background.neutral['0']}
+          mode="large"
+          fc={fareContract}
         />
       </GenericSectionItem>
       <GenericSectionItem>

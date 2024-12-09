@@ -15,12 +15,12 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
-import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;

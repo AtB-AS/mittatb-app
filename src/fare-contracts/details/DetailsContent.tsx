@@ -49,6 +49,7 @@ import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem.tsx';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type Props = {
   fareContract: FareContract;
@@ -152,12 +153,15 @@ export const DetailsContent: React.FC<Props> = ({
           fareProductType={preassignedFareProduct?.type}
         />
         <FareContractInfoHeader
-          fareContract={fc}
-          travelRight={firstTravelRight}
           status={validityStatus}
           testID="details"
           preassignedFareProduct={preassignedFareProduct}
           sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
+        />
+        <FareContractFromTo
+          backgroundColor={theme.color.background.neutral['0']}
+          mode="large"
+          fc={fc}
         />
       </GenericSectionItem>
       {isInspectable && validityStatus === 'valid' && (
