@@ -115,7 +115,7 @@ const NotInspectableContent = () => {
   return (
     <View style={styles.symbolContent}>
       <ThemeText
-        type="body__tertiary"
+        typography="body__tertiary"
         style={{
           textAlign: 'center',
         }}

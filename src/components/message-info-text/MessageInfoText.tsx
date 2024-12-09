@@ -47,7 +47,7 @@ export const MessageInfoText = ({
       <ThemeText
         color={textColor}
         isMarkdown={isMarkdown}
-        type="body__secondary"
+        typography="body__secondary"
         style={styles.text}
       >
         {message}

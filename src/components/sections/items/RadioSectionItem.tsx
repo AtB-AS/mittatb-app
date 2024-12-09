@@ -88,14 +88,14 @@ export function RadioSectionItem({
         {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
         <View style={styles.textContainer}>
           <ThemeText
-            type="body__primary"
+            typography="body__primary"
             style={[contentContainer, {color: textColor}]}
           >
             {text}
           </ThemeText>
           {subtext && !hideSubtext && (
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color="secondary"
               style={{marginTop: theme.spacing.small}}
             >

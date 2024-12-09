@@ -63,7 +63,11 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       secondaryTestID={onPressLogin ? 'acceptLimitations' : ''}
     >
       <View ref={focusRef} accessible>
-        <ThemeText type="heading--big" color={themeColor} style={styles.header}>
+        <ThemeText
+          typography="heading--big"
+          color={themeColor}
+          style={styles.header}
+        >
           {t(AnonymousPurchasesTexts.consequences.title)}
         </ThemeText>
       </View>

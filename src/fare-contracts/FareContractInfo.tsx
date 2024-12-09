@@ -105,7 +105,7 @@ export const FareContractInfoHeader = ({
     <View style={styles.header}>
       {productName && (
         <ThemeText
-          type="body__primary--bold"
+          typography="body__primary--bold"
           accessibilityLabel={productName + screenReaderPause}
           testID={testID + 'Product'}
         >
@@ -114,7 +114,7 @@ export const FareContractInfoHeader = ({
       )}
       {productDescription && (
         <ThemeText
-          type="body__secondary"
+          typography="body__secondary"
           accessibilityLabel={productDescription + screenReaderPause}
           testID={testID + 'ProductDescription'}
         >

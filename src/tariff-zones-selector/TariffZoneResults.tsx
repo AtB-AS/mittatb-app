@@ -28,7 +28,7 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText typography="body__secondary" color="secondary">
           {t(TariffZoneSearchTexts.zones.heading)}
         </ThemeText>
       </View>
@@ -56,11 +56,11 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                   <ThemeIcon svg={Pin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type="body__primary--bold">
+                  <ThemeText typography="body__primary--bold">
                     {getReferenceDataName(tariffZone, language)}
                   </ThemeText>
                   {tariffZone.description && (
-                    <ThemeText type="body__secondary">
+                    <ThemeText typography="body__secondary">
                       {getTextForLanguage(tariffZone.description, language)}
                     </ThemeText>
                   )}

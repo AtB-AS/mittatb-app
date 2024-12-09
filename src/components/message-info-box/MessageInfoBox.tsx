@@ -110,7 +110,7 @@ export const MessageInfoBox = ({
       >
         {title && (
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
@@ -120,7 +120,7 @@ export const MessageInfoBox = ({
         )}
         <ThemeText
           color={textColor}
-          type="body__primary"
+          typography="body__primary"
           isMarkdown={isMarkdown}
         >
           {message}
@@ -129,7 +129,7 @@ export const MessageInfoBox = ({
           <ThemeText
             color={textColor}
             style={styles.linkText}
-            type="body__primary--underline"
+            typography="body__primary--underline"
           >
             {onPressConfig.text}
           </ThemeText>

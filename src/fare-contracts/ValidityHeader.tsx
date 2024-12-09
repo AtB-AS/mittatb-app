@@ -59,7 +59,7 @@ export const ValidityHeader: React.FC<{
         )}
         <ThemeText
           style={styles.label}
-          type="body__secondary"
+          typography="body__secondary"
           accessibilityLabel={
             !isInspectable
               ? label +

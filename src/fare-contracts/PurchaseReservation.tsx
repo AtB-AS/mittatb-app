@@ -29,6 +29,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
       Bugsnag.notify(err);
     }
   }
+
   const getStatus = () => {
     const paymentStatus = reservation.paymentStatus;
     switch (paymentStatus) {
@@ -65,7 +66,10 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <FareContractStatusSymbol status={status} />
             )}
-            <ThemeText type="body__secondary" style={styles.reservationStatus}>
+            <ThemeText
+              typography="body__secondary"
+              style={styles.reservationStatus}
+            >
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </View>
@@ -73,7 +77,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine status={status} />
         <View style={styles.infoContainer} accessible={true}>
           {status == 'rejected' && (
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               {t(
                 TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
@@ -85,7 +89,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             </ThemeText>
           )}
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.detail}
           >

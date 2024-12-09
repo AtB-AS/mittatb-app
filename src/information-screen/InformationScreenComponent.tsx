@@ -79,7 +79,7 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
 const Header = ({text}: {text: string}) => {
   const styles = useStyles();
   return (
-    <ThemeText style={styles.paragraphHeading} type="heading__paragraph">
+    <ThemeText style={styles.paragraphHeading} typography="heading__paragraph">
       {text}
     </ThemeText>
   );
@@ -94,7 +94,7 @@ const Link = ({link}: {link: InformationLink}) => {
       onPress={() => Linking.openURL(link.link ?? '')}
       accessibilityRole="link"
     >
-      <ThemeText type="body__primary--underline">{link.text}</ThemeText>
+      <ThemeText typography="body__primary--underline">{link.text}</ThemeText>
     </PressableOpacity>
   );
 };

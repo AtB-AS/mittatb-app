@@ -207,7 +207,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           {text && (
             <View style={textContainer}>
               <ThemeText
-                type={getTextType(mode, type)}
+                typography={getTextType(mode, type)}
                 style={styleText}
                 testID="buttonText"
               >

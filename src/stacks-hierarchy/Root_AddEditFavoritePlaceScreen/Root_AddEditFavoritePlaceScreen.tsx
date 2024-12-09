@@ -203,7 +203,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               !emoji ? (
                 <ThemeIcon svg={Pin} />
               ) : (
-                <ThemeText type="body__primary">{emoji}</ThemeText>
+                <ThemeText typography="body__primary">{emoji}</ThemeText>
               )
             }
             testID="iconButton"

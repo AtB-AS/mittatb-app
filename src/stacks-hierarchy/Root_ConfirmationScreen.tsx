@@ -36,7 +36,7 @@ export const Root_ConfirmationScreen = ({
   return (
     <View style={styles.container}>
       <ThemeText
-        type="heading--jumbo"
+        typography="heading--jumbo"
         color={themeColor}
         style={styles.message}
       >

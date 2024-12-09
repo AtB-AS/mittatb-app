@@ -356,7 +356,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   ref={onCloseFocusRef}
                 >
                   <View style={styles.flexRowCenter}>
-                    <ThemeText type="body__primary--bold">
+                    <ThemeText typography="body__primary--bold">
                       {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
                     </ThemeText>
                   </View>

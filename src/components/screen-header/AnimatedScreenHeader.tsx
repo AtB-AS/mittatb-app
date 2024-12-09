@@ -80,7 +80,7 @@ export const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
           ]}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
-            <ThemeText color={themeColor} type="body__primary--bold">
+            <ThemeText color={themeColor} typography="body__primary--bold">
               {title}
             </ThemeText>
           </View>

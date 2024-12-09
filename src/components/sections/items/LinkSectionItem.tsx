@@ -87,7 +87,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
             style={[contentContainer, {color: themeColor.foreground.primary}]}
-            type={textType}
+            typography={textType}
           >
             {text}
           </ThemeText>
@@ -96,7 +96,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         </View>
         {subtitle && (
           <View style={disabledStyle}>
-            <ThemeText color="secondary" type="body__secondary">
+            <ThemeText color="secondary" typography="body__secondary">
               {subtitle}
             </ThemeText>
           </View>

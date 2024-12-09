@@ -68,7 +68,7 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
                     color={storyContrastColor}
                   />
                   <ThemeText
-                    type="body__tertiary"
+                    typography="body__tertiary"
                     color={storyContrastColor}
                     style={{flex: 1}}
                   >

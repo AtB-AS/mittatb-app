@@ -29,7 +29,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
     >
       <View style={styles.mainView}>
         <ThemeText
-          type="body__primary--jumbo--bold"
+          typography="body__primary--jumbo--bold"
           color={themeColor}
           style={styles.header}
         >

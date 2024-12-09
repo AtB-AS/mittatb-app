@@ -67,12 +67,12 @@ export const Root_TicketInformationScreen = (props: Props) => {
                       iconSize="xSmall"
                       modes={fareProductTypeConfig?.transportModes}
                     />
-                    <ThemeText type="body__primary--bold">
+                    <ThemeText typography="body__primary--bold">
                       {getTextForLanguage(fareProductTypeConfig.name, language)}
                     </ThemeText>
                   </View>
                 )}
-                <ThemeText type="body__secondary" isMarkdown={true}>
+                <ThemeText typography="body__secondary" isMarkdown={true}>
                   {getTextForLanguage(
                     preassignedFareProduct.productDescription,
                     language,
