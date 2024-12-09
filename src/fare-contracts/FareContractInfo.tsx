@@ -44,7 +44,6 @@ export type FareContractInfoProps = {
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
   sentToCustomerAccountId?: string;
-  fareContract: FareContract;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -108,17 +107,6 @@ export const FareContractInfoHeader = ({
           {productDescription}
         </ThemeText>
       )}
-<<<<<<< Updated upstream
-      {fromStopPlaceId && toStopPlaceId && (
-        <FareContractHarborStopPlaces
-          fromStopPlaceId={fromStopPlaceId}
-          toStopPlaceId={toStopPlaceId}
-          direction={travelRight.direction}
-          transportModes={fareProductTypeConfig?.transportModes}
-        />
-      )}
-=======
->>>>>>> Stashed changes
       {phoneNumber && (
         <MessageInfoText
           type="warning"
