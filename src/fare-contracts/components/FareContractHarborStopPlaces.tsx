@@ -8,16 +8,17 @@ import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useHarbors} from '@atb/harbors';
 import {ProductTypeTransportModes} from '@atb-as/config-specs';
+import {TravelRightDirection} from '@atb/ticketing';
 
 export function FareContractHarborStopPlaces({
   fromStopPlaceId,
   toStopPlaceId,
-  showTwoWayIcon,
+  direction,
   transportModes,
 }: {
   fromStopPlaceId?: string;
   toStopPlaceId?: string;
-  showTwoWayIcon: boolean;
+  direction?: TravelRightDirection;
   transportModes?: ProductTypeTransportModes[];
 }) {
   const {theme} = useTheme();
@@ -44,6 +45,7 @@ export function FareContractHarborStopPlaces({
   const harbors = harborsQuery.data;
   const fromName = harbors.find((sp) => sp.id === fromStopPlaceId)?.name;
   const toName = harbors.find((sp) => sp.id === toStopPlaceId)?.name;
+  const isTwoWay = direction === TravelRightDirection.Both;
 
   if (!fromName || !toName) return null;
 
@@ -56,7 +58,11 @@ export function FareContractHarborStopPlaces({
     <View
       style={styles.container}
       accessibilityLabel={t(
-        FareContractTexts.details.harbors.directions(fromName, toName),
+        FareContractTexts.details.harbors.directions(
+          fromName,
+          toName,
+          isTwoWay,
+        ),
       )}
       accessible={true}
     >
@@ -76,20 +82,20 @@ export function FareContractHarborStopPlaces({
           borderLeftWidth: decorationLineWidth,
         }}
       >
-        <ThemeText type="body__secondary" color="primary">
+        <ThemeText typography="body__secondary" color="primary">
           {fromName}
         </ThemeText>
 
         <View
           style={{
-            paddingVertical: showTwoWayIcon ? 0 : decorationLineWidth,
+            paddingVertical: isTwoWay ? 0 : decorationLineWidth,
             marginLeft:
               -verticalLinePaddingLeft -
               decorationLineWidth / 2 -
               theme.tripLegDetail.decorationContainerWidth / 2,
           }}
         >
-          {showTwoWayIcon && (
+          {isTwoWay && (
             <View
               style={{
                 backgroundColor: theme.color.background.neutral[0].background,
@@ -104,7 +110,7 @@ export function FareContractHarborStopPlaces({
           )}
         </View>
 
-        <ThemeText type="body__secondary" color="primary">
+        <ThemeText typography="body__secondary" color="primary">
           {toName}
         </ThemeText>
       </View>

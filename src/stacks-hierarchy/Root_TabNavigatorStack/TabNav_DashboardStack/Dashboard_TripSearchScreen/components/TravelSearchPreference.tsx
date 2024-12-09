@@ -26,7 +26,7 @@ export const TravelSearchPreference = ({
 
   return (
     <View style={containerStyle}>
-      <ThemeText style={styles.heading} type="body__primary--bold">
+      <ThemeText style={styles.heading} typography="body__primary--bold">
         {getTextForLanguage(preference.title, language)}
       </ThemeText>
       <Section>

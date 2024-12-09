@@ -154,12 +154,18 @@ const FareContractTexts = {
       },
     },
     harbors: {
-      directions: (from: string, to: string) =>
-        _(
-          `Fra ${from}, til ${to}`,
-          `From ${from}, to ${to}`,
-          `Frå ${from}, til ${to}`,
-        ),
+      directions: (from: string, to: string, isTwoWay: boolean) =>
+        isTwoWay
+          ? _(
+              `Mellom ${from} og ${to}, i begge retninger`,
+              `Between ${from} and ${to}, in both directions`,
+              `Mellom ${from} og ${to}, i begge retningar`,
+            )
+          : _(
+              `Fra ${from}, til ${to},`,
+              `From ${from}, to ${to}`,
+              `Frå ${from}, til ${to}`,
+            ),
       error: _(
         'Kunne ikke laste kaier.',
         'Could not load harbors.',

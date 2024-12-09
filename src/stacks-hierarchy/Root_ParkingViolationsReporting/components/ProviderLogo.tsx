@@ -48,7 +48,7 @@ const UnknownProvider = ({height, width}: {height: number; width: number}) => {
         justifyContent: 'center',
       }}
     >
-      <ThemeText type="body__primary--big--bold" color={themeColor}>
+      <ThemeText typography="body__primary--big--bold" color={themeColor}>
         ?
       </ThemeText>
     </View>

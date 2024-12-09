@@ -200,7 +200,7 @@ const Card = (props: {
         </View>
       </View>
 
-      <ThemeText color="secondary" type="body__secondary">
+      <ThemeText color="secondary" typography="body__secondary">
         {getExpireDate(card.expires_at)}
       </ThemeText>
     </View>

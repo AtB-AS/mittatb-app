@@ -69,20 +69,23 @@ export function QuaySection({
     mode === 'Favourite'
       ? departures.sort((a, b) => compareByLineNameAndDesc(t, a, b))
       : departures;
+
+  const navigateToQuayEnabled = !!navigateToQuay;
+
+  // If the user has toggled "Show only favorites" and there are no favorites on
+  // this quay, we should minimize the quay section.
+  const hasFavorites = !!favoriteDepartures.find((f) => quay.id === f.quayId);
+  const shouldBeMinimized =
+    navigateToQuayEnabled && !hasFavorites && showOnlyFavorites;
   useEffect(() => {
-    if (!showOnlyFavorites) return setIsMinimized(false);
-    setIsMinimized(
-      !!navigateToQuay &&
-        !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showOnlyFavorites]);
+    setIsMinimized(shouldBeMinimized);
+  }, [shouldBeMinimized]);
 
   const hasMoreItemsThanDisplayLimit =
     !!departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
   const shouldShowMoreItemsLink =
-    !!navigateToQuay &&
+    navigateToQuayEnabled &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
@@ -104,7 +107,7 @@ export function QuaySection({
           <View style={styles.stopPlaceHeader} testID={testID + 'HideAction'}>
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
-                type="body__secondary--bold"
+                typography="body__secondary--bold"
                 color="secondary"
                 style={styles.rightMargin}
                 testID={testID + 'Name'}
@@ -116,7 +119,7 @@ export function QuaySection({
               {!!quay.description && (
                 <ThemeText
                   style={styles.rightMargin}
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   testID={testID + 'Description'}
                 >
@@ -151,7 +154,7 @@ export function QuaySection({
         {!isMinimized && didLoadingDataFail && !isLoading && (
           <GenericSectionItem>
             <View style={styles.messageBox}>
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>

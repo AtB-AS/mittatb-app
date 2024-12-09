@@ -190,7 +190,7 @@ const DeparturesTexts = {
           ),
         delete: {
           label: _(
-            'Fjerne faovrittavgang?',
+            'Fjerne favorittavgang?',
             'Delete favourite departure?',
             'Slette favorittavgang?',
           ),

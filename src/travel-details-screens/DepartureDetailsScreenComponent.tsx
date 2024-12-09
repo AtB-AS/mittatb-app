@@ -205,7 +205,7 @@ export const DepartureDetailsScreenComponent = ({
             >
               <LineChip serviceJourney={lineChipServiceJourney} />
               <ThemeText
-                type="heading__title"
+                typography="heading__title"
                 color={themeColor}
                 style={styles.headerTitle}
               >
@@ -298,7 +298,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText type="body__primary" color="secondary">
+                <ThemeText typography="body__primary" color="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>
@@ -388,7 +388,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
   return (
     <View style={styles.passedSection}>
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color={themeColor}
         style={styles.passedText}
       >
@@ -559,7 +559,7 @@ function EstimatedCallRow({
         <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -569,7 +569,7 @@ function EstimatedCallRow({
         )}
         {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
           <AccessibleText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"

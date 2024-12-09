@@ -132,8 +132,6 @@ export const RecentFareContractComponent = ({
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
-  const showTwoWayIcon = direction === TravelRightDirection.Both;
-
   return (
     <TileWithButton
       buttonSvg={ArrowRight}
@@ -157,7 +155,7 @@ export const RecentFareContractComponent = ({
 
       <View style={styles.productName} testID={testID + 'Title'}>
         <ThemeText
-          type="body__secondary--bold"
+          typography="body__secondary--bold"
           color={interactiveColor.default}
         >
           {getReferenceDataName(preassignedFareProduct, language)}
@@ -167,7 +165,7 @@ export const RecentFareContractComponent = ({
       {direction !== undefined && pointToPointValidity && (
         <View style={styles.harbors}>
           <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
+            direction={direction}
             fromStopPlaceId={pointToPointValidity?.fromPlace}
             toStopPlaceId={pointToPointValidity?.toPlace}
             transportModes={fareProductTypeConfig.transportModes}
@@ -177,7 +175,7 @@ export const RecentFareContractComponent = ({
 
       <View style={styles.horizontalFlex}>
         <View style={styles.detailContainer}>
-          <ThemeText type="label__uppercase" color="secondary">
+          <ThemeText typography="label__uppercase" color="secondary">
             {t(RecentFareContractsTexts.titles.travellers)}
           </ThemeText>
           {userProfilesWithCount.length <= 2 &&
@@ -207,7 +205,7 @@ export const RecentFareContractComponent = ({
                 />
               ))}
               <ThemeText
-                type="body__tertiary"
+                typography="body__tertiary"
                 testID={`${testID}TravellersOthers`}
                 color={interactiveColor.default}
                 style={styles.additionalCategories}
@@ -222,7 +220,7 @@ export const RecentFareContractComponent = ({
           fromZoneName &&
           toZoneName && (
             <View style={styles.detailContainer}>
-              <ThemeText type="label__uppercase" color="secondary">
+              <ThemeText typography="label__uppercase" color="secondary">
                 {t(RecentFareContractsTexts.titles.zone)}
               </ThemeText>
               {fromZoneName === toZoneName ? (

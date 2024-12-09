@@ -11,12 +11,12 @@ import {
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
-import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data.ts';
-import {ContrastColor, TextColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb-as/theme';
+import { EstimatedCallWithMetadata } from '@atb/travel-details-screens/use-departure-data';
 
 type DepartureTimeProps = {
+  color?: ContrastColor;
   departure: EstimatedCall | EstimatedCallWithMetadata;
-  color?: ContrastColor | Statuses | TextColor | ColorValue;
 };
 export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
@@ -34,14 +34,13 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
           />
         )}
         <ThemeText
-          type={
+          typography={
             departure.cancellation
               ? 'body__primary--strike'
               : 'body__primary--bold'
           }
-          color={
-            color ? color : departure.cancellation ? 'secondary' : 'primary'
-          }
+          color={color}
+          type={departure.cancellation ? 'secondary' : 'primary'}
         >
           {formatToClockOrRelativeMinutes(
             departure.expectedDepartureTime,
@@ -52,8 +51,9 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
       </View>
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
-          type="body__tertiary--strike"
-          color={color ? color : 'secondary'}
+          typography="body__tertiary--strike"
+          color={color}
+          type="secondary"
           style={styles.aimedTime}
         >
           {formatLocaleTime(departure.aimedDepartureTime, language)}

@@ -52,7 +52,7 @@ export const OperatorNameAndLogo = ({
           />
         )
       ) : null}
-      <ThemeText type="body__primary--bold">{operatorName}</ThemeText>
+      <ThemeText typography="body__primary--bold">{operatorName}</ThemeText>
     </View>
   );
 };

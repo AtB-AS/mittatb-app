@@ -229,15 +229,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           <TravellerSelection
-            setUserProfilesWithCount={setUserProfilesWithCount}
-            fareProductTypeConfig={selection.fareProductTypeConfig}
-            preassignedFareProduct={selection.preassignedFareProduct}
-            selectionMode={travellerSelectionMode}
-            userProfilesWithCount={selection.userProfilesWithCount}
-            style={styles.selectionComponent}
-            setIsOnBehalfOfToggle={setIsOnBehalfOfToggle}
+            selection={selection}
             isOnBehalfOfToggle={isOnBehalfOfToggle}
+            onSave={(userProfilesWithCount, onBehalfOfToggle) => {
+              setUserProfilesWithCount(userProfilesWithCount);
+              setIsOnBehalfOfToggle(onBehalfOfToggle);
+            }}
+            style={styles.selectionComponent}
           />
+
           <FromToSelection
             fareProductTypeConfig={selection.fareProductTypeConfig}
             fromPlace={selection.zones?.from || selection.stopPlaces?.from}

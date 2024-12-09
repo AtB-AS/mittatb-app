@@ -158,7 +158,7 @@ function tabSettings(
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
         testID={testID}
