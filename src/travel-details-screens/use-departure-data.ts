@@ -19,6 +19,7 @@ export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   title?: string;
+  publicCode?: string;
   subMode?: TransportSubmode;
   situations: SituationFragment[];
   notices: NoticeFragment[];
@@ -59,11 +60,10 @@ export function useDepartureData(
 
       const publicCode =
         serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = `${publicCode} ${formatDestinationDisplay(
+      const title = `${formatDestinationDisplay(
         t,
         focusedEstimatedCall.destinationDisplay,
       )}`;
-
       const notices = getNoticesForServiceJourney(
         serviceJourney,
         activeItem.fromQuayId,
@@ -76,6 +76,7 @@ export function useDepartureData(
       return {
         mode: serviceJourney.transportMode,
         title,
+        publicCode,
         subMode: serviceJourney.transportSubmode,
         estimatedCallsWithMetadata,
         situations,

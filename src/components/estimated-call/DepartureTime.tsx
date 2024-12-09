@@ -12,10 +12,11 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {ContrastColor} from '@atb-as/theme';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 type DepartureTimeProps = {
   color?: ContrastColor;
-  departure: EstimatedCall;
+  departure: EstimatedCall | EstimatedCallWithMetadata;
 };
 export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
@@ -62,7 +63,9 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   );
 };
 
-const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
+const isMoreThanOneMinuteDelayed = (
+  departure: EstimatedCall | EstimatedCallWithMetadata,
+) =>
   secondsBetween(
     departure.aimedDepartureTime,
     departure.expectedDepartureTime,

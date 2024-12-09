@@ -5,11 +5,9 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -56,12 +54,14 @@ import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   getBookingStatus,
+  getLineAndTimeA11yLabel,
   getShouldShowLiveVehicle,
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {usePreferences} from '@atb/preferences';
+import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -99,7 +99,15 @@ export const DepartureDetailsScreenComponent = ({
   const {t, language} = useTranslation();
 
   const [
-    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
+    {
+      estimatedCallsWithMetadata,
+      title,
+      publicCode,
+      mode,
+      subMode,
+      situations,
+      notices,
+    },
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
@@ -148,6 +156,7 @@ export const DepartureDetailsScreenComponent = ({
   const fromQuay = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
+
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
     modesWeSellTicketsFor,
@@ -169,6 +178,16 @@ export const DepartureDetailsScreenComponent = ({
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
 
+  const a11yLabel =
+    fromQuay && publicCode
+      ? getLineAndTimeA11yLabel(fromQuay, publicCode, t, language)
+      : undefined;
+  const lineChipServiceJourney = {
+    line: {publicCode},
+    transportMode: mode,
+    transportSubmode: subMode,
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -178,21 +197,23 @@ export const DepartureDetailsScreenComponent = ({
         }}
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
-            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
-              {mode && (
-                <TransportationIconBox
-                  mode={mode}
-                  subMode={subMode}
-                  style={styles.headerTitleIcon}
-                />
-              )}
+            <View
+              style={styles.headerContainer}
+              ref={focusRef}
+              accessible={true}
+              accessibilityLabel={a11yLabel}
+            >
+              <LineChip serviceJourney={lineChipServiceJourney} />
               <ThemeText
-                typography="heading--medium"
+                typography="heading__title"
                 color={themeColor}
-                style={{flexShrink: 1}}
+                style={styles.headerTitle}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
+              {fromQuay && (
+                <DepartureTime departure={fromQuay} color={themeColor} />
+              )}
             </View>
             {shouldShowTravelAid && (
               <Button
@@ -211,47 +232,46 @@ export const DepartureDetailsScreenComponent = ({
                 interactiveColor={ctaColor}
               />
             )}
-            {shouldShowMapButton || realtimeText ? (
-              <View style={styles.headerSubSection}>
-                {realtimeText && !activeItem.isTripCancelled && (
-                  <LastPassedStop realtimeText={realtimeText} />
-                )}
-                {shouldShowMapButton ? (
-                  <Button
-                    type="small"
-                    leftIcon={{svg: Map}}
-                    style={realtimeText ? styles.liveButton : undefined}
-                    text={t(
-                      vehiclePosition
-                        ? DepartureDetailsTexts.live(t(translatedModeName))
-                        : DepartureDetailsTexts.map,
-                    )}
-                    interactiveColor={interactiveColor}
-                    onPress={() => {
-                      vehiclePosition &&
-                        analytics.logEvent(
-                          'Departure details',
-                          'See live bus clicked',
-                          {
-                            fromPlace: mapData.start,
-                            toPlace: mapData?.stop,
-                            mode: mode,
-                            subMode: subMode,
-                          },
-                        );
-                      onPressDetailsMap({
-                        legs: mapData.mapLegs,
-                        fromPlace: mapData.start,
-                        toPlace: mapData.stop,
-                        vehicleWithPosition: vehiclePosition,
-                        mode: mode,
-                        subMode: subMode,
-                      });
-                    }}
-                  />
-                ) : null}
+            {shouldShowMapButton ? (
+              <View style={styles.actionButtons}>
+                <Button
+                  type="small"
+                  leftIcon={{svg: Map}}
+                  text={t(
+                    vehiclePosition
+                      ? DepartureDetailsTexts.live(t(translatedModeName))
+                      : DepartureDetailsTexts.map,
+                  )}
+                  interactiveColor={interactiveColor}
+                  onPress={() => {
+                    vehiclePosition &&
+                      analytics.logEvent(
+                        'Departure details',
+                        'See live bus clicked',
+                        {
+                          fromPlace: mapData.start,
+                          toPlace: mapData?.stop,
+                          mode: mode,
+                          subMode: subMode,
+                        },
+                      );
+                    onPressDetailsMap({
+                      legs: mapData.mapLegs,
+                      fromPlace: mapData.start,
+                      toPlace: mapData.stop,
+                      vehicleWithPosition: vehiclePosition,
+                      mode: mode,
+                      subMode: subMode,
+                    });
+                  }}
+                />
               </View>
             ) : null}
+            {realtimeText && !activeItem.isTripCancelled && (
+              <View style={styles.headerSubSection}>
+                <LastPassedStop realtimeText={realtimeText} />
+              </View>
+            )}
           </View>
         )}
       >
@@ -367,11 +387,6 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
 
   return (
     <View style={styles.passedSection}>
-      <ThemeIcon
-        svg={RealtimeDark}
-        size="xSmall"
-        style={styles.passedSectionRealtimeIcon}
-      />
       <ThemeText
         typography="body__secondary"
         color={themeColor}
@@ -662,9 +677,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
-  headerTitle: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  headerTitle: {
+    flex: 1,
+    marginRight: theme.spacing.medium,
   },
   parallaxContent: {marginHorizontal: theme.spacing.medium},
   date: {
@@ -689,20 +708,21 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     minWidth: '50%',
     flex: 1,
   },
-  passedSectionRealtimeIcon: {
-    marginRight: theme.spacing.xSmall,
-  },
   passedText: {
-    flexShrink: 1,
+    alignItems: 'center',
   },
   startPlace: {
     marginTop: theme.spacing.medium,
   },
-  liveButton: {
-    marginLeft: theme.spacing.small,
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
   travelAidButton: {
     marginTop: theme.spacing.medium,
