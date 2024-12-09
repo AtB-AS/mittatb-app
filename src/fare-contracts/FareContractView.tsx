@@ -5,6 +5,7 @@ import {
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
+  userProfileCountAndName,
 } from '@atb/fare-contracts/utils';
 import {
   GenericSectionItem,
@@ -13,10 +14,7 @@ import {
 } from '@atb/components/sections';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
-import {
-  FareContractInfoDetails,
-  FareContractInfoHeader,
-} from '@atb/fare-contracts/FareContractInfo';
+import {FareContractInfoHeader} from '@atb/fare-contracts/FareContractInfo';
 import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthState} from '@atb/auth';
@@ -34,6 +32,10 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
+import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
+import React from 'react';
+import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+import {View} from 'react-native';
 
 type Props = {
   now: number;
@@ -54,7 +56,7 @@ export const FareContractView: React.FC<Props> = ({
   const {isInspectable} = useMobileTokenContextState();
   const {isActivateTicketNowEnabled} = useFeatureToggles();
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -81,17 +83,7 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const {tariffZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfiguration();
-
-  const firstZone = firstTravelRight.tariffZoneRefs?.[0];
-  const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
-  const fromTariffZone = firstZone
-    ? findReferenceDataById(tariffZones, firstZone)
-    : undefined;
-  const toTariffZone = lastZone
-    ? findReferenceDataById(tariffZones, lastZone)
-    : undefined;
+  const {userProfiles, preassignedFareProducts} = useFirestoreConfiguration();
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
@@ -130,19 +122,23 @@ export const FareContractView: React.FC<Props> = ({
             isSent ? fareContract.customerAccountId : undefined
           }
         />
-        <FareContractFromTo
-          backgroundColor={theme.color.background.neutral['0']}
-          mode="large"
-          fc={fareContract}
-        />
       </GenericSectionItem>
-      <GenericSectionItem>
-        <FareContractInfoDetails
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
-          userProfilesWithCount={userProfilesWithCount}
-          status={validityStatus}
+      <GenericSectionItem style={styles.detailContainer}>
+        <View style={styles.detailTextContainer}>
+          <FareContractFromTo
+            fc={fareContract}
+            backgroundColor={theme.color.background.neutral['0']}
+            mode="small"
+          />
+          <FareContractDetail
+            content={userProfilesWithCount.map((u) =>
+              userProfileCountAndName(u, language),
+            )}
+          />
+        </View>
+        <InspectionSymbol
           preassignedFareProduct={preassignedFareProduct}
+          sentTicket={validityStatus === 'sent'}
         />
       </GenericSectionItem>
       {isCarnetFareContract && (
@@ -182,5 +178,12 @@ export const FareContractView: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     marginBottom: theme.spacing.large,
+  },
+  detailContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  detailTextContainer: {
+    rowGap: theme.spacing.medium,
   },
 }));

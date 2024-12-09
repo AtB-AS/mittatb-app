@@ -30,10 +30,7 @@ import {
 import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {
-  findReferenceDataById,
-  PreassignedFareProduct,
-} from '@atb/configuration';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -92,7 +89,7 @@ export const DetailsContent: React.FC<Props> = ({
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
 
   const firstTravelRight = travelRights[0];
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {userProfiles} = useFirestoreConfiguration();
   const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
@@ -104,15 +101,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: purchaserPhoneNumber} =
     useGetPhoneByAccountIdQuery(senderAccountId);
 
-  const firstZone = firstTravelRight.tariffZoneRefs?.[0];
-  const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
-
-  const fromTariffZone = firstZone
-    ? findReferenceDataById(tariffZones, firstZone)
-    : undefined;
-  const toTariffZone = lastZone
-    ? findReferenceDataById(tariffZones, lastZone)
-    : undefined;
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
     userProfiles,
@@ -177,8 +165,6 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       <GenericSectionItem>
         <FareContractInfoDetails
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
