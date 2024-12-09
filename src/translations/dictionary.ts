@@ -121,6 +121,7 @@ const dictionary = {
     'Something went wrong',
     `Noko gjekk gale`,
   ),
+  zone: _('Sone', 'Zone', 'Sone'),
 };
 
 export default orgSpecificTranslations(dictionary, {
