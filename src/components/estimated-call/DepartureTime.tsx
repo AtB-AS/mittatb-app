@@ -12,7 +12,7 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {ContrastColor} from '@atb-as/theme';
-import { EstimatedCallWithMetadata } from '@atb/travel-details-screens/use-departure-data';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 type DepartureTimeProps = {
   color?: ContrastColor;
