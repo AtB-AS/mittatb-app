@@ -26,6 +26,7 @@ export type ShouldShowArgsType = {
   locationPermissionStatus: PermissionStatus | null;
   pushNotificationPermissionStatus: NotificationPermissionStatus;
   authenticationType: AuthenticationType;
+  isOnboardingLoginEnabled: boolean;
   isPushNotificationsEnabled: boolean;
   hasFareContractWithActivatedNotification: boolean;
   travelCardDisabled: boolean;
@@ -33,7 +34,6 @@ export type ShouldShowArgsType = {
   extendedOnboardingEnabled: boolean;
   userCreationIsOnboarded: boolean;
   shouldShowShareTravelHabitsScreen: boolean;
-  onboardingLoginEnabled: boolean;
 };
 
 export type OnboardingSectionConfig = {

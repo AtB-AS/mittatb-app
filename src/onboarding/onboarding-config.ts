@@ -22,8 +22,8 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       params: {},
     },
     shouldShowBeforeUserCreated: true,
-    shouldShowPredicate: ({onboardingLoginEnabled, authenticationType}) =>
-      onboardingLoginEnabled && authenticationType === 'anonymous',
+    shouldShowPredicate: ({isOnboardingLoginEnabled, authenticationType}) =>
+      isOnboardingLoginEnabled && authenticationType === 'anonymous',
   },
   {
     isOnboardedStoreKey: '@ATB_location_when_in_use_permission_onboarded',
