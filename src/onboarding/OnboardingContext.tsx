@@ -292,6 +292,7 @@ const useShouldShowArgs = (
   const {
     enable_extended_onboarding: extendedOnboardingEnabled,
     disable_travelcard: travelCardDisabled,
+    enable_onboarding_login: onboardingLoginEnabled,
   } = useRemoteConfig();
 
   const shouldShowShareTravelHabitsScreen =
@@ -316,6 +317,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      onboardingLoginEnabled,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -328,6 +330,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      onboardingLoginEnabled,
     ],
   );
 };

@@ -33,6 +33,7 @@ export type ShouldShowArgsType = {
   extendedOnboardingEnabled: boolean;
   userCreationIsOnboarded: boolean;
   shouldShowShareTravelHabitsScreen: boolean;
+  onboardingLoginEnabled: boolean;
 };
 
 export type OnboardingSectionConfig = {
