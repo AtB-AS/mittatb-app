@@ -71,7 +71,7 @@ const BenefitInfo = ({
   const styles = useStyles();
   return (
     <View style={styles.benefitInfo}>
-      {formFactors.length && (
+      {!!formFactors.length && (
         <View style={styles.formFactorsContainer}>
           {formFactors.map((ff) => (
             <BenefitImageAsset

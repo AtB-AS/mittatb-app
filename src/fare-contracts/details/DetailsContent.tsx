@@ -221,7 +221,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {usedAccesses?.length && (
+      {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
       <GenericSectionItem>
