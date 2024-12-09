@@ -257,6 +257,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacing.large,
     backgroundColor: '#FFFFFF',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: 200,
   },
   staticBottomContainer: {
     flex: 1,
