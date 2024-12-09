@@ -139,7 +139,7 @@ export const PreassignedFareContractSummary = ({
             )}
           <SummaryText />
           {!isSearchingOffer &&
-            validDurationSeconds &&
+            !!validDurationSeconds &&
             isShowValidTimeInfoEnabled &&
             summary(
               t(

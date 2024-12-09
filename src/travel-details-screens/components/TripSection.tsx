@@ -155,7 +155,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
-        {step && leg.mode && (
+        {!!step && leg.mode && (
           <AccessibleText
             style={style.a11yHelper}
             prefix={t(

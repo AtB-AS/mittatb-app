@@ -118,7 +118,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
               </GenericSectionItem>
             )}
-            {customerNumber && (
+            {!!customerNumber && (
               <GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}

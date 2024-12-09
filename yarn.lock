@@ -3843,6 +3843,13 @@
     semver "^7.5.4"
     ts-api-utils "^1.0.1"
 
+"@typescript-eslint/experimental-utils@^5.36.1":
+  version "5.62.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-5.62.0.tgz#14559bf73383a308026b427a4a6129bae2146741"
+  integrity sha512-RTXpeB3eMkpoclG3ZHft6vG/Z30azNHuqY6wKPBHlVMZFuEvrtlEDe8gMqDb+SO+9hjC/pLekeSCryf9vMZlCw==
+  dependencies:
+    "@typescript-eslint/utils" "5.62.0"
+
 "@typescript-eslint/parser@^5.30.5":
   version "5.62.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.62.0.tgz#1b63d082d849a2fcae8a569248fbe2ee1b8a56c7"
@@ -5913,6 +5920,15 @@ eslint-plugin-jest@^26.5.3:
   integrity sha512-TWJxWGp1J628gxh2KhaH1H1paEdgE2J61BBF1I59c6xWeL5+D1BzMxGDN/nXAfX+aSkR5u80K+XhskK6Gwq9ng==
   dependencies:
     "@typescript-eslint/utils" "^5.10.0"
+
+eslint-plugin-jsx-no-leaked-values@0.1.24:
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-no-leaked-values/-/eslint-plugin-jsx-no-leaked-values-0.1.24.tgz#5503c11c5f019d17c86ee65df926df2fc8f71109"
+  integrity sha512-gr81LxBZlWu+YsbdaoG6ruRN/wKPTLhuhZGrX95hgCNMoiyfPv4Xw/PFw8xR/sYOIIAGgrkuv38XFT0KrfSMWw==
+  dependencies:
+    "@typescript-eslint/experimental-utils" "^5.36.1"
+    ts-pattern "^4.0.5"
+    tsutils "^3.21.0"
 
 eslint-plugin-prettier@5.0.0:
   version "5.0.0"
@@ -10843,6 +10859,11 @@ ts-jest@^29.2.4:
     make-error "1.x"
     semver "^7.5.3"
     yargs-parser "^21.0.1"
+
+ts-pattern@^4.0.5:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.3.0.tgz#7a995b39342f1b00d1507c2d2f3b90ea16e178a6"
+  integrity sha512-pefrkcd4lmIVR0LA49Imjf9DYLK8vtWhqBPA3Ya1ir8xCW0O2yjL9dsCVvI7pCodLC5q7smNpEtDR2yVulQxOg==
 
 tslib@^1.8.1:
   version "1.14.1"

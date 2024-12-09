@@ -170,6 +170,7 @@
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "8.47.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsx-no-leaked-values": "0.1.24",
     "eslint-plugin-prettier": "5.0.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
