@@ -20,6 +20,22 @@ class DepartureDetailPage {
   }
 
   /**
+   * Return the public code
+   */
+  async getPublicCode() {
+    const publicCodeId = `//*[@resource-id="PublicCode"]`;
+    return $(publicCodeId).getText();
+  }
+
+  /**
+   * Return the line name
+   */
+  async getLineName() {
+    const lineNameId = `//*[@resource-id="lineName"]`;
+    return $(lineNameId).getText();
+  }
+
+  /**
    * Return the quay name
    * @param legType 'passed' or 'trip'
    * @param legIndex index of the leg
