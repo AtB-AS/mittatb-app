@@ -47,8 +47,11 @@ export function hasValidRightNowTravelRight(
   );
 }
 
-function isValidRightNowTravelRight(travelRight: TravelRight, now: number) {
-  // Unknown travel rights are not active
+export function isValidRightNowTravelRight(
+  travelRight: TravelRight,
+  now: number,
+) {
+  // Unknown travel rights are not valid
   if (!isNormalTravelRight(travelRight)) return false;
 
   if (isCarnetTravelRight(travelRight)) {
@@ -57,12 +60,11 @@ function isValidRightNowTravelRight(travelRight: TravelRight, now: number) {
       travelRight.usedAccesses,
     );
 
-    // If there are no used accesses, the travel right is not active
+    // If there are no used accesses, the travel right is not valid
     if (!validTo || !validFrom) return false;
 
-    // If the last used access is not active, the travel right is not active.
-    if (validTo < now) return false;
-    if (validFrom > now) return false;
+    // Return whether the last used access is currently valid.
+    return validFrom < now && validTo > now;
   }
 
   if (travelRight.endDateTime.getTime() < now) return false;
