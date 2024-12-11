@@ -11,9 +11,9 @@ export const useHasReservationOrActiveFareContract = () => {
     serverNow,
   );
   const hasActiveFareContracts = activeFareContracts.length > 0;
-  const hasReservingReservations = reservations
+  const hasNonRejectedReservations = reservations
     .map(getReservationStatus)
-    .some((status) => status === 'reserving');
+    .some((status) => status !== 'rejected');
 
-  return hasActiveFareContracts || hasReservingReservations;
+  return hasActiveFareContracts || hasNonRejectedReservations;
 };
