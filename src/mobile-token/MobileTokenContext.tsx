@@ -39,7 +39,7 @@ import {
 } from './hooks/use-load-native-token-query';
 import {wipeToken} from '@atb/mobile-token/helpers';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
 

@@ -1,4 +1,4 @@
-import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {
   OnBehalfOfTexts,
   PhoneInputTexts,
@@ -10,7 +10,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {ContrastColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 
 export const PhoneAndNameInputSection = ({

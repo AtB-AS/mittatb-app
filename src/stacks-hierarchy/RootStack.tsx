@@ -65,7 +65,7 @@ import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
-import {compareVersion} from '@atb/utils/compare-version.ts';
+import {compareVersion} from '@atb/utils/compare-version';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;

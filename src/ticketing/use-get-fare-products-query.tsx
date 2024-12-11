@@ -2,7 +2,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {getFareProducts} from '@atb/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const useGetFareProductsQuery = () => {
   const {preassignedFareProducts} = useFirestoreConfiguration();

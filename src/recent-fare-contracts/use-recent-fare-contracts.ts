@@ -15,9 +15,9 @@ import {
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {RecentFareContractType} from '@atb/recent-fare-contracts/types.ts';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques.ts';
-import {enumFromString} from '@atb/utils/enum-from-string.ts';
+import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {enumFromString} from '@atb/utils/enum-from-string';
 
 type State = {
   error: boolean;

@@ -1,19 +1,19 @@
-import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useEffect, useLayoutEffect} from 'react';
 import {ActivityIndicator, Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ContrastColor} from '@atb/theme/colors.ts';
-import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf.ts';
+import {ContrastColor} from '@atb/theme/colors';
+import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
-import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation.ts';
-import {animateNextChange} from '@atb/utils/animation.ts';
+import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation';
+import {animateNextChange} from '@atb/utils/animation';
 import {screenReaderPause} from '@atb/components/text';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {spellOut} from '@atb/utils/accessibility';
 
 export const ExistingRecipientsList = ({

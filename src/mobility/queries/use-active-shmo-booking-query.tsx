@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {getActiveShmoBooking} from '@atb/api/mobility';
-import {ONE_MINUTE_MS} from '@atb/utils/durations.ts';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
 import {useFeatureToggles} from '@atb/feature-toggles';
 

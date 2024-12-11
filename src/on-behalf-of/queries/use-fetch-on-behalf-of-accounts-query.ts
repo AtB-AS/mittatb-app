@@ -1,8 +1,8 @@
 import {useAuthState} from '@atb/auth';
 import {useQuery} from '@tanstack/react-query';
-import {fetchOnBehalfOfAccounts} from '@atb/api/profile.ts';
-import {HALF_DAY_MS} from '@atb/utils/durations.ts';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types.ts';
+import {fetchOnBehalfOfAccounts} from '@atb/api/profile';
+import {HALF_DAY_MS} from '@atb/utils/durations';
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
 
 export const FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY =
   'FETCH_ON_BEHALF_OF_ACCOUNTS';

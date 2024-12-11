@@ -11,7 +11,7 @@ import {Token} from '@atb/mobile-token/types';
 
 import {v4 as uuid} from 'uuid';
 import {useAuthState} from '@atb/auth';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils.ts';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 
 export const LIST_REMOTE_TOKENS_QUERY_KEY = 'listRemoteTokens';
 

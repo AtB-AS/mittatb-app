@@ -28,7 +28,7 @@ import {
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {getQuayName} from '@atb/utils/transportation-names.ts';
+import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/situations';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
