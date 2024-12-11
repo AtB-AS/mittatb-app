@@ -32,6 +32,7 @@ export function useSectionItem({
     backgroundColor: transparent
       ? undefined
       : theme.color.background.neutral[0].background,
+    overflow: 'hidden',
   };
   const contentContainer: ViewStyle = {
     flex: 1,

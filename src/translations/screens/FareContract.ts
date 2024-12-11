@@ -153,25 +153,27 @@ const FareContractTexts = {
         retry: _('Prøv på nytt.', 'Try again.', 'Prøv på nytt.'),
       },
     },
-    fromTo: {
-      directions: (from: string, to: string, isTwoWay: boolean) =>
-        isTwoWay
-          ? _(
-              `Mellom ${from} og ${to}, i begge retninger`,
-              `Between ${from} and ${to}, in both directions`,
-              `Mellom ${from} og ${to}, i begge retningar`,
-            )
-          : _(
-              `Fra ${from}, til ${to},`,
-              `From ${from}, to ${to}`,
-              `Frå ${from}, til ${to}`,
-            ),
+    harbors: {
       error: _(
         'Kunne ikke laste kaier.',
         'Could not load harbors.',
         'Kunne ikkje laste kaier.',
       ),
     },
+    fromTo: (from: string, to: string, isTwoWay: boolean) =>
+      isTwoWay
+        ? _(
+            `Mellom ${from} og ${to}, i begge retninger`,
+            `Between ${from} and ${to}, in both directions`,
+            `Mellom ${from} og ${to}, i begge retningar`,
+          )
+        : _(
+            `Fra ${from}, til ${to},`,
+            `From ${from}, to ${to}`,
+            `Frå ${from}, til ${to}`,
+          ),
+    validIn: (zone: string) =>
+      _(`Gyldig i ${zone}`, `Valid in ${zone}`, `Gyldig i ${zone}`),
     infoButtonA11yHint: _(
       'Aktivér for å gå til billettinformasjon',
       'Activate to go to ticket information',

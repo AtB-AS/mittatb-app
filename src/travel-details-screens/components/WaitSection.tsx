@@ -3,7 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {secondsToDuration} from '@atb/utils/date';
+import {secondsToDurationString} from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React from 'react';
 import {View} from 'react-native';
@@ -20,7 +20,7 @@ export type WaitDetails = {
 export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
+  const waitTime = secondsToDurationString(wait.waitTimeInSeconds, language);
   const shortWait = timeIsShort(wait.waitTimeInSeconds);
   const iconColor = useTransportationColor().background;
 
