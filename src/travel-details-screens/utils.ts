@@ -23,9 +23,9 @@ import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
-import {isDefined} from '@atb/utils/presence.ts';
+import {isDefined} from '@atb/utils/presence';
 import {screenReaderPause} from '@atb/components/text';
-import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data.ts';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 

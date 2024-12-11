@@ -7,7 +7,7 @@ import {
 } from '@entur-private/abt-mobile-client-sdk';
 import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
-import {HALF_DAY_MS} from '@atb/utils/durations.ts';
+import {HALF_DAY_MS} from '@atb/utils/durations';
 
 const CONTEXT_ID = 'main';
 

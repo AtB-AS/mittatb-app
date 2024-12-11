@@ -8,7 +8,7 @@ import {
 import {useAuthState} from '@atb/auth';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 
 type Args = {
   offers: ReserveOffer[];

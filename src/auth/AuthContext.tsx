@@ -30,7 +30,7 @@ import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useLocaleContext} from '@atb/LocaleProvider';
-import {useRefreshIdTokenWhenNecessary} from '@atb/auth/use-refresh-id-token-when-necessary.ts';
+import {useRefreshIdTokenWhenNecessary} from '@atb/auth/use-refresh-id-token-when-necessary';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
 export type AuthReducerState = {

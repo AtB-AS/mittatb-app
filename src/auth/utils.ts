@@ -1,6 +1,6 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {AuthenticationType} from './types';
-import {secondsBetween} from '@atb/utils/date.ts';
+import {secondsBetween} from '@atb/utils/date';
 
 export const mapAuthenticationType = (
   user: FirebaseAuthTypes.User | undefined,

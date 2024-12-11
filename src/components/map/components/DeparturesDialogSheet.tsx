@@ -14,7 +14,7 @@ import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {isDefined} from '@atb/utils/presence.ts';
+import {isDefined} from '@atb/utils/presence';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;

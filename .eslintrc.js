@@ -49,6 +49,7 @@ module.exports = {
     'unused-imports',
     '@tanstack/query',
     'jsx-no-leaked-values',
+    'import',
   ],
   rules: {
     // Warning on console.log
@@ -67,6 +68,12 @@ module.exports = {
     'no-restricted-exports': [
       'error',
       {restrictDefaultExports: {direct: true}},
+    ],
+
+    'import/extensions': [
+      'error',
+      'never',
+      {android: 'always', ios: 'always', json: 'always'},
     ],
 
     // Error on imports not done through index files (as of now only applied for @atb/components)

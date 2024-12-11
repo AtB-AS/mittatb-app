@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {PreassignedFareProduct} from '@atb/configuration/types';
 import {getFareProductBenefits} from '@atb/mobility/api/api';
 import {useAuthState} from '@atb/auth';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const useFareProductBenefitsQuery = (
   productId: PreassignedFareProduct['id'] | undefined,

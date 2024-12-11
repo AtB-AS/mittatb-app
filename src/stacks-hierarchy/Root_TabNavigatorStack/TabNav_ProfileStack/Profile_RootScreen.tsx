@@ -42,7 +42,7 @@ import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
 const buildNumber = getBuildNumber();
