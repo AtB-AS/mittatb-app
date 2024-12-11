@@ -21,6 +21,7 @@ const RETRY_INTERVAL_MS_MAX = 30000;
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
+  isLoaded: boolean;
   feedback_questions: FeedbackConfiguration[];
 };
 
@@ -61,6 +62,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
   const [fetchError, setFetchError] = useState(false);
   const [retryInterval, incrementRetryInterval] = useRetryIntervalWithBackoff();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchConfig = useCallback(async () => {
     try {
@@ -68,6 +70,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
       const currentConfig = await getConfig();
       setConfig(currentConfig);
       setFetchError(false);
+      setIsLoaded(true);
     } catch (e) {
       setFetchError(true);
       if (isRemoteConfigError(e) && isUserInfo(e.userInfo)) {
@@ -116,6 +119,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
         ...config,
         feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
+        isLoaded,
       }}
     >
       {children}
