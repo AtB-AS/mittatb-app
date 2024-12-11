@@ -30,6 +30,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('timeout', ref));
     expect(mockBugsnagNotification).toEqual([
@@ -40,6 +41,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
           isLoadingAppState: true,
           authStatus: 'loading',
           firestoreConfigStatus: 'success',
+          remoteConfigIsLoaded: true,
         },
       }),
     ]);
@@ -50,6 +52,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('loading', ref));
     expect(mockBugsnagNotification).toEqual(undefined);
@@ -60,6 +63,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('success', ref));
     expect(mockBugsnagNotification).toEqual(undefined);
@@ -70,6 +74,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     const hook = renderHook(
       ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
@@ -87,6 +92,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
           isLoadingAppState: true,
           authStatus: 'loading',
           firestoreConfigStatus: 'success',
+          remoteConfigIsLoaded: true,
         },
       }),
     ]);
@@ -97,6 +103,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     const hook = renderHook(() =>
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
@@ -109,6 +116,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
           isLoadingAppState: true,
           authStatus: 'loading',
           firestoreConfigStatus: 'success',
+          remoteConfigIsLoaded: true,
         },
       }),
     ]);
@@ -122,6 +130,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     const hook = renderHook(
       ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
@@ -134,6 +143,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
@@ -144,6 +154,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
           isLoadingAppState: true,
           authStatus: 'fetching-id-token',
           firestoreConfigStatus: 'success',
+          remoteConfigIsLoaded: true,
         },
       }),
     ]);
@@ -154,6 +165,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     });
     const hook = renderHook(() =>
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
@@ -166,6 +178,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
           isLoadingAppState: true,
           authStatus: 'loading',
           firestoreConfigStatus: 'success',
+          remoteConfigIsLoaded: true,
         },
       }),
     ]);
@@ -174,6 +187,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       isLoadingAppState: true,
       authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(mockBugsnagNotification).toEqual(undefined);

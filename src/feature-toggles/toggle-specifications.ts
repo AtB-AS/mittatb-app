@@ -74,6 +74,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_on_behalf_of',
   },
   {
+    name: 'isOnboardingLoginEnabled',
+    remoteConfigKey: 'enable_onboarding_login',
+  },
+  {
     name: 'isOnlyStopPlacesCheckboxEnabled',
     remoteConfigKey: 'enable_only_stop_places_checkbox',
   },
