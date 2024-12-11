@@ -9,6 +9,7 @@ export type LoadingParams = {
   isLoadingAppState: boolean;
   authStatus: AuthStatus;
   firestoreConfigStatus: FirestoreConfigStatus;
+  remoteConfigIsLoaded: boolean;
 };
 
 export type LoadingState = {
