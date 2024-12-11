@@ -106,15 +106,13 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   }
 
   return (
-    <View style={{alignItems: 'center'}}>
-      <View
-        style={styles.aztecCode}
-        accessible={true}
-        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-        testID="mobileTokenBarcode"
-      >
-        <SvgXml xml={aztecXml} width="100%" height="100%" />
-      </View>
+    <View
+      style={styles.aztecCode}
+      accessible={true}
+      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+      testID="mobileTokenBarcode"
+    >
+      <SvgXml xml={aztecXml} width="100%" height="100%" />
     </View>
   );
 };
@@ -257,6 +255,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacing.large,
     backgroundColor: '#FFFFFF',
+    maxHeight: 275,
   },
   staticBottomContainer: {
     flex: 1,
