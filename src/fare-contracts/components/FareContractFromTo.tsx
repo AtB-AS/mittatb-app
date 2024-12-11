@@ -266,7 +266,7 @@ const BorderedFromToBox = ({
 
   return (
     <View
-      style={styles.borderedInfoBoxContainer}
+      style={styles.container}
       accessible
       accessibilityLabel={accessibilityLabel}
     >
@@ -278,8 +278,8 @@ const BorderedFromToBox = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  borderedInfoBoxContainer: {
-    flex: 1,
+  container: {
+    width: '100%',
   },
   largeContent: {
     flexDirection: 'column',

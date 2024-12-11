@@ -16,7 +16,7 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToClock, secondsToDuration} from '@atb/utils/date';
+import {formatToClock, secondsToDurationString} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -417,7 +417,7 @@ const IntermediateInfo = ({
         t(
           TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
+            secondsToDurationString(leg.duration, language),
           ),
         ) + screenReaderPause
       }
@@ -429,7 +429,7 @@ const IntermediateInfo = ({
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
+            secondsToDurationString(leg.duration, language),
           ),
         )}
       </ThemeText>
@@ -454,7 +454,7 @@ const WalkSection = (leg: Leg) => {
         {isWalkTimeOfSignificance
           ? t(
               TripDetailsTexts.trip.leg.walk.label(
-                secondsToDuration(leg.duration ?? 0, language),
+                secondsToDurationString(leg.duration ?? 0, language),
               ),
             )
           : t(TripDetailsTexts.trip.leg.shortWalk)}
@@ -478,7 +478,7 @@ const BikeSection = (leg: Leg) => {
       <ThemeText typography="body__secondary" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.bicycle.label(
-            secondsToDuration(leg.duration ?? 0, language),
+            secondsToDurationString(leg.duration ?? 0, language),
           ),
         )}
       </ThemeText>
@@ -582,7 +582,7 @@ function InterchangeSection({
       ' ' +
       t(
         TripDetailsTexts.messages.interchangeMaxWait(
-          secondsToDuration(maximumWaitTime, language),
+          secondsToDurationString(maximumWaitTime, language),
         ),
       );
   }

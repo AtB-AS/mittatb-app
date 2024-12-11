@@ -7,10 +7,7 @@ import {
   NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {
-  FareContractInfoHeader,
-  FareContractInfoDetails,
-} from '../FareContractInfo';
+import {FareContractInfoDetails} from '../FareContractInfo';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -47,6 +44,9 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
+import {ProductName} from '@atb/fare-contracts/components/ProductName';
+import {Description} from '@atb/fare-contracts/components/FareContractDescription';
+import {ValidTo} from '@atb/fare-contracts/components/ValidTo';
 
 type Props = {
   fareContract: FareContract;
@@ -124,15 +124,9 @@ export const DetailsContent: React.FC<Props> = ({
 
   return (
     <Section style={styles.section}>
-      <GenericSectionItem>
-        <ValidityHeader
-          status={validityStatus}
-          now={now}
-          createdDate={fc.created.getTime()}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-        />
+      <GenericSectionItem
+        style={{paddingTop: 0, paddingBottom: theme.spacing.large}}
+      >
         <ValidityLine
           status={validityStatus}
           now={now}
@@ -140,12 +134,27 @@ export const DetailsContent: React.FC<Props> = ({
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
         />
-        <FareContractInfoHeader
-          status={validityStatus}
-          testID="details"
-          preassignedFareProduct={preassignedFareProduct}
-          sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
-        />
+        <View
+          style={{
+            paddingVertical: theme.spacing.large,
+            paddingHorizontal: theme.spacing.medium,
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            flex: 1,
+            rowGap: theme.spacing.small,
+          }}
+        >
+          <ProductName fc={fc} />
+          <ValidityHeader
+            status={validityStatus}
+            now={now}
+            createdDate={fc.created.getTime()}
+            validFrom={validFrom}
+            validTo={validTo}
+          />
+          <ValidTo fc={fc} />
+          <Description fc={fc} />
+        </View>
         <FareContractFromTo
           backgroundColor={theme.color.background.neutral['0']}
           mode="large"

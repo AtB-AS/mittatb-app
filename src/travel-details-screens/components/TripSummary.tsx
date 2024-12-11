@@ -1,7 +1,7 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {secondsToDuration} from '@atb/utils/date';
+import {secondsToDurationString} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
@@ -11,7 +11,7 @@ import {SummaryDetail} from '@atb/travel-details-screens/components/SummaryDetai
 
 export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const {t, language} = useTranslation();
-  const time = secondsToDuration(duration, language);
+  const time = secondsToDurationString(duration, language);
   const walkDistance = getDistance(legs, Mode.Foot);
   const bikeDistance = getDistance(legs, Mode.Bicycle);
   const readableWalkDistance = useHumanizeDistance(walkDistance);

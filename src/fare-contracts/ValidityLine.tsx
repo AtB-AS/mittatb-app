@@ -36,22 +36,16 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'approved':
       return (
         <LineWithVerticalBars
-          backgroundColor={theme.color.background.accent[3].background}
+          backgroundColor={theme.color.interactive[0].default.background}
           lineColor={lineColor}
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, animate = true} = props;
-      const validityPercent = animate
-        ? getValidityPercent(now, validFrom, validTo)
-        : 100;
-
       return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={backgroundColor.background}
           lineColor={lineColor}
-          validityPercent={validityPercent}
-          animate={animate}
+          animate={props.animate}
         />
       ) : (
         <View style={styles.container}>
@@ -141,23 +135,6 @@ const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
 };
 
 /**
- * Calculates the validity percent based on time left on ticket. This value is
- * used for determining how wide the animated part of the progress bar should
- * be. The returned validity percent will never be below 5 as the progress bar
- * need to be wide enough to always show some animation.
- */
-const getValidityPercent = (
-  now: number,
-  validFrom: number,
-  validTo: number,
-) => {
-  const duration = validTo - validFrom;
-  const timeLeft = validTo - now;
-  const percent = Math.ceil((timeLeft / duration) * 100);
-  return Math.max(5, Math.min(percent, 100));
-};
-
-/**
  Get the number of vertical lines necessary to fill the progress bar. For
  simplicity's sake it is calculated by using the window viewport width instead
  of actual progress bar width. I found using the onLayout listener to calculate
@@ -202,18 +179,18 @@ const VerticalLine = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginVertical: theme.spacing.medium,
+    //marginBottom: theme.spacing.medium,
     marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },
   progressBar: {
-    height: 8,
+    height: 12,
     overflow: 'hidden',
   },
   verticalLine: {
     position: 'absolute',
     bottom: 0,
-    width: 12,
+    width: 16,
     height: '100%',
   },
 }));
