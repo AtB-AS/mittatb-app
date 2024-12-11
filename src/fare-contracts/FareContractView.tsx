@@ -14,7 +14,6 @@ import {
 } from '@atb/components/sections';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
-import {FareContractInfoHeader} from '@atb/fare-contracts/FareContractInfo';
 import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/auth';
@@ -23,7 +22,6 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
-  isSentOrReceivedFareContract,
   FareContract,
   isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
@@ -36,6 +34,9 @@ import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDet
 import React from 'react';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 import {View} from 'react-native';
+import {getTransportModeText} from '@atb/components/transportation-modes';
+import {ProductName} from '@atb/fare-contracts/components/ProductName';
+import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 
 type Props = {
   now: number;
@@ -96,17 +97,19 @@ export const FareContractView: React.FC<Props> = ({
     firstTravelRight.fareProductRef,
   );
 
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
+  //TODO: Rydd og strukturer dette inn i logiske komponenter
   return (
     <Section testID={testID}>
-      <GenericSectionItem>
-        <ValidityHeader
-          status={validityStatus}
-          now={now}
-          createdDate={fareContract.created.getTime()}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-        />
+      <GenericSectionItem
+        style={{
+          paddingVertical: 0,
+        }}
+      >
         <ValidityLine
           status={validityStatus}
           now={now}
@@ -115,22 +118,42 @@ export const FareContractView: React.FC<Props> = ({
           fareProductType={preassignedFareProduct?.type}
           animate={!isStatic}
         />
-        <FareContractInfoHeader
-          status={validityStatus}
-          testID={testID}
-          preassignedFareProduct={preassignedFareProduct}
-          sentToCustomerAccountId={
-            isSent ? fareContract.customerAccountId : undefined
-          }
-        />
+        <View
+          style={{
+            paddingVertical: theme.spacing.large,
+            paddingHorizontal: theme.spacing.medium,
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            flex: 1,
+            rowGap: theme.spacing.small,
+          }}
+        >
+          <ProductName fc={fareContract} />
+          <ValidityHeader
+            status={validityStatus}
+            now={now}
+            createdDate={fareContract.created.getTime()}
+            validFrom={validFrom}
+            validTo={validTo}
+          />
+          <Description fc={fareContract} />
+        </View>
       </GenericSectionItem>
       <GenericSectionItem style={styles.detailContainer}>
         <View style={styles.detailTextContainer}>
           <FareContractFromTo
             fc={fareContract}
-            backgroundColor={theme.color.background.neutral['0']}
+            backgroundColor={theme.color.background.neutral[0]}
             mode="small"
           />
+          {!!fareProductTypeConfig?.transportModes && (
+            <FareContractDetail
+              content={[
+                getTransportModeText(fareProductTypeConfig.transportModes, t),
+              ]}
+            />
+          )}
+
           <FareContractDetail
             content={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, language),
@@ -180,8 +203,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   detailContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingVertical: theme.spacing.large,
+    paddingHorizontal: theme.spacing.medium,
   },
   detailTextContainer: {
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.xSmall,
   },
 }));
