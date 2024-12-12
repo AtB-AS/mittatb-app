@@ -287,13 +287,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   largeContent: {
     flexDirection: 'column',
     alignItems: 'center',
-    rowGap: 4,
+    rowGap: theme.spacing.xSmall,
   },
   smallContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    columnGap: 4,
+    columnGap: theme.spacing.xSmall,
   },
   smallContentText: {
     flexDirection: 'column',
