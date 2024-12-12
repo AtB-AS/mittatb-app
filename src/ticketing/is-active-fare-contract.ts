@@ -12,6 +12,8 @@ import {
  * - Fare contract state is 'Activated' or 'NotActivated'
  * - If carnet: Has non-expired access, or non-expired travel right in combination with unused access(es)
  * - If not carnet: Has any non-expired travel right
+ *
+ * See https://github.com/AtB-AS/docs-private/blob/main/terminology.md#ticketing
  */
 export const isActiveFareContract = (
   fc: FareContract,
