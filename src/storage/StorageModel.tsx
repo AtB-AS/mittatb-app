@@ -24,6 +24,7 @@ export type StorageModel = {
   '@ATB_user_preferences': string;
   '@ATB_user_travel_search_filters': string;
   '@ATB_user_travel_search_filters_v2': string;
+  '@ATB_only_stop_places_checkbox': string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;
