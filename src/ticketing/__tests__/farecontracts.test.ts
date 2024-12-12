@@ -2,8 +2,9 @@ import {carnetFareContract} from './fixtures/carnet-farecontact';
 import {periodBoatFareContract} from './fixtures/period-boat-farecontract';
 import {singleFareContract} from './fixtures/single-farecontract';
 
-import {isValidRightNowOrCanBeUsedFareContract, isCarnet} from '../utils';
+import {isCarnet} from '../utils';
 import {FareContractState, NormalTravelRight} from '../types';
+import {isActiveFareContract} from '../is-active-fare-contract';
 
 const now = Date.now();
 
@@ -20,20 +21,14 @@ describe('Fare contract', () => {
 
 describe('isActiveNowOrCanBeUsedFareContract', () => {
   it('is true when valid', () => {
-    expect(
-      isValidRightNowOrCanBeUsedFareContract(carnetFareContract, now),
-    ).toBe(true);
-    expect(
-      isValidRightNowOrCanBeUsedFareContract(periodBoatFareContract, now),
-    ).toBe(true);
-    expect(
-      isValidRightNowOrCanBeUsedFareContract(singleFareContract, now),
-    ).toBe(true);
+    expect(isActiveFareContract(carnetFareContract, now)).toBe(true);
+    expect(isActiveFareContract(periodBoatFareContract, now)).toBe(true);
+    expect(isActiveFareContract(singleFareContract, now)).toBe(true);
   });
 
   it('is true when not activated', () => {
     expect(
-      isValidRightNowOrCanBeUsedFareContract(
+      isActiveFareContract(
         {
           ...singleFareContract,
           state: FareContractState.NotActivated,
@@ -45,7 +40,7 @@ describe('isActiveNowOrCanBeUsedFareContract', () => {
 
   it('is true when valid in the future', () => {
     expect(
-      isValidRightNowOrCanBeUsedFareContract(
+      isActiveFareContract(
         {
           ...singleFareContract,
           travelRights: [
@@ -63,7 +58,7 @@ describe('isActiveNowOrCanBeUsedFareContract', () => {
 
   it('is false when refunded', () => {
     expect(
-      isValidRightNowOrCanBeUsedFareContract(
+      isActiveFareContract(
         {
           ...singleFareContract,
           state: FareContractState.Refunded,
@@ -75,7 +70,7 @@ describe('isActiveNowOrCanBeUsedFareContract', () => {
 
   it('is false when cancelled', () => {
     expect(
-      isValidRightNowOrCanBeUsedFareContract(
+      isActiveFareContract(
         {
           ...singleFareContract,
           state: FareContractState.Cancelled,
