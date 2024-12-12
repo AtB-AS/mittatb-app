@@ -26,7 +26,7 @@ const createFareContract = (args?: {
 /**
  * Create a mock travel right. The default are:
  * - Currently valid.
- * - Not carned (no used accesses)
+ * - Not carnet (no used accesses)
  * - If any accesses provided, then the maximumNumberOfAccesses is 3
  */
 const createTravelRight = (
