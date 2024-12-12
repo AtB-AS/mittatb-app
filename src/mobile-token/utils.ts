@@ -7,6 +7,7 @@ import {
 } from '@entur-private/abt-mobile-client-sdk';
 import {isDefined} from '@atb/utils/presence';
 import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
+import Bugsnag from '@bugsnag/react-native';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -75,6 +76,12 @@ export const parseBffCallErrors = (error: any) => {
     error.message === 'Network request failed'
   ) {
     return new ClientNetworkError(error.message);
+  }
+
+  if (error instanceof TokenFactoryError) {
+    Bugsnag.leaveBreadcrumb(
+      `Received Token Factory Error: ${error.name}, ${error.message}, should be resolved using ${error.resolution}`,
+    );
   }
 
   return parseRemoteError(error) ?? error;
