@@ -72,6 +72,8 @@ type MobileTokenContextState = {
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
     wipeToken: () => void;
+    nativeTokenError: any;
+    remoteTokenError: any;
     getTokenErrorResolution: (
       activatedToken: ActivatedToken,
     ) => TokenErrorResolution;
@@ -104,11 +106,17 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     authStatus === 'authenticated' &&
     !isLoggingOut;
 
-  const {data: nativeToken, status: nativeTokenStatus} =
-    useLoadNativeTokenQuery(enabled, userId);
+  const {
+    data: nativeToken,
+    status: nativeTokenStatus,
+    error: nativeTokenError,
+  } = useLoadNativeTokenQuery(enabled, userId);
 
-  const {data: remoteTokens, status: remoteTokensStatus} =
-    useListRemoteTokensQuery(enabled, nativeToken);
+  const {
+    data: remoteTokens,
+    status: remoteTokensStatus,
+    error: remoteTokenError,
+  } = useListRemoteTokensQuery(enabled, nativeToken);
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
   useEffect(() => {
@@ -213,6 +221,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               ),
             [queryClient, nativeToken],
           ),
+          nativeTokenError: nativeTokenError,
+          remoteTokenError: remoteTokenError,
           getTokenErrorResolution: abtClient.getTokenErrorResolution,
           setSabotage: (attestationSabotage?: AttestationSabotage) => {
             setSabotage(attestationSabotage);
