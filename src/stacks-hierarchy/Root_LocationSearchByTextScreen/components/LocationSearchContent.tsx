@@ -15,7 +15,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
@@ -35,6 +35,8 @@ type LocationSearchContentProps = {
   onAddFavorite: () => void;
 };
 
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+
 export function LocationSearchContent({
   label,
   placeholder,
@@ -52,6 +54,7 @@ export function LocationSearchContent({
   const {history, addSearchEntry} = useSearchHistory();
   const {t} = useTranslation();
   const analytics = useAnalytics();
+  const {theme} = useTheme();
 
   const [text, setText] = useState<string>(defaultText ?? '');
   const debouncedText = useDebounce(text, 200);
@@ -161,7 +164,7 @@ export function LocationSearchContent({
               );
               setOnlyStopPlaces(v);
             }}
-            color="background_accent_0"
+            color={getThemeColor(theme)}
             style={styles.onlyStopPlacesCheckbox}
           />
         )}
@@ -226,7 +229,7 @@ export function LocationSearchContent({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.color.background.accent[0].background,
+    backgroundColor: getThemeColor(theme).background,
     paddingBottom: theme.spacing.medium,
   },
   withMargin: {
