@@ -22,6 +22,7 @@ import {CheckboxWithLabel} from '@atb/components/checkbox';
 import {useAnalytics} from '@atb/analytics';
 import {useFeatureToggles} from '@atb/feature-toggles';
 import {storage} from '@atb/storage';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 
 type LocationSearchContentProps = {
   label: string;
@@ -66,7 +67,10 @@ export function LocationSearchContent({
   );
 
   const {isOnlyStopPlacesCheckboxEnabled} = useFeatureToggles();
-  const [onlyStopPlaces, setOnlyStopPlaces] = useOnlyStopPlacesState();
+  const [onlyStopPlaces, setOnlyStopPlaces] = usePersistedBoolState(
+    storage,
+    '@ATB_only_stop_places_checkbox',
+  );
 
   const {location: geolocation} = useGeolocationState();
 
@@ -224,24 +228,6 @@ export function LocationSearchContent({
     </>
   );
 }
-
-const useOnlyStopPlacesState = (): [boolean, (b: boolean) => void] => {
-  const [onlyStopPlacesState, setOnlyStopPlacesState] = useState(false);
-
-  useEffect(() => {
-    storage.get('@ATB_only_stop_places_checkbox').then((v) => {
-      setOnlyStopPlacesState(v === 'true');
-    });
-  }, []);
-
-  return [
-    onlyStopPlacesState,
-    (b: boolean) => {
-      setOnlyStopPlacesState(b);
-      storage.set('@ATB_only_stop_places_checkbox', String(b));
-    },
-  ];
-};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
