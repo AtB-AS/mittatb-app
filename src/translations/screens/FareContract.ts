@@ -153,7 +153,7 @@ const FareContractTexts = {
         retry: _('Prøv på nytt.', 'Try again.', 'Prøv på nytt.'),
       },
     },
-    harbors: {
+    fromTo: {
       directions: (from: string, to: string, isTwoWay: boolean) =>
         isTwoWay
           ? _(

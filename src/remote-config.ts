@@ -30,6 +30,7 @@ export type RemoteConfig = {
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_on_behalf_of: boolean;
+  enable_onboarding_login: boolean;
   enable_parking_violations_reporting: boolean;
   enable_posthog: boolean;
   enable_push_notifications: boolean;
@@ -99,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
+  enable_onboarding_login: true,
   enable_parking_violations_reporting: false,
   enable_posthog: false,
   enable_push_notifications: false,
@@ -208,6 +210,9 @@ export function getConfig(): RemoteConfig {
   const enable_on_behalf_of =
     values['enable_on_behalf_of']?.asBoolean() ??
     defaultRemoteConfig.enable_on_behalf_of;
+  const enable_onboarding_login =
+    values['enable_onboarding_login']?.asBoolean() ??
+    defaultRemoteConfig.enable_onboarding_login;
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
@@ -351,6 +356,7 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_nynorsk,
     enable_on_behalf_of,
+    enable_onboarding_login,
     enable_parking_violations_reporting,
     enable_posthog,
     enable_push_notifications,

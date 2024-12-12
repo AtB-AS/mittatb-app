@@ -1,13 +1,10 @@
-import {
-  screenReaderPause,
-  ThemeText,
-  ThemeTextProps,
-} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Checkbox} from '.';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
+import type {ContrastColor} from '@atb-as/theme';
 
 export const CheckboxWithLabel = ({
   label,
@@ -19,7 +16,7 @@ export const CheckboxWithLabel = ({
   label: string;
   checked: boolean;
   onPress: (v: boolean) => void;
-  color?: ThemeTextProps['color'];
+  color: ContrastColor;
   style: StyleProp<ViewStyle>;
 }) => {
   const {t} = useTranslation();

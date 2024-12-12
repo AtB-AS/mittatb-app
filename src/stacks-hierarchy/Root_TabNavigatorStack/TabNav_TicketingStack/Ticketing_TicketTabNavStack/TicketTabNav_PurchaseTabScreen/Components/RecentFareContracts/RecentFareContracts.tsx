@@ -9,16 +9,18 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {RecentFareContractComponent} from './RecentFareContractComponent';
-import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {
+  RecentFareContract,
+  type RecentFareContractType,
+} from '@atb/recent-fare-contracts';
 
 type Props = {
-  recentFareContracts: RecentFareContract[];
+  recentFareContracts: RecentFareContractType[];
   loading: boolean;
   onSelect: (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => void;
@@ -86,7 +88,7 @@ export const RecentFareContracts = ({
           >
             {memoizedRecentFareContracts.map((rfc) => {
               return (
-                <RecentFareContractComponent
+                <RecentFareContract
                   key={rfc.id}
                   recentFareContract={rfc}
                   onSelect={onSelect}

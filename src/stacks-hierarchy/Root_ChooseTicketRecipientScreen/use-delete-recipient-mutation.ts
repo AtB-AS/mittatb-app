@@ -1,9 +1,9 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteOnBehalfOfAccount} from '@atb/api/profile.ts';
+import {deleteOnBehalfOfAccount} from '@atb/api/profile';
 import {useAuthState} from '@atb/auth';
-import {OnBehalfOfAccountsResponse} from '@atb/api/types/profile.ts';
+import {OnBehalfOfAccountsResponse} from '@atb/api/types/profile';
 import {useState} from 'react';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 
 export const useDeleteRecipientMutation = () => {
   const {userId} = useAuthState();

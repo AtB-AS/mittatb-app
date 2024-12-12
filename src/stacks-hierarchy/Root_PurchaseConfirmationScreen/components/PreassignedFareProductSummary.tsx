@@ -17,7 +17,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/ticketing';
@@ -139,7 +139,7 @@ export const PreassignedFareContractSummary = ({
             )}
           <SummaryText />
           {!isSearchingOffer &&
-            validDurationSeconds &&
+            !!validDurationSeconds &&
             isShowValidTimeInfoEnabled &&
             summary(
               t(

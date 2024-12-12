@@ -16,10 +16,7 @@ import {
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {Platform} from 'react-native';
-import {
-  getCurrentUserIdGlobal,
-  getIdTokenGlobal,
-} from '@atb/auth/AuthContext.tsx';
+import {getCurrentUserIdGlobal, getIdTokenGlobal} from '@atb/auth/AuthContext';
 
 type InternalUpstreamServerError = {
   errorCode: 602;

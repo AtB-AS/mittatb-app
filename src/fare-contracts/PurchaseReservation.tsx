@@ -11,6 +11,7 @@ import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {getReservationStatus} from '@atb/fare-contracts/utils';
 
 type Props = {
   reservation: Reservation;
@@ -30,18 +31,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
     }
   }
 
-  const getStatus = () => {
-    const paymentStatus = reservation.paymentStatus;
-    switch (paymentStatus) {
-      case 'CAPTURE':
-        return 'approved';
-      case 'REJECT':
-        return 'rejected';
-      default:
-        return 'reserving';
-    }
-  };
-
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
   );
@@ -51,7 +40,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
     return null;
   }
 
-  const status = getStatus();
+  const status = getReservationStatus(reservation);
 
   const paymentType = PaymentType[reservation.paymentType];
   return (

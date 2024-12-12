@@ -24,7 +24,7 @@ export const MobilityStat = ({
   return (
     <View style={[styles.container, externalStyle]}>
       <StatWithIcon svg={svg} text={String(primaryStat)} />
-      {secondaryStat && (
+      {!!secondaryStat && (
         <ThemeText
           typography="body__secondary"
           style={secondaryStatStyle}

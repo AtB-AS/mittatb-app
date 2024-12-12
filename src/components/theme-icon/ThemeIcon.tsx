@@ -15,7 +15,7 @@ import {
   NotificationIndicatorProps,
 } from './NotificationIndicator';
 import React from 'react';
-import {notifyBugsnag} from '@atb/utils/bugsnag-utils.ts';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;

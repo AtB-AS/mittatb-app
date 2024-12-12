@@ -1,12 +1,12 @@
-import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
+import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {dictionary, OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {Checkbox} from '@atb/components/checkbox';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {ContrastColor} from '@atb/theme/colors.ts';
+import {ContrastColor} from '@atb/theme/colors';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 
 const MAX_RECIPIENTS = 10;
 

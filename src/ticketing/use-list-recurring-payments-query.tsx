@@ -1,7 +1,7 @@
 import {useAuthState} from '@atb/auth';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useQuery} from '@tanstack/react-query';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const LIST_RECURRING_PAYMENTS_QUERY_KEY = 'getListRecurringPayments';
 

@@ -8,9 +8,7 @@ import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
-import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
@@ -18,7 +16,9 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {TariffZone} from '@atb/configuration';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
-import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage.tsx';
+import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
+import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
+import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -91,7 +91,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   };
 
   const onFareContractSelect = (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => {

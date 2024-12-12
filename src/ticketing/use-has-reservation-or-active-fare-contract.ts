@@ -1,6 +1,7 @@
 import {useTicketingState} from '@atb/ticketing/TicketingContext';
 import {useTimeContextState} from '@atb/time';
 import {filterActiveOrCanBeUsedFareContracts} from '@atb/ticketing/utils';
+import {getReservationStatus} from '@atb/fare-contracts/utils';
 
 export const useHasReservationOrActiveFareContract = () => {
   const {fareContracts, reservations} = useTicketingState();
@@ -10,7 +11,9 @@ export const useHasReservationOrActiveFareContract = () => {
     serverNow,
   );
   const hasActiveFareContracts = activeFareContracts.length > 0;
-  const hasReservations = reservations.length > 0;
+  const hasNonRejectedReservations = reservations
+    .map(getReservationStatus)
+    .some((status) => status !== 'rejected');
 
-  return hasActiveFareContracts || hasReservations;
+  return hasActiveFareContracts || hasNonRejectedReservations;
 };

@@ -29,7 +29,9 @@ module.exports = {
   },
   parserOptions: {
     sourceType: 'module',
+    project: './tsconfig.json',
   },
+  ignorePatterns: ['.eslintrc.js'],
   root: true,
   extends: [
     // Add the recommended react-query eslint rules, with exhaustive deps for the query key
@@ -46,6 +48,8 @@ module.exports = {
     'rulesdir',
     'unused-imports',
     '@tanstack/query',
+    'jsx-no-leaked-values',
+    'import',
   ],
   rules: {
     // Warning on console.log
@@ -64,6 +68,12 @@ module.exports = {
     'no-restricted-exports': [
       'error',
       {restrictDefaultExports: {direct: true}},
+    ],
+
+    'import/extensions': [
+      'error',
+      'never',
+      {android: 'always', ios: 'always', json: 'always'},
     ],
 
     // Error on imports not done through index files (as of now only applied for @atb/components)
@@ -109,6 +119,9 @@ module.exports = {
         argsIgnorePattern: '^_',
       },
     ],
+
+    // Avoid accidentally rendering 0 or NaN, which makes react-native crash if rendered not inside Text component
+    'jsx-no-leaked-values/jsx-no-leaked-values': 'error',
 
     // Warning on usage of texts from translations module without using the translation function
     'rulesdir/translations-warning': 'warn',

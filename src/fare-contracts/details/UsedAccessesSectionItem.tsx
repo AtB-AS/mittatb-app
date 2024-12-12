@@ -2,7 +2,7 @@ import {CarnetTravelRightUsedAccess} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {fullDateTime} from '@atb/utils/date.ts';
+import {fullDateTime} from '@atb/utils/date';
 import React from 'react';
 import {useSectionItem} from '@atb/components/sections';
 

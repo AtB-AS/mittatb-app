@@ -215,6 +215,7 @@ export const DepartureDetailsScreenComponent = ({
                 typography="heading__title"
                 color={themeColor}
                 style={styles.headerTitle}
+                testID="lineName"
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>

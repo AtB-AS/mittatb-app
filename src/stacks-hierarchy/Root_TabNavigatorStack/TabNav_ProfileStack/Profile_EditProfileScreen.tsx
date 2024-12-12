@@ -16,7 +16,7 @@ import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -255,7 +255,7 @@ export const Profile_EditProfileScreen = ({
                 {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
               </ThemeText>
             )}
-            {customerNumber && (
+            {!!customerNumber && (
               <>
                 <ThemeText>
                   {t(EditProfileTexts.profileInfo.customerNumber)}

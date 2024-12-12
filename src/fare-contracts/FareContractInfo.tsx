@@ -4,7 +4,6 @@ import {
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
-  useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -35,14 +34,12 @@ import {
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
-import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 export type FareContractInfoProps = {
-  travelRight: NormalTravelRight;
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
@@ -63,7 +60,6 @@ export type FareContractInfoDetailsProps = {
 };
 
 export const FareContractInfoHeader = ({
-  travelRight,
   status,
   testID,
   preassignedFareProduct,
@@ -71,9 +67,6 @@ export const FareContractInfoHeader = ({
 }: FareContractInfoProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-  const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
-    travelRight;
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -94,13 +87,6 @@ export const FareContractInfoHeader = ({
     phoneNumber &&
     onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
 
-  const fareProductTypeConfig = preassignedFareProduct
-    ? fareProductTypeConfigs.find(
-        (fareProductTypeConfig) =>
-          fareProductTypeConfig.type === preassignedFareProduct.type,
-      )
-    : undefined;
-
   return (
     <View style={styles.header}>
       {productName && (
@@ -120,14 +106,6 @@ export const FareContractInfoHeader = ({
         >
           {productDescription}
         </ThemeText>
-      )}
-      {fromStopPlaceId && toStopPlaceId && (
-        <FareContractHarborStopPlaces
-          fromStopPlaceId={fromStopPlaceId}
-          toStopPlaceId={toStopPlaceId}
-          direction={travelRight.direction}
-          transportModes={fareProductTypeConfig?.transportModes}
-        />
       )}
       {phoneNumber && (
         <MessageInfoText
@@ -266,5 +244,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     flex: 1,
     rowGap: theme.spacing.medium,
+    paddingVertical: theme.spacing.medium,
   },
 }));

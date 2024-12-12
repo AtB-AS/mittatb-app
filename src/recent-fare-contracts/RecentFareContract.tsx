@@ -2,7 +2,7 @@ import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
-import {RecentFareContract} from '../../types';
+import type {RecentFareContractType} from './types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
 import {
@@ -15,24 +15,24 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
-import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type RecentFareContractProps = {
-  recentFareContract: RecentFareContract;
+  recentFareContract: RecentFareContractType;
   onSelect: (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => void;
   testID: string;
 };
 
-export const RecentFareContractComponent = ({
+export const RecentFareContract = ({
   recentFareContract,
   onSelect,
   testID,
@@ -164,11 +164,10 @@ export const RecentFareContractComponent = ({
 
       {direction !== undefined && pointToPointValidity && (
         <View style={styles.harbors}>
-          <FareContractHarborStopPlaces
-            direction={direction}
-            fromStopPlaceId={pointToPointValidity?.fromPlace}
-            toStopPlaceId={pointToPointValidity?.toPlace}
-            transportModes={fareProductTypeConfig.transportModes}
+          <FareContractFromTo
+            backgroundColor={theme.color.background.neutral['0']}
+            mode="small"
+            rfc={recentFareContract}
           />
         </View>
       )}

@@ -30,10 +30,7 @@ import {
 import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {
-  findReferenceDataById,
-  PreassignedFareProduct,
-} from '@atb/configuration';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -47,8 +44,9 @@ import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureToggles} from '@atb/feature-toggles';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem.tsx';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type Props = {
   fareContract: FareContract;
@@ -91,7 +89,7 @@ export const DetailsContent: React.FC<Props> = ({
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
 
   const firstTravelRight = travelRights[0];
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {userProfiles} = useFirestoreConfiguration();
   const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
@@ -103,15 +101,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: purchaserPhoneNumber} =
     useGetPhoneByAccountIdQuery(senderAccountId);
 
-  const firstZone = firstTravelRight.tariffZoneRefs?.[0];
-  const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
-
-  const fromTariffZone = firstZone
-    ? findReferenceDataById(tariffZones, firstZone)
-    : undefined;
-  const toTariffZone = lastZone
-    ? findReferenceDataById(tariffZones, lastZone)
-    : undefined;
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
     userProfiles,
@@ -152,11 +141,15 @@ export const DetailsContent: React.FC<Props> = ({
           fareProductType={preassignedFareProduct?.type}
         />
         <FareContractInfoHeader
-          travelRight={firstTravelRight}
           status={validityStatus}
           testID="details"
           preassignedFareProduct={preassignedFareProduct}
           sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
+        />
+        <FareContractFromTo
+          backgroundColor={theme.color.background.neutral['0']}
+          mode="large"
+          fc={fc}
         />
       </GenericSectionItem>
       {isInspectable && validityStatus === 'valid' && (
@@ -172,8 +165,6 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       <GenericSectionItem>
         <FareContractInfoDetails
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
@@ -220,7 +211,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {usedAccesses?.length && (
+      {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
       <GenericSectionItem>

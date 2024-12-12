@@ -9,7 +9,7 @@ export function FareContractDetail({
   header,
   content,
 }: {
-  header: string;
+  header?: string;
   content: string[];
 }) {
   const styles = useStyles();
@@ -20,9 +20,11 @@ export function FareContractDetail({
 
   return (
     <View style={styles.container}>
-      <ThemeText typography="body__secondary" color={textColor}>
-        {header}
-      </ThemeText>
+      {header && (
+        <ThemeText typography="body__secondary" color={textColor}>
+          {header}
+        </ThemeText>
+      )}
       {content.map((c) => (
         <BorderedInfoBox
           type="small"

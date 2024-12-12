@@ -12,6 +12,7 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: false,
   authStatus: 'authenticated',
   firestoreConfigStatus: 'success',
+  remoteConfigIsLoaded: true,
 };
 
 jest.mock('@atb/auth/AuthContext', () => {});

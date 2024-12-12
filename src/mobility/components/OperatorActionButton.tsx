@@ -1,6 +1,6 @@
 import {useAnalytics} from '@atb/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert.tsx';
+import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
