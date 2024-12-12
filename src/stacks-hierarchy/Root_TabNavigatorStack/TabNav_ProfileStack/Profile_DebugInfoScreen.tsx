@@ -93,6 +93,8 @@ export const Profile_DebugInfoScreen = () => {
       removeRemoteToken,
       renewToken,
       wipeToken,
+      nativeTokenError,
+      remoteTokenError,
       setSabotage,
       getTokenErrorResolution,
       sabotage,
@@ -427,15 +429,18 @@ export const Profile_DebugInfoScreen = () => {
                     ).toISOString()}`}</ThemeText>
                     <ThemeText>{`Is native token attested: ${nativeToken.isAttested()}`}</ThemeText>
                     <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
-                    <ThemeText>{`Token error resolution: ${
+                    <ThemeText>{`Error resolution (if any): ${
                       TokenErrorResolution[getTokenErrorResolution(nativeToken)]
                     }`}</ThemeText>
                   </View>
                 )}
+
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
+                <ThemeText>{`Native token error: ${nativeTokenError}`}</ThemeText>
                 <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
+                <ThemeText>{`Remote tokens error: ${remoteTokenError}`}</ThemeText>
                 <ThemeText>{`Now: ${new Date(
                   serverNow,
                 ).toISOString()}`}</ThemeText>
