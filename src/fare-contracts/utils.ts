@@ -319,3 +319,15 @@ export function getFareContractInfo(
     numberOfUsedAccesses,
   };
 }
+
+export const getReservationStatus = (reservation: Reservation) => {
+  const paymentStatus = reservation.paymentStatus;
+  switch (paymentStatus) {
+    case 'CAPTURE':
+      return 'approved';
+    case 'REJECT':
+      return 'rejected';
+    default:
+      return 'reserving';
+  }
+};
