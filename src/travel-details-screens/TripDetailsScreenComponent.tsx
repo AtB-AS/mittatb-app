@@ -387,7 +387,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   heading: {marginBottom: theme.spacing.medium},
   parallaxContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
-    paddingHorizontal: theme.spacing.medium,
+    padding: theme.spacing.medium,
   },
   purchaseButton: {
     position: 'absolute',

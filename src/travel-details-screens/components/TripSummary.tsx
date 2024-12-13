@@ -1,6 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
@@ -11,7 +10,6 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SummaryDetail} from '@atb/travel-details-screens/components/SummaryDetail';
 
 export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
-  const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
   const walkDistance = getDistance(legs, Mode.Foot);
@@ -20,7 +18,7 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const readableBikeDistance = useHumanizeDistance(bikeDistance);
 
   return (
-    <View style={styles.tripSummary}>
+    <View>
       <SummaryDetail
         icon={Duration}
         accessibilityLabel={t(
@@ -63,12 +61,6 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
     </View>
   );
 };
-
-const useStyle = StyleSheet.createThemeHook((theme) => ({
-  tripSummary: {
-    paddingVertical: theme.spacing.medium,
-  },
-}));
 
 function getDistance<T extends {mode: Mode; distance: number}>(
   legs: Array<T>,
