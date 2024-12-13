@@ -21,6 +21,8 @@ import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
 import {useAnalytics} from '@atb/analytics';
 import {useFeatureToggles} from '@atb/feature-toggles';
+import {storage} from '@atb/storage';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 
 type LocationSearchContentProps = {
   label: string;
@@ -68,7 +70,10 @@ export function LocationSearchContent({
   );
 
   const {isOnlyStopPlacesCheckboxEnabled} = useFeatureToggles();
-  const [onlyStopPlaces, setOnlyStopPlaces] = useState(false);
+  const [onlyStopPlaces, setOnlyStopPlaces] = usePersistedBoolState(
+    storage,
+    '@ATB_only_stop_places_checkbox',
+  );
 
   const {location: geolocation} = useGeolocationState();
 
