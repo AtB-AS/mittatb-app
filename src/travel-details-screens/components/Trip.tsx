@@ -1,5 +1,4 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {Feedback} from '@atb/components/feedback';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatToVerboseFullDate,
@@ -217,7 +216,6 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <TripSummary {...tripPattern} />
-      <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );
 };

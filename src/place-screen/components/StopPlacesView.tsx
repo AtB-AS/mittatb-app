@@ -1,5 +1,4 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {Feedback} from '@atb/components/feedback';
 import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
@@ -116,8 +115,6 @@ export const StopPlacesView = (props: Props) => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
-  const lastIndex = quays?.length ? quays.length - 1 : 0;
-
   return (
     <SectionList
       ListHeaderComponent={
@@ -219,30 +216,21 @@ export const StopPlacesView = (props: Props) => {
       testID={testID}
       keyExtractor={(item) => item.quay.id}
       renderItem={({item, index}) => (
-        <>
-          <QuaySection
-            quay={item.quay}
-            isLoading={state.isLoading}
-            departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
-            data={state.data}
-            didLoadingDataFail={didLoadingDataFail}
-            navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
-            testID={'quaySection' + index}
-            stopPlace={item.stopPlace}
-            showOnlyFavorites={showOnlyFavorites}
-            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
-            searchDate={searchStartTime}
-            mode={mode}
-          />
-          {mode === 'Departure' && index === lastIndex && (
-            <Feedback
-              viewContext="departures"
-              metadata={quayListData}
-              avoidResetOnMetadataUpdate
-            />
-          )}
-        </>
+        <QuaySection
+          quay={item.quay}
+          isLoading={state.isLoading}
+          departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
+          data={state.data}
+          didLoadingDataFail={didLoadingDataFail}
+          navigateToDetails={navigateToDetails}
+          navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
+          testID={'quaySection' + index}
+          stopPlace={item.stopPlace}
+          showOnlyFavorites={showOnlyFavorites}
+          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
+          searchDate={searchStartTime}
+          mode={mode}
+        />
       )}
     />
   );
