@@ -11,5 +11,6 @@ export const useGetServiceJourneyVehiclesQuery = (
     queryFn: () => getServiceJourneyVehicles(serviceJourneyIds),
     refetchInterval: 20000,
     initialData: [],
+    retry: false,
   });
 };
