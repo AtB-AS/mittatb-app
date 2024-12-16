@@ -313,7 +313,7 @@ export const DepartureDetailsScreenComponent = ({
                 <Button
                   type="small"
                   leftIcon={{svg: favouriteIcon}}
-                  text="Favorite"
+                  text={t(FavoriteDeparturesTexts.favoriteButton)}
                   interactiveColor={interactiveColor}
                   accessibilityLabel={accessibilityLabel()}
                   accessibilityHint={
@@ -321,7 +321,17 @@ export const DepartureDetailsScreenComponent = ({
                       ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
                       : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
                   }
-                  onPress={onPressFavorite}
+                  onPress={() => {
+                    analytics.logEvent(
+                      'Departure details',
+                      'Add to Favourite clicked',
+                      {
+                        line: favouriteDepartureLine?.id,
+                        lineNumber: favouriteDepartureLine?.lineNumber,
+                      },
+                    );
+                    onPressFavorite();
+                  }}
                 />
               )}
             </View>
