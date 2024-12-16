@@ -244,6 +244,7 @@ export const DepartureDetailsScreenComponent = ({
               <View style={styles.actionButtons}>
                 <Button
                   type="small"
+                  expand={true}
                   leftIcon={{svg: Map}}
                   text={t(
                     vehiclePosition
