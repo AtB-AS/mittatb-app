@@ -56,7 +56,9 @@ export const FavouriteDepartureToggle = ({
   );
 };
 
-const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
+export const getFavoriteIcon = (
+  existingFavorite?: StoredType<FavoriteDeparture>,
+) => {
   if (!existingFavorite) {
     return SvgFavorite;
   } else if (existingFavorite.destinationDisplay) {

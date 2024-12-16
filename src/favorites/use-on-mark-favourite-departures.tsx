@@ -13,7 +13,7 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
-type FavouriteDepartureLine = {
+export type FavouriteDepartureLine = {
   id: string;
   description?: string;
   lineNumber?: string;
@@ -23,8 +23,8 @@ type FavouriteDepartureLine = {
 };
 
 export function useOnMarkFavouriteDepartures(
-  quay: Quay,
-  stopPlace: StopPlace,
+  quay?: Pick<Quay, 'id' | 'name' | 'publicCode'>,
+  stopPlace?: Pick<StopPlace, 'id' | 'name'>,
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
@@ -32,9 +32,18 @@ export function useOnMarkFavouriteDepartures(
   const {t} = useTranslation();
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const addFavorite = async (
-    line: FavouriteDepartureLine,
+    line: Pick<
+      FavouriteDepartureLine,
+      | 'id'
+      | 'destinationDisplay'
+      | 'lineNumber'
+      | 'transportMode'
+      | 'transportSubmode'
+    >,
     forSpecificDestination: boolean,
   ) => {
+    if (!(quay && stopPlace)) return;
+
     await addFavoriteDeparture({
       lineId: line.id,
       destinationDisplay: forSpecificDestination
@@ -54,38 +63,46 @@ export function useOnMarkFavouriteDepartures(
     );
   };
 
-  const getExistingFavorite = (line: FavouriteDepartureLine) =>
-    getFavoriteDeparture({
+  const getExistingFavorite = (line?: FavouriteDepartureLine) => {
+    if (!(line && quay && stopPlace)) return;
+
+    return getFavoriteDeparture({
       destinationDisplay: line.destinationDisplay,
       lineId: line.id,
       stopId: stopPlace.id,
       quayId: quay.id,
     });
+  };
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
     const existing = getExistingFavorite(line);
-    return existing
-      ? t(
-          DeparturesTexts.results.lines.favorite.removeFavorite(
-            `${line.lineNumber} ${
-              formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
-            }`,
-            stopPlace.name,
-          ),
-        )
-      : t(
-          DeparturesTexts.results.lines.favorite.addFavorite(
-            `${line.lineNumber} ${formatDestinationDisplay(
-              t,
-              line.destinationDisplay,
-            )}`,
-            stopPlace.name,
-          ),
-        );
+    if (stopPlace && existing) {
+      return existing
+        ? t(
+            DeparturesTexts.results.lines.favorite.removeFavorite(
+              `${line.lineNumber} ${
+                formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
+              }`,
+              stopPlace.name,
+            ),
+          )
+        : t(
+            DeparturesTexts.results.lines.favorite.addFavorite(
+              `${line.lineNumber} ${formatDestinationDisplay(
+                t,
+                line.destinationDisplay,
+              )}`,
+              stopPlace.name,
+            ),
+          );
+    }
   };
 
   const onMarkFavourite = (
-    line: FavouriteDepartureLine,
+    line: Pick<
+      FavouriteDepartureLine,
+      'id' | 'transportMode' | 'lineNumber' | 'destinationDisplay'
+    >,
     existing: StoredFavoriteDeparture | undefined,
     onCloseFocusRef: RefObject<any>,
   ) => {
@@ -117,7 +134,12 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (line.destinationDisplay && line.lineNumber && quay.name) {
+    } else if (
+      line.destinationDisplay &&
+      line.lineNumber &&
+      quay &&
+      quay.name
+    ) {
       openBottomSheet(() => {
         return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
