@@ -1,5 +1,4 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {Feedback} from '@atb/components/feedback';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatToVerboseFullDate,
@@ -115,17 +114,18 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {shouldShowDate && (
         <>
-          <View style={styles.date}>
-            <ThemeText typography="body__secondary" color="secondary">
-              {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
-            </ThemeText>
-          </View>
-          <Divider style={styles.divider} />
+          <ThemeText
+            typography="body__secondary"
+            color="secondary"
+            style={styles.date}
+          >
+            {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
+          </ThemeText>
+          <Divider />
         </>
       )}
       {shortWaitTime && (
         <MessageInfoBox
-          style={styles.messageBox}
           type="info"
           message={[
             t(TripDetailsTexts.messages.shortTime),
@@ -137,7 +137,6 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
-        style={styles.messageBox}
         textColor={theme.color.background.neutral[0]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
@@ -152,11 +151,7 @@ export const Trip: React.FC<TripProps> = ({
       {error && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
-          <MessageInfoBox
-            style={styles.messageBox}
-            type="warning"
-            message={translatedError(error, t)}
-          />
+          <MessageInfoBox type="warning" message={translatedError(error, t)} />
         </>
       )}
       <View style={styles.trip}>
@@ -199,7 +194,7 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Divider style={styles.divider} />
+      <Divider />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
           mapLegs={tripPatternLegs}
@@ -217,7 +212,6 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <TripSummary {...tripPattern} />
-      <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );
 };
@@ -239,22 +233,13 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacing.medium,
-    marginBottom: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
   date: {
-    alignItems: 'center',
-    marginBottom: theme.spacing.medium,
-  },
-  divider: {
-    marginBottom: theme.spacing.medium,
-  },
-  messageBox: {
-    marginBottom: theme.spacing.medium,
+    textAlign: 'center',
   },
   trip: {
     marginTop: theme.spacing.medium,
-    marginBottom: theme.spacing.xSmall,
   },
 }));
 
