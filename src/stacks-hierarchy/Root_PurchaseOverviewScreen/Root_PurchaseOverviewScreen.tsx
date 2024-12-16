@@ -80,12 +80,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const analytics = useAnalyticsContext();
 
-  const {
-    timeSelectionMode,
-    travellerSelectionMode,
-    zoneSelectionMode,
-    requiresTokenOnMobile,
-  } = selection.fareProductTypeConfig.configuration;
+  const {travellerSelectionMode, zoneSelectionMode, requiresTokenOnMobile} =
+    selection.fareProductTypeConfig.configuration;
 
   const fareProductOnBehalfOfEnabled =
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
@@ -223,8 +219,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ))}
 
           <ProductSelection
-            preassignedFareProduct={selection.preassignedFareProduct}
-            fareProductTypeConfig={selection.fareProductTypeConfig}
+            selection={selection}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
           />
@@ -240,10 +235,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           <FromToSelection
-            fareProductTypeConfig={selection.fareProductTypeConfig}
-            fromPlace={selection.zones?.from || selection.stopPlaces?.from}
-            toPlace={selection.zones?.to || selection.stopPlaces?.to}
-            preassignedFareProduct={selection.preassignedFareProduct}
+            selection={selection}
             style={styles.selectionComponent}
             onSelect={(params) => {
               navigation.setParams({onFocusElement: undefined});
@@ -258,11 +250,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           <StartTimeSelection
-            selectionMode={timeSelectionMode}
+            selection={selection}
             color={theme.color.interactive[2]}
-            travelDate={selection.travelDate}
             setTravelDate={(travelDate) => navigation.setParams({travelDate})}
-            validFromTime={selection.travelDate}
             style={styles.selectionComponent}
           />
 
@@ -317,12 +307,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           )}
 
           <Summary
+            selection={selection}
             isLoading={isSearchingOffer}
             isFree={isFree}
             isError={!!error || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            userProfilesWithCount={selection.userProfilesWithCount}
             summaryButtonText={
               isOnBehalfOfToggle
                 ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
