@@ -28,13 +28,13 @@ import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators'
 export const isScooter = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter ||
-  feature?.properties?.vehicleType?.formFactor === FormFactor.ScooterStanding;
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
+  feature?.properties?.vehicle_type_form_factor === FormFactor.ScooterStanding;
 
 export const isBicycle = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicleType?.formFactor === FormFactor.Bicycle &&
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
   !isStation(feature);
 
 export const isStation = (

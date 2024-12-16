@@ -97,7 +97,11 @@ export const isFeatureGeofencingZone = (f: Feature) =>
 export const isClusterFeature = (
   feature: Feature,
 ): feature is Feature<Point, Cluster> =>
-  isFeaturePoint(feature) && feature.properties?.cluster;
+  !!(
+    isFeaturePoint(feature) &&
+    feature.properties?.count &&
+    feature.properties?.count != 1
+  );
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
