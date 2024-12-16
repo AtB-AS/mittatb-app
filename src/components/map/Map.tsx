@@ -3,44 +3,36 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
+import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, Polygon, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {polygon} from '@turf/helpers';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
 import {MapFilter} from './components/filter/MapFilter';
-import {Stations, Vehicles} from './components/mobility';
+
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
-import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+import {GeofencingZoneCustomProps, MapProps} from './types';
 
-//import {MapPin} from '../../assets/svg/mono-icons/map';
-// import TestImg from './TestImg.png';
-// import AndroidIcon from './AndroidIcon.jpg';
-// import ParkingIcon from './Parking.png';
-
-// const mapIcons2 = {
-//   Park_and_ride: require('./sprite_images/Mapbox-Park_and_ride.svg'),
-//   Ferry: require('./sprite_images/Mapbox-Ferry.svg'),
-//   Tram: require('./sprite_images/Mapbox-Tram.svg'),
-//   TramSubway: require('./sprite_images/Mapbox-TramSubway.svg'),
-//   Subway: require('./sprite_images/Mapbox-Subway.svg'),
-//   Carferry: require('./sprite_images/Mapbox-Carferry.svg'),
-//   Helicopter: require('./sprite_images/Mapbox-Helicopter.svg'),
-//   Train: require('./sprite_images/Mapbox-Train.svg'),
-//   BusTram: require('./sprite_images/Mapbox-BusTram.svg'),
-//   Plane: require('./sprite_images/Mapbox-Plane.svg'),
-//   Bus: require('./icons/Bus.png'),
-//   BusSelected: require('./icons/BusSelected.png'),
-// }
+import {
+  flyToLocation,
+  isClusterFeature,
+  SLIGHTLY_RAISED_MAP_PADDING,
+} from '@atb/components/map';
 
 import {
   isFeaturePoint,
@@ -48,8 +40,9 @@ import {
   isFeatureGeofencingZone,
   isStopPlace,
   isParkAndRide,
+  mapPositionToCoordinates,
 } from './utils';
-import isEqual from 'lodash.isequal';
+
 import {
   GeofencingZones,
   useGeofencingZoneTextContent,
@@ -66,20 +59,25 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
-//import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {
-  mapIcons,
-  mapStyleItemToCircleStyle,
-  mapStyleItemToSymbolStyle,
-  //mapStyleToSymbolOrCircle,
-  nsrStyleCircleItems,
-  //nsrStyleItems,
-  nsrStyleSymbolItems,
-} from './nsrItemsMapStyle';
-//import {iconSizes} from '@atb-as/theme';
+  mapImageSourcesLightMode,
+  mapImageSourcesDarkMode,
+} from './mapIcons/mapIcons';
+
+import {
+  vehiclesAndStationsVectorSourceId,
+  VehiclesAndStations,
+} from './components/mobility/VehiclesAndStations';
+import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useMapSymbolRefresherSequence} from './hooks/use-map-symbol-refresher-sequence';
 
 export const Map = (props: MapProps) => {
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {initialLocation, includeSnackbar} = props;
+
+  const {themeName} = useTheme();
+
   const {getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -157,50 +155,6 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneTextContent],
   );
 
-  const updateRegionForVehicles = props.vehicles?.updateRegion;
-  const updateRegionForStations = props.stations?.updateRegion;
-  const [mapRegion, setMapRegion] = useState<MapRegion>();
-  useEffect(() => {
-    if (!mapRegion) return;
-    updateRegionForVehicles?.(mapRegion);
-    updateRegionForStations?.(mapRegion);
-  }, [mapRegion, updateRegionForVehicles, updateRegionForStations]);
-
-  const onDidFinishLoadingMap = async () => {
-    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
-    const zoomLevel = await mapViewRef.current?.getZoom();
-    const center = await mapViewRef.current?.getCenter();
-
-    if (!visibleBounds || !zoomLevel || !center) return;
-
-    setMapRegion({
-      visibleBounds,
-      zoomLevel,
-      center,
-    });
-  };
-
-  /**
-   * OnMapIdle fires more often than expected, because of that we check if the
-   * map region is changed before updating its state.
-   *
-   * There is a slight performance overhead by deep comparing previous and new
-   * map regions on each on map idle, but since we have control over the size of
-   * the objects it should be ok. The risk of firing effects that uses the map
-   * region too often is greater than the risk introduced by the performance
-   * overhead.
-   */
-  const onMapIdle = (state: MapState) => {
-    const newMapRegion: MapRegion = {
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
-  };
-
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -213,12 +167,6 @@ export const Map = (props: MapProps) => {
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
 
-      mapViewRef.current?.clearData(); // refreshes style
-      if (!showGeofencingZones) {
-        onMapClick({source: 'map-click', feature});
-        return;
-      }
-
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
@@ -230,6 +178,14 @@ export const Map = (props: MapProps) => {
             ? currentFeature
             : selected,
       );
+
+      // onFeatureClick is TODO!
+      // car stations on click not working atm
+
+      if (!showGeofencingZones && !isClusterFeature(featureToSelect)) {
+        onMapClick({source: 'map-click', feature});
+        return;
+      }
 
       /**
        * this hides the Snackbar when a feature is clicked,
@@ -244,10 +200,25 @@ export const Map = (props: MapProps) => {
         );
       } else {
         if (isFeaturePoint(featureToSelect)) {
-          onMapClick({
-            source: 'map-click',
-            feature: featureToSelect,
-          });
+          if (isClusterFeature(featureToSelect)) {
+            const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+            const toZoomLevel = Math.max(fromZoomLevel + 2);
+
+            flyToLocation({
+              coordinates: mapPositionToCoordinates(
+                feature.geometry.coordinates,
+              ),
+              padding: SLIGHTLY_RAISED_MAP_PADDING,
+              mapCameraRef,
+              zoomLevel: toZoomLevel,
+              animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
+            });
+          } else {
+            onMapClick({
+              source: 'map-click',
+              feature: featureToSelect,
+            });
+          }
         } else if (isScooter(selectedFeature)) {
           // outside of operational area, rules unspecified
           geofencingZoneOnPress(undefined);
@@ -263,19 +234,20 @@ export const Map = (props: MapProps) => {
     ],
   );
 
-  //const featureEntityType = ['get', 'entityType'];
-  //const featureStopPlaceType = ['get', 'stopPlaceType'];
-  ////const featureId = ['get', 'id'];
+  useLayoutEffect(() => {
+    // Prevent tile requests while the map isn't visible.
+    //console.log('setSourceVisibility', !!isFocusedAndActive);
+    // For some reason setSourceVisibility only works when changing to a tab that hasn't already been rendered.
+    // https://github.com/rnmapbox/maps/pull/3616
+    // should be fixed in rnmapbox version v10.1.32
+    mapViewRef.current?.setSourceVisibility(
+      !!isFocusedAndActive,
+      vehiclesAndStationsVectorSourceId,
+    );
+  }, [isFocusedAndActive]);
 
-  const selectedFeatureId = selectedFeature?.properties?.id || '';
-  //const isSelected = ['==', featureId, selectedFeatureId];
-  // const [refreshKey, setRefreshKey] = useState('someKey');
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log('SET THE KEY');
-  //     setRefreshKey('anotherKey');
-  //   }, 5000);
-  // }, []);
+  const {startMapSymbolRefresherSequence, useToggledIconName} =
+    useMapSymbolRefresherSequence();
 
   return (
     <View style={styles.container}>
@@ -287,17 +259,24 @@ export const Map = (props: MapProps) => {
       )}
       <View style={{flex: 1}}>
         <MapboxGL.MapView
+          onDidFinishLoadingMap={() => startMapSymbolRefresherSequence()}
           ref={mapViewRef}
           style={{
             flex: 1,
           }}
           pitchEnabled={false}
-          onDidFinishLoadingMap={onDidFinishLoadingMap}
-          onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
           {...MapViewConfig}
         >
+          <MapboxGL.Images
+            images={
+              themeName === 'dark'
+                ? mapImageSourcesDarkMode
+                : mapImageSourcesLightMode
+            }
+          />
+
           <MapboxGL.Camera
             ref={mapCameraRef}
             zoomLevel={15}
@@ -307,46 +286,15 @@ export const Map = (props: MapProps) => {
             ]}
             {...MapCameraConfig}
           />
-          <MapboxGL.Images images={mapIcons} />
 
-          <MapboxGL.VectorSource
-            id="stop-places-source"
-            url="mapbox://mittatb.3hi4kb3o"
-            //key={refreshKey}
-            // minZoomLevel={14} // limit requests to zoom level
-            // maxZoomLevel={14} // limit requests to zoom level
-            //tileUrlTemplates={[`localhost:8082/${refreshKey}/{z}/{x}/{y}.pbf`]}
-          >
-            <>
-              {nsrStyleSymbolItems.map((nsrStyleSymbolItem) => (
-                <MapboxGL.SymbolLayer
-                  key={nsrStyleSymbolItem.id}
-                  id={nsrStyleSymbolItem.id}
-                  //maxZoomLevel={10}
-                  sourceID="composite"
-                  //sourceLayerID="foo-6pzjnl"
-                  sourceLayerID={nsrStyleSymbolItem['source-layer']}
-                  // Filter to include relevant entity types
-                  filter={nsrStyleSymbolItem.filter}
-                  style={mapStyleItemToSymbolStyle(
-                    nsrStyleSymbolItem,
-                    selectedFeatureId,
-                  )}
-                />
-              ))}
-              {nsrStyleCircleItems.map((nsrStyleCircleItem) => (
-                <MapboxGL.CircleLayer
-                  key={nsrStyleCircleItem.id}
-                  id={nsrStyleCircleItem.id}
-                  sourceID="composite"
-                  sourceLayerID={nsrStyleCircleItem['source-layer']} // Make sure to access source-layer dynamically
-                  filter={nsrStyleCircleItem.filter}
-                  style={mapStyleItemToCircleStyle(nsrStyleCircleItem)} // Apply the mapped circle style
-                  minZoomLevel={nsrStyleCircleItem.minzoom || 0} // Optional: minZoom level from item
-                />
-              ))}
-            </>
-          </MapboxGL.VectorSource>
+          <VehiclesAndStations
+            selectedFeature={selectedFeature}
+            useToggledIconName={useToggledIconName}
+          />
+          <SelectedFeatureIcon
+            selectedFeature={selectedFeature}
+            useToggledIconName={useToggledIconName}
+          />
 
           {showGeofencingZones && (
             <GeofencingZones
@@ -361,31 +309,6 @@ export const Map = (props: MapProps) => {
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
-          )}
-          {props.vehicles && (
-            <Vehicles
-              vehicles={props.vehicles.vehicles}
-              mapCameraRef={mapCameraRef}
-              mapViewRef={mapViewRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
-            />
-          )}
-          {props.stations && (
-            <Stations
-              stations={props.stations.stations}
-              mapCameraRef={mapCameraRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
-            />
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
@@ -448,73 +371,3 @@ function getFeatureWeight(feature: Feature, positionClicked: Position): number {
     return 0;
   }
 }
-
-// (entity_type, stop_place_type, finalStopPlaceType)
-
-// ('TariffZone', None, None)
-// ('Quay', None, None)
-// ('Parking', None, None)
-
-// ('StopPlace', None, None)
-
-// ('StopPlace', 'onstreetBus', 'onstreetBus')
-// ('StopPlace', 'onstreetBus', 'onstreetBus_onstreetTram')
-// ('StopPlace', 'onstreetBus', 'localBus')
-// ('StopPlace', 'onstreetBus', 'localBus_onstreetTram')
-// ('StopPlace', 'onstreetBus', 'localTram_onstreetBus')
-
-// ('StopPlace', 'onstreetBus', 'schoolBus')
-// ('StopPlace', 'onstreetBus', 'regionalBus')
-// ('StopPlace', 'onstreetBus', 'shuttleBus')
-// ('StopPlace', 'onstreetBus', 'expressBus')
-// ('StopPlace', 'onstreetBus', 'railReplacementBus')
-// ('StopPlace', 'onstreetBus', 'airportLinkBus')
-// ('StopPlace', 'onstreetBus', 'sightseeingBus')
-
-// ('StopPlace', 'harbourPort', 'localCarFerry')
-// ('StopPlace', 'harbourPort', 'nationalCarFerry')
-// ('StopPlace', 'harbourPort', 'internationalCarFerry')
-// ('StopPlace', 'harbourPort', 'highSpeedPassengerService')
-// ('StopPlace', 'harbourPort', 'highSpeedVehicleService')
-// ('StopPlace', 'harbourPort', 'harbourPort')
-
-// ('StopPlace', 'onstreetTram', 'onstreetTram')
-// ('StopPlace', 'onstreetTram', 'localTram')
-// ('StopPlace', 'onstreetTram', 'localTram_onstreetBus')
-// ('StopPlace', 'onstreetTram', 'localTram_metroStation')
-// ('StopPlace', 'onstreetTram', 'onstreetBus_onstreetTram')
-
-// ('StopPlace', 'ferryStop', 'sightseeingService')
-// ('StopPlace', 'ferryStop', 'highSpeedPassengerService')
-// ('StopPlace', 'ferryStop', 'localPassengerFerry')
-// ('StopPlace', 'ferryStop', 'ferryStop')
-
-// ('StopPlace', 'liftStation', 'liftStation')
-// ('StopPlace', 'liftStation', 'telecabin')
-
-// ('StopPlace', 'airport', 'airport')
-// ('StopPlace', 'airport', 'helicopterService')
-
-// ('StopPlace', 'metroStation', 'metroStation')
-// ('StopPlace', 'metroStation', 'metro')
-
-// ('StopPlace', 'railStation', 'railStation')
-// ('StopPlace', 'railStation', 'touristRailway')
-
-// ('StopPlace', 'busStation', 'busStation')
-
-// https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/728727661/stops#StopPlace.1
-// stop_place_type:
-// onstreetBus (bus stops)
-// onstreetTram (tram stops)
-// taxiStand (taxi stations)
-// airport (airports)
-// railStation (railway stations)
-// metroStation (metro or subway stations)
-// busStation (bus terminals (different from regular bus stops))
-// harbourPort (ports where cars may board or disembark a ship)
-// ferryStop (ports where people can board or disembark a ship)
-// liftStation (station for a cable borne vehicle)
-// --
-// Mandatory when StopPlace has one or more subordinate Quay.
-// Not mandatory if the StopPlace is a parentStop.
