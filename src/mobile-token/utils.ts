@@ -80,7 +80,9 @@ export const parseBffCallErrors = (error: any) => {
 
   if (error instanceof TokenFactoryError) {
     Bugsnag.leaveBreadcrumb(
-      `Received Token Factory Error: ${error.name}, ${error.message}, should be resolved using ${error.resolution}`,
+      `Received Token Factory Error when calling BFF: ${error.name}, ${
+        error.message
+      }, should be resolved using ${TokenErrorResolution[error.resolution]}`,
     );
   }
 
