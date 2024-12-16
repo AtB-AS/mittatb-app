@@ -64,7 +64,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }
 
   return (
-    <>
+    <View>
       <View style={styles.mapContainer}>
         <MapboxGL.MapView
           style={styles.map}
@@ -104,7 +104,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
       </PressableOpacity>
-    </>
+    </View>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -26,7 +26,11 @@ import {
 } from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {animateNextChange} from '@atb/utils/animation';
-import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
+import {
+  formatToVerboseFullDate,
+  isInThePast,
+  isWithinSameDate,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -199,6 +203,9 @@ export const DepartureDetailsScreenComponent = ({
     }
   };
 
+  const shouldShowDepartureTime =
+    (fromQuay && !isInThePast(fromQuay.expectedDepartureTime)) || false;
+
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
     modesWeSellTicketsFor,
@@ -254,7 +261,7 @@ export const DepartureDetailsScreenComponent = ({
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
-              {fromQuay && (
+              {fromQuay && shouldShowDepartureTime && (
                 <DepartureTime departure={fromQuay} color={themeColor} />
               )}
             </View>
