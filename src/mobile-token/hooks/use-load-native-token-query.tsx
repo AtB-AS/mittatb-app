@@ -1,9 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {
-  ActivatedToken,
-  TokenMustBeReplacedError,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
 import {
@@ -108,13 +105,16 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
       } catch (err) {
+        const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
         if (
-          err instanceof TokenMustBeReplacedError ||
           err instanceof TokenMustBeReplacedRemoteTokenStateError ||
           err instanceof TokenNotFoundRemoteTokenStateError
         ) {
           token = undefined;
-        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
+        } else if (
+          err instanceof TokenEncodingInvalidRemoteTokenStateError ||
+          tokenSdkErrorHandling === 'reset'
+        ) {
           wipeToken([token.tokenId], traceId);
           token = undefined;
         } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
