@@ -9,6 +9,5 @@ const {getDefaultConfig} = require('@react-native/metro-config');
 const config = getDefaultConfig(__dirname);
 
 config.resolver.resolverMainFields.unshift("sbmodern");
-//config.transformer.unstable_allowRequireContext = true
 
 module.exports = config;
