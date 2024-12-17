@@ -47,7 +47,7 @@ export const useMapSymbolRefresherSequence = () => {
     [setUseToggledIconName, setRefreshCount],
     REFRESH_INTERVAL_MS,
     refreshIntervalIsDisabled,
-    false,
+    true,
   );
 
   return {
