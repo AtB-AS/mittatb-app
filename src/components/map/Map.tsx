@@ -77,6 +77,10 @@ export const Map = (props: MapProps) => {
   const isFocusedAndActive = useIsFocusedAndActive();
   const {initialLocation, includeSnackbar} = props;
 
+  const shouldShowMapFilter = props.selectionMode === 'ExploreEntities';
+  const shouldShowMapVehiclesAndStations =
+    props.selectionMode === 'ExploreEntities'; // should probably split map components instead
+
   const {themeName} = useTheme();
   const mainMapViewConfig = {
     ...MapViewConfig,
@@ -295,10 +299,12 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          <VehiclesAndStations
-            selectedFeature={selectedFeature}
-            useToggledIconName={useToggledIconName}
-          />
+          {shouldShowMapVehiclesAndStations && (
+            <VehiclesAndStations
+              selectedFeature={selectedFeature}
+              useToggledIconName={useToggledIconName}
+            />
+          )}
           <SelectedFeatureIcon
             selectedFeature={selectedFeature}
             useToggledIconName={useToggledIconName}
@@ -322,14 +328,8 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
 
-          {(props.vehicles || props.stations) && (
-            <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
-              isLoading={
-                (props.vehicles?.isLoading || props.stations?.isLoading) ??
-                false
-              }
-            />
+          {shouldShowMapFilter && (
+            <MapFilter onPress={() => onMapClick({source: 'filters-button'})} />
           )}
           <PositionArrow
             onPress={async () => {

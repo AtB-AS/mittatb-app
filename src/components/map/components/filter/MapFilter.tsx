@@ -6,9 +6,8 @@ import {useAnalytics} from '@atb/analytics';
 
 type MapFilterProps = {
   onPress: () => void;
-  isLoading: boolean;
 };
-export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
+export const MapFilter = ({onPress}: MapFilterProps) => {
   const style = useStyle();
   const {theme} = useTheme();
   const interactiveColor = theme.color.interactive[2];
@@ -25,7 +24,6 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
         analytics.logEvent('Map', 'Filter button clicked');
         onPress();
       }}
-      loading={isLoading}
       rightIcon={{svg: Filter}}
       hasShadow={true}
       testID="mapFilter"
