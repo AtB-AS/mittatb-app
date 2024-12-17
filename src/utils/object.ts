@@ -33,7 +33,7 @@ export type RequiredField<T, K extends keyof T> = T & Required<Pick<T, K>>;
  *
  * @example
  * type A = { a: number, b: string, c: boolean };
- * type B = OptionalValue<A, 'b' | 'c'>;
+ * type B = PartialField<A, 'b' | 'c'>;
  * // B is { a: number, b?: string, c?: boolean }
  */
 export type PartialField<T, K extends keyof T> = Omit<T, K> &

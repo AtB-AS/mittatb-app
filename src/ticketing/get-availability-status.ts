@@ -10,11 +10,9 @@ import {
 } from './utils';
 
 /**
- * Check whether a fare contract is active or not. A fare contract is considered active
- * if all of these are true:
- * - Fare contract state is 'Activated' or 'NotActivated'
- * - If carnet: Has non-expired access, or non-expired travel right in combination with unused access(es)
- * - If not carnet: Has any non-expired travel right
+ * Get availability status of a fare contract
+ *
+ * @see https://github.com/AtB-AS/docs-private/blob/main/terminology.md#ticketing
  */
 export const getAvailabilityStatus = (
   fc: FareContract,
