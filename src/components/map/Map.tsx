@@ -27,6 +27,7 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps} from './types';
+import {MAPBOX_LIGHT_V2_STYLE_URL, MAPBOX_DARK_V2_STYLE_URL} from '@env';
 
 import {
   flyToLocation,
@@ -77,6 +78,13 @@ export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
 
   const {themeName} = useTheme();
+  const mainMapViewConfig = {
+    ...MapViewConfig,
+    styleURL:
+      themeName === 'dark'
+        ? MAPBOX_DARK_V2_STYLE_URL
+        : MAPBOX_LIGHT_V2_STYLE_URL,
+  };
 
   const {getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -267,7 +275,7 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
-          {...MapViewConfig}
+          {...mainMapViewConfig}
         >
           <MapboxGL.Images
             images={

@@ -7,6 +7,8 @@ declare module '@env' {
   export const CUSTOMER_SERVICE_URL: string;
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
+  export const MAPBOX_LIGHT_V2_STYLE_URL: string;
+  export const MAPBOX_DARK_V2_STYLE_URL: string;
   export const AUTHORITY: string;
   export const APP_ORG: import('./app-orgs').AppOrgs;
   export const APP_GROUP_NAME: string;
