@@ -200,7 +200,7 @@ import vehiclepin_tram_indicator_dark from './dark/vehiclepin_tram_indicator.png
 
 import {ImageEntry} from '@rnmapbox/maps';
 
-export const MAP_ICONS_PIXEL_RATIO = 2;
+export const MAP_ICONS_PIXEL_RATIO = 1; //2;
 export const MAP_ICONS_UNTOGGLED_SUFFIX = '_untoggled';
 export const MAP_ICONS_TOGGLED_SUFFIX = '_toggled';
 

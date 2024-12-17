@@ -1,22 +1,12 @@
 import {Feature, Point, GeoJsonProperties} from 'geojson';
-import {
-  MAP_ICONS_PIXEL_RATIO,
-  MAP_ICONS_TOGGLED_SUFFIX,
-  MAP_ICONS_UNTOGGLED_SUFFIX,
-} from '../mapIcons/mapIcons';
 import {useTheme} from '@atb/theme';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined,
   pinType: 'vehicle' | 'station',
-  useToggledIconName: boolean = false,
   textSizeFactor: number = 1.0,
 ) => {
-  const iconToggleSuffix = useToggledIconName
-    ? MAP_ICONS_TOGGLED_SUFFIX
-    : MAP_ICONS_UNTOGGLED_SUFFIX;
-
   const {themeName} = useTheme();
   const isDarkMode = themeName === 'dark';
 
@@ -40,12 +30,7 @@ export const useMapSymbolStyles = (
     mapItemIconNonClusterState,
   ];
 
-  const iconSize = [
-    'case',
-    isCluster,
-    0.855 / MAP_ICONS_PIXEL_RATIO,
-    1 / MAP_ICONS_PIXEL_RATIO,
-  ];
+  const iconSize = ['case', isCluster, 0.855, 1];
 
   const vehicle_type_form_factor = ['get', 'vehicle_type_form_factor'];
   const iconCode = [
@@ -99,8 +84,7 @@ export const useMapSymbolStyles = (
     ['case', ['==', suffix, ''], '', '_'],
     suffix,
     '_',
-    isDarkMode ? 'dark' : 'light',
-    iconToggleSuffix,
+    themeName,
   ];
   const iconStyle = {
     iconImage,

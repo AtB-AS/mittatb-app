@@ -2,15 +2,12 @@ import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly} from '../../utils';
-import {MAP_ICONS_PIXEL_RATIO} from '../../mapIcons/mapIcons';
 import {useMapSymbolStyles} from '@atb/components/map';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
-  useToggledIconName,
 }: {
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
-  useToggledIconName: boolean;
 }) => {
   const pinType =
     selectedFeature?.properties?.is_virtual_station !== undefined
@@ -19,7 +16,6 @@ export const SelectedFeatureIcon = ({
   const {iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeature,
     pinType,
-    useToggledIconName,
     1.61,
   );
   if (!selectedFeature) {
@@ -61,8 +57,8 @@ export const SelectedFeatureIcon = ({
           ...customTextStyle,
           iconImage: iconStyle.iconImage,
           iconAnchor: 'bottom',
-          iconOffset: [0, 10 * MAP_ICONS_PIXEL_RATIO], // compensate for shadow
-          iconSize: 1 / MAP_ICONS_PIXEL_RATIO,
+          iconOffset: [0, 10], // compensate for shadow
+          iconSize: 1,
         }}
       />
     </MapboxGL.ShapeSource>

@@ -3,7 +3,7 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, Polygon, Position} from 'geojson';
@@ -27,7 +27,6 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps} from './types';
-import {MAPBOX_LIGHT_V2_STYLE_URL, MAPBOX_DARK_V2_STYLE_URL} from '@env';
 
 import {
   flyToLocation,
@@ -61,17 +60,12 @@ import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
 import {
-  mapImageSourcesLightMode,
-  mapImageSourcesDarkMode,
-} from './mapIcons/mapIcons';
-
-import {
   vehiclesAndStationsVectorSourceId,
   VehiclesAndStations,
 } from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useMapSymbolRefresherSequence} from './hooks/use-map-symbol-refresher-sequence';
+import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 
 export const Map = (props: MapProps) => {
   const isFocusedAndActive = useIsFocusedAndActive();
@@ -80,15 +74,6 @@ export const Map = (props: MapProps) => {
   const shouldShowMapFilter = props.selectionMode === 'ExploreEntities';
   const shouldShowMapVehiclesAndStations =
     props.selectionMode === 'ExploreEntities'; // should probably split map components instead
-
-  const {themeName} = useTheme();
-  const mainMapViewConfig = {
-    ...MapViewConfig,
-    styleURL:
-      themeName === 'dark'
-        ? MAPBOX_DARK_V2_STYLE_URL
-        : MAPBOX_LIGHT_V2_STYLE_URL,
-  };
 
   const {getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -258,8 +243,10 @@ export const Map = (props: MapProps) => {
     );
   }, [isFocusedAndActive]);
 
-  const {startMapSymbolRefresherSequence, useToggledIconName} =
-    useMapSymbolRefresherSequence();
+  const {mapboxJsonStyle, mapboxStyleIsLoading} = useMapboxJsonStyle();
+  if (mapboxStyleIsLoading) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -271,7 +258,6 @@ export const Map = (props: MapProps) => {
       )}
       <View style={{flex: 1}}>
         <MapboxGL.MapView
-          onDidFinishLoadingMap={() => startMapSymbolRefresherSequence()}
           ref={mapViewRef}
           style={{
             flex: 1,
@@ -279,16 +265,12 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
-          {...mainMapViewConfig}
+          {...{
+            ...MapViewConfig,
+            styleURL: undefined,
+            styleJSON: mapboxJsonStyle,
+          }}
         >
-          <MapboxGL.Images
-            images={
-              themeName === 'dark'
-                ? mapImageSourcesDarkMode
-                : mapImageSourcesLightMode
-            }
-          />
-
           <MapboxGL.Camera
             ref={mapCameraRef}
             zoomLevel={15}
@@ -300,15 +282,9 @@ export const Map = (props: MapProps) => {
           />
 
           {shouldShowMapVehiclesAndStations && (
-            <VehiclesAndStations
-              selectedFeature={selectedFeature}
-              useToggledIconName={useToggledIconName}
-            />
+            <VehiclesAndStations selectedFeature={selectedFeature} />
           )}
-          <SelectedFeatureIcon
-            selectedFeature={selectedFeature}
-            useToggledIconName={useToggledIconName}
-          />
+          <SelectedFeatureIcon selectedFeature={selectedFeature} />
 
           {showGeofencingZones && (
             <GeofencingZones
