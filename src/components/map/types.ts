@@ -1,14 +1,12 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, FeatureCollection, LineString, Point, Position} from 'geojson';
+import {Feature, LineString, Point} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
-import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -23,7 +21,7 @@ import {
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -40,41 +38,10 @@ export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
 
-export type MapRegion = {
-  // The coordinate bounds (ne, sw) visible in the user’s viewport.
-  visibleBounds: Position[];
-  zoomLevel: number;
-  center: Position;
-};
-
 export type MapPadding =
   | number
   | [number, number]
   | [number, number, number, number];
-
-export type VehicleFeatures = {
-  bicycles: FeatureCollection<Point, VehicleBasicFragment>;
-  scooters: FeatureCollection<Point, VehicleBasicFragment>;
-};
-
-export type VehiclesState = {
-  vehicles: VehicleFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
-
-export type StationFeatures = {
-  bicycles: FeatureCollection<Point, StationBasicFragment>;
-  cars: FeatureCollection<Point, StationBasicFragment>;
-};
-
-export type StationsState = {
-  stations: StationFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
 
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
@@ -92,8 +59,6 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  vehicles?: VehiclesState;
-  stations?: StationsState;
   includeSnackbar?: boolean;
 } & (
   | {

@@ -2,23 +2,13 @@ import {RefObject} from 'react';
 import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
 import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJsonProperties,
-  MultiPolygon,
-  Geometry,
-  Point,
-  Polygon,
-  Position,
-} from 'geojson';
+import {Feature, MultiPolygon, Point, Polygon, Position} from 'geojson';
 import {
   Cluster,
   MapSelectionActionType,
   MapPadding,
   ParkingType,
 } from './types';
-import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
@@ -110,13 +100,6 @@ export const isParkAndRide = (
   f: Feature<Point>,
 ): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
 
-export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
-  typeof obj === 'object' &&
-  obj !== null &&
-  'type' in obj &&
-  typeof obj.type === 'string' &&
-  obj.type === 'FeatureCollection';
-
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
   latitude: p[1],
@@ -183,44 +166,6 @@ export function flyToLocation({
       animationDuration: animationDuration ?? 750,
     });
 }
-
-export const toFeaturePoint = <
-  T extends {id?: string; lat: number; lon: number},
->(
-  item: T,
-): GeoJSON.Feature<GeoJSON.Point, T> => ({
-  type: 'Feature',
-  geometry: {
-    type: 'Point',
-    coordinates: [item.lon, item.lat],
-  },
-  properties: item,
-});
-
-export const toFeaturePoints = <
-  T extends {id: string; lat: number; lon: number},
->(
-  items: T[],
-) => items.map(toFeaturePoint);
-
-export const toFeatureCollection = <
-  G extends Geometry | null = Geometry,
-  P = GeoJsonProperties,
->(
-  features: Array<Feature<G, P>>,
-): FeatureCollection<G, P> => ({
-  type: 'FeatureCollection',
-  features,
-});
-
-/**
- * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
- * @param visibleBounds
- */
-export const getVisibleRange = (visibleBounds: Position[]) => {
-  const [[_, latNE], [lonSW, latSW]] = visibleBounds;
-  return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
-};
 
 export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
   isStation(entityFeature) || isStopPlace(entityFeature);

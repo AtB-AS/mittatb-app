@@ -9,9 +9,7 @@ import {
   BackArrow,
   flyToLocation,
   MapCameraConfig,
-  MapFilterType,
   MapLeg,
-  MapRegion,
   MapViewConfig,
   PositionArrow,
   useControlPositionsStyle,
@@ -33,15 +31,11 @@ import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {useStations} from '@atb/mobility';
-import {Stations} from '@atb/components/map';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
-
-const EMPTY_FILTER = {};
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -50,7 +44,6 @@ export type TravelDetailsMapScreenParams = {
   toPlace?: Coordinates | Position;
   mode?: AnyMode;
   subMode?: AnySubMode;
-  mapFilter?: MapFilterType;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -69,7 +62,6 @@ export const TravelDetailsMapScreenComponent = ({
   onPressBack,
   mode,
   subMode,
-  mapFilter,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -88,8 +80,6 @@ export const TravelDetailsMapScreenComponent = ({
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
-
-  const stations = useStations(mapFilter?.mobility ?? EMPTY_FILTER);
 
   const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
@@ -122,29 +112,8 @@ export const TravelDetailsMapScreenComponent = ({
           },
         };
 
-  const loadStations = (mapRegion: MapRegion) => {
-    stations?.updateRegion(mapRegion);
-  };
-
-  const onDidFinishLoadingMap = async () => {
-    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
-    const zoomLevel = await mapViewRef.current?.getZoom();
-    const center = await mapViewRef.current?.getCenter();
-    if (!visibleBounds || !zoomLevel || !center) return;
-    loadStations({
-      visibleBounds,
-      zoomLevel,
-      center,
-    });
-  };
-
   const onMapIdle = (state: MapState) => {
     setZoomLevel(state.properties.zoom);
-    loadStations({
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    });
   };
 
   useEffect(() => {
@@ -169,7 +138,6 @@ export const TravelDetailsMapScreenComponent = ({
         {...MapViewConfig}
         {...mapCameraTrackingMethod}
         onMapIdle={onMapIdle}
-        onDidFinishLoadingMap={onDidFinishLoadingMap}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -209,9 +177,7 @@ export const TravelDetailsMapScreenComponent = ({
             isError={isLiveConnected}
           />
         )}
-        {stations && (
-          <Stations stations={stations.stations} mapCameraRef={mapCameraRef} />
-        )}
+        {/* todo - re-add stations here */}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
@@ -280,8 +246,7 @@ const LiveVehicleMarker = ({
   if (isError) {
     circleBackgroundColor =
       theme.color.interactive.destructive.disabled.background;
-    circleBorderColor =
-      theme.color.interactive.destructive.default.background;
+    circleBorderColor = theme.color.interactive.destructive.default.background;
   }
   if (isStale) {
     circleBackgroundColor = theme.color.interactive[1].disabled.background;

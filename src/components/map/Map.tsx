@@ -53,7 +53,7 @@ import {ExternalRealtimeMapButton} from './components/external-realtime-map/Exte
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
-import {Snackbar, useSnackbar} from '../snackbar';
+import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
