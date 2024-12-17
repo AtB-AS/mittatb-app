@@ -1,21 +1,20 @@
-import {isActiveFareContract} from './is-active-fare-contract';
-import {isValidFareContract} from './is-valid-fare-contract';
 import {useTicketingState} from '@atb/ticketing/TicketingContext';
-import type {FareContract} from '@atb/ticketing/types';
-
-type Status = 'active' | 'valid' | 'expired';
+import type {AvailabilityStatus, FareContract} from '@atb/ticketing/types';
+import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
+import type {PartialField} from '@atb/utils/object';
 
 export const useFareContracts = (
-  status: Status,
+  availabilityStatus: PartialField<AvailabilityStatus, 'status'>,
   now: number,
 ): FareContract[] => {
   const {fareContracts} = useTicketingState();
-  switch (status) {
-    case 'active':
-      return fareContracts.filter((fc) => isActiveFareContract(fc, now));
-    case 'valid':
-      return fareContracts.filter((fc) => isValidFareContract(fc, now));
-    case 'expired':
-      return fareContracts.filter((fc) => !isActiveFareContract(fc, now));
-  }
+  return fareContracts.filter((fc) => {
+    const as = getAvailabilityStatus(fc, now);
+    if (as.availability === availabilityStatus.availability) {
+      if (!availabilityStatus) return true;
+      return as.status === availabilityStatus.status;
+    }
+
+    return false;
+  });
 };

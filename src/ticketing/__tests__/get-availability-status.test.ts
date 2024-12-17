@@ -4,8 +4,8 @@ import {
   FareContractState,
   type TravelRight,
 } from '../types';
-import {isActiveFareContract} from '../is-active-fare-contract';
 import {addMinutes} from 'date-fns';
+import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
 
 /**
  * Create a mock fare contract. The defaults are:
@@ -66,55 +66,49 @@ const createUsedAccess = (args?: {
   };
 };
 
-describe('isActiveFareContract', () => {
-  it('should return true if activated and the travel right is currently valid', () => {
-    const isActive = isActiveFareContract(
-      createFareContract(),
+describe('getAvailabilityStatus', () => {
+  it(`should return 'refunded' if fare contract state is refunded`, () => {
+    const availabilityStatus = getAvailabilityStatus(
+      createFareContract({state: FareContractState.Refunded}),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.status).toEqual('refunded');
   });
 
-  it('should return true if activated and the travel will be valid in future', () => {
-    const isActive = isActiveFareContract(
-      createFareContract({
-        travelRights: [
-          createTravelRight({startTime: addMinutes(new Date(), 30)}),
-        ],
-      }),
+  it(`should return 'historic/cancelled' if fare contract state is cancelled`, () => {
+    const availabilityStatus = getAvailabilityStatus(
+      createFareContract({state: FareContractState.Cancelled}),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.status).toEqual('cancelled');
   });
 
-  it('should return false if state other than activated and not activated', () => {
-    let isActive = isActiveFareContract(
-      createFareContract({
-        state: FareContractState.Cancelled,
-      }),
+  it(`should return 'invalid/unspecified' if fare contract state is unspecified`, () => {
+    const availabilityStatus = getAvailabilityStatus(
+      createFareContract({state: FareContractState.Unspecified}),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(false);
 
-    isActive = isActiveFareContract(
-      createFareContract({
-        state: FareContractState.Refunded,
-      }),
-      new Date().getTime(),
-    );
-    expect(isActive).toEqual(false);
-
-    isActive = isActiveFareContract(
-      createFareContract({
-        state: FareContractState.Unspecified,
-      }),
-      new Date().getTime(),
-    );
-    expect(isActive).toEqual(false);
+    expect(availabilityStatus.availability).toEqual('invalid');
+    expect(availabilityStatus.status).toEqual('unspecified');
   });
 
-  it('should return true if multiple travel rights and one of them are valid in the future', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'invalid/invalid' if travel right is not according to spec`, () => {
+    const availabilityStatus = getAvailabilityStatus(
+      createFareContract({travelRights: [{} as TravelRight]}),
+      new Date().getTime(),
+    );
+
+    expect(availabilityStatus.availability).toEqual('invalid');
+    expect(availabilityStatus.status).toEqual('invalid');
+  });
+
+  it(`should return 'historic/expired' if all travel rights are expired`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -125,40 +119,63 @@ describe('isActiveFareContract', () => {
             startTime: addMinutes(new Date(), -240),
             endTime: addMinutes(new Date(), -150),
           }),
-          createTravelRight({startTime: addMinutes(new Date(), 30)}),
         ],
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.status).toEqual('expired');
   });
 
-  it('should return false if travel right was valid in the past', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/upcoming' if a travel right will be valid in the future`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
-          createTravelRight({endTime: addMinutes(new Date(), -15)}),
+          createTravelRight({
+            startTime: addMinutes(new Date(), -120),
+            endTime: addMinutes(new Date(), -30),
+          }),
+          createTravelRight({
+            startTime: addMinutes(new Date(), 30),
+            endTime: addMinutes(new Date(), 120),
+          }),
         ],
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(false);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('upcoming');
   });
 
-  it('should return false if travel right was valid in the past', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/valid' if a travel right is currently valid`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
-          createTravelRight({endTime: addMinutes(new Date(), -15)}),
+          createTravelRight({
+            startTime: addMinutes(new Date(), -180),
+            endTime: addMinutes(new Date(), -90),
+          }),
+          createTravelRight({
+            startTime: addMinutes(new Date(), 30),
+            endTime: addMinutes(new Date(), 120),
+          }),
+          createTravelRight({
+            startTime: addMinutes(new Date(), -30),
+            endTime: addMinutes(new Date(), 60),
+          }),
         ],
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(false);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('valid');
   });
 
-  it('should return true if has used all accesses and one is currently valid', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/valid' if has used all accesses and one is currently valid`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -176,11 +193,13 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('valid');
   });
 
-  it('should return true if no accesses used', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/upcoming' when no accesses used`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -191,11 +210,13 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('upcoming');
   });
 
-  it('should return true if any remaining unused accesses', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/upcoming' if any remaining unused accesses`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -212,11 +233,13 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('upcoming');
   });
 
-  it('should return false if all accesses are either used or expired', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'historic/empty' if all accesses are expired`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -237,11 +260,13 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(false);
+
+    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.status).toEqual('empty');
   });
 
-  it('should return false if travel right is expired even if unused accesses', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'historic/expired' if travel right is expired even if unused accesses`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -253,11 +278,13 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(false);
+
+    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.status).toEqual('expired');
   });
 
-  it('should return true if travel right is expired but there is an currently valid access', () => {
-    const isActive = isActiveFareContract(
+  it(`should return 'available/valid' if there is a valid access even if travel right is expired`, () => {
+    const availabilityStatus = getAvailabilityStatus(
       createFareContract({
         travelRights: [
           createTravelRight({
@@ -274,6 +301,8 @@ describe('isActiveFareContract', () => {
       }),
       new Date().getTime(),
     );
-    expect(isActive).toEqual(true);
+
+    expect(availabilityStatus.availability).toEqual('available');
+    expect(availabilityStatus.status).toEqual('valid');
   });
 });

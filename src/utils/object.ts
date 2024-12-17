@@ -19,14 +19,25 @@ export type Flattened<T> = T extends object
 export type Nested<T> = T | {[key: string]: Nested<T>};
 
 /**
- * Make values in T required.
+ * Make specific field(s) in T required.
  *
  * @example
  * type A = { a: number, b?: string, c: boolean | undefined};
  * type B = RequireValue<A, 'b' | 'c'>;
  * // B is { a: number, b: string, c: boolean }
  */
-export type RequireValue<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type RequiredField<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+/**
+ * Make specific field(s) in T optional.
+ *
+ * @example
+ * type A = { a: number, b: string, c: boolean };
+ * type B = OptionalValue<A, 'b' | 'c'>;
+ * // B is { a: number, b?: string, c?: boolean }
+ */
+export type PartialField<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 /**
  * Flatten an object, non-recursively
