@@ -1,8 +1,8 @@
 import {Button} from '@atb/components/button';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useValidRightNowFareContract} from '@atb/ticketing';
 import {
   DashboardTexts,
@@ -11,7 +11,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
@@ -27,13 +27,13 @@ export const CompactFareContracts: React.FC<Props> = ({
 }) => {
   const itemStyle = useStyles();
 
-  const {serverNow} = useTimeContextState();
+  const {serverNow} = useTimeContext();
   const validFareContracts = useValidRightNowFareContract();
 
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {tariffZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfiguration();
+    useFirestoreConfigurationContext();
 
   return (
     <View style={[style, itemStyle.container]}>

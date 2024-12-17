@@ -6,7 +6,7 @@ import {
   formatToShortDateTimeWithoutYear,
   formatToVerboseDateTime,
 } from '@atb/utils/date';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/configuration';
@@ -30,7 +30,7 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const openTravelDateSheet = () => {

@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {Coordinates} from '@atb/sdk';
 
@@ -16,7 +16,7 @@ import {Coordinates} from '@atb/sdk';
 export function useInitialCoordinates(
   askForPermissionIfBlocked: boolean | undefined = false,
 ): Coordinates | null {
-  const {getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationContext();
   const [initialCoordinates, setInitialCoordinates] =
     useState<Coordinates | null>(null);
 

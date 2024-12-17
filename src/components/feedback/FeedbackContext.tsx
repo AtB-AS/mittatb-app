@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
@@ -34,9 +34,9 @@ export type AlternativeType = {
 
 const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
-export const FeedbackQuestionsProvider: React.FC = ({children}) => {
+export const FeedbackQuestionsContextProvider: React.FC = ({children}) => {
   const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);
-  const {feedback_questions} = useRemoteConfig();
+  const {feedback_questions} = useRemoteConfigContext();
 
   useEffect(() => {
     setCategories(feedback_questions ? feedback_questions : []);
@@ -49,17 +49,17 @@ export const FeedbackQuestionsProvider: React.FC = ({children}) => {
   );
 };
 
-function useFeedbackQuestionsState() {
+function useFeedbackQuestionsContext() {
   const context = useContext(FeedbackQuestionsContext);
   if (context === undefined) {
     throw new Error(
-      'useFeedbackQuestionsState must be used within an FeedbackQuestionsProvider',
+      'useFeedbackQuestionsContext must be used within an FeedbackQuestionsContextProvider',
     );
   }
   return context;
 }
 
 export function useFeedbackQuestion(viewContext: FeedbackQuestionsViewContext) {
-  const allCategories = useFeedbackQuestionsState();
+  const allCategories = useFeedbackQuestionsContext();
   return allCategories.find((category) => category.viewContext === viewContext);
 }

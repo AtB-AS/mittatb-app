@@ -1,13 +1,13 @@
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme, Theme} from '@atb/theme';
+import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[3];
 
 export const Loading: React.FC<{text?: string}> = ({text}) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   return (

@@ -1,10 +1,10 @@
 import {TariffZone} from '@atb/configuration';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useMemo} from 'react';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
-  const {location} = useGeolocationState();
+  const {location} = useGeolocationContext();
   return useMemo(() => {
     if (location) {
       const {longitude, latitude} = location.coordinates;

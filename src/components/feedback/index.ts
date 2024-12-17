@@ -1,3 +1,3 @@
 export {Feedback} from './Feedback';
-export {FeedbackQuestionsProvider} from './FeedbackContext';
+export {FeedbackQuestionsContextProvider} from './FeedbackContext';
 export type {FeedbackConfiguration} from './FeedbackContext';

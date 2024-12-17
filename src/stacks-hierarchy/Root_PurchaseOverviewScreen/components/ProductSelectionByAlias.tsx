@@ -8,14 +8,14 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   PreassignedFareProduct,
   isProductSellableInApp,
   FareProductTypeConfig,
 } from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
@@ -36,8 +36,8 @@ export function ProductSelectionByAlias({
 }: Props) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))

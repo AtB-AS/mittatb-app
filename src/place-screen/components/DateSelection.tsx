@@ -1,6 +1,6 @@
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, Language, useTranslation} from '@atb/translations';
@@ -69,7 +69,7 @@ export const DateSelection = ({
     setSearchTime(time);
   };
 
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onLaterTimePress = () => {
     openBottomSheet(
       () => (

@@ -2,7 +2,7 @@ import {RadioGroupSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
   preference_screenAlternatives,
-  usePreferences,
+  usePreferencesContext,
 } from '@atb/preferences';
 import {
   SelectStartScreenTexts,
@@ -33,7 +33,7 @@ export const Profile_SelectStartScreenScreen = () => {
   const {
     setPreference,
     preferences: {startScreen},
-  } = usePreferences();
+  } = usePreferencesContext();
   const {t} = useTranslation();
   const styles = useStyles();
   const items = Array.from(preference_screenAlternatives);

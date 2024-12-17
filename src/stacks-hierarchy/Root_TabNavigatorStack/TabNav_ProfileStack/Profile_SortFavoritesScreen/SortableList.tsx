@@ -8,7 +8,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteIcon, LocationFavorite, UserFavorites} from '@atb/favorites';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';
 import {FlatList, View} from 'react-native';
@@ -115,7 +115,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
     item,
   )} ${diretion} ${screenReaderPause}`;
   const styles = useListStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   if (index === 0 && !isDown) {
     return (

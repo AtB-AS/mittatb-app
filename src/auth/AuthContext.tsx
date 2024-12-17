@@ -31,7 +31,7 @@ import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {useRefreshIdTokenWhenNecessary} from '@atb/auth/use-refresh-id-token-when-necessary';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -155,7 +155,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const {language} = useLocaleContext();
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
-  const {isBackendSmsAuthEnabled: backendSmsEnabled} = useFeatureToggles();
+  const {isBackendSmsAuthEnabled: backendSmsEnabled} =
+    useFeatureTogglesContext();
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useClearQueriesOnUserChange(state);
@@ -225,7 +226,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   );
 };
 
-export function useAuthState() {
+export function useAuthContext() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuthState must be used within a AuthContextProvider');

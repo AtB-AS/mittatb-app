@@ -2,18 +2,18 @@ import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
+import {StoredFavoriteDeparture, useFavoritesContext} from '@atb/favorites';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -96,11 +96,11 @@ export const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
+  const {theme} = useThemeContext();
+  const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setUpdatedFavorites(

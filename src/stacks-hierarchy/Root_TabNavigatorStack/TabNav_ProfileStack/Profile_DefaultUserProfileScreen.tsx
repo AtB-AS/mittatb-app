@@ -1,12 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
 import {
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -16,12 +16,12 @@ export const Profile_DefaultUserProfileScreen = () => {
   const {
     setPreference,
     preferences: {defaultUserTypeString},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  const {userProfiles} = useFirestoreConfiguration();
+  const {userProfiles} = useFirestoreConfigurationContext();
 
   const selectedProfile =
     userProfiles.find(

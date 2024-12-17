@@ -62,7 +62,7 @@ export const SearchHistoryContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useSearchHistory() {
+export function useSearchHistoryContext() {
   const context = useContext(SearchHistoryContext);
   if (context === undefined) {
     throw new Error(

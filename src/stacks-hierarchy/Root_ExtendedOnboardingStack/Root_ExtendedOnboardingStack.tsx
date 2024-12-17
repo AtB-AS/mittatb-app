@@ -1,5 +1,5 @@
 import {PageIndicator} from '@atb/components/page-indicator';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
@@ -17,7 +17,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const Root_ExtendedOnboardingStack = () => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <>
       <StatusBar backgroundColor={getThemeColor(theme).background} />

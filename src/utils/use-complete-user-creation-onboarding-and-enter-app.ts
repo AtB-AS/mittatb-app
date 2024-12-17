@@ -1,4 +1,4 @@
-import {useOnboardingState, useOnboardingFlow} from '@atb/onboarding';
+import {useOnboardingContext, useOnboardingFlow} from '@atb/onboarding';
 
 import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
@@ -10,7 +10,7 @@ import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
  * completes it if not, and then navigates to the next screen using enterApp.
  */
 export const useCompleteUserCreationOnboardingAndEnterApp = () => {
-  const {completeOnboardingSection} = useOnboardingState();
+  const {completeOnboardingSection} = useOnboardingContext();
 
   const enterApp = useEnterApp();
 

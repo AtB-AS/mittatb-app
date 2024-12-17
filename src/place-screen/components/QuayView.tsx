@@ -1,5 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {SearchTime} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
@@ -48,7 +48,7 @@ export function QuayView({
 }: QuayViewProps) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavoritesContext();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const isFocused = useIsFocused();

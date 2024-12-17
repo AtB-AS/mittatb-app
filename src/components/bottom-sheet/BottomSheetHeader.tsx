@@ -1,9 +1,9 @@
 import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {insets} from '@atb/utils/insets';
@@ -22,8 +22,9 @@ export const BottomSheetHeader = ({
   const styles = useStyle();
   const {t} = useTranslation();
 
-  const {theme} = useTheme();
-  const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const {close: closeBottomSheetDefault, onOpenFocusRef} =
+    useBottomSheetContext();
 
   const handleClose = () => {
     if (onClose) {

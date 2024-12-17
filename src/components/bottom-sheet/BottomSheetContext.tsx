@@ -41,7 +41,7 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
   undefined,
 );
 
-export const BottomSheetProvider: React.FC = ({children}) => {
+export const BottomSheetContextProvider: React.FC = ({children}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
   const [contentFunction, setContentFunction] = useState<() => ReactNode>(
@@ -161,7 +161,7 @@ const BottomSheetOnBackDrop = ({
   );
 };
 
-export function useBottomSheet() {
+export function useBottomSheetContext() {
   const context = useContext(BottomSheetContext);
   if (context === undefined) {
     throw new Error(

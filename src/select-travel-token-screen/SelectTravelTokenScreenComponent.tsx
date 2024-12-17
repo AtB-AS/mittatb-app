@@ -2,12 +2,12 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {Token, useMobileTokenContextState} from '@atb/mobile-token';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {Token, useMobileTokenContext} from '@atb/mobile-token';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
 import {
   dictionary,
@@ -21,18 +21,18 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection} from '@atb/components/sections';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
   findReferenceDataById,
   isOfFareProductRef,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useOnboardingState} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/onboarding';
 import {useToggleTokenMutation} from '@atb/mobile-token';
 
 type Props = {onAfterSave: () => void};
@@ -40,20 +40,20 @@ type Props = {onAfterSave: () => void};
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const {fareContracts} = useTicketingState();
-  const {disable_travelcard} = useRemoteConfig();
+  const {fareContracts} = useTicketingContext();
+  const {disable_travelcard} = useRemoteConfigContext();
   const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfiguration();
+    useFirestoreConfigurationContext();
 
-  const {completeOnboardingSection} = useOnboardingState();
+  const {completeOnboardingSection} = useOnboardingContext();
 
-  const {tokens} = useMobileTokenContextState();
+  const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
   const {data} = useTokenToggleDetailsQuery();
 
-  const {serverNow} = useTimeContextState();
+  const {serverNow} = useTimeContext();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(

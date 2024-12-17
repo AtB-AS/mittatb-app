@@ -9,22 +9,22 @@ import React from 'react';
 import {TicketTabNavStackParams} from './navigation-types';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
 export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
-  const {fareContracts} = useTicketingState();
-  const {serverNow} = useTimeContextState();
+  const {fareContracts} = useTicketingContext();
+  const {serverNow} = useTimeContext();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     serverNow,
@@ -68,7 +68,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
   navigation,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={styles.container}>
       {state.routes.map((route: Route<string>, index: number) => {

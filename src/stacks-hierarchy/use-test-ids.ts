@@ -1,4 +1,4 @@
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {
   setTestIdPrototypes,
   resetTestIdPrototypes,
@@ -8,7 +8,7 @@ import {useEffect} from 'react';
 export function useTestIds() {
   const {
     preferences: {showTestIds},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   useEffect(() => {
     if (showTestIds) {

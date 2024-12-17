@@ -21,7 +21,7 @@ import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -36,7 +36,7 @@ export const useVehicles: (
   initialFilter?: MobilityMapFilterType,
 ) => VehiclesState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
-  const {isVehiclesInMapEnabled} = useFeatureToggles();
+  const {isVehiclesInMapEnabled} = useFeatureTogglesContext();
   const {getMapFilter} = useUserMapFilters();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},

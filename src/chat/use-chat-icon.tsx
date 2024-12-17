@@ -1,11 +1,11 @@
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import {ContrastColor} from '@atb/theme/colors';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
@@ -19,8 +19,8 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const {theme} = useTheme();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const {open: openBottomSheet} = useBottomSheetContext();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const onCloseFocusRef = useRef<RefObject<any>>(null);

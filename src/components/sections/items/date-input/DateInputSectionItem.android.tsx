@@ -1,4 +1,4 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {formatToSimpleDate} from '@atb/utils/date';
 import RNDateTimePicker, {
@@ -14,7 +14,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
   const {value, onChange, ...innerProps} = props;
   const {t} = useTranslation();
   const locale = useLocaleContext();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const [show, setShow] = useState(false);
 
   return (

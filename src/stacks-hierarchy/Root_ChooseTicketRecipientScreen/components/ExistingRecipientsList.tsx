@@ -4,7 +4,7 @@ import {useEffect, useLayoutEffect} from 'react';
 import {ActivityIndicator, Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
@@ -31,7 +31,7 @@ export const ExistingRecipientsList = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const recipientsQuery = useFetchOnBehalfOfAccountsQuery({enabled: true});
   const {mutation: deleteMutation, activeDeletions} =

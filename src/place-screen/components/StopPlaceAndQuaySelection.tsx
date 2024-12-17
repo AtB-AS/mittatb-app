@@ -2,7 +2,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
 
@@ -23,7 +23,7 @@ const StopPlaceAndQuaySelection = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
 
   const isMissingQuays = place.quays === undefined;

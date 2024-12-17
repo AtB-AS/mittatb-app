@@ -1,9 +1,9 @@
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {createEmptyBuilder} from './purchase-selection-builder';
 import type {PurchaseSelectionBuilderInput} from './types';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
-import {usePreferences} from '@atb/preferences';
-import {useTicketingState} from '@atb/ticketing';
+import {usePreferencesContext} from '@atb/preferences';
+import {useTicketingContext} from '@atb/ticketing';
 import {APP_VERSION} from '@env';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
@@ -21,11 +21,11 @@ import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-quer
  */
 export const usePurchaseSelectionBuilder = () => {
   const {fareProductTypeConfigs, userProfiles, tariffZones} =
-    useFirestoreConfiguration();
+    useFirestoreConfigurationContext();
   const {
     preferences: {defaultUserTypeString},
-  } = usePreferences();
-  const {customerProfile} = useTicketingState();
+  } = usePreferencesContext();
+  const {customerProfile} = useTicketingContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const builderInput: PurchaseSelectionBuilderInput = {

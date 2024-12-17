@@ -2,7 +2,7 @@ import {getLocales} from 'react-native-localize';
 import {TFunc} from '@leile/lobo-t';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Language} from '@atb/translations';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_REGION,
@@ -56,7 +56,7 @@ function useLocale(): Locale {
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
   const {
     preferences: {useSystemLanguage = true, language: userPreferencedLanguage},
-  } = usePreferences();
+  } = usePreferencesContext();
   // listen for updates to system Locale
   useEffect(() => {
     setSystemLocale(getPreferredSystemLocale);

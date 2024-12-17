@@ -4,7 +4,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteChips, Location} from '@atb/favorites';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
@@ -46,7 +46,7 @@ export const NearbyStopPlacesScreenComponent = ({
     locationIsAvailable,
     location: geolocation,
     requestLocationPermission,
-  } = useGeolocationState();
+  } = useGeolocationContext();
 
   const currentLocation = geolocation || undefined;
 

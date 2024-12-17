@@ -90,7 +90,7 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useAnnouncementsState() {
+export function useAnnouncementsContext() {
   const context = useContext(AnnouncementsContext);
   if (context === undefined) {
     throw new Error(

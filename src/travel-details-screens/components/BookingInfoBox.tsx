@@ -7,7 +7,7 @@ import {
   getEarliestBookingDate,
   getLatestBookingDate,
 } from '../utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingArrangement} from '@atb/api/types/generated/journey_planner_v3_types';
 import {RefObject} from 'react';
@@ -57,7 +57,7 @@ const useBookingMessage = (
   now: number,
 ): string | undefined => {
   const {t, language} = useTranslation();
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   if (!bookingArrangements) return undefined;
 
   const status = getBookingStatus(

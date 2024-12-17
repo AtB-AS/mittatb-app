@@ -21,7 +21,7 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/ticketing';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -46,7 +46,7 @@ export const PreassignedFareContractSummary = ({
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {isShowValidTimeInfoEnabled} = useFeatureToggles();
+  const {isShowValidTimeInfoEnabled} = useFeatureTogglesContext();
 
   const {zoneSelectionMode} = fareProductTypeConfig.configuration;
 

@@ -319,7 +319,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useFirestoreConfiguration() {
+export function useFirestoreConfigurationContext() {
   const context = useContext(FirestoreConfigurationContext);
   if (context === undefined) {
     throw new Error(

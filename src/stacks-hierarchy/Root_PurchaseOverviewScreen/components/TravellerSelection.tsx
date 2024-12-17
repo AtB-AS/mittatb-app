@@ -13,18 +13,18 @@ import {
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
-import {usePopOver} from '@atb/popover';
+import {usePopOverContext} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
-import {useAuthState} from '@atb/auth';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useAuthContext} from '@atb/auth';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {
   useSelectableUserProfiles,
   type PurchaseSelectionType,
@@ -48,13 +48,14 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {authenticationType} = useAuthState();
+  const {authenticationType} = useAuthContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
 
   const isOnBehalfOfEnabled =
-    useFeatureToggles().isOnBehalfOfEnabled &&
+    useFeatureTogglesContext().isOnBehalfOfEnabled &&
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const selectionMode =
@@ -62,7 +63,7 @@ export function TravellerSelection({
   const isOnBehalfOfAllowed =
     isOnBehalfOfEnabled && authenticationType === 'phone';
 
-  const {addPopOver} = usePopOver();
+  const {addPopOver} = usePopOverContext();
   const onBehalfOfIndicatorRef = useRef(null);
 
   const selectableUserProfiles = useSelectableUserProfiles(

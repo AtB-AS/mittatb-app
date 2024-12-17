@@ -16,7 +16,7 @@ import {
   DepartureGroupMetadata,
 } from '@atb/api/departures/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';
@@ -268,7 +268,7 @@ export function useFavoriteDepartureData(
   });
   const isFocused = useIsFocused();
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
-    useFavorites();
+    useFavoritesContext();
   const dashboardFavoriteDepartures = favoriteDepartures.filter(
     (f) => f.visibleOnDashboard,
   );

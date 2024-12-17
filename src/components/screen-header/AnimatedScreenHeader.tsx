@@ -1,4 +1,4 @@
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -33,7 +33,7 @@ export const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   ...props
 }) => {
   const style = useHeaderStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
 
   const fontScale = useFontScale();

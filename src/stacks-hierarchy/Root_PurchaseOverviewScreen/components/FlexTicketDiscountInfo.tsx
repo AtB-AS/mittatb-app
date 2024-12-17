@@ -9,11 +9,11 @@ import {
 import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
 import {
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -30,11 +30,11 @@ type Props = {
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
-  const {appTexts} = useFirestoreConfiguration();
-  const {flex_ticket_url} = useRemoteConfig();
+  const {appTexts} = useFirestoreConfigurationContext();
+  const {flex_ticket_url} = useRemoteConfigContext();
 
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
 

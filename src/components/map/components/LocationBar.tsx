@@ -8,7 +8,7 @@ import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -16,7 +16,7 @@ import {
 } from '@atb/translations';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
@@ -36,7 +36,7 @@ const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation} = useGeolocationContext();
   const {closestLocation, isSearching, error} = useReverseGeocoder(
     coordinates || null,
   );
@@ -88,7 +88,7 @@ const Icon: React.FC<{
   location?: Location;
   hasError: boolean;
 }> = ({isSearching, location, hasError}) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (

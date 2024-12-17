@@ -1,6 +1,6 @@
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -12,7 +12,7 @@ export function ProductDescriptionToggle({title}: {title: string}) {
   const {
     setPreference,
     preferences: {hideProductDescriptions: hideDescriptions},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   return (
     <View style={styles.container}>

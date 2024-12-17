@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
@@ -45,7 +45,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
 } => {
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const analytics = useMapSelectionAnalytics();
   const navigation = useNavigation<RootNavigationProps>();
 

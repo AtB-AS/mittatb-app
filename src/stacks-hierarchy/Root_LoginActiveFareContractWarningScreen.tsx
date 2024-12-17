@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
@@ -8,11 +8,11 @@ import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
@@ -24,14 +24,14 @@ type Props = RootStackScreenProps<'Root_LoginActiveFareContractWarningScreen'>;
 export const Root_LoginActiveFareContractWarningScreen = ({
   navigation,
 }: Props) => {
-  const {enable_vipps_login} = useRemoteConfig();
+  const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
-  const {fareContracts, reservations} = useTicketingState();
-  const {serverNow} = useTimeContextState();
+  const {fareContracts, reservations} = useTicketingContext();
+  const {serverNow} = useTimeContext();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     serverNow,

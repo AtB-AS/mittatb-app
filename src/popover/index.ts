@@ -1,2 +1,2 @@
 export type {PopOverKey} from './types';
-export {usePopOver, PopOverContextProvider} from './PopOverContext';
+export {usePopOverContext, PopOverContextProvider} from './PopOverContext';

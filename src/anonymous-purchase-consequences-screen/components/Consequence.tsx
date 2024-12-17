@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -15,7 +15,7 @@ export const Consequence = ({
   icon: JSX.Element;
 }) => {
   const styles = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={styles.consequence}>
       <View style={styles.icon}>{icon}</View>

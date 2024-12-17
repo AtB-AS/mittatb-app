@@ -1,17 +1,17 @@
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {LoadingParams, LoadingState} from '@atb/loading-screen/types';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useIsLoadingAppState} from '@atb/loading-screen';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 export const useLoadingState = (timeoutMs: number): LoadingState => {
   const isLoadingAppState = useIsLoadingAppState();
-  const {userId, authStatus, retryAuth} = useAuthState();
+  const {userId, authStatus, retryAuth} = useAuthContext();
   const [isTimeout, setIsTimeout] = useState(false);
   const {resubscribeFirestoreConfig, firestoreConfigStatus} =
-    useFirestoreConfiguration();
-  const {isLoaded: remoteConfigIsLoaded} = useRemoteConfig();
+    useFirestoreConfigurationContext();
+  const {isLoaded: remoteConfigIsLoaded} = useRemoteConfigContext();
   const paramsRef = useRef<LoadingParams>({
     userId,
     isLoadingAppState,

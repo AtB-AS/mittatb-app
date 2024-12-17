@@ -4,13 +4,13 @@ import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReser
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -35,8 +35,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   emptyStateDetailsText,
 }) => {
   const navigation = useNavigation<RootNavigationProp>();
-  const analytics = useAnalytics();
-  const {theme} = useTheme();
+  const analytics = useAnalyticsContext();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
 
   const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];

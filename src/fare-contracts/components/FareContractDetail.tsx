@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
 export function FareContractDetail({
@@ -13,7 +13,7 @@ export function FareContractDetail({
   content: string[];
 }) {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const themeColor = theme.color.background.neutral[0];
   const textColor = theme.color.foreground.dynamic.secondary;

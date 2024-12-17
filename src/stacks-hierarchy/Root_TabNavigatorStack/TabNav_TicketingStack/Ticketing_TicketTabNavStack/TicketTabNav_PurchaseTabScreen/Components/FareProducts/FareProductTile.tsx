@@ -8,7 +8,7 @@ import {useTextForLanguage} from '@atb/translations/utils';
 
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 export const FareProductTile = ({
   accented = false,
@@ -27,7 +27,7 @@ export const FareProductTile = ({
     productGroupTransportModes[0]?.mode,
     productGroupTransportModes[0]?.subMode,
   );
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const transportColor = theme.color.transport[transportName];
   const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);

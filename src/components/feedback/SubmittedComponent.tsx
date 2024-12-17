@@ -1,11 +1,11 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import Intercom from '@intercom/intercom-react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
@@ -31,9 +31,9 @@ export const SubmittedComponent = ({
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad();
-  const {customer_service_url, enable_intercom} = useRemoteConfig();
+  const {customer_service_url, enable_intercom} = useRemoteConfigContext();
 
   const handleButtonClick = () => {
     if (enable_intercom) {

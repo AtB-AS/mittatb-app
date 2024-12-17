@@ -8,7 +8,7 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
   Language,
@@ -144,7 +144,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
   const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
@@ -531,7 +531,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
 const LegDash = () => {
   const styles = useThemeStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
   return (

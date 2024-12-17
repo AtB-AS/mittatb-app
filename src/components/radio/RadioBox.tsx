@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
@@ -37,7 +37,7 @@ export function RadioBox({
   interactiveColor,
 }: Props) {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const spacing = useSpacing(type);
 
   const currentInteractiveColor =
@@ -96,7 +96,7 @@ export function RadioBox({
 }
 
 function useSpacing(type: ContainerSizingType) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   switch (type) {
     case 'compact':
       return theme.spacing.small;

@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
 import {
   MessageInfoBox,
@@ -9,7 +9,7 @@ import {
 } from '@atb/components/message-info-box';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {enrollIntoBetaGroups} from '@atb/api/enrollment';
 import analytics from '@react-native-firebase/analytics';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -18,7 +18,7 @@ import {ScreenHeading} from '@atb/components/heading';
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
   const [inviteCode, setInviteCode] = useState<string>('');
 
@@ -71,7 +71,7 @@ export const Profile_EnrollmentScreen = () => {
 type UserProperties = {[key: string]: string | null};
 
 const useEnroll = () => {
-  const {refresh} = useRemoteConfig();
+  const {refresh} = useRemoteConfigContext();
 
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -1,5 +1,5 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
@@ -36,15 +36,15 @@ import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -65,14 +65,14 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const {enable_ticketing} = useRemoteConfig();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const {enable_ticketing} = useRemoteConfigContext();
+  const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
-  const {isRealtimeMapEnabled} = useFeatureToggles();
+  const {isRealtimeMapEnabled} = useFeatureTogglesContext();
 
   const liveVehicleIds = tripPattern.legs
     .filter((leg) =>

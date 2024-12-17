@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 export const Divider = ({style}: {style?: ViewStyle}) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   return (
     <View

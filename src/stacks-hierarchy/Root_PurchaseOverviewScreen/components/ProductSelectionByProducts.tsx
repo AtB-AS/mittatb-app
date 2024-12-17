@@ -7,7 +7,7 @@ import {
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   PreassignedFareProduct,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   getReferenceDataName,
   isProductSellableInApp,
 } from '@atb/configuration';
@@ -18,11 +18,11 @@ import {
   RadioGroupSection,
   Section,
 } from '@atb/components/sections';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
-import {usePreferenceItems} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type ProductSelectionByProductsProps = {
@@ -39,11 +39,11 @@ export function ProductSelectionByProducts({
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
-  const {hideProductDescriptions} = usePreferenceItems();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
+  const {hideProductDescriptions} = usePreferencesContext().preferences;
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
