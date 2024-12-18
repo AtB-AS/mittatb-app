@@ -97,7 +97,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   return (
-    <Section style={styles.section} testID={testID}>
+    <Section testID={testID}>
       <GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
@@ -177,9 +177,6 @@ export const FareContractView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginBottom: theme.spacing.large,
-  },
   detailContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

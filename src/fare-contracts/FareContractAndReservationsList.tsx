@@ -10,7 +10,8 @@ import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
-import {useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {View} from 'react-native';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -34,6 +35,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   emptyStateTitleText,
   emptyStateDetailsText,
 }) => {
+  const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalyticsContext();
   const {theme} = useThemeContext();
@@ -51,7 +53,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
     );
 
   return (
-    <>
+    <View style={styles.container}>
       {showTokenInfo && (
         <TravelTokenBox
           showIfThisDevice={false}
@@ -83,7 +85,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           index={index}
         />
       ))}
-    </>
+    </View>
   );
 };
 
@@ -95,3 +97,9 @@ const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
       return <HoldingHands height={84} />;
   }
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacing.large,
+  },
+}));

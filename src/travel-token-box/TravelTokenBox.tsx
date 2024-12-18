@@ -36,11 +36,7 @@ export function TravelTokenBox({
     navigation.navigate('Root_SelectTravelTokenScreen');
 
   if (mobileTokenStatus === 'loading') {
-    return (
-      <View style={styles.loadingIndicator}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator size="large" />;
   }
 
   const showTokensNotWorkingError =
@@ -52,7 +48,6 @@ export function TravelTokenBox({
         type="warning"
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
-        style={styles.errorMessage}
         onPressConfig={{
           action: retry,
           text: t(dictionary.retry),
@@ -73,7 +68,6 @@ export function TravelTokenBox({
         isMarkdown={true}
         title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
-        style={styles.errorMessage}
       />
     );
 
@@ -126,18 +120,10 @@ export function TravelTokenBox({
 
 const useStyles = (interactiveColor: InteractiveColor) =>
   StyleSheet.createThemeHook((theme: Theme) => ({
-    loadingIndicator: {
-      marginBottom: theme.spacing.medium,
-    },
-    errorMessage: {
-      marginBottom: theme.spacing.medium,
-    },
-
     container: {
       backgroundColor: interactiveColor.default.background,
       padding: theme.spacing.xLarge,
       borderRadius: theme.border.radius.regular,
-      marginBottom: theme.spacing.medium,
     },
     content: {
       marginBottom: theme.spacing.large,
