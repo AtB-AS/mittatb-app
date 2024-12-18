@@ -20,6 +20,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',
   component: Button,
   argTypes: {
+    expand: {control: 'boolean'},
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
@@ -134,7 +135,5 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
 export default ButtonMeta;
 
 export const Block = {};
-
-export const Medium = {args: {type: 'medium'}};
 
 export const Small = {args: {type: 'small'}};
