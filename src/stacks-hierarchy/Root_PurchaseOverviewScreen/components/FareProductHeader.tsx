@@ -10,12 +10,12 @@ import {
 } from '@atb/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {stripMarkdown} from '@atb/components/text';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -34,10 +34,10 @@ export const FareProductHeader = forwardRef<View, Props>(
     ref,
   ) => {
     const {t, language} = useTranslation();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
     const themeColor = theme.color.background.accent[0];
     const styles = useStyle();
-    const {isTicketInformationEnabled} = useFeatureToggles();
+    const {isTicketInformationEnabled} = useFeatureTogglesContext();
 
     const productDescription = stripMarkdown(
       getTextForLanguage(

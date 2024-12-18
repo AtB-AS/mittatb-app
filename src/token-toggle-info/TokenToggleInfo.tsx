@@ -6,7 +6,7 @@ import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,
 } from '@atb/utils/date';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContrastColor, Mode} from '@atb/theme/colors';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
@@ -45,7 +45,7 @@ const TokenToggleContent = ({
   textColor,
 }: TokenToggleContentProps) => {
   const {t, language} = useTranslation();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const styles = useStyles();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);

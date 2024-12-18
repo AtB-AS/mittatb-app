@@ -3,7 +3,7 @@ import {LoginTexts, useTranslation} from '@atb/translations';
 import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
-  useAuthState,
+  useAuthContext,
 } from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
@@ -19,10 +19,10 @@ import {loginConfirmCodeInputId} from '@atb/test-ids';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useOnboardingState} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
@@ -35,14 +35,14 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const {phoneNumber} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const {confirmCode, signInWithPhoneNumber} = useAuthState();
+  const {confirmCode, signInWithPhoneNumber} = useAuthContext();
   const [code, setCode] = useState('');
   const [error, setError] = useState<LoginErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const {completeOnboardingSection} = useOnboardingState();
+  const {completeOnboardingSection} = useOnboardingContext();
   const {isRateLimited, rateLimitIfNeeded} = useRateLimitWhen<LoginErrorCode>(
     (code) => code === 'too_many_attempts',
   );

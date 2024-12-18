@@ -1,21 +1,21 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {usePreferences, UserPreferences} from '@atb/preferences';
+import {useMobileTokenContext} from '@atb/mobile-token';
+import {usePreferencesContext, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
-  useRemoteConfig,
+  useRemoteConfigContext,
 } from '@atb/RemoteConfigContext';
-import {useGlobalMessagesState} from '@atb/global-messages';
+import {useGlobalMessagesContext} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -31,13 +31,13 @@ import {
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
-import {useAnnouncementsState} from '@atb/announcements';
-import {useNotifications} from '@atb/notifications';
-import {useTimeContextState} from '@atb/time';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useOnboardingState} from '@atb/onboarding';
+import {useAnnouncementsContext} from '@atb/announcements';
+import {useNotificationsContext} from '@atb/notifications';
+import {useTimeContext} from '@atb/time';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -46,14 +46,14 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   const {
     onboardingSections,
     restartOnboardingSection,
     restartAllOnboardingSections,
-  } = useOnboardingState();
+  } = useOnboardingContext();
 
   const {
     onboardForBeacons,
@@ -64,19 +64,19 @@ export const Profile_DebugInfoScreen = () => {
     isBeaconsSupported,
     getPrivacyDashboardUrl,
     getPrivacyTermsUrl,
-  } = useBeaconsState();
-  const {resetDismissedGlobalMessages} = useGlobalMessagesState();
+  } = useBeaconsContext();
+  const {resetDismissedGlobalMessages} = useGlobalMessagesContext();
   const {
     userId,
     retryAuth,
     debug: {user, idTokenResult},
-  } = useAuthState();
+  } = useAuthContext();
 
   const {
     debug: {overrides, setOverride},
-  } = useFeatureToggles();
+  } = useFeatureTogglesContext();
 
-  const {resetDismissedAnnouncements} = useAnnouncementsState();
+  const {resetDismissedAnnouncements} = useAnnouncementsContext();
 
   const {
     tokens,
@@ -92,8 +92,8 @@ export const Profile_DebugInfoScreen = () => {
       renewToken,
       wipeToken,
     },
-  } = useMobileTokenContextState();
-  const {serverNow} = useTimeContextState();
+  } = useMobileTokenContext();
+  const {serverNow} = useTimeContext();
 
   const {
     fcmToken,
@@ -101,9 +101,9 @@ export const Profile_DebugInfoScreen = () => {
     register: registerNotifications,
     requestPermissions: requestPushNotificationPermissions,
     checkPermissions: checkPushNotificationPermissions,
-  } = useNotifications();
+  } = useNotificationsContext();
 
-  const remoteConfig = useRemoteConfig();
+  const remoteConfig = useRemoteConfigContext();
 
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
@@ -120,7 +120,7 @@ export const Profile_DebugInfoScreen = () => {
       );
   }
 
-  const {setPreference, preferences} = usePreferences();
+  const {setPreference, preferences} = usePreferencesContext();
   const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
     preferences;
 

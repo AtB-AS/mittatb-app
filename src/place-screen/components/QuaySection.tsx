@@ -8,7 +8,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {
   DeparturesTexts,
@@ -59,7 +59,7 @@ export function QuaySection({
   searchDate,
   mode,
 }: QuaySectionProps): JSX.Element {
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavoritesContext();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);

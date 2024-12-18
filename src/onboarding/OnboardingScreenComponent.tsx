@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 
 import {View} from 'react-native';
@@ -38,7 +38,7 @@ export const OnboardingScreenComponent = ({
   testID,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
 

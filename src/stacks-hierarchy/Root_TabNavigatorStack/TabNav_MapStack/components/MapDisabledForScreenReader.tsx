@@ -1,6 +1,6 @@
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -11,7 +11,7 @@ import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 export const MapDisabledForScreenReader = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const focusRef = useFocusOnLoad();
   return (
     <SafeAreaView style={styles.container}>

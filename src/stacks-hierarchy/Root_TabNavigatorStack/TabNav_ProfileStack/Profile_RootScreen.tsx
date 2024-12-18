@@ -1,16 +1,16 @@
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useMobileTokenContext} from '@atb/mobile-token';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
-  useTicketingState,
+  useTicketingContext,
   useHasReservationOrActiveFareContract,
 } from '@atb/ticketing';
 import {
@@ -37,13 +37,13 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -51,11 +51,11 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_ticketing, enable_vipps_login} = useRemoteConfig();
-  const {clearTokenAtLogout} = useMobileTokenContextState();
+  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
+  const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const {
     authenticationType,
     signOut,
@@ -63,14 +63,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     customerNumber,
     retryAuth,
     authStatus,
-  } = useAuthState();
+  } = useAuthContext();
   const config = useLocalConfig();
-  const {customerProfile} = useTicketingState();
+  const {customerProfile} = useTicketingContext();
   const hasReservationOrActiveFareContract =
     useHasReservationOrActiveFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
 
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {configurableLinks} = useFirestoreConfigurationContext();
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
@@ -82,14 +82,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
-  const {disable_travelcard} = useRemoteConfig();
+  const {disable_travelcard} = useRemoteConfigContext();
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {isPushNotificationsEnabled, isTravelAidEnabled} = useFeatureToggles();
+  const {isPushNotificationsEnabled, isTravelAidEnabled} =
+    useFeatureTogglesContext();
 
-  const {logEvent} = useAnalytics();
+  const {logEvent} = useAnalyticsContext();
 
   return (
     <>

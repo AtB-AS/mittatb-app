@@ -1,6 +1,6 @@
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -9,7 +9,7 @@ import {ThemeText} from '@atb/components/text';
 import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
@@ -43,7 +43,7 @@ import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {closeInAppBrowser} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -52,15 +52,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
 
   const interactiveColor = theme.color.interactive[0];
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =

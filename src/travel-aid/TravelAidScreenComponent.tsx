@@ -1,7 +1,7 @@
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import React, {Ref} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -58,7 +58,7 @@ export const TravelAidScreenComponent = ({
   });
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const focusRef = useFocusOnLoad();
 
   const hasSentStopSignal = sentStopSignalsCache.hasSent(
@@ -270,7 +270,7 @@ const TravelAidSection = ({
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
   const {language, t} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const {focusedEstimatedCall, status} = state;
 
   const scheduledClock = formatToClock(

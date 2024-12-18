@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {SvgCssUri} from 'react-native-svg/css';
 import {StyleSheet} from '@atb/theme';
 
@@ -28,7 +28,7 @@ export const OperatorNameAndLogo = ({
   logoUrl,
   style,
 }: OperatorNameAndLogoProps) => {
-  const {enable_vehicle_operator_logo} = useRemoteConfig();
+  const {enable_vehicle_operator_logo} = useRemoteConfigContext();
   const isSvg = (url: string) => url.endsWith('.svg');
   const styles = useSheetStyle();
 

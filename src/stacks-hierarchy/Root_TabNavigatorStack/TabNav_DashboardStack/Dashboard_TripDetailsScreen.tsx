@@ -1,11 +1,11 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {TripDetailsScreenComponent} from '@atb/travel-details-screens/TripDetailsScreenComponent';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 
 export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   return (
     <TripDetailsScreenComponent

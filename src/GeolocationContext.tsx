@@ -334,7 +334,7 @@ const openSettingsAlert = () =>
     {cancelable: true},
   );
 
-export function useGeolocationState() {
+export function useGeolocationContext() {
   const context = useContext(GeolocationContext);
   if (context === undefined) {
     throw new Error(

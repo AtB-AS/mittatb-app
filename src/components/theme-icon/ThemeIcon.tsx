@@ -1,4 +1,4 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {
   ContrastColor,
   Statuses,
@@ -34,7 +34,7 @@ export const ThemeIcon = ({
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element | null => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const fill = useColor(color);
 
@@ -67,7 +67,7 @@ export const ThemeIcon = ({
 };
 
 function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   if (typeof color === 'object') {
     return color.foreground.primary;
   } else if (isStatusColor(color, theme)) {

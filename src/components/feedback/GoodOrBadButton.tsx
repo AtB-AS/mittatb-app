@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Opinions} from './Feedback';
@@ -23,7 +23,7 @@ export const GoodOrBadButton = ({
 }: GoodOrBadButtonProps) => {
   const styles = useButtonStyle();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   return (
     <View style={styles.outerGoodOrBad}>

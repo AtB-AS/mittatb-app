@@ -17,9 +17,9 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useTheme, StyleSheet} from '@atb/theme';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useThemeContext, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
@@ -73,7 +73,7 @@ export const TravelDetailsMapScreenComponent = ({
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
@@ -253,9 +253,9 @@ const LiveVehicleMarker = ({
   heading,
   isError,
 }: VehicleIconProps) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fillColor = useTransportationColor(mode, subMode, false).background;
-  const {live_vehicle_stale_threshold} = useRemoteConfig();
+  const {live_vehicle_stale_threshold} = useRemoteConfigContext();
 
   const [isStale, setIsStale] = useState(false);
 
@@ -361,7 +361,7 @@ const LiveVehicleIcon = ({
   isStale,
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fillColor = useTransportationColor(mode, subMode).foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 

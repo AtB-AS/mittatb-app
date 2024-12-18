@@ -1,5 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import RailReplacementBusTexts from '@atb/translations/components/RailReplacementBusMessage';
 import React from 'react';
@@ -11,7 +11,7 @@ export const RailReplacementBusMessage: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   return tripPattern.legs.some(
     (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
   ) ? (

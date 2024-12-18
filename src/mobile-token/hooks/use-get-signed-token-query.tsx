@@ -1,6 +1,6 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {mobileTokenClient} from '../mobileTokenClient';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {
   getSdkErrorHandlingStrategy,
@@ -20,7 +20,7 @@ const GET_SIGNED_TOKEN_QUERY_KEY = 'getSignedToken';
  * requests to Entur.
  */
 export const useGetSignedTokenQuery = () => {
-  const {nativeToken} = useMobileTokenContextState();
+  const {nativeToken} = useMobileTokenContext();
   const queryClient = useQueryClient();
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_SIGNED_TOKEN_QUERY_KEY, nativeToken],

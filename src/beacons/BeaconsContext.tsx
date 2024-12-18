@@ -19,7 +19,7 @@ import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type BeaconsInfo = {
   /**
@@ -94,7 +94,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const {rationaleMessages} = useBeaconsMessages();
   const [beaconsInfo, setBeaconsInfo] = useState<BeaconsInfo>();
   const [isConsentGranted, setIsConsentGranted] = useState<boolean>(false);
-  const {isBeaconsEnabled} = useFeatureToggles();
+  const {isBeaconsEnabled} = useFeatureTogglesContext();
 
   const isInitializedRef = useRef(false);
   const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY;
@@ -275,7 +275,7 @@ const getBeaconsInfo = async (): Promise<BeaconsInfo> => {
   };
 };
 
-export function useBeaconsState() {
+export function useBeaconsContext() {
   const context = useContext(BeaconsContext);
   if (context === undefined) {
     throw new Error(

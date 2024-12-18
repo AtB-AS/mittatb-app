@@ -1,6 +1,6 @@
 import React, {createContext, useContext} from 'react';
 import {storage} from '@atb/storage';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {FeatureTogglesContextState} from './types';
 import {useFeatureTogglesContextState} from './use-feature-toggle-context-state';
 
@@ -13,8 +13,8 @@ const FeatureTogglesContext = createContext<
   FeatureTogglesContextState | undefined
 >(undefined);
 
-export const FeatureTogglesProvider: React.FC = ({children}) => {
-  const remoteConfig = useRemoteConfig();
+export const FeatureTogglesContextProvider: React.FC = ({children}) => {
+  const remoteConfig = useRemoteConfigContext();
 
   const state = useFeatureTogglesContextState(remoteConfig, storage);
 
@@ -25,7 +25,7 @@ export const FeatureTogglesProvider: React.FC = ({children}) => {
   );
 };
 
-export function useFeatureToggles() {
+export function useFeatureTogglesContext() {
   const context = useContext(FeatureTogglesContext);
   if (context === undefined) {
     throw new Error(

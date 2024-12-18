@@ -1,4 +1,4 @@
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
@@ -28,7 +28,7 @@ export function LineChip({
 }: LineChipProps) {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const {transportMode, transportSubmode} = serviceJourney;
   const publicCode = serviceJourney.line?.publicCode;
 

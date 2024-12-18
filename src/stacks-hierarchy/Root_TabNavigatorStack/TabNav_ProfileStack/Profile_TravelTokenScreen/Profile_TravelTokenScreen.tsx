@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import React from 'react';
@@ -8,15 +8,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {Section, GenericSectionItem} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 
 export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {disable_travelcard} = useRemoteConfig();
+  const {theme} = useThemeContext();
+  const {disable_travelcard} = useRemoteConfigContext();
   const {data} = useTokenToggleDetailsQuery();
 
   return (

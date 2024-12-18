@@ -1,6 +1,6 @@
 import {
   getCurrentCoordinatesGlobal,
-  useGeolocationState,
+  useGeolocationContext,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
@@ -43,12 +43,12 @@ import {Snackbar, useSnackbar} from '../snackbar';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
-  const {getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
@@ -77,7 +77,7 @@ export const Map = (props: MapProps) => {
     startingCoordinates,
   );
 
-  const {bottomSheetCurrentlyAutoSelected} = useMapState();
+  const {bottomSheetCurrentlyAutoSelected} = useMapContext();
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -89,7 +89,7 @@ export const Map = (props: MapProps) => {
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
   const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureToggles();
+    useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&

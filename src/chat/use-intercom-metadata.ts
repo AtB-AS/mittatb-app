@@ -2,7 +2,7 @@ import Intercom from '@intercom/intercom-react-native';
 import {PlatformOSType} from 'react-native';
 import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useCallback} from 'react';
 
 type Metadata = {
@@ -23,7 +23,7 @@ type Metadata = {
 };
 
 export const useIntercomMetadata = () => {
-  const {enable_intercom} = useRemoteConfig();
+  const {enable_intercom} = useRemoteConfigContext();
 
   const updateMetadata = useCallback(
     async function (metadata: Partial<Metadata>) {

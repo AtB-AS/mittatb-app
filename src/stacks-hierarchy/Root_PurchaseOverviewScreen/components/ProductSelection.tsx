@@ -3,7 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type ProductSelectionProps = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -18,7 +18,7 @@ export function ProductSelection({
   setSelectedProduct,
   style,
 }: ProductSelectionProps) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   switch (fareProductTypeConfig.configuration.productSelectionMode) {
     case 'product':

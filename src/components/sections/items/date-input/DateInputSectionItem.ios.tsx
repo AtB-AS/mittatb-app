@@ -1,4 +1,4 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
@@ -12,7 +12,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
   const {value, onChange, maximumDate, ...innerprops} = props;
   const {t} = useTranslation();
   const locale = useLocaleContext();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
   let style: StyleProp<ViewStyle> = {width: 130};

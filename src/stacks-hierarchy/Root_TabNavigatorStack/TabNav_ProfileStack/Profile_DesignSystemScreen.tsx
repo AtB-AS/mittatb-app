@@ -9,7 +9,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -45,7 +45,7 @@ export const Profile_DesignSystemScreen = ({
 }: DesignSystemScreenProps) => {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const [selected, setSelected] = useState(false);
 

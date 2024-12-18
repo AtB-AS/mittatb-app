@@ -14,7 +14,7 @@ import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations'
 import {useIsFocused} from '@react-navigation/native';
 import {getStations} from '@atb/api/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 const MIN_ZOOM_LEVEL = 11;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -30,7 +30,7 @@ export const useStations: (
 ) => StationsState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
   const {isCityBikesInMapEnabled, isCarSharingInMapEnabled} =
-    useFeatureToggles();
+    useFeatureTogglesContext();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
   );

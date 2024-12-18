@@ -1,4 +1,4 @@
-export {useFilters, FiltersContextProvider} from './FiltersContext';
+export {useFiltersContext, FiltersContextProvider} from './FiltersContext';
 export type {
   TravelSearchFiltersSelectionType,
   FlexibleTransportOptionTypeWithSelectionType,

@@ -1,4 +1,4 @@
 export {
   AnnouncementsContextProvider,
-  useAnnouncementsState,
+  useAnnouncementsContext,
 } from './AnnouncementsContext';

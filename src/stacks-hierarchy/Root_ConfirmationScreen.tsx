@@ -1,7 +1,7 @@
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -21,7 +21,7 @@ export const Root_ConfirmationScreen = ({
   },
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const circleColor = getCircleColor(theme);
 

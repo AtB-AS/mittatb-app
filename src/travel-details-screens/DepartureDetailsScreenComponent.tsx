@@ -16,7 +16,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {SituationMessageBox} from '@atb/situations';
 import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
   TripDetailsTexts,
@@ -49,11 +49,11 @@ import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/Pag
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
@@ -63,8 +63,8 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {usePreferences} from '@atb/preferences';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 
 export type DepartureDetailsScreenParams = {
@@ -86,15 +86,15 @@ export const DepartureDetailsScreenComponent = ({
   onPressTravelAid,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
   const ctaColor = theme.color.interactive[0];
   const backgroundColor = theme.color.background.neutral[0];
   const themeColor = theme.color.background.accent[0];
 
-  const analytics = useAnalytics();
-  const {enable_ticketing} = useRemoteConfig();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const analytics = useAnalyticsContext();
+  const {enable_ticketing} = useRemoteConfigContext();
+  const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -121,12 +121,12 @@ export const DepartureDetailsScreenComponent = ({
     activeItem.toQuayId,
   );
 
-  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureToggles();
+  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
     preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
-  } = usePreferences();
+  } = usePreferencesContext();
   const shouldShowTravelAid =
     travelAidPreferenceEnabled &&
     isTravelAidEnabled &&
@@ -391,7 +391,7 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   return (
@@ -531,7 +531,7 @@ function EstimatedCallRow({
     subMode,
   ).background;
 
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
     call.bookingArrangements,
     call.aimedDepartureTime,

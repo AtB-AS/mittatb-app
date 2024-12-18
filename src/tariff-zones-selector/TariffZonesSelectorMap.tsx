@@ -13,12 +13,12 @@ import {
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   getReferenceDataName,
 } from '@atb/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
@@ -40,15 +40,15 @@ const TariffZonesSelectorMap = ({
   setSelectedZones,
   onSave,
 }: Props) => {
-  const {tariffZones} = useFirestoreConfiguration();
+  const {tariffZones} = useFirestoreConfigurationContext();
   const styles = useMapStyles();
 
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
   const a11yContext = useAccessibilityContext();
 
-  const {location} = useGeolocationState();
+  const {location} = useGeolocationContext();
   const initialCoordinates = useInitialCoordinates();
 
   const selectFeature = (event: OnPressEvent) => {

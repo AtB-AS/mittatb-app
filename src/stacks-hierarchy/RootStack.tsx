@@ -1,6 +1,6 @@
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
 import {
   DefaultTheme,
@@ -57,13 +57,13 @@ import {
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 
@@ -76,11 +76,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const RootStack = () => {
   const isLoadingAppState = useIsLoadingAppState();
   const {getInitialNavigationContainerState} = useOnboardingFlow();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
-  const {minimum_app_version} = useRemoteConfig();
+  const {minimum_app_version} = useRemoteConfigContext();
 
-  useBeaconsState();
+  useBeaconsContext();
   useTestIds();
 
   // init Intercom user

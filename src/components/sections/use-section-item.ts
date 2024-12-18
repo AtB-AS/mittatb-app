@@ -1,5 +1,5 @@
 import {ViewStyle} from 'react-native';
-import {Theme, useTheme} from '@atb/theme';
+import {Theme, useThemeContext} from '@atb/theme';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
@@ -22,7 +22,7 @@ export function useSectionItem({
   radius,
   radiusSize,
 }: BaseSectionItemProps): SectionReturnType {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const spacing = useSpacing(type);
 
@@ -45,7 +45,7 @@ export function useSectionItem({
 }
 
 function useSpacing(type: ContainerSizingType) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   switch (type) {
     case 'block':
       return theme.spacing.medium;

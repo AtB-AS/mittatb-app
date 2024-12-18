@@ -1,4 +1,4 @@
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import React from 'react';
 import {AnonymousPurchaseConsequencesScreenComponent} from '@atb/anonymous-purchase-consequences-screen';
 import {RootStackParamList, RootStackScreenProps} from './navigation-types';
@@ -12,7 +12,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   navigation,
   route: {params},
 }: Props) => {
-  const {enable_vipps_login} = useRemoteConfig();
+  const {enable_vipps_login} = useRemoteConfigContext();
   const hasReservationOrActiveFareContract =
     useHasReservationOrActiveFareContract();
   const completeUserCreationOnboardingAndEnterApp =

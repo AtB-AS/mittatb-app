@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
@@ -11,7 +11,7 @@ import {Psst} from '@atb/assets/svg/color/illustrations';
 import {Ticket} from '@atb/assets/svg/color/images';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
@@ -25,10 +25,10 @@ export const Root_LoginRequiredForFareProductScreen = ({
   route,
 }: Props) => {
   const {fareProductTypeConfig} = route.params;
-  const {enable_vipps_login} = useRemoteConfig();
+  const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad();
 
   const themeColor = getThemeColor(theme);

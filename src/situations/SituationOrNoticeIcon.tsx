@@ -4,7 +4,7 @@ import {SituationType} from './types';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {StyleProp, ViewStyle} from 'react-native';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -22,7 +22,7 @@ export const SituationOrNoticeIcon = ({
 }: Props) => {
   const situations =
     'situation' in props ? [props.situation] : props.situations;
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   // TODO: It might be needed to check if the transport is flexible and shows a yellow icon (warning)
   const svg = getSvgForMostCriticalSituationOrNotice(

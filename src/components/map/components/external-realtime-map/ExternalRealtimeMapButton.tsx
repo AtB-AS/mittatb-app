@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {MapSelectionActionType} from '../../types';
 
 type ExternalRealtimeMapButtonProps = {
@@ -13,11 +13,11 @@ export const ExternalRealtimeMapButton = ({
   onMapClick,
 }: ExternalRealtimeMapButtonProps) => {
   const style = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
 
   const {language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {configurableLinks} = useFirestoreConfigurationContext();
 
   const externalRealtimeMapUrl = getTextForLanguage(
     configurableLinks?.externalRealtimeMap,

@@ -2,7 +2,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View, ViewStyle} from 'react-native';
 import {Check as CheckDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Check as CheckLight} from '@atb/assets/svg/color/icons/status/light';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {
@@ -48,7 +48,7 @@ export const BenefitImageAsset = ({
 
 const BenefitEligibilityIndicator = () => {
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const Check = themeName === 'dark' ? CheckDark : CheckLight;
 
   return (

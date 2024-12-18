@@ -1,6 +1,6 @@
 import {QuayGroup} from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
@@ -39,7 +39,7 @@ export const QuaySection = React.memo(function QuaySection({
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   useEffect(() => {
     setLimit(LIMIT_SIZE);

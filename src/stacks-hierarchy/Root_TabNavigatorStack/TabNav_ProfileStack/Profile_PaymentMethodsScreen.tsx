@@ -11,7 +11,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {addPaymentMethod, RecurringPayment} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
@@ -150,7 +150,7 @@ const Card = (props: {
   const {card, removePaymentHandler} = props;
   const paymentName = getPaymentTypeName(card.payment_type);
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const fontScale = useFontScale();
 

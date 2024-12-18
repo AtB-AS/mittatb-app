@@ -127,7 +127,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useRemoteConfig() {
+export function useRemoteConfigContext() {
   const context = useContext(RemoteConfigContext);
   if (context === undefined) {
     throw new Error(

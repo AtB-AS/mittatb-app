@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
@@ -26,7 +26,7 @@ export const MessageInfoText = ({
   isMarkdown = false,
 }: MessageInfoTextProps) => {
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   const iconColorProps = {color: textColor};
 

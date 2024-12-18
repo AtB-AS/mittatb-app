@@ -1,5 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
+import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
@@ -15,7 +15,7 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -68,9 +68,9 @@ export const StopPlacesView = (props: Props) => {
     addedFavoritesVisibleOnDashboard,
   } = props;
   const styles = useStyles();
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavoritesContext();
   const {t} = useTranslation();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
 

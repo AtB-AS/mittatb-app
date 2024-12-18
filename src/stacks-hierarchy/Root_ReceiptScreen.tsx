@@ -5,7 +5,7 @@ import {
   MessageInfoBoxProps,
 } from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -17,7 +17,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {useProfileQuery} from '@atb/queries';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
@@ -37,9 +37,9 @@ export function Root_ReceiptScreen({route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const a11yContext = useAccessibilityContext();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   useEffect(() => {
     if (profileStatus === 'success') {

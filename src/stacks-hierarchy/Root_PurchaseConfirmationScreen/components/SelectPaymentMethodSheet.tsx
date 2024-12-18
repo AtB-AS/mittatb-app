@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -9,7 +9,7 @@ import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/Selec
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -17,7 +17,7 @@ import {
   PaymentMethod,
   SavedPaymentMethodType,
 } from '@atb/stacks-hierarchy/types';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {PaymentType} from '@atb/ticketing';
 
 type Props = {
@@ -38,13 +38,13 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   currentOptions,
 }) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const [shouldSave, setShouldSave] = useState(
     currentOptions?.shouldSavePaymentMethod ?? false,
   );
 
-  const {paymentTypes} = useFirestoreConfiguration();
+  const {paymentTypes} = useFirestoreConfigurationContext();
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
     (paymentType) => ({
       paymentType,
@@ -145,7 +145,7 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {authenticationType} = useAuthState();
+  const {authenticationType} = useAuthContext();
 
   function getPaymentTexts(method: PaymentMethod): {
     text: string;

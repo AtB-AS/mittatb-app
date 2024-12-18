@@ -6,7 +6,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   findReferenceDataById,
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {useHarbors} from '@atb/harbors';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
@@ -116,7 +116,7 @@ const ZonesFromTo = ({
   mode,
   backgroundColor,
 }: ZonesProps) => {
-  const {tariffZones} = useFirestoreConfiguration();
+  const {tariffZones} = useFirestoreConfigurationContext();
   const {t, language} = useTranslation();
 
   const fromZoneId = tarifZoneRefs[0];

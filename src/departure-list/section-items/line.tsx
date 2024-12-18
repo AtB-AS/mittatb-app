@@ -7,7 +7,7 @@ import {
 } from '@atb/components/sections';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   CancelledDepartureTexts,
   DeparturesTexts,
@@ -231,7 +231,7 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   const rightIcon = getSvgForDeparture(departure, themeName);
   const leftIcon =

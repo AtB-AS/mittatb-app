@@ -1,9 +1,9 @@
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 
 import React from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -23,13 +23,13 @@ export function TravelTokenBox({
   alwaysShowErrors?: boolean;
   interactiveColor?: InteractiveColor;
 }) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeTextColor = interactiveColor ?? theme.color.interactive[1];
 
   const styles = useStyles(themeTextColor)();
   const {t} = useTranslation();
   const {mobileTokenStatus, isInspectable, tokens, retry} =
-    useMobileTokenContextState();
+    useMobileTokenContext();
 
   const navigation = useNavigation<RootNavigationProps>();
   const onPressChangeButton = () =>
