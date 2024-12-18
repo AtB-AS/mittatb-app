@@ -115,7 +115,11 @@ export function QuayView({
         </>
       }
       refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
+        <RefreshControl
+          refreshing={state.isLoading}
+          onRefresh={forceRefresh}
+          testID="isLoading"
+        />
       }
       sections={quayListData}
       testID={testID}

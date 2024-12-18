@@ -238,6 +238,7 @@ export const DepartureDetailsScreenComponent = ({
                 }}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
+                testID="journeyAidButton"
               />
             )}
             {shouldShowMapButton ? (

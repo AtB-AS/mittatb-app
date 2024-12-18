@@ -77,6 +77,7 @@ export const FareProductHeader = forwardRef<View, Props>(
               interactiveColor={theme.color.interactive[1]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
+              testID="ticketInformationButton"
             />
           </View>
         )}

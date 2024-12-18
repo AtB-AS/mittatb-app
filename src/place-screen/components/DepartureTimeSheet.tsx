@@ -60,9 +60,17 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           style={{paddingBottom: keyboardHeight}}
           ref={focusRef}
         >
-          <Section style={styles.section}>
-            <DateInputSectionItem value={date} onChange={setDate} />
-            <TimeInputSectionItem value={time} onChange={setTime} />
+          <Section style={styles.section} testID="dateTimePickerSection">
+            <DateInputSectionItem
+              value={date}
+              onChange={setDate}
+              testID="datePicker"
+            />
+            <TimeInputSectionItem
+              value={time}
+              onChange={setTime}
+              testID="timePicker"
+            />
           </Section>
 
           <Button
@@ -71,6 +79,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
             text={t(DeparturesTexts.dateInput.confirm)}
             rightIcon={{svg: Confirm}}
             accessibilityHint={t(DeparturesTexts.dateInput.a11yInPastHint)}
+            testID="searchButton"
           />
         </ScrollView>
 
