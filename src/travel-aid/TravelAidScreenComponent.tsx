@@ -104,6 +104,7 @@ export const TravelAidScreenComponent = ({
         mode="tertiary"
         type="medium"
         backgroundColor={bgContrastColor}
+        testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         {status === 'loading' && (
@@ -181,7 +182,7 @@ const TravelAidSection = ({
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
   return (
-    <Section ref={focusRef}>
+    <Section ref={focusRef} testID="journeyAidSection">
       <GenericSectionItem
         style={styles.sectionContainer}
         accessibility={{

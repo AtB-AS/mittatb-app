@@ -51,6 +51,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           textType="heading__component"
           expanded={expanded}
           onPress={setExpanded}
+          testID="flexDiscountExpandable"
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
