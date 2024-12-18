@@ -9,13 +9,7 @@ import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, Polygon, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {polygon} from '@turf/helpers';
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -59,16 +53,12 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
-import {
-  vehiclesAndStationsVectorSourceId,
-  VehiclesAndStations,
-} from './components/mobility/VehiclesAndStations';
+import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 
 export const Map = (props: MapProps) => {
-  const isFocusedAndActive = useIsFocusedAndActive();
   const {initialLocation, includeSnackbar} = props;
 
   const shouldShowMapFilter = props.selectionMode === 'ExploreEntities';
@@ -231,20 +221,9 @@ export const Map = (props: MapProps) => {
     ],
   );
 
-  useLayoutEffect(() => {
-    // Prevent tile requests while the map isn't visible.
-    //console.log('setSourceVisibility', !!isFocusedAndActive);
-    // For some reason setSourceVisibility only works when changing to a tab that hasn't already been rendered.
-    // https://github.com/rnmapbox/maps/pull/3616
-    // should be fixed in rnmapbox version v10.1.32
-    mapViewRef.current?.setSourceVisibility(
-      !!isFocusedAndActive,
-      vehiclesAndStationsVectorSourceId,
-    );
-  }, [isFocusedAndActive]);
-
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {mapboxJsonStyle, mapboxStyleIsLoading} = useMapboxJsonStyle();
-  if (mapboxStyleIsLoading) {
+  if (mapboxStyleIsLoading || !isFocusedAndActive) {
     return null;
   }
 

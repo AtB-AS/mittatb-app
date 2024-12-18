@@ -5,20 +5,17 @@ import {useMapSymbolStyles} from '@atb/components/map';
 
 type SelectedFeatureProp = {
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
-  useToggledIconName?: boolean;
 };
 
-export const vehiclesAndStationsVectorSourceId =
+const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
 
 export const VehiclesWithClusters = ({
   selectedFeature,
-  useToggledIconName,
 }: SelectedFeatureProp) => {
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeature,
     'vehicle',
-    useToggledIconName,
   );
   return (
     <MapboxGL.SymbolLayer
@@ -35,14 +32,10 @@ export const VehiclesWithClusters = ({
   );
 };
 
-export const Stations = ({
-  selectedFeature,
-  useToggledIconName,
-}: SelectedFeatureProp) => {
+export const Stations = ({selectedFeature}: SelectedFeatureProp) => {
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeature,
     'station',
-    useToggledIconName,
   );
   return (
     <MapboxGL.SymbolLayer
@@ -60,10 +53,7 @@ export const Stations = ({
   );
 };
 
-export const VehiclesAndStations = ({
-  selectedFeature,
-  useToggledIconName,
-}: SelectedFeatureProp) => (
+export const VehiclesAndStations = ({selectedFeature}: SelectedFeatureProp) => (
   <MapboxGL.VectorSource
     id={vehiclesAndStationsVectorSourceId}
     minZoomLevel={14}
@@ -73,13 +63,7 @@ export const VehiclesAndStations = ({
       'http://localhost:8080/mobility/v1/tiles/vehicles_clustered,stations/{z}/{x}/{y}',
     ]}
   >
-    <VehiclesWithClusters
-      selectedFeature={selectedFeature}
-      useToggledIconName={useToggledIconName}
-    />
-    <Stations
-      selectedFeature={selectedFeature}
-      useToggledIconName={useToggledIconName}
-    />
+    <VehiclesWithClusters selectedFeature={selectedFeature} />
+    <Stations selectedFeature={selectedFeature} />
   </MapboxGL.VectorSource>
 );
