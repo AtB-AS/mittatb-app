@@ -7,13 +7,14 @@ import TicketPage from '../../pageobjects/ticket.page.js';
 import PurchaseOverviewPage from '../../pageobjects/purchase.overview.page.js';
 import PurchaseSummaryPage from '../../pageobjects/purchase.summary.page.js';
 import PurchasePaymentPage from '../../pageobjects/purchase.payment.page.js';
+import Config from '../../conf/config.js';
 
 /**
  * Runs through the app and does some visual comparisons of the screen
  */
 describe('Visual tests', () => {
-  // Generate new baseline images locally by setting this to 'true'
-  const newBaseline = false;
+  // Generate new baseline images (true) or test (false)
+  const newBaseline = Config.recordBaseline();
 
   // Set test options
   const testOptions = {

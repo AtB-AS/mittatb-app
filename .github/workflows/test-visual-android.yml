@@ -5,12 +5,20 @@ on:
       visualTest:
         description: 'Test a one or all (*) areas'
         required: true
+        default: '*'
         options:
           - '*'
           - 'departures'
           - 'other'
           - 'ticket'
           - 'travelsearch'
+      record:
+        description: 'Record new images (true) or test (false)'
+        required: true
+        default: 'false'
+        options:
+          - 'true'
+          - 'false'
       api_level:
         description: 'Define API level'
         required: true
@@ -32,6 +40,7 @@ jobs:
       ENV_VISUAL_TEST: ${{ github.event.inputs.visualTest || '*' }}
       ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
       ENV_API_LEVEL: ${{ github.event.inputs.api_level || '30' }}
+      ENV_RECORD_BASELINE: ${{ github.event.inputs.record || 'false' }}
     steps:
       - name: Set env variables
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
@@ -119,6 +128,7 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
+          RECORD_BASELINE: ${{ env.ENV_RECORD_BASELINE }}
 
       # Results
       - name: Upload diff screenshots

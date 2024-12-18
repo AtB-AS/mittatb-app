@@ -5,13 +5,14 @@ import FrontPagePage from '../../pageobjects/frontpage.page.js';
 import VisualHelper from '../../utils/visual.helper.js';
 import ElementHelper from '../../utils/element.helper.js';
 import MyProfilePage from '../../pageobjects/myProfile.page.js';
+import Config from '../../conf/config.js';
 
 /**
  * Runs through the app and does some visual comparisons of the screen
  */
 describe('Visual tests', () => {
-  // Generate new baseline images locally by setting this to 'true'
-  const newBaseline = false;
+  // Generate new baseline images (true) or test (false)
+  const newBaseline = Config.recordBaseline();
 
   // Set test options
   const testOptions = {

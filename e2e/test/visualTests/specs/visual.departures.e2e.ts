@@ -17,8 +17,8 @@ import JourneyAidPage from '../../pageobjects/journey.aid.page.js';
  * Runs through the app and does some visual comparisons of the screen
  */
 describe('Visual tests', () => {
-  // Generate new baseline images locally by setting this to 'true'
-  const newBaseline = false;
+  // Generate new baseline images (true) or test (false)
+  const newBaseline = Config.recordBaseline();
 
   // Set test options
   const testOptions = {

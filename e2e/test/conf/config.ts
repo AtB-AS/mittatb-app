@@ -8,6 +8,7 @@ class Config {
     ONBOARDING_LOGIN_ENABLED: true,
     TRAVEL_SEARCH_DATE: '2025-03-06',
     DEPARTURE_DATE: '2025-03-06',
+    RECORD_BASELINE: false,
   };
 
   loadingScreenEnabled = (): boolean => {
@@ -38,6 +39,11 @@ class Config {
 
   departureDate = (): string => {
     return <string>(process.env.DEPARTURE_DATE || this.config.DEPARTURE_DATE);
+  };
+
+  // Generate new baseline images (true) or test (false)
+  recordBaseline = (): boolean => {
+    return <boolean>(process.env.RECORD_BASELINE || this.config.RECORD_BASELINE);
   };
 }
 
