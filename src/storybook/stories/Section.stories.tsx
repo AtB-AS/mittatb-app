@@ -93,7 +93,6 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <FavoriteDepartureSectionItem
                   favorite={{
                     id: '1',
-                    stopId: '2',
                     lineId: '3',
                     quayId: '4',
                     quayName: 'FavoriteDepartureSectionItem',

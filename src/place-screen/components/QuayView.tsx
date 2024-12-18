@@ -67,7 +67,6 @@ export function QuayView({
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
-    stopPlace.id,
     stopPlace.quays?.map((q) => q.id),
   );
 
@@ -132,7 +131,6 @@ export function QuayView({
           didLoadingDataFail={didLoadingDataFail}
           navigateToDetails={navigateToDetails}
           testID="quaySection"
-          stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
