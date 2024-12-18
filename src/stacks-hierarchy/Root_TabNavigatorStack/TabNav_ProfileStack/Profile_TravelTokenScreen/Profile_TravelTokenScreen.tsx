@@ -33,7 +33,7 @@ export const Profile_TravelTokenScreen = () => {
         <TravelTokenBox
           showIfThisDevice={true}
           alwaysShowErrors={true}
-          interactiveColor={theme.color.interactive[0]}
+          interactiveColor={theme.color.interactive[2]}
         />
         <Section>
           {data?.toggleLimit !== undefined && (
