@@ -191,7 +191,10 @@ export const Profile_FareContractsScreen = () => {
   return (
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
-      <ScrollView style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.contentContainer}
+      >
         <ThemeText typography="heading--jumbo">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}
@@ -234,5 +237,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   content: {
     padding: theme.spacing.medium,
+  },
+  contentContainer: {
+    rowGap: theme.spacing.large,
   },
 }));

@@ -29,13 +29,13 @@ export const Profile_TravelTokenScreen = () => {
         }
         leftButton={{type: 'back'}}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView contentContainerStyle={styles.content}>
         <TravelTokenBox
           showIfThisDevice={true}
           alwaysShowErrors={true}
           interactiveColor={theme.color.interactive[0]}
         />
-        <Section style={styles.tokenInfoSection}>
+        <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>
               <TokenToggleInfo style={styles.tokenInfoView} />
@@ -53,11 +53,9 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
-  scrollView: {
+  content: {
+    rowGap: theme.spacing.medium,
     padding: theme.spacing.medium,
-  },
-  tokenInfoSection: {
-    marginBottom: theme.spacing.medium,
   },
   tokenInfoView: {flexDirection: 'row'},
 }));

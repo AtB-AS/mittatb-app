@@ -164,5 +164,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     padding: theme.spacing.medium,
+    rowGap: theme.spacing.large,
   },
 }));
