@@ -67,7 +67,7 @@ const createUsedAccess = (args?: {
 };
 
 describe('getAvailabilityStatus', () => {
-  it(`should return 'refunded' if fare contract state is refunded`, () => {
+  it(`should return 'historic/refunded' if fare contract state is refunded`, () => {
     const availabilityStatus = getAvailabilityStatus(
       createFareContract({state: FareContractState.Refunded}),
       new Date().getTime(),
