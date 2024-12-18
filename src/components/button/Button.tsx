@@ -18,6 +18,7 @@ import {shadows} from '@atb/components/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
+type ButtonType = 'large' | 'small';
 
 type ButtonSettings = {
   withBackground: boolean;
@@ -39,11 +40,6 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   },
 };
 
-type ButtonTypeAwareProps =
-  | {text: string; type?: 'large'}
-  | {text?: string; type: 'medium'}
-  | {text: string; type: 'small'};
-
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
@@ -59,6 +55,8 @@ type ButtonModeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
+  text?: string;
+  type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   expand?: boolean;
@@ -67,8 +65,7 @@ export type ButtonProps = {
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
-} & ButtonTypeAwareProps &
-  ButtonModeAwareProps &
+} & ButtonModeAwareProps &
   PressableProps;
 
 const DISABLED_OPACITY = 0.2;
@@ -78,7 +75,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     {
       onPress,
       mode = 'primary',
-      type = 'block',
+      type = 'large',
       leftIcon,
       rightIcon,
       text,
@@ -119,8 +116,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = (type === 'medium' || type === 'small') && !expand;
-
     const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =
       interactiveColor[active ? 'active' : 'default'];
@@ -143,61 +138,47 @@ export const Button = React.forwardRef<any, ButtonProps>(
       {
         backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
         borderColor: borderColor,
-        paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        alignSelf: isInline ? 'flex-start' : undefined,
-        justifyContent: expand ? 'center' : undefined,
-        alignItems: expand ? 'center' : undefined,
+        paddingHorizontal: theme.spacing.medium,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
         borderRadius:
           type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
+        ...(expand
+          ? {
+              flex: 1,
+            }
+          : {
+              alignSelf: 'flex-start',
+            }),
       },
     ];
 
-    const textMarginHorizontal = useTextMarginHorizontal(
-      isInline,
-      expand,
-      leftIcon,
-      rightIcon,
-    );
-
     const styleText: TextStyle = {
       color: textColor,
-      width: isInline ? '100%' : undefined,
     };
     const textContainer: TextStyle = {
-      flex: isInline ? undefined : !expand ? 1 : undefined,
       alignItems: 'center',
-      marginHorizontal: textMarginHorizontal,
-      flexShrink: isInline ? 1 : undefined,
     };
-    const leftStyling: ViewStyle = {
-      position: isInline ? 'relative' : !expand ? 'absolute' : undefined,
-      left: isInline ? undefined : !expand ? spacing : undefined,
-      marginRight:
-        isInline || (expand && (text || rightIcon))
+    const iconStyle = (
+      iconSide: 'left' | 'right',
+      icon?: ButtonIconProps,
+    ): ViewStyle => {
+      return {
+        [iconSide === 'left' ? 'marginRight' : 'marginLeft']: icon
           ? theme.spacing.xSmall
           : undefined,
+      };
     };
 
-    const rightStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      right: isInline ? undefined : spacing,
-      marginLeft:
-        isInline && (text || leftIcon) ? theme.spacing.xSmall : undefined,
-    };
+    const leftStyling = iconStyle('left', leftIcon);
+    const rightStyling = iconStyle('right', rightIcon);
 
     return (
-      <Animated.View
-        style={[
-          {
-            opacity: fadeAnim,
-            flex: expand ? 1 : undefined,
-          },
-          style,
-        ]}
-      >
+      <Animated.View style={[{opacity: fadeAnim}, style]}>
         <PressableOpacity
           style={[styleContainer, hasShadow ? shadows : undefined]}
           onPress={disabled || loading ? undefined : onPress}
@@ -237,28 +218,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
     );
   },
 );
-
-/**
- * Get the extra horizontal margin for the button text. This is for normal
- * "block" type (not inline) buttons as the icons are placed with absolute
- * position, to not offset the centering of the text. This method calculates the
- * necessary horizontal margin based on the largest icon size.
- */
-const useTextMarginHorizontal = (
-  isInline: boolean,
-  expand: boolean,
-  leftIcon?: ButtonIconProps,
-  rightIcon?: ButtonIconProps,
-) => {
-  const {theme} = useTheme();
-  if (isInline) return 0;
-  if (!leftIcon && !rightIcon) return 0;
-  const maxIconSize = Math.max(
-    theme.icon.size[leftIcon?.size || 'normal'],
-    theme.icon.size[rightIcon?.size || 'normal'],
-  );
-  return !expand ? maxIconSize + theme.spacing.xSmall : 0;
-};
 
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {

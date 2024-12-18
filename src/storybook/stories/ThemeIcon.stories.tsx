@@ -158,7 +158,7 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['large', 'medium', 'small', 'xSmall'] as IconSize[],
+      options: ['large', 'small', 'xSmall'] as IconSize[],
     },
     notification: {
       control: 'select',
