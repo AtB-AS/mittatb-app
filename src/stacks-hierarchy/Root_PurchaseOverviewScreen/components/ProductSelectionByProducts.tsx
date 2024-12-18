@@ -11,7 +11,6 @@ import {
   getReferenceDataName,
   isProductSellableInApp,
 } from '@atb/configuration';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {
   HeaderSectionItem,
@@ -24,17 +23,16 @@ import {usePreferencesContext} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
 import {useThemeContext} from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type ProductSelectionByProductsProps = {
-  selectedProduct: PreassignedFareProduct;
-  fareProductTypeConfig: FareProductTypeConfig;
+  selection: PurchaseSelectionType;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByProducts({
-  selectedProduct,
-  fareProductTypeConfig,
+  selection,
   setSelectedProduct,
   style,
 }: ProductSelectionByProductsProps) {
@@ -47,7 +45,7 @@ export function ProductSelectionByProducts({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type)
+    .filter((product) => product.type === selection.preassignedFareProduct.type)
     .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const alias = (fareProduct: PreassignedFareProduct) =>
@@ -61,7 +59,7 @@ export function ProductSelectionByProducts({
 
   const title =
     useTextForLanguage(
-      fareProductTypeConfig.configuration.productSelectionTitle,
+      selection.fareProductTypeConfig.configuration.productSelectionTitle,
     ) || t(PurchaseOverviewTexts.productSelection.title);
 
   const subText = (fp: PreassignedFareProduct) => {
@@ -84,7 +82,7 @@ export function ProductSelectionByProducts({
             itemToText={(fp) => productDisplayName(fp)}
             hideSubtext={hideProductDescriptions}
             itemToSubtext={(fp) => subText(fp)}
-            selected={selectedProduct}
+            selected={selection.preassignedFareProduct}
             color={interactiveColor}
             onSelect={setSelectedProduct}
             accessibilityHint={t(
@@ -97,8 +95,8 @@ export function ProductSelectionByProducts({
           <ContentHeading text={title} />
           <Section>
             <HeaderSectionItem
-              text={productDisplayName(selectedProduct)}
-              subtitle={subText(selectedProduct)}
+              text={productDisplayName(selection.preassignedFareProduct)}
+              subtitle={subText(selection.preassignedFareProduct)}
             />
           </Section>
         </>

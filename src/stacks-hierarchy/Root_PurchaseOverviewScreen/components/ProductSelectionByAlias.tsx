@@ -8,29 +8,27 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {
-  useFirestoreConfigurationContext,
-  PreassignedFareProduct,
   isProductSellableInApp,
-  FareProductTypeConfig,
+  PreassignedFareProduct,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {useTicketingContext} from '@atb/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type Props = {
   color: InteractiveColor;
-  selectedProduct: PreassignedFareProduct;
-  fareProductTypeConfig: FareProductTypeConfig;
+  selection: PurchaseSelectionType;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByAlias({
   color,
-  selectedProduct,
-  fareProductTypeConfig,
+  selection,
   setSelectedProduct,
   style,
 }: Props) {
@@ -41,11 +39,11 @@ export function ProductSelectionByAlias({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type)
+    .filter((product) => product.type === selection.preassignedFareProduct.type)
     .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const title = useTextForLanguage(
-    fareProductTypeConfig.configuration.productSelectionTitle,
+    selection.fareProductTypeConfig.configuration.productSelectionTitle,
   );
 
   return (
@@ -69,9 +67,10 @@ export function ProductSelectionByAlias({
               color={color}
               text={text}
               selected={
-                selectedProduct.productAliasId
-                  ? selectedProduct.productAliasId === fp.productAliasId
-                  : selectedProduct.id === fp.id
+                selection.preassignedFareProduct.productAliasId
+                  ? selection.preassignedFareProduct.productAliasId ===
+                    fp.productAliasId
+                  : selection.preassignedFareProduct.id === fp.id
               }
               onPress={() => setSelectedProduct(fp)}
               key={i}
