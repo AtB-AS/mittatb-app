@@ -10,6 +10,15 @@ class DepartureSearchPage {
   }
 
   /**
+   * Set departure date
+   */
+  async openDateTimePicker() {
+    const reqId = `//*[@resource-id="setDateButton"]`;
+    await $(reqId).click();
+    await ElementHelper.waitForElement('id', 'datePicker');
+  }
+
+  /**
    * Click the given stop place
    * @param stopPlace name of the stop place
    */

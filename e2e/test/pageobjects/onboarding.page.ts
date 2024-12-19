@@ -88,10 +88,16 @@ class OnboardingPage {
    */
   async skipOnboarding(testName: string = '') {
     try {
-      await ElementHelper.waitForElement('id', 'useAppAnonymouslyButton');
-      await this.useAppAnonymously.click();
-      await ElementHelper.waitForElement('id', 'acceptLimitationsButton');
-      await this.acceptLimitations.click();
+      // Onboarding: login (if enabled)
+      // Note: Could also use Config.onboardingLoginEnabled() if settings are stable
+      if (await ElementHelper.isElementExisting('useAppAnonymouslyButton', 2)) {
+        await ElementHelper.waitForElement('id', 'useAppAnonymouslyButton');
+        await this.useAppAnonymously.click();
+        await ElementHelper.waitForElement('id', 'acceptLimitationsButton');
+        await this.acceptLimitations.click();
+      }
+
+      // Onboarding: location
       await ElementHelper.waitForElement(
         'id',
         'locationWhenInUsePermissionButton',
