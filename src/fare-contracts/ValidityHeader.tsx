@@ -10,24 +10,33 @@ import {formatToLongDateTime, secondsToDurationString} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {ValidityStatus} from './utils';
+import {getFareContractInfo, ValidityStatus} from './utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
+import {useTimeContext} from '@atb/time';
+import {useAuthContext} from '@atb/auth';
+import type {FareContract} from '@atb/ticketing';
 
-export const ValidityHeader: React.FC<{
-  status: ValidityStatus;
-  now: number;
-  createdDate: number;
-  validFrom: number;
-  validTo: number;
-}> = ({status, now, createdDate, validFrom, validTo}) => {
+type Props = {
+  fc: FareContract;
+};
+
+export const ValidityHeader = ({fc}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {isInspectable} = useMobileTokenContext();
+  const {serverNow} = useTimeContext();
+  const {abtCustomerId: currentUserId} = useAuthContext();
+
+  const {validityStatus, validFrom, validTo} = getFareContractInfo(
+    serverNow,
+    fc,
+    currentUserId,
+  );
 
   const label: string = validityTimeText(
-    status,
-    now,
-    createdDate,
+    validityStatus,
+    serverNow,
+    fc.created.getTime(),
     validFrom,
     validTo,
     t,
@@ -35,8 +44,9 @@ export const ValidityHeader: React.FC<{
   );
 
   return (
-    <View style={styles.validityHeader}>
+    <View>
       <ThemeText
+        style={styles.validityText}
         typography="heading--medium"
         accessibilityLabel={
           !isInspectable
@@ -108,7 +118,7 @@ function validityTimeText(
 }
 
 const useStyles = StyleSheet.createThemeHook(() => ({
-  validityHeader: {
-    alignItems: 'center',
+  validityText: {
+    textAlign: 'center',
   },
 }));
