@@ -217,7 +217,7 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
                 </ThemeText>
               )}
             </View>
-            <PaymentBrand icon={paymentMethod.paymentType} />
+            <PaymentBrand paymentType={paymentMethod.paymentType} />
           </View>
           {paymentMethod.recurringCard && (
             <ThemeText style={styles.expireDate}>

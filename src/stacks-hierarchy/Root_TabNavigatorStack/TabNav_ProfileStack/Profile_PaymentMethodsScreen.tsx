@@ -172,7 +172,7 @@ const Card = (props: {
         </View>
 
         <View style={style.cardIcons}>
-          <PaymentBrand icon={card.payment_type} />
+          <PaymentBrand paymentType={card.payment_type} />
           <PressableOpacity
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
