@@ -108,7 +108,11 @@ export function TravelTokenBox({
         mode="secondary"
         backgroundColor={themeTextColor.default}
         onPress={onPressChangeButton}
-        text={t(TravelTokenBoxTexts.change)}
+        text={
+          inspectableToken
+            ? t(TravelTokenBoxTexts.change)
+            : t(TravelTokenBoxTexts.select)
+        }
         testID="continueWithoutChangingTravelTokenButton"
       />
     </View>
