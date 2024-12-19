@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -58,7 +58,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     forwardedRef,
   ) => {
     const {topContainer, spacing} = useSectionItem(props);
-    const {theme, themeName} = useTheme();
+    const {theme, themeName} = useThemeContext();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const [isSelectingPrefix, setIsSelectingPrefix] = useState(false);

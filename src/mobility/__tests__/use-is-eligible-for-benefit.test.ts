@@ -245,7 +245,7 @@ const hyreSingleUnlockOperatorBenefit: OperatorBenefitType = {
 };
 
 jest.mock('@atb/configuration', () => ({
-  useFirestoreConfiguration: () => ({
+  useFirestoreConfigurationContext: () => ({
     benefitIdsRequiringValueCode: ['single-unlock', 'free-unlock'],
   }),
 }));

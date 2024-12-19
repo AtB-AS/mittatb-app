@@ -1,4 +1,4 @@
 export {
-  FeatureTogglesProvider,
-  useFeatureToggles,
+  FeatureTogglesContextProvider,
+  useFeatureTogglesContext,
 } from './FeatureTogglesContext';

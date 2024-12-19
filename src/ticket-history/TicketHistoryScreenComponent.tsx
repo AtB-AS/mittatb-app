@@ -6,9 +6,9 @@ import {
   FareContract,
   Reservation,
   filterExpiredFareContracts,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
@@ -17,7 +17,7 @@ import {
   TicketHistoryScreenParams,
 } from '@atb/ticket-history';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 export const TicketHistoryScreenComponent = ({
   mode,
@@ -29,11 +29,11 @@ export const TicketHistoryScreenComponent = ({
     reservations,
     rejectedReservations,
     resubscribeFirestoreListeners,
-  } = useTicketingState();
+  } = useTicketingContext();
 
-  const {abtCustomerId: customerAccountId} = useAuthState();
+  const {abtCustomerId: customerAccountId} = useAuthContext();
 
-  const {serverNow} = useTimeContextState();
+  const {serverNow} = useTimeContext();
   const {t} = useTranslation();
   const styles = useStyles();
 

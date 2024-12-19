@@ -7,7 +7,7 @@ import {BenefitImageAsset} from '@atb/mobility/components/BenefitImage';
 import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {toFormFactorEnum} from '@atb/mobility/utils';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
@@ -22,7 +22,7 @@ export const MobilityBenefitsInfoSectionItem = ({
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const accessibilityLabel =
     t(MobilityTexts.includedWithTheTicket) +

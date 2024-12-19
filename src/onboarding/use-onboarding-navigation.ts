@@ -6,14 +6,14 @@ import {useCallback} from 'react';
 import {InteractionManager} from 'react-native';
 import {
   useOnboardingFlow,
-  useOnboardingState,
+  useOnboardingContext,
   OnboardingSectionId,
 } from '@atb/onboarding';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();
   const {getNextOnboardingSection} = useOnboardingFlow();
-  const {completeOnboardingSection} = useOnboardingState();
+  const {completeOnboardingSection} = useOnboardingContext();
 
   const goToScreen = useCallback(
     (replace, screen: {name?: any; params?: any}) => {

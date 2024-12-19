@@ -1,7 +1,7 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
   TicketingTexts,
@@ -10,11 +10,11 @@ import {
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useTimeContextState} from '@atb/time';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useAnalytics} from '@atb/analytics';
+import {useTimeContext} from '@atb/time';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useAnalyticsContext} from '@atb/analytics';
 import {MapFilterType} from '@atb/components/map';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {ErrorBoundary} from '@atb/error-boundary';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
@@ -22,11 +22,11 @@ type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {enable_ticket_information} = useRemoteConfig();
-  const {serverNow} = useTimeContextState();
-  const analytics = useAnalytics();
-  const {abtCustomerId: currentUserId} = useAuthState();
+  const {theme} = useThemeContext();
+  const {enable_ticket_information} = useRemoteConfigContext();
+  const {serverNow} = useTimeContext();
+  const analytics = useAnalyticsContext();
+  const {abtCustomerId: currentUserId} = useAuthContext();
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
     useTicketInfo(route.params.orderId);
 

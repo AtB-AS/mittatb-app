@@ -1,4 +1,4 @@
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {useEffect, useMemo} from 'react';
 
 /**
@@ -12,7 +12,7 @@ export const useOnFareContractReceived = ({
   orderId: string | undefined;
   callback: () => void;
 }) => {
-  const {fareContracts, sentFareContracts} = useTicketingState();
+  const {fareContracts, sentFareContracts} = useTicketingContext();
 
   const fareContractReceived = useMemo(() => {
     const allPossibleFareContracts = [

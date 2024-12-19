@@ -52,6 +52,7 @@ class TravelSearchOverviewPage {
     await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
     await this.firstTripResult.click();
     await ElementHelper.waitForElement('id', `tripDetailsContentView`);
+    await ElementHelper.waitForElement('id', `legContainer0`);
   }
 
   /**

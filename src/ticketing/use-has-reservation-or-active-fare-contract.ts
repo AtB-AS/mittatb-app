@@ -1,11 +1,11 @@
-import {useTicketingState} from '@atb/ticketing/TicketingContext';
-import {useTimeContextState} from '@atb/time';
+import {useTicketingContext} from '@atb/ticketing/TicketingContext';
+import {useTimeContext} from '@atb/time';
 import {filterActiveOrCanBeUsedFareContracts} from '@atb/ticketing/utils';
 import {getReservationStatus} from '@atb/fare-contracts/utils';
 
 export const useHasReservationOrActiveFareContract = () => {
-  const {fareContracts, reservations} = useTicketingState();
-  const {serverNow} = useTimeContextState();
+  const {fareContracts, reservations} = useTicketingContext();
+  const {serverNow} = useTimeContext();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     serverNow,

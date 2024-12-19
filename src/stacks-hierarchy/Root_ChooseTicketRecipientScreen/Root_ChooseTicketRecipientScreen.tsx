@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useCallback, useRef} from 'react';
 import {KeyboardAvoidingView, RefreshControl, View} from 'react-native';
@@ -27,7 +27,7 @@ export const Root_ChooseTicketRecipientScreen = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   const [state, dispatch] = useRecipientSelectionState();

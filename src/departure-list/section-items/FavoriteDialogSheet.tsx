@@ -7,13 +7,13 @@ import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type Props = {
   lineNumber: string;
@@ -25,11 +25,11 @@ type Props = {
 export const FavoriteDialogSheet = forwardRef<View, Props>(
   ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
     const {t} = useTranslation();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
     const interactiveColor = theme.color.interactive[0];
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
-    const {close} = useBottomSheet();
+    const {close} = useBottomSheetContext();
     return (
       <BottomSheetContainer
         title={t(DeparturesTexts.favoriteDialogSheet.title)}

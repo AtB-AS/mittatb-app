@@ -84,7 +84,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function usePopOver() {
+export function usePopOverContext() {
   const context = useContext(PopOverContext);
   if (context === undefined) {
     throw new Error(

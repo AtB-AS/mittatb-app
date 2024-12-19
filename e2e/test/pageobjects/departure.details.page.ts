@@ -60,6 +60,15 @@ class DepartureDetailPage {
     await ElementHelper.waitForElement('id', 'quaySection');
     await ElementHelper.waitForElement('id', 'estimatedCallItem');
   }
+
+  /**
+   * Open journey aid
+   */
+  async openJourneyAid() {
+    const buttonId = `//*[@resource-id="journeyAidButton"]`;
+    await $(buttonId).click();
+    await ElementHelper.waitForElement('id', 'closeJourneyAidButton');
+  }
 }
 
 export default new DepartureDetailPage();

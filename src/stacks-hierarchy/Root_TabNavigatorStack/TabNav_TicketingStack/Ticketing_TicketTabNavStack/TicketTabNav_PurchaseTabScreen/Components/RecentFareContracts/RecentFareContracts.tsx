@@ -1,15 +1,15 @@
 import {ThemeText} from '@atb/components/text';
 import {
   isProductSellableInApp,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   FareProductTypeConfig,
 } from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
   RecentFareContract,
@@ -32,10 +32,10 @@ export const RecentFareContracts = ({
   onSelect,
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
 
   const memoizedRecentFareContracts = useMemo(
     () =>

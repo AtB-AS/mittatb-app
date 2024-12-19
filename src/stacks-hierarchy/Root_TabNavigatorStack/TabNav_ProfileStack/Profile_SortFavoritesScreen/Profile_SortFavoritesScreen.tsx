@@ -3,8 +3,8 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useFavorites} from '@atb/favorites';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {useFavoritesContext} from '@atb/favorites';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -15,12 +15,12 @@ type Props = ProfileScreenProps<'Profile_SortFavoritesScreen'>;
 
 export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
   const style = useProfileStyle();
-  const {favorites, setFavoriteLocations: setFavorites} = useFavorites();
+  const {favorites, setFavoriteLocations: setFavorites} = useFavoritesContext();
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const saveOrder = async () => {
     try {

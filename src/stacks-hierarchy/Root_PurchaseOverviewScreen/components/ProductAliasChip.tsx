@@ -1,5 +1,5 @@
 import {InteractiveColor} from '@atb/theme/colors';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -13,7 +13,7 @@ type Props = {
 
 export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const currentColor = color[selected ? 'active' : 'default'];
 

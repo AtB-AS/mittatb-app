@@ -5,23 +5,23 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {
   GlobalMessageContextEnum,
-  useGlobalMessagesState,
+  useGlobalMessagesContext,
 } from '@atb/global-messages';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {ContrastColor} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 export const useServiceDisruptionIcon = (
   color?: ContrastColor,
   testID?: string,
 ): IconButtonProps | undefined => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {findGlobalMessages} = useGlobalMessagesState();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const {findGlobalMessages} = useGlobalMessagesContext();
+  const {open: openBottomSheet} = useBottomSheetContext();
   const now = useNow(2500);
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 

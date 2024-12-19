@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '../use-token-toggle-details';
 import {LIST_REMOTE_TOKENS_QUERY_KEY} from './use-list-remote-tokens-query';
 import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 type Args = {
   tokenId: string;
@@ -12,7 +12,7 @@ type Args = {
 };
 export const useToggleTokenMutation = () => {
   const queryClient = useQueryClient();
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
   return useMutation({
     mutationFn: ({tokenId, bypassRestrictions}: Args) =>
       tokenService.toggle(tokenId, uuid(), bypassRestrictions),

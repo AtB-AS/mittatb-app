@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 
@@ -186,7 +186,7 @@ export const EmojiSheet = forwardRef<ScrollView, Props>(
   ({value, onEmojiSelected, closeOnSelect, ...props}, focusRef) => {
     const {t} = useTranslation();
 
-    const {close} = useBottomSheet();
+    const {close} = useBottomSheetContext();
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);
       if (closeOnSelect) {

@@ -6,51 +6,49 @@ import {
   formatToShortDateTimeWithoutYear,
   formatToVerboseDateTime,
 } from '@atb/utils/date';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
-import {TimeSelectionMode} from '@atb/configuration';
 import {ContentHeading} from '@atb/components/heading';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type StartTimeSelectionProps = {
+  selection: PurchaseSelectionType;
   color: InteractiveColor;
   setTravelDate: (date?: string) => void;
-  validFromTime?: string;
-  travelDate?: string;
-  selectionMode: TimeSelectionMode;
   style?: StyleProp<ViewStyle>;
 };
 
 export function StartTimeSelection({
+  selection,
   color,
   setTravelDate,
-  validFromTime,
-  travelDate,
-  selectionMode,
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const openTravelDateSheet = () => {
     openBottomSheet(
-      () => <TravelDateSheet save={setTravelDate} travelDate={travelDate} />,
+      () => <TravelDateSheet save={setTravelDate} selection={selection} />,
       onCloseFocusRef,
     );
   };
 
-  const subtext = validFromTime
-    ? formatToShortDateTimeWithoutYear(validFromTime, language)
+  const subtext = selection.travelDate
+    ? formatToShortDateTimeWithoutYear(selection.travelDate, language)
     : undefined;
-  const accessibilityLabel = validFromTime
+  const accessibilityLabel = selection.travelDate
     ? t(PurchaseOverviewTexts.startTime.later) +
       ', ' +
-      formatToVerboseDateTime(validFromTime, language)
+      formatToVerboseDateTime(selection.travelDate, language)
     : undefined;
 
-  if (selectionMode === 'none') {
-    return <></>;
+  if (
+    selection.fareProductTypeConfig.configuration.timeSelectionMode === 'none'
+  ) {
+    return null;
   }
 
   return (
@@ -58,7 +56,7 @@ export function StartTimeSelection({
       <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
       <RadioSegments
         color={color}
-        activeIndex={!!validFromTime ? 1 : 0}
+        activeIndex={!!selection.travelDate ? 1 : 0}
         options={[
           {
             text: t(PurchaseOverviewTexts.startTime.now),

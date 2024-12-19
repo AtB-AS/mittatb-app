@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -11,19 +11,19 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {Button} from '@atb/components/button';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import Bugsnag from '@bugsnag/react-native';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {useAnalytics} from '@atb/analytics';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useAnalyticsContext} from '@atb/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {setPreference, preferences} = usePreferences();
-  const {contactPhoneNumber} = useFirestoreConfiguration();
-  const analytics = useAnalytics();
+  const {theme} = useThemeContext();
+  const {setPreference, preferences} = usePreferencesContext();
+  const {contactPhoneNumber} = useFirestoreConfigurationContext();
+  const analytics = useAnalyticsContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const backgroundColor = theme.color.background.neutral[0];

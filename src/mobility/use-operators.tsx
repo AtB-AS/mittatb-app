@@ -1,9 +1,9 @@
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useCallback} from 'react';
 
 export const useOperators = () => {
-  const {mobilityOperators} = useFirestoreConfiguration();
+  const {mobilityOperators} = useFirestoreConfigurationContext();
 
   const byFormFactor = useCallback(
     (types: undefined | FormFactor | FormFactor[]) => {

@@ -4,8 +4,8 @@ import {LoadingErrorScreen} from './LoadingErrorScreen';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useLoadingState} from '@atb/loading-screen/use-loading-state';
 import {useNotifyBugsnagOnTimeoutStatus} from '@atb/loading-screen/use-notify-bugsnag-on-timeout-status';
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 const LOADING_TIMEOUT_MS = 10000;
 
@@ -15,8 +15,8 @@ export const LoadingScreenBoundary = ({
   children: JSX.Element;
 }): JSX.Element => {
   const {isLoadingScreenEnabled, isLoadingErrorScreenEnabled} =
-    useFeatureToggles();
-  const {loading_screen_delay_ms} = useRemoteConfig();
+    useFeatureTogglesContext();
+  const {loading_screen_delay_ms} = useRemoteConfigContext();
   const {status, retry, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
   useNotifyBugsnagOnTimeoutStatus(status, paramsRef);
 

@@ -1,11 +1,11 @@
 import React, {ReactElement, useEffect, useRef} from 'react';
 import {Animated, Dimensions, Easing, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {SectionSeparator} from '@atb/components/sections';
 import {useValidityLineColors} from './use-validity-line-colors';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -24,12 +24,12 @@ type Props =
 export const ValidityLine = (props: Props): ReactElement => {
   const {status} = props;
 
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
   );
-  const {isInspectable} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContext();
 
   switch (status) {
     case 'reserving':
@@ -85,7 +85,7 @@ const LineWithVerticalBars = ({
   animate?: boolean;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
   return (

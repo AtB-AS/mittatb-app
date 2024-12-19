@@ -2,7 +2,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {Linking, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
@@ -14,7 +14,7 @@ type Props = {
 export const BookingOptions = ({bookingArrangements}: Props) => {
   const {t} = useTranslation();
   const style = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   if (!bookingArrangements) return null;
 

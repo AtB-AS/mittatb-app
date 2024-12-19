@@ -1,6 +1,6 @@
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {PhotoFile} from '@atb/components/camera';
@@ -26,7 +26,7 @@ export const ImageConfirmationBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
   return (
     <BottomSheetContainer
       title={t(ParkingViolationTexts.imageConfirmation.title)}

@@ -1,16 +1,16 @@
-import {useAuthState} from '@atb/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {useAnalytics} from '@atb/analytics';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useAnalyticsContext} from '@atb/analytics';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
@@ -23,17 +23,17 @@ import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
-  const {must_upgrade_ticketing} = useRemoteConfig();
-  const {authenticationType} = useAuthState();
-  const {theme} = useTheme();
+  const {must_upgrade_ticketing} = useRemoteConfigContext();
+  const {authenticationType} = useAuthContext();
+  const {theme} = useThemeContext();
   const {recentFareContracts, loading} = useRecentFareContracts();
   const {data: fareProducts} = useGetFareProductsQuery();
 
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
-  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
+  const {tokens, mobileTokenStatus} = useMobileTokenContext();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const hasMobileTokenError =

@@ -1,8 +1,8 @@
 import React from 'react';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {FareProductGroup} from './FareProductGroup';
 import {
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   FareProductTypeConfig,
   LanguageAndTextType,
   ProductTypeTransportModes,
@@ -31,8 +31,8 @@ export const FareProducts = ({
 }) => {
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs, fareProductGroups} =
-    useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
+    useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
 
   const sellableProductsInApp = fareProducts.filter((product) =>
     isProductSellableInApp(product, customerProfile),

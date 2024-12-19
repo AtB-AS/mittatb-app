@@ -1,4 +1,4 @@
-import {useOnboardingState} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/onboarding';
 import {
   OnboardingSectionId,
   OnboardingSection,
@@ -8,7 +8,7 @@ import {
 export const useOnboardingSectionIsOnboarded: (
   onboardingSectionId: OnboardingSectionId,
 ) => boolean = (onboardingSectionId) => {
-  const {onboardingSections} = useOnboardingState();
+  const {onboardingSections} = useOnboardingContext();
   return getOnboardingSectionIsOnboarded(
     onboardingSections,
     onboardingSectionId,

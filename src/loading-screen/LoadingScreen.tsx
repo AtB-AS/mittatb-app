@@ -1,7 +1,7 @@
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -9,7 +9,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 export const LoadingScreen = React.memo(() => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   return (

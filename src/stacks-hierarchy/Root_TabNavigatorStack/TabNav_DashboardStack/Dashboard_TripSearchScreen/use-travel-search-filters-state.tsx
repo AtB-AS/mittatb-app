@@ -1,8 +1,8 @@
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React, {RefObject, useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useFilters} from '@atb/travel-search-filters';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFiltersContext} from '@atb/travel-search-filters';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
   TravelSearchFiltersSelectionType,
@@ -29,9 +29,9 @@ export const useTravelSearchFiltersState = ({
 }: {
   onCloseFocusRef: RefObject<any>;
 }): TravelSearchFiltersState => {
-  const {open, onOpenFocusRef} = useBottomSheet();
-  const {travelSearchFilters} = useFirestoreConfiguration();
-  const {filters, setFilters} = useFilters();
+  const {open, onOpenFocusRef} = useBottomSheetContext();
+  const {travelSearchFilters} = useFirestoreConfigurationContext();
+  const {filters, setFilters} = useFiltersContext();
 
   const transportModeFilterOptionsFromFirestore =
     travelSearchFilters?.transportModes;

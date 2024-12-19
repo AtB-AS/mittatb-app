@@ -10,7 +10,7 @@ import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-fro
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
-import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {tGlobal} from '@atb/LocaleProvider';
@@ -24,7 +24,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const isFocused = useIsFocusedAndActive();
   const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
-    useMapState();
+    useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
 
   const {

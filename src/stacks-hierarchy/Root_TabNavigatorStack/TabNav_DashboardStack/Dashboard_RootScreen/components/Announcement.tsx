@@ -6,7 +6,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Image, Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -17,10 +17,10 @@ import {
   Section,
 } from '@atb/components/sections';
 import {AnnouncementSheet} from './AnnouncementSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {animateNextChange} from '@atb/utils/animation';
-import {useAnalytics} from '@atb/analytics';
-import {useAnnouncementsState} from '@atb/announcements';
+import {useAnalyticsContext} from '@atb/analytics';
+import {useAnnouncementsContext} from '@atb/announcements';
 import Bugsnag from '@bugsnag/react-native';
 import {RefObject, useRef} from 'react';
 
@@ -33,10 +33,10 @@ export const Announcement = ({announcement, style}: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {language} = useTranslation();
-  const {theme} = useTheme();
-  const analytics = useAnalytics();
-  const {dismissAnnouncement} = useAnnouncementsState();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const analytics = useAnalyticsContext();
+  const {dismissAnnouncement} = useAnnouncementsContext();
+  const {open: openBottomSheet} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handleDismiss = () => {

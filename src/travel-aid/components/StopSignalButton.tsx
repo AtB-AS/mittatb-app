@@ -1,5 +1,5 @@
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
@@ -12,11 +12,11 @@ import {View} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import type {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '@atb/travel-aid/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 export const StopSignalButton = ({
   serviceJourney,
@@ -29,12 +29,12 @@ export const StopSignalButton = ({
   onPress: (args: SendStopSignalRequestType) => void;
   status: MutationStatus;
 }) => {
-  const {isTravelAidStopButtonEnabled} = useFeatureToggles();
-  const {theme} = useTheme();
+  const {isTravelAidStopButtonEnabled} = useFeatureTogglesContext();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
-  const {stopSignalButtonConfig: config} = useFirestoreConfiguration();
-  const analytics = useAnalytics();
+  const {stopSignalButtonConfig: config} = useFirestoreConfigurationContext();
+  const analytics = useAnalyticsContext();
 
   if (!isTravelAidStopButtonEnabled) return null;
 

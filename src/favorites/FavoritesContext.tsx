@@ -178,7 +178,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useFavorites() {
+export function useFavoritesContext() {
   const context = useContext(FavoritesContext);
   if (context === undefined) {
     throw new Error(

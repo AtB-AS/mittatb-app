@@ -26,4 +26,4 @@ export {
   findReferenceDataById,
   getReferenceDataName,
 } from './utils';
-export {useFirestoreConfiguration} from './FirestoreConfigurationContext';
+export {useFirestoreConfigurationContext} from './FirestoreConfigurationContext';

@@ -1,4 +1,4 @@
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {useQuery} from '@tanstack/react-query';
 import {fetchOnBehalfOfAccounts} from '@atb/api/profile';
 import {HALF_DAY_MS} from '@atb/utils/durations';
@@ -10,7 +10,7 @@ export const FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY =
 type Params = {enabled: boolean};
 
 export const useFetchOnBehalfOfAccountsQuery = ({enabled}: Params) => {
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
 
   return useQuery({
     queryKey: [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY, userId],

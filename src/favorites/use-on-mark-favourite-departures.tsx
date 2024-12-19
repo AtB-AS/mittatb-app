@@ -1,10 +1,10 @@
-import {useFavorites, StoredFavoriteDeparture} from '@atb/favorites';
+import {useFavoritesContext, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {RefObject} from 'react';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
   TransportMode,
@@ -28,9 +28,9 @@ export function useOnMarkFavouriteDepartures(
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
-    useFavorites();
+    useFavoritesContext();
   const {t} = useTranslation();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const addFavorite = async (
     line: Pick<
       FavouriteDepartureLine,

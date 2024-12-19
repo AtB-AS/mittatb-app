@@ -5,7 +5,7 @@ import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   formatLocaleTime,
   formatToClockOrRelativeMinutes,
@@ -21,7 +21,7 @@ type DepartureTimeProps = {
 export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   return (
     <View>

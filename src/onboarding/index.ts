@@ -1,6 +1,6 @@
 export {
   OnboardingContextProvider,
-  useOnboardingState,
+  useOnboardingContext,
 } from './OnboardingContext';
 export {OnboardingScreenComponent} from './OnboardingScreenComponent';
 export {OnboardingFullScreenView} from './OnboardingFullScreenView';

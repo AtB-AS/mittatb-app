@@ -2,7 +2,7 @@ import {Statuses, StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {LineChip, LineChipServiceJourney} from './LineChip';
 import {ThemeIcon} from '../theme-icon';
 import {PinInvalid} from '@atb/assets/svg/mono-icons/map';
@@ -31,7 +31,7 @@ export function EstimatedCallInfo({
   const {t} = useTranslation();
   const {
     preferences: {debugPredictionInaccurate},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
   const showAsCancelled =

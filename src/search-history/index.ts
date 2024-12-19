@@ -1,5 +1,5 @@
 export {
   SearchHistoryContextProvider,
-  useSearchHistory,
+  useSearchHistoryContext,
 } from './SearchHistoryContext';
 export type {JourneySearchHistoryEntry} from './SearchHistoryContext';

@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   ActiveTokenRequiredTexts,
   dictionary,
@@ -11,7 +11,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {Token, useMobileTokenContextState} from '@atb/mobile-token';
+import {Token, useMobileTokenContext} from '@atb/mobile-token';
 import {RadioGroupSection} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
@@ -33,12 +33,12 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
   const focusRef = useFocusOnLoad();
   const {nextScreen} = route.params;
 
-  const {tokens} = useMobileTokenContextState();
+  const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
   const [selectedToken, setSelectedToken] = useState<Token>();
   const mobileTokens = tokens.filter((t) => t.type === 'mobile');
 
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   useEffect(() => {

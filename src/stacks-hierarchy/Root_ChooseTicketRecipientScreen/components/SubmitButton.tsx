@@ -3,7 +3,7 @@ import {
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {TicketRecipientType} from '@atb/ticketing';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   OnBehalfOfTexts,
   PhoneInputTexts,
@@ -32,7 +32,7 @@ export const SubmitButton = ({
   themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);

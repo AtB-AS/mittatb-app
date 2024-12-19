@@ -29,23 +29,18 @@ jobs:
       TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
     environment: atb
     timeout-minutes: 90
+    env:
+      ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
+      ENV_API_LEVEL: ${{ github.event.inputs.api_level || 30 }}
+      ENV_TEST_ITERATIONS: ${{ github.event.inputs.test_iterations || 1 }}
+      ENV_MAX_RETRIES: ${{ github.event.inputs.max_retries || 1 }}
     steps:
       - name: Set env variables
-        env:
-          DEFAULT_BRANCH: 'master'
-          DEFAULT_API_LEVEL: 30
-          DEFAULT_TEST_ITERATIONS: 1
-          DEFAULT_MAX_RETRIES: 1
-        run: |
-          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
-          echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
-          echo "INPUT_TEST_ITERATIONS=${{ github.event.inputs.test_iterations || env.DEFAULT_TEST_ITERATIONS }}" >> $GITHUB_ENV
-          echo "INPUT_MAX_RETRIES=${{ github.event.inputs.max_retries || env.DEFAULT_MAX_RETRIES }}" >> $GITHUB_ENV
-          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.INPUT_BRANCH }}
+          ref: ${{ env.ENV_BRANCH }}
 
       # Download APK
       - name: Get AppCenter APK
@@ -84,15 +79,15 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-pixel_5-default-${{ env.INPUT_API_LEVEL }}
+          key: avd-pixel_5-default-${{ env.ENV_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
           target: default
           profile: pixel_5
@@ -109,8 +104,8 @@ jobs:
         with:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
           target: default
           profile: pixel_5
@@ -118,7 +113,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           disable-animations: true
-          script: ./scripts/run-flashlight-tests.sh ${{ env.INPUT_TEST_ITERATIONS }} ${{ env.INPUT_MAX_RETRIES }}
+          script: ./scripts/run-flashlight-tests.sh ${{ env.ENV_TEST_ITERATIONS }} ${{ env.ENV_MAX_RETRIES }}
           pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:

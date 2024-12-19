@@ -13,8 +13,8 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import type {PurchaseSelectionType} from '@atb/purchase-selection';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {useAuthState} from '@atb/auth';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useAuthContext} from '@atb/auth';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -90,9 +90,9 @@ export const TravellerSelectionSheet = ({
 
 const useShouldShowOnBehalfOf = (selection: PurchaseSelectionType) => {
   const isOnBehalfOfEnabled =
-    useFeatureToggles().isOnBehalfOfEnabled &&
+    useFeatureTogglesContext().isOnBehalfOfEnabled &&
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-  const isLoggedIn = useAuthState().authenticationType === 'phone';
+  const isLoggedIn = useAuthContext().authenticationType === 'phone';
   return isOnBehalfOfEnabled && isLoggedIn;
 };
 

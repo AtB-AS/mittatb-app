@@ -1,14 +1,14 @@
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 import {
-  useTicketingState,
+  useTicketingContext,
   filterValidRightNowFareContracts,
   FareContract,
 } from '@atb/ticketing';
 import {useMemo} from 'react';
 
 export function useValidRightNowFareContract(): FareContract[] {
-  const {serverNow} = useTimeContextState();
-  const {fareContracts} = useTicketingState();
+  const {serverNow} = useTimeContext();
+  const {fareContracts} = useTicketingContext();
   return useMemo(
     () => filterValidRightNowFareContracts(fareContracts, serverNow),
     [serverNow, fareContracts],

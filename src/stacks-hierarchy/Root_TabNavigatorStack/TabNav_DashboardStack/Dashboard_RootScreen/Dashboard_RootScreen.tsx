@@ -1,6 +1,6 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useAnalytics} from '@atb/analytics';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useAnalyticsContext} from '@atb/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
@@ -13,7 +13,7 @@ import {
   GeoLocation,
   Location,
   UserFavorites,
-  useFavorites,
+  useFavoritesContext,
 } from '@atb/favorites';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {
@@ -52,12 +52,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
 }) => {
   const style = useStyle();
   const {t} = useTranslation();
-  const {enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   const {locationIsAvailable, location, requestLocationPermission} =
-    useGeolocationState();
+    useGeolocationContext();
 
   const currentLocation = location || undefined;
 
@@ -301,7 +301,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
-  const {favorites} = useFavorites();
+  const {favorites} = useFavoritesContext();
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,

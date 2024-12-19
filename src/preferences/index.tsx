@@ -1,6 +1,5 @@
 export {
-  usePreferences,
-  usePreferenceItems,
+  usePreferencesContext,
   PreferencesContextProvider,
 } from './PreferencesContext';
 

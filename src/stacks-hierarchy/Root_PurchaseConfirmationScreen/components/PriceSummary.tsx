@@ -3,9 +3,9 @@ import {ThemeText} from '@atb/components/text';
 import {
   FareProductTypeConfig,
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
@@ -26,9 +26,9 @@ export const PriceSummary = ({
   totalPrice,
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
-  const {vatPercent} = useFirestoreConfiguration();
+  const {vatPercent} = useFirestoreConfigurationContext();
 
   const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
   const vatAmountString = formatDecimalNumber(vatAmount, language);

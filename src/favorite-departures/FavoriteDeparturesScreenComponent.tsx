@@ -1,4 +1,4 @@
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
@@ -21,7 +21,7 @@ export const FavoriteDeparturesScreenComponent = ({
   onPressAddFavorite,
 }: Props) => {
   const style = useStyles();
-  const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
+  const {favoriteDepartures, removeFavoriteDeparture} = useFavoritesContext();
   const {t} = useTranslation();
   const onDeletePress = (item: StoredFavoriteDeparture) => {
     Alert.alert(

@@ -1,22 +1,22 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContactSheetTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom, {Space} from '@intercom/intercom-react-native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {Theme} from '@atb/theme/colors';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   onReportParkingViolation: () => void;
@@ -28,18 +28,18 @@ const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
-    useRemoteConfig();
-  const analytics = useAnalytics();
-  const {isParkingViolationsReportingEnabled} = useFeatureToggles();
+    useRemoteConfigContext();
+  const analytics = useAnalyticsContext();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const showWebsiteFeedback = !!customer_feedback_url;
   const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
   return (
     <BottomSheetContainer title={t(ContactSheetTexts.header.title)}>

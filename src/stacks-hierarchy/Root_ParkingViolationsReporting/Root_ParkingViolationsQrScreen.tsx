@@ -1,7 +1,7 @@
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
@@ -14,7 +14,7 @@ import {
   blobToBase64,
   useParkingViolations,
 } from '@atb/parking-violations-reporting';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -28,15 +28,16 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const {providers, coordinates} = useParkingViolations();
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const providersList = useMemo(

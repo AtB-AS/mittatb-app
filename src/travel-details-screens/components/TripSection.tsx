@@ -9,7 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox} from '@atb/situations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -22,7 +22,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {
@@ -51,7 +51,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {BookingOptions} from './BookingOptions';
 import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
 import {
@@ -94,7 +94,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
 
   const isWalkSection = leg.mode === Mode.Foot;
@@ -126,7 +126,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(30000);
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
     leg.bookingArrangements,
     leg.aimedStartTime,
@@ -138,7 +138,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const shouldShowButtonForOpeningFlexBottomSheet =
     isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
 
   function openBookingDetails() {
     openBottomSheet(
@@ -481,7 +481,7 @@ const BikeSection = (leg: Leg) => {
 const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[3];
 
   if (id === AUTHORITY) return null;

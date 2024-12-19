@@ -1,7 +1,7 @@
 import React, {RefObject} from 'react';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle, StyleProp} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '../pressable-opacity';
 
@@ -31,7 +31,7 @@ export function RadioSegments({
   style,
 }: RadioSegmentsProps) {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const interactiveColor = color;
 

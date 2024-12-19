@@ -1,4 +1,4 @@
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Camera, PhotoFile} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -21,7 +21,8 @@ export const Root_ParkingViolationsPhotoScreen = ({
   const isFocused = useIsFocusedAndActive();
   const style = useStyles();
   const {coordinates, isLoading} = useParkingViolations();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handlePhotoCapture = (file: PhotoFile) => {

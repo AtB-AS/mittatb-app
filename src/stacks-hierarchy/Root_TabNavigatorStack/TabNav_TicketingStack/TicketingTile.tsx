@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransportColor} from '@atb/theme/colors';
@@ -30,7 +30,7 @@ export const TicketingTile = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const themeColor = accented
     ? theme.color.background.accent[3]
