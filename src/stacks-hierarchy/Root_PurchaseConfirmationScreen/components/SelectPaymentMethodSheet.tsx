@@ -10,7 +10,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {getExpireDate, getPaymentTypeName} from '../../utils';
+import {getExpireDate} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
@@ -18,7 +18,7 @@ import {
   SavedPaymentMethodType,
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
-import {PaymentType} from '@atb/ticketing';
+import {PaymentType, humanizePaymentType} from '@atb/ticketing';
 
 type Props = {
   onSelect: (
@@ -152,7 +152,7 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
     label: string;
     hint: string;
   } {
-    const paymentTypeName = getPaymentTypeName(method.paymentType);
+    const paymentTypeName = humanizePaymentType(method.paymentType);
     if (method.recurringCard) {
       return {
         text: paymentTypeName,
@@ -179,7 +179,7 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
 
   function getPaymentTestId(method: PaymentMethod, index: number) {
     if (method.savedType === 'normal') {
-      return getPaymentTypeName(method.paymentType) + 'Button';
+      return humanizePaymentType(method.paymentType) + 'Button';
     } else {
       return 'recurringPayment' + index;
     }
@@ -217,7 +217,7 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
                 </ThemeText>
               )}
             </View>
-            <PaymentBrand icon={paymentMethod.paymentType} />
+            <PaymentBrand paymentType={paymentMethod.paymentType} />
           </View>
           {paymentMethod.recurringCard && (
             <ThemeText style={styles.expireDate}>

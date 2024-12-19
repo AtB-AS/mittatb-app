@@ -16,7 +16,7 @@ export enum SavedPaymentMethodType {
 
 type CardPaymentMethod = {
   savedType: SavedPaymentMethodType;
-  paymentType: PaymentType.Mastercard | PaymentType.Visa;
+  paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
   recurringCard?: RecurringPayment;
 };
 type VippsPaymentMethod = {

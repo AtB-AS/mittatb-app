@@ -1,5 +1,10 @@
 import {useAnalyticsContext} from '@atb/analytics';
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
+import {
+  Amex,
+  MasterCard,
+  Vipps,
+  Visa,
+} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -194,6 +199,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         break;
       case PaymentType.Mastercard:
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
+        break;
+      case PaymentType.Amex:
+        str = t(PurchaseConfirmationTexts.payWithAmex.text);
         break;
     }
     if (method.recurringCard) {
@@ -396,6 +404,8 @@ function getPaymentTypeSvg(paymentType: PaymentType) {
       return Vipps;
     case PaymentType.Visa:
       return Visa;
+    case PaymentType.Amex:
+      return Amex;
   }
 }
 

@@ -1,6 +1,7 @@
 import {
   FareContract,
   FareContractState,
+  humanizePaymentTypeString,
   isNormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -8,7 +9,6 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import _ from 'lodash';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {formatDecimalNumber} from '@atb/utils/numbers';
@@ -78,7 +78,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           style={style.marginTop}
         >
           {t(FareContractTexts.details.paymentMethod)}
-          {_.capitalize(fareContract?.paymentType?.join(', '))}
+          {fareContract.paymentType?.map(humanizePaymentTypeString).join(', ')}
         </ThemeText>
       )}
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
