@@ -1,9 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {
-  ActivatedToken,
-  TokenAction,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
 import {
@@ -38,7 +35,9 @@ export const useLoadNativeTokenQuery = (
         const token = await loadNativeToken(userId!, traceId);
         updateMetadata({
           'AtB-Mobile-Token-Id': token.tokenId,
-          'AtB-Mobile-Token-Status': 'success',
+          'AtB-Mobile-Token-Status': token.isAttested()
+            ? 'attested'
+            : 'non-attested',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
         return token;
@@ -106,17 +105,18 @@ const loadNativeToken = async (userId: string, traceId: string) => {
        */
       try {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
-        const signedToken = await mobileTokenClient.encode(token, [
-          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-        ]);
-        await tokenService.validate(token, signedToken, traceId);
+        await tokenService.validate(token, traceId);
       } catch (err) {
+        const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
         if (
           err instanceof TokenMustBeReplacedRemoteTokenStateError ||
           err instanceof TokenNotFoundRemoteTokenStateError
         ) {
           token = undefined;
-        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
+        } else if (
+          err instanceof TokenEncodingInvalidRemoteTokenStateError ||
+          tokenSdkErrorHandling === 'reset'
+        ) {
           wipeToken([token.tokenId], traceId);
           token = undefined;
         } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
