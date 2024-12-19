@@ -35,7 +35,7 @@ export const useLoadNativeTokenQuery = (
         const token = await loadNativeToken(userId!, traceId);
         updateMetadata({
           'AtB-Mobile-Token-Id': token.tokenId,
-          'AtB-Mobile-Token-Status': 'success',
+          'AtB-Mobile-Token-Status': token.isAttested() ? 'attested' : 'non-attested',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
         return token;
