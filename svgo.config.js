@@ -18,5 +18,11 @@ module.exports = {
     'removeStyleElement',
     'sortAttrs',
     'removeXMLNS',
+    {
+      name: 'removeAttrs',
+      params: {
+        attrs: 'class',
+      },
+    },
   ],
 };
