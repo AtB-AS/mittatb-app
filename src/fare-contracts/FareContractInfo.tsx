@@ -31,7 +31,7 @@ import {
   useTariffZoneSummary,
   ValidityStatus,
 } from '../fare-contracts/utils';
-import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
+import {FareContractDetailItem} from './components/FareContractDetailItem';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -152,14 +152,14 @@ export const FareContractInfoDetails = (
     <View style={styles.container} accessible={true}>
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
-          <FareContractDetail
+          <FareContractDetailItem
             header={t(FareContractTexts.label.travellers)}
             content={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, language),
             )}
           />
           {tariffZoneSummary && (
-            <FareContractDetail
+            <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
               content={[tariffZoneSummary]}
             />

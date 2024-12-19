@@ -265,9 +265,9 @@ const FareContractTexts = {
   },
   fareContractInfo: {
     noInspectionIcon: _(
-      'Ugyldig\ni kontroll',
-      'Invalid in\ninspection',
-      'Ugyldig\ni kontroll',
+      'Ikke bruk i\nkontroll',
+      'Do not use in\ninspection',
+      'Ikkje bruk i\nkontroll',
     ),
     noInspectionIconA11yLabel: _(
       'Ugyldig i kontroll',
