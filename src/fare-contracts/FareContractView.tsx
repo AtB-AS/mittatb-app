@@ -12,9 +12,6 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
-import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
-import {FareContractInfoHeader} from '@atb/fare-contracts/FareContractInfo';
 import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/auth';
@@ -23,19 +20,28 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
-  isSentOrReceivedFareContract,
   FareContract,
   isCanBeActivatedNowFareContract,
+  isSentOrReceivedFareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
+import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
 import React from 'react';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 import {View} from 'react-native';
+import {getTransportModeText} from '@atb/components/transportation-modes';
+import {Description} from '@atb/fare-contracts/components/FareContractDescription';
+import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
+import {ProductName} from '@atb/fare-contracts/components/ProductName';
+import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 
 type Props = {
   now: number;
@@ -64,8 +70,6 @@ export const FareContractView: React.FC<Props> = ({
     isCarnetFareContract,
     travelRights,
     validityStatus,
-    validFrom,
-    validTo,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   } = getFareContractInfo(now, fareContract, currentUserId);
@@ -73,6 +77,15 @@ export const FareContractView: React.FC<Props> = ({
   const isSentOrReceived = isSentOrReceivedFareContract(fareContract);
   const isSent =
     isSentOrReceived && fareContract.customerAccountId !== currentUserId;
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    fareContract.customerAccountId,
+  );
+  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
+    enabled: !!phoneNumber,
+  });
+  const recipientName =
+    phoneNumber &&
+    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
 
   const firstTravelRight = travelRights[0];
 
@@ -96,51 +109,66 @@ export const FareContractView: React.FC<Props> = ({
     firstTravelRight.fareProductRef,
   );
 
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
   return (
     <Section testID={testID}>
-      <GenericSectionItem>
-        <ValidityHeader
-          status={validityStatus}
-          now={now}
-          createdDate={fareContract.created.getTime()}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-        />
-        <ValidityLine
-          status={validityStatus}
-          now={now}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-          animate={!isStatic}
-        />
-        <FareContractInfoHeader
-          status={validityStatus}
-          testID={testID}
+      <GenericSectionItem
+        style={{
+          paddingVertical: 0,
+        }}
+      >
+        <WithValidityLine
+          fc={fareContract}
           preassignedFareProduct={preassignedFareProduct}
-          sentToCustomerAccountId={
-            isSent ? fareContract.customerAccountId : undefined
-          }
-        />
+        >
+          <ProductName fc={fareContract} />
+          <ValidityHeader fc={fareContract} />
+          <Description fc={fareContract} />
+        </WithValidityLine>
       </GenericSectionItem>
-      <GenericSectionItem style={styles.detailContainer}>
-        <View style={styles.detailTextContainer}>
-          <FareContractFromTo
-            fc={fareContract}
-            backgroundColor={theme.color.background.neutral['0']}
-            mode="small"
-          />
-          <FareContractDetail
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
+      <GenericSectionItem style={styles.fareContractDetails}>
+        {isSent && !!phoneNumber && (
+          <MessageInfoBox
+            type="warning"
+            message={t(
+              FareContractTexts.details.sentTo(
+                recipientName || formatPhoneNumber(phoneNumber),
+              ),
             )}
           />
+        )}
+        <View style={styles.detailRow}>
+          <View style={styles.fareContractDetailItems}>
+            <FareContractFromTo
+              fc={fareContract}
+              backgroundColor={theme.color.background.neutral[0]}
+              mode="small"
+            />
+            {!!fareProductTypeConfig?.transportModes && (
+              <FareContractDetailItem
+                content={[
+                  getTransportModeText(fareProductTypeConfig.transportModes, t),
+                ]}
+              />
+            )}
+
+            <FareContractDetailItem
+              content={userProfilesWithCount.map((u) =>
+                userProfileCountAndName(u, language),
+              )}
+            />
+          </View>
+          {(validityStatus === 'valid' || validityStatus === 'sent') && (
+            <InspectionSymbol
+              preassignedFareProduct={preassignedFareProduct}
+              sentTicket={validityStatus === 'sent'}
+            />
+          )}
         </View>
-        <InspectionSymbol
-          preassignedFareProduct={preassignedFareProduct}
-          sentTicket={validityStatus === 'sent'}
-        />
       </GenericSectionItem>
       {isCarnetFareContract && (
         <GenericSectionItem>
@@ -177,11 +205,19 @@ export const FareContractView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  detailContainer: {
+  section: {
+    marginBottom: theme.spacing.large,
+  },
+  fareContractDetails: {
+    paddingVertical: theme.spacing.large,
+    rowGap: theme.spacing.large,
+  },
+  detailRow: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  detailTextContainer: {
-    rowGap: theme.spacing.medium,
+  fareContractDetailItems: {
+    rowGap: theme.spacing.xSmall,
   },
 }));

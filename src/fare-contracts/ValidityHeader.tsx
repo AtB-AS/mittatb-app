@@ -6,36 +6,37 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDurationString} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {ValidityStatus} from './utils';
-import {TransportModes} from '@atb/components/transportation-modes';
-import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {getFareContractInfo, ValidityStatus} from './utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
+import {useTimeContext} from '@atb/time';
+import {useAuthContext} from '@atb/auth';
+import type {FareContract} from '@atb/ticketing';
 
-export const ValidityHeader: React.FC<{
-  status: ValidityStatus;
-  now: number;
-  createdDate: number;
-  validFrom: number;
-  validTo: number;
-  fareProductType: string | undefined;
-}> = ({status, now, createdDate, validFrom, validTo, fareProductType}) => {
+type Props = {
+  fc: FareContract;
+};
+
+export const ValidityHeader = ({fc}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === fareProductType,
-  );
   const {isInspectable} = useMobileTokenContext();
+  const {serverNow} = useTimeContext();
+  const {abtCustomerId: currentUserId} = useAuthContext();
+
+  const {validityStatus, validFrom, validTo} = getFareContractInfo(
+    serverNow,
+    fc,
+    currentUserId,
+  );
 
   const label: string = validityTimeText(
-    status,
-    now,
-    createdDate,
+    validityStatus,
+    serverNow,
+    fc.created.getTime(),
     validFrom,
     validTo,
     t,
@@ -43,34 +44,20 @@ export const ValidityHeader: React.FC<{
   );
 
   return (
-    <View style={styles.validityHeader}>
-      <View style={styles.validityContainer}>
-        {status === 'valid' || status === 'inactive' ? (
-          fareProductTypeConfig && (
-            <TransportModes
-              modes={fareProductTypeConfig.transportModes}
-              iconSize="xSmall"
-              style={{flex: 2}}
-              disabled={status === 'inactive'}
-            />
-          )
-        ) : (
-          <FareContractStatusSymbol status={status} />
-        )}
-        <ThemeText
-          style={styles.label}
-          typography="body__secondary"
-          accessibilityLabel={
-            !isInspectable
-              ? label +
-                ', ' +
-                t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
-              : undefined
-          }
-        >
-          {label}
-        </ThemeText>
-      </View>
+    <View>
+      <ThemeText
+        style={styles.validityText}
+        typography="heading--medium"
+        accessibilityLabel={
+          !isInspectable
+            ? label +
+              ', ' +
+              t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
+            : undefined
+        }
+      >
+        {label}
+      </ThemeText>
     </View>
   );
 };
@@ -86,7 +73,7 @@ function validityTimeText(
 ): string {
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const toDurationText = (seconds: number) =>
-    secondsToDuration(seconds, language, {
+    secondsToDurationString(seconds, language, {
       conjunction,
       serialComma: false,
     });
@@ -130,22 +117,8 @@ function validityTimeText(
   }
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  validityHeader: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  validityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 1,
-  },
-  label: {
-    flex: 3,
-    textAlign: 'right',
-    marginLeft: theme.spacing.xLarge,
+const useStyles = StyleSheet.createThemeHook(() => ({
+  validityText: {
+    textAlign: 'center',
   },
 }));
