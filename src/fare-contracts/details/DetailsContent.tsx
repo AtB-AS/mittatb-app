@@ -79,8 +79,6 @@ export const DetailsContent: React.FC<Props> = ({
     isCarnetFareContract,
     travelRights,
     validityStatus,
-    validFrom,
-    validTo,
     usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
