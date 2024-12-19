@@ -6,6 +6,7 @@ on:
         description: 'Test a one or all (*) areas'
         required: true
         default: '*'
+        type: choice
         options:
           - '*'
           - 'departures'
@@ -16,6 +17,7 @@ on:
         description: 'Record new images (true) or test (false)'
         required: true
         default: 'false'
+        type: choice
         options:
           - 'true'
           - 'false'

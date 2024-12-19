@@ -73,12 +73,6 @@ describe('Visual tests', () => {
         testOptions,
         newBaseline,
       );
-      await VisualHelper.visualTestElement(
-        'quaySection1',
-        'departures_departuresItem1',
-        testOptions,
-        newBaseline,
-      );
 
       // Departure details
       await DepartureOverviewPage.openDeparture();

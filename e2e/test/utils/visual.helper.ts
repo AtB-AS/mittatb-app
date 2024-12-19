@@ -24,6 +24,9 @@ class VisualHelper {
   ) {
     if (newBaseline) {
       const el = `//*[@resource-id="${elemId}"]`;
+      await driver.saveElement(await $(el), tag, testOptions);
+    } else {
+      const el = `//*[@resource-id="${elemId}"]`;
       const res: Result = await driver.checkElement(
         await $(el),
         tag,
@@ -31,9 +34,6 @@ class VisualHelper {
       );
       // console.log(s.misMatchPercentage);
       await expect(res.misMatchPercentage).toEqual(0);
-    } else {
-      const el = `//*[@resource-id="${elemId}"]`;
-      await driver.saveElement(await $(el), tag, testOptions);
     }
   }
 
