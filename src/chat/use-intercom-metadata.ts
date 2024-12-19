@@ -17,7 +17,7 @@ type Metadata = {
   'AtB-OS-Font-Scale': number;
   'AtB-Screen-Size': string;
   'AtB-Mobile-Token-Id': string;
-  'AtB-Mobile-Token-Status': 'success' | 'error';
+  'AtB-Mobile-Token-Status': 'attested' | 'non-attested' | 'error';
   'AtB-Mobile-Token-Error-Correlation-Id': string;
   'AtB-Beta-TripSearch': string;
 };
