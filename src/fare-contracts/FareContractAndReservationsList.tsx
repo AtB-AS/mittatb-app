@@ -57,6 +57,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       {showTokenInfo && (
         <TravelTokenBox
           showIfThisDevice={false}
+          alwaysShowErrors={false}
           interactiveColor={interactiveColor}
         />
       )}

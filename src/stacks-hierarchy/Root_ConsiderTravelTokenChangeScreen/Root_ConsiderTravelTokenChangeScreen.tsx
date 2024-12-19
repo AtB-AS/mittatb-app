@@ -24,7 +24,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const interactiveColor = theme.color.interactive[1];
+  const interactiveColor = theme.color.interactive[2];
   const focusRef = useFocusOnLoad();
   const {disable_travelcard} = useRemoteConfigContext();
 

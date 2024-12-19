@@ -13,6 +13,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 export function TravelTokenBox({
   showIfThisDevice,
@@ -20,11 +21,11 @@ export function TravelTokenBox({
   interactiveColor,
 }: {
   showIfThisDevice: boolean;
-  alwaysShowErrors?: boolean;
-  interactiveColor?: InteractiveColor;
+  alwaysShowErrors: boolean;
+  interactiveColor: InteractiveColor;
 }) {
   const {theme} = useThemeContext();
-  const themeTextColor = interactiveColor ?? theme.color.interactive[1];
+  const themeTextColor = interactiveColor ?? theme.color.interactive[2];
 
   const styles = useStyles(themeTextColor)();
   const {t} = useTranslation();
@@ -61,57 +62,57 @@ export function TravelTokenBox({
   }
 
   const inspectableToken = tokens.find((t) => t.isInspectable);
-  if (!inspectableToken)
-    return (
-      <MessageInfoBox
-        type="warning"
-        isMarkdown={true}
-        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
-        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
-      />
-    );
-
-  const isTravelCard = inspectableToken.type === 'travel-card';
+  const isTravelCard = inspectableToken?.type === 'travel-card';
 
   return (
     <View style={styles.container} testID="travelTokenBox">
-      <View style={styles.content}>
-        {isTravelCard ? (
-          <ThemedTokenTravelCard
-            style={{maxWidth: 90}}
-            testID={inspectableToken.type + 'Icon'}
-          />
-        ) : (
-          <ThemedTokenPhone testID={inspectableToken.type + 'Icon'} />
-        )}
-        <View style={styles.activeTravelTokenInfo}>
-          <ThemeText
-            typography="body__primary--bold"
-            color={themeTextColor.default}
-            style={styles.travelTokenBoxTitle}
-          >
-            {t(TravelTokenBoxTexts.title) +
-              t(
-                isTravelCard
-                  ? TravelTokenBoxTexts.tcardName
-                  : inspectableToken?.isThisDevice
-                  ? TravelTokenBoxTexts.thisDeviceSuffix
-                  : TravelTokenBoxTexts.otherDeviceSuffix,
-              )}
-          </ThemeText>
-          {inspectableToken && (
+      {inspectableToken ? (
+        <View style={styles.content}>
+          {isTravelCard ? (
+            <ThemedTokenTravelCard
+              style={{maxWidth: 90}}
+              testID={inspectableToken.type + 'Icon'}
+            />
+          ) : (
+            <ThemedTokenPhone testID={inspectableToken.type + 'Icon'} />
+          )}
+          <View style={styles.activeTravelTokenInfo}>
+            <ThemeText
+              typography="body__primary--bold"
+              color={themeTextColor.default}
+            >
+              {t(TravelTokenBoxTexts.title) +
+                t(
+                  isTravelCard
+                    ? TravelTokenBoxTexts.tcardName
+                    : inspectableToken.isThisDevice
+                    ? TravelTokenBoxTexts.thisDeviceSuffix
+                    : TravelTokenBoxTexts.otherDeviceSuffix,
+                )}
+            </ThemeText>
+
             <TravelTokenDeviceTitle
               inspectableToken={inspectableToken}
               themeTextColor={themeTextColor.default}
             />
-          )}
+          </View>
         </View>
-      </View>
+      ) : (
+        <MessageInfoText
+          type="error"
+          textColor={interactiveColor.default}
+          message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+        />
+      )}
       <Button
         mode="secondary"
         backgroundColor={themeTextColor.default}
         onPress={onPressChangeButton}
-        text={t(TravelTokenBoxTexts.change)}
+        text={
+          inspectableToken
+            ? t(TravelTokenBoxTexts.change)
+            : t(TravelTokenBoxTexts.select)
+        }
         testID="continueWithoutChangingTravelTokenButton"
       />
     </View>
@@ -123,18 +124,16 @@ const useStyles = (interactiveColor: InteractiveColor) =>
     container: {
       backgroundColor: interactiveColor.default.background,
       padding: theme.spacing.xLarge,
+      rowGap: theme.spacing.medium,
       borderRadius: theme.border.radius.regular,
     },
     content: {
-      marginBottom: theme.spacing.large,
       display: 'flex',
       flexDirection: 'row',
+      columnGap: theme.spacing.medium,
     },
     activeTravelTokenInfo: {
       flex: 1,
-      marginLeft: theme.spacing.medium,
-    },
-    travelTokenBoxTitle: {
-      marginBottom: theme.spacing.xSmall,
+      rowGap: theme.spacing.xSmall,
     },
   }));
