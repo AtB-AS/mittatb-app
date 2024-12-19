@@ -162,11 +162,12 @@ export const FareContractView: React.FC<Props> = ({
               )}
             />
           </View>
-          <InspectionSymbol
-            preassignedFareProduct={preassignedFareProduct}
-            sentTicket={validityStatus === 'sent'}
-            /* TODO: This has the wrong border color for invalid fare contracts */
-          />
+          {(validityStatus === 'valid' || validityStatus === 'sent') && (
+            <InspectionSymbol
+              preassignedFareProduct={preassignedFareProduct}
+              sentTicket={validityStatus === 'sent'}
+            />
+          )}
         </View>
       </GenericSectionItem>
       {isCarnetFareContract && (
