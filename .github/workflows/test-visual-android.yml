@@ -29,8 +29,8 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  #schedule:
-  #  - cron: '0 6 * * *'
+  schedule:
+    - cron: '0 5 * * 1-5'
 
 jobs:
   run_tests:
