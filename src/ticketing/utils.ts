@@ -1,4 +1,4 @@
-import {flatten, sumBy} from 'lodash';
+import {flatten, sumBy, startCase} from 'lodash';
 import {
   FareContract,
   FareContractState,
@@ -9,6 +9,7 @@ import {
   LastUsedAccessState,
   UsedAccessStatus,
   NormalTravelRight,
+  PaymentType,
 } from './types';
 
 export function isCarnetTravelRight(
@@ -272,4 +273,30 @@ function getUsedAccessValidity(
   if (now > validTo) return 'inactive';
   if (now < validFrom) return 'upcoming';
   return 'valid';
+}
+
+export function humanizePaymentType(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Visa:
+      return 'Visa';
+    case PaymentType.Mastercard:
+      return 'MasterCard';
+    case PaymentType.Vipps:
+      return 'Vipps';
+    default:
+      return '';
+  }
+}
+
+export function humanizePaymentTypeString(paymentType: string) {
+  switch (paymentType.toLowerCase()) {
+    case 'visa':
+      return 'Visa';
+    case 'mastercard':
+      return 'MasterCard';
+    case 'vipps':
+      return 'Vipps';
+    default:
+      return startCase(paymentType);
+  }
 }
