@@ -19,6 +19,8 @@ import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
+  DeparturesTexts,
+  FavoriteDeparturesTexts,
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -34,7 +36,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import React, {useState} from 'react';
+import React, {RefObject, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -66,6 +68,8 @@ import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfo
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
+import {useOnMarkFavouriteDepartures} from '@atb/favorites';
+import {getFavoriteIcon} from '@atb/favorites/FavouriteDepartureToggle';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -111,6 +115,7 @@ export const DepartureDetailsScreenComponent = ({
       subMode,
       situations,
       notices,
+      serviceJourney,
     },
     isLoading,
   ] = useDepartureData(activeItem, 20);
@@ -160,6 +165,43 @@ export const DepartureDetailsScreenComponent = ({
   const fromQuay = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
+
+  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
+    fromQuay?.quay,
+    fromQuay?.quay.stopPlace,
+    false,
+  );
+
+  const favouriteDepartureLine = fromQuay?.quay.id
+    ? {
+        ...serviceJourney?.line,
+        lineNumber: publicCode,
+        destinationDisplay: fromQuay?.destinationDisplay,
+        id: fromQuay.quay.id,
+      }
+    : undefined;
+  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+  const favouriteIcon = getFavoriteIcon(existingFavorite);
+  const accessibilityLabel = () => {
+    if (!existingFavorite) {
+      return '';
+    } else if (existingFavorite.destinationDisplay) {
+      return t(DeparturesTexts.favorites.favoriteButton.oneVariation);
+    } else {
+      return t(DeparturesTexts.favorites.favoriteButton.allVariations);
+    }
+  };
+
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onPressFavorite = () => {
+    if (favouriteDepartureLine) {
+      onMarkFavourite(
+        favouriteDepartureLine,
+        existingFavorite,
+        onCloseFocusRef,
+      );
+    }
+  };
 
   const shouldShowDepartureTime =
     (fromQuay && !isInThePast(fromQuay.expectedDepartureTime)) || false;
@@ -241,8 +283,8 @@ export const DepartureDetailsScreenComponent = ({
                 testID="journeyAidButton"
               />
             )}
-            {shouldShowMapButton ? (
-              <View style={styles.actionButtons}>
+            <View style={styles.actionButtons}>
+              {shouldShowMapButton ? (
                 <Button
                   type="small"
                   leftIcon={{svg: Map}}
@@ -274,8 +316,33 @@ export const DepartureDetailsScreenComponent = ({
                     });
                   }}
                 />
-              </View>
-            ) : null}
+              ) : null}
+              {favouriteDepartureLine && (
+                <Button
+                  type="small"
+                  leftIcon={{svg: favouriteIcon}}
+                  text={t(FavoriteDeparturesTexts.favoriteButton)}
+                  interactiveColor={interactiveColor}
+                  accessibilityLabel={accessibilityLabel()}
+                  accessibilityHint={
+                    !!existingFavorite
+                      ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+                      : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+                  }
+                  onPress={() => {
+                    analytics.logEvent(
+                      'Departure details',
+                      'Add to Favourite clicked',
+                      {
+                        line: favouriteDepartureLine?.id,
+                        lineNumber: favouriteDepartureLine?.lineNumber,
+                      },
+                    );
+                    onPressFavorite();
+                  }}
+                />
+              )}
+            </View>
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
@@ -729,7 +796,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     gap: theme.spacing.medium,
     marginTop: theme.spacing.medium,
   },
