@@ -107,6 +107,9 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
       } catch (err) {
+        /**
+         * Added this line to see if the error can be handled by resetting the token
+         */
         const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
         if (
           err instanceof TokenMustBeReplacedRemoteTokenStateError ||
@@ -115,7 +118,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
           token = undefined;
         } else if (
           err instanceof TokenEncodingInvalidRemoteTokenStateError ||
-          tokenSdkErrorHandling === 'reset'
+          tokenSdkErrorHandling === 'reset' // if the error can be resolved by resetting the token, do it
         ) {
           wipeToken([token.tokenId], traceId);
           token = undefined;
@@ -135,6 +138,8 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     - There has been a user change and the existing token has been wiped.
     - There was a validation error which signaled that a new token should
       be created.
+    - There was an error where the token resolution is `RESET` as 
+      suggested by the SDK.
      */
     logToBugsnag(`Creating new mobile token`);
     token = await mobileTokenClient.create(traceId);

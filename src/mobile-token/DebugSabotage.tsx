@@ -9,6 +9,9 @@ type SabotageProps = {
   setSabotage: (sabotage?: AttestationSabotage) => void;
 };
 
+/**
+ * Helper to allow sabotaging of attestation in debug mode
+ */
 export const DebugSabotage = ({sabotage, setSabotage}: SabotageProps) => {
   return (
     <View>
