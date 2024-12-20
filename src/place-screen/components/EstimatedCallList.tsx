@@ -23,7 +23,6 @@ type EstimatedCallRenderItem = {
 type Props = Pick<
   QuaySectionProps,
   | 'quay'
-  | 'stopPlace'
   | 'addedFavoritesVisibleOnDashboard'
   | 'navigateToDetails'
   | 'mode'
@@ -35,7 +34,6 @@ type Props = Pick<
 };
 export const EstimatedCallList = ({
   quay,
-  stopPlace,
   departures,
   addedFavoritesVisibleOnDashboard,
   navigateToDetails,
@@ -47,7 +45,6 @@ export const EstimatedCallList = ({
   const {t} = useTranslation();
   const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
     quay,
-    stopPlace,
     addedFavoritesVisibleOnDashboard,
   );
 

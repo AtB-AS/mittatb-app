@@ -45,7 +45,6 @@ export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];
 
 type FavoriteDepartureBaseIds = {
-  stopId: string;
   lineId: string;
   quayId: string;
 };

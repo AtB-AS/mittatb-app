@@ -164,7 +164,6 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
               favorite.destinationDisplay,
               potential.destinationDisplay,
             )) &&
-          favorite.stopId == potential.stopId &&
           favorite.quayId == potential.quayId
         );
       });

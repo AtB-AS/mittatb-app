@@ -1,4 +1,4 @@
-import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
+import {EstimatedCall, Quay} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {
   GenericClickableSectionItem,
@@ -37,7 +37,6 @@ export type QuaySectionProps = {
     fromQuayId?: string,
     isCancelled?: boolean,
   ) => void;
-  stopPlace: StopPlace;
   showOnlyFavorites: boolean;
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
@@ -53,7 +52,6 @@ export function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
-  stopPlace,
   showOnlyFavorites,
   addedFavoritesVisibleOnDashboard,
   searchDate,
@@ -141,7 +139,6 @@ export function QuaySection({
         {!isMinimized && (
           <EstimatedCallList
             quay={quay}
-            stopPlace={stopPlace}
             departures={departuresToDisplay.slice(0, departuresPerQuay)}
             mode={mode}
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
