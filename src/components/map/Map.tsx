@@ -9,7 +9,7 @@ import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, Polygon, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {polygon} from '@turf/helpers';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -55,8 +55,9 @@ import {useFeatureToggles} from '@atb/feature-toggles';
 
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
+import {useIsFocused} from '@react-navigation/native';
+import {StopPlaceMapItems} from './StopPlaceMapItems';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -221,9 +222,24 @@ export const Map = (props: MapProps) => {
     ],
   );
 
-  const isFocusedAndActive = useIsFocusedAndActive();
+  const [initialZoomLevel, setInitialZoomLevel] = useState(15);
+  const [initialCenterCoordinate, setInitialCenterCoordinate] = useState<
+    Position | undefined
+  >([startingCoordinates.longitude, startingCoordinates.latitude]);
+
+  const isFocused = useIsFocused();
   const {mapboxJsonStyle, mapboxStyleIsLoading} = useMapboxJsonStyle();
-  if (mapboxStyleIsLoading || !isFocusedAndActive) {
+  if (mapboxStyleIsLoading || !isFocused) {
+    // Returning null when !isFocused prevents unnecessary tile requests while the map isn't shown.
+    // Center and Zoom are captured to re-init the map where it left off.
+    if (mapViewRef.current) {
+      mapViewRef.current
+        ?.getCenter()
+        .then((center) => setInitialCenterCoordinate(center));
+      mapViewRef.current
+        ?.getZoom()
+        .then((zoomLevel) => setInitialZoomLevel(zoomLevel));
+    }
     return null;
   }
 
@@ -252,18 +268,14 @@ export const Map = (props: MapProps) => {
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={15}
-            centerCoordinate={[
-              startingCoordinates.longitude,
-              startingCoordinates.latitude,
-            ]}
+            zoomLevel={initialZoomLevel}
+            centerCoordinate={initialCenterCoordinate}
             {...MapCameraConfig}
           />
 
           {shouldShowMapVehiclesAndStations && (
             <VehiclesAndStations selectedFeature={selectedFeature} />
           )}
-          <SelectedFeatureIcon selectedFeature={selectedFeature} />
 
           {showGeofencingZones && (
             <GeofencingZones
@@ -275,6 +287,15 @@ export const Map = (props: MapProps) => {
             />
           )}
           {mapLines && <MapRoute lines={mapLines} />}
+
+          <StopPlaceMapItems selectedFeature={selectedFeature} />
+
+          <SelectedFeatureIcon
+            selectedFeature={selectedFeature}
+            // hmm this is bad, try to find another fix, maybe set the layer index for lines in MapRoute instead
+            aboveLayerId={mapLines?.length !== undefined ? 'line-0' : undefined}
+          />
+
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />

@@ -1,11 +1,7 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSymbolStyles} from '@atb/components/map';
-
-type SelectedFeatureProp = {
-  selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
-};
+import {SelectedFeatureProp} from '../../types';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';

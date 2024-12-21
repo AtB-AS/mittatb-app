@@ -6,13 +6,18 @@ import {useMapSymbolStyles} from '@atb/components/map';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
+  aboveLayerId,
 }: {
-  selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
+  selectedFeature?: Feature<Point, GeoJsonProperties>;
+  aboveLayerId?: string;
 }) => {
   const pinType =
-    selectedFeature?.properties?.is_virtual_station !== undefined
+    selectedFeature?.properties?.entityType === 'StopPlace'
+      ? 'stop'
+      : selectedFeature?.properties?.is_virtual_station !== undefined
       ? 'station'
       : 'vehicle';
+
   const {iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeature,
     pinType,
@@ -53,6 +58,7 @@ export const SelectedFeatureIcon = ({
     >
       <MapboxGL.SymbolLayer
         id="selected-vehicle-symbol-layer"
+        aboveLayerID={aboveLayerId}
         style={{
           ...customTextStyle,
           iconImage: iconStyle.iconImage,

@@ -1,10 +1,11 @@
 import {Feature, Point, GeoJsonProperties} from 'geojson';
 import {useTheme} from '@atb/theme';
+import {nsrItems} from './useStopPlaceSymbolLayers';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined,
-  pinType: 'vehicle' | 'station',
+  pinType: 'vehicle' | 'station' | 'stop',
   textSizeFactor: number = 1.0,
 ) => {
   const {themeName} = useTheme();
@@ -32,9 +33,19 @@ export const useMapSymbolStyles = (
 
   const iconSize = ['case', isCluster, 0.855, 1];
 
+  const stopPlacesExpression: (
+    | (string | (string | boolean | string[])[])[]
+    | string
+  )[] = [];
+  nsrItems.forEach((nsrItem) => {
+    stopPlacesExpression.push(nsrItem.filter);
+    stopPlacesExpression.push(nsrItem.iconCode);
+  });
+
   const vehicle_type_form_factor = ['get', 'vehicle_type_form_factor'];
   const iconCode = [
     'case',
+    ...stopPlacesExpression,
     ['==', vehicle_type_form_factor, 'SCOOTER'],
     'scooter',
     ['==', vehicle_type_form_factor, 'BICYCLE'],
@@ -65,13 +76,16 @@ export const useMapSymbolStyles = (
       ? ['case', ['==', iconCode, 'scooter'], transportOperator, '']
       : mapItemIconNonClusterState;
 
+  // should make this easier to understand, perhaps rename images to achieve it
   const iconImage = [
     'concat',
     pinType,
     'pin_',
     iconCode,
-    '_',
-    pinType === 'vehicle'
+    pinType === 'stop' ? '' : '_',
+    pinType === 'stop'
+      ? ''
+      : pinType !== 'station'
       ? mapItemIconState
       : [
           'case',
@@ -86,6 +100,7 @@ export const useMapSymbolStyles = (
     '_',
     themeName,
   ];
+
   const iconStyle = {
     iconImage,
     iconSize,

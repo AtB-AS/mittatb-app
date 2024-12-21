@@ -1,6 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, LineString, Point} from 'geojson';
+import {Feature, LineString, Point, GeoJsonProperties} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
@@ -200,4 +200,8 @@ type GeofencingZoneExplanationType = {
 
 export type GeofencingZoneExplanationsType = {
   [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+};
+
+export type SelectedFeatureProp = {
+  selectedFeature?: Feature<Point, GeoJsonProperties>;
 };
