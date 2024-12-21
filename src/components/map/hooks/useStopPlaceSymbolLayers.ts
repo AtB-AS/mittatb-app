@@ -1,5 +1,5 @@
 import {useTheme} from '@atb/theme';
-import {Feature, Point, GeoJsonProperties} from 'geojson';
+import {SelectedFeatureProp} from '../types';
 
 const paintPropsLightMode = {
   textHaloColor: 'hsl(0, 0%, 100%)',
@@ -16,7 +16,7 @@ const opacityTransitionZoomRange = 1;
 // todo: also support quays, such as "P1" and "P2"
 
 export const useStopPlaceSymbolLayers = (
-  selectedFeature: Feature<Point, GeoJsonProperties> | undefined,
+  selectedFeature: SelectedFeatureProp['selectedFeature'],
 ) => {
   const {themeName} = useTheme();
   return nsrItems.map((nsrItem) => {

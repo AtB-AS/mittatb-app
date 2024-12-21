@@ -1,10 +1,10 @@
-import {Feature, Point, GeoJsonProperties} from 'geojson';
 import {useTheme} from '@atb/theme';
 import {nsrItems} from './useStopPlaceSymbolLayers';
+import {SelectedFeatureProp} from '../types';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (
-  selectedFeature: Feature<Point, GeoJsonProperties> | undefined,
+  selectedFeature: SelectedFeatureProp['selectedFeature'],
   pinType: 'vehicle' | 'station' | 'stop',
   textSizeFactor: number = 1.0,
 ) => {
