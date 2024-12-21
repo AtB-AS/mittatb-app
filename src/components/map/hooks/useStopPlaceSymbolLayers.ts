@@ -10,6 +10,9 @@ const paintPropsDarkMode = {
   textColor: 'hsl(0, 0%, 100%)',
 };
 
+const minimizedZoomRange = 3;
+const opacityTransitionZoomRange = 1;
+
 // todo: also support quays, such as "P1" and "P2"
 
 export const useStopPlaceSymbolLayers = (
@@ -41,7 +44,8 @@ export const useStopPlaceSymbolLayers = (
             'interpolate',
             ['linear'],
             ['zoom'],
-            Math.max(nsrItem.showDefaultIconZoom + 1.5, 13.75) - 1,
+            Math.max(nsrItem.showDefaultIconZoom + 1.5, 13.75) -
+              opacityTransitionZoomRange,
             0,
             Math.max(nsrItem.showDefaultIconZoom + 1.5, 13.75),
             1,
@@ -57,7 +61,7 @@ export const useStopPlaceSymbolLayers = (
       sourceID: 'composite',
       sourceLayerID: 'foo-6pzjnl',
       id: `${nsrItem.id}_unique`, // add _unique for now since these are also in the style from mapbox, and ids can't have conflicts
-      minZoomLevel: nsrItem.showDefaultIconZoom - 3,
+      minZoomLevel: nsrItem.showDefaultIconZoom - minimizedZoomRange,
       style: {
         textFont: ['DIN Offc Pro Regular', 'Arial Unicode MS Regular'],
         textField: ['get', 'name'],
@@ -82,7 +86,7 @@ export const useStopPlaceSymbolLayers = (
           'interpolate',
           ['linear'],
           ['zoom'],
-          nsrItem.showDefaultIconZoom - 3,
+          nsrItem.showDefaultIconZoom - minimizedZoomRange,
           0,
           nsrItem.showDefaultIconZoom,
           1,
@@ -92,9 +96,11 @@ export const useStopPlaceSymbolLayers = (
           'interpolate',
           ['linear'],
           ['zoom'],
-          nsrItem.showDefaultIconZoom - 3,
+          nsrItem.showDefaultIconZoom - minimizedZoomRange,
           0,
-          nsrItem.showDefaultIconZoom - 2,
+          nsrItem.showDefaultIconZoom -
+            minimizedZoomRange +
+            opacityTransitionZoomRange,
           1,
         ],
 
