@@ -70,6 +70,8 @@ import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {getFavoriteIcon} from '@atb/favorites/FavouriteDepartureToggle';
+import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
+import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -115,7 +117,7 @@ export const DepartureDetailsScreenComponent = ({
       subMode,
       situations,
       notices,
-      serviceJourney,
+      line,
     },
     isLoading,
   ] = useDepartureData(activeItem, 20);
@@ -159,52 +161,15 @@ export const DepartureDetailsScreenComponent = ({
     vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
     estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
 
-  const toQuay = estimatedCallsWithMetadata.find(
+  const toCall = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.toQuayId,
   );
-  const fromQuay = estimatedCallsWithMetadata.find(
+  const fromCall = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
 
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
-    fromQuay?.quay,
-    fromQuay?.quay.stopPlace,
-    false,
-  );
-
-  const favouriteDepartureLine = fromQuay?.quay.id
-    ? {
-        ...serviceJourney?.line,
-        lineNumber: publicCode,
-        destinationDisplay: fromQuay?.destinationDisplay,
-        id: fromQuay.quay.id,
-      }
-    : undefined;
-  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
-  const favouriteIcon = getFavoriteIcon(existingFavorite);
-  const accessibilityLabel = () => {
-    if (!existingFavorite) {
-      return '';
-    } else if (existingFavorite.destinationDisplay) {
-      return t(DeparturesTexts.favorites.favoriteButton.oneVariation);
-    } else {
-      return t(DeparturesTexts.favorites.favoriteButton.allVariations);
-    }
-  };
-
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const onPressFavorite = () => {
-    if (favouriteDepartureLine) {
-      onMarkFavourite(
-        favouriteDepartureLine,
-        existingFavorite,
-        onCloseFocusRef,
-      );
-    }
-  };
-
   const shouldShowDepartureTime =
-    (fromQuay && !isInThePast(fromQuay.expectedDepartureTime)) || false;
+    (fromCall && !isInThePast(fromCall.expectedDepartureTime)) || false;
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
@@ -228,8 +193,8 @@ export const DepartureDetailsScreenComponent = ({
     !isJourneyFinished;
 
   const a11yLabel =
-    fromQuay && publicCode
-      ? getLineAndTimeA11yLabel(fromQuay, publicCode, t, language)
+    fromCall && publicCode
+      ? getLineAndTimeA11yLabel(fromCall, publicCode, t, language)
       : undefined;
   const lineChipServiceJourney = {
     line: {publicCode},
@@ -261,8 +226,8 @@ export const DepartureDetailsScreenComponent = ({
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
-              {fromQuay && shouldShowDepartureTime && (
-                <DepartureTime departure={fromQuay} color={themeColor} />
+              {fromCall && shouldShowDepartureTime && (
+                <DepartureTime departure={fromCall} color={themeColor} />
               )}
             </View>
             {shouldShowTravelAid && (
@@ -317,30 +282,8 @@ export const DepartureDetailsScreenComponent = ({
                   }}
                 />
               ) : null}
-              {favouriteDepartureLine && (
-                <Button
-                  type="small"
-                  leftIcon={{svg: favouriteIcon}}
-                  text={t(FavoriteDeparturesTexts.favoriteButton)}
-                  interactiveColor={interactiveColor}
-                  accessibilityLabel={accessibilityLabel()}
-                  accessibilityHint={
-                    !!existingFavorite
-                      ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
-                      : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
-                  }
-                  onPress={() => {
-                    analytics.logEvent(
-                      'Departure details',
-                      'Add to Favourite clicked',
-                      {
-                        line: favouriteDepartureLine?.id,
-                        lineNumber: favouriteDepartureLine?.lineNumber,
-                      },
-                    );
-                    onPressFavorite();
-                  }}
-                />
+              {fromCall && line && (
+                <FavoriteButton fromCall={fromCall} line={line} />
               )}
             </View>
             {realtimeText && !activeItem.isTripCancelled && (
@@ -435,8 +378,8 @@ export const DepartureDetailsScreenComponent = ({
               mode: mode || null,
               subMode: subMode || null,
               fromZones:
-                fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
-              toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
+                fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+              toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
             }}
             style={styles.messageBox}
             textColor={backgroundColor}
@@ -734,6 +677,74 @@ function CollapseButtonRow({
     </PressableOpacity>
   );
 }
+
+const FavoriteButton = ({
+  fromCall,
+  line,
+}: {
+  fromCall: EstimatedCallWithMetadata;
+  line: LineFragment;
+}) => {
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const analytics = useAnalyticsContext();
+  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
+    fromCall.quay,
+    false,
+  );
+
+  const favouriteDepartureLine: FavouriteDepartureLine = {
+    id: line.id,
+    transportMode: line.transportMode,
+    transportSubmode: line.transportSubmode,
+    lineNumber: line.publicCode,
+    destinationDisplay: fromCall.destinationDisplay,
+  };
+  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+  const favouriteIcon = getFavoriteIcon(existingFavorite);
+  const accessibilityLabel = () => {
+    if (!existingFavorite) {
+      return '';
+    } else if (existingFavorite.destinationDisplay) {
+      return t(DeparturesTexts.favorites.favoriteButton.oneVariation);
+    } else {
+      return t(DeparturesTexts.favorites.favoriteButton.allVariations);
+    }
+  };
+
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onPressFavorite = () => {
+    if (favouriteDepartureLine) {
+      onMarkFavourite(
+        favouriteDepartureLine,
+        existingFavorite,
+        onCloseFocusRef,
+      );
+    }
+  };
+
+  return (
+    <Button
+      type="small"
+      leftIcon={{svg: favouriteIcon}}
+      text={t(FavoriteDeparturesTexts.favoriteButton)}
+      interactiveColor={theme.color.interactive['1']}
+      accessibilityLabel={accessibilityLabel()}
+      accessibilityHint={
+        !!existingFavorite
+          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+      }
+      onPress={() => {
+        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+          line: favouriteDepartureLine?.id,
+          lineNumber: favouriteDepartureLine?.lineNumber,
+        });
+        onPressFavorite();
+      }}
+    />
+  );
+};
 
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

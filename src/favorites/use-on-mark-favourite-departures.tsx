@@ -31,14 +31,7 @@ export function useOnMarkFavouriteDepartures(
   const {t} = useTranslation();
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const addFavorite = async (
-    line: Pick<
-      FavouriteDepartureLine,
-      | 'id'
-      | 'destinationDisplay'
-      | 'lineNumber'
-      | 'transportMode'
-      | 'transportSubmode'
-    >,
+    line: FavouriteDepartureLine,
     forSpecificDestination: boolean,
   ) => {
     await addFavoriteDeparture({
@@ -90,10 +83,7 @@ export function useOnMarkFavouriteDepartures(
   };
 
   const onMarkFavourite = (
-    line: Pick<
-      FavouriteDepartureLine,
-      'id' | 'transportMode' | 'lineNumber' | 'destinationDisplay'
-    >,
+    line: FavouriteDepartureLine,
     existing: StoredFavoriteDeparture | undefined,
     onCloseFocusRef: RefObject<any>,
   ) => {
@@ -125,11 +115,7 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (
-      line.destinationDisplay &&
-      line.lineNumber &&
-      quay.name
-    ) {
+    } else if (line.destinationDisplay && line.lineNumber && quay.name) {
       openBottomSheet(() => {
         return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
