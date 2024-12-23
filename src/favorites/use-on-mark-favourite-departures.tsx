@@ -13,7 +13,7 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
-type FavouriteDepartureLine = {
+export type FavouriteDepartureLine = {
   id: string;
   description?: string;
   lineNumber?: string;
@@ -23,7 +23,7 @@ type FavouriteDepartureLine = {
 };
 
 export function useOnMarkFavouriteDepartures(
-  quay: Quay,
+  quay: Pick<Quay, 'id' | 'name' | 'publicCode'>,
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
