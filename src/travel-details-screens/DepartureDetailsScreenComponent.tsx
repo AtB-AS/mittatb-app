@@ -191,9 +191,7 @@ export const DepartureDetailsScreenComponent = ({
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
-
   const shouldShowFavoriteButton = !!fromCall && !!line;
-
   const shouldShowButtonsRow = shouldShowMapButton || shouldShowFavoriteButton;
 
   const a11yLabel =
@@ -698,6 +696,7 @@ const FavoriteButton = ({
     fromCall.quay,
     false,
   );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
     id: line.id,
@@ -707,35 +706,19 @@ const FavoriteButton = ({
     destinationDisplay: fromCall.destinationDisplay,
   };
   const existingFavorite = getExistingFavorite(favouriteDepartureLine);
-  const favouriteIcon = getFavoriteIcon(existingFavorite);
-  const accessibilityLabel = () => {
-    if (!existingFavorite) {
-      return '';
-    } else if (existingFavorite.destinationDisplay) {
-      return t(DeparturesTexts.favorites.favoriteButton.oneVariation);
-    } else {
-      return t(DeparturesTexts.favorites.favoriteButton.allVariations);
-    }
-  };
-
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const onPressFavorite = () => {
-    if (favouriteDepartureLine) {
-      onMarkFavourite(
-        favouriteDepartureLine,
-        existingFavorite,
-        onCloseFocusRef,
-      );
-    }
-  };
 
   return (
     <Button
       type="small"
-      leftIcon={{svg: favouriteIcon}}
+      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
       text={t(FavoriteDeparturesTexts.favoriteButton)}
       interactiveColor={theme.color.interactive['1']}
-      accessibilityLabel={accessibilityLabel()}
+      accessibilityLabel={
+        existingFavorite &&
+        (existingFavorite.destinationDisplay
+          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+      }
       accessibilityHint={
         !!existingFavorite
           ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
@@ -746,8 +729,13 @@ const FavoriteButton = ({
           line: favouriteDepartureLine?.id,
           lineNumber: favouriteDepartureLine?.lineNumber,
         });
-        onPressFavorite();
+        onMarkFavourite(
+          favouriteDepartureLine,
+          existingFavorite,
+          onCloseFocusRef,
+        );
       }}
+      ref={onCloseFocusRef}
     />
   );
 };
