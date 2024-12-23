@@ -158,19 +158,9 @@ const PurchaseConfirmationTexts = {
   },
   payWithVipps: {
     text: _('Betal med Vipps', 'Pay with Vipps', 'Betale med Vipps'),
-    a11yHint: _(
-      'Aktiver for å betale med Vipps',
-      'Activate to pay with Vipps',
-      'Aktivér for å betale med Vipps',
-    ),
   },
   payWithVisa: {
     text: _('Betal med Visa', 'Pay with Visa', 'Betale med Visa'),
-    a11yHint: _(
-      'Aktiver for å betale med Visa',
-      'Activate to pay with Visa',
-      'Aktivér for å betale med Visa',
-    ),
   },
   payWithMasterCard: {
     text: _(
@@ -178,10 +168,12 @@ const PurchaseConfirmationTexts = {
       'Pay with MasterCard',
       'Betal med MasterCard',
     ),
-    a11yHint: _(
-      'Aktiver for å betale med MasterCard',
-      'Activate to pay with MasterCard',
-      'Aktivér for å betale med MasterCard',
+  },
+  payWithAmex: {
+    text: _(
+      'Betal med American Express',
+      'Pay with American Express',
+      'Betal med American Express',
     ),
   },
   ordinaryPricePrefix: _(`Ord. pris`, `Ord. price`, `Ord. pris`),

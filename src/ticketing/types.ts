@@ -96,6 +96,7 @@ export enum PaymentType {
   Vipps = 2,
   Visa = 3,
   Mastercard = 4,
+  Amex = 5,
 }
 
 export type RecurringPayment = {

@@ -104,7 +104,6 @@ export const StopPlacesView = (props: Props) => {
   const placeHasFavorites = stopPlaces.some((sp) =>
     hasFavorites(
       favoriteDepartures,
-      sp.id,
       sp.quays?.map((q) => q.id),
     ),
   );
@@ -225,7 +224,6 @@ export const StopPlacesView = (props: Props) => {
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}
-          stopPlace={item.stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
@@ -238,13 +236,10 @@ export const StopPlacesView = (props: Props) => {
 
 export function hasFavorites(
   favorites: UserFavoriteDepartures,
-  stopPlaceId?: string,
   quayIds?: string[],
 ) {
-  return favorites.some(
-    (favorite) =>
-      stopPlaceId === favorite.stopId ||
-      quayIds?.find((quayId) => favorite.quayId === quayId),
+  return favorites.some((favorite) =>
+    quayIds?.find((quayId) => favorite.quayId === quayId),
   );
 }
 

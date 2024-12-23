@@ -1,7 +1,7 @@
 import {useFavoritesContext, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {Quay, StopPlace} from '@atb/api/types/departures';
+import {Quay} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {RefObject} from 'react';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
@@ -23,8 +23,7 @@ export type FavouriteDepartureLine = {
 };
 
 export function useOnMarkFavouriteDepartures(
-  quay?: Pick<Quay, 'id' | 'name' | 'publicCode'>,
-  stopPlace?: Pick<StopPlace, 'id' | 'name'>,
+  quay: Pick<Quay, 'id' | 'name' | 'publicCode'>,
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
@@ -42,8 +41,6 @@ export function useOnMarkFavouriteDepartures(
     >,
     forSpecificDestination: boolean,
   ) => {
-    if (!(quay && stopPlace)) return;
-
     await addFavoriteDeparture({
       lineId: line.id,
       destinationDisplay: forSpecificDestination
@@ -55,7 +52,6 @@ export function useOnMarkFavouriteDepartures(
       quayName: quay.name,
       quayPublicCode: quay.publicCode,
       quayId: quay.id,
-      stopId: stopPlace.id,
       visibleOnDashboard: addedFavoritesVisibleOnDashboard,
     });
     AccessibilityInfo.announceForAccessibility(
@@ -63,39 +59,34 @@ export function useOnMarkFavouriteDepartures(
     );
   };
 
-  const getExistingFavorite = (line?: FavouriteDepartureLine) => {
-    if (!(line && quay && stopPlace)) return;
-
+  const getExistingFavorite = (line: FavouriteDepartureLine) => {
     return getFavoriteDeparture({
       destinationDisplay: line.destinationDisplay,
       lineId: line.id,
-      stopId: stopPlace.id,
       quayId: quay.id,
     });
   };
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
     const existing = getExistingFavorite(line);
-    if (stopPlace && existing) {
-      return existing
-        ? t(
-            DeparturesTexts.results.lines.favorite.removeFavorite(
-              `${line.lineNumber} ${
-                formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
-              }`,
-              stopPlace.name,
-            ),
-          )
-        : t(
-            DeparturesTexts.results.lines.favorite.addFavorite(
-              `${line.lineNumber} ${formatDestinationDisplay(
-                t,
-                line.destinationDisplay,
-              )}`,
-              stopPlace.name,
-            ),
-          );
-    }
+    return existing
+      ? t(
+          DeparturesTexts.results.lines.favorite.removeFavorite(
+            `${line.lineNumber} ${
+              formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
+            }`,
+            quay.name,
+          ),
+        )
+      : t(
+          DeparturesTexts.results.lines.favorite.addFavorite(
+            `${line.lineNumber} ${formatDestinationDisplay(
+              t,
+              line.destinationDisplay,
+            )}`,
+            quay.name,
+          ),
+        );
   };
 
   const onMarkFavourite = (
@@ -137,7 +128,6 @@ export function useOnMarkFavouriteDepartures(
     } else if (
       line.destinationDisplay &&
       line.lineNumber &&
-      quay &&
       quay.name
     ) {
       openBottomSheet(() => {
