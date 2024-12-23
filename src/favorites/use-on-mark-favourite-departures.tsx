@@ -52,13 +52,12 @@ export function useOnMarkFavouriteDepartures(
     );
   };
 
-  const getExistingFavorite = (line: FavouriteDepartureLine) => {
-    return getFavoriteDeparture({
+  const getExistingFavorite = (line: FavouriteDepartureLine) =>
+    getFavoriteDeparture({
       destinationDisplay: line.destinationDisplay,
       lineId: line.id,
       quayId: quay.id,
     });
-  };
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
     const existing = getExistingFavorite(line);

@@ -112,7 +112,7 @@ export const EstimatedCallItem = memo(
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
           </View>
 
-          {mode !== 'Map' && mode !== 'Departure' && (
+          {mode === 'Favourite' && (
             <FavouriteDepartureToggle
               existingFavorite={existingFavorite}
               onMarkFavourite={() =>

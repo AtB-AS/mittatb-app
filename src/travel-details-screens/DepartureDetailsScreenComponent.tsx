@@ -192,6 +192,10 @@ export const DepartureDetailsScreenComponent = ({
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
 
+  const shouldShowFavoriteButton = !!fromCall && !!line;
+
+  const shouldShowButtonsRow = shouldShowMapButton || shouldShowFavoriteButton;
+
   const a11yLabel =
     fromCall && publicCode
       ? getLineAndTimeA11yLabel(fromCall, publicCode, t, language)
@@ -248,44 +252,46 @@ export const DepartureDetailsScreenComponent = ({
                 testID="journeyAidButton"
               />
             )}
-            <View style={styles.actionButtons}>
-              {shouldShowMapButton ? (
-                <Button
-                  type="small"
-                  leftIcon={{svg: Map}}
-                  text={t(
-                    vehiclePosition
-                      ? DepartureDetailsTexts.live(t(translatedModeName))
-                      : DepartureDetailsTexts.map,
-                  )}
-                  interactiveColor={interactiveColor}
-                  onPress={() => {
-                    vehiclePosition &&
-                      analytics.logEvent(
-                        'Departure details',
-                        'See live bus clicked',
-                        {
-                          fromPlace: mapData.start,
-                          toPlace: mapData?.stop,
-                          mode: mode,
-                          subMode: subMode,
-                        },
-                      );
-                    onPressDetailsMap({
-                      legs: mapData.mapLegs,
-                      fromPlace: mapData.start,
-                      toPlace: mapData.stop,
-                      vehicleWithPosition: vehiclePosition,
-                      mode: mode,
-                      subMode: subMode,
-                    });
-                  }}
-                />
-              ) : null}
-              {fromCall && line && (
-                <FavoriteButton fromCall={fromCall} line={line} />
-              )}
-            </View>
+            {shouldShowButtonsRow && (
+              <View style={styles.actionButtons}>
+                {shouldShowMapButton ? (
+                  <Button
+                    type="small"
+                    leftIcon={{svg: Map}}
+                    text={t(
+                      vehiclePosition
+                        ? DepartureDetailsTexts.live(t(translatedModeName))
+                        : DepartureDetailsTexts.map,
+                    )}
+                    interactiveColor={interactiveColor}
+                    onPress={() => {
+                      vehiclePosition &&
+                        analytics.logEvent(
+                          'Departure details',
+                          'See live bus clicked',
+                          {
+                            fromPlace: mapData.start,
+                            toPlace: mapData?.stop,
+                            mode: mode,
+                            subMode: subMode,
+                          },
+                        );
+                      onPressDetailsMap({
+                        legs: mapData.mapLegs,
+                        fromPlace: mapData.start,
+                        toPlace: mapData.stop,
+                        vehicleWithPosition: vehiclePosition,
+                        mode: mode,
+                        subMode: subMode,
+                      });
+                    }}
+                  />
+                ) : null}
+                {shouldShowFavoriteButton && (
+                  <FavoriteButton fromCall={fromCall} line={line} />
+                )}
+              </View>
+            )}
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
