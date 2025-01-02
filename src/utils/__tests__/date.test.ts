@@ -86,16 +86,35 @@ describe.each<TimeZone>([
   });
 
   describe('formatToLongDateTime', () => {
-    test('for norwegian (bokmål) format', () => {
+    const currentYear = new Date().getFullYear();
+    test('for norwegian (bokmål) format, current year', () => {
       expect(
-        formatToLongDateTime('2024-09-01T12:00:00Z', Language.Norwegian),
+        formatToLongDateTime(
+          `${currentYear}-09-01T12:00:00Z`,
+          Language.Norwegian,
+        ),
       ).toBe('01. sep. 14:00');
     });
 
-    test('for english format', () => {
+    test('for english format, current year', () => {
       expect(
-        formatToLongDateTime('2024-09-01T12:00:00Z', Language.English),
+        formatToLongDateTime(
+          `${currentYear}-09-01T12:00:00Z`,
+          Language.English,
+        ),
       ).toBe('01. Sep 14:00');
+    });
+
+    test('for norwegian (bokmål) format, not current year', () => {
+      expect(
+        formatToLongDateTime(`2020-09-01T12:00:00Z`, Language.Norwegian),
+      ).toBe('01. sep. 2020, 14:00');
+    });
+
+    test('for english format, not current year', () => {
+      expect(
+        formatToLongDateTime(`2020-09-01T12:00:00Z`, Language.English),
+      ).toBe('01. Sep 2020, 14:00');
     });
   });
 });

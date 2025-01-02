@@ -344,7 +344,7 @@ export function formatToShortDateTimeWithRelativeDayNames(
 
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
-  return format(parsed, 'PP, p', {
+  return format(parsed, 'dd. MMM yyyy, HH:mm', {
     locale: languageToLocale(language),
   });
 }
