@@ -8,7 +8,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
-import axios from 'axios';
+import {getAxiosErrorType} from '@atb/api/utils';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -72,7 +72,7 @@ export const getSdkErrorTokenIds = (err: any): string[] =>
  * from https://github.com/entur/abt-mobile-client-sdk/pull/368
  */
 export const parseBffCallErrors = (error: any) => {
-  if (axios.isAxiosError(error) && !error.response) {
+  if (getAxiosErrorType(error) === 'network-error') {
     return new ClientNetworkError(error.message);
   }
 
