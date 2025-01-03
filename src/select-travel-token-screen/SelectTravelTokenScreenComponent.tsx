@@ -2,13 +2,14 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {Token, useMobileTokenContext} from '@atb/mobile-token';
+import {
+  Token,
+  useMobileTokenContext,
+  useToggleTokenMutation,
+} from '@atb/mobile-token';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingContext,
-} from '@atb/ticketing';
+import {useFareContracts} from '@atb/ticketing';
 import {
   dictionary,
   getTextForLanguage,
@@ -16,7 +17,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
-import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -33,7 +33,6 @@ import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useOnboardingContext} from '@atb/onboarding';
-import {useToggleTokenMutation} from '@atb/mobile-token';
 
 type Props = {onAfterSave: () => void};
 
@@ -42,7 +41,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const {fareContracts} = useTicketingContext();
   const {disable_travelcard} = useRemoteConfigContext();
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
@@ -64,13 +62,17 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const activeFareContracts = flatMap(
-    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow),
-    (i) => i.travelRights,
+  const availableFareContracts = useFareContracts(
+    {availability: 'available'},
+    serverNow,
+  );
+
+  const availableTravelRights = availableFareContracts.flatMap(
+    (fc) => fc.travelRights,
   );
 
   // Filter for unique travel rights config types
-  const activeFareContractsTypes = activeFareContracts
+  const availableFareContractsTypes = availableTravelRights
     .filter(onlyUniquesBasedOnField('type'))
     .map((travelRight) => {
       const preassignedFareProduct = findReferenceDataById(
@@ -87,7 +89,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     });
 
   const fareProductConfigWhichRequiresTokenOnMobile =
-    activeFareContractsTypes.find(
+    availableFareContractsTypes.find(
       (fareProductTypeConfig) =>
         fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
     );
