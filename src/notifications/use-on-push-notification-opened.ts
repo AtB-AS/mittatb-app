@@ -30,7 +30,7 @@ export function useOnPushNotificationOpened() {
             params: {
               screen: 'Ticketing_RootScreen',
               params: {
-                screen: 'TicketTabNav_ActiveFareProductsTabScreen',
+                screen: 'TicketTabNav_AvailableFareContractsTabScreen',
               },
             },
           });

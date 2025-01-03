@@ -4,13 +4,10 @@ import {
 } from '@react-navigation/material-top-tabs';
 import {TicketTabNav_PurchaseTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/TicketTabNav_PurchaseTabScreen';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {TicketTabNav_ActiveFareProductsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_ActiveFareProductsTabScreen';
+import {TicketTabNav_AvailableFareContractsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_AvailableFareContractsTabScreen';
 import React from 'react';
 import {TicketTabNavStackParams} from './navigation-types';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingContext,
-} from '@atb/ticketing';
+import {useFareContracts} from '@atb/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
@@ -23,15 +20,15 @@ const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
-  const {fareContracts} = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
+  const availableFareContracts = useFareContracts(
+    {availability: 'available'},
     serverNow,
   );
-  const initialRoute: keyof TicketTabNavStackParams = activeFareContracts.length
-    ? 'TicketTabNav_ActiveFareProductsTabScreen'
-    : 'TicketTabNav_PurchaseTabScreen';
+  const initialRoute: keyof TicketTabNavStackParams =
+    availableFareContracts.length
+      ? 'TicketTabNav_AvailableFareContractsTabScreen'
+      : 'TicketTabNav_PurchaseTabScreen';
 
   return (
     <TopTabNav.Navigator
@@ -49,11 +46,11 @@ export const Ticketing_TicketTabNavStack = () => {
         }}
       />
       <TopTabNav.Screen
-        name="TicketTabNav_ActiveFareProductsTabScreen"
-        component={TicketTabNav_ActiveFareProductsTabScreen}
+        name="TicketTabNav_AvailableFareContractsTabScreen"
+        component={TicketTabNav_AvailableFareContractsTabScreen}
         options={{
           tabBarLabel: t(
-            TicketingTexts.activeFareProductsAndReservationsTab.label,
+            TicketingTexts.availableFareProductsAndReservationsTab.label,
           ),
           tabBarTestID: 'activeTicketsTab',
         }}

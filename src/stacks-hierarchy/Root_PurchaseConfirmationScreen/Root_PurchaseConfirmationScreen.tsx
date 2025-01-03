@@ -131,7 +131,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       screen: 'TabNav_TicketingStack',
       params: {
         screen: 'Ticketing_RootScreen',
-        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+        params: {screen: 'TicketTabNav_AvailableFareContractsTabScreen'},
       },
     });
   }, [

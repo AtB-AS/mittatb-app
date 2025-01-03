@@ -2,10 +2,7 @@ import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthContext} from '@atb/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingContext,
-} from '@atb/ticketing';
+import {useFareContracts} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React from 'react';
@@ -23,10 +20,12 @@ export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthContext();
-  const {fareContracts} = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
+  const availableFareContracts = useFareContracts(
+    {availability: 'available'},
+    serverNow,
+  );
+  const hasAvailableFareContracts = availableFareContracts.length > 0;
 
   const {deleteCollectedData} = useBeaconsContext();
 
@@ -92,7 +91,7 @@ export const Profile_DeleteProfileScreen = () => {
         style={styles.contentMargin}
       />
 
-      {activeFareContracts && (
+      {hasAvailableFareContracts && (
         <MessageInfoBox
           message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
           type="warning"
@@ -110,7 +109,7 @@ export const Profile_DeleteProfileScreen = () => {
             ),
           }}
           onPress={() => showDeleteAlert()}
-          disabled={activeFareContracts}
+          disabled={hasAvailableFareContracts}
           icon={<ThemeIcon svg={Delete} color="error" />}
         />
       </Section>
