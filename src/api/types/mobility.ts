@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Feature, Point} from 'geojson';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -198,3 +199,62 @@ export const IdsFromQrCodeQuerySchema = z.object({
 });
 
 export type IdsFromQrCodeQuery = z.infer<typeof IdsFromQrCodeQuerySchema>;
+
+const GeoJsonCoordinatesSchema = z.union([
+  z.tuple([longitude, latitude]), // lon, lat
+  z.tuple([longitude, latitude, z.number()]), // lon, lat, altitude
+]);
+
+const GeoJsonFeatureWithPointGeometrySchema = z.object({
+  type: z.literal('Feature'),
+  geometry: z.object({
+    type: z.literal('Point'),
+    coordinates: GeoJsonCoordinatesSchema,
+  }),
+  // properties placeholder — empty object by default
+  properties: z.object({}).passthrough(),
+}) satisfies z.ZodType<Feature<Point>>;
+
+// See martin.yaml -> stations, in the tile server
+export const StationFeatureSchema =
+  GeoJsonFeatureWithPointGeometrySchema.extend({
+    properties: z.object({
+      id: z.string(),
+      system_id: z.string(),
+      vehicle_type_form_factor: FormFactorSchema,
+      num_vehicles_available: z.number(),
+      capacity: z.number(),
+      is_virtual_station: z.boolean(),
+    }),
+  }) satisfies z.ZodType<Feature<Point>>;
+export type StationFeature = z.infer<typeof StationFeatureSchema>;
+
+export const ClusterOfVehiclesPropertiesSchema = z
+  .object({
+    count: z.number(),
+    vehicle_type_form_factor: FormFactorSchema,
+  })
+  .strict(); // don't allow any other props, in order to avoid matching with VehiclePropertiesSchema
+export type ClusterOfVehiclesProperties = z.infer<
+  typeof ClusterOfVehiclesPropertiesSchema
+>;
+
+export const VehiclePropertiesSchema = z.object({
+  id: z.string(),
+  system_id: z.string(),
+  count: z.number(),
+  vehicle_type_form_factor: FormFactorSchema,
+});
+
+// This should match the output of the vehicles_clustered postgres function,
+// which can be found in schema.sql in the mobility service.
+export const VehiclesClusteredFeatureSchema =
+  GeoJsonFeatureWithPointGeometrySchema.extend({
+    properties: z.union([
+      VehiclePropertiesSchema,
+      ClusterOfVehiclesPropertiesSchema,
+    ]),
+  }) satisfies z.ZodType<Feature<Point>>;
+export type VehiclesClusteredFeature = z.infer<
+  typeof VehiclesClusteredFeatureSchema
+>;

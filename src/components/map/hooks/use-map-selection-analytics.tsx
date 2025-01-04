@@ -4,9 +4,9 @@ import {useAnalytics} from '@atb/analytics';
 import {isStopPlace} from '../utils';
 import {
   isBicycle,
-  isBikeStation,
-  isCarStation,
-  isScooter,
+  isBikeStationFeature,
+  isCarStationFeature,
+  isScooterFeature,
 } from '@atb/mobility/utils';
 
 export const useMapSelectionAnalytics = () => {
@@ -18,15 +18,15 @@ export const useMapSelectionAnalytics = () => {
           analytics.logEvent('Map', 'Stop place selected', {
             id: selectedFeature.id,
           });
-        } else if (isBikeStation(selectedFeature)) {
+        } else if (isBikeStationFeature(selectedFeature)) {
           analytics.logEvent('Map', 'City bike station selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isCarStation(selectedFeature)) {
+        } else if (isCarStationFeature(selectedFeature)) {
           analytics.logEvent('Map', 'Car sharing station selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isScooter(selectedFeature)) {
+        } else if (isScooterFeature(selectedFeature)) {
           analytics.logEvent('Map', 'Scooter selected', {
             id: selectedFeature.properties.id,
           });

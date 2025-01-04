@@ -2,4 +2,11 @@ export {CarSharingStationBottomSheet} from './components/CarSharingStationBottom
 export {BikeStationBottomSheet} from './components/BikeStationBottomSheet';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {ScooterSheet} from './components/ScooterSheet';
-export {isBikeStation, isCarStation, isBicycle, isScooter} from './utils';
+export {
+  isStationFeature,
+  isBikeStationFeature,
+  isCarStationFeature,
+  isVehiclesClusteredFeature,
+  isBicycleFeature,
+  isScooterFeature,
+} from './utils';

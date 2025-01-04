@@ -56,7 +56,7 @@ export const useAutoSelectMapItem = (
           mapCameraRef,
           // zoom level removed here for now due to performance bug
           // the bug has to do with onMapIdle being called too often
-          //zoomLevel: SCOOTERS_MAX_CLUSTER_LEVEL + 0.01, // ensure no clustering
+          //zoomLevel: 17
         });
     },
     [mapCameraRef],

@@ -8,49 +8,53 @@ import {FormFactorFilterType} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {
-  StationBasicFragment,
-  VehicleTypeAvailabilityBasicFragment,
-} from '@atb/api/types/generated/fragments/stations';
+import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
+import {
+  StationFeatureSchema,
+  StationFeature,
+  VehiclesClusteredFeatureSchema,
+  VehiclesClusteredFeature,
+} from '@atb/api/types/mobility';
 
-export const isScooter = (
+export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
-  feature?.properties?.vehicle_type_form_factor === FormFactor.ScooterStanding;
+): feature is VehiclesClusteredFeature =>
+  VehiclesClusteredFeatureSchema.safeParse(feature).success;
 
-export const isBicycle = (
+export const isScooterFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleBasicFragment> =>
+): feature is Feature<Point, VehiclesClusteredFeature> =>
+  isVehiclesClusteredFeature(feature) &&
+  (feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
+    feature?.properties?.vehicle_type_form_factor ===
+      FormFactor.ScooterStanding);
+
+export const isBicycleFeature = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, VehiclesClusteredFeature> =>
+  isVehiclesClusteredFeature(feature) &&
   feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
-  !isStation(feature);
+  !isStationFeature(feature);
 
-export const isStation = (
+export const isStationFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  feature?.properties?.__typename === 'Station';
+): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
 
-export const isBikeStation = (
+export const isBikeStationFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  (isStation(feature) &&
-    feature.properties?.vehicleTypesAvailable?.some(
-      (types) => types.vehicleType.formFactor === FormFactor.Bicycle,
-    )) ??
-  false;
+): feature is StationFeature =>
+  isStationFeature(feature) &&
+  feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
-export const isCarStation = (
+export const isCarStationFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  (isStation(feature) &&
-    feature.properties?.vehicleTypesAvailable?.some(
-      (types) => types.vehicleType.formFactor === FormFactor.Car,
-    )) ??
-  false;
+): feature is StationFeature =>
+  isStationFeature(feature) &&
+  feature.properties?.vehicle_type_form_factor === FormFactor.Car;
 
 export const getAvailableVehicles = (
   types: VehicleTypeAvailabilityBasicFragment[] | undefined,

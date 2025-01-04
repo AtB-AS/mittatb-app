@@ -6,9 +6,9 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
-import {Feature, Polygon, Position} from 'geojson';
+import {Feature, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {polygon} from '@turf/helpers';
+
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -31,10 +31,11 @@ import {
 import {
   isFeaturePoint,
   getFeaturesAtClick,
-  isFeatureGeofencingZone,
+  isGeofencingZoneFeature,
   isStopPlace,
-  isParkAndRide,
+  isParkAndRideFeature,
   mapPositionToCoordinates,
+  isQuayFeature,
 } from './utils';
 
 import {
@@ -43,8 +44,7 @@ import {
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
-import {isBicycle, isScooter} from '@atb/mobility';
-import {isCarStation, isStation} from '@atb/mobility/utils';
+import {isStationFeature, isVehiclesClusteredFeature} from '@atb/mobility';
 
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
@@ -57,7 +57,8 @@ import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {useIsFocused} from '@react-navigation/native';
-import {StopPlaceMapItems} from './StopPlaceMapItems';
+import {NationalStopRegistryFeatures} from './NationalStopRegistryFeatures';
+import {VehiclePropertiesSchema} from '@atb/api/types/mobility';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -103,8 +104,9 @@ export const Map = (props: MapProps) => {
     bottomSheetCurrentlyAutoSelected?.type ===
       AutoSelectableBottomSheetType.Bicycle;
 
-  const selectedFeatureIsAVehicle =
-    isScooter(selectedFeature) || isBicycle(selectedFeature);
+  const selectedFeatureIsAVehicle = VehiclePropertiesSchema.safeParse(
+    selectedFeature?.properties,
+  ).success;
 
   const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureToggles();
@@ -167,14 +169,6 @@ export const Map = (props: MapProps) => {
             : selected,
       );
 
-      // onFeatureClick is TODO!
-      // car stations on click not working atm
-
-      if (!showGeofencingZones && !isClusterFeature(featureToSelect)) {
-        onMapClick({source: 'map-click', feature});
-        return;
-      }
-
       /**
        * this hides the Snackbar when a feature is clicked,
        * unless the feature is a geofencingZone, in which case
@@ -182,9 +176,14 @@ export const Map = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isFeatureGeofencingZone(featureToSelect)) {
+      if (isQuayFeature(featureToSelect)) {
+        // In this case we might want to either
+        // - select a stop place with the clicked quay sorted on top
+        // - have a bottom sheet with departures just for the clicked quay
+        return; // currently - do nothing
+      } else if (isGeofencingZoneFeature(featureToSelect)) {
         geofencingZoneOnPress(
-          featureToSelect?.properties?.geofencingZoneCustomProps,
+          featureToSelect.properties.geofencingZoneCustomProps,
         );
       } else {
         if (isFeaturePoint(featureToSelect)) {
@@ -199,7 +198,7 @@ export const Map = (props: MapProps) => {
               padding: SLIGHTLY_RAISED_MAP_PADDING,
               mapCameraRef,
               zoomLevel: toZoomLevel,
-              animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
+              animationDuration: 200,
             });
           } else {
             onMapClick({
@@ -207,19 +206,13 @@ export const Map = (props: MapProps) => {
               feature: featureToSelect,
             });
           }
-        } else if (isScooter(selectedFeature)) {
+        } else if (isVehiclesClusteredFeature(selectedFeature)) {
           // outside of operational area, rules unspecified
           geofencingZoneOnPress(undefined);
         }
       }
     },
-    [
-      geofencingZoneOnPress,
-      hideSnackbar,
-      onMapClick,
-      showGeofencingZones,
-      selectedFeature,
-    ],
+    [geofencingZoneOnPress, hideSnackbar, onMapClick, selectedFeature],
   );
 
   const [initialZoomLevel, setInitialZoomLevel] = useState(15);
@@ -228,8 +221,8 @@ export const Map = (props: MapProps) => {
   >([startingCoordinates.longitude, startingCoordinates.latitude]);
 
   const isFocused = useIsFocused();
-  const {mapboxJsonStyle, mapboxStyleIsLoading} = useMapboxJsonStyle();
-  if (mapboxStyleIsLoading || !isFocused) {
+  const mapboxJsonStyle = useMapboxJsonStyle();
+  if (!isFocused) {
     // Returning null when !isFocused prevents unnecessary tile requests while the map isn't shown.
     // Center and Zoom are captured to re-init the map where it left off.
     if (mapViewRef.current) {
@@ -288,13 +281,9 @@ export const Map = (props: MapProps) => {
           )}
           {mapLines && <MapRoute lines={mapLines} />}
 
-          <StopPlaceMapItems selectedFeature={selectedFeature} />
+          <NationalStopRegistryFeatures selectedFeature={selectedFeature} />
 
-          <SelectedFeatureIcon
-            selectedFeature={selectedFeature}
-            // hmm this is bad, try to find another fix, maybe set the layer index for lines in MapRoute instead
-            aboveLayerId={mapLines?.length !== undefined ? 'line-0' : undefined}
-          />
+          <SelectedFeatureIcon selectedFeature={selectedFeature} />
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
@@ -336,21 +325,17 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
 function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
-      isScooter(feature) ||
-      isBicycle(feature) ||
-      isStation(feature) ||
-      isCarStation(feature) ||
-      isParkAndRide(feature)
+      isVehiclesClusteredFeature(feature) ||
+      isStationFeature(feature) ||
+      isParkAndRideFeature(feature)
       ? 3
       : 1;
-  } else if (isFeatureGeofencingZone(feature)) {
-    const coordinates = (feature.geometry as Polygon).coordinates;
-    const polygonGeometry = polygon(coordinates);
-    const positionClickedIsInsidePolygon = turfBooleanPointInPolygon(
+  } else if (isGeofencingZoneFeature(feature)) {
+    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
       positionClicked,
-      polygonGeometry,
+      feature.geometry,
     );
-    return positionClickedIsInsidePolygon ? 2 : 0;
+    return positionClickedIsInsideGeofencingZone ? 2 : 0;
   } else {
     return 0;
   }

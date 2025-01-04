@@ -1,5 +1,5 @@
 import {useTheme} from '@atb/theme';
-import {nsrItems} from './useStopPlaceSymbolLayers';
+import {nsrSymbolItems} from './useNsrSymbolLayers';
 import {SelectedFeatureProp} from '../types';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
@@ -33,14 +33,10 @@ export const useMapSymbolStyles = (
 
   const iconSize = ['case', isCluster, 0.855, 1];
 
-  const stopPlacesExpression: (
-    | (string | (string | boolean | string[])[])[]
-    | string
-  )[] = [];
-  nsrItems.forEach((nsrItem) => {
-    stopPlacesExpression.push(nsrItem.filter);
-    stopPlacesExpression.push(nsrItem.iconCode);
-  });
+  const stopPlacesExpression = nsrSymbolItems.flatMap((nsrSymbolItem) => [
+    nsrSymbolItem.filter,
+    nsrSymbolItem.iconCode,
+  ]);
 
   const vehicle_type_form_factor = ['get', 'vehicle_type_form_factor'];
   const iconCode = [

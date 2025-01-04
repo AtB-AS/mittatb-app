@@ -2,14 +2,25 @@ import {RefObject} from 'react';
 import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
 import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
-import {Feature, MultiPolygon, Point, Polygon, Position} from 'geojson';
 import {
-  Cluster,
+  Feature,
+  GeoJsonProperties,
+  Geometry,
+  MultiPolygon,
+  Point,
+  Polygon,
+  Position,
+} from 'geojson';
+import {
   MapSelectionActionType,
   MapPadding,
   ParkingType,
+  GeofencingZoneCustomProps,
 } from './types';
-import {isStation} from '@atb/mobility/utils';
+import {
+  ClusterOfVehiclesProperties,
+  ClusterOfVehiclesPropertiesSchema,
+} from '@atb/api/types/mobility';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -81,22 +92,22 @@ export const hasProperties = (f: Feature) =>
 export const hasGeofencingZoneCustomProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
-export const isFeatureGeofencingZone = (f: Feature) =>
-  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
+export const isGeofencingZoneFeature = (
+  f: Feature,
+): f is Feature<
+  MultiPolygon,
+  {geofencingZoneCustomProps: GeofencingZoneCustomProps}
+> => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
 export const isClusterFeature = (
   feature: Feature,
-): feature is Feature<Point, Cluster> =>
-  !!(
-    isFeaturePoint(feature) &&
-    feature.properties?.count &&
-    feature.properties?.count != 1
-  );
+): feature is Feature<Point, ClusterOfVehiclesProperties> =>
+  ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
 
-export const isStopPlace = (f: Feature<Point>) =>
-  f.properties?.entityType === 'StopPlace';
+export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
+  f.properties?.entityType === 'Quay';
 
-export const isParkAndRide = (
+export const isParkAndRideFeature = (
   f: Feature<Point>,
 ): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
 
@@ -167,8 +178,10 @@ export function flyToLocation({
     });
 }
 
-export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
+// export const isStopPlaceFeature = (f: Feature<Point>) => f.properties?.entityType === 'StopPlace';
 
-export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
+// disable for now
+export const shouldShowMapLines = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
+
+// disable for now
+export const shouldZoomToFeature = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);

@@ -5,14 +5,14 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
+import {findEntityAtClick, isParkAndRideFeature, isStopPlace} from '../utils';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
-  isBicycle,
-  isBikeStation,
-  isCarStation,
-  isScooter,
+  isBicycleFeature,
+  isBikeStationFeature,
+  isCarStationFeature,
+  isScooterFeature,
   ParkAndRideBottomSheet,
   ScooterSheet,
 } from '@atb/mobility';
@@ -123,7 +123,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           false,
         );
-      } else if (isBikeStation(selectedFeature)) {
+      } else if (isBikeStationFeature(selectedFeature)) {
         openBottomSheet(
           () => (
             <BikeStationBottomSheet
@@ -134,7 +134,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           false,
         );
-      } else if (isCarStation(selectedFeature)) {
+      } else if (isCarStationFeature(selectedFeature)) {
         openBottomSheet(
           () => (
             <CarSharingStationBottomSheet
@@ -145,7 +145,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           false,
         );
-      } else if (isScooter(selectedFeature)) {
+      } else if (isScooterFeature(selectedFeature)) {
         openBottomSheet(() => {
           return (
             <ScooterSheet
@@ -155,7 +155,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             />
           );
         }, false);
-      } else if (isBicycle(selectedFeature)) {
+      } else if (isBicycleFeature(selectedFeature)) {
         openBottomSheet(() => {
           return (
             <BicycleSheet
@@ -164,7 +164,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             />
           );
         }, false);
-      } else if (isParkAndRide(selectedFeature)) {
+      } else if (isParkAndRideFeature(selectedFeature)) {
         openBottomSheet(() => {
           return (
             <ParkAndRideBottomSheet

@@ -64,7 +64,6 @@
     "@turf/centroid": "^7.1.0",
     "@turf/difference": "^7.1.0",
     "@turf/distance": "^7.1.0",
-    "@turf/helpers": "^7.1.0",
     "@types/marked": "^4.0.8",
     "@types/qrcode": "^1.5.5",
     "axios": "^1.7.3",
