@@ -1,7 +1,6 @@
 import {RefObject, useState} from 'react';
 import {getCoordinatesFromMapSelectionAction} from '../utils';
 import MapboxGL from '@rnmapbox/maps';
-import {useGeolocationState} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
@@ -28,16 +27,9 @@ export const useMapSelectionChangeEffect = (
   const [mapSelectionAction, setMapSelectionAction] = useState<
     MapSelectionActionType | undefined
   >({source: 'my-position', coords: startingCoordinates});
-  const {location: currentLocation} = useGeolocationState();
-  const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
   const {setBottomSheetCurrentlyAutoSelected} = useMapState();
 
-  const cameraFocusMode = useDecideCameraFocusMode(
-    mapProps.selectionMode,
-    fromCoords,
-    mapSelectionAction,
-    mapViewRef,
-  );
+  const cameraFocusMode = useDecideCameraFocusMode(mapSelectionAction);
   const distance =
     cameraFocusMode?.mode === 'map-lines'
       ? cameraFocusMode.distance
@@ -61,7 +53,6 @@ export const useMapSelectionChangeEffect = (
     onMapClick: (sc: MapSelectionActionType) => {
       setBottomSheetCurrentlyAutoSelected(undefined);
       setMapSelectionAction(sc);
-      setFromCoords(currentLocation?.coordinates);
     },
     selectedCoordinates: mapSelectionAction
       ? getCoordinatesFromMapSelectionAction(mapSelectionAction)

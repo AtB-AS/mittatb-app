@@ -26,7 +26,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {MapFilterType} from '@atb/components/map';
+// import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,
@@ -43,7 +43,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+// import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
 import {useFeatureToggles} from '@atb/feature-toggles';
 
@@ -88,14 +88,14 @@ export const Trip: React.FC<TripProps> = ({
 
   const tripPatternLegs = tripPattern?.legs;
 
-  const mapFilter: MapFilterType = {
-    mobility: {
-      [FormFactor.Bicycle]: {
-        showAll: tripPatternLegs.some((leg) => leg.rentedBike),
-        operators: [],
-      },
-    },
-  };
+  // const mapFilter: MapFilterType = {
+  //   mobility: {
+  //     [FormFactor.Bicycle]: {
+  //       showAll: tripPatternLegs.some((leg) => leg.rentedBike),
+  //       operators: [],
+  //     },
+  //   },
+  // };
 
   const shouldShowDate =
     !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
@@ -207,7 +207,7 @@ export const Trip: React.FC<TripProps> = ({
               legs: tripPatternLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-              mapFilter,
+              //mapFilter,
             });
           }}
         />

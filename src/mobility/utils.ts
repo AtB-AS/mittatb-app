@@ -1,5 +1,4 @@
 import {Feature, Point} from 'geojson';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
@@ -18,6 +17,8 @@ import {
   StationFeature,
   VehiclesClusteredFeatureSchema,
   VehiclesClusteredFeature,
+  VehicleFeature,
+  VehicleFeatureSchema,
 } from '@atb/api/types/mobility';
 
 export const isVehiclesClusteredFeature = (
@@ -25,17 +26,27 @@ export const isVehiclesClusteredFeature = (
 ): feature is VehiclesClusteredFeature =>
   VehiclesClusteredFeatureSchema.safeParse(feature).success;
 
+export const isVehicleFeature = (
+  feature: Feature<Point> | undefined,
+): feature is VehicleFeature => VehicleFeatureSchema.safeParse(feature).success;
+
 export const isScooterFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehiclesClusteredFeature> =>
-  isVehiclesClusteredFeature(feature) &&
+): feature is VehicleFeature & {
+  properties: {
+    vehicle_type_form_factor: FormFactor.Scooter | FormFactor.ScooterStanding;
+  };
+} =>
+  isVehicleFeature(feature) &&
   (feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
     feature?.properties?.vehicle_type_form_factor ===
       FormFactor.ScooterStanding);
 
 export const isBicycleFeature = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehiclesClusteredFeature> =>
+): feature is VehicleFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Bicycle};
+} =>
   isVehiclesClusteredFeature(feature) &&
   feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
   !isStationFeature(feature);
@@ -46,13 +57,17 @@ export const isStationFeature = (
 
 export const isBikeStationFeature = (
   feature: Feature<Point> | undefined,
-): feature is StationFeature =>
+): feature is StationFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Bicycle};
+} =>
   isStationFeature(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
 export const isCarStationFeature = (
   feature: Feature<Point> | undefined,
-): feature is StationFeature =>
+): feature is StationFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Car};
+} =>
   isStationFeature(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Car;
 

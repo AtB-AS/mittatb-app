@@ -46,12 +46,14 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
     }
   };
-  const onNavigateToMap = async (initialFilters: MapFilterType) => {
+  const onNavigateToMap = async (_initialFilters: MapFilterType) => {
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_MapStack',
       params: {
         screen: 'Map_RootScreen',
-        params: {initialFilters},
+        params: {
+          //initialFilters // todo: either remove filters entirely, or fix
+        },
       },
     });
   };

@@ -63,7 +63,8 @@ import {VehiclePropertiesSchema} from '@atb/api/types/mobility';
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
 
-  const shouldShowMapFilter = props.selectionMode === 'ExploreEntities';
+  // todo: either remove filters entirely, or fix
+  const shouldShowMapFilter = false; //props.selectionMode === 'ExploreEntities'; // hidden for now
   const shouldShowMapVehiclesAndStations =
     props.selectionMode === 'ExploreEntities'; // should probably split map components instead
 

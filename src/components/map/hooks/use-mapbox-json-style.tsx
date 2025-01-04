@@ -12,7 +12,7 @@ export const useMapboxJsonStyle: () => string | undefined = () => {
         ...(themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle),
         sprite: 'http://localhost:3000/sprite/v1/' + themeName, // todo: replace with remote config url
       }),
-    [mapboxLightStyle, mapboxDarkStyle, themeName],
+    [themeName],
   );
 
   return mapboxJsonStyle;

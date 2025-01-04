@@ -5,11 +5,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {
-  findEntityAtClick,
-  isParkAndRideFeature,
-  isStopPlaceFeature,
-} from '../utils';
+import {isParkAndRideFeature, isStopPlaceFeature} from '../utils';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -46,7 +42,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const analytics = useMapSelectionAnalytics();
   const navigation = useNavigation<RootNavigationProps>();
-
   const closeWithCallback = useCallback(() => {
     closeBottomSheet();
     closeCallback();
@@ -62,7 +57,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     (async function () {
       const selectedFeature =
         mapSelectionAction?.source === 'map-click'
-          ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
+          ? mapSelectionAction.feature
           : undefined;
       setSelectedFeature(selectedFeature);
       if (selectedFeature) {
@@ -81,8 +76,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           <MapFilterSheet
             onFilterChanged={(filter: MapFilterType) => {
               analytics.logEvent('Map', 'Filter changed', {filter});
-              mapProps.vehicles?.onFilterChange(filter.mobility);
-              mapProps.stations?.onFilterChange(filter.mobility);
+              // mapProps.vehicles?.onFilterChange(filter.mobility); // todo: either remove filters entirely, or fix
+              // mapProps.stations?.onFilterChange(filter.mobility); // todo: either remove filters entirely, or fix
             }}
             onClose={closeCallback}
           />

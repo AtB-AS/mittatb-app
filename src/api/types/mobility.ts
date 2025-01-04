@@ -246,6 +246,12 @@ export const VehiclePropertiesSchema = z.object({
   vehicle_type_form_factor: FormFactorSchema,
 });
 
+export const VehicleFeatureSchema =
+  GeoJsonFeatureWithPointGeometrySchema.extend({
+    properties: VehiclePropertiesSchema,
+  }) satisfies z.ZodType<Feature<Point>>;
+export type VehicleFeature = z.infer<typeof VehicleFeatureSchema>;
+
 // This should match the output of the vehicles_clustered postgres function,
 // which can be found in schema.sql in the mobility service.
 export const VehiclesClusteredFeatureSchema =
