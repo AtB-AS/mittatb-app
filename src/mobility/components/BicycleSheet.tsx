@@ -10,7 +10,6 @@ import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {
   BicycleTexts,
   MobilityTexts,
-  ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
@@ -146,7 +145,7 @@ export const BicycleSheet = ({
           <View style={styles.footer}>
             <MessageInfoBox
               type="error"
-              message={t(ScooterTexts.loadingFailed)}
+              message={t(BicycleTexts.loadingFailed)}
             />
           </View>
         )}
