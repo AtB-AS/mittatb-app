@@ -104,6 +104,9 @@ export const isClusterFeature = (
 ): feature is Feature<Point, ClusterOfVehiclesProperties> =>
   ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
 
+export const isStopPlaceFeature = (f: Feature<Point>) =>
+  f.properties?.entityType === 'StopPlace';
+
 export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
   f.properties?.entityType === 'Quay';
 
@@ -177,8 +180,6 @@ export function flyToLocation({
       animationDuration: animationDuration ?? 750,
     });
 }
-
-// export const isStopPlaceFeature = (f: Feature<Point>) => f.properties?.entityType === 'StopPlace';
 
 // disable for now
 export const shouldShowMapLines = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);

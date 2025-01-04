@@ -1,9 +1,9 @@
 import {Feature, Point} from 'geojson';
 import {useMemo} from 'react';
 import {useAnalytics} from '@atb/analytics';
-import {isStopPlace} from '../utils';
+import {isStopPlaceFeature} from '../utils';
 import {
-  isBicycle,
+  isBicycleFeature,
   isBikeStationFeature,
   isCarStationFeature,
   isScooterFeature,
@@ -14,7 +14,7 @@ export const useMapSelectionAnalytics = () => {
   return useMemo(
     () => ({
       logMapSelection: (selectedFeature: Feature<Point>) => {
-        if (isStopPlace(selectedFeature)) {
+        if (isStopPlaceFeature(selectedFeature)) {
           analytics.logEvent('Map', 'Stop place selected', {
             id: selectedFeature.id,
           });
@@ -30,7 +30,7 @@ export const useMapSelectionAnalytics = () => {
           analytics.logEvent('Map', 'Scooter selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isBicycle(selectedFeature)) {
+        } else if (isBicycleFeature(selectedFeature)) {
           analytics.logEvent('Map', 'Bike selected', {
             id: selectedFeature.properties.id,
           });

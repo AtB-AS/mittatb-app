@@ -5,7 +5,11 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {findEntityAtClick, isParkAndRideFeature, isStopPlace} from '../utils';
+import {
+  findEntityAtClick,
+  isParkAndRideFeature,
+  isStopPlaceFeature,
+} from '../utils';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -100,7 +104,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         closeBottomSheet();
         return;
       }
-      if (isStopPlace(selectedFeature)) {
+      if (isStopPlaceFeature(selectedFeature)) {
         openBottomSheet(
           () => (
             <DeparturesDialogSheet

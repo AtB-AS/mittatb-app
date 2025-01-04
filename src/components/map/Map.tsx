@@ -32,7 +32,7 @@ import {
   isFeaturePoint,
   getFeaturesAtClick,
   isGeofencingZoneFeature,
-  isStopPlace,
+  isStopPlaceFeature,
   isParkAndRideFeature,
   mapPositionToCoordinates,
   isQuayFeature,
@@ -324,7 +324,7 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
 
 function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {
-    return isStopPlace(feature) ||
+    return isStopPlaceFeature(feature) ||
       isVehiclesClusteredFeature(feature) ||
       isStationFeature(feature) ||
       isParkAndRideFeature(feature)
