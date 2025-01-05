@@ -16,7 +16,7 @@ import {
   isNormalTravelRight,
   TravelRightDirection,
 } from '@atb/ticketing';
-import {dictionary, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 
 type FareContractFromToBaseProps = {
@@ -197,6 +197,17 @@ const BorderedFromToBox = ({
   backgroundColor,
 }: BorderedFromToBoxProps) => {
   const styles = useStyles();
+  const {t} = useTranslation();
+
+  const accessibilityLabel = !!toText
+    ? t(
+        FareContractTexts.details.fromTo(
+          fromText,
+          toText ?? fromText,
+          direction === TravelRightDirection.Both,
+        ),
+      )
+    : t(FareContractTexts.details.validIn(fromText));
 
   const smallLayout = () => {
     if (!toText)
@@ -251,15 +262,21 @@ const BorderedFromToBox = ({
   );
 
   return (
-    <BorderedInfoBox backgroundColor={backgroundColor} type={mode}>
-      {mode === 'large' ? largeLayout() : smallLayout()}
-    </BorderedInfoBox>
+    <View
+      style={styles.borderedInfoBoxContainer}
+      accessible
+      accessibilityLabel={accessibilityLabel}
+    >
+      <BorderedInfoBox backgroundColor={backgroundColor} type={mode}>
+        {mode === 'large' ? largeLayout() : smallLayout()}
+      </BorderedInfoBox>
+    </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    alignItems: 'center',
+  borderedInfoBoxContainer: {
+    flex: 1,
   },
   largeContent: {
     flexDirection: 'column',

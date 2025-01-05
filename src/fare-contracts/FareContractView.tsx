@@ -31,11 +31,11 @@ import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
 import React from 'react';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {View} from 'react-native';
+import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
 
 type Props = {
   now: number;
@@ -124,23 +124,25 @@ export const FareContractView: React.FC<Props> = ({
           }
         />
       </GenericSectionItem>
-      <GenericSectionItem style={styles.detailContainer}>
-        <View style={styles.detailTextContainer}>
-          <FareContractFromTo
-            fc={fareContract}
-            backgroundColor={theme.color.background.neutral['0']}
-            mode="small"
-          />
-          <FareContractDetail
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
-            )}
+      <GenericSectionItem>
+        <View style={styles.detailContainer}>
+          <View style={styles.detailTextContainer}>
+            <FareContractFromTo
+              backgroundColor={theme.color.background.neutral[0]}
+              mode="small"
+              fc={fareContract}
+            />
+            <FareContractDetail
+              content={userProfilesWithCount.map((u) =>
+                userProfileCountAndName(u, language),
+              )}
+            />
+          </View>
+          <InspectionSymbol
+            preassignedFareProduct={preassignedFareProduct}
+            sentTicket={validityStatus === 'sent'}
           />
         </View>
-        <InspectionSymbol
-          preassignedFareProduct={preassignedFareProduct}
-          sentTicket={validityStatus === 'sent'}
-        />
       </GenericSectionItem>
       {isCarnetFareContract && (
         <GenericSectionItem>
@@ -179,9 +181,10 @@ export const FareContractView: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   detailContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   detailTextContainer: {
+    flex: 1,
     rowGap: theme.spacing.medium,
   },
 }));
