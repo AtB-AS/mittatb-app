@@ -21,7 +21,6 @@ export const SendToOtherButton = ({
       text={t(OnBehalfOfTexts.sendToOtherButton)}
       onPress={onPress}
       mode="secondary"
-      type="medium"
       compact={true}
       backgroundColor={themeColor}
       leftIcon={{svg: Add}}

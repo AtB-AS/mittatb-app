@@ -35,7 +35,6 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
         <View style={styles.container}>
           <View style={styles.buttonLeft}>
             <Button
-              type="medium"
               compact={true}
               mode="tertiary"
               disabled={!hasPrevious}
@@ -58,7 +57,6 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
           </ThemeText>
           <View style={styles.buttonRight}>
             <Button
-              type="medium"
               compact={true}
               mode="tertiary"
               disabled={!hasNext}

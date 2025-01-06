@@ -102,7 +102,6 @@ export const TravelAidScreenComponent = ({
         text={t(TravelAidTexts.close)}
         leftIcon={{svg: Close}}
         mode="tertiary"
-        type="medium"
         backgroundColor={bgContrastColor}
         testID="closeJourneyAidButton"
       />

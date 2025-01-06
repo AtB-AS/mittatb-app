@@ -83,7 +83,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
-      expand = false,
+      expand = true,
       hasShadow = false,
       style,
       ...props

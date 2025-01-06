@@ -243,38 +243,39 @@ export const DepartureDetailsScreenComponent = ({
             )}
             {shouldShowMapButton ? (
               <View style={styles.actionButtons}>
-                <Button
-                  type="small"
-                  expand={true}
-                  leftIcon={{svg: Map}}
-                  text={t(
-                    vehiclePosition
-                      ? DepartureDetailsTexts.live(t(translatedModeName))
-                      : DepartureDetailsTexts.map,
-                  )}
-                  interactiveColor={interactiveColor}
-                  onPress={() => {
-                    vehiclePosition &&
-                      analytics.logEvent(
-                        'Departure details',
-                        'See live bus clicked',
-                        {
-                          fromPlace: mapData.start,
-                          toPlace: mapData?.stop,
-                          mode: mode,
-                          subMode: subMode,
-                        },
-                      );
-                    onPressDetailsMap({
-                      legs: mapData.mapLegs,
-                      fromPlace: mapData.start,
-                      toPlace: mapData.stop,
-                      vehicleWithPosition: vehiclePosition,
-                      mode: mode,
-                      subMode: subMode,
-                    });
-                  }}
-                />
+                <View style={{flex: 1}}>
+                  <Button
+                    type="small"
+                    leftIcon={{svg: Map}}
+                    text={t(
+                      vehiclePosition
+                        ? DepartureDetailsTexts.live(t(translatedModeName))
+                        : DepartureDetailsTexts.map,
+                    )}
+                    interactiveColor={interactiveColor}
+                    onPress={() => {
+                      vehiclePosition &&
+                        analytics.logEvent(
+                          'Departure details',
+                          'See live bus clicked',
+                          {
+                            fromPlace: mapData.start,
+                            toPlace: mapData?.stop,
+                            mode: mode,
+                            subMode: subMode,
+                          },
+                        );
+                      onPressDetailsMap({
+                        legs: mapData.mapLegs,
+                        fromPlace: mapData.start,
+                        toPlace: mapData.stop,
+                        vehicleWithPosition: vehiclePosition,
+                        mode: mode,
+                        subMode: subMode,
+                      });
+                    }}
+                  />
+                </View>
               </View>
             ) : null}
             {realtimeText && !activeItem.isTripCancelled && (

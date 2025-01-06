@@ -95,7 +95,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.prevDay)
             : undefined
         }
-        type="medium"
         mode="tertiary"
         compact={true}
         leftIcon={{svg: ArrowLeft}}
@@ -116,7 +115,6 @@ export const DateSelection = ({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
@@ -132,7 +130,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.nextDay)
             : undefined
         }
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
