@@ -182,6 +182,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   detailContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    columnGap: theme.spacing.small,
   },
   detailTextContainer: {
     flex: 1,
