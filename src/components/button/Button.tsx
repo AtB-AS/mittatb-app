@@ -167,10 +167,17 @@ export const Button = React.forwardRef<any, ButtonProps>(
       iconSide: 'left' | 'right',
       icon?: ButtonIconProps,
     ): ViewStyle => {
+      if (type === 'large' && expand) {
+        return {
+          position: 'absolute',
+          width: '100%',
+          alignItems: iconSide === 'left' ? 'flex-start' : 'flex-end',
+        };
+      }
+
+      const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
       return {
-        [iconSide === 'left' ? 'marginRight' : 'marginLeft']: icon
-          ? theme.spacing.xSmall
-          : undefined,
+        [iconMargin]: icon ? theme.spacing.xSmall : undefined,
       };
     };
 
