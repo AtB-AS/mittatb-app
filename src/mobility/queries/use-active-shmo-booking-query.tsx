@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getActiveShmoBooking} from '@atb/api/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export const getActiveShmoBookingQueryKey = (acceptLanguage: string) => [
   'GET_ACTIVE_SHMO_BOOKING_QUERY_KEY',
@@ -11,7 +11,7 @@ export const getActiveShmoBookingQueryKey = (acceptLanguage: string) => [
 
 export const useActiveShmoBookingQuery = () => {
   const acceptLanguage = useAcceptLanguage();
-  const {isShmoDeepIntegrationEnabled} = useFeatureToggles();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   return useQuery({
     enabled: isShmoDeepIntegrationEnabled,
     queryKey: getActiveShmoBookingQueryKey(acceptLanguage),

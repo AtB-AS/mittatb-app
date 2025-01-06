@@ -29,7 +29,7 @@ jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
 jest.mock('react-native-device-info', () => {});
 jest.mock('react-native-inappbrowser-reborn', () => {});
 jest.mock('@atb/auth', () => ({
-  useAuthState: () => ({
+  useAuthContext: () => ({
     authStatus: DEFAULT_MOCK_STATE,
     abtCustomerId: '1',
     retryAuth: () => {},

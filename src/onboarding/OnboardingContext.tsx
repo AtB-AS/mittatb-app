@@ -19,14 +19,14 @@ import {
 } from '@atb/onboarding';
 import {ShouldShowArgsType} from '@atb/onboarding/types';
 import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
-import {useNotifications} from '@atb/notifications';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {AuthStateChangeListenerCallback, useAuthState} from '@atb/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useNotificationsContext} from '@atb/notifications';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {AuthStateChangeListenerCallback, useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -221,7 +221,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useOnboardingState() {
+export function useOnboardingContext() {
   const context = useContext(OnboardingContext);
   if (context === undefined) {
     throw new Error(
@@ -283,17 +283,17 @@ const useShouldShowArgs = (
     useHasFareContractWithActivatedNotification();
 
   const {isPushNotificationsEnabled, isOnboardingLoginEnabled} =
-    useFeatureToggles();
+    useFeatureTogglesContext();
   const {permissionStatus: pushNotificationPermissionStatus} =
-    useNotifications();
+    useNotificationsContext();
 
-  const {status: locationPermissionStatus} = useGeolocationState();
-  const {authenticationType} = useAuthState();
+  const {status: locationPermissionStatus} = useGeolocationContext();
+  const {authenticationType} = useAuthContext();
 
   const {
     enable_extended_onboarding: extendedOnboardingEnabled,
     disable_travelcard: travelCardDisabled,
-  } = useRemoteConfig();
+  } = useRemoteConfigContext();
 
   const shouldShowShareTravelHabitsScreen =
     useShouldShowShareTravelHabitsScreen(loadedOnboardingSections);
@@ -303,7 +303,7 @@ const useShouldShowArgs = (
     'userCreation',
   );
 
-  const {mobileTokenStatus} = useMobileTokenContextState();
+  const {mobileTokenStatus} = useMobileTokenContext();
 
   return useMemo(
     () => ({

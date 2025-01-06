@@ -1,6 +1,6 @@
 import {Checkbox} from '@atb/components/checkbox';
 import {RadioIcon} from '@atb/components/radio';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useState, ReactElement} from 'react';
 import {
   StyleProp,
@@ -96,7 +96,7 @@ const SelectItem = <T,>({
   style,
 }: ItemProps<T>) => {
   const itemStyles = useItemStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const background = theme.color.background.neutral[0].background;
   const selectedBackground = theme.color.interactive[2].active.background;
   const selectedBorder = theme.color.interactive[0].default.background;

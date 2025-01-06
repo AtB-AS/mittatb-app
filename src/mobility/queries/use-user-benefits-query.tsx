@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {getBenefitsForUser} from '@atb/mobility/api/api';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 // Caching user benefits for one minute will provide some performance gains, as benefits do not have to be
 // reloaded while the user is navigating in the map and clicking different vehicles or stations.
@@ -9,7 +9,7 @@ import {useAuthState} from '@atb/auth';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export const useUserBenefitsQuery = (enabled: boolean) => {
-  const {userId, authStatus} = useAuthState();
+  const {userId, authStatus} = useAuthContext();
   return useQuery({
     queryKey: ['mobilityUserBenefits', userId],
     queryFn: getBenefitsForUser,

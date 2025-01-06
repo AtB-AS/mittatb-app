@@ -3,12 +3,12 @@ import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import type {RecentFareContractType} from './types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
 import {
   FareProductTypeConfig,
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
@@ -47,14 +47,14 @@ export const RecentFareContract = ({
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const fromZoneName = fromTariffZone?.name.value;
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
   const interactiveColor = theme.color.interactive[2];
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );

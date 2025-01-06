@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 import {Consequence} from './components/Consequence';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -29,7 +29,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   leftButton,
 }: Props) => {
   const styles = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
 

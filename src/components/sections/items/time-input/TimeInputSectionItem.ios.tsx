@@ -1,4 +1,4 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {dateWithReplacedTime} from '@atb/utils/date';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -12,7 +12,7 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
   const {value, onChange, ...innerprops} = props;
   const {t} = useTranslation();
   const locale = useLocaleContext();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   return (
     <InternalLabeledSectionItem

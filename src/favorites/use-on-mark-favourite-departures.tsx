@@ -1,10 +1,10 @@
-import {useFavorites, StoredFavoriteDeparture} from '@atb/favorites';
+import {useFavoritesContext, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {Quay, StopPlace} from '@atb/api/types/departures';
+import {Quay} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {RefObject} from 'react';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
   TransportMode,
@@ -24,13 +24,12 @@ type FavouriteDepartureLine = {
 
 export function useOnMarkFavouriteDepartures(
   quay: Quay,
-  stopPlace: StopPlace,
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
-    useFavorites();
+    useFavoritesContext();
   const {t} = useTranslation();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const addFavorite = async (
     line: FavouriteDepartureLine,
     forSpecificDestination: boolean,
@@ -46,7 +45,6 @@ export function useOnMarkFavouriteDepartures(
       quayName: quay.name,
       quayPublicCode: quay.publicCode,
       quayId: quay.id,
-      stopId: stopPlace.id,
       visibleOnDashboard: addedFavoritesVisibleOnDashboard,
     });
     AccessibilityInfo.announceForAccessibility(
@@ -58,7 +56,6 @@ export function useOnMarkFavouriteDepartures(
     getFavoriteDeparture({
       destinationDisplay: line.destinationDisplay,
       lineId: line.id,
-      stopId: stopPlace.id,
       quayId: quay.id,
     });
 
@@ -70,7 +67,7 @@ export function useOnMarkFavouriteDepartures(
             `${line.lineNumber} ${
               formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
             }`,
-            stopPlace.name,
+            quay.name,
           ),
         )
       : t(
@@ -79,7 +76,7 @@ export function useOnMarkFavouriteDepartures(
               t,
               line.destinationDisplay,
             )}`,
-            stopPlace.name,
+            quay.name,
           ),
         );
   };

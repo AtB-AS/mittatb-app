@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -57,7 +57,7 @@ export const MessageInfoBox = ({
   focusRef,
   testID,
 }: MessageInfoBoxProps) => {
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const iconColorProps = {

@@ -3,7 +3,7 @@ import {Linking, View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Statuses} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -29,7 +29,7 @@ export function MessageSectionItem({
 }: Props) {
   const {topContainer} = useSectionItem(props);
   const styles = useStyles(messageType)();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const a11yLabel = useA11yLabel(
     messageType,
     title,

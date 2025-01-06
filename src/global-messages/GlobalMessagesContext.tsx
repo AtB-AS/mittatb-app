@@ -128,7 +128,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useGlobalMessagesState() {
+export function useGlobalMessagesContext() {
   const context = useContext(GlobalMessagesContext);
   if (context === undefined) {
     throw new Error(

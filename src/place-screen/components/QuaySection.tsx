@@ -1,4 +1,4 @@
-import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
+import {EstimatedCall, Quay} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {
   GenericClickableSectionItem,
@@ -8,7 +8,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {
   DeparturesTexts,
@@ -37,7 +37,6 @@ export type QuaySectionProps = {
     fromQuayId?: string,
     isCancelled?: boolean,
   ) => void;
-  stopPlace: StopPlace;
   showOnlyFavorites: boolean;
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
@@ -53,13 +52,12 @@ export function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
-  stopPlace,
   showOnlyFavorites,
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
 }: QuaySectionProps): JSX.Element {
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavoritesContext();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
@@ -141,7 +139,6 @@ export function QuaySection({
         {!isMinimized && (
           <EstimatedCallList
             quay={quay}
-            stopPlace={stopPlace}
             departures={departuresToDisplay.slice(0, departuresPerQuay)}
             mode={mode}
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}

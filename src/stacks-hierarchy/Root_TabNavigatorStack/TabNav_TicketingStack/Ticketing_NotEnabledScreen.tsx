@@ -1,7 +1,7 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
 import {ScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TicketingSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useWindowDimensions, View} from 'react-native';
@@ -12,7 +12,7 @@ export const Ticketing_NotEnabledScreen = () => {
   const styles = useStyles();
   const {width: windowWidth} = useWindowDimensions();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const bgColor = theme.color.background.accent[0];
 

@@ -2,19 +2,19 @@ import {StyleSheet} from '@atb/theme';
 import {
   filterAndSortValidRightNowOrCanBeUsedFareContracts,
   filterExpiredFareContracts,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
 import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
-import {useAnalytics} from '@atb/analytics';
-import {useTimeContextState} from '@atb/time';
+import {useAnalyticsContext} from '@atb/analytics';
+import {useTimeContext} from '@atb/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
-import {usePopOver} from '@atb/popover';
+import {usePopOverContext} from '@atb/popover';
 import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
 import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
 
@@ -30,9 +30,9 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
     fareContracts,
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
-  } = useTicketingState();
-  const {serverNow} = useTimeContextState();
-  const analytics = useAnalytics();
+  } = useTicketingContext();
+  const {serverNow} = useTimeContext();
+  const analytics = useAnalyticsContext();
 
   const activeFareContracts =
     filterAndSortValidRightNowOrCanBeUsedFareContracts(
@@ -42,7 +42,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 
   const styles = useStyles();
   const {t} = useTranslation();
-  const {addPopOver} = usePopOver();
+  const {addPopOver} = usePopOverContext();
 
   const hasExpiredFareContracts =
     filterExpiredFareContracts(fareContracts, serverNow).length > 0;
@@ -164,5 +164,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     padding: theme.spacing.medium,
+    rowGap: theme.spacing.large,
   },
 }));

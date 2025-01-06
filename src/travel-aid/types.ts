@@ -1,7 +1,7 @@
-import type {RequireValue} from '@atb/utils/object';
+import type {RequiredField} from '@atb/utils/object';
 import type {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
-export type ServiceJourneyWithGuaranteedCalls = RequireValue<
+export type ServiceJourneyWithGuaranteedCalls = RequiredField<
   ServiceJourneyWithEstCallsFragment,
   'estimatedCalls'
 >;

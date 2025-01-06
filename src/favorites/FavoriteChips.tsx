@@ -3,8 +3,8 @@ import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -15,7 +15,7 @@ import {
   FavoriteIcon,
   GeoLocation,
   Location,
-  useFavorites,
+  useFavoritesContext,
 } from '@atb/favorites';
 
 type Props = {
@@ -35,9 +35,9 @@ export const FavoriteChips: React.FC<Props> = ({
   chipActionHint,
   onAddFavorite,
 }) => {
-  const {favorites} = useFavorites();
+  const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
@@ -128,7 +128,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 function useCurrentLocationChip(
   onSelectLocation: (location: GeoLocation) => void,
 ) {
-  const {location, requestLocationPermission} = useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationContext();
 
   const [recentlyAllowedGeo, setRecentlyAllowedGeo] = useState(false);
 

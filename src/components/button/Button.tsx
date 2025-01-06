@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
@@ -92,7 +92,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
   ) => {
     const modeData = DefaultModeStyles[mode];
     const styles = useButtonStyle();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
 
     const interactiveColor =
       'interactiveColor' in props && props.interactiveColor

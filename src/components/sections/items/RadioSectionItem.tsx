@@ -1,6 +1,6 @@
 import React from 'react';
 import {AccessibilityProps, ActivityIndicator, View} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
@@ -47,7 +47,7 @@ export function RadioSectionItem({
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const interactiveColor = color;
 

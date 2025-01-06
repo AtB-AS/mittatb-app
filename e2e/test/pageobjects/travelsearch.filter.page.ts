@@ -12,14 +12,6 @@ class TravelSearchFilterPage {
   }
 
   /**
-   * Return the search button within time chooser
-   */
-  get searchButton() {
-    const reqId = `//*[@resource-id="searchButton"]`;
-    return $(reqId);
-  }
-
-  /**
    * Open the time picker on the travel search results
    */
   async openTravelSearchTimePicker() {
@@ -38,15 +30,6 @@ class TravelSearchFilterPage {
     if (basedOn !== 'Now') {
       await ElementHelper.waitForElement('id', `timePicker`);
     }
-  }
-
-  /**
-   * Open the native time picker
-   */
-  async openNativeTimePicker() {
-    const reqId = `//*[@resource-id="timePicker"]`;
-    await $(reqId).click();
-    await ElementHelper.waitForElement('id', `android:id/toggle_mode`);
   }
 
   /**

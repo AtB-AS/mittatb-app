@@ -1,14 +1,14 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 export function useControlPositionsStyle(extraPaddingBottom = false) {
   const {top, bottom} = useSafeAreaInsets();
-  const {theme} = useTheme();
-  const {height: bottomSheetHeight} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
   const {minHeight} = useBottomNavigationStyles();
 
   const bottomPaddingIfBottomSheetIsOpen = bottomSheetHeight

@@ -1,10 +1,10 @@
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {useTheme} from '@atb/theme';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useThemeContext} from '@atb/theme';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 
 export function useValidityLineColors(fareProductType?: string) {
-  const {theme} = useTheme();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {theme} = useThemeContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === fareProductType,

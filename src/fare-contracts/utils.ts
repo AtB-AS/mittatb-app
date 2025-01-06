@@ -17,7 +17,7 @@ import {
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
@@ -28,9 +28,9 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {useCallback, useMemo} from 'react';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -93,7 +93,7 @@ export const useSortFcOrReservationByValidityAndCreation = (
     currentUserId?: string,
   ) => ValidityStatus | undefined,
 ): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthState();
+  const {abtCustomerId: currentUserId} = useAuthContext();
   const getFcOrReservationOrder = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
@@ -152,7 +152,7 @@ export const mapToUserProfilesWithCount = (
 
 export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
-  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  const {mobileTokenStatus, tokens} = useMobileTokenContext();
   switch (mobileTokenStatus) {
     case 'success-and-inspectable':
     case 'fallback':
@@ -176,7 +176,7 @@ export const useNonInspectableTokenWarning = () => {
 
 export const useOtherDeviceIsInspectableWarning = () => {
   const {t} = useTranslation();
-  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  const {mobileTokenStatus, tokens} = useMobileTokenContext();
   switch (mobileTokenStatus) {
     case 'success-and-inspectable':
     case 'fallback':
@@ -206,7 +206,7 @@ export const useTariffZoneSummary = (
   toTariffZone?: TariffZone,
 ) => {
   const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
 
   if (!fromTariffZone || !toTariffZone) return undefined;
 

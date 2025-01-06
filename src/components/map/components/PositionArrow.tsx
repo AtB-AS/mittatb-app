@@ -1,5 +1,5 @@
 import {Location} from '@atb/assets/svg/mono-icons/places';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
@@ -9,7 +9,7 @@ export const PositionArrow: React.FC<
   {onPress(): void} & AccessibilityProps
 > = ({onPress}) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const interactiveColor = theme.color.interactive[2];
 

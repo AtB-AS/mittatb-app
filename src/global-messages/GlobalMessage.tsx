@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
-import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
+import {useGlobalMessagesContext} from '@atb/global-messages/GlobalMessagesContext';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
@@ -13,7 +13,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
 import {ContrastColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
@@ -32,12 +32,12 @@ const GlobalMessage = ({
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
-  const {authenticationType} = useAuthState();
+  const {authenticationType} = useAuthContext();
   const {
     findGlobalMessages,
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
-  } = useGlobalMessagesState();
+  } = useGlobalMessagesContext();
 
   if (!globalMessageContext) return null;
 

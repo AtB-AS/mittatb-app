@@ -1,13 +1,13 @@
 import React, {PropsWithChildren} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 type Props = PropsWithChildren<{
   accessibilityLabel?: string | undefined;
 }>;
 export const SectionHeading = ({accessibilityLabel, children}: Props) => {
   const style = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   return (
     <ThemeText

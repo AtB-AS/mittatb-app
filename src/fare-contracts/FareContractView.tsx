@@ -1,6 +1,6 @@
 import {
   findReferenceDataById,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {
   getFareContractInfo,
@@ -17,8 +17,8 @@ import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
 import {FareContractInfoHeader} from '@atb/fare-contracts/FareContractInfo';
 import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useAuthState} from '@atb/auth';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useAuthContext} from '@atb/auth';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
@@ -28,14 +28,14 @@ import {
   isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import React from 'react';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {View} from 'react-native';
+import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
 
 type Props = {
   now: number;
@@ -52,13 +52,13 @@ export const FareContractView: React.FC<Props> = ({
   onPressDetails,
   testID,
 }) => {
-  const {abtCustomerId: currentUserId} = useAuthState();
-  const {isInspectable} = useMobileTokenContextState();
-  const {isActivateTicketNowEnabled} = useFeatureToggles();
+  const {abtCustomerId: currentUserId} = useAuthContext();
+  const {isInspectable} = useMobileTokenContext();
+  const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const {
     isCarnetFareContract,
@@ -83,7 +83,8 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const {userProfiles, preassignedFareProducts} = useFirestoreConfiguration();
+  const {userProfiles, preassignedFareProducts} =
+    useFirestoreConfigurationContext();
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
@@ -96,7 +97,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   return (
-    <Section style={styles.section} testID={testID}>
+    <Section testID={testID}>
       <GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
@@ -123,23 +124,25 @@ export const FareContractView: React.FC<Props> = ({
           }
         />
       </GenericSectionItem>
-      <GenericSectionItem style={styles.detailContainer}>
-        <View style={styles.detailTextContainer}>
-          <FareContractFromTo
-            fc={fareContract}
-            backgroundColor={theme.color.background.neutral['0']}
-            mode="small"
-          />
-          <FareContractDetail
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
-            )}
+      <GenericSectionItem>
+        <View style={styles.detailContainer}>
+          <View style={styles.detailTextContainer}>
+            <FareContractFromTo
+              backgroundColor={theme.color.background.neutral[0]}
+              mode="small"
+              fc={fareContract}
+            />
+            <FareContractDetail
+              content={userProfilesWithCount.map((u) =>
+                userProfileCountAndName(u, language),
+              )}
+            />
+          </View>
+          <InspectionSymbol
+            preassignedFareProduct={preassignedFareProduct}
+            sentTicket={validityStatus === 'sent'}
           />
         </View>
-        <InspectionSymbol
-          preassignedFareProduct={preassignedFareProduct}
-          sentTicket={validityStatus === 'sent'}
-        />
       </GenericSectionItem>
       {isCarnetFareContract && (
         <GenericSectionItem>
@@ -176,14 +179,12 @@ export const FareContractView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginBottom: theme.spacing.large,
-  },
   detailContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   detailTextContainer: {
+    flex: 1,
     rowGap: theme.spacing.medium,
   },
 }));

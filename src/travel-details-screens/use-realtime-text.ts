@@ -1,4 +1,4 @@
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {formatToClock, isInThePast} from '@atb/utils/date';
 import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
@@ -13,7 +13,7 @@ export const useRealtimeText = (
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   if (lastPassedStop && lastPassedStop.quay?.name) {
     return t(

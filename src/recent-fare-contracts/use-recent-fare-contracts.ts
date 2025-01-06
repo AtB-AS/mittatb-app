@@ -3,7 +3,7 @@ import {
   TariffZone,
   UserProfile,
   FareProductTypeConfig,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   findReferenceDataById,
   isProductSellableInApp,
 } from '@atb/configuration';
@@ -11,7 +11,7 @@ import {
   listRecentFareContracts,
   RecentFareContractBackend,
   TravelRightDirection,
-  useTicketingState,
+  useTicketingContext,
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
@@ -199,13 +199,13 @@ const mapToLastThreeUniqueRecentFareContracts = (
 
 export const useRecentFareContracts = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {fareContracts} = useTicketingState();
+  const {fareContracts} = useTicketingContext();
   const {
     preassignedFareProducts,
     fareProductTypeConfigs,
     tariffZones,
     userProfiles,
-  } = useFirestoreConfiguration();
+  } = useFirestoreConfigurationContext();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});

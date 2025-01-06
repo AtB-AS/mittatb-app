@@ -1,6 +1,5 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {Feedback} from '@atb/components/feedback';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
@@ -37,15 +36,15 @@ import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -66,14 +65,14 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const {enable_ticketing} = useRemoteConfig();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const {enable_ticketing} = useRemoteConfigContext();
+  const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
-  const {isRealtimeMapEnabled} = useFeatureToggles();
+  const {isRealtimeMapEnabled} = useFeatureTogglesContext();
 
   const liveVehicleIds = tripPattern.legs
     .filter((leg) =>
@@ -115,17 +114,18 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {shouldShowDate && (
         <>
-          <View style={styles.date}>
-            <ThemeText typography="body__secondary" color="secondary">
-              {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
-            </ThemeText>
-          </View>
-          <Divider style={styles.divider} />
+          <ThemeText
+            typography="body__secondary"
+            color="secondary"
+            style={styles.date}
+          >
+            {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
+          </ThemeText>
+          <Divider />
         </>
       )}
       {shortWaitTime && (
         <MessageInfoBox
-          style={styles.messageBox}
           type="info"
           message={[
             t(TripDetailsTexts.messages.shortTime),
@@ -137,7 +137,6 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
-        style={styles.messageBox}
         textColor={theme.color.background.neutral[0]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
@@ -152,11 +151,7 @@ export const Trip: React.FC<TripProps> = ({
       {error && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
-          <MessageInfoBox
-            style={styles.messageBox}
-            type="warning"
-            message={translatedError(error, t)}
-          />
+          <MessageInfoBox type="warning" message={translatedError(error, t)} />
         </>
       )}
       <View style={styles.trip}>
@@ -199,7 +194,7 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Divider style={styles.divider} />
+      <Divider />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
           mapLegs={tripPatternLegs}
@@ -217,7 +212,6 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <TripSummary {...tripPattern} />
-      <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );
 };
@@ -239,22 +233,13 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacing.medium,
-    marginBottom: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
   date: {
-    alignItems: 'center',
-    marginBottom: theme.spacing.medium,
-  },
-  divider: {
-    marginBottom: theme.spacing.medium,
-  },
-  messageBox: {
-    marginBottom: theme.spacing.medium,
+    textAlign: 'center',
   },
   trip: {
     marginTop: theme.spacing.medium,
-    marginBottom: theme.spacing.xSmall,
   },
 }));
 

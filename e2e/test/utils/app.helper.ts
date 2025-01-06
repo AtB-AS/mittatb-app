@@ -1,6 +1,7 @@
 import ElementHelper from './element.helper.ts';
 import {driver} from '@wdio/globals';
 import {numberToStringWithZeros} from './utils.js';
+import Config from '../conf/config.js';
 
 const screenshotsFolder: string = './screenshots';
 
@@ -83,23 +84,30 @@ class AppHelper {
   async waitOnLoadingScreen(numberOfRetries: number = 0) {
     const retryAuthId = `//*[@resource-id="retryAuthButton"]`;
 
-    // Wait until loading screen is done
-    while (await ElementHelper.isElementExisting('loadingScreen', 2)) {
-      await this.pause(1000);
+    if (Config.loadingScreenEnabled()) {
+      // Wait until loading screen is done
+      while (await ElementHelper.isElementExisting('loadingScreen', 2)) {
+        await this.pause(500);
+      }
     }
 
-    // Check if loading failed and retry is available
-    const exists = await ElementHelper.isElementExisting('retryAuthButton', 2);
-    // max 2 retries
-    if (exists) {
-      if (numberOfRetries < 2) {
-        await $(retryAuthId).click();
-        // new loading screen with increased retry count
-        await this.waitOnLoadingScreen(numberOfRetries + 1);
-      } else {
-        throw new Error(
-          '[ERROR] Could not load the app from the loading screen!',
-        );
+    if (Config.loadingErrorScreenEnabled()) {
+      // Check if loading failed and retry is available
+      const exists = await ElementHelper.isElementExisting(
+        'retryAuthButton',
+        2,
+      );
+      // max 2 retries
+      if (exists) {
+        if (numberOfRetries < 2) {
+          await $(retryAuthId).click();
+          // new loading screen with increased retry count
+          await this.waitOnLoadingScreen(numberOfRetries + 1);
+        } else {
+          throw new Error(
+            '[ERROR] Could not load the app from the loading screen!',
+          );
+        }
       }
     }
   }
@@ -161,6 +169,40 @@ class AppHelper {
   }
 
   /**
+   * Set the date in the time picker once it's opened
+   * @param searchDate set the date (YYYY-MM-DD)
+   */
+  async setTimePickerDate(searchDate: string) {
+    // How many months until targeted date
+    const targetDate = new Date(searchDate);
+    const month = targetDate.getMonth() + 1;
+    const dateOfMonth = targetDate.getDate();
+    const currentMonth = new Date().getMonth() + 1;
+    const noMonthSteps =
+      month - currentMonth < 0
+        ? month - currentMonth + 12
+        : month - currentMonth;
+
+    // Set correct month
+    await ElementHelper.waitForElement('id', `android:id/datePicker`);
+    const nextMonth = await ElementHelper.getElement('android:id/next');
+    // Find month
+    for (let i = 0; i < noMonthSteps; i++) {
+      await nextMonth.click();
+      await this.pause(50);
+    }
+    // Set day of month
+    const dayInCalendar = await ElementHelper.getElementText(
+      dateOfMonth.toString(),
+    );
+    await dayInCalendar.click();
+    // Confirm
+    const okButton = await ElementHelper.getElement('android:id/button1');
+    await okButton.click();
+    await this.pause(1000);
+  }
+
+  /**
    * Set the time in the time picker once it's opened
    * @param hours set the hours
    * @param minutes set the minutes
@@ -184,7 +226,7 @@ class AppHelper {
     // Confirm
     const okButton = await ElementHelper.getElement('android:id/button1');
     await okButton.click();
-    await this.pause(1000);
+    await this.pause(500);
   }
 }
 

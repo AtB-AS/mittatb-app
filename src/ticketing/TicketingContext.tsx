@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
-import {useAuthState} from '../auth';
+import {useAuthContext} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile, isNormalTravelRight} from '.';
 import {setupFirestoreListeners} from './firestore';
@@ -144,8 +144,8 @@ export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
   const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
-  const {userId} = useAuthState();
-  const {enable_ticketing} = useRemoteConfig();
+  const {userId} = useAuthContext();
+  const {enable_ticketing} = useRemoteConfigContext();
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -254,7 +254,7 @@ function isAbortedPaymentStatus(status: PaymentStatus): boolean {
   return abortedPaymentStatus.includes(status);
 }
 
-export function useTicketingState() {
+export function useTicketingContext() {
   const context = useContext(TicketingContext);
   if (context === undefined) {
     throw new Error(

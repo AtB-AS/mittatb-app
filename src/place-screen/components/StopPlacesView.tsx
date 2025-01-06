@@ -1,6 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {Feedback} from '@atb/components/feedback';
-import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
+import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
@@ -16,7 +15,7 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -69,9 +68,9 @@ export const StopPlacesView = (props: Props) => {
     addedFavoritesVisibleOnDashboard,
   } = props;
   const styles = useStyles();
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavoritesContext();
   const {t} = useTranslation();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
 
@@ -105,7 +104,6 @@ export const StopPlacesView = (props: Props) => {
   const placeHasFavorites = stopPlaces.some((sp) =>
     hasFavorites(
       favoriteDepartures,
-      sp.id,
       sp.quays?.map((q) => q.id),
     ),
   );
@@ -115,8 +113,6 @@ export const StopPlacesView = (props: Props) => {
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
-
-  const lastIndex = quays?.length ? quays.length - 1 : 0;
 
   return (
     <SectionList
@@ -219,30 +215,20 @@ export const StopPlacesView = (props: Props) => {
       testID={testID}
       keyExtractor={(item) => item.quay.id}
       renderItem={({item, index}) => (
-        <>
-          <QuaySection
-            quay={item.quay}
-            isLoading={state.isLoading}
-            departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
-            data={state.data}
-            didLoadingDataFail={didLoadingDataFail}
-            navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
-            testID={'quaySection' + index}
-            stopPlace={item.stopPlace}
-            showOnlyFavorites={showOnlyFavorites}
-            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
-            searchDate={searchStartTime}
-            mode={mode}
-          />
-          {mode === 'Departure' && index === lastIndex && (
-            <Feedback
-              viewContext="departures"
-              metadata={quayListData}
-              avoidResetOnMetadataUpdate
-            />
-          )}
-        </>
+        <QuaySection
+          quay={item.quay}
+          isLoading={state.isLoading}
+          departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
+          data={state.data}
+          didLoadingDataFail={didLoadingDataFail}
+          navigateToDetails={navigateToDetails}
+          navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
+          testID={'quaySection' + index}
+          showOnlyFavorites={showOnlyFavorites}
+          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
+          searchDate={searchStartTime}
+          mode={mode}
+        />
       )}
     />
   );
@@ -250,13 +236,10 @@ export const StopPlacesView = (props: Props) => {
 
 export function hasFavorites(
   favorites: UserFavoriteDepartures,
-  stopPlaceId?: string,
   quayIds?: string[],
 ) {
-  return favorites.some(
-    (favorite) =>
-      stopPlaceId === favorite.stopId ||
-      quayIds?.find((quayId) => favorite.quayId === quayId),
+  return favorites.some((favorite) =>
+    quayIds?.find((quayId) => favorite.quayId === quayId),
   );
 }
 

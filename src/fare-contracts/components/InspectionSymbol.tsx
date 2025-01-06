@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -8,12 +8,12 @@ import {
   PreassignedFareProduct,
   ProductTypeTransportModes,
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
 
@@ -27,9 +27,9 @@ export const InspectionSymbol = ({
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
@@ -39,7 +39,7 @@ export const InspectionSymbol = ({
     fareProductTypeConfig?.transportModes[0].subMode,
   );
 
-  const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
+  const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
 
   const themeColor = isInspectable
     ? theme.color.transport[transportColor].primary
@@ -76,7 +76,7 @@ const InspectableContent = ({
 }) => {
   const styles = useStyles();
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );

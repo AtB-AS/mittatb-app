@@ -4,13 +4,13 @@ import {
   NotificationConfigUpdate,
   updateNotificationConfig,
 } from './api';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 const QUERY_PARENT_KEY = 'notification/config';
 
 export const useNotificationConfig = () => {
   const queryClient = useQueryClient();
-  const {authStatus, userId} = useAuthState();
+  const {authStatus, userId} = useAuthContext();
 
   const query = useQuery({
     queryKey: [QUERY_PARENT_KEY, userId],

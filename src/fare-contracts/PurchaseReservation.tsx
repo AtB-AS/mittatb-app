@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {Reservation, PaymentType, useTicketingState} from '@atb/ticketing';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
@@ -19,8 +19,8 @@ type Props = {
 
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
-  const {theme} = useTheme();
-  const {customerProfile} = useTicketingState();
+  const {theme} = useThemeContext();
+  const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -124,7 +124,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
-    marginBottom: theme.spacing.medium,
   },
   extraText: {
     paddingVertical: theme.spacing.xSmall,

@@ -28,21 +28,17 @@ jobs:
     runs-on: ubuntu-24.04
     environment: atb
     timeout-minutes: 90
+    env:
+      ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
+      ENV_API_LEVEL: ${{ github.event.inputs.api_level || '30' }}
+      ENV_SYSTEM_IMAGE: ${{ github.event.inputs.system_image || 'default' }}
     steps:
       - name: Set env variables
-        env:
-          DEFAULT_BRANCH: 'master'
-          DEFAULT_API_LEVEL: 30
-          DEFAULT_SYSTEM_IMAGE: 'default'
-        run: |
-          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
-          echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
-          echo "INPUT_SYSTEM_IMAGE=${{ github.event.inputs.system_image || env.DEFAULT_SYSTEM_IMAGE }}" >> $GITHUB_ENV          
-          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.INPUT_BRANCH }}
+          ref: ${{ env.ENV_BRANCH }}
 
       # Download APK
       - name: Get AppCenter APK
@@ -74,27 +70,27 @@ jobs:
 
       # Emulator cache
       - name: Gradle cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default'
+        if: env.ENV_SYSTEM_IMAGE == 'default'
         uses: gradle/actions/setup-gradle@v3
       - name: AVD cache
-        if: env.INPUT_SYSTEM_IMAGE == 'default'
+        if: env.ENV_SYSTEM_IMAGE == 'default'
         uses: actions/cache@v4
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-pixel_5-${{ env.INPUT_SYSTEM_IMAGE }}-${{ env.INPUT_API_LEVEL }}
+          key: avd-pixel_5-${{ env.ENV_SYSTEM_IMAGE }}-${{ env.ENV_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true' || env.INPUT_SYSTEM_IMAGE != 'default'
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.ENV_SYSTEM_IMAGE != 'default'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: emulator-${{ env.INPUT_SYSTEM_IMAGE }}-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-${{ env.ENV_SYSTEM_IMAGE }}-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
-          target: ${{ env.INPUT_SYSTEM_IMAGE }}
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
@@ -107,10 +103,10 @@ jobs:
         with:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
-          target: ${{ env.INPUT_SYSTEM_IMAGE }}
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900

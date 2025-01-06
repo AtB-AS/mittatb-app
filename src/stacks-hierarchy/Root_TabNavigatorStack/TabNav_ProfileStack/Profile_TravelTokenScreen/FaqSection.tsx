@@ -7,12 +7,12 @@ import {
   HeaderSectionItem,
   Section,
 } from '@atb/components/sections';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {disable_travelcard} = useRemoteConfig();
+  const {disable_travelcard} = useRemoteConfigContext();
 
   return (
     <Section style={styles.faqSection}>

@@ -10,7 +10,7 @@ import {
   userProfileCountAndName,
   useTariffZoneSummary,
 } from '@atb/fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
@@ -134,7 +134,7 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {isInspectable} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContext();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)

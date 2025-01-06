@@ -10,7 +10,7 @@ import {getReferenceDataName} from '@atb/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import type {UserCountState} from './types';
 
 export function MultipleTravellersSelection({
@@ -19,7 +19,7 @@ export function MultipleTravellersSelection({
   removeCount,
 }: UserCountState) {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const travellersModified = useRef(false);
 

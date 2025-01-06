@@ -4,7 +4,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {View} from 'react-native';
 import React from 'react';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {areDefaultFiltersSelected} from '../utils';
 
@@ -19,7 +19,7 @@ export const SelectedFiltersButtons = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   if (!filtersSelection.transportModes) return null;
 
   if (areDefaultFiltersSelected(filtersSelection?.transportModes)) return null;

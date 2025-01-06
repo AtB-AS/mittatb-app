@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {hasProp} from '@atb/utils/object';
 import {RefObject, useRef} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
@@ -36,7 +36,7 @@ export const Camera = ({
   const camera = useRef<CameraKitCamera>(null);
   const styles = useStyles();
   const {isAuthorized} = usePermissions();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
 
   const handleCapture = async () => {

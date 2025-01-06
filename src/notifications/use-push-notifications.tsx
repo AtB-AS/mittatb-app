@@ -16,8 +16,8 @@ import {NotificationConfig} from './types';
 import {useNotificationConfig} from './use-notification-config';
 import {useRegister} from './use-register';
 import {getLanguageAndTextEnum} from '@atb/translations/utils';
-import {useAuthState} from '@atb/auth';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useAuthContext} from '@atb/auth';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type NotificationPermissionStatus =
   | 'granted'
@@ -50,8 +50,8 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const {mutate: mutateRegister} = registerMutation;
   const {query: configQuery, mutation: configMutation} =
     useNotificationConfig();
-  const {isPushNotificationsEnabled} = useFeatureToggles();
-  const {authStatus} = useAuthState();
+  const {isPushNotificationsEnabled} = useFeatureTogglesContext();
+  const {authStatus} = useAuthContext();
 
   const getFcmToken = useCallback(async () => {
     const token = await messaging().getToken();
@@ -155,11 +155,11 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useNotifications() {
+export function useNotificationsContext() {
   const context = useContext(NotificationContext);
   if (context === undefined) {
     throw new Error(
-      'useNotificationContextState must be used within a NotificationContextProvider',
+      'useNotificationContext must be used within a NotificationContextProvider',
     );
   }
   return context;

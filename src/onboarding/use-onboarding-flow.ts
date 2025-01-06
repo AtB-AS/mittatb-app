@@ -5,13 +5,13 @@ import {useCallback, useEffect, useState} from 'react';
 import {PartialRoute, Route} from '@react-navigation/native';
 
 import {
-  useOnboardingState,
+  useOnboardingContext,
   OnboardingSection,
   OnboardingSectionId,
 } from '@atb/onboarding';
 
 export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
-  const {onboardingSections} = useOnboardingState();
+  const {onboardingSections} = useOnboardingContext();
 
   const getNextOnboardingSection = useCallback(
     (

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {
   ColorValue,
   Platform,
@@ -35,7 +35,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, useAndroidSystemFont} = useTheme();
+  const {theme, useAndroidSystemFont} = useThemeContext();
   const textColor = useColor(color, type);
 
   const typeStyle = {
@@ -92,7 +92,7 @@ function useColor(
   color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
   type: keyof ContrastColor['foreground'],
 ) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   if (typeof color === 'object') {
     return color.foreground[type];
   } else if (isStatusColor(color, theme)) {

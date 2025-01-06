@@ -16,7 +16,7 @@ let mockRetryAuthInvoked = false;
 let mockRetryFirestoreConfigInvoked = false;
 
 jest.mock('@atb/auth', () => ({
-  useAuthState: () => ({
+  useAuthContext: () => ({
     userId: mockState.userId,
     authStatus: mockState.authStatus,
     retryAuth: () => {
@@ -25,7 +25,7 @@ jest.mock('@atb/auth', () => ({
   }),
 }));
 jest.mock('@atb/configuration', () => ({
-  useFirestoreConfiguration: () => ({
+  useFirestoreConfigurationContext: () => ({
     firestoreConfigStatus: mockState.firestoreConfigStatus,
     resubscribeFirestoreConfig: () => {
       mockRetryFirestoreConfigInvoked = true;
@@ -37,7 +37,7 @@ jest.mock('@atb/loading-screen', () => ({
 }));
 
 jest.mock('@atb/RemoteConfigContext', () => ({
-  useRemoteConfig: () => ({
+  useRemoteConfigContext: () => ({
     isLoaded: mockState.remoteConfigIsLoaded,
   }),
 }));

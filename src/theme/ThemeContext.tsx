@@ -1,7 +1,7 @@
 import {RCTChangeNative} from '@atb/change-native';
 import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
-import {usePreferences} from '../preferences';
+import {usePreferencesContext} from '../preferences';
 import {Mode, Theme, Themes, themes} from './colors';
 
 interface ThemeContextValue {
@@ -30,7 +30,7 @@ export const ThemeContext = createContext<ThemeContextValue>({
   updateAndroidFontOverride() {},
 });
 
-export function useTheme() {
+export function useThemeContext() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeContextProvider');
@@ -47,7 +47,7 @@ export const ThemeContextProvider: React.FC = ({children}) => {
       overrideSystemAppearance,
       useAndroidSystemFont,
     },
-  } = usePreferences();
+  } = usePreferencesContext();
 
   const actualColorScheme =
     (overrideSystemAppearance ? storedColorScheme : colorScheme) ?? 'light';

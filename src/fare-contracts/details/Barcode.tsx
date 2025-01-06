@@ -1,12 +1,12 @@
 import DeviceBrightness from '@adrianso/react-native-device-brightness';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useMobileTokenContext} from '@atb/mobile-token';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -26,7 +26,7 @@ type Props = {
 };
 
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
-  const {mobileTokenStatus} = useMobileTokenContextState();
+  const {mobileTokenStatus} = useMobileTokenContext();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
 
@@ -119,7 +119,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
 
 const BarcodeError = () => {
   const {t} = useTranslation();
-  const {retry} = useMobileTokenContextState();
+  const {retry} = useMobileTokenContext();
 
   return (
     <GenericSectionItem>
@@ -138,7 +138,7 @@ const BarcodeError = () => {
 
 const DeviceNotInspectable = () => {
   const {t} = useTranslation();
-  const {tokens} = useMobileTokenContextState();
+  const {tokens} = useMobileTokenContext();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   if (!inspectableToken) return null;
   const message =
@@ -166,7 +166,7 @@ const DeviceNotInspectable = () => {
 };
 
 const LoadingBarcode = () => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={{flex: 1}}>
       <ActivityIndicator
@@ -283,7 +283,7 @@ function useStaticBarcodeBottomSheet(
     open: openBottomSheet,
     close: closeBottomSheet,
     onOpenFocusRef,
-  } = useBottomSheet();
+  } = useBottomSheetContext();
 
   const onOpenBarcodePress = () => {
     openBottomSheet(

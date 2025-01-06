@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
 
 import {Button, ButtonProps} from '@atb/components/button';
@@ -28,7 +28,7 @@ export const OnboardingFullScreenView = ({
   secondaryTestID,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   const interactiveColor = theme.color.interactive[0];
 

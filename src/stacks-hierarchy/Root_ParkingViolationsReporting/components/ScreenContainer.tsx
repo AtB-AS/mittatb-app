@@ -1,7 +1,7 @@
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -22,7 +22,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ScreenContainer = (props: Props) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   return (
@@ -53,7 +53,7 @@ const LoadingBody = () => {
 
 const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
   return (
