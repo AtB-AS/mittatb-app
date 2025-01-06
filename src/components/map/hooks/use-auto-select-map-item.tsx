@@ -16,7 +16,11 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
+import {
+  MapSelectionActionType,
+  SLIGHTLY_RAISED_MAP_PADDING,
+} from '@atb/components/map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 /**
  * When a new bottomSheetToAutoSelect is set and isn't already selected,
@@ -25,6 +29,7 @@ import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 export const useAutoSelectMapItem = (
   mapCameraRef: React.RefObject<CameraRef>,
   onReportParkingViolation: () => void,
+  onMapClick: (sc: MapSelectionActionType) => void,
 ) => {
   const {
     bottomSheetToAutoSelect,
@@ -32,12 +37,13 @@ export const useAutoSelectMapItem = (
     setBottomSheetCurrentlyAutoSelected,
   } = useMapState();
   const isFocused = useIsFocusedAndActive();
-  const {open: openBottomSheet, close} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet(); // close
 
   const closeBottomSheet = useCallback(() => {
-    close();
+    //close(); // not needed?
+    onMapClick({source: 'qr-scan', feature: undefined});
     setBottomSheetCurrentlyAutoSelected(undefined);
-  }, [close, setBottomSheetCurrentlyAutoSelected]);
+  }, [setBottomSheetCurrentlyAutoSelected, onMapClick]); // close,
 
   const flyToMapItemLocation = useCallback(
     (
@@ -54,12 +60,35 @@ export const useAutoSelectMapItem = (
           },
           padding: SLIGHTLY_RAISED_MAP_PADDING,
           mapCameraRef,
-          // zoom level removed here for now due to performance bug
-          // the bug has to do with onMapIdle being called too often
-          //zoomLevel: 17
+          zoomLevel: 19, // 1 more than the max cluster zoom server side
         });
     },
     [mapCameraRef],
+  );
+
+  const onItemReceived = useCallback(
+    (
+      item: VehicleExtendedFragment | BikeStationFragment | CarStationFragment,
+      vehicle_type_form_factor: FormFactor,
+    ) => {
+      console.log('item', JSON.stringify(item));
+      onMapClick({
+        source: 'qr-scan',
+        feature: {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [item.lon, item.lat],
+          },
+          properties: {
+            ...item, // todo: also get system_id on item, so that the spcecific instead of generic icon will be selected
+            vehicle_type_form_factor,
+          },
+        },
+      });
+      flyToMapItemLocation(item);
+    },
+    [flyToMapItemLocation, onMapClick],
   );
 
   /**
@@ -77,7 +106,9 @@ export const useAutoSelectMapItem = (
               <ScooterSheet
                 vehicleId={bottomSheetToAutoSelect.id}
                 onClose={closeBottomSheet}
-                onVehicleReceived={flyToMapItemLocation}
+                onVehicleReceived={(item) =>
+                  onItemReceived(item, FormFactor.Scooter)
+                }
                 onReportParkingViolation={onReportParkingViolation}
               />
             );
@@ -87,7 +118,9 @@ export const useAutoSelectMapItem = (
               <BicycleSheet
                 vehicleId={bottomSheetToAutoSelect.id}
                 onClose={closeBottomSheet}
-                onVehicleReceived={flyToMapItemLocation}
+                onVehicleReceived={(item) =>
+                  onItemReceived(item, FormFactor.Bicycle)
+                }
               />
             );
             break;
@@ -97,7 +130,9 @@ export const useAutoSelectMapItem = (
                 stationId={bottomSheetToAutoSelect.id}
                 distance={undefined}
                 onClose={closeBottomSheet}
-                onStationReceived={flyToMapItemLocation}
+                onStationReceived={(item) =>
+                  onItemReceived(item, FormFactor.Bicycle)
+                }
               />
             );
             break;
@@ -107,7 +142,9 @@ export const useAutoSelectMapItem = (
                 stationId={bottomSheetToAutoSelect.id}
                 distance={undefined}
                 onClose={closeBottomSheet}
-                onStationReceived={flyToMapItemLocation}
+                onStationReceived={(item) =>
+                  onItemReceived(item, FormFactor.Car)
+                }
               />
             );
             break;
@@ -132,5 +169,6 @@ export const useAutoSelectMapItem = (
     setBottomSheetToAutoSelect,
     onReportParkingViolation,
     setBottomSheetCurrentlyAutoSelected,
+    onItemReceived,
   ]);
 };

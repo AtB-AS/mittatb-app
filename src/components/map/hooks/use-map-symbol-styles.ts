@@ -17,7 +17,7 @@ export const useMapSymbolStyles = (
 
   const count = ['get', 'count'];
   const numVehiclesAvailable = ['get', 'num_vehicles_available'];
-  const isCluster = ['!=', count, 1];
+  const isCluster = ['all', ['has', 'count'], ['!=', count, 1]];
   const mapItemIconNonClusterState = [
     'case',
     isSelected,
@@ -48,7 +48,7 @@ export const useMapSymbolStyles = (
     'citybike',
     ['==', vehicle_type_form_factor, 'CAR'],
     'sharedcar',
-    'scooter', // fallback
+    'non-existing-icon',
   ];
 
   const systemId = ['get', 'system_id'];

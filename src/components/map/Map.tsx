@@ -59,6 +59,7 @@ import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {useIsFocused} from '@react-navigation/native';
 import {NationalStopRegistryFeatures} from './NationalStopRegistryFeatures';
 import {VehiclePropertiesSchema} from '@atb/api/types/mobility';
+import {isVehicleFeature} from '@atb/mobility/utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -96,7 +97,7 @@ export const Map = (props: MapProps) => {
     mapCameraRef,
     startingCoordinates,
   );
-
+  //console.log('selectedFeature', JSON.stringify(selectedFeature));
   const {bottomSheetCurrentlyAutoSelected} = useMapState();
 
   const aVehicleIsAutoSelected =
@@ -129,7 +130,7 @@ export const Map = (props: MapProps) => {
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
-  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
+  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation, onMapClick);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -158,6 +159,14 @@ export const Map = (props: MapProps) => {
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
 
+      // should split components instead of this, ExploreLocation should only depend on location state, not features
+      if (props.selectionMode == 'ExploreLocation') {
+        onMapClick({
+          source: 'map-click',
+          feature,
+        });
+      }
+
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
@@ -169,7 +178,6 @@ export const Map = (props: MapProps) => {
             ? currentFeature
             : selected,
       );
-
       /**
        * this hides the Snackbar when a feature is clicked,
        * unless the feature is a geofencingZone, in which case
@@ -202,10 +210,17 @@ export const Map = (props: MapProps) => {
               animationDuration: 200,
             });
           } else {
-            onMapClick({
-              source: 'map-click',
-              feature: featureToSelect,
-            });
+            if (
+              isStopPlaceFeature(featureToSelect) ||
+              isVehicleFeature(featureToSelect) ||
+              isStationFeature(featureToSelect) ||
+              isParkAndRideFeature(featureToSelect)
+            ) {
+              onMapClick({
+                source: 'map-click',
+                feature: featureToSelect,
+              });
+            }
           }
         } else if (isVehiclesClusteredFeature(selectedFeature)) {
           // outside of operational area, rules unspecified
@@ -213,7 +228,13 @@ export const Map = (props: MapProps) => {
         }
       }
     },
-    [geofencingZoneOnPress, hideSnackbar, onMapClick, selectedFeature],
+    [
+      geofencingZoneOnPress,
+      hideSnackbar,
+      onMapClick,
+      selectedFeature,
+      props.selectionMode,
+    ],
   );
 
   const [initialZoomLevel, setInitialZoomLevel] = useState(15);
@@ -239,7 +260,7 @@ export const Map = (props: MapProps) => {
 
   return (
     <View style={styles.container}>
-      {props.selectionMode === 'ExploreLocation' && (
+      {props.selectionMode === 'ExploreLocation' && ( // should split components instead
         <LocationBar
           coordinates={selectedCoordinates || startingCoordinates}
           onSelect={props.onLocationSelect}
@@ -282,9 +303,18 @@ export const Map = (props: MapProps) => {
           )}
           {mapLines && <MapRoute lines={mapLines} />}
 
-          <NationalStopRegistryFeatures selectedFeature={selectedFeature} />
+          <NationalStopRegistryFeatures
+            selectedFeature={
+              selectedFeature
+              // props.selectionMode === 'ExploreLocation' // should split components instead
+              //   ? undefined // todo: SelectionPin must be a SymbolLayer to control aboveLayerId
+              //   : selectedFeature // alternatively: move the map instead of the pin, draw the pin outside mapbox
+            }
+          />
 
-          <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          {props.selectionMode !== 'ExploreLocation' && ( // should split components instead
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (

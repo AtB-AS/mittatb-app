@@ -38,6 +38,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'qr-scan') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       setCameraFocusMode({
         mode: 'coordinates',
         coordinates: mapPositionToCoordinates(

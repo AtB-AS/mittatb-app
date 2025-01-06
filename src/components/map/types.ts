@@ -80,6 +80,10 @@ export type MapSelectionActionType =
       feature: Feature<Point>;
     }
   | {
+      source: 'qr-scan';
+      feature: Feature<Point> | undefined;
+    }
+  | {
       source: 'cluster-click';
       feature: Feature<Point, ClusterOfVehiclesProperties>;
     }

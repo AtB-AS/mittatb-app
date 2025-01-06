@@ -328,6 +328,7 @@ const useCircleAndTextItems = () => {
   const {theme} = useTheme();
   return [
     {
+      // Quays from mapbox geojson via the asag repo do not contain info to know which stopPlaceType it belongs to. As a Martin Tile Vector Source though, we can add add this. E.g. then we can select boat instead of city for boat harbour quays.
       id: 'quays.nsr.api',
       showAsDefaultAtZoomLevel: 17.5,
       filter: ['all', ['match', ['get', 'entityType'], ['Quay'], true, false]],

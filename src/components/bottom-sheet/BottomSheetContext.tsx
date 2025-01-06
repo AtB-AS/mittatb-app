@@ -85,7 +85,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
       'hardwareBackPress',
       () => {
         if (isOpen) {
-          close();
+          close(); // not compatible with custom onClose for Header
           return true;
         }
         return false;

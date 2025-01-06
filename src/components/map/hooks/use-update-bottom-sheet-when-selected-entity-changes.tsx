@@ -56,7 +56,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   useEffect(() => {
     (async function () {
       const selectedFeature =
-        mapSelectionAction?.source === 'map-click'
+        mapSelectionAction?.source === 'map-click' ||
+        mapSelectionAction?.source === 'qr-scan'
           ? mapSelectionAction.feature
           : undefined;
       setSelectedFeature(selectedFeature);
@@ -96,7 +97,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       }
 
       if (!selectedFeature) {
-        closeBottomSheet();
+        mapSelectionAction?.source !== 'qr-scan' && closeBottomSheet();
         return;
       }
       if (isStopPlaceFeature(selectedFeature)) {
@@ -181,7 +182,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           );
         }, false);
       } else {
-        closeBottomSheet();
+        if (mapSelectionAction?.source !== 'qr-scan') {
+          closeBottomSheet();
+        }
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
