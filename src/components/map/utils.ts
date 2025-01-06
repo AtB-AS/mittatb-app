@@ -17,6 +17,7 @@ import {
   MapSelectionActionType,
   MapPadding,
   ParkingType,
+  GeofencingZoneCustomProps,
 } from './types';
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
@@ -91,8 +92,12 @@ export const hasProperties = (f: Feature) =>
 export const hasGeofencingZoneCustomProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
-export const isFeatureGeofencingZone = (f: Feature) =>
-  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
+export const isFeatureGeofencingZone = (
+  f: Feature,
+): f is Feature<
+  MultiPolygon,
+  {geofencingZoneCustomProps: GeofencingZoneCustomProps}
+> => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
 export const isClusterFeature = (
   feature: Feature,
