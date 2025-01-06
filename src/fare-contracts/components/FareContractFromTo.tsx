@@ -57,10 +57,20 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
     if (hasFareContract(props)) {
       const travelRight = props.fc.travelRights[0];
       if (isNormalTravelRight(travelRight)) {
-        return travelRight.direction;
+        if (!!travelRight.direction) {
+          // A travelRight between quays (e.g. for boat)
+          return travelRight.direction;
+        } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
+          // A travelRight between several zones (e.g. for bus)
+          return TravelRightDirection.Both;
+        }
       }
     } else if (hasRecentFareContract(props)) {
-      return props.rfc.direction;
+      if (!!props.rfc.direction) {
+        return props.rfc.direction;
+      } else if (props.rfc.fromTariffZone?.id !== props.rfc.toTariffZone?.id) {
+        return TravelRightDirection.Both;
+      }
     }
   })();
 
@@ -84,7 +94,6 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
     return (
       <ZonesFromTo
         tarifZoneRefs={tariffZoneRefs}
-        direction={direction}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
@@ -105,17 +114,11 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
 
 type ZonesProps = {
   tarifZoneRefs: string[];
-  direction?: TravelRightDirection;
   mode: 'small' | 'large';
   backgroundColor: ContrastColor;
 };
 
-const ZonesFromTo = ({
-  tarifZoneRefs,
-  direction,
-  mode,
-  backgroundColor,
-}: ZonesProps) => {
+const ZonesFromTo = ({tarifZoneRefs, mode, backgroundColor}: ZonesProps) => {
   const {tariffZones} = useFirestoreConfigurationContext();
   const {t, language} = useTranslation();
 
@@ -140,7 +143,7 @@ const ZonesFromTo = ({
     <BorderedFromToBox
       fromText={fromZoneText}
       toText={toZoneText}
-      direction={direction}
+      direction={TravelRightDirection.Both}
       mode={mode}
       backgroundColor={backgroundColor}
     />
@@ -281,11 +284,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   largeContent: {
     flexDirection: 'column',
     alignItems: 'center',
+    rowGap: theme.spacing.xSmall,
   },
   smallContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+    columnGap: theme.spacing.xSmall,
   },
   smallContentText: {
     flexDirection: 'column',
