@@ -212,7 +212,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.large,
   },
   detailRow: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
