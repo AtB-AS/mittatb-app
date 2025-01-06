@@ -219,6 +219,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     columnGap: theme.spacing.small,
   },
   fareContractDetailItems: {
+    flex: 1,
     rowGap: theme.spacing.xSmall,
   },
 }));
