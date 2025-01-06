@@ -204,6 +204,33 @@ export const DepartureDetailsScreenComponent = ({
     transportSubmode: subMode,
   };
 
+  const handleTravelAidPress = () => {
+    analytics.logEvent('Journey aid', 'Open journey aid clicked', {
+      screenReaderEnabled,
+    });
+    onPressTravelAid();
+  };
+
+  const handleMapButtonPress = () => {
+    if (!mapData) return;
+    if (vehiclePosition) {
+      analytics.logEvent('Departure details', 'See live bus clicked', {
+        fromPlace: mapData.start,
+        toPlace: mapData?.stop,
+        mode: mode,
+        subMode: subMode,
+      });
+    }
+    onPressDetailsMap({
+      legs: mapData.mapLegs,
+      fromPlace: mapData.start,
+      toPlace: mapData.stop,
+      vehicleWithPosition: vehiclePosition,
+      mode: mode,
+      subMode: subMode,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -235,16 +262,7 @@ export const DepartureDetailsScreenComponent = ({
             {shouldShowTravelAid && (
               <Button
                 style={styles.travelAidButton}
-                onPress={() => {
-                  analytics.logEvent(
-                    'Journey aid',
-                    'Open journey aid clicked',
-                    {
-                      screenReaderEnabled,
-                    },
-                  );
-                  onPressTravelAid();
-                }}
+                onPress={handleTravelAidPress}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
                 testID="journeyAidButton"
@@ -262,27 +280,7 @@ export const DepartureDetailsScreenComponent = ({
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor={interactiveColor}
-                    onPress={() => {
-                      vehiclePosition &&
-                        analytics.logEvent(
-                          'Departure details',
-                          'See live bus clicked',
-                          {
-                            fromPlace: mapData.start,
-                            toPlace: mapData?.stop,
-                            mode: mode,
-                            subMode: subMode,
-                          },
-                        );
-                      onPressDetailsMap({
-                        legs: mapData.mapLegs,
-                        fromPlace: mapData.start,
-                        toPlace: mapData.stop,
-                        vehicleWithPosition: vehiclePosition,
-                        mode: mode,
-                        subMode: subMode,
-                      });
-                    }}
+                    onPress={handleMapButtonPress}
                   />
                 ) : null}
                 {shouldShowFavoriteButton && (
