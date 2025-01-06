@@ -136,6 +136,7 @@ export const ScooterSheet = ({
               )}
               {isParkingViolationsReportingEnabled && (
                 <Button
+                  expand={true}
                   style={styles.parkingViolationsButton}
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"

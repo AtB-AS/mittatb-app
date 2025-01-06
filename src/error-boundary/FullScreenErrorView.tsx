@@ -39,6 +39,7 @@ export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
             Tusen takk for at du gjør oss bedre!
           </ThemeText>
           <Button
+            expand={true}
             text="Start appen på nytt"
             onPress={onRestartApp}
             style={styles.button}

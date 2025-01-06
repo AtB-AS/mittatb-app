@@ -65,6 +65,7 @@ export const MapFilterSheet = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
+          expand={true}
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={() => {
             setMapFilter(filter);

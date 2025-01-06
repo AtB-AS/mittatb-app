@@ -105,6 +105,7 @@ const TariffZonesSelectorMap = ({
               ]}
             >
               <Button
+                expand={true}
                 onPress={onSave}
                 interactiveColor={interactiveColor}
                 text={t(TariffZonesTexts.saveButton.text)}
@@ -206,6 +207,7 @@ const TariffZonesSelectorMap = ({
             {onSave && (
               <View style={styles.saveButton}>
                 <Button
+                  expand={true}
                   onPress={onSave}
                   interactiveColor={interactiveColor}
                   text={t(TariffZonesTexts.saveButton.text)}

@@ -43,6 +43,7 @@ export const CompactFareContracts: React.FC<Props> = ({
       />
       {validFareContracts.length == 0 ? (
         <Button
+          expand={true}
           text={t(DashboardTexts.buyButton)}
           onPress={onPressBuy}
           testID="buyTicketsButton"

@@ -225,6 +225,7 @@ export const DepartureDetailsScreenComponent = ({
             </View>
             {shouldShowTravelAid && (
               <Button
+                expand={true}
                 style={styles.travelAidButton}
                 onPress={() => {
                   analytics.logEvent(

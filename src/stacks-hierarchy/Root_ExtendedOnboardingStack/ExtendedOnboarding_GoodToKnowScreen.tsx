@@ -42,6 +42,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
       </View>
       <View style={styles.bottomView}>
         <Button
+          expand={true}
           interactiveColor={interactiveColor}
           onPress={() =>
             navigation.navigate('ExtendedOnboarding_AlsoGoodToKnowScreen')

@@ -102,6 +102,7 @@ export const JourneyDatePickerScreenComponent = ({
         )}
 
         <Button
+          expand={true}
           onPress={onSelect}
           interactiveColor={interactiveColor}
           text={t(JourneyDatePickerTexts.searchButton.text)}

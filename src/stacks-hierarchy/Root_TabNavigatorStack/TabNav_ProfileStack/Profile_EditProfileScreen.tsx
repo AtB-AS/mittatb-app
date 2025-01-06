@@ -215,6 +215,7 @@ export const Profile_EditProfileScreen = ({
 
               <View style={styles.submitSection}>
                 <Button
+                  expand={true}
                   mode="primary"
                   text={t(EditProfileTexts.button.save)}
                   onPress={onSubmit}
@@ -275,6 +276,7 @@ export const Profile_EditProfileScreen = ({
           </View>
           <View style={styles.deleteProfile}>
             <Button
+              expand={true}
               mode="primary"
               interactiveColor={theme.color.interactive.destructive}
               leftIcon={{svg: Delete}}

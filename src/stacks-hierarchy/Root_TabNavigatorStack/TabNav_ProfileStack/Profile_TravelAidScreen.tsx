@@ -69,6 +69,7 @@ export const Profile_TravelAidScreen = () => {
             <View style={styles.buttonContainer}>
               {hasContactPhoneNumber && (
                 <Button
+                  expand={true}
                   mode="secondary"
                   backgroundColor={backgroundColor}
                   text={t(TravelAidSettingsTexts.button.contact.title)}

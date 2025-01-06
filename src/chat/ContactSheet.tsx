@@ -47,6 +47,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
         <View style={styles.buttonContainer}>
           {showWebsiteFeedback ? (
             <Button
+              expand={true}
               interactiveColor={getInteractiveColor(theme)}
               text={t(ContactSheetTexts.customer_feedback_website.button)}
               accessibilityHint={t(
@@ -64,6 +65,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
 
           {showIntercomFeedback ? (
             <Button
+              expand={true}
               {...screenReaderHidden}
               text={t(ContactSheetTexts.customer_feedback.button)}
               accessibilityHint={t(
@@ -87,6 +89,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             />
           ) : undefined}
           <Button
+            expand={true}
             backgroundColor={getBackgroundColor(theme)}
             text={t(ContactSheetTexts.customer_service.button)}
             accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
@@ -101,6 +104,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
           />
           {isParkingViolationsReportingEnabled && (
             <Button
+              expand={true}
               backgroundColor={getBackgroundColor(theme)}
               text={t(ContactSheetTexts.parking_violations.buttonText)}
               accessibilityHint={t(

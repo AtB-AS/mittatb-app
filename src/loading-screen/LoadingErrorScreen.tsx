@@ -60,6 +60,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
         </View>
         <View>
           <Button
+            expand={true}
             text={t(dictionary.retry)}
             onPress={() => {
               analytics.logEvent(
@@ -71,6 +72,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
             testID="retryAuthButton"
           />
           <Button
+            expand={true}
             style={styles.customerServiceButton}
             onPress={() => {
               analytics.logEvent(

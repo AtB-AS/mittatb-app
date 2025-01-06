@@ -326,6 +326,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
+                  expand={true}
                   text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
@@ -373,6 +374,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
             ) : (
               <Button
+                expand={true}
                 interactiveColor={interactiveColor}
                 text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
                 disabled={!!offerError}

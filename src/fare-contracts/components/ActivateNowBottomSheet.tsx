@@ -66,6 +66,7 @@ export const ActivateNowBottomSheet = ({fareContractId}: Props) => {
           </GenericSectionItem>
         </Section>
         <Button
+          expand={true}
           onPress={onActivate}
           text={t(FareContractTexts.activateNow.confirm)}
           rightIcon={{svg: Confirm}}

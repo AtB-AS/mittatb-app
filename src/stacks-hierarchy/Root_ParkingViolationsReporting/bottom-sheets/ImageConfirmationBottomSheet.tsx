@@ -50,11 +50,13 @@ export const ImageConfirmationBottomSheet = ({
           </View>
         </View>
         <Button
+          expand={true}
           style={styles.button}
           onPress={onConfirm}
           text={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
         />
         <Button
+          expand={true}
           style={styles.button}
           mode="secondary"
           onPress={close}

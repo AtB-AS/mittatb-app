@@ -85,6 +85,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
         <Ticket style={styles.illustration} />
         <View style={styles.buttonView}>
           <Button
+            expand={true}
             interactiveColor={theme.color.interactive[0]}
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}

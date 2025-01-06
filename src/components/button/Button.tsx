@@ -18,6 +18,7 @@ import {shadows} from '@atb/components/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
+type ButtonType = 'large' | 'small';
 
 type ButtonSettings = {
   withBackground: boolean;
@@ -39,11 +40,6 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   },
 };
 
-type ButtonTypeAwareProps =
-  | {text: string; type?: 'large'}
-  | {text?: string; type: 'medium'}
-  | {text: string; type: 'small'};
-
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
@@ -59,15 +55,17 @@ type ButtonModeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
+  text?: string;
+  type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  expand?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
-} & ButtonTypeAwareProps &
-  ButtonModeAwareProps &
+} & ButtonModeAwareProps &
   PressableProps;
 
 const DISABLED_OPACITY = 0.2;
@@ -77,7 +75,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     {
       onPress,
       mode = 'primary',
-      type = 'block',
+      type = 'large',
       leftIcon,
       rightIcon,
       text,
@@ -85,6 +83,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
+      expand = false,
       hasShadow = false,
       style,
       ...props
@@ -117,7 +116,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'medium' || type === 'small';
+    const isInline = !expand;
 
     const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =

@@ -156,6 +156,7 @@ export const SelectFavouritesBottomSheet = ({
       <FullScreenFooter>
         <View style={styles.buttonContainer}>
           <Button
+            expand={true}
             interactiveColor={theme.color.interactive[0]}
             text={t(SelectFavouriteDeparturesText.confirm_button.text)}
             accessibilityHint={t(
@@ -167,6 +168,7 @@ export const SelectFavouritesBottomSheet = ({
             testID="confirmButton"
           />
           <Button
+            expand={true}
             text={t(SelectFavouriteDeparturesText.edit_button.text)}
             accessibilityHint={t(
               SelectFavouriteDeparturesText.edit_button.a11yhint,
