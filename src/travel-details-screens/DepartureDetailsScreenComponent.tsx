@@ -241,44 +241,45 @@ export const DepartureDetailsScreenComponent = ({
                 testID="journeyAidButton"
               />
             )}
-            {shouldShowMapButton ? (
-              <View style={styles.actionButtons}>
-                <Button
-                  type="small"
-                  leftIcon={{svg: Map}}
-                  text={t(
-                    vehiclePosition
-                      ? DepartureDetailsTexts.live(t(translatedModeName))
-                      : DepartureDetailsTexts.map,
-                  )}
-                  interactiveColor={interactiveColor}
-                  onPress={() => {
-                    vehiclePosition &&
-                      analytics.logEvent(
-                        'Departure details',
-                        'See live bus clicked',
-                        {
-                          fromPlace: mapData.start,
-                          toPlace: mapData?.stop,
-                          mode: mode,
-                          subMode: subMode,
-                        },
-                      );
-                    onPressDetailsMap({
-                      legs: mapData.mapLegs,
-                      fromPlace: mapData.start,
-                      toPlace: mapData.stop,
-                      vehicleWithPosition: vehiclePosition,
-                      mode: mode,
-                      subMode: subMode,
-                    });
-                  }}
-                />
-              </View>
-            ) : null}
-            {realtimeText && !activeItem.isTripCancelled && (
+            {((realtimeText && !activeItem.isTripCancelled) ||
+              shouldShowMapButton) && (
               <View style={styles.headerSubSection}>
-                <LastPassedStop realtimeText={realtimeText} />
+                {realtimeText && !activeItem.isTripCancelled && (
+                  <LastPassedStop realtimeText={realtimeText} />
+                )}
+                {shouldShowMapButton && (
+                  <Button
+                    type="small"
+                    leftIcon={{svg: Map}}
+                    text={t(
+                      vehiclePosition
+                        ? DepartureDetailsTexts.live(t(translatedModeName))
+                        : DepartureDetailsTexts.map,
+                    )}
+                    interactiveColor={interactiveColor}
+                    onPress={() => {
+                      vehiclePosition &&
+                        analytics.logEvent(
+                          'Departure details',
+                          'See live bus clicked',
+                          {
+                            fromPlace: mapData.start,
+                            toPlace: mapData?.stop,
+                            mode: mode,
+                            subMode: subMode,
+                          },
+                        );
+                      onPressDetailsMap({
+                        legs: mapData.mapLegs,
+                        fromPlace: mapData.start,
+                        toPlace: mapData.stop,
+                        vehicleWithPosition: vehiclePosition,
+                        mode: mode,
+                        subMode: subMode,
+                      });
+                    }}
+                  />
+                )}
               </View>
             )}
           </View>
@@ -396,11 +397,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
 
   return (
     <View style={styles.passedSection}>
-      <ThemeText
-        typography="body__secondary"
-        color={themeColor}
-        style={styles.passedText}
-      >
+      <ThemeText typography="body__secondary" color={themeColor}>
         {realtimeText}
       </ThemeText>
     </View>
@@ -709,6 +706,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: theme.spacing.small,
   },
   border: {
     borderColor: theme.color.background.neutral[3].background,
@@ -717,12 +716,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     minWidth: '50%',
     flex: 1,
-  },
-  passedText: {
-    alignItems: 'center',
   },
   startPlace: {
     marginTop: theme.spacing.medium,
