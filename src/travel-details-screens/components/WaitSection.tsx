@@ -22,16 +22,15 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
   const shortWait = timeIsShort(wait.waitTimeInSeconds);
-  const iconColor = useTransportationColor(
-    undefined,
-    undefined,
-    false,
-    'secondary',
-  ).background;
+  const legColor = useTransportationColor();
 
   return (
     <View style={style.section}>
-      <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
+      <TripLegDecoration
+        color={legColor.secondary.background}
+        hasStart={false}
+        hasEnd={false}
+      />
       {shortWait && (
         <TripRow>
           <MessageInfoBox
@@ -40,7 +39,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
           />
         </TripRow>
       )}
-      <TripRow rowLabel={<ThemeIcon svg={Time} color={iconColor} />}>
+      <TripRow rowLabel={<ThemeIcon svg={Time} color={legColor.secondary} />}>
         <ThemeText typography="body__secondary" color="secondary">
           {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>

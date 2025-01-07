@@ -105,8 +105,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
-    'secondary',
-  ).background;
+  ).secondary.background;
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -537,12 +536,7 @@ function InterchangeSection({
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const secondaryColor = useTransportationColor(
-    undefined,
-    undefined,
-    false,
-    'secondary',
-  );
+  const legColor = useTransportationColor().secondary;
 
   let text = '';
   if (publicCode && staySeated) {
@@ -585,7 +579,7 @@ function InterchangeSection({
   return (
     <View style={style.interchangeSection}>
       <TripLegDecoration
-        color={secondaryColor.background}
+        color={legColor.background}
         hasStart={false}
         hasEnd={false}
       />

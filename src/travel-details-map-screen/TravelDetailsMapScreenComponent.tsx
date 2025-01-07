@@ -254,7 +254,7 @@ const LiveVehicleMarker = ({
   isError,
 }: VehicleIconProps) => {
   const {theme} = useThemeContext();
-  const fillColor = useTransportationColor(mode, subMode, false).background;
+  const fillColor = useTransportationColor(mode, subMode).primary.background;
   const {live_vehicle_stale_threshold} = useRemoteConfigContext();
 
   const [isStale, setIsStale] = useState(false);
@@ -273,9 +273,7 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  const circleColor = useTransportationColor(mode, subMode).background;
-
-  let circleBackgroundColor = circleColor;
+  let circleBackgroundColor = fillColor;
   let circleBorderColor = 'transparent';
   if (isError) {
     circleBackgroundColor =
@@ -362,7 +360,8 @@ const LiveVehicleIcon = ({
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useThemeContext();
-  const fillColor = useTransportationColor(mode, subMode).foreground.primary;
+  const fillColor = useTransportationColor(mode, subMode).primary.foreground
+    .primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)

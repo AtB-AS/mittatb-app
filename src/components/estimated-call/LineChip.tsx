@@ -35,7 +35,7 @@ export function LineChip({
   const transportColor = useTransportationColor(
     transportMode,
     transportSubmode,
-  );
+  ).primary;
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const icon = messageType && messageTypeToIcon(messageType, true, themeName);
 

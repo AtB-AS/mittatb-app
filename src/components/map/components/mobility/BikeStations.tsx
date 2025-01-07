@@ -15,19 +15,12 @@ type Props = {
 };
 
 export const BikeStations = ({stations, onClusterClick}: Props) => {
-  const stationBackgroundColor = useTransportationColor(
-    Mode.Bicycle,
-  ).background;
-  const stationTextColor = useTransportationColor(
-    Mode.Bicycle,
-    undefined,
-    false,
-  ).foreground.primary;
+  const bicycleColor = useTransportationColor(Mode.Bicycle).primary;
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const symbolStyling = {
     textAnchor: 'center',
     textOffset: [0.75, 0],
-    textColor: stationBackgroundColor,
+    textColor: bicycleColor.background,
     textSize: 12,
     iconImage: 'BikeChip',
     iconAllowOverlap: true,
@@ -81,8 +74,8 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
           maxZoomLevel={13}
           minZoomLevel={12}
           style={{
-            circleColor: stationBackgroundColor,
-            circleStrokeColor: stationTextColor,
+            circleColor: bicycleColor.background,
+            circleStrokeColor: bicycleColor.foreground.primary,
             circleOpacity: 0.7,
             circleStrokeOpacity: 0.7,
             circleRadius: 4,

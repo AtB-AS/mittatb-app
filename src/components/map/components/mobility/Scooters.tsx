@@ -23,7 +23,7 @@ type Props = {
 export const Scooters = ({scooters, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
-  const scooterColor = useTransportationColor(Mode.Scooter).background;
+  const scooterColor = useTransportationColor(Mode.Scooter).primary.background;
 
   return (
     <>
