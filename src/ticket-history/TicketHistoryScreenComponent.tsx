@@ -3,9 +3,8 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
 import {
-  FareContract,
   Reservation,
-  filterExpiredFareContracts,
+  useFareContracts,
   useTicketingContext,
 } from '@atb/ticketing';
 import {useTimeContext} from '@atb/time';
@@ -23,17 +22,20 @@ export const TicketHistoryScreenComponent = ({
   mode,
 }: TicketHistoryScreenParams) => {
   const {
-    fareContracts,
     sentFareContracts,
     isRefreshingFareContracts,
     reservations,
     rejectedReservations,
     resubscribeFirestoreListeners,
   } = useTicketingContext();
+  const {serverNow} = useTimeContext();
+  const historicFareContracts = useFareContracts(
+    {availability: 'historic'},
+    serverNow,
+  );
 
   const {abtCustomerId: customerAccountId} = useAuthContext();
 
-  const {serverNow} = useTimeContext();
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -58,12 +60,9 @@ export const TicketHistoryScreenComponent = ({
     >
       <View style={styles.container}>
         <FareContractAndReservationsList
-          fareContracts={displayFareContracts(
-            mode,
-            fareContracts,
-            sentFareContracts,
-            serverNow,
-          )}
+          fareContracts={
+            mode === 'sent' ? sentFareContracts : historicFareContracts
+          }
           reservations={displayReservations(
             mode,
             reservations,
@@ -80,20 +79,6 @@ export const TicketHistoryScreenComponent = ({
   );
 };
 
-const displayFareContracts = (
-  mode: TicketHistoryMode,
-  fareContracts: FareContract[],
-  sentFareContracts: FareContract[],
-  serverNow: number,
-) => {
-  switch (mode) {
-    case 'expired':
-      return filterExpiredFareContracts(fareContracts, serverNow);
-    case 'sent':
-      return sentFareContracts;
-  }
-};
-
 const displayReservations = (
   mode: TicketHistoryMode,
   reservations: Reservation[],
@@ -101,7 +86,7 @@ const displayReservations = (
   customerAccountId?: string,
 ) => {
   switch (mode) {
-    case 'expired':
+    case 'historic':
       return rejectedReservations.filter(
         (reservation) => reservation.customerAccountId === customerAccountId,
       );

@@ -3,7 +3,6 @@ import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConf
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useValidRightNowFareContract} from '@atb/ticketing';
 import {
   DashboardTexts,
   TicketingTexts,
@@ -13,6 +12,7 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {useTimeContext} from '@atb/time';
 import {ContentHeading} from '@atb/components/heading';
+import {useFareContracts} from '@atb/ticketing';
 
 type Props = {
   onPressDetails?: (orderId: string) => void;
@@ -28,7 +28,10 @@ export const CompactFareContracts: React.FC<Props> = ({
   const itemStyle = useStyles();
 
   const {serverNow} = useTimeContext();
-  const validFareContracts = useValidRightNowFareContract();
+  const validFareContracts = useFareContracts(
+    {availability: 'available', status: 'valid'},
+    serverNow,
+  );
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();

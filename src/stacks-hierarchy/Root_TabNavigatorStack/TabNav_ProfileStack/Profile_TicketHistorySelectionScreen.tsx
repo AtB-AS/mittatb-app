@@ -29,14 +29,14 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
     >
       <Section style={styles.content}>
         <LinkSectionItem
-          text={t(TicketHistoryModeTexts.expired.title)}
+          text={t(TicketHistoryModeTexts.historic.title)}
           accessibility={{
-            accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
+            accessibilityHint: t(TicketHistoryModeTexts.historic.titleA11y),
           }}
-          testID="expiredTicketsButton"
+          testID="historicTicketsButton"
           onPress={() =>
             navigation.navigate('Profile_TicketHistoryScreen', {
-              mode: 'expired',
+              mode: 'historic',
             })
           }
         />

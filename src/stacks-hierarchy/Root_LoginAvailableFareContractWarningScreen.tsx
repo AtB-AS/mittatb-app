@@ -6,10 +6,7 @@ import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingContext,
-} from '@atb/ticketing';
+import {useFareContracts, useTicketingContext} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/time';
@@ -19,9 +16,10 @@ import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReser
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
-type Props = RootStackScreenProps<'Root_LoginActiveFareContractWarningScreen'>;
+type Props =
+  RootStackScreenProps<'Root_LoginAvailableFareContractWarningScreen'>;
 
-export const Root_LoginActiveFareContractWarningScreen = ({
+export const Root_LoginAvailableFareContractWarningScreen = ({
   navigation,
 }: Props) => {
   const {enable_vipps_login} = useRemoteConfigContext();
@@ -30,13 +28,13 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
-  const {fareContracts, reservations} = useTicketingContext();
+  const {reservations} = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
+  const availableFareContracts = useFareContracts(
+    {availability: 'available'},
     serverNow,
   );
-  const firstActiveFc = activeFareContracts[0];
+  const firstAvailableFc = availableFareContracts[0];
   const onNext = async () => {
     if (enable_vipps_login) {
       navigation.navigate('Root_LoginOptionsScreen', {
@@ -55,7 +53,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
-        title={t(LoginTexts.activeFareContractPrompt.header)}
+        title={t(LoginTexts.availableFareContractPrompt.header)}
       />
 
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
@@ -65,7 +63,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
             style={styles.title}
             color={themeColor}
           >
-            {t(LoginTexts.activeFareContractPrompt.title)}
+            {t(LoginTexts.availableFareContractPrompt.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
@@ -74,15 +72,15 @@ export const Root_LoginActiveFareContractWarningScreen = ({
             color={themeColor}
             isMarkdown={true}
           >
-            {reservations.length > 0 && !firstActiveFc
-              ? t(LoginTexts.activeFareContractPrompt.ticketReservationBody)
-              : t(LoginTexts.activeFareContractPrompt.body)}
+            {reservations.length > 0 && !firstAvailableFc
+              ? t(LoginTexts.availableFareContractPrompt.ticketReservationBody)
+              : t(LoginTexts.availableFareContractPrompt.body)}
           </ThemeText>
         </View>
         <View style={styles.fareContract}>
-          {(firstActiveFc || reservations.length > 0) && (
+          {(firstAvailableFc || reservations.length > 0) && (
             <FareContractOrReservation
-              fcOrReservation={firstActiveFc || reservations[0]}
+              fcOrReservation={firstAvailableFc || reservations[0]}
               isStatic={true}
               onPressFareContract={() => {}}
               now={serverNow}
@@ -95,12 +93,12 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         <Button
           interactiveColor={theme.color.interactive.destructive}
           onPress={onNext}
-          text={t(LoginTexts.activeFareContractPrompt.logInAndDeleteButton)}
+          text={t(LoginTexts.availableFareContractPrompt.logInAndDeleteButton)}
           style={styles.logInAndDeleteButton}
         />
         <Button
           onPress={navigation.goBack}
-          text={t(LoginTexts.activeFareContractPrompt.cancelButton)}
+          text={t(LoginTexts.availableFareContractPrompt.cancelButton)}
           interactiveColor={theme.color.interactive[0]}
         />
       </FullScreenFooter>

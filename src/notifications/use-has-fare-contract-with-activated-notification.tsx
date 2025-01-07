@@ -2,16 +2,18 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {
-  isNormalTravelRight,
-  useValidRightNowFareContract,
-} from '@atb/ticketing';
+import {isNormalTravelRight, useFareContracts} from '@atb/ticketing';
 import {useNotificationsContext} from '@atb/notifications';
+import {useTimeContext} from '@atb/time';
 
 export function useHasFareContractWithActivatedNotification(): boolean {
   const {config: notificationsConfig} = useNotificationsContext();
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
-  const validFareContracts = useValidRightNowFareContract();
+  const {serverNow} = useTimeContext();
+  const validFareContracts = useFareContracts(
+    {availability: 'available', status: 'valid'},
+    serverNow,
+  );
 
   if (!notificationsConfig) return false;
 

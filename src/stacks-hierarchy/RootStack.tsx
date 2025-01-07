@@ -37,7 +37,7 @@ import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_Purcha
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {Root_LoginActiveFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginActiveFareContractWarningScreen';
+import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
@@ -193,7 +193,7 @@ export const RootStack = () => {
                         screens: {
                           Ticketing_RootScreen: {
                             screens: {
-                              TicketTabNav_ActiveFareProductsTabScreen:
+                              TicketTabNav_AvailableFareContractsTabScreen:
                                 'ticketing',
                             },
                           },
@@ -358,8 +358,8 @@ export const RootStack = () => {
                 component={Root_ShareTravelHabitsScreen}
               />
               <Stack.Screen
-                name="Root_LoginActiveFareContractWarningScreen"
-                component={Root_LoginActiveFareContractWarningScreen}
+                name="Root_LoginAvailableFareContractWarningScreen"
+                component={Root_LoginAvailableFareContractWarningScreen}
               />
               <Stack.Screen
                 name="Root_LoginOptionsScreen"

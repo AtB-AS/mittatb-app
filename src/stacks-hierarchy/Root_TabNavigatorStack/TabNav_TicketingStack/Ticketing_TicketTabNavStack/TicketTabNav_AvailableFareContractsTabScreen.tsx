@@ -1,9 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {
-  filterAndSortValidRightNowOrCanBeUsedFareContracts,
-  filterExpiredFareContracts,
-  useTicketingContext,
-} from '@atb/ticketing';
+import {useFareContracts, useTicketingContext} from '@atb/ticketing';
 import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
@@ -19,33 +15,34 @@ import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
 import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
 
 type Props =
-  TicketTabNavScreenProps<'TicketTabNav_ActiveFareProductsTabScreen'>;
+  TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
 
-export const TicketTabNav_ActiveFareProductsTabScreen = ({
+export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
 }: Props) => {
   const {
     reservations,
     sentFareContracts,
-    fareContracts,
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
   } = useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
 
-  const activeFareContracts =
-    filterAndSortValidRightNowOrCanBeUsedFareContracts(
-      fareContracts,
-      serverNow,
-    );
+  const availableFareContracts = useFareContracts(
+    {availability: 'available'},
+    serverNow,
+  );
+  const historicFareContracts = useFareContracts(
+    {availability: 'historic'},
+    serverNow,
+  );
 
   const styles = useStyles();
   const {t} = useTranslation();
   const {addPopOver} = usePopOverContext();
 
-  const hasExpiredFareContracts =
-    filterExpiredFareContracts(fareContracts, serverNow).length > 0;
+  const hasHistoricFareContracts = historicFareContracts.length > 0;
 
   const hasSentFareContracts = sentFareContracts.length > 0;
 
@@ -100,7 +97,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
               resubscribeFirestoreListeners();
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
                 reservationsCount: reservations.length,
-                activeFareContractsCount: activeFareContracts.length,
+                availableFareContractsCount: availableFareContracts.length,
               });
             }}
           />
@@ -108,29 +105,29 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
       >
         <FareContractAndReservationsList
           reservations={reservations}
-          fareContracts={activeFareContracts}
+          fareContracts={availableFareContracts}
           now={serverNow}
           showTokenInfo={true}
           emptyStateTitleText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
+            TicketingTexts.availableFareProductsAndReservationsTab
               .noActiveTicketsTitle,
           )}
           emptyStateDetailsText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
+            TicketingTexts.availableFareProductsAndReservationsTab
               .noActiveTicketsDetails,
           )}
         />
         <Section>
-          {hasExpiredFareContracts && (
+          {hasHistoricFareContracts && (
             <LinkSectionItem
-              text={t(TicketHistoryModeTexts.expired.title)}
+              text={t(TicketHistoryModeTexts.historic.title)}
               accessibility={{
-                accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
+                accessibilityHint: t(TicketHistoryModeTexts.historic.titleA11y),
               }}
-              testID="expiredTicketsButton"
+              testID="historicTicketsButton"
               onPress={() =>
                 navigation.navigate('Ticketing_TicketHistoryScreen', {
-                  mode: 'expired',
+                  mode: 'historic',
                 })
               }
             />
