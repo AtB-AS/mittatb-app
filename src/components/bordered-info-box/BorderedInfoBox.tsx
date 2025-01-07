@@ -3,6 +3,7 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
+import {addOpacity} from '@atb/utils/add-opacity';
 
 export type BorderedInfoBoxProps =
   | {
@@ -26,7 +27,7 @@ export const BorderedInfoBox = ({
   testID,
   ...props
 }: BorderedInfoBoxProps) => {
-  const styles = useStyles(type);
+  const styles = useStyles(type, backgroundColor.foreground.primary);
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
@@ -44,10 +45,10 @@ export const BorderedInfoBox = ({
   );
 };
 
-const useStyles = (type: BorderedInfoBoxProps['type']) => {
+const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) => {
   return StyleSheet.createThemeHook((theme) => ({
     container: {
-      borderColor: theme.color.background.neutral[2].background,
+      borderColor: addOpacity(textColor, 0.15),
       borderWidth: theme.border.width.slim,
       borderRadius: theme.border.radius.regular,
       paddingHorizontal:
