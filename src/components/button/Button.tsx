@@ -116,8 +116,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = !expand;
-
     const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =
       interactiveColor[active ? 'active' : 'default'];
@@ -142,43 +140,62 @@ export const Button = React.forwardRef<any, ButtonProps>(
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        alignSelf: isInline ? 'flex-start' : undefined,
         borderRadius:
           type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
+        ...(expand && type === 'small'
+          ? {
+              justifyContent: 'center',
+            }
+          : {
+              alignSelf: 'flex-start',
+            }),
       },
     ];
 
     const textMarginHorizontal = useTextMarginHorizontal(
-      isInline,
+      expand,
       leftIcon,
       rightIcon,
     );
 
-    const styleText: TextStyle = {
-      color: textColor,
-      width: isInline ? '100%' : undefined,
-    };
-    const textContainer: TextStyle = {
-      flex: isInline ? undefined : 1,
-      alignItems: 'center',
-      marginHorizontal: textMarginHorizontal,
-      flexShrink: isInline ? 1 : undefined,
-    };
-    const leftStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      left: isInline ? undefined : spacing,
-      marginRight:
-        isInline && (text || rightIcon) ? theme.spacing.xSmall : undefined,
+    const iconStyle = (
+      iconSide: 'left' | 'right',
+      icon?: ButtonIconProps,
+    ): ViewStyle => {
+      const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
+      if (expand && type !== 'small') {
+        return {
+          position: 'absolute',
+          [iconSide]: spacing,
+          [iconMargin]: text || icon ? theme.spacing.xSmall : undefined,
+        };
+      }
+
+      return {
+        [iconMargin]: text || icon ? theme.spacing.xSmall : undefined,
+      };
     };
 
-    const rightStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      right: isInline ? undefined : spacing,
-      marginLeft:
-        isInline && (text || leftIcon) ? theme.spacing.xSmall : undefined,
+    const styleText: TextStyle = {
+      color: textColor,
+      width: !expand ? '100%' : undefined,
     };
+    const textContainer: TextStyle = {
+      flex: !expand ? undefined : 1,
+      alignItems: 'center',
+      marginHorizontal: textMarginHorizontal,
+      flexShrink: !expand ? 1 : undefined,
+      ...(expand &&
+        type === 'small' && {
+          flex: undefined,
+          marginHorizontal: theme.spacing.xSmall,
+        }),
+    };
+
+    const leftStyling: ViewStyle = iconStyle('left', leftIcon);
+    const rightStyling: ViewStyle = iconStyle('right', rightIcon);
 
     return (
       <Animated.View
@@ -236,12 +253,12 @@ export const Button = React.forwardRef<any, ButtonProps>(
  * necessary horizontal margin based on the largest icon size.
  */
 const useTextMarginHorizontal = (
-  isInline: boolean,
+  expand: boolean,
   leftIcon?: ButtonIconProps,
   rightIcon?: ButtonIconProps,
 ) => {
   const {theme} = useThemeContext();
-  if (isInline) return 0;
+  if (!expand) return 0;
   if (!leftIcon && !rightIcon) return 0;
   const maxIconSize = Math.max(
     theme.icon.size[leftIcon?.size || 'normal'],
