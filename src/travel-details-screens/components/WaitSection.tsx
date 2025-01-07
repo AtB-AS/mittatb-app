@@ -22,7 +22,12 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
   const shortWait = timeIsShort(wait.waitTimeInSeconds);
-  const iconColor = useTransportationColor().background;
+  const iconColor = useTransportationColor(
+    undefined,
+    undefined,
+    false,
+    'secondary',
+  ).background;
 
   return (
     <View style={style.section}>

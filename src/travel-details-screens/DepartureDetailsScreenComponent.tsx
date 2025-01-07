@@ -526,9 +526,11 @@ function EstimatedCallRow({
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
-  const iconColor = useTransportationColor(
+  const tripLegDecorationColor = useTransportationColor(
     group === 'trip' ? mode : undefined,
     subMode,
+    false,
+    'secondary',
   ).background;
 
   const {flex_booking_number_of_days_available} = useRemoteConfigContext();
@@ -545,7 +547,7 @@ function EstimatedCallRow({
         hasStart={isStartOfGroup}
         hasCenter={isBetween}
         hasEnd={isEndOfGroup}
-        color={iconColor}
+        color={tripLegDecorationColor}
       />
       <TripRow
         rowLabel={
