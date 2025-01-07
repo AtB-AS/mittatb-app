@@ -48,7 +48,7 @@ export const BorderedInfoBox = ({
 const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) => {
   return StyleSheet.createThemeHook((theme) => ({
     container: {
-      borderColor: addOpacity(textColor, 0.15),
+      borderColor: addOpacity(textColor, 0.2),
       borderWidth: theme.border.width.slim,
       borderRadius: theme.border.radius.regular,
       paddingHorizontal:
