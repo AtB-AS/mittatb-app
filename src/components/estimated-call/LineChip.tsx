@@ -2,7 +2,7 @@ import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {getTransportModeSvg} from '../icon-box';
 import {View} from 'react-native';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -32,7 +32,7 @@ export function LineChip({
   const {transportMode, transportSubmode} = serviceJourney;
   const publicCode = serviceJourney.line?.publicCode;
 
-  const transportColor = useTransportationColor(
+  const transportColor = useTransportColor(
     transportMode,
     transportSubmode,
   ).primary;

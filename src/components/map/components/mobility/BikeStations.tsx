@@ -1,5 +1,5 @@
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const BikeStations = ({stations, onClusterClick}: Props) => {
-  const bicycleColor = useTransportationColor(Mode.Bicycle).primary;
+  const bicycleColor = useTransportColor(Mode.Bicycle).primary;
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const symbolStyling = {
     textAnchor: 'center',

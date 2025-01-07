@@ -6,7 +6,7 @@ import {
   TransportColors,
 } from '@atb/theme/colors';
 
-export function useTransportationColor(
+export function useTransportColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
   isFlexible?: boolean,

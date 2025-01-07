@@ -33,7 +33,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -526,7 +526,7 @@ function EstimatedCallRow({
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
-  const tripLegDecorationColor = useTransportationColor(
+  const tripLegDecorationColor = useTransportColor(
     group === 'trip' ? mode : undefined,
     subMode,
   ).secondary.background;

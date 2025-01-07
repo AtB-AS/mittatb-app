@@ -1,4 +1,4 @@
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL from '@rnmapbox/maps';
 import {Point} from 'geojson';
 import hexToRgba from 'hex-to-rgba';
@@ -27,7 +27,7 @@ type MapLineItemProps = {
   index: number;
 };
 function MapLineItem({line, index}: MapLineItemProps) {
-  const lineColorInput = useTransportationColor(
+  const lineColorInput = useTransportColor(
     line?.faded ? undefined : line?.travelType,
     line?.subMode,
     line.isFlexible,

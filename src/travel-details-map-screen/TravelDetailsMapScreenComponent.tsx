@@ -24,7 +24,7 @@ import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {Feature, Point, Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -254,7 +254,7 @@ const LiveVehicleMarker = ({
   isError,
 }: VehicleIconProps) => {
   const {theme} = useThemeContext();
-  const fillColor = useTransportationColor(mode, subMode).primary.background;
+  const fillColor = useTransportColor(mode, subMode).primary.background;
   const {live_vehicle_stale_threshold} = useRemoteConfigContext();
 
   const [isStale, setIsStale] = useState(false);
@@ -360,8 +360,7 @@ const LiveVehicleIcon = ({
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useThemeContext();
-  const fillColor = useTransportationColor(mode, subMode).primary.foreground
-    .primary;
+  const fillColor = useTransportColor(mode, subMode).primary.foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)

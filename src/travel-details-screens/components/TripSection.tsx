@@ -21,7 +21,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -101,7 +101,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
-  const legColor = useTransportationColor(
+  const legColor = useTransportColor(
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
@@ -536,7 +536,7 @@ function InterchangeSection({
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const legColor = useTransportationColor().secondary;
+  const legColor = useTransportColor().secondary;
 
   let text = '';
   if (publicCode && staySeated) {
