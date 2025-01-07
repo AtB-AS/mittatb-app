@@ -397,11 +397,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
 
   return (
     <View style={styles.passedSection}>
-      <ThemeText
-        typography="body__secondary"
-        color={themeColor}
-        style={styles.passedText}
-      >
+      <ThemeText typography="body__secondary" color={themeColor}>
         {realtimeText}
       </ThemeText>
     </View>
@@ -723,7 +719,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     minWidth: '50%',
     flex: 1,
   },
-  passedText: {},
   startPlace: {
     marginTop: theme.spacing.medium,
   },
