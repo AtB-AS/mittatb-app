@@ -23,7 +23,7 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  transportColor: TransportColor['city'];
+  transportColor: TransportColor;
   title?: string;
   description?: string;
   accessibilityLabel?: string;

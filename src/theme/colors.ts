@@ -18,8 +18,10 @@ export type {
   ContrastColor,
   TextNames,
   InteractiveColor,
-  TransportColors as TransportColor,
-  StatusColors as StatusColor,
+  TransportColors,
+  TransportColor,
+  StatusColors,
+  StatusColor,
 } from '@atb-as/theme';
 
 export {textNames} from '@atb-as/theme';
