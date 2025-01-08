@@ -160,21 +160,18 @@ export const Button = React.forwardRef<any, ButtonProps>(
       rightIcon,
     );
 
-    const iconStyle = (
-      iconSide: 'left' | 'right',
-      icon?: ButtonIconProps,
-    ): ViewStyle => {
+    const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
       const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
       if (expanded && type !== 'small') {
         return {
           position: 'absolute',
           [iconSide]: spacing,
-          [iconMargin]: text || icon ? theme.spacing.xSmall : undefined,
+          [iconMargin]: text ? theme.spacing.xSmall : undefined,
         };
       }
 
       return {
-        [iconMargin]: text || icon ? theme.spacing.xSmall : undefined,
+        [iconMargin]: text ? theme.spacing.xSmall : undefined,
       };
     };
 
@@ -194,8 +191,8 @@ export const Button = React.forwardRef<any, ButtonProps>(
         }),
     };
 
-    const leftStyling: ViewStyle = iconStyle('left', leftIcon);
-    const rightStyling: ViewStyle = iconStyle('right', rightIcon);
+    const leftStyling: ViewStyle = iconStyle('left');
+    const rightStyling: ViewStyle = iconStyle('right');
 
     return (
       <Animated.View
