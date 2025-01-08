@@ -77,7 +77,7 @@ type AppThemeExtension = {
 export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   light: {
     tripLegDetail,
-    statusBarStyle: 'light-content',
+    statusBarStyle: 'dark-content',
 
     typography: textTypeStyles,
   },
