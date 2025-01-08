@@ -1,6 +1,6 @@
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useThemeContext} from '@atb/theme';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 
 export function useValidityLineColors(fareProductType?: string) {
   const {theme} = useThemeContext();
@@ -13,10 +13,12 @@ export function useValidityLineColors(fareProductType?: string) {
   const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
 
   const lineColor = theme.color.background.neutral[2].background;
-  const backgroundColor = useTransportationColor(mode, subMode);
+  const backgroundColor = useTransportColor(mode, subMode);
 
   return {
     lineColor,
-    backgroundColor: mode ? backgroundColor : theme.color.status.valid.primary,
+    backgroundColor: mode
+      ? backgroundColor.primary
+      : theme.color.status.valid.primary,
   };
 }

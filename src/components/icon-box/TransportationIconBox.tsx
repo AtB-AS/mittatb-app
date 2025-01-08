@@ -4,7 +4,7 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from './utils';

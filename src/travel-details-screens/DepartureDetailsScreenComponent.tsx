@@ -33,7 +33,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -526,10 +526,10 @@ function EstimatedCallRow({
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
-  const iconColor = useTransportationColor(
+  const tripLegDecorationColor = useTransportColor(
     group === 'trip' ? mode : undefined,
     subMode,
-  ).background;
+  ).secondary.background;
 
   const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
@@ -545,7 +545,7 @@ function EstimatedCallRow({
         hasStart={isStartOfGroup}
         hasCenter={isBetween}
         hasEnd={isEndOfGroup}
-        color={iconColor}
+        color={tripLegDecorationColor}
       />
       <TripRow
         rowLabel={

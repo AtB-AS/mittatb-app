@@ -2,7 +2,7 @@ import React, {RefObject, useRef} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {
@@ -23,7 +23,7 @@ type Props = {
 export const Scooters = ({scooters, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
-  const scooterColor = useTransportationColor(Mode.Scooter).background;
+  const scooterColor = useTransportColor(Mode.Scooter).primary.background;
 
   return (
     <>
