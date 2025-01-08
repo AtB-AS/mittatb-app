@@ -1,6 +1,10 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {
+  AddPaymentMethodResponse,
+  type FareContract,
+  ReserveOfferRequestBody,
+} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -13,6 +17,7 @@ import {
   TicketRecipientType,
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
+import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -186,4 +191,15 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
   });
 
   return response.data;
+}
+
+export async function getFareContracts(
+  availability: 'Available' | 'Historical',
+): Promise<FareContract[]> {
+  const url = `ticket/v4/list?availability=${availability}`;
+  const response = await client.get(url, {
+    authWithIdToken: true,
+  });
+
+  return response.data.fareContracts.map(convertIsoStringFieldsToDate);
 }
