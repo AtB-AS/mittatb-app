@@ -5,7 +5,7 @@ import {TicketingScreenProps} from '../navigation-types';
 
 export type TicketTabNavStackParams = StackParams<{
   TicketTabNav_PurchaseTabScreen: undefined;
-  TicketTabNav_ActiveFareProductsTabScreen: undefined;
+  TicketTabNav_AvailableFareContractsTabScreen: undefined;
 }>;
 
 export type TicketTabNavStackRootProps =

@@ -11,8 +11,9 @@ export const useFareContracts = (
   return fareContracts.filter((fc) => {
     const as = getAvailabilityStatus(fc, now);
     if (as.availability === availabilityStatus.availability) {
-      if (!availabilityStatus) return true;
-      return as.status === availabilityStatus.status;
+      return availabilityStatus.status
+        ? as.status === availabilityStatus.status
+        : true;
     }
 
     return false;

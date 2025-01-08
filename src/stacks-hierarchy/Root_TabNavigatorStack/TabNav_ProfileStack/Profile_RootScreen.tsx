@@ -11,7 +11,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingContext,
-  useHasReservationOrActiveFareContract,
+  useHasReservationOrAvailableFareContract,
 } from '@atb/ticketing';
 import {
   dictionary,
@@ -66,8 +66,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   } = useAuthContext();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingContext();
-  const hasReservationOrActiveFareContract =
-    useHasReservationOrActiveFareContract();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
@@ -184,9 +184,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
                 onPress={() => {
-                  if (hasReservationOrActiveFareContract) {
+                  if (hasReservationOrAvailableFareContract) {
                     navigation.navigate(
-                      'Root_LoginActiveFareContractWarningScreen',
+                      'Root_LoginAvailableFareContractWarningScreen',
                       {},
                     );
                   } else if (enable_vipps_login) {

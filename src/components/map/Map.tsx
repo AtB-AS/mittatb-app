@@ -6,9 +6,8 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, Polygon, Position} from 'geojson';
+import {Feature, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {polygon} from '@turf/helpers';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -351,13 +350,11 @@ function getFeatureWeight(feature: Feature, positionClicked: Position): number {
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
-    const coordinates = (feature.geometry as Polygon).coordinates;
-    const polygonGeometry = polygon(coordinates);
-    const positionClickedIsInsidePolygon = turfBooleanPointInPolygon(
+    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
       positionClicked,
-      polygonGeometry,
+      feature.geometry,
     );
-    return positionClickedIsInsidePolygon ? 2 : 0;
+    return positionClickedIsInsideGeofencingZone ? 2 : 0;
   } else {
     return 0;
   }
