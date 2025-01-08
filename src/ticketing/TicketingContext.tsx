@@ -5,7 +5,6 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile, isNormalTravelRight} from '.';
 import {setupFirestoreListeners} from './firestore';
-import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type TicketingReducerState = {
@@ -121,7 +120,6 @@ type TicketingState = {
   fareContracts: FareContract[];
   sentFareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-  resubscribeFirestoreListeners: () => void;
 } & Pick<
   TicketingReducerState,
   | 'reservations'
@@ -142,7 +140,6 @@ const initialReducerState: TicketingReducerState = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
-  const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
   const {userId} = useAuthContext();
   const {enable_ticketing} = useRemoteConfigContext();
@@ -226,7 +223,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [resubscribeToggle, userId, enable_ticketing]);
+  }, [userId, enable_ticketing]);
 
   return (
     <TicketingContext.Provider
@@ -236,7 +233,6 @@ export const TicketingContextProvider: React.FC = ({children}) => {
           state.fareContracts
             .concat(state.sentFareContracts)
             .find((fc) => fc.orderId === orderId),
-        resubscribeFirestoreListeners: resubscribe,
       }}
     >
       {children}
