@@ -126,7 +126,7 @@ export const TripDetailsScreenComponent = ({
       {tripTicketDetails && (
         <View style={styles.borderTop}>
           <Button
-            expand={true}
+            expanded={true}
             accessibilityRole="button"
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessible={true}

@@ -70,7 +70,7 @@ export const SubmittedComponent = ({
       <View style={styles.button}>
         {enable_intercom ? (
           <Button
-            expand={true}
+            expanded={true}
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.intercomButton)}
             rightIcon={{svg: Chat}}
@@ -78,7 +78,7 @@ export const SubmittedComponent = ({
           />
         ) : (
           <Button
-            expand={true}
+            expanded={true}
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
             rightIcon={{svg: ExternalLink}}

@@ -163,7 +163,7 @@ export const Root_ParkingViolationsQrScreen = ({
       leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
       buttons={
         <Button
-          expand={true}
+          expanded={true}
           disabled={isError}
           mode="secondary"
           backgroundColor={themeColor}

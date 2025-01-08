@@ -111,7 +111,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
         </ScrollView>
         <FullScreenFooter>
           <Button
-            expand={true}
+            expanded={true}
             style={styles.button}
             onPress={close}
             interactiveColor={interactiveColor}

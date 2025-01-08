@@ -225,7 +225,7 @@ export const DepartureDetailsScreenComponent = ({
             </View>
             {shouldShowTravelAid && (
               <Button
-                expand={true}
+                expanded={true}
                 style={styles.travelAidButton}
                 onPress={() => {
                   analytics.logEvent(
@@ -247,7 +247,7 @@ export const DepartureDetailsScreenComponent = ({
                 <View style={{flex: 1}}>
                   <Button
                     type="small"
-                    expand={true}
+                    expanded={true}
                     leftIcon={{svg: Map}}
                     text={t(
                       vehiclePosition

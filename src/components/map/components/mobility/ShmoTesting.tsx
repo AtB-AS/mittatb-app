@@ -120,6 +120,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       }}
     >
       <Button
+        expanded={false}
         style={styles.filterButton}
         compact={true}
         interactiveColor={
@@ -136,6 +137,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
         compact={true}
         interactiveColor={
@@ -152,6 +154,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
         compact={true}
         interactiveColor={
@@ -168,6 +171,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
         compact={true}
         interactiveColor={

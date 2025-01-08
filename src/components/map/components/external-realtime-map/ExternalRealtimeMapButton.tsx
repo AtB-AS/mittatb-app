@@ -30,6 +30,7 @@ export const ExternalRealtimeMapButton = ({
 
   return (
     <Button
+      expanded={false}
       style={style.button}
       compact={true}
       interactiveColor={interactiveColor}

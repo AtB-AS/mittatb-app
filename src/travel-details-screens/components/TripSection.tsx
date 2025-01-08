@@ -293,6 +293,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           <TripRow>
             <Button
               type="small"
+              expanded={false}
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor={theme.color.interactive[3]}
@@ -515,6 +516,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           onPress={() => url && Linking.openURL(url)}
           mode="primary"
           type="small"
+          expanded={false}
           interactiveColor={interactiveColor}
           text={name}
         />

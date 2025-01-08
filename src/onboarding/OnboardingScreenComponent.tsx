@@ -47,6 +47,7 @@ export const OnboardingScreenComponent = ({
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
+        expanded: false,
       }}
       footerDescription={footerDescription}
       testID={testID ? `${testID}` : 'next'}

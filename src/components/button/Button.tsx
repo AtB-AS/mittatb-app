@@ -61,7 +61,7 @@ export type ButtonProps = {
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
-  expand?: boolean;
+  expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
@@ -83,7 +83,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
-      expand = false,
+      expanded,
       hasShadow = false,
       style,
       ...props
@@ -144,7 +144,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
-        ...(expand && type === 'small'
+        ...(expanded && type === 'small'
           ? {
               justifyContent: 'center',
             }
@@ -155,7 +155,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     ];
 
     const textMarginHorizontal = useTextMarginHorizontal(
-      expand,
+      expanded,
       leftIcon,
       rightIcon,
     );
@@ -165,7 +165,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       icon?: ButtonIconProps,
     ): ViewStyle => {
       const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
-      if (expand && type !== 'small') {
+      if (expanded && type !== 'small') {
         return {
           position: 'absolute',
           [iconSide]: spacing,
@@ -180,14 +180,14 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const styleText: TextStyle = {
       color: textColor,
-      width: !expand ? '100%' : undefined,
+      width: !expanded ? '100%' : undefined,
     };
     const textContainer: TextStyle = {
-      flex: !expand ? undefined : 1,
+      flex: !expanded ? undefined : 1,
       alignItems: 'center',
       marginHorizontal: textMarginHorizontal,
-      flexShrink: !expand ? 1 : undefined,
-      ...(expand &&
+      flexShrink: !expanded ? 1 : undefined,
+      ...(expanded &&
         type === 'small' && {
           flex: undefined,
           marginHorizontal: theme.spacing.xSmall,

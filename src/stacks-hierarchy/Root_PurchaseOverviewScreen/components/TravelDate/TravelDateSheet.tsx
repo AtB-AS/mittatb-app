@@ -55,7 +55,7 @@ export const TravelDateSheet = ({selection, save}: Props) => {
       </ScrollView>
       <FullScreenFooter>
         <Button
-          expand={true}
+          expanded={true}
           onPress={onSave}
           interactiveColor={theme.color.interactive[0]}
           text={t(TravelDateTexts.primaryButton)}

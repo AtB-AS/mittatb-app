@@ -55,7 +55,7 @@ export const Profile_EnrollmentScreen = () => {
               autoCapitalize="none"
             />
             <Button
-              expand={true}
+              expanded={true}
               onPress={() => onEnroll(inviteCode)}
               text={t(EnrollmentTexts.button)}
               leftIcon={{svg: Confirm}}

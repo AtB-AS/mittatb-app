@@ -43,7 +43,7 @@ export const Root_ParkingViolationsSelectScreen = ({
       secondaryText={t(ParkingViolationTexts.selectViolation.description)}
       buttons={
         <Button
-          expand={true}
+          expanded={true}
           disabled={!preReqs}
           onPress={() => {
             navigation.navigate('Root_ParkingViolationsPhotoScreen', {

@@ -46,6 +46,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
         const analyticsMetadata = {mode, duration: durationShort};
         return (
           <Button
+            expanded={false}
             onPress={() => onDetailsPressed(tripPattern, {analyticsMetadata})}
             style={style.tripMode}
             key={modeText}

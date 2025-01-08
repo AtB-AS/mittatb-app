@@ -48,7 +48,7 @@ export const ForceUpdateScreen = () => {
             {t(ForceUpdateTexts.subText)}
           </ThemeText>
           <Button
-            expand={true}
+            expanded={true}
             rightIcon={{svg: ExternalLink}}
             onPress={() => {
               const link = Platform.select({

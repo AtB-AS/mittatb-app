@@ -90,7 +90,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
           {reservation.paymentType === PaymentType.Vipps &&
             status === 'reserving' && (
               <Button
-                expand={true}
+                expanded={true}
                 onPress={() => openVippsUrl(reservation.url)}
                 accessibilityRole="link"
                 text={t(TicketingTexts.reservation.goToVipps)}

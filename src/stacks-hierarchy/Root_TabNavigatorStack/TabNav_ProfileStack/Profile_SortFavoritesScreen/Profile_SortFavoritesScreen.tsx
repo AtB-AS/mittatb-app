@@ -46,7 +46,7 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
 
       <FullScreenFooter>
         <Button
-          expand={true}
+          expanded={true}
           onPress={saveOrder}
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           rightIcon={{svg: Confirm}}

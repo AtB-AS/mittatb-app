@@ -66,7 +66,13 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
               },
             },
             ...(args.actionButtonText
-              ? {actionButton: {onPress: () => {}, text: args.actionButtonText}}
+              ? {
+                  actionButton: {
+                    onPress: () => {},
+                    text: args.actionButtonText,
+                    expanded: false,
+                  },
+                }
               : undefined),
           }}
         />

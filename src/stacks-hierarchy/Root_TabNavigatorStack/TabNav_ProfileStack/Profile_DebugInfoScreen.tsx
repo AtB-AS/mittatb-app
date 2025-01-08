@@ -333,19 +333,19 @@ export const Profile_DebugInfoScreen = () => {
                   Notification status: {pushNotificationPermissionStatus}
                 </ThemeText>
                 <Button
-                  expand={true}
+                  expanded={true}
                   style={styles.button}
                   onPress={requestPushNotificationPermissions}
                   text="Request permissions"
                 />
                 <Button
-                  expand={true}
+                  expanded={true}
                   style={styles.button}
                   onPress={checkPushNotificationPermissions}
                   text="Check permissions"
                 />
                 <Button
-                  expand={true}
+                  expanded={true}
                   style={styles.button}
                   onPress={() =>
                     registerNotifications(
@@ -433,14 +433,14 @@ export const Profile_DebugInfoScreen = () => {
                   serverNow,
                 ).toISOString()}`}</ThemeText>
                 <Button
-                  expand={true}
+                  expanded={true}
                   style={styles.button}
                   text="Reload token(s)"
                   onPress={retry}
                 />
                 {nativeToken && (
                   <Button
-                    expand={true}
+                    expanded={true}
                     style={styles.button}
                     text="Wipe token"
                     onPress={wipeToken}
@@ -448,7 +448,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 {nativeToken && (
                   <Button
-                    expand={true}
+                    expanded={true}
                     style={styles.button}
                     text="Validate token"
                     onPress={validateToken}
@@ -456,7 +456,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 {nativeToken && (
                   <Button
-                    expand={true}
+                    expanded={true}
                     style={styles.button}
                     text="Renew token"
                     onPress={renewToken}
@@ -473,7 +473,7 @@ export const Profile_DebugInfoScreen = () => {
                         </ThemeText>
                       ))}
                       <Button
-                        expand={true}
+                        expanded={true}
                         onPress={() => removeRemoteToken(token.id)}
                         text="Remove"
                       />
@@ -504,7 +504,7 @@ export const Profile_DebugInfoScreen = () => {
                     }`}</ThemeText>
                   </View>
                   <Button
-                    expand={true}
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const granted = await onboardForBeacons(true);
@@ -515,7 +515,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Onboard and give consent"
                   />
                   <Button
-                    expand={true}
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       await revokeBeacons();
@@ -525,7 +525,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Revoke"
                   />
                   <Button
-                    expand={true}
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       await deleteCollectedData();
@@ -534,7 +534,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Delete Collected Data"
                   />
                   <Button
-                    expand={true}
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyDashboardUrl =
@@ -547,7 +547,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Open Privacy Dashboard"
                   />
                   <Button
-                    expand={true}
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();

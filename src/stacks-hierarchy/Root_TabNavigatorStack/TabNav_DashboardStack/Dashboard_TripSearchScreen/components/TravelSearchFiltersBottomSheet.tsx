@@ -219,7 +219,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
       <FullScreenFooter>
         <Button
-          expand={true}
+          expanded={true}
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={save}
           rightIcon={{svg: Confirm}}

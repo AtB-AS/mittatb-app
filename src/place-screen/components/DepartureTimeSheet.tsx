@@ -74,7 +74,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           </Section>
 
           <Button
-            expand={true}
+            expanded={true}
             onPress={onSelect}
             interactiveColor={interactiveColor}
             text={t(DeparturesTexts.dateInput.confirm)}

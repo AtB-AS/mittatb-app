@@ -87,6 +87,7 @@ export const DateSelection = ({
   return (
     <View style={styles.dateNavigator}>
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
@@ -107,6 +108,7 @@ export const DateSelection = ({
         testID="previousDayButton"
       />
       <Button
+        expanded={false}
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
@@ -122,6 +124,7 @@ export const DateSelection = ({
         ref={onCloseFocusRef}
       />
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}

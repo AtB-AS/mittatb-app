@@ -297,7 +297,7 @@ export const Feedback = ({
         {selectedOpinion !== Opinions.NotClickedYet && (
           <View style={styles.submitButtonView}>
             <Button
-              expand={true}
+              expanded={true}
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
@@ -309,7 +309,7 @@ export const Feedback = ({
           feedbackConfig.dismissable &&
           !feedbackConfig.alwaysShow && (
             <Button
-              expand={true}
+              expanded={true}
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}

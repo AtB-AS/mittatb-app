@@ -15,6 +15,7 @@ export const PositionArrow: React.FC<
 
   return (
     <Button
+      expanded={false}
       compact={true}
       interactiveColor={interactiveColor}
       onPress={onPress}

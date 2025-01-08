@@ -189,7 +189,7 @@ export const Profile_PrivacyScreen = () => {
 
         <Section style={style.spacingTop}>
           <Button
-            expand={true}
+            expanded={true}
             leftIcon={{svg: Delete}}
             interactiveColor={destructiveColor}
             text={t(
@@ -218,7 +218,7 @@ export const Profile_PrivacyScreen = () => {
           />
           {isBeaconsSupported && (
             <Button
-              expand={true}
+              expanded={true}
               style={style.spacingTop}
               leftIcon={{svg: Delete}}
               interactiveColor={destructiveColor}

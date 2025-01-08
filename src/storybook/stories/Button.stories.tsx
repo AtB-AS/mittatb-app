@@ -20,7 +20,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',
   component: Button,
   argTypes: {
-    expand: {control: 'boolean'},
+    expanded: {control: 'boolean'},
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},

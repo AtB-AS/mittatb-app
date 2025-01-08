@@ -143,7 +143,7 @@ export const SubmitButton = ({
 
       {!isSubmitting && (
         <Button
-          expand={true}
+          expanded={true}
           interactiveColor={theme.color.interactive[0]}
           onPress={onPress}
           text={t(PurchaseOverviewTexts.summary.button.payment)}

@@ -212,6 +212,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         </Section>
         {emoji && (
           <Button
+            expanded={false}
             text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
             type="small"
             mode="tertiary"
@@ -227,7 +228,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         <View style={styles.buttonContainer}>
           {editItem && (
             <Button
-              expand={true}
+              expanded={true}
               onPress={deleteItem}
               interactiveColor={theme.color.interactive.destructive}
               rightIcon={{svg: SvgDelete}}
@@ -237,7 +238,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           )}
 
           <Button
-            expand={true}
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             onPress={save}
             rightIcon={{svg: SvgConfirm}}

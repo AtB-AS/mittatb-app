@@ -332,7 +332,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </Section>
             <View style={styles.searchParametersButtons}>
               <Button
-                expand={true}
+                expanded={true}
                 text={getSearchTimeLabel(
                   searchTime,
                   timeOfLastSearch,
@@ -366,6 +366,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {filtersState.enabled && (
                 <View ref={filterButtonWrapperRef} collapsable={false}>
                   <Button
+                    expanded={false}
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"

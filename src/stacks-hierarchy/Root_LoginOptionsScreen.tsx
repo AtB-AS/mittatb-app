@@ -190,7 +190,7 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
           />
           <Button
-            expand={true}
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             mode="primary"
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
@@ -203,7 +203,7 @@ export const Root_LoginOptionsScreen = ({
             testID="chooseLoginPhoneButton"
           />
           <Button
-            expand={true}
+            expanded={true}
             mode="secondary"
             backgroundColor={themeColor}
             onPress={() =>
@@ -223,7 +223,7 @@ export const Root_LoginOptionsScreen = ({
         {termsInfoUrl && (
           <View style={styles.termsOfUseLinkContainer}>
             <Button
-              expand={true}
+              expanded={true}
               backgroundColor={themeColor}
               mode="tertiary"
               rightIcon={{svg: ExternalLink}}

@@ -72,7 +72,7 @@ export const TravellerSelectionSheet = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
-          expand={true}
+          expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={noProfilesSelected}
           onPress={() =>

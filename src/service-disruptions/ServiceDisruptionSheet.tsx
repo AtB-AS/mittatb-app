@@ -37,7 +37,7 @@ export const ServiceDisruptionSheet = () => {
               <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
             </Section>
             <Button
-              expand={true}
+              expanded={true}
               mode="secondary"
               text={t(ServiceDisruptionsTexts.button.text)}
               accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
