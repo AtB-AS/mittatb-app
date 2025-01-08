@@ -10,7 +10,7 @@ export function useHasFareContractWithActivatedNotification(): boolean {
   const {config: notificationsConfig} = useNotificationsContext();
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {serverNow} = useTimeContext();
-  const validFareContracts = useFareContracts(
+  const {fareContracts: validFareContracts} = useFareContracts(
     {availability: 'available', status: 'valid'},
     serverNow,
   );

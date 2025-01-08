@@ -29,7 +29,7 @@ export const TicketHistoryScreenComponent = ({
     resubscribeFirestoreListeners,
   } = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const historicFareContracts = useFareContracts(
+  const {fareContracts: historicFareContracts} = useFareContracts(
     {availability: 'historic'},
     serverNow,
   );

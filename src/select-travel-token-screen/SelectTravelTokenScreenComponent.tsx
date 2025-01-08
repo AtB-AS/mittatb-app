@@ -62,7 +62,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const availableFareContracts = useFareContracts(
+  const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,
   );

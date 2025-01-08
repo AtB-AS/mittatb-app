@@ -6,9 +6,9 @@ import type {PartialField} from '@atb/utils/object';
 export const useFareContracts = (
   availabilityStatus: PartialField<AvailabilityStatus, 'status'>,
   now: number,
-): FareContract[] => {
-  const {fareContracts} = useTicketingContext();
-  return fareContracts.filter((fc) => {
+): {fareContracts: FareContract[]} => {
+  const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
+  const fareContracts = fareContractsFromFirestore.filter((fc) => {
     const as = getAvailabilityStatus(fc, now);
     if (as.availability === availabilityStatus.availability) {
       return availabilityStatus.status
@@ -18,4 +18,6 @@ export const useFareContracts = (
 
     return false;
   });
+
+  return {fareContracts};
 };

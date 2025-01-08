@@ -29,11 +29,11 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
 
-  const availableFareContracts = useFareContracts(
+  const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,
   );
-  const historicFareContracts = useFareContracts(
+  const {fareContracts: historicFareContracts} = useFareContracts(
     {availability: 'historic'},
     serverNow,
   );

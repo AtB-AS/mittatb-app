@@ -28,7 +28,7 @@ export const CompactFareContracts: React.FC<Props> = ({
   const itemStyle = useStyles();
 
   const {serverNow} = useTimeContext();
-  const validFareContracts = useFareContracts(
+  const {fareContracts: validFareContracts} = useFareContracts(
     {availability: 'available', status: 'valid'},
     serverNow,
   );
