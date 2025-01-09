@@ -60,6 +60,7 @@ export const StopSignalButton = ({
       )}
       {status !== 'success' && (
         <Button
+          expanded={true}
           interactiveColor={theme.color.interactive['0']}
           text={t(TravelAidTexts.stopButton.text)}
           onPress={() => {

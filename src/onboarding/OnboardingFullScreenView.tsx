@@ -53,6 +53,7 @@ export const OnboardingFullScreenView = ({
             </ScrollView>
           )}
           <Button
+            expanded={true}
             interactiveColor={interactiveColor}
             mode="primary"
             onPress={footerButton.onPress}
@@ -63,6 +64,7 @@ export const OnboardingFullScreenView = ({
           />
           {secondaryFooterButton && (
             <Button
+              expanded={true}
               backgroundColor={themeColor}
               mode="secondary"
               onPress={secondaryFooterButton.onPress}

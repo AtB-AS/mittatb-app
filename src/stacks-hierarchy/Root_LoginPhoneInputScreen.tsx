@@ -155,6 +155,7 @@ export const Root_LoginPhoneInputScreen = ({
 
             {!isSubmitting && (
               <Button
+                expanded={true}
                 style={styles.submitButton}
                 interactiveColor={theme.color.interactive[0]}
                 onPress={onNext}

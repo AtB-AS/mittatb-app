@@ -99,6 +99,7 @@ const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
 
   return (
     <Button
+      expanded={true}
       text={buttonText}
       onPress={() => buttonOnPress()}
       mode="primary"

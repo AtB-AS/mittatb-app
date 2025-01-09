@@ -91,12 +91,14 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
+          expanded={true}
           interactiveColor={theme.color.interactive.destructive}
           onPress={onNext}
           text={t(LoginTexts.availableFareContractPrompt.logInAndDeleteButton)}
           style={styles.logInAndDeleteButton}
         />
         <Button
+          expanded={true}
           onPress={navigation.goBack}
           text={t(LoginTexts.availableFareContractPrompt.cancelButton)}
           interactiveColor={theme.color.interactive[0]}

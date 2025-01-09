@@ -257,6 +257,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         ) : (
           !requiresTokenOnMobile && (
             <Button
+              expanded={true}
               onPress={onSave}
               text={t(TravelTokenTexts.toggleToken.saveButton)}
               interactiveColor={theme.color.interactive[0]}

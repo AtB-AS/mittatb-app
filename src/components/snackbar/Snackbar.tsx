@@ -125,7 +125,6 @@ const SnackbarInstance = ({
           <View style={styles.snackbarButtons}>
             {actionButton && (
               <Button
-                type="medium"
                 mode="tertiary"
                 {...actionButton}
                 onPress={() => {

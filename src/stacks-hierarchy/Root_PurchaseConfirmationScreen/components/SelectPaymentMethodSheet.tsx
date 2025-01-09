@@ -107,6 +107,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         </View>
         <FullScreenFooter>
           <Button
+            expanded={true}
             style={styles.confirmButton}
             interactiveColor={theme.color.interactive[0]}
             text={t(SelectPaymentMethodTexts.confirm_button.text)}

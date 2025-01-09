@@ -49,6 +49,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
         <FullScreenFooter>
           <View style={styles.buttonContainer}>
             <Button
+              expanded={true}
               interactiveColor={interactiveColor}
               onPress={() => {
                 close();
@@ -64,6 +65,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
               testID="onlySelectedDeparture"
             />
             <Button
+              expanded={true}
               interactiveColor={interactiveColor}
               onPress={() => {
                 close();

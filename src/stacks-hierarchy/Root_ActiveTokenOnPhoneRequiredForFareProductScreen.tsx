@@ -140,6 +140,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           <ActivityIndicator size="large" />
         ) : (
           <Button
+            expanded={true}
             onPress={onSave}
             text={t(MobileTokenOnboarding.tCard.button)}
             interactiveColor={theme.color.interactive[0]}

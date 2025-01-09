@@ -18,10 +18,10 @@ export const SendToOtherButton = ({
   if (settingPhone) return null;
   return (
     <Button
+      expanded={false}
       text={t(OnBehalfOfTexts.sendToOtherButton)}
       onPress={onPress}
       mode="secondary"
-      type="medium"
       compact={true}
       backgroundColor={themeColor}
       leftIcon={{svg: Add}}

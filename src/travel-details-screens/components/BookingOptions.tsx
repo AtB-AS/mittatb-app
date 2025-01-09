@@ -43,6 +43,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             onPress={() => Linking.openURL(bookingUrl)}
             mode="primary"
             type="small"
+            expanded={false}
             interactiveColor={theme.color.interactive[0]}
             leftIcon={{svg: ExternalLink}}
           />
@@ -60,6 +61,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             )}
             onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
             type="small"
+            expanded={false}
             interactiveColor={theme.color.interactive[3]}
             leftIcon={{svg: Phone}}
           />

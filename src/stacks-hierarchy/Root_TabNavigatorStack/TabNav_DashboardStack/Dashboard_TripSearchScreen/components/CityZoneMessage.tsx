@@ -107,6 +107,7 @@ const CityZoneBox = ({
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
               <Button
+                expanded={false}
                 key={actionButton.id}
                 type="small"
                 compact={true}
