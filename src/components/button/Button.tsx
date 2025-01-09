@@ -162,7 +162,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
       const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
-      if (expanded && type !== 'small') {
+      if (expanded && text && type !== 'small') {
         return {
           position: 'absolute',
           [iconSide]: spacing,
