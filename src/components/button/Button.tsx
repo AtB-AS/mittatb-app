@@ -194,6 +194,10 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const leftStyling: ViewStyle = iconStyle('left');
     const rightStyling: ViewStyle = iconStyle('right');
 
+    if (!text && !(leftIcon || rightIcon)) {
+      return null;
+    }
+
     return (
       <Animated.View
         style={[
