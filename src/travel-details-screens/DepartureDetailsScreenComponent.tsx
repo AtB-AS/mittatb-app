@@ -293,119 +293,115 @@ export const DepartureDetailsScreenComponent = ({
                 )}
               </View>
             )}
-
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
             )}
-
-            <View
-              style={styles.scrollView__content}
-              testID="departureDetailsContentView"
-            >
-              {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
-                activeItem ? (
-                  <PaginatedDetailsHeader
-                    page={activeItemIndexState + 1}
-                    totalPages={items.length}
-                    onNavigate={onPaginationPress}
-                    showPagination={hasMultipleItems}
-                    currentDate={activeItem?.date}
-                    isTripCancelled={activeItem?.isTripCancelled}
-                  />
-                ) : (
-                  <MessageInfoBox
-                    type="error"
-                    message={t(DepartureDetailsTexts.messages.noActiveItem)}
-                  />
-                )
-              ) : !isWithinSameDate(new Date(), activeItem.date) ? (
-                <>
-                  <View style={styles.date}>
-                    <ThemeText typography="body__primary" color="secondary">
-                      {formatToVerboseFullDate(activeItem.date, language)}
-                    </ThemeText>
-                  </View>
-                  <Divider style={styles.border} />
-                </>
-              ) : null}
-
-              {subMode === TransportSubmode.RailReplacementBus && (
-                <MessageInfoBox
-                  type="warning"
-                  message={t(
-                    TripDetailsTexts.messages.departureIsRailReplacementBus,
-                  )}
-                  style={styles.messageBox}
-                />
-              )}
-
-              {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
-
-              {situations.map((situation) => (
-                <SituationMessageBox
-                  key={situation.id}
-                  situation={situation}
-                  style={styles.messageBox}
-                />
-              ))}
-
-              {notices.map(
-                (notice) =>
-                  notice.text && (
-                    <MessageInfoBox
-                      type="info"
-                      message={notice.text}
-                      style={styles.messageBox}
-                    />
-                  ),
-              )}
-
-              {isLoading && (
-                <View>
-                  <ActivityIndicator
-                    color={theme.color.foreground.dynamic.primary}
-                    style={styles.spinner}
-                    animating={true}
-                    size="large"
-                  />
-                  <ScreenReaderAnnouncement
-                    message={t(DepartureDetailsTexts.messages.loading)}
-                  />
-                </View>
-              )}
-
-              <GlobalMessage
-                globalMessageContext={
-                  GlobalMessageContextEnum.appDepartureDetails
-                }
-                ruleVariables={{
-                  ticketingEnabled: enable_ticketing,
-                  canSellTicketsForDeparture: canSellTicketsForDeparture,
-                  mode: mode || null,
-                  subMode: subMode || null,
-                  fromZones:
-                    fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
-                  toZones:
-                    toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
-                }}
-                style={styles.messageBox}
-                textColor={backgroundColor}
-              />
-
-              <EstimatedCallRows
-                calls={estimatedCallsWithMetadata}
-                mode={mode}
-                subMode={subMode}
-                toQuayId={activeItem.toQuayId}
-                alreadyShownSituationNumbers={alreadyShownSituationNumbers}
-                onPressQuay={onPressQuay}
-              />
-            </View>
           </View>
         )}
-      />
+      >
+        <View
+          style={styles.scrollView__content}
+          testID="departureDetailsContentView"
+        >
+          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
+            activeItem ? (
+              <PaginatedDetailsHeader
+                page={activeItemIndexState + 1}
+                totalPages={items.length}
+                onNavigate={onPaginationPress}
+                showPagination={hasMultipleItems}
+                currentDate={activeItem?.date}
+                isTripCancelled={activeItem?.isTripCancelled}
+              />
+            ) : (
+              <MessageInfoBox
+                type="error"
+                message={t(DepartureDetailsTexts.messages.noActiveItem)}
+              />
+            )
+          ) : !isWithinSameDate(new Date(), activeItem.date) ? (
+            <>
+              <View style={styles.date}>
+                <ThemeText typography="body__primary" color="secondary">
+                  {formatToVerboseFullDate(activeItem.date, language)}
+                </ThemeText>
+              </View>
+              <Divider style={styles.border} />
+            </>
+          ) : null}
+
+          {subMode === TransportSubmode.RailReplacementBus && (
+            <MessageInfoBox
+              type="warning"
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+              style={styles.messageBox}
+            />
+          )}
+
+          {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
+
+          {situations.map((situation) => (
+            <SituationMessageBox
+              key={situation.id}
+              situation={situation}
+              style={styles.messageBox}
+            />
+          ))}
+
+          {notices.map(
+            (notice) =>
+              notice.text && (
+                <MessageInfoBox
+                  type="info"
+                  message={notice.text}
+                  style={styles.messageBox}
+                />
+              ),
+          )}
+
+          {isLoading && (
+            <View>
+              <ActivityIndicator
+                color={theme.color.foreground.dynamic.primary}
+                style={styles.spinner}
+                animating={true}
+                size="large"
+              />
+              <ScreenReaderAnnouncement
+                message={t(DepartureDetailsTexts.messages.loading)}
+              />
+            </View>
+          )}
+
+          <GlobalMessage
+            globalMessageContext={GlobalMessageContextEnum.appDepartureDetails}
+            ruleVariables={{
+              ticketingEnabled: enable_ticketing,
+              canSellTicketsForDeparture: canSellTicketsForDeparture,
+              mode: mode || null,
+              subMode: subMode || null,
+              fromZones:
+                fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+              toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+            }}
+            style={styles.messageBox}
+            textColor={backgroundColor}
+          />
+
+          <EstimatedCallRows
+            calls={estimatedCallsWithMetadata}
+            mode={mode}
+            subMode={subMode}
+            toQuayId={activeItem.toQuayId}
+            alreadyShownSituationNumbers={alreadyShownSituationNumbers}
+            onPressQuay={onPressQuay}
+          />
+        </View>
+      </FullScreenView>
     </View>
   );
 };
