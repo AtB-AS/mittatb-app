@@ -18,6 +18,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_beacons',
   },
   {
+    name: 'isBonusProgramEnabled',
+    remoteConfigKey: 'enable_bonus_program',
+  },
+  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
