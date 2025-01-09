@@ -49,6 +49,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </ThemeText>
       {buttonProps && (
         <Button
+          expanded={false}
           interactiveColor={interactiveColor}
           text={buttonProps.text}
           mode="primary"

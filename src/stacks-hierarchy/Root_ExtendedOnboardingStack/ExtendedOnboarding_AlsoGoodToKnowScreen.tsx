@@ -39,6 +39,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
       </View>
       <View style={styles.bottomView}>
         <Button
+          expanded={true}
           interactiveColor={interactiveColor}
           onPress={() => continueFromOnboardingSection('extendedOnboarding')}
           text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}

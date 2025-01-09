@@ -6,7 +6,7 @@ import {
 } from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 
-import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
 import {useThemeContext} from '@atb/theme';
 

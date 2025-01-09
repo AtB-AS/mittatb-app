@@ -98,11 +98,11 @@ export const TravelAidScreenComponent = ({
         barStyle={themeName === 'light' ? 'dark-content' : 'light-content'}
       />
       <Button
+        expanded={false}
         onPress={goBack}
         text={t(TravelAidTexts.close)}
         leftIcon={{svg: Close}}
         mode="tertiary"
-        type="medium"
         backgroundColor={bgContrastColor}
         testID="closeJourneyAidButton"
       />

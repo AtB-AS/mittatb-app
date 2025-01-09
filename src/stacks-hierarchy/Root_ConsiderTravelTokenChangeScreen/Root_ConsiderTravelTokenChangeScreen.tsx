@@ -57,6 +57,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
       footerButton={{
         onPress: onPressContinue,
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
+        expanded: false,
       }}
     >
       <View ref={focusRef} accessible>

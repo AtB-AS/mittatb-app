@@ -35,8 +35,8 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {RefObject, useRef, useState} from 'react';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -261,6 +261,7 @@ export const DepartureDetailsScreenComponent = ({
             </View>
             {shouldShowTravelAid && (
               <Button
+                expanded={true}
                 style={styles.travelAidButton}
                 onPress={handleTravelAidPress}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
@@ -270,133 +271,141 @@ export const DepartureDetailsScreenComponent = ({
             )}
             {shouldShowButtonsRow && (
               <View style={styles.actionButtons}>
-                {shouldShowMapButton ? (
-                  <Button
-                    type="small"
-                    leftIcon={{svg: Map}}
-                    text={t(
-                      vehiclePosition
-                        ? DepartureDetailsTexts.live(t(translatedModeName))
-                        : DepartureDetailsTexts.map,
-                    )}
-                    interactiveColor={interactiveColor}
-                    onPress={handleMapButtonPress}
-                  />
-                ) : null}
+                {shouldShowMapButton && (
+                  <View style={{flex: 1}}>
+                    <Button
+                      type="small"
+                      expanded={true}
+                      leftIcon={{svg: Map}}
+                      text={t(
+                        vehiclePosition
+                          ? DepartureDetailsTexts.live(t(translatedModeName))
+                          : DepartureDetailsTexts.map,
+                      )}
+                      interactiveColor={interactiveColor}
+                      onPress={handleMapButtonPress}
+                    />
+                  </View>
+                )}
+
                 {shouldShowFavoriteButton && (
                   <FavoriteButton fromCall={fromCall} line={line} />
                 )}
               </View>
             )}
+
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
             )}
-          </View>
-        )}
-      >
-        <View
-          style={styles.scrollView__content}
-          testID="departureDetailsContentView"
-        >
-          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
-            activeItem ? (
-              <PaginatedDetailsHeader
-                page={activeItemIndexState + 1}
-                totalPages={items.length}
-                onNavigate={onPaginationPress}
-                showPagination={hasMultipleItems}
-                currentDate={activeItem?.date}
-                isTripCancelled={activeItem?.isTripCancelled}
-              />
-            ) : (
-              <MessageInfoBox
-                type="error"
-                message={t(DepartureDetailsTexts.messages.noActiveItem)}
-              />
-            )
-          ) : !isWithinSameDate(new Date(), activeItem.date) ? (
-            <>
-              <View style={styles.date}>
-                <ThemeText typography="body__primary" color="secondary">
-                  {formatToVerboseFullDate(activeItem.date, language)}
-                </ThemeText>
-              </View>
-              <Divider style={styles.border} />
-            </>
-          ) : null}
 
-          {subMode === TransportSubmode.RailReplacementBus && (
-            <MessageInfoBox
-              type="warning"
-              message={t(
-                TripDetailsTexts.messages.departureIsRailReplacementBus,
-              )}
-              style={styles.messageBox}
-            />
-          )}
+            <View
+              style={styles.scrollView__content}
+              testID="departureDetailsContentView"
+            >
+              {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
+                activeItem ? (
+                  <PaginatedDetailsHeader
+                    page={activeItemIndexState + 1}
+                    totalPages={items.length}
+                    onNavigate={onPaginationPress}
+                    showPagination={hasMultipleItems}
+                    currentDate={activeItem?.date}
+                    isTripCancelled={activeItem?.isTripCancelled}
+                  />
+                ) : (
+                  <MessageInfoBox
+                    type="error"
+                    message={t(DepartureDetailsTexts.messages.noActiveItem)}
+                  />
+                )
+              ) : !isWithinSameDate(new Date(), activeItem.date) ? (
+                <>
+                  <View style={styles.date}>
+                    <ThemeText typography="body__primary" color="secondary">
+                      {formatToVerboseFullDate(activeItem.date, language)}
+                    </ThemeText>
+                  </View>
+                  <Divider style={styles.border} />
+                </>
+              ) : null}
 
-          {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
-
-          {situations.map((situation) => (
-            <SituationMessageBox
-              key={situation.id}
-              situation={situation}
-              style={styles.messageBox}
-            />
-          ))}
-
-          {notices.map(
-            (notice) =>
-              notice.text && (
+              {subMode === TransportSubmode.RailReplacementBus && (
                 <MessageInfoBox
-                  type="info"
-                  message={notice.text}
+                  type="warning"
+                  message={t(
+                    TripDetailsTexts.messages.departureIsRailReplacementBus,
+                  )}
                   style={styles.messageBox}
                 />
-              ),
-          )}
+              )}
 
-          {isLoading && (
-            <View>
-              <ActivityIndicator
-                color={theme.color.foreground.dynamic.primary}
-                style={styles.spinner}
-                animating={true}
-                size="large"
+              {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
+
+              {situations.map((situation) => (
+                <SituationMessageBox
+                  key={situation.id}
+                  situation={situation}
+                  style={styles.messageBox}
+                />
+              ))}
+
+              {notices.map(
+                (notice) =>
+                  notice.text && (
+                    <MessageInfoBox
+                      type="info"
+                      message={notice.text}
+                      style={styles.messageBox}
+                    />
+                  ),
+              )}
+
+              {isLoading && (
+                <View>
+                  <ActivityIndicator
+                    color={theme.color.foreground.dynamic.primary}
+                    style={styles.spinner}
+                    animating={true}
+                    size="large"
+                  />
+                  <ScreenReaderAnnouncement
+                    message={t(DepartureDetailsTexts.messages.loading)}
+                  />
+                </View>
+              )}
+
+              <GlobalMessage
+                globalMessageContext={
+                  GlobalMessageContextEnum.appDepartureDetails
+                }
+                ruleVariables={{
+                  ticketingEnabled: enable_ticketing,
+                  canSellTicketsForDeparture: canSellTicketsForDeparture,
+                  mode: mode || null,
+                  subMode: subMode || null,
+                  fromZones:
+                    fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+                  toZones:
+                    toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+                }}
+                style={styles.messageBox}
+                textColor={backgroundColor}
               />
-              <ScreenReaderAnnouncement
-                message={t(DepartureDetailsTexts.messages.loading)}
+
+              <EstimatedCallRows
+                calls={estimatedCallsWithMetadata}
+                mode={mode}
+                subMode={subMode}
+                toQuayId={activeItem.toQuayId}
+                alreadyShownSituationNumbers={alreadyShownSituationNumbers}
+                onPressQuay={onPressQuay}
               />
             </View>
-          )}
-
-          <GlobalMessage
-            globalMessageContext={GlobalMessageContextEnum.appDepartureDetails}
-            ruleVariables={{
-              ticketingEnabled: enable_ticketing,
-              canSellTicketsForDeparture: canSellTicketsForDeparture,
-              mode: mode || null,
-              subMode: subMode || null,
-              fromZones:
-                fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
-              toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
-            }}
-            style={styles.messageBox}
-            textColor={backgroundColor}
-          />
-
-          <EstimatedCallRows
-            calls={estimatedCallsWithMetadata}
-            mode={mode}
-            subMode={subMode}
-            toQuayId={activeItem.toQuayId}
-            alreadyShownSituationNumbers={alreadyShownSituationNumbers}
-            onPressQuay={onPressQuay}
-          />
-        </View>
-      </FullScreenView>
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -538,10 +547,10 @@ function EstimatedCallRow({
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
-  const iconColor = useTransportationColor(
+  const tripLegDecorationColor = useTransportColor(
     group === 'trip' ? mode : undefined,
     subMode,
-  ).background;
+  ).secondary.background;
 
   const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
@@ -557,7 +566,7 @@ function EstimatedCallRow({
         hasStart={isStartOfGroup}
         hasCenter={isBetween}
         hasEnd={isEndOfGroup}
-        color={iconColor}
+        color={tripLegDecorationColor}
       />
       <TripRow
         rowLabel={
@@ -708,6 +717,7 @@ const FavoriteButton = ({
   return (
     <Button
       type="small"
+      expanded={false}
       leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
       text={t(FavoriteDeparturesTexts.favoriteButton)}
       interactiveColor={theme.color.interactive['1']}

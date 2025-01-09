@@ -14,7 +14,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
+import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -33,12 +33,12 @@ export const Root_LoginRequiredForFareProductScreen = ({
 
   const themeColor = getThemeColor(theme);
 
-  const hasReservationOrActiveFareContract =
-    useHasReservationOrActiveFareContract();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
 
   const onNext = async () => {
-    if (hasReservationOrActiveFareContract) {
-      navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
+    if (hasReservationOrAvailableFareContract) {
+      navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {
         transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
       });
     } else {
@@ -85,6 +85,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
         <Ticket style={styles.illustration} />
         <View style={styles.buttonView}>
           <Button
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}

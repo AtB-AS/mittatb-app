@@ -105,6 +105,7 @@ export function TravelTokenBox({
         />
       )}
       <Button
+        expanded={true}
         mode="secondary"
         backgroundColor={themeTextColor.default}
         onPress={onPressChangeButton}

@@ -144,6 +144,7 @@ export const StopPlacesView = (props: Props) => {
               <View style={styles.buttonsContainer}>
                 <View style={styles.travelButton}>
                   <Button
+                    expanded={true}
                     text={t(DeparturesDialogSheetTexts.travelFrom.title)}
                     onPress={() => {
                       analytics.logEvent(
@@ -160,6 +161,7 @@ export const StopPlacesView = (props: Props) => {
                 </View>
                 <View style={styles.travelButton}>
                   <Button
+                    expanded={true}
                     text={t(DeparturesDialogSheetTexts.travelTo.title)}
                     onPress={() => {
                       analytics.logEvent(

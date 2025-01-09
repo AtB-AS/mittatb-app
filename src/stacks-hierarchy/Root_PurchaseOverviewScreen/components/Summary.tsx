@@ -75,6 +75,7 @@ export function Summary({
         </ThemeText>
       )}
       <Button
+        expanded={true}
         interactiveColor={theme.color.interactive[0]}
         text={summaryButtonText}
         disabled={isLoading || !hasSelection || isFree || isError}

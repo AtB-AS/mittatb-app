@@ -167,6 +167,7 @@ export const PlaceScreenComponent = ({
       {onPressClose && (
         <View style={styles.closeButton}>
           <Button
+            expanded={true}
             interactiveColor={interactiveColor}
             text={t(DeparturesTexts.closeButton.label)}
             onPress={onPressClose}

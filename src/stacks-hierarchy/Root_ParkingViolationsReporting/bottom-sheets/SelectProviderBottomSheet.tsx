@@ -69,6 +69,7 @@ export const SelectProviderBottomSheet = ({
         </ScrollView>
         <View style={[styles.content, styles.footer]}>
           <Button
+            expanded={true}
             text={t(ParkingViolationTexts.selectProvider.confirm)}
             onPress={() =>
               selectedProvider ? onSelect(selectedProvider) : undefined

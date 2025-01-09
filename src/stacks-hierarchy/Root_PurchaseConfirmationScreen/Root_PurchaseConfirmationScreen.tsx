@@ -131,7 +131,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       screen: 'TabNav_TicketingStack',
       params: {
         screen: 'Ticketing_RootScreen',
-        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+        params: {screen: 'TicketTabNav_AvailableFareContractsTabScreen'},
       },
     });
   }, [
@@ -326,6 +326,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
+                  expanded={true}
                   text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
@@ -373,6 +374,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
             ) : (
               <Button
+                expanded={true}
                 interactiveColor={interactiveColor}
                 text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
                 disabled={!!offerError}

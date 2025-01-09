@@ -19,11 +19,12 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Requirements
 
-1. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
+1. Ruby v2.7.6: With something like [rbenv](https://github.com/rbenv/rbenv)
+2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
    > ⓘ When installing cocoapods, use `gem install cocoapods -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`COCOAPODS: 1.x.x`).
-2. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
-3. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
-4. Ruby v2.7: With something like [rbenv](https://github.com/rbenv/rbenv)
+   > If encountering errors, following the suggested gem installs might solve it.
+3. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
+4. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 
 ### Starting locally
 
@@ -36,11 +37,15 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    b. Create an identity token for your jfrog user in jfrog user setting
 
    c. Run this script:
+
    > ⚠ Make sure to run this only once. This script appends to the token files and does not overwrite its contents.
+
    ```
    ENTUR_REGISTRY_USER=<USER_EMAIL> ENTUR_REGISTRY_TOKEN=<IDENTITY_TOKEN> ./scripts/add-entur-private-registry.sh
    ```
+
    > ⓘ Access token from jfrog has a one-year expiry
+
 2. Install dependencies:
 
    a. React Native: `yarn`
@@ -54,9 +59,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 4. Install iOS Pods:
 
    a. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
-       ```
-       cp .netrc ~/
-       ```
+   `   cp .netrc ~/`
 
    b. Pod install: `cd ios/` and `pod install`
 
@@ -69,8 +72,8 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 - iOS: Run `yarn ios --list-devices`
 - Android: Run `yarn android`
-   - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
-   - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
+  - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
+  - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
 
 ### Common errors
 
@@ -127,11 +130,9 @@ yarn start --reset-cache
 
 See the [design system](https://github.com/AtB-AS/design-system) and [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) for more details.
 
-
 ## Distributing new app versions (deploy)
 
 For test devices and developer devices we do continuous distribution through direct groups on AppCenter and Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
-
 
 ## Storybook
 

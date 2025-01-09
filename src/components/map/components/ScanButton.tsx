@@ -21,8 +21,8 @@ export const ScanButton = () => {
 
   return (
     <Button
+      expanded={false}
       style={{...styles.scanButton, bottom: controlsContainer.bottom}}
-      type="medium"
       compact={true}
       interactiveColor={interactiveColor}
       accessibilityRole="button"

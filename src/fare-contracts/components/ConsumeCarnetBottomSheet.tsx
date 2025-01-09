@@ -66,6 +66,7 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
           </GenericSectionItem>
         </Section>
         <Button
+          expanded={true}
           onPress={onConsume}
           text={t(FareContractTexts.carnet.activateCarnet)}
           rightIcon={{svg: Confirm}}

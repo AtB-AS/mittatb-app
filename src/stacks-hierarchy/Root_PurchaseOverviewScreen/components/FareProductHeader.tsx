@@ -72,6 +72,7 @@ export const FareProductHeader = forwardRef<View, Props>(
               {productDescription}
             </ThemeText>
             <Button
+              expanded={false}
               type="small"
               leftIcon={{svg: Info}}
               interactiveColor={theme.color.interactive[1]}

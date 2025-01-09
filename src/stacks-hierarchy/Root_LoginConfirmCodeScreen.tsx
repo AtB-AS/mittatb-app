@@ -137,6 +137,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
             {!isLoading && (
               <>
                 <Button
+                  expanded={true}
                   interactiveColor={theme.color.interactive[0]}
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}

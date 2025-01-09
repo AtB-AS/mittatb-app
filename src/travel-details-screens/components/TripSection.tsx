@@ -21,7 +21,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -101,12 +101,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
-  const legColor = useTransportationColor(
+  const legColor = useTransportColor(
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
-  ).background;
-  const iconColor = useTransportationColor().background;
+  ).secondary.background;
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -293,6 +292,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           <TripRow>
             <Button
               type="small"
+              expanded={false}
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor={theme.color.interactive[3]}
@@ -350,7 +350,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
       </View>
       {showInterchangeSection && (
         <InterchangeSection
-          iconColor={iconColor}
           publicCode={publicCode}
           interchangeDetails={interchangeDetails}
           maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
@@ -515,6 +514,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           onPress={() => url && Linking.openURL(url)}
           mode="primary"
           type="small"
+          expanded={false}
           interactiveColor={interactiveColor}
           text={name}
         />
@@ -524,7 +524,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
 };
 
 type InterchangeSectionProps = {
-  iconColor: string;
   publicCode: string;
   interchangeDetails: InterchangeDetails;
   maximumWaitTime?: number;
@@ -532,7 +531,6 @@ type InterchangeSectionProps = {
 };
 
 function InterchangeSection({
-  iconColor,
   publicCode,
   interchangeDetails,
   maximumWaitTime,
@@ -540,6 +538,7 @@ function InterchangeSection({
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const legColor = useTransportColor().secondary;
 
   let text = '';
   if (publicCode && staySeated) {
@@ -581,7 +580,11 @@ function InterchangeSection({
 
   return (
     <View style={style.interchangeSection}>
-      <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
+      <TripLegDecoration
+        color={legColor.background}
+        hasStart={false}
+        hasEnd={false}
+      />
       <TripRow>
         <MessageInfoBox type="info" message={text} />
       </TripRow>

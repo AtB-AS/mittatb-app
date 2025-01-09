@@ -12,7 +12,7 @@ type TicketHistoryModeText = {
 export const TicketHistoryModeTexts: {
   [key in TicketHistoryMode]: TicketHistoryModeText;
 } = {
-  expired: {
+  historic: {
     title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
     titleA11y: _(
       'Aktiver for å vise dine utløpte billetter',
@@ -87,7 +87,7 @@ const TicketingTexts = {
       ),
     },
   },
-  activeFareProductsAndReservationsTab: {
+  availableFareProductsAndReservationsTab: {
     label: _('Mine billetter', 'My tickets', 'Mine billettar'),
     noActiveTicketsTitle: _(
       'Ingen aktive billetter',

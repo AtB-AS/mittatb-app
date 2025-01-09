@@ -11,7 +11,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';

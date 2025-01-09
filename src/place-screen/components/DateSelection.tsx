@@ -87,6 +87,7 @@ export const DateSelection = ({
   return (
     <View style={styles.dateNavigator}>
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
@@ -95,7 +96,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.prevDay)
             : undefined
         }
-        type="medium"
         mode="tertiary"
         compact={true}
         leftIcon={{svg: ArrowLeft}}
@@ -108,6 +108,7 @@ export const DateSelection = ({
         testID="previousDayButton"
       />
       <Button
+        expanded={false}
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
@@ -116,7 +117,6 @@ export const DateSelection = ({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
@@ -124,6 +124,7 @@ export const DateSelection = ({
         ref={onCloseFocusRef}
       />
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
@@ -132,7 +133,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.nextDay)
             : undefined
         }
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}

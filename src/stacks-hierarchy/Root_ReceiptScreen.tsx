@@ -110,6 +110,7 @@ export function Root_ReceiptScreen({route}: Props) {
           )}
         </Section>
         <Button
+          expanded={true}
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}

@@ -55,6 +55,7 @@ export const FavoriteChips: React.FC<Props> = ({
       >
         {activeType('location') && (
           <FavoriteChip
+            expanded={false}
             backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
@@ -67,6 +68,7 @@ export const FavoriteChips: React.FC<Props> = ({
         )}
         {activeType('map') && !disableMap && (
           <FavoriteChip
+            expanded={false}
             text={t(FavoriteTexts.chips.mapLocation)}
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
@@ -80,6 +82,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
+              expanded={false}
               key={fav.id}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -100,6 +103,7 @@ export const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
+            expanded={false}
             backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
@@ -115,7 +119,7 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  return <Button {...props} type="medium" compact={true} />;
+  return <Button {...props} compact={true} />;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

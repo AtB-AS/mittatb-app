@@ -127,6 +127,7 @@ export const DeparturesWidget = ({
 
       {!!favoriteDepartures.length && (
         <Button
+          expanded={true}
           mode="secondary"
           backgroundColor={themeColor}
           onPress={openFrontpageFavouritesBottomSheet}
