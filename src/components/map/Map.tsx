@@ -310,7 +310,6 @@ export const Map = (props: MapProps) => {
             {isBonusProgramEnabled &&
               props.selectionMode === 'ExploreEntities' && (
                 <BonusProgramMapButton
-                  bonusPoints={0} // TODO: send actual value
                   onPress={() => onMapClick({source: 'bonus-program-button'})}
                   isLoading={
                     // TODO: fix actual loading value
