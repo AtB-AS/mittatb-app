@@ -14,6 +14,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
+import {BonusProgramMapButton} from './components/bonus-program/BonusProgramMapButton';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
@@ -87,8 +88,11 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isBonusProgramEnabled,
+    isGeofencingZonesEnabled,
+    isShmoDeepIntegrationEnabled,
+  } = useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -302,28 +306,39 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          <ExternalRealtimeMapButton onMapClick={onMapClick} />
+          <View>
+            {isBonusProgramEnabled &&
+              props.selectionMode === 'ExploreEntities' && (
+                <BonusProgramMapButton
+                  onPress={() => onMapClick({source: 'bonus-program-button'})}
+                />
+              )}
+          </View>
 
-          {(props.vehicles || props.stations) && (
-            <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
-              isLoading={
-                (props.vehicles?.isLoading || props.stations?.isLoading) ??
-                false
-              }
+          <View>
+            <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
+            {(props.vehicles || props.stations) && (
+              <MapFilter
+                onPress={() => onMapClick({source: 'filters-button'})}
+                isLoading={
+                  (props.vehicles?.isLoading || props.stations?.isLoading) ??
+                  false
+                }
+              />
+            )}
+            <PositionArrow
+              onPress={async () => {
+                const coordinates = await getCurrentCoordinates(true);
+                if (coordinates) {
+                  onMapClick({
+                    source: 'my-position',
+                    coords: coordinates,
+                  });
+                }
+              }}
             />
-          )}
-          <PositionArrow
-            onPress={async () => {
-              const coordinates = await getCurrentCoordinates(true);
-              if (coordinates) {
-                onMapClick({
-                  source: 'my-position',
-                  coords: coordinates,
-                });
-              }
-            }}
-          />
+          </View>
         </View>
         {isShmoDeepIntegrationEnabled && (
           <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />

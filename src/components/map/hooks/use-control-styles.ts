@@ -29,11 +29,15 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
       },
       controlsContainer: {
         position: 'absolute',
+        width: '100%',
         bottom:
           (extraPaddingBottom ? bottom : 0) +
           bottomPaddingIfBottomSheetIsOpen +
           theme.spacing.medium,
-        right: theme.spacing.medium,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        paddingHorizontal: theme.spacing.medium,
       },
       locationContainer: {
         position: 'absolute',
