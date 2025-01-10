@@ -272,7 +272,7 @@ export type AddPaymentMethodResponse = {
 export type AvailabilityStatus =
   | {availability: 'available'; status: 'upcoming' | 'valid'}
   | {
-      availability: 'historic';
+      availability: 'historical';
       status: 'expired' | 'empty' | 'refunded' | 'cancelled';
     }
   | {availability: 'invalid'; status: 'unspecified' | 'invalid'};

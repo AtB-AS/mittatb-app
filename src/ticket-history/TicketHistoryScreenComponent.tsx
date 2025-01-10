@@ -29,9 +29,9 @@ export const TicketHistoryScreenComponent = ({
   } = useTicketingContext();
   const {serverNow} = useTimeContext();
   const {
-    fareContracts: historicFareContracts,
-    refetch: refetchHistoricFareContracts,
-  } = useFareContracts({availability: 'historic'}, serverNow);
+    fareContracts: historicalFareContracts,
+    refetch: refetchHistoricalFareContracts,
+  } = useFareContracts({availability: 'historical'}, serverNow);
 
   const {abtCustomerId: customerAccountId} = useAuthContext();
 
@@ -53,14 +53,14 @@ export const TicketHistoryScreenComponent = ({
       refreshControl={
         <RefreshControl
           refreshing={isRefreshingFareContracts}
-          onRefresh={refetchHistoricFareContracts}
+          onRefresh={refetchHistoricalFareContracts}
         />
       }
     >
       <View style={styles.container}>
         <FareContractAndReservationsList
           fareContracts={
-            mode === 'sent' ? sentFareContracts : historicFareContracts
+            mode === 'sent' ? sentFareContracts : historicalFareContracts
           }
           reservations={displayReservations(
             mode,
@@ -85,7 +85,7 @@ const displayReservations = (
   customerAccountId?: string,
 ) => {
   switch (mode) {
-    case 'historic':
+    case 'historical':
       return rejectedReservations.filter(
         (reservation) => reservation.customerAccountId === customerAccountId,
       );

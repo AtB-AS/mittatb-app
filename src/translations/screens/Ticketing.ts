@@ -12,7 +12,7 @@ type TicketHistoryModeText = {
 export const TicketHistoryModeTexts: {
   [key in TicketHistoryMode]: TicketHistoryModeText;
 } = {
-  historic: {
+  historical: {
     title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
     titleA11y: _(
       'Aktiver for å vise dine utløpte billetter',

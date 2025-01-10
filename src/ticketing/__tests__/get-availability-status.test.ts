@@ -73,7 +73,7 @@ describe('getAvailabilityStatus', () => {
       new Date().getTime(),
     );
 
-    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.availability).toEqual('historical');
     expect(availabilityStatus.status).toEqual('refunded');
   });
 
@@ -83,7 +83,7 @@ describe('getAvailabilityStatus', () => {
       new Date().getTime(),
     );
 
-    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.availability).toEqual('historical');
     expect(availabilityStatus.status).toEqual('cancelled');
   });
 
@@ -124,7 +124,7 @@ describe('getAvailabilityStatus', () => {
       new Date().getTime(),
     );
 
-    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.availability).toEqual('historical');
     expect(availabilityStatus.status).toEqual('expired');
   });
 
@@ -261,7 +261,7 @@ describe('getAvailabilityStatus', () => {
       new Date().getTime(),
     );
 
-    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.availability).toEqual('historical');
     expect(availabilityStatus.status).toEqual('empty');
   });
 
@@ -279,7 +279,7 @@ describe('getAvailabilityStatus', () => {
       new Date().getTime(),
     );
 
-    expect(availabilityStatus.availability).toEqual('historic');
+    expect(availabilityStatus.availability).toEqual('historical');
     expect(availabilityStatus.status).toEqual('expired');
   });
 
