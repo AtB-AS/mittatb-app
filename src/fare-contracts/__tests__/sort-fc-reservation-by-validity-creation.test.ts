@@ -113,7 +113,7 @@ describe('Sort by Validity', () => {
   it('Reservation should be first if reservation is being processing', async () => {
     const fcOrReservations: (FareContract | Reservation)[] = [
       mockupFareContract('1', 'valid', -1),
-      mockupReservation('3', 'reserving', 1),
+      mockupReservation('3', 'reserving', 0),
       mockupFareContract('2', 'valid', 0),
     ];
 
