@@ -98,26 +98,26 @@ export const useSortFcOrReservationByValidityAndCreation = (
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
-      if (!isFareContract) return 1;
+      if (!isFareContract) return -1;
 
       const validityStatus = getFareContractStatus(
         now,
         fcOrReservation,
         currentUserId,
       );
-      return validityStatus === 'valid' ? 1 : 0;
+      return validityStatus === 'valid' ? 0 : 1;
     },
     [getFareContractStatus, now, currentUserId],
   );
 
-  const fareContractsAndReservationsSorted = useMemo(() => {
+  return useMemo(() => {
     return fcOrReservations.sort((a, b) => {
-      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
-      return order === 0 ? b.created.getTime() - a.created.getTime() : order;
+      const orderA = getFcOrReservationOrder(a);
+      const orderB = getFcOrReservationOrder(b);
+      if (orderA !== orderB) return orderA - orderB;
+      return b.created.getTime() - a.created.getTime();
     });
   }, [fcOrReservations, getFcOrReservationOrder]);
-
-  return fareContractsAndReservationsSorted;
 };
 
 export const mapToUserProfilesWithCount = (
