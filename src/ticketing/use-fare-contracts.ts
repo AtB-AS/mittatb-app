@@ -11,6 +11,14 @@ type AvailabilityStatusInput = {
   status?: Exclude<AvailabilityStatus['status'], 'invalid'>;
 };
 
+/**
+ * Hook for subscribing to fare contracts with the given availability and
+ * status. The fare contracts are retrieved from Firestore, but this hook
+ * also exposes a refetch function for retrieving them through an API call. The
+ * reason for this is that we have some reports of fare contracts not appearing
+ * in the app, and it seems a possible reason is a faulty Firestore
+ * subscription.
+ */
 export const useFareContracts = (
   availabilityStatus: AvailabilityStatusInput,
   now: number,
@@ -34,7 +42,7 @@ export const useFareContracts = (
     });
   };
 
-  const filteredContracts = fareContracts.filter((fc) => {
+  const filteredFareContracts = fareContracts.filter((fc) => {
     const as = getAvailabilityStatus(fc, now);
     if (as.availability === availabilityStatus.availability) {
       return availabilityStatus.status
@@ -45,7 +53,7 @@ export const useFareContracts = (
     return false;
   });
 
-  return {fareContracts: filteredContracts, refetch};
+  return {fareContracts: filteredFareContracts, refetch};
 };
 
 const useGetFareContractsQuery = (
