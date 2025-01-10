@@ -4,6 +4,7 @@ import {
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
+  useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -38,6 +39,7 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {getTransportModeText} from '@atb/components/transportation-modes';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -143,6 +145,11 @@ export const FareContractInfoDetails = (
     toTariffZone,
   );
 
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
   const isStatusSent = status === 'sent';
 
   const isValidOrSentFareContract: boolean =
@@ -152,6 +159,14 @@ export const FareContractInfoDetails = (
     <View style={styles.container} accessible={true}>
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
+          {!!fareProductTypeConfig?.transportModes && (
+            <FareContractDetailItem
+              header={t(FareContractTexts.label.transportModes)}
+              content={[
+                getTransportModeText(fareProductTypeConfig.transportModes, t),
+              ]}
+            />
+          )}
           <FareContractDetailItem
             header={t(FareContractTexts.label.travellers)}
             content={userProfilesWithCount.map((u) =>
