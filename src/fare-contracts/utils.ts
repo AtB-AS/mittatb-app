@@ -114,7 +114,9 @@ export const useSortFcOrReservationByValidityAndCreation = (
     return fcOrReservations.sort((a, b) => {
       const orderA = getFcOrReservationOrder(a);
       const orderB = getFcOrReservationOrder(b);
+      // Negative return value for a - b means "place a before b"
       if (orderA !== orderB) return orderA - orderB;
+      // Make sure most recent dates comes first
       return b.created.getTime() - a.created.getTime();
     });
   }, [fcOrReservations, getFcOrReservationOrder]);
