@@ -311,10 +311,6 @@ export const Map = (props: MapProps) => {
               props.selectionMode === 'ExploreEntities' && (
                 <BonusProgramMapButton
                   onPress={() => onMapClick({source: 'bonus-program-button'})}
-                  isLoading={
-                    // TODO: fix actual loading value
-                    false
-                  }
                 />
               )}
           </View>

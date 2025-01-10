@@ -6,17 +6,16 @@ import {FavoriteFill} from '@atb/assets/svg/mono-icons/places';
 
 type BonusProgramMapButtonProps = {
   onPress: () => void;
-  isLoading: boolean;
 };
 export const BonusProgramMapButton = ({
   onPress,
-  isLoading,
 }: BonusProgramMapButtonProps) => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const analytics = useAnalyticsContext();
   const bonusPoints = 0; // TODO: get actual number of user bonus points using useQuery or React.Context
+  var isLoading = false; // TODO: fix actual loading value
 
   return (
     <Button
