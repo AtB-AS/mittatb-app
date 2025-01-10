@@ -31,7 +31,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   reservations,
   now,
   showTokenInfo,
-  mode = 'historic',
+  mode = 'historical',
   emptyStateTitleText,
   emptyStateDetailsText,
 }) => {
@@ -92,7 +92,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 
 const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
   switch (emptyStateMode) {
-    case 'historic':
+    case 'historical':
       return <TicketTilted height={84} />;
     case 'sent':
       return <HoldingHands height={84} />;
