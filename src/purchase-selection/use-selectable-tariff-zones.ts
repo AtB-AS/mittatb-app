@@ -1,0 +1,10 @@
+import {PreassignedFareProduct, type TariffZone} from '@atb-as/config-specs';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {isSelectableZone} from './utils';
+
+export function useSelectableTariffZones(
+  product: PreassignedFareProduct,
+): TariffZone[] {
+  const {tariffZones} = useFirestoreConfigurationContext();
+  return tariffZones.filter((profile) => isSelectableZone(product, profile));
+}
