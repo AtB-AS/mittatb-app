@@ -58,6 +58,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'bonus-program-button') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       if (mapSelectionAction.source === 'external-map-button') {
         setCameraFocusMode(undefined);
         return;
