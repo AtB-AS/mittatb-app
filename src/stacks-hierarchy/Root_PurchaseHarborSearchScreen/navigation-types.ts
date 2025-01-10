@@ -1,9 +1,5 @@
-import {FareProductTypeConfig} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/configuration';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type Root_PurchaseHarborSearchScreenParams = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-  fromHarbor?: StopPlaceFragment;
+  selection: PurchaseSelectionType;
 };

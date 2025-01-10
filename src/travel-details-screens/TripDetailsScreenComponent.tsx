@@ -31,6 +31,10 @@ import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/harbors';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -58,7 +62,7 @@ export const TripDetailsScreenComponent = ({
   const {updatedTripPattern, error} =
     useCurrentTripPatternWithUpdates(tripPattern);
 
-  const tripTicketDetails = useTicketInfoFromTrip(updatedTripPattern);
+  const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
 
@@ -123,7 +127,7 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </FullScreenView>
-      {tripTicketDetails && (
+      {purchaseSelection && (
         <View style={styles.borderTop}>
           <Button
             expanded={true}
@@ -133,10 +137,7 @@ export const TripDetailsScreenComponent = ({
             onPress={() => {
               analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
-                fareProductTypeConfig: tripTicketDetails.fareProductTypeConfig,
-                fromPlace: tripTicketDetails.fromPlace,
-                toPlace: tripTicketDetails.toPlace,
-                travelDate: tripTicketDetails.ticketStartTime,
+                selection: purchaseSelection,
                 mode: 'TravelSearch',
               });
             }}
@@ -150,14 +151,15 @@ export const TripDetailsScreenComponent = ({
   );
 };
 
-function useTicketInfoFromTrip(
+function usePurchaseSelectionFromTrip(
   tripPattern: TripPattern,
-): TicketInfoForBus | TicketInfoForBoat | undefined {
+): PurchaseSelectionType | undefined {
   const {enable_ticketing} = useRemoteConfigContext();
   const {
     isFromTravelSearchToTicketEnabled,
     isFromTravelSearchToTicketBoatEnabled,
   } = useFeatureTogglesContext();
+  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {tariffZones} = useFirestoreConfigurationContext();
   const {data: harbors} = useHarbors();
@@ -187,7 +189,14 @@ function useTicketInfoFromTrip(
     tariffZones,
     ticketStartTime,
   );
-  if (ticketInfoForBus) return ticketInfoForBus;
+  if (ticketInfoForBus) {
+    return purchaseSelectionBuilder
+      .forType(ticketInfoForBus.fareProductTypeConfig.type)
+      .fromZone(ticketInfoForBus.fromPlace)
+      .toZone(ticketInfoForBus.toPlace)
+      .date(ticketInfoForBus.ticketStartTime)
+      .build();
+  }
 
   if (!isFromTravelSearchToTicketBoatEnabled) {
     // Boat ticket is disabled, avoid returning any ticket info
@@ -201,7 +210,14 @@ function useTicketInfoFromTrip(
     harbors,
     ticketStartTime,
   );
-  if (ticketInfoForBoat) return ticketInfoForBoat;
+  if (ticketInfoForBoat) {
+    return purchaseSelectionBuilder
+      .forType(ticketInfoForBoat.fareProductTypeConfig.type)
+      .fromStopPlace(ticketInfoForBoat.fromPlace)
+      .toStopPlace(ticketInfoForBoat.toPlace)
+      .date(ticketInfoForBoat.ticketStartTime)
+      .build();
+  }
 }
 
 function getNonHumanLegs(legs: Leg[]) {

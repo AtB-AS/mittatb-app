@@ -19,6 +19,7 @@ import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-quer
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
 import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
 import type {RecentFareContractType} from '@atb/recent-fare-contracts';
+import {usePurchaseSelectionBuilder} from '@atb/purchase-selection';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -28,6 +29,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {recentFareContracts, loading} = useRecentFareContracts();
   const {data: fareProducts} = useGetFareProductsQuery();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
@@ -46,6 +48,10 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       type: fareProductTypeConfig.type,
     });
 
+    const selection = selectionBuilder
+      .forType(fareProductTypeConfig.type)
+      .build();
+
     if (authenticationType !== 'phone') {
       if (
         fareProductTypeConfig.configuration.requiresLogin &&
@@ -53,14 +59,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         !hasInspectableMobileToken
       ) {
         navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          fareProductTypeConfig,
+          selection,
         });
         return;
       }
 
       if (fareProductTypeConfig.configuration.requiresLogin) {
         navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          fareProductTypeConfig,
+          selection,
         });
         return;
       }
@@ -75,7 +81,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           nextScreen: {
             screen: 'Root_PurchaseOverviewScreen',
             params: {
-              fareProductTypeConfig,
+              selection,
               mode: 'Ticket',
             },
           },
@@ -85,7 +91,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     }
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
-      fareProductTypeConfig: fareProductTypeConfig,
+      selection,
       mode: 'Ticket',
     });
   };
@@ -98,33 +104,36 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
     });
-    const getPlace = (
-      pointToPointValidityPlace: string | undefined,
-      zone: TariffZone | undefined,
-    ): TariffZoneWithMetadata | StopPlaceFragment | undefined => {
-      if (pointToPointValidityPlace !== undefined) {
-        const fromName = harbors?.find(
-          (sp) => sp.id === pointToPointValidityPlace,
-        )?.name;
-        return fromName
-          ? {
-              id: pointToPointValidityPlace,
-              name: fromName,
-            }
-          : undefined;
-      } else if (zone !== undefined) {
-        return {...zone, resultType: 'zone'};
-      }
+
+    const mapZone = (zone: TariffZone): TariffZoneWithMetadata => {
+      return {...zone, resultType: 'zone'};
     };
+
+    const mapPlace = (pointToPointValidityPlace?: string) => {
+      if (!pointToPointValidityPlace) return undefined;
+      const fromName = harbors?.find(
+        (sp) => sp.id === pointToPointValidityPlace,
+      )?.name;
+      return fromName
+        ? {
+            id: pointToPointValidityPlace,
+            name: fromName,
+          }
+        : undefined;
+    };
+
+    const builder = selectionBuilder
+      .forType(fareProductTypeConfig.type)
+      .product(rfc.preassignedFareProduct)
+      .userProfiles(rfc.userProfilesWithCount)
+      .fromStopPlace(mapPlace(rfc.pointToPointValidity?.fromPlace))
+      .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
+    if (rfc.fromTariffZone) builder.fromZone(mapZone(rfc.fromTariffZone));
+    if (rfc.toTariffZone) builder.toZone(mapZone(rfc.toTariffZone));
+    const selection = builder.build();
+
     navigation.navigate('Root_PurchaseOverviewScreen', {
-      fareProductTypeConfig,
-      preassignedFareProduct: rfc.preassignedFareProduct,
-      userProfilesWithCount: rfc.userProfilesWithCount,
-      fromPlace: getPlace(
-        rfc.pointToPointValidity?.fromPlace,
-        rfc.fromTariffZone,
-      ),
-      toPlace: getPlace(rfc.pointToPointValidity?.toPlace, rfc.toTariffZone),
+      selection,
       mode: 'Ticket',
     });
   };

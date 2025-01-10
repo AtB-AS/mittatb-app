@@ -4,15 +4,17 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
-  onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
+  onSelect: (selection: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -21,14 +23,13 @@ export const HarborSelection = forwardRef<
   StopPlaceSelectionProps
 >(({selection, onSelect, style}: StopPlaceSelectionProps, ref) => {
   const {t} = useTranslation();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const fromHarborRef = useRef<TouchableOpacity>(null);
   const toHarborRef = useRef<TouchableOpacity>(null);
   useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
 
   if (!selection.stopPlaces) return null;
-  const fromHarbor = selection.stopPlaces.from;
-  const toHarbor = selection.stopPlaces.to;
 
   return (
     <View style={style} accessible={false}>
@@ -38,27 +39,25 @@ export const HarborSelection = forwardRef<
       <Section accessible={false}>
         <HarborSelectionItem
           fromOrTo="from"
-          harbor={fromHarbor}
+          harbor={selection.stopPlaces.from}
           disabled={false}
           onPress={() =>
-            onSelect({
-              fareProductTypeConfig: selection.fareProductTypeConfig,
-              preassignedFareProduct: selection.preassignedFareProduct,
-            })
+            onSelect(
+              // Wipe existing stop places when selecting new from stop place
+              selectionBuilder
+                .fromSelection(selection)
+                .fromStopPlace(undefined)
+                .toStopPlace(undefined)
+                .build(),
+            )
           }
           ref={fromHarborRef}
         />
         <HarborSelectionItem
           fromOrTo="to"
-          harbor={toHarbor}
-          disabled={!fromHarbor}
-          onPress={() =>
-            onSelect({
-              fromHarbor,
-              fareProductTypeConfig: selection.fareProductTypeConfig,
-              preassignedFareProduct: selection.preassignedFareProduct,
-            })
-          }
+          harbor={selection.stopPlaces.to}
+          disabled={!selection.stopPlaces.from}
+          onPress={() => onSelect(selection)}
           ref={toHarborRef}
         />
       </Section>

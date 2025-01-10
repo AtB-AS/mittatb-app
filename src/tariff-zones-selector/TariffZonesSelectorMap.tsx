@@ -1,4 +1,4 @@
-import {TariffZoneResultType, TariffZoneSelection} from './types';
+import {TariffZoneResultType, type TariffZoneWithMetadata} from './types';
 import {TariffZoneResults} from './TariffZoneResults';
 import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
@@ -17,31 +17,38 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {
+  getReferenceDataName,
   TariffZone,
   useFirestoreConfigurationContext,
-  getReferenceDataName,
 } from '@atb/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type Props = {
-  selectedZones: TariffZoneSelection;
+  selection: PurchaseSelectionType;
+  selectNext: 'from' | 'to';
   isApplicableOnSingleZoneOnly: boolean;
-  setSelectedZones: (selectedZones: TariffZoneSelection) => void;
+  onSelect: (selection: PurchaseSelectionType) => void;
   onSave?: () => void;
 };
 
 const TariffZonesSelectorMap = ({
-  selectedZones,
+  selection,
+  selectNext,
   isApplicableOnSingleZoneOnly,
-  setSelectedZones,
+  onSelect,
   onSave,
 }: Props) => {
   const {tariffZones} = useFirestoreConfigurationContext();
   const styles = useMapStyles();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -71,19 +78,15 @@ const TariffZonesSelectorMap = ({
     const clickedTariffZone = tariffZones.find(
       (tariffZone) => tariffZoneId === tariffZone.id,
     )!;
-    const newZoneSelection: TariffZoneSelection = {
-      ...selectedZones,
-      [selectedZones.selectNext]: {
-        ...clickedTariffZone,
-        resultType: resultType,
-      },
-      selectNext: isApplicableOnSingleZoneOnly
-        ? 'from'
-        : selectedZones.selectNext === 'from'
-        ? 'to'
-        : 'from',
+    const zone: TariffZoneWithMetadata = {
+      ...clickedTariffZone,
+      resultType: resultType,
     };
-    setSelectedZones(newZoneSelection);
+    const builder = selectionBuilder.fromSelection(selection);
+    if (selectNext === 'from') builder.fromZone(zone);
+    if (selectNext === 'to') builder.toZone(zone);
+    const newSelection = builder.build();
+    onSelect(newSelection);
   };
 
   return (
@@ -141,9 +144,9 @@ const TariffZonesSelectorMap = ({
                   fillColor: [
                     // Mapbox Expression syntax
                     'case',
-                    ['==', selectedZones.from.id, ['id']],
+                    ['==', selection.zones?.from.id, ['id']],
                     hexToRgba(theme.color.zone.from.background, 0.6),
-                    ['==', selectedZones.to.id, ['id']],
+                    ['==', selection.zones?.to.id, ['id']],
                     !isApplicableOnSingleZoneOnly
                       ? hexToRgba(theme.color.zone.to.background, 0.6)
                       : 'transparent',

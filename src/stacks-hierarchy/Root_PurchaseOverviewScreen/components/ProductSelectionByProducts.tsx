@@ -23,17 +23,20 @@ import {usePreferencesContext} from '@atb/preferences';
 import {ContentHeading} from '@atb/components/heading';
 import {useThemeContext} from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type ProductSelectionByProductsProps = {
   selection: PurchaseSelectionType;
-  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByProducts({
   selection,
-  setSelectedProduct,
+  setSelection,
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
@@ -42,6 +45,7 @@ export function ProductSelectionByProducts({
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {customerProfile} = useTicketingContext();
   const {hideProductDescriptions} = usePreferencesContext().preferences;
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
@@ -84,7 +88,13 @@ export function ProductSelectionByProducts({
             itemToSubtext={(fp) => subText(fp)}
             selected={selection.preassignedFareProduct}
             color={interactiveColor}
-            onSelect={setSelectedProduct}
+            onSelect={(p) => {
+              const newSelection = selectionBuilder
+                .fromSelection(selection)
+                .product(p)
+                .build();
+              setSelection(newSelection);
+            }}
             accessibilityHint={t(
               PurchaseOverviewTexts.productSelection.a11yTitle,
             )}

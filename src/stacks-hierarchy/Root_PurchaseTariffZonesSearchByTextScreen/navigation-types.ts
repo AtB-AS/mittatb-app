@@ -1,5 +1,6 @@
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
+
 export type Root_PurchaseTariffZonesSearchByTextScreenParams = {
-  callerRouteName: string;
-  callerRouteParam: string;
-  label: string;
+  selection: PurchaseSelectionType;
+  fromOrTo: 'from' | 'to';
 };

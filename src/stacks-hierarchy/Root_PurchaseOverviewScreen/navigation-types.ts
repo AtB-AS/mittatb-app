@@ -1,17 +1,8 @@
-import {FareProductTypeConfig} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type Root_PurchaseOverviewScreenParams = {
+  selection: PurchaseSelectionType;
   refreshOffer?: boolean;
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct?: PreassignedFareProduct;
-  userProfilesWithCount?: UserProfileWithCount[];
-  fromPlace?: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
-  toPlace?: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
   mode?: 'Ticket' | 'TravelSearch';
-  travelDate?: string;
   onFocusElement?: string;
 };
