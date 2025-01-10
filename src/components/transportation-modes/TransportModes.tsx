@@ -26,6 +26,9 @@ const removeDuplicateStringsFilter = (
   arr: string[],
 ): boolean => arr.indexOf(val) === i;
 
+/*
+    Renders transportModes as natural text, e.g. "Buss og trikk"
+ */
 export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,

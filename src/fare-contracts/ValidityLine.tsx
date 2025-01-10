@@ -179,7 +179,6 @@ const VerticalLine = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    //marginBottom: theme.spacing.medium,
     marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },

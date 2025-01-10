@@ -115,11 +115,7 @@ export const FareContractView: React.FC<Props> = ({
 
   return (
     <Section testID={testID}>
-      <GenericSectionItem
-        style={{
-          paddingVertical: 0,
-        }}
-      >
+      <GenericSectionItem style={styles.header}>
         <WithValidityLine
           fc={fareContract}
           preassignedFareProduct={preassignedFareProduct}
@@ -204,12 +200,13 @@ export const FareContractView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginBottom: theme.spacing.large,
+  header: {
+    paddingVertical: 0,
   },
   fareContractDetails: {
     paddingVertical: theme.spacing.large,
     rowGap: theme.spacing.large,
+    alignItems: 'center',
   },
   detailRow: {
     flexDirection: 'row',
