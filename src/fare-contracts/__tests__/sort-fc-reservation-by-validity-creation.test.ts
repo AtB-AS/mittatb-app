@@ -133,4 +133,29 @@ describe('Sort by Validity', () => {
 
     expect(ids).toEqual(['3', '2', '1']);
   });
+
+  it('Multiple reservations and valid fare contracts', async () => {
+    const fcOrReservations: (FareContract | Reservation)[] = [
+      mockupReservation('1', 'reserving', 0),
+      mockupReservation('2', 'reserving', 0.1),
+      mockupFareContract('3', 'valid', 0.1),
+      mockupFareContract('4', 'valid', 0.11),
+    ];
+
+    const result = useSortFcOrReservationByValidityAndCreation(
+      now,
+      fcOrReservations,
+      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
+    );
+    const ids: string[] = result.map((fcOrReservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      if (isFareContract) {
+        return fcOrReservation.id;
+      } else {
+        return fcOrReservation.orderId;
+      }
+    });
+
+    expect(ids).toEqual(['2', '1', '4', '3']);
+  });
 });
