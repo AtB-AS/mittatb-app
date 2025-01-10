@@ -33,7 +33,7 @@ export const ProductName = ({fc, testID}: Props) => {
       typography="body__secondary--bold"
       accessibilityLabel={productName + screenReaderPause}
       testID={testID + 'Product'}
-      color={theme.color.foreground.dark.secondary}
+      color={theme.color.foreground.dynamic.secondary}
     >
       {productName}
     </ThemeText>
