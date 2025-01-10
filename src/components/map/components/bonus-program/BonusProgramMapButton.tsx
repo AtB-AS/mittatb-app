@@ -15,7 +15,7 @@ export const BonusProgramMapButton = ({
   const interactiveColor = theme.color.interactive[2];
   const analytics = useAnalyticsContext();
   const bonusPoints = 0; // TODO: get actual number of user bonus points using useQuery or React.Context
-  var isLoading = false; // TODO: fix actual loading value
+  const isLoading = false; // TODO: fix actual loading value
 
   return (
     <Button
