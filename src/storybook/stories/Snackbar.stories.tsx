@@ -18,7 +18,7 @@ type MetaPropsInputLayer = SnackbarTextContent & {
   actionButtonText: string;
 }; // to easily input title, description and action button text, define them directly as props, and map as input to Story
 
-type SnackbarMetaProps = SnackbarProps & ThemedStoryProps & MetaPropsInputLayer;
+type SnackbarMetaProps = ThemedStoryProps<SnackbarProps & MetaPropsInputLayer>;
 
 const SnackbarMeta: Meta<SnackbarMetaProps> = {
   title: 'Snackbar',
@@ -66,7 +66,13 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
               },
             },
             ...(args.actionButtonText
-              ? {actionButton: {onPress: () => {}, text: args.actionButtonText}}
+              ? {
+                  actionButton: {
+                    onPress: () => {},
+                    text: args.actionButtonText,
+                    expanded: false,
+                  },
+                }
               : undefined),
           }}
         />

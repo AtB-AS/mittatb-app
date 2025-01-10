@@ -6,7 +6,7 @@ import {
   Section,
   TimeInputSectionItem,
 } from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   JourneyDatePickerTexts,
   Language,
@@ -46,7 +46,7 @@ export const JourneyDatePickerScreenComponent = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   const dateItems = Array.from(DateOptions);
@@ -102,6 +102,7 @@ export const JourneyDatePickerScreenComponent = ({
         )}
 
         <Button
+          expanded={true}
           onPress={onSelect}
           interactiveColor={interactiveColor}
           text={t(JourneyDatePickerTexts.searchButton.text)}

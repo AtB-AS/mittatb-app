@@ -2,7 +2,7 @@ import {Feature, Point} from 'geojson';
 import {MapLine} from '@atb/travel-details-map-screen/utils';
 import {RefObject, useEffect} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
@@ -30,7 +30,7 @@ export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  const {height: bottomSheetHeight} = useBottomSheet();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
 
   useEffect(() => {
@@ -151,7 +151,7 @@ export const fitCameraWithinLocation = (
 };
 
 const useCalculatePaddings = (): MapPadding => {
-  const {height: bottomSheetHeight} = useBottomSheet();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {height: screenHeight} = Dimensions.get('screen');
   const basePadding = screenHeight * 0.1;

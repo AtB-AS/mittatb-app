@@ -11,13 +11,13 @@ import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {
   FareProductTypeConfig,
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -30,7 +30,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/harbors';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -52,7 +52,7 @@ export const TripDetailsScreenComponent = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   const {updatedTripPattern, error} =
@@ -75,7 +75,7 @@ export const TripDetailsScreenComponent = ({
             <View accessible={true} ref={focusRef}>
               <ThemeText
                 color={themeColor}
-                type="heading--medium"
+                typography="heading--medium"
                 style={styles.heading}
                 accessibilityLabel={
                   fromToNames
@@ -99,7 +99,7 @@ export const TripDetailsScreenComponent = ({
                 color={themeColor}
               />
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 color={themeColor}
                 accessibilityLabel={t(
                   TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
@@ -126,6 +126,7 @@ export const TripDetailsScreenComponent = ({
       {tripTicketDetails && (
         <View style={styles.borderTop}>
           <Button
+            expanded={true}
             accessibilityRole="button"
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessible={true}
@@ -152,13 +153,13 @@ export const TripDetailsScreenComponent = ({
 function useTicketInfoFromTrip(
   tripPattern: TripPattern,
 ): TicketInfoForBus | TicketInfoForBoat | undefined {
-  const {enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing} = useRemoteConfigContext();
   const {
     isFromTravelSearchToTicketEnabled,
     isFromTravelSearchToTicketBoatEnabled,
-  } = useFeatureToggles();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-  const {tariffZones} = useFirestoreConfiguration();
+  } = useFeatureTogglesContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {tariffZones} = useFirestoreConfigurationContext();
   const {data: harbors} = useHarbors();
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
@@ -387,7 +388,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   heading: {marginBottom: theme.spacing.medium},
   parallaxContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
-    paddingHorizontal: theme.spacing.medium,
+    padding: theme.spacing.medium,
   },
   purchaseButton: {
     position: 'absolute',

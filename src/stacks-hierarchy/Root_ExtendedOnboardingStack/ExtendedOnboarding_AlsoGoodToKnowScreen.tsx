@@ -1,7 +1,7 @@
 import {Onboarding5} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
@@ -11,7 +11,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const interactiveColor = theme.color.interactive[0];
   const styles = useThemeStyles();
@@ -26,7 +26,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
     >
       <View style={styles.mainView}>
         <ThemeText
-          type="body__primary--jumbo--bold"
+          typography="body__primary--jumbo--bold"
           color={themeColor}
           style={styles.header}
         >
@@ -39,6 +39,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
       </View>
       <View style={styles.bottomView}>
         <Button
+          expanded={true}
           interactiveColor={interactiveColor}
           onPress={() => continueFromOnboardingSection('extendedOnboarding')}
           text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}

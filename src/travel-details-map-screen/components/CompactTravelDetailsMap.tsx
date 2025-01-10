@@ -1,6 +1,6 @@
 import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
 
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
@@ -31,7 +31,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   buttonText,
   onExpand,
 }) => {
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
   const cameraRef = useRef<MapboxGL.Camera>(null);
@@ -64,7 +64,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }
 
   return (
-    <>
+    <View>
       <View style={styles.mapContainer}>
         <MapboxGL.MapView
           style={styles.map}
@@ -99,12 +99,12 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         </MapboxGL.MapView>
       </View>
       <PressableOpacity style={styles.button} onPress={onExpand}>
-        <ThemeText type="body__secondary--bold" color="primary">
+        <ThemeText typography="body__secondary--bold" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
       </PressableOpacity>
-    </>
+    </View>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({

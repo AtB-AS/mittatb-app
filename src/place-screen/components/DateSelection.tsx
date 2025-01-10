@@ -1,6 +1,6 @@
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, Language, useTranslation} from '@atb/translations';
@@ -14,7 +14,7 @@ import {
 } from '@atb/utils/date';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {addDays, isToday, parseISO} from 'date-fns';
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {SearchTime} from '../types';
 import {DepartureTimeSheet} from './DepartureTimeSheet';
@@ -33,6 +33,7 @@ export const DateSelection = ({
   const disablePreviousDayNavigation = isToday(
     parseISOFromCET(searchTime.date),
   );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const fontScale = useFontScale();
   const shouldShowNextPrevTexts = fontScale < 1.3;
@@ -68,21 +69,25 @@ export const DateSelection = ({
     setSearchTime(time);
   };
 
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onLaterTimePress = () => {
-    openBottomSheet(() => (
-      <DepartureTimeSheet
-        ref={onOpenFocusRef}
-        initialTime={searchTime}
-        setSearchTime={onSetSearchTime}
-        allowTimeInPast={false}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <DepartureTimeSheet
+          ref={onOpenFocusRef}
+          initialTime={searchTime}
+          setSearchTime={onSetSearchTime}
+          allowTimeInPast={false}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return (
     <View style={styles.dateNavigator}>
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
@@ -91,7 +96,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.prevDay)
             : undefined
         }
-        type="medium"
         mode="tertiary"
         compact={true}
         leftIcon={{svg: ArrowLeft}}
@@ -104,6 +108,7 @@ export const DateSelection = ({
         testID="previousDayButton"
       />
       <Button
+        expanded={false}
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
@@ -112,13 +117,14 @@ export const DateSelection = ({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         testID="setDateButton"
+        ref={onCloseFocusRef}
       />
       <Button
+        expanded={false}
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
@@ -127,7 +133,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.nextDay)
             : undefined
         }
-        type="medium"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}

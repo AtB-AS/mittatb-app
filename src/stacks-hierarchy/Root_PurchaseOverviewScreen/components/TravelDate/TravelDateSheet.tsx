@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DateInputSectionItem,
   Section,
@@ -11,30 +11,31 @@ import {Button} from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type Props = {
-  travelDate?: string;
+  selection: PurchaseSelectionType;
   save: (dateString?: string) => void;
 };
 
-export const TravelDateSheet = ({travelDate, save}: Props) => {
+export const TravelDateSheet = ({selection, save}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const defaultDate = travelDate ?? new Date().toISOString();
+  const defaultDate = selection.travelDate ?? new Date().toISOString();
   const [dateString, setDate] = useState(defaultDate);
 
   const [timeString, setTime] = useState(() =>
     formatLocaleTime(defaultDate, language),
   );
 
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
   const onSave = () => {
     save(dateWithReplacedTime(dateString, timeString).toISOString());
     close();
@@ -54,6 +55,7 @@ export const TravelDateSheet = ({travelDate, save}: Props) => {
       </ScrollView>
       <FullScreenFooter>
         <Button
+          expanded={true}
           onPress={onSave}
           interactiveColor={theme.color.interactive[0]}
           text={t(TravelDateTexts.primaryButton)}

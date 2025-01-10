@@ -2,18 +2,18 @@ import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
+import {StoredFavoriteDeparture, useFavoritesContext} from '@atb/favorites';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -65,11 +65,11 @@ const SelectableFavouriteDeparture = ({
         subMode={favorite.lineTransportationSubMode}
       />
       <View style={styles.selectableDepartureTextView}>
-        <ThemeText type="body__primary" style={styles.lineIdentifierText}>
+        <ThemeText typography="body__primary" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}
         </ThemeText>
 
-        <ThemeText type="body__secondary" style={styles.secondaryText}>
+        <ThemeText typography="body__secondary" style={styles.secondaryText}>
           {t(SelectFavouriteDeparturesText.departures.from)} {favorite.quayName}
           {departureQuay && ' ' + departureQuay}
         </ThemeText>
@@ -96,11 +96,11 @@ export const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
+  const {theme} = useThemeContext();
+  const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setUpdatedFavorites(
@@ -123,7 +123,10 @@ export const SelectFavouritesBottomSheet = ({
       <ScrollView style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
           <>
-            <ThemeText style={styles.questionText} type="heading__component">
+            <ThemeText
+              style={styles.questionText}
+              typography="heading__component"
+            >
               {t(SelectFavouriteDeparturesText.title.text)}
             </ThemeText>
 
@@ -153,6 +156,7 @@ export const SelectFavouritesBottomSheet = ({
       <FullScreenFooter>
         <View style={styles.buttonContainer}>
           <Button
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             text={t(SelectFavouriteDeparturesText.confirm_button.text)}
             accessibilityHint={t(
@@ -164,6 +168,7 @@ export const SelectFavouritesBottomSheet = ({
             testID="confirmButton"
           />
           <Button
+            expanded={true}
             text={t(SelectFavouriteDeparturesText.edit_button.text)}
             accessibilityHint={t(
               SelectFavouriteDeparturesText.edit_button.a11yhint,

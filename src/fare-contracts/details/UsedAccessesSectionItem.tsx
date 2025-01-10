@@ -2,7 +2,7 @@ import {CarnetTravelRightUsedAccess} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {fullDateTime} from '@atb/utils/date.ts';
+import {fullDateTime} from '@atb/utils/date';
 import React from 'react';
 import {useSectionItem} from '@atb/components/sections';
 
@@ -19,11 +19,15 @@ export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
 
   return (
     <View style={topContainer} accessible={true}>
-      <ThemeText type="body__secondary">
+      <ThemeText typography="body__secondary">
         {t(FareContractTexts.details.usedAccesses)}
       </ThemeText>
       {dateStrings.map((dateString) => (
-        <ThemeText key={dateString} type="body__secondary" color="secondary">
+        <ThemeText
+          key={dateString}
+          typography="body__secondary"
+          color="secondary"
+        >
           {dateString}
         </ThemeText>
       ))}

@@ -17,14 +17,14 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useTheme, StyleSheet} from '@atb/theme';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useThemeContext, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {Feature, Point, Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -73,7 +73,7 @@ export const TravelDetailsMapScreenComponent = ({
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
@@ -253,9 +253,9 @@ const LiveVehicleMarker = ({
   heading,
   isError,
 }: VehicleIconProps) => {
-  const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, false).background;
-  const {live_vehicle_stale_threshold} = useRemoteConfig();
+  const {theme} = useThemeContext();
+  const fillColor = useTransportColor(mode, subMode).primary.background;
+  const {live_vehicle_stale_threshold} = useRemoteConfigContext();
 
   const [isStale, setIsStale] = useState(false);
 
@@ -273,9 +273,7 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  const circleColor = useTransportationColor(mode, subMode).background;
-
-  let circleBackgroundColor = circleColor;
+  let circleBackgroundColor = fillColor;
   let circleBorderColor = 'transparent';
   if (isError) {
     circleBackgroundColor =
@@ -361,8 +359,8 @@ const LiveVehicleIcon = ({
   isStale,
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
-  const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode).foreground.primary;
+  const {theme} = useThemeContext();
+  const fillColor = useTransportColor(mode, subMode).primary.foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)

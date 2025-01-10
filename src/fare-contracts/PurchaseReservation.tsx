@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {Reservation, PaymentType, useTicketingState} from '@atb/ticketing';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
@@ -11,6 +11,7 @@ import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {getReservationStatus} from '@atb/fare-contracts/utils';
 
 type Props = {
   reservation: Reservation;
@@ -18,8 +19,8 @@ type Props = {
 
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
-  const {theme} = useTheme();
-  const {customerProfile} = useTicketingState();
+  const {theme} = useThemeContext();
+  const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -29,17 +30,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
       Bugsnag.notify(err);
     }
   }
-  const getStatus = () => {
-    const paymentStatus = reservation.paymentStatus;
-    switch (paymentStatus) {
-      case 'CAPTURE':
-        return 'approved';
-      case 'REJECT':
-        return 'rejected';
-      default:
-        return 'reserving';
-    }
-  };
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
@@ -50,7 +40,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
     return null;
   }
 
-  const status = getStatus();
+  const status = getReservationStatus(reservation);
 
   const paymentType = PaymentType[reservation.paymentType];
   return (
@@ -65,7 +55,10 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <FareContractStatusSymbol status={status} />
             )}
-            <ThemeText type="body__secondary" style={styles.reservationStatus}>
+            <ThemeText
+              typography="body__secondary"
+              style={styles.reservationStatus}
+            >
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </View>
@@ -73,7 +66,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         <VerifyingValidityLine status={status} />
         <View style={styles.infoContainer} accessible={true}>
           {status == 'rejected' && (
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               {t(
                 TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
@@ -85,7 +78,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             </ThemeText>
           )}
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.detail}
           >
@@ -97,6 +90,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
           {reservation.paymentType === PaymentType.Vipps &&
             status === 'reserving' && (
               <Button
+                expanded={true}
                 onPress={() => openVippsUrl(reservation.url)}
                 accessibilityRole="link"
                 text={t(TicketingTexts.reservation.goToVipps)}
@@ -131,7 +125,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
-    marginBottom: theme.spacing.medium,
   },
   extraText: {
     paddingVertical: theme.spacing.xSmall,

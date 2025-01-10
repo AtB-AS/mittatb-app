@@ -9,11 +9,11 @@ import {
 import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
 import {
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -30,11 +30,11 @@ type Props = {
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
-  const {appTexts} = useFirestoreConfiguration();
-  const {flex_ticket_url} = useRemoteConfig();
+  const {appTexts} = useFirestoreConfigurationContext();
+  const {flex_ticket_url} = useRemoteConfigContext();
 
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
 
@@ -49,13 +49,13 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
-          label="new"
           expanded={expanded}
           onPress={setExpanded}
+          testID="flexDiscountExpandable"
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               {description}
             </ThemeText>
           </GenericSectionItem>
@@ -93,7 +93,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 key={u.id}
               >
                 <View style={styles.userProfileDiscountInfo}>
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {t(
                       PurchaseOverviewTexts.flexDiscount.per(
                         userProfileName.toLowerCase(),
@@ -111,7 +111,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                     <ThemeText
                       style={styles.priceInfo}
-                      type="body__tertiary"
+                      typography="body__tertiary"
                       color="primary"
                     >
                       {priceText}

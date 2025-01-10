@@ -80,6 +80,21 @@ class ElementHelper {
   }
 
   /**
+   * Waits for an element to NOT exist given default timeout
+   * @param id name of the test-id to wait for
+   * @param maxTimeout max time to wait in sec (default: 10 sec)
+   */
+  async waitForElementNotExists(id: string, maxTimeout: number = 10) {
+    // Check for n sec
+    let exists = await this.isElementExisting(id, 1);
+    let waitingTime = 1;
+    while (exists && waitingTime < maxTimeout) {
+      exists = await this.isElementExisting(id, 1);
+      waitingTime = waitingTime + 1;
+    }
+  }
+
+  /**
    * Wait for pop-up alert
    */
   async waitForAlert() {

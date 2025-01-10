@@ -1,4 +1,4 @@
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
@@ -21,7 +21,7 @@ export const CounterIconBox = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const lineHeight = theme.icon.size[size];
 
@@ -41,7 +41,7 @@ export const CounterIconBox = ({
     >
       <ThemeText
         color={getTransportColor(theme).secondary}
-        type={textType}
+        typography={textType}
         testID="tripLegMore"
         style={{
           height: lineHeight * fontScale,

@@ -7,6 +7,7 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
   authStatus: 'loading',
   firestoreConfigStatus: 'loading',
   userId: 'user1',
+  remoteConfigIsLoaded: false,
 };
 
 let mockState = DEFAULT_MOCK_STATE;
@@ -15,7 +16,7 @@ let mockRetryAuthInvoked = false;
 let mockRetryFirestoreConfigInvoked = false;
 
 jest.mock('@atb/auth', () => ({
-  useAuthState: () => ({
+  useAuthContext: () => ({
     userId: mockState.userId,
     authStatus: mockState.authStatus,
     retryAuth: () => {
@@ -24,7 +25,7 @@ jest.mock('@atb/auth', () => ({
   }),
 }));
 jest.mock('@atb/configuration', () => ({
-  useFirestoreConfiguration: () => ({
+  useFirestoreConfigurationContext: () => ({
     firestoreConfigStatus: mockState.firestoreConfigStatus,
     resubscribeFirestoreConfig: () => {
       mockRetryFirestoreConfigInvoked = true;
@@ -33,6 +34,12 @@ jest.mock('@atb/configuration', () => ({
 }));
 jest.mock('@atb/loading-screen', () => ({
   useIsLoadingAppState: () => mockState.isLoadingAppState,
+}));
+
+jest.mock('@atb/RemoteConfigContext', () => ({
+  useRemoteConfigContext: () => ({
+    isLoaded: mockState.remoteConfigIsLoaded,
+  }),
 }));
 
 describe('useLoadingState', () => {
@@ -56,6 +63,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -65,6 +73,17 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
+    };
+    hook.rerender();
+    expect(hook.result.current.status).toBe('loading');
+
+    mockState = {
+      isLoadingAppState: false,
+      authStatus: 'authenticated',
+      firestoreConfigStatus: 'success',
+      userId: 'user1',
+      remoteConfigIsLoaded: false,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -90,6 +109,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     expect(hook.result.current.status).toBe('success');
@@ -105,6 +125,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -119,6 +140,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -130,6 +152,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     expect(hook.result.current.status).toBe('success');
@@ -138,6 +161,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -149,6 +173,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -158,6 +183,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('timeout');
@@ -169,6 +195,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(80));
@@ -178,6 +205,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -192,6 +220,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -206,6 +235,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -215,6 +245,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     act(() => hook.result.current.retry());
     expect(hook.result.current.status).toBe('success');
@@ -226,6 +257,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'loading',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -234,6 +266,7 @@ describe('useLoadingState', () => {
       isLoadingAppState: false,
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
+      remoteConfigIsLoaded: true,
     };
     act(() => hook.result.current.retry());
     expect(hook.result.current.status).toBe('success');
@@ -245,6 +278,7 @@ describe('useLoadingState', () => {
       authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => hook.result.current.retry());
@@ -257,6 +291,7 @@ describe('useLoadingState', () => {
       authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -271,6 +306,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'loading',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -285,6 +321,7 @@ describe('useLoadingState', () => {
       authStatus: 'authenticated',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -298,6 +335,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -311,6 +349,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user1',
+      remoteConfigIsLoaded: true,
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -321,6 +360,7 @@ describe('useLoadingState', () => {
       authStatus: 'loading',
       firestoreConfigStatus: 'success',
       userId: 'user2',
+      remoteConfigIsLoaded: true,
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');

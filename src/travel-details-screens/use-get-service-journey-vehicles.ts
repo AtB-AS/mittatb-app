@@ -1,31 +1,18 @@
 import {getServiceJourneyVehicles} from '@atb/api/vehicles';
-import {useCallback} from 'react';
-import {usePollableResource} from '@atb/utils/use-pollable-resource';
-import {AxiosError} from 'axios';
-import {GetServiceJourneyVehicles} from '@atb/api/types/vehicles';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useQuery} from '@tanstack/react-query';
 
-export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
-  const fetchVehicles = useCallback(
-    (signal?: AbortSignal) =>
-      getServiceJourneyVehicles(serviceJourneyIds, {
-        signal,
-      }),
-    // Disabling as this works, and no quick fix in sight without causing havoc
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(serviceJourneyIds)],
-  );
-
-  const [updatedVehicles, , , error] = usePollableResource<
-    GetServiceJourneyVehicles | undefined,
-    AxiosError
-  >(fetchVehicles, {
-    initialValue: undefined,
-    pollingTimeInSeconds: 20,
-    pollOnFocus: true,
+export const useGetServiceJourneyVehiclesQuery = (
+  serviceJourneyIds: string[],
+  enabled: boolean = true,
+) => {
+  const isFocusedAndActive = useIsFocusedAndActive();
+  return useQuery({
+    enabled: enabled && isFocusedAndActive,
+    queryKey: ['serviceJourneyVehicles', ...serviceJourneyIds],
+    queryFn: () => getServiceJourneyVehicles(serviceJourneyIds),
+    refetchInterval: 20000,
+    initialData: [],
+    retry: false,
   });
-
-  return {
-    vehiclePositions: updatedVehicles ?? undefined,
-    error: error,
-  };
 };

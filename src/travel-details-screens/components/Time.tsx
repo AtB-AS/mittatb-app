@@ -5,7 +5,7 @@ import {formatToClock} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {getTimeRepresentationType, TimeValues} from '../utils';
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {RoundingMethod} from 'date-fns';
 
 export const Time: React.FC<{
@@ -15,7 +15,7 @@ export const Time: React.FC<{
 }> = ({timeValues, roundingMethod, timeIsApproximation}) => {
   const {
     preferences: {debugShowSeconds},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   const {t, language} = useTranslation();
   const circaPrefix = timeIsApproximation
@@ -46,7 +46,7 @@ export const Time: React.FC<{
             </AccessibleText>
           </View>
           <AccessibleText
-            type="body__tertiary"
+            typography="body__tertiary"
             color="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
             style={{textDecorationLine: 'line-through'}}

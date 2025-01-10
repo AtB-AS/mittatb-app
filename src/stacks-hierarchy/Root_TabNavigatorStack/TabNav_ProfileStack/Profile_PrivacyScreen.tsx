@@ -4,7 +4,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   ProfileTexts,
   getTextForLanguage,
@@ -16,17 +16,17 @@ import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySe
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useSearchHistory} from '@atb/search-history';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useSearchHistoryContext} from '@atb/search-history';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {allowedPermissionsForBeacons} from '@atb/beacons/permissions';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 
 export const Profile_PrivacyScreen = () => {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const destructiveColor = theme.color.interactive.destructive;
   const {
     revokeBeacons,
@@ -35,12 +35,12 @@ export const Profile_PrivacyScreen = () => {
     isBeaconsSupported,
     deleteCollectedData,
     getPrivacyDashboardUrl,
-  } = useBeaconsState();
+  } = useBeaconsContext();
 
-  const {privacy_policy_url} = useRemoteConfig();
+  const {privacy_policy_url} = useRemoteConfigContext();
   const style = useStyle();
-  const {clearHistory} = useSearchHistory();
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {clearHistory} = useSearchHistoryContext();
+  const {configurableLinks} = useFirestoreConfigurationContext();
 
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
@@ -189,6 +189,7 @@ export const Profile_PrivacyScreen = () => {
 
         <Section style={style.spacingTop}>
           <Button
+            expanded={true}
             leftIcon={{svg: Delete}}
             interactiveColor={destructiveColor}
             text={t(
@@ -217,6 +218,7 @@ export const Profile_PrivacyScreen = () => {
           />
           {isBeaconsSupported && (
             <Button
+              expanded={true}
               style={style.spacingTop}
               leftIcon={{svg: Delete}}
               interactiveColor={destructiveColor}

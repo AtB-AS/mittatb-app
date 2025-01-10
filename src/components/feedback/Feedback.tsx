@@ -13,7 +13,7 @@ import {View} from 'react-native';
 import {RenderQuestion} from './RenderQuestions';
 import {Button} from '@atb/components/button';
 import {GoodOrBadQuestion} from './GoodOrBadQuestion';
-import {StyleSheet, useTheme, Theme} from '@atb/theme';
+import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
 
 export enum Opinions {
   Good = 'GOOD',
@@ -50,7 +50,7 @@ export const Feedback = ({
 }: FeedbackProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const feedbackConfig = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
   const [selectedOpinion, setSelectedOpinion] = useState(
@@ -297,6 +297,7 @@ export const Feedback = ({
         {selectedOpinion !== Opinions.NotClickedYet && (
           <View style={styles.submitButtonView}>
             <Button
+              expanded={true}
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
@@ -308,6 +309,7 @@ export const Feedback = ({
           feedbackConfig.dismissable &&
           !feedbackConfig.alwaysShow && (
             <Button
+              expanded={true}
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}

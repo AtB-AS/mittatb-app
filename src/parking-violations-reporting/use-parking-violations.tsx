@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {initViolationsReporting} from '@atb/api/mobility';
 import {
   ParkingViolationType,
@@ -21,7 +21,7 @@ export const useParkingViolations = () => {
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
   const [coordinates, setCoordinates] = useState<Coordinates>();
 
-  const {getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationContext();
 
   useEffect(() => {
     const getLocationAndInitReporting = async () => {

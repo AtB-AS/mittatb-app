@@ -9,6 +9,7 @@ import NavigationHelper from '../utils/navigation.helper.ts';
 import TravelsearchFilterPage from '../pageobjects/travelsearch.filter.page.js';
 import TimeHelper from '../utils/time.helper.js';
 import {stringToNumArray} from '../utils/utils.js';
+import TimePickerPage from '../pageobjects/time.picker.page.js';
 
 describe('Travel search', () => {
   before(async () => {
@@ -192,9 +193,9 @@ describe('Travel search', () => {
       // Set new departure time
       await TravelsearchFilterPage.openTravelSearchTimePicker();
       await TravelsearchFilterPage.chooseSearchBasedOn('Departure');
-      await TravelsearchFilterPage.openNativeTimePicker();
+      await TimePickerPage.openNativeTimePicker();
       await AppHelper.setTimePickerTime(depTimeHr, depTimeMin);
-      await TravelsearchFilterPage.searchButton.click();
+      await TimePickerPage.searchButton.click();
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 

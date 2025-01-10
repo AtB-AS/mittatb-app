@@ -17,6 +17,7 @@ export type RemoteConfig = {
   enable_auto_sale: boolean;
   enable_backend_sms_auth: boolean;
   enable_beacons: boolean;
+  enable_bonus_program: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
   enable_extended_onboarding: boolean;
@@ -30,6 +31,7 @@ export type RemoteConfig = {
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_on_behalf_of: boolean;
+  enable_onboarding_login: boolean;
   enable_parking_violations_reporting: boolean;
   enable_posthog: boolean;
   enable_push_notifications: boolean;
@@ -38,7 +40,6 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
-  enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback: boolean;
   enable_token_fallback_on_timeout: boolean;
@@ -88,6 +89,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_auto_sale: false,
   enable_backend_sms_auth: false,
   enable_beacons: false,
+  enable_bonus_program: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
@@ -100,6 +102,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
+  enable_onboarding_login: true,
   enable_parking_violations_reporting: false,
   enable_posthog: false,
   enable_push_notifications: false,
@@ -109,7 +112,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_from_travel_search_to_ticket_boat: false,
-  enable_ticketing_assistant: false,
   enable_tips_and_information: false,
   enable_token_fallback: true,
   enable_token_fallback_on_timeout: true,
@@ -177,6 +179,9 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_backend_sms_auth;
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
+  const enable_bonus_program =
+    values['enable_bonus_program']?.asBoolean() ??
+    defaultRemoteConfig.enable_bonus_program;
   const enable_car_sharing_in_map =
     values['enable_car_sharing_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_car_sharing_in_map;
@@ -210,6 +215,9 @@ export function getConfig(): RemoteConfig {
   const enable_on_behalf_of =
     values['enable_on_behalf_of']?.asBoolean() ??
     defaultRemoteConfig.enable_on_behalf_of;
+  const enable_onboarding_login =
+    values['enable_onboarding_login']?.asBoolean() ??
+    defaultRemoteConfig.enable_onboarding_login;
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
@@ -231,9 +239,6 @@ export function getConfig(): RemoteConfig {
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
-  const enable_ticketing_assistant =
-    values['enable_ticketing_assistant']?.asBoolean() ??
-    defaultRemoteConfig.enable_ticketing_assistant;
   const enable_from_travel_search_to_ticket_boat =
     values['enable_from_travel_search_to_ticket_boat']?.asBoolean() ??
     defaultRemoteConfig.enable_from_travel_search_to_ticket_boat;
@@ -344,6 +349,7 @@ export function getConfig(): RemoteConfig {
     enable_auto_sale,
     enable_backend_sms_auth,
     enable_beacons,
+    enable_bonus_program,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
     enable_extended_onboarding,
@@ -356,6 +362,7 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_nynorsk,
     enable_on_behalf_of,
+    enable_onboarding_login,
     enable_parking_violations_reporting,
     enable_posthog,
     enable_push_notifications,
@@ -364,7 +371,6 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_ticket_information,
     enable_ticketing,
-    enable_ticketing_assistant,
     enable_from_travel_search_to_ticket_boat,
     enable_tips_and_information,
     enable_token_fallback,

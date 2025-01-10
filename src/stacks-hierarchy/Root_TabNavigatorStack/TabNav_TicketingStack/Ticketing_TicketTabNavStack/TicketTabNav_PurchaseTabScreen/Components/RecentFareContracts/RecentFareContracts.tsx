@@ -1,24 +1,26 @@
 import {ThemeText} from '@atb/components/text';
 import {
   isProductSellableInApp,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   FareProductTypeConfig,
 } from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {RecentFareContractComponent} from './RecentFareContractComponent';
-import {RecentFareContract} from '../../types';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {
+  RecentFareContract,
+  type RecentFareContractType,
+} from '@atb/recent-fare-contracts';
 
 type Props = {
-  recentFareContracts: RecentFareContract[];
+  recentFareContracts: RecentFareContractType[];
   loading: boolean;
   onSelect: (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => void;
@@ -30,10 +32,10 @@ export const RecentFareContracts = ({
   onSelect,
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
 
   const memoizedRecentFareContracts = useMemo(
     () =>
@@ -60,7 +62,7 @@ export const RecentFareContracts = ({
           accessibilityLabel={t(RecentFareContractsTexts.titles.loading)}
         >
           <ThemeText
-            type="body__primary"
+            typography="body__primary"
             style={{textAlign: 'center', marginBottom: theme.spacing.large}}
           >
             {t(TicketingTexts.recentFareContracts.loading)}
@@ -73,7 +75,7 @@ export const RecentFareContracts = ({
 
       {!loading && !!memoizedRecentFareContracts.length && (
         <>
-          <ThemeText type="body__secondary" style={styles.header}>
+          <ThemeText typography="body__secondary" style={styles.header}>
             {t(RecentFareContractsTexts.repeatPurchase.label)}
           </ThemeText>
           <ScrollView
@@ -86,7 +88,7 @@ export const RecentFareContracts = ({
           >
             {memoizedRecentFareContracts.map((rfc) => {
               return (
-                <RecentFareContractComponent
+                <RecentFareContract
                   key={rfc.id}
                   recentFareContract={rfc}
                   onSelect={onSelect}

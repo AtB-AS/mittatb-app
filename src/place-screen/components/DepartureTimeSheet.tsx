@@ -1,7 +1,7 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -10,7 +10,7 @@ import {
   Section,
   TimeInputSectionItem,
 } from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   dateWithReplacedTime,
@@ -32,7 +32,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
     const interactiveColor = theme.color.interactive[0];
 
     const [date, setDate] = useState(initialTime.date);
@@ -40,7 +40,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
       formatLocaleTime(initialTime.date, language),
     );
 
-    const {close} = useBottomSheet();
+    const {close} = useBottomSheetContext();
     const onSelect = () => {
       const calculatedTime = dateWithReplacedTime(date, time).toISOString();
       if (isInThePast(calculatedTime) && !allowTimeInPast) {
@@ -60,17 +60,27 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           style={{paddingBottom: keyboardHeight}}
           ref={focusRef}
         >
-          <Section style={styles.section}>
-            <DateInputSectionItem value={date} onChange={setDate} />
-            <TimeInputSectionItem value={time} onChange={setTime} />
+          <Section style={styles.section} testID="dateTimePickerSection">
+            <DateInputSectionItem
+              value={date}
+              onChange={setDate}
+              testID="datePicker"
+            />
+            <TimeInputSectionItem
+              value={time}
+              onChange={setTime}
+              testID="timePicker"
+            />
           </Section>
 
           <Button
+            expanded={true}
             onPress={onSelect}
             interactiveColor={interactiveColor}
             text={t(DeparturesTexts.dateInput.confirm)}
             rightIcon={{svg: Confirm}}
             accessibilityHint={t(DeparturesTexts.dateInput.a11yInPastHint)}
+            testID="searchButton"
           />
         </ScrollView>
 

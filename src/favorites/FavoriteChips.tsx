@@ -3,8 +3,8 @@ import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useGeolocationContext} from '@atb/GeolocationContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -15,7 +15,7 @@ import {
   FavoriteIcon,
   GeoLocation,
   Location,
-  useFavorites,
+  useFavoritesContext,
 } from '@atb/favorites';
 
 type Props = {
@@ -35,9 +35,9 @@ export const FavoriteChips: React.FC<Props> = ({
   chipActionHint,
   onAddFavorite,
 }) => {
-  const {favorites} = useFavorites();
+  const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
@@ -55,6 +55,7 @@ export const FavoriteChips: React.FC<Props> = ({
       >
         {activeType('location') && (
           <FavoriteChip
+            expanded={false}
             backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
@@ -67,6 +68,7 @@ export const FavoriteChips: React.FC<Props> = ({
         )}
         {activeType('map') && !disableMap && (
           <FavoriteChip
+            expanded={false}
             text={t(FavoriteTexts.chips.mapLocation)}
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
@@ -80,6 +82,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
+              expanded={false}
               key={fav.id}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -100,6 +103,7 @@ export const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
+            expanded={false}
             backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
@@ -115,7 +119,7 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  return <Button {...props} type="medium" compact={true} />;
+  return <Button {...props} compact={true} />;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -128,7 +132,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 function useCurrentLocationChip(
   onSelectLocation: (location: GeoLocation) => void,
 ) {
-  const {location, requestLocationPermission} = useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationContext();
 
   const [recentlyAllowedGeo, setRecentlyAllowedGeo] = useState(false);
 

@@ -7,7 +7,7 @@ import {
 } from '@atb/components/sections';
 import {Linking, Platform, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
@@ -17,14 +17,14 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useNotifications, isConfigEnabled} from '@atb/notifications';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useNotificationsContext, isConfigEnabled} from '@atb/notifications';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
 import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {useAuthState} from '@atb/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 type NotificationsScreenProps =
   ProfileScreenProps<'Profile_NotificationsScreen'>;
@@ -34,7 +34,7 @@ export const Profile_NotificationsScreen = ({
 }: NotificationsScreenProps) => {
   const style = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
@@ -43,11 +43,11 @@ export const Profile_NotificationsScreen = ({
     requestPermissions,
     checkPermissions,
     updateConfig,
-  } = useNotifications();
-  const {notificationConfig} = useFirestoreConfiguration();
+  } = useNotificationsContext();
+  const {notificationConfig} = useFirestoreConfigurationContext();
   const profileQuery = useProfileQuery();
-  const {authenticationType} = useAuthState();
-  const {disable_email_field_in_profile_page} = useRemoteConfig();
+  const {authenticationType} = useAuthContext();
+  const {disable_email_field_in_profile_page} = useRemoteConfigContext();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -93,7 +93,7 @@ export const Profile_NotificationsScreen = ({
       }}
       parallaxContent={(focusRef) => (
         <View style={style.parallaxContent} ref={focusRef} accessible={true}>
-          <ThemeText color={themeColor} type="heading--medium">
+          <ThemeText color={themeColor} typography="heading--medium">
             {t(
               ProfileTexts.sections.settings.linkSectionItems.notifications
                 .heading,

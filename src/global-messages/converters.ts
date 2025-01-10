@@ -1,4 +1,4 @@
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
 import {isArray} from 'lodash';
 import {APP_VERSION} from '@env';
 import {Platform} from 'react-native';

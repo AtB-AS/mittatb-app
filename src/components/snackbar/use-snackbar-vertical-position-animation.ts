@@ -4,7 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {shadows} from '@atb/components/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 export const snackbarAnimationDurationMS = 300; // 0.3 seconds
 
@@ -14,7 +14,7 @@ export const useSnackbarVerticalPositionAnimation = (
 ) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const withSnackbarPadding = (safeAreaHeight: number) =>
     Math.max(safeAreaHeight, theme.spacing.medium) + theme.spacing.small;
 

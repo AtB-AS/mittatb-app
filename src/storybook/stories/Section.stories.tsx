@@ -32,9 +32,8 @@ import {
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
-import {themes} from '@atb/theme/colors';
 
-type SectionMetaProps = SectionProps & ThemedStoryProps;
+type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
 
 const SectionMeta: Meta<SectionMetaProps> = {
@@ -57,7 +56,6 @@ export default SectionMeta;
 export const ListedSectionItems: Meta<SectionMetaProps> = {
   args: {
     style: {margin: 12},
-    backgroundColor: themes.light.color.background.neutral[2],
   },
   decorators: [
     (Story, {args}) => (
@@ -95,7 +93,6 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <FavoriteDepartureSectionItem
                   favorite={{
                     id: '1',
-                    stopId: '2',
                     lineId: '3',
                     quayId: '4',
                     quayName: 'FavoriteDepartureSectionItem',
@@ -185,10 +182,7 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
 };
 
 export const RadioSection: Meta<SectionMetaProps> = {
-  args: {
-    style: {margin: 12},
-    backgroundColor: themes.light.color.background.neutral[1],
-  },
+  args: {style: {margin: 12}},
   decorators: [
     (Story, {args}) => (
       <Story

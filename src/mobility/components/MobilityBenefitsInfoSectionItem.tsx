@@ -7,7 +7,7 @@ import {BenefitImageAsset} from '@atb/mobility/components/BenefitImage';
 import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {toFormFactorEnum} from '@atb/mobility/utils';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
@@ -22,7 +22,7 @@ export const MobilityBenefitsInfoSectionItem = ({
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const accessibilityLabel =
     t(MobilityTexts.includedWithTheTicket) +
@@ -44,7 +44,7 @@ export const MobilityBenefitsInfoSectionItem = ({
       accessible={true}
       accessibilityLabel={accessibilityLabel}
     >
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox
@@ -71,7 +71,7 @@ const BenefitInfo = ({
   const styles = useStyles();
   return (
     <View style={styles.benefitInfo}>
-      {formFactors.length && (
+      {!!formFactors.length && (
         <View style={styles.formFactorsContainer}>
           {formFactors.map((ff) => (
             <BenefitImageAsset
@@ -82,7 +82,7 @@ const BenefitInfo = ({
           ))}
         </View>
       )}
-      <ThemeText type="body__tertiary" style={styles.benefitText}>
+      <ThemeText typography="body__tertiary" style={styles.benefitText}>
         {getTextForLanguage(ticketDescription, language)}
       </ThemeText>
     </View>

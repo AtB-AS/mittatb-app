@@ -48,7 +48,7 @@ const LoginTexts = {
   terms: {
     title: _('Betingelser', 'Terms', 'Vilkår'),
   },
-  activeFareContractPrompt: {
+  availableFareContractPrompt: {
     header: _('Logg inn', 'Log in', 'Logg inn'),
     title: _(
       'Billetten din slettes ved innlogging',
@@ -203,7 +203,7 @@ const LoginTexts = {
 
 export default orgSpecificTranslations(LoginTexts, {
   fram: {
-    activeFareContractPrompt: {
+    availableFareContractPrompt: {
       body: _(
         'Billetten kan **ikke** overføres til din bruker og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
         'This ticket can **not** be transferred to your user, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',

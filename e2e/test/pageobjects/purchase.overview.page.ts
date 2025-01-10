@@ -21,6 +21,22 @@ class PurchaseOverviewPage {
   }
 
   /**
+   * Get flex discount expandable - expand or hide
+   */
+  get flexDiscountExpandable() {
+    const reqId = `//*[@resource-id="flexDiscountExpandable"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Get the description toggle for category info
+   */
+  get toggleDescription() {
+    const reqId = `//*[@resource-id="descriptionToggle"]`;
+    return $(reqId);
+  }
+
+  /**
    * Get the on-behalf-of toggle
    */
   get onBehalfOfToggle() {
@@ -35,6 +51,20 @@ class PurchaseOverviewPage {
     const reqId = `//*[@resource-id="selectTravellerButton"]`;
     await $(reqId).click();
     await ElementHelper.waitForElement('text', 'Travellers');
+  }
+
+  /**
+   * Click on the edit zone button
+   */
+  async selectZones() {
+    const reqId = `//*[@resource-id="selectZonesButton"]`;
+    await $(reqId).click();
+
+    // Deny to share location
+    await OnboardingPage.denyLocationAndDontAskAgain();
+    await AlertHelper.systemSettingsCancel.click();
+
+    await ElementHelper.waitForElement('text', 'Select stops/zones');
   }
 
   /**
@@ -79,6 +109,15 @@ class PurchaseOverviewPage {
   async getTraveller() {
     const reqId = `//*[@resource-id="selectedTravellers"]`;
     return $(reqId).getText();
+  }
+
+  /**
+   * Open the ticket information
+   */
+  async showTicketInformation() {
+    const reqId = `//*[@resource-id="ticketInformationButton"]`;
+    await $(reqId).click();
+    await ElementHelper.waitForElement('text', 'Ticket description');
   }
 
   /**

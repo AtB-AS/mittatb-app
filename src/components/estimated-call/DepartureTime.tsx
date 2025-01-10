@@ -5,20 +5,23 @@ import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   formatLocaleTime,
   formatToClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
+import {ContrastColor} from '@atb-as/theme';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 type DepartureTimeProps = {
-  departure: EstimatedCall;
+  color?: ContrastColor;
+  departure: EstimatedCall | EstimatedCallWithMetadata;
 };
-export const DepartureTime = ({departure}: DepartureTimeProps) => {
+export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   return (
     <View>
@@ -31,12 +34,13 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
           />
         )}
         <ThemeText
-          type={
+          typography={
             departure.cancellation
               ? 'body__primary--strike'
               : 'body__primary--bold'
           }
-          color={departure.cancellation ? 'secondary' : 'primary'}
+          color={color}
+          type={departure.cancellation ? 'secondary' : 'primary'}
         >
           {formatToClockOrRelativeMinutes(
             departure.expectedDepartureTime,
@@ -47,8 +51,9 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
       </View>
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
-          type="body__tertiary--strike"
-          color="secondary"
+          typography="body__tertiary--strike"
+          color={color}
+          type="secondary"
           style={styles.aimedTime}
         >
           {formatLocaleTime(departure.aimedDepartureTime, language)}
@@ -58,7 +63,9 @@ export const DepartureTime = ({departure}: DepartureTimeProps) => {
   );
 };
 
-const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
+const isMoreThanOneMinuteDelayed = (
+  departure: EstimatedCall | EstimatedCallWithMetadata,
+) =>
   secondsBetween(
     departure.aimedDepartureTime,
     departure.expectedDepartureTime,

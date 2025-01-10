@@ -1,4 +1,4 @@
-export {AuthContextProvider, useAuthState} from './AuthContext';
+export {AuthContextProvider, useAuthContext} from './AuthContext';
 export type {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,

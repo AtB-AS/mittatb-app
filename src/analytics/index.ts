@@ -1,2 +1,5 @@
-export {AnalyticsContextProvider, useAnalytics} from './AnalyticsContext';
+export {
+  AnalyticsContextProvider,
+  useAnalyticsContext,
+} from './AnalyticsContext';
 export type {AnalyticsEventContext} from './types';

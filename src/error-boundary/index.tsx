@@ -2,7 +2,7 @@ import React, {ErrorInfo} from 'react';
 import Bugsnag from '@bugsnag/react-native';
 import Intercom from '@intercom/intercom-react-native';
 import {FullScreenErrorView} from './FullScreenErrorView';
-import {ComponentErrorView} from './ComponentErrorView';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props =
   | {
@@ -61,7 +61,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           );
         case 'component':
         default:
-          return <ComponentErrorView message={message!} />;
+          return <MessageInfoBox message={message!} type="error" />;
       }
     }
     return (

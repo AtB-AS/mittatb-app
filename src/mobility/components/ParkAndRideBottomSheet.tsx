@@ -68,12 +68,14 @@ export const ParkAndRideBottomSheet = ({
       <ScrollView>
         <View style={styles.buttonsContainer}>
           <Button
+            expanded={true}
             text={t(DeparturesDialogSheetTexts.travelFrom.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
             mode="primary"
             style={styles.travelButton}
           />
           <Button
+            expanded={true}
             text={t(DeparturesDialogSheetTexts.travelTo.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
             mode="primary"
@@ -84,7 +86,7 @@ export const ParkAndRideBottomSheet = ({
           <Section>
             <GenericSectionItem>
               <View style={styles.parkingName}>
-                <ThemeText type="body__secondary" color="secondary">
+                <ThemeText typography="body__secondary" color="secondary">
                   {heading}
                 </ThemeText>
                 <WalkingDistance distance={distance} />

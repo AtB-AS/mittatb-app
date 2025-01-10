@@ -1,6 +1,11 @@
-import {useAnalytics} from '@atb/analytics';
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useAnalyticsContext} from '@atb/analytics';
+import {
+  Amex,
+  MasterCard,
+  Vipps,
+  Visa,
+} from '@atb/assets/svg/color/icons/ticketing';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -9,7 +14,7 @@ import {ThemeText} from '@atb/components/text';
 import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
@@ -17,7 +22,14 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -36,7 +48,7 @@ import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {closeInAppBrowser} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -45,15 +57,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
 
   const interactiveColor = theme.color.interactive[0];
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -61,6 +74,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const {selection, recipient} = params;
 
@@ -117,7 +131,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       screen: 'TabNav_TicketingStack',
       params: {
         screen: 'Ticketing_RootScreen',
-        params: {screen: 'TicketTabNav_ActiveFareProductsTabScreen'},
+        params: {screen: 'TicketTabNav_AvailableFareContractsTabScreen'},
       },
     });
   }, [
@@ -186,6 +200,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       case PaymentType.Mastercard:
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
+      case PaymentType.Amex:
+        str = t(PurchaseConfirmationTexts.payWithAmex.text);
+        break;
     }
     if (method.recurringCard) {
       str = str + ` (**** ${method.recurringCard.masked_pan})`;
@@ -218,7 +235,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }}
         />
       );
-    });
+    }, onCloseFocusRef);
   }
 
   return (
@@ -309,6 +326,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             {paymentMethod ? (
               <View style={styles.flexColumn}>
                 <Button
+                  expanded={true}
                   text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
@@ -345,9 +363,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   accessibilityHint={t(
                     PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
                   )}
+                  ref={onCloseFocusRef}
                 >
                   <View style={styles.flexRowCenter}>
-                    <ThemeText type="body__primary--bold">
+                    <ThemeText typography="body__primary--bold">
                       {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
                     </ThemeText>
                   </View>
@@ -355,6 +374,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
             ) : (
               <Button
+                expanded={true}
                 interactiveColor={interactiveColor}
                 text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
                 disabled={!!offerError}
@@ -368,6 +388,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   selectPaymentMethod();
                 }}
                 testID="choosePaymentMethodButton"
+                ref={onCloseFocusRef}
               />
             )}
           </View>
@@ -385,6 +406,8 @@ function getPaymentTypeSvg(paymentType: PaymentType) {
       return Vipps;
     case PaymentType.Visa:
       return Visa;
+    case PaymentType.Amex:
+      return Amex;
   }
 }
 

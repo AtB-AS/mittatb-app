@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Linking, View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {ThemeText} from '@atb/components/text';
@@ -13,7 +13,7 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
 import {useParkingViolations} from '@atb/parking-violations-reporting';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelectScreen'>;
@@ -25,13 +25,13 @@ export const Root_ParkingViolationsSelectScreen = ({
 }: SelectViolationScreenProps) => {
   const style = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {parkingViolationsState, isLoading, violations} =
     useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
     ParkingViolationType[]
   >([]);
-  const {locationIsAvailable, location} = useGeolocationState();
+  const {locationIsAvailable, location} = useGeolocationContext();
 
   const preReqs =
     locationIsAvailable && location && parkingViolationsState === 'success';
@@ -43,6 +43,7 @@ export const Root_ParkingViolationsSelectScreen = ({
       secondaryText={t(ParkingViolationTexts.selectViolation.description)}
       buttons={
         <Button
+          expanded={true}
           disabled={!preReqs}
           onPress={() => {
             navigation.navigate('Root_ParkingViolationsPhotoScreen', {
@@ -105,7 +106,7 @@ const IssueMessageBox = () => {
   const {t} = useTranslation();
   const style = useStyles();
 
-  const {status: locationPermissionStatus, location} = useGeolocationState();
+  const {status: locationPermissionStatus, location} = useGeolocationContext();
 
   let titleAndMessageTexts: ViolationsReportingIssue = 'general';
   let type: Statuses = 'error';

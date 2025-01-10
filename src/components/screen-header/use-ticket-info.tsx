@@ -2,9 +2,9 @@ import {
   PreassignedFareProduct,
   findReferenceDataById,
   isOfFareProductRef,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {FareContract, useTicketingState} from '@atb/ticketing';
+import {FareContract, useTicketingContext} from '@atb/ticketing';
 
 type TicketInfoParams = {
   fareProductTypeConfigType: string;
@@ -18,11 +18,11 @@ type TicketInfo = {
 };
 
 export const useTicketInfo = (orderId: string): TicketInfo => {
-  const {findFareContractByOrderId} = useTicketingState();
+  const {findFareContractByOrderId} = useTicketingContext();
   const fareContract = findFareContractByOrderId(orderId);
   const firstTravelRight = fareContract?.travelRights[0];
 
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',

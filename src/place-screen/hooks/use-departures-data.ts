@@ -5,7 +5,7 @@ import {
 } from '@atb/api/departures/stops-nearest';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
+import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';
@@ -247,7 +247,7 @@ export function useDeparturesData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
-    useFavorites();
+    useFavoritesContext();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
   const [timeRange, setTimeRange] = useState<number | undefined>();
   const lastHardRefreshTime = useRef<Date>(new Date());

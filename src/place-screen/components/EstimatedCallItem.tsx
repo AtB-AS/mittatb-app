@@ -35,7 +35,7 @@ import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
 } from '@atb/situations/utils';
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {DepartureTime} from '@atb/components/estimated-call';

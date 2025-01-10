@@ -1,11 +1,11 @@
 import {Dispatch} from 'react';
 import {AuthReducerAction} from './types';
 import {AuthReducerState} from '@atb/auth/AuthContext';
-import {secondsToTokenExpiry} from '@atb/auth/utils.ts';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status.ts';
-import {useInterval} from '@atb/utils/use-interval.ts';
-import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils.ts';
-import {ONE_SECOND_MS} from '@atb/utils/durations.ts';
+import {secondsToTokenExpiry} from '@atb/auth/utils';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {useInterval} from '@atb/utils/use-interval';
+import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 export const useRefreshIdTokenWhenNecessary = (
   state: AuthReducerState,

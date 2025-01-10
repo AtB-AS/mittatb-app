@@ -20,6 +20,22 @@ class DepartureDetailPage {
   }
 
   /**
+   * Return the public code
+   */
+  async getPublicCode() {
+    const publicCodeId = `//*[@resource-id="PublicCode"]`;
+    return $(publicCodeId).getText();
+  }
+
+  /**
+   * Return the line name
+   */
+  async getLineName() {
+    const lineNameId = `//*[@resource-id="lineName"]`;
+    return $(lineNameId).getText();
+  }
+
+  /**
    * Return the quay name
    * @param legType 'passed' or 'trip'
    * @param legIndex index of the leg
@@ -43,6 +59,15 @@ class DepartureDetailPage {
     await AppHelper.pause(500);
     await ElementHelper.waitForElement('id', 'quaySection');
     await ElementHelper.waitForElement('id', 'estimatedCallItem');
+  }
+
+  /**
+   * Open journey aid
+   */
+  async openJourneyAid() {
+    const buttonId = `//*[@resource-id="journeyAidButton"]`;
+    await $(buttonId).click();
+    await ElementHelper.waitForElement('id', 'closeJourneyAidButton');
   }
 }
 

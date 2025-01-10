@@ -9,10 +9,10 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   GeoLocation,
   Location,
-  useFavorites,
+  useFavoritesContext,
   UserFavorites,
 } from '@atb/favorites';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,
   useLocationSearchValue,
@@ -24,7 +24,7 @@ import {
 } from '@atb/journey-date-picker';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
 import {
@@ -46,14 +46,14 @@ import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {TripPattern} from '@atb/api/types/trips';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePopOver} from '@atb/popover';
+import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected} from './utils';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -68,19 +68,20 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 }) => {
   const {callerRoute} = route.params;
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const headerBackgroundColor = getHeaderBackgroundColor(theme);
   const interactiveColor = theme.color.interactive[1];
   const statusColor = theme.color.status.valid.primary;
 
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const isFocused = useIsFocusedAndActive();
-  const {addPopOver} = usePopOver();
+  const {addPopOver} = usePopOverContext();
   const filterButtonWrapperRef = useRef(null);
+  const filterButtonRef = useRef(null);
 
-  const {location, requestLocationPermission} = useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationContext();
 
   const currentLocation = location || undefined;
 
@@ -90,9 +91,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     date: new Date().toISOString(),
   });
 
-  const filtersState = useTravelSearchFiltersState();
+  const filtersState = useTravelSearchFiltersState({
+    onCloseFocusRef: filterButtonRef,
+  });
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
-    useFeatureToggles();
+    useFeatureTogglesContext();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
   const {nonTransitTrips} = useNonTransitTripsQuery(
@@ -329,6 +332,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </Section>
             <View style={styles.searchParametersButtons}>
               <Button
+                expanded={true}
                 text={getSearchTimeLabel(
                   searchTime,
                   timeOfLastSearch,
@@ -362,14 +366,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {filtersState.enabled && (
                 <View ref={filterButtonWrapperRef} collapsable={false}>
                   <Button
+                    expanded={false}
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
                     interactiveColor={interactiveColor}
-                    type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
                     testID="filterButton"
+                    ref={filterButtonRef}
                     rightIcon={{
                       svg: Filter,
                       notification: !areDefaultFiltersSelected(
@@ -381,7 +386,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           }
                         : undefined,
                     }}
-                    ref={filtersState.onCloseFocusRef}
                   />
                 </View>
               )}
@@ -507,7 +511,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
-  const {favorites} = useFavorites();
+  const {favorites} = useFavoritesContext();
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,

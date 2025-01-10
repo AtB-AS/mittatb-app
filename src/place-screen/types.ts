@@ -1,4 +1,4 @@
-import {Quay, StopPlace} from '@atb/api/types/departures.ts';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 
 export const DateOptions = ['now', 'departure'] as const;
 export type DateOptionType = (typeof DateOptions)[number];

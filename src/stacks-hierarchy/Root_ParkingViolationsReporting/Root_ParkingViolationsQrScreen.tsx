@@ -1,10 +1,10 @@
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect, useMemo, useState} from 'react';
+import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -14,7 +14,7 @@ import {
   blobToBase64,
   useParkingViolations,
 } from '@atb/parking-violations-reporting';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -28,15 +28,17 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
   const {providers, coordinates} = useParkingViolations();
-  const {userId} = useAuthState();
+  const {userId} = useAuthContext();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const providersList = useMemo(
     () => [
@@ -111,14 +113,17 @@ export const Root_ParkingViolationsQrScreen = ({
       disableScanning(qr);
       const providerAndVehicleId = await getProviderByQr(qr);
       if (providerAndVehicleId) {
-        openBottomSheet(() => (
-          <VehicleLookupConfirmationBottomSheet
-            vehicleId={providerAndVehicleId.vehicle_id}
-            provider={providerAndVehicleId.provider}
-            onReportSubmit={submitReport}
-            onClose={enableScanning}
-          />
-        ));
+        openBottomSheet(
+          () => (
+            <VehicleLookupConfirmationBottomSheet
+              vehicleId={providerAndVehicleId.vehicle_id}
+              provider={providerAndVehicleId.provider}
+              onReportSubmit={submitReport}
+              onClose={enableScanning}
+            />
+          ),
+          onCloseFocusRef,
+        );
       } else {
         selectProvider(true);
       }
@@ -126,16 +131,19 @@ export const Root_ParkingViolationsQrScreen = ({
   };
 
   const selectProvider = (qrScanFailed?: boolean) => {
-    openBottomSheet(() => (
-      <SelectProviderBottomSheet
-        providers={providersList}
-        qrScanFailed={qrScanFailed}
-        onSelect={(provider) => {
-          submitReport(provider.id);
-        }}
-        onClose={enableScanning}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <SelectProviderBottomSheet
+          providers={providersList}
+          qrScanFailed={qrScanFailed}
+          onSelect={(provider) => {
+            submitReport(provider.id);
+          }}
+          onClose={enableScanning}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const disableScanning = (qr: string) => {
@@ -155,11 +163,13 @@ export const Root_ParkingViolationsQrScreen = ({
       leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
       buttons={
         <Button
+          expanded={true}
           disabled={isError}
           mode="secondary"
           backgroundColor={themeColor}
           onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+          ref={onCloseFocusRef}
         />
       }
       isLoading={isLoading}

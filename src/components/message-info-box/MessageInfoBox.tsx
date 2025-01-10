@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -41,6 +41,7 @@ export type MessageInfoBoxProps = {
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
   a11yLiveRegion?: A11yLiveRegion;
+  focusRef?: React.Ref<any>;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -53,9 +54,10 @@ export const MessageInfoBox = ({
   onPressConfig,
   onDismiss,
   a11yLiveRegion,
+  focusRef,
   testID,
 }: MessageInfoBoxProps) => {
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const iconColorProps = {
@@ -84,6 +86,7 @@ export const MessageInfoBox = ({
       style={[styles.container, style]}
       accessible={false}
       testID={testID}
+      focusRef={focusRef}
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -107,7 +110,7 @@ export const MessageInfoBox = ({
       >
         {title && (
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
@@ -117,7 +120,7 @@ export const MessageInfoBox = ({
         )}
         <ThemeText
           color={textColor}
-          type="body__primary"
+          typography="body__primary"
           isMarkdown={isMarkdown}
         >
           {message}
@@ -126,7 +129,7 @@ export const MessageInfoBox = ({
           <ThemeText
             color={textColor}
             style={styles.linkText}
-            type="body__primary--underline"
+            typography="body__primary--underline"
           >
             {onPressConfig.text}
           </ThemeText>

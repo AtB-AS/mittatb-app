@@ -1,8 +1,8 @@
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useCallback, useEffect} from 'react';
+import {RefObject, useCallback, useEffect, useRef} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -30,9 +30,13 @@ export const useAutoSelectMapItem = (
     bottomSheetToAutoSelect,
     setBottomSheetToAutoSelect,
     setBottomSheetCurrentlyAutoSelected,
-  } = useMapState();
+  } = useMapContext();
   const isFocused = useIsFocusedAndActive();
-  const {open: openBottomSheet, close} = useBottomSheet();
+  const {open: openBottomSheet, close} = useBottomSheetContext();
+
+  // NOTE: This ref is not used for anything since the map doesn't support
+  // screen readers, but a ref is required when opening bottom sheets.
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const closeBottomSheet = useCallback(() => {
     close();
@@ -114,7 +118,7 @@ export const useAutoSelectMapItem = (
         }
 
         if (!!BottomSheetComponent) {
-          openBottomSheet(() => BottomSheetComponent, false);
+          openBottomSheet(() => BottomSheetComponent, onCloseFocusRef, false);
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);

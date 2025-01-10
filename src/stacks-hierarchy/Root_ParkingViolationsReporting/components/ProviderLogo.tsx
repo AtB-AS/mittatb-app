@@ -1,7 +1,7 @@
 import React from 'react';
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 
 type Props = {
@@ -36,7 +36,7 @@ export const ProviderLogo = ({provider, size = 50, style}: Props) => {
 };
 
 const UnknownProvider = ({height, width}: {height: number; width: number}) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   return (
     <View
@@ -48,7 +48,7 @@ const UnknownProvider = ({height, width}: {height: number; width: number}) => {
         justifyContent: 'center',
       }}
     >
-      <ThemeText type="body__primary--big--bold" color={themeColor}>
+      <ThemeText typography="body__primary--big--bold" color={themeColor}>
         ?
       </ThemeText>
     </View>

@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
 import {BookingOptions} from './BookingOptions';
@@ -20,8 +20,8 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {getBookingStatus, getPublicCodeFromLeg} from '../utils';
 import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
 
@@ -37,10 +37,10 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
 > = ({leg}) => {
   const {t, language} = useTranslation();
   const style = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
+  const {configurableLinks} = useFirestoreConfigurationContext();
 
   const publicCode = getPublicCodeFromLeg(leg);
 
@@ -82,7 +82,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             </View>
           )}
 
-          <ThemeText type="heading__title" style={style.title}>
+          <ThemeText typography="heading__title" style={style.title}>
             {t(TripDetailsTexts.flexibleTransport.contentTitle(publicCode))}
           </ThemeText>
           <View style={style.steps} accessibilityRole="list">
@@ -99,8 +99,10 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
                     accessibilityLabel={stepNumberText + stepInstructionText}
                     accessibilityRole="text"
                   >
-                    <ThemeText type="body__primary">{stepNumberText}</ThemeText>
-                    <ThemeText type="body__primary">
+                    <ThemeText typography="body__primary">
+                      {stepNumberText}
+                    </ThemeText>
+                    <ThemeText typography="body__primary">
                       {stepInstructionText}
                     </ThemeText>
                   </View>
@@ -128,7 +130,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             <ThemeText
               color="secondary"
               style={style.linkText}
-              type="body__primary--underline"
+              typography="body__primary--underline"
             >
               {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
             </ThemeText>

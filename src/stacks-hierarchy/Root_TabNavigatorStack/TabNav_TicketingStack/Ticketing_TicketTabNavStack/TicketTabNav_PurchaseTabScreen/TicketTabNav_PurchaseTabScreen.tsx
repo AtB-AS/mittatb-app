@@ -1,46 +1,39 @@
-import {useAuthState} from '@atb/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
-import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
-import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
-import {useAnalytics} from '@atb/analytics';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useAnalyticsContext} from '@atb/analytics';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
-import {ThemeText} from '@atb/components/text';
-import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
-import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage.tsx';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
+import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
+import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
-  const {must_upgrade_ticketing} = useRemoteConfig();
-  const {authenticationType} = useAuthState();
-  const {theme} = useTheme();
+  const {must_upgrade_ticketing} = useRemoteConfigContext();
+  const {authenticationType} = useAuthContext();
+  const {theme} = useThemeContext();
   const {recentFareContracts, loading} = useRecentFareContracts();
   const {data: fareProducts} = useGetFareProductsQuery();
 
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
-  const {t} = useTranslation();
+  const analytics = useAnalyticsContext();
 
-  const {isTicketingAssistantEnabled} = useFeatureToggles();
-  const analytics = useAnalytics();
-
-  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
+  const {tokens, mobileTokenStatus} = useMobileTokenContext();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const hasMobileTokenError =
@@ -98,7 +91,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   };
 
   const onFareContractSelect = (
-    rfc: RecentFareContract,
+    rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
   ) => {
@@ -172,21 +165,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           fareProducts={fareProducts}
           onProductSelect={onProductSelect}
         />
-
-        {isTicketingAssistantEnabled && (
-          <>
-            <ThemeText style={styles.heading} type="body__secondary">
-              {t(TicketingTexts.ticketAssistantTile.title)}
-            </ThemeText>
-            <TicketAssistantTile
-              onPress={() => {
-                analytics.logEvent('Ticketing', 'Ticket assistant opened');
-                navigation.navigate('Root_TicketAssistantStack');
-              }}
-              testID="ticketAssistant"
-            />
-          </>
-        )}
       </View>
     </ScrollView>
   ) : null;

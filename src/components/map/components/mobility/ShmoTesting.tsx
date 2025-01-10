@@ -3,7 +3,7 @@ import {
   ShmoBookingEvent,
   ShmoBookingEventType,
 } from '@atb/api/types/mobility';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
@@ -24,7 +24,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   const [previousBookingId, setPreviousBookingId] = useState<string>();
   const [vehicleId, setVehicleId] = useState<string>();
 
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const destructiveColor = theme.color.interactive.destructive;
 
@@ -120,8 +120,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       }}
     >
       <Button
+        expanded={false}
         style={styles.filterButton}
-        type="medium"
         compact={true}
         interactiveColor={
           initShmoOneStopBookingIsError ? destructiveColor : interactiveColor
@@ -137,8 +137,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
-        type="medium"
         compact={true}
         interactiveColor={
           sendShmoBookingEventIsError ? destructiveColor : interactiveColor
@@ -154,8 +154,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
-        type="medium"
         compact={true}
         interactiveColor={
           sendShmoBookingEventIsError ? destructiveColor : interactiveColor
@@ -171,8 +171,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       />
 
       <Button
+        expanded={false}
         style={styles.filterButton}
-        type="medium"
         compact={true}
         interactiveColor={
           getIdsFromQrCodeIsError ? destructiveColor : interactiveColor

@@ -2,7 +2,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchTime} from './types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -48,7 +48,7 @@ export const PlaceScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   const [searchTime, setSearchTime] = useState<SearchTime>({
@@ -167,6 +167,7 @@ export const PlaceScreenComponent = ({
       {onPressClose && (
         <View style={styles.closeButton}>
           <Button
+            expanded={true}
             interactiveColor={interactiveColor}
             text={t(DeparturesTexts.closeButton.label)}
             onPress={onPressClose}

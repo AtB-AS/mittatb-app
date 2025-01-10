@@ -1,4 +1,4 @@
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Camera, PhotoFile} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -8,6 +8,7 @@ import {ScreenContainer} from './components/ScreenContainer';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from '@atb/parking-violations-reporting';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {RefObject, useRef} from 'react';
 
 export type PhotoScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsPhotoScreen'>;
@@ -20,22 +21,27 @@ export const Root_ParkingViolationsPhotoScreen = ({
   const isFocused = useIsFocusedAndActive();
   const style = useStyles();
   const {coordinates, isLoading} = useParkingViolations();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handlePhotoCapture = (file: PhotoFile) => {
-    openBottomSheet(() => (
-      <ImageConfirmationBottomSheet
-        onConfirm={() => {
-          closeBottomSheet();
-          navigation.navigate('Root_ParkingViolationsQrScreen', {
-            ...params,
-            photo: file.path,
-          });
-        }}
-        coordinates={coordinates}
-        file={file}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <ImageConfirmationBottomSheet
+          onConfirm={() => {
+            closeBottomSheet();
+            navigation.navigate('Root_ParkingViolationsQrScreen', {
+              ...params,
+              photo: file.path,
+            });
+          }}
+          coordinates={coordinates}
+          file={file}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   return (
@@ -50,6 +56,7 @@ export const Root_ParkingViolationsPhotoScreen = ({
           mode="photo"
           style={style.camera}
           onCapture={handlePhotoCapture}
+          focusRef={onCloseFocusRef}
         />
       )}
     </ScreenContainer>

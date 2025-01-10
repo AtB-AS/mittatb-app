@@ -1,7 +1,7 @@
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import React, {Ref} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -28,7 +28,7 @@ import {
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {getQuayName} from '@atb/utils/transportation-names.ts';
+import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/situations';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
@@ -58,7 +58,7 @@ export const TravelAidScreenComponent = ({
   });
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const focusRef = useFocusOnLoad();
 
   const hasSentStopSignal = sentStopSignalsCache.hasSent(
@@ -77,6 +77,11 @@ export const TravelAidScreenComponent = ({
     serviceJourneyDeparture.serviceDate,
   );
 
+  // Skip cancelled calls, since they won't get actualDepartureTimes
+  const estimatedCalls = serviceJourney?.estimatedCalls?.filter(
+    (ec) => !ec.cancellation,
+  );
+
   const bgContrastColor: ContrastColor =
     sendStopSignalStatus === 'success'
       ? theme.color.background.accent['2']
@@ -93,12 +98,13 @@ export const TravelAidScreenComponent = ({
         barStyle={themeName === 'light' ? 'dark-content' : 'light-content'}
       />
       <Button
+        expanded={false}
         onPress={goBack}
         text={t(TravelAidTexts.close)}
         leftIcon={{svg: Close}}
         mode="tertiary"
-        type="medium"
         backgroundColor={bgContrastColor}
+        testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         {status === 'loading' && (
@@ -108,23 +114,33 @@ export const TravelAidScreenComponent = ({
           <View ref={focusRef}>
             <MessageInfoBox
               type="error"
-              message={t(TravelAidTexts.error.message)}
+              message={t(TravelAidTexts.apiError.message)}
               onPressConfig={{action: refetch, text: t(dictionary.retry)}}
             />
           </View>
         )}
-        {status === 'success' && serviceJourney.estimatedCalls && (
-          <TravelAidSection
-            serviceJourney={{
-              ...serviceJourney,
-              estimatedCalls: serviceJourney.estimatedCalls,
-            }}
-            fromQuayId={serviceJourneyDeparture.fromQuayId}
-            focusRef={focusRef}
-            sendStopSignal={stopSignalMutation.mutate}
-            sendStopSignalStatus={sendStopSignalStatus}
-          />
+        {estimatedCalls && estimatedCalls.length === 0 && (
+          <View ref={focusRef}>
+            <MessageInfoBox
+              type="error"
+              message={t(TravelAidTexts.noEstimatedCallsError.message)}
+            />
+          </View>
         )}
+        {status === 'success' &&
+          estimatedCalls &&
+          estimatedCalls.length > 0 && (
+            <TravelAidSection
+              serviceJourney={{
+                ...serviceJourney,
+                estimatedCalls,
+              }}
+              fromQuayId={serviceJourneyDeparture.fromQuayId}
+              focusRef={focusRef}
+              sendStopSignal={stopSignalMutation.mutate}
+              sendStopSignalStatus={sendStopSignalStatus}
+            />
+          )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -166,7 +182,7 @@ const TravelAidSection = ({
   const quayName = getQuayName(focusedEstimatedCall.quay) ?? '';
 
   return (
-    <Section ref={focusRef}>
+    <Section ref={focusRef} testID="journeyAidSection">
       <GenericSectionItem
         style={styles.sectionContainer}
         accessibility={{
@@ -232,10 +248,10 @@ const TravelAidSection = ({
                 getStopHeader(status, t) + screenReaderPause + quayName
               }
             >
-              <ThemeText type="body__tertiary--bold">
+              <ThemeText typography="body__tertiary--bold">
                 {getStopHeader(status, t)}
               </ThemeText>
-              <ThemeText type="heading__title">{quayName}</ThemeText>
+              <ThemeText typography="heading__title">{quayName}</ThemeText>
             </LiveRegionWrapper>
             <TimeInfo state={{status, focusedEstimatedCall}} />
           </View>
@@ -254,7 +270,7 @@ const TravelAidSection = ({
 const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
   const {language, t} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const {focusedEstimatedCall, status} = state;
 
   const scheduledClock = formatToClock(
@@ -277,31 +293,39 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         <LiveRegionWrapper
           accessibilityLabel={t(TravelAidTexts.scheduledTime(scheduledClock))}
         >
-          <ThemeText type="body__secondary--bold">
+          <ThemeText typography="body__secondary--bold">
             {t(TravelAidTexts.scheduledTime(scheduledClock))}
           </ThemeText>
         </LiveRegionWrapper>
       );
     case TravelAidStatus.NotYetArrived:
       return (
-        <LiveRegionWrapper
-          accessibilityLabel={`${t(
-            dictionary.a11yRealTimePrefix,
-          )} ${relativeRealtime}, ${t(
-            TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
-          )}`}
-        >
-          <View style={styles.realTime}>
-            <ThemeIcon
-              svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
-              size="xSmall"
-            />
-            <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
-          </View>
-          <ThemeText type="body__secondary--bold">
-            {t(TravelAidTexts.scheduledTime(scheduledClock))}
-          </ThemeText>
-        </LiveRegionWrapper>
+        <View>
+          <LiveRegionWrapper
+            accessibilityLabel={`${t(
+              dictionary.a11yRealTimePrefix,
+            )} ${relativeRealtime}`}
+          >
+            <View style={styles.realTime}>
+              <ThemeIcon
+                svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
+                size="xSmall"
+              />
+              <ThemeText typography="heading__title">
+                {relativeRealtime}
+              </ThemeText>
+            </View>
+          </LiveRegionWrapper>
+          <LiveRegionWrapper
+            accessibilityLabel={`${t(
+              TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
+            )}`}
+          >
+            <ThemeText typography="body__secondary--bold">
+              {t(TravelAidTexts.scheduledTime(scheduledClock))}
+            </ThemeText>
+          </LiveRegionWrapper>
+        </View>
       );
     case TravelAidStatus.Arrived:
     case TravelAidStatus.BetweenStops:
@@ -316,7 +340,9 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
               size="xSmall"
             />
-            <ThemeText type="heading__title">{relativeRealtime}</ThemeText>
+            <ThemeText typography="heading__title">
+              {relativeRealtime}
+            </ThemeText>
           </View>
         </LiveRegionWrapper>
       );

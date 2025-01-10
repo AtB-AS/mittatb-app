@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -8,7 +8,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 export type ConfirmationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsConfirmationScreen'>;
@@ -19,9 +19,9 @@ export const Root_ParkingViolationsConfirmationScreen = ({
 }: ConfirmationScreenProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   const closeReporting = () => {
     analytics.logEvent('Mobility', 'Parking violation report sent');
@@ -33,7 +33,7 @@ export const Root_ParkingViolationsConfirmationScreen = ({
       rightHeaderButton={{type: 'close', onPress: closeReporting}}
     >
       <View style={styles.confirmation}>
-        <ThemeText color={themeColor} type="heading--big">
+        <ThemeText color={themeColor} typography="heading--big">
           {t(ParkingViolationTexts.confirmation.title)}
         </ThemeText>
         <ThemeText style={styles.description} color={themeColor}>

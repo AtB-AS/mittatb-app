@@ -30,7 +30,7 @@ import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedScooter} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   vehicleId: VehicleId;
@@ -62,7 +62,7 @@ export const ScooterSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {isParkingViolationsReportingEnabled} = useFeatureToggles();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   return (
     <BottomSheetContainer
@@ -136,6 +136,7 @@ export const ScooterSheet = ({
               )}
               {isParkingViolationsReportingEnabled && (
                 <Button
+                  expanded={true}
                   style={styles.parkingViolationsButton}
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"

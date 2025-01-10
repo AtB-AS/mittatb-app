@@ -1,10 +1,10 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {storage} from '@atb/storage';
 
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
-import {useBeaconsState} from './BeaconsContext';
+import {useBeaconsContext} from './BeaconsContext';
 import {getOnboardingSectionIsOnboarded} from '@atb/onboarding';
 import {LoadedOnboardingSection} from '@atb/onboarding/types';
 
@@ -16,11 +16,11 @@ export const useShouldShowShareTravelHabitsScreen = (
 ) => {
   const {
     delay_share_travel_habits_screen_by_sessions_count: runAfterSessionsCount,
-  } = useRemoteConfig();
+  } = useRemoteConfigContext();
   const sessionCountRef = useRef(0);
   const [sessionCount, setSessionCount] = useState(0);
   const isInitializedRef = useRef(false);
-  const {isBeaconsSupported, isConsentGranted} = useBeaconsState();
+  const {isBeaconsSupported, isConsentGranted} = useBeaconsContext();
 
   const appStatus = useAppStateStatus();
 

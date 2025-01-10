@@ -1,4 +1,16 @@
 import * as Types from '../journey_planner_v3_types';
+import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import type {TariffZoneFragment} from '@atb/api/types/generated/fragments/tariffZone';
+import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import type {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
+
+export type TripFragment = {
+  nextPageCursor?: string;
+  previousPageCursor?: string;
+  metadata?: {nextDateTime?: any; prevDateTime?: any; searchWindowUsed: number};
+  tripPatterns: Array<TripPatternFragment>;
+};
 
 export type TripPatternFragment = {
   expectedStartTime: any;
@@ -22,25 +34,16 @@ export type TripPatternFragment = {
       transportSubmode?: Types.TransportSubmode;
       publicCode?: string;
       flexibleLineType?: string;
-      notices: Array<{id: string; text?: string}>;
+      notices: Array<NoticeFragment>;
     };
     fromEstimatedCall?: {
       aimedDepartureTime: any;
       expectedDepartureTime: any;
       destinationDisplay?: {frontText?: string; via?: Array<string>};
       quay: {publicCode?: string; name: string};
-      notices: Array<{id: string; text?: string}>;
+      notices: Array<NoticeFragment>;
     };
-    situations: Array<{
-      id: string;
-      situationNumber?: string;
-      reportType?: Types.ReportType;
-      summary: Array<{language?: string; value: string}>;
-      description: Array<{language?: string; value: string}>;
-      advice: Array<{language?: string; value: string}>;
-      infoLinks?: Array<{uri: string; label?: string}>;
-      validityPeriod?: {startTime?: any; endTime?: any};
-    }>;
+    situations: Array<SituationFragment>;
     fromPlace: {
       name?: string;
       longitude: number;
@@ -57,17 +60,8 @@ export type TripPatternFragment = {
           latitude?: number;
           name: string;
         };
-        situations: Array<{
-          id: string;
-          situationNumber?: string;
-          reportType?: Types.ReportType;
-          summary: Array<{language?: string; value: string}>;
-          description: Array<{language?: string; value: string}>;
-          advice: Array<{language?: string; value: string}>;
-          infoLinks?: Array<{uri: string; label?: string}>;
-          validityPeriod?: {startTime?: any; endTime?: any};
-        }>;
-        tariffZones: Array<{id: string; name?: string}>;
+        situations: Array<SituationFragment>;
+        tariffZones: Array<TariffZoneFragment>;
       };
     };
     toPlace: {
@@ -86,35 +80,27 @@ export type TripPatternFragment = {
           latitude?: number;
           name: string;
         };
-        situations: Array<{
-          id: string;
-          situationNumber?: string;
-          reportType?: Types.ReportType;
-          summary: Array<{language?: string; value: string}>;
-          description: Array<{language?: string; value: string}>;
-          advice: Array<{language?: string; value: string}>;
-          infoLinks?: Array<{uri: string; label?: string}>;
-          validityPeriod?: {startTime?: any; endTime?: any};
-        }>;
-        tariffZones: Array<{id: string; name?: string}>;
+        situations: Array<SituationFragment>;
+        tariffZones: Array<TariffZoneFragment>;
       };
     };
     serviceJourney?: {
       id: string;
-      notices: Array<{id: string; text?: string}>;
-      journeyPattern?: {notices: Array<{id: string; text?: string}>};
+      notices: Array<NoticeFragment>;
+      journeyPattern?: {notices: Array<NoticeFragment>};
     };
     interchangeTo?: {
       guaranteed?: boolean;
+      maximumWaitTime?: number;
+      staySeated?: boolean;
       toServiceJourney?: {id: string};
-      staySeated?: boolean | undefined;
     };
     pointsOnLink?: {points?: string; length?: number};
     intermediateEstimatedCalls: Array<{
       date: any;
       quay: {name: string; id: string};
     }>;
-    authority?: {id: string; name: string; url?: string};
+    authority?: AuthorityFragment;
     serviceJourneyEstimatedCalls: Array<{
       actualDepartureTime?: any;
       realtime: boolean;
@@ -123,21 +109,9 @@ export type TripPatternFragment = {
       predictionInaccurate: boolean;
       quay: {name: string};
     }>;
-    bookingArrangements?: {
-      bookingMethods?: Array<Types.BookingMethod>;
-      latestBookingTime?: any;
-      bookingNote?: string;
-      bookWhen?: Types.PurchaseWhen;
-      minimumBookingPeriod?: string;
-      bookingContact?: {
-        contactPerson?: string;
-        email?: string;
-        url?: string;
-        phone?: string;
-        furtherDetails?: string;
-      };
-    };
+    bookingArrangements?: BookingArrangementFragment;
     datedServiceJourney?: {
+      id: string;
       estimatedCalls?: Array<{
         actualDepartureTime?: any;
         predictionInaccurate: boolean;

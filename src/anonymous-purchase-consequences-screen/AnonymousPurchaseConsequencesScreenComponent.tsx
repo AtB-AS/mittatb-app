@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 import {Consequence} from './components/Consequence';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -29,7 +29,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   leftButton,
 }: Props) => {
   const styles = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
 
@@ -41,6 +41,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     accessibilityHint: t(
       AnonymousPurchasesTexts.consequences.button.login.a11yHint,
     ),
+    expanded: false,
   };
 
   const continueWithoutLoginButton = {
@@ -50,6 +51,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
     ),
     rightIcon: onPressLogin ? undefined : {svg: ArrowRight},
+    expanded: false,
   };
 
   return (
@@ -63,7 +65,11 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       secondaryTestID={onPressLogin ? 'acceptLimitations' : ''}
     >
       <View ref={focusRef} accessible>
-        <ThemeText type="heading--big" color={themeColor} style={styles.header}>
+        <ThemeText
+          typography="heading--big"
+          color={themeColor}
+          style={styles.header}
+        >
           {t(AnonymousPurchasesTexts.consequences.title)}
         </ThemeText>
       </View>

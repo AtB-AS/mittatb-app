@@ -1,6 +1,6 @@
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert.tsx';
+import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
@@ -10,7 +10,7 @@ import {ActivityIndicator, Linking} from 'react-native';
 import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -26,7 +26,7 @@ export const OperatorActionButton = ({
   appStoreUri,
   rentalAppUri,
 }: OperatorActionButtonProps) => {
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const {t, language} = useTranslation();
   const {
     isUserEligibleForBenefit,
@@ -94,11 +94,12 @@ type AppSwitchButtonProps = {
 };
 
 const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   return (
     <Button
+      expanded={true}
       text={buttonText}
       onPress={() => buttonOnPress()}
       mode="primary"

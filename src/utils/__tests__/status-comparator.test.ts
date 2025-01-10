@@ -1,5 +1,5 @@
 import {statusComparator} from '@atb/utils/status-comparator';
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
 
 describe('statusComparator', () => {
   it('Should return 0 if equal', async () => {

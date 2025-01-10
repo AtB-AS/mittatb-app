@@ -1,7 +1,7 @@
 import {ViewStyle} from 'react-native';
 import {Slider as RNSlider} from '@miblanchard/react-native-slider';
 import {InteractiveColor} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {Dimensions} from '@miblanchard/react-native-slider/lib/types';
 import React from 'react';
 
@@ -41,7 +41,7 @@ export function Slider({
   trackMarkComponent,
   trackMarks,
 }: Props) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.interactive[0];
   const minColor = (minimumTrackTintColor ?? themeColor).default.background;
   const maxColor = (maximumTrackTintColor ?? themeColor).active.background;

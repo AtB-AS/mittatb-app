@@ -10,9 +10,13 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
-import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {addPaymentMethod, RecurringPayment} from '@atb/ticketing';
+import {getExpireDate} from '@atb/stacks-hierarchy/utils';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {
+  addPaymentMethod,
+  humanizePaymentType,
+  RecurringPayment,
+} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -148,9 +152,9 @@ const Card = (props: {
   removePaymentHandler: (card: RecurringPayment) => void;
 }) => {
   const {card, removePaymentHandler} = props;
-  const paymentName = getPaymentTypeName(card.payment_type);
+  const paymentName = humanizePaymentType(card.payment_type);
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const fontScale = useFontScale();
 
@@ -168,7 +172,7 @@ const Card = (props: {
         </View>
 
         <View style={style.cardIcons}>
-          <PaymentBrand icon={card.payment_type} />
+          <PaymentBrand paymentType={card.payment_type} />
           <PressableOpacity
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
@@ -200,7 +204,7 @@ const Card = (props: {
         </View>
       </View>
 
-      <ThemeText color="secondary" type="body__secondary">
+      <ThemeText color="secondary" typography="body__secondary">
         {getExpireDate(card.expires_at)}
       </ThemeText>
     </View>

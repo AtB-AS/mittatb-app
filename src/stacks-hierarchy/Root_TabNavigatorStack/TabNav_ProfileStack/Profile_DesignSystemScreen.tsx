@@ -9,7 +9,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -45,7 +45,7 @@ export const Profile_DesignSystemScreen = ({
 }: DesignSystemScreenProps) => {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const [selected, setSelected] = useState(false);
 
@@ -54,6 +54,7 @@ export const Profile_DesignSystemScreen = ({
   const buttons = Object.entries(theme.color.interactive).map(
     ([key, color]) => (
       <Button
+        expanded={true}
         key={key}
         text={`interactive ${key}`}
         onPress={() => Alert.alert(color.default.background)}
@@ -458,18 +459,20 @@ export const Profile_DesignSystemScreen = ({
               <View>
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/0
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
+                    expanded={true}
                     text="Default"
                     onPress={presser}
                     mode="primary"
                     interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="primary"
@@ -477,6 +480,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -484,6 +488,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[0]}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="primary"
@@ -494,18 +499,20 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/1
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
+                    expanded={true}
                     text="Default - block"
                     onPress={presser}
                     mode="primary"
                     interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="primary"
@@ -513,6 +520,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -520,6 +528,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="primary"
@@ -530,18 +539,20 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/2
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
+                    expanded={true}
                     text="Default"
                     onPress={presser}
                     mode="primary"
                     interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="primary"
@@ -549,6 +560,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -556,6 +568,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[2]}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="primary"
@@ -566,18 +579,20 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
+                    expanded={true}
                     text="Default"
                     onPress={presser}
                     mode="primary"
                     interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="primary"
@@ -585,6 +600,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -592,6 +608,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="primary"
@@ -602,25 +619,33 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Secondary - block
                 </ThemeText>
                 <View style={styles.buttonContainer}>
-                  <Button text="Default" onPress={presser} mode="secondary" />
                   <Button
+                    expanded={true}
+                    text="Default"
+                    onPress={presser}
+                    mode="secondary"
+                  />
+                  <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
@@ -630,25 +655,33 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   tertiary - block
                 </ThemeText>
                 <View style={styles.buttonContainer}>
-                  <Button text="Default" onPress={presser} mode="tertiary" />
                   <Button
+                    expanded={true}
+                    text="Default"
+                    onPress={presser}
+                    mode="tertiary"
+                  />
+                  <Button
+                    expanded={true}
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
                   />
                   <Button
+                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
                   />
                   <Button
+                    expanded={true}
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
@@ -658,81 +691,81 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Medium button examples (interactive_0)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
+                    expanded={false}
                     text="Primary"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - active"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     active={true}
                     interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     disabled={true}
                     interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - compact"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     compact={true}
                     interactiveColor={theme.color.interactive[0]}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
-                    type="medium"
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary - active"
                     onPress={presser}
                     mode="secondary"
-                    type="medium"
                     active={true}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary - compact"
                     onPress={presser}
                     mode="secondary"
-                    type="medium"
                     compact={true}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Tertiary"
                     onPress={presser}
                     mode="tertiary"
-                    type="medium"
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Tertiary - disabled"
                     onPress={presser}
                     mode="tertiary"
-                    type="medium"
                     disabled={true}
                     style={{margin: 4}}
                   />
@@ -740,12 +773,13 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   Pill button examples (interactive_0)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
+                    expanded={false}
                     text="Primary"
                     onPress={presser}
                     mode="primary"
@@ -754,6 +788,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - active"
                     onPress={presser}
                     mode="primary"
@@ -763,6 +798,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
@@ -772,6 +808,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Primary - compact"
                     onPress={presser}
                     mode="primary"
@@ -781,6 +818,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
@@ -788,6 +826,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary - active"
                     onPress={presser}
                     mode="secondary"
@@ -796,6 +835,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Secondary - compact"
                     onPress={presser}
                     mode="secondary"
@@ -804,6 +844,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Tertiary"
                     onPress={presser}
                     mode="tertiary"
@@ -811,6 +852,7 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Tertiary - disabled"
                     onPress={presser}
                     mode="tertiary"
@@ -822,11 +864,12 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
+                  typography="heading__paragraph"
                 >
                   With icons examples (interactive_0)
                 </ThemeText>
                 <Button
+                  expanded={true}
                   text="Example"
                   onPress={presser}
                   mode="primary"
@@ -835,6 +878,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{margin: 4}}
                 />
                 <Button
+                  expanded={true}
                   text="Example"
                   onPress={presser}
                   mode="primary"
@@ -846,6 +890,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{margin: 4}}
                 />
                 <Button
+                  expanded={true}
                   text="Example"
                   onPress={presser}
                   mode="primary"
@@ -856,6 +901,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{margin: 4}}
                 />
                 <Button
+                  expanded={true}
                   text="Loading button"
                   onPress={presser}
                   mode="primary"
@@ -870,10 +916,10 @@ export const Profile_DesignSystemScreen = ({
                   }}
                 >
                   <Button
+                    expanded={false}
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     interactiveColor={theme.color.interactive[0]}
                     leftIcon={{
                       svg: Add,
@@ -882,71 +928,71 @@ export const Profile_DesignSystemScreen = ({
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     active={true}
                     interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Example"
                     onPress={presser}
                     mode="secondary"
-                    type="medium"
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Example"
                     onPress={presser}
                     mode="tertiary"
-                    type="medium"
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     active={true}
                     interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     interactiveColor={theme.color.interactive[0]}
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     onPress={presser}
                     mode="primary"
-                    type="medium"
                     compact={true}
                     interactiveColor={theme.color.interactive[0]}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     onPress={presser}
                     mode="secondary"
-                    type="medium"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
+                    expanded={false}
                     onPress={presser}
                     mode="tertiary"
-                    type="medium"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -955,6 +1001,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="small"
+                    expanded={false}
                     interactiveColor={theme.color.interactive[0]}
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
@@ -964,6 +1011,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="small"
+                    expanded={false}
                     compact={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -973,6 +1021,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="small"
+                    expanded={false}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1106,7 +1155,7 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem>
             {textNames.map(function (t: TextNames) {
               return (
-                <ThemeText type={t} key={t}>
+                <ThemeText typography={t} key={t}>
                   {t}
                 </ThemeText>
               );

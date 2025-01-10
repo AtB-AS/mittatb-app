@@ -38,6 +38,7 @@ export const ExternalRealtimeMapSheet = ({
           </GenericSectionItem>
         </Section>
         <Button
+          expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
             Linking.openURL(url);

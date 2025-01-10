@@ -2,7 +2,7 @@ import React from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {StoredFavoriteDeparture} from '@atb/favorites';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -64,7 +64,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   return (
     <View style={[sectionStyle.spaceBetween, topContainer, styles.flexStart]}>
@@ -79,7 +79,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
           {formatDestinationDisplay(t, favorite.destinationDisplay) ??
             t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText typography="body__secondary" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}
           {favorite.quayPublicCode ?? ''}
         </ThemeText>

@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareProductTile} from './FareProductTile';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TransportModes} from '@atb/components/transportation-modes';
 
 type Props = {
@@ -24,7 +24,7 @@ export const FareProductGroup = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   /*
   Group by two and two, as two fare products are shown side by side on each row

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {useChatIcon} from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
@@ -7,10 +7,10 @@ import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
-import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
+import {AnalyticsEventContext, useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {ContrastColor} from '@atb/theme/colors';
@@ -36,6 +36,7 @@ export type HeaderButtonProps = {
    * pressed. If no context provided, then no analytics event will be logged.
    */
   analyticsEventContext?: AnalyticsEventContext;
+  focusRef?: RefObject<any>;
 } & AccessibilityProps;
 
 export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
@@ -43,13 +44,13 @@ export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
 };
 
 export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const iconButton = useHeaderButton(buttonProps);
   if (!iconButton) {
     return null;
   }
 
-  const {onPress, children, ...accessibilityProps} = iconButton;
+  const {onPress, children, focusRef, ...accessibilityProps} = iconButton;
 
   const onPressWithLogEvent = () => {
     if (buttonProps.analyticsEventContext) {
@@ -66,6 +67,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
       onPress={onPressWithLogEvent}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
+      ref={focusRef}
       {...accessibilityProps}
     >
       {children}
@@ -136,7 +138,7 @@ const HeaderButtonIcon = ({
   mode: ButtonModes;
   color?: ContrastColor;
 }) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const iconProps: Omit<ThemeIconProps, 'svg'> = {
     color: color,
     style: {marginRight: theme.spacing.xSmall},

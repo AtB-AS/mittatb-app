@@ -1,7 +1,7 @@
 import React from 'react';
 import {AccessibilityProps, ActivityIndicator} from 'react-native';
 import {Location} from '@atb/favorites';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ButtonSectionItem, ButtonSectionItemProps} from './ButtonSectionItem';
 import {SectionTexts} from '@atb/translations';
@@ -21,7 +21,7 @@ export function LocationInputSectionItem({
 }: Props) {
   const {t} = useTranslation();
 
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const currentValueLabel =
     location?.resultType == 'geolocation'
       ? t(SectionTexts.LocationInputSectionItem.myPosition)

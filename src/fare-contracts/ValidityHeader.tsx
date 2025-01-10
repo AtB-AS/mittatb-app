@@ -13,8 +13,8 @@ import {View} from 'react-native';
 import {ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useMobileTokenContext} from '@atb/mobile-token';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
@@ -26,11 +26,11 @@ export const ValidityHeader: React.FC<{
 }> = ({status, now, createdDate, validFrom, validTo, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === fareProductType,
   );
-  const {isInspectable} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContext();
 
   const label: string = validityTimeText(
     status,
@@ -59,7 +59,7 @@ export const ValidityHeader: React.FC<{
         )}
         <ThemeText
           style={styles.label}
-          type="body__secondary"
+          typography="body__secondary"
           accessibilityLabel={
             !isInspectable
               ? label +

@@ -1,6 +1,6 @@
 import {
   PreassignedFareProduct,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
@@ -25,7 +25,7 @@ export function useOfferDefaults(
   preassignedFareProductAlternatives: PreassignedFareProduct[];
 } {
   const selectionBuilder = usePurchaseSelectionBuilder();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
 
   const selection = useMemo(
     () => {

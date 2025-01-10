@@ -1,8 +1,8 @@
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {getTransportModeSvg} from '../icon-box';
 import {View} from 'react-native';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -28,14 +28,14 @@ export function LineChip({
 }: LineChipProps) {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const {transportMode, transportSubmode} = serviceJourney;
   const publicCode = serviceJourney.line?.publicCode;
 
-  const transportColor = useTransportationColor(
+  const transportColor = useTransportColor(
     transportMode,
     transportSubmode,
-  );
+  ).primary;
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const icon = messageType && messageTypeToIcon(messageType, true, themeName);
 
@@ -59,7 +59,7 @@ export function LineChip({
               minWidth: fontScale * 20,
             },
           ]}
-          type="body__primary--bold"
+          typography="body__primary--bold"
           testID={`${testID}PublicCode`}
         >
           {publicCode}

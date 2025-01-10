@@ -52,7 +52,7 @@ export const PreferencesContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function usePreferences() {
+export function usePreferencesContext() {
   const context = useContext(PreferencesContext);
   if (context === undefined) {
     throw new Error(
@@ -60,14 +60,4 @@ export function usePreferences() {
     );
   }
   return context;
-}
-
-export function usePreferenceItems() {
-  const context = useContext(PreferencesContext);
-  if (context === undefined) {
-    throw new Error(
-      'usePreferences must be used within a PreferencesContextProvider',
-    );
-  }
-  return context.preferences;
 }

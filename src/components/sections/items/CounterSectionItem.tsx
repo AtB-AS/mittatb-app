@@ -7,7 +7,7 @@ import {useSectionStyle} from '../use-section-style';
 import {insets} from '@atb/utils/insets';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -39,7 +39,7 @@ export function CounterSectionItem({
   const style = useSectionStyle();
   const counterStyles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const removeButtonDisabled = count === 0;
   const activeColor = count > 0 && color ? color.active : undefined;
 
@@ -59,7 +59,7 @@ export function CounterSectionItem({
         <ThemeText>{text}</ThemeText>
         {subtext && !hideSubtext && (
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={counterStyles.infoSubtext}
           >
@@ -112,7 +112,7 @@ export function CounterSectionItem({
               counterStyles.countText,
               activeColor && {color: activeColor.foreground.primary},
             ]}
-            type="body__primary--bold"
+            typography="body__primary--bold"
             testID={testID + '_count'}
           >
             {count}

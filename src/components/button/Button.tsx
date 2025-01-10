@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
@@ -18,6 +18,7 @@ import {shadows} from '@atb/components/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
+type ButtonType = 'large' | 'small';
 
 type ButtonSettings = {
   withBackground: boolean;
@@ -39,11 +40,6 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   },
 };
 
-type ButtonTypeAwareProps =
-  | {text: string; type?: 'large'}
-  | {text?: string; type: 'medium'}
-  | {text: string; type: 'small'};
-
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
@@ -59,15 +55,17 @@ type ButtonModeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
+  text?: string;
+  type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
-} & ButtonTypeAwareProps &
-  ButtonModeAwareProps &
+} & ButtonModeAwareProps &
   PressableProps;
 
 const DISABLED_OPACITY = 0.2;
@@ -77,7 +75,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     {
       onPress,
       mode = 'primary',
-      type = 'block',
+      type = 'large',
       leftIcon,
       rightIcon,
       text,
@@ -85,6 +83,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
+      expanded,
       hasShadow = false,
       style,
       ...props
@@ -93,7 +92,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
   ) => {
     const modeData = DefaultModeStyles[mode];
     const styles = useButtonStyle();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
 
     const interactiveColor =
       'interactiveColor' in props && props.interactiveColor
@@ -116,8 +115,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
         useNativeDriver: true,
       }).start();
     }, [disabled, fadeAnim]);
-
-    const isInline = type === 'medium' || type === 'small';
 
     const spacing = compact ? theme.spacing.small : theme.spacing.medium;
     const {background: buttonColor} =
@@ -143,43 +140,63 @@ export const Button = React.forwardRef<any, ButtonProps>(
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        alignSelf: isInline ? 'flex-start' : undefined,
         borderRadius:
           type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
+        ...(expanded && type === 'small'
+          ? {
+              justifyContent: 'center',
+            }
+          : {
+              alignSelf: 'flex-start',
+            }),
       },
     ];
 
     const textMarginHorizontal = useTextMarginHorizontal(
-      isInline,
+      expanded,
       leftIcon,
       rightIcon,
     );
 
-    const styleText: TextStyle = {
-      color: textColor,
-      width: isInline ? '100%' : undefined,
-    };
-    const textContainer: TextStyle = {
-      flex: isInline ? undefined : 1,
-      alignItems: 'center',
-      marginHorizontal: textMarginHorizontal,
-      flexShrink: isInline ? 1 : undefined,
-    };
-    const leftStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      left: isInline ? undefined : spacing,
-      marginRight:
-        isInline && (text || rightIcon) ? theme.spacing.xSmall : undefined,
+    const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
+      const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
+      if (expanded && text && type !== 'small') {
+        return {
+          position: 'absolute',
+          [iconSide]: spacing,
+          [iconMargin]: text ? theme.spacing.xSmall : undefined,
+        };
+      }
+
+      return {
+        [iconMargin]: text ? theme.spacing.xSmall : undefined,
+      };
     };
 
-    const rightStyling: ViewStyle = {
-      position: isInline ? 'relative' : 'absolute',
-      right: isInline ? undefined : spacing,
-      marginLeft:
-        isInline && (text || leftIcon) ? theme.spacing.xSmall : undefined,
+    const styleText: TextStyle = {
+      color: textColor,
+      width: !expanded ? '100%' : undefined,
     };
+    const textContainer: TextStyle = {
+      flex: !expanded ? undefined : 1,
+      alignItems: 'center',
+      marginHorizontal: textMarginHorizontal,
+      flexShrink: !expanded ? 1 : undefined,
+      ...(expanded &&
+        type === 'small' && {
+          flex: undefined,
+          marginHorizontal: theme.spacing.xSmall,
+        }),
+    };
+
+    const leftStyling: ViewStyle = iconStyle('left');
+    const rightStyling: ViewStyle = iconStyle('right');
+
+    if (!text && !(leftIcon || rightIcon)) {
+      return null;
+    }
 
     return (
       <Animated.View
@@ -207,7 +224,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           {text && (
             <View style={textContainer}>
               <ThemeText
-                type={getTextType(mode, type)}
+                typography={getTextType(mode, type)}
                 style={styleText}
                 testID="buttonText"
               >
@@ -237,12 +254,12 @@ export const Button = React.forwardRef<any, ButtonProps>(
  * necessary horizontal margin based on the largest icon size.
  */
 const useTextMarginHorizontal = (
-  isInline: boolean,
+  expand: boolean,
   leftIcon?: ButtonIconProps,
   rightIcon?: ButtonIconProps,
 ) => {
-  const {theme} = useTheme();
-  if (isInline) return 0;
+  const {theme} = useThemeContext();
+  if (!expand) return 0;
   if (!leftIcon && !rightIcon) return 0;
   const maxIconSize = Math.max(
     theme.icon.size[leftIcon?.size || 'normal'],

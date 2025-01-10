@@ -5,8 +5,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {useAuthState} from '@atb/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
   MobileTokenStatus,
   RemoteToken,
@@ -39,7 +39,7 @@ import {
 } from './hooks/use-load-native-token-query';
 import {wipeToken} from '@atb/mobile-token/helpers';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
 
@@ -79,10 +79,10 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 );
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
-  const {userId, authStatus} = useAuthState();
+  const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
 
-  const {token_timeout_in_seconds} = useRemoteConfig();
+  const {token_timeout_in_seconds} = useRemoteConfigContext();
   const mobileTokenEnabled = hasEnabledMobileToken();
 
   const [isTimeout, setIsTimeout] = useState(false);
@@ -224,7 +224,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 const hasEnabledMobileToken = () =>
   Platform.OS === 'android' || !DeviceInfo.isEmulatorSync();
 
-export function useMobileTokenContextState() {
+export function useMobileTokenContext() {
   const context = useContext(MobileTokenContext);
   if (context === undefined) {
     throw new Error(
@@ -266,7 +266,7 @@ const useMobileTokenStatus = (
     enable_token_fallback,
     enable_token_fallback_on_timeout,
     use_trygg_overgang_qr_code,
-  } = useRemoteConfig();
+  } = useRemoteConfigContext();
 
   const fallbackStatus = use_trygg_overgang_qr_code ? 'staticQr' : 'fallback';
   // Treat iOS emulator as fallback

@@ -5,7 +5,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import React, {useMemo, useState} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ButtonModes, HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
@@ -60,7 +60,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   textOpacity = 1,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = color ?? theme.color.background.accent[0];
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
@@ -100,7 +100,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           <ThemeText
             accessible={false}
             onLayout={setLayoutFor('title')}
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={themeColor}
           >
             {title && textOpacity > 0 ? title : '\u00a0'}

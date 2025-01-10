@@ -2,7 +2,7 @@ import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useState} from 'react';
@@ -25,7 +25,7 @@ export const SelectProviderBottomSheet = ({
   qrScanFailed,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const [selectedProvider, setSelectedProvider] =
     useState<ViolationsReportingProvider>();
@@ -69,6 +69,7 @@ export const SelectProviderBottomSheet = ({
         </ScrollView>
         <View style={[styles.content, styles.footer]}>
           <Button
+            expanded={true}
             text={t(ParkingViolationTexts.selectProvider.confirm)}
             onPress={() =>
               selectedProvider ? onSelect(selectedProvider) : undefined

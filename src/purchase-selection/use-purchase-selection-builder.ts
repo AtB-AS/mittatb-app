@@ -1,10 +1,11 @@
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {createEmptyBuilder} from './purchase-selection-builder';
 import type {PurchaseSelectionBuilderInput} from './types';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
-import {usePreferences} from '@atb/preferences';
-import {useTicketingState} from '@atb/ticketing';
+import {usePreferencesContext} from '@atb/preferences';
+import {useTicketingContext} from '@atb/ticketing';
 import {APP_VERSION} from '@env';
+import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 /**
  * Returns a purchase selection builder for creating or modifying a
@@ -19,16 +20,13 @@ import {APP_VERSION} from '@env';
  * should be invoked by user actions and not as a side effect of state change.
  */
 export const usePurchaseSelectionBuilder = () => {
-  const {
-    fareProductTypeConfigs,
-    userProfiles,
-    preassignedFareProducts,
-    tariffZones,
-  } = useFirestoreConfiguration();
+  const {fareProductTypeConfigs, userProfiles, tariffZones} =
+    useFirestoreConfigurationContext();
   const {
     preferences: {defaultUserTypeString},
-  } = usePreferences();
-  const {customerProfile} = useTicketingState();
+  } = usePreferencesContext();
+  const {customerProfile} = useTicketingContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const builderInput: PurchaseSelectionBuilderInput = {
     fareProductTypeConfigs,

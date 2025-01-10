@@ -5,11 +5,9 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -17,8 +15,8 @@ import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {SituationMessageBox} from '@atb/situations';
-import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
   TripDetailsTexts,
@@ -26,12 +24,16 @@ import {
 } from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {animateNextChange} from '@atb/utils/animation';
-import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
+import {
+  formatToVerboseFullDate,
+  isInThePast,
+  isWithinSameDate,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -47,21 +49,23 @@ import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/Pag
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   getBookingStatus,
+  getLineAndTimeA11yLabel,
   getShouldShowLiveVehicle,
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {useFeatureToggles} from '@atb/feature-toggles';
-import {usePreferences} from '@atb/preferences';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {usePreferencesContext} from '@atb/preferences';
+import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -82,15 +86,15 @@ export const DepartureDetailsScreenComponent = ({
   onPressTravelAid,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
   const ctaColor = theme.color.interactive[0];
   const backgroundColor = theme.color.background.neutral[0];
   const themeColor = theme.color.background.accent[0];
 
-  const analytics = useAnalytics();
-  const {enable_ticketing} = useRemoteConfig();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const analytics = useAnalyticsContext();
+  const {enable_ticketing} = useRemoteConfigContext();
+  const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -99,7 +103,15 @@ export const DepartureDetailsScreenComponent = ({
   const {t, language} = useTranslation();
 
   const [
-    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
+    {
+      estimatedCallsWithMetadata,
+      title,
+      publicCode,
+      mode,
+      subMode,
+      situations,
+      notices,
+    },
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
@@ -109,21 +121,25 @@ export const DepartureDetailsScreenComponent = ({
     activeItem.toQuayId,
   );
 
-  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureToggles();
+  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
     preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
-  } = usePreferences();
-  const shouldShowTravelAid = travelAidPreferenceEnabled && isTravelAidEnabled;
+  } = usePreferencesContext();
+  const shouldShowTravelAid =
+    travelAidPreferenceEnabled &&
+    isTravelAidEnabled &&
+    !activeItem.isTripCancelled;
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
     isRealtimeMapEnabled,
   );
 
-  const {vehiclePositions} = useGetServiceJourneyVehicles(
-    shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
+  const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
+    [activeItem.serviceJourneyId],
+    shouldShowLive,
   );
 
   const translatedModeName = getTranslatedModeName(mode);
@@ -144,6 +160,10 @@ export const DepartureDetailsScreenComponent = ({
   const fromQuay = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
+
+  const shouldShowDepartureTime =
+    (fromQuay && !isInThePast(fromQuay.expectedDepartureTime)) || false;
+
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
     modesWeSellTicketsFor,
@@ -165,6 +185,16 @@ export const DepartureDetailsScreenComponent = ({
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
 
+  const a11yLabel =
+    fromQuay && publicCode
+      ? getLineAndTimeA11yLabel(fromQuay, publicCode, t, language)
+      : undefined;
+  const lineChipServiceJourney = {
+    line: {publicCode},
+    transportMode: mode,
+    transportSubmode: subMode,
+  };
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -174,24 +204,28 @@ export const DepartureDetailsScreenComponent = ({
         }}
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
-            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
-              {mode && (
-                <TransportationIconBox
-                  mode={mode}
-                  subMode={subMode}
-                  style={styles.headerTitleIcon}
-                />
-              )}
+            <View
+              style={styles.headerContainer}
+              ref={focusRef}
+              accessible={true}
+              accessibilityLabel={a11yLabel}
+            >
+              <LineChip serviceJourney={lineChipServiceJourney} />
               <ThemeText
-                type="heading--medium"
+                typography="heading__title"
                 color={themeColor}
-                style={{flexShrink: 1}}
+                style={styles.headerTitle}
+                testID="lineName"
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
+              {fromQuay && shouldShowDepartureTime && (
+                <DepartureTime departure={fromQuay} color={themeColor} />
+              )}
             </View>
             {shouldShowTravelAid && (
               <Button
+                expanded={true}
                 style={styles.travelAidButton}
                 onPress={() => {
                   analytics.logEvent(
@@ -205,18 +239,16 @@ export const DepartureDetailsScreenComponent = ({
                 }}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
+                testID="journeyAidButton"
               />
             )}
-            {shouldShowMapButton || realtimeText ? (
-              <View style={styles.headerSubSection}>
-                {realtimeText && !activeItem.isTripCancelled && (
-                  <LastPassedStop realtimeText={realtimeText} />
-                )}
-                {shouldShowMapButton ? (
+            {shouldShowMapButton ? (
+              <View style={styles.actionButtons}>
+                <View style={{flex: 1}}>
                   <Button
                     type="small"
+                    expanded={true}
                     leftIcon={{svg: Map}}
-                    style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
                         ? DepartureDetailsTexts.live(t(translatedModeName))
@@ -245,9 +277,14 @@ export const DepartureDetailsScreenComponent = ({
                       });
                     }}
                   />
-                ) : null}
+                </View>
               </View>
             ) : null}
+            {realtimeText && !activeItem.isTripCancelled && (
+              <View style={styles.headerSubSection}>
+                <LastPassedStop realtimeText={realtimeText} />
+              </View>
+            )}
           </View>
         )}
       >
@@ -274,7 +311,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText type="body__primary" color="secondary">
+                <ThemeText typography="body__primary" color="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>
@@ -333,6 +370,7 @@ export const DepartureDetailsScreenComponent = ({
               ticketingEnabled: enable_ticketing,
               canSellTicketsForDeparture: canSellTicketsForDeparture,
               mode: mode || null,
+              subMode: subMode || null,
               fromZones:
                 fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
@@ -357,18 +395,13 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   return (
     <View style={styles.passedSection}>
-      <ThemeIcon
-        svg={RealtimeDark}
-        size="xSmall"
-        style={styles.passedSectionRealtimeIcon}
-      />
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color={themeColor}
         style={styles.passedText}
       >
@@ -480,6 +513,7 @@ type TripItemProps = {
   situations: SituationFragment[];
   onPressQuay: Props['onPressQuay'];
 };
+
 function EstimatedCallRow({
   call,
   mode,
@@ -496,12 +530,12 @@ function EstimatedCallRow({
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
-  const iconColor = useTransportationColor(
+  const tripLegDecorationColor = useTransportColor(
     group === 'trip' ? mode : undefined,
     subMode,
-  ).background;
+  ).secondary.background;
 
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
     call.bookingArrangements,
     call.aimedDepartureTime,
@@ -515,7 +549,7 @@ function EstimatedCallRow({
         hasStart={isStartOfGroup}
         hasCenter={isBetween}
         hasEnd={isEndOfGroup}
-        color={iconColor}
+        color={tripLegDecorationColor}
       />
       <TripRow
         rowLabel={
@@ -538,7 +572,7 @@ function EstimatedCallRow({
         <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -548,7 +582,7 @@ function EstimatedCallRow({
         )}
         {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
           <AccessibleText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -602,6 +636,7 @@ type CollapseButtonRowProps = {
   setCollapsed(collapsed: boolean): void;
   testID?: string;
 };
+
 function CollapseButtonRow({
   label,
   collapsed,
@@ -636,6 +671,7 @@ function CollapseButtonRow({
     </PressableOpacity>
   );
 }
+
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
@@ -654,9 +690,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
-  headerTitle: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  headerTitle: {
+    flex: 1,
+    marginRight: theme.spacing.medium,
   },
   parallaxContent: {marginHorizontal: theme.spacing.medium},
   date: {
@@ -681,20 +721,21 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     minWidth: '50%',
     flex: 1,
   },
-  passedSectionRealtimeIcon: {
-    marginRight: theme.spacing.xSmall,
-  },
   passedText: {
-    flexShrink: 1,
+    alignItems: 'center',
   },
   startPlace: {
     marginTop: theme.spacing.medium,
   },
-  liveButton: {
-    marginLeft: theme.spacing.small,
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
   },
   travelAidButton: {
     marginTop: theme.spacing.medium,

@@ -1,15 +1,15 @@
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 
 type Props = {style?: StyleProp<ViewStyle>};
 
 export const ErrorWithAccountMessage = ({style}: Props) => {
-  const {authStatus, retryAuth} = useAuthState();
+  const {authStatus, retryAuth} = useAuthContext();
   const {t} = useTranslation();
-  const {logEvent} = useAnalytics();
+  const {logEvent} = useAnalyticsContext();
   if (authStatus === 'authenticated') return null;
 
   return (

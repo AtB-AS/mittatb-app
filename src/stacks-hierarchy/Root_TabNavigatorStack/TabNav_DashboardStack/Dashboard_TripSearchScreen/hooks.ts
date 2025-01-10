@@ -8,7 +8,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 
 import {defaultJourneyModes} from './utils';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -37,7 +37,7 @@ export function useJourneyModes(): Modes {
     isFlexibleTransportOnDirectModeEnabled,
     isFlexibleTransportOnEgressModeEnabled,
     isNonTransitTripSearchEnabled,
-  } = useFeatureToggles();
+  } = useFeatureTogglesContext();
 
   return {
     accessMode:

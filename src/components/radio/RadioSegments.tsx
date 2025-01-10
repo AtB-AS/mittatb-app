@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle, StyleProp} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '../pressable-opacity';
 
@@ -12,6 +12,7 @@ export type SegmentOptions = {
   selected?: boolean;
   accessibilityHint?: string;
   accessibilityLabel?: string;
+  ref?: RefObject<any>;
 };
 
 type RadioSegmentsProps = {
@@ -30,7 +31,7 @@ export function RadioSegments({
   style,
 }: RadioSegmentsProps) {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   const interactiveColor = color;
 
@@ -63,6 +64,7 @@ export function RadioSegments({
             accessibilityState={{selected}}
             accessibilityLabel={getAccessibilityLabel(option)}
             accessibilityHint={option.accessibilityHint}
+            ref={option.ref}
             style={[
               styles.optionBox,
               {
@@ -76,14 +78,16 @@ export function RadioSegments({
             ]}
           >
             <ThemeText
-              type={selected ? 'body__secondary--bold' : 'body__secondary'}
+              typography={
+                selected ? 'body__secondary--bold' : 'body__secondary'
+              }
               style={[styles.optionText, {color: textColor}]}
             >
               {option.text}
             </ThemeText>
             {option.subtext && (
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 style={[styles.optionText, {color: textColor}]}
               >
                 {option.subtext}

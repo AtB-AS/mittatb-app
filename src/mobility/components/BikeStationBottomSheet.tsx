@@ -88,7 +88,7 @@ export const BikeStationBottomSheet = ({
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
-                    <ThemeText type="body__secondary" color="secondary">
+                    <ThemeText typography="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
                     <WalkingDistance distance={distance} />

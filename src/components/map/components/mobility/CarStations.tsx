@@ -1,5 +1,5 @@
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
@@ -15,15 +15,13 @@ type Props = {
 };
 
 export const CarStations = ({stations, onClusterClick}: Props) => {
-  const stationBackgroundColor = useTransportationColor(Mode.Car).background;
-  const stationTextColor = useTransportationColor(Mode.Car, undefined, false)
-    .foreground.primary;
+  const carColor = useTransportColor(Mode.Car);
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
 
   const symbolStyling = {
     textAnchor: 'center',
     textOffset: [0.75, 0],
-    textColor: stationBackgroundColor,
+    textColor: carColor.primary.background,
     textSize: 12,
     textAllowOverlap: true,
     iconImage: 'CarChip',
@@ -78,8 +76,8 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
           maxZoomLevel={12}
           minZoomLevel={11}
           style={{
-            circleColor: stationBackgroundColor,
-            circleStrokeColor: stationTextColor,
+            circleColor: carColor.primary.background,
+            circleStrokeColor: carColor.primary.foreground.primary,
             circleOpacity: 0.7,
             circleStrokeOpacity: 0.7,
             circleRadius: 4,

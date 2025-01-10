@@ -41,7 +41,7 @@ export const RenderQuestion = ({
   return (
     <View>
       <View style={styles.questionTitleView}>
-        <ThemeText type="body__primary--bold">
+        <ThemeText typography="body__primary--bold">
           {question.questionText[language]}
         </ThemeText>
       </View>
@@ -97,7 +97,7 @@ function AlternativeItem({
             : [topContainer, styles.alternativeBox]
         }
       >
-        <ThemeText type="body__primary">
+        <ThemeText typography="body__primary">
           {alternative.alternativeText[language]}
         </ThemeText>
       </View>

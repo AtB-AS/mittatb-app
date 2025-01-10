@@ -12,7 +12,7 @@ import sortBy from 'lodash.sortby';
 import {GeoLocation} from '@atb/favorites';
 import haversine from 'haversine-distance';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -34,7 +34,7 @@ export const HarborResults: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const {location} = useGeolocationState();
+  const {location} = useGeolocationContext();
   const currentLocation = location || undefined;
 
   let harborResults = sortHarbors(harbors, currentLocation);
@@ -56,7 +56,7 @@ export const HarborResults: React.FC<Props> = ({
             message={t(HarborSearchTexts.messages.emptyResult)}
           />
         ) : (
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {getHeading(t, searchText, fromHarborName, currentLocation)}
           </ThemeText>
         )}
@@ -80,7 +80,7 @@ export const HarborResults: React.FC<Props> = ({
               >
                 <ThemeIcon svg={Boat} />
                 <View style={styles.nameContainer}>
-                  <ThemeText type="body__primary--bold">
+                  <ThemeText typography="body__primary--bold">
                     {harbor.name}
                   </ThemeText>
                 </View>

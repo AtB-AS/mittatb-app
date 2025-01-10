@@ -1,5 +1,4 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
@@ -11,9 +10,9 @@ import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
+  TouchableOpacity,
   View,
   ViewStyle,
-  TouchableOpacity,
 } from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {
@@ -21,37 +20,24 @@ import {
   GenericSectionItem,
   Section,
 } from '@atb/components/sections';
-import {PreassignedFareProduct, getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type ZonesSelectionProps = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
-  preassignedFareProduct: PreassignedFareProduct;
+  selection: PurchaseSelectionType;
   selectionMode: 'single' | 'multiple';
   onSelect: (params: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
-  (
-    {
-      fareProductTypeConfig,
-      fromTariffZone,
-      toTariffZone,
-      preassignedFareProduct,
-      selectionMode,
-      onSelect,
-      style,
-    }: ZonesSelectionProps,
-    ref,
-  ) => {
+  ({selection, selectionMode, onSelect, style}: ZonesSelectionProps, ref) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
 
@@ -60,9 +46,14 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
       zonesRef,
     }));
 
+    if (!selection.zones) return null;
+
+    const fromTariffZone = selection.zones.from;
+    const toTariffZone = selection.zones.to;
+
     // Can select zone if there is no whitelisted zones, or there is more than 1 whitelisted zone
     const canSelectZone =
-      preassignedFareProduct.limitations.tariffZoneRefs?.length !== 1;
+      selection.preassignedFareProduct.limitations.tariffZoneRefs?.length !== 1;
 
     const accessibility: AccessibilityProps = {
       accessible: true,
@@ -94,7 +85,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.fromZone}>
                 <ThemeText
                   color="secondary"
-                  type="body__secondary"
+                  typography="body__secondary"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.from)}
@@ -104,7 +95,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.toZone}>
                 <ThemeText
                   color="secondary"
-                  type="body__secondary"
+                  typography="body__secondary"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.to)}
@@ -140,8 +131,8 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
                 onSelect({
                   fromTariffZone,
                   toTariffZone,
-                  fareProductTypeConfig,
-                  preassignedFareProduct,
+                  fareProductTypeConfig: selection.fareProductTypeConfig,
+                  preassignedFareProduct: selection.preassignedFareProduct,
                 })
               }
               testID="selectZonesButton"
@@ -164,13 +155,13 @@ const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
 
   return tariffZone.venueName ? (
     <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
-      <ThemeText type="body__primary--bold" testID="selectedStation">
+      <ThemeText typography="body__primary--bold" testID="selectedStation">
         {tariffZone.venueName + ' '}
       </ThemeText>
       ({zoneLabel})
     </ThemeText>
   ) : (
-    <ThemeText type="body__primary--bold" testID="selectedZone">
+    <ThemeText typography="body__primary--bold" testID="selectedZone">
       {zoneLabel}
     </ThemeText>
   );

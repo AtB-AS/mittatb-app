@@ -21,18 +21,14 @@ const TravelTokenBoxTexts = {
       `Tickets must be used on either a t:card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
       `Billettar må brukast på enten eit t:kort eller ein mobil, men akkurat no kan vi ikkje finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
     ),
-    noInspectableTokenTitle: _(
-      'Velg hvor du vil bruke billettene dine',
-      'Choose where your tickets are used',
-      'Vel kor du vil bruke billettane dine',
-    ),
     noInspectableToken: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom t:kort / mobil** for å velge.',
-      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between t:card / phone** to select`,
-      `Billettar må brukast på enten eit t:kort eller ein mobil, og det ser ikkje ut som du har valt ein av dei.\n\nGå til **Mi profil, Bytt mellom t:kort / mobil** for å velje.`,
+      'Billetter må brukes på enten t:kort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
+      'Tickets must be used on either t:card or phone. Please select where you want to use your tickets.',
+      'Billettar må brukast på enten t:kort eller ein mobil. Ver venleg og vel kvar du vil bruke billettane dine.',
     ),
   },
   change: _('Endre', 'Change', 'Endre'),
+  select: _('Velg', 'Select', 'Vel'),
 };
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {
@@ -50,9 +46,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         `Billettar må brukast på enten eit reisekort eller ein mobil, men akkurat no kan vi ikkje finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
       ),
       noInspectableToken: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom reisekort / mobil** for å velge.',
-        `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between travel card / phone** to select`,
-        `Billettar må brukast på enten eit reisekort eller ein mobil, og det ser ikkje ut som du har valt ein av dei.\n\nGå til **Mi profil, Bytt mellom reisekort / mobil** for å velje.`,
+        'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
+        'Tickets must be used on either a travel card or phone. Please select where you want to use your tickets.',
+        'Billettar må brukast på enten eit reisekort eller ein mobil. Ver venleg og vel kvar du vil bruke billettane dine.',
       ),
     },
   },
@@ -70,9 +66,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarar vi ikkje finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
       ),
       noInspectableToken: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min bruker, Bytt mellom reisekort / mobil** for å velge.',
-        `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My user, switch between travel card / phone** to select`,
-        'Billettar må brukast på enten eit reisekort eller ein mobil, og det ser ikkje ut som du har valgt ein av dei.\n\nGå til **Min brukar, Bytt mellom reisekort / mobil** for å velje.',
+        'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
+        'Tickets must be used on either a travel card or phone. Please select where you want to use your tickets.',
+        'Billettar må brukast på enten eit reisekort eller ein mobil. Ver venleg og vel kvar du vil bruke billettane dine.',
       ),
     },
   },
@@ -90,9 +86,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarar vi ikkje finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
       ),
       noInspectableToken: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min bruker, Bytt mellom reisekort / mobil** for å velge.',
-        `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My user, switch between travel card / phone** to select`,
-        'Billettar må brukast på enten eit reisekort eller ein mobil, og det ser ikkje ut som du har valgt ein av dei.\n\nGå til **Min brukar, Bytt mellom reisekort / mobil** for å velje.',
+        'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
+        'Tickets must be used on either a travel card or phone. Please select where you want to use your tickets.',
+        'Billettar må brukast på enten eit reisekort eller ein mobil. Ver venleg og vel kvar du vil bruke billettane dine.',
       ),
     },
   },

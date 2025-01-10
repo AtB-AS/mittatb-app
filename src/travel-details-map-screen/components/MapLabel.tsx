@@ -1,14 +1,14 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {Point} from 'geojson';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 export const MapLabel: React.FC<{
   text: string;
   point: Point;
   id: string;
 }> = ({text, point, id}) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const shape: GeoJSON.Feature = {
     type: 'Feature',
     geometry: point,

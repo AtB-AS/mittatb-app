@@ -3,9 +3,9 @@ import {ThemeText} from '@atb/components/text';
 import {
   FareProductTypeConfig,
   getReferenceDataName,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
@@ -26,9 +26,9 @@ export const PriceSummary = ({
   totalPrice,
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
-  const {vatPercent} = useFirestoreConfiguration();
+  const {vatPercent} = useFirestoreConfigurationContext();
 
   const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
   const vatAmountString = formatDecimalNumber(vatAmount, language);
@@ -53,10 +53,10 @@ export const PriceSummary = ({
       <GenericSectionItem>
         <View style={styles.totalPaymentContainer} accessible={true}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body__primary">
+            <ThemeText typography="body__primary">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText type="body__tertiary" color="secondary">
+            <ThemeText typography="body__tertiary" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -67,7 +67,7 @@ export const PriceSummary = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="body__primary--jumbo" testID="totalPrice">
+            <ThemeText typography="body__primary--jumbo" testID="totalPrice">
               {totalPriceString} kr
             </ThemeText>
           ) : (
@@ -126,7 +126,7 @@ const PricePerUserProfile = ({
       <ThemeText
         style={styles.userProfileCountAndName}
         color="secondary"
-        type="body__secondary"
+        typography="body__secondary"
         testID="userProfileCountAndName"
       >
         {count} {userProfileName}
@@ -134,14 +134,14 @@ const PricePerUserProfile = ({
       <View style={styles.userProfilePrice}>
         {hasFlexDiscount && (
           <ThemeText
-            type="body__tertiary"
+            typography="body__tertiary"
             color="secondary"
             style={styles.userProfileOriginalPriceAmount}
           >
             {originalPriceString} kr
           </ThemeText>
         )}
-        <ThemeText color="secondary" type="body__secondary">
+        <ThemeText color="secondary" typography="body__secondary">
           {priceString} kr
         </ThemeText>
       </View>

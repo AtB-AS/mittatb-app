@@ -49,6 +49,7 @@ platform :ios do
         'FASTLANE_MATCH_TYPE',
         'MATCH_DEPLOY_KEY',
         'APPCONNECT_API_KEY_PATH',
+        'KEYCHAIN_NAME'
       ]
     )
     register_devices(
@@ -57,6 +58,7 @@ platform :ios do
       api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    keychain_name = ENV['KEYCHAIN_NAME']
     puts "Provisioning profiles for #{identifiers}"
     match(
       type: ENV["FASTLANE_MATCH_TYPE"],
@@ -66,6 +68,7 @@ platform :ios do
       app_identifier: identifiers,
       force_for_new_devices: true,
       force: true,
+      keychain_name: keychain_name,
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
@@ -132,9 +135,18 @@ platform :ios do
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
-      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: [
+        'IOS_DEVELOPMENT_TEAM_ID',
+        'IOS_BUNDLE_IDENTIFIER',
+        'IOS_APP_WIDGET_IDENTIFIER',
+        'IOS_APP_INTENT_IDENTIFIER',
+        'FASTLANE_MATCH_GIT_URL',
+        'FASTLANE_MATCH_TYPE',
+        'KEYCHAIN_NAME'
+      ]
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    keychain_name = ENV['KEYCHAIN_NAME']
     match_nuke(
       readonly: false,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
@@ -142,6 +154,7 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
+      keychain_name: keychain_name,
       include_all_certificates: true
     )
     get_certs
@@ -150,9 +163,19 @@ platform :ios do
   desc 'Generate new certificates without nuking old ones'
   lane :generate_new_certificates_without_nuke do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: [
+        'MATCH_PASSWORD',
+        'FASTLANE_MATCH_GIT_SSH_URL',
+        'FASTLANE_MATCH_TYPE',
+        'IOS_BUNDLE_IDENTIFIER',
+        'IOS_APP_WIDGET_IDENTIFIER',
+        'IOS_APP_INTENT_IDENTIFIER',
+        'IOS_DEVELOPMENT_TEAM_ID',
+        'KEYCHAIN_NAME'
+      ]
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    keychain_name = ENV['KEYCHAIN_NAME']
     match(
       type: ENV["FASTLANE_MATCH_TYPE"],
       app_identifier: identifiers,
@@ -161,6 +184,7 @@ platform :ios do
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       readonly: false,
       force: true,
+      keychain_name: keychain_name,
       include_all_certificates: true
     )
   end
@@ -168,12 +192,23 @@ platform :ios do
   desc 'Match certificates'
   lane :get_certs do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: [
+        'MATCH_PASSWORD',
+        'FASTLANE_MATCH_GIT_SSH_URL',
+        'FASTLANE_MATCH_TYPE',
+        'IOS_BUNDLE_IDENTIFIER',
+        'IOS_APP_WIDGET_IDENTIFIER',
+        'IOS_APP_INTENT_IDENTIFIER',
+        'IOS_DEVELOPMENT_TEAM_ID',
+        'KEYCHAIN_NAME'
+      ]
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     if is_ci
+      keychain_name = ENV['KEYCHAIN_NAME']
+
       create_keychain(
-        name: "CI",
+        name: keychain_name,
         password: ENV["MATCH_PASSWORD"],
         default_keychain: true,
         unlock: true,
@@ -183,9 +218,7 @@ platform :ios do
 
       # Retrieve the keychain path from lane_context
       keychain_path = lane_context[SharedValues::KEYCHAIN_PATH]
-
-      # Update Apple WWDR Certificate using the keychain path
-      download_and_install_wwdr_cert(keychain: keychain_path)
+      keychain_file_path = "#{keychain_path}-db"
 
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
@@ -193,10 +226,12 @@ platform :ios do
         storage_mode: 'git',
         git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         readonly: true,
-        keychain_name: "CI",
+        keychain_name: keychain_name,
         keychain_password: ENV["MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
+
+      verify_installed_certificates(keychain: keychain_file_path)
     else
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
@@ -219,40 +254,12 @@ platform :ios do
     )
   end
 
-  private_lane :download_and_install_wwdr_cert do |options|
-    require 'open-uri'
-
-    keychain_path = options[:keychain] || "/Library/Keychains/System.keychain"
-    wwdr_cert_url = "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer"
-    cert_file_path = File.join(Dir.tmpdir, "AppleWWDRCAG3.cer")
-
-    unlock_keychain(
-      path: keychain_path,
-      password: ENV['MATCH_PASSWORD']
-    )
-
-    UI.message("Downloading the latest Apple WWDR Certificate...")
-    File.write(cert_file_path, URI.open(wwdr_cert_url).read)
-
-    UI.message("Installing the Apple WWDR Certificate into #{keychain_path}...")
-    import_certificate(
-      certificate_path: cert_file_path,
-      keychain_name: keychain_path,
-      keychain_password: ENV['MATCH_PASSWORD']
-    )
-
-    UI.message("Cleaning up temporary files...")
-    File.delete(cert_file_path)
-
-    verify_installed_certificates(keychain: keychain_path)
-  end
-
   lane :verify_installed_certificates do |options|
     keychain_path = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
-  
+
     UI.message("Listing installed certificates in #{keychain_path}...")
     installed_certs = `security find-certificate -c "Apple Worldwide Developer Relations Certification Authority" -a -Z #{keychain_path}`
-    
+
     if installed_certs.empty?
       UI.user_error!("WWDR Certificate is missing in #{keychain_path}.")
     else

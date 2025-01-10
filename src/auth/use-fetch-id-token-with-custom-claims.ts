@@ -8,7 +8,7 @@ import {
   notifyBugsnag,
 } from '@atb/utils/bugsnag-utils';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useRemoteConfig} from '@atb/RemoteConfigContext.tsx';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext.tsx';
 
 /**
  * Variable signalling whether the next fetch id token request should be force
@@ -33,7 +33,7 @@ export const useFetchIdTokenWithCustomClaims = (
     shouldForceRefresh = false;
   }, [state.user]);
 
-  const {fetch_id_token_retry_count: retryCount} = useRemoteConfig();
+  const {fetch_id_token_retry_count: retryCount} = useRemoteConfigContext();
 
   const query = useQuery({
     queryKey: ['FETCH_ID_TOKEN'],

@@ -2,7 +2,7 @@
 # https://github.com/AtB-AS/docs-private/blob/main/kundevendt-development-guidelines.md#systemdomain-captains
 
 # App
-* @gorandalum @marius-at-atb @jorelosorio @rosvik
+* @gorandalum @marius-at-atb @jorelosorio @rosvik @strandlie
 
 # Mobile token (App, Webshop, Token-server)
 /src/mobile-token/ @gorandalum @jorelosorio @hanne-at-atb

@@ -1,21 +1,17 @@
 import {ThemeText} from '@atb/components/text';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {PreassignedFareProduct} from '@atb/configuration';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type StopPlaceSelectionProps = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  fromHarbor?: StopPlaceFragment;
-  toHarbor?: StopPlaceFragment;
-  preassignedFareProduct: PreassignedFareProduct;
+  selection: PurchaseSelectionType;
   onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -23,60 +19,52 @@ type StopPlaceSelectionProps = {
 export const HarborSelection = forwardRef<
   FocusRefsType,
   StopPlaceSelectionProps
->(
-  (
-    {
-      fareProductTypeConfig,
-      fromHarbor,
-      toHarbor,
-      preassignedFareProduct,
-      onSelect,
-      style,
-    }: StopPlaceSelectionProps,
-    ref,
-  ) => {
-    const {t} = useTranslation();
+>(({selection, onSelect, style}: StopPlaceSelectionProps, ref) => {
+  const {t} = useTranslation();
 
-    const fromHarborRef = useRef<TouchableOpacity>(null);
-    const toHarborRef = useRef<TouchableOpacity>(null);
-    useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
+  const fromHarborRef = useRef<TouchableOpacity>(null);
+  const toHarborRef = useRef<TouchableOpacity>(null);
+  useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
 
-    return (
-      <View style={style} accessible={false}>
-        <ContentHeading
-          text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
+  if (!selection.stopPlaces) return null;
+  const fromHarbor = selection.stopPlaces.from;
+  const toHarbor = selection.stopPlaces.to;
+
+  return (
+    <View style={style} accessible={false}>
+      <ContentHeading
+        text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
+      />
+      <Section accessible={false}>
+        <HarborSelectionItem
+          fromOrTo="from"
+          harbor={fromHarbor}
+          disabled={false}
+          onPress={() =>
+            onSelect({
+              fareProductTypeConfig: selection.fareProductTypeConfig,
+              preassignedFareProduct: selection.preassignedFareProduct,
+            })
+          }
+          ref={fromHarborRef}
         />
-        <Section accessible={false}>
-          <HarborSelectionItem
-            fromOrTo="from"
-            harbor={fromHarbor}
-            disabled={false}
-            onPress={() =>
-              onSelect({
-                fareProductTypeConfig,
-                preassignedFareProduct,
-              })
-            }
-            ref={fromHarborRef}
-          />
-          <HarborSelectionItem
-            fromOrTo="to"
-            harbor={toHarbor}
-            disabled={!fromHarbor}
-            onPress={() =>
-              onSelect({
-                fromHarbor,
-                fareProductTypeConfig,
-                preassignedFareProduct,
-              })
-            }
-            ref={toHarborRef}
-          />
-        </Section>
-      </View>
-    );
-  },
-);
+        <HarborSelectionItem
+          fromOrTo="to"
+          harbor={toHarbor}
+          disabled={!fromHarbor}
+          onPress={() =>
+            onSelect({
+              fromHarbor,
+              fareProductTypeConfig: selection.fareProductTypeConfig,
+              preassignedFareProduct: selection.preassignedFareProduct,
+            })
+          }
+          ref={toHarborRef}
+        />
+      </Section>
+    </View>
+  );
+});
 
 type HarborSelectionItemProps = {
   harbor?: StopPlaceFragment;
@@ -118,7 +106,7 @@ const HarborSelectionItem = forwardRef<
       <View style={styles.sectionContent}>
         <ThemeText
           color={disabled ? 'disabled' : 'secondary'}
-          type="body__secondary"
+          typography="body__secondary"
           style={styles.toFromLabel}
         >
           {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
@@ -139,7 +127,7 @@ const HarborLabel = ({
   const harborName = harbor?.name;
   const {t} = useTranslation();
   return harborName ? (
-    <ThemeText type="body__primary--bold">{harborName}</ThemeText>
+    <ThemeText typography="body__primary--bold">{harborName}</ThemeText>
   ) : (
     <ThemeText
       style={{flexShrink: 1}}

@@ -3,10 +3,10 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {CrashSmall} from '@atb/assets/svg/color/images';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 import {OnboardingFullScreenView} from '@atb/onboarding';
 
@@ -19,19 +19,24 @@ export function NoTravelTokenInfo({
 }): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
-  const {disable_travelcard} = useRemoteConfig();
+  const {disable_travelcard} = useRemoteConfigContext();
 
   return (
     <OnboardingFullScreenView
       footerButton={{
         onPress: onPressFooterButton,
         text: t(MobileTokenOnboardingTexts.ok),
+        expanded: false,
       }}
     >
-      <ThemeText type="heading--big" style={styles.header} color={themeColor}>
+      <ThemeText
+        typography="heading--big"
+        style={styles.header}
+        color={themeColor}
+      >
         {t(MobileTokenOnboardingTexts.error.heading)}
       </ThemeText>
       <ThemeText style={styles.description} color={themeColor}>

@@ -1,28 +1,28 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useControlPositionsStyle} from '../hooks/use-control-styles';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 export const ScanButton = () => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const styles = useStyles();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const navigation = useNavigation<RootNavigationProps>();
   const {t} = useTranslation();
   const {controlsContainer} = useControlPositionsStyle();
-  const {close: closeBottomSheet} = useBottomSheet();
+  const {close: closeBottomSheet} = useBottomSheetContext();
 
   return (
     <Button
+      expanded={false}
       style={{...styles.scanButton, bottom: controlsContainer.bottom}}
-      type="medium"
       compact={true}
       interactiveColor={interactiveColor}
       accessibilityRole="button"

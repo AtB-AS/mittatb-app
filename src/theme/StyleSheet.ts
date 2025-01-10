@@ -5,7 +5,7 @@ import {
   ImageStyle,
 } from 'react-native';
 import {Mode as ThemeMode, Theme} from './colors';
-import {useTheme} from './ThemeContext';
+import {useThemeContext} from './ThemeContext';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
@@ -23,7 +23,7 @@ interface ExtendedStyleSheet extends StyleSheetType {
 export function useStyle<T extends NamedStyles<T>>(
   style: ThemedStyles<T> | T,
 ): T {
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   if (!isThemedStyles<T>(style)) {
     return style;
   }
