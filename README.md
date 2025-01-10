@@ -30,6 +30,8 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 #### First time setup
 
+0. Before cloning the project, make sure that the path you clone it into has no spaces (" ") in it.
+
 1. Setup Entur private registry in `.npmrc` and `gradle.properties`.
 
    a. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
