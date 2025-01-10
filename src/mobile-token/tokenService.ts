@@ -20,9 +20,8 @@ import {
   ToggleResponse,
   TokenLimitResponse,
 } from './types';
-import {RemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {getDeviceName} from 'react-native-device-info';
-import {parseBffCallErrors} from './utils';
+import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
 import {abtClient} from './mobileTokenClient';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
@@ -46,9 +45,6 @@ export type TokenService = RemoteTokenService & {
 const handleError = (err: any) => {
   throw parseBffCallErrors(err.response?.data) || err;
 };
-
-const isRemoteTokenStateError = (err: any) =>
-  parseBffCallErrors(err.response?.data) instanceof RemoteTokenStateError;
 
 export const tokenService: TokenService = {
   initiateNewMobileToken: async (traceId) => {
@@ -199,13 +195,13 @@ export const tokenService: TokenService = {
       includeCertificate: false,
     };
 
-    await abtClient.remoteClientCallHandler(
-      token.getContextId(),
-      tokenEncodingRequest,
-      traceId,
-      async (secureContainerToken, attestation) => {
-        return client
-          .get('/tokens/v4/validate', {
+    await abtClient
+      .remoteClientCallHandler(
+        token.getContextId(),
+        tokenEncodingRequest,
+        traceId,
+        async (secureContainerToken, attestation) => {
+          return await client.get('/tokens/v4/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainerToken,
@@ -215,9 +211,9 @@ export const tokenService: TokenService = {
             authWithIdToken: true,
             timeout: 15000,
             skipErrorLogging: isRemoteTokenStateError,
-          })
-          .catch(handleError);
-      },
-    );
+          });
+        },
+      )
+      .catch(handleError);
   },
 };

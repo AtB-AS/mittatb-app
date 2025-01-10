@@ -6,7 +6,10 @@ import {
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isDefined} from '@atb/utils/presence';
-import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
+import {
+  parseRemoteError,
+  RemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
 import {getAxiosErrorType} from '@atb/api/utils';
 
@@ -86,3 +89,6 @@ export const parseBffCallErrors = (error: any) => {
 
   return parseRemoteError(error) ?? error;
 };
+
+export const isRemoteTokenStateError = (err: any) =>
+  parseBffCallErrors(err.response?.data) instanceof RemoteTokenStateError;
