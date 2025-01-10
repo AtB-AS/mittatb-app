@@ -84,7 +84,8 @@ const TariffZonesSelectorMap = ({
     };
     const builder = selectionBuilder.fromSelection(selection);
     if (selectNext === 'from') builder.fromZone(zone);
-    if (selectNext === 'to') builder.toZone(zone);
+    if (selectNext === 'to' || isApplicableOnSingleZoneOnly)
+      builder.toZone(zone);
     const newSelection = builder.build();
     onSelect(newSelection);
   };
