@@ -602,3 +602,21 @@ export const isValidDateString = (dateString: string) => {
   const parsedDate = parseISO(dateString);
   return isValid(parsedDate);
 };
+
+/**
+ * Recursively transforms iso date strings fields to Date fields.
+ */
+export const convertIsoStringFieldsToDate = (value: any): any => {
+  if (!value) return value;
+  if (Array.isArray(value)) {
+    return value.map(convertIsoStringFieldsToDate);
+  } else if (typeof value === 'object') {
+    return Object.entries(value).reduce<any>((acc, [key, fieldValue]) => {
+      acc[key] = convertIsoStringFieldsToDate(fieldValue);
+      return acc;
+    }, {});
+  } else if (typeof value === 'string' && isValidDateString(value)) {
+    return parseISO(value);
+  }
+  return value;
+};

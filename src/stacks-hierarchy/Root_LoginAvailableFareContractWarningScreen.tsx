@@ -30,7 +30,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   const focusRef = useFocusOnLoad();
   const {reservations} = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const availableFareContracts = useFareContracts(
+  const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,
   );

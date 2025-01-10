@@ -21,7 +21,7 @@ export const Profile_DeleteProfileScreen = () => {
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthContext();
   const {serverNow} = useTimeContext();
-  const availableFareContracts = useFareContracts(
+  const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,
   );

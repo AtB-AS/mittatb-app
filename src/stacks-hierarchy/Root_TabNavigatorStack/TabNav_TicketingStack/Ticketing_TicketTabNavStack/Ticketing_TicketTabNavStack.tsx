@@ -21,7 +21,7 @@ export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
   const {serverNow} = useTimeContext();
-  const availableFareContracts = useFareContracts(
+  const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,
   );

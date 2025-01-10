@@ -26,13 +26,12 @@ export const TicketHistoryScreenComponent = ({
     isRefreshingFareContracts,
     reservations,
     rejectedReservations,
-    resubscribeFirestoreListeners,
   } = useTicketingContext();
   const {serverNow} = useTimeContext();
-  const historicFareContracts = useFareContracts(
-    {availability: 'historic'},
-    serverNow,
-  );
+  const {
+    fareContracts: historicFareContracts,
+    refetch: refetchHistoricFareContracts,
+  } = useFareContracts({availability: 'historic'}, serverNow);
 
   const {abtCustomerId: customerAccountId} = useAuthContext();
 
@@ -54,7 +53,7 @@ export const TicketHistoryScreenComponent = ({
       refreshControl={
         <RefreshControl
           refreshing={isRefreshingFareContracts}
-          onRefresh={resubscribeFirestoreListeners}
+          onRefresh={refetchHistoricFareContracts}
         />
       }
     >
