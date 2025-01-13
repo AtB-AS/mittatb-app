@@ -54,6 +54,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -404,6 +405,18 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
+          {!!tripPatterns.length && (
+            <View style={styles.globalMessage}>
+              <GlobalMessage
+                textColor={theme.color.background.neutral[0]}
+                globalMessageContext={GlobalMessageContextEnum.appTripResults}
+                ruleVariables={{
+                  fromStopPlaceId: from?.id ?? '',
+                  toStopPlaceId: to?.id ?? '',
+                }}
+              />
+            </View>
+          )}
           {from && to && (
             <View>
               {filtersState.enabled && (
@@ -681,5 +694,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
+  },
+  globalMessage: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
 }));
