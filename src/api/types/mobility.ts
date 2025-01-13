@@ -152,6 +152,7 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
     .string()
     .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
+  operatorId: z.string(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
