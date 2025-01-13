@@ -24,10 +24,8 @@ export function useSectionItem({
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useThemeContext();
 
-  const spacing = useSpacing(type);
-
   const topContainer: ViewStyle = {
-    padding: spacing,
+    ...mapToPadding(theme, type),
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
@@ -38,6 +36,7 @@ export function useSectionItem({
     flex: 1,
   };
 
+  const spacing = useSpacing(type);
   return {
     topContainer,
     contentContainer,
@@ -55,11 +54,36 @@ function useSpacing(type: ContainerSizingType) {
   }
 }
 
+type Padding = Pick<ViewStyle, 'paddingVertical' | 'paddingHorizontal'>;
+
+function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
+  switch (type) {
+    case 'block':
+      return {
+        paddingVertical: theme.spacing.large,
+        paddingHorizontal: theme.spacing.medium,
+      };
+    case 'spacious':
+      return {
+        paddingVertical: theme.spacing.large,
+        paddingHorizontal: theme.spacing.large,
+      };
+  }
+}
+
+type BorderRadius = Pick<
+  ViewStyle,
+  | 'borderTopLeftRadius'
+  | 'borderTopRightRadius'
+  | 'borderBottomRightRadius'
+  | 'borderBottomLeftRadius'
+>;
+
 function mapToBorderRadius(
   theme: Theme,
   radiusSize: keyof Theme['border']['radius'] = 'regular',
   radius?: RadiusModeType,
-): ViewStyle {
+): BorderRadius {
   if (!radius) {
     return {};
   }
