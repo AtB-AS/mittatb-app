@@ -9,7 +9,7 @@ export const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({
   onBack,
 }) => {
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
+  const interactiveColor = theme.color.interactive[2];
 
   return (
     <Button
