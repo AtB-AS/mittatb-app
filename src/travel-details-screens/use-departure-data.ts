@@ -14,6 +14,7 @@ import {
   getNoticesForServiceJourney,
 } from '@atb/travel-details-screens/utils';
 import {useTranslation} from '@atb/translations';
+import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -23,6 +24,7 @@ export type DepartureData = {
   subMode?: TransportSubmode;
   situations: SituationFragment[];
   notices: NoticeFragment[];
+  line?: LineFragment;
 };
 
 type EstimatedCallMetadata = {
@@ -81,6 +83,7 @@ export function useDepartureData(
         estimatedCallsWithMetadata,
         situations,
         notices,
+        line: serviceJourney.line,
       };
     },
     [activeItem, t],

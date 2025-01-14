@@ -18,6 +18,7 @@ import {
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
+import capitalize from 'lodash/capitalize';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -194,9 +195,9 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 }
 
 export async function getFareContracts(
-  availability: 'Available' | 'Historical',
+  availability: 'available' | 'historical',
 ): Promise<FareContract[]> {
-  const url = `ticket/v4/list?availability=${availability}`;
+  const url = `ticket/v4/list?availability=${capitalize(availability)}`;
   const response = await client.get(url, {
     authWithIdToken: true,
   });

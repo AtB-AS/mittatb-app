@@ -62,19 +62,8 @@ const useGetFareContractsQuery = (
   const {userId} = useAuthContext();
   return useQuery({
     queryKey: ['FETCH_FARE_CONTRACTS', availability, userId],
-    queryFn: () => getFareContracts(mapAvailability(availability)),
+    queryFn: () => getFareContracts(availability),
     enabled: false,
     retry: 0,
   });
-};
-
-const mapAvailability = (
-  availability: AvailabilityStatusInput['availability'],
-) => {
-  switch (availability) {
-    case 'available':
-      return 'Available';
-    case 'historic':
-      return 'Historical';
-  }
 };

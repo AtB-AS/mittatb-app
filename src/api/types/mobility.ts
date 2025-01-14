@@ -17,6 +17,7 @@ export type ViolationsReportingProvider = {
 
 export type ParkingViolationType = {
   code: string;
+  /** @deprecated Icon is only used by the app in v. 1.61 and earlier */
   icon: string;
 };
 
@@ -152,6 +153,7 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
     .string()
     .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
+  operatorId: z.string(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<

@@ -19,11 +19,11 @@ export const getAvailabilityStatus = (
   now: number,
 ): AvailabilityStatus => {
   if (fc.state === FareContractState.Refunded) {
-    return {availability: 'historic', status: 'refunded'};
+    return {availability: 'historical', status: 'refunded'};
   }
 
   if (fc.state === FareContractState.Cancelled) {
-    return {availability: 'historic', status: 'cancelled'};
+    return {availability: 'historical', status: 'cancelled'};
   }
 
   if (fc.state === FareContractState.Unspecified) {
@@ -42,15 +42,15 @@ export const getAvailabilityStatus = (
     if (usedAccesses.some(isValid(now))) {
       return {availability: 'available', status: 'valid'};
     } else if (numberOfUsedAccesses >= maximumNumberOfAccesses) {
-      return {availability: 'historic', status: 'empty'};
+      return {availability: 'historical', status: 'empty'};
     } else if (travelRights.every(isExpired(now))) {
-      return {availability: 'historic', status: 'expired'};
+      return {availability: 'historical', status: 'expired'};
     } else {
       return {availability: 'available', status: 'upcoming'};
     }
   } else {
     if (travelRights.every(isExpired(now))) {
-      return {availability: 'historic', status: 'expired'};
+      return {availability: 'historical', status: 'expired'};
     } else if (travelRights.some(isValid(now))) {
       return {availability: 'available', status: 'valid'};
     } else {

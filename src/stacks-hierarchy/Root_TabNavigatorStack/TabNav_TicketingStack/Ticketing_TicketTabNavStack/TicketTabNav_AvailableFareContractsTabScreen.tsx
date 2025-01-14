@@ -29,8 +29,8 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     fareContracts: availableFareContracts,
     refetch: refetchAvailableFareContracts,
   } = useFareContracts({availability: 'available'}, serverNow);
-  const {fareContracts: historicFareContracts} = useFareContracts(
-    {availability: 'historic'},
+  const {fareContracts: historicalFareContracts} = useFareContracts(
+    {availability: 'historical'},
     serverNow,
   );
 
@@ -38,7 +38,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   const {t} = useTranslation();
   const {addPopOver} = usePopOverContext();
 
-  const hasHistoricFareContracts = historicFareContracts.length > 0;
+  const hasHistoricalFareContracts = historicalFareContracts.length > 0;
 
   const hasSentFareContracts = sentFareContracts.length > 0;
 
@@ -114,16 +114,18 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           )}
         />
         <Section>
-          {hasHistoricFareContracts && (
+          {hasHistoricalFareContracts && (
             <LinkSectionItem
-              text={t(TicketHistoryModeTexts.historic.title)}
+              text={t(TicketHistoryModeTexts.historical.title)}
               accessibility={{
-                accessibilityHint: t(TicketHistoryModeTexts.historic.titleA11y),
+                accessibilityHint: t(
+                  TicketHistoryModeTexts.historical.titleA11y,
+                ),
               }}
               testID="historicTicketsButton"
               onPress={() =>
                 navigation.navigate('Ticketing_TicketHistoryScreen', {
-                  mode: 'historic',
+                  mode: 'historical',
                 })
               }
             />
