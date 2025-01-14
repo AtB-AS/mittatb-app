@@ -27,17 +27,21 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
         top: top + theme.spacing.medium,
         right: theme.spacing.medium,
       },
-      controlsContainer: {
+
+      mapButtonsContainer: {
         position: 'absolute',
-        width: '100%',
         bottom:
           (extraPaddingBottom ? bottom : 0) +
           bottomPaddingIfBottomSheetIsOpen +
           theme.spacing.medium,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        paddingHorizontal: theme.spacing.medium,
+      },
+
+      mapButtonsContainerLeft: {
+        left: theme.spacing.medium,
+      },
+
+      mapButtonsContainerRight: {
+        right: theme.spacing.medium,
       },
       locationContainer: {
         position: 'absolute',
