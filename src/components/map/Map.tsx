@@ -308,7 +308,7 @@ export const Map = (props: MapProps) => {
         <View
           style={[
             controlStyles.mapButtonsContainer,
-            controlStyles['mapButtonsContainer--left'],
+            controlStyles.mapButtonsContainerLeft,
           ]}
         >
           {isBonusProgramEnabled &&
@@ -322,7 +322,7 @@ export const Map = (props: MapProps) => {
         <View
           style={[
             controlStyles.mapButtonsContainer,
-            controlStyles['mapButtonsContainer--right'],
+            controlStyles.mapButtonsContainerRight,
           ]}
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />

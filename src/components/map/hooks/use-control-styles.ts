@@ -36,11 +36,11 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
           theme.spacing.medium,
       },
 
-      'mapButtonsContainer--left': {
+      mapButtonsContainerLeft: {
         left: theme.spacing.medium,
       },
 
-      'mapButtonsContainer--right': {
+      mapButtonsContainerRight: {
         right: theme.spacing.medium,
       },
       locationContainer: {
