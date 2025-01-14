@@ -15,7 +15,15 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
     ? bottomSheetHeight - minHeight
     : 0;
 
-  return useMemo<{[key: string]: ViewStyle}>(
+  return useMemo<{
+    [key in
+      | 'backArrowContainer'
+      | 'positionArrowContainer'
+      | 'mapButtonsContainer'
+      | 'mapButtonsContainerLeft'
+      | 'mapButtonsContainerRight'
+      | 'locationContainer']: ViewStyle;
+  }>(
     () => ({
       backArrowContainer: {
         position: 'absolute',

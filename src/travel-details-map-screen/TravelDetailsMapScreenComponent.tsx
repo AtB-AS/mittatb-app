@@ -219,7 +219,12 @@ export const TravelDetailsMapScreenComponent = ({
           onBack={onPressBack}
         />
       </View>
-      <View style={controlStyles.controlsContainer}>
+      <View
+        style={[
+          controlStyles.mapButtonsContainer,
+          controlStyles.mapButtonsContainerRight,
+        ]}
+      >
         <PositionArrow
           onPress={() => {
             setShouldTrack(false);
