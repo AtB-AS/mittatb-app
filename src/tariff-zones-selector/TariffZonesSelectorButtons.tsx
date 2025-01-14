@@ -9,22 +9,21 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
 import {getReferenceDataName} from '@atb/configuration';
-import {TariffZoneSelection, TariffZoneWithMetadata} from './types';
-// eslint-disable-next-line no-restricted-imports
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {TariffZoneWithMetadata} from './types';
 import {ViewStyle} from 'react-native';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type Props = {
-  selectedZones: TariffZoneSelection;
+  selection: PurchaseSelectionType;
+  selectNext: 'from' | 'to';
   isApplicableOnSingleZoneOnly: boolean;
-  onVenueSearchClick: (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
-  ) => void;
+  onVenueSearchClick: (fromOrTo: 'from' | 'to') => void;
   style?: ViewStyle;
 };
 
 const TariffZonesSelectorButtons = ({
-  selectedZones,
+  selection,
+  selectNext,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
   style,
@@ -39,39 +38,39 @@ const TariffZonesSelectorButtons = ({
             ? t(TariffZonesTexts.location.singleZone.label)
             : t(TariffZonesTexts.location.zonePicker.labelFrom)
         }
-        value={departurePickerValue(selectedZones.from, language, t)}
+        value={departurePickerValue(selection.zones?.from, language, t)}
         accessibilityLabel={departurePickerAccessibilityLabel(
-          selectedZones.from,
+          selection.zones?.from,
           language,
           t,
         )}
         accessibilityHint={t(TariffZonesTexts.location.zonePicker.a11yHintFrom)}
-        onPress={() => onVenueSearchClick('fromTariffZone')}
+        onPress={() => onVenueSearchClick('from')}
         icon={
-          selectedZones.from.resultType === 'geolocation' ? (
+          selection.zones?.from.resultType === 'geolocation' ? (
             <ThemeIcon svg={Location} />
           ) : undefined
         }
-        highlighted={selectedZones.selectNext === 'from'}
+        highlighted={selectNext === 'from'}
         testID="searchFromButton"
       />
       {!isApplicableOnSingleZoneOnly && (
         <ButtonSectionItem
           label={t(TariffZonesTexts.location.zonePicker.labelTo)}
-          value={destinationPickerValue(selectedZones.to, language, t)}
+          value={destinationPickerValue(selection.zones?.to, language, t)}
           accessibilityLabel={destinationPickerAccessibilityLabel(
-            selectedZones.to,
+            selection.zones?.to,
             language,
             t,
           )}
           accessibilityHint={t(TariffZonesTexts.location.zonePicker.a11yHintTo)}
-          onPress={() => onVenueSearchClick('toTariffZone')}
+          onPress={() => onVenueSearchClick('to')}
           icon={
-            selectedZones.to.resultType === 'geolocation' ? (
+            selection.zones?.to.resultType === 'geolocation' ? (
               <ThemeIcon svg={Location} />
             ) : undefined
           }
-          highlighted={selectedZones.selectNext === 'to'}
+          highlighted={selectNext === 'to'}
           testID="searchToButton"
         />
       )}
@@ -80,10 +79,11 @@ const TariffZonesSelectorButtons = ({
 };
 
 const departurePickerAccessibilityLabel = (
-  fromTariffZone: TariffZoneWithMetadata,
+  fromTariffZone: TariffZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
-): string => {
+): string | undefined => {
+  if (!fromTariffZone) return undefined;
   if (fromTariffZone.venueName)
     return t(
       TariffZonesTexts.location.zonePicker.a11yLabelFrom.withVenue(
@@ -101,10 +101,11 @@ const departurePickerAccessibilityLabel = (
 };
 
 const destinationPickerAccessibilityLabel = (
-  toTariffZone: TariffZoneWithMetadata,
+  toTariffZone: TariffZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
-): string => {
+): string | undefined => {
+  if (!toTariffZone) return undefined;
   if (toTariffZone.venueName)
     return t(
       TariffZonesTexts.location.zonePicker.a11yLabelTo.withVenue(
@@ -122,10 +123,11 @@ const destinationPickerAccessibilityLabel = (
 };
 
 const departurePickerValue = (
-  fromTariffZone: TariffZoneWithMetadata,
+  fromTariffZone: TariffZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
-): string => {
+): string | undefined => {
+  if (!fromTariffZone) return undefined;
   if (fromTariffZone.venueName)
     return t(
       TariffZonesTexts.location.zonePicker.value.withVenue(
@@ -143,10 +145,11 @@ const departurePickerValue = (
 };
 
 const destinationPickerValue = (
-  toTariffZone: TariffZoneWithMetadata,
+  toTariffZone: TariffZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
-): string => {
+): string | undefined => {
+  if (!toTariffZone) return undefined;
   if (toTariffZone.venueName) {
     return t(
       TariffZonesTexts.location.zonePicker.value.withVenue(

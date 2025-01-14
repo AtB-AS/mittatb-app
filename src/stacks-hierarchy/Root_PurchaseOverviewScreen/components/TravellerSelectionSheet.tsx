@@ -9,8 +9,10 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
 import {useUserCountState} from './Travellers/use-user-count-state';
-import {UserProfileWithCount} from '@atb/fare-contracts';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
@@ -19,10 +21,7 @@ import {useAuthContext} from '@atb/auth';
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
   isOnBehalfOfToggle: boolean;
-  onSave: (
-    chosenSelectableUserProfiles: UserProfileWithCount[],
-    onBehalfOfToggle: boolean,
-  ) => void;
+  onSave: (selection: PurchaseSelectionType, onBehalfOfToggle: boolean) => void;
 };
 export const TravellerSelectionSheet = ({
   selection,
@@ -31,6 +30,7 @@ export const TravellerSelectionSheet = ({
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
@@ -75,12 +75,13 @@ export const TravellerSelectionSheet = ({
           expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={noProfilesSelected}
-          onPress={() =>
-            onSave(
-              userCountState.userProfilesWithCount,
-              isTravelerOnBehalfOfToggle,
-            )
-          }
+          onPress={() => {
+            const newSelection = selectionBuilder
+              .fromSelection(selection)
+              .userProfiles(userCountState.userProfilesWithCount)
+              .build();
+            onSave(newSelection, isTravelerOnBehalfOfToggle);
+          }}
           rightIcon={{svg: Confirm}}
           testID="confirmButton"
         />

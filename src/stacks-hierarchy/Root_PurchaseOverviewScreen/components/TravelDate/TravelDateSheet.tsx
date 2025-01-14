@@ -16,17 +16,21 @@ import {
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type Props = {
   selection: PurchaseSelectionType;
-  save: (dateString?: string) => void;
+  onSave: (selection: PurchaseSelectionType) => void;
 };
 
-export const TravelDateSheet = ({selection, save}: Props) => {
+export const TravelDateSheet = ({selection, onSave}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const defaultDate = selection.travelDate ?? new Date().toISOString();
   const [dateString, setDate] = useState(defaultDate);
@@ -36,8 +40,16 @@ export const TravelDateSheet = ({selection, save}: Props) => {
   );
 
   const {close} = useBottomSheetContext();
-  const onSave = () => {
-    save(dateWithReplacedTime(dateString, timeString).toISOString());
+  const onSavePress = () => {
+    const travelDate = dateWithReplacedTime(
+      dateString,
+      timeString,
+    ).toISOString();
+    const newSelection = selectionBuilder
+      .fromSelection(selection)
+      .date(travelDate)
+      .build();
+    onSave(newSelection);
     close();
   };
   const keyboardHeight = useKeyboardHeight();
@@ -56,7 +68,7 @@ export const TravelDateSheet = ({selection, save}: Props) => {
       <FullScreenFooter>
         <Button
           expanded={true}
-          onPress={onSave}
+          onPress={onSavePress}
           interactiveColor={theme.color.interactive[0]}
           text={t(TravelDateTexts.primaryButton)}
           style={[styles.saveButton, {marginBottom: keyboardHeight}]}

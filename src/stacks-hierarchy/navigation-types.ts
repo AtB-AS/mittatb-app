@@ -4,16 +4,12 @@ import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {
-  FareProductTypeConfig,
-  PreassignedFareProduct,
-} from '@atb/configuration';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -21,10 +17,7 @@ export type Root_AddEditFavoritePlaceScreenParams = {
 };
 
 export type Root_PurchaseTariffZonesSearchByMapScreenParams = {
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
+  selection: PurchaseSelectionType;
 };
 
 export type Root_LocationSearchByMapScreenParams = {
@@ -56,7 +49,7 @@ export type Root_LoginConfirmCodeScreenParams = {
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  fareProductTypeConfig: FareProductTypeConfig;
+  selection: PurchaseSelectionType;
 };
 
 export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {

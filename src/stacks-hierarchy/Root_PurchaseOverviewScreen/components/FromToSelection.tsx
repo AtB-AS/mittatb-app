@@ -1,21 +1,13 @@
 import React, {forwardRef} from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleProp, ViewStyle} from 'react-native';
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
-import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type SelectionProps = {
   selection: PurchaseSelectionType;
-  onSelect: (
-    params:
-      | Root_PurchaseHarborSearchScreenParams
-      | Root_PurchaseTariffZonesSearchByMapScreenParams,
-  ) => void;
+  onSelect: (selection: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -58,9 +50,3 @@ export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
     );
   },
 );
-
-export function isValidTariffZone(
-  place: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree,
-): place is TariffZoneWithMetadata {
-  return !!place && 'geometry' in place;
-}

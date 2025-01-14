@@ -24,7 +24,6 @@ import {getReferenceDataName} from '@atb/configuration';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
 import type {PurchaseSelectionType} from '@atb/purchase-selection';
@@ -32,7 +31,7 @@ import type {PurchaseSelectionType} from '@atb/purchase-selection';
 type ZonesSelectionProps = {
   selection: PurchaseSelectionType;
   selectionMode: 'single' | 'multiple';
-  onSelect: (params: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
+  onSelect: (selection: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -127,14 +126,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
           {canSelectZone ? (
             <GenericClickableSectionItem
               ref={zonesRef}
-              onPress={() =>
-                onSelect({
-                  fromTariffZone,
-                  toTariffZone,
-                  fareProductTypeConfig: selection.fareProductTypeConfig,
-                  preassignedFareProduct: selection.preassignedFareProduct,
-                })
-              }
+              onPress={() => onSelect(selection)}
               testID="selectZonesButton"
             >
               {content}

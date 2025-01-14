@@ -18,7 +18,6 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
 import {usePopOverContext} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
@@ -26,17 +25,14 @@ import {isUserProfileSelectable} from '../utils';
 import {useAuthContext} from '@atb/auth';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {
-  useSelectableUserProfiles,
   type PurchaseSelectionType,
+  useSelectableUserProfiles,
 } from '@atb/purchase-selection';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
   isOnBehalfOfToggle: boolean;
-  onSave: (
-    userProfilesWithCount: UserProfileWithCount[],
-    onBehalfOfToggle: boolean,
-  ) => void;
+  onSave: (selection: PurchaseSelectionType, onBehalfOfToggle: boolean) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -145,11 +141,8 @@ export function TravellerSelection({
         <TravellerSelectionSheet
           selection={selection}
           isOnBehalfOfToggle={isOnBehalfOfToggle}
-          onSave={(
-            userProfilesWithCounts: UserProfileWithCount[],
-            onBehalfOfToggle: boolean,
-          ) => {
-            onSave(userProfilesWithCounts, onBehalfOfToggle);
+          onSave={(selection, onBehalfOfToggle) => {
+            onSave(selection, onBehalfOfToggle);
             closeBottomSheet();
           }}
         />

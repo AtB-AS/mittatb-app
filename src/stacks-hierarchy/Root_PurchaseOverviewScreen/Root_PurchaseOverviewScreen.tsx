@@ -1,5 +1,5 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
@@ -7,14 +7,13 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -31,9 +30,12 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/auth';
-import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
-import {useSelectableUserProfiles} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  useSelectableUserProfiles,
+} from '@atb/purchase-selection';
+import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -45,36 +47,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const selection = params.selection;
 
-  const isFree = params.toPlace
-    ? 'isFree' in params.toPlace && !!params.toPlace.isFree
-    : false;
+  const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
-  const {selection, preassignedFareProductAlternatives} = useOfferDefaults(
-    params.preassignedFareProduct,
-    params.fareProductTypeConfig,
-    params.userProfilesWithCount,
-    params.fromPlace,
-    params.toPlace,
-    params.travelDate,
-  );
-
+  const preassignedFareProductAlternatives = useProductAlternatives(selection);
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
 
-  const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
-    navigation.setParams({
-      preassignedFareProduct: fp,
-    });
-  };
-
-  const setUserProfilesWithCount = useCallback(
-    (userProfilesWithCount: UserProfileWithCount[]) => {
-      navigation.setParams({userProfilesWithCount});
-    },
-    [navigation],
-  );
+  const setSelection = (s: PurchaseSelectionType) =>
+    navigation.setParams({selection: s});
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
 
@@ -220,15 +203,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <ProductSelection
             selection={selection}
-            setSelectedProduct={onSelectPreassignedFareProduct}
+            setSelection={setSelection}
             style={styles.selectionComponent}
           />
 
           <TravellerSelection
             selection={selection}
             isOnBehalfOfToggle={isOnBehalfOfToggle}
-            onSave={(userProfilesWithCount, onBehalfOfToggle) => {
-              setUserProfilesWithCount(userProfilesWithCount);
+            onSave={(selection, onBehalfOfToggle) => {
+              setSelection(selection);
               setIsOnBehalfOfToggle(onBehalfOfToggle);
             }}
             style={styles.selectionComponent}
@@ -237,13 +220,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           <FromToSelection
             selection={selection}
             style={styles.selectionComponent}
-            onSelect={(params) => {
+            onSelect={(selection) => {
               navigation.setParams({onFocusElement: undefined});
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
                   ? 'Root_PurchaseHarborSearchScreen'
                   : 'Root_PurchaseTariffZonesSearchByMapScreen',
-                params,
+                {selection},
               );
             }}
             ref={focusRefs}
@@ -252,7 +235,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           <StartTimeSelection
             selection={selection}
             color={theme.color.interactive[2]}
-            setTravelDate={(travelDate) => navigation.setParams({travelDate})}
+            setSelection={setSelection}
             style={styles.selectionComponent}
           />
 

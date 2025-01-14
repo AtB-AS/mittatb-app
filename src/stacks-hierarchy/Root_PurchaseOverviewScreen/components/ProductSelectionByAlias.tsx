@@ -9,7 +9,6 @@ import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {
   isProductSellableInApp,
-  PreassignedFareProduct,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
@@ -17,25 +16,29 @@ import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScree
 import {useTicketingContext} from '@atb/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type Props = {
   color: InteractiveColor;
   selection: PurchaseSelectionType;
-  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByAlias({
   color,
   selection,
-  setSelectedProduct,
+  setSelection,
   style,
 }: Props) {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {customerProfile} = useTicketingContext();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
@@ -72,7 +75,13 @@ export function ProductSelectionByAlias({
                     fp.productAliasId
                   : selection.preassignedFareProduct.id === fp.id
               }
-              onPress={() => setSelectedProduct(fp)}
+              onPress={() => {
+                const newSelection = selectionBuilder
+                  .fromSelection(selection)
+                  .product(fp)
+                  .build();
+                setSelection(newSelection);
+              }}
               key={i}
             />
           );

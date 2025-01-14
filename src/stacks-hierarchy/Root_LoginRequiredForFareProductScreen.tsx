@@ -24,7 +24,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
   navigation,
   route,
 }: Props) => {
-  const {fareProductTypeConfig} = route.params;
+  const {fareProductTypeConfig} = route.params.selection;
   const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useThemeStyles();

@@ -1,4 +1,3 @@
-import {PreassignedFareProduct} from '@atb/configuration';
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
@@ -7,13 +6,13 @@ import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type ProductSelectionProps = {
   selection: PurchaseSelectionType;
-  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelection({
   selection,
-  setSelectedProduct,
+  setSelection,
   style,
 }: ProductSelectionProps) {
   const {theme} = useThemeContext();
@@ -23,7 +22,7 @@ export function ProductSelection({
       return (
         <ProductSelectionByProducts
           selection={selection}
-          setSelectedProduct={setSelectedProduct}
+          setSelection={setSelection}
           style={style}
         />
       );
@@ -33,7 +32,7 @@ export function ProductSelection({
         <ProductSelectionByAlias
           color={theme.color.interactive[2]}
           selection={selection}
-          setSelectedProduct={setSelectedProduct}
+          setSelection={setSelection}
           style={style}
         />
       );
