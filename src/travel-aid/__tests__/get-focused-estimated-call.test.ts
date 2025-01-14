@@ -10,6 +10,7 @@ const onGoingJourney: any[] = [
     actualDepartureTime: '2024-10-18T12:15:14+02:00',
     realtime: true,
     quay: {id: 'NSR:Quay:102721', name: 'Østre Lund'},
+    stopPositionInPattern: 0,
   },
   {
     aimedDepartureTime: '2024-10-18T12:17:00+02:00',
@@ -17,6 +18,7 @@ const onGoingJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: true,
     quay: {id: 'NSR:Quay:74027', name: 'Kattemsenteret'},
+    stopPositionInPattern: 1,
   },
 ];
 describe('getFocusedEstimatedCall for ongoing journey', () => {
@@ -39,6 +41,7 @@ const notStartedJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: true,
     quay: {id: 'NSR:Quay:102721', name: 'Østre Lund'},
+    stopPositionInPattern: 0,
   },
   {
     aimedDepartureTime: '2024-10-18T12:17:00+02:00',
@@ -46,6 +49,7 @@ const notStartedJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: true,
     quay: {id: 'NSR:Quay:74027', name: 'Kattemsenteret'},
+    stopPositionInPattern: 1,
   },
 ];
 describe('getFocusedEstimatedCall for not started journey', () => {
@@ -75,6 +79,7 @@ const endedJourney: any[] = [
     actualDepartureTime: '2024-10-18T12:15:14+02:00',
     realtime: true,
     quay: {id: 'NSR:Quay:102721', name: 'Østre Lund'},
+    stopPositionInPattern: 0,
   },
   {
     aimedDepartureTime: '2024-10-18T12:17:00+02:00',
@@ -82,6 +87,7 @@ const endedJourney: any[] = [
     actualDepartureTime: '2024-10-18T12:17:20+02:00',
     realtime: true,
     quay: {id: 'NSR:Quay:74027', name: 'Kattemsenteret'},
+    stopPositionInPattern: 1,
   },
 ];
 describe('getFocusedEstimatedCall for ended journey', () => {
@@ -99,6 +105,7 @@ const noRealtimeJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: false,
     quay: {id: 'NSR:Quay:102721', name: 'Østre Lund'},
+    stopPositionInPattern: 0,
   },
   {
     aimedDepartureTime: '2024-10-18T12:17:00+02:00',
@@ -106,6 +113,7 @@ const noRealtimeJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: false,
     quay: {id: 'NSR:Quay:74027', name: 'Kattemsenteret'},
+    stopPositionInPattern: 1,
   },
 ];
 describe('getFocusedEstimatedCall for no realtime journey', () => {
@@ -123,6 +131,7 @@ const arrivedButNotDepartedJourney: any[] = [
     actualDepartureTime: '2024-10-18T12:15:14+02:00',
     realtime: true,
     quay: {id: 'NSR:Quay:102721', name: 'Østre Lund'},
+    stopPositionInPattern: 0,
   },
   {
     aimedDepartureTime: '2024-10-18T12:17:00+02:00',
@@ -130,6 +139,7 @@ const arrivedButNotDepartedJourney: any[] = [
     actualDepartureTime: undefined,
     realtime: true,
     quay: {id: 'NSR:Quay:74027', name: 'Kattemsenteret'},
+    stopPositionInPattern: 1,
   },
 ];
 describe('getFocusedEstimatedCall for arrived but not departed journey', () => {
