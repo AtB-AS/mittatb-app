@@ -1,6 +1,7 @@
 import {RemoteToken} from './types';
 import {
   ClientNetworkError,
+  mapTokenErrorResolution,
   TokenAction,
   TokenErrorResolution,
   TokenFactoryError,
@@ -44,21 +45,30 @@ export const getTravelCardId = (remoteToken?: RemoteToken) =>
 export const getSdkErrorHandlingStrategy = (
   err: any,
 ): 'reset' | 'unspecified' => {
+  let errorResolution: TokenErrorResolution | undefined;
+
+  // try to find the error resolution
   if (err instanceof TokenFactoryError) {
-    switch (err.resolution) {
-      case TokenErrorResolution.RESET:
-        return 'reset';
-      case TokenErrorResolution.GIVE_UP:
-      case TokenErrorResolution.RETRY_NOW:
-      case TokenErrorResolution.UNKNOWN:
-      case TokenErrorResolution.ASK_USER:
-      case TokenErrorResolution.IGNORE:
-      case TokenErrorResolution.RETRY_LATER:
-      case TokenErrorResolution.NONE:
-        return 'unspecified';
-    }
+    errorResolution = err.resolution;
+  } else if (err instanceof RemoteTokenStateError) {
+    errorResolution = mapTokenErrorResolution(err);
+  } else {
+    return 'unspecified';
   }
-  return 'unspecified';
+
+  // handle the error resolution
+  switch (errorResolution) {
+    case TokenErrorResolution.RESET:
+      return 'reset';
+    case TokenErrorResolution.RETRY_NOW:
+    case TokenErrorResolution.RETRY_LATER:
+    case TokenErrorResolution.GIVE_UP:
+    case TokenErrorResolution.ASK_USER:
+    case TokenErrorResolution.IGNORE:
+    case TokenErrorResolution.UNKNOWN:
+    case TokenErrorResolution.NONE:
+      return 'unspecified';
+  }
 };
 
 /**
