@@ -1,5 +1,8 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
-import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
+import {
+  ClientConfig,
+  TokenFactoryError,
+} from '@entur-private/abt-mobile-client-sdk';
 import {isRemoteTokenStateError} from './utils';
 
 export const localLogger: ClientConfig['localLogger'] = {
@@ -24,7 +27,7 @@ export const remoteLogger: ClientConfig['remoteLogger'] = (err) => {
     'error',
     'Mobiletoken sdk remote logger error',
   );
-  if (!isRemoteTokenStateError(err)) {
+  if (!isRemoteTokenStateError(err) && !(err instanceof TokenFactoryError)) {
     Bugsnag.notify(err, onError);
   }
 };

@@ -3,12 +3,7 @@ import {storage} from '@atb/storage';
 import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
-import {
-  TokenEncodingInvalidRemoteTokenStateError,
-  TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
-  TokenNotFoundRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
+import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {v4 as uuid} from 'uuid';
 import {
   getSdkErrorHandlingStrategy,
@@ -107,24 +102,17 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
       } catch (err) {
-        /**
-         * Added this line to see if the error can be handled by resetting the token
-         */
+        // Check if the error has an error handling strategy implemented
         const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
-        if (
-          err instanceof TokenMustBeReplacedRemoteTokenStateError ||
-          err instanceof TokenNotFoundRemoteTokenStateError
-        ) {
-          token = undefined;
-        } else if (
-          err instanceof TokenEncodingInvalidRemoteTokenStateError ||
-          tokenSdkErrorHandling === 'reset' // if the error can be resolved by resetting the token, do it
-        ) {
-          wipeToken([token.tokenId], traceId);
-          token = undefined;
-        } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+        if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+          // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
+        } else if (tokenSdkErrorHandling === 'reset') {
+          // token needs reset, therefore, wipe token
+          await wipeToken([token.tokenId], traceId);
+          token = undefined;
         } else {
+          // other errors
           throw err;
         }
       }
