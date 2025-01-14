@@ -10,11 +10,11 @@ import {
   Unknown,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {
-  Bicycle,
   Plane,
   Scooter,
   Subway,
 } from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
