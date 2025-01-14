@@ -1,8 +1,8 @@
+import React from 'react';
 import {useState} from 'react';
 import {Linking, View} from 'react-native';
-import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
+import {Statuses, StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {ThemeText} from '@atb/components/text';
@@ -18,14 +18,11 @@ import {useGeolocationContext} from '@atb/GeolocationContext';
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelectScreen'>;
 
-const ICON_SIZE = 50;
-
 export const Root_ParkingViolationsSelectScreen = ({
   navigation,
 }: SelectViolationScreenProps) => {
   const style = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {parkingViolationsState, isLoading, violations} =
     useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
@@ -40,7 +37,6 @@ export const Root_ParkingViolationsSelectScreen = ({
     <ScreenContainer
       leftHeaderButton={{type: 'close'}}
       title={t(ParkingViolationTexts.selectViolation.title)}
-      secondaryText={t(ParkingViolationTexts.selectViolation.description)}
       buttons={
         <Button
           expanded={true}
@@ -71,27 +67,14 @@ export const Root_ParkingViolationsSelectScreen = ({
                 ),
               )
             }
-            renderItem={(violation, isSelected) => (
-              <>
-                <SvgXml
-                  style={{
-                    ...style.itemImage,
-                    borderColor: isSelected
-                      ? theme.color.interactive[2].outline.background
-                      : theme.color.background.neutral[0].background,
-                  }}
-                  height={ICON_SIZE}
-                  width={ICON_SIZE}
-                  xml={violation.icon}
-                />
-                <ThemeText style={style.itemDescription}>
-                  {t(
-                    ParkingViolationTexts.selectViolation.violationDescription(
-                      violation.code,
-                    ),
-                  )}
-                </ThemeText>
-              </>
+            renderItem={(violation) => (
+              <ThemeText style={style.itemDescription}>
+                {t(
+                  ParkingViolationTexts.selectViolation.violationDescription(
+                    violation.code,
+                  ),
+                )}
+              </ThemeText>
             )}
           />
         </ScrollView>
@@ -146,14 +129,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   violation: {
     marginBottom: theme.spacing.medium,
-  },
-  itemImage: {
-    marginRight: theme.spacing.medium,
-    borderColor: theme.color.interactive[2].outline.background,
-    borderRadius: ICON_SIZE / 2,
-    height: ICON_SIZE,
-    width: ICON_SIZE,
-    borderWidth: 1,
   },
   itemDescription: {
     flexShrink: 1,
