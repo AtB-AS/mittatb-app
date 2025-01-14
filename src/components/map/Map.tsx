@@ -305,19 +305,18 @@ export const Map = (props: MapProps) => {
             />
           )}
         </MapboxGL.MapView>
-        <View
-          style={[
-            controlStyles.mapButtonsContainer,
-            controlStyles.mapButtonsContainerLeft,
-          ]}
-        >
-          {isBonusProgramEnabled &&
-            props.selectionMode === 'ExploreEntities' && (
-              <BonusProgramMapButton
-                onPress={() => onMapClick({source: 'bonus-program-button'})}
-              />
-            )}
-        </View>
+        {isBonusProgramEnabled && props.selectionMode === 'ExploreEntities' && (
+          <View
+            style={[
+              controlStyles.mapButtonsContainer,
+              controlStyles.mapButtonsContainerLeft,
+            ]}
+          >
+            <BonusProgramMapButton
+              onPress={() => onMapClick({source: 'bonus-program-button'})}
+            />
+          </View>
+        )}
 
         <View
           style={[
@@ -348,9 +347,10 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled && (
-          <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-        )}
+        {isShmoDeepIntegrationEnabled &&
+          props.selectionMode === 'ExploreEntities' && (
+            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
+          )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

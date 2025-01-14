@@ -16,13 +16,13 @@ export const ScanButton = () => {
   const analytics = useAnalyticsContext();
   const navigation = useNavigation<RootNavigationProps>();
   const {t} = useTranslation();
-  const {controlsContainer} = useControlPositionsStyle();
+  const {mapButtonsContainer} = useControlPositionsStyle();
   const {close: closeBottomSheet} = useBottomSheetContext();
 
   return (
     <Button
       expanded={false}
-      style={{...styles.scanButton, bottom: controlsContainer.bottom}}
+      style={{...styles.scanButton, bottom: mapButtonsContainer.bottom}}
       compact={true}
       interactiveColor={interactiveColor}
       accessibilityRole="button"
