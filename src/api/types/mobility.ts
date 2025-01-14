@@ -17,6 +17,7 @@ export type ViolationsReportingProvider = {
 
 export type ParkingViolationType = {
   code: string;
+  /** @deprecated Icon is only used by the app in v. 1.61 and earlier */
   icon: string;
 };
 
