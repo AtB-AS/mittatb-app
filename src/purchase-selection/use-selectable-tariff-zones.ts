@@ -6,5 +6,5 @@ export function useSelectableTariffZones(
   product: PreassignedFareProduct,
 ): TariffZone[] {
   const {tariffZones} = useFirestoreConfigurationContext();
-  return tariffZones.filter((profile) => isSelectableZone(product, profile));
+  return tariffZones.filter((zone) => isSelectableZone(product, zone));
 }
