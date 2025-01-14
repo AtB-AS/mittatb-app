@@ -25,7 +25,7 @@ type DeparturesDialogSheetProps = {
     serviceJourneyId: string,
     serviceDate: string,
     date: string | undefined,
-    stopPositionInPattern: number,
+    fromStopPosition: number,
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
