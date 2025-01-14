@@ -19,6 +19,8 @@ import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
+  DeparturesTexts,
+  FavoriteDeparturesTexts,
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -33,8 +35,8 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
+import React, {RefObject, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -66,6 +68,10 @@ import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfo
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
+import {useOnMarkFavouriteDepartures} from '@atb/favorites';
+import {getFavoriteIcon} from '@atb/favorites/FavouriteDepartureToggle';
+import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
+import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -111,6 +117,7 @@ export const DepartureDetailsScreenComponent = ({
       subMode,
       situations,
       notices,
+      line,
     },
     isLoading,
   ] = useDepartureData(activeItem, 20);
@@ -154,15 +161,15 @@ export const DepartureDetailsScreenComponent = ({
     vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
     estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
 
-  const toQuay = estimatedCallsWithMetadata.find(
+  const toCall = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.toQuayId,
   );
-  const fromQuay = estimatedCallsWithMetadata.find(
+  const fromCall = estimatedCallsWithMetadata.find(
     (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
   );
 
   const shouldShowDepartureTime =
-    (fromQuay && !isInThePast(fromQuay.expectedDepartureTime)) || false;
+    (fromCall && !isInThePast(fromCall.expectedDepartureTime)) || false;
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
@@ -184,15 +191,44 @@ export const DepartureDetailsScreenComponent = ({
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
+  const shouldShowFavoriteButton = !!fromCall && !!line;
+  const shouldShowButtonsRow = shouldShowMapButton || shouldShowFavoriteButton;
 
   const a11yLabel =
-    fromQuay && publicCode
-      ? getLineAndTimeA11yLabel(fromQuay, publicCode, t, language)
+    fromCall && publicCode
+      ? getLineAndTimeA11yLabel(fromCall, publicCode, t, language)
       : undefined;
   const lineChipServiceJourney = {
     line: {publicCode},
     transportMode: mode,
     transportSubmode: subMode,
+  };
+
+  const handleTravelAidPress = () => {
+    analytics.logEvent('Journey aid', 'Open journey aid clicked', {
+      screenReaderEnabled,
+    });
+    onPressTravelAid();
+  };
+
+  const handleMapButtonPress = () => {
+    if (!mapData) return;
+    if (vehiclePosition) {
+      analytics.logEvent('Departure details', 'See live bus clicked', {
+        fromPlace: mapData.start,
+        toPlace: mapData?.stop,
+        mode: mode,
+        subMode: subMode,
+      });
+    }
+    onPressDetailsMap({
+      legs: mapData.mapLegs,
+      fromPlace: mapData.start,
+      toPlace: mapData.stop,
+      vehicleWithPosition: vehiclePosition,
+      mode: mode,
+      subMode: subMode,
+    });
   };
 
   return (
@@ -219,67 +255,44 @@ export const DepartureDetailsScreenComponent = ({
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
-              {fromQuay && shouldShowDepartureTime && (
-                <DepartureTime departure={fromQuay} color={themeColor} />
+              {fromCall && shouldShowDepartureTime && (
+                <DepartureTime departure={fromCall} color={themeColor} />
               )}
             </View>
             {shouldShowTravelAid && (
               <Button
                 expanded={true}
                 style={styles.travelAidButton}
-                onPress={() => {
-                  analytics.logEvent(
-                    'Journey aid',
-                    'Open journey aid clicked',
-                    {
-                      screenReaderEnabled,
-                    },
-                  );
-                  onPressTravelAid();
-                }}
+                onPress={handleTravelAidPress}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
                 interactiveColor={ctaColor}
                 testID="journeyAidButton"
               />
             )}
-            {shouldShowMapButton ? (
+            {shouldShowButtonsRow && (
               <View style={styles.actionButtons}>
-                <View style={{flex: 1}}>
-                  <Button
-                    type="small"
-                    expanded={true}
-                    leftIcon={{svg: Map}}
-                    text={t(
-                      vehiclePosition
-                        ? DepartureDetailsTexts.live(t(translatedModeName))
-                        : DepartureDetailsTexts.map,
-                    )}
-                    interactiveColor={interactiveColor}
-                    onPress={() => {
-                      vehiclePosition &&
-                        analytics.logEvent(
-                          'Departure details',
-                          'See live bus clicked',
-                          {
-                            fromPlace: mapData.start,
-                            toPlace: mapData?.stop,
-                            mode: mode,
-                            subMode: subMode,
-                          },
-                        );
-                      onPressDetailsMap({
-                        legs: mapData.mapLegs,
-                        fromPlace: mapData.start,
-                        toPlace: mapData.stop,
-                        vehicleWithPosition: vehiclePosition,
-                        mode: mode,
-                        subMode: subMode,
-                      });
-                    }}
-                  />
-                </View>
+                {shouldShowMapButton && (
+                  <View style={{flex: 1}}>
+                    <Button
+                      type="small"
+                      expanded={true}
+                      leftIcon={{svg: Map}}
+                      text={t(
+                        vehiclePosition
+                          ? DepartureDetailsTexts.live(t(translatedModeName))
+                          : DepartureDetailsTexts.map,
+                      )}
+                      interactiveColor={interactiveColor}
+                      onPress={handleMapButtonPress}
+                    />
+                  </View>
+                )}
+
+                {shouldShowFavoriteButton && (
+                  <FavoriteButton fromCall={fromCall} line={line} />
+                )}
               </View>
-            ) : null}
+            )}
             {realtimeText && !activeItem.isTripCancelled && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
@@ -372,8 +385,8 @@ export const DepartureDetailsScreenComponent = ({
               mode: mode || null,
               subMode: subMode || null,
               fromZones:
-                fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
-              toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
+                fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+              toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
             }}
             style={styles.messageBox}
             textColor={backgroundColor}
@@ -672,6 +685,65 @@ function CollapseButtonRow({
   );
 }
 
+const FavoriteButton = ({
+  fromCall,
+  line,
+}: {
+  fromCall: EstimatedCallWithMetadata;
+  line: LineFragment;
+}) => {
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const analytics = useAnalyticsContext();
+  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
+    fromCall.quay,
+    false,
+  );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+
+  const favouriteDepartureLine: FavouriteDepartureLine = {
+    id: line.id,
+    transportMode: line.transportMode,
+    transportSubmode: line.transportSubmode,
+    lineNumber: line.publicCode,
+    destinationDisplay: fromCall.destinationDisplay,
+  };
+  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+
+  return (
+    <Button
+      type="small"
+      expanded={false}
+      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
+      text={t(FavoriteDeparturesTexts.favoriteButton)}
+      interactiveColor={theme.color.interactive['1']}
+      accessibilityLabel={
+        existingFavorite &&
+        (existingFavorite.destinationDisplay
+          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+      }
+      accessibilityHint={
+        !!existingFavorite
+          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+      }
+      onPress={() => {
+        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+          line: favouriteDepartureLine?.id,
+          lineNumber: favouriteDepartureLine?.lineNumber,
+        });
+        onMarkFavourite(
+          favouriteDepartureLine,
+          existingFavorite,
+          onCloseFocusRef,
+        );
+      }}
+      ref={onCloseFocusRef}
+    />
+  );
+};
+
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
@@ -733,7 +805,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     gap: theme.spacing.medium,
     marginTop: theme.spacing.medium,
   },
