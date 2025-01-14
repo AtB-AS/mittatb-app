@@ -55,6 +55,7 @@ import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {isDefined} from '@atb/utils/presence';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -405,18 +406,22 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
-          {!!tripPatterns.length && (
-            <View style={styles.globalMessage}>
-              <GlobalMessage
-                textColor={theme.color.background.neutral[0]}
-                globalMessageContext={GlobalMessageContextEnum.appTripResults}
-                ruleVariables={{
-                  fromStopPlaceId: from?.id ?? '',
-                  toStopPlaceId: to?.id ?? '',
-                }}
-              />
-            </View>
-          )}
+          <View style={styles.globalMessage}>
+            <GlobalMessage
+              textColor={theme.color.background.neutral[0]}
+              globalMessageContext={GlobalMessageContextEnum.appTripResults}
+              ruleVariables={{
+                transportSubmodes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.transportSubmode)
+                  .filter(isDefined),
+                authorities: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.authority?.id)
+                  .filter(isDefined),
+              }}
+            />
+          </View>
           {from && to && (
             <View>
               {filtersState.enabled && (
