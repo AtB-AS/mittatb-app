@@ -44,6 +44,7 @@ export type DepartureTime = {
   notices?: NoticeFragment[];
   cancellation?: boolean;
   bookingArrangements?: BookingArrangementFragment;
+  stopPositionInPattern: number;
 };
 
 export type DepartureGroup = {

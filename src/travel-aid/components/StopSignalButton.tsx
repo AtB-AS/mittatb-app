@@ -20,12 +20,12 @@ import {useAnalyticsContext} from '@atb/analytics';
 
 export const StopSignalButton = ({
   serviceJourney,
-  fromQuayId,
+  fromStopPosition,
   onPress,
   status,
 }: {
   serviceJourney: ServiceJourneyWithGuaranteedCalls;
-  fromQuayId?: string;
+  fromStopPosition: number;
   onPress: (args: SendStopSignalRequestType) => void;
   status: MutationStatus;
 }) => {
@@ -38,9 +38,7 @@ export const StopSignalButton = ({
 
   if (!isTravelAidStopButtonEnabled) return null;
 
-  const selectedCall = serviceJourney.estimatedCalls.reduce((selected, cur) =>
-    cur.quay.id === fromQuayId ? cur : selected,
-  );
+  const selectedCall = serviceJourney.estimatedCalls[fromStopPosition];
 
   const shouldShow = shouldShowStopButton(serviceJourney, selectedCall, config);
   if (!shouldShow) return null;

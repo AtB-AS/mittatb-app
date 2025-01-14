@@ -66,12 +66,10 @@ export const getNoticesForLeg = (leg: Leg) =>
 
 export const getNoticesForServiceJourney = (
   serviceJourney: ServiceJourneyWithEstCallsFragment,
-  fromQuayId?: string,
+  fromStopPosition: number,
 ) => {
   const focusedEstimatedCall =
-    serviceJourney.estimatedCalls?.find(
-      ({quay}) => quay?.id && quay.id === fromQuayId,
-    ) || serviceJourney.estimatedCalls?.[0];
+    serviceJourney.estimatedCalls?.[fromStopPosition];
 
   return filterNotices([
     ...serviceJourney.notices,

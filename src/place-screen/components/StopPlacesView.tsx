@@ -27,8 +27,8 @@ type Props = {
   navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;

@@ -33,8 +33,8 @@ export type QuaySectionProps = {
   navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
     isCancelled?: boolean,
   ) => void;
   showOnlyFavorites: boolean;

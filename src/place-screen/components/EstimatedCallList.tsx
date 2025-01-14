@@ -73,7 +73,7 @@ export const EstimatedCallList = ({
       departure.serviceJourney.id,
       departure.date,
       departure.aimedDepartureTime,
-      departure.quay.id,
+      departure.stopPositionInPattern,
       departure.cancellation,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

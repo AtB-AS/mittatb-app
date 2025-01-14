@@ -36,8 +36,8 @@ export const Map_RootScreen = ({
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
     isTripCancelled?: boolean,
   ) => {
     if (!serviceJourneyId || !date) return;
@@ -47,7 +47,7 @@ export const Map_RootScreen = ({
           serviceJourneyId,
           serviceDate,
           date,
-          fromQuayId,
+          fromStopPosition,
           isTripCancelled,
         },
       ],

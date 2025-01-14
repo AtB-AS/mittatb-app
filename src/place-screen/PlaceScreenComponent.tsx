@@ -90,8 +90,8 @@ export const PlaceScreenComponent = ({
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
     isTripCancelled?: boolean,
   ) => {
     if (!date) return;
@@ -101,7 +101,7 @@ export const PlaceScreenComponent = ({
           serviceJourneyId,
           serviceDate,
           date,
-          fromQuayId,
+          fromStopPosition,
           isTripCancelled,
         },
       ],

@@ -4,7 +4,7 @@ import type {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 
 type ServiceJourneyDepartureRelevantFields = Pick<
   ServiceJourneyDeparture,
-  'serviceJourneyId' | 'fromQuayId' | 'serviceDate'
+  'serviceJourneyId' | 'fromStopPosition' | 'serviceDate'
 >;
 
 const addSentStopSignal =
@@ -19,7 +19,7 @@ const hasSentStopSignal =
     sentStopSignals.some((sc) => isEqual(sc, pickFields(departure)));
 
 const pickFields = (departure: ServiceJourneyDepartureRelevantFields) =>
-  pick(departure, 'serviceJourneyId', 'fromQuayId', 'serviceDate');
+  pick(departure, 'serviceJourneyId', 'fromStopPosition', 'serviceDate');
 
 /**
  * An in-memory cache of sent stop signals. The sent stop signals are only

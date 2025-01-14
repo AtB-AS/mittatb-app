@@ -24,8 +24,8 @@ type DeparturesDialogSheetProps = {
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    stopPositionInPattern: number,
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
