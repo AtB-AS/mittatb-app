@@ -52,7 +52,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    borderRadius: theme.border.radius.circle * 2,
+    borderRadius: theme.border.radius.large * 2,
     marginRight: theme.spacing.small,
     justifyContent: 'center',
   },

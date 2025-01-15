@@ -1,11 +1,10 @@
 import {PageIndicator} from '@atb/components/page-indicator';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import {StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ExtendedOnboardingStackParams} from './navigation-types';
 import {ExtendedOnboarding_GoodToKnowScreen} from './ExtendedOnboarding_GoodToKnowScreen';
@@ -17,10 +16,8 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const Root_ExtendedOnboardingStack = () => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   return (
     <>
-      <StatusBar backgroundColor={getThemeColor(theme).background} />
       <SafeAreaView style={styles.container}>
         <Tab.Navigator
           tabBar={(props: MaterialTopTabBarProps) => {

@@ -112,15 +112,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[1].background,
   },
   dot: {
-    backgroundColor: theme.color.background.accent[1].background,
+    backgroundColor: theme.color.foreground.dynamic.secondary,
     borderRadius: 20,
-    borderColor: theme.color.background.accent[1].background,
+    borderColor: theme.color.foreground.dynamic.secondary,
     borderWidth: 2,
     width: 16,
     height: 16,
   },
   dot__unused: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: 'transparent',
   },
   dotFill__activeViewBox: {
     height: '100%',

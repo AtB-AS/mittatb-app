@@ -142,7 +142,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
         borderRadius:
           type === 'small'
-            ? theme.border.radius.circle
+            ? theme.border.radius.large
             : theme.border.radius.regular,
         ...(expanded && type === 'small'
           ? {
