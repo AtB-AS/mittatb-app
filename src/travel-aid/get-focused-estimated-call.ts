@@ -1,6 +1,5 @@
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {minutesBetween} from '@atb/utils/date';
-import {getCallByStopPosition} from '@atb/travel-details-screens/utils';
 
 export enum TravelAidStatus {
   /** Not yet arrived at the selected stop */
@@ -26,7 +25,9 @@ export const getFocusedEstimatedCall = (
   estimatedCalls: EstimatedCallWithQuayFragment[],
   fromStopPosition: number,
 ): FocusedEstimatedCallState => {
-  const selectedCall = getCallByStopPosition(estimatedCalls, fromStopPosition);
+  const selectedCall =
+    estimatedCalls.find((c) => c.stopPositionInPattern === fromStopPosition) ||
+    estimatedCalls[0];
 
   let previousOrCurrentCallIndex = -1;
   estimatedCalls.forEach((estimatedCall, index) => {

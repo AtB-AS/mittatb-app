@@ -59,7 +59,6 @@ import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
-  getCallByStopPosition,
   getBookingStatus,
   getLineAndTimeA11yLabel,
   getShouldShowLiveVehicle,
@@ -123,17 +122,12 @@ export const DepartureDetailsScreenComponent = ({
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
-  const fromCall = getCallByStopPosition(
-    estimatedCallsWithMetadata,
-    activeItem.fromStopPosition,
+  const fromCall = estimatedCallsWithMetadata.find(
+    (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
   );
-  const toCall =
-    activeItem.toStopPosition !== undefined
-      ? getCallByStopPosition(
-          estimatedCallsWithMetadata,
-          activeItem.toStopPosition,
-        )
-      : undefined;
+  const toCall = estimatedCallsWithMetadata.find(
+    (c) => c.stopPositionInPattern === activeItem.toStopPosition,
+  );
 
   const mapData = useMapData(
     activeItem.serviceJourneyId,
