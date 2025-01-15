@@ -5,7 +5,7 @@ import {
 } from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
 
-export const sendSupportRequestMutation = () => {
+export const useSendSupportRequestMutation = () => {
   const acceptLanguage = useAcceptLanguage();
 
   return useMutation({
