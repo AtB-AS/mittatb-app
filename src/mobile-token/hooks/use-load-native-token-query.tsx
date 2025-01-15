@@ -1,17 +1,9 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {
-  ActivatedToken,
-  TokenAction,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
-import {
-  TokenEncodingInvalidRemoteTokenStateError,
-  TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
-  TokenNotFoundRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
+import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {v4 as uuid} from 'uuid';
 import {
   getSdkErrorHandlingStrategy,
@@ -38,7 +30,9 @@ export const useLoadNativeTokenQuery = (
         const token = await loadNativeToken(userId!, traceId);
         updateMetadata({
           'AtB-Mobile-Token-Id': token.tokenId,
-          'AtB-Mobile-Token-Status': 'success',
+          'AtB-Mobile-Token-Status': token.isAttested()
+            ? 'attested'
+            : 'non-attested',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
         return token;
@@ -106,22 +100,19 @@ const loadNativeToken = async (userId: string, traceId: string) => {
        */
       try {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
-        const signedToken = await mobileTokenClient.encode(token, [
-          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-        ]);
-        await tokenService.validate(token, signedToken, traceId);
+        await tokenService.validate(token, traceId);
       } catch (err) {
-        if (
-          err instanceof TokenMustBeReplacedRemoteTokenStateError ||
-          err instanceof TokenNotFoundRemoteTokenStateError
-        ) {
-          token = undefined;
-        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
-          wipeToken([token.tokenId], traceId);
-          token = undefined;
-        } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+        // Check if the error has an error handling strategy implemented
+        const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
+        if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+          // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
+        } else if (tokenSdkErrorHandling === 'reset') {
+          // token needs reset, therefore, wipe token
+          await wipeToken([token.tokenId], traceId);
+          token = undefined;
         } else {
+          // other errors
           throw err;
         }
       }
@@ -135,6 +126,8 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     - There has been a user change and the existing token has been wiped.
     - There was a validation error which signaled that a new token should
       be created.
+    - There was an error where the token resolution is `RESET` as 
+      suggested by the SDK.
      */
     logToBugsnag(`Creating new mobile token`);
     token = await mobileTokenClient.create(traceId);

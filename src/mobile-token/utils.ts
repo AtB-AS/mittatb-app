@@ -1,10 +1,18 @@
 import {RemoteToken} from './types';
 import {
+  ClientNetworkError,
+  mapTokenErrorResolution,
   TokenAction,
   TokenErrorResolution,
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isDefined} from '@atb/utils/presence';
+import {
+  parseRemoteError,
+  RemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
+import Bugsnag from '@bugsnag/react-native';
+import {getAxiosErrorType} from '@atb/api/utils';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -37,20 +45,30 @@ export const getTravelCardId = (remoteToken?: RemoteToken) =>
 export const getSdkErrorHandlingStrategy = (
   err: any,
 ): 'reset' | 'unspecified' => {
+  let errorResolution: TokenErrorResolution | undefined;
+
+  // try to find the error resolution
   if (err instanceof TokenFactoryError) {
-    switch (err.resolution) {
-      case TokenErrorResolution.RESET:
-        return 'reset';
-      case TokenErrorResolution.GIVE_UP:
-      case TokenErrorResolution.RETRY_NOW:
-      case TokenErrorResolution.UNKNOWN:
-      case TokenErrorResolution.ASK_USER:
-      case TokenErrorResolution.IGNORE:
-      case TokenErrorResolution.RETRY_LATER:
-        return 'unspecified';
-    }
+    errorResolution = err.resolution;
+  } else if (err instanceof RemoteTokenStateError) {
+    errorResolution = mapTokenErrorResolution(err);
+  } else {
+    return 'unspecified';
   }
-  return 'unspecified';
+
+  // handle the error resolution
+  switch (errorResolution) {
+    case TokenErrorResolution.RESET:
+      return 'reset';
+    case TokenErrorResolution.RETRY_NOW:
+    case TokenErrorResolution.RETRY_LATER:
+    case TokenErrorResolution.GIVE_UP:
+    case TokenErrorResolution.ASK_USER:
+    case TokenErrorResolution.IGNORE:
+    case TokenErrorResolution.UNKNOWN:
+    case TokenErrorResolution.NONE:
+      return 'unspecified';
+  }
 };
 
 /**
@@ -58,5 +76,29 @@ export const getSdkErrorHandlingStrategy = (
  */
 export const getSdkErrorTokenIds = (err: any): string[] =>
   err instanceof TokenFactoryError
-    ? [err.pendingTokenId, err.activatedTokenId].filter(isDefined)
+    ? [err.pendingTokenId?.tokenId, err.activatedTokenId?.tokenId].filter(
+        isDefined,
+      )
     : [];
+
+/**
+ * from https://github.com/entur/abt-mobile-client-sdk/pull/368
+ */
+export const parseBffCallErrors = (error: any) => {
+  if (getAxiosErrorType(error) === 'network-error') {
+    return new ClientNetworkError(error.message);
+  }
+
+  if (error instanceof TokenFactoryError) {
+    Bugsnag.leaveBreadcrumb(
+      `Received Token Factory Error when calling BFF: ${error.name}, ${
+        error.message
+      }, should be resolved using ${TokenErrorResolution[error.resolution]}`,
+    );
+  }
+
+  return parseRemoteError(error) ?? error;
+};
+
+export const isRemoteTokenStateError = (err: any) =>
+  parseBffCallErrors(err.response?.data) instanceof RemoteTokenStateError;
