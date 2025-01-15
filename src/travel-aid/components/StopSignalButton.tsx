@@ -17,6 +17,7 @@ import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '@atb/travel-aid/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAnalyticsContext} from '@atb/analytics';
+import {getCallByStopPosition} from '@atb/travel-details-screens/utils';
 
 export const StopSignalButton = ({
   serviceJourney,
@@ -38,7 +39,10 @@ export const StopSignalButton = ({
 
   if (!isTravelAidStopButtonEnabled) return null;
 
-  const selectedCall = serviceJourney.estimatedCalls[fromStopPosition];
+  const selectedCall = getCallByStopPosition(
+    serviceJourney.estimatedCalls,
+    fromStopPosition,
+  );
 
   const shouldShow = shouldShowStopButton(serviceJourney, selectedCall, config);
   if (!shouldShow) return null;

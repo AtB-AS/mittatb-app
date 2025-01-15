@@ -56,6 +56,13 @@ export function getTimeRepresentationType({
     : 'significant-difference';
 }
 
+export const getCallByStopPosition = <
+  T extends Pick<EstimatedCall, 'stopPositionInPattern'>,
+>(
+  calls: T[],
+  stopPosition: number,
+): T => calls.find((c) => c.stopPositionInPattern === stopPosition) || calls[0];
+
 export const getNoticesForLeg = (leg: Leg) =>
   filterNotices([
     ...(leg.line?.notices || []),
@@ -69,7 +76,8 @@ export const getNoticesForServiceJourney = (
   fromStopPosition: number,
 ) => {
   const focusedEstimatedCall =
-    serviceJourney.estimatedCalls?.[fromStopPosition];
+    serviceJourney.estimatedCalls &&
+    getCallByStopPosition(serviceJourney.estimatedCalls, fromStopPosition);
 
   return filterNotices([
     ...serviceJourney.notices,
