@@ -15,6 +15,7 @@ export type EstimatedCallWithQuayFragment = {
   forAlighting: boolean;
   forBoarding: boolean;
   realtime: boolean;
+  stopPositionInPattern: number;
   destinationDisplay?: {frontText?: string; via?: Array<string>};
   quay: QuayFragment;
   notices: Array<NoticeFragment>;

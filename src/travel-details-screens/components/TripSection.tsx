@@ -392,8 +392,8 @@ const IntermediateInfo = ({
         serviceJourneyId: leg.serviceJourney.id,
         date: leg.expectedStartTime,
         serviceDate: leg.intermediateEstimatedCalls[0].date,
-        fromQuayId: leg.fromPlace.quay?.id,
-        toQuayId: leg.toPlace.quay?.id,
+        fromStopPosition: leg.fromEstimatedCall?.stopPositionInPattern || 0,
+        toStopPosition: leg.toEstimatedCall?.stopPositionInPattern,
       };
       onPressDeparture([departureData], 0);
     }

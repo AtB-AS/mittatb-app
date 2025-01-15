@@ -1038,7 +1038,7 @@ export type QueryType = {
   serverInfo: ServerInfo;
   /** Get a single service journey based on its id */
   serviceJourney?: Maybe<ServiceJourney>;
-  /** Get all service journeys */
+  /** Get all _service journeys_ */
   serviceJourneys: Array<Maybe<ServiceJourney>>;
   /** Get a single situation based on its situationNumber */
   situation?: Maybe<PtSituationElement>;
@@ -2112,7 +2112,7 @@ export type TripSearchData = {
    * @deprecated Use pageCursor instead
    */
   prevDateTime?: Maybe<Scalars['DateTime']['output']>;
-  /** This is the time window used by the raptor search. The input searchWindow is an optional parameter and is dynamically assigned if not set. OTP might override the value if it is too small or too large. When paging OTP adjusts it to the appropriate size, depending on the number of itineraries found in the current search window. The scaling of the search window ensures faster paging and limits resource usage. The unit is seconds. */
+  /** This is the time window used by the raptor search. The input searchWindow is an optional parameter and is dynamically assigned if not set. OTP might override the value if it is too small or too large. When paging OTP adjusts it to the appropriate size, depending on the number of itineraries found in the current search window. The scaling of the search window ensures faster paging and limits resource usage. The unit is minutes. */
   searchWindowUsed: Scalars['Int']['output'];
 };
 

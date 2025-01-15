@@ -135,7 +135,7 @@ export const TravelAidScreenComponent = ({
                 ...serviceJourney,
                 estimatedCalls,
               }}
-              fromQuayId={serviceJourneyDeparture.fromQuayId}
+              fromStopPosition={serviceJourneyDeparture.fromStopPosition}
               focusRef={focusRef}
               sendStopSignal={stopSignalMutation.mutate}
               sendStopSignalStatus={sendStopSignalStatus}
@@ -148,13 +148,13 @@ export const TravelAidScreenComponent = ({
 
 const TravelAidSection = ({
   serviceJourney,
-  fromQuayId,
+  fromStopPosition,
   focusRef,
   sendStopSignal,
   sendStopSignalStatus,
 }: {
   serviceJourney: ServiceJourneyWithGuaranteedCalls;
-  fromQuayId?: string;
+  fromStopPosition: number;
   focusRef: Ref<any>;
   sendStopSignal: (args: SendStopSignalRequestType) => void;
   sendStopSignalStatus: MutationStatus;
@@ -164,7 +164,7 @@ const TravelAidSection = ({
 
   const {status, focusedEstimatedCall} = getFocusedEstimatedCall(
     serviceJourney.estimatedCalls,
-    fromQuayId,
+    fromStopPosition,
   );
 
   const situationsForFocused =
@@ -174,7 +174,7 @@ const TravelAidSection = ({
   const noticesForFocused =
     getNoticesForServiceJourney(
       serviceJourney,
-      focusedEstimatedCall.quay.id,
+      focusedEstimatedCall.stopPositionInPattern,
     ).sort((n1, n2) => n1.id.localeCompare(n2.id)) ?? [];
 
   const isCancelled = focusedEstimatedCall.cancellation;
@@ -257,7 +257,7 @@ const TravelAidSection = ({
           </View>
           <StopSignalButton
             serviceJourney={serviceJourney}
-            fromQuayId={fromQuayId}
+            fromStopPosition={fromStopPosition}
             onPress={sendStopSignal}
             status={sendStopSignalStatus}
           />

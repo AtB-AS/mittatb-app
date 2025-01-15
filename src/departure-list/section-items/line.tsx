@@ -75,7 +75,7 @@ export function LineItem({
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
     date: dep.aimedTime,
-    fromQuayId: group.lineInfo?.quayId,
+    fromStopPosition: dep.stopPositionInPattern,
     serviceDate: dep.serviceDate,
     isTripCancelled: dep.cancellation,
   }));

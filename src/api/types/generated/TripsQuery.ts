@@ -50,10 +50,12 @@ export type TripFragment = {
       fromEstimatedCall?: {
         aimedDepartureTime: any;
         expectedDepartureTime: any;
+        stopPositionInPattern: number;
         destinationDisplay?: {frontText?: string; via?: Array<string>};
         quay: {publicCode?: string; name: string};
         notices: Array<{id: string; text?: string}>;
       };
+      toEstimatedCall?: {stopPositionInPattern: number};
       situations: Array<{
         id: string;
         situationNumber?: string;
