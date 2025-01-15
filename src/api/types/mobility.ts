@@ -199,14 +199,12 @@ const SendSupportRequestBodySchema = z.object({
   place: z.object({
     coordinates: ShmoCoordinatesSchema,
     name: z.string(),
-  })
+  }),
 });
 
 export type SendSupportRequestBody = z.infer<
   typeof SendSupportRequestBodySchema
 >;
-
-
 
 export enum ShmoBookingEventType {
   START_FINISHING = 'START_FINISHING',

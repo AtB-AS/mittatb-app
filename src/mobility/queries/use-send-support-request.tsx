@@ -1,8 +1,6 @@
 import {useMutation} from '@tanstack/react-query';
 import {sendSupportRequest} from '@atb/api/mobility';
-import {
-  SendSupportRequestBody,
-} from '@atb/api/types/mobility';
+import {SendSupportRequestBody} from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
 
 export const useSendSupportRequestMutation = () => {
@@ -10,6 +8,6 @@ export const useSendSupportRequestMutation = () => {
 
   return useMutation({
     mutationFn: (reqBody: SendSupportRequestBody) =>
-        sendSupportRequest(reqBody, acceptLanguage),
+      sendSupportRequest(reqBody, acceptLanguage),
   });
 };
