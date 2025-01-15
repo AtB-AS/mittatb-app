@@ -27,9 +27,12 @@ import {
   IdsFromQrCodeResponse,
   IdsFromQrCodeResponseSchema,
   InitShmoOneStopBookingRequestBody,
+  SendSupportRequestBody,
   ShmoBooking,
   ShmoBookingEvent,
   ShmoBookingSchema,
+  SupportStatus,
+  SupportStatusSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
   ViolationsReportingInitQuery,
@@ -248,4 +251,16 @@ export const sendViolationsReport = (
   return client
     .post<ViolationsReportQueryResult>(url, data, opts)
     .then((res) => res.data);
+};
+
+export const sendSupportRequest = (
+  reqBody: SendSupportRequestBody,
+  acceptLanguage: string,
+): Promise<SupportStatus> => {
+  return client
+    .post<SupportStatus>('/mobility/v1/support', reqBody, {
+      authWithIdToken: true,
+      headers: {'Accept-Language': acceptLanguage},
+    })
+    .then((response) => SupportStatusSchema.parse(response.data));
 };
