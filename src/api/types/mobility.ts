@@ -159,6 +159,11 @@ export type InitShmoOneStopBookingRequestBody = z.infer<
   typeof InitShmoOneStopBookingRequestBodySchema
 >;
 
+export enum ShmoBookingEventType {
+  START_FINISHING = 'START_FINISHING',
+  FINISH = 'FINISH',
+}
+
 const ShmoImageFileSchema = z.object({
   fileName: z.string(),
   fileType: z.string(),
@@ -170,21 +175,18 @@ export const SupportStatusSchema = z.object({
   timeToResolution: z.number().int(),
 });
 
+export type SupportStatus = z.infer<typeof SupportStatusSchema>;
+
 export enum SupportType {
   BROKEN_DOWN = 'BROKEN_DOWN',
   NOT_AT_LOCATION = 'NOT_AT_LOCATION',
   MISSING_AFTER_PAUSE = 'MISSING_AFTER_PAUSE',
-  NOT_CLEAN = 'NOT_CLEAN',
   NOT_AVAILABLE = 'NOT_AVAILABLE',
   UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
   UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
-  API_TECHNICAL = 'API_TECHNICAL',
-  API_FUNCTIONAL = 'API_FUNCTIONAL',
   ACCIDENT = 'ACCIDENT',
   OTHER = 'OTHER',
 }
-
-export type SupportStatus = z.infer<typeof SupportStatusSchema>;
 
 const SendSupportRequestBodySchema = z.object({
   operatorId: z.string(),
@@ -205,11 +207,6 @@ const SendSupportRequestBodySchema = z.object({
 export type SendSupportRequestBody = z.infer<
   typeof SendSupportRequestBodySchema
 >;
-
-export enum ShmoBookingEventType {
-  START_FINISHING = 'START_FINISHING',
-  FINISH = 'FINISH',
-}
 
 type StartFinishingEvent = {event: ShmoBookingEventType.START_FINISHING};
 type FinishEvent = {
