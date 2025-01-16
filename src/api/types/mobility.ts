@@ -180,7 +180,6 @@ export type SupportStatus = z.infer<typeof SupportStatusSchema>;
 export enum SupportType {
   BROKEN_DOWN = 'BROKEN_DOWN',
   NOT_AT_LOCATION = 'NOT_AT_LOCATION',
-  MISSING_AFTER_PAUSE = 'MISSING_AFTER_PAUSE',
   NOT_AVAILABLE = 'NOT_AVAILABLE',
   UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
   UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
