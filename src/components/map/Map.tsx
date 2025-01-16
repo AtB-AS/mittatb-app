@@ -45,6 +45,7 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -78,6 +79,7 @@ export const Map = (props: MapProps) => {
   );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
+  const mapboxJsonStyle = useMapboxJsonStyle();
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -252,7 +254,12 @@ export const Map = (props: MapProps) => {
           onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
-          {...MapViewConfig}
+          {...{
+            ...MapViewConfig,
+            // only updating Map.tsx for now.
+            styleURL: undefined,
+            styleJSON: mapboxJsonStyle,
+          }}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
