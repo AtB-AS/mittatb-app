@@ -7,6 +7,7 @@ import {
   Boat,
   Ferry,
   Walk,
+  Night,
   Unknown,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {
@@ -26,6 +27,8 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.SightseeingService,
 ];
 
+const TRANSPORT_SUB_MODES_BUS: AnySubMode[] = [TransportSubmode.NightBus];
+
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
     case 'bus':
@@ -34,7 +37,10 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
       if (APP_ORG === 'atb' && subMode === 'shuttleBus') {
         return {svg: SvgShuttle, name: 'Shuttle'};
       }
-      return {svg: Bus, name: 'Bus'};
+
+      return subMode && TRANSPORT_SUB_MODES_BUS.includes(subMode)
+        ? {svg: Night, name: 'Night Bus'}
+        : {svg: Bus, name: 'Bus'};
     case 'tram':
       return {svg: Tram, name: 'Tram'};
     case 'rail':
