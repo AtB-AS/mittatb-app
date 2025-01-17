@@ -17,7 +17,7 @@ export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
 export const useLoadNativeTokenQuery = (
   enabled: boolean,
   userId: string | undefined,
-  traceId: string
+  traceId: string,
 ) => {
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],

@@ -101,7 +101,4 @@ export type MobileTokenStatus =
   | 'error'
   | 'fallback';
 
-export type IntercomTokenStatus = 
-  | 'attested'
-  | 'non-attested'
-  | 'error'
+export type IntercomTokenStatus = 'attested' | 'non-attested' | 'error';
