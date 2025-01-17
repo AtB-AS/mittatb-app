@@ -27,20 +27,18 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.SightseeingService,
 ];
 
-const TRANSPORT_SUB_MODES_BUS: AnySubMode[] = [TransportSubmode.NightBus];
-
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
     case 'bus':
     case 'coach':
       // TODO: Temporary icon for Ski VM 2025. Should be removed after the event.
-      if (APP_ORG === 'atb' && subMode === 'shuttleBus') {
+      if (APP_ORG === 'atb' && subMode === TransportSubmode.ShuttleBus) {
         return {svg: SvgShuttle, name: 'Shuttle'};
       }
-
-      return subMode && TRANSPORT_SUB_MODES_BUS.includes(subMode)
-        ? {svg: Night, name: 'Night Bus'}
-        : {svg: Bus, name: 'Bus'};
+      if (subMode === TransportSubmode.NightBus) {
+        return {svg: Night, name: 'Night Bus'};
+      }
+      return {svg: Bus, name: 'Bus'};
     case 'tram':
       return {svg: Tram, name: 'Tram'};
     case 'rail':

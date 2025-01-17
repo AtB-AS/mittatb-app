@@ -61,7 +61,6 @@ import {
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {FareContractTexts} from '@atb/translations';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -148,6 +147,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
+
   const showInterchangeSection =
     leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 
@@ -224,21 +224,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
             }
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
-              <>
-                <TripRow alignChildren="flex-start"></TripRow>
-                <ThemeText
-                  color="secondary"
-                  typography="body__secondary"
-                  style={style.onDemandTransportLabel}
-                >
-                  {
-                    FareContractTexts.transportMode(
-                      leg.mode,
-                      leg.line?.transportSubmode,
-                    )[language]
-                  }
-                </ThemeText>
-              </>
+              <ThemeText
+                color="secondary"
+                typography="body__secondary"
+                style={style.secondaryTransportLabel}
+              >
+                {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
+              </ThemeText>
             )}
             <ThemeText style={style.legLineName}>
               {getLineName(t, leg)}
@@ -686,6 +678,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   onDemandTransportLabel: {
+    paddingTop: theme.spacing.xSmall,
+  },
+  secondaryTransportLabel: {
     paddingTop: theme.spacing.xSmall,
   },
   flexBookingOptions: {
