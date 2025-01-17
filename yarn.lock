@@ -54,6 +54,15 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
+"@atb-as/theme@^13.1.2":
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.2.tgz#dd43e635fb894781c0b1d66762811f3a2aefad96"
+  integrity sha512-Id882xWREp7gZbaFeGhxCSonNdo3hsjEbUaMG9wLLQPSLI8nK54xG8Fe9jFsprlWNR4l+HYFSF//W4ZaF1dJFQ==
+  dependencies:
+    "@tfk-samf/figma-to-dtcg" "0.4.0"
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.25.9", "@babel/code-frame@^7.26.0":
   version "7.26.2"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.26.2.tgz#4b5fab97d33338eff916235055f0ebc21e573a85"
