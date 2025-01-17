@@ -1,5 +1,5 @@
 import {renderHook} from '@testing-library/react-hooks';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {UserBenefitsType} from '../api/api';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 
