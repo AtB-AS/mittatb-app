@@ -102,8 +102,21 @@ function renderToken(
                 paddingTop: props.spacingBetweenListElements ?? 0,
               }}
             >
-              <Text {...props.textProps}>{'\u2022 '}</Text>
-              <Text {...props.textProps}>{item.text}</Text>
+              <Text {...props.textProps}>
+                {token.ordered ? `${itemIndex + 1}. ` : '\u2022 '}
+              </Text>
+              <Text
+                {...props.textProps}
+                style={[
+                  props.textProps?.style,
+                  {
+                    flex: 1,
+                    flexWrap: 'wrap',
+                  },
+                ]}
+              >
+                {item.text}
+              </Text>
             </View>
           ))}
         </React.Fragment>
