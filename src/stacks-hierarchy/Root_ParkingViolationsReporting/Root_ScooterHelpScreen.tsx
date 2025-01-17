@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -14,7 +14,6 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 
 export type ScooterHelpScreenProps =
@@ -26,6 +25,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   const {t, language} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {scooterFaqs} = useFirestoreConfigurationContext();
+  const [currentlyOpen, setCurrentlyOpen] = useState<number>();
 
   const {operatorName} = useVehicle(vehicleId);
 
@@ -51,10 +51,14 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
         <Section>
           {scooterFaqs?.map((item, index) => (
             <ExpandableSectionItem
-              key={index}
+              key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
               textType="body__primary--bold"
               showIconText={false}
+              expanded={currentlyOpen === index}
+              onPress={() => {
+                setCurrentlyOpen(index);
+              }}
               expandContent={
                 <ThemeText isMarkdown={true}>
                   {getTextForLanguage(item.description, language)}
