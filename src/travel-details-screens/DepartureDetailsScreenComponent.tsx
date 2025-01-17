@@ -69,7 +69,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {useOnMarkFavouriteDepartures} from '@atb/favorites';
-import {getFavoriteIcon} from '@atb/favorites/FavouriteDepartureToggle';
+import {getFavoriteIcon} from '@atb/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
 

@@ -1,21 +1,19 @@
 import {EstimatedCall} from '@atb/api/types/departures';
 import {screenReaderPause} from '@atb/components/text';
+import {StoredFavoriteDeparture} from '@atb/favorites';
+import {Statuses, StyleSheet} from '@atb/theme';
 import {
-  FavouriteDepartureToggle,
-  StoredFavoriteDeparture,
-} from '@atb/favorites';
-import {StyleSheet} from '@atb/theme';
-import {
-  getNoticesForEstimatedCall,
   bookingStatusToMsgType,
   getBookingStatus,
   getLineA11yLabel,
+  getNoticesForEstimatedCall,
 } from '@atb/travel-details-screens/utils';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
   CancelledDepartureTexts,
   DeparturesTexts,
   dictionary,
+  FavoriteDeparturesTexts,
   Language,
   SituationsTexts,
   TranslateFunction,
@@ -26,7 +24,7 @@ import {
   formatToClockOrLongRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
-import React, {memo} from 'react';
+import React, {memo, type RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
@@ -35,10 +33,10 @@ import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
 } from '@atb/situations/utils';
-import {Statuses} from '@atb/theme';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCallInfo} from '@atb/components/estimated-call';
-import {DepartureTime} from '@atb/components/estimated-call';
+import {DepartureTime, EstimatedCallInfo} from '@atb/components/estimated-call';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {getFavoriteIcon} from '@atb/favorites';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
@@ -48,7 +46,8 @@ export type EstimatedCallItemProps = {
   onPressDetails: (departure: EstimatedCall) => void;
   onPressFavorite: (
     departure: EstimatedCall,
-    existingFavorite?: StoredFavoriteDeparture,
+    existingFavorite: StoredFavoriteDeparture | undefined,
+    onCloseRef: RefObject<any>,
   ) => void;
   showBottomBorder: boolean;
   testID?: string;
@@ -66,24 +65,34 @@ export const EstimatedCallItem = memo(
     const styles = useStyles();
     const {t, language} = useTranslation();
     const testID = 'estimatedCallItem';
+    const onCloseRef = useRef<RefObject<any>>(null);
 
     const onPress =
       mode === 'Favourite'
-        ? () => onPressFavorite(departure, existingFavorite)
+        ? () => onPressFavorite(departure, existingFavorite, onCloseRef)
         : () => onPressDetails(departure);
 
     const a11yLabel =
       mode === 'Favourite'
-        ? getLineA11yLabel(
-            departure.destinationDisplay,
-            departure.serviceJourney.line.publicCode,
-            t,
-          )
+        ? [
+            getLineA11yLabel(
+              departure.destinationDisplay,
+              departure.serviceJourney.line.publicCode,
+              t,
+            ),
+            existingFavorite
+              ? existingFavorite.destinationDisplay
+                ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+                : t(DeparturesTexts.favorites.favoriteButton.allVariations)
+              : '',
+          ].join(screenReaderPause)
         : getLineAndTimeA11yLabel(departure, t, language);
 
     const a11yHint =
       mode === 'Favourite'
-        ? t(DeparturesTexts.a11yMarkFavouriteHint)
+        ? !!existingFavorite
+          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
         : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
     const msgType = getMsgTypeForEstimatedCall(departure);
@@ -92,33 +101,24 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={false}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={a11yLabel}
+        accessibilityHint={a11yHint}
+        importantForAccessibility="yes"
+        ref={onCloseRef}
       >
         <View style={styles.container} testID={testID}>
-          <View
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel={a11yLabel}
-            accessibilityHint={a11yHint}
-            style={styles.lineAndDepartureTime}
-            importantForAccessibility="yes"
-          >
-            <EstimatedCallInfo
-              departure={departure}
-              ignoreSituationsAndCancellations={mode === 'Favourite'}
-              messageType={msgType}
-              testID={testID}
-            />
-            {mode !== 'Favourite' && <DepartureTime departure={departure} />}
-          </View>
-
-          {mode === 'Favourite' && (
-            <FavouriteDepartureToggle
-              existingFavorite={existingFavorite}
-              onMarkFavourite={() =>
-                onPressFavorite(departure, existingFavorite)
-              }
-            />
+          <EstimatedCallInfo
+            departure={departure}
+            ignoreSituationsAndCancellations={mode === 'Favourite'}
+            messageType={msgType}
+            testID={testID}
+          />
+          {mode === 'Favourite' ? (
+            <ThemeIcon svg={getFavoriteIcon(existingFavorite)} />
+          ) : (
+            <DepartureTime departure={departure} />
           )}
         </View>
       </GenericClickableSectionItem>
