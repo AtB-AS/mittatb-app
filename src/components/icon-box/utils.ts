@@ -27,6 +27,8 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.SightseeingService,
 ];
 
+const TRANSPORT_SUB_MODES_BUS: AnySubMode[] = [TransportSubmode.NightBus];
+
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
     case 'bus':
