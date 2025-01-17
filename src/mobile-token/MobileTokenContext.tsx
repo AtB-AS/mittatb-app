@@ -3,11 +3,13 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {useAuthContext} from '@atb/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
+  IntercomTokenStatus,
   MobileTokenStatus,
   RemoteToken,
   Token,
@@ -41,6 +43,7 @@ import {
 import {wipeToken} from '@atb/mobile-token/helpers';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
 
@@ -89,6 +92,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
+  const {updateMetadata} = useIntercomMetadata();
 
   const {token_timeout_in_seconds} = useRemoteConfigContext();
   const mobileTokenEnabled = hasEnabledMobileToken();
@@ -97,6 +101,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const traceId = useRef<string>(uuid());
 
   useEffect(() => setIsLoggingOut(false), [userId]);
 
@@ -110,7 +115,17 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     data: nativeToken,
     status: nativeTokenStatus,
     error: nativeTokenError,
-  } = useLoadNativeTokenQuery(enabled, userId);
+  } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
+
+  useEffect(() => {
+    updateMetadata({
+      'AtB-Mobile-Token-Id': nativeToken ? nativeToken.tokenId : 'undefined',
+      'AtB-Mobile-Token-Status': getAttestationStatus(nativeToken),
+      'AtB-Mobile-Token-Error-Correlation-Id': nativeToken
+        ? 'undefined'
+        : traceId.current,
+    });
+  }, [nativeToken, nativeTokenError, updateMetadata]);
 
   const {
     data: remoteTokens,
@@ -357,3 +372,17 @@ const getTokenToggleDetails = async () => {
     return undefined;
   }
 };
+
+function getAttestationStatus(
+  nativeToken: ActivatedToken | undefined,
+): IntercomTokenStatus {
+  if (nativeToken) {
+    if (nativeToken.isAttested()) {
+      return 'attested';
+    } else {
+      return 'non-attested';
+    }
+  } else {
+    return 'error';
+  }
+}
