@@ -337,9 +337,6 @@ const FareContractTexts = {
     switch (mode) {
       case TransportMode.Bus:
       case TransportMode.Coach:
-        if (subMode === TransportSubmode.NightBus) {
-          return _('Nattbuss', 'Nightbuss', 'Nattbuss');
-        }
         return _('buss', 'bus', 'buss');
       case TransportMode.Rail:
         return _('tog', 'train', 'tog');
