@@ -102,7 +102,9 @@ function renderToken(
                 paddingTop: props.spacingBetweenListElements ?? 0,
               }}
             >
-              <Text {...props.textProps}>{'\u2022 '}</Text>
+              <Text {...props.textProps}>
+                {token.ordered ? `${itemIndex + 1}. ` : '\u2022 '}
+              </Text>
               <Text {...props.textProps}>{item.text}</Text>
             </View>
           ))}
