@@ -100,3 +100,8 @@ export type MobileTokenStatus =
   | 'staticQr'
   | 'error'
   | 'fallback';
+
+export type IntercomTokenStatus = 
+  | 'attested'
+  | 'non-attested'
+  | 'error'
