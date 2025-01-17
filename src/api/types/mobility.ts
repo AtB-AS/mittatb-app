@@ -170,13 +170,6 @@ const ShmoImageFileSchema = z.object({
   fileData: z.string().describe('base64 encoded image data'),
 });
 
-export const SupportStatusSchema = z.object({
-  status: z.string(),
-  timeToResolution: z.number().int(),
-});
-
-export type SupportStatus = z.infer<typeof SupportStatusSchema>;
-
 export enum SupportType {
   BROKEN_DOWN = 'BROKEN_DOWN',
   NOT_AT_LOCATION = 'NOT_AT_LOCATION',
@@ -188,7 +181,6 @@ export enum SupportType {
 }
 
 const SendSupportRequestBodySchema = z.object({
-  operatorId: z.string(),
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
   supportType: z.nativeEnum(SupportType),

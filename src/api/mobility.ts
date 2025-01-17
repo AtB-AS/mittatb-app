@@ -31,8 +31,6 @@ import {
   ShmoBooking,
   ShmoBookingEvent,
   ShmoBookingSchema,
-  SupportStatus,
-  SupportStatusSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
   ViolationsReportingInitQuery,
@@ -43,7 +41,7 @@ import {
 
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
-export const getVehicles = (
+export const getVehicles = async (
   {
     lat,
     lon,
@@ -73,7 +71,7 @@ export const getVehicles = (
     .then((res) => res.data ?? []);
 };
 
-export const getVehicle = (
+export const getVehicle = async (
   id: string,
   opts?: VehicleRequestOpts,
 ): Promise<VehicleExtendedFragment | null> => {
@@ -84,7 +82,7 @@ export const getVehicle = (
     .then((res) => res.data.vehicles?.[0] || null);
 };
 
-export const getStations = (
+export const getStations = async (
   {
     lat,
     lon,
@@ -112,7 +110,7 @@ export const getStations = (
     .then((res) => res.data ?? []);
 };
 
-export const getBikeStation = (
+export const getBikeStation = async (
   id: string,
   opts?: AxiosRequestConfig,
 ): Promise<BikeStationFragment | undefined> => {
@@ -123,7 +121,7 @@ export const getBikeStation = (
     .then((res) => res.data.stations?.[0]);
 };
 
-export const getCarStation = (
+export const getCarStation = async (
   id: string,
   opts?: AxiosRequestConfig,
 ): Promise<CarStationFragment | undefined> => {
@@ -134,7 +132,7 @@ export const getCarStation = (
     .then((res) => res.data.stations?.[0]);
 };
 
-export const getGeofencingZones = (
+export const getGeofencingZones = async (
   systemIds: string[],
   opts?: AxiosRequestConfig,
 ): Promise<GeofencingZones[] | null> => {
@@ -146,7 +144,7 @@ export const getGeofencingZones = (
     .then((res) => res.data.geofencingZones ?? null);
 };
 
-export const getActiveShmoBooking = (
+export const getActiveShmoBooking = async (
   acceptLanguage: string,
   opts?: AxiosRequestConfig,
 ): Promise<ShmoBooking | null> => {
@@ -161,7 +159,7 @@ export const getActiveShmoBooking = (
     );
 };
 
-export const getShmoBooking = (
+export const getShmoBooking = async (
   bookingId: ShmoBooking['bookingId'],
   acceptLanguage: string,
   opts?: AxiosRequestConfig,
@@ -175,7 +173,7 @@ export const getShmoBooking = (
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
-export const initShmoOneStopBooking = (
+export const initShmoOneStopBooking = async (
   reqBody: InitShmoOneStopBookingRequestBody,
   acceptLanguage: string,
 ): Promise<ShmoBooking> => {
@@ -187,7 +185,7 @@ export const initShmoOneStopBooking = (
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
-export const sendShmoBookingEvent = (
+export const sendShmoBookingEvent = async (
   bookingId: ShmoBooking['bookingId'],
   shmoBookingEvent: ShmoBookingEvent,
   acceptLanguage: string,
@@ -204,7 +202,7 @@ export const sendShmoBookingEvent = (
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
-export const getIdsFromQrCode = (
+export const getIdsFromQrCode = async (
   params: IdsFromQrCodeQuery,
   acceptLanguage: string,
   opts?: AxiosRequestConfig,
@@ -221,7 +219,7 @@ export const getIdsFromQrCode = (
     .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
 };
 
-export const initViolationsReporting = (
+export const initViolationsReporting = async (
   params: ViolationsReportingInitQuery,
   opts?: AxiosRequestConfig,
 ): Promise<ViolationsReportingInitQueryResult> => {
@@ -232,7 +230,7 @@ export const initViolationsReporting = (
     .then((res) => res.data);
 };
 
-export const lookupVehicleByQr = (
+export const lookupVehicleByQr = async (
   params: ViolationsVehicleLookupQuery,
   opts?: AxiosRequestConfig,
 ): Promise<ViolationsVehicleLookupQueryResult> => {
@@ -243,7 +241,7 @@ export const lookupVehicleByQr = (
     .then((res) => res.data);
 };
 
-export const sendViolationsReport = (
+export const sendViolationsReport = async (
   data: ViolationsReportQuery,
   opts?: AxiosRequestConfig,
 ): Promise<ViolationsReportQueryResult> => {
@@ -253,14 +251,16 @@ export const sendViolationsReport = (
     .then((res) => res.data);
 };
 
-export const sendSupportRequest = (
+export const sendSupportRequest = async (
   reqBody: SendSupportRequestBody,
   acceptLanguage: string,
-): Promise<SupportStatus> => {
-  return client
-    .post<SupportStatus>('/mobility/v1/support', reqBody, {
-      authWithIdToken: true,
-      headers: {'Accept-Language': acceptLanguage},
-    })
-    .then((response) => SupportStatusSchema.parse(response.data));
+  operatorId: string,
+) => {
+  return client.post('/mobility/v1/support', reqBody, {
+    authWithIdToken: true,
+    headers: {
+      'Accept-Language': acceptLanguage,
+      'Operator-Id': operatorId,
+    },
+  });
 };
