@@ -4,13 +4,11 @@ import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
 import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
-import {v4 as uuid} from 'uuid';
 import {
   getSdkErrorHandlingStrategy,
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
 } from '../utils';
-import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {wipeToken} from '@atb/mobile-token/helpers';
 import Bugsnag from '@bugsnag/react-native';
@@ -19,29 +17,15 @@ export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
 export const useLoadNativeTokenQuery = (
   enabled: boolean,
   userId: string | undefined,
+  traceId: string,
 ) => {
-  const {updateMetadata} = useIntercomMetadata();
-
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
     queryFn: async () => {
-      const traceId = uuid();
       try {
         const token = await loadNativeToken(userId!, traceId);
-        updateMetadata({
-          'AtB-Mobile-Token-Id': token.tokenId,
-          'AtB-Mobile-Token-Status': token.isAttested()
-            ? 'attested'
-            : 'non-attested',
-          'AtB-Mobile-Token-Error-Correlation-Id': undefined,
-        });
         return token;
       } catch (err: any) {
-        updateMetadata({
-          'AtB-Mobile-Token-Id': undefined,
-          'AtB-Mobile-Token-Status': 'error',
-          'AtB-Mobile-Token-Error-Correlation-Id': traceId,
-        });
         logError(err, traceId);
         throw err;
       }
