@@ -58,6 +58,7 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
+  mapbox_sprite_url: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -130,6 +131,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
+  mapbox_sprite_url: '',
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -296,6 +298,9 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
+  const mapbox_sprite_url =
+    values['mapbox_sprite_url']?.asString() ??
+    defaultRemoteConfig.mapbox_sprite_url;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -390,6 +395,7 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
+    mapbox_sprite_url,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
