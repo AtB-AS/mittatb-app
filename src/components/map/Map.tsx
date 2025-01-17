@@ -46,6 +46,7 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
+import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -282,6 +283,16 @@ export const Map = (props: MapProps) => {
           )}
 
           {mapLines && <MapRoute lines={mapLines} />}
+
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={
+              selectedFeature?.properties?.id
+              // props.selectionMode === 'ExploreLocation' // should split components instead
+              //   ? undefined // todo: SelectionPin must be a SymbolLayer to control aboveLayerId
+              //   : selectedFeature // alternatively: move the map instead of the pin, draw the pin outside mapbox
+            }
+          />
+
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
