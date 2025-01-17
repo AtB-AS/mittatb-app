@@ -61,7 +61,6 @@ import {
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {FareContractTexts} from '@atb/translations';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -148,6 +147,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
+
   const showInterchangeSection =
     leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 

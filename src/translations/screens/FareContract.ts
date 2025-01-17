@@ -1,5 +1,8 @@
 import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
-import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
@@ -339,7 +342,7 @@ const FareContractTexts = {
     switch (mode) {
       case TransportMode.Bus:
       case TransportMode.Coach:
-        if (subMode === 'nightBus') {
+        if (subMode === TransportSubmode.NightBus) {
           return _('Nattbuss', 'Nightbuss', 'Nattbuss');
         }
         return _('buss', 'bus', 'buss');
