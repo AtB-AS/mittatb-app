@@ -215,7 +215,6 @@ export function useOfferState(
 
           const response = await searchOffers(offerEndpoint, params, {
             cancelToken,
-            retry: true,
             authWithIdToken: true,
             skipErrorLogging: isNotAvailableError,
           });
