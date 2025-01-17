@@ -55,6 +55,23 @@ if (appScheme == null) {
     throw new GradleException("APP_SCHEME not found. Define APP_SCHEME with current org identifier in the .env file.")
 }
 
+def webShopUrl = System.getProperty('WEB_SHOP_URL')
+if (webShopUrl == null) {
+    throw new GradleException("WEB_SHOP_URL not found. Define WEB_SHOP_URL with an api url in the .env file.")
+}
+
+// Use a URI parser to extract the domain name
+def webShopDomainName
+try {
+    def url = new URI(webShopUrl)
+    webShopDomainName = url.host
+    if (webShopDomainName == null) {
+        throw new GradleException("Failed to extract the domain name from the provided API_BASE_URL: $webShopUrl")
+    }
+} catch (Exception e) {
+    throw new GradleException("Invalid WEB_SHOP_URL: $webShopUrl. Ensure it's a valid URL.", e)
+}
+
 def appVersionCode = '1'
 
 android {
@@ -76,6 +93,7 @@ android {
     defaultConfig {
         resValue "string", "app_name", appName
         resValue "string", "app_scheme", appScheme
+        resValue "string", "web_shop_domain", webShopDomainName
         applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

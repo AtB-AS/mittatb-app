@@ -1,5 +1,6 @@
 declare module '@env' {
   export const API_BASE_URL: string;
+  export const WEB_SHOP_URL: string;
   export const WS_API_BASE_URL: string;
   export const APP_VERSION: string;
   export const IOS_BUNDLE_IDENTIFIER: string;

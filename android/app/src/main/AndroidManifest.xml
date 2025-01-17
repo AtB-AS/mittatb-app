@@ -45,6 +45,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/app_scheme" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="@string/web_shop_domain" />
+            </intent-filter>
         </activity>
         <meta-data
             android:name="com.bugsnag.android.API_KEY"
