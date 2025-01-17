@@ -105,6 +105,7 @@ function renderToken(
               <Text {...props.textProps}>
                 {token.ordered ? `${itemIndex + 1}. ` : '\u2022 '}
               </Text>
+              <Text {...props.textProps}>{'\u2022 '}</Text>
               <Text {...props.textProps}>{item.text}</Text>
             </View>
           ))}
