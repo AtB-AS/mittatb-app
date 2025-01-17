@@ -1,8 +1,5 @@
 import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
