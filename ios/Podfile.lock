@@ -2124,10 +2124,6 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-webview (13.10.5):
-    - glog
-    - RCT-Folly (= 2022.05.16.00)
-    - React-Core
   - React-nativeconfig (0.73.7)
   - React-NativeModulesApple (0.73.7):
     - glog
@@ -2446,7 +2442,6 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
-  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2618,8 +2613,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
-  react-native-webview:
-    :path: "../node_modules/react-native-webview"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -2806,7 +2799,6 @@ SPEC CHECKSUMS:
   react-native-pager-view: ce73434826e4dca60108c3b3a30d83792ff28b0c
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-slider: 9cfd2f0af9efe89a3ed372fcda8eca65109aa94c
-  react-native-webview: f8f61799dda94b4cc3a864b06c4c229d1a9ced1d
   React-nativeconfig: 1c018931dcd44532a5df80426c4387d71f66c737
   React-NativeModulesApple: fe9afa0c30c58c6e7f01ad34cd5012e7e42a8cad
   React-perflogger: 68ec84e2f858a3e35009aef8866b55893e5e0a1f
