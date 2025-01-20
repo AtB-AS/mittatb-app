@@ -11,8 +11,10 @@ import {
 } from '@atb/components/map';
 import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {NsrProps} from '../national-stop-registry-features/NationalStopRegistryFeatures';
 
 type Props = {
+  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   mapCameraRef: RefObject<MapboxGL.Camera>;
   mapViewRef: RefObject<MapboxGL.MapView>;
   vehicles: VehicleFeatures;
@@ -20,6 +22,7 @@ type Props = {
 };
 
 export const Vehicles = ({
+  selectedFeaturePropertyId,
   mapCameraRef,
   mapViewRef,
   vehicles,
@@ -53,10 +56,12 @@ export const Vehicles = ({
   return (
     <>
       <Scooters
+        selectedFeaturePropertyId={selectedFeaturePropertyId}
         scooters={vehicles.scooters}
         onClusterClick={handleClusterClick}
       />
       <Bicycles
+        selectedFeaturePropertyId={selectedFeaturePropertyId}
         bicycles={vehicles.bicycles}
         onClusterClick={handleClusterClick}
       />

@@ -308,6 +308,7 @@ export const Map = (props: MapProps) => {
           )}
           {props.vehicles && (
             <Vehicles
+              selectedFeaturePropertyId={selectedFeature?.properties?.id}
               vehicles={props.vehicles.vehicles}
               mapCameraRef={mapCameraRef}
               mapViewRef={mapViewRef}
@@ -321,6 +322,7 @@ export const Map = (props: MapProps) => {
           )}
           {props.stations && (
             <Stations
+              selectedFeaturePropertyId={selectedFeature?.properties?.id}
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
               onClusterClick={(feature) => {

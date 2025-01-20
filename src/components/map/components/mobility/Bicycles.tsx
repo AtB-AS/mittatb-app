@@ -1,13 +1,23 @@
 import React, {RefObject, useRef} from 'react';
-import {FeatureCollection, GeoJSON} from 'geojson';
+import {FeatureCollection} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
-import {useTransportColor} from '@atb/utils/use-transport-color';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {
+  hitboxCoveringIconOnly,
+  SCOOTERS_CLUSTER_RADIUS,
+  SCOOTERS_MAX_CLUSTER_LEVEL,
+  SCOOTERS_MAX_ZOOM_LEVEL,
+  useMapSymbolStyles,
+} from '@atb/components/map';
+import {NsrProps} from '../national-stop-registry-features/NationalStopRegistryFeatures';
+import {getFilterWhichAlsoHidesSelectedFeature} from '../national-stop-registry-features/nsr-utils';
+import {getClusterPropertiesWithVehicleTypeFormFactorProp} from './Scooters';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFeatureCollectionWithExtraProps} from './Stations';
 
 type Props = {
+  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
   onClusterClick: (
     e: OnPressEvent,
@@ -15,77 +25,78 @@ type Props = {
   ) => void;
 };
 
-export const Bicycles = ({bicycles, onClusterClick}: Props) => {
+export const Bicycles = ({
+  selectedFeaturePropertyId,
+  bicycles,
+  onClusterClick,
+}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
-  const bicycleColor = useTransportColor(Mode.Bicycle);
+
+  const clusteredFilter = getFilterWhichAlsoHidesSelectedFeature(
+    ['all', ['has', 'point_count']],
+    selectedFeaturePropertyId,
+  );
+  const unclusteredFilter = getFilterWhichAlsoHidesSelectedFeature(
+    ['all', ['!', ['has', 'point_count']]],
+    selectedFeaturePropertyId,
+  );
+
+  const {textStyle, iconStyle} = useMapSymbolStyles(
+    selectedFeaturePropertyId,
+    'vehicle',
+  );
+
+  const bicyclesWithVehicleTypeFormFactor = useFeatureCollectionWithExtraProps(
+    bicycles,
+    () => ({vehicle_type_form_factor: FormFactor.Bicycle}),
+  );
 
   return (
     <>
       <MapboxGL.ShapeSource
         id="bicycleClusters"
         ref={clustersSource}
-        shape={bicycles}
+        shape={bicyclesWithVehicleTypeFormFactor}
         tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
-        maxZoomLevel={22}
-        clusterMaxZoomLevel={21}
+        maxZoomLevel={SCOOTERS_MAX_ZOOM_LEVEL}
+        clusterMaxZoomLevel={SCOOTERS_MAX_CLUSTER_LEVEL}
+        clusterRadius={SCOOTERS_CLUSTER_RADIUS}
+        clusterProperties={getClusterPropertiesWithVehicleTypeFormFactorProp(
+          FormFactor.Bicycle,
+        )}
         onPress={(e) => onClusterClick(e, clustersSource)}
       >
         <MapboxGL.SymbolLayer
           id="bicycleClusterIcon"
-          filter={['has', 'point_count']}
+          filter={clusteredFilter}
           minZoomLevel={13.5}
           style={{
-            iconImage: 'BikeCluster',
-            iconSize: 0.85,
-            iconAllowOverlap: true,
-          }}
-        />
-        <MapboxGL.SymbolLayer
-          id="bicycleClusterCountCircle"
-          filter={['has', 'point_count']}
-          minZoomLevel={13.5}
-          aboveLayerID="bicycleClusterIcon"
-          style={{
-            iconImage: 'ClusterCount',
-            iconAllowOverlap: true,
-            iconTranslate: [13, -13],
-          }}
-        />
-        <MapboxGL.SymbolLayer
-          id="bicycleClusterCount"
-          filter={['has', 'point_count']}
-          minZoomLevel={13.5}
-          aboveLayerID="bicycleClusterCountCircle"
-          style={{
-            textField: ['get', 'point_count'],
-            textColor: bicycleColor.primary.background,
-            textSize: 11,
-            textTranslate: [13, -13],
-            textAllowOverlap: true,
+            ...iconStyle,
+            ...textStyle,
           }}
         />
       </MapboxGL.ShapeSource>
       <MapboxGL.ShapeSource
         id="bicycle"
         ref={vehiclesSource}
-        shape={bicycles}
+        shape={bicyclesWithVehicleTypeFormFactor}
         tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
-        maxZoomLevel={22}
-        clusterMaxZoomLevel={21}
+        maxZoomLevel={SCOOTERS_MAX_ZOOM_LEVEL}
+        clusterRadius={SCOOTERS_CLUSTER_RADIUS}
+        clusterMaxZoomLevel={SCOOTERS_MAX_CLUSTER_LEVEL}
       >
         <MapboxGL.SymbolLayer
           id="bicycleIcon"
-          filter={['!', ['has', 'point_count']]}
+          filter={unclusteredFilter}
           minZoomLevel={13.5}
           style={{
-            iconImage: 'BikePin',
-            iconSize: 0.85,
-            iconAllowOverlap: true,
+            ...iconStyle,
+            ...textStyle,
           }}
         />
       </MapboxGL.ShapeSource>

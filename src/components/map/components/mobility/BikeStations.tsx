@@ -1,12 +1,15 @@
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
 import {StationsWithCount} from './Stations';
-import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
+import {NsrProps} from '../national-stop-registry-features/NationalStopRegistryFeatures';
+import {getFilterWhichAlsoHidesSelectedFeature} from '../national-stop-registry-features/nsr-utils';
+import {getClusterPropertiesWithVehicleTypeFormFactorProp} from './Scooters';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
+  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   stations: StationsWithCount;
   onClusterClick: (
     e: OnPressEvent,
@@ -14,35 +17,42 @@ type Props = {
   ) => void;
 };
 
-export const BikeStations = ({stations, onClusterClick}: Props) => {
-  const bicycleColor = useTransportColor(Mode.Bicycle).primary;
+export const BikeStations = ({
+  selectedFeaturePropertyId,
+  stations,
+  onClusterClick,
+}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
-  const symbolStyling = {
-    textAnchor: 'center',
-    textOffset: [0.75, 0],
-    textColor: bicycleColor.background,
-    textSize: 12,
-    iconImage: 'BikeChip',
-    iconAllowOverlap: true,
-    iconSize: 0.85,
-  };
+
+  const clusteredFilter = getFilterWhichAlsoHidesSelectedFeature(
+    ['all', ['has', 'point_count']],
+    selectedFeaturePropertyId,
+  );
+  const unclusteredFilter = getFilterWhichAlsoHidesSelectedFeature(
+    ['all', ['!', ['has', 'point_count']]],
+    selectedFeaturePropertyId,
+  );
+
+  const {textStyle, iconStyle} = useMapSymbolStyles(
+    selectedFeaturePropertyId,
+    'station',
+  );
 
   return (
     <>
       <MapboxGL.ShapeSource
         id="bikeStations"
         shape={stations}
-        tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
       >
         <MapboxGL.SymbolLayer
           id="bikeStationPin"
-          filter={['!', ['has', 'point_count']]}
+          filter={unclusteredFilter}
           minZoomLevel={13}
           style={{
-            ...symbolStyling,
-            textField: ['get', 'count'],
+            ...textStyle,
+            ...iconStyle,
           }}
         />
       </MapboxGL.ShapeSource>
@@ -50,36 +60,23 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
         id="bikeStationCluster"
         shape={stations}
         ref={clustersSource}
-        tolerance={0}
         cluster
         hitbox={hitboxCoveringIconOnly}
         clusterProperties={{
-          sum: ['+', ['get', 'count']],
+          ...getClusterPropertiesWithVehicleTypeFormFactorProp(
+            FormFactor.Bicycle,
+          ),
+          count: ['+', ['get', 'count']],
         }}
         onPress={(e) => onClusterClick(e, clustersSource)}
       >
         <MapboxGL.SymbolLayer
           id="bikeStationClusterPin"
-          filter={['has', 'point_count']}
+          filter={clusteredFilter}
           minZoomLevel={13}
           style={{
-            ...symbolStyling,
-            textField: ['get', 'sum'],
-          }}
-        />
-      </MapboxGL.ShapeSource>
-      <MapboxGL.ShapeSource id="bikeStationMini" shape={stations} tolerance={0}>
-        <MapboxGL.CircleLayer
-          id="bikeStationMiniPin"
-          maxZoomLevel={13}
-          minZoomLevel={12}
-          style={{
-            circleColor: bicycleColor.background,
-            circleStrokeColor: bicycleColor.foreground.primary,
-            circleOpacity: 0.7,
-            circleStrokeOpacity: 0.7,
-            circleRadius: 4,
-            circleStrokeWidth: 1,
+            ...textStyle,
+            ...iconStyle,
           }}
         />
       </MapboxGL.ShapeSource>

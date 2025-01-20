@@ -210,7 +210,11 @@ export const TravelDetailsMapScreenComponent = ({
           />
         )}
         {stations && (
-          <Stations stations={stations.stations} mapCameraRef={mapCameraRef} />
+          <Stations
+            selectedFeaturePropertyId="" // no active selection feature used here
+            stations={stations.stations}
+            mapCameraRef={mapCameraRef}
+          />
         )}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>

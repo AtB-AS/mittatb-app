@@ -77,7 +77,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillColor: bgColor,
           fillOpacity,
         }}
-        aboveLayerID="water-point-label"
+        aboveLayerID="country-label"
       />
       <MapboxGL.LineLayer
         id="tariffZonesLine"
@@ -86,7 +86,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           lineColor: bgColor,
           lineOpacity,
         }}
-        aboveLayerID="water-point-label"
+        aboveLayerID="country-label"
       />
     </MapboxGL.ShapeSource>
   );
