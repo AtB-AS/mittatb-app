@@ -115,17 +115,20 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     data: nativeToken,
     status: nativeTokenStatus,
     error: nativeTokenError,
+    isFetched: isNativeTokenFetched,
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
-    updateMetadata({
-      'AtB-Mobile-Token-Id': nativeToken ? nativeToken.tokenId : 'undefined',
-      'AtB-Mobile-Token-Status': getAttestationStatus(nativeToken),
-      'AtB-Mobile-Token-Error-Correlation-Id': nativeToken
-        ? 'undefined'
-        : traceId.current,
-    });
-  }, [nativeToken, nativeTokenError, updateMetadata]);
+    if (isNativeTokenFetched) {
+      updateMetadata({
+        'AtB-Mobile-Token-Id': nativeToken ? nativeToken.tokenId : 'undefined',
+        'AtB-Mobile-Token-Status': getAttestationStatus(nativeToken),
+        'AtB-Mobile-Token-Error-Correlation-Id': nativeToken
+          ? 'undefined'
+          : traceId.current,
+      });
+    }
+  }, [isNativeTokenFetched, nativeToken, updateMetadata]);
 
   const {
     data: remoteTokens,
