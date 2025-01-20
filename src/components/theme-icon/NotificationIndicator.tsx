@@ -68,7 +68,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     right: 0,
     top: 0,
-    borderRadius: theme.border.radius.circle,
+    borderRadius: theme.border.radius.large,
     zIndex: 10,
     overflow: 'hidden',
   },

@@ -1,7 +1,7 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {useFirestoreConfigurationContext, TariffZone} from '@atb/configuration';
+import {TariffZone} from '@atb/configuration';
 import {SearchLocation} from '@atb/favorites';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationContext} from '@atb/GeolocationContext';
@@ -22,10 +22,13 @@ import {
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TariffZoneResults} from '@atb/tariff-zones-selector/TariffZoneResults';
-import {VenueResults, LocationAndTariffZone} from './VenueResults';
+import {LocationAndTariffZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
-import {usePurchaseSelectionBuilder} from '@atb/purchase-selection';
+import {
+  usePurchaseSelectionBuilder,
+  useSelectableTariffZones,
+} from '@atb/purchase-selection';
 import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;
@@ -44,7 +47,9 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const {tariffZones} = useFirestoreConfigurationContext();
+  const tariffZones = useSelectableTariffZones(
+    selection.preassignedFareProduct,
+  );
 
   const getMatchingTariffZone = useCallback(
     (location: SearchLocation) =>

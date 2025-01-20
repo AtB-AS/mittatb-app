@@ -40,6 +40,9 @@ const dictionary = {
         `Ukjent transportmiddel`,
       ),
     },
+    legSubModes: {
+      nightBus: _('Nattbuss', 'Night bus', `Nattbuss`),
+    },
     line: _('Linje', 'Line', 'Linje'),
     time: {
       aimedPrefix: _('Rutetid', 'Route time', `Rutetid`),

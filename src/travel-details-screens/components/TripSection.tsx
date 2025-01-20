@@ -223,6 +223,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
+            {leg.transportSubmode === TransportSubmode.NightBus && (
+              <ThemeText
+                color="secondary"
+                typography="body__secondary"
+                style={style.secondaryTransportLabel}
+              >
+                {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
+              </ThemeText>
+            )}
             <ThemeText style={style.legLineName}>
               {getLineName(t, leg)}
             </ThemeText>
@@ -392,8 +401,8 @@ const IntermediateInfo = ({
         serviceJourneyId: leg.serviceJourney.id,
         date: leg.expectedStartTime,
         serviceDate: leg.intermediateEstimatedCalls[0].date,
-        fromQuayId: leg.fromPlace.quay?.id,
-        toQuayId: leg.toPlace.quay?.id,
+        fromStopPosition: leg.fromEstimatedCall?.stopPositionInPattern || 0,
+        toStopPosition: leg.toEstimatedCall?.stopPositionInPattern,
       };
       onPressDeparture([departureData], 0);
     }
@@ -669,6 +678,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   onDemandTransportLabel: {
+    paddingTop: theme.spacing.xSmall,
+  },
+  secondaryTransportLabel: {
     paddingTop: theme.spacing.xSmall,
   },
   flexBookingOptions: {

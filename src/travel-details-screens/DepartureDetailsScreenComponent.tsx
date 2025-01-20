@@ -122,10 +122,17 @@ export const DepartureDetailsScreenComponent = ({
     isLoading,
   ] = useDepartureData(activeItem, 20);
 
+  const fromCall = estimatedCallsWithMetadata.find(
+    (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
+  );
+  const toCall = estimatedCallsWithMetadata.find(
+    (c) => c.stopPositionInPattern === activeItem.toStopPosition,
+  );
+
   const mapData = useMapData(
     activeItem.serviceJourneyId,
-    activeItem.fromQuayId,
-    activeItem.toQuayId,
+    fromCall?.quay.id,
+    toCall?.quay.id,
   );
 
   const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
@@ -160,13 +167,6 @@ export const DepartureDetailsScreenComponent = ({
   const isJourneyFinished =
     vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
     estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
-
-  const toCall = estimatedCallsWithMetadata.find(
-    (estimatedCall) => estimatedCall.quay?.id === activeItem.toQuayId,
-  );
-  const fromCall = estimatedCallsWithMetadata.find(
-    (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
-  );
 
   const shouldShowDepartureTime =
     (fromCall && !isInThePast(fromCall.expectedDepartureTime)) || false;
@@ -396,7 +396,7 @@ export const DepartureDetailsScreenComponent = ({
             calls={estimatedCallsWithMetadata}
             mode={mode}
             subMode={subMode}
-            toQuayId={activeItem.toQuayId}
+            toStopPosition={activeItem.toStopPosition}
             alreadyShownSituationNumbers={alreadyShownSituationNumbers}
             onPressQuay={onPressQuay}
           />
@@ -428,7 +428,7 @@ type CallGroupProps = {
   calls: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   subMode?: TransportSubmode;
-  toQuayId?: string;
+  toStopPosition?: number;
   alreadyShownSituationNumbers: string[];
   onPressQuay: Props['onPressQuay'];
 };
@@ -437,7 +437,7 @@ function EstimatedCallRows({
   calls,
   mode,
   subMode,
-  toQuayId,
+  toStopPosition,
   alreadyShownSituationNumbers,
   onPressQuay,
 }: CallGroupProps) {
@@ -486,7 +486,7 @@ function EstimatedCallRows({
           situations={getSituationsToShowForCall(
             call,
             alreadyShownSituationNumbers,
-            toQuayId,
+            toStopPosition,
           )}
           onPressQuay={onPressQuay}
         />
@@ -507,10 +507,10 @@ function EstimatedCallRows({
 const getSituationsToShowForCall = (
   {situations, metadata: {group, isEndOfGroup}}: EstimatedCallWithMetadata,
   alreadyShownSituationNumbers: string[],
-  toQuayId?: string,
+  toStopPosition?: number,
 ) => {
   if (group === 'passed' || group === 'after') return [];
-  if (toQuayId && !isEndOfGroup) return [];
+  if (toStopPosition && !isEndOfGroup) return [];
   return situations.filter(
     (s) =>
       !s.situationNumber ||
@@ -780,7 +780,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   headerSubSection: {
     marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.accent[1].background,
+    borderTopColor: theme.color.background.neutral[0].background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
