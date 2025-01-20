@@ -109,10 +109,10 @@ export const EstimatedCallList = ({
 
   const keyExtractor = useCallback(
     ({departure}: EstimatedCallItemProps) =>
-      // ServiceJourney ID is not a unique key if a ServiceJourney
-      // passes by the same stop several times, (e.g. Ringen in Oslo)
-      // which is why it is used in combination with aimedDepartureTime.
-      departure.serviceJourney.id + departure.aimedDepartureTime,
+      // ServiceJourney ID is not a unique key if a ServiceJourney passes by the
+      // same stop several times, (e.g. Ringen in Oslo) which is why it is used
+      // in combination with stopPositionInPattern.
+      departure.serviceJourney.id + departure.stopPositionInPattern,
     [],
   );
 
