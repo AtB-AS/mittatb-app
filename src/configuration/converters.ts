@@ -7,6 +7,7 @@ import {
   FareProductGroup,
   FareProductGroupType,
   OperatorBenefitId,
+  ScooterFaq,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -133,6 +134,20 @@ export function mapToMobilityOperators(operators?: any) {
   return operators
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToScooterFaqs(scooterFaqs?: any) {
+  if (!scooterFaqs) return;
+  if (!Array.isArray(scooterFaqs)) return;
+  return scooterFaqs
+    .map((scooterFaq) => {
+      const parseResult = ScooterFaq.safeParse(scooterFaq);
       if (!parseResult.success) {
         return;
       }

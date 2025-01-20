@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {BenefitImageAsset} from '@atb/mobility/components/BenefitImage';
 import React from 'react';

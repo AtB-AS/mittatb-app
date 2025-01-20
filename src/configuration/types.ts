@@ -1,5 +1,5 @@
 export * from '@atb-as/config-specs';
-export * from '@atb-as/config-specs/lib/mobility-operators';
+export * from '@atb-as/config-specs/lib/mobility';
 
 export type FirestoreConfigStatus = 'loading' | 'success';
 
