@@ -63,6 +63,9 @@ export const Profile_PaymentMethodsScreen = () => {
 
   const [recurringPaymentId, setRecurringPaymentId] = useState<number>();
 
+  // In cases where the recurring payment appears in firestore before the
+  // callback is called, we can cancel the payment flow and reload the recurring
+  // payment list.
   useOnRecurringPaymentReceived({
     recurringPaymentId,
     callback: () => {
