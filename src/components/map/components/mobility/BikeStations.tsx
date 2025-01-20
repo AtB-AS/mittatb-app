@@ -45,6 +45,7 @@ export const BikeStations = ({
         shape={stations}
         cluster
         hitbox={hitboxCoveringIconOnly}
+        tolerance={0}
       >
         <MapboxGL.SymbolLayer
           id="bikeStationPin"
@@ -69,6 +70,7 @@ export const BikeStations = ({
           count: ['+', ['get', 'count']],
         }}
         onPress={(e) => onClusterClick(e, clustersSource)}
+        tolerance={0}
       >
         <MapboxGL.SymbolLayer
           id="bikeStationClusterPin"

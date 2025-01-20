@@ -45,6 +45,7 @@ export const CarStations = ({
         shape={stations}
         cluster
         hitbox={hitboxCoveringIconOnly}
+        tolerance={0}
       >
         <MapboxGL.SymbolLayer
           id="carStationPin"
@@ -62,6 +63,7 @@ export const CarStations = ({
         shape={stations}
         cluster
         hitbox={hitboxCoveringIconOnly}
+        tolerance={0}
         clusterProperties={{
           ...getClusterPropertiesWithVehicleTypeFormFactorProp(FormFactor.Car),
           count: ['+', ['get', 'count']],

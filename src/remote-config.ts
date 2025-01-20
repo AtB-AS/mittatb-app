@@ -131,7 +131,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
-  mapbox_sprite_url: '',
+  mapbox_sprite_url:
+    'https://storage.googleapis.com/atb-mobility-platform-staging.appspot.com/map-assets/',
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
