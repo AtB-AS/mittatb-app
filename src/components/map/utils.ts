@@ -20,7 +20,7 @@ import {
   GeofencingZoneCustomProps,
 } from './types';
 import distance from '@turf/distance';
-import {isStation} from '@atb/mobility/utils';
+// import {isStation} from '@atb/mobility/utils';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -65,6 +65,9 @@ export const findEntityAtClick = async (
   );
   return renderedFeatures?.filter(isFeaturePoint)?.filter(hasProperties)[0];
 };
+
+export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
+  f.properties?.entityType === 'Quay';
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
@@ -223,8 +226,8 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
 
-export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
+// disable for now
+export const shouldShowMapLines = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
 
-export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
+// disable for now
+export const shouldZoomToFeature = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);

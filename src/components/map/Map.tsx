@@ -28,6 +28,7 @@ import {
   isFeatureGeofencingZone,
   isStopPlace,
   isParkAndRide,
+  isQuayFeature,
 } from './utils';
 import isEqual from 'lodash.isequal';
 import {
@@ -187,11 +188,6 @@ export const Map = (props: MapProps) => {
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
 
-      if (!showGeofencingZones) {
-        onMapClick({source: 'map-click', feature});
-        return;
-      }
-
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
@@ -211,7 +207,15 @@ export const Map = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isFeatureGeofencingZone(featureToSelect)) {
+      if (isQuayFeature(featureToSelect)) {
+        // In this case we might want to either
+        // - select a stop place with the clicked quay sorted on top
+        // - have a bottom sheet with departures just for the clicked quay
+        return; // currently - do nothing
+      } else if (!showGeofencingZones) {
+        onMapClick({source: 'map-click', feature});
+        return;
+      } else if (isFeatureGeofencingZone(featureToSelect)) {
         geofencingZoneOnPress(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
