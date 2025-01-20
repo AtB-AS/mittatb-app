@@ -4,6 +4,7 @@ import type {SituationFragment} from '@atb/api/types/generated/fragments/situati
 import type {TariffZoneFragment} from '@atb/api/types/generated/fragments/tariffZone';
 import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import type {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
+import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 
 export type TripFragment = {
   nextPageCursor?: string;
@@ -28,14 +29,7 @@ export type TripPatternFragment = {
     realtime: boolean;
     transportSubmode?: Types.TransportSubmode;
     rentedBike?: boolean;
-    line?: {
-      id: string;
-      name?: string;
-      transportSubmode?: Types.TransportSubmode;
-      publicCode?: string;
-      flexibleLineType?: string;
-      notices: Array<NoticeFragment>;
-    };
+    line?: {name?: string} & LineFragment;
     fromEstimatedCall?: {
       aimedDepartureTime: any;
       expectedDepartureTime: any;
