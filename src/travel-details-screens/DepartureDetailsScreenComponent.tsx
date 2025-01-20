@@ -473,10 +473,7 @@ function EstimatedCallRows({
     <View style={styles.estimatedCallRows}>
       {estimatedCallsToShow.map((call) => (
         <EstimatedCallRow
-          // Quay ID is not a unique key if a ServiceJourney passes by the
-          // same stop several times, (e.g. Ringen in Oslo) which is why it
-          // is used in combination with aimedDepartureTime.
-          key={`${call.quay?.id}-${call.aimedDepartureTime}`}
+          key={call.stopPositionInPattern}
           call={call}
           mode={mode}
           subMode={subMode}
