@@ -48,6 +48,7 @@ import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -296,6 +297,10 @@ export const Map = (props: MapProps) => {
               //   : selectedFeature // alternatively: move the map instead of the pin, draw the pin outside mapbox
             }
           />
+
+          {props.selectionMode !== 'ExploreLocation' && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
