@@ -166,15 +166,20 @@ export const Map = (props: MapProps) => {
    * region too often is greater than the risk introduced by the performance
    * overhead.
    */
+  const onMapIdleThrottleTimeRef = useRef(0); // due to performance issue, don't run this more often than every 300ms
   const onMapIdle = (state: MapState) => {
-    const newMapRegion: MapRegion = {
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
+    const now = new Date().getTime();
+    if (now > onMapIdleThrottleTimeRef.current + 300) {
+      onMapIdleThrottleTimeRef.current = now;
+      const newMapRegion: MapRegion = {
+        visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
+        zoomLevel: state.properties.zoom,
+        center: state.properties.center,
+      };
+      setMapRegion((prevMapRegion) =>
+        isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
+      );
+    }
   };
 
   /**
