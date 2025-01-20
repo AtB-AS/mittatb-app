@@ -27,6 +27,7 @@ import {
   IdsFromQrCodeResponse,
   IdsFromQrCodeResponseSchema,
   InitShmoOneStopBookingRequestBody,
+  SendSupportRequestBody,
   ShmoBooking,
   ShmoBookingEvent,
   ShmoBookingSchema,
@@ -249,3 +250,16 @@ export const sendViolationsReport = (
     .post<ViolationsReportQueryResult>(url, data, opts)
     .then((res) => res.data);
 };
+
+export const sendSupportRequest = (
+  reqBody: SendSupportRequestBody,
+  acceptLanguage: string,
+  operatorId: string,
+) =>
+  client.post('/mobility/v1/support', reqBody, {
+    authWithIdToken: true,
+    headers: {
+      'Accept-Language': acceptLanguage,
+      'Operator-Id': operatorId,
+    },
+  });

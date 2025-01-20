@@ -171,6 +171,37 @@ const ShmoImageFileSchema = z.object({
   fileData: z.string().describe('base64 encoded image data'),
 });
 
+export enum SupportType {
+  REFUND = 'REFUND',
+  UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
+  UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
+  ACCIDENT_OR_BROKEN = 'ACCIDENT_OR_BROKEN',
+  OTHER = 'OTHER',
+}
+
+const SendSupportRequestBodySchema = z.object({
+  bookingId: z.string().uuid().optional().nullable(),
+  assetId: z.string().optional().nullable(),
+  supportType: z.nativeEnum(SupportType),
+  contactInformationEndUser: z
+    .object({
+      phone: z.string().optional(),
+      email: z.string().email().optional(),
+    })
+    .refine((data) => data.phone || data.email, {
+      message: 'Please provide at least one: phone or email',
+    }),
+  comment: z.string().optional().nullable(),
+  place: z.object({
+    coordinates: ShmoCoordinatesSchema,
+    name: z.string(),
+  }),
+});
+
+export type SendSupportRequestBody = z.infer<
+  typeof SendSupportRequestBodySchema
+>;
+
 type StartFinishingEvent = {event: ShmoBookingEventType.START_FINISHING};
 type FinishEvent = {
   event: ShmoBookingEventType.FINISH;
