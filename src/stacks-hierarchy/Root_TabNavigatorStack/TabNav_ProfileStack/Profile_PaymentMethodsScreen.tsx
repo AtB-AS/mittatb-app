@@ -291,19 +291,18 @@ export const useOnRecurringPaymentReceived = ({
       },
     );
 
-  const recurringPaymentsReceived = useMemo(() => {
-    return recurringPayments.some(
-      (rp) => rp.id === recurringPaymentId && recurringPaymentId !== undefined,
-    );
-  }, [recurringPayments, recurringPaymentId]);
-
   useEffect(() => {
-    if (recurringPaymentsReceived) {
+    if (
+      recurringPayments.some(
+        (rp) =>
+          rp.id === recurringPaymentId && recurringPaymentId !== undefined,
+      )
+    ) {
       callback();
     }
 
     return recurringPaymentsUnsub;
-  }, [recurringPaymentsReceived, callback, recurringPaymentsUnsub]);
+  }, [callback, recurringPaymentId, recurringPayments, recurringPaymentsUnsub]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
