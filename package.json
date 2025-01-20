@@ -113,7 +113,6 @@
     "react-native-screens": "^3.34.0",
     "react-native-svg": "^15.5.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-webview": "^13.10.5",
     "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
