@@ -171,7 +171,6 @@ const ShmoImageFileSchema = z.object({
 });
 
 export enum SupportType {
-  NOT_AVAILABLE = 'NOT_AVAILABLE',
   REFUND = 'REFUND',
   UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
   UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
@@ -183,10 +182,14 @@ const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
   supportType: z.nativeEnum(SupportType),
-  contactInformationEndUser: z.object({
-    phone: z.string(),
-    email: z.string().email(),
-  }),
+  contactInformationEndUser: z
+    .object({
+      phone: z.string().optional(),
+      email: z.string().email().optional(),
+    })
+    .refine((data) => data.phone || data.email, {
+      message: 'Please provide at least one: phone or email',
+    }),
   comment: z.string().optional().nullable(),
   place: z.object({
     coordinates: ShmoCoordinatesSchema,

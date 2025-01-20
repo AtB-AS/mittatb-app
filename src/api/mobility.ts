@@ -153,7 +153,6 @@ export const getActiveShmoBooking = (
       ...opts,
       authWithIdToken: true,
       headers: {'Accept-Language': acceptLanguage},
-      baseURL: '10.100.1.47:8080',
     })
     .then((response) =>
       response.data === null ? null : ShmoBookingSchema.parse(response.data),
@@ -170,7 +169,6 @@ export const getShmoBooking = (
       ...opts,
       authWithIdToken: true,
       headers: {'Accept-Language': acceptLanguage},
-      baseURL: '10.100.1.47:8080',
     })
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
