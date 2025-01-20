@@ -54,6 +54,9 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {isDefined} from '@atb/utils/presence';
+import {onlyUniques} from '@atb/utils/only-uniques';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -404,6 +407,29 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
+          <View style={styles.globalMessage}>
+            <GlobalMessage
+              textColor={theme.color.background.neutral[0]}
+              globalMessageContext={GlobalMessageContextEnum.appTripResults}
+              ruleVariables={{
+                transportModes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.mode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+                transportSubmodes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.transportSubmode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+                authorities: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.authority?.id)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+              }}
+            />
+          </View>
           {from && to && (
             <View>
               {filtersState.enabled && (
@@ -681,5 +707,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
+  },
+  globalMessage: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
 }));

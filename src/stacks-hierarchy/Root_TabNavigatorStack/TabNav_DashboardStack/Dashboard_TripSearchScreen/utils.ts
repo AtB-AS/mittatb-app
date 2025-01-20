@@ -102,7 +102,7 @@ function transportModeToEnum(
       transportMode: enumFromString(TransportMode, internal.transportMode),
       transportSubModes: internal.transportSubModes
         ?.map((submode) => enumFromString(TransportSubmode, submode))
-        .filter(Boolean) as TransportSubmode[],
+        .filter(isDefined),
     };
   });
 }
