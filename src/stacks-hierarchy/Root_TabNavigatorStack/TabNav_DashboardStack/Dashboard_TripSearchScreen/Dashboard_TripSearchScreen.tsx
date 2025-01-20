@@ -56,6 +56,7 @@ import {areDefaultFiltersSelected} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {isDefined} from '@atb/utils/presence';
+import {onlyUniques} from '@atb/utils/only-uniques';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -411,14 +412,21 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               textColor={theme.color.background.neutral[0]}
               globalMessageContext={GlobalMessageContextEnum.appTripResults}
               ruleVariables={{
+                transportModes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.mode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
                 transportSubmodes: tripPatterns
                   .flatMap((tp) => tp.legs)
                   .map((leg) => leg.transportSubmode)
-                  .filter(isDefined),
+                  .filter(isDefined)
+                  .filter(onlyUniques),
                 authorities: tripPatterns
                   .flatMap((tp) => tp.legs)
                   .map((leg) => leg.authority?.id)
-                  .filter(isDefined),
+                  .filter(isDefined)
+                  .filter(onlyUniques),
               }}
             />
           </View>
