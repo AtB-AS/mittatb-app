@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -30,7 +30,15 @@ import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-p
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
-import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
+import {
+  closeInAppBrowser,
+  openInAppBrowser,
+} from '@atb/in-app-browser/in-app-browser';
+import {useAuthContext} from '@atb/auth';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -52,6 +60,16 @@ export const Profile_PaymentMethodsScreen = () => {
     mutateAsync: cancelRecurringPayment,
     isError: cancelRecurringPaymentError,
   } = useCancelRecurringPaymentMutation();
+
+  const [recurringPaymentId, setRecurringPaymentId] = useState<number>();
+
+  useOnRecurringPaymentReceived({
+    recurringPaymentId,
+    callback: () => {
+      closeInAppBrowser();
+      refetchRecurringPayment();
+    },
+  });
 
   const isError =
     recurringPaymentError ||
@@ -75,6 +93,7 @@ export const Profile_PaymentMethodsScreen = () => {
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
     const response = await addPaymentMethod(callbackUrl);
+    setRecurringPaymentId(response.data.recurring_payment_id);
     openInAppBrowser(
       response.data.terminal_url,
       'cancel',
@@ -226,6 +245,62 @@ const GenericError = () => {
       />
     </View>
   );
+};
+
+export const useOnRecurringPaymentReceived = ({
+  recurringPaymentId,
+  callback,
+}: {
+  recurringPaymentId: number | undefined;
+  callback: () => void;
+}) => {
+  const {userId} = useAuthContext();
+  const [recurringPayments, setRecurringPayments] = useState<
+    RecurringPayment[]
+  >([]);
+
+  const mapRecurringPayment = (
+    recurringPayment: FirebaseFirestoreTypes.DocumentData,
+  ): RecurringPayment => {
+    return {
+      id: recurringPayment.id,
+      expires_at: recurringPayment.expires_at,
+      masked_pan: recurringPayment.masked_pan,
+      payment_type: recurringPayment.payment_type,
+    };
+  };
+
+  const recurringPaymentsUnsub = firestore()
+    .collection('customers')
+    .doc(userId)
+    .collection('recurringPayments')
+    .orderBy('created', 'desc')
+    .onSnapshot(
+      (snapshot) => {
+        const recurringPayments =
+          snapshot.docs.map<RecurringPayment>(mapRecurringPayment);
+        setRecurringPayments(recurringPayments);
+      },
+      (err) => {
+        Bugsnag.notify(err, function (event) {
+          event.addMetadata('payment', {userId});
+        });
+      },
+    );
+
+  const recurringPaymentsReceived = useMemo(() => {
+    return recurringPayments.some(
+      (rp) => rp.id === recurringPaymentId && recurringPaymentId !== undefined,
+    );
+  }, [recurringPayments, recurringPaymentId]);
+
+  useEffect(() => {
+    if (recurringPaymentsReceived) {
+      callback();
+    }
+
+    return recurringPaymentsUnsub;
+  }, [recurringPaymentsReceived, callback, recurringPaymentsUnsub]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
