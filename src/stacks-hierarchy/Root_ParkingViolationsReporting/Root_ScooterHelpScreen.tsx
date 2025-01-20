@@ -25,9 +25,9 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   const {t, language} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {scooterFaqs} = useFirestoreConfigurationContext();
-  const [currentlyOpen, setCurrentlyOpen] = useState<number>();
+  const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
 
-  const {operatorName} = useVehicle(vehicleId);
+  const {operatorName, operatorId} = useVehicle(vehicleId);
 
   return (
     <ScreenContainer
@@ -37,9 +37,11 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
       <View style={style.container}>
         <ContentHeading text={t(ScooterHelpTexts.contactAndReport)} />
         <Section>
-          <LinkSectionItem
-            text={t(ScooterHelpTexts.contactOperator(operatorName))}
-          />
+          {operatorId != undefined && (
+            <LinkSectionItem
+              text={t(ScooterHelpTexts.contactOperator(operatorName))}
+            />
+          )}
           <LinkSectionItem
             text={t(ScooterHelpTexts.reportParking)}
             onPress={() =>
@@ -55,9 +57,9 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
               text={getTextForLanguage(item.title, language) ?? ''}
               textType="body__primary--bold"
               showIconText={false}
-              expanded={currentlyOpen === index}
+              expanded={currentlyOpenFaqIndex === index}
               onPress={() => {
-                setCurrentlyOpen(index);
+                setCurrentlyOpenFaqIndex(index);
               }}
               expandContent={
                 <ThemeText isMarkdown={true}>
