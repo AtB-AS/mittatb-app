@@ -26,10 +26,18 @@ export const NationalStopRegistryFeatures = ({
     >
       <>
         {nsrCircleLayers.map((nsrCircleLayer) => (
-          <MapboxGL.CircleLayer key={nsrCircleLayer.id} {...nsrCircleLayer} />
+          <MapboxGL.CircleLayer
+            key={nsrCircleLayer.id}
+            {...nsrCircleLayer}
+            aboveLayerID="country-label"
+          />
         ))}
         {nsrSymbolLayers.map((nsrSymbolLayer) => (
-          <MapboxGL.SymbolLayer key={nsrSymbolLayer.id} {...nsrSymbolLayer} />
+          <MapboxGL.SymbolLayer
+            key={nsrSymbolLayer.id}
+            {...nsrSymbolLayer}
+            aboveLayerID="country-label"
+          />
         ))}
       </>
     </MapboxGL.VectorSource>

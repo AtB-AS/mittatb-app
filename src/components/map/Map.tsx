@@ -189,6 +189,15 @@ export const Map = (props: MapProps) => {
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
 
+      // should split components instead of this, ExploreLocation should only depend on location state, not features
+      if (props.selectionMode == 'ExploreLocation') {
+        onMapClick({
+          source: 'map-click',
+          feature,
+        });
+        return;
+      }
+
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
@@ -233,10 +242,11 @@ export const Map = (props: MapProps) => {
       }
     },
     [
-      geofencingZoneOnPress,
+      props.selectionMode,
       hideSnackbar,
-      onMapClick,
       showGeofencingZones,
+      onMapClick,
+      geofencingZoneOnPress,
       selectedFeature,
     ],
   );
@@ -290,12 +300,7 @@ export const Map = (props: MapProps) => {
           {mapLines && <MapRoute lines={mapLines} />}
 
           <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={
-              selectedFeature?.properties?.id
-              // props.selectionMode === 'ExploreLocation' // should split components instead
-              //   ? undefined // todo: SelectionPin must be a SymbolLayer to control aboveLayerId
-              //   : selectedFeature // alternatively: move the map instead of the pin, draw the pin outside mapbox
-            }
+            selectedFeaturePropertyId={selectedFeature?.properties?.id}
           />
 
           {props.selectionMode !== 'ExploreLocation' && (
