@@ -12,7 +12,7 @@ import {
  * @property {number} showAsDefaultAtZoomLevel - The zoom level at which the icon switches to default when zooming in.
  * @property {FilterExpression} filter - Filter to select specific NSR items relevant to the layer.
  */
-type NsrLayer = {
+export type NsrLayer = {
   id: string;
   showAsDefaultAtZoomLevel: number;
   filter: FilterExpression;

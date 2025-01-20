@@ -67,7 +67,7 @@ export const useNsrSymbolLayers = (
     );
     const {iconImage, iconSize, iconOpacity, textSize, textOpacity} = style;
 
-    const iconProps: SymbolLayerStyleProps = !nsrSymbolLayer?.iconCode
+    const iconStyleProps: SymbolLayerStyleProps = !nsrSymbolLayer?.iconCode
       ? {}
       : {
           iconImage,
@@ -79,7 +79,7 @@ export const useNsrSymbolLayers = (
           iconOffset: [0, 0],
         };
 
-    const textProps: SymbolLayerStyleProps = !nsrSymbolLayer?.textField
+    const textStyleProps: SymbolLayerStyleProps = !nsrSymbolLayer?.textField
       ? {}
       : {
           textSize,
@@ -105,8 +105,8 @@ export const useNsrSymbolLayers = (
       filter,
       minZoomLevel,
       style: {
-        ...iconProps,
-        ...textProps,
+        ...iconStyleProps,
+        ...textStyleProps,
       },
     };
   });

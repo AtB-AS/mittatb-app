@@ -8,8 +8,6 @@ import {
 } from './nsr-utils';
 import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 
-const circleFullSizeRadius = 11;
-
 export const useNsrCircleLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): SymbolLayerProps[] => {
@@ -27,7 +25,7 @@ export const useNsrCircleLayers = (
     const {minZoomLevel, style} = getLayerPropsDeterminedByZoomLevel({
       showAsDefaultAtZoomLevel,
       selectedFeaturePropertyId,
-      iconFullSize: circleFullSizeRadius,
+      iconFullSize: 11,
     });
 
     const {iconSize: circleRadius, iconOpacity: circleOpacity} = style;

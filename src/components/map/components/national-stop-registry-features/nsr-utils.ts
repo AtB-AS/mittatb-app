@@ -1,5 +1,6 @@
 import {MAPBOX_NSR_SOURCE_LAYER_ID} from '@env';
 import {NsrProps} from './NationalStopRegistryFeatures';
+import {NsrLayer} from './nsr-layers';
 import {
   Expression,
   FilterExpression,
@@ -19,6 +20,9 @@ export const getNsrLayerSourceProps = (
 });
 
 export const getFilterWhichAlsoHidesSelectedFeature = (
+  /**
+   * @property {FilterExpression} filter should be an array with 'all' as the first element
+   */
   filter: FilterExpression,
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): FilterExpression => [
@@ -49,7 +53,7 @@ const getExpressionForNsrIconImage = (
 ];
 
 export type LayerPropsDeterminedByZoomLevelParams = {
-  showAsDefaultAtZoomLevel: number;
+  showAsDefaultAtZoomLevel: NsrLayer['showAsDefaultAtZoomLevel'];
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   iconImageProps?: IconImageProps;
   opacityTransitionZoomRangeDelay?: number;
