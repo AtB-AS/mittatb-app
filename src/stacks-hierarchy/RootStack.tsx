@@ -66,6 +66,7 @@ import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
+import {Root_ScooterHelpScreen} from './Root_ParkingViolationsReporting/Root_ScooterHelpScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -386,6 +387,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
                 component={Root_ActiveTokenOnPhoneRequiredForFareProductScreen}
+              />
+              <Stack.Screen
+                name="Root_ScooterHelpScreen"
+                component={Root_ScooterHelpScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

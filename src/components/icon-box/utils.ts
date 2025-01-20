@@ -7,6 +7,7 @@ import {
   Boat,
   Ferry,
   Walk,
+  Night,
   Unknown,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {
@@ -31,8 +32,11 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
     case 'bus':
     case 'coach':
       // TODO: Temporary icon for Ski VM 2025. Should be removed after the event.
-      if (APP_ORG === 'atb' && subMode === 'shuttleBus') {
+      if (APP_ORG === 'atb' && subMode === TransportSubmode.ShuttleBus) {
         return {svg: SvgShuttle, name: 'Shuttle'};
+      }
+      if (subMode === TransportSubmode.NightBus) {
+        return {svg: Night, name: 'Night Bus'};
       }
       return {svg: Bus, name: 'Bus'};
     case 'tram':

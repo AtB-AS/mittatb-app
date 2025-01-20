@@ -10,7 +10,7 @@ import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 
 type PricingPlanProps = {
   operator: string;

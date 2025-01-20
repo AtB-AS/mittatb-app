@@ -19,6 +19,9 @@ import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/mobility/use-vehicle';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type ShmoTestingProps = {selectedVehicleId?: string};
 
@@ -31,6 +34,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   const destructiveColor = theme.color.interactive.destructive;
 
   const {operatorId} = useVehicle(vehicleId ?? '');
+  const navigation = useNavigation<RootNavigationProps>();
 
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
@@ -49,6 +53,8 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
   const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);
+
+  const {close: closeBottomSheet} = useBottomSheetContext();
 
   useEffect(() => {
     if (selectedVehicleId) {
@@ -197,6 +203,21 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         }}
         text="Qr to Ids"
         loading={getIdsFromQrCodeIsLoading}
+        hasShadow={true}
+      />
+      <Button
+        expanded={false}
+        style={styles.filterButton}
+        compact={true}
+        interactiveColor={interactiveColor}
+        accessibilityRole="button"
+        onPress={() => {
+          closeBottomSheet();
+          navigation.navigate('Root_ScooterHelpScreen', {
+            vehicleId,
+          });
+        }}
+        text="Help"
         hasShadow={true}
       />
     </View>

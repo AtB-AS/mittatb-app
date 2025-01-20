@@ -37,7 +37,6 @@ export const useReserveOfferMutation = ({
         paymentType: paymentMethod.paymentType,
         recurringPaymentId: paymentMethod.recurringCard?.id,
         shouldSavePaymentMethod,
-        opts: {retry: true},
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
         phoneNumber,
