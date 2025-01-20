@@ -141,6 +141,10 @@ export const Button = React.forwardRef<any, ButtonProps>(
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
         borderRadius: theme.border.radius.circle,
+        borderWidth:
+          type === 'small'
+            ? theme.border.width.slim
+            : theme.border.width.medium,
         ...(expanded && type === 'small'
           ? {
               justifyContent: 'center',
@@ -265,11 +269,10 @@ const useTextMarginHorizontal = (
   return maxIconSize + theme.spacing.xSmall;
 };
 
-const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useButtonStyle = StyleSheet.createThemeHook(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: theme.border.width.medium,
   },
 }));
 
