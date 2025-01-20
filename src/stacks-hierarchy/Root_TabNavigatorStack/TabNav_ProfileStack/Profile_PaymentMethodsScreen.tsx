@@ -28,7 +28,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
-import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
@@ -50,11 +49,6 @@ export const Profile_PaymentMethodsScreen = () => {
   } = useDeleteRecurringPaymentMutation();
 
   const {
-    mutateAsync: authorizeRecurringPayment,
-    isError: authorizeRecurringPaymentError,
-  } = useAuthorizeRecurringPaymentMutation();
-
-  const {
     mutateAsync: cancelRecurringPayment,
     isError: cancelRecurringPaymentError,
   } = useCancelRecurringPaymentMutation();
@@ -62,7 +56,6 @@ export const Profile_PaymentMethodsScreen = () => {
   const isError =
     recurringPaymentError ||
     deleteRecurringPaymentError ||
-    authorizeRecurringPaymentError ||
     cancelRecurringPaymentError;
 
   const addPaymentMethodCallbackHandler = (url: string) => {
@@ -72,7 +65,7 @@ export const Profile_PaymentMethodsScreen = () => {
         queryString.parseUrl(url).query.recurring_payment_id,
       );
       if (responseCode === 'OK') {
-        authorizeRecurringPayment(paymentId);
+        refetchRecurringPayment();
       } else if (responseCode === 'Cancel') {
         cancelRecurringPayment(paymentId);
       }
