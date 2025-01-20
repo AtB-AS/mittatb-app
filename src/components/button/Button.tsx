@@ -140,10 +140,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        borderRadius:
-          type === 'small'
-            ? theme.border.radius.large
-            : theme.border.radius.regular,
+        borderRadius: theme.border.radius.circle,
         ...(expanded && type === 'small'
           ? {
               justifyContent: 'center',
