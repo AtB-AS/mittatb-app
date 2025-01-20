@@ -25,17 +25,17 @@ export const NationalStopRegistryFeatures = ({
       url={`mapbox://${MAPBOX_NSR_TILESET_ID}`}
     >
       <>
-        {nsrCircleLayers.map((nsrCircleLayer) => (
-          <MapboxGL.CircleLayer
-            key={nsrCircleLayer.id}
-            {...nsrCircleLayer}
-            aboveLayerID="country-label"
-          />
-        ))}
         {nsrSymbolLayers.map((nsrSymbolLayer) => (
           <MapboxGL.SymbolLayer
             key={nsrSymbolLayer.id}
             {...nsrSymbolLayer}
+            aboveLayerID="country-label"
+          />
+        ))}
+        {nsrCircleLayers.map((nsrCircleLayer) => (
+          <MapboxGL.CircleLayer
+            key={nsrCircleLayer.id}
+            {...nsrCircleLayer}
             aboveLayerID="country-label"
           />
         ))}
