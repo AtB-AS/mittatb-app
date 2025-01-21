@@ -14,7 +14,7 @@ import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query'
 // eslint-disable-next-line no-restricted-imports
 import {usePreviousPaymentMethods} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {useCallback, useState} from 'react';
-import {useWindowDimensions, View} from 'react-native';
+import {TextInput, useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -27,15 +27,17 @@ type ShmoTestingProps = {selectedVehicleId?: string};
 
 export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   const [previousBookingId, setPreviousBookingId] = useState<string>();
-  const [vehicleId, setVehicleId] = useState<string>(selectedVehicleId ?? '');
+  const [vehicleId, setVehicleId] = useState<string | undefined>(
+    selectedVehicleId,
+  );
+  const [vehicleCode, setVehicleCode] = useState<string>('146030');
+  const {operatorId} = useVehicle(vehicleId ?? '');
 
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const destructiveColor = theme.color.interactive.destructive;
 
-  const {operatorId} = useVehicle(vehicleId ?? '');
   const navigation = useNavigation<RootNavigationProps>();
-
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -82,7 +84,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
   const getVehicleIdFromQrCode = async () => {
     const idsFromQrCode = await getIdsFromQrCode({
-      qrCodeUrl: 'https://m.ryde.vip/scooter.html?n=146030',
+      qrCodeUrl: `https://m.ryde.vip/scooter.html?n=${vehicleCode}`,
       latitude: 0,
       longitude: 0,
     });
@@ -188,6 +190,12 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         hasShadow={true}
       />
 
+      <TextInput
+        style={styles.textInput}
+        onChangeText={(text) => setVehicleCode(text)}
+        value={vehicleCode}
+      />
+
       <Button
         expanded={false}
         style={styles.filterButton}
@@ -199,6 +207,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         onPress={async () => {
           //analytics.logEvent('Map', 'Qr to Ids Pressed');
           const vehicleIdFromQrCode = await getVehicleIdFromQrCode();
+
           setVehicleId(vehicleIdFromQrCode || '');
         }}
         text="Qr to Ids"
@@ -214,7 +223,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         onPress={() => {
           closeBottomSheet();
           navigation.navigate('Root_ScooterHelpScreen', {
-            vehicleId,
+            vehicleId: vehicleId ?? '',
           });
         }}
         text="Help"
@@ -245,6 +254,10 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
 
           <View style={{backgroundColor: 'rgba(0,255,0,0.25)'}}>
             <ThemeText>VehicleId: {vehicleId}</ThemeText>
+          </View>
+
+          <View style={{backgroundColor: 'rgba(225, 0, 255, 0.25)'}}>
+            <ThemeText>VehicleCode: {vehicleCode}</ThemeText>
           </View>
 
           <View style={{backgroundColor: 'yellow'}}>
@@ -289,5 +302,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   filterButton: {
     marginBottom: theme.spacing.small,
     pointerEvents: 'auto',
+  },
+  textInput: {
+    marginBottom: theme.spacing.small,
+    pointerEvents: 'auto',
+    borderWidth: 1,
+    backgroundColor: 'white',
+    color: 'black',
+    padding: 8,
   },
 }));
