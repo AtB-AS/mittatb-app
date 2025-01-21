@@ -94,6 +94,20 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
+#### Mysterious, unexplainable build errors when building the android app
+ *Example:* `Could not resolve all files for configuration ':adrianso_react-native-device-brightness:androidJdkImage'.`
+
+ Run this command to check if you have the correct JDK: 
+```sh
+npx react-native doctor
+```
+
+If it tells you that the JDK is wrong (probably too new) follow this guide to correctly set up your environment:
+
+[Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
+
+The `doctor` command can also help you troubleshoot other problems.
+
 #### Command failed: `xcrun simctl list --json devices`
 
 You might have Command Line Tools set without Xcode (eg. when using homebrew without xcode). Change Command Line Tool to Xcode:
