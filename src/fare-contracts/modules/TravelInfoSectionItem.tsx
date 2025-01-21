@@ -25,7 +25,7 @@ import {useSectionItem} from '@atb/components/sections';
 
 type Props = {fc: FareContract};
 
-export const TicketInfoSectionItem = ({fc}: Props) => {
+export const TravelInfoSectionItem = ({fc}: Props) => {
   // TRANSLATION
   const {t, language} = useTranslation();
 

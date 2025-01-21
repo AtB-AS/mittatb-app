@@ -13,7 +13,6 @@ export type BaseSectionItemProps = {
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
-  spacing: number;
 };
 
 export function useSectionItem({
@@ -35,22 +34,10 @@ export function useSectionItem({
     flex: 1,
   };
 
-  const spacing = useSpacing(type);
   return {
     topContainer,
     contentContainer,
-    spacing,
   };
-}
-
-function useSpacing(type: ContainerSizingType) {
-  const {theme} = useThemeContext();
-  switch (type) {
-    case 'block':
-      return theme.spacing.medium;
-    case 'spacious':
-      return theme.spacing.large;
-  }
 }
 
 type Padding = Pick<ViewStyle, 'paddingVertical' | 'paddingHorizontal'>;

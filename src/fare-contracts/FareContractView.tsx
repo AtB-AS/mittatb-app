@@ -23,7 +23,7 @@ import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
-import {TicketInfoSectionItem} from '@atb/fare-contracts/modules/TicketInfoSectionItem';
+import {TravelInfoSectionItem} from '@atb/fare-contracts/modules/TravelInfoSectionItem';
 
 type Props = {
   now: number;
@@ -73,7 +73,7 @@ export const FareContractView: React.FC<Props> = ({
           <Description fc={fareContract} />
         </WithValidityLine>
       </GenericSectionItem>
-      <TicketInfoSectionItem fc={fareContract} />
+      <TravelInfoSectionItem fc={fareContract} />
       {isCarnetFareContract && (
         <GenericSectionItem>
           <CarnetFooter
