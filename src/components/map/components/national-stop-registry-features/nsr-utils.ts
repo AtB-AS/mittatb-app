@@ -8,6 +8,7 @@ import {
 import {Props as LayerPropsCommonAndStyle} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Theme, Themes} from '@atb-as/theme';
+import {PinType} from '../../hooks/use-map-symbol-styles';
 
 export const getNsrLayerSourceProps = (
   layerId: string,
@@ -38,13 +39,16 @@ type IconImageProps = {
   themeName: keyof Themes<Theme>; // 'light' | 'dark';
 };
 
+const nsrPinType: PinType = 'stop'; // pinType = 'stop' for all NSR items
+
 const getExpressionForNsrIconImage = (
   iconType: 'default' | 'minimized',
   iconImageProps: IconImageProps,
   aFeatureIsSelected: boolean,
 ): Expression => [
   'concat',
-  'stoppin_',
+  nsrPinType,
+  'pin_',
   iconImageProps.iconCode,
   '_',
   ['case', aFeatureIsSelected, 'minimized', iconType],

@@ -7,10 +7,12 @@ import {
   SymbolLayerStyleProps,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 
+export type PinType = 'vehicle' | 'station' | 'stop';
+
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
-  pinType: 'vehicle' | 'station' | 'stop',
+  pinType: PinType,
   textSizeFactor: number = 1.0,
 ) => {
   const {themeName} = useThemeContext();

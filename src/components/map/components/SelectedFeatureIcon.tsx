@@ -2,13 +2,14 @@ import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
+import {PinType} from '../hooks/use-map-symbol-styles';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
 }: {
   selectedFeature?: Feature<Point, GeoJsonProperties>;
 }) => {
-  const pinType =
+  const pinType: PinType =
     selectedFeature?.properties?.entityType === 'StopPlace' ||
     selectedFeature?.properties?.entityType === 'Parking' ||
     selectedFeature?.properties?.entityType === 'Quay'
