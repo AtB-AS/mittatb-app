@@ -134,7 +134,7 @@ See the [design system](https://github.com/AtB-AS/design-system) and [`@atb-as/g
 
 ## Distributing new app versions (deploy)
 
-For test devices and developer devices we do continuous distribution through direct groups on AppCenter and Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
+For test devices and developer devices we do continuous distribution through direct groups Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
 
 ## Storybook
 

@@ -103,22 +103,6 @@ Upload the build to Firebase App Distribution
 
 Upload app to testflight
 
-### ios appcenter_staging
-
-```sh
-[bundle exec] fastlane ios appcenter_staging
-```
-
-Upload the build to AppCenter
-
-### ios appcenter_testflight
-
-```sh
-[bundle exec] fastlane ios appcenter_testflight
-```
-
-Upload the build to AppCenter for distribution to TestFlight
-
 ----
 
 
@@ -162,23 +146,11 @@ Upload the build to AppCenter
 [bundle exec] fastlane android playstore_internal_aab
 ```
 
-
-
-### android appcenter_staging
-
-```sh
-[bundle exec] fastlane android appcenter_staging
-```
-
-
-
 ### android appcenter_alpha
 
 ```sh
 [bundle exec] fastlane android appcenter_alpha
 ```
-
-
 
 ----
 

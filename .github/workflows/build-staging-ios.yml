@@ -106,18 +106,12 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Distribute to Firebase App Distribution
-        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
-      - name: Distribute to AppCenter
-        if: matrix.org == 'atb'
-        run: bundle exec fastlane ios appcenter_staging
-        env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/create-sourcemaps.sh
