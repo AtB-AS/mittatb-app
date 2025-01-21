@@ -69,7 +69,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {useOnMarkFavouriteDepartures} from '@atb/favorites';
-import {getFavoriteIcon} from '@atb/favorites/FavouriteDepartureToggle';
+import {getFavoriteIcon} from '@atb/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
 
@@ -305,7 +305,7 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
+          {true ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
                 page={activeItemIndexState + 1}
@@ -473,10 +473,7 @@ function EstimatedCallRows({
     <View style={styles.estimatedCallRows}>
       {estimatedCallsToShow.map((call) => (
         <EstimatedCallRow
-          // Quay ID is not a unique key if a ServiceJourney passes by the
-          // same stop several times, (e.g. Ringen in Oslo) which is why it
-          // is used in combination with aimedDepartureTime.
-          key={`${call.quay?.id}-${call.aimedDepartureTime}`}
+          key={call.stopPositionInPattern}
           call={call}
           mode={mode}
           subMode={subMode}

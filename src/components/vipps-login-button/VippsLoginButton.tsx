@@ -48,7 +48,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.circle,
     justifyContent: 'center',
     borderWidth: theme.border.width.medium,
     borderColor: VIPPS_BACKGROUND_COLOR,

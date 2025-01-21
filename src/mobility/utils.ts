@@ -23,7 +23,7 @@ import {
 import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 
 export const isScooter = (
   feature: Feature<Point> | undefined,

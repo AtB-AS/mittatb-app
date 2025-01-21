@@ -4,7 +4,7 @@ import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ActivityIndicator, Linking} from 'react-native';
 import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutation';

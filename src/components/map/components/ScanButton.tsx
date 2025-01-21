@@ -23,7 +23,7 @@ export const ScanButton = () => {
     <Button
       expanded={false}
       style={{...styles.scanButton, bottom: mapButtonsContainer.bottom}}
-      compact={true}
+      type="small"
       interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() => {

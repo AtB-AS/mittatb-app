@@ -487,14 +487,6 @@ export const Profile_DesignSystemScreen = ({
                     disabled={true}
                     interactiveColor={theme.color.interactive[0]}
                   />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="primary"
-                    compact={true}
-                    interactiveColor={theme.color.interactive[0]}
-                  />
                 </View>
 
                 <ThemeText
@@ -525,14 +517,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor={theme.color.interactive[1]}
-                  />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="primary"
-                    compact={true}
                     interactiveColor={theme.color.interactive[1]}
                   />
                 </View>
@@ -567,14 +551,6 @@ export const Profile_DesignSystemScreen = ({
                     disabled={true}
                     interactiveColor={theme.color.interactive[2]}
                   />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="primary"
-                    compact={true}
-                    interactiveColor={theme.color.interactive[2]}
-                  />
                 </View>
 
                 <ThemeText
@@ -607,14 +583,6 @@ export const Profile_DesignSystemScreen = ({
                     disabled={true}
                     interactiveColor={theme.color.interactive.destructive}
                   />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="primary"
-                    compact={true}
-                    interactiveColor={theme.color.interactive.destructive}
-                  />
                 </View>
 
                 <ThemeText
@@ -644,13 +612,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     disabled={true}
                   />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="secondary"
-                    compact={true}
-                  />
                 </View>
 
                 <ThemeText
@@ -679,13 +640,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                  />
-                  <Button
-                    expanded={true}
-                    text="Compact"
-                    onPress={presser}
-                    mode="tertiary"
-                    compact={true}
                   />
                 </View>
 
@@ -724,15 +678,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={false}
-                    text="Primary - compact"
-                    onPress={presser}
-                    mode="primary"
-                    compact={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
@@ -744,14 +689,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Secondary - compact"
-                    onPress={presser}
-                    mode="secondary"
-                    compact={true}
                     style={{margin: 4}}
                   />
                   <Button
@@ -809,16 +746,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={false}
-                    text="Primary - compact"
-                    onPress={presser}
-                    mode="primary"
-                    type="small"
-                    compact={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
@@ -832,15 +759,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="small"
                     active={true}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Secondary - compact"
-                    onPress={presser}
-                    mode="secondary"
-                    type="small"
-                    compact={true}
                     style={{margin: 4}}
                   />
                   <Button
@@ -976,15 +894,6 @@ export const Profile_DesignSystemScreen = ({
                   <Button
                     expanded={false}
                     onPress={presser}
-                    mode="primary"
-                    compact={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    rightIcon={{svg: Delete}}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
-                    onPress={presser}
                     mode="secondary"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -1012,7 +921,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="small"
                     expanded={false}
-                    compact={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />

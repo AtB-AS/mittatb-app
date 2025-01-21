@@ -22,8 +22,8 @@ export type RemoteConfig = {
   enable_city_bikes_in_map: boolean;
   enable_extended_onboarding: boolean;
   enable_flexible_transport: boolean;
-  enable_from_travel_search_to_ticket: boolean;
   enable_from_travel_search_to_ticket_boat: boolean;
+  enable_from_travel_search_to_ticket: boolean;
   enable_geofencing_zones: boolean;
   enable_intercom: boolean;
   enable_loading_error_screen: boolean;
@@ -32,31 +32,33 @@ export type RemoteConfig = {
   enable_nynorsk: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
+  enable_only_stop_places_checkbox: boolean;
   enable_parking_violations_reporting: boolean;
   enable_posthog: boolean;
   enable_push_notifications: boolean;
   enable_realtime_map: boolean;
+  enable_save_ticket_recipients: boolean;
   enable_server_time: boolean;
+  enable_shmo_deep_integration: boolean;
   enable_show_valid_time_info: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
   enable_tips_and_information: boolean;
-  enable_token_fallback: boolean;
   enable_token_fallback_on_timeout: boolean;
-  enable_travel_aid: boolean;
+  enable_token_fallback: boolean;
   enable_travel_aid_stop_button: boolean;
+  enable_travel_aid: boolean;
   enable_vehicle_operator_logo: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
-  enable_save_ticket_recipients: boolean;
-  enable_shmo_deep_integration: boolean;
-  enable_only_stop_places_checkbox: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
+  fetch_id_token_retry_count: number;
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
+  mapbox_sprite_url: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -71,7 +73,6 @@ export type RemoteConfig = {
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
   vehicles_poll_interval: number;
-  fetch_id_token_retry_count: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -94,6 +95,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
   enable_flexible_transport: false,
+  enable_from_travel_search_to_ticket_boat: false,
   enable_from_travel_search_to_ticket: false,
   enable_geofencing_zones: false,
   enable_intercom: false,
@@ -103,32 +105,33 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
+  enable_only_stop_places_checkbox: false,
   enable_parking_violations_reporting: false,
   enable_posthog: false,
   enable_push_notifications: false,
   enable_realtime_map: false,
+  enable_save_ticket_recipients: false,
   enable_server_time: true,
+  enable_shmo_deep_integration: false,
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
-  enable_from_travel_search_to_ticket_boat: false,
   enable_tips_and_information: false,
-  enable_token_fallback: true,
   enable_token_fallback_on_timeout: true,
-  enable_travel_aid: false,
+  enable_token_fallback: true,
   enable_travel_aid_stop_button: false,
+  enable_travel_aid: false,
   enable_vehicle_operator_logo: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
-  enable_save_ticket_recipients: false,
-  enable_shmo_deep_integration: false,
-  enable_only_stop_places_checkbox: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
+  fetch_id_token_retry_count: 3,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
+  mapbox_sprite_url: '',
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -143,7 +146,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
   vehicles_poll_interval: 20000,
-  fetch_id_token_retry_count: 3,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -197,6 +199,9 @@ export function getConfig(): RemoteConfig {
   const enable_from_travel_search_to_ticket =
     values['enable_from_travel_search_to_ticket']?.asBoolean() ??
     defaultRemoteConfig.enable_from_travel_search_to_ticket;
+  const enable_from_travel_search_to_ticket_boat =
+    values['enable_from_travel_search_to_ticket_boat']?.asBoolean() ??
+    defaultRemoteConfig.enable_from_travel_search_to_ticket_boat;
   const enable_geofencing_zones =
     values['enable_geofencing_zones']?.asBoolean() ??
     defaultRemoteConfig.enable_geofencing_zones;
@@ -218,6 +223,9 @@ export function getConfig(): RemoteConfig {
   const enable_onboarding_login =
     values['enable_onboarding_login']?.asBoolean() ??
     defaultRemoteConfig.enable_onboarding_login;
+  const enable_only_stop_places_checkbox =
+    values['enable_only_stop_places_checkbox']?.asBoolean() ??
+    defaultRemoteConfig.enable_only_stop_places_checkbox;
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
@@ -229,9 +237,15 @@ export function getConfig(): RemoteConfig {
   const enable_realtime_map =
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
+  const enable_save_ticket_recipients =
+    values['enable_save_ticket_recipients']?.asBoolean() ??
+    defaultRemoteConfig.enable_save_ticket_recipients;
   const enable_server_time =
     values['enable_server_time']?.asBoolean() ??
     defaultRemoteConfig.enable_server_time;
+  const enable_shmo_deep_integration =
+    values['enable_shmo_deep_integration']?.asBoolean() ??
+    defaultRemoteConfig.enable_shmo_deep_integration;
   const enable_show_valid_time_info =
     values['enable_show_valid_time_info']?.asBoolean() ??
     defaultRemoteConfig.enable_show_valid_time_info;
@@ -239,9 +253,6 @@ export function getConfig(): RemoteConfig {
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
-  const enable_from_travel_search_to_ticket_boat =
-    values['enable_from_travel_search_to_ticket_boat']?.asBoolean() ??
-    defaultRemoteConfig.enable_from_travel_search_to_ticket_boat;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
     defaultRemoteConfig.enable_tips_and_information;
@@ -266,21 +277,15 @@ export function getConfig(): RemoteConfig {
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
-  const enable_save_ticket_recipients =
-    values['enable_save_ticket_recipients']?.asBoolean() ??
-    defaultRemoteConfig.enable_save_ticket_recipients;
-  const enable_shmo_deep_integration =
-    values['enable_shmo_deep_integration']?.asBoolean() ??
-    defaultRemoteConfig.enable_shmo_deep_integration;
-  const enable_only_stop_places_checkbox =
-    values['enable_only_stop_places_checkbox']?.asBoolean() ??
-    defaultRemoteConfig.enable_only_stop_places_checkbox;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
   const feedback_questions =
     values['feedback_questions']?.asString() ??
     defaultRemoteConfig.feedback_questions;
+  const fetch_id_token_retry_count =
+    values['fetch_id_token_retry_count']?.asNumber() ??
+    defaultRemoteConfig.fetch_id_token_retry_count;
   const flex_booking_number_of_days_available =
     values['flex_booking_number_of_days_available']?.asNumber() ??
     defaultRemoteConfig.flex_booking_number_of_days_available;
@@ -293,6 +298,9 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
+  const mapbox_sprite_url =
+    values['mapbox_sprite_url']?.asString() ??
+    defaultRemoteConfig.mapbox_sprite_url;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -334,9 +342,6 @@ export function getConfig(): RemoteConfig {
   const vehicles_poll_interval =
     values['vehicles_poll_interval']?.asNumber() ??
     defaultRemoteConfig.vehicles_poll_interval;
-  const fetch_id_token_retry_count =
-    values['fetch_id_token_retry_count']?.asNumber() ??
-    defaultRemoteConfig.fetch_id_token_retry_count;
 
   return {
     customer_feedback_url,
@@ -354,6 +359,7 @@ export function getConfig(): RemoteConfig {
     enable_city_bikes_in_map,
     enable_extended_onboarding,
     enable_flexible_transport,
+    enable_from_travel_search_to_ticket_boat,
     enable_from_travel_search_to_ticket,
     enable_geofencing_zones,
     enable_intercom,
@@ -363,32 +369,33 @@ export function getConfig(): RemoteConfig {
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,
+    enable_only_stop_places_checkbox,
     enable_parking_violations_reporting,
     enable_posthog,
     enable_push_notifications,
     enable_realtime_map,
+    enable_save_ticket_recipients,
     enable_server_time,
+    enable_shmo_deep_integration,
     enable_show_valid_time_info,
     enable_ticket_information,
     enable_ticketing,
-    enable_from_travel_search_to_ticket_boat,
     enable_tips_and_information,
-    enable_token_fallback,
     enable_token_fallback_on_timeout,
-    enable_travel_aid,
+    enable_token_fallback,
     enable_travel_aid_stop_button,
+    enable_travel_aid,
     enable_vehicle_operator_logo,
     enable_vehicles_in_map,
     enable_vipps_login,
-    enable_save_ticket_recipients,
-    enable_shmo_deep_integration,
-    enable_only_stop_places_checkbox,
     favourite_departures_poll_interval,
     feedback_questions,
+    fetch_id_token_retry_count,
     flex_booking_number_of_days_available,
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
+    mapbox_sprite_url,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
@@ -403,7 +410,6 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
-    fetch_id_token_retry_count,
   };
 }
 

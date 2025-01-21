@@ -60,7 +60,6 @@ export type ButtonProps = {
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
-  compact?: boolean;
   expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -82,7 +81,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       disabled,
       active,
       loading = false,
-      compact = false,
       expanded,
       hasShadow = false,
       style,
@@ -116,7 +114,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const spacing = compact ? theme.spacing.small : theme.spacing.medium;
+    const spacing = theme.spacing.medium;
     const {background: buttonColor} =
       interactiveColor[active ? 'active' : 'default'];
 
@@ -128,7 +126,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const borderColor =
       active && mode === 'primary'
-        ? interactiveColor.default.background
+        ? interactiveColor.outline.background
         : modeData.visibleBorder
         ? textColor
         : 'transparent';
@@ -140,10 +138,11 @@ export const Button = React.forwardRef<any, ButtonProps>(
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        borderRadius:
+        borderRadius: theme.border.radius.circle,
+        borderWidth:
           type === 'small'
-            ? theme.border.radius.large
-            : theme.border.radius.regular,
+            ? theme.border.width.slim
+            : theme.border.width.medium,
         ...(expanded && type === 'small'
           ? {
               justifyContent: 'center',
@@ -268,11 +267,10 @@ const useTextMarginHorizontal = (
   return maxIconSize + theme.spacing.xSmall;
 };
 
-const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useButtonStyle = StyleSheet.createThemeHook(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: theme.border.width.medium,
   },
 }));
 

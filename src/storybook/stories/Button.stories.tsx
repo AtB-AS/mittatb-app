@@ -22,7 +22,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
   argTypes: {
     expanded: {control: 'boolean'},
     active: {control: 'boolean'},
-    compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
     hasShadow: {control: 'boolean'},

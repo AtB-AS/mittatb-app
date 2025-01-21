@@ -182,7 +182,7 @@ export async function cancelPayment(
   transaction_id: number,
 ): Promise<void> {
   const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put(url, {}, {authWithIdToken: true, retry: true});
+  await client.put(url, {}, {authWithIdToken: true});
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {

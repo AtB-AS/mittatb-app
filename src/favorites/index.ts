@@ -4,7 +4,7 @@ export {
   FavoritesContextProvider,
 } from './FavoritesContext';
 export {useOnMarkFavouriteDepartures} from './use-on-mark-favourite-departures';
-export {FavouriteDepartureToggle} from './FavouriteDepartureToggle';
+export {getFavoriteIcon} from './get-favorite-icon';
 export {FavoriteChips} from './FavoriteChips';
 export type {
   GeoLocation,
