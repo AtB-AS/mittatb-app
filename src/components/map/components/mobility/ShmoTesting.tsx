@@ -31,7 +31,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
     selectedVehicleId,
   );
   const [vehicleCode, setVehicleCode] = useState<string>('146030');
-  const {operatorId} = useVehicle(selectedVehicleId ?? '');
+  const {operatorId} = useVehicle(vehicleId ?? '');
 
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
