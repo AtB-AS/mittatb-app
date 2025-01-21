@@ -20,31 +20,61 @@ export enum TravelRightDirection {
   Backwards = '3',
 }
 
+/**
+ * For definitions, see travel_right.go in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ */
 export type TravelRight = {
   id: string;
   type: string;
-};
-
-export type NormalTravelRight = TravelRight & {
-  fareProductRef: string;
+  customerAccountId?: string;
   status: TravelRightStatus;
+  fareProductRef: string;
   startDateTime: Date;
   endDateTime: Date;
   usageValidityPeriodRef: string;
   userProfileRef: string;
+  authorityRef: string;
+};
+export type NormalTravelRight = TravelRight & {
+  /** Used by period, single and carnet */
   tariffZoneRefs?: string[];
+  /** Used by period, single and carnet */
+  fareZoneRefs?: string[];
+  /** Used by boat and carnet boat */
   startPointRef?: string;
+  /** Used by boat and carnet boat */
   endPointRef?: string;
+  /** Used by boat and carnet boat */
   direction?: TravelRightDirection;
+  /** Used by carnet and carnet boat */
+  maximumNumberOfAccesses?: number;
+  /** Used by carnet and carnet boat */
+  numberOfUsedAccesses?: number;
+  /** Used by carnet and carnet boat */
+  usedAccesses?: CarnetTravelRightUsedAccess[];
 };
 
+/**
+ * For definition, see `unknownTicketPersisted` type in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ */
+export type UnknownTravelRight = {
+  id: string;
+  type: string;
+  customerAccountId?: string;
+};
+
+/**
+ * For definition, see `elementAccess` type in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ */
 export type CarnetTravelRightUsedAccess = {
   startDateTime: Date;
   endDateTime: Date;
 };
 
 export type CarnetTravelRight = NormalTravelRight & {
-  type: string;
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
   usedAccesses: CarnetTravelRightUsedAccess[];

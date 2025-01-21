@@ -43,6 +43,6 @@ describe('Travelright type', () => {
   });
 
   it('skoleskyss should not resolve to normal', async () => {
-    expect(isNormalTravelRight(skoleskyssTravelRight)).toBe(false);
+    expect(isNormalTravelRight(skoleskyssTravelRight as any)).toBe(false);
   });
 });
