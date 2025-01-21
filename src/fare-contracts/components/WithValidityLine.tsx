@@ -6,21 +6,25 @@ import type {FareContract} from '@atb/ticketing';
 import {getFareContractInfo} from '@atb/fare-contracts/utils';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
-import type {PreassignedFareProduct} from '@atb-as/config-specs';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/configuration';
 
 type Props = PropsWithChildren<{
   fc: FareContract;
-  preassignedFareProduct?: PreassignedFareProduct;
 }>;
 
-export const WithValidityLine = ({
-  fc,
-  preassignedFareProduct,
-  children,
-}: Props) => {
+export const WithValidityLine = ({fc, children}: Props) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
+  const firstTravelRight = getFareContractInfo(serverNow, fc).travelRights?.[0];
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    firstTravelRight.fareProductRef,
+  );
   const {validityStatus, validFrom, validTo} = getFareContractInfo(
     serverNow,
     fc,
@@ -35,7 +39,7 @@ export const WithValidityLine = ({
         validTo={validTo}
         fareProductType={preassignedFareProduct?.type}
       />
-      <View style={styles.content}>{children}</View>
+      {!!children ? <View style={styles.content}>{children}</View> : null}
     </View>
   );
 };
@@ -43,12 +47,15 @@ export const WithValidityLine = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'column',
+    marginHorizontal: -theme.spacing.medium,
+    borderTopRightRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
+    overflow: 'hidden',
   },
   content: {
     paddingVertical: theme.spacing.large,
+    paddingHorizontal: theme.spacing.medium,
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    flex: 1,
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));

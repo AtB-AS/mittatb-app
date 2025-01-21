@@ -10,7 +10,7 @@ import {
   userProfileCountAndName,
   useTariffZoneSummary,
 } from '@atb/fare-contracts/utils';
-import {FareContractInfoDetailsProps} from './FareContractInfo';
+import {FareContractInfoDetailsProps} from './FareContractInfoDetails';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';

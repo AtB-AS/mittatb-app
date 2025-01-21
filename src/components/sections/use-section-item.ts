@@ -30,7 +30,6 @@ export function useSectionItem({
     backgroundColor: transparent
       ? undefined
       : theme.color.background.neutral[0].background,
-    overflow: 'hidden',
   };
   const contentContainer: ViewStyle = {
     flex: 1,
@@ -60,13 +59,13 @@ function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
     case 'block':
       return {
-        paddingVertical: theme.spacing.large,
+        paddingVertical: theme.spacing.medium,
         paddingHorizontal: theme.spacing.medium,
       };
     case 'spacious':
       return {
         paddingVertical: theme.spacing.large,
-        paddingHorizontal: theme.spacing.large,
+        paddingHorizontal: theme.spacing.medium,
       };
   }
 }

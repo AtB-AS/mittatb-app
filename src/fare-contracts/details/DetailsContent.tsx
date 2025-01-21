@@ -7,7 +7,7 @@ import {
   NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {FareContractInfoDetails} from '../FareContractInfo';
+import {FareContractInfoDetails} from '../FareContractInfoDetails';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -136,10 +136,7 @@ export const DetailsContent: React.FC<Props> = ({
           paddingVertical: 0,
         }}
       >
-        <WithValidityLine
-          fc={fc}
-          preassignedFareProduct={preassignedFareProduct}
-        >
+        <WithValidityLine fc={fc}>
           <ProductName fc={fc} />
           <ValidityHeader fc={fc} />
           <ValidTo fc={fc} />
@@ -163,7 +160,7 @@ export const DetailsContent: React.FC<Props> = ({
           />
         </View>
       </GenericSectionItem>
-      <GenericSectionItem>
+      <GenericSectionItem type="spacious">
         <FareContractInfoDetails
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}

@@ -6,7 +6,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 type Props = {
   fc: FareContract;
@@ -17,6 +17,7 @@ export const Description = ({fc, testID}: Props) => {
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
+  const styles = useStyles();
 
   const travelRight = fc.travelRights[0];
   if (!isNormalTravelRight(travelRight)) return null;
@@ -34,8 +35,15 @@ export const Description = ({fc, testID}: Props) => {
       accessibilityLabel={description + screenReaderPause}
       testID={testID + 'Product'}
       color={theme.color.foreground.dynamic.secondary}
+      style={styles.text}
     >
       {description}
     </ThemeText>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  text: {
+    textAlign: 'center',
+  },
+}));

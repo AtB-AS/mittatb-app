@@ -70,16 +70,13 @@ export const ValidityLine = (props: Props): ReactElement => {
 const LineWithVerticalBars = ({
   backgroundColor,
   lineColor,
-  validityPercent = 100,
   animate = true,
 }: {
   backgroundColor: string;
   lineColor: string;
-  validityPercent?: number;
   animate?: boolean;
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
   return (
@@ -88,7 +85,6 @@ const LineWithVerticalBars = ({
         style={[
           styles.progressBar,
           {
-            width: `${validityPercent}%`,
             backgroundColor,
           },
         ]}
@@ -102,12 +98,6 @@ const LineWithVerticalBars = ({
           />
         ))}
       </View>
-      <View
-        style={{
-          width: `${100 - validityPercent}%`,
-          backgroundColor: theme.color.background.neutral[1].background,
-        }}
-      />
     </View>
   );
 };
@@ -177,13 +167,14 @@ const VerticalLine = ({
     />
   );
 };
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
-    marginHorizontal: -theme.spacing.medium,
+    //marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },
   progressBar: {
     height: 12,
+    width: '100%',
     overflow: 'hidden',
   },
   verticalLine: {
