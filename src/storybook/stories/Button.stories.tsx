@@ -82,6 +82,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
             args={{
               ...args,
               mode: 'secondary',
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
@@ -90,6 +91,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'secondary',
               leftIcon: {svg: Add},
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
@@ -98,6 +100,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'secondary',
               rightIcon: {svg: Add},
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
@@ -105,6 +108,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
             args={{
               ...args,
               mode: 'tertiary',
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
@@ -113,6 +117,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'tertiary',
               leftIcon: {svg: Add},
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
@@ -121,6 +126,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'tertiary',
               rightIcon: {svg: Add},
+              interactiveColor: storyInteractiveColor,
               backgroundColor: storyContrastColor,
             }}
           />
