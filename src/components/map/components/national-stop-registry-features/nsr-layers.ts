@@ -1,4 +1,5 @@
 import {
+  Expression,
   FilterExpression,
   SymbolLayerStyleProps,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
@@ -79,15 +80,15 @@ export const nsrCircleLayers: NsrCircleLayer[] = [
   {...quaysBaseLayer, id: quaysBaseLayer.id + '_circle'},
 ];
 
-const isStopPlaceEntityType = [
+const isStopPlaceEntityType: Expression = [
   'match',
   ['get', 'entityType'],
   ['StopPlace'],
   true,
   false,
 ];
-const stopPlaceType = ['get', 'stopPlaceType'];
-const hasAdjacentSites = ['has', 'adjacentSites'];
+const stopPlaceType: Expression = ['get', 'stopPlaceType'];
+const hasAdjacentSites: Expression = ['has', 'adjacentSites'];
 const nameTextField: NsrLayer['textField'] = ['get', 'name'];
 
 export const nsrSymbolLayers: NsrSymbolLayer[] = [
