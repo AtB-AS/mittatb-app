@@ -64,6 +64,9 @@ function mockupFareContract(
     travelRights: [],
     qrCode: '',
     validityStatus: validityStatus,
+    paymentType: ['VISA'],
+    paymentTypeGroup: ['PAYMENTCARD'],
+    totalTaxAmount: '0',
   };
 }
 

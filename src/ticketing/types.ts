@@ -58,19 +58,25 @@ export type LastUsedAccessState = {
   validTo: number | undefined;
 };
 
+/**
+ * For definition, see `persistedFareContract` type in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/fare_contract.go
+ */
 export type FareContract = {
   created: Date;
-  version: string;
   id: string;
   customerAccountId: string;
-  purchasedBy: string;
-  orderId: string;
-  state: FareContractState;
   minimumSecurityLevel: number;
+  orderId: string;
+  paymentType: string[];
+  paymentTypeGroup: string[];
+  qrCode?: string;
+  state: FareContractState;
+  totalAmount: string;
+  totalTaxAmount: string;
   travelRights: TravelRight[];
-  qrCode: string;
-  totalAmount?: string;
-  paymentType?: string[];
+  version: string;
+  purchasedBy: string;
 };
 
 export enum FareContractState {
