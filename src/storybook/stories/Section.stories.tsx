@@ -32,6 +32,8 @@ import {
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
+import {Warning} from '@atb/assets/svg/mono-icons/status';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
@@ -139,6 +141,13 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <TextInputSectionItem label="TextInputSectionItem" />
                 <ToggleSectionItem
                   text="ToggleSectionItem"
+                  onValueChange={() => {}}
+                />
+                <ToggleSectionItem
+                  leftImage={<ThemeIcon svg={Warning} />}
+                  text="ToggleSectionItem"
+                  isSubtextMarkdown={true}
+                  subtext={`1. This is a list \n 2. made with markdown`}
                   onValueChange={() => {}}
                 />
                 <DateInputSectionItem
