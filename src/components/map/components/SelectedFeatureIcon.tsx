@@ -3,6 +3,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
 import {PinType} from '../hooks/use-map-symbol-styles';
+import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
@@ -27,14 +28,19 @@ export const SelectedFeatureIcon = ({
     return null;
   }
 
-  const numVehiclesAvailable = ['get', 'count']; // switch to num_vehicles_available when using vector source
+  const numVehiclesAvailable: Expression = ['get', 'count']; // switch to num_vehicles_available when using vector source
 
-  const textField =
-    pinType == 'station' ? ['to-string', numVehiclesAvailable] : '';
+  const textField: Expression = [
+    'to-string',
+    pinType == 'station' ? numVehiclesAvailable : '',
+  ];
 
-  const numberOfUnits = pinType == 'station' ? numVehiclesAvailable : 1;
+  const numberOfUnits: Expression = [
+    'to-number',
+    pinType == 'station' ? numVehiclesAvailable : 1,
+  ];
 
-  const textOffset = [
+  const textOffset: Expression = [
     'step',
     numberOfUnits,
     [0.9, -1.3],
