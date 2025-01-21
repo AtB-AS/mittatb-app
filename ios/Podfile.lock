@@ -946,11 +946,11 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240116.2)
-  - AbtCommoniOSLib (3.0.10):
+  - AbtCommoniOSLib (3.0.11):
     - DevicePpi (~> 1.2.19)
   - AbtProtobufTokenIosStubs (2.884.0):
     - SwiftProtobuf (~> 1.22.0)
-  - BarcodeiOSLib (3.0.10):
+  - BarcodeiOSLib (3.0.11):
     - AbtCommoniOSLib
   - boost (1.83.0)
   - BoringSSL-GRPC (0.0.32):
@@ -2390,10 +2390,10 @@ PODS:
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
-  - TokenCore (3.0.10):
+  - TokenCore (3.0.11):
     - AbtProtobufTokenIosStubs
     - SwiftProtobuf (~> 1.22.0)
-  - TokenStateReactNativeLib (3.0.10):
+  - TokenStateReactNativeLib (3.0.11):
     - AbtCommoniOSLib
     - BarcodeiOSLib
     - React-Core
@@ -2401,9 +2401,9 @@ PODS:
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (2.8.0)
-  - VisualCodeModeliOSLib (3.0.10):
+  - VisualCodeModeliOSLib (3.0.11):
     - AbtCommoniOSLib
-  - VisualCodeViewiOSLib (3.0.10):
+  - VisualCodeViewiOSLib (3.0.11):
     - AbtCommoniOSLib
     - VisualCodeModeliOSLib
   - Yoga (1.14.0)
@@ -2733,9 +2733,9 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
-  AbtCommoniOSLib: f370604e1257e4e7c9e7307df973879503303a08
+  AbtCommoniOSLib: f0fdb471684cb91795172ee10f06be918a58e5a3
   AbtProtobufTokenIosStubs: b12f2c9bc2931e9351b64ad69deb4f5cdfc24fee
-  BarcodeiOSLib: ae923e9d9b77f09e8f4e10643131399dc78b57e0
+  BarcodeiOSLib: bc911f72cf8050dc0228b1bdd8bcb7fc300042c8
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
@@ -2852,11 +2852,11 @@ SPEC CHECKSUMS:
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  TokenCore: d4e7ca8860156808915506a6409ffe8ef316e5c0
-  TokenStateReactNativeLib: 44be6519022cabb67de8eb566dfe6e6d535bd087
+  TokenCore: 3ee9c7bc854e94a3d2cfafadebb2be7a4db23b85
+  TokenStateReactNativeLib: 0ab8114a1e8cdb59d352e51bda2d7e9519f24bed
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
-  VisualCodeModeliOSLib: 9845c4989158776090a21bd330616db86f2236b4
-  VisualCodeViewiOSLib: 6459969bea66a55e59163cbf3a0a49cf58b59249
+  VisualCodeModeliOSLib: 92cdfd86e9055080e1e7431f72f5401de79a8e58
+  VisualCodeViewiOSLib: 74d575be2c4b81451b24ed65d93dcbd7bfda3ec7
   Yoga: 6d01ccde54c9f8b92492beb05d468dbfed1d9881
 
 PODFILE CHECKSUM: c15ba7df7b88a8e5796d5e933199f670172f2e40

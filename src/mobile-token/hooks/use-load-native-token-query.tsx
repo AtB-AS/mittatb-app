@@ -68,10 +68,10 @@ const loadNativeToken = async (userId: string, traceId: string) => {
       const errHandling = getSdkErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
-          logError(err, traceId);
           await wipeToken(getSdkErrorTokenIds(err), traceId);
           break;
         case 'unspecified':
+          logError(err, traceId);
           throw err;
       }
     }
@@ -85,7 +85,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
       try {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
-      } catch (err) {
+      } catch (err: any) {
         // Check if the error has an error handling strategy implemented
         const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
         if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
@@ -97,6 +97,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
           token = undefined;
         } else {
           // other errors
+          logError(err, traceId)
           throw err;
         }
       }
