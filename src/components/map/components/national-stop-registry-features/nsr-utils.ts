@@ -1,14 +1,13 @@
 import {MAPBOX_NSR_SOURCE_LAYER_ID} from '@env';
 import {NsrProps} from './NationalStopRegistryFeatures';
-import {NsrIconCode, NsrLayer} from './nsr-layers';
+import {NsrLayer} from './nsr-layers';
 import {
   Expression,
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Props as LayerPropsCommonAndStyle} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {Theme, Themes} from '@atb-as/theme';
-import {PinType} from '../../hooks/use-map-symbol-styles';
+import {NsrPinIconCode, PinTheme, PinType} from '../../mapbox-styles/pin-types';
 
 export const getNsrLayerSourceProps = (
   layerId: string,
@@ -35,8 +34,8 @@ const minimizedZoomRange = 3; // show icon as minimized version for this number 
 const opacityTransitionZoomRange = 0.8;
 
 type IconImageProps = {
-  iconCode: NsrIconCode;
-  themeName: keyof Themes<Theme>; // 'light' | 'dark';
+  iconCode: NsrPinIconCode;
+  themeName: PinTheme;
 };
 
 const nsrPinType: PinType = 'stop'; // pinType = 'stop' for all NSR items

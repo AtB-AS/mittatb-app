@@ -1,4 +1,5 @@
 import {useThemeContext} from '@atb/theme';
+
 import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr-layers';
 import {NsrProps} from '../components/national-stop-registry-features/NationalStopRegistryFeatures';
 import {
@@ -6,8 +7,7 @@ import {
   Expression,
   SymbolLayerStyleProps,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
-
-export type PinType = 'vehicle' | 'station' | 'stop';
+import {PinType} from '../mapbox-styles/pin-types';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (

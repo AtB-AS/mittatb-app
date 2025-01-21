@@ -3,8 +3,7 @@ import {
   FilterExpression,
   SymbolLayerStyleProps,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
-
-// Note: The NSR layers are config driven, and could come from firestore if desired.
+import {NsrPinIconCode} from '../../mapbox-styles/pin-types';
 
 /**
  * An NsrLayer represents core static data for a layer, specific for National Stop Registry (NSR) data.
@@ -32,34 +31,15 @@ export enum NsrSymbolLayerTextLocation {
   BelowIcon,
   InsideCircle,
 }
-
-/**
- * for sprites, the naming convention is `${pinType}pin_${iconCode}_${pinState}_${themeName}`
- * such as e.g. stoppin_bus_default_light.
- * NsrIconCode lists the available values for iconCode.
- */
-export type NsrIconCode =
-  | 'commuterparking'
-  | 'ferry'
-  | 'tram'
-  | 'metroandtram'
-  | 'metro'
-  | 'ferry'
-  | 'plane'
-  | 'helicopter'
-  | 'train'
-  | 'busandtram'
-  | 'bus';
-
 /**
  * An NsrSymbolLayer is an NsrLayer displayed with icons.
- * @property {NsrIconCode} iconCode - The icon code associated with this layer. Should match part of file names chosen for icons in sprites.
+ * @property {NsrPinIconCode} iconCode - The icon code associated with this layer. Should match part of file names chosen for icons in sprites.
  * @property {NsrSymbolLayerTextLocation} textLocation
  */
 type NsrSymbolLayer = NsrLayer &
   (
     | {
-        iconCode: NsrIconCode;
+        iconCode: NsrPinIconCode;
         textLocation: NsrSymbolLayerTextLocation.BelowIcon;
       }
     | {
