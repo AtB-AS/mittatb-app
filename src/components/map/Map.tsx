@@ -28,7 +28,6 @@ import {
   isFeatureGeofencingZone,
   isStopPlace,
   isParkAndRide,
-  isQuayFeature,
 } from './utils';
 import isEqual from 'lodash.isequal';
 import {
@@ -166,16 +165,14 @@ export const Map = (props: MapProps) => {
    * region too often is greater than the risk introduced by the performance
    * overhead.
    */
-  const onMapIdleThrottleTimeRef = useRef(0); // due to performance issue, don't run this more often than every 300ms
   const onMapIdle = (state: MapState) => {
-    const now = new Date().getTime();
-    if (now > onMapIdleThrottleTimeRef.current + 300) {
-      onMapIdleThrottleTimeRef.current = now;
-      const newMapRegion: MapRegion = {
-        visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-        zoomLevel: state.properties.zoom,
-        center: state.properties.center,
-      };
+    console.log('onMapIdle');
+    const newMapRegion: MapRegion = {
+      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
+      zoomLevel: state.properties.zoom,
+      center: state.properties.center,
+    };
+    if (!isEqual(mapRegion, newMapRegion)) {
       setMapRegion((prevMapRegion) =>
         isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
       );
@@ -203,6 +200,11 @@ export const Map = (props: MapProps) => {
         return;
       }
 
+      if (!showGeofencingZones) {
+        onMapClick({source: 'map-click', feature});
+        return;
+      }
+
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
@@ -222,15 +224,7 @@ export const Map = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isQuayFeature(featureToSelect)) {
-        // In this case we might want to either
-        // - select a stop place with the clicked quay sorted on top
-        // - have a bottom sheet with departures just for the clicked quay
-        return; // currently - do nothing
-      } else if (!showGeofencingZones) {
-        onMapClick({source: 'map-click', feature});
-        return;
-      } else if (isFeatureGeofencingZone(featureToSelect)) {
+      if (isFeatureGeofencingZone(featureToSelect)) {
         geofencingZoneOnPress(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );

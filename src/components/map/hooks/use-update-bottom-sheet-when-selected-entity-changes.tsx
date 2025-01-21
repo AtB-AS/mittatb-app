@@ -11,7 +11,12 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
+import {
+  findEntityAtClick,
+  isParkAndRide,
+  isQuayFeature,
+  isStopPlace,
+} from '../utils';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -71,9 +76,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         mapSelectionAction?.source === 'map-click'
           ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
-      setSelectedFeature(selectedFeature);
-      if (selectedFeature) {
-        analytics.logMapSelection(selectedFeature);
+      if (isQuayFeature(selectedFeature)) {
+        setSelectedFeature(undefined);
+      } else {
+        setSelectedFeature(selectedFeature);
+        if (selectedFeature) {
+          analytics.logMapSelection(selectedFeature);
+        }
       }
     })();
   }, [mapSelectionAction, analytics, mapViewRef]);

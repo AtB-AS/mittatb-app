@@ -66,8 +66,8 @@ export const findEntityAtClick = async (
   return renderedFeatures?.filter(isFeaturePoint)?.filter(hasProperties)[0];
 };
 
-export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
-  f.properties?.entityType === 'Quay';
+export const isQuayFeature = (f?: Feature<Point, GeoJsonProperties>) =>
+  f?.properties?.entityType === 'Quay';
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
