@@ -24,13 +24,14 @@ type ShmoTestingProps = {selectedVehicleId?: string};
 
 export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   const [previousBookingId, setPreviousBookingId] = useState<string>();
-  const [vehicleId, setVehicleId] = useState<string>(selectedVehicleId ?? '');
+  const [vehicleId, setVehicleId] = useState<string | undefined>(
+    selectedVehicleId,
+  );
+  const [operatorId, setOperatorId] = useState<string | undefined>();
 
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const destructiveColor = theme.color.interactive.destructive;
-
-  const {operatorId} = useVehicle(vehicleId ?? '');
 
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
@@ -53,6 +54,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
   useEffect(() => {
     if (selectedVehicleId) {
       setVehicleId(selectedVehicleId);
+      setOperatorId(useVehicle(selectedVehicleId)?.operatorId);
     }
   }, [selectedVehicleId]);
 
@@ -193,7 +195,10 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         onPress={async () => {
           //analytics.logEvent('Map', 'Qr to Ids Pressed');
           const vehicleIdFromQrCode = await getVehicleIdFromQrCode();
-          setVehicleId(vehicleIdFromQrCode || '');
+          if (vehicleIdFromQrCode) {
+            setVehicleId(vehicleIdFromQrCode || '');
+            setOperatorId(useVehicle(vehicleIdFromQrCode)?.operatorId);
+          }
         }}
         text="Qr to Ids"
         loading={getIdsFromQrCodeIsLoading}
