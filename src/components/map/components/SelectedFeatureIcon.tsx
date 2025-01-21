@@ -22,8 +22,9 @@ export const SelectedFeatureIcon = ({
   const {iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeature?.properties?.id,
     pinType,
-    1.61,
+    1.61, // increased text size since the icon is larger
   );
+  const {iconImage} = iconStyle;
   if (!selectedFeature) {
     return null;
   }
@@ -66,7 +67,7 @@ export const SelectedFeatureIcon = ({
         id="selected-vehicle-symbol-layer"
         style={{
           ...customTextStyle,
-          iconImage: iconStyle.iconImage,
+          iconImage,
           iconAnchor: 'bottom',
           iconOffset: [0, 10], // compensation for shadow
           iconSize: 1,
