@@ -18,7 +18,6 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
     <Button
       expanded={false}
       style={style.filterButton}
-      compact={true}
       interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() => {

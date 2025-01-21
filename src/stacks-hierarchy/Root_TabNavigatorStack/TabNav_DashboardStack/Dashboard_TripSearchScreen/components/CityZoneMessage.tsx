@@ -110,7 +110,6 @@ const CityZoneBox = ({
                 expanded={false}
                 key={actionButton.id}
                 type="small"
-                compact={true}
                 interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}
                 onPress={actionButton.onPress}
