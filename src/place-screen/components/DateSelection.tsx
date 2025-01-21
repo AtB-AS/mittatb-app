@@ -97,7 +97,7 @@ export const DateSelection = ({
             : undefined
         }
         mode="tertiary"
-        compact={true}
+        type="small"
         leftIcon={{svg: ArrowLeft}}
         disabled={disablePreviousDayNavigation}
         accessibilityHint={
@@ -117,7 +117,7 @@ export const DateSelection = ({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        compact={true}
+        type="small"
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         testID="setDateButton"
@@ -133,7 +133,7 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.nextDay)
             : undefined
         }
-        compact={true}
+        type="small"
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}

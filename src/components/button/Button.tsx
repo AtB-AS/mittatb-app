@@ -60,7 +60,6 @@ export type ButtonProps = {
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
-  compact?: boolean;
   expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -82,7 +81,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       disabled,
       active,
       loading = false,
-      compact = false,
       expanded,
       hasShadow = false,
       style,
@@ -116,7 +114,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const spacing = compact ? theme.spacing.small : theme.spacing.medium;
+    const spacing = theme.spacing.medium;
     const {background: buttonColor} =
       interactiveColor[active ? 'active' : 'default'];
 

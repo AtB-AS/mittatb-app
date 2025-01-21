@@ -140,7 +140,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       <Button
         expanded={false}
         style={styles.filterButton}
-        compact={true}
+        type="small"
         interactiveColor={
           initShmoOneStopBookingIsError ? destructiveColor : interactiveColor
         }
@@ -157,7 +157,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       <Button
         expanded={false}
         style={styles.filterButton}
-        compact={true}
+        type="small"
         interactiveColor={
           sendShmoBookingEventIsError ? destructiveColor : interactiveColor
         }
@@ -174,7 +174,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       <Button
         expanded={false}
         style={styles.filterButton}
-        compact={true}
+        type="small"
         interactiveColor={
           sendShmoBookingEventIsError ? destructiveColor : interactiveColor
         }
@@ -191,7 +191,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       <Button
         expanded={false}
         style={styles.filterButton}
-        compact={true}
+        type="small"
         interactiveColor={
           getIdsFromQrCodeIsError ? destructiveColor : interactiveColor
         }
@@ -208,7 +208,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
       <Button
         expanded={false}
         style={styles.filterButton}
-        compact={true}
+        type="small"
         interactiveColor={interactiveColor}
         accessibilityRole="button"
         onPress={() => {

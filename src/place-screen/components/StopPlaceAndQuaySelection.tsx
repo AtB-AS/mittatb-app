@@ -24,7 +24,7 @@ const StopPlaceAndQuaySelection = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[1];
+  const interactiveColor = theme.color.interactive[2];
 
   const isMissingQuays = place.quays === undefined;
 

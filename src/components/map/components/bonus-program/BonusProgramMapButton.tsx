@@ -21,7 +21,6 @@ export const BonusProgramMapButton = ({
     <Button
       expanded={false}
       style={style.bonusProgramButton}
-      compact={true}
       interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() => {

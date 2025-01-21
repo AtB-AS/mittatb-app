@@ -305,7 +305,7 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
+          {true ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
                 page={activeItemIndexState + 1}

@@ -351,7 +351,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 )}
                 mode="primary"
                 interactiveColor={interactiveColor}
-                compact={true}
+                type="small"
                 style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
                 testID="dashboardDateTimePicker"
@@ -374,7 +374,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
                     interactiveColor={interactiveColor}
-                    compact={true}
+                    type="small"
                     onPress={filtersState.openBottomSheet}
                     testID="filterButton"
                     ref={filterButtonRef}
