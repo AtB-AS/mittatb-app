@@ -33,14 +33,32 @@ export enum NsrSymbolLayerTextLocation {
 }
 
 /**
+ * for sprites, the naming convention is `${pinType}pin_${iconCode}_${pinState}_${themeName}`
+ * such as e.g. stoppin_bus_default_light.
+ * NsrIconCode lists the available values for iconCode.
+ */
+export type NsrIconCode =
+  | 'commuterparking'
+  | 'ferry'
+  | 'tram'
+  | 'metroandtram'
+  | 'metro'
+  | 'ferry'
+  | 'plane'
+  | 'helicopter'
+  | 'train'
+  | 'busandtram'
+  | 'bus';
+
+/**
  * An NsrSymbolLayer is an NsrLayer displayed with icons.
- * @property {string} iconCode - The icon code associated with this layer. Should match part of file names chosen for icons in sprites.
+ * @property {NsrIconCode} iconCode - The icon code associated with this layer. Should match part of file names chosen for icons in sprites.
  * @property {NsrSymbolLayerTextLocation} textLocation
  */
 type NsrSymbolLayer = NsrLayer &
   (
     | {
-        iconCode: string;
+        iconCode: NsrIconCode;
         textLocation: NsrSymbolLayerTextLocation.BelowIcon;
       }
     | {

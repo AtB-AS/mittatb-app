@@ -1,6 +1,6 @@
 import {MAPBOX_NSR_SOURCE_LAYER_ID} from '@env';
 import {NsrProps} from './NationalStopRegistryFeatures';
-import {NsrLayer} from './nsr-layers';
+import {NsrIconCode, NsrLayer} from './nsr-layers';
 import {
   Expression,
   FilterExpression,
@@ -35,7 +35,7 @@ const minimizedZoomRange = 3; // show icon as minimized version for this number 
 const opacityTransitionZoomRange = 0.8;
 
 type IconImageProps = {
-  iconCode: string;
+  iconCode: NsrIconCode;
   themeName: keyof Themes<Theme>; // 'light' | 'dark';
 };
 
