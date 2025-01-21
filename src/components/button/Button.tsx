@@ -128,7 +128,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const borderColor =
       active && mode === 'primary'
-        ? interactiveColor.default.background
+        ? interactiveColor.outline.background
         : modeData.visibleBorder
         ? textColor
         : 'transparent';
