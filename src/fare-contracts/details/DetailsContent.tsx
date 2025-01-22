@@ -7,10 +7,7 @@ import {
   NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {
-  FareContractInfoHeader,
-  FareContractInfoDetails,
-} from '../FareContractInfo';
+import {FareContractInfoDetails} from '../FareContractInfoDetails';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -39,14 +36,19 @@ import {useAuthContext} from '@atb/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {ValidityLine} from '../ValidityLine';
-import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
+import {Description} from '@atb/fare-contracts/components/FareContractDescription';
+import {ValidTo} from '@atb/fare-contracts/components/ValidTo';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
+import {ProductName} from '@atb/fare-contracts/components/ProductName';
+import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 
 type Props = {
   fareContract: FareContract;
@@ -77,8 +79,6 @@ export const DetailsContent: React.FC<Props> = ({
     isCarnetFareContract,
     travelRights,
     validityStatus,
-    validFrom,
-    validTo,
     usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
@@ -87,6 +87,13 @@ export const DetailsContent: React.FC<Props> = ({
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(fc.customerAccountId);
+  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
+    enabled: !!phoneNumber,
+  });
+  const recipientName =
+    phoneNumber &&
+    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
 
   const firstTravelRight = travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
@@ -124,32 +131,40 @@ export const DetailsContent: React.FC<Props> = ({
 
   return (
     <Section style={styles.section}>
-      <GenericSectionItem>
-        <ValidityHeader
+      <GenericSectionItem
+        style={{
+          paddingVertical: 0,
+        }}
+      >
+        <WithValidityLine fc={fc}>
+          <ProductName fc={fc} />
+          <ValidityHeader fc={fc} />
+          <ValidTo fc={fc} />
+          <Description fc={fc} />
+        </WithValidityLine>
+        <View style={styles.fareContractDetails}>
+          {isSent && !!phoneNumber && (
+            <MessageInfoBox
+              type="warning"
+              message={t(
+                FareContractTexts.details.sentTo(
+                  recipientName || formatPhoneNumber(phoneNumber),
+                ),
+              )}
+            />
+          )}
+          <FareContractFromTo
+            backgroundColor={theme.color.background.neutral['0']}
+            mode="large"
+            fc={fc}
+          />
+        </View>
+      </GenericSectionItem>
+      <GenericSectionItem type="spacious">
+        <FareContractInfoDetails
+          userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
-          now={now}
-          createdDate={fc.created.getTime()}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-        />
-        <ValidityLine
-          status={validityStatus}
-          now={now}
-          validFrom={validFrom}
-          validTo={validTo}
-          fareProductType={preassignedFareProduct?.type}
-        />
-        <FareContractInfoHeader
-          status={validityStatus}
-          testID="details"
           preassignedFareProduct={preassignedFareProduct}
-          sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
-        />
-        <FareContractFromTo
-          backgroundColor={theme.color.background.neutral['0']}
-          mode="large"
-          fc={fc}
         />
       </GenericSectionItem>
       {isInspectable && validityStatus === 'valid' && (
@@ -163,13 +178,6 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      <GenericSectionItem>
-        <FareContractInfoDetails
-          userProfilesWithCount={userProfilesWithCount}
-          status={validityStatus}
-          preassignedFareProduct={preassignedFareProduct}
-        />
-      </GenericSectionItem>
       {isCarnetFareContract && (
         <GenericSectionItem>
           <CarnetFooter
@@ -240,6 +248,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   section: {
     marginBottom: theme.spacing.large,
+  },
+  fareContractDetails: {
+    flex: 1,
+    paddingBottom: theme.spacing.large,
+    rowGap: theme.spacing.medium,
   },
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',

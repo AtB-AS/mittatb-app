@@ -22,7 +22,7 @@ import {
   formatToClock,
   isInThePast,
   secondsBetween,
-  secondsToDuration,
+  secondsToDurationString,
   secondsToDurationShort,
   secondsToMinutes,
 } from '@atb/utils/date';
@@ -552,8 +552,8 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const waitTimeInSeconds = !nextLeg
     ? 0
     : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
-  const waitDuration = secondsToDuration(waitTimeInSeconds, language);
-  const walkDuration = secondsToDuration(leg.duration ?? 0, language);
+  const waitDuration = secondsToDurationString(waitTimeInSeconds, language);
+  const walkDuration = secondsToDurationString(leg.duration ?? 0, language);
 
   const mustWalk = significantWalkTime(leg.duration);
   const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
@@ -725,7 +725,7 @@ const tripSummary = (
     TripSearchTexts.results.resultItem.journeySummary.travelTimes(
       formatToClock(tripPattern.expectedStartTime, language, 'floor'),
       formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
-      secondsToDuration(tripPattern.duration, language),
+      secondsToDurationString(tripPattern.duration, language),
       startTimeIsApproximation,
       endTimeIsApproximation,
     ),

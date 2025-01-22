@@ -32,7 +32,7 @@ import {
   toZonedTime,
 } from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
-import humanizeDuration from 'humanize-duration';
+import humanizeDuration, {type Unit} from 'humanize-duration';
 
 export {daysInWeek} from 'date-fns/constants';
 
@@ -111,14 +111,39 @@ export function secondsToMinutesLong(
   });
 }
 
-export function secondsToDuration(
+const oneMinuteInSeconds = 60;
+const oneHourInSeconds = oneMinuteInSeconds * 60;
+const oneDayInSeconds = oneHourInSeconds * 24;
+const sevenDaysInSeconds = oneDayInSeconds * 7;
+const unitMap: UnitMapType = [
+  {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
+  {
+    range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+    units: ['m', 's'],
+  },
+  {
+    range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
+    units: ['h', 'm'],
+  },
+  {range: {low: oneDayInSeconds, high: sevenDaysInSeconds}, units: ['d', 'h']},
+  {range: {low: sevenDaysInSeconds, high: Infinity}, units: ['d', 'h']},
+];
+type Range = {low: number; high: number};
+type UnitMapType = {range: Range; units: Unit[]}[];
+
+export function secondsToDurationString(
   seconds: number,
   language: Language,
   opts?: humanizeDuration.Options,
 ): string {
   const currentLanguage = language === Language.English ? 'en' : 'no';
-  return humanizeDuration(seconds * 1000, {
-    units: ['d', 'h', 'm'],
+  const units: Unit[] = unitMap.find(
+    ({range}) => seconds >= range.low && seconds <= range.high,
+  )?.units ?? ['d', 'h', 'm'];
+  const value = Math.max(seconds, 0);
+
+  return humanizeDuration(value * 1000, {
+    units,
     round: true,
     language: currentLanguage,
     ...opts,

@@ -5,7 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import {useThemeContext} from '@atb/theme';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
-export function FareContractDetail({
+export function FareContractDetailItem({
   header,
   content,
 }: {

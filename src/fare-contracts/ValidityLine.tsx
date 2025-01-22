@@ -36,22 +36,16 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'approved':
       return (
         <LineWithVerticalBars
-          backgroundColor={theme.color.background.accent[3].background}
+          backgroundColor={theme.color.interactive[0].default.background}
           lineColor={lineColor}
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, animate = true} = props;
-      const validityPercent = animate
-        ? getValidityPercent(now, validFrom, validTo)
-        : 100;
-
       return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={backgroundColor.background}
           lineColor={lineColor}
-          validityPercent={validityPercent}
-          animate={animate}
+          animate={props.animate}
         />
       ) : (
         <View style={styles.container}>
@@ -76,16 +70,13 @@ export const ValidityLine = (props: Props): ReactElement => {
 const LineWithVerticalBars = ({
   backgroundColor,
   lineColor,
-  validityPercent = 100,
   animate = true,
 }: {
   backgroundColor: string;
   lineColor: string;
-  validityPercent?: number;
   animate?: boolean;
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
   return (
@@ -94,7 +85,6 @@ const LineWithVerticalBars = ({
         style={[
           styles.progressBar,
           {
-            width: `${validityPercent}%`,
             backgroundColor,
           },
         ]}
@@ -108,12 +98,6 @@ const LineWithVerticalBars = ({
           />
         ))}
       </View>
-      <View
-        style={{
-          width: `${100 - validityPercent}%`,
-          backgroundColor: theme.color.background.neutral[1].background,
-        }}
-      />
     </View>
   );
 };
@@ -138,23 +122,6 @@ const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
     ).start();
   }, [animate, animatedOffset]);
   return animatedOffset;
-};
-
-/**
- * Calculates the validity percent based on time left on ticket. This value is
- * used for determining how wide the animated part of the progress bar should
- * be. The returned validity percent will never be below 5 as the progress bar
- * need to be wide enough to always show some animation.
- */
-const getValidityPercent = (
-  now: number,
-  validFrom: number,
-  validTo: number,
-) => {
-  const duration = validTo - validFrom;
-  const timeLeft = validTo - now;
-  const percent = Math.ceil((timeLeft / duration) * 100);
-  return Math.max(5, Math.min(percent, 100));
 };
 
 /**
@@ -200,20 +167,19 @@ const VerticalLine = ({
     />
   );
 };
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
-    marginVertical: theme.spacing.medium,
-    marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },
   progressBar: {
-    height: 8,
+    height: 12,
+    width: '100%',
     overflow: 'hidden',
   },
   verticalLine: {
     position: 'absolute',
     bottom: 0,
-    width: 12,
+    width: 16,
     height: '100%',
   },
 }));

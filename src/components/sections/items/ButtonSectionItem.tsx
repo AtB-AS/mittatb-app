@@ -4,7 +4,7 @@ import {
   isNavigationIcon,
   NavigationIconTypes,
 } from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React, {RefObject} from 'react';
 import {AccessibilityProps, View, ViewStyle} from 'react-native';
@@ -47,12 +47,13 @@ export function ButtonSectionItem({
   ...props
 }: ButtonSectionItemProps) {
   const sectionStyles = useSectionStyle();
-  const {topContainer, contentContainer, spacing} = useSectionItem(props);
+  const {theme} = useThemeContext();
+  const {topContainer, contentContainer} = useSectionItem(props);
   const styles = useSymbolPickerStyle();
   const hasIcon = Boolean(icon);
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
 
-  const padding = {padding: spacing};
+  const padding = {padding: theme.spacing.medium};
 
   const handlerWithoutPress =
     hasIcon && !onIconPress ? (

@@ -1,9 +1,8 @@
-import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
   findReferenceDataById,
-  getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
+  useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -15,29 +14,21 @@ import {
   isCarnetTravelRight,
   NormalTravelRight,
 } from '@atb/ticketing';
-import {
-  FareContractTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
-  useNonInspectableTokenWarning,
   userProfileCountAndName,
   useTariffZoneSummary,
   ValidityStatus,
 } from '../fare-contracts/utils';
-import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
+import {FareContractDetailItem} from './components/FareContractDetailItem';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {getTransportModeText} from '@atb/components/transportation-modes';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -59,71 +50,6 @@ export type FareContractInfoDetailsProps = {
   fareProductType?: string;
 };
 
-export const FareContractInfoHeader = ({
-  status,
-  testID,
-  preassignedFareProduct,
-  sentToCustomerAccountId,
-}: FareContractInfoProps) => {
-  const styles = useStyles();
-  const {t, language} = useTranslation();
-
-  const productName = preassignedFareProduct
-    ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
-  const productDescription = preassignedFareProduct
-    ? getTextForLanguage(preassignedFareProduct.description, language)
-    : undefined;
-  const warning = useNonInspectableTokenWarning();
-
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
-    sentToCustomerAccountId,
-  );
-
-  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
-    enabled: !!phoneNumber,
-  });
-  const recipientName =
-    phoneNumber &&
-    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
-
-  return (
-    <View style={styles.header}>
-      {productName && (
-        <ThemeText
-          typography="body__primary--bold"
-          accessibilityLabel={productName + screenReaderPause}
-          testID={testID + 'Product'}
-        >
-          {productName}
-        </ThemeText>
-      )}
-      {productDescription && (
-        <ThemeText
-          typography="body__secondary"
-          accessibilityLabel={productDescription + screenReaderPause}
-          testID={testID + 'ProductDescription'}
-        >
-          {productDescription}
-        </ThemeText>
-      )}
-      {phoneNumber && (
-        <MessageInfoText
-          type="warning"
-          message={t(
-            FareContractTexts.details.sentTo(
-              recipientName || formatPhoneNumber(phoneNumber),
-            ),
-          )}
-        />
-      )}
-      {status === 'valid' && warning && (
-        <MessageInfoText message={warning} type="warning" />
-      )}
-    </View>
-  );
-};
-
 export const FareContractInfoDetails = (
   props: FareContractInfoDetailsProps,
 ) => {
@@ -143,6 +69,11 @@ export const FareContractInfoDetails = (
     toTariffZone,
   );
 
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
   const isStatusSent = status === 'sent';
 
   const isValidOrSentFareContract: boolean =
@@ -152,14 +83,22 @@ export const FareContractInfoDetails = (
     <View style={styles.container} accessible={true}>
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
-          <FareContractDetail
+          {!!fareProductTypeConfig?.transportModes.length && (
+            <FareContractDetailItem
+              header={t(FareContractTexts.label.transportModes)}
+              content={[
+                getTransportModeText(fareProductTypeConfig.transportModes, t),
+              ]}
+            />
+          )}
+          <FareContractDetailItem
             header={t(FareContractTexts.label.travellers)}
             content={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, language),
             )}
           />
           {tariffZoneSummary && (
-            <FareContractDetail
+            <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
               content={[tariffZoneSummary]}
             />

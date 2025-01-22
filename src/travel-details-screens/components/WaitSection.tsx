@@ -3,14 +3,14 @@ import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {secondsToDuration} from '@atb/utils/date';
-import {useTransportColor} from '@atb/utils/use-transport-color';
+import {secondsToDurationString} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {timeIsShort} from '../utils';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
@@ -20,7 +20,7 @@ export type WaitDetails = {
 export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
+  const waitTime = secondsToDurationString(wait.waitTimeInSeconds, language);
   const shortWait = timeIsShort(wait.waitTimeInSeconds);
   const legColor = useTransportColor();
 

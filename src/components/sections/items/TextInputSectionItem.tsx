@@ -48,7 +48,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     },
     forwardedRef,
   ) => {
-    const {topContainer, spacing, contentContainer} = useSectionItem(props);
+    const {topContainer, contentContainer} = useSectionItem(props);
     const {theme, themeName} = useThemeContext();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
@@ -101,14 +101,17 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const padding = {
       // There are some oddities with handling padding
       // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom: spacing - Platform.select({android: 4, default: 0}),
-      paddingTop: spacing - Platform.select({android: 5, default: 0}),
+      paddingBottom:
+        theme.spacing.medium - Platform.select({android: 4, default: 0}),
+      paddingTop:
+        theme.spacing.medium - Platform.select({android: 5, default: 0}),
     };
 
     // Remove padding from topContainerStyle
     const {padding: _dropThis, ...topContainerStyle} = topContainer;
+
     const containerPadding = {
-      paddingHorizontal: spacing,
+      paddingHorizontal: theme.spacing.medium,
     };
 
     return (
