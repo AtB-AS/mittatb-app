@@ -111,11 +111,16 @@ export function secondsToMinutesLong(
   });
 }
 
-const oneHourInSeconds = 60 * 60;
+const oneMinuteInSeconds = 60;
+const oneHourInSeconds = oneMinuteInSeconds * 60;
 const oneDayInSeconds = oneHourInSeconds * 24;
 const sevenDaysInSeconds = oneDayInSeconds * 7;
 const unitMap: UnitMapType = [
-  {range: {low: -Infinity, high: oneHourInSeconds - 1}, units: ['m', 's']},
+  {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
+  {
+    range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+    units: ['m', 's'],
+  },
   {
     range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
     units: ['h', 'm'],
@@ -135,8 +140,9 @@ export function secondsToDurationString(
   const units: Unit[] = unitMap.find(
     ({range}) => seconds >= range.low && seconds <= range.high,
   )?.units ?? ['d', 'h', 'm'];
+  const value = Math.max(seconds, 0);
 
-  return humanizeDuration(seconds * 1000, {
+  return humanizeDuration(value * 1000, {
     units,
     round: true,
     language: currentLanguage,

@@ -169,7 +169,6 @@ const VerticalLine = ({
 };
 const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
-    //marginHorizontal: -theme.spacing.medium,
     flexDirection: 'row',
   },
   progressBar: {
