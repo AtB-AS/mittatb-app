@@ -68,9 +68,9 @@ export const Profile_PaymentMethodsScreen = () => {
   // payment list.
   useOnRecurringPaymentReceived({
     recurringPaymentId,
-    callback: () => {
+    callback: async () => {
       closeInAppBrowser();
-      refetchRecurringPayment();
+      await refetchRecurringPayment();
     },
   });
 
@@ -79,16 +79,16 @@ export const Profile_PaymentMethodsScreen = () => {
     deleteRecurringPaymentError ||
     cancelRecurringPaymentError;
 
-  const addPaymentMethodCallbackHandler = (url: string) => {
+  const addPaymentMethodCallbackHandler = async (url: string) => {
     if (url.includes('response_code') && url.includes('recurring_payment_id')) {
       const responseCode = queryString.parseUrl(url).query.response_code;
       const paymentId = Number(
         queryString.parseUrl(url).query.recurring_payment_id,
       );
       if (responseCode === 'OK') {
-        refetchRecurringPayment();
+        await refetchRecurringPayment();
       } else if (responseCode === 'Cancel') {
-        cancelRecurringPayment(paymentId);
+        await cancelRecurringPayment(paymentId);
       }
     }
   };
@@ -97,7 +97,7 @@ export const Profile_PaymentMethodsScreen = () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
     const response = await addPaymentMethod(callbackUrl);
     setRecurringPaymentId(response.data.recurring_payment_id);
-    openInAppBrowser(
+    await openInAppBrowser(
       response.data.terminal_url,
       'cancel',
       callbackUrl,
