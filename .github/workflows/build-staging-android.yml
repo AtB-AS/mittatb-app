@@ -100,13 +100,7 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-      - name: Distribute to AppCenter
-        if: matrix.org == 'atb'
-        run: bundle exec fastlane android appcenter_staging
-        env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Distribute to Firebase App Distribution
-        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane android firebase_distribution_staging
