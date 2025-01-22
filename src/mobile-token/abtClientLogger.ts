@@ -1,7 +1,5 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
-import {
-  ClientConfig,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
 export const localLogger: ClientConfig['localLogger'] = {
   debug: (msg, metadata?) => {

@@ -46,7 +46,7 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
       /**
        * There are cases where remove token fails due to the backoffice token
        * already removed, in this case, just wipe the local token.
-       */ 
+       */
       if (isTokenDeletedError(err)) {
         await mobileTokenClient.clear();
       }
