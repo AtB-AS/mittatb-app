@@ -63,6 +63,14 @@ Match certificates
 
 Enable Apple pass presentation suppression entitlement
 
+### ios verify_installed_certificates
+
+```sh
+[bundle exec] fastlane ios verify_installed_certificates
+```
+
+
+
 ### ios setup_certificates
 
 ```sh
@@ -114,7 +122,7 @@ Upload app to testflight
 [bundle exec] fastlane android build
 ```
 
-Upload the build to AppCenter
+Upload the build to Firebase app distribution
 
 ### android build_aab
 
@@ -146,11 +154,7 @@ Upload the build to AppCenter
 [bundle exec] fastlane android playstore_internal_aab
 ```
 
-### android appcenter_alpha
 
-```sh
-[bundle exec] fastlane android appcenter_alpha
-```
 
 ----
 

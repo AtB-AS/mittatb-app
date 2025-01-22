@@ -388,7 +388,7 @@ platform :ios do
 end
 
 platform :android do
-  desc 'Upload the build to AppCenter'
+  desc 'Upload the build to Firebase app distribution'
 
   lane :build do
     ensure_env_vars(
@@ -475,23 +475,6 @@ platform :android do
       aab: ENV['AAB_FILE_NAME'],
       package_name: ENV['ANDROID_PACKAGE_NAME'],
       release_status: "draft"
-    )
-  end
-
-  lane :appcenter_alpha do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY', 'RELEASE_NOTES', 'RELEASE_URL']
-    )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_KEY"],
-      owner_name: "AtB-AS",
-      app_name: "MittAtb",
-      owner_type: "organization",
-      file: "app-store.apk",
-      destination_type: "store",
-      destinations: "Alpha",
-      release_notes: ENV['RELEASE_NOTES'][0..499],
-      release_notes_link: ENV['RELEASE_URL']
     )
   end
 end

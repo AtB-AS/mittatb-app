@@ -160,7 +160,6 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
-    fastlane-plugin-appcenter (2.1.2)
     fastlane-plugin-firebase_app_distribution (0.9.0)
       google-apis-firebaseappdistribution_v1 (~> 0.3.0)
       google-apis-firebaseappdistribution_v1alpha (~> 0.2.0)
@@ -290,11 +289,10 @@ DEPENDENCIES
   configure_extensions
   dotenv
   fastlane
-  fastlane-plugin-appcenter
   fastlane-plugin-firebase_app_distribution
 
 RUBY VERSION
    ruby 2.7.6p219
 
 BUNDLED WITH
-   2.3.22
+   2.4.4
