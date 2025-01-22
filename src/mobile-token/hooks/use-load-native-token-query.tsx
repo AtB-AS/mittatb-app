@@ -5,12 +5,12 @@ import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
 import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {
-  getSdkErrorHandlingStrategy,
+  getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
+  wipeToken,
 } from '../utils';
 import {logToBugsnag} from '@atb/utils/bugsnag-utils';
-import {wipeToken} from '@atb/mobile-token/helpers';
 import Bugsnag from '@bugsnag/react-native';
 
 export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
@@ -65,7 +65,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
-      const errHandling = getSdkErrorHandlingStrategy(err);
+      const errHandling = getMobileTokenErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
           await wipeToken(getSdkErrorTokenIds(err), traceId);
@@ -87,7 +87,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         await tokenService.validate(token, traceId);
       } catch (err: any) {
         // Check if the error has an error handling strategy implemented
-        const tokenSdkErrorHandling = getSdkErrorHandlingStrategy(err);
+        const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
         if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
           // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
@@ -97,7 +97,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
           token = undefined;
         } else {
           // other errors
-          logError(err, traceId)
+          logError(err, traceId);
           throw err;
         }
       }
