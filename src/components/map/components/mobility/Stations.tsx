@@ -8,27 +8,52 @@ import {
 import {getAvailableVehicles} from '@atb/mobility/utils';
 import {Camera, ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-import {Feature, FeatureCollection, Point} from 'geojson';
-import React, {RefObject} from 'react';
+import {Feature, FeatureCollection, GeoJsonProperties, Point} from 'geojson';
+import React, {RefObject, useMemo} from 'react';
 import {Cluster} from '../../types';
 import {mapPositionToCoordinates} from '../../utils';
 import {BikeStations} from './BikeStations';
 import {CarStations} from './CarStations';
+import {NsrProps} from '../national-stop-registry-features/NationalStopRegistryFeatures';
 
 type Props = {
+  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   stations: StationFeatures;
   mapCameraRef: RefObject<Camera>;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
 export type StationsWithCount = FeatureCollection<
-  GeoJSON.Point,
+  Point,
   StationBasicFragment & {count: number}
 >;
 
-export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
-  const bikeStations = stationsWithCount(stations.bicycles, FormFactor.Bicycle);
-  const carStations = stationsWithCount(stations.cars, FormFactor.Car);
+export const Stations = ({
+  selectedFeaturePropertyId,
+  stations,
+  onClusterClick,
+  mapCameraRef,
+}: Props) => {
+  const bikeStations = useFeatureCollectionWithExtraProps(
+    stations.bicycles,
+    (feature: Feature<Point, StationBasicFragment>) => ({
+      count: getAvailableVehicles(
+        feature.properties.vehicleTypesAvailable,
+        FormFactor.Bicycle,
+      ),
+      vehicle_type_form_factor: FormFactor.Bicycle,
+    }),
+  );
+  const carStations = useFeatureCollectionWithExtraProps(
+    stations.cars,
+    (feature: Feature<Point, StationBasicFragment>) => ({
+      count: getAvailableVehicles(
+        feature.properties.vehicleTypesAvailable,
+        FormFactor.Car,
+      ),
+      vehicle_type_form_factor: FormFactor.Car,
+    }),
+  );
 
   const handleClusterClick = async (
     e: OnPressEvent,
@@ -51,34 +76,38 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
   return (
     <>
       <BikeStations
+        selectedFeaturePropertyId={selectedFeaturePropertyId}
         stations={bikeStations}
         onClusterClick={handleClusterClick}
       />
-      <CarStations stations={carStations} onClusterClick={handleClusterClick} />
+      <CarStations
+        selectedFeaturePropertyId={selectedFeaturePropertyId}
+        stations={carStations}
+        onClusterClick={handleClusterClick}
+      />
     </>
   );
 };
 
-/**
- * Adds a 'count' property with the number of available vehicles for each station.
- * @param stations
- * @param formFactor
- */
-const stationsWithCount = (
-  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>,
-  formFactor: FormFactor,
-): StationsWithCount => {
-  return {
-    ...stations,
-    features: stations.features.map((feature) => ({
-      ...feature,
-      properties: {
-        ...feature.properties,
-        count: getAvailableVehicles(
-          feature.properties.vehicleTypesAvailable,
-          formFactor,
-        ),
-      },
-    })),
-  };
-};
+// Add extra properties to features
+export function useFeatureCollectionWithExtraProps<
+  P extends GeoJsonProperties,
+  E extends GeoJsonProperties,
+>(
+  collection: FeatureCollection<Point, P>,
+  getExtraProps: (feature: Feature<Point, P>) => E,
+): FeatureCollection<Point, P & E> {
+  return useMemo(
+    () => ({
+      ...collection,
+      features: collection.features.map((feature) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          ...getExtraProps(feature), // only change: adding these props
+        },
+      })),
+    }),
+    [collection, getExtraProps],
+  );
+}

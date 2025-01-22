@@ -45,6 +45,9 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
+import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -78,6 +81,7 @@ export const Map = (props: MapProps) => {
   );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
+  const mapboxJsonStyle = useMapboxJsonStyle();
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -162,14 +166,17 @@ export const Map = (props: MapProps) => {
    * overhead.
    */
   const onMapIdle = (state: MapState) => {
+    console.log('onMapIdle');
     const newMapRegion: MapRegion = {
       visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
       zoomLevel: state.properties.zoom,
       center: state.properties.center,
     };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
+    if (!isEqual(mapRegion, newMapRegion)) {
+      setMapRegion((prevMapRegion) =>
+        isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
+      );
+    }
   };
 
   /**
@@ -183,6 +190,15 @@ export const Map = (props: MapProps) => {
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
+
+      // should split components instead of this, ExploreLocation should only depend on location state, not features
+      if (props.selectionMode == 'ExploreLocation') {
+        onMapClick({
+          source: 'map-click',
+          feature,
+        });
+        return;
+      }
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -225,10 +241,11 @@ export const Map = (props: MapProps) => {
       }
     },
     [
-      geofencingZoneOnPress,
+      props.selectionMode,
       hideSnackbar,
-      onMapClick,
       showGeofencingZones,
+      onMapClick,
+      geofencingZoneOnPress,
       selectedFeature,
     ],
   );
@@ -252,7 +269,12 @@ export const Map = (props: MapProps) => {
           onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
-          {...MapViewConfig}
+          {...{
+            ...MapViewConfig,
+            // only updating Map.tsx for now.
+            styleURL: undefined,
+            styleJSON: mapboxJsonStyle,
+          }}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
@@ -275,12 +297,22 @@ export const Map = (props: MapProps) => {
           )}
 
           {mapLines && <MapRoute lines={mapLines} />}
+
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={selectedFeature?.properties?.id}
+          />
+
+          {props.selectionMode !== 'ExploreLocation' && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
+
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
           {props.vehicles && (
             <Vehicles
+              selectedFeaturePropertyId={selectedFeature?.properties?.id}
               vehicles={props.vehicles.vehicles}
               mapCameraRef={mapCameraRef}
               mapViewRef={mapViewRef}
@@ -294,6 +326,7 @@ export const Map = (props: MapProps) => {
           )}
           {props.stations && (
             <Stations
+              selectedFeaturePropertyId={selectedFeature?.properties?.id}
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
               onClusterClick={(feature) => {
