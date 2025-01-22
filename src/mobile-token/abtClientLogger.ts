@@ -1,9 +1,5 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
-import {
-  ClientConfig,
-  TokenFactoryError,
-} from '@entur-private/abt-mobile-client-sdk';
-import {isRemoteTokenStateError} from './utils';
+import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
 export const localLogger: ClientConfig['localLogger'] = {
   debug: (msg, metadata?) => {
@@ -13,10 +9,12 @@ export const localLogger: ClientConfig['localLogger'] = {
     Bugsnag.leaveBreadcrumb('Mobiletoken sdk info message: ' + msg, metadata);
   },
   warn: (msg, err, metadata?) => {
+    Bugsnag.leaveBreadcrumb('Mobiletoken sdk info message: ' + msg, metadata);
     const onError = toOnErrorCallback('warning', msg, metadata);
     if (err) Bugsnag.notify(err, onError);
   },
   error: (msg, err, metadata?) => {
+    Bugsnag.leaveBreadcrumb('Mobiletoken sdk info message: ' + msg, metadata);
     const onError = toOnErrorCallback('error', msg, metadata);
     if (err) Bugsnag.notify(err, onError);
   },
@@ -27,9 +25,7 @@ export const remoteLogger: ClientConfig['remoteLogger'] = (err) => {
     'error',
     'Mobiletoken sdk remote logger error',
   );
-  if (!isRemoteTokenStateError(err) && !(err instanceof TokenFactoryError)) {
-    Bugsnag.notify(err, onError);
-  }
+  Bugsnag.notify(err, onError);
 };
 
 const toOnErrorCallback =
