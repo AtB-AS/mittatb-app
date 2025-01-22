@@ -9,13 +9,11 @@ with secrets required for the workflow.
 
 ### Secrets required for Firebase App Distribution:
 
-`FIREBASE_APP_ID` - Your app's Firebase App ID e.g. `app: "1:1234567890:android:0a1b2c3d4e5f67890"`
+`FIREBASE_APP_ID` - Your Android app's Firebase App ID e.g. `1:1234567890:android:0a1b2c3d4e5f67890`
 
-`FIREBASE_DISTRIBUTION_CREDENTIALS` - base64 encoded service account with `Firebase App Distribution Admin role`
+`FIREBASE_APP_ID_IOS` - Your iOS app's Firebase App ID e.g. `1:1234567890:ios:0a1b2c3d4e5f67890`
 
-### Secrets required for App Center Distribution:
-
-`APPCENTER_ANDROID_API_KEY`
+`FIREBASE_DISTRIBUTION_CREDENTIALS` - base64 encoded JSON service account with `Firebase App Distribution Admin role`
 
 ### Secrets required for all
 
