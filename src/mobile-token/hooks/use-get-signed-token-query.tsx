@@ -3,11 +3,11 @@ import {mobileTokenClient} from '../mobileTokenClient';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {
-  getSdkErrorHandlingStrategy,
+  getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
+  wipeToken,
 } from '../utils';
-import {wipeToken} from '@atb/mobile-token/helpers';
 import {v4 as uuid} from 'uuid';
 
 const TEN_SECONDS_MS = 1000 * 10;
@@ -36,7 +36,7 @@ export const useGetSignedTokenQuery = () => {
             description: 'Error encoding signed token',
           },
         });
-        const errHandling = getSdkErrorHandlingStrategy(err);
+        const errHandling = getMobileTokenErrorHandlingStrategy(err);
         switch (errHandling) {
           case 'reset':
             await wipeToken(getSdkErrorTokenIds(err), uuid());

@@ -24,7 +24,7 @@ import {
   AttestationSabotage,
   TokenErrorResolution,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
+import {isInspectable, MOBILE_TOKEN_QUERY_KEY, wipeToken} from './utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
@@ -40,7 +40,6 @@ import {
   LOAD_NATIVE_TOKEN_QUERY_KEY,
   useLoadNativeTokenQuery,
 } from './hooks/use-load-native-token-query';
-import {wipeToken} from '@atb/mobile-token/helpers';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';

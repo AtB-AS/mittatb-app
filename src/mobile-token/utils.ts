@@ -13,6 +13,10 @@ import {
 } from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
 import {getAxiosErrorType} from '@atb/api/utils';
+import {tokenService} from './tokenService';
+import {mobileTokenClient} from './mobileTokenClient';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils';
+import {isAxiosError} from 'axios';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -33,16 +37,38 @@ export const hasNoTokenType = (remoteToken?: RemoteToken) =>
 export const getTravelCardId = (remoteToken?: RemoteToken) =>
   remoteToken?.keyValues?.find((kv) => kv.key === 'travelCardId')?.value;
 
+export const wipeToken = async (tokensIds: string[], traceId: string) => {
+  for (const id of tokensIds) {
+    logToBugsnag('Wiping token with id ' + id);
+    try {
+      await tokenService.removeToken(id, traceId);
+    } catch (err: any) {
+      /**
+       * There are cases where remove token fails due to the backoffice token
+       * already removed, in this case, just wipe the local token.
+       */
+      if (isTokenDeletedError(err)) {
+        await mobileTokenClient.clear();
+      }
+    }
+  }
+  await mobileTokenClient.clear();
+};
+
 /**
- * Get the error handling strategy from a sdk error. As of now we only differ
- * between 'reset' and 'fail', but more handling strategies may be added later.
+ * Get the error handling strategy from an error. Some of these errors has
+ * a recommended error resolution from the SDK, if they have a resolution,
+ * use the SDK resolution. Otherwise we need to handle it ourselves.
+ *
+ * As of now we only differ between 'reset' and 'fail',
+ * but more handling strategies may be added later.
  *
  * Handling strategies which may be returned:
  * 'reset' - Wipe tokens locally and remotely and start over
  * 'unspecified' - No explicit handling strategy given. May often result in an
  * error message and retry possibility for the user.
  */
-export const getSdkErrorHandlingStrategy = (
+export const getMobileTokenErrorHandlingStrategy = (
   err: any,
 ): 'reset' | 'unspecified' => {
   let errorResolution: TokenErrorResolution | undefined;
@@ -50,8 +76,15 @@ export const getSdkErrorHandlingStrategy = (
   // try to find the error resolution
   if (err instanceof TokenFactoryError) {
     errorResolution = err.resolution;
-  } else if (err instanceof RemoteTokenStateError) {
+  } else if (err instanceof isRemoteTokenStateError) {
     errorResolution = mapTokenErrorResolution(err);
+  } else if (isTokenDeletedError(err)) {
+    /**
+     * This handles the situation where local token is still stored, while
+     * the remote token is already deleted, should only happens with a very
+     * old account that got their account history truncated in backoffice.
+     */
+    return 'reset';
   } else {
     return 'unspecified';
   }
@@ -69,6 +102,19 @@ export const getSdkErrorHandlingStrategy = (
     case TokenErrorResolution.NONE:
       return 'unspecified';
   }
+};
+
+/**
+ * Checks if the error is a token deleted error
+ * Should be only those with error code 500, and has message as follows:
+ *
+ * `5 NOT_FOUND: Entity deleted: Entity of type Token with id xxxx has been deleted`
+ *
+ */
+const isTokenDeletedError = (err: any): boolean => {
+  return (
+    isAxiosError(err) && err.code === '500' && err.message.includes('NOT FOUND')
+  );
 };
 
 /**
