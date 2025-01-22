@@ -5,6 +5,7 @@ import React, {useRef} from 'react';
 import {
   ActivityIndicator,
   Animated,
+  type ColorValue,
   Easing,
   PressableProps,
   StyleProp,
@@ -47,7 +48,7 @@ type ButtonIconProps = {
 };
 
 type ButtonModeAwareProps =
-  | {mode?: 'primary'; interactiveColor?: InteractiveColor}
+  | {mode?: 'primary'}
   | {
       mode: Exclude<ButtonMode, 'primary'>;
       backgroundColor?: ContrastColor;
@@ -59,6 +60,7 @@ export type ButtonProps = {
   type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
+  interactiveColor?: InteractiveColor;
   active?: boolean;
   expanded: boolean;
   loading?: boolean;
@@ -92,10 +94,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const styles = useButtonStyle();
     const {theme} = useThemeContext();
 
-    const interactiveColor =
-      'interactiveColor' in props && props.interactiveColor
-        ? props.interactiveColor
-        : theme.color.interactive[0];
+    const interactiveColor = props.interactiveColor
+      ? props.interactiveColor
+      : theme.color.interactive[0];
     const backgroundColor =
       'backgroundColor' in props && props.backgroundColor
         ? props.backgroundColor
@@ -125,16 +126,23 @@ export const Button = React.forwardRef<any, ButtonProps>(
         : interactiveColor[active ? 'active' : 'default'].foreground.primary;
 
     const borderColor =
-      active && mode === 'primary'
+      active && mode !== 'tertiary'
         ? interactiveColor.outline.background
         : modeData.visibleBorder
         ? textColor
         : 'transparent';
 
+    const backgroundColorValue: ColorValue =
+      active && mode !== 'tertiary'
+        ? buttonColor
+        : modeData.withBackground
+        ? buttonColor
+        : 'transparent';
+
     const styleContainer: ViewStyle[] = [
       styles.button,
       {
-        backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
+        backgroundColor: backgroundColorValue,
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
