@@ -45,10 +45,19 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^13.1.1", "@atb-as/theme@^13.1.2":
+"@atb-as/theme@^13.1.1":
   version "13.1.2"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.2.tgz#dd43e635fb894781c0b1d66762811f3a2aefad96"
   integrity sha512-Id882xWREp7gZbaFeGhxCSonNdo3hsjEbUaMG9wLLQPSLI8nK54xG8Fe9jFsprlWNR4l+HYFSF//W4ZaF1dJFQ==
+  dependencies:
+    "@tfk-samf/figma-to-dtcg" "0.4.0"
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
+"@atb-as/theme@^13.1.3":
+  version "13.1.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.3.tgz#ab449d294e48ac1307ddda5e2728176081027f13"
+  integrity sha512-jTvfSCA0xi8AQnq3AGTQeLVcvtouloAdZwMWDKy8GcAwe1GSM2iDZ/LtagkTRuG/7GTpZSBYjzZ3XBcOUa0xDA==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"
