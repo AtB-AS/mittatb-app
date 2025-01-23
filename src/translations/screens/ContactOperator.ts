@@ -116,4 +116,12 @@ export const ContactOperatorTexts = {
     },
   },
   submitButton: _('Send inn', 'Submit', 'Send inn'),
+
+  submitError: (operatorName: string) => {
+    return _(
+      `Oops - noe gikk galt, vi klarte ikke å sende skjemaet til ${operatorName}. Supert om du prøver på nytt 🤞`,
+      `Whoops - something went wrong, we could not send the request to ${operatorName}. Please try again 🤞`,
+      `Oops - noko gjekk gale, vi klarte ikkje å sende skjemaet  til ${operatorName}. Supert om du prøver på nytt 🤞`,
+    );
+  },
 };

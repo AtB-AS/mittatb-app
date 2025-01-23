@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
-import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   PhoneInputSectionItem,
   RadioGroupSection,
@@ -11,7 +11,6 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {useNavigation} from '@react-navigation/native';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactOperatorTexts} from '@atb/translations/screens/ContactOperator';
 import {
@@ -51,18 +50,22 @@ export const Root_ScooterContactOperatorScreen = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
-  const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
   const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
     getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
+
+  const onSuccess = () => {
+    // TODO: navigate to next screen
+  };
+
   const {
     mutate: sendSupportRequest,
     isLoading: isLoadingSupportRequest,
     isError: isErrorSupportRequest,
     isSuccess: isSuccessSupportRequest,
     error: errorSupportRequest,
-  } = useSendSupportRequestMutation(operatorId);
+  } = useSendSupportRequestMutation(operatorId, onSuccess);
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
   const {data: customerProfile} = useProfileQuery();
@@ -126,7 +129,7 @@ export const Root_ScooterContactOperatorScreen = ({
         }),
       };
 
-      sendSupportRequest(requestBody);
+      const res = await sendSupportRequest(requestBody);
     } else {
       setIsContactInfoPresent(newIsContactInfoPresent);
       setIsPhoneNumberValid(newIsPhoneNumberValid);
@@ -241,6 +244,12 @@ export const Root_ScooterContactOperatorScreen = ({
                 {t(ContactOperatorTexts.location.description(operatorName))}
               </ThemeText>
             </View>
+            {isErrorSupportRequest && (
+              <MessageInfoBox
+                message={t(ContactOperatorTexts.submitError(operatorName))}
+                type="error"
+              />
+            )}
             <Button
               loading={isLoadingSupportRequest}
               expanded={true}
