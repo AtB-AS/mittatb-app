@@ -191,7 +191,7 @@ export const SendSupportRequestBodySchema = z.object({
     .refine((data) => data.phone || data.email, {
       message: 'Please provide at least one: phone or email',
     }),
-  comment: z.string().optional().nullable(),
+  comment: z.string().max(1000).optional().nullable(),
   place: z
     .object({
       coordinates: ShmoCoordinatesSchema,
