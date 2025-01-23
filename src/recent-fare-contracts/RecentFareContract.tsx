@@ -1,6 +1,6 @@
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import type {RecentFareContractType} from './types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -14,10 +14,10 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
-import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
+import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -147,84 +147,40 @@ export const RecentFareContract = ({
           typography="body__primary--bold"
           color={interactiveColor.default}
         >
-          {direction !== undefined && pointToPointValidity ? (
-            getReferenceDataName(preassignedFareProduct, language)
-          ) : (
-            <>
-              {getReferenceDataName(preassignedFareProduct, language)},{' '}
-              {getTransportModeText(
-                fareProductTypeConfig.transportModes,
-                t,
-              ).toLowerCase()}
-            </>
-          )}
+          {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
         </ThemeText>
       </View>
 
-      <View style={styles.fareContractDetailItems}>
-        {fareProductTypeConfig.configuration.zoneSelectionMode !== 'none' &&
-          fromZoneName &&
-          toZoneName &&
-          (fromZoneName === toZoneName ? (
-            <BorderedInfoBox
-              backgroundColor={interactiveColor.default}
-              type="small"
-              text={`${t(
-                RecentFareContractsTexts.titles.zone,
-              )} ${fromZoneName}`}
-              testID={`${testID}Zone`}
-            />
-          ) : (
-            <BorderedInfoBox
-              backgroundColor={interactiveColor.default}
-              type="small"
-              text={`${fromZoneName} - ${toZoneName}`}
-              testID={`${testID}Zones`}
-            />
-          ))}
+      <View style={styles.recentFareContractDetailItems}>
+        <FareContractFromTo
+          rfc={recentFareContract}
+          backgroundColor={theme.color.background.neutral[0]}
+          mode="small"
+        />
 
-        {direction !== undefined && pointToPointValidity && (
-          <FareContractFromTo
-            backgroundColor={theme.color.background.neutral['0']}
-            mode="small"
-            rfc={recentFareContract}
-          />
-        )}
-
-        {userProfilesWithCount.map((u) => (
-          <BorderedInfoBox
-            backgroundColor={interactiveColor.default}
-            type="small"
-            key={u.id}
-            text={`${getTransportModeText(
-              fareProductTypeConfig.transportModes,
-              t,
-            )}`}
-            testID={`${testID}Travellers${userProfilesWithCount.indexOf(u)}`}
+        {userProfilesWithCount.map(() => (
+          <FareContractDetailItem
+            content={[
+              `${getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}`,
+            ]}
           />
         ))}
 
         {userProfilesWithCount.length <= 2 &&
           userProfilesWithCount.map((u) => (
-            <BorderedInfoBox
-              backgroundColor={interactiveColor.default}
-              type="small"
-              key={u.id}
-              text={`${u.count} ${getReferenceDataName(u, language)}`}
-              testID={`${testID}Travellers${userProfilesWithCount.indexOf(u)}`}
+            <FareContractDetailItem
+              content={[`${u.count} ${getReferenceDataName(u, language)}`]}
             />
           ))}
+
         {userProfilesWithCount.length > 2 && (
           <>
             {userProfilesWithCount.slice(0, 1).map((u) => (
-              <BorderedInfoBox
-                key={u.id}
-                type="small"
-                backgroundColor={interactiveColor.default}
-                text={`${u.count} ${getReferenceDataName(u, language)}`}
-                testID={`${testID}Travellers${userProfilesWithCount.indexOf(
-                  u,
-                )}`}
+              <FareContractDetailItem
+                content={[`${u.count} ${getReferenceDataName(u, language)}`]}
               />
             ))}
             <ThemeText
@@ -255,7 +211,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   additionalCategories: {
     marginHorizontal: theme.spacing.small,
   },
-  fareContractDetailItems: {
+  recentFareContractDetailItems: {
     flex: 1,
     rowGap: theme.spacing.xSmall,
   },
