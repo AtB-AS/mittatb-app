@@ -63,8 +63,6 @@ export const Root_ScooterContactOperatorScreen = ({
     mutate: sendSupportRequest,
     isLoading: isLoadingSupportRequest,
     isError: isErrorSupportRequest,
-    isSuccess: isSuccessSupportRequest,
-    error: errorSupportRequest,
   } = useSendSupportRequestMutation(operatorId, onSuccess);
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
@@ -129,7 +127,7 @@ export const Root_ScooterContactOperatorScreen = ({
         }),
       };
 
-      const res = await sendSupportRequest(requestBody);
+      sendSupportRequest(requestBody);
     } else {
       setIsContactInfoPresent(newIsContactInfoPresent);
       setIsPhoneNumberValid(newIsPhoneNumberValid);
