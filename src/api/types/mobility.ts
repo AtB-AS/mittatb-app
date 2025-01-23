@@ -179,7 +179,7 @@ export enum SupportType {
   OTHER = 'OTHER',
 }
 
-const SendSupportRequestBodySchema = z.object({
+export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
   supportType: z.nativeEnum(SupportType),
@@ -192,10 +192,12 @@ const SendSupportRequestBodySchema = z.object({
       message: 'Please provide at least one: phone or email',
     }),
   comment: z.string().optional().nullable(),
-  place: z.object({
-    coordinates: ShmoCoordinatesSchema,
-    name: z.string(),
-  }),
+  place: z
+    .object({
+      coordinates: ShmoCoordinatesSchema,
+      name: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type SendSupportRequestBody = z.infer<
