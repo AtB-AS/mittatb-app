@@ -11,10 +11,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {
-  getTransportModeText,
-  TransportModes,
-} from '@atb/components/transportation-modes';
+import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
@@ -145,100 +142,102 @@ export const RecentFareContract = ({
       }
       style={{minWidth: width * 0.6}}
     >
-      <View style={styles.travelModeWrapper}>
-        <TransportModes
-          iconSize="xSmall"
-          modes={fareProductTypeConfig.transportModes}
-          style={{flex: 2}}
-        />
-      </View>
-
       <View style={styles.productName} testID={testID + 'Title'}>
         <ThemeText
-          typography="body__secondary--bold"
+          typography="body__primary--bold"
           color={interactiveColor.default}
         >
-          {getReferenceDataName(preassignedFareProduct, language)}
+          {direction !== undefined && pointToPointValidity ? (
+            getReferenceDataName(preassignedFareProduct, language)
+          ) : (
+            <>
+              {getReferenceDataName(preassignedFareProduct, language)},{' '}
+              {getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              ).toLowerCase()}
+            </>
+          )}
         </ThemeText>
       </View>
 
-      {direction !== undefined && pointToPointValidity && (
-        <View style={styles.harbors}>
+      <View style={styles.fareContractDetailItems}>
+        {fareProductTypeConfig.configuration.zoneSelectionMode !== 'none' &&
+          fromZoneName &&
+          toZoneName &&
+          (fromZoneName === toZoneName ? (
+            <BorderedInfoBox
+              backgroundColor={interactiveColor.default}
+              type="small"
+              text={`${t(
+                RecentFareContractsTexts.titles.zone,
+              )} ${fromZoneName}`}
+              testID={`${testID}Zone`}
+            />
+          ) : (
+            <BorderedInfoBox
+              backgroundColor={interactiveColor.default}
+              type="small"
+              text={`${fromZoneName} - ${toZoneName}`}
+              testID={`${testID}Zones`}
+            />
+          ))}
+
+        {direction !== undefined && pointToPointValidity && (
           <FareContractFromTo
             backgroundColor={theme.color.background.neutral['0']}
             mode="small"
             rfc={recentFareContract}
           />
-        </View>
-      )}
+        )}
 
-      <View style={styles.horizontalFlex}>
-        <View style={styles.detailContainer}>
-          <ThemeText typography="label__uppercase" color="secondary">
-            {t(RecentFareContractsTexts.titles.travellers)}
-          </ThemeText>
-          {userProfilesWithCount.length <= 2 &&
-            userProfilesWithCount.map((u) => (
+        {userProfilesWithCount.map((u) => (
+          <BorderedInfoBox
+            backgroundColor={interactiveColor.default}
+            type="small"
+            key={u.id}
+            text={`${getTransportModeText(
+              fareProductTypeConfig.transportModes,
+              t,
+            )}`}
+            testID={`${testID}Travellers${userProfilesWithCount.indexOf(u)}`}
+          />
+        ))}
+
+        {userProfilesWithCount.length <= 2 &&
+          userProfilesWithCount.map((u) => (
+            <BorderedInfoBox
+              backgroundColor={interactiveColor.default}
+              type="small"
+              key={u.id}
+              text={`${u.count} ${getReferenceDataName(u, language)}`}
+              testID={`${testID}Travellers${userProfilesWithCount.indexOf(u)}`}
+            />
+          ))}
+        {userProfilesWithCount.length > 2 && (
+          <>
+            {userProfilesWithCount.slice(0, 1).map((u) => (
               <BorderedInfoBox
-                backgroundColor={interactiveColor.default}
-                type="small"
                 key={u.id}
+                type="small"
+                backgroundColor={interactiveColor.default}
                 text={`${u.count} ${getReferenceDataName(u, language)}`}
-                style={styles.infoChip_travellers}
                 testID={`${testID}Travellers${userProfilesWithCount.indexOf(
                   u,
                 )}`}
               />
             ))}
-          {userProfilesWithCount.length > 2 && (
-            <>
-              {userProfilesWithCount.slice(0, 1).map((u) => (
-                <BorderedInfoBox
-                  key={u.id}
-                  type="small"
-                  backgroundColor={interactiveColor.default}
-                  text={`${u.count} ${getReferenceDataName(u, language)}`}
-                  testID={`${testID}Travellers${userProfilesWithCount.indexOf(
-                    u,
-                  )}`}
-                />
-              ))}
-              <ThemeText
-                typography="body__tertiary"
-                testID={`${testID}TravellersOthers`}
-                color={interactiveColor.default}
-                style={styles.additionalCategories}
-              >
-                + {userProfilesWithCount.slice(1).length}{' '}
-                {t(RecentFareContractsTexts.titles.moreTravelers)}
-              </ThemeText>
-            </>
-          )}
-        </View>
-        {fareProductTypeConfig.configuration.zoneSelectionMode !== 'none' &&
-          fromZoneName &&
-          toZoneName && (
-            <View style={styles.detailContainer}>
-              <ThemeText typography="label__uppercase" color="secondary">
-                {t(RecentFareContractsTexts.titles.zone)}
-              </ThemeText>
-              {fromZoneName === toZoneName ? (
-                <BorderedInfoBox
-                  backgroundColor={interactiveColor.default}
-                  type="small"
-                  text={`${fromZoneName}`}
-                  testID={`${testID}Zone`}
-                />
-              ) : (
-                <BorderedInfoBox
-                  backgroundColor={interactiveColor.default}
-                  type="small"
-                  text={`${fromZoneName} - ${toZoneName}`}
-                  testID={`${testID}Zones`}
-                />
-              )}
-            </View>
-          )}
+            <ThemeText
+              typography="body__tertiary"
+              testID={`${testID}TravellersOthers`}
+              color={interactiveColor.default}
+              style={styles.additionalCategories}
+            >
+              + {userProfilesWithCount.slice(1).length}{' '}
+              {t(RecentFareContractsTexts.titles.moreTravelers)}
+            </ThemeText>
+          </>
+        )}
       </View>
     </TileWithButton>
   );
@@ -252,25 +251,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   productName: {
     marginBottom: theme.spacing.medium,
   },
-  travellersTileWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  horizontalFlex: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  detailContainer: {
-    rowGap: theme.spacing.xSmall,
-  },
-  infoChip_travellers: {
-    marginRight: theme.spacing.xSmall,
-  },
+
   additionalCategories: {
     marginHorizontal: theme.spacing.small,
   },
-  harbors: {
-    marginBottom: theme.spacing.medium,
+  fareContractDetailItems: {
+    flex: 1,
+    rowGap: theme.spacing.xSmall,
   },
 }));
