@@ -68,6 +68,8 @@ function format(
 
 const humanizer = humanizeDuration.humanizer({});
 
+export const parseDate = (d: string) => parseISO(d);
+
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
 }

@@ -9557,6 +9557,11 @@ react-native-compressor@^1.8.25:
   resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.8.25.tgz#11fb31b9883f9249f59196a146667f2be3610dd3"
   integrity sha512-ldQvBEFJpGa9FlBF6ijBoOGg5e/vRYJOZ97ElEERwC9tO9qmt87Nj80LAuASaY0JDFfYDJi8mFSWM/uUaXaMsA==
 
+react-native-date-picker@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.8.tgz#1820fccc194bfa6907ea4382f94677f11e831b92"
+  integrity sha512-1l4w4+iLuhOZUSyQrt5DclXnNx3RwEyp+wUrSaBfaHr/3FWtRWjLjS0E9FL4FWuq6vn09Hy9hn8lZJ1DmPc9YQ==
+
 react-native-device-info@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-11.1.0.tgz#7db5c4e5a179dce761efac155a493aa0956a40ab"
