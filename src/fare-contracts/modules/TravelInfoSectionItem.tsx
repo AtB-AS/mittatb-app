@@ -47,13 +47,14 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
   const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
-  );
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
   );
+  const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
+    return c.type === preassignedFareProduct?.type;
+  });
+
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
