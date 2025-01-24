@@ -81,6 +81,12 @@ export const Root_ScooterContactOperatorScreen = ({
   const [comment, setComment] = useState<string>('');
   const [isCommentValid, setIsCommentValid] = useState(true);
 
+  const isAllInputValid =
+    isContactInfoPresent &&
+    isPhoneNumberValid &&
+    isEmailValid &&
+    isCommentValid;
+
   const setAllInputIsValid = () => {
     setIsCommentValid(true);
     setIsContactInfoPresent(true);
@@ -242,7 +248,7 @@ export const Root_ScooterContactOperatorScreen = ({
                 {t(ContactOperatorTexts.location.description(operatorName))}
               </ThemeText>
             </View>
-            {isErrorSupportRequest && (
+            {isErrorSupportRequest && isAllInputValid && (
               <MessageInfoBox
                 message={t(ContactOperatorTexts.submitError(operatorName))}
                 type="error"
