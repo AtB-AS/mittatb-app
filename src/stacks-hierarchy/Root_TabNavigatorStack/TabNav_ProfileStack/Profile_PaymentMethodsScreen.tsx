@@ -61,13 +61,14 @@ export const Profile_PaymentMethodsScreen = () => {
     isError: cancelRecurringPaymentError,
   } = useCancelRecurringPaymentMutation();
 
-  const [recurringPaymentId, setRecurringPaymentId] = useState<number>();
+  const [awaitingRecurringPaymentId, setAwaitingRecurringPaymentId] =
+    useState<number>();
 
   // In cases where the recurring payment appears in firestore before the
   // callback is called, we can cancel the payment flow and reload the recurring
   // payment list.
   useOnRecurringPaymentReceived({
-    recurringPaymentId,
+    recurringPaymentId: awaitingRecurringPaymentId,
     callback: async () => {
       closeInAppBrowser();
       await refetchRecurringPayment();
@@ -96,7 +97,7 @@ export const Profile_PaymentMethodsScreen = () => {
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
     const response = await addPaymentMethod(callbackUrl);
-    setRecurringPaymentId(response.data.recurring_payment_id);
+    setAwaitingRecurringPaymentId(response.data.recurring_payment_id);
     await openInAppBrowser(
       response.data.terminal_url,
       'cancel',
