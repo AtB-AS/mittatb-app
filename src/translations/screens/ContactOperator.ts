@@ -71,7 +71,7 @@ export const ContactOperatorTexts = {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
       placeholder: _(
         'Legg til e-post',
-        'Add e-mail address',
+        'Add email address',
         'Legg til e-post',
       ),
       errorMessage: _(
@@ -121,7 +121,7 @@ export const ContactOperatorTexts = {
     return _(
       `Oops - noe gikk galt, vi klarte ikke å sende skjemaet til ${operatorName}. Supert om du prøver på nytt 🤞`,
       `Whoops - something went wrong, we could not send the request to ${operatorName}. Please try again 🤞`,
-      `Oops - noko gjekk gale, vi klarte ikkje å sende skjemaet  til ${operatorName}. Supert om du prøver på nytt 🤞`,
+      `Oops - noko gjekk gale, vi klarte ikkje å sende skjemaet til ${operatorName}. Supert om du prøver på nytt 🤞`,
     );
   },
 };
