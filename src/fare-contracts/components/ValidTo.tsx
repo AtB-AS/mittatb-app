@@ -1,5 +1,6 @@
 import {
   FareContract,
+  flattenCarnetTravelRightAccesses,
   getLastUsedAccess,
   isCarnetTravelRight,
   isNormalTravelRight,
@@ -20,20 +21,23 @@ export const ValidTo = ({fc}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {serverNow} = useTimeContext();
-  const travelRight = fc.travelRights[0];
-  if (!isNormalTravelRight(travelRight)) return null;
+  const firstTravelRight = fc.travelRights[0];
+  if (!isNormalTravelRight(firstTravelRight)) return null;
   if (!(getValidityStatus(serverNow, fc) === 'valid')) return null;
 
-  const endDateTime = (() => {
-    if (isCarnetTravelRight(travelRight)) {
-      const validTo = getLastUsedAccess(
-        serverNow,
-        travelRight.usedAccesses,
-      )?.validTo;
-      if (validTo) return new Date(validTo);
+  let endDateTime = firstTravelRight.endDateTime;
+  const {usedAccesses} = flattenCarnetTravelRightAccesses(
+    fc.travelRights.filter(isCarnetTravelRight),
+  );
+  if (usedAccesses.length) {
+    const {validTo: usedAccessValidTo} = getLastUsedAccess(
+      serverNow,
+      usedAccesses,
+    );
+    if (usedAccessValidTo) {
+      endDateTime = new Date(usedAccessValidTo);
     }
-    return travelRight.endDateTime;
-  })();
+  }
 
   return (
     <ThemeText
