@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -270,30 +270,36 @@ export const useOnRecurringPaymentReceived = ({
     };
   };
 
-  firestore()
-    .collection('customers')
-    .doc(userId)
-    .collection('recurringPayments')
-    .orderBy('created', 'desc')
-    .onSnapshot(
-      (snapshot) => {
-        const recurringPayments =
-          snapshot.docs.map<RecurringPayment>(mapRecurringPayment);
-        if (
-          recurringPayments.some(
-            (rp) =>
-              rp.id === recurringPaymentId && recurringPaymentId !== undefined,
-          )
-        ) {
-          callback();
-        }
-      },
-      (err) => {
-        Bugsnag.notify(err, function (event) {
-          event.addMetadata('payment', {userId});
-        });
-      },
-    );
+  useEffect(() => {
+    const recurringPaymentsUnsub = firestore()
+      .collection('customers')
+      .doc(userId)
+      .collection('recurringPayments')
+      .orderBy('created', 'desc')
+      .onSnapshot(
+        (snapshot) => {
+          const recurringPayments =
+            snapshot.docs.map<RecurringPayment>(mapRecurringPayment);
+          if (
+            recurringPayments.some(
+              (rp) =>
+                rp.id === recurringPaymentId &&
+                recurringPaymentId !== undefined,
+            )
+          ) {
+            callback();
+          }
+        },
+        (err) => {
+          Bugsnag.notify(err, function (event) {
+            event.addMetadata('payment', {userId});
+          });
+        },
+      );
+    return () => {
+      recurringPaymentsUnsub();
+    };
+  }, [userId, recurringPaymentId, callback]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
