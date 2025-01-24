@@ -3,7 +3,6 @@ import {
   useGeolocationContext,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
 import {Feature, Position} from 'geojson';
@@ -54,7 +53,6 @@ export const Map = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle(
     props.selectionMode === 'ExploreLocation',
   );
@@ -166,17 +164,14 @@ export const Map = (props: MapProps) => {
    * overhead.
    */
   const onMapIdle = (state: MapState) => {
-    console.log('onMapIdle');
     const newMapRegion: MapRegion = {
       visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
       zoomLevel: state.properties.zoom,
       center: state.properties.center,
     };
-    if (!isEqual(mapRegion, newMapRegion)) {
-      setMapRegion((prevMapRegion) =>
-        isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-      );
-    }
+    setMapRegion((prevMapRegion) =>
+      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
+    );
   };
 
   /**
@@ -251,7 +246,7 @@ export const Map = (props: MapProps) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
       {props.selectionMode === 'ExploreLocation' && (
         <LocationBar
           coordinates={selectedCoordinates || startingCoordinates}
@@ -390,10 +385,6 @@ export const Map = (props: MapProps) => {
     </View>
   );
 };
-
-const useMapStyles = StyleSheet.createThemeHook(() => ({
-  container: {flex: 1},
-}));
 
 function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {

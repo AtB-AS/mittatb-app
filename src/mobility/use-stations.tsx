@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {AreaState, getOperators, isShowAll, updateAreaState} from './utils';
 import {
   MapRegion,
@@ -98,13 +98,17 @@ export const useStations: (
   const onFilterChange = (filter: MobilityMapFilterType) => {
     setFilter(filter);
   };
-
-  return enableStations
-    ? {
-        stations,
-        onFilterChange,
-        updateRegion,
-        isLoading,
-      }
-    : undefined;
+  const res = useMemo(
+    () =>
+      enableStations
+        ? {
+            stations,
+            onFilterChange,
+            updateRegion,
+            isLoading,
+          }
+        : undefined,
+    [enableStations, isLoading, stations, updateRegion],
+  );
+  return res;
 };

@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {SnackbarProps} from './Snackbar';
 import {getSnackbarHasTextContent} from './utils';
 
@@ -12,17 +12,23 @@ export const useSnackbar = () => {
   }, []);
   const hideSnackbar = useCallback(() => setSnackbarProps(undefined), []);
 
-  const snackbarTextContent = getSnackbarHasTextContent(
-    snackbarProps?.textContent,
-  )
-    ? {
-        ...snackbarProps?.textContent,
-        messageKey, // add unique key to each message
-      }
-    : undefined;
+  const snackbarTextContent = useMemo(
+    () =>
+      getSnackbarHasTextContent(snackbarProps?.textContent)
+        ? {
+            ...snackbarProps?.textContent,
+            messageKey, // add unique key to each message
+          }
+        : undefined,
+    [messageKey, snackbarProps?.textContent],
+  );
 
+  const snackbarPropsWithTextContent = useMemo(
+    () => ({...snackbarProps, snackbarTextContent}),
+    [snackbarProps, snackbarTextContent],
+  );
   return {
-    snackbarProps: {...snackbarProps, snackbarTextContent},
+    snackbarProps: snackbarPropsWithTextContent,
     showSnackbar,
     hideSnackbar,
   };

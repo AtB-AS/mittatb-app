@@ -55,7 +55,7 @@ export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
    * this allows goBack from an onboarding screen when used as initial screen
    * @returns navigation state object
    */
-  const getInitialNavigationContainerState = () => {
+  const getInitialNavigationContainerState = useCallback(() => {
     const defaultInitialRouteName = 'Root_TabNavigatorStack';
     const nextOnboardingSection = getNextOnboardingSection(); // dont rely on effects as it will be too late for initialState
     const initialOnboardingScreen = nextOnboardingSection?.initialScreen;
@@ -74,7 +74,7 @@ export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
       routes.unshift({name: defaultInitialRouteName});
     }
     return {routes};
-  };
+  }, [getNextOnboardingSection]);
 
   return {
     nextOnboardingSection,

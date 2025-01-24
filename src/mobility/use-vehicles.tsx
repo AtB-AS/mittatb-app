@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Point} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
@@ -113,12 +113,18 @@ export const useVehicles: (
     setFilter(filter);
   };
 
-  return isVehiclesInMapEnabled
-    ? {
-        vehicles,
-        onFilterChange,
-        updateRegion,
-        isLoading,
-      }
-    : undefined;
+  const res = useMemo(
+    () =>
+      isVehiclesInMapEnabled
+        ? {
+            vehicles,
+            onFilterChange,
+            updateRegion,
+            isLoading,
+          }
+        : undefined,
+    [isLoading, isVehiclesInMapEnabled, updateRegion, vehicles],
+  );
+
+  return res;
 };
