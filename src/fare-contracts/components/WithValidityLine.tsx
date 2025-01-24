@@ -45,7 +45,7 @@ export const WithValidityLine = (props: Props) => {
       preassignedFareProducts,
       firstTravelRight.fareProductRef,
     );
-    const {validityStatus, validFrom, validTo} = getFareContractInfo(
+    const {validityStatus} = getFareContractInfo(
       serverNow,
       props.fc,
       currentUserId,
@@ -54,9 +54,6 @@ export const WithValidityLine = (props: Props) => {
       <View style={styles.container}>
         <ValidityLine
           status={validityStatus}
-          now={serverNow}
-          validFrom={validFrom}
-          validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
         />
         {!!props.children ? (

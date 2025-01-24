@@ -39,7 +39,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
       }
     },
     [isServerTimeEnabled],
-    2500,
+    1000,
     false,
     true,
   );

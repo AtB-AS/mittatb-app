@@ -6,7 +6,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDurationString} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
@@ -72,7 +72,7 @@ function validityTimeText(
 ): string {
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const toDurationText = (seconds: number) =>
-    secondsToDurationString(seconds, language, {
+    secondsToDuration(seconds, language, {
       conjunction,
       serialComma: false,
     });

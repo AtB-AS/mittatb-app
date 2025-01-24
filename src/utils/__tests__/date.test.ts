@@ -8,7 +8,7 @@ import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
-  secondsToDurationString,
+  secondsToDuration,
 } from '../date'; // Adjust the path if needed
 
 type TimeZone =
@@ -251,16 +251,16 @@ describe('convertIsoStringFieldsToDate', () => {
   });
 });
 
-describe('secondsToDurationString', () => {
+describe('secondsToDuration', () => {
   // Basic Functionality
   describe('Basic conversions', () => {
     test('converts 500 seconds to duration string in English', () => {
-      const result = secondsToDurationString(500, Language.English);
+      const result = secondsToDuration(500, Language.English);
       expect(result).toBe('8 minutes, 20 seconds');
     });
 
     test('converts 500 seconds to duration string in Norwegian', () => {
-      const result = secondsToDurationString(500, Language.Norwegian);
+      const result = secondsToDuration(500, Language.Norwegian);
       expect(result).toBe('8 minutter, 20 sekunder');
     });
   });
@@ -268,22 +268,22 @@ describe('secondsToDurationString', () => {
   // Edge Cases
   describe('Edge case handling', () => {
     test('handles 59 seconds at low range', () => {
-      const result = secondsToDurationString(59, Language.English);
+      const result = secondsToDuration(59, Language.English);
       expect(result).toBe('59 seconds');
     });
 
     test('handles 60 seconds (start of minutes range)', () => {
-      const result = secondsToDurationString(60, Language.English);
+      const result = secondsToDuration(60, Language.English);
       expect(result).toBe('1 minute');
     });
 
     test('handles 3658 seconds (slightly above hours range)', () => {
-      const result = secondsToDurationString(3658, Language.English);
+      const result = secondsToDuration(3658, Language.English);
       expect(result).toBe('1 hour, 1 minute');
     });
 
     test('handles 3600 seconds (start of hours range)', () => {
-      const result = secondsToDurationString(3600, Language.English);
+      const result = secondsToDuration(3600, Language.English);
       expect(result).toBe('1 hour');
     });
   });
@@ -291,7 +291,7 @@ describe('secondsToDurationString', () => {
   // Large Durations
   describe('Large durations', () => {
     test('handles durations greater than a day', () => {
-      const result = secondsToDurationString(90000, Language.English);
+      const result = secondsToDuration(90000, Language.English);
       expect(result).toBe('1 day, 1 hour');
     });
   });
@@ -299,7 +299,7 @@ describe('secondsToDurationString', () => {
   // Custom Options
   describe('Custom options passed to humanizeDuration', () => {
     test('applies custom options (e.g., largest units) correctly', () => {
-      const result = secondsToDurationString(3661, Language.English, {
+      const result = secondsToDuration(3661, Language.English, {
         largest: 1,
       });
       expect(result).toBe('1 hour');
@@ -309,12 +309,12 @@ describe('secondsToDurationString', () => {
   // Invalid or Corner Case Inputs
   describe('Invalid or edge case inputs', () => {
     test('handles negative seconds gracefully', () => {
-      const result = secondsToDurationString(-500, Language.English);
+      const result = secondsToDuration(-500, Language.English);
       expect(result).toBe('0 seconds');
     });
 
     test('handles exactly 0 seconds', () => {
-      const result = secondsToDurationString(0, Language.English);
+      const result = secondsToDuration(0, Language.English);
       expect(result).toBe('0 seconds');
     });
   });
@@ -322,17 +322,17 @@ describe('secondsToDurationString', () => {
   // Unit Map Logic
   describe('Unit map logic', () => {
     test('uses seconds for durations under 60 seconds', () => {
-      const result = secondsToDurationString(30, Language.English);
+      const result = secondsToDuration(30, Language.English);
       expect(result).toBe('30 seconds');
     });
 
     test('uses minutes and seconds for durations under an hour', () => {
-      const result = secondsToDurationString(120, Language.English);
+      const result = secondsToDuration(120, Language.English);
       expect(result).toBe('2 minutes');
     });
 
     test('uses hours and minutes for durations under a day', () => {
-      const result = secondsToDurationString(7200, Language.English);
+      const result = secondsToDuration(7200, Language.English);
       expect(result).toBe('2 hours');
     });
   });
