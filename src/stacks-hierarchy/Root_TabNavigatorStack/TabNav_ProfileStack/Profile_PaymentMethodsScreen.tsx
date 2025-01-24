@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -259,18 +259,22 @@ export const useOnRecurringPaymentReceived = ({
 }) => {
   const {userId} = useAuthContext();
 
-  const mapRecurringPayment = (
-    recurringPayment: FirebaseFirestoreTypes.DocumentData,
-  ): RecurringPayment => {
-    return {
-      id: recurringPayment.id,
-      expires_at: recurringPayment.expires_at,
-      masked_pan: recurringPayment.masked_pan,
-      payment_type: recurringPayment.payment_type,
-    };
+  const mapRecurringPaymentIds = (
+    d: FirebaseFirestoreTypes.DocumentSnapshot,
+  ): number => {
+    const recurringPayment = d.data();
+    if (!recurringPayment) {
+      throw new Error('No recurring payment data');
+    }
+
+    return recurringPayment.id;
   };
 
+  const callbackRef = useRef(callback);
+
   useEffect(() => {
+    if (!recurringPaymentId) return;
+
     const recurringPaymentsUnsub = firestore()
       .collection('customers')
       .doc(userId)
@@ -278,16 +282,9 @@ export const useOnRecurringPaymentReceived = ({
       .orderBy('created', 'desc')
       .onSnapshot(
         (snapshot) => {
-          const recurringPayments =
-            snapshot.docs.map<RecurringPayment>(mapRecurringPayment);
-          if (
-            recurringPayments.some(
-              (rp) =>
-                rp.id === recurringPaymentId &&
-                recurringPaymentId !== undefined,
-            )
-          ) {
-            callback();
+          const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
+          if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
+            callbackRef.current();
           }
         },
         (err) => {
@@ -299,7 +296,7 @@ export const useOnRecurringPaymentReceived = ({
     return () => {
       recurringPaymentsUnsub();
     };
-  }, [userId, recurringPaymentId, callback]);
+  }, [userId, recurringPaymentId]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
