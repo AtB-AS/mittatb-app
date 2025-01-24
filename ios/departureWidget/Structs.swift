@@ -336,9 +336,8 @@ struct FavouriteDeparture: Codable {
     let quayName: String
     let quayPublicCode: String?
     let quayId: String
-    let stopId: String
 
-    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String, stopId: String) {
+    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String) {
         self.id = id
         self.lineId = lineId
         self.lineName = lineName
@@ -348,7 +347,6 @@ struct FavouriteDeparture: Codable {
         self.quayName = quayName
         self.quayPublicCode = quayPublicCode
         self.quayId = quayId
-        self.stopId = stopId
     }
 
     init(from decoder: Decoder) throws {
@@ -362,7 +360,6 @@ struct FavouriteDeparture: Codable {
         quayName = try container.decode(String.self, forKey: .quayName)
         quayPublicCode = try container.decodeIfPresent(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
-        stopId = try container.decode(String.self, forKey: .stopId)
     }
 }
 
@@ -378,8 +375,7 @@ extension FavouriteDeparture {
         lineTransportationSubMode: TransportSubMode.undefined,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
-        quayId: "NSR:Quay:71184",
-        stopId: "NSR:StopPlace:41613"
+        quayId: "NSR:Quay:71184"
     )
 }
 
