@@ -1,16 +1,13 @@
 import {
-  CarnetTravelRight,
   FareContract,
   Reservation,
   FareContractState,
-  NormalTravelRight,
-  flattenCarnetTravelRightAccesses,
+  flattenTravelRightAccesses,
   isCarnet,
-  isCarnetTravelRight,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-  isNormalTravelRight,
   CarnetTravelRightUsedAccess,
+  TravelRight,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
@@ -69,13 +66,11 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
 
-  if (isCarnet(fc)) {
-    const usedAccesses = flattenCarnetTravelRightAccesses(
-      fc.travelRights as CarnetTravelRight[],
-    ).usedAccesses;
-    return getLastUsedAccess(now, usedAccesses).status;
+  const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
+  if (fareContractAccesses) {
+    return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
   } else {
-    const firstTravelRight = fc.travelRights.filter(isNormalTravelRight)[0];
+    const firstTravelRight = fc.travelRights[0];
     return getRelativeValidity(
       now,
       firstTravelRight.startDateTime.getTime(),
@@ -261,7 +256,7 @@ export const useDefaultPreassignedFareProduct = (
 
 type FareContractInfoProps = {
   isCarnetFareContract: boolean;
-  travelRights: NormalTravelRight[];
+  travelRights: TravelRight[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -280,9 +275,7 @@ export function getFareContractInfo(
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
-  const travelRights = fc.travelRights.filter(
-    isCarnetFareContract ? isCarnetTravelRight : isNormalTravelRight,
-  );
+  const travelRights = fc.travelRights;
   const firstTravelRight = travelRights[0];
 
   const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
@@ -290,9 +283,7 @@ export function getFareContractInfo(
 
   const validityStatus = getValidityStatus(now, fc, isSent);
 
-  const carnetTravelRightAccesses = isCarnetFareContract
-    ? flattenCarnetTravelRightAccesses(travelRights as CarnetTravelRight[])
-    : undefined;
+  const carnetTravelRightAccesses = flattenTravelRightAccesses(travelRights);
 
   const lastUsedAccess =
     carnetTravelRightAccesses &&

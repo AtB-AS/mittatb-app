@@ -4,7 +4,6 @@ import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
-  NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetails} from '../FareContractInfoDetails';
@@ -109,7 +108,7 @@ export const DetailsContent: React.FC<Props> = ({
     useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
+    fc.travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
 

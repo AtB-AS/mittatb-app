@@ -35,8 +35,6 @@ export type TravelRight = {
   usageValidityPeriodRef: string;
   userProfileRef: string;
   authorityRef: string;
-};
-export type NormalTravelRight = TravelRight & {
   /** Used by period, single and carnet */
   tariffZoneRefs?: string[];
   /** Used by period, single and carnet */
@@ -72,12 +70,6 @@ export type UnknownTravelRight = {
 export type CarnetTravelRightUsedAccess = {
   startDateTime: Date;
   endDateTime: Date;
-};
-
-export type CarnetTravelRight = NormalTravelRight & {
-  maximumNumberOfAccesses: number;
-  numberOfUsedAccesses: number;
-  usedAccesses: CarnetTravelRightUsedAccess[];
 };
 
 export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';

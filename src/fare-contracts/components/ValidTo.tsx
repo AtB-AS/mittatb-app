@@ -1,8 +1,7 @@
 import {
   FareContract,
-  flattenCarnetTravelRightAccesses,
+  flattenTravelRightAccesses,
   getLastUsedAccess,
-  isCarnetTravelRight,
   isNormalTravelRight,
 } from '@atb/ticketing';
 import React from 'react';
@@ -26,13 +25,11 @@ export const ValidTo = ({fc}: Props) => {
   if (!(getValidityStatus(serverNow, fc) === 'valid')) return null;
 
   let endDateTime = firstTravelRight.endDateTime;
-  const {usedAccesses} = flattenCarnetTravelRightAccesses(
-    fc.travelRights.filter(isCarnetTravelRight),
-  );
-  if (usedAccesses.length) {
+  const flattenedAccesses = flattenTravelRightAccesses(fc.travelRights);
+  if (flattenedAccesses) {
     const {validTo: usedAccessValidTo} = getLastUsedAccess(
       serverNow,
-      usedAccesses,
+      flattenedAccesses.usedAccesses,
     );
     if (usedAccessValidTo) {
       endDateTime = new Date(usedAccessValidTo);

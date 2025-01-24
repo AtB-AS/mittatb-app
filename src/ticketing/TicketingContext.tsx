@@ -3,9 +3,10 @@ import {useAuthContext} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
-import {CustomerProfile, isNormalTravelRight} from '.';
+import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {isDefined} from '@atb/utils/presence';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
@@ -54,7 +55,8 @@ const ticketingReducer: TicketingReducer = (
       );
       // Filter out fare contracts that doesn't have any normal travel rights
       const fareContracts = action.fareContracts.filter((fc) =>
-        fc.travelRights.some((tr) => isNormalTravelRight(tr)),
+        // TODO: Add Zod validation for fare contracts
+        fc.travelRights.some(isDefined),
       );
       return {
         ...prevState,

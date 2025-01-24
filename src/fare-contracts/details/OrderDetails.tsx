@@ -2,7 +2,6 @@ import {
   FareContract,
   FareContractState,
   humanizePaymentTypeString,
-  isNormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
@@ -38,32 +37,28 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           ),
         )}
       </ThemeText>
-      {isNormalTravelRight(firstTravelRight) && (
-        <>
-          <ThemeText
-            typography="body__secondary"
-            color="secondary"
-            style={style.marginTop}
-          >
-            {t(
-              FareContractTexts.details.validFrom(
-                fullDateTime(firstTravelRight.startDateTime, language),
-              ),
-            )}
-          </ThemeText>
-          <ThemeText
-            typography="body__secondary"
-            color="secondary"
-            style={style.marginTop}
-          >
-            {t(
-              FareContractTexts.details.validTo(
-                fullDateTime(firstTravelRight.endDateTime, language),
-              ),
-            )}
-          </ThemeText>
-        </>
-      )}
+      <ThemeText
+        typography="body__secondary"
+        color="secondary"
+        style={style.marginTop}
+      >
+        {t(
+          FareContractTexts.details.validFrom(
+            fullDateTime(firstTravelRight.startDateTime, language),
+          ),
+        )}
+      </ThemeText>
+      <ThemeText
+        typography="body__secondary"
+        color="secondary"
+        style={style.marginTop}
+      >
+        {t(
+          FareContractTexts.details.validTo(
+            fullDateTime(firstTravelRight.endDateTime, language),
+          ),
+        )}
+      </ThemeText>
       {fareContract.state !== FareContractState.Refunded && priceString && (
         <ThemeText
           typography="body__secondary"

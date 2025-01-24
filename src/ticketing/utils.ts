@@ -1,19 +1,17 @@
 import {flatten, sumBy, startCase} from 'lodash';
 import {
   FareContract,
-  CarnetTravelRight,
   TravelRight,
   CarnetTravelRightUsedAccess,
   LastUsedAccessState,
   UsedAccessStatus,
-  NormalTravelRight,
   PaymentType,
 } from './types';
 import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
 
 export function isCarnetTravelRight(
   travelRight: TravelRight | undefined,
-): travelRight is CarnetTravelRight {
+): travelRight is TravelRight {
   return !!travelRight && 'maximumNumberOfAccesses' in travelRight;
 }
 
@@ -23,7 +21,7 @@ export function isCarnet(fareContract: FareContract): boolean {
 
 export function isNormalTravelRight(
   travelRight: TravelRight | undefined,
-): travelRight is NormalTravelRight {
+): travelRight is TravelRight {
   return (
     !!travelRight &&
     'startDateTime' in travelRight &&
@@ -35,26 +33,28 @@ export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
 
-type FlattenedCarnetTravelRights = {
+type FlattenedAccesses = {
   usedAccesses: CarnetTravelRightUsedAccess[];
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
 };
 
-export function flattenCarnetTravelRightAccesses(
-  travelRights: CarnetTravelRight[],
-): FlattenedCarnetTravelRights {
+export function flattenTravelRightAccesses(
+  travelRights: TravelRight[],
+): FlattenedAccesses | undefined {
+  if (travelRights.filter(isCarnetTravelRight).length === 0) return undefined;
+
   const allUsedAccesses = travelRights.map((t) => t.usedAccesses ?? []);
   const usedAccesses = flatten(allUsedAccesses).sort(
     (a, b) => a.startDateTime.getTime() - b.startDateTime.getTime(),
   );
   const maximumNumberOfAccesses = sumBy(
     travelRights,
-    (t) => t.maximumNumberOfAccesses,
+    (t) => t.maximumNumberOfAccesses ?? 0,
   );
   const numberOfUsedAccesses = sumBy(
     travelRights,
-    (t) => t.numberOfUsedAccesses,
+    (t) => t.numberOfUsedAccesses ?? 0,
   );
   return {
     usedAccesses,

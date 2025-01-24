@@ -3,11 +3,7 @@ import {
   type FareContract,
   FareContractState,
 } from './types';
-import {
-  flattenCarnetTravelRightAccesses,
-  isCarnetTravelRight,
-  isNormalTravelRight,
-} from './utils';
+import {flattenTravelRightAccesses} from './utils';
 
 /**
  * Get availability status of a fare contract
@@ -30,28 +26,27 @@ export const getAvailabilityStatus = (
     return {availability: 'invalid', status: 'unspecified'};
   }
 
-  const travelRights = fc.travelRights.filter(isNormalTravelRight);
-  if (!travelRights.length) {
+  if (!fc.travelRights.length) {
     return {availability: 'invalid', status: 'invalid'};
   }
 
-  const carnetTravelRights = travelRights.filter(isCarnetTravelRight);
-  if (carnetTravelRights.length) {
-    const {usedAccesses, numberOfUsedAccesses, maximumNumberOfAccesses} =
-      flattenCarnetTravelRightAccesses(carnetTravelRights);
+  const flattenedAccesses = flattenTravelRightAccesses(fc.travelRights);
+  if (flattenedAccesses) {
+    const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
+      flattenedAccesses;
     if (usedAccesses.some(isValid(now))) {
       return {availability: 'available', status: 'valid'};
     } else if (numberOfUsedAccesses >= maximumNumberOfAccesses) {
       return {availability: 'historical', status: 'empty'};
-    } else if (travelRights.every(isExpired(now))) {
+    } else if (fc.travelRights.every(isExpired(now))) {
       return {availability: 'historical', status: 'expired'};
     } else {
       return {availability: 'available', status: 'upcoming'};
     }
   } else {
-    if (travelRights.every(isExpired(now))) {
+    if (fc.travelRights.every(isExpired(now))) {
       return {availability: 'historical', status: 'expired'};
-    } else if (travelRights.some(isValid(now))) {
+    } else if (fc.travelRights.some(isValid(now))) {
       return {availability: 'available', status: 'valid'};
     } else {
       return {availability: 'available', status: 'upcoming'};
