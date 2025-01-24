@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {parseDate} from '@atb/utils/date';
+import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {type StyleProp, View, type ViewStyle} from 'react-native';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
 type Props = {
   date: string;
@@ -12,6 +13,7 @@ type Props = {
 
 export const DatePicker = ({date, onDateChange, style}: Props) => {
   const styles = useStyles();
+  const locale = useLocaleContext();
 
   return (
     <View style={[styles.container, style]}>
@@ -19,6 +21,9 @@ export const DatePicker = ({date, onDateChange, style}: Props) => {
         date={parseDate(date)}
         onDateChange={(date) => onDateChange(date.toISOString())}
         mode="datetime"
+        locale={locale.localeString}
+        // Applies timezone offset from UTC to enforce CET timezone on date picker
+        timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
       />
     </View>
   );
