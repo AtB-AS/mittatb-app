@@ -291,9 +291,8 @@ const useScooterContactFormController = (
         }),
       };
       sendSupportRequest(requestBody);
-    } else {
-      setShowError(true);
     }
+    setShowError(true);
   };
 
   return {
