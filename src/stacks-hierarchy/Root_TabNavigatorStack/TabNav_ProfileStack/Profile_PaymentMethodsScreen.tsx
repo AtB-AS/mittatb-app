@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -258,9 +258,6 @@ export const useOnRecurringPaymentReceived = ({
   callback: () => void;
 }) => {
   const {userId} = useAuthContext();
-  const [recurringPayments, setRecurringPayments] = useState<
-    RecurringPayment[]
-  >([]);
 
   const mapRecurringPayment = (
     recurringPayment: FirebaseFirestoreTypes.DocumentData,
@@ -273,7 +270,7 @@ export const useOnRecurringPaymentReceived = ({
     };
   };
 
-  const recurringPaymentsUnsub = firestore()
+  firestore()
     .collection('customers')
     .doc(userId)
     .collection('recurringPayments')
@@ -282,7 +279,14 @@ export const useOnRecurringPaymentReceived = ({
       (snapshot) => {
         const recurringPayments =
           snapshot.docs.map<RecurringPayment>(mapRecurringPayment);
-        setRecurringPayments(recurringPayments);
+        if (
+          recurringPayments.some(
+            (rp) =>
+              rp.id === recurringPaymentId && recurringPaymentId !== undefined,
+          )
+        ) {
+          callback();
+        }
       },
       (err) => {
         Bugsnag.notify(err, function (event) {
@@ -290,19 +294,6 @@ export const useOnRecurringPaymentReceived = ({
         });
       },
     );
-
-  useEffect(() => {
-    if (
-      recurringPayments.some(
-        (rp) =>
-          rp.id === recurringPaymentId && recurringPaymentId !== undefined,
-      )
-    ) {
-      callback();
-    }
-
-    return recurringPaymentsUnsub;
-  }, [callback, recurringPaymentId, recurringPayments, recurringPaymentsUnsub]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
