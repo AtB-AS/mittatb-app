@@ -20,7 +20,7 @@ type Props = {
   fc: FareContract;
 };
 
-export const ValidityHeader = ({fc}: Props) => {
+export const ValidityTime = ({fc}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {isInspectable} = useMobileTokenContext();
@@ -32,7 +32,6 @@ export const ValidityHeader = ({fc}: Props) => {
     fc,
     currentUserId,
   );
-
   const label: string = validityTimeText(
     validityStatus,
     serverNow,
@@ -115,6 +114,21 @@ function validityTimeText(
     default:
       return t(FareContractTexts.validityHeader.unknown);
   }
+}
+
+function createRepeatingTask(callback: () => void, delay: number) {
+  let timeoutId: NodeJS.Timeout;
+
+  const task = () => {
+    callback();
+    timeoutId = setTimeout(task, delay);
+  };
+
+  timeoutId = setTimeout(task, delay);
+
+  return {
+    cancel: () => clearTimeout(timeoutId),
+  };
 }
 
 const useStyles = StyleSheet.createThemeHook(() => ({

@@ -119,7 +119,7 @@ const unitMap: UnitMapType = [
   {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
   {
     range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
-    units: ['m', 's'],
+    units: ['m'],
   },
   {
     range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
