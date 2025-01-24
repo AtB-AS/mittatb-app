@@ -22,6 +22,7 @@ import {
 } from '@atb/configuration';
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
+import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 
 type Props = {fc: FareContract};
 
@@ -36,11 +37,13 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
     enabled: !!phoneNumber,
   });
-  const {travelRights, validityStatus} = getFareContractInfo(
-    serverNow,
-    fc,
-    currentUserId,
-  );
+  const {
+    travelRights,
+    validityStatus,
+    isCarnetFareContract,
+    numberOfUsedAccesses,
+    maximumNumberOfAccesses,
+  } = getFareContractInfo(serverNow, fc, currentUserId);
   const firstTravelRight = travelRights[0];
   const recipientName =
     phoneNumber &&
@@ -70,17 +73,12 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
   return (
-    <View style={topContainer}>
-      {isSent && !!phoneNumber && (
-        <MessageInfoBox
-          type="warning"
-          message={t(
-            FareContractTexts.details.sentTo(
-              recipientName || formatPhoneNumber(phoneNumber),
-            ),
-          )}
-        />
-      )}
+    <View
+      style={[
+        topContainer,
+        {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
+      ]}
+    >
       <View style={styles.detailRow}>
         <View style={styles.fareContractDetailItems}>
           <FareContractFromTo
@@ -96,11 +94,12 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
             />
           )}
 
-          <FareContractDetailItem
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
-            )}
-          />
+          {userProfilesWithCount.map((u, i) => (
+            <FareContractDetailItem
+              key={`userProfile-${i}`}
+              content={[userProfileCountAndName(u, language)]}
+            />
+          ))}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
           <InspectionSymbol
@@ -109,6 +108,25 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           />
         )}
       </View>
+
+      {isSent && !!phoneNumber && (
+        <MessageInfoBox
+          type="warning"
+          message={t(
+            FareContractTexts.details.sentTo(
+              recipientName || formatPhoneNumber(phoneNumber),
+            ),
+          )}
+        />
+      )}
+
+      {isCarnetFareContract && (
+        <CarnetFooter
+          active={validityStatus === 'valid'}
+          maximumNumberOfAccesses={maximumNumberOfAccesses!}
+          numberOfUsedAccesses={numberOfUsedAccesses!}
+        />
+      )}
     </View>
   );
 };

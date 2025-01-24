@@ -277,6 +277,11 @@ describe('secondsToDurationString', () => {
       expect(result).toBe('1 minute');
     });
 
+    test('handles 3658 seconds (slightly above hours range)', () => {
+      const result = secondsToDurationString(3658, Language.English);
+      expect(result).toBe('1 hour, 1 minute');
+    });
+
     test('handles 3600 seconds (start of hours range)', () => {
       const result = secondsToDurationString(3600, Language.English);
       expect(result).toBe('1 hour');
