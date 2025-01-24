@@ -84,5 +84,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

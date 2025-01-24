@@ -127,6 +127,7 @@ export const Root_ScooterContactOperatorScreen = ({
                 placeholder={t(
                   ContactOperatorTexts.contactInfo.email.placeholder,
                 )}
+                showClear
                 inlineLabel={false}
                 keyboardType="email-address"
                 autoComplete="email"
@@ -134,6 +135,8 @@ export const Root_ScooterContactOperatorScreen = ({
                 errorText={
                   !isEmailValid && showError
                     ? t(ContactOperatorTexts.contactInfo.email.errorMessage)
+                    : !isContactInfoPresent && showError
+                    ? t(ContactOperatorTexts.contactInfo.errorMessage)
                     : undefined
                 }
               />
@@ -152,17 +155,14 @@ export const Root_ScooterContactOperatorScreen = ({
                 placeholder={t(
                   ContactOperatorTexts.contactInfo.phone.placeholder,
                 )}
+                showClear
                 keyboardType="number-pad"
                 textContentType="telephoneNumber"
                 errorText={
                   !isPhoneNumberValid && showError
                     ? t(ContactOperatorTexts.contactInfo.phone.errorMessage)
                     : !isContactInfoPresent && showError
-                    ? t(
-                        ContactOperatorTexts.contactInfo.errorMessage(
-                          operatorName,
-                        ),
-                      )
+                    ? t(ContactOperatorTexts.contactInfo.errorMessage)
                     : undefined
                 }
               />

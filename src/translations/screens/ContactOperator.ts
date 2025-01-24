@@ -89,13 +89,11 @@ export const ContactOperatorTexts = {
         `Ver vennleg og legg til eit gyldig telefonnummer.`,
       ),
     },
-    errorMessage: (operatorName: string) => {
-      return _(
-        `Vennligst legg til enten telefonnummer eller e-postadresse. ${operatorName} trenger det for å kontakte deg.`,
-        `Please add a phone number or email adress. ${operatorName} needs it to contact you.`,
-        `Ver vennleg og legg til anten telefonnummer eller e-postadresse. ${operatorName} treng det for å kontakta deg.`,
-      );
-    },
+    errorMessage: _(
+      `Vennligst legg til enten telefonnummer eller e-postadresse.`,
+      `Please add a phone number or email adress.`,
+      `Ver vennleg og legg til anten telefonnummer eller e-postadresse.`,
+    ),
   },
   location: {
     header: _(
