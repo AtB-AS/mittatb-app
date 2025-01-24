@@ -3,7 +3,6 @@ import {
   RadioSectionItem,
   ButtonSectionItem,
   CounterSectionItem,
-  DateInputSectionItem,
   ExpandableSectionItem,
   FavoriteDepartureSectionItem,
   FavoriteSectionItem,
@@ -17,7 +16,6 @@ import {
   Section,
   SectionProps,
   TextInputSectionItem,
-  TimeInputSectionItem,
   ToggleSectionItem,
   InternalLabeledSectionItem,
   RadioGroupSection,
@@ -150,11 +148,6 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   subtext={`1. This is a list \n 2. made with markdown`}
                   onValueChange={() => {}}
                 />
-                <DateInputSectionItem
-                  value={new Date().toISOString()}
-                  onChange={() => {}}
-                />
-                <TimeInputSectionItem value="22:22" onChange={() => {}} />
               </Section>
             ),
           }}
