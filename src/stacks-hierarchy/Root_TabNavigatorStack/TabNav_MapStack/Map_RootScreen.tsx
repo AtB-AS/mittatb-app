@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   Map,
   MapFilterType,
@@ -24,49 +24,56 @@ export const Map_RootScreen = ({
   const vehicles = useVehicles(mobilityFilters);
   const stations = useStations(mobilityFilters);
 
-  if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
+  const navigateToQuay = useCallback(
+    (place: StopPlace, quay: Quay) => {
+      navigation.navigate('Map_PlaceScreen', {
+        place,
+        selectedQuayId: quay.id,
+        mode: 'Departure',
+      });
+    },
+    [navigation],
+  );
 
-  const navigateToQuay = (place: StopPlace, quay: Quay) => {
-    navigation.navigate('Map_PlaceScreen', {
-      place,
-      selectedQuayId: quay.id,
-      mode: 'Departure',
-    });
-  };
-  const navigateToDetails = (
-    serviceJourneyId: string,
-    serviceDate: string,
-    date: string | undefined,
-    fromStopPosition: number,
-    isTripCancelled?: boolean,
-  ) => {
-    if (!serviceJourneyId || !date) return;
-    navigation.navigate('Map_DepartureDetailsScreen', {
-      items: [
-        {
-          serviceJourneyId,
-          serviceDate,
-          date,
-          fromStopPosition,
-          isTripCancelled,
+  const navigateToDetails = useCallback(
+    (
+      serviceJourneyId: string,
+      serviceDate: string,
+      date: string | undefined,
+      fromStopPosition: number,
+      isTripCancelled?: boolean,
+    ) => {
+      if (!serviceJourneyId || !date) return;
+      navigation.navigate('Map_DepartureDetailsScreen', {
+        items: [
+          {
+            serviceJourneyId,
+            serviceDate,
+            date,
+            fromStopPosition,
+            isTripCancelled,
+          },
+        ],
+        activeItemIndex: 0,
+      });
+    },
+    [navigation],
+  );
+  const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
+    (location, destination) => {
+      navigation.navigate({
+        name: 'Dashboard_TripSearchScreen',
+        params: {
+          [destination]: location,
+          callerRoute: {name: 'Map_RootScreen'},
         },
-      ],
-      activeItemIndex: 0,
-    });
-  };
-  const navigateToTripSearch: TravelFromAndToLocationsCallback = (
-    location,
-    destination,
-  ) => {
-    navigation.navigate({
-      name: 'Dashboard_TripSearchScreen',
-      params: {
-        [destination]: location,
-        callerRoute: {name: 'Map_RootScreen'},
-      },
-      merge: true,
-    });
-  };
+        merge: true,
+      });
+    },
+    [navigation],
+  );
+
+  if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
   return (
     <>
