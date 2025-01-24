@@ -31,14 +31,6 @@ import {isValidEmail} from '@atb/utils/validation';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
 
-const supportItems: SupportType[] = [
-  SupportType.UNABLE_TO_OPEN,
-  SupportType.UNABLE_TO_CLOSE,
-  SupportType.REFUND,
-  SupportType.ACCIDENT_OR_BROKEN,
-  SupportType.OTHER,
-];
-
 export type Root_ScooterContactOperatorScreenProps =
   RootStackScreenProps<'Root_ScooterContactOperatorScreen'>;
 
@@ -51,96 +43,23 @@ export const Root_ScooterContactOperatorScreen = ({
   const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
   const {operatorName} = useVehicle(vehicleId);
-  const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
-  const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
-    getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
 
   const onSuccess = () => {
-    // TODO: navigate to next screen
+    // TODO: navigate to next screen (in next PR)
   };
 
   const {
-    mutate: sendSupportRequest,
-    isLoading: isLoadingSupportRequest,
-    isError: isErrorSupportRequest,
-  } = useSendSupportRequestMutation(operatorId, onSuccess);
-
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
-  const {data: customerProfile} = useProfileQuery();
-
-  const [selectedSupportType, setSelectedSupportType] = useState<SupportType>(
-    SupportType.OTHER,
-  );
-  const [isContactInfoPresent, setIsContactInfoPresent] =
-    useState<boolean>(true);
-  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(true);
-  const [phoneNumber, setPhoneNumber] = useState(authPhoneNumber);
-  const [phonePrefix, setPhonePrefix] = useState(authPhonePrefix ?? '47');
-  const [email, setEmail] = useState<string>(customerProfile?.email ?? '');
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [comment, setComment] = useState<string>('');
-  const [isCommentValid, setIsCommentValid] = useState(true);
-
-  const isAllInputValid =
-    isContactInfoPresent &&
-    isPhoneNumberValid &&
-    isEmailValid &&
-    isCommentValid;
-
-  const setAllInputIsValid = () => {
-    setIsCommentValid(true);
-    setIsContactInfoPresent(true);
-    setIsPhoneNumberValid(true);
-    setIsEmailValid(true);
-  };
-
-  const onSubmit = async () => {
-    const newIsCommentValid =
-      SendSupportRequestBodySchema.shape.comment.safeParse(comment).success;
-    const newPhoneNumberWithPrefix = '+' + phonePrefix + phoneNumber;
-    const newIsPhoneNumberValid =
-      !phoneNumber || isValidPhoneNumber(newPhoneNumberWithPrefix);
-
-    const newIsEmailValid = !email || isValidEmail(email);
-    const newIsContactInfoPresent = !!email || !!phoneNumber;
-
-    const isRequestValid =
-      newIsContactInfoPresent &&
-      newIsPhoneNumberValid &&
-      newIsEmailValid &&
-      newIsCommentValid;
-
-    if (isRequestValid) {
-      setAllInputIsValid();
-      const currentUserCoordinates = getCurrentCoordinatesGlobal();
-
-      const requestBody: SendSupportRequestBody = {
-        assetId: vehicleId,
-        bookingId: activeShmoBooking ? activeShmoBooking.bookingId : undefined,
-        supportType: selectedSupportType,
-        comment: comment,
-        contactInformationEndUser: {
-          phone: newPhoneNumberWithPrefix,
-          email: email,
-        },
-        ...(currentUserCoordinates && {
-          place: {
-            coordinates: {
-              latitude: currentUserCoordinates.latitude,
-              longitude: currentUserCoordinates.longitude,
-            },
-          },
-        }),
-      };
-
-      sendSupportRequest(requestBody);
-    } else {
-      setIsContactInfoPresent(newIsContactInfoPresent);
-      setIsPhoneNumberValid(newIsPhoneNumberValid);
-      setIsEmailValid(newIsEmailValid);
-      setIsCommentValid(newIsCommentValid);
-    }
-  };
+    formData,
+    setFormData,
+    isCommentValid,
+    isPhoneNumberValid,
+    isEmailValid,
+    isContactInfoPresent,
+    isAllInputValid,
+    onSubmit,
+    showError,
+    supportRequestStatus,
+  } = useScooterContactFormController(operatorId, vehicleId, onSuccess);
 
   return (
     <View style={style.container}>
@@ -158,9 +77,11 @@ export const Root_ScooterContactOperatorScreen = ({
             <ContentHeading text={t(ContactOperatorTexts.supportType.header)} />
             <RadioGroupSection<SupportType>
               keyExtractor={(supportItem) => supportItem}
-              selected={selectedSupportType}
-              items={supportItems}
-              onSelect={setSelectedSupportType}
+              selected={formData.supportType}
+              items={Object.values(SupportType) as SupportType[]}
+              onSelect={(supportType) =>
+                setFormData((prev) => ({...prev, supportType}))
+              }
               itemToText={(supportItem) =>
                 t(
                   ContactOperatorTexts.supportType.supportTypeDescription(
@@ -169,7 +90,7 @@ export const Root_ScooterContactOperatorScreen = ({
                 )
               }
             />
-            {selectedSupportType === SupportType.UNABLE_TO_CLOSE && (
+            {formData.supportType === SupportType.UNABLE_TO_CLOSE && (
               <MessageInfoBox
                 message={t(
                   ContactOperatorTexts.supportType.noEndInfo(operatorName),
@@ -180,14 +101,16 @@ export const Root_ScooterContactOperatorScreen = ({
             <ContentHeading text={t(ContactOperatorTexts.comment.header)} />
             <Section>
               <TextInputSectionItem
-                value={comment}
-                onChangeText={setComment}
+                value={formData.comment}
+                onChangeText={(comment) =>
+                  setFormData((prev) => ({...prev, comment}))
+                }
                 label={t(ContactOperatorTexts.comment.label)}
                 placeholder={t(ContactOperatorTexts.comment.placeholder)}
                 inlineLabel={false}
                 autoCapitalize="sentences"
                 errorText={
-                  !isCommentValid
+                  !isCommentValid && showError
                     ? t(ContactOperatorTexts.comment.errorMessage)
                     : undefined
                 }
@@ -196,8 +119,10 @@ export const Root_ScooterContactOperatorScreen = ({
             <ContentHeading text={t(ContactOperatorTexts.contactInfo.header)} />
             <Section>
               <TextInputSectionItem
-                value={email}
-                onChangeText={setEmail}
+                value={formData.email}
+                onChangeText={(email) =>
+                  setFormData((prev) => ({...prev, email}))
+                }
                 label={t(ContactOperatorTexts.contactInfo.email.label)}
                 placeholder={t(
                   ContactOperatorTexts.contactInfo.email.placeholder,
@@ -207,7 +132,7 @@ export const Root_ScooterContactOperatorScreen = ({
                 autoComplete="email"
                 autoCapitalize="none"
                 errorText={
-                  !isEmailValid
+                  !isEmailValid && showError
                     ? t(ContactOperatorTexts.contactInfo.email.errorMessage)
                     : undefined
                 }
@@ -215,12 +140,14 @@ export const Root_ScooterContactOperatorScreen = ({
             </Section>
             <Section>
               <PhoneInputSectionItem
-                prefix={phonePrefix}
-                onChangePrefix={setPhonePrefix}
-                onChangeText={(text) => {
-                  setPhoneNumber(text);
-                }}
-                value={phoneNumber}
+                prefix={formData.phonePrefix}
+                onChangePrefix={(phonePrefix) =>
+                  setFormData((prev) => ({...prev, phonePrefix}))
+                }
+                onChangeText={(phoneNumber) =>
+                  setFormData((prev) => ({...prev, phoneNumber}))
+                }
+                value={formData.phoneNumber}
                 label={t(ContactOperatorTexts.contactInfo.phone.label)}
                 placeholder={t(
                   ContactOperatorTexts.contactInfo.phone.placeholder,
@@ -228,9 +155,9 @@ export const Root_ScooterContactOperatorScreen = ({
                 keyboardType="number-pad"
                 textContentType="telephoneNumber"
                 errorText={
-                  !isPhoneNumberValid
+                  !isPhoneNumberValid && showError
                     ? t(ContactOperatorTexts.contactInfo.phone.errorMessage)
-                    : !isContactInfoPresent
+                    : !isContactInfoPresent && showError
                     ? t(
                         ContactOperatorTexts.contactInfo.errorMessage(
                           operatorName,
@@ -248,14 +175,16 @@ export const Root_ScooterContactOperatorScreen = ({
                 {t(ContactOperatorTexts.location.description(operatorName))}
               </ThemeText>
             </View>
-            {isErrorSupportRequest && isAllInputValid && (
-              <MessageInfoBox
-                message={t(ContactOperatorTexts.submitError(operatorName))}
-                type="error"
-              />
-            )}
+            {supportRequestStatus === 'error' &&
+              isAllInputValid &&
+              showError && (
+                <MessageInfoBox
+                  message={t(ContactOperatorTexts.submitError(operatorName))}
+                  type="error"
+                />
+              )}
             <Button
-              loading={isLoadingSupportRequest}
+              loading={supportRequestStatus === 'loading'}
               expanded={true}
               mode="primary"
               text={t(ContactOperatorTexts.submitButton)}
@@ -289,3 +218,126 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
   },
 }));
+
+type FormData = {
+  supportType: SupportType;
+  comment: string;
+  phonePrefix: string;
+  phoneNumber: string;
+  email: string;
+};
+
+/*
+ * Controller hook for handling scooter contact form operations.
+ *
+ * This controller manages the state and logic for the contact form for scooyer operator support requests.
+ * It handles form validation, data submission, and integration with user profile and booking information.
+ */
+const useScooterContactFormController = (
+  operatorId: string,
+  vehicleId: string,
+  onSuccess: () => void,
+) => {
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
+  const {data: customerProfile} = useProfileQuery();
+  const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
+  const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
+    getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
+
+  const [formData, setFormData] = useState<FormData>({
+    supportType: SupportType.OTHER,
+    comment: '',
+    phonePrefix: authPhonePrefix ?? '47',
+    phoneNumber: authPhoneNumber ?? '',
+    email: customerProfile?.email ?? '',
+  });
+
+  const [showError, setShowError] = useState(false);
+
+  const {
+    isCommentValid,
+    isPhoneNumberValid,
+    isEmailValid,
+    isContactInfoPresent,
+    isAllInputValid,
+  } = validateFormData(formData);
+
+  const {mutate: sendSupportRequest, status: supportRequestStatus} =
+    useSendSupportRequestMutation(operatorId, onSuccess);
+
+  const onSubmit = async () => {
+    if (isAllInputValid) {
+      const currentUserCoordinates = getCurrentCoordinatesGlobal();
+
+      const requestBody: SendSupportRequestBody = {
+        assetId: vehicleId,
+        bookingId: activeShmoBooking?.bookingId,
+        supportType: formData.supportType,
+        comment: formData.comment,
+        contactInformationEndUser: {
+          phone: combinePhoneNumberAndPrefix(
+            formData.phonePrefix,
+            formData.phoneNumber,
+          ),
+          email: formData.email,
+        },
+        ...(currentUserCoordinates && {
+          place: {
+            coordinates: {
+              latitude: currentUserCoordinates.latitude,
+              longitude: currentUserCoordinates.longitude,
+            },
+          },
+        }),
+      };
+      sendSupportRequest(requestBody);
+    } else {
+      setShowError(true);
+    }
+  };
+
+  return {
+    formData,
+    setFormData,
+    isCommentValid,
+    isPhoneNumberValid,
+    isEmailValid,
+    isContactInfoPresent,
+    isAllInputValid,
+    onSubmit,
+    showError,
+    supportRequestStatus,
+  };
+};
+
+const validateFormData = (formData: FormData) => {
+  const isCommentValid = SendSupportRequestBodySchema.shape.comment.safeParse(
+    formData.comment,
+  ).success;
+
+  const isPhoneNumberValid =
+    !formData.phoneNumber ||
+    isValidPhoneNumber(
+      combinePhoneNumberAndPrefix(formData.phonePrefix, formData.phoneNumber),
+    );
+
+  const isEmailValid = !formData.email || isValidEmail(formData.email);
+  const isContactInfoPresent = !!formData.email || !!formData.phoneNumber;
+
+  const isAllInputValid =
+    isContactInfoPresent &&
+    isPhoneNumberValid &&
+    isEmailValid &&
+    isCommentValid;
+
+  return {
+    isCommentValid,
+    isPhoneNumberValid,
+    isEmailValid,
+    isContactInfoPresent,
+    isAllInputValid,
+  };
+};
+
+const combinePhoneNumberAndPrefix = (prefix: string, phoneNumber: string) =>
+  '+' + prefix + phoneNumber;

@@ -172,9 +172,9 @@ const ShmoImageFileSchema = z.object({
 });
 
 export enum SupportType {
-  REFUND = 'REFUND',
   UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
   UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
+  REFUND = 'REFUND',
   ACCIDENT_OR_BROKEN = 'ACCIDENT_OR_BROKEN',
   OTHER = 'OTHER',
 }
