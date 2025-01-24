@@ -87,9 +87,9 @@ export const Profile_PaymentMethodsScreen = () => {
         queryString.parseUrl(url).query.recurring_payment_id,
       );
       if (responseCode === 'OK') {
-        await refetchRecurringPayment();
+        refetchRecurringPayment();
       } else if (responseCode === 'Cancel') {
-        await cancelRecurringPayment(paymentId);
+        cancelRecurringPayment(paymentId);
       }
     }
   };
