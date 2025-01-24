@@ -135,8 +135,11 @@ export const RootStack = () => {
             {
               serviceJourneyId: params.serviceJourneyId,
               serviceDate: params.serviceDate,
-              date: new Date(),
-              fromQuayId: params.quayId,
+              date: (params.date as string) || new Date().toISOString(),
+              fromStopPosition:
+                typeof params.fromStopPosition === 'string'
+                  ? parseInt(params.fromStopPosition)
+                  : 0,
             },
           ],
         },

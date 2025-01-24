@@ -265,6 +265,7 @@ struct DepartureTime: Codable {
     let situations: [SituationElement]
     let serviceJourneyId: String
     let serviceDate: String
+    let stopPositionInPattern: Int
 }
 
 struct SituationElement: Codable {
@@ -427,7 +428,8 @@ extension DepartureGroup {
             realtime: false,
             situations: [],
             serviceJourneyId: "",
-            serviceDate: ""
+            serviceDate: "",
+            stopPositionInPattern: 0
         )
     }
   )
