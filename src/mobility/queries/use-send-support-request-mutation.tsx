@@ -5,13 +5,13 @@ import {useAcceptLanguage} from '@atb/api/use-accept-language';
 
 export const useSendSupportRequestMutation = (
   operatorId: string,
-  onSuccesCallback: () => void,
+  onSuccessCallback: () => void,
 ) => {
   const acceptLanguage = useAcceptLanguage();
 
   return useMutation({
     mutationFn: (reqBody: SendSupportRequestBody) =>
       sendSupportRequest(reqBody, acceptLanguage, operatorId),
-    onSuccess: onSuccesCallback,
+    onSuccess: onSuccessCallback,
   });
 };
