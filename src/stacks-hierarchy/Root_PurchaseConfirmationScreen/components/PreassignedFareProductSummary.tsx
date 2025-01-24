@@ -16,7 +16,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDurationString} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
@@ -144,7 +144,7 @@ export const PreassignedFareContractSummary = ({
             summary(
               t(
                 PurchaseConfirmationTexts.validityTexts.time(
-                  secondsToDurationString(validDurationSeconds, language),
+                  secondsToDuration(validDurationSeconds, language),
                 ),
               ),
             )}

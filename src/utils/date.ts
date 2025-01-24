@@ -41,6 +41,9 @@ import {
   toSeconds as toSecondsIso8601Duration,
 } from 'iso8601-duration';
 
+type Range = {low: number; high: number};
+type UnitMapType = {range: Range; units: Unit[]}[];
+
 const CET = 'Europe/Oslo';
 /**
  * Wrapped default formatting to take CET timezone into account
@@ -111,36 +114,14 @@ export function secondsToMinutesLong(
   });
 }
 
-const oneMinuteInSeconds = 60;
-const oneHourInSeconds = oneMinuteInSeconds * 60;
-const oneDayInSeconds = oneHourInSeconds * 24;
-const sevenDaysInSeconds = oneDayInSeconds * 7;
-const unitMap: UnitMapType = [
-  {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
-  {
-    range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
-    units: ['m'],
-  },
-  {
-    range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
-    units: ['h', 'm'],
-  },
-  {range: {low: oneDayInSeconds, high: sevenDaysInSeconds}, units: ['d', 'h']},
-  {range: {low: sevenDaysInSeconds, high: Infinity}, units: ['d', 'h']},
-];
-type Range = {low: number; high: number};
-type UnitMapType = {range: Range; units: Unit[]}[];
-
-export function secondsToDurationString(
+export function secondsToDuration(
   seconds: number,
   language: Language,
   opts?: humanizeDuration.Options,
 ): string {
   const currentLanguage = language === Language.English ? 'en' : 'no';
-  const units: Unit[] = unitMap.find(
-    ({range}) => seconds >= range.low && seconds <= range.high,
-  )?.units ?? ['d', 'h', 'm'];
   const value = Math.max(seconds, 0);
+  const units = secondsToUnits(seconds);
 
   return humanizeDuration(value * 1000, {
     units,
@@ -645,3 +626,31 @@ export const convertIsoStringFieldsToDate = (value: any): any => {
   }
   return value;
 };
+
+function secondsToUnits(seconds: number): humanizeDuration.Unit[] {
+  const oneMinuteInSeconds = 60;
+  const oneHourInSeconds = oneMinuteInSeconds * 60;
+  const oneDayInSeconds = oneHourInSeconds * 24;
+  const sevenDaysInSeconds = oneDayInSeconds * 7;
+  const unitMap: UnitMapType = [
+    {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
+    {
+      range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+      units: ['m', 's'],
+    },
+    {
+      range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
+      units: ['h', 'm'],
+    },
+    {
+      range: {low: oneDayInSeconds, high: sevenDaysInSeconds},
+      units: ['d', 'h'],
+    },
+    {range: {low: sevenDaysInSeconds, high: Infinity}, units: ['d']},
+  ];
+
+  return (
+    unitMap.find(({range}) => seconds >= range.low && seconds <= range.high)
+      ?.units ?? ['d', 'h', 'm']
+  );
+}

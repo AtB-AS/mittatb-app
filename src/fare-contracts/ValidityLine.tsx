@@ -13,9 +13,6 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 type Props =
   | {
       status: 'valid';
-      now: number;
-      validFrom: number;
-      validTo: number;
       fareProductType?: string;
       animate?: boolean;
     }
@@ -25,6 +22,7 @@ export const ValidityLine = (props: Props): ReactElement => {
   const {status} = props;
 
   const {theme} = useThemeContext();
+
   const styles = useStyles();
   const {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
@@ -33,6 +31,12 @@ export const ValidityLine = (props: Props): ReactElement => {
 
   switch (status) {
     case 'reserving':
+      return (
+        <LineWithVerticalBars
+          backgroundColor={theme.color.foreground.dynamic.disabled}
+          lineColor={lineColor}
+        />
+      );
     case 'approved':
       return (
         <LineWithVerticalBars
