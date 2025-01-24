@@ -69,11 +69,7 @@ export const ContactOperatorTexts = {
     ),
     email: {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
-      placeholder: _(
-        'Legg til e-post',
-        'Add email address',
-        'Legg til e-post',
-      ),
+      placeholder: _('Legg til e-post', 'Add email address', 'Legg til e-post'),
       errorMessage: _(
         `Vennligst legg inn en gyldig e-postadresse`,
         `Please add a valid e-mail adress.`,
