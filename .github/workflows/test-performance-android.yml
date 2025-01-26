@@ -26,7 +26,7 @@ jobs:
     name: Performance measures for Android
     runs-on: ubuntu-24.04
     outputs:
-      TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
     environment: atb
     timeout-minutes: 90
     env:
@@ -43,13 +43,26 @@ jobs:
           ref: ${{ env.ENV_BRANCH }}
 
       # Download APK
-      - name: Get AppCenter APK
-        id: get-appcenter-apk
-        run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: e2e
+      #- name: Get AppCenter APK
+      #  id: get-appcenter-apk
+      #  run: bash ./scripts/get-appcenter-apk.sh
+      #  working-directory: e2e
+      #  env:
+      #    APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
+      #    APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+      - name: Get Firebase AppDistribution APK
+        id: get-appdistribution-apk
+        run: |
+          output=$(python get-appdistribution-apk.py)
+        working-directory: e2e/scripts
         env:
-          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
-          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: "True"
+      # Temp
+      - name: Print TESTED_VERSION 1
+        run: echo ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
+      - name: Print TESTED_VERSION 2
+        run: echo ${{ env.TESTED_VERSION }}
 
       # E2E init
       - name: Enable KVM
@@ -119,7 +132,7 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+          TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
 
       # Results
       #- name: Check for performance report
