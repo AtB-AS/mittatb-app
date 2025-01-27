@@ -4,7 +4,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {SectionSeparator} from '@atb/components/sections';
-import {useValidityLineColors} from './use-validity-line-colors';
+import {useValidityLineColors} from '../use-validity-line-colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
@@ -13,9 +13,6 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 type Props =
   | {
       status: 'valid';
-      now: number;
-      validFrom: number;
-      validTo: number;
       fareProductType?: string;
       animate?: boolean;
     }
@@ -25,6 +22,7 @@ export const ValidityLine = (props: Props): ReactElement => {
   const {status} = props;
 
   const {theme} = useThemeContext();
+
   const styles = useStyles();
   const {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
@@ -33,6 +31,12 @@ export const ValidityLine = (props: Props): ReactElement => {
 
   switch (status) {
     case 'reserving':
+      return (
+        <LineWithVerticalBars
+          backgroundColor={theme.color.foreground.dynamic.disabled}
+          lineColor={lineColor}
+        />
+      );
     case 'approved':
       return (
         <LineWithVerticalBars

@@ -84,7 +84,10 @@ export function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View style={[topContainer, {padding: 0}]} testID={testID}>
+    <View
+      style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}
+      testID={testID}
+    >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <PressableOpacity
           style={[contentContainer, styles.lineHeader]}

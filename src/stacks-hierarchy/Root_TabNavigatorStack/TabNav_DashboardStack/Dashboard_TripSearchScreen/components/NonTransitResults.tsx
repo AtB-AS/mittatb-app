@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
 import {Button} from '@atb/components/button';
-import {secondsToDurationString, secondsToDurationShort} from '@atb/utils/date';
+import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {
   TranslateFunction,
   TripSearchTexts,
@@ -42,10 +42,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
           tripPattern.duration,
           language,
         );
-        const duration = secondsToDurationString(
-          tripPattern.duration,
-          language,
-        );
+        const duration = secondsToDuration(tripPattern.duration, language);
         const analyticsMetadata = {mode, duration: durationShort};
         return (
           <Button

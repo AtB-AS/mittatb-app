@@ -2,7 +2,6 @@ import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   NativeSyntheticEvent,
-  Platform,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
@@ -98,15 +97,6 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       }
     };
 
-    const padding = {
-      // There are some oddities with handling padding
-      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom:
-        theme.spacing.medium - Platform.select({android: 4, default: 0}),
-      paddingTop:
-        theme.spacing.medium - Platform.select({android: 5, default: 0}),
-    };
-
     // Remove padding from topContainerStyle
     const {padding: _dropThis, ...topContainerStyle} = topContainer;
 
@@ -131,7 +121,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         <View style={inlineLabel ? contentContainer : undefined}>
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, padding, style]}
+            style={[styles.input, style]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -195,12 +185,13 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     paddingRight: theme.spacing.xSmall,
   },
   inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     position: 'relative',
   },
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacing.medium,
   },
   clearButton: {
     alignSelf: 'center',
