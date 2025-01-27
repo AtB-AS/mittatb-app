@@ -47,7 +47,7 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
        * There are cases where remove token fails due to the backoffice token
        * already removed, in this case, just wipe the local token.
        */
-      if (isTokenDeletedError(err)) {
+      if (isEntityDeletedError(err)) {
         await mobileTokenClient.clear();
       }
     }
@@ -76,9 +76,9 @@ export const getMobileTokenErrorHandlingStrategy = (
   // try to find the error resolution
   if (err instanceof TokenFactoryError) {
     errorResolution = err.resolution;
-  } else if (err instanceof isRemoteTokenStateError) {
+  } else if (err instanceof RemoteTokenStateError) {
     errorResolution = mapTokenErrorResolution(err);
-  } else if (isTokenDeletedError(err)) {
+  } else if (isEntityDeletedError(err)) {
     /**
      * This handles the situation where local token is still stored, while
      * the remote token is already deleted, should only happens with a very
@@ -105,15 +105,15 @@ export const getMobileTokenErrorHandlingStrategy = (
 };
 
 /**
- * Checks if the error is a token deleted error
+ * Checks if the error is an `Entity deleted` error
  * Should be only those with error code 500, and has message as follows:
  *
  * `5 NOT_FOUND: Entity deleted: Entity of type Token with id xxxx has been deleted`
- *
+ * `5 NOT_FOUND: Entity not found: Token not found for CustomerAccount: xxxx`
  */
-const isTokenDeletedError = (err: any): boolean => {
+const isEntityDeletedError = (err: any): boolean => {
   return (
-    isAxiosError(err) && err.code === '500' && err.message.includes('NOT FOUND')
+    isAxiosError(err) && err.code === '500' && err.message.includes('NOT_FOUND')
   );
 };
 
