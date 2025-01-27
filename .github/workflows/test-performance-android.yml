@@ -65,7 +65,7 @@ jobs:
         id: get-appdistribution-apk
         run: |
           output=$(python get-appdistribution-apk.py)
-        working-directory: e2e/scripts
+        working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
           IS_GITHUB: "True"
