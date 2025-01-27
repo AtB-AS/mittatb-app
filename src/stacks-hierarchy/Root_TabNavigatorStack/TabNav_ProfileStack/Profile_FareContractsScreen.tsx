@@ -144,11 +144,26 @@ export const Profile_FareContractsScreen = () => {
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
         maximumNumberOfAccesses: 10,
-        numberOfUsedAccesses: 8,
+        numberOfUsedAccesses: 1,
         status: 5,
         usedAccesses: [
           {
-            startDateTime: daysFromNow(-1),
+            startDateTime: daysFromNow(-5),
+            endDateTime: daysFromNow(-4),
+          },
+        ],
+      },
+      {
+        ...BASE.travelRights[0],
+        type: 'CarnetTicket',
+        fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
+        id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-2',
+        maximumNumberOfAccesses: 10,
+        numberOfUsedAccesses: 1,
+        status: 5,
+        usedAccesses: [
+          {
+            startDateTime: daysFromNow(-2),
             endDateTime: daysFromNow(1),
           },
         ],
