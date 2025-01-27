@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -271,7 +271,7 @@ export const useOnRecurringPaymentReceived = ({
     return recurringPayment.id;
   };
 
-  const callbackRef = useRef(callback);
+  const callbackRef = useCallback(() => callback(), [callback]);
 
   useEffect(() => {
     if (!recurringPaymentId) return;
@@ -285,7 +285,7 @@ export const useOnRecurringPaymentReceived = ({
         (snapshot) => {
           const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
           if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
-            callbackRef.current();
+            callbackRef();
           }
         },
         (err) => {
@@ -297,7 +297,7 @@ export const useOnRecurringPaymentReceived = ({
     return () => {
       recurringPaymentsUnsub();
     };
-  }, [userId, recurringPaymentId]);
+  }, [userId, recurringPaymentId, callbackRef]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
