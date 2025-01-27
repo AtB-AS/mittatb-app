@@ -1,5 +1,8 @@
 import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {isValidPhoneNumber} from 'libphonenumber-js';
+import {isValidEmail} from '@atb/utils/validation';
+import {combinePrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -172,31 +175,78 @@ const ShmoImageFileSchema = z.object({
 });
 
 export enum SupportType {
-  REFUND = 'REFUND',
   UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
   UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
+  REFUND = 'REFUND',
   ACCIDENT_OR_BROKEN = 'ACCIDENT_OR_BROKEN',
   OTHER = 'OTHER',
 }
 
-const SendSupportRequestBodySchema = z.object({
+export enum SendSupportCustomErrorType {
+  NO_CONTACT_INFO = 'NO_CONTACT_INFO',
+}
+
+export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
+
+export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
   supportType: z.nativeEnum(SupportType),
   contactInformationEndUser: z
     .object({
-      phone: z.string().optional(),
-      email: z.string().email().optional(),
+      phonePrefix: z.string().nullish(),
+      phoneNumber: z.string().nullish(),
+      email: z.string().nullish(),
     })
-    .refine((data) => data.phone || data.email, {
-      message: 'Please provide at least one: phone or email',
-    }),
-  comment: z.string().optional().nullable(),
-  place: z.object({
-    coordinates: ShmoCoordinatesSchema,
-    name: z.string(),
-  }),
+    .superRefine((data, ctx) => {
+      const phone =
+        data.phonePrefix && data.phoneNumber
+          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
+          : undefined;
+      const email = data.email || undefined;
+
+      if (!phone && !email) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: SendSupportCustomErrorType.NO_CONTACT_INFO,
+        });
+      }
+
+      if (phone && !isValidPhoneNumber(phone)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['phoneNumber'],
+        });
+      }
+
+      if (email && !isValidEmail(email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+        });
+      }
+
+      return z.NEVER;
+    })
+    .transform((data) => ({
+      phone:
+        data.phonePrefix && data.phoneNumber
+          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
+          : undefined,
+      email: data.email || undefined,
+    })),
+  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).optional().nullable(),
+  place: z
+    .object({
+      coordinates: ShmoCoordinatesSchema,
+      name: z.string().optional(),
+    })
+    .optional(),
 });
+
+export type SendSupportRequestBodyInput = z.input<
+  typeof SendSupportRequestBodySchema
+>;
 
 export type SendSupportRequestBody = z.infer<
   typeof SendSupportRequestBodySchema

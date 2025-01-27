@@ -67,6 +67,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ParkingViolationsReporting/Root_ScooterHelpScreen';
+import {Root_ScooterContactOperatorScreen} from './Root_ParkingViolationsReporting/Root_ScooterContactOperatorScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -391,6 +392,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ScooterHelpScreen"
                 component={Root_ScooterHelpScreen}
+              />
+              <Stack.Screen
+                name="Root_ScooterContactOperatorScreen"
+                component={Root_ScooterContactOperatorScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

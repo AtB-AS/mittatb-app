@@ -74,6 +74,11 @@ type Root_ScooterHelpScreenParams = {
   vehicleId: string;
 };
 
+type Root_ScooterContactOperatorScreenParams = {
+  vehicleId: string;
+  operatorId: string;
+};
+
 type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
 };
@@ -125,6 +130,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ScooterHelpScreen: Root_ScooterHelpScreenParams;
+  Root_ScooterContactOperatorScreen: Root_ScooterContactOperatorScreenParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
