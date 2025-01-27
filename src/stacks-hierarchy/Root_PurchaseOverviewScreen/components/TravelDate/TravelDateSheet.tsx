@@ -1,14 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  DateInputSectionItem,
-  Section,
-  TimeInputSectionItem,
-} from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravelDateTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {
   BottomSheetContainer,
   useBottomSheetContext,
@@ -20,6 +14,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/purchase-selection';
+import {DatePicker} from '@atb/date-picker';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -27,27 +22,19 @@ type Props = {
 };
 
 export const TravelDateSheet = ({selection, onSave}: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
   const defaultDate = selection.travelDate ?? new Date().toISOString();
-  const [dateString, setDate] = useState(defaultDate);
-
-  const [timeString, setTime] = useState(() =>
-    formatLocaleTime(defaultDate, language),
-  );
+  const [date, setDate] = useState(defaultDate);
 
   const {close} = useBottomSheetContext();
   const onSavePress = () => {
-    const travelDate = dateWithReplacedTime(
-      dateString,
-      timeString,
-    ).toISOString();
     const newSelection = selectionBuilder
       .fromSelection(selection)
-      .date(travelDate)
+      .date(date)
       .build();
     onSave(newSelection);
     close();
@@ -60,10 +47,7 @@ export const TravelDateSheet = ({selection, onSave}: Props) => {
         contentContainerStyle={styles.contentContainer}
         centerContent={true}
       >
-        <Section>
-          <DateInputSectionItem value={dateString} onChange={setDate} />
-          <TimeInputSectionItem value={timeString} onChange={setTime} />
-        </Section>
+        <DatePicker date={date} onDateChange={setDate} />
       </ScrollView>
       <FullScreenFooter>
         <Button

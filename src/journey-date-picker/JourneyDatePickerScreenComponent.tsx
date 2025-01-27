@@ -1,11 +1,6 @@
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {
-  DateInputSectionItem,
-  RadioGroupSection,
-  Section,
-  TimeInputSectionItem,
-} from '@atb/components/sections';
+import {RadioGroupSection, Section} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   JourneyDatePickerTexts,
@@ -13,15 +8,12 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {
-  dateWithReplacedTime,
-  formatLocaleTime,
-  formatToLongDateTime,
-} from '@atb/utils/date';
+import {formatToLongDateTime} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
 import {ParamListBase, RouteProp, useRoute} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
+import {DatePicker} from '@atb/date-picker';
 
 export type JourneyDatePickerScreenParams = {
   searchTime: SearchTime;
@@ -44,24 +36,18 @@ export const JourneyDatePickerScreenComponent = ({
   searchTime,
   onSave,
 }: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   const dateItems = Array.from(DateOptions);
 
-  const [dateString, setDate] = useState<string>(searchTime.date);
-  const [timeString, setTime] = useState<string>(() =>
-    formatLocaleTime(searchTime.date, language),
-  );
+  const [date, setDate] = useState<string>(searchTime.date);
 
   const onSelect = () => {
     const calculatedTime: SearchTime = {
-      date:
-        option === 'now'
-          ? new Date().toISOString()
-          : dateWithReplacedTime(dateString, timeString).toISOString(),
+      date: option === 'now' ? new Date().toISOString() : date,
       option,
     };
     onSave(calculatedTime);
@@ -88,16 +74,7 @@ export const JourneyDatePickerScreenComponent = ({
 
         {option !== 'now' && (
           <Section style={styles.section} testID="dateTimePickerSection">
-            <DateInputSectionItem
-              value={dateString}
-              onChange={setDate}
-              testID="datePicker"
-            />
-            <TimeInputSectionItem
-              value={timeString}
-              onChange={setTime}
-              testID="timePicker"
-            />
+            <DatePicker date={date} onDateChange={setDate} />
           </Section>
         )}
 
@@ -185,5 +162,4 @@ export function getSearchTimeLabel(
     case 'departure':
       return t(JourneyDatePickerTexts.dateInput.departure(time));
   }
-  return time;
 }
