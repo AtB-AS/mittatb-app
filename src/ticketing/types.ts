@@ -68,17 +68,6 @@ export const TravelRight = z.object({
 });
 export type TravelRight = z.infer<typeof TravelRight>;
 
-/**
- * For definition, see `unknownTicketPersisted` type in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
- */
-export const UnknownTravelRight = z.object({
-  id: z.string(),
-  type: z.string(),
-  customerAccountId: z.string().optional(),
-});
-export type UnknownTravelRight = z.infer<typeof UnknownTravelRight>;
-
 export enum FareContractState {
   Unspecified = 0,
   NotActivated = 1,
