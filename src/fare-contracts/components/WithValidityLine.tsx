@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
+import {ValidityLine} from '@atb/fare-contracts/components/ValidityLine';
 import {View} from 'react-native';
 import React, {type PropsWithChildren} from 'react';
 import type {FareContract, Reservation} from '@atb/ticketing';

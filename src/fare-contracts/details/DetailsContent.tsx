@@ -48,7 +48,7 @@ import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fet
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
-import {ValidityTime} from '@atb/fare-contracts/ValidityTime';
+import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
 
 type Props = {
   fareContract: FareContract;
