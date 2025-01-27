@@ -192,7 +192,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   inputClear: {
     position: 'absolute',
     right: 0,
-    //bottom: theme.spacing.medium,
   },
   clearButton: {
     alignSelf: 'center',
