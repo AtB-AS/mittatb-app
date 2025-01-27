@@ -68,12 +68,6 @@ export async function deleteRecurringPayment(paymentId: number) {
   await client.delete<void>(url, {authWithIdToken: true});
 }
 
-export async function authorizeRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}/authorize`;
-  const response = await client.post<void>(url, {}, {authWithIdToken: true});
-  return response.data;
-}
-
 export async function cancelRecurringPayment(paymentId: number) {
   const url = `ticket/v3/recurring-payments/${paymentId}/cancel`;
   const response = await client.post<void>(url, {}, {authWithIdToken: true});
