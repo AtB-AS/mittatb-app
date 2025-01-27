@@ -113,7 +113,7 @@ export const getMobileTokenErrorHandlingStrategy = (
  */
 const isEntityDeletedError = (err: any): boolean => {
   return (
-    isAxiosError(err) && err.code === '500' && err.message.includes('NOT FOUND')
+    isAxiosError(err) && err.code === '500' && err.message.includes('NOT_FOUND')
   );
 };
 
