@@ -42,6 +42,17 @@ jobs:
         with:
           ref: ${{ env.ENV_BRANCH }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+
       # Download APK
       #- name: Get AppCenter APK
       #  id: get-appcenter-apk
