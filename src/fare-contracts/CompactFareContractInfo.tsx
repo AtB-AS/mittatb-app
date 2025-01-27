@@ -5,6 +5,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
+  fareContractValidityUnits,
   isValidFareContract,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
@@ -151,6 +152,7 @@ export const useFareContractInfoTexts = (
   const durationText = secondsToDuration(secondsUntilValid, language, {
     conjunction,
     serialComma: false,
+    units: fareContractValidityUnits(secondsUntilValid),
   });
 
   const tokenWarning = useNonInspectableTokenWarning();

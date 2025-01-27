@@ -256,12 +256,12 @@ describe('secondsToDuration', () => {
   describe('Basic conversions', () => {
     test('converts 500 seconds to duration string in English', () => {
       const result = secondsToDuration(500, Language.English);
-      expect(result).toBe('8 minutes, 20 seconds');
+      expect(result).toBe('8 minutes');
     });
 
     test('converts 500 seconds to duration string in Norwegian', () => {
       const result = secondsToDuration(500, Language.Norwegian);
-      expect(result).toBe('8 minutter, 20 sekunder');
+      expect(result).toBe('8 minutter');
     });
   });
 
@@ -269,7 +269,7 @@ describe('secondsToDuration', () => {
   describe('Edge case handling', () => {
     test('handles 59 seconds at low range', () => {
       const result = secondsToDuration(59, Language.English);
-      expect(result).toBe('59 seconds');
+      expect(result).toBe('1 minute');
     });
 
     test('handles 60 seconds (start of minutes range)', () => {
@@ -310,22 +310,17 @@ describe('secondsToDuration', () => {
   describe('Invalid or edge case inputs', () => {
     test('handles negative seconds gracefully', () => {
       const result = secondsToDuration(-500, Language.English);
-      expect(result).toBe('0 seconds');
+      expect(result).toBe('0 minutes');
     });
 
     test('handles exactly 0 seconds', () => {
       const result = secondsToDuration(0, Language.English);
-      expect(result).toBe('0 seconds');
+      expect(result).toBe('0 minutes');
     });
   });
 
   // Unit Map Logic
   describe('Unit map logic', () => {
-    test('uses seconds for durations under 60 seconds', () => {
-      const result = secondsToDuration(30, Language.English);
-      expect(result).toBe('30 seconds');
-    });
-
     test('uses minutes and seconds for durations under an hour', () => {
       const result = secondsToDuration(120, Language.English);
       expect(result).toBe('2 minutes');

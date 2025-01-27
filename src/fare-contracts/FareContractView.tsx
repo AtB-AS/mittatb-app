@@ -21,7 +21,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
-import {ValidityTime} from '@atb/fare-contracts/ValidityTime';
+import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
 import {TravelInfoSectionItem} from '@atb/fare-contracts/modules/TravelInfoSectionItem';
 
 type Props = {

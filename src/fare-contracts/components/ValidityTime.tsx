@@ -10,7 +10,11 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {getFareContractInfo, ValidityStatus} from './utils';
+import {
+  fareContractValidityUnits,
+  getFareContractInfo,
+  ValidityStatus,
+} from '../utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
@@ -75,6 +79,7 @@ function validityTimeText(
     secondsToDuration(seconds, language, {
       conjunction,
       serialComma: false,
+      units: fareContractValidityUnits(seconds),
     });
 
   switch (status) {
