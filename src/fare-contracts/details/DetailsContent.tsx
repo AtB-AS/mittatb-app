@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FareContract,
+  hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
@@ -75,7 +76,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     usedAccesses,
@@ -177,7 +177,7 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {isCarnetFareContract && (
+      {hasTravelRightAccesses(fc.travelRights) && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}

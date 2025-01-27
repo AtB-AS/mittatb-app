@@ -97,16 +97,6 @@ describe('getAvailabilityStatus', () => {
     expect(availabilityStatus.status).toEqual('unspecified');
   });
 
-  it(`should return 'invalid/invalid' if travel right is not according to spec`, () => {
-    const availabilityStatus = getAvailabilityStatus(
-      createFareContract({travelRights: [{} as TravelRight]}),
-      new Date().getTime(),
-    );
-
-    expect(availabilityStatus.availability).toEqual('invalid');
-    expect(availabilityStatus.status).toEqual('invalid');
-  });
-
   it(`should return 'historic/expired' if all travel rights are expired`, () => {
     const availabilityStatus = getAvailabilityStatus(
       createFareContract({

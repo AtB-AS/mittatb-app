@@ -14,6 +14,7 @@ import {
   isCanBeConsumedNowFareContract,
   FareContract,
   isCanBeActivatedNowFareContract,
+  hasTravelRightAccesses,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
@@ -48,7 +49,6 @@ export const FareContractView: React.FC<Props> = ({
   const styles = useStyles();
 
   const {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     maximumNumberOfAccesses,
@@ -74,7 +74,7 @@ export const FareContractView: React.FC<Props> = ({
         </WithValidityLine>
       </GenericSectionItem>
       <TravelInfoSectionItem fc={fareContract} />
-      {isCarnetFareContract && (
+      {hasTravelRightAccesses(fareContract.travelRights) && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}

@@ -6,7 +6,6 @@ import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {isDefined} from '@atb/utils/presence';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
@@ -53,10 +52,8 @@ const ticketingReducer: TicketingReducer = (
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );
-      // Filter out fare contracts that doesn't have any normal travel rights
-      const fareContracts = action.fareContracts.filter((fc) =>
-        // TODO: Add Zod validation for fare contracts
-        fc.travelRights.some(isDefined),
+      const fareContracts = action.fareContracts.filter(
+        (fc) => FareContract.safeParse(fc).success,
       );
       return {
         ...prevState,

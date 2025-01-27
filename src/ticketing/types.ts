@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 enum TravelRightStatus {
   UNSPECIFIED = 0,
   RESERVED = 1,
@@ -21,85 +23,61 @@ export enum TravelRightDirection {
 }
 
 /**
+ * For definition, see `elementAccess` type in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ */
+export const CarnetTravelRightUsedAccess = z.object({
+  startDateTime: z.date(),
+  endDateTime: z.date(),
+});
+export type CarnetTravelRightUsedAccess = z.infer<
+  typeof CarnetTravelRightUsedAccess
+>;
+
+/**
  * For definitions, see travel_right.go in eventhandler
  * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
  */
-export type TravelRight = {
-  id: string;
-  type: string;
-  customerAccountId?: string;
-  status: TravelRightStatus;
-  fareProductRef: string;
-  startDateTime: Date;
-  endDateTime: Date;
-  usageValidityPeriodRef: string;
-  userProfileRef: string;
-  authorityRef: string;
+export const TravelRight = z.object({
+  id: z.string(),
+  type: z.string(),
+  customerAccountId: z.string().optional(),
+  status: z.nativeEnum(TravelRightStatus),
+  fareProductRef: z.string(),
+  startDateTime: z.date(),
+  endDateTime: z.date(),
+  usageValidityPeriodRef: z.string(),
+  userProfileRef: z.string(),
+  authorityRef: z.string(),
   /** Used by period, single and carnet */
-  tariffZoneRefs?: string[];
+  tariffZoneRefs: z.array(z.string()).optional(),
   /** Used by period, single and carnet */
-  fareZoneRefs?: string[];
+  fareZoneRefs: z.array(z.string()).optional(),
   /** Used by boat and carnet boat */
-  startPointRef?: string;
+  startPointRef: z.string().optional(),
   /** Used by boat and carnet boat */
-  endPointRef?: string;
+  endPointRef: z.string().optional(),
   /** Used by boat and carnet boat */
-  direction?: TravelRightDirection;
+  direction: z.nativeEnum(TravelRightDirection).optional(),
   /** Used by carnet and carnet boat */
-  maximumNumberOfAccesses?: number;
+  maximumNumberOfAccesses: z.number().optional(),
   /** Used by carnet and carnet boat */
-  numberOfUsedAccesses?: number;
+  numberOfUsedAccesses: z.number().optional(),
   /** Used by carnet and carnet boat */
-  usedAccesses?: CarnetTravelRightUsedAccess[];
-};
+  usedAccesses: z.array(CarnetTravelRightUsedAccess).optional(),
+});
+export type TravelRight = z.infer<typeof TravelRight>;
 
 /**
  * For definition, see `unknownTicketPersisted` type in eventhandler
  * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
  */
-export type UnknownTravelRight = {
-  id: string;
-  type: string;
-  customerAccountId?: string;
-};
-
-/**
- * For definition, see `elementAccess` type in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
- */
-export type CarnetTravelRightUsedAccess = {
-  startDateTime: Date;
-  endDateTime: Date;
-};
-
-export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
-
-export type LastUsedAccessState = {
-  status: UsedAccessStatus;
-  validFrom: number | undefined;
-  validTo: number | undefined;
-};
-
-/**
- * For definition, see `persistedFareContract` type in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/fare_contract.go
- */
-export type FareContract = {
-  created: Date;
-  id: string;
-  customerAccountId: string;
-  minimumSecurityLevel: number;
-  orderId: string;
-  paymentType: string[];
-  paymentTypeGroup: string[];
-  qrCode?: string;
-  state: FareContractState;
-  totalAmount: string;
-  totalTaxAmount: string;
-  travelRights: TravelRight[];
-  version: string;
-  purchasedBy: string;
-};
+export const UnknownTravelRight = z.object({
+  id: z.string(),
+  type: z.string(),
+  customerAccountId: z.string().optional(),
+});
+export type UnknownTravelRight = z.infer<typeof UnknownTravelRight>;
 
 export enum FareContractState {
   Unspecified = 0,
@@ -108,6 +86,35 @@ export enum FareContractState {
   Cancelled = 3,
   Refunded = 4,
 }
+/**
+ * For definition, see `persistedFareContract` type in eventhandler
+ * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/fare_contract.go
+ */
+export const FareContract = z.object({
+  created: z.date(),
+  id: z.string(),
+  customerAccountId: z.string(),
+  minimumSecurityLevel: z.number(),
+  orderId: z.string(),
+  paymentType: z.array(z.string()),
+  paymentTypeGroup: z.array(z.string()),
+  qrCode: z.string().optional(),
+  state: z.nativeEnum(FareContractState),
+  totalAmount: z.string(),
+  totalTaxAmount: z.string(),
+  travelRights: z.array(TravelRight).nonempty(),
+  version: z.string(),
+  purchasedBy: z.string(),
+});
+export type FareContract = z.infer<typeof FareContract>;
+
+export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
+
+export type LastUsedAccessState = {
+  status: UsedAccessStatus;
+  validFrom: number | undefined;
+  validTo: number | undefined;
+};
 
 export type Reservation = {
   created: Date;

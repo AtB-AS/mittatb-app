@@ -2,7 +2,6 @@ import {
   FareContract,
   flattenTravelRightAccesses,
   getLastUsedAccess,
-  isNormalTravelRight,
 } from '@atb/ticketing';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
@@ -21,8 +20,7 @@ export const ValidTo = ({fc}: Props) => {
   const {theme} = useThemeContext();
   const {serverNow} = useTimeContext();
   const firstTravelRight = fc.travelRights[0];
-  if (!isNormalTravelRight(firstTravelRight)) return null;
-  if (!(getValidityStatus(serverNow, fc) === 'valid')) return null;
+  if (getValidityStatus(serverNow, fc) !== 'valid') return null;
 
   let endDateTime = firstTravelRight.endDateTime;
   const flattenedAccesses = flattenTravelRightAccesses(fc.travelRights);

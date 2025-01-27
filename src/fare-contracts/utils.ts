@@ -3,7 +3,6 @@ import {
   Reservation,
   FareContractState,
   flattenTravelRightAccesses,
-  isCarnet,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
   CarnetTravelRightUsedAccess,
@@ -255,7 +254,6 @@ export const useDefaultPreassignedFareProduct = (
 };
 
 type FareContractInfoProps = {
-  isCarnetFareContract: boolean;
   travelRights: TravelRight[];
   validityStatus: ValidityStatus;
   validFrom: number;
@@ -270,8 +268,6 @@ export function getFareContractInfo(
   fc: FareContract,
   currentUserId?: string,
 ): FareContractInfoProps {
-  const isCarnetFareContract = isCarnet(fc);
-
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
@@ -302,7 +298,6 @@ export function getFareContractInfo(
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
 
   return {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     validFrom,

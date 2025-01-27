@@ -10,7 +10,6 @@ import {
   FareContract,
   flattenTravelRightAccesses,
   getLastUsedAccess,
-  isCarnet,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -41,7 +40,6 @@ export type FareContractInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
-  isCarnetFareContract?: boolean;
   testID?: string;
   now?: number;
   validTo?: number;
@@ -143,7 +141,6 @@ export const getFareContractInfoDetails = (
     userProfiles,
   );
 
-  const isACarnetFareContract = isCarnet(fareContract);
   const flattenedAccesses = flattenTravelRightAccesses(
     fareContract.travelRights,
   );
@@ -161,7 +158,6 @@ export const getFareContractInfoDetails = (
     status: validityStatus,
     now: now,
     validTo: validTo,
-    isCarnetFareContract: isACarnetFareContract,
   };
 };
 
