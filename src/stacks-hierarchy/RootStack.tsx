@@ -67,6 +67,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ParkingViolationsReporting/Root_ScooterHelpScreen';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -126,18 +127,24 @@ export const RootStack = () => {
     ];
 
     if (path.includes('details')) {
+      const item: ServiceJourneyDeparture = {
+        serviceJourneyId: params.serviceJourneyId as string,
+        date: (params.date as string) || new Date().toISOString(),
+        serviceDate: params.serviceDate as string,
+        fromStopPosition:
+          typeof params.fromStopPosition === 'string'
+            ? parseInt(params.fromStopPosition)
+            : 0,
+        toStopPosition:
+          typeof params.toStopPosition === 'string'
+            ? parseInt(params.toStopPosition)
+            : undefined,
+      };
       destination.push({
         name: 'Departures_DepartureDetailsScreen',
         params: {
           activeItemIndex: 0,
-          items: [
-            {
-              serviceJourneyId: params.serviceJourneyId,
-              serviceDate: params.serviceDate,
-              date: new Date(),
-              fromQuayId: params.quayId,
-            },
-          ],
+          items: [item],
         },
       });
     }
