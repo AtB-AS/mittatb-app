@@ -1,5 +1,7 @@
 import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {isValidPhoneNumber} from 'libphonenumber-js';
+import {isValidEmail} from '@atb/utils/validation';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -179,18 +181,57 @@ export enum SupportType {
   OTHER = 'OTHER',
 }
 
+export enum SendSupportCustomErrorType {
+  NO_CONTACT_INFO = 'NO_CONTACT_INFO',
+}
+
 export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
   supportType: z.nativeEnum(SupportType),
   contactInformationEndUser: z
     .object({
-      phone: z.string().optional(),
-      email: z.string().email().optional(),
+      phonePrefix: z.string().nullish(),
+      phoneNumber: z.string().nullish(),
+      email: z.string().nullish(),
     })
-    .refine((data) => data.phone || data.email, {
-      message: 'Please provide at least one: phone or email',
-    }),
+    .superRefine((data, ctx) => {
+      const phone =
+        data.phonePrefix && data.phoneNumber
+          ? `+ ${data.phonePrefix}${data.phoneNumber}`
+          : undefined;
+      const email = data.email || undefined;
+
+      if (!phone && !email) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: SendSupportCustomErrorType.NO_CONTACT_INFO,
+        });
+      }
+
+      if (phone && !isValidPhoneNumber(phone)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['phoneNumber'],
+        });
+      }
+
+      if (email && !isValidEmail(email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+        });
+      }
+
+      return z.NEVER;
+    })
+    .transform((data) => ({
+      phone:
+        data.phonePrefix && data.phoneNumber
+          ? `${data.phonePrefix}${data.phoneNumber}`
+          : undefined,
+      email: data.email || undefined,
+    })),
   comment: z.string().max(1000).optional().nullable(),
   place: z
     .object({
@@ -199,6 +240,10 @@ export const SendSupportRequestBodySchema = z.object({
     })
     .optional(),
 });
+
+export type SendSupportRequestBodyInput = z.input<
+  typeof SendSupportRequestBodySchema
+>;
 
 export type SendSupportRequestBody = z.infer<
   typeof SendSupportRequestBodySchema

@@ -14,20 +14,20 @@ import {ContentHeading} from '@atb/components/heading';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactOperatorTexts} from '@atb/translations/screens/ContactOperator';
 import {
+  SendSupportCustomErrorType,
   SendSupportRequestBody,
+  SendSupportRequestBodyInput,
   SendSupportRequestBodySchema,
   SupportType,
 } from '@atb/api/types/mobility';
 import {useAuthContext} from '@atb/auth';
 import {getParsedPrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Button} from '@atb/components/button';
-import {isValidPhoneNumber} from 'libphonenumber-js';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSendSupportRequestMutation} from '@atb/mobility/queries/use-send-support-request-mutation';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
-import {isValidEmail} from '@atb/utils/validation';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
 
@@ -254,33 +254,35 @@ const useScooterContactFormController = (
 
   const [showError, setShowError] = useState(false);
 
+  const requestBody: SendSupportRequestBodyInput = {
+    assetId: vehicleId,
+    bookingId: activeShmoBooking?.bookingId,
+    supportType: formData.supportType,
+    comment: formData.comment,
+    contactInformationEndUser: {
+      phoneNumber: formData.phoneNumber,
+      phonePrefix: formData.phonePrefix,
+      email: formData.email,
+    },
+  };
+
   const {
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
     isContactInfoPresent,
     isAllInputValid,
-  } = validateFormData(formData);
+    validatedRequestBody,
+  } = validateSchema(requestBody);
 
   const {mutate: sendSupportRequest, status: supportRequestStatus} =
     useSendSupportRequestMutation(operatorId, onSuccess);
 
   const onSubmit = async () => {
-    if (isAllInputValid) {
+    if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
-
-      const requestBody: SendSupportRequestBody = {
-        assetId: vehicleId,
-        bookingId: activeShmoBooking?.bookingId,
-        supportType: formData.supportType,
-        comment: formData.comment,
-        contactInformationEndUser: {
-          phone: combinePhoneNumberAndPrefix(
-            formData.phonePrefix,
-            formData.phoneNumber,
-          ),
-          email: formData.email,
-        },
+      const requestBody2: SendSupportRequestBody = {
+        ...validatedRequestBody,
         ...(currentUserCoordinates && {
           place: {
             coordinates: {
@@ -290,7 +292,7 @@ const useScooterContactFormController = (
           },
         }),
       };
-      sendSupportRequest(requestBody);
+      sendSupportRequest(requestBody2);
     }
     setShowError(true);
   };
@@ -309,34 +311,31 @@ const useScooterContactFormController = (
   };
 };
 
-const validateFormData = (formData: FormData) => {
-  const isCommentValid = SendSupportRequestBodySchema.shape.comment.safeParse(
-    formData.comment,
-  ).success;
+export const validateSchema = (body: SendSupportRequestBodyInput) => {
+  const result = SendSupportRequestBodySchema.safeParse(body);
 
-  const isPhoneNumberValid =
-    !formData.phoneNumber ||
-    isValidPhoneNumber(
-      combinePhoneNumberAndPrefix(formData.phonePrefix, formData.phoneNumber),
-    );
+  if (result.success) {
+    return {
+      isCommentValid: true,
+      isPhoneNumberValid: true,
+      isEmailValid: true,
+      isContactInfoPresent: true,
+      isAllInputValid: true,
+      validatedRequestBody: result.data,
+    };
+  }
 
-  const isEmailValid = !formData.email || isValidEmail(formData.email);
-  const isContactInfoPresent = !!formData.email || !!formData.phoneNumber;
-
-  const isAllInputValid =
-    isContactInfoPresent &&
-    isPhoneNumberValid &&
-    isEmailValid &&
-    isCommentValid;
-
+  const formattedErrors = result.error.format();
   return {
-    isCommentValid,
-    isPhoneNumberValid,
-    isEmailValid,
-    isContactInfoPresent,
-    isAllInputValid,
+    isCommentValid: !formattedErrors.comment?._errors,
+    isPhoneNumberValid:
+      !formattedErrors.contactInformationEndUser?.phoneNumber?._errors,
+    isEmailValid: !formattedErrors.contactInformationEndUser?.email?._errors,
+    isContactInfoPresent:
+      !formattedErrors.contactInformationEndUser?._errors?.includes(
+        SendSupportCustomErrorType.NO_CONTACT_INFO,
+      ),
+    isAllInputValid: false,
+    validatedRequestBody: undefined,
   };
 };
-
-const combinePhoneNumberAndPrefix = (prefix: string, phoneNumber: string) =>
-  '+' + prefix + phoneNumber;
