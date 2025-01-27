@@ -63,8 +63,7 @@ jobs:
       #    APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
       - name: Get Firebase AppDistribution APK
         id: get-appdistribution-apk
-        run: |
-          output=$(python get-appdistribution-apk.py)
+        run: python get-appdistribution-apk.py
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
