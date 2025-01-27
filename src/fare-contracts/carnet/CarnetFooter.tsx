@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
 
@@ -17,7 +17,6 @@ export const CarnetFooter: React.FC<Props> = ({
   numberOfUsedAccesses,
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
 
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =

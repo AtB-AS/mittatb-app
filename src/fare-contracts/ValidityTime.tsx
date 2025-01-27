@@ -116,21 +116,6 @@ function validityTimeText(
   }
 }
 
-function createRepeatingTask(callback: () => void, delay: number) {
-  let timeoutId: NodeJS.Timeout;
-
-  const task = () => {
-    callback();
-    timeoutId = setTimeout(task, delay);
-  };
-
-  timeoutId = setTimeout(task, delay);
-
-  return {
-    cancel: () => clearTimeout(timeoutId),
-  };
-}
-
 const useStyles = StyleSheet.createThemeHook(() => ({
   validityText: {
     textAlign: 'center',
