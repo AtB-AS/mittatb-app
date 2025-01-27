@@ -40,13 +40,25 @@ jobs:
         with:
           ref: ${{ env.ENV_BRANCH }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+
       # Download APK
-      - name: Get AppCenter APK
-        run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: e2e
+      - name: Get Firebase AppDistribution APK
+        id: get-appdistribution-apk
+        run: python get-appdistribution-apk.py
+        working-directory: e2e/firestore
         env:
-          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
-          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: "True"
 
       # E2E init
       - name: Enable KVM
