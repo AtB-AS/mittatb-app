@@ -70,7 +70,7 @@ export function TileWithButton({
         <ThemeIcon
           size={mode === 'spacious' ? 'normal' : 'xSmall'}
           svg={buttonSvg}
-          color={interactiveColor.outline.foreground.primary}
+          color={interactiveColor.default.foreground.primary}
         />
       </View>
     </PressableOpacity>
@@ -87,7 +87,7 @@ const useStyles = (interactiveColor: InteractiveColor) =>
       borderColor: theme.color.background.neutral[2].background,
     },
     spaciousContentContainer: {
-      padding: theme.spacing.xLarge,
+      padding: theme.spacing.medium,
       flexGrow: 1,
     },
     compactContentContainer: {
@@ -98,10 +98,11 @@ const useStyles = (interactiveColor: InteractiveColor) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: interactiveColor.outline.background,
+      borderTopWidth: theme.border.width.slim,
+      borderColor: theme.color.background.neutral[2].background,
     },
     spaciousButton: {
-      paddingHorizontal: theme.spacing.xLarge,
+      paddingHorizontal: theme.spacing.medium,
       paddingVertical: theme.spacing.medium,
     },
     compactButton: {
@@ -109,6 +110,6 @@ const useStyles = (interactiveColor: InteractiveColor) =>
       paddingVertical: theme.spacing.small,
     },
     buttonText: {
-      color: interactiveColor.outline.foreground.primary,
+      color: interactiveColor.default.foreground.primary,
     },
   }))();
