@@ -185,6 +185,8 @@ export enum SendSupportCustomErrorType {
   NO_CONTACT_INFO = 'NO_CONTACT_INFO',
 }
 
+export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
+
 export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().optional().nullable(),
   assetId: z.string().optional().nullable(),
@@ -198,7 +200,7 @@ export const SendSupportRequestBodySchema = z.object({
     .superRefine((data, ctx) => {
       const phone =
         data.phonePrefix && data.phoneNumber
-          ? `+ ${data.phonePrefix}${data.phoneNumber}`
+          ? `+${data.phonePrefix}${data.phoneNumber}`
           : undefined;
       const email = data.email || undefined;
 
@@ -228,11 +230,11 @@ export const SendSupportRequestBodySchema = z.object({
     .transform((data) => ({
       phone:
         data.phonePrefix && data.phoneNumber
-          ? `${data.phonePrefix}${data.phoneNumber}`
+          ? `+${data.phonePrefix}${data.phoneNumber}`
           : undefined,
       email: data.email || undefined,
     })),
-  comment: z.string().max(1000).optional().nullable(),
+  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).optional().nullable(),
   place: z
     .object({
       coordinates: ShmoCoordinatesSchema,

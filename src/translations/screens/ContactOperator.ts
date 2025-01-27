@@ -55,11 +55,12 @@ export const ContactOperatorTexts = {
     header: _('Vennligst utdyp', 'Please elaborate', 'Ver vennleg og utdjup'),
     label: _('Kommentar', 'Comment', 'Kommentar'),
     placeholder: _('Legg til kommentar', 'Add a comment', 'Legg til kommentar'),
-    errorMessage: _(
-      'Kommentaren er for lang. Det er maks 1000 tegn.',
-      'The comment is too long. There is a maximum of 1000 characters.',
-      'Kommentaren er for lang. Det er maks 1000 teikn.',
-    ),
+    errorMessage: (maxCommentLength: number) =>
+      _(
+        `Kommentaren er for lang. Det er maks ${maxCommentLength} tegn.`,
+        `The comment is too long. There is a maximum of ${maxCommentLength} characters.`,
+        `Kommentaren er for lang. Det er maks ${maxCommentLength} teikn.`,
+      ),
   },
   contactInfo: {
     header: _(

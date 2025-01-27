@@ -14,6 +14,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactOperatorTexts} from '@atb/translations/screens/ContactOperator';
 import {
+  MAX_SUPPORT_COMMENT_LENGTH,
   SendSupportCustomErrorType,
   SendSupportRequestBody,
   SendSupportRequestBodyInput,
@@ -111,7 +112,11 @@ export const Root_ScooterContactOperatorScreen = ({
                 autoCapitalize="sentences"
                 errorText={
                   !isCommentValid && showError
-                    ? t(ContactOperatorTexts.comment.errorMessage)
+                    ? t(
+                        ContactOperatorTexts.comment.errorMessage(
+                          MAX_SUPPORT_COMMENT_LENGTH,
+                        ),
+                      )
                     : undefined
                 }
               />
@@ -281,7 +286,7 @@ const useScooterContactFormController = (
   const onSubmit = async () => {
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
-      const requestBody2: SendSupportRequestBody = {
+      const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         ...(currentUserCoordinates && {
           place: {
@@ -292,7 +297,7 @@ const useScooterContactFormController = (
           },
         }),
       };
-      sendSupportRequest(requestBody2);
+      sendSupportRequest(requestBody);
     }
     setShowError(true);
   };
@@ -313,29 +318,17 @@ const useScooterContactFormController = (
 
 export const validateSchema = (body: SendSupportRequestBodyInput) => {
   const result = SendSupportRequestBodySchema.safeParse(body);
-
-  if (result.success) {
-    return {
-      isCommentValid: true,
-      isPhoneNumberValid: true,
-      isEmailValid: true,
-      isContactInfoPresent: true,
-      isAllInputValid: true,
-      validatedRequestBody: result.data,
-    };
-  }
-
-  const formattedErrors = result.error.format();
+  const formattedErrors = result.success ? undefined : result?.error?.format();
   return {
-    isCommentValid: !formattedErrors.comment?._errors,
+    isCommentValid: !formattedErrors?.comment?._errors,
     isPhoneNumberValid:
-      !formattedErrors.contactInformationEndUser?.phoneNumber?._errors,
-    isEmailValid: !formattedErrors.contactInformationEndUser?.email?._errors,
+      !formattedErrors?.contactInformationEndUser?.phoneNumber?._errors,
+    isEmailValid: !formattedErrors?.contactInformationEndUser?.email?._errors,
     isContactInfoPresent:
-      !formattedErrors.contactInformationEndUser?._errors?.includes(
+      !formattedErrors?.contactInformationEndUser?._errors?.includes(
         SendSupportCustomErrorType.NO_CONTACT_INFO,
       ),
-    isAllInputValid: false,
-    validatedRequestBody: undefined,
+    isAllInputValid: result.success,
+    validatedRequestBody: result.success ? result.data : undefined,
   };
 };
