@@ -3,7 +3,7 @@ import {useAuthContext} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
-import {CustomerProfile, isNormalTravelRight} from '.';
+import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
@@ -52,9 +52,8 @@ const ticketingReducer: TicketingReducer = (
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );
-      // Filter out fare contracts that doesn't have any normal travel rights
-      const fareContracts = action.fareContracts.filter((fc) =>
-        fc.travelRights.some((tr) => isNormalTravelRight(tr)),
+      const fareContracts = action.fareContracts.filter(
+        (fc) => FareContract.safeParse(fc).success,
       );
       return {
         ...prevState,

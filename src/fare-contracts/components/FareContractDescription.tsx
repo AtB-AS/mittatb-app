@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContract, isNormalTravelRight} from '@atb/ticketing';
+import {type FareContract} from '@atb/ticketing';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
@@ -20,7 +20,6 @@ export const Description = ({fc, testID}: Props) => {
   const styles = useStyles();
 
   const travelRight = fc.travelRights[0];
-  if (!isNormalTravelRight(travelRight)) return null;
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     travelRight.fareProductRef,

@@ -2,7 +2,7 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {isNormalTravelRight, useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/ticketing';
 import {useNotificationsContext} from '@atb/notifications';
 import {useTimeContext} from '@atb/time';
 
@@ -19,10 +19,6 @@ export function useHasFareContractWithActivatedNotification(): boolean {
 
   return validFareContracts.some((validFareContract) => {
     const firstTravelRight = validFareContract.travelRights[0];
-
-    if (!isNormalTravelRight(firstTravelRight)) {
-      return false;
-    }
 
     if (!firstTravelRight.fareProductRef) {
       return false;

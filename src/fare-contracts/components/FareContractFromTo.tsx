@@ -11,11 +11,7 @@ import {
 import {useHarbors} from '@atb/harbors';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  isNormalTravelRight,
-  TravelRightDirection,
-} from '@atb/ticketing';
+import {FareContract, TravelRightDirection} from '@atb/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 
@@ -39,9 +35,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   const tariffZoneRefs = (() => {
     if (hasFareContract(props)) {
       const travelRight = props.fc.travelRights[0];
-      if (isNormalTravelRight(travelRight)) {
-        return travelRight.tariffZoneRefs ?? [];
-      }
+      return travelRight.tariffZoneRefs ?? [];
     } else if (hasRecentFareContract(props)) {
       if (props.rfc.fromTariffZone) {
         return [
@@ -56,14 +50,12 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   const direction = (() => {
     if (hasFareContract(props)) {
       const travelRight = props.fc.travelRights[0];
-      if (isNormalTravelRight(travelRight)) {
-        if (!!travelRight.direction) {
-          // A travelRight between quays (e.g. for boat)
-          return travelRight.direction;
-        } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
-          // A travelRight between several zones (e.g. for bus)
-          return TravelRightDirection.Both;
-        }
+      if (!!travelRight.direction) {
+        // A travelRight between quays (e.g. for boat)
+        return travelRight.direction;
+      } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
+        // A travelRight between several zones (e.g. for bus)
+        return TravelRightDirection.Both;
       }
     } else if (hasRecentFareContract(props)) {
       if (!!props.rfc.direction) {
@@ -77,7 +69,6 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (hasFareContract(props)) {
       const travelRight = props.fc.travelRights[0];
-      if (!isNormalTravelRight(travelRight)) return {};
       return {
         startPointRef: travelRight.startPointRef,
         endPointRef: travelRight.endPointRef,
