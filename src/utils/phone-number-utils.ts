@@ -34,3 +34,8 @@ export const getParsedPrefixAndPhoneNumber = (
     phoneNumber: parsedPhone.nationalNumber,
   };
 };
+
+export const combinePrefixAndPhoneNumber = (
+  prefix: string,
+  phoneNumber: string,
+) => `+${prefix}${phoneNumber}`;

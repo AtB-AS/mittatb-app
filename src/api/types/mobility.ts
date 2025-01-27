@@ -2,6 +2,7 @@ import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
+import {combinePrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -200,7 +201,7 @@ export const SendSupportRequestBodySchema = z.object({
     .superRefine((data, ctx) => {
       const phone =
         data.phonePrefix && data.phoneNumber
-          ? `+${data.phonePrefix}${data.phoneNumber}`
+          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
           : undefined;
       const email = data.email || undefined;
 
@@ -230,7 +231,7 @@ export const SendSupportRequestBodySchema = z.object({
     .transform((data) => ({
       phone:
         data.phonePrefix && data.phoneNumber
-          ? `+${data.phonePrefix}${data.phoneNumber}`
+          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
           : undefined,
       email: data.email || undefined,
     })),
