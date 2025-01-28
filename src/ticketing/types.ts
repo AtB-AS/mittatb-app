@@ -49,21 +49,13 @@ export const TravelRight = z.object({
   usageValidityPeriodRef: z.string(),
   userProfileRef: z.string(),
   authorityRef: z.string(),
-  /** Used by period, single and carnet */
   tariffZoneRefs: z.array(z.string()).optional(),
-  /** Used by period, single and carnet */
   fareZoneRefs: z.array(z.string()).optional(),
-  /** Used by boat and carnet boat */
   startPointRef: z.string().optional(),
-  /** Used by boat and carnet boat */
   endPointRef: z.string().optional(),
-  /** Used by boat and carnet boat */
   direction: z.nativeEnum(TravelRightDirection).optional(),
-  /** Used by carnet and carnet boat */
   maximumNumberOfAccesses: z.number().optional(),
-  /** Used by carnet and carnet boat */
   numberOfUsedAccesses: z.number().optional(),
-  /** Used by carnet and carnet boat */
   usedAccesses: z.array(CarnetTravelRightUsedAccess).optional(),
 });
 export type TravelRight = z.infer<typeof TravelRight>;
