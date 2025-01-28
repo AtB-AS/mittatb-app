@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
