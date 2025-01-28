@@ -2,7 +2,7 @@ import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {
   AddPaymentMethodResponse,
-  type FareContract,
+  FareContract,
   ReserveOfferRequestBody,
 } from '.';
 import {client} from '../api';
@@ -201,6 +201,9 @@ export async function getFareContracts(
   const response = await client.get(url, {
     authWithIdToken: true,
   });
-
-  return response.data.fareContracts.map(convertIsoStringFieldsToDate);
+  const fareContracts = response.data.fareContracts.map(
+    convertIsoStringFieldsToDate,
+  );
+  // TODO: Log errors during parsing
+  return fareContracts.filter((fc: any) => FareContract.safeParse(fc).success);
 }

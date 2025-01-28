@@ -8,11 +8,8 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
-  flattenCarnetTravelRightAccesses,
+  flattenTravelRightAccesses,
   getLastUsedAccess,
-  isCarnet,
-  isCarnetTravelRight,
-  NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -43,7 +40,6 @@ export type FareContractInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
-  isCarnetFareContract?: boolean;
   testID?: string;
   now?: number;
   validTo?: number;
@@ -119,12 +115,11 @@ export const getFareContractInfoDetails = (
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
-  const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
   const {
     endDateTime,
     fareProductRef: productRef,
     tariffZoneRefs,
-  } = firstTravelRight;
+  } = fareContract.travelRights[0];
   let validTo = endDateTime.getTime();
   const validityStatus = getValidityStatus(now, fareContract);
 
@@ -141,18 +136,15 @@ export const getFareContractInfoDetails = (
     productRef,
   );
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map(
-      (tr) => (tr as NormalTravelRight).userProfileRef,
-    ),
+    fareContract.travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
 
-  const carnetTravelRights =
-    fareContract.travelRights.filter(isCarnetTravelRight);
-  const isACarnetFareContract = isCarnet(fareContract);
-  if (isACarnetFareContract) {
-    const {usedAccesses} = flattenCarnetTravelRightAccesses(carnetTravelRights);
-
+  const flattenedAccesses = flattenTravelRightAccesses(
+    fareContract.travelRights,
+  );
+  if (flattenedAccesses) {
+    const {usedAccesses} = flattenedAccesses;
     const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
     if (usedAccessValidTo) validTo = usedAccessValidTo;
   }
@@ -165,7 +157,6 @@ export const getFareContractInfoDetails = (
     status: validityStatus,
     now: now,
     validTo: validTo,
-    isCarnetFareContract: isACarnetFareContract,
   };
 };
 

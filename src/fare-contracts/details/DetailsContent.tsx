@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   FareContract,
+  hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
-  NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetails} from '../FareContractInfoDetails';
@@ -76,7 +76,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     usedAccesses,
@@ -109,7 +108,7 @@ export const DetailsContent: React.FC<Props> = ({
     useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
+    fc.travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
 
@@ -178,7 +177,7 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {isCarnetFareContract && (
+      {hasTravelRightAccesses(fc.travelRights) && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}

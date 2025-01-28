@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContract, isNormalTravelRight} from '@atb/ticketing';
+import {type FareContract} from '@atb/ticketing';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -20,7 +20,6 @@ export const ProductName = ({fc, testID}: Props) => {
   const {theme} = useThemeContext();
 
   const travelRight = fc.travelRights[0];
-  if (!isNormalTravelRight(travelRight)) return null;
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     travelRight.fareProductRef,
