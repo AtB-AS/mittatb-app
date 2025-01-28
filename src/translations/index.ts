@@ -61,3 +61,4 @@ export {default as DeparturesTexts} from './screens/Departures';
 export {default as GeoLocationTexts} from './GeoLocation';
 export {default as PhoneInputTexts} from './components/PhoneInput';
 export {default as OnBehalfOfTexts} from './screens/subscreens/OnBehalfOf';
+export {default as DatePickerSheetTexts} from './components/DatePickerSheet';

@@ -30,6 +30,7 @@ import {
   formatInTimeZone,
   fromZonedTime,
   toZonedTime,
+  getTimezoneOffset,
 } from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration, {type Unit} from 'humanize-duration';
@@ -40,6 +41,7 @@ import {
   parse as parseIso8601Duration,
   toSeconds as toSecondsIso8601Duration,
 } from 'iso8601-duration';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 const CET = 'Europe/Oslo';
 /**
@@ -67,6 +69,8 @@ function format(
 }
 
 const humanizer = humanizeDuration.humanizer({});
+
+export const parseDate = (d: string) => parseISO(d);
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
@@ -644,4 +648,9 @@ export const convertIsoStringFieldsToDate = (value: any): any => {
     return parseISO(value);
   }
   return value;
+};
+
+export const getTimeZoneOffsetInMinutes = () => {
+  const offsetMs = getTimezoneOffset(CET, new Date());
+  return offsetMs / ONE_MINUTE_MS;
 };

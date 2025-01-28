@@ -107,6 +107,7 @@ const dictionary = {
     valid: _('Suksess', 'Success', `Suksess`),
     error: _('Feil', 'Error', `Feil`),
   },
+  confirm: _('Bekreft', 'Confirm', `Bekreft`),
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   cancel: _('Avbryt', 'Cancel', `Avbryt`),
   remove: _('Fjern', 'Remove', `Fjern`),

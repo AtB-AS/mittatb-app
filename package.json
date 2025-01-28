@@ -97,6 +97,7 @@
     "react-native-bootsplash": "^6.1.1",
     "react-native-camera-kit": "14.0.0-beta12",
     "react-native-compressor": "^1.8.25",
+    "react-native-date-picker": "^5.0.8",
     "react-native-device-info": "^11.1.0",
     "react-native-gesture-handler": "^2.18.1",
     "react-native-get-random-values": "^1.11.0",
