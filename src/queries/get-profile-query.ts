@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getProfile} from '@atb/api';
 import {useAuthContext} from '@atb/auth';
 import {CustomerProfile} from '@atb/api/types/profile';
-import {useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 
 export const getProfileQueryKey = 'getProfile';
 export const useProfileQuery = (
@@ -15,11 +15,15 @@ export const useProfileQuery = (
     enabled: authStatus === 'authenticated',
   });
 
-  useEffect(() => {
+  const handleSuccess = useCallback(() => {
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback(res.data);
     }
   }, [res.status, res.data, onSuccessCallback]);
+
+  useEffect(() => {
+    handleSuccess();
+  }, [handleSuccess]);
 
   return res;
 };
