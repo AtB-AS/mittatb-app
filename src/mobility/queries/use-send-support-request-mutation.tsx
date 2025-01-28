@@ -19,7 +19,7 @@ export const useSendSupportRequestMutation = (
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback();
     }
-  }, [res.status]);
+  }, [res.status, res.data, onSuccessCallback]);
 
   return res;
 };

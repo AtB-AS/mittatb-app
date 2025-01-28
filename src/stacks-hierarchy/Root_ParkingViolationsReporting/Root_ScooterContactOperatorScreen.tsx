@@ -257,6 +257,7 @@ const useScooterContactFormController = (
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
   const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
     getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
 
   const [requestBody, setRequestBody] = useState<SendSupportRequestBodyInput>({
     supportType: SupportType.OTHER,
@@ -298,7 +299,6 @@ const useScooterContactFormController = (
   const onSubmit = async () => {
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
-      const {data: activeShmoBooking} = useActiveShmoBookingQuery();
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         assetId: vehicleId,

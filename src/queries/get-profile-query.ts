@@ -19,7 +19,7 @@ export const useProfileQuery = (
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback(res.data);
     }
-  }, [res.status]);
+  }, [res.status, res.data, onSuccessCallback]);
 
   return res;
 };
