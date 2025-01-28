@@ -21,7 +21,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -64,15 +64,17 @@ export const Profile_PaymentMethodsScreen = () => {
   const [awaitingRecurringPaymentId, setAwaitingRecurringPaymentId] =
     useState<number>();
 
+  const callback = useCallback(async () => {
+    closeInAppBrowser();
+    await refetchRecurringPayment();
+  }, [refetchRecurringPayment]);
+
   // In cases where the recurring payment appears in firestore before the
   // callback is called, we can cancel the payment flow and reload the recurring
   // payment list.
   useOnRecurringPaymentReceived({
     recurringPaymentId: awaitingRecurringPaymentId,
-    callback: async () => {
-      closeInAppBrowser();
-      await refetchRecurringPayment();
-    },
+    callback,
   });
 
   const isError =
@@ -271,8 +273,6 @@ export const useOnRecurringPaymentReceived = ({
     return recurringPayment.id;
   };
 
-  const callbackRef = useRef(callback);
-
   useEffect(() => {
     if (!recurringPaymentId) return;
 
@@ -285,7 +285,7 @@ export const useOnRecurringPaymentReceived = ({
         (snapshot) => {
           const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
           if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
-            callbackRef.current();
+            callback();
           }
         },
         (err) => {
@@ -297,7 +297,7 @@ export const useOnRecurringPaymentReceived = ({
     return () => {
       recurringPaymentsUnsub();
     };
-  }, [userId, recurringPaymentId]);
+  }, [userId, recurringPaymentId, callback]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
