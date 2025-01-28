@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -31,6 +31,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
+import {CustomerProfile} from '@atb/ticketing';
 
 export type Root_ScooterContactOperatorScreenProps =
   RootStackScreenProps<'Root_ScooterContactOperatorScreen'>;
@@ -39,7 +40,7 @@ export const Root_ScooterContactOperatorScreen = ({
   route,
 }: Root_ScooterContactOperatorScreenProps) => {
   const {vehicleId, operatorId} = route.params;
-  const style = useStyles();
+  const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
@@ -50,8 +51,8 @@ export const Root_ScooterContactOperatorScreen = ({
   };
 
   const {
-    formData,
-    setFormData,
+    requestBody,
+    setRequestBody,
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
@@ -63,35 +64,35 @@ export const Root_ScooterContactOperatorScreen = ({
   } = useScooterContactFormController(operatorId, vehicleId, onSuccess);
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
       />
-      <KeyboardAvoidingView behavior="padding" style={style.mainView}>
+      <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
-          <View style={style.contentContainer}>
-            <ThemeText style={style.title} typography="heading--medium">
+          <View style={styles.contentContainer}>
+            <ThemeText style={styles.title} typography="heading--medium">
               {t(ContactOperatorTexts.title(operatorName))}
             </ThemeText>
             <ContentHeading text={t(ContactOperatorTexts.supportType.header)} />
             <RadioGroupSection<SupportType>
-              keyExtractor={(supportItem) => supportItem}
-              selected={formData.supportType}
+              keyExtractor={(supportType) => supportType}
+              selected={requestBody.supportType}
               items={Object.values(SupportType) as SupportType[]}
               onSelect={(supportType) =>
-                setFormData((prev) => ({...prev, supportType}))
+                setRequestBody((prev) => ({...prev, supportType}))
               }
-              itemToText={(supportItem) =>
+              itemToText={(supportType) =>
                 t(
                   ContactOperatorTexts.supportType.supportTypeDescription(
-                    supportItem,
+                    supportType,
                   ),
                 )
               }
             />
-            {formData.supportType === SupportType.UNABLE_TO_CLOSE && (
+            {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
               <MessageInfoBox
                 message={t(
                   ContactOperatorTexts.supportType.noEndInfo(operatorName),
@@ -102,9 +103,9 @@ export const Root_ScooterContactOperatorScreen = ({
             <ContentHeading text={t(ContactOperatorTexts.comment.header)} />
             <Section>
               <TextInputSectionItem
-                value={formData.comment}
+                value={requestBody.comment ?? ''}
                 onChangeText={(comment) =>
-                  setFormData((prev) => ({...prev, comment}))
+                  setRequestBody((prev) => ({...prev, comment}))
                 }
                 label={t(ContactOperatorTexts.comment.label)}
                 placeholder={t(ContactOperatorTexts.comment.placeholder)}
@@ -124,9 +125,15 @@ export const Root_ScooterContactOperatorScreen = ({
             <ContentHeading text={t(ContactOperatorTexts.contactInfo.header)} />
             <Section>
               <TextInputSectionItem
-                value={formData.email}
+                value={requestBody.contactInformationEndUser.email ?? ''}
                 onChangeText={(email) =>
-                  setFormData((prev) => ({...prev, email}))
+                  setRequestBody((prev) => ({
+                    ...prev,
+                    contactInformationEndUser: {
+                      ...prev.contactInformationEndUser,
+                      email,
+                    },
+                  }))
                 }
                 label={t(ContactOperatorTexts.contactInfo.email.label)}
                 placeholder={t(
@@ -148,14 +155,26 @@ export const Root_ScooterContactOperatorScreen = ({
             </Section>
             <Section>
               <PhoneInputSectionItem
-                prefix={formData.phonePrefix}
+                prefix={requestBody.contactInformationEndUser.phonePrefix ?? ''}
                 onChangePrefix={(phonePrefix) =>
-                  setFormData((prev) => ({...prev, phonePrefix}))
+                  setRequestBody((prev) => ({
+                    ...prev,
+                    contactInformationEndUser: {
+                      ...prev.contactInformationEndUser,
+                      phonePrefix,
+                    },
+                  }))
                 }
                 onChangeText={(phoneNumber) =>
-                  setFormData((prev) => ({...prev, phoneNumber}))
+                  setRequestBody((prev) => ({
+                    ...prev,
+                    contactInformationEndUser: {
+                      ...prev.contactInformationEndUser,
+                      phoneNumber,
+                    },
+                  }))
                 }
-                value={formData.phoneNumber}
+                value={requestBody.contactInformationEndUser.phoneNumber ?? ''}
                 label={t(ContactOperatorTexts.contactInfo.phone.label)}
                 placeholder={t(
                   ContactOperatorTexts.contactInfo.phone.placeholder,
@@ -172,7 +191,7 @@ export const Root_ScooterContactOperatorScreen = ({
                 }
               />
             </Section>
-            <View style={style.description}>
+            <View style={styles.description}>
               <ThemeText typography="body__secondary">
                 {t(ContactOperatorTexts.location.header)}
               </ThemeText>
@@ -224,14 +243,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-type FormData = {
-  supportType: SupportType;
-  comment: string;
-  phonePrefix: string;
-  phoneNumber: string;
-  email: string;
-};
-
 /*
  * Controller hook for handling scooter contact form operations.
  *
@@ -243,33 +254,34 @@ const useScooterContactFormController = (
   vehicleId: string,
   onSuccess: () => void,
 ) => {
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
-  const {data: customerProfile} = useProfileQuery();
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
   const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
     getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
 
-  const [formData, setFormData] = useState<FormData>({
+  const [requestBody, setRequestBody] = useState<SendSupportRequestBodyInput>({
     supportType: SupportType.OTHER,
     comment: '',
-    phonePrefix: authPhonePrefix ?? '47',
-    phoneNumber: authPhoneNumber ?? '',
-    email: customerProfile?.email ?? '',
+    contactInformationEndUser: {
+      phonePrefix: authPhonePrefix ?? '47',
+      phoneNumber: authPhoneNumber ?? '',
+      email: '',
+    },
   });
 
-  const [showError, setShowError] = useState(false);
-
-  const requestBody: SendSupportRequestBodyInput = {
-    assetId: vehicleId,
-    bookingId: activeShmoBooking?.bookingId,
-    supportType: formData.supportType,
-    comment: formData.comment,
-    contactInformationEndUser: {
-      phoneNumber: formData.phoneNumber,
-      phonePrefix: formData.phonePrefix,
-      email: formData.email,
-    },
+  const profileOnSuccess = (data: CustomerProfile) => {
+    setRequestBody((prev) => ({
+      ...prev,
+      contactInformationEndUser: {
+        ...prev.contactInformationEndUser,
+        email: data?.email,
+      },
+    }));
   };
+
+  useProfileQuery(profileOnSuccess);
+  console.log(requestBody);
+
+  const [showError, setShowError] = useState(false);
 
   const {
     isCommentValid,
@@ -286,8 +298,11 @@ const useScooterContactFormController = (
   const onSubmit = async () => {
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
+      const {data: activeShmoBooking} = useActiveShmoBookingQuery();
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
+        assetId: vehicleId,
+        bookingId: activeShmoBooking?.bookingId,
         ...(currentUserCoordinates && {
           place: {
             coordinates: {
@@ -303,8 +318,8 @@ const useScooterContactFormController = (
   };
 
   return {
-    formData,
-    setFormData,
+    requestBody,
+    setRequestBody,
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,

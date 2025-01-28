@@ -73,7 +73,7 @@ export const ContactOperatorTexts = {
       placeholder: _('Legg til e-post', 'Add email address', 'Legg til e-post'),
       errorMessage: _(
         `Vennligst legg inn en gyldig e-postadresse`,
-        `Please add a valid e-mail adress.`,
+        `Please enter a valid e-mail adress.`,
         `Ver vennleg og legg inn ei gyldig e-postadresse.`,
       ),
     },
@@ -86,13 +86,13 @@ export const ContactOperatorTexts = {
       ),
       errorMessage: _(
         `Vennligst legg til et gyldig telefonnummer.`,
-        `Please add a valid phone number.`,
+        `Please enter a valid phone number.`,
         `Ver vennleg og legg til eit gyldig telefonnummer.`,
       ),
     },
     errorMessage: _(
       `Vennligst legg til enten telefonnummer eller e-postadresse.`,
-      `Please add a phone number or email adress.`,
+      `Please enter a phone number or email adress.`,
       `Ver vennleg og legg til anten telefonnummer eller e-postadresse.`,
     ),
   },
