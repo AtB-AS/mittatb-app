@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {getProfile} from '@atb/api';
 import {useAuthContext} from '@atb/auth';
-import {CustomerProfile} from '@atb/ticketing';
+import {CustomerProfile} from '@atb/api/types/profile';
 
 export const getProfileQueryKey = 'getProfile';
 export const useProfileQuery = (

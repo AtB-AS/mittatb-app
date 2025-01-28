@@ -31,7 +31,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
-import {CustomerProfile} from '@atb/ticketing';
+import {CustomerProfile} from '@atb/api/types/profile';
 
 export type Root_ScooterContactOperatorScreenProps =
   RootStackScreenProps<'Root_ScooterContactOperatorScreen'>;
