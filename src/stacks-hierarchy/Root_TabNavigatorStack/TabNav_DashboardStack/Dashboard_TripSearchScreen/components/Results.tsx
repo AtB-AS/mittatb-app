@@ -13,7 +13,6 @@ import {
 import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
-import {SearchTime} from '@atb/journey-date-picker';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
@@ -22,6 +21,7 @@ import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
+import type {TripSearchTime} from '../../types';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -31,7 +31,7 @@ type Props = {
   resultReasons: string[];
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   errorType?: ErrorType;
-  searchTime: SearchTime;
+  searchTime: TripSearchTime;
   anyFiltersApplied: boolean;
 };
 
