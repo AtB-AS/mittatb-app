@@ -52,6 +52,7 @@ const dictionary = {
   date: {
     units: {
       now: _('Nå', 'Now', `No`),
+      later: _('Senere', 'Later', `Seinare`),
       short: {
         year: _('år', 'y', `år`),
         month: _('m', 'm', `mnd`),
