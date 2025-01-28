@@ -19,7 +19,8 @@ export const useSendSupportRequestMutation = (
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback();
     }
-  }, [res.status, res.data, onSuccessCallback]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [res.status]);
 
   return res;
 };

@@ -19,7 +19,8 @@ export const useProfileQuery = (
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback(res.data);
     }
-  }, [res.status, res.data, onSuccessCallback]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [res.status]);
 
   return res;
 };
