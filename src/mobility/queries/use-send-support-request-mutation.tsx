@@ -13,14 +13,8 @@ export const useSendSupportRequestMutation = (
   const res = useMutation({
     mutationFn: (reqBody: SendSupportRequestBody) =>
       sendSupportRequest(reqBody, acceptLanguage, operatorId),
+    onSuccess: onSuccessCallback,
   });
-
-  useEffect(() => {
-    if (res.status === 'success' && onSuccessCallback) {
-      onSuccessCallback();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [res.status]);
 
   return res;
 };
