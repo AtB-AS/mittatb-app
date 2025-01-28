@@ -115,12 +115,11 @@ export const getFareContractInfoDetails = (
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
-  const firstTravelRight = fareContract.travelRights?.[0];
   const {
     endDateTime,
     fareProductRef: productRef,
     tariffZoneRefs,
-  } = firstTravelRight;
+  } = fareContract.travelRights[0];
   let validTo = endDateTime.getTime();
   const validityStatus = getValidityStatus(now, fareContract);
 
