@@ -24,7 +24,10 @@ export const CarnetFooter: React.FC<Props> = ({
 
   return (
     <View
-      style={{flexDirection: 'column', flex: 1}}
+      style={{
+        flexDirection: 'column',
+        flex: 1,
+      }}
       accessible={true}
       accessibilityLabel={t(
         FareContractTexts.carnet.numberOfUsedAccessesRemaining(

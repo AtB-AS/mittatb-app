@@ -170,9 +170,9 @@ const TicketingTexts = {
   },
   reservation: {
     reserving: _(
-      'Prosesseres... ikke gyldig enda',
-      'Processing... not yet valid',
-      'Prosesserer... ikkje gyldig enda',
+      'Venter på prosessering...',
+      'Waiting for processing...',
+      'Ventar på prosessering...',
     ),
     approved: _(
       'Betaling godkjent. Henter billett...',

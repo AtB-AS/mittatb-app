@@ -15,11 +15,7 @@ const FareContractTexts = {
   },
   validityHeader: {
     valid: (duration: string) =>
-      _(
-        `Gyldig i ${duration}`,
-        `Valid through ${duration}`,
-        `Gyldig i ${duration}`,
-      ),
+      _(`${duration} igjen`, `${duration} left`, `${duration} igjen`),
     recentlyExpired: (duration: string) =>
       _(
         `Utløpt for ${duration} siden`,

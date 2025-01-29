@@ -48,7 +48,7 @@ import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fet
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
-import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
+import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
 
 type Props = {
   fareContract: FareContract;
@@ -137,7 +137,7 @@ export const DetailsContent: React.FC<Props> = ({
       >
         <WithValidityLine fc={fc}>
           <ProductName fc={fc} />
-          <ValidityHeader fc={fc} />
+          <ValidityTime fc={fc} />
           <ValidTo fc={fc} />
           <Description fc={fc} />
         </WithValidityLine>

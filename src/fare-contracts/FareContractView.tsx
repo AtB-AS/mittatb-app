@@ -9,12 +9,10 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/auth';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
   FareContract,
   isCanBeActivatedNowFareContract,
-  hasTravelRightAccesses,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
@@ -23,8 +21,8 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
-import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 import {TravelInfoSectionItem} from '@atb/fare-contracts/modules/TravelInfoSectionItem';
+import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
 
 type Props = {
   now: number;
@@ -48,12 +46,11 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {
-    travelRights,
-    validityStatus,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = getFareContractInfo(now, fareContract, currentUserId);
+  const {travelRights, validityStatus} = getFareContractInfo(
+    now,
+    fareContract,
+    currentUserId,
+  );
 
   const firstTravelRight = travelRights[0];
 
@@ -69,20 +66,11 @@ export const FareContractView: React.FC<Props> = ({
       <GenericSectionItem style={styles.header}>
         <WithValidityLine fc={fareContract}>
           <ProductName fc={fareContract} />
-          <ValidityHeader fc={fareContract} />
+          <ValidityTime fc={fareContract} />
           <Description fc={fareContract} />
         </WithValidityLine>
       </GenericSectionItem>
       <TravelInfoSectionItem fc={fareContract} />
-      {hasTravelRightAccesses(fareContract.travelRights) && (
-        <GenericSectionItem>
-          <CarnetFooter
-            active={validityStatus === 'valid'}
-            maximumNumberOfAccesses={maximumNumberOfAccesses!}
-            numberOfUsedAccesses={numberOfUsedAccesses!}
-          />
-        </GenericSectionItem>
-      )}
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
