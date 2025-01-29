@@ -144,7 +144,7 @@ jobs:
       #  working-directory: e2e/performance
       #  run: npx tsx createPerformanceSummary.ts
       #  env:
-      #    TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      #    TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
       #- name: Print performance summary
       #  working-directory: e2e/performance
       #  run: cat performance_measures_summary.json | jq .
