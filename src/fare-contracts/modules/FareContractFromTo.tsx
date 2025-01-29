@@ -1,10 +1,6 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
-import {
-  FareContract,
-  isNormalTravelRight,
-  TravelRightDirection,
-} from '@atb/ticketing';
+import {FareContract, TravelRightDirection} from '@atb/ticketing';
 import type {PreassignedFareProduct} from '@atb-as/config-specs';
 import {ZonesFromTo} from '@atb/fare-contracts/modules/ZonesFromTo';
 import {HarborsFromTo} from '@atb/fare-contracts/modules/HarborsFromTo';
@@ -84,7 +80,6 @@ function useFareContractFromToController({
   const tariffZoneRefs = () => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
-      if (!isNormalTravelRight(travelRight)) return [];
       return travelRight.tariffZoneRefs ?? [];
     } else if (isRecentFareContract(fcOrRfc)) {
       if (fcOrRfc.fromTariffZone) {
@@ -101,7 +96,6 @@ function useFareContractFromToController({
   const direction = () => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
-      if (!isNormalTravelRight(travelRight)) return undefined;
       if (!!travelRight.direction) {
         // A travelRight between quays (e.g. for boat)
         return travelRight.direction;
@@ -122,7 +116,6 @@ function useFareContractFromToController({
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
-      if (!isNormalTravelRight(travelRight)) return {};
       return {
         startPointRef: travelRight.startPointRef,
         endPointRef: travelRight.endPointRef,
