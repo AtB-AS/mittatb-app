@@ -9,13 +9,13 @@ import {
   Walk,
   Night,
   Unknown,
+  Bicycle,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {
   Plane,
   Scooter,
   Subway,
 } from '@atb/assets/svg/mono-icons/transportation-entur';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {SvgShuttle} from './SvgShuttle';
 import {APP_ORG} from '@env';
 

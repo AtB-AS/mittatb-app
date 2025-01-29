@@ -2,6 +2,7 @@ import {Feature, Point, Position} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
+  PricingSegmentFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {
@@ -24,6 +25,13 @@ import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {
+  BatteryEmpty,
+  BatteryFull,
+  BatteryHigh,
+  BatteryLow,
+  BatteryMedium,
+} from '@atb/assets/svg/mono-icons/miscellaneous';
 
 export const isScooter = (
   feature: Feature<Point> | undefined,
@@ -161,6 +169,44 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
       ? (rangeInMeters / 1000).toFixed(0)
       : formatDecimalNumber(rangeInMeters / 1000, language, 1);
   return `${rangeInKm} km`;
+};
+
+const getPercentageBattery = (batteryPercentage: number) => {
+  let newBatteryPercentage = batteryPercentage;
+  if (batteryPercentage % 1 !== 0) {
+    newBatteryPercentage = batteryPercentage * 100;
+  }
+  return newBatteryPercentage;
+};
+
+export const getBatteryLevelIcon = (batteryPercentage: number) => {
+  const newBatteryPercentage = getPercentageBattery(batteryPercentage);
+
+  if (newBatteryPercentage >= 77) {
+    return BatteryFull;
+  } else if (newBatteryPercentage >= 36) {
+    return BatteryHigh;
+  } else if (newBatteryPercentage >= 16) {
+    return BatteryMedium;
+  } else if (newBatteryPercentage >= 3) {
+    return BatteryLow;
+  } else {
+    return BatteryEmpty;
+  }
+};
+
+export const formatPrice = (
+  segmentFragment: PricingSegmentFragment,
+  language: Language,
+) => {
+  const rate = Number(segmentFragment.rate);
+  return Number.isInteger(rate) ? rate : formatDecimalNumber(rate, language, 2);
+};
+
+export const formatNumberLang = (number: number, language: Language) => {
+  return Number.isInteger(number)
+    ? number
+    : formatDecimalNumber(number, language, 2);
 };
 
 export const getOperators = (

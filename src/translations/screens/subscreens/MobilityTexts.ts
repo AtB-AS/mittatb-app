@@ -133,6 +133,9 @@ export const ScooterTexts = {
     "Ops! We couldn't find this scooter",
     'Ops! Vi fann ikkje denne sparkesykkelen',
   ),
+  range: _('rekkevidde', 'range', 'rekkjevidde'),
+  unlock: _('opplåsning', 'unlock', 'opplåsing'),
+  perMin: _('per minutt', 'per minute', 'per minutt'),
 };
 
 export const BicycleTexts = {

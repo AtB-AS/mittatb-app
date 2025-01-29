@@ -5,9 +5,8 @@ import {
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
-import {Language, useTranslation} from '@atb/translations';
-import {formatDecimalNumber} from '@atb/utils/numbers';
-import {hasMultiplePricingPlans} from '@atb/mobility/utils';
+import {useTranslation} from '@atb/translations';
+import {formatPrice, hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
@@ -66,16 +65,6 @@ const PriceInfo = ({
   eligibleBenefit,
 }: PriceInfoProps) => {
   const {t, language} = useTranslation();
-
-  const formatPrice = (
-    segmentFragment: PricingSegmentFragment,
-    language: Language,
-  ) => {
-    const rate = Number(segmentFragment.rate);
-    return Number.isInteger(rate)
-      ? rate
-      : formatDecimalNumber(rate, language, 2);
-  };
 
   return (
     <MobilityStat

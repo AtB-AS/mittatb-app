@@ -6,15 +6,10 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {GenericSectionItem, Section} from '@atb/components/sections';
-import {PricingPlan} from '@atb/mobility/components/PricingPlan';
-import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
-import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -25,12 +20,9 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {MobilityStats} from '@atb/mobility/components/MobilityStats';
-import {MobilityStat} from '@atb/mobility/components/MobilityStat';
-import {BrandingImage} from '@atb/mobility/components/BrandingImage';
-import {ThemedScooter} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {VehicleCard} from './VehicleCard';
 
 type Props = {
   vehicleId: VehicleId;
@@ -45,7 +37,7 @@ export const ScooterSheet = ({
   onReportParkingViolation,
   onVehicleReceived,
 }: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useSheetStyle();
   const {
     vehicle,
@@ -53,7 +45,6 @@ export const ScooterSheet = ({
     isError,
     operatorId,
     operatorName,
-    brandLogoUrl,
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
@@ -86,43 +77,7 @@ export const ScooterSheet = ({
                   style={styles.operatorBenefit}
                 />
               )}
-              <Section>
-                <GenericSectionItem>
-                  <OperatorNameAndLogo
-                    operatorName={operatorName}
-                    logoUrl={brandLogoUrl}
-                    style={styles.operatorNameAndLogo}
-                  />
-                </GenericSectionItem>
-                <GenericSectionItem>
-                  <View style={styles.content}>
-                    <MobilityStats
-                      first={
-                        <MobilityStat
-                          svg={Battery}
-                          primaryStat={vehicle.currentFuelPercent + '%'}
-                          secondaryStat={t(
-                            MobilityTexts.range(
-                              formatRange(vehicle.currentRangeMeters, language),
-                            ),
-                          )}
-                        />
-                      }
-                      second={
-                        <PricingPlan
-                          operator={operatorName}
-                          plan={vehicle.pricingPlan}
-                          benefit={operatorBenefit}
-                        />
-                      }
-                    />
-                    <BrandingImage
-                      logoUrl={brandLogoUrl}
-                      fallback={<ThemedScooter />}
-                    />
-                  </View>
-                </GenericSectionItem>
-              </Section>
+              <VehicleCard vehicleId={id} />
             </ScrollView>
             <View style={styles.footer}>
               {rentalAppUri && (
@@ -172,11 +127,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
-    },
-    content: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacing.medium),
