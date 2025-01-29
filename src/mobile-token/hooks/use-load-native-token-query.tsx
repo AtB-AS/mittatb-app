@@ -8,7 +8,6 @@ import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
 import {
   TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import {
   getMobileTokenErrorHandlingStrategy,
