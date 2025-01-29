@@ -4,7 +4,11 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import type {PreassignedFareProduct} from '@atb-as/config-specs';
-import {type FareContract, TravelRightDirection} from '@atb/ticketing';
+import {
+  type FareContract,
+  isNormalTravelRight,
+  TravelRightDirection,
+} from '@atb/ticketing';
 import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 import {useTranslation} from '@atb/translations';
 import {useHarbors} from '@atb/harbors';
@@ -38,6 +42,7 @@ export function useFareContractFromTo({
   const tariffZoneRefs = () => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
+      if (!isNormalTravelRight(travelRight)) return [];
       return travelRight.tariffZoneRefs ?? [];
     } else if (isRecentFareContract(fcOrRfc)) {
       if (fcOrRfc.fromTariffZone) {
@@ -54,6 +59,7 @@ export function useFareContractFromTo({
   const direction = () => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
+      if (!isNormalTravelRight(travelRight)) return undefined;
       if (!!travelRight.direction) {
         // A travelRight between quays (e.g. for boat)
         return travelRight.direction;
@@ -74,6 +80,7 @@ export function useFareContractFromTo({
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
+      if (!isNormalTravelRight(travelRight)) return {};
       return {
         startPointRef: travelRight.startPointRef,
         endPointRef: travelRight.endPointRef,
