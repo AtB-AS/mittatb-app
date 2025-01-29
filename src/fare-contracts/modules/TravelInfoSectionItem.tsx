@@ -10,7 +10,7 @@ import {
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
 import {View} from 'react-native';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
+import {FareContractFromTo} from '@atb/fare-contracts/modules/FareContractFromTo';
 import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {

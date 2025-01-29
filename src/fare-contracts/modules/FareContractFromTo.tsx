@@ -1,35 +1,77 @@
+import {ContrastColor} from '@atb-as/theme';
+import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {
-  findReferenceDataById,
-  getReferenceDataName,
-  useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import type {PreassignedFareProduct} from '@atb-as/config-specs';
-import {
-  type FareContract,
+  FareContract,
   isNormalTravelRight,
   TravelRightDirection,
 } from '@atb/ticketing';
-import type {RecentFareContractType} from '@atb/recent-fare-contracts';
-import {useTranslation} from '@atb/translations';
-import {useHarbors} from '@atb/harbors';
+import type {PreassignedFareProduct} from '@atb-as/config-specs';
+import {ZonesFromTo} from '@atb/fare-contracts/modules/ZonesFromTo';
+import {HarborsFromTo} from '@atb/fare-contracts/modules/HarborsFromTo';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 
-type UseFareContractFromToProps = {
+type FareContractFromToBaseProps = {
+  backgroundColor: ContrastColor;
+  mode: 'small' | 'large';
+  preassignedFareProduct?: PreassignedFareProduct;
+};
+
+export type FareContractPropsSub = {
+  fc: FareContract;
+};
+
+export type RecentFareContractPropsSub = {
+  rfc: RecentFareContractType;
+};
+
+type FareContractFromToProps = FareContractFromToBaseProps &
+  (FareContractPropsSub | RecentFareContractPropsSub);
+
+export const FareContractFromTo = (props: FareContractFromToProps) => {
+  const {
+    shouldReturnNull,
+    tariffZoneRefs,
+    direction,
+    startPointRef,
+    endPointRef,
+  } = useFareContractFromToController({
+    preassignedFareProduct: props.preassignedFareProduct,
+    fcOrRfc: 'rfc' in props ? props.rfc : props.fc,
+  });
+
+  if (shouldReturnNull) return null;
+
+  if (tariffZoneRefs.length) {
+    return (
+      <ZonesFromTo
+        tariffZoneRefs={tariffZoneRefs}
+        mode={props.mode}
+        backgroundColor={props.backgroundColor}
+      />
+    );
+  } else if (startPointRef) {
+    return (
+      <HarborsFromTo
+        startPointRef={startPointRef}
+        endPointRef={endPointRef}
+        direction={direction}
+        mode={props.mode}
+        backgroundColor={props.backgroundColor}
+      />
+    );
+  }
+  return null;
+};
+
+type FareContractFromToControllerProps = {
   fcOrRfc: FareContract | RecentFareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
 };
 
-type FareContractFromToLogicType = {
-  shouldReturnNull: boolean;
-  tariffZoneRefs: string[];
-  direction?: TravelRightDirection;
-  startPointRef?: string;
-  endPointRef?: string;
-};
-
-export function useFareContractFromTo({
+function useFareContractFromToController({
   preassignedFareProduct,
   fcOrRfc,
-}: UseFareContractFromToProps): FareContractFromToLogicType {
+}: FareContractFromToControllerProps) {
   // shouldReturnNull
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -113,62 +155,4 @@ function isRecentFareContract(
   fcOrRfc: FareContract | RecentFareContractType,
 ): fcOrRfc is RecentFareContractType {
   return 'fromTariffZone' in fcOrRfc;
-}
-
-type UseZonesFromToProps = {tariffZoneRefs: string[]};
-type ZonesFromToLogicType = {
-  fromZoneName?: string;
-  toZoneName?: string;
-};
-
-export function useZonesFromTo({
-  tariffZoneRefs,
-}: UseZonesFromToProps): ZonesFromToLogicType {
-  const {tariffZones} = useFirestoreConfigurationContext();
-  const {language} = useTranslation();
-
-  const fromZoneId = tariffZoneRefs[0];
-  const fromZone = findReferenceDataById(tariffZones, fromZoneId);
-  const fromZoneName = !!fromZone
-    ? getReferenceDataName(fromZone, language)
-    : undefined;
-
-  const toZoneId = tariffZoneRefs[tariffZoneRefs.length - 1];
-  const toZone =
-    fromZoneId !== toZoneId
-      ? findReferenceDataById(tariffZones, toZoneId)
-      : undefined;
-  const toZoneName = toZone
-    ? getReferenceDataName(toZone, language)
-    : undefined;
-
-  return {
-    fromZoneName,
-    toZoneName,
-  };
-}
-
-type HarborsFromToProps = {
-  startPointRef: string;
-  endPointRef?: string;
-};
-type HarborsFromToLogicType = {
-  startPointName?: string;
-  endPointName?: string;
-};
-
-export function useHarborsFromTo({
-  startPointRef,
-  endPointRef,
-}: HarborsFromToProps): HarborsFromToLogicType {
-  const {data: harbors} = useHarbors();
-  const startPointName = harbors.find((h) => h.id === startPointRef)?.name;
-
-  const endPointName = endPointRef
-    ? harbors.find((h) => h.id === endPointRef)?.name
-    : undefined;
-  return {
-    startPointName,
-    endPointName,
-  };
 }
