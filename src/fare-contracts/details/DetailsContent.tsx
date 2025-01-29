@@ -156,6 +156,7 @@ export const DetailsContent: React.FC<Props> = ({
             backgroundColor={theme.color.background.neutral['0']}
             mode="large"
             fc={fc}
+            preassignedFareProduct={preassignedFareProduct}
           />
         </View>
       </GenericSectionItem>

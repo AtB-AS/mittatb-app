@@ -3,28 +3,29 @@ import {ArrowDown, ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  findReferenceDataById,
-  getReferenceDataName,
-  useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import {useHarbors} from '@atb/harbors';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {StyleSheet} from '@atb/theme';
 import {FareContract, TravelRightDirection} from '@atb/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
+import type {PreassignedFareProduct} from '@atb-as/config-specs';
+import {
+  useFareContractFromTo,
+  useHarborsFromTo,
+  useZonesFromTo,
+} from '@atb/fare-contracts/components/FareContractFromToComponentHooks';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
   mode: 'small' | 'large';
+  preassignedFareProduct?: PreassignedFareProduct;
 };
 
-type FareContractPropsSub = {
+export type FareContractPropsSub = {
   fc: FareContract;
 };
 
-type RecentFareContractPropsSub = {
+export type RecentFareContractPropsSub = {
   rfc: RecentFareContractType;
 };
 
@@ -32,59 +33,23 @@ type FareContractFromToProps = FareContractFromToBaseProps &
   (FareContractPropsSub | RecentFareContractPropsSub);
 
 export const FareContractFromTo = (props: FareContractFromToProps) => {
-  const tariffZoneRefs = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      return travelRight.tariffZoneRefs ?? [];
-    } else if (hasRecentFareContract(props)) {
-      if (props.rfc.fromTariffZone) {
-        return [
-          props.rfc.fromTariffZone.id,
-          ...(props.rfc.toTariffZone ? [props.rfc.toTariffZone.id] : []),
-        ];
-      }
-    }
-    return [];
-  })();
+  const {
+    shouldReturnNull,
+    tariffZoneRefs,
+    direction,
+    startPointRef,
+    endPointRef,
+  } = useFareContractFromTo({
+    preassignedFareProduct: props.preassignedFareProduct,
+    fcOrRfc: 'rfc' in props ? props.rfc : props.fc,
+  });
 
-  const direction = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      if (!!travelRight.direction) {
-        // A travelRight between quays (e.g. for boat)
-        return travelRight.direction;
-      } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
-        // A travelRight between several zones (e.g. for bus)
-        return TravelRightDirection.Both;
-      }
-    } else if (hasRecentFareContract(props)) {
-      if (!!props.rfc.direction) {
-        return props.rfc.direction;
-      } else if (props.rfc.fromTariffZone?.id !== props.rfc.toTariffZone?.id) {
-        return TravelRightDirection.Both;
-      }
-    }
-  })();
+  if (shouldReturnNull) return null;
 
-  const {startPointRef = undefined, endPointRef = undefined} = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      return {
-        startPointRef: travelRight.startPointRef,
-        endPointRef: travelRight.endPointRef,
-      };
-    } else if (hasRecentFareContract(props) && props.rfc.pointToPointValidity) {
-      return {
-        startPointRef: props.rfc.pointToPointValidity.fromPlace,
-        endPointRef: props.rfc.pointToPointValidity.toPlace,
-      };
-    }
-    return {};
-  })();
   if (tariffZoneRefs.length) {
     return (
       <ZonesFromTo
-        tarifZoneRefs={tariffZoneRefs}
+        tariffZoneRefs={tariffZoneRefs}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
@@ -104,30 +69,21 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
 };
 
 type ZonesProps = {
-  tarifZoneRefs: string[];
+  tariffZoneRefs: string[];
   mode: 'small' | 'large';
   backgroundColor: ContrastColor;
 };
 
-const ZonesFromTo = ({tarifZoneRefs, mode, backgroundColor}: ZonesProps) => {
-  const {tariffZones} = useFirestoreConfigurationContext();
-  const {t, language} = useTranslation();
+const ZonesFromTo = ({tariffZoneRefs, mode, backgroundColor}: ZonesProps) => {
+  const {t} = useTranslation();
+  const {fromZoneName, toZoneName} = useZonesFromTo({
+    tariffZoneRefs,
+  });
+  if (!fromZoneName) return null;
 
-  const fromZoneId = tarifZoneRefs[0];
-  const fromZone = findReferenceDataById(tariffZones, fromZoneId);
-  if (!fromZone) return null;
-  const fromZoneText = `${t(dictionary.zone)} ${getReferenceDataName(
-    fromZone,
-    language,
-  )}`;
-
-  const toZoneId = tarifZoneRefs[tarifZoneRefs.length - 1];
-  const toZone =
-    fromZoneId !== toZoneId
-      ? findReferenceDataById(tariffZones, toZoneId)
-      : undefined;
-  const toZoneText = toZone
-    ? `${t(dictionary.zone)} ${getReferenceDataName(toZone, language)}`
+  const fromZoneText = `${t(dictionary.zone)} ${fromZoneName}`;
+  const toZoneText = toZoneName
+    ? `${t(dictionary.zone)} ${toZoneName}`
     : undefined;
 
   return (
@@ -156,14 +112,12 @@ const HarborsFromTo = ({
   mode,
   backgroundColor,
 }: HarborsProps) => {
-  const {data: harbors} = useHarbors();
-  const startPointName = harbors.find((h) => h.id === startPointRef)?.name;
+  const {startPointName, endPointName} = useHarborsFromTo({
+    startPointRef,
+    endPointRef,
+  });
+
   if (!startPointName) return null;
-
-  const endPointName = endPointRef
-    ? harbors.find((h) => h.id === endPointRef)?.name
-    : undefined;
-
   return (
     <BorderedFromToBox
       fromText={startPointName}
@@ -281,15 +235,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacing.xSmall,
   },
 }));
-
-function hasFareContract(
-  props: FareContractFromToProps,
-): props is FareContractFromToBaseProps & FareContractPropsSub {
-  return 'fc' in props;
-}
-
-function hasRecentFareContract(
-  props: FareContractFromToProps,
-): props is FareContractFromToBaseProps & RecentFareContractPropsSub {
-  return 'rfc' in props;
-}
