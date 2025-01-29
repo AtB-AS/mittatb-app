@@ -59,6 +59,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     useEffect(() => {
       giveFocus(errorFocusRef);
     }, [errorText]);
+
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -179,6 +180,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
   },
   label: {
     minWidth: 60 - theme.spacing.medium,
