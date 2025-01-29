@@ -54,16 +54,10 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
             description: `Token already deleted in backoffice ${id}, start new`,
           },
         });
-        break; // No need to do anything, proceed to clear the local token
+        // No need to do anything, proceed to clear the local token
       } else {
-        notifyBugsnag(err, {
-          errorGroupHash: 'token',
-          metadata: {
-            traceId,
-            description: `Other error during wipe token, throw the error`,
-          },
-        });
-        // if it is not entity deleted error
+        logToBugsnag(`Other error found during wipe token, ${err}`);
+        // if it is not entity deleted error, throw it so it notifies bugsnag
         throw err;
       }
     }
