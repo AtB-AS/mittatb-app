@@ -2,7 +2,6 @@ import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
 import {
   ActivatedToken,
-  TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
