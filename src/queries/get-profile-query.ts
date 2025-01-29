@@ -15,15 +15,11 @@ export const useProfileQuery = (
     enabled: authStatus === 'authenticated',
   });
 
-  const handleSuccess = useCallback(() => {
+  const handleSuccess = useEffect(() => {
     if (res.status === 'success' && onSuccessCallback) {
       onSuccessCallback(res.data);
     }
   }, [res.status, res.data, onSuccessCallback]);
-
-  useEffect(() => {
-    handleSuccess();
-  }, [handleSuccess]);
 
   return res;
 };

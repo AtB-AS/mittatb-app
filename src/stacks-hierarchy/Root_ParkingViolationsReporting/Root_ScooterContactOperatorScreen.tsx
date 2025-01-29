@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -269,7 +269,7 @@ const useScooterContactFormController = (
     },
   });
 
-  const profileOnSuccess = (data: CustomerProfile) => {
+  const profileOnSuccess = useCallback((data: CustomerProfile) => {
     setRequestBody((prev) => ({
       ...prev,
       contactInformationEndUser: {
@@ -277,10 +277,9 @@ const useScooterContactFormController = (
         email: data?.email,
       },
     }));
-  };
+  }, []);
 
   useProfileQuery(profileOnSuccess);
-  console.log(requestBody);
 
   const [showError, setShowError] = useState(false);
 
