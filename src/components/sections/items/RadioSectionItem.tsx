@@ -49,7 +49,7 @@ export function RadioSectionItem({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const interactiveColor = color;
+  const interactiveColor = color || theme.color.interactive[2];
 
   const backgroundColor = interactiveColor
     ? selected

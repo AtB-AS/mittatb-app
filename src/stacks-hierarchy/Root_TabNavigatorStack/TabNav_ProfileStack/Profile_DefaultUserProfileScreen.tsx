@@ -11,7 +11,6 @@ import {
 } from '@atb/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useThemeContext} from '@atb/theme';
 
 export const Profile_DefaultUserProfileScreen = () => {
   const {
@@ -21,9 +20,6 @@ export const Profile_DefaultUserProfileScreen = () => {
 
   const styles = useStyles();
   const {t, language} = useTranslation();
-
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
   const {userProfiles} = useFirestoreConfigurationContext();
 
@@ -56,7 +52,6 @@ export const Profile_DefaultUserProfileScreen = () => {
           keyExtractor={(u) => u.id}
           itemToText={(u) => getReferenceDataName(u, language)}
           selected={selectedProfile}
-          color={interactiveColor}
           onSelect={(u) =>
             setPreference({defaultUserTypeString: u.userTypeString})
           }
