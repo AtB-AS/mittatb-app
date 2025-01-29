@@ -15,8 +15,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {tokenService} from './tokenService';
 import {mobileTokenClient} from './mobileTokenClient';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils';
-import {isAxiosError} from 'axios';
+import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -43,13 +42,9 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
     try {
       await tokenService.removeToken(id, traceId);
     } catch (err: any) {
-      /**
-       * There are cases where remove token fails due to the backoffice token
-       * already removed, in this case, just wipe the local token.
-       */
-      if (isEntityDeletedError(err)) {
-        await mobileTokenClient.clear();
-      }
+      logToBugsnag(`Other error found during wipe token, ${err}`);
+      // if it is not entity deleted error, throw it so it notifies bugsnag
+      throw err;
     }
   }
   await mobileTokenClient.clear();
@@ -78,17 +73,20 @@ export const getMobileTokenErrorHandlingStrategy = (
     errorResolution = err.resolution;
   } else if (err instanceof RemoteTokenStateError) {
     errorResolution = mapTokenErrorResolution(err);
-  } else if (isEntityDeletedError(err)) {
-    /**
-     * This handles the situation where local token is still stored, while
-     * the remote token is already deleted, should only happens with a very
-     * old account that got their account history truncated in backoffice.
-     */
-    return 'reset';
   } else {
     return 'unspecified';
   }
 
+  logToBugsnag(
+    `mobile token handle error ${err} with resolution ${errorResolution}`,
+  );
+
+  notifyBugsnag(err, {
+    errorGroupHash: 'token',
+    metadata: {
+      description: `Handling error ${err} with resolution of ${errorResolution}`,
+    },
+  });
   // handle the error resolution
   switch (errorResolution) {
     case TokenErrorResolution.RESET:
@@ -102,19 +100,6 @@ export const getMobileTokenErrorHandlingStrategy = (
     case TokenErrorResolution.NONE:
       return 'unspecified';
   }
-};
-
-/**
- * Checks if the error is an `Entity deleted` error
- * Should be only those with error code 500, and has message as follows:
- *
- * `5 NOT_FOUND: Entity deleted: Entity of type Token with id xxxx has been deleted`
- * `5 NOT_FOUND: Entity not found: Token not found for CustomerAccount: xxxx`
- */
-const isEntityDeletedError = (err: any): boolean => {
-  return (
-    isAxiosError(err) && err.code === '500' && err.message.includes('NOT_FOUND')
-  );
 };
 
 /**
