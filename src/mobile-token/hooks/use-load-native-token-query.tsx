@@ -1,9 +1,15 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
+import {
+  ActivatedToken,
+  TokenFactoryError,
+} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
-import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
+import {
+  TokenMustBeRenewedRemoteTokenStateError,
+  TokenMustBeReplacedRemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
 import {
   getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
@@ -65,12 +71,16 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
+      logToBugsnag(`Get token error ${err}`);
       const errHandling = getMobileTokenErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
+          logToBugsnag(`Get token needs to reset token`);
           await wipeToken(getSdkErrorTokenIds(err), traceId);
+          logError(err, traceId);
           break;
         case 'unspecified':
+          logToBugsnag(`Get token error unspecified resolution`);
           logError(err, traceId);
           throw err;
       }
@@ -86,17 +96,25 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
       } catch (err: any) {
+        logToBugsnag(`Validation error on token ${token.getTokenId()}, ${err}`);
         // Check if the error has an error handling strategy implemented
         const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
         if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+          logToBugsnag(`Token needs renewal ${token.getTokenId()}, ${err}`);
+          logError(err, traceId);
           // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
         } else if (tokenSdkErrorHandling === 'reset') {
           // token needs reset, therefore, wipe token
+          logToBugsnag(`Token needs reset, wipe ${token.getTokenId()}, ${err}`);
+          logError(err, traceId);
           await wipeToken([token.tokenId], traceId);
           token = undefined;
         } else {
           // other errors
+          logToBugsnag(
+            `Other error during validation of ${token.getTokenId()}, ${err}`,
+          );
           logError(err, traceId);
           throw err;
         }
