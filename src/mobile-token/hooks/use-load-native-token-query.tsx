@@ -1,13 +1,9 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {
-  ActivatedToken,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
-import {
-  TokenMustBeRenewedRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
+import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {
   getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
