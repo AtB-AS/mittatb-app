@@ -13,11 +13,11 @@ else
 
     echo "Run test for Travel Search"
     /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures_travelsearch.e2e.ts" --resultsTitle performance_measures_travelsearch --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
-    #flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android:local:appcenter --spec test/flashlight/performanceMeasures_travelsearch.e2e.ts" --resultsTitle performance_measures_travelsearch --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
+    #flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android:local:firebase --spec test/flashlight/performanceMeasures_travelsearch.e2e.ts" --resultsTitle performance_measures_travelsearch --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
     ./scripts/handle-flashlight-results.sh 30000 travelsearch
 
     echo "Run test for Map"
     /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures_map.e2e.ts" --resultsTitle performance_measures_map --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
-    #flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android:local:appcenter --spec test/flashlight/performanceMeasures_map.e2e.ts" --resultsTitle performance_measures_map --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
+    #flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android:local:firebase --spec test/flashlight/performanceMeasures_map.e2e.ts" --resultsTitle performance_measures_map --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
     ./scripts/handle-flashlight-results.sh 30000 map
 fi

@@ -18,8 +18,9 @@ $ yarn install
 
 ## Test on GH action
 
-The GH action described in `test-e2e-android.yml` downloads the latest Android staging build from AppCenter and run 
-tests against it. The Android APK will be downloaded to `e2e/apk/app-staging.apk`.
+The GH action described in `test-e2e-android.yml` downloads the latest Android staging build from 
+Firebase App Distribution and run tests against it. The Android APK will be downloaded to 
+`e2e/apk/app-staging.apk`.
 ```bash
 ## run tests
 $ APP_PATH=<absolute-path-to-root> yarn test:android
@@ -30,13 +31,13 @@ $ APP_PATH=<absolute-path-to-root> yarn test:android
 Two alternatives.
 
 0) Pre-requisite: Android emulator with a ready to go AVD
-1) As for the GH action, an Android APK can be downloaded from AppCenter to `e2e/apk/app-staging.apk`
+1) As for the GH action, an Android APK can be downloaded from Firebase App Distribution to `e2e/apk/app-staging.apk`
 ```bash
 ## start emulator (name of the AVD is here 'Pixel_5_API_30')
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## run tests
-$ yarn test:android:local:appcenter
+$ yarn test:android:local:firebase
 ```
 2) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
 ```bash
