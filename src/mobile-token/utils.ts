@@ -60,7 +60,7 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
           errorGroupHash: 'token',
           metadata: {
             traceId,
-            description: `Token already deleted in backoffice ${id}, start new`,
+            description: `Other error during wipe token, throw the error`,
           },
         });
         // if it is not entity deleted error
