@@ -42,24 +42,9 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
     try {
       await tokenService.removeToken(id, traceId);
     } catch (err: any) {
-      /**
-       * There are cases where remove token fails due to the backoffice token
-       * already removed, in this case, just wipe the local token.
-       */
-      if (isEntityDeletedError(err)) {
-        notifyBugsnag(Error(`Token removed from backoffice ${id}`), {
-          errorGroupHash: 'token',
-          metadata: {
-            traceId,
-            description: `Token already deleted in backoffice ${id}, start new`,
-          },
-        });
-        // No need to do anything, proceed to clear the local token
-      } else {
-        logToBugsnag(`Other error found during wipe token, ${err}`);
-        // if it is not entity deleted error, throw it so it notifies bugsnag
-        throw err;
-      }
+      logToBugsnag(`Other error found during wipe token, ${err}`);
+      // if it is not entity deleted error, throw it so it notifies bugsnag
+      throw err;
     }
   }
   await mobileTokenClient.clear();
@@ -116,14 +101,6 @@ export const getMobileTokenErrorHandlingStrategy = (
       return 'unspecified';
   }
 };
-
-/**
- * Checks if the error calling the `/remove` endpoint has statusCode 500
- * This usually happens when the token is removed from backoffice
- * and they return error code 500.
- */
-const isEntityDeletedError = (err: any): boolean =>
-  'statusCode' in err && err.statusCode === 500;
 
 /**
  * Get the token ids that are encapsulated in some sdk errors.
