@@ -54,7 +54,7 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
             description: `Token already deleted in backoffice ${id}, start new`,
           },
         });
-        await mobileTokenClient.clear();
+        break; // No need to do anything, proceed to clear the local token
       } else {
         notifyBugsnag(err, {
           errorGroupHash: 'token',
