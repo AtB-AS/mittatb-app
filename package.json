@@ -87,7 +87,7 @@
     "lodash.pickby": "^4.6.0",
     "lodash.sortby": "^4.7.0",
     "marked": "^4.2.12",
-    "phone": "^3.1.49",
+    "phone": "^3.1.58",
     "posthog-react-native": "^3.1.1",
     "prop-types": "^15.8.1",
     "qrcode": "1.5.3",
