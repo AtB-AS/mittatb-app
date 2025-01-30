@@ -31,7 +31,7 @@ export const PriceSummary = ({
   const {vatPercent} = useFirestoreConfigurationContext();
 
   const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
-  const vatAmountString = formatDecimalNumber(vatAmount, language);
+  const vatAmountString = formatDecimalNumber(vatAmount, language, 2);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
   const totalPriceString = formatDecimalNumber(totalPrice, language, 2);
 
