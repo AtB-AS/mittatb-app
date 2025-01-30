@@ -13,18 +13,31 @@ import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   formatNumberLang,
   formatPrice,
+  formatPricePerUnit,
   formatRange,
   getBatteryLevelIcon,
 } from '../utils';
+import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 
 type Props = {
-  vehicleId: VehicleId;
+  pricingPlan: PricingPlanFragment;
+  currentFuelPercent: number | undefined;
+  currentRangeMeters: number;
+  operatorName: string;
+  brandLogoUrl: string | undefined;
 };
 
-export const VehicleCard = ({vehicleId: id}: Props) => {
+export const VehicleCard = ({
+  pricingPlan,
+  currentFuelPercent,
+  currentRangeMeters,
+  operatorName,
+  brandLogoUrl,
+}: Props) => {
   const {t, language} = useTranslation();
-  const styles = useSheetStyle();
-  const {vehicle, operatorName, brandLogoUrl} = useVehicle(id);
+  const styles = useStyles();
+
+  const price = formatPricePerUnit(pricingPlan, language);
 
   return (
     <Section style={styles.container}>
@@ -37,46 +50,35 @@ export const VehicleCard = ({vehicleId: id}: Props) => {
       </GenericSectionItem>
       <GenericSectionItem>
         <View style={styles.content}>
-          {vehicle ? (
-            <>
-              <VehicleCardStat
-                icon={
-                  vehicle.currentFuelPercent
-                    ? getBatteryLevelIcon(vehicle.currentFuelPercent)
-                    : BatteryHigh
-                }
-                stat={formatRange(vehicle.currentRangeMeters, language)}
-                description={t(ScooterTexts.range)}
-              />
-              <VehicleCardStat
-                icon={Unlock}
-                stat={
-                  formatNumberLang(vehicle.pricingPlan.price, language) + ' kr'
-                }
-                description={t(ScooterTexts.unlock)}
-              />
-              {vehicle.pricingPlan.perMinPricing &&
-              vehicle.pricingPlan.perMinPricing.length > 0 ? (
-                <VehicleCardStat
-                  icon={PricePerTime}
-                  stat={
-                    formatPrice(
-                      vehicle?.pricingPlan.perMinPricing[0],
-                      language,
-                    ) + ' kr'
-                  }
-                  description={t(ScooterTexts.perMin)}
-                />
-              ) : null}
-            </>
-          ) : null}
+          <>
+            <VehicleCardStat
+              icon={
+                currentFuelPercent
+                  ? getBatteryLevelIcon(currentFuelPercent)
+                  : BatteryHigh
+              }
+              stat={formatRange(currentRangeMeters, language)}
+              description={t(ScooterTexts.range)}
+            />
+            <VehicleCardStat
+              icon={Unlock}
+              stat={formatNumberLang(pricingPlan.price, language) + ' kr'}
+              description={t(ScooterTexts.unlock)}
+            />
+
+            <VehicleCardStat
+              icon={PricePerTime}
+              stat={price?.price ?? ''}
+              description={t(ScooterTexts.per.unit(price?.unit ?? ''))}
+            />
+          </>
         </View>
       </GenericSectionItem>
     </Section>
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,

@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const VehicleCardStat = ({stat, description, icon}: Props) => {
-  const styles = useSheetStyle();
+  const styles = useStyles();
 
   return (
     <View style={styles.contentItem}>
@@ -27,12 +27,12 @@ export const VehicleCardStat = ({stat, description, icon}: Props) => {
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook(() => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     contentItem: {
       flexDirection: 'column',
       alignItems: 'center',
-      gap: 5,
+      gap: theme.spacing.xSmall,
     },
   };
 });

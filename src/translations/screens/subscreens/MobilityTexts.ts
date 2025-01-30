@@ -135,7 +135,18 @@ export const ScooterTexts = {
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
-  perMin: _('per minutt', 'per minute', 'per minutt'),
+  per: {
+    unit(unit: string) {
+      switch (unit) {
+        case 'min':
+          return _('per minutt', 'per minute', 'per minutt');
+        case 'km':
+          return _('per kilometer', 'per kilometer', 'per kilometer');
+        default:
+          return _('per', 'per', 'per');
+      }
+    },
+  },
 };
 
 export const BicycleTexts = {

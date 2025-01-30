@@ -38,7 +38,7 @@ export const ScooterSheet = ({
   onVehicleReceived,
 }: Props) => {
   const {t} = useTranslation();
-  const styles = useSheetStyle();
+  const styles = useStyles();
   const {
     vehicle,
     isLoading,
@@ -46,6 +46,7 @@ export const ScooterSheet = ({
     operatorId,
     operatorName,
     rentalAppUri,
+    brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
 
@@ -77,7 +78,13 @@ export const ScooterSheet = ({
                   style={styles.operatorBenefit}
                 />
               )}
-              <VehicleCard vehicleId={id} />
+              <VehicleCard
+                pricingPlan={vehicle.pricingPlan}
+                currentFuelPercent={vehicle.currentFuelPercent}
+                currentRangeMeters={vehicle.currentRangeMeters}
+                operatorName={operatorName}
+                brandLogoUrl={brandLogoUrl}
+              />
             </ScrollView>
             <View style={styles.footer}>
               {rentalAppUri && (
@@ -115,7 +122,7 @@ export const ScooterSheet = ({
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {

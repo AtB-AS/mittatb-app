@@ -173,8 +173,10 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
 
 const getPercentageBattery = (batteryPercentage: number) => {
   let newBatteryPercentage = batteryPercentage;
-  if (batteryPercentage % 1 !== 0) {
+  if (batteryPercentage % 1 !== 0 && batteryPercentage < 1) {
     newBatteryPercentage = batteryPercentage * 100;
+  } else if (batteryPercentage % 1 !== 0) {
+    newBatteryPercentage = Math.round(batteryPercentage);
   }
   return newBatteryPercentage;
 };
@@ -207,6 +209,22 @@ export const formatNumberLang = (number: number, language: Language) => {
   return Number.isInteger(number)
     ? number
     : formatDecimalNumber(number, language, 2);
+};
+
+export const formatPricePerUnit = (
+  pricePlan: PricingPlanFragment,
+  language: Language,
+) => {
+  const perMinPrice = pricePlan.perMinPricing?.[0];
+  const perKmPrice = pricePlan.perKmPricing?.[0];
+
+  if (perMinPrice) {
+    return {price: `${formatPrice(perMinPrice, language)} kr`, unit: 'min'};
+  }
+  if (perKmPrice) {
+    return {price: `${formatPrice(perKmPrice, language)} kr`, unit: 'km'};
+  }
+  return undefined;
 };
 
 export const getOperators = (
