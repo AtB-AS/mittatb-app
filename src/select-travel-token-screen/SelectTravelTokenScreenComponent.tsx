@@ -27,7 +27,6 @@ import {
   isOfFareProductRef,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContext} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
@@ -72,9 +71,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   );
 
   // Filter for unique travel rights config types
-  const availableFareContractsTypes = availableTravelRights
-    .filter(onlyUniquesBasedOnField('type'))
-    .map((travelRight) => {
+  const availableFareContractsTypes = availableTravelRights.map(
+    (travelRight) => {
       const preassignedFareProduct = findReferenceDataById(
         preassignedFareProducts,
         isOfFareProductRef(travelRight) ? travelRight.fareProductRef : '',
@@ -86,7 +84,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           (c) => c.type === preassignedFareProduct.type,
         )
       );
-    });
+    },
+  );
 
   const fareProductConfigWhichRequiresTokenOnMobile =
     availableFareContractsTypes.find(
