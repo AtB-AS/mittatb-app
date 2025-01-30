@@ -18,7 +18,7 @@ type Props = PropsWithChildren<
   | {
       fc: FareContract;
     }
-  | ({reservation: Reservation} & {enabledLine: boolean})
+  | ({reservation: Reservation} & {enabledLine?: boolean})
 >;
 
 export const WithValidityLine = (props: Props) => {
