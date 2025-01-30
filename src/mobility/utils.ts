@@ -24,6 +24,13 @@ import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {
+  BatteryEmpty,
+  BatteryFull,
+  BatteryHigh,
+  BatteryLow,
+  BatteryMedium,
+} from '@atb/assets/svg/mono-icons/miscellaneous';
 
 export const isScooter = (
   feature: Feature<Point> | undefined,
@@ -161,6 +168,57 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
       ? (rangeInMeters / 1000).toFixed(0)
       : formatDecimalNumber(rangeInMeters / 1000, language, 1);
   return `${rangeInKm} km`;
+};
+
+const getPercentageBattery = (batteryPercentage: number) => {
+  let newBatteryPercentage = batteryPercentage;
+  if (batteryPercentage % 1 !== 0 && batteryPercentage < 1) {
+    newBatteryPercentage = batteryPercentage * 100;
+  } else if (batteryPercentage % 1 !== 0) {
+    newBatteryPercentage = Math.round(batteryPercentage);
+  }
+  return newBatteryPercentage;
+};
+
+export const getBatteryLevelIcon = (batteryPercentage: number) => {
+  const newBatteryPercentage = getPercentageBattery(batteryPercentage);
+
+  if (newBatteryPercentage >= 77) {
+    return BatteryFull;
+  } else if (newBatteryPercentage >= 36) {
+    return BatteryHigh;
+  } else if (newBatteryPercentage >= 16) {
+    return BatteryMedium;
+  } else if (newBatteryPercentage >= 3) {
+    return BatteryLow;
+  } else {
+    return BatteryEmpty;
+  }
+};
+
+export const formatPrice = (number: number, language: Language) => {
+  return Number.isInteger(number)
+    ? number
+    : formatDecimalNumber(number, language, 2);
+};
+
+export const formatPricePerUnit = (
+  pricePlan: PricingPlanFragment,
+  language: Language,
+) => {
+  const perMinPrice = pricePlan.perMinPricing?.[0];
+  const perKmPrice = pricePlan.perKmPricing?.[0];
+
+  if (perMinPrice) {
+    return {
+      price: `${formatPrice(perMinPrice.rate, language)} kr`,
+      unit: 'min',
+    };
+  }
+  if (perKmPrice) {
+    return {price: `${formatPrice(perKmPrice.rate, language)} kr`, unit: 'km'};
+  }
+  return undefined;
 };
 
 export const getOperators = (
