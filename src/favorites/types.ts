@@ -44,6 +44,8 @@ export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];
 
+// NOTE: The iOS departure widget is dependent on this type. When changing it,
+// make sure to update the widget as well.
 type FavoriteDepartureBaseIds = {
   lineId: string;
   quayId: string;
@@ -57,6 +59,8 @@ export type FavoriteDepartureId = FavoriteDepartureBaseIds & {
   destinationDisplay?: DestinationDisplay;
 };
 
+// NOTE: The iOS departure widget is dependent on this type. When changing it,
+// make sure to update the widget as well.
 type FavoriteDepartureWithoutId = {
   lineLineNumber?: string;
   lineTransportationMode?: TransportMode;
