@@ -2,7 +2,6 @@ import {Feature, Point, Position} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
-  PricingSegmentFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {
@@ -197,15 +196,7 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
   }
 };
 
-export const formatPrice = (
-  segmentFragment: PricingSegmentFragment,
-  language: Language,
-) => {
-  const rate = Number(segmentFragment.rate);
-  return Number.isInteger(rate) ? rate : formatDecimalNumber(rate, language, 2);
-};
-
-export const formatNumberLang = (number: number, language: Language) => {
+export const formatPrice = (number: number, language: Language) => {
   return Number.isInteger(number)
     ? number
     : formatDecimalNumber(number, language, 2);
@@ -219,10 +210,13 @@ export const formatPricePerUnit = (
   const perKmPrice = pricePlan.perKmPricing?.[0];
 
   if (perMinPrice) {
-    return {price: `${formatPrice(perMinPrice, language)} kr`, unit: 'min'};
+    return {
+      price: `${formatPrice(perMinPrice.rate, language)} kr`,
+      unit: 'min',
+    };
   }
   if (perKmPrice) {
-    return {price: `${formatPrice(perKmPrice, language)} kr`, unit: 'km'};
+    return {price: `${formatPrice(perKmPrice.rate, language)} kr`, unit: 'km'};
   }
   return undefined;
 };

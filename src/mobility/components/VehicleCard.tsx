@@ -9,7 +9,7 @@ import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
-  formatNumberLang,
+  formatPrice,
   formatPricePerUnit,
   formatRange,
   getBatteryLevelIcon,
@@ -59,7 +59,7 @@ export const VehicleCard = ({
             />
             <VehicleCardStat
               icon={Unlock}
-              stat={formatNumberLang(pricingPlan.price, language) + ' kr'}
+              stat={formatPrice(pricingPlan.price, language) + ' kr'}
               description={t(ScooterTexts.unlock)}
             />
 
