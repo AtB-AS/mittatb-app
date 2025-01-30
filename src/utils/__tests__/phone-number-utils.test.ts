@@ -1,5 +1,4 @@
 import {
-  combinePrefixAndPhoneNumber,
   formatPhoneNumber,
   getParsedPrefixAndPhoneNumber,
 } from '../phone-number-utils';
