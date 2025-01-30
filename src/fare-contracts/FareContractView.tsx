@@ -31,11 +31,10 @@ import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
-import React from 'react';
-import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {View} from 'react-native';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {FareContractDetail} from '@atb/fare-contracts/components/FareContractDetail';
+import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 
 type Props = {
   now: number;
