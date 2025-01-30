@@ -1,8 +1,6 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {useVehicle} from '@atb/mobility/use-vehicle';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {View} from 'react-native';
@@ -12,7 +10,6 @@ import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   formatNumberLang,
-  formatPrice,
   formatPricePerUnit,
   formatRange,
   getBatteryLevelIcon,
