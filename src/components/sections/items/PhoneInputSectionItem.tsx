@@ -3,7 +3,6 @@ import {
   AccessibilityInfo,
   Keyboard,
   NativeSyntheticEvent,
-  Platform,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
@@ -114,15 +113,6 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       }
     };
 
-    const padding = {
-      // There are some oddities with handling padding
-      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom:
-        theme.spacing.medium - Platform.select({android: 4, default: 0}),
-      paddingTop:
-        theme.spacing.medium - Platform.select({android: 5, default: 0}),
-    };
-
     // Remove padding from topContainerStyle
     const {padding: _dropThis, ...topContainerStyle} = topContainer;
     const containerPadding = {
@@ -188,7 +178,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             )}
             <InternalTextInput
               ref={combinedRef}
-              style={[styles.input, padding, style]}
+              style={[styles.input, style]}
               placeholderTextColor={theme.color.foreground.dynamic.secondary}
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
@@ -254,6 +244,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
+    paddingVertical: 0,
     fontSize: theme.typography.body__primary.fontSize,
     flexGrow: 1,
   },
@@ -268,6 +259,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
   },
   label: {
     minWidth: 60 - theme.spacing.medium,
