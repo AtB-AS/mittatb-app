@@ -168,7 +168,6 @@ export const RecentFareContract = ({
             backgroundColor={theme.color.background.neutral['0']}
             mode="small"
             rfc={recentFareContract}
-            preassignedFareProduct={preassignedFareProduct}
           />
         </View>
       )}

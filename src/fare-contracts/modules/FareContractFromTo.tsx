@@ -1,15 +1,16 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {FareContract, TravelRightDirection} from '@atb/ticketing';
-import type {PreassignedFareProduct} from '@atb-as/config-specs';
 import {ZonesFromTo} from '@atb/fare-contracts/modules/ZonesFromTo';
 import {HarborsFromTo} from '@atb/fare-contracts/modules/HarborsFromTo';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/configuration';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
   mode: 'small' | 'large';
-  preassignedFareProduct?: PreassignedFareProduct;
 };
 
 export type FareContractPropsSub = {
@@ -31,7 +32,6 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
     startPointRef,
     endPointRef,
   } = useFareContractFromToController({
-    preassignedFareProduct: props.preassignedFareProduct,
     fcOrRfc: 'rfc' in props ? props.rfc : props.fc,
   });
 
@@ -61,18 +61,27 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
 
 type FareContractFromToControllerProps = {
   fcOrRfc: FareContract | RecentFareContractType;
-  preassignedFareProduct?: PreassignedFareProduct;
 };
 
 function useFareContractFromToController({
-  preassignedFareProduct,
   fcOrRfc,
 }: FareContractFromToControllerProps) {
   // shouldReturnNull
-  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
-  );
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
+    if (isFareContract(fcOrRfc)) {
+      const productRef = fcOrRfc.travelRights[0].fareProductRef;
+      const preassignedFareProduct = findReferenceDataById(
+        preassignedFareProducts,
+        productRef,
+      );
+      return c.type === preassignedFareProduct?.type;
+    } else if (isRecentFareContract(fcOrRfc)) {
+      return c.type === fcOrRfc.preassignedFareProduct.type;
+    }
+  });
+
   const shouldReturnNull =
     fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
 

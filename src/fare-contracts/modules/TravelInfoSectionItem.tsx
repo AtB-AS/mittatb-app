@@ -86,7 +86,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         <View style={styles.fareContractDetailItems}>
           <FareContractFromTo
             fc={fc}
-            preassignedFareProduct={preassignedFareProduct}
             backgroundColor={theme.color.background.neutral[0]}
             mode="small"
           />
