@@ -41,7 +41,7 @@ import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
-import {FareContractFromTo} from '@atb/fare-contracts/modules/FareContractFromTo';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 import {ValidTo} from '@atb/fare-contracts/components/ValidTo';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';

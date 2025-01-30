@@ -21,10 +21,11 @@ export const ZonesFromTo = ({
   backgroundColor,
 }: ZonesFromToProps) => {
   const {t} = useTranslation();
-  const {fromZoneName, toZoneName} = useZonesFromToController({
+  const controllerData = useZonesFromToController({
     tariffZoneRefs,
   });
-  if (!fromZoneName) return null;
+  if (!controllerData) return null;
+  const {fromZoneName, toZoneName} = controllerData;
 
   const fromZoneText = `${t(dictionary.zone)} ${fromZoneName}`;
   const toZoneText = toZoneName
@@ -52,9 +53,9 @@ function useZonesFromToController({
 
   const fromZoneId = tariffZoneRefs[0];
   const fromZone = findReferenceDataById(tariffZones, fromZoneId);
-  const fromZoneName = !!fromZone
-    ? getReferenceDataName(fromZone, language)
-    : undefined;
+  if (!fromZone) return undefined;
+
+  const fromZoneName = getReferenceDataName(fromZone, language);
 
   const toZoneId = tariffZoneRefs[tariffZoneRefs.length - 1];
   const toZone =

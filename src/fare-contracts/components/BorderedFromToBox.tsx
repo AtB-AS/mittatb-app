@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 type BorderedFromToBoxProps = {
   fromText: string;
   toText?: string;
-  direction?: TravelRightDirection;
+  direction: TravelRightDirection;
   mode: 'small' | 'large';
   backgroundColor: ContrastColor;
 };
@@ -49,9 +49,7 @@ export const BorderedFromToBox = ({
       <View style={styles.smallContent}>
         <ThemeIcon
           color={backgroundColor}
-          svg={
-            direction === TravelRightDirection.Both ? ArrowUpDown : ArrowDown
-          }
+          svg={icons[direction]}
           size="small"
         />
         <View style={styles.smallContentText}>
@@ -114,3 +112,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacing.xSmall,
   },
 }));
+
+const icons = {
+  [TravelRightDirection.Both]: ArrowUpDown,
+  [TravelRightDirection.Forwards]: ArrowDown,
+  [TravelRightDirection.Backwards]: ArrowDown,
+  [TravelRightDirection.Unspecified]: ArrowDown,
+};

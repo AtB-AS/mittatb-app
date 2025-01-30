@@ -1,8 +1,8 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {FareContract, TravelRightDirection} from '@atb/ticketing';
-import {ZonesFromTo} from '@atb/fare-contracts/modules/ZonesFromTo';
-import {HarborsFromTo} from '@atb/fare-contracts/modules/HarborsFromTo';
+import {ZonesFromTo} from '@atb/fare-contracts/components/ZonesFromTo';
+import {HarborsFromTo} from '@atb/fare-contracts/components/HarborsFromTo';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
@@ -25,32 +25,26 @@ type FareContractFromToProps = FareContractFromToBaseProps &
   (FareContractPropsSub | RecentFareContractPropsSub);
 
 export const FareContractFromTo = (props: FareContractFromToProps) => {
-  const {
-    shouldReturnNull,
-    tariffZoneRefs,
-    direction,
-    startPointRef,
-    endPointRef,
-  } = useFareContractFromToController({
-    fcOrRfc: 'rfc' in props ? props.rfc : props.fc,
-  });
+  const controllerData = useFareContractFromToController(
+    'rfc' in props ? props.rfc : props.fc,
+  );
 
-  if (shouldReturnNull) return null;
+  if (!controllerData) return null;
 
-  if (tariffZoneRefs.length) {
+  if (controllerData.mode === 'zones') {
     return (
       <ZonesFromTo
-        tariffZoneRefs={tariffZoneRefs}
+        tariffZoneRefs={controllerData.tariffZoneRefs}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
     );
-  } else if (startPointRef) {
+  } else if (controllerData.mode === 'harbors') {
     return (
       <HarborsFromTo
-        startPointRef={startPointRef}
-        endPointRef={endPointRef}
-        direction={direction}
+        startPointRef={controllerData.startPointRef}
+        endPointRef={controllerData.endPointRef}
+        direction={controllerData.direction}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
@@ -59,14 +53,26 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   return null;
 };
 
-type FareContractFromToControllerProps = {
-  fcOrRfc: FareContract | RecentFareContractType;
+type HarborsFromToData = {
+  mode: 'harbors';
+  startPointRef: string;
+  endPointRef?: string;
+  direction: TravelRightDirection;
 };
 
-function useFareContractFromToController({
-  fcOrRfc,
-}: FareContractFromToControllerProps) {
-  // shouldReturnNull
+type ZonesFromToData = {
+  mode: 'zones';
+  tariffZoneRefs: string[];
+};
+
+type FareContractFromToControllerDataType =
+  | HarborsFromToData
+  | ZonesFromToData
+  | undefined;
+
+function useFareContractFromToController(
+  fcOrRfc: FareContract | RecentFareContractType,
+): FareContractFromToControllerDataType {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
@@ -82,11 +88,11 @@ function useFareContractFromToController({
     }
   });
 
-  const shouldReturnNull =
-    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
+  if (fareProductTypeConfig?.configuration.zoneSelectionMode === 'none') {
+    return undefined;
+  }
 
-  // tarifZoneRefs
-  const tariffZoneRefs = () => {
+  const tariffZoneRefs = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
       return travelRight.tariffZoneRefs ?? [];
@@ -99,10 +105,9 @@ function useFareContractFromToController({
       }
     }
     return [];
-  };
+  })();
 
-  // direction
-  const direction = () => {
+  const direction = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
       if (!!travelRight.direction) {
@@ -119,9 +124,10 @@ function useFareContractFromToController({
         return TravelRightDirection.Both;
       }
     }
-  };
+    // Fall back to Forwards
+    return TravelRightDirection.Forwards;
+  })();
 
-  // startPointRef / endPointRef
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
@@ -138,13 +144,18 @@ function useFareContractFromToController({
     return {};
   })();
 
-  return {
-    shouldReturnNull,
-    tariffZoneRefs: tariffZoneRefs(),
-    direction: direction(),
-    startPointRef,
-    endPointRef,
-  };
+  if (!!startPointRef)
+    return {
+      mode: 'harbors',
+      startPointRef,
+      endPointRef,
+      direction,
+    };
+  else if (!!tariffZoneRefs.length)
+    return {
+      mode: 'zones',
+      tariffZoneRefs,
+    };
 }
 
 function isFareContract(

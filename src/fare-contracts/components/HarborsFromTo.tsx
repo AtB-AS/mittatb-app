@@ -6,7 +6,7 @@ import {useHarbors} from '@atb/harbors';
 type HarborsProps = {
   startPointRef: string;
   endPointRef?: string;
-  direction?: TravelRightDirection;
+  direction: TravelRightDirection;
   mode: 'small' | 'large';
   backgroundColor: ContrastColor;
 };
@@ -18,12 +18,13 @@ export const HarborsFromTo = ({
   mode,
   backgroundColor,
 }: HarborsProps) => {
-  const {startPointName, endPointName} = useHarborsFromToController({
+  const constrollerData = useHarborsFromToController({
     startPointRef,
     endPointRef,
   });
+  if (!constrollerData) return null;
+  const {startPointName, endPointName} = constrollerData;
 
-  if (!startPointName) return null;
   return (
     <BorderedFromToBox
       fromText={startPointName}
@@ -46,6 +47,7 @@ function useHarborsFromToController({
 }: HarborsFromToControllerProps) {
   const {data: harbors} = useHarbors();
   const startPointName = harbors.find((h) => h.id === startPointRef)?.name;
+  if (!startPointName) return undefined;
 
   const endPointName = endPointRef
     ? harbors.find((h) => h.id === endPointRef)?.name

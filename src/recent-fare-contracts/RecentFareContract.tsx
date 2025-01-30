@@ -20,7 +20,7 @@ import {TravelRightDirection} from '@atb/ticketing';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FareContractFromTo} from '@atb/fare-contracts/modules/FareContractFromTo';
+import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
