@@ -35,8 +35,12 @@ export function Summary({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const formattedPrice = formatDecimalNumber(price, language);
-  const formattedOriginalPrice = formatDecimalNumber(originalPrice, language);
+  const formattedPrice = formatDecimalNumber(price, language, 2);
+  const formattedOriginalPrice = formatDecimalNumber(
+    originalPrice,
+    language,
+    2,
+  );
   const hasSelection = selection.userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
