@@ -34,13 +34,3 @@ export const getParsedPrefixAndPhoneNumber = (
     phoneNumber: parsedPhone.nationalNumber,
   };
 };
-
-/**
- * Combines a prefix and a number to a combined phone number
- * @param {string} prefix prefix string
- * @param {string} phoneNumber phone number string
- */
-export const combinePrefixAndPhoneNumber = (
-  prefix: string,
-  phoneNumber: string,
-) => `+${prefix}${phoneNumber}`;

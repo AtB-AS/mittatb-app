@@ -2,7 +2,6 @@ import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
-import {combinePrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -194,21 +193,24 @@ export const SendSupportRequestBodySchema = z.object({
       phoneNumber: z.string().nullish(),
       email: z.string().nullish(),
     })
-    .superRefine((data, ctx) => {
-      const phone =
+    .transform((data) => ({
+      phone:
         data.phonePrefix && data.phoneNumber
-          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
-          : undefined;
+          ? `+${data.phonePrefix}${data.phoneNumber}`
+          : undefined,
+      email: data.email || undefined,
+    }))
+    .superRefine((data, ctx) => {
       const email = data.email || undefined;
 
-      if (!phone && !email) {
+      if (!data.phone && !email) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: [],
         });
       }
 
-      if (phone && !isValidPhoneNumber(phone)) {
+      if (data.phone && !isValidPhoneNumber(data.phone)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['phoneNumber'],
@@ -221,16 +223,7 @@ export const SendSupportRequestBodySchema = z.object({
           path: ['email'],
         });
       }
-
-      return z.NEVER;
-    })
-    .transform((data) => ({
-      phone:
-        data.phonePrefix && data.phoneNumber
-          ? combinePrefixAndPhoneNumber(data.phonePrefix, data.phoneNumber)
-          : undefined,
-      email: data.email || undefined,
-    })),
+    }),
   comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).optional().nullable(),
   place: z
     .object({

@@ -33,14 +33,4 @@ describe('phoneNumberUtils', () => {
       expect(formattedNumber.phoneNumber).toEqual('12345');
     });
   });
-
-  describe('combinePrefixAndPhoneNumber', () => {
-    it('Should combine prefix and phonenumber with a + before', () => {
-      const prefix = '47';
-      const phoneNumber = '44444444';
-      expect(combinePrefixAndPhoneNumber(prefix, phoneNumber)).toEqual(
-        '+4744444444',
-      );
-    });
-  });
 });
