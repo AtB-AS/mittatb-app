@@ -165,6 +165,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
+    paddingVertical: 0,
 
     fontSize: theme.typography.body__primary.fontSize,
   },

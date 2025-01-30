@@ -29,6 +29,7 @@ import {
   Section,
   TextInputSectionItem,
   ToggleSectionItem,
+  PhoneInputSectionItem,
 } from '@atb/components/sections';
 import {ProfileScreenProps} from './navigation-types';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -1036,6 +1037,14 @@ export const Profile_DesignSystemScreen = ({
             textContentType="oneTimeCode"
             showClear={true}
             inlineLabel={false}
+          />
+          <PhoneInputSectionItem
+            label="Phone input"
+            prefix="47"
+            onChangePrefix={() => {}}
+            onClear={() => {}}
+            showClear={true}
+            errorText="Error"
           />
           <TextInputSectionItem
             label="Inline Label"
