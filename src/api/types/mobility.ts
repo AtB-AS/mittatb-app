@@ -182,10 +182,6 @@ export enum SupportType {
   OTHER = 'OTHER',
 }
 
-export enum SendSupportCustomErrorType {
-  NO_CONTACT_INFO = 'NO_CONTACT_INFO',
-}
-
 export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
 
 export const SendSupportRequestBodySchema = z.object({
@@ -208,7 +204,7 @@ export const SendSupportRequestBodySchema = z.object({
       if (!phone && !email) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: SendSupportCustomErrorType.NO_CONTACT_INFO,
+          path: [],
         });
       }
 

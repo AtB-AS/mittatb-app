@@ -15,7 +15,6 @@ import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactOperatorTexts} from '@atb/translations/screens/ContactOperator';
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
-  SendSupportCustomErrorType,
   SendSupportRequestBody,
   SendSupportRequestBodyInput,
   SendSupportRequestBodySchema,
@@ -334,14 +333,13 @@ export const validateSchema = (body: SendSupportRequestBodyInput) => {
   const result = SendSupportRequestBodySchema.safeParse(body);
   const formattedErrors = result.success ? undefined : result?.error?.format();
   return {
-    isCommentValid: !formattedErrors?.comment?._errors,
+    isCommentValid: !formattedErrors?.comment?._errors?.length,
     isPhoneNumberValid:
-      !formattedErrors?.contactInformationEndUser?.phoneNumber?._errors,
-    isEmailValid: !formattedErrors?.contactInformationEndUser?.email?._errors,
+      !formattedErrors?.contactInformationEndUser?.phoneNumber?._errors?.length,
+    isEmailValid:
+      !formattedErrors?.contactInformationEndUser?.email?._errors?.length,
     isContactInfoPresent:
-      !formattedErrors?.contactInformationEndUser?._errors?.includes(
-        SendSupportCustomErrorType.NO_CONTACT_INFO,
-      ),
+      !formattedErrors?.contactInformationEndUser?._errors?.length,
     isAllInputValid: result.success,
     validatedRequestBody: result.success ? result.data : undefined,
   };
