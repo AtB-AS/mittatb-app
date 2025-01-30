@@ -69,6 +69,7 @@ import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ParkingViolationsReporting/Root_ScooterHelpScreen';
 import {Root_ScooterContactOperatorScreen} from './Root_ParkingViolationsReporting/Root_ScooterContactOperatorScreen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {parseParamAsInt} from './utils';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -132,14 +133,8 @@ export const RootStack = () => {
         serviceJourneyId: params.serviceJourneyId as string,
         date: (params.date as string) || new Date().toISOString(),
         serviceDate: params.serviceDate as string,
-        fromStopPosition:
-          typeof params.fromStopPosition === 'string'
-            ? parseInt(params.fromStopPosition)
-            : 0,
-        toStopPosition:
-          typeof params.toStopPosition === 'string'
-            ? parseInt(params.toStopPosition)
-            : undefined,
+        fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+        toStopPosition: parseParamAsInt(params.toStopPosition),
       };
       destination.push({
         name: 'Departures_DepartureDetailsScreen',
