@@ -20,6 +20,7 @@ type Props = {
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   stations: StationFeatures;
   mapCameraRef: RefObject<Camera>;
+  onMapItemClick: (e: OnPressEvent) => void;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
@@ -31,6 +32,7 @@ export type StationsWithCount = FeatureCollection<
 export const Stations = ({
   selectedFeaturePropertyId,
   stations,
+  onMapItemClick,
   onClusterClick,
   mapCameraRef,
 }: Props) => {
@@ -78,11 +80,13 @@ export const Stations = ({
       <BikeStations
         selectedFeaturePropertyId={selectedFeaturePropertyId}
         stations={bikeStations}
+        onMapItemClick={onMapItemClick}
         onClusterClick={handleClusterClick}
       />
       <CarStations
         selectedFeaturePropertyId={selectedFeaturePropertyId}
         stations={carStations}
+        onMapItemClick={onMapItemClick}
         onClusterClick={handleClusterClick}
       />
     </>

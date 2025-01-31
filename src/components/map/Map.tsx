@@ -5,7 +5,7 @@ import {
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
+import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
@@ -47,6 +47,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -169,9 +170,11 @@ export const Map = (props: MapProps) => {
       zoomLevel: state.properties.zoom,
       center: state.properties.center,
     };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
+    if (!isEqual(mapRegion, newMapRegion)) {
+      setMapRegion((prevMapRegion) =>
+        isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
+      );
+    }
   };
 
   /**
@@ -184,6 +187,7 @@ export const Map = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
+      // console.log('onFeatureClick', new Date().getTime());
       if (!isFeaturePoint(feature)) return;
 
       // should split components instead of this, ExploreLocation should only depend on location state, not features
@@ -204,12 +208,9 @@ export const Map = (props: MapProps) => {
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick.reduce(
-        (selected, currentFeature) =>
-          getFeatureWeight(currentFeature, positionClicked) >
-          getFeatureWeight(selected, positionClicked)
-            ? currentFeature
-            : selected,
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
       );
 
       /**
@@ -244,6 +245,42 @@ export const Map = (props: MapProps) => {
       selectedFeature,
     ],
   );
+
+  const onMapItemClick = useCallback(
+    (e: OnPressEvent) => {
+      // console.log('onMapItemClick', new Date().getTime());
+      // console.log('e.features', JSON.stringify(e.features));
+      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
+      const featuresAtClick = e.features; // as Feature<Point, GeoJsonProperties>[];
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
+      );
+      if (isFeaturePoint(featureToSelect)) {
+        // console.log('featureToSelect', featureToSelect);
+        onMapClick({
+          source: 'map-item',
+          feature: featureToSelect,
+        });
+      }
+    },
+    [onMapClick],
+  );
+
+  const onClusterClick = useCallback(
+    (feature) => {
+      onMapClick({
+        source: 'cluster-click',
+        feature,
+      });
+    },
+    [onMapClick],
+  );
+
+  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
+
+  const enableShowSelectedFeature = showSelectedFeature; // Platform.OS !== 'android'; // onPress handler too slow on old android devices with this feature enabled
 
   return (
     <View style={{flex: 1}}>
@@ -294,12 +331,18 @@ export const Map = (props: MapProps) => {
           {mapLines && <MapRoute lines={mapLines} />}
 
           <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={selectedFeature?.properties?.id}
+            selectedFeaturePropertyId={
+              enableShowSelectedFeature
+                ? selectedFeature?.properties?.id
+                : undefined
+            }
+            onMapItemClick={onMapItemClick}
           />
 
-          {props.selectionMode !== 'ExploreLocation' && (
-            <SelectedFeatureIcon selectedFeature={selectedFeature} />
-          )}
+          {props.selectionMode !== 'ExploreLocation' &&
+            enableShowSelectedFeature && (
+              <SelectedFeatureIcon selectedFeature={selectedFeature} />
+            )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
@@ -307,29 +350,29 @@ export const Map = (props: MapProps) => {
           )}
           {props.vehicles && (
             <Vehicles
-              selectedFeaturePropertyId={selectedFeature?.properties?.id}
+              selectedFeaturePropertyId={
+                enableShowSelectedFeature
+                  ? selectedFeature?.properties?.id
+                  : undefined
+              }
               vehicles={props.vehicles.vehicles}
               mapCameraRef={mapCameraRef}
               mapViewRef={mapViewRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
+              onMapItemClick={onMapItemClick}
+              onClusterClick={onClusterClick}
             />
           )}
           {props.stations && (
             <Stations
-              selectedFeaturePropertyId={selectedFeature?.properties?.id}
+              selectedFeaturePropertyId={
+                enableShowSelectedFeature
+                  ? selectedFeature?.properties?.id
+                  : undefined
+              }
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
+              onMapItemClick={onMapItemClick}
+              onClusterClick={onClusterClick}
             />
           )}
         </MapboxGL.MapView>
@@ -377,7 +420,11 @@ export const Map = (props: MapProps) => {
         </View>
         {isShmoDeepIntegrationEnabled &&
           props.selectionMode === 'ExploreEntities' && (
-            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
+            <ShmoTesting
+              selectedVehicleId={selectedFeature?.properties?.id}
+              showSelectedFeature={showSelectedFeature}
+              setShowSelectedFeature={setShowSelectedFeature}
+            />
           )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
@@ -385,6 +432,19 @@ export const Map = (props: MapProps) => {
     </View>
   );
 };
+
+function getFeatureToSelect(
+  featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
+  positionClicked: Position, // [lon, lat]
+) {
+  const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
+    getFeatureWeight(currentFeature, positionClicked) >
+    getFeatureWeight(selected, positionClicked)
+      ? currentFeature
+      : selected,
+  );
+  return featureToSelect;
+}
 
 function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {

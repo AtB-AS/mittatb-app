@@ -121,6 +121,10 @@ export type MapSelectionActionType =
       feature: Feature<Point>;
     }
   | {
+      source: 'map-item';
+      feature: Feature<Point>;
+    }
+  | {
       source: 'cluster-click';
       feature: Feature<Point, Cluster>;
     }

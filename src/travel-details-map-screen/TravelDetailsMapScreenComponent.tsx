@@ -211,6 +211,7 @@ export const TravelDetailsMapScreenComponent = ({
         )}
         {stations && (
           <Stations
+            onMapItemClick={() => {}} // ignore clicks
             selectedFeaturePropertyId="" // no active selection feature used here
             stations={stations.stations}
             mapCameraRef={mapCameraRef}
