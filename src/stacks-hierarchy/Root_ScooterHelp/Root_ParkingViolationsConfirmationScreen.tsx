@@ -2,7 +2,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useAnalyticsContext} from '@atb/analytics';
-import {ConfirmationScreenComponent} from '@atb/scooter-help/ConfirmationScreenComponent';
+import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
 
 export type ConfirmationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsConfirmationScreen'>;

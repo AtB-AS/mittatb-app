@@ -92,9 +92,9 @@ export const ParkingViolationTexts = {
   },
   confirmation: {
     title: _(
-      'Feilparkering rapportert!',
-      'Report sent!',
-      'Feilparkering rapportert!',
+      'Feilparkering rapportert',
+      'Report sent',
+      'Feilparkering rapportert',
     ),
     description: (providerName?: string) =>
       _(

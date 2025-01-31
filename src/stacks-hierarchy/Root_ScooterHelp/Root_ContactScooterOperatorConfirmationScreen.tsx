@@ -1,7 +1,7 @@
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/analytics';
-import {ConfirmationScreenComponent} from '@atb/scooter-help/ConfirmationScreenComponent';
+import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
 import {ScooterOperatorContactTexts} from '@atb/translations/screens/ScooterOperatorContact';
 
 export type ContactScooterOperatorConfirmationScreenProps =

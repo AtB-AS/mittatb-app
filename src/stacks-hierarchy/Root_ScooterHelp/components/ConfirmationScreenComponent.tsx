@@ -4,12 +4,8 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Check as CheckDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Check as CheckLight} from '@atb/assets/svg/color/icons/status/light';
-import {
-  ScreenContainer,
-  getThemeColor,
-} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ScreenContainer';
+import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ScreenContainer';
 import {Button} from '@atb/components/button';
-import ScreenHeader from '@atb/translations/components/ScreenHeader';
 import {dictionary, useTranslation} from '@atb/translations';
 
 type ConfirmationScreenComponentProps = {
@@ -26,7 +22,7 @@ export const ConfirmationScreenComponent = ({
   const styles = useStyles();
   const {theme, themeName} = useThemeContext();
   const {t} = useTranslation();
-  const themeColor = getThemeColor(theme);
+  const themeColor = theme.color.background.accent[0];
 
   const close = () => {
     onClose();
