@@ -1,5 +1,5 @@
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {CarImage} from './CarImage';
 import {ThemeText} from '@atb/components/text';
@@ -54,9 +54,10 @@ type MoreCarsProps = {
 
 const MoreCarsIndicator = ({count}: MoreCarsProps) => {
   const style = useSheetStyle();
+  const {theme} = useThemeContext();
   return (
     <View style={style.moreCarsContainer}>
-      <ThemeText>+{count}</ThemeText>
+      <ThemeText color={theme.color.background.neutral[2]}>+{count}</ThemeText>
     </View>
   );
 };
@@ -83,7 +84,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       height: 40,
       width: 40,
       borderRadius: 8,
-      backgroundColor: '#d8d8d8',
+      backgroundColor: theme.color.background.neutral[2].background,
       justifyContent: 'center',
       alignItems: 'center',
     },
