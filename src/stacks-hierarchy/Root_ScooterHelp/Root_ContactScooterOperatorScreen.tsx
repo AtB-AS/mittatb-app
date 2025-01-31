@@ -39,15 +39,13 @@ export type Root_ContactScooterOperatorScreenProps =
 export const Root_ContactScooterOperatorScreen = ({
   route,
 }: Root_ContactScooterOperatorScreenProps) => {
-  const {vehicleId} = route.params;
+  const {vehicleId, operatorId} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
-
-  const operatorId = 'YAL:Operator:Altair';
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
