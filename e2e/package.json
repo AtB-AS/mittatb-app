@@ -1,13 +1,13 @@
 {
   "name": "atb-e2e",
-  "version": "1.62.0",
+  "version": "1.63.0",
   "private": true,
   "license": "EUPL-1.2",
   "type": "module",
   "scripts": {
     "test:android": "wdio ./conf/android.conf.ts",
     "test:android:local:dev": "IS_LOCAL=true wdio ./conf/android.conf.local.dev.ts",
-    "test:android:local:appcenter": "IS_LOCAL=true wdio ./conf/android.conf.local.appcenter.ts",
+    "test:android:local:firebase": "IS_LOCAL=true wdio ./conf/android.conf.local.firebase.ts",
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"yarn test:android:local:dev --spec test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1"
   },
   "devDependencies": {

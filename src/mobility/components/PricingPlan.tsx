@@ -6,8 +6,7 @@ import {
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {useTranslation} from '@atb/translations';
-import {formatFarePrice} from '@atb/utils/numbers';
-import {hasMultiplePricingPlans} from '@atb/mobility/utils';
+import {formatPrice, hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';

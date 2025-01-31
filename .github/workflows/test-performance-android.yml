@@ -26,7 +26,7 @@ jobs:
     name: Performance measures for Android
     runs-on: ubuntu-24.04
     outputs:
-      TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
     environment: atb
     timeout-minutes: 90
     env:
@@ -42,14 +42,25 @@ jobs:
         with:
           ref: ${{ env.ENV_BRANCH }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+
       # Download APK
-      - name: Get AppCenter APK
-        id: get-appcenter-apk
-        run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: e2e
+      - name: Get Firebase AppDistribution APK
+        id: get-appdistribution-apk
+        run: python get-appdistribution-apk.py
+        working-directory: e2e/firestore
         env:
-          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
-          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: "True"
 
       # E2E init
       - name: Enable KVM
@@ -58,7 +69,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install Flashlight
-        #run: sh ./scripts/install-flashlight.sh
         run: curl https://get.flashlight.dev | bash
       - name: Setup Python and its dependencies
         uses: ./.github/actions/python-setup
@@ -119,7 +129,7 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+          TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
 
       # Results
       #- name: Check for performance report
@@ -134,7 +144,7 @@ jobs:
       #  working-directory: e2e/performance
       #  run: npx tsx createPerformanceSummary.ts
       #  env:
-      #    TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      #    TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
       #- name: Print performance summary
       #  working-directory: e2e/performance
       #  run: cat performance_measures_summary.json | jq .

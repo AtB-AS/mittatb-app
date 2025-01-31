@@ -128,6 +128,7 @@ import {
   Flexible,
   Unknown as UnknownTransportation,
   Walk,
+  Bicycle,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {
   Bicycle as BicycleEntur,
@@ -146,7 +147,7 @@ import {
   Tram as TramEntur,
   Walk as WalkEntur,
 } from '@atb/assets/svg/mono-icons/transportation-entur';
-import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {getColorByOption} from '../utils';
 
 type ThemeIconMetaProps = ThemedStoryProps<ThemeIconProps>;
@@ -420,7 +421,7 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
         'Train (Entur)': TrainEntur,
         'Tram (Entur)': TramEntur,
         'Walk (Entur)': WalkEntur,
-        Battery: Battery,
+        Battery: BatteryHigh,
         Bicycle: Bicycle,
       },
     },

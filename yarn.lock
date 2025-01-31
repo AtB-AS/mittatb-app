@@ -33,22 +33,22 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^14.0.3":
-  version "14.0.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-14.0.3.tgz#9a99796b5a5f59ce86745d891e8422965a3f7044"
-  integrity sha512-jecjLi0Dbp5dLZj5U2i+k/riL6q6e8UhfYjErL/JsTNP2p3NGQHx6lxDgUvvEUfSMHcrWnf9npwNq17SWaS4Fg==
+"@atb-as/generate-assets@^15.0.1":
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.0.1.tgz#a85c0c2233faa3ffaf072e09abfa79df46583e9f"
+  integrity sha512-iNhLbcfopxs+ADn+1tuWDKsAKJI5PxJQNfl7CpCx1pKd9WgMVQ+k1BGiplL6wrt/uDqqj76cnctborcgjW4psw==
   dependencies:
-    "@atb-as/theme" "^13.1.1"
+    "@atb-as/theme" "^13.1.3"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^13.1.1", "@atb-as/theme@^13.1.2":
-  version "13.1.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.2.tgz#dd43e635fb894781c0b1d66762811f3a2aefad96"
-  integrity sha512-Id882xWREp7gZbaFeGhxCSonNdo3hsjEbUaMG9wLLQPSLI8nK54xG8Fe9jFsprlWNR4l+HYFSF//W4ZaF1dJFQ==
+"@atb-as/theme@^13.1.3":
+  version "13.1.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.3.tgz#ab449d294e48ac1307ddda5e2728176081027f13"
+  integrity sha512-jTvfSCA0xi8AQnq3AGTQeLVcvtouloAdZwMWDKy8GcAwe1GSM2iDZ/LtagkTRuG/7GTpZSBYjzZ3XBcOUa0xDA==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"
@@ -9166,10 +9166,10 @@ path-type@^4.0.0:
   resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-phone@^3.1.49:
-  version "3.1.49"
-  resolved "https://registry.yarnpkg.com/phone/-/phone-3.1.49.tgz#607672cbb2a7e6808b800ce597ab98640c6708f8"
-  integrity sha512-S+rHWXSQrllK5eQwz0sDbwfxQ2PzennWPgsP/jdpEPH3k7P5IBJZYjvYfU8e/RF5AwKCgOtzbTGTGJcBSLJVVw==
+phone@^3.1.58:
+  version "3.1.58"
+  resolved "https://registry.yarnpkg.com/phone/-/phone-3.1.58.tgz#af0523fc3d2d840e46d47fb4118845f0bc38babd"
+  integrity sha512-4R4qfXxNPpl08fxOH0qvTXTodQue0nCnAQP0OIu2i59TDq4QXM0dq/b7ODPNH93setqK5YdMSiMuce0RPsgu4w==
 
 picocolors@^1.0.0, picocolors@^1.1.0:
   version "1.1.1"

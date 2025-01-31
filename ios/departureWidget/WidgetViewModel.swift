@@ -68,7 +68,9 @@ struct WidgetViewModel {
             link.append("details")
             queryItems.append(contentsOf: [
                 URLQueryItem(name: "serviceJourneyId", value: departure.serviceJourneyId),
+                URLQueryItem(name: "date", value: toISOString(departure.aimedTime)),
                 URLQueryItem(name: "serviceDate", value: departure.serviceDate),
+                URLQueryItem(name: "fromStopPosition", value: String(departure.stopPositionInPattern)),
             ])
         }
 
@@ -139,5 +141,11 @@ struct WidgetViewModel {
         let dateformat = DateFormatter()
         dateformat.dateFormat = "HH:mm"
         return dateformat.string(from: date)
+    }
+  
+    private func toISOString(_ date: Date) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.string(from: date)
     }
 }

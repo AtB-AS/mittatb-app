@@ -6,11 +6,15 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDurationString} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {getFareContractInfo, ValidityStatus} from './utils';
+import {
+  fareContractValidityUnits,
+  getFareContractInfo,
+  ValidityStatus,
+} from '../utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
@@ -20,7 +24,7 @@ type Props = {
   fc: FareContract;
 };
 
-export const ValidityHeader = ({fc}: Props) => {
+export const ValidityTime = ({fc}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {isInspectable} = useMobileTokenContext();
@@ -32,7 +36,6 @@ export const ValidityHeader = ({fc}: Props) => {
     fc,
     currentUserId,
   );
-
   const label: string = validityTimeText(
     validityStatus,
     serverNow,
@@ -73,9 +76,10 @@ function validityTimeText(
 ): string {
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const toDurationText = (seconds: number) =>
-    secondsToDurationString(seconds, language, {
+    secondsToDuration(seconds, language, {
       conjunction,
       serialComma: false,
+      units: fareContractValidityUnits(seconds),
     });
 
   switch (status) {

@@ -2,7 +2,7 @@ import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {
   AddPaymentMethodResponse,
-  type FareContract,
+  FareContract,
   ReserveOfferRequestBody,
 } from '.';
 import {client} from '../api';
@@ -66,12 +66,6 @@ export async function addPaymentMethod(paymentRedirectUrl: string) {
 export async function deleteRecurringPayment(paymentId: number) {
   const url = `ticket/v3/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
-}
-
-export async function authorizeRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}/authorize`;
-  const response = await client.post<void>(url, {}, {authWithIdToken: true});
-  return response.data;
 }
 
 export async function cancelRecurringPayment(paymentId: number) {
@@ -201,6 +195,9 @@ export async function getFareContracts(
   const response = await client.get(url, {
     authWithIdToken: true,
   });
-
-  return response.data.fareContracts.map(convertIsoStringFieldsToDate);
+  const fareContracts = response.data.fareContracts.map(
+    convertIsoStringFieldsToDate,
+  );
+  // TODO: Log errors during parsing
+  return fareContracts.filter((fc: any) => FareContract.safeParse(fc).success);
 }

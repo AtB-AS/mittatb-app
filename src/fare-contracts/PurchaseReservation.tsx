@@ -1,17 +1,17 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
-import {ActivityIndicator, Linking, View} from 'react-native';
-import {ValidityLine} from './ValidityLine';
-import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
+import {Linking} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {getReservationStatus} from '@atb/fare-contracts/utils';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type Props = {
   reservation: Reservation;
@@ -19,7 +19,6 @@ type Props = {
 
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
 
@@ -45,26 +44,18 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const paymentType = PaymentType[reservation.paymentType];
   return (
     <PressableOpacity accessible={false} importantForAccessibility="no">
-      <View style={styles.container} testID="purchaseReservation">
-        <View style={styles.validityContainer}>
-          <View style={styles.validityHeader}>
-            {status === 'reserving' ? (
-              <ActivityIndicator
-                color={theme.color.foreground.dynamic.primary}
-              />
-            ) : (
-              <FareContractStatusSymbol status={status} />
-            )}
-            <ThemeText
-              typography="body__secondary"
-              style={styles.reservationStatus}
-            >
+      <Section>
+        <GenericSectionItem style={{paddingVertical: 0}}>
+          <WithValidityLine
+            reservation={reservation}
+            enabledLine={status !== 'rejected'}
+          >
+            <ThemeText typography="heading--medium">
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
-          </View>
-        </View>
-        <VerifyingValidityLine status={status} />
-        <View style={styles.infoContainer} accessible={true}>
+          </WithValidityLine>
+        </GenericSectionItem>
+        <GenericSectionItem accessibility={{accessible: true}}>
           {status == 'rejected' && (
             <ThemeText typography="body__secondary" color="secondary">
               {t(
@@ -97,52 +88,14 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
                 mode="tertiary"
               />
             )}
-        </View>
-      </View>
+        </GenericSectionItem>
+      </Section>
     </PressableOpacity>
   );
 };
 
-const VerifyingValidityLine = ({status}: {status: any}) => {
-  const styles = useStyles();
-  return (
-    <View style={styles.validityDashContainer}>
-      <ValidityLine status={status} />
-    </View>
-  );
-};
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  validityHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'space-between',
-  },
   detail: {
     paddingVertical: theme.spacing.xSmall,
-  },
-  container: {
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-  },
-  extraText: {
-    paddingVertical: theme.spacing.xSmall,
-    color: theme.color.foreground.dynamic.disabled,
-  },
-  validityContainer: {
-    flexDirection: 'row',
-    padding: theme.spacing.small,
-  },
-  validityDashContainer: {
-    marginHorizontal: theme.spacing.medium,
-  },
-  infoContainer: {
-    padding: theme.spacing.medium,
-  },
-  reservationStatus: {
-    flex: 1,
-    textAlign: 'right',
-    marginLeft: theme.spacing.small,
   },
 }));

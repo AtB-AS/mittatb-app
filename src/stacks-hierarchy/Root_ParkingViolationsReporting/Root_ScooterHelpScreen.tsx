@@ -40,6 +40,12 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
           {operatorId != undefined && (
             <LinkSectionItem
               text={t(ScooterHelpTexts.contactOperator(operatorName))}
+              onPress={() => {
+                navigation.navigate('Root_ScooterContactOperatorScreen', {
+                  vehicleId,
+                  operatorId,
+                });
+              }}
             />
           )}
           <LinkSectionItem
@@ -78,5 +84,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
+    marginBottom: theme.spacing.xLarge,
   },
 }));

@@ -4,7 +4,11 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {useAuthContext} from '@atb/auth';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {type FareContract, isSentOrReceivedFareContract} from '@atb/ticketing';
+import {
+  type FareContract,
+  hasTravelRightAccesses,
+  isSentOrReceivedFareContract,
+} from '@atb/ticketing';
 import {View} from 'react-native';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
@@ -22,6 +26,7 @@ import {
 } from '@atb/configuration';
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
+import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 
 type Props = {fc: FareContract};
 
@@ -36,24 +41,26 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
     enabled: !!phoneNumber,
   });
-  const {travelRights, validityStatus} = getFareContractInfo(
-    serverNow,
-    fc,
-    currentUserId,
-  );
+  const {
+    travelRights,
+    validityStatus,
+    numberOfUsedAccesses,
+    maximumNumberOfAccesses,
+  } = getFareContractInfo(serverNow, fc, currentUserId);
   const firstTravelRight = travelRights[0];
   const recipientName =
     phoneNumber &&
     onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
   const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
-  );
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
   );
+  const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
+    return c.type === preassignedFareProduct?.type;
+  });
+
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
@@ -69,17 +76,12 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
   return (
-    <View style={topContainer}>
-      {isSent && !!phoneNumber && (
-        <MessageInfoBox
-          type="warning"
-          message={t(
-            FareContractTexts.details.sentTo(
-              recipientName || formatPhoneNumber(phoneNumber),
-            ),
-          )}
-        />
-      )}
+    <View
+      style={[
+        topContainer,
+        {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
+      ]}
+    >
       <View style={styles.detailRow}>
         <View style={styles.fareContractDetailItems}>
           <FareContractFromTo
@@ -95,11 +97,12 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
             />
           )}
 
-          <FareContractDetailItem
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
-            )}
-          />
+          {userProfilesWithCount.map((u, i) => (
+            <FareContractDetailItem
+              key={`userProfile-${i}`}
+              content={[userProfileCountAndName(u, language)]}
+            />
+          ))}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
           <InspectionSymbol
@@ -108,6 +111,25 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           />
         )}
       </View>
+
+      {isSent && !!phoneNumber && (
+        <MessageInfoBox
+          type="warning"
+          message={t(
+            FareContractTexts.details.sentTo(
+              recipientName || formatPhoneNumber(phoneNumber),
+            ),
+          )}
+        />
+      )}
+
+      {!!hasTravelRightAccesses(fc.travelRights) && (
+        <CarnetFooter
+          active={validityStatus === 'valid'}
+          maximumNumberOfAccesses={maximumNumberOfAccesses!}
+          numberOfUsedAccesses={numberOfUsedAccesses!}
+        />
+      )}
     </View>
   );
 };
