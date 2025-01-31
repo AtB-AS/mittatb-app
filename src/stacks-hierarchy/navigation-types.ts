@@ -79,6 +79,10 @@ type Root_ScooterContactOperatorScreenParams = {
   operatorId: string;
 };
 
+type Root_ScooterOperatorContactConfirmationScreenParams = {
+  operatorName: string;
+};
+
 type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
 };
@@ -131,6 +135,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ScooterHelpScreen: Root_ScooterHelpScreenParams;
   Root_ScooterContactOperatorScreen: Root_ScooterContactOperatorScreenParams;
+  Root_ScooterOperatorContactConfirmationScreen: Root_ScooterOperatorContactConfirmationScreenParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;

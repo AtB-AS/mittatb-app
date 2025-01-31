@@ -3,7 +3,7 @@ import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   PhoneInputSectionItem,
   RadioGroupSection,
@@ -12,7 +12,7 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ContactOperatorTexts} from '@atb/translations/screens/ContactOperator';
+import {ScooterOperatorContactTexts} from '@atb/translations/screens/ScooterOperatorContact';
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
   SendSupportRequestBody,
@@ -31,6 +31,7 @@ import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
+import {useNavigation} from '@react-navigation/native';
 
 export type Root_ScooterContactOperatorScreenProps =
   RootStackScreenProps<'Root_ScooterContactOperatorScreen'>;
@@ -38,15 +39,20 @@ export type Root_ScooterContactOperatorScreenProps =
 export const Root_ScooterContactOperatorScreen = ({
   route,
 }: Root_ScooterContactOperatorScreenProps) => {
-  const {vehicleId, operatorId} = route.params;
+  const {vehicleId} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
+  const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
 
+  const operatorId = 'YAL:Operator:Altair';
+
   const onSuccess = () => {
-    // TODO: navigate to next screen (in next PR)
+    navigation.navigate('Root_ScooterOperatorContactConfirmationScreen', {
+      operatorName: operatorName,
+    });
   };
 
   const {
@@ -73,9 +79,11 @@ export const Root_ScooterContactOperatorScreen = ({
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
           <View style={styles.contentContainer}>
             <ThemeText style={styles.title} typography="heading--medium">
-              {t(ContactOperatorTexts.title(operatorName))}
+              {t(ScooterOperatorContactTexts.title(operatorName))}
             </ThemeText>
-            <ContentHeading text={t(ContactOperatorTexts.supportType.header)} />
+            <ContentHeading
+              text={t(ScooterOperatorContactTexts.supportType.header)}
+            />
             <RadioGroupSection<SupportType>
               keyExtractor={(supportType) => supportType}
               selected={requestBody.supportType}
@@ -85,7 +93,7 @@ export const Root_ScooterContactOperatorScreen = ({
               }
               itemToText={(supportType) =>
                 t(
-                  ContactOperatorTexts.supportType.supportTypeDescription(
+                  ScooterOperatorContactTexts.supportType.supportTypeDescription(
                     supportType,
                   ),
                 )
@@ -94,26 +102,30 @@ export const Root_ScooterContactOperatorScreen = ({
             {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
               <MessageInfoBox
                 message={t(
-                  ContactOperatorTexts.supportType.noEndInfo(operatorName),
+                  ScooterOperatorContactTexts.supportType.noEndInfo(
+                    operatorName,
+                  ),
                 )}
                 type="info"
               />
             )}
-            <ContentHeading text={t(ContactOperatorTexts.comment.header)} />
+            <ContentHeading
+              text={t(ScooterOperatorContactTexts.comment.header)}
+            />
             <Section>
               <TextInputSectionItem
                 value={requestBody.comment ?? ''}
                 onChangeText={(comment) =>
                   setRequestBody((prev) => ({...prev, comment}))
                 }
-                label={t(ContactOperatorTexts.comment.label)}
-                placeholder={t(ContactOperatorTexts.comment.placeholder)}
+                label={t(ScooterOperatorContactTexts.comment.label)}
+                placeholder={t(ScooterOperatorContactTexts.comment.placeholder)}
                 inlineLabel={false}
                 autoCapitalize="sentences"
                 errorText={
                   !isCommentValid && showError
                     ? t(
-                        ContactOperatorTexts.comment.errorMessage(
+                        ScooterOperatorContactTexts.comment.errorMessage(
                           MAX_SUPPORT_COMMENT_LENGTH,
                         ),
                       )
@@ -121,7 +133,9 @@ export const Root_ScooterContactOperatorScreen = ({
                 }
               />
             </Section>
-            <ContentHeading text={t(ContactOperatorTexts.contactInfo.header)} />
+            <ContentHeading
+              text={t(ScooterOperatorContactTexts.contactInfo.header)}
+            />
             <Section>
               <TextInputSectionItem
                 value={requestBody.contactInformationEndUser.email ?? ''}
@@ -134,9 +148,9 @@ export const Root_ScooterContactOperatorScreen = ({
                     },
                   }))
                 }
-                label={t(ContactOperatorTexts.contactInfo.email.label)}
+                label={t(ScooterOperatorContactTexts.contactInfo.email.label)}
                 placeholder={t(
-                  ContactOperatorTexts.contactInfo.email.placeholder,
+                  ScooterOperatorContactTexts.contactInfo.email.placeholder,
                 )}
                 showClear
                 inlineLabel={false}
@@ -145,9 +159,12 @@ export const Root_ScooterContactOperatorScreen = ({
                 autoCapitalize="none"
                 errorText={
                   !isEmailValid && showError
-                    ? t(ContactOperatorTexts.contactInfo.email.errorMessage)
+                    ? t(
+                        ScooterOperatorContactTexts.contactInfo.email
+                          .errorMessage,
+                      )
                     : !isContactInfoPresent && showError
-                    ? t(ContactOperatorTexts.contactInfo.errorMessage)
+                    ? t(ScooterOperatorContactTexts.contactInfo.errorMessage)
                     : undefined
                 }
               />
@@ -174,35 +191,44 @@ export const Root_ScooterContactOperatorScreen = ({
                   }))
                 }
                 value={requestBody.contactInformationEndUser.phoneNumber ?? ''}
-                label={t(ContactOperatorTexts.contactInfo.phone.label)}
+                label={t(ScooterOperatorContactTexts.contactInfo.phone.label)}
                 placeholder={t(
-                  ContactOperatorTexts.contactInfo.phone.placeholder,
+                  ScooterOperatorContactTexts.contactInfo.phone.placeholder,
                 )}
                 showClear
                 keyboardType="number-pad"
                 textContentType="telephoneNumber"
                 errorText={
                   !isPhoneNumberValid && showError
-                    ? t(ContactOperatorTexts.contactInfo.phone.errorMessage)
+                    ? t(
+                        ScooterOperatorContactTexts.contactInfo.phone
+                          .errorMessage,
+                      )
                     : !isContactInfoPresent && showError
-                    ? t(ContactOperatorTexts.contactInfo.errorMessage)
+                    ? t(ScooterOperatorContactTexts.contactInfo.errorMessage)
                     : undefined
                 }
               />
             </Section>
             <View style={styles.description}>
               <ThemeText typography="body__secondary">
-                {t(ContactOperatorTexts.location.header)}
+                {t(ScooterOperatorContactTexts.location.header)}
               </ThemeText>
               <ThemeText typography="body__tertiary">
-                {t(ContactOperatorTexts.location.description(operatorName))}
+                {t(
+                  ScooterOperatorContactTexts.location.description(
+                    operatorName,
+                  ),
+                )}
               </ThemeText>
             </View>
             {supportRequestStatus === 'error' &&
               isAllInputValid &&
               showError && (
                 <MessageInfoBox
-                  message={t(ContactOperatorTexts.submitError(operatorName))}
+                  message={t(
+                    ScooterOperatorContactTexts.submitError(operatorName),
+                  )}
                   type="error"
                 />
               )}
@@ -210,7 +236,7 @@ export const Root_ScooterContactOperatorScreen = ({
               loading={supportRequestStatus === 'loading'}
               expanded={true}
               mode="primary"
-              text={t(ContactOperatorTexts.submitButton)}
+              text={t(ScooterOperatorContactTexts.submitButton)}
               onPress={onSubmit}
             />
           </View>
