@@ -134,6 +134,5 @@ export const ScooterOperatorContactTexts = {
         `${operatorName} kan ta kontakt med deg ved behov.`,
       );
     },
-    closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
 };

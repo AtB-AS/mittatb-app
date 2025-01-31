@@ -4,29 +4,28 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Check as CheckDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Check as CheckLight} from '@atb/assets/svg/color/icons/status/light';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   ScreenContainer,
   getThemeColor,
 } from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ScreenContainer';
 import {Button} from '@atb/components/button';
+import ScreenHeader from '@atb/translations/components/ScreenHeader';
+import {dictionary, useTranslation} from '@atb/translations';
 
-type ConfirmationScreenProps = {
+type ConfirmationScreenComponentProps = {
   onClose: () => void;
   title: string;
   description: string;
-  accessibilityLabel: string;
 };
 
-export const ConfirmationScreen = ({
+export const ConfirmationScreenComponent = ({
   onClose,
   title,
   description,
-  accessibilityLabel,
-}: ConfirmationScreenProps) => {
+}: ConfirmationScreenComponentProps) => {
   const styles = useStyles();
   const {theme, themeName} = useThemeContext();
+  const {t} = useTranslation();
   const themeColor = getThemeColor(theme);
 
   const close = () => {
@@ -38,7 +37,6 @@ export const ConfirmationScreen = ({
   const iconColorProps = {
     color: theme.color.status.valid.secondary.foreground.primary,
   };
-  const textColor = theme.color.status.valid.secondary.foreground.primary;
 
   return (
     <ScreenContainer rightHeaderButton={{type: 'close', onPress: close}}>
@@ -62,7 +60,12 @@ export const ConfirmationScreen = ({
           </ThemeText>
         </View>
         <View style={styles.buttonContainer}>
-          <Button expanded={true} text={'Lukk'} onPress={close} />
+          <Button
+            expanded={true}
+            text={t(dictionary.appNavigation.close.text)}
+            accessibilityHint={t(dictionary.appNavigation.close.a11yHint)}
+            onPress={close}
+          />
         </View>
       </View>
     </ScreenContainer>

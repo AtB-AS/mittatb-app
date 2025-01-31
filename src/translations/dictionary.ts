@@ -49,6 +49,16 @@ const dictionary = {
       expectedPrefix: _('Sanntid', 'Realtime', `Sanntid`),
     },
   },
+  appNavigation: {
+    close: {
+      text: _('Lukk', 'Close', 'Lukk'),
+      a11yHint: _(
+        'Aktivér for å lukke',
+        'Activate to close',
+        'Aktivér for å lukke',
+      ),
+    },
+  },
   date: {
     units: {
       now: _('Nå', 'Now', `No`),

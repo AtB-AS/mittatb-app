@@ -1,7 +1,7 @@
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/analytics';
-import {ConfirmationScreen} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreen';
+import {ConfirmationScreenComponent} from '@atb/scooter-help/ConfirmationScreenComponent';
 import {ScooterOperatorContactTexts} from '@atb/translations/screens/ScooterOperatorContact';
 
 export type ContactScooterOperatorConfirmationScreenProps =
@@ -20,7 +20,7 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
   };
 
   return (
-    <ConfirmationScreen
+    <ConfirmationScreenComponent
       title={t(
         ScooterOperatorContactTexts.confirmation.title(params.operatorName),
       )}
@@ -28,9 +28,6 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
         ScooterOperatorContactTexts.confirmation.description(
           params.operatorName,
         ),
-      )}
-      accessibilityLabel={t(
-        ScooterOperatorContactTexts.confirmation.closeA11yHint,
       )}
       onClose={closeReporting}
     />

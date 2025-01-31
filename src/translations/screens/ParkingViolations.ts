@@ -108,7 +108,6 @@ export const ParkingViolationTexts = {
           providerName ?? 'operatøren'
         } og til kommunen.`,
       ),
-    closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
   issue: {
     general: {
