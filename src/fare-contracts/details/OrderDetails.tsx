@@ -19,10 +19,8 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
     FareContractTexts.details.orderId(fareContract.orderId),
   );
   const firstTravelRight = fareContract.travelRights[0];
-  const priceString = formatFarePrice(
-    parseFloat(fareContract.totalAmount),
-    language,
-  );
+  const priceString = formatFarePrice(parseFloat(fareContract.totalAmount), language);
+
 
   return (
     <View accessible={true}>
