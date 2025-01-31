@@ -301,6 +301,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowMapButton && (
                   <Button
                     type="small"
+                    expanded={true}
                     leftIcon={{svg: Map}}
                     text={t(
                       vehiclePosition
