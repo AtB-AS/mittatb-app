@@ -11,7 +11,7 @@ import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {formatDecimalNumber} from '@atb/utils/numbers';
+import {formatFarePrice} from '@atb/utils/numbers';
 
 export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   const style = useStyles();
@@ -21,7 +21,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   );
   const firstTravelRight = fareContract.travelRights[0];
   const priceString = fareContract.totalAmount
-    ? formatDecimalNumber(parseFloat(fareContract.totalAmount), language, 2)
+    ? formatFarePrice(parseFloat(fareContract.totalAmount), language)
     : undefined;
 
   return (

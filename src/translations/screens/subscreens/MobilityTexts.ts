@@ -1,4 +1,4 @@
-import {translation as _} from '../../commons';
+import {translation as _, Language} from '../../commons';
 import {Platform} from 'react-native';
 import {
   FormFactor,
@@ -8,6 +8,7 @@ import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
 } from '@atb/components/map';
+import {formatFarePrice} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
@@ -119,12 +120,12 @@ export const ScooterTexts = {
       `Sjå ${operator}-appen for prisar`,
     ),
   pricingPlan: {
-    price: (price: number) =>
+    price: (price: number, language: Language) =>
       price > 0
         ? _(
-            `+ ${price} kr for oppstart`,
-            `+ ${price} kr to unlock`,
-            `+ ${price} kr for å låse opp`,
+            `+ ${formatFarePrice(price, language)} kr for oppstart`,
+            `+ ${formatFarePrice(price, language)} kr to unlock`,
+            `+ ${formatFarePrice(price, language)} kr for å låse opp`,
           )
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },

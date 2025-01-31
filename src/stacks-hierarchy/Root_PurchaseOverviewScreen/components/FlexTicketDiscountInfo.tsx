@@ -11,7 +11,7 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {formatDecimalNumber} from '@atb/utils/numbers';
+import {formatFarePrice} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
@@ -74,11 +74,8 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 ),
               );
             const priceText =
-              formatDecimalNumber(
-                u.offer.prices[0].amount_float || 0,
-                language,
-                2,
-              ) + ' kr';
+              formatFarePrice(u.offer.prices[0].amount_float || 0, language) +
+              ' kr';
 
             const accessibilityLabel = `${userProfileName}, ${
               discountText ? discountText : ''
