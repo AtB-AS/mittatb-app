@@ -41,7 +41,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
             <LinkSectionItem
               text={t(ScooterHelpTexts.contactOperator(operatorName))}
               onPress={() => {
-                navigation.navigate('Root_ScooterContactOperatorScreen', {
+                navigation.navigate('Root_ContactScooterOperatorScreen', {
                   vehicleId,
                   operatorId,
                 });

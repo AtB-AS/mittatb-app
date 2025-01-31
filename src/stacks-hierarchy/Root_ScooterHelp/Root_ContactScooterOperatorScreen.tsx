@@ -33,12 +33,12 @@ import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 
-export type Root_ScooterContactOperatorScreenProps =
-  RootStackScreenProps<'Root_ScooterContactOperatorScreen'>;
+export type Root_ContactScooterOperatorScreenProps =
+  RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
 
-export const Root_ScooterContactOperatorScreen = ({
+export const Root_ContactScooterOperatorScreen = ({
   route,
-}: Root_ScooterContactOperatorScreenProps) => {
+}: Root_ContactScooterOperatorScreenProps) => {
   const {vehicleId} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -50,7 +50,7 @@ export const Root_ScooterContactOperatorScreen = ({
   const operatorId = 'YAL:Operator:Altair';
 
   const onSuccess = () => {
-    navigation.navigate('Root_ScooterOperatorContactConfirmationScreen', {
+    navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
       operatorName: operatorName,
     });
   };

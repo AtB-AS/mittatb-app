@@ -9,7 +9,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   ScreenContainer,
   getThemeColor,
-} from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting/components/ScreenContainer';
+} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ScreenContainer';
 import {Button} from '@atb/components/button';
 
 type ConfirmationScreenProps = {
