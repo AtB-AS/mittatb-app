@@ -40,7 +40,9 @@ Finally, run this command:
 
 This will create a draft release in GitHub.
 
-- Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version.
+> [!WARNING]
+> **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
+
 - `git fetch` to locally pull all existing tags
 - Make sure you've checked out the release branch from which you want to make the release.
 - Make sure you're authenticated with the GitHub CLI (`gh auth status`).
