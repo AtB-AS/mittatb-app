@@ -18,6 +18,7 @@ import {useFeatureCollectionWithExtraProps} from './Stations';
 type Props = {
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  onMapItemClick: (e: OnPressEvent) => void;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
@@ -27,6 +28,7 @@ type Props = {
 export const Scooters = ({
   selectedFeaturePropertyId,
   scooters,
+  onMapItemClick,
   onClusterClick,
 }: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
@@ -89,6 +91,7 @@ export const Scooters = ({
         maxZoomLevel={SCOOTERS_MAX_ZOOM_LEVEL}
         clusterRadius={SCOOTERS_CLUSTER_RADIUS}
         clusterMaxZoomLevel={SCOOTERS_MAX_CLUSTER_LEVEL}
+        onPress={onMapItemClick}
       >
         <MapboxGL.SymbolLayer
           id="scooterIcon"

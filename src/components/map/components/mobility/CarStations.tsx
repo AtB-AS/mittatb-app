@@ -11,6 +11,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type Props = {
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   stations: StationsWithCount;
+  onMapItemClick: (e: OnPressEvent) => void;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
@@ -20,6 +21,7 @@ type Props = {
 export const CarStations = ({
   selectedFeaturePropertyId,
   stations,
+  onMapItemClick,
   onClusterClick,
 }: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
@@ -46,6 +48,7 @@ export const CarStations = ({
         cluster
         hitbox={hitboxCoveringIconOnly}
         tolerance={0}
+        onPress={onMapItemClick}
       >
         <MapboxGL.SymbolLayer
           id="carStationPin"
