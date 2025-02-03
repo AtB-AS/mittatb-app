@@ -178,6 +178,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               }
               testID="ticketHistoryButton"
             />
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.bonus.label,
+              )}
+              onPress={() => navigation.navigate('Profile_BonusScreen')}
+              testID="BonusButton"
+            />
             {authenticationType !== 'phone' && (
               <LinkSectionItem
                 text={t(
