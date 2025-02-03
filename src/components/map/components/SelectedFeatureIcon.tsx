@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
@@ -10,22 +10,30 @@ export const SelectedFeatureIcon = ({
 }: {
   selectedFeature?: Feature<Point, GeoJsonProperties>;
 }) => {
+  const selectedFeatureWithId = useMemo(
+    () =>
+      !!selectedFeature
+        ? {...selectedFeature, id: selectedFeature?.properties?.id} // fixes a bug (crash) on Android for when selectedFeature.id is undefined
+        : undefined,
+    [selectedFeature],
+  );
+
   const pinType: PinType =
-    selectedFeature?.properties?.entityType === 'StopPlace' ||
-    selectedFeature?.properties?.entityType === 'Parking' ||
-    selectedFeature?.properties?.entityType === 'Quay'
+    selectedFeatureWithId?.properties?.entityType === 'StopPlace' ||
+    selectedFeatureWithId?.properties?.entityType === 'Parking' ||
+    selectedFeatureWithId?.properties?.entityType === 'Quay'
       ? 'stop'
-      : selectedFeature?.properties?.vehicleTypesAvailable !== undefined // use is_virtual_station instead when using vector source
+      : selectedFeatureWithId?.properties?.vehicleTypesAvailable !== undefined // use is_virtual_station instead when using vector source
       ? 'station'
       : 'vehicle';
 
   const {iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeature?.properties?.id,
+    selectedFeatureWithId?.properties?.id,
     pinType,
     1.61, // increased text size since the icon is larger
   );
   const {iconImage} = iconStyle;
-  if (!selectedFeature) {
+  if (!selectedFeatureWithId) {
     return null;
   }
 
@@ -60,7 +68,7 @@ export const SelectedFeatureIcon = ({
   return (
     <MapboxGL.ShapeSource
       id="selected-vehicle-source"
-      shape={selectedFeature}
+      shape={selectedFeatureWithId}
       hitbox={hitboxCoveringIconOnly}
     >
       <MapboxGL.SymbolLayer
