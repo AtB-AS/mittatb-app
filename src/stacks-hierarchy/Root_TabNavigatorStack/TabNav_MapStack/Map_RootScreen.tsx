@@ -8,7 +8,6 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {useStations, useVehicles} from '@atb/mobility';
 
 export type MapScreenParams = {
@@ -76,17 +75,14 @@ export const Map_RootScreen = ({
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
   return (
-    <>
-      <StatusBarOnFocus barStyle="dark-content" backgroundColor="#00000000" />
-      <Map
-        selectionMode="ExploreEntities"
-        vehicles={vehicles}
-        stations={stations}
-        navigateToQuay={navigateToQuay}
-        navigateToDetails={navigateToDetails}
-        navigateToTripSearch={navigateToTripSearch}
-        includeSnackbar={true}
-      />
-    </>
+    <Map
+      selectionMode="ExploreEntities"
+      vehicles={vehicles}
+      stations={stations}
+      navigateToQuay={navigateToQuay}
+      navigateToDetails={navigateToDetails}
+      navigateToTripSearch={navigateToTripSearch}
+      includeSnackbar={true}
+    />
   );
 };
