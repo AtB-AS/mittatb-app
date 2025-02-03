@@ -1,5 +1,5 @@
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {BonusProfileTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -10,7 +10,6 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with ne 
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 
 export const Profile_BonusScreen = () => {
-  useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -52,8 +51,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   section: {
     marginHorizontal: theme.spacing.medium,
-    marginBottom: theme.spacing.small,
-    marginTop: theme.spacing.small,
+    marginVertical: theme.spacing.small,
   },
   currentPointsContainer: {
     flexDirection: 'row',
