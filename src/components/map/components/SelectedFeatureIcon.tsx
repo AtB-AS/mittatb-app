@@ -18,14 +18,7 @@ export const SelectedFeatureIcon = ({
     [selectedFeature],
   );
 
-  const pinType: PinType =
-    selectedFeatureWithId?.properties?.entityType === 'StopPlace' ||
-    selectedFeatureWithId?.properties?.entityType === 'Parking' ||
-    selectedFeatureWithId?.properties?.entityType === 'Quay'
-      ? 'stop'
-      : selectedFeatureWithId?.properties?.vehicleTypesAvailable !== undefined // use is_virtual_station instead when using vector source
-      ? 'station'
-      : 'vehicle';
+  const pinType = getPinType(selectedFeatureWithId?.properties);
 
   const {iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeatureWithId?.properties?.id,
@@ -84,3 +77,19 @@ export const SelectedFeatureIcon = ({
     </MapboxGL.ShapeSource>
   );
 };
+
+function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
+  switch (selectedFeatureProperties?.entityType) {
+    case 'StopPlace':
+    case 'Parking':
+    case 'Quay':
+      return 'stop';
+    default:
+      // If it's not one of the above entityTypes, check vehicleTypesAvailable
+      if (selectedFeatureProperties?.vehicleTypesAvailable !== undefined) {
+        return 'station';
+      } else {
+        return 'vehicle';
+      }
+  }
+}
