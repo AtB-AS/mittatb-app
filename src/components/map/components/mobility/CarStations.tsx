@@ -11,8 +11,8 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type Props = {
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   stations: StationsWithCount;
-  onMapItemClick: (e: OnPressEvent) => void;
-  onClusterClick: (
+  onMapItemClick?: (e: OnPressEvent) => void;
+  onClusterClick?: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
@@ -71,7 +71,7 @@ export const CarStations = ({
           ...getClusterPropertiesWithVehicleTypeFormFactorProp(FormFactor.Car),
           count: ['+', ['get', 'count']],
         }}
-        onPress={(e) => onClusterClick(e, clustersSource)}
+        onPress={(e) => onClusterClick?.(e, clustersSource)}
       >
         <MapboxGL.SymbolLayer
           id="carStationClusterPin"

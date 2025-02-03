@@ -17,10 +17,10 @@ import {CarStations} from './CarStations';
 import {NsrProps} from '../national-stop-registry-features/NationalStopRegistryFeatures';
 
 type Props = {
-  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
+  selectedFeaturePropertyId?: NsrProps['selectedFeaturePropertyId'];
   stations: StationFeatures;
   mapCameraRef: RefObject<Camera>;
-  onMapItemClick: (e: OnPressEvent) => void;
+  onMapItemClick?: (e: OnPressEvent) => void;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 

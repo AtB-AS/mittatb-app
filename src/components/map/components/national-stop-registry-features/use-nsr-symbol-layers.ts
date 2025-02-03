@@ -119,6 +119,8 @@ export const useNsrSymbolLayers = (
       }),
     [
       selectedFeaturePropertyId,
+      theme.color.foreground.dynamic.primary,
+      theme.color.foreground.inverse.primary,
       theme.color.transport.city.primary.foreground.primary,
       theme.color.transport.city.primary.foreground.secondary,
       themeName,
