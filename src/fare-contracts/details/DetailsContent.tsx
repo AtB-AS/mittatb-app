@@ -114,7 +114,6 @@ export const DetailsContent: React.FC<Props> = ({
 
   const globalMessageRuleVariables = {
     fareProductType: preassignedFareProduct?.type ?? 'unknown',
-    firstTravelRightType: firstTravelRight.type,
     validityStatus: validityStatus,
     tariffZones: firstTravelRight.tariffZoneRefs ?? [],
     numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,

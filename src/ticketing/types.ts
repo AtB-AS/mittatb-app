@@ -23,8 +23,8 @@ export enum TravelRightDirection {
 }
 
 /**
- * For definition, see `elementAccess` type in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ * For definition, see `UsedAccess` struct in ticket service
+ * https://github.com/AtB-AS/ticket/blob/main/firestore-client/src/travel_right.rs
  */
 export const CarnetTravelRightUsedAccess = z.object({
   startDateTime: z.date(),
@@ -35,12 +35,11 @@ export type CarnetTravelRightUsedAccess = z.infer<
 >;
 
 /**
- * For definitions, see travel_right.go in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/travel_right.go
+ * For definitions, see `TravelRight` struct in ticket service
+ * https://github.com/AtB-AS/ticket/blob/main/firestore-client/src/travel_right.rs
  */
 export const TravelRight = z.object({
   id: z.string(),
-  type: z.string(),
   customerAccountId: z.string().optional(),
   status: z.nativeEnum(TravelRightStatus),
   fareProductRef: z.string(),
@@ -68,17 +67,15 @@ export enum FareContractState {
   Refunded = 4,
 }
 /**
- * For definition, see `persistedFareContract` type in eventhandler
- * https://github.com/AtB-AS/eventhandler/blob/main/customerstore/fare_contract.go
+ * For definition, see `FareContract` struct in ticket service
+ * https://github.com/AtB-AS/ticket/blob/main/firestore-client/src/fare_contract.rs
  */
 export const FareContract = z.object({
   created: z.date(),
   id: z.string(),
   customerAccountId: z.string(),
-  minimumSecurityLevel: z.number(),
   orderId: z.string(),
   paymentType: z.array(z.string()),
-  paymentTypeGroup: z.array(z.string()),
   qrCode: z.string().optional(),
   state: z.nativeEnum(FareContractState),
   totalAmount: z.string(),

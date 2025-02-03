@@ -60,12 +60,10 @@ function mockupFareContract(
     orderId: '1',
     state: 0,
     totalAmount: '0',
-    minimumSecurityLevel: 1,
     travelRights: [{} as any as TravelRight],
     qrCode: '',
     validityStatus: validityStatus,
     paymentType: ['VISA'],
-    paymentTypeGroup: ['PAYMENTCARD'],
     totalTaxAmount: '0',
   };
 }

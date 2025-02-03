@@ -41,10 +41,8 @@ export const Profile_FareContractsScreen = () => {
     customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     purchasedBy: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     id: 'ATB:FareContract:V3TZT6NE-xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
-    minimumSecurityLevel: -200,
     orderId: 'V3TZT6NE',
     paymentType: ['VISA'],
-    paymentTypeGroup: ['PAYMENTCARD'],
     qrCode:
       'CioKKBImCiRmM2I4ZjQ1NC0wNGZiLTRlY2UtODc5ZC0wNDY2MzhiOWEzNjgSUwo+MDwCHDde9IPYTgNlJVADldKpl5GnkVowFiejaqbAcF0CHDqRdXIKEoOg0O67eH9sg8hNOuCYH35KJQ0oq2gaAU4qDAiXr++oBhDol5+uAjAB',
     state: 2,
@@ -70,7 +68,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'PeriodBoatTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:5f61ee14',
         id: 'ATB:CustomerPurchasePackage:MMLMWZUV',
         direction: TravelRightDirection.Both,
@@ -85,7 +82,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'YouthTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:47bb613e',
         id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
       },
@@ -97,7 +93,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'NightTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:8f351521',
         id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
       },
@@ -108,7 +103,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'PreActivatedPeriodTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:6dd9beab',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
         tariffZoneRefs: [
@@ -125,7 +119,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'SingleBoatTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:c4467e3a',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
         direction: TravelRightDirection.Forwards,
@@ -140,7 +133,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'CarnetTicket',
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
         maximumNumberOfAccesses: 10,
@@ -155,7 +147,6 @@ export const Profile_FareContractsScreen = () => {
       },
       {
         ...BASE.travelRights[0],
-        type: 'CarnetTicket',
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-2',
         maximumNumberOfAccesses: 10,
@@ -177,7 +168,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'CarnetTicket',
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
         maximumNumberOfAccesses: 50,
