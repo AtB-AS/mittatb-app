@@ -40,6 +40,7 @@ export {default as TripDetailsTexts} from './screens/subscreens/TripDetails';
 export {default as DepartureDetailsTexts} from './screens/subscreens/DepartureDetails';
 export {default as SelectStartScreenTexts} from './screens/subscreens/SelectStartScreen';
 export {default as AppearanceSettingsTexts} from './screens/subscreens/AppearanceSettings';
+export {default as BonusProfileTexts} from './screens/subscreens/BonusProfile';
 export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSettingsTexts';
 export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProfileSettingsTexts';
 export {default as LoginTexts} from './screens/subscreens/Login';
