@@ -21,6 +21,7 @@ export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   color?: ContrastColor | TextColor | ColorValue;
   size?: keyof Theme['icon']['size'];
+  customSize?: number;
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
 } & Omit<SvgProps, 'color' | 'fill'>;
@@ -29,6 +30,7 @@ export const ThemeIcon = ({
   svg,
   color,
   size = 'normal',
+  customSize,
   notification,
   style,
   allowFontScaling = true,
@@ -43,9 +45,11 @@ export const ThemeIcon = ({
     return null;
   }
 
+  const unscaledIconSize = customSize ?? theme.icon.size[size];
+
   const iconSize = allowFontScaling
-    ? theme.icon.size[size] * fontScale
-    : theme.icon.size[size];
+    ? unscaledIconSize * fontScale
+    : unscaledIconSize;
 
   const settings = {
     fill,

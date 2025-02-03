@@ -1,7 +1,7 @@
 import {SupportType} from '@atb/api/types/mobility';
 import {translation as _} from '../commons';
 
-export const ContactOperatorTexts = {
+export const ContactScooterOperatorTexts = {
   title: (operatorName: string) => {
     return _(
       `Kontakt ${operatorName}`,
@@ -114,9 +114,25 @@ export const ContactOperatorTexts = {
 
   submitError: (operatorName: string) => {
     return _(
-      `Oops - noe gikk galt, vi klarte ikke å sende skjemaet til ${operatorName}. Supert om du prøver på nytt 🤞`,
-      `Whoops - something went wrong, we could not send the request to ${operatorName}. Please try again 🤞`,
-      `Oops - noko gjekk gale, vi klarte ikkje å sende skjemaet til ${operatorName}. Supert om du prøver på nytt 🤞`,
+      `Noe gikk galt, vi klarte ikke å sende meldingen til ${operatorName}. Vennligst prøv på nytt.`,
+      `Something went wrong, we could not send the message to ${operatorName}. Please try again.`,
+      `Noko gjekk gale, vi klarte ikkje å sende meldinga til ${operatorName}. Vennligst prøv på nytt.`,
     );
+  },
+  confirmation: {
+    title: (operatorName: string) => {
+      return _(
+        `Melding sendt til ${operatorName}`,
+        `Message sent to ${operatorName}`,
+        `Melding sendt til ${operatorName}`,
+      );
+    },
+    description: (operatorName: string) => {
+      return _(
+        `${operatorName} kan ta kontakt med deg ved behov.`,
+        `${operatorName} can contact you if necessary.`,
+        `${operatorName} kan ta kontakt med deg ved behov.`,
+      );
+    },
   },
 };
