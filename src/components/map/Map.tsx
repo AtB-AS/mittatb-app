@@ -187,7 +187,6 @@ export const Map = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      // console.log('onFeatureClick', new Date().getTime());
       if (!isFeaturePoint(feature)) return;
 
       // should split components instead of this, ExploreLocation should only depend on location state, not features
@@ -248,17 +247,14 @@ export const Map = (props: MapProps) => {
 
   const onMapItemClick = useCallback(
     (e: OnPressEvent) => {
-      // console.log('onMapItemClick', new Date().getTime());
-      // console.log('e.features', JSON.stringify(e.features));
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
-      const featuresAtClick = e.features; // as Feature<Point, GeoJsonProperties>[];
+      const featuresAtClick = e.features;
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,
         positionClicked,
       );
       if (isFeaturePoint(featureToSelect)) {
-        // console.log('featureToSelect', featureToSelect);
         onMapClick({
           source: 'map-item',
           feature: featureToSelect,
@@ -278,9 +274,9 @@ export const Map = (props: MapProps) => {
     [onMapClick],
   );
 
+  // The onPress handling is slow on old android devices with this feature enabled
   const [showSelectedFeature, setShowSelectedFeature] = useState(true);
-
-  const enableShowSelectedFeature = showSelectedFeature; // Platform.OS !== 'android'; // onPress handler too slow on old android devices with this feature enabled
+  const enableShowSelectedFeature = showSelectedFeature; // being considered: setting this to Platform.OS !== 'android'; for temporary performance measure
 
   return (
     <View style={{flex: 1}}>

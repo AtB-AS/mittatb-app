@@ -72,14 +72,12 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
 
   useEffect(() => {
     (async function () {
-      // console.log('before', new Date().getTime());
       const selectedFeature =
         mapSelectionAction?.source === 'map-item'
           ? mapSelectionAction.feature
           : mapSelectionAction?.source === 'map-click'
           ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
-      // console.log('after', new Date().getTime());
       if (isQuayFeature(selectedFeature)) {
         setSelectedFeature(undefined);
       } else {
