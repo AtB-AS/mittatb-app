@@ -20,12 +20,6 @@ const SectionTexts = {
         `${currentLocation} er vald.`,
       ),
   },
-  dateInput: {
-    label: _('Dato', 'Date', 'Dato'),
-  },
-  timeInput: {
-    label: _('Tid', 'Time', 'Tid'),
-  },
   expandableSectionItem: {
     a11yHint: {
       expand: _('Aktiver for å vise', 'Activate to show', 'Aktiver for å vise'),

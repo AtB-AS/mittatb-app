@@ -14,12 +14,19 @@ import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {flatMap} from '@atb/utils/array';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {SearchTime} from '@atb/journey-date-picker';
 import {isDefined} from '@atb/utils/presence';
 import {FeatureCategory} from '@atb/sdk';
+import type {DateOptionAndValue} from '@atb/date-picker';
+import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {
+  Language,
+  type TranslateFunction,
+  TripSearchTexts,
+} from '@atb/translations';
+import {formatToLongDateTime} from '@atb/utils/date';
 
 export type TimeSearch = {
-  searchTime: SearchTime;
+  searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>;
   cursor?: never;
 };
 
@@ -107,7 +114,9 @@ function transportModeToEnum(
   });
 }
 
-export const sanitizeSearchTime = (searchTime: SearchTime) =>
+export const sanitizeSearchTime = (
+  searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>,
+) =>
   searchTime.option === 'now'
     ? {...searchTime, date: new Date().toISOString()}
     : searchTime;
@@ -137,3 +146,22 @@ export const getSearchPlace = (location: Location) => {
     ? location.id
     : undefined;
 };
+
+export function getSearchTimeLabel(
+  searchTime: TripSearchTime,
+  timeOfLastSearch: string,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  const time = formatToLongDateTime(date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return t(TripSearchTexts.dateInput.departureNow(time));
+    case 'arrival':
+      return t(TripSearchTexts.dateInput.arrival(time));
+    case 'departure':
+      return t(TripSearchTexts.dateInput.departure(time));
+  }
+}

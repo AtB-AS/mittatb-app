@@ -1,6 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useFavoritesContext} from '@atb/favorites';
-import {SearchTime} from '../types';
+import {DepartureSearchTime} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
@@ -24,8 +24,8 @@ export type QuayViewProps = {
     date: string | undefined,
     fromStopPosition: number,
   ) => void;
-  searchTime: SearchTime;
-  setSearchTime: (searchTime: SearchTime) => void;
+  searchTime: DepartureSearchTime;
+  setSearchTime: (searchTime: DepartureSearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;

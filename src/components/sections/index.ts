@@ -17,8 +17,6 @@ export {ExpandableSectionItem} from './items/ExpandableSectionItem';
 export {ToggleSectionItem} from './items/ToggleSectionItem';
 
 // Inputs
-export {TimeInputSectionItem} from './items/time-input';
-export {DateInputSectionItem} from './items/date-input';
 export {TextInputSectionItem} from './items/TextInputSectionItem';
 export {PhoneInputSectionItem} from './items/PhoneInputSectionItem';
 export {LocationInputSectionItem} from './items/LocationInputSectionItem';

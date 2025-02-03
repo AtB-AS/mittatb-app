@@ -1,53 +1,38 @@
 import React, {RefObject, useRef} from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {
-  formatToShortDateTimeWithoutYear,
-  formatToVerboseDateTime,
-} from '@atb/utils/date';
+import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
-import {RadioSegments} from '@atb/components/radio';
 import {ContentHeading} from '@atb/components/heading';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/purchase-selection';
+import {DatePickerSheet} from '@atb/date-picker';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {StyleSheet} from '@atb/theme';
 
 type StartTimeSelectionProps = {
   selection: PurchaseSelectionType;
-  color: InteractiveColor;
   setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function StartTimeSelection({
   selection,
-  color,
   setSelection,
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const selectionBuilder = usePurchaseSelectionBuilder();
+  const styles = useStyles();
 
-  const openTravelDateSheet = () => {
-    openBottomSheet(
-      () => <TravelDateSheet onSave={setSelection} selection={selection} />,
-      onCloseFocusRef,
-    );
-  };
-
-  const subtext = selection.travelDate
-    ? formatToShortDateTimeWithoutYear(selection.travelDate, language)
-    : undefined;
-  const accessibilityLabel = selection.travelDate
-    ? t(PurchaseOverviewTexts.startTime.later) +
-      ', ' +
-      formatToVerboseDateTime(selection.travelDate, language)
-    : undefined;
+  const {openDatePickerSheet, onCloseFocusRef} = useDatePickerSheet(
+    selection,
+    setSelection,
+  );
 
   if (
     selection.fareProductTypeConfig.configuration.timeSelectionMode === 'none'
@@ -58,31 +43,89 @@ export function StartTimeSelection({
   return (
     <View style={style}>
       <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
-      <RadioSegments
-        color={color}
-        activeIndex={!!selection.travelDate ? 1 : 0}
-        options={[
-          {
-            text: t(PurchaseOverviewTexts.startTime.now),
-            onPress: () => {
-              const newSelection = selectionBuilder
-                .fromSelection(selection)
-                .date(undefined)
-                .build();
-              setSelection(newSelection);
-            },
-            accessibilityHint: t(PurchaseOverviewTexts.startTime.a11yNowHint),
-          },
-          {
-            text: t(PurchaseOverviewTexts.startTime.later),
-            subtext,
-            onPress: openTravelDateSheet,
-            accessibilityLabel,
-            accessibilityHint: t(PurchaseOverviewTexts.startTime.a11yLaterHint),
-            ref: onCloseFocusRef,
-          },
-        ]}
-      />
+      <Section>
+        <GenericClickableSectionItem
+          ref={onCloseFocusRef}
+          onPress={openDatePickerSheet}
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.startTime.a11yLabel(
+              selection.travelDate &&
+                formatToLongDateTime(selection.travelDate, language),
+            ),
+          )}
+          accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
+          testID="selectZonesButton"
+        >
+          <View style={styles.sectionContent}>
+            <ThemeText typography="body__primary--bold">
+              {selection.travelDate
+                ? t(
+                    PurchaseOverviewTexts.startTime.laterTime(
+                      formatToLongDateTime(selection.travelDate, language),
+                    ),
+                  )
+                : t(PurchaseOverviewTexts.startTime.now)}
+            </ThemeText>
+            <ThemeIcon svg={Edit} size="normal" />
+          </View>
+        </GenericClickableSectionItem>
+      </Section>
     </View>
   );
 }
+
+const useDatePickerSheet = (
+  selection: PurchaseSelectionType,
+  setSelection: (s: PurchaseSelectionType) => void,
+) => {
+  const {t} = useTranslation();
+  const selectionBuilder = usePurchaseSelectionBuilder();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+
+  const {open: openBottomSheet} = useBottomSheetContext();
+  const openDatePickerSheet = () => {
+    openBottomSheet(
+      () => (
+        <DatePickerSheet
+          options={[
+            {
+              option: 'now',
+              text: t(PurchaseOverviewTexts.startTime.now),
+              selected: !selection.travelDate,
+            },
+            {
+              option: 'later',
+              text: t(PurchaseOverviewTexts.startTime.laterOption),
+              selected: !!selection.travelDate,
+            },
+          ]}
+          onSave={(selectedOption) => {
+            const newSelection = selectionBuilder
+              .fromSelection(selection)
+              .date(
+                selectedOption.option === 'now' ||
+                  isInThePast(selectedOption.date)
+                  ? undefined
+                  : selectedOption.date,
+              )
+              .build();
+            setSelection(newSelection);
+          }}
+          initialDate={selection.travelDate}
+        />
+      ),
+      onCloseFocusRef,
+    );
+  };
+
+  return {openDatePickerSheet, onCloseFocusRef};
+};
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  sectionContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+}));

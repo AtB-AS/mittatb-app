@@ -107,16 +107,17 @@ const TripSearchTexts = {
     },
   },
   dateInput: {
+    options: {
+      now: _('Avreise nå', 'Leave now', 'Avreise no'),
+      departure: _('Avreisetid', 'Leave at', 'Avreisetid'),
+      arrival: _('Ankomsttid', 'Arrive by', 'Framkomsttid'),
+    },
     departureNow: (time: string) =>
-      _(
-        `Avreise nå (${time})`,
-        `Departing now (${time})`,
-        `Avreise no (${time})`,
-      ),
+      _(`Avreise nå (${time})`, `Leave now (${time})`, `Avreise no (${time})`),
     departure: (time: string) =>
-      _(`Avreise ${time}`, `Departure ${time}`, `Avreise ${time}`),
+      _(`Avreisetid ${time}`, `Leave at ${time}`, `Avreisetid ${time}`),
     arrival: (time: string) =>
-      _(`Ankomst ${time}`, `Arrival ${time}`, `Framkomst ${time}`),
+      _(`Ankomsttid ${time}`, `Arrive by ${time}`, `Framkomsttid ${time}`),
     a11yHint: _(
       'Aktivér for å endre reisetidspunkt',
       'Activate to change time of travel',

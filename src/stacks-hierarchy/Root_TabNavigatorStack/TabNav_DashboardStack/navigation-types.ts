@@ -2,7 +2,6 @@ import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/Departur
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {TripDetailsScreenParams} from '@atb/travel-details-screens/TripDetailsScreenComponent';
-import {JourneyDatePickerScreenParams} from '@atb/journey-date-picker';
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -28,7 +27,6 @@ export type DashboardStackParams = StackParams<{
   Dashboard_PlaceScreen: Dashboard_PlaceScreenParams;
   Dashboard_TripSearchScreen: TripSearchScreenParams;
   Dashboard_TripDetailsScreen: TripDetailsScreenParams;
-  Dashboard_JourneyDatePickerScreen: JourneyDatePickerScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;
   Dashboard_NearbyStopPlacesScreen: Dashboard_NearbyStopPlacesScreenParams;
   Dashboard_TravelAidScreen: TravelAidScreenParams;

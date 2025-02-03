@@ -22,11 +22,11 @@ import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';
 import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
-import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
 
 import {flatten} from 'lodash';
 import {DepartureLineInfo} from '@atb/api/departures/types';
+import type {DateOptionAndValue} from '@atb/date-picker';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -46,7 +46,7 @@ export type DepartureDataState = {
   queryInput: DepartureFavoritesQuery;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
-  searchTime: SearchTime;
+  searchTime: DateOptionAndValue<'now'>;
 };
 
 const initialState: Omit<
