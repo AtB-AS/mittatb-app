@@ -9,7 +9,7 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/purchase-selection';
 import {DatePickerSheet} from '@atb/date-picker';
-import {GenericClickableSectionItem} from '@atb/components/sections';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -43,31 +43,33 @@ export function StartTimeSelection({
   return (
     <View style={style}>
       <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
-      <GenericClickableSectionItem
-        ref={onCloseFocusRef}
-        onPress={openDatePickerSheet}
-        accessibilityLabel={t(
-          PurchaseOverviewTexts.startTime.a11yLabel(
-            selection.travelDate &&
-              formatToLongDateTime(selection.travelDate, language),
-          ),
-        )}
-        accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
-        testID="selectZonesButton"
-      >
-        <View style={styles.sectionContent}>
-          <ThemeText typography="body__primary--bold">
-            {selection.travelDate
-              ? t(
-                  PurchaseOverviewTexts.startTime.laterTime(
-                    formatToLongDateTime(selection.travelDate, language),
-                  ),
-                )
-              : t(PurchaseOverviewTexts.startTime.now)}
-          </ThemeText>
-          <ThemeIcon svg={Edit} size="normal" />
-        </View>
-      </GenericClickableSectionItem>
+      <Section>
+        <GenericClickableSectionItem
+          ref={onCloseFocusRef}
+          onPress={openDatePickerSheet}
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.startTime.a11yLabel(
+              selection.travelDate &&
+                formatToLongDateTime(selection.travelDate, language),
+            ),
+          )}
+          accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
+          testID="selectZonesButton"
+        >
+          <View style={styles.sectionContent}>
+            <ThemeText typography="body__primary--bold">
+              {selection.travelDate
+                ? t(
+                    PurchaseOverviewTexts.startTime.laterTime(
+                      formatToLongDateTime(selection.travelDate, language),
+                    ),
+                  )
+                : t(PurchaseOverviewTexts.startTime.now)}
+            </ThemeText>
+            <ThemeIcon svg={Edit} size="normal" />
+          </View>
+        </GenericClickableSectionItem>
+      </Section>
     </View>
   );
 }
