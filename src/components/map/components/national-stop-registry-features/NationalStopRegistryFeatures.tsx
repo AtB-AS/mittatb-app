@@ -5,6 +5,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {useNsrCircleLayers} from './use-nsr-circle-layers';
 import {useNsrSymbolLayers} from './use-nsr-symbol-layers';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 
 /**
  * @property {string} selectedFeaturePropertyId - Should be the id from properties, which is the NSR id. This is needed to hide the selected feature.
@@ -29,21 +30,24 @@ export const NationalStopRegistryFeatures = ({
       onPress={onMapItemClick}
     >
       <>
-        {nsrCircleLayers.map((nsrCircleLayer) => (
+        {nsrCircleLayers.map((nsrCircleLayer, i) => (
           <MapboxGL.CircleLayer
             key={nsrCircleLayer.id}
             {...nsrCircleLayer}
-            belowLayerID="poi-stadium"
+            belowLayerID={getPreviousLayerId(nsrCircleLayers, i)}
           />
         ))}
-        {nsrSymbolLayers.map((nsrSymbolLayer) => (
+        {nsrSymbolLayers.map((nsrSymbolLayer, i) => (
           <MapboxGL.SymbolLayer
             key={nsrSymbolLayer.id}
             {...nsrSymbolLayer}
-            aboveLayerID="poi-stadium"
+            aboveLayerID={getPreviousLayerId(nsrSymbolLayers, i)}
           />
         ))}
       </>
     </MapboxGL.VectorSource>
   );
 };
+
+const getPreviousLayerId = (nsrSymbolLayers: SymbolLayerProps[], i: number) =>
+  nsrSymbolLayers?.[i - 1]?.id ?? 'poi-stadium';
