@@ -53,10 +53,9 @@ export const useNsrSymbolLayers = (
           };
 
         if (textLocation === NsrSymbolLayerTextLocation.BelowIcon) {
-          textColor =
-            themeName === 'light' ? 'hsl(236, 56%, 22%)' : 'hsl(0, 0%, 100%)';
-          textHaloColor =
-            themeName === 'light' ? 'hsl(0, 0%, 100%)' : 'hsl(236, 56%, 22%)';
+          textColor = theme.color.foreground.dynamic.primary;
+          textHaloColor = theme.color.foreground.inverse.primary;
+
           textHaloWidth = 2;
           textVariableAnchor = ['top'];
 

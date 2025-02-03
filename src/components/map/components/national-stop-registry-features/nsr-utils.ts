@@ -89,6 +89,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
   const aFeatureIsSelected =
     !!selectedFeaturePropertyId && selectedFeaturePropertyId !== '';
 
+  // Icons and labels start small and invisible, then grow and become more visible and prominent as you zoom in.
   return {
     minZoomLevel: showAsDefaultAtZoomLevel - minimizedZoomRange,
     style: {
@@ -109,7 +110,6 @@ export const getLayerPropsDeterminedByZoomLevel: (
               aFeatureIsSelected,
             ),
           ],
-
       iconSize: [
         'interpolate',
         ['linear'],
@@ -130,7 +130,6 @@ export const getLayerPropsDeterminedByZoomLevel: (
           opacityTransitionZoomRange,
         1,
       ],
-
       textSize: [
         'interpolate',
         ['exponential', 1.5],
