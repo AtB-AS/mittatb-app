@@ -2,7 +2,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/analytics';
 import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
-import {ScooterOperatorContactTexts} from '@atb/translations/screens/ScooterOperatorContact';
+import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 
 export type ContactScooterOperatorConfirmationScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorConfirmationScreen'>;
@@ -22,10 +22,10 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
   return (
     <ConfirmationScreenComponent
       title={t(
-        ScooterOperatorContactTexts.confirmation.title(params.operatorName),
+        ContactScooterOperatorTexts.confirmation.title(params.operatorName),
       )}
       description={t(
-        ScooterOperatorContactTexts.confirmation.description(
+        ContactScooterOperatorTexts.confirmation.description(
           params.operatorName,
         ),
       )}

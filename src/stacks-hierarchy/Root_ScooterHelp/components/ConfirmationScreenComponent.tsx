@@ -24,10 +24,6 @@ export const ConfirmationScreenComponent = ({
   const {t} = useTranslation();
   const themeColor = theme.color.background.accent[0];
 
-  const close = () => {
-    onClose();
-  };
-
   const icon = themeName === 'dark' ? CheckDark : CheckLight;
 
   const iconColorProps = {
@@ -35,7 +31,7 @@ export const ConfirmationScreenComponent = ({
   };
 
   return (
-    <ScreenContainer rightHeaderButton={{type: 'close', onPress: close}}>
+    <ScreenContainer rightHeaderButton={{type: 'close', onPress: onClose}}>
       <View style={styles.container}>
         <View style={styles.contentWrapper}>
           <ThemeIcon
@@ -60,7 +56,7 @@ export const ConfirmationScreenComponent = ({
             expanded={true}
             text={t(dictionary.appNavigation.close.text)}
             accessibilityHint={t(dictionary.appNavigation.close.a11yHint)}
-            onPress={close}
+            onPress={onClose}
           />
         </View>
       </View>
