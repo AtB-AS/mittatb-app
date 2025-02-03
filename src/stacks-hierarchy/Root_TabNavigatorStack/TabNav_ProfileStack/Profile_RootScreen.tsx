@@ -87,8 +87,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {isPushNotificationsEnabled, isTravelAidEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isPushNotificationsEnabled,
+    isTravelAidEnabled,
+    isBonusProgramEnabled,
+  } = useFeatureTogglesContext();
 
   const {logEvent} = useAnalyticsContext();
 
@@ -178,13 +181,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               }
               testID="ticketHistoryButton"
             />
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.bonus.label,
-              )}
-              onPress={() => navigation.navigate('Profile_BonusScreen')}
-              testID="BonusButton"
-            />
+            {isBonusProgramEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+              />
+            )}
             {authenticationType !== 'phone' && (
               <LinkSectionItem
                 text={t(
