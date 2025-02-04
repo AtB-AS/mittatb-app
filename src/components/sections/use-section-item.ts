@@ -1,5 +1,5 @@
 import {ViewStyle} from 'react-native';
-import {Theme, useTheme} from '@atb/theme';
+import {Theme, useThemeContext} from '@atb/theme';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
@@ -13,7 +13,6 @@ export type BaseSectionItemProps = {
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
-  spacing: number;
 };
 
 export function useSectionItem({
@@ -22,12 +21,10 @@ export function useSectionItem({
   radius,
   radiusSize,
 }: BaseSectionItemProps): SectionReturnType {
-  const {theme} = useTheme();
-
-  const spacing = useSpacing(type);
+  const {theme} = useThemeContext();
 
   const topContainer: ViewStyle = {
-    padding: spacing,
+    ...mapToPadding(theme, type),
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
@@ -40,25 +37,39 @@ export function useSectionItem({
   return {
     topContainer,
     contentContainer,
-    spacing,
   };
 }
 
-function useSpacing(type: ContainerSizingType) {
-  const {theme} = useTheme();
+type Padding = Pick<ViewStyle, 'paddingVertical' | 'paddingHorizontal'>;
+
+function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
     case 'block':
-      return theme.spacing.medium;
+      return {
+        paddingVertical: theme.spacing.medium,
+        paddingHorizontal: theme.spacing.medium,
+      };
     case 'spacious':
-      return theme.spacing.large;
+      return {
+        paddingVertical: theme.spacing.large,
+        paddingHorizontal: theme.spacing.medium,
+      };
   }
 }
+
+type BorderRadius = Pick<
+  ViewStyle,
+  | 'borderTopLeftRadius'
+  | 'borderTopRightRadius'
+  | 'borderBottomRightRadius'
+  | 'borderBottomLeftRadius'
+>;
 
 function mapToBorderRadius(
   theme: Theme,
   radiusSize: keyof Theme['border']['radius'] = 'regular',
   radius?: RadiusModeType,
-): ViewStyle {
+): BorderRadius {
   if (!radius) {
     return {};
   }

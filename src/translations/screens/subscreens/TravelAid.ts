@@ -15,24 +15,43 @@ export const TravelAidTexts = {
       `Scheduled at ${time}`,
       `Rutetid klokken. ${time}`,
     ),
-  clock: (time: string) => _(`kl. ${time}`, `${time}`, `kl. ${time}`),
-  error: {
+  stopButton: {
+    text: _('Send stopp', 'Send stop', 'Send stopp'),
+    successMessage: _(
+      'Stoppet er sendt!',
+      'The stop is sent!',
+      'Stoppet er sendt!',
+    ),
+    notAvailable: _(
+      'Ikke mulig å sende stopp signal nå',
+      'Not possible to send stop signal now',
+      'Ikke mogleg å sende stopp signal no',
+    ),
+  },
+  apiError: {
     message: _(
       'Det oppstod en feil ved henting av reisedata for denne avgangen.',
       'There was a problem loading travel data for this trip.',
       'Det oppstod ein feil då vi prøvde å hente reisedata for denne avgangen.',
     ),
   },
+  noEstimatedCallsError: {
+    message: _(
+      'Denne reisen har ingen kommende avganger.',
+      'This journey has no upcoming departures.',
+      'Denne reisa har ingen kommende avgangar.',
+    ),
+  },
   noRealtimeError: {
     title: _(
-      'Ingen kontakt med kjøretøy',
-      'No connection with vehicle',
-      'Ingen kontakt med køyretøy',
+      'Reisehjelp utilgjengelig for avgangen',
+      'Journey aid unavailable for this departure',
+      'Reisehjelp utilgjengeleg for denne avgangen',
     ),
     message: _(
-      'Vi får ikke oppdatert kjøretøyets posisjon, og Reisehjelp er derfor utilgjengelig for denne avgangen. Vi jobber med å få kontakt.',
-      "We're not receiving updates on the vehicle's position, so Journey Aid is unavailable for this trip. We're working to establish a connection.",
-      'Vi får ikkje oppdatert køyretøyets posisjon, og Reisehjelp er difor utilgjengeleg for denne avgangen. Vi jobbar med å få kontakt.',
+      'Vi har ingen kontakt med kjøretøyet. Prøv igjen senere eller velg en annen avgang.',
+      'We currently have no contact with the vehicle. Please try again later or choose a different departure.',
+      'Vi har ingen kontakt med køyretøyet. Prøv igjen seinare eller velg ein annan avgang.',
     ),
   },
 };

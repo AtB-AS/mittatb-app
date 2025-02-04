@@ -11,14 +11,14 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
-  useFilters,
+  useFiltersContext,
 } from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
@@ -31,7 +31,7 @@ import {
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -42,12 +42,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 >(({filtersSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
-  const {setFilters} = useFilters();
+  const {setFilters} = useFiltersContext();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const {isFlexibleTransportEnabled} = useFeatureToggles();
+  const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
 
   const [selectedModeOptions, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
@@ -79,14 +79,18 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
   const showFlexibleTransportFilterOption =
-      isFlexibleTransportEnabled && selectedFlexibleTransportOption;
+    isFlexibleTransportEnabled && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer
       maxHeightValue={0.9}
       title={t(TripSearchTexts.filters.bottomSheet.heading)}
     >
-      <ScrollView style={styles.filtersContainer} ref={focusRef} testID="filterView">
+      <ScrollView
+        style={styles.filtersContainer}
+        ref={focusRef}
+        testID="filterView"
+      >
         <Section>
           <HeaderSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
@@ -205,7 +209,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 }}
                 testID="saveFilter"
               />
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
               </ThemeText>
             </View>
@@ -215,6 +219,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
       <FullScreenFooter>
         <Button
+          expanded={true}
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={save}
           rightIcon={{svg: Confirm}}

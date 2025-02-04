@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {DetailsContent} from '@atb/fare-contracts';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {findReferenceDataById} from '@atb/configuration';
@@ -10,18 +10,18 @@ import {addDays} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 export const Profile_FareContractsScreen = () => {
   const styles = useStyles();
 
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const getPreassignedFareProduct = (fcRef: string) =>
     findReferenceDataById(preassignedFareProducts, fcRef);
 
   const daysFromNow = (d: number) => addDays(new Date(), d);
   const NOW = new Date();
-  const {abtCustomerId} = useAuthState();
+  const {abtCustomerId} = useAuthContext();
 
   const RESERVATION: Reservation = {
     created: NOW,
@@ -41,10 +41,8 @@ export const Profile_FareContractsScreen = () => {
     customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     purchasedBy: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     id: 'ATB:FareContract:V3TZT6NE-xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
-    minimumSecurityLevel: -200,
     orderId: 'V3TZT6NE',
     paymentType: ['VISA'],
-    paymentTypeGroup: ['PAYMENTCARD'],
     qrCode:
       'CioKKBImCiRmM2I4ZjQ1NC0wNGZiLTRlY2UtODc5ZC0wNDY2MzhiOWEzNjgSUwo+MDwCHDde9IPYTgNlJVADldKpl5GnkVowFiejaqbAcF0CHDqRdXIKEoOg0O67eH9sg8hNOuCYH35KJQ0oq2gaAU4qDAiXr++oBhDol5+uAjAB',
     state: 2,
@@ -70,7 +68,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'PeriodBoatTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:5f61ee14',
         id: 'ATB:CustomerPurchasePackage:MMLMWZUV',
         direction: TravelRightDirection.Both,
@@ -85,7 +82,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'YouthTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:47bb613e',
         id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
       },
@@ -97,7 +93,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'NightTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:8f351521',
         id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
       },
@@ -108,7 +103,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'PreActivatedPeriodTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:6dd9beab',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
         tariffZoneRefs: [
@@ -125,7 +119,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'SingleBoatTicket',
         fareProductRef: 'ATB:PreassignedFareProduct:c4467e3a',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
         direction: TravelRightDirection.Forwards,
@@ -140,15 +133,28 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'CarnetTicket',
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
         maximumNumberOfAccesses: 10,
-        numberOfUsedAccesses: 8,
+        numberOfUsedAccesses: 1,
         status: 5,
         usedAccesses: [
           {
-            startDateTime: daysFromNow(-1),
+            startDateTime: daysFromNow(-5),
+            endDateTime: daysFromNow(-4),
+          },
+        ],
+      },
+      {
+        ...BASE.travelRights[0],
+        fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
+        id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-2',
+        maximumNumberOfAccesses: 10,
+        numberOfUsedAccesses: 1,
+        status: 5,
+        usedAccesses: [
+          {
+            startDateTime: daysFromNow(-2),
             endDateTime: daysFromNow(1),
           },
         ],
@@ -162,7 +168,6 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-        type: 'CarnetTicket',
         fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
         id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
         maximumNumberOfAccesses: 50,
@@ -191,15 +196,18 @@ export const Profile_FareContractsScreen = () => {
   return (
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
-      <ScrollView style={styles.content}>
-        <ThemeText type="heading--jumbo">Reservation</ThemeText>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <ThemeText typography="heading--jumbo">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
         />
-        <ThemeText type="heading--jumbo">Fare Contracts</ThemeText>
+        <ThemeText typography="heading--jumbo">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
           <FareContractOrReservation
             key={i}
@@ -209,7 +217,7 @@ export const Profile_FareContractsScreen = () => {
             onPressFareContract={() => {}}
           />
         ))}
-        <ThemeText type="heading--jumbo">Fare contract details</ThemeText>
+        <ThemeText typography="heading--jumbo">Fare contract details</ThemeText>
         {fareContracts.map((fc, i) => (
           <DetailsContent
             key={i}
@@ -234,5 +242,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   content: {
     padding: theme.spacing.medium,
+  },
+  contentContainer: {
+    rowGap: theme.spacing.large,
   },
 }));

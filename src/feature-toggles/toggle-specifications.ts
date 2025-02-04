@@ -18,6 +18,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_beacons',
   },
   {
+    name: 'isBonusProgramEnabled',
+    remoteConfigKey: 'enable_bonus_program',
+  },
+  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
@@ -66,8 +70,16 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
   {
+    name: 'isNynorskEnabled',
+    remoteConfigKey: 'enable_nynorsk',
+  },
+  {
     name: 'isOnBehalfOfEnabled',
     remoteConfigKey: 'enable_on_behalf_of',
+  },
+  {
+    name: 'isOnboardingLoginEnabled',
+    remoteConfigKey: 'enable_onboarding_login',
   },
   {
     name: 'isOnlyStopPlacesCheckboxEnabled',
@@ -104,10 +116,6 @@ export const toggleSpecifications = [
   {
     name: 'isTicketInformationEnabled',
     remoteConfigKey: 'enable_ticket_information',
-  },
-  {
-    name: 'isTicketingAssistantEnabled',
-    remoteConfigKey: 'enable_ticketing_assistant',
   },
   {
     name: 'isTipsAndInformationEnabled',

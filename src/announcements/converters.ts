@@ -1,5 +1,10 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AnnouncementRaw, AnnouncementType, ActionButton, ActionType} from './types';
+import {
+  AnnouncementRaw,
+  AnnouncementType,
+  ActionButton,
+  ActionType,
+} from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
 import {AppPlatformType} from '@atb/global-messages/types';
@@ -78,7 +83,7 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
   );
 }
- 
+
 function mapActionButton(data: any): ActionButton | undefined {
   const action = data ?? {};
   const labelWithLanguage = mapToLanguageAndTexts(action.label);
@@ -94,6 +99,6 @@ function mapActionButton(data: any): ActionButton | undefined {
   };
 }
 
-function mapToActionType(data:any): ActionType | undefined {
+function mapToActionType(data: any): ActionType | undefined {
   if (Object.values(ActionType).includes(data)) return data;
 }

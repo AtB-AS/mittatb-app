@@ -1,15 +1,11 @@
-import React, {useCallback, useRef} from 'react';
+import React, {RefObject, useCallback, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {
-  FareProductTypeConfig,
-  getReferenceDataName,
-  TravellerSelectionMode,
-} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -17,64 +13,62 @@ import {
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
-import {usePopOver} from '@atb/popover';
+import {usePopOverContext} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
-import {useAuthState} from '@atb/auth';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useAuthContext} from '@atb/auth';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {
+  type PurchaseSelectionType,
+  useSelectableUserProfiles,
+} from '@atb/purchase-selection';
 
 type TravellerSelectionProps = {
-  userProfilesWithCount: UserProfileWithCount[];
-  setUserProfilesWithCount: (
-    userProfilesWithCount: UserProfileWithCount[],
-  ) => void;
-  style?: StyleProp<ViewStyle>;
-  selectionMode: TravellerSelectionMode;
-  fareProductTypeConfig: FareProductTypeConfig;
-  setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  selection: PurchaseSelectionType;
   isOnBehalfOfToggle: boolean;
+  onSave: (selection: PurchaseSelectionType, onBehalfOfToggle: boolean) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function TravellerSelection({
-  setUserProfilesWithCount,
-  style,
-  userProfilesWithCount,
-  selectionMode,
-  fareProductTypeConfig,
-  setIsOnBehalfOfToggle,
+  selection,
   isOnBehalfOfToggle,
+  onSave,
+  style,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {authenticationType} = useAuthState();
+  const {authenticationType} = useAuthContext();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onCloseFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
 
   const isOnBehalfOfEnabled =
-    useFeatureToggles().isOnBehalfOfEnabled &&
-    fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    useFeatureTogglesContext().isOnBehalfOfEnabled &&
+    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const isLoggedIn = authenticationType === 'phone';
+  const selectionMode =
+    selection.fareProductTypeConfig.configuration.travellerSelectionMode;
+  const isOnBehalfOfAllowed =
+    isOnBehalfOfEnabled && authenticationType === 'phone';
 
-  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
-
-  const {addPopOver} = usePopOver();
+  const {addPopOver} = usePopOverContext();
   const onBehalfOfIndicatorRef = useRef(null);
+
+  const selectableUserProfiles = useSelectableUserProfiles(
+    selection.preassignedFareProduct,
+  );
 
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
-    userProfilesWithCount,
+    selectableUserProfiles,
   );
 
   useFocusEffect(
@@ -92,18 +86,17 @@ export function TravellerSelection({
     return null;
   }
 
-  const selectedUserProfiles = userProfilesWithCount.filter(({count}) => count);
-  const totalTravellersCount = selectedUserProfiles.reduce(
+  const totalTravellersCount = selection.userProfilesWithCount.reduce(
     (acc, {count}) => acc + count,
     0,
   );
   const multipleTravellerCategoriesSelectedFrom =
-    selectedUserProfiles.length > 1;
+    selection.userProfilesWithCount.length > 1;
 
   const travellersDetailsText =
     selectionMode == 'single'
-      ? getReferenceDataName(selectedUserProfiles?.[0], language)
-      : selectedUserProfiles
+      ? getReferenceDataName(selection.userProfilesWithCount?.[0], language)
+      : selection.userProfilesWithCount
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
@@ -113,7 +106,7 @@ export function TravellerSelection({
 
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(
-        userProfilesWithCount[0].alternativeDescriptions,
+        selection.userProfilesWithCount[0].alternativeDescriptions,
         language,
       )
     : '';
@@ -143,32 +136,25 @@ export function TravellerSelection({
   };
 
   const travellerSelectionOnPress = () => {
-    openBottomSheet(() => (
-      <TravellerSelectionSheet
-        selectionMode={selectionMode}
-        fareProductTypeConfig={fareProductTypeConfig}
-        selectableUserProfilesWithCountInit={userProfilesWithCount}
-        isOnBehalfOfToggle={isOnBehalfOfToggle}
-        onConfirmSelection={(
-          chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
-          onBehalfOfToggle?: boolean,
-        ) => {
-          if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setUserProfilesWithCount(chosenSelectableUserProfilesWithCounts);
-          }
-          if (onBehalfOfToggle !== undefined) {
-            setIsOnBehalfOfToggle(onBehalfOfToggle);
-          }
-          closeBottomSheet();
-        }}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <TravellerSelectionSheet
+          selection={selection}
+          isOnBehalfOfToggle={isOnBehalfOfToggle}
+          onSave={(selection, onBehalfOfToggle) => {
+            onSave(selection, onBehalfOfToggle);
+            closeBottomSheet();
+          }}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
-        <ThemeText type="body__primary--bold" testID="selectedTravellers">
+        <ThemeText typography="body__primary--bold" testID="selectedTravellers">
           {multipleTravellerCategoriesSelectedFrom
             ? t(
                 PurchaseOverviewTexts.travellerSelection.travellers_title(
@@ -178,19 +164,19 @@ export function TravellerSelection({
             : travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {travellerInfo}
           </ThemeText>
         )}
         {isOnBehalfOfToggle && canSelectUserProfile && (
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           </ThemeText>
         )}
 
         {multipleTravellerCategoriesSelectedFrom && (
           <ThemeText
-            type="body__secondary"
+            typography="body__secondary"
             color="secondary"
             style={styles.multipleTravellersDetails}
             testID="selectedTravellers"

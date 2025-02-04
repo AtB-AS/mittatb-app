@@ -2,11 +2,12 @@ import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import VippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const VIPPS_BACKGROUND_COLOR = '#FF5B24';
+const VIPPS_TEXT_COLOR = '#FFFFFF';
 
 export const VippsLoginButton = ({
   onPress,
@@ -18,9 +19,6 @@ export const VippsLoginButton = ({
   style?: ViewStyle;
 }) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const interactiveColor = theme.color.interactive[0].default
-
   const styles = useStyles();
 
   return (
@@ -33,9 +31,9 @@ export const VippsLoginButton = ({
         style={[styles.container, disabled && styles.disabledOpacity, style]}
       >
         <ThemeText
-          type="body__primary--bold"
+          typography="body__primary--bold"
           style={styles.label}
-          color={interactiveColor}
+          color={VIPPS_TEXT_COLOR}
         >
           {t(LoginTexts.logInOptions.options.vipps.label)}
         </ThemeText>
@@ -50,7 +48,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.circle,
     justifyContent: 'center',
     borderWidth: theme.border.width.medium,
     borderColor: VIPPS_BACKGROUND_COLOR,

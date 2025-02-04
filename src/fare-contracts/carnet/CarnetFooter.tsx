@@ -24,7 +24,10 @@ export const CarnetFooter: React.FC<Props> = ({
 
   return (
     <View
-      style={{flexDirection: 'column', flex: 1}}
+      style={{
+        flexDirection: 'column',
+        flex: 1,
+      }}
       accessible={true}
       accessibilityLabel={t(
         FareContractTexts.carnet.numberOfUsedAccessesRemaining(
@@ -33,7 +36,7 @@ export const CarnetFooter: React.FC<Props> = ({
       )}
     >
       <View>
-        <ThemeText type="body__secondary">
+        <ThemeText typography="body__secondary">
           {t(
             FareContractTexts.carnet.numberOfUsedAccessesRemaining(
               accessesRemaining,
@@ -75,7 +78,7 @@ function MultiCarnet({count}: {count: number}) {
         <View style={styles.triangle} />
       </View>
       <View style={styles.count}>
-        <ThemeText type="body__tertiary">{count}</ThemeText>
+        <ThemeText typography="body__tertiary">{count}</ThemeText>
       </View>
     </View>
   );
@@ -112,15 +115,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[1].background,
   },
   dot: {
-    backgroundColor: theme.color.background.accent[1].background,
+    backgroundColor: theme.color.foreground.dynamic.secondary,
     borderRadius: 20,
-    borderColor: theme.color.background.accent[1].background,
+    borderColor: theme.color.foreground.dynamic.secondary,
     borderWidth: 2,
     width: 16,
     height: 16,
   },
   dot__unused: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: 'transparent',
   },
   dotFill__activeViewBox: {
     height: '100%',

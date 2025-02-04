@@ -1,6 +1,10 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {
+  AddPaymentMethodResponse,
+  FareContract,
+  ReserveOfferRequestBody,
+} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -13,6 +17,8 @@ import {
   TicketRecipientType,
 } from './types';
 import {PreassignedFareProduct} from '@atb/configuration';
+import {convertIsoStringFieldsToDate} from '@atb/utils/date';
+import capitalize from 'lodash/capitalize';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -24,24 +30,16 @@ export async function listRecentFareContracts(): Promise<
   return response.data;
 }
 
-export type OfferSearchParams = SearchParams &
-  (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
-
-type SearchParams = {
+export type OfferSearchParams = {
   is_on_behalf_of: boolean;
   travellers: Traveller[];
   products: string[];
   travel_date?: string;
+  zones?: string[];
+  from?: string;
+  to?: string;
 };
 
-type ZoneOfferSearchParams = {
-  zones: string[];
-};
-
-type StopPlaceOfferSearchParams = {
-  from: string;
-  to: string;
-};
 type Traveller = {
   id: string;
   user_type: string;
@@ -68,12 +66,6 @@ export async function addPaymentMethod(paymentRedirectUrl: string) {
 export async function deleteRecurringPayment(paymentId: number) {
   const url = `ticket/v3/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
-}
-
-export async function authorizeRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}/authorize`;
-  const response = await client.post<void>(url, {}, {authWithIdToken: true});
-  return response.data;
 }
 
 export async function cancelRecurringPayment(paymentId: number) {
@@ -184,7 +176,7 @@ export async function cancelPayment(
   transaction_id: number,
 ): Promise<void> {
   const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put(url, {}, {authWithIdToken: true, retry: true});
+  await client.put(url, {}, {authWithIdToken: true});
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
@@ -194,4 +186,18 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
   });
 
   return response.data;
+}
+
+export async function getFareContracts(
+  availability: 'available' | 'historical',
+): Promise<FareContract[]> {
+  const url = `ticket/v4/list?availability=${capitalize(availability)}`;
+  const response = await client.get(url, {
+    authWithIdToken: true,
+  });
+  const fareContracts = response.data.fareContracts.map(
+    convertIsoStringFieldsToDate,
+  );
+  // TODO: Log errors during parsing
+  return fareContracts.filter((fc: any) => FareContract.safeParse(fc).success);
 }

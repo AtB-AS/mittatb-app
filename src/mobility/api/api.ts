@@ -1,8 +1,8 @@
 import {client} from '@atb/api';
-import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
-import {PreassignedFareProductId} from '@atb/configuration/types';
+import {PreassignedFareProduct} from '@atb/configuration/types';
 
 const UserBenefits = z
   .object({
@@ -53,7 +53,7 @@ const FareProductBenefitMapping = z.object({
 type FareProductBenefitMappingType = z.infer<typeof FareProductBenefitMapping>;
 
 export const getFareProductBenefits = (
-  productId: PreassignedFareProductId,
+  productId: PreassignedFareProduct['id'],
 ): Promise<FareProductBenefitMappingType[]> => {
   return client
     .get(`/mobility/v1/benefits/${productId}`, {

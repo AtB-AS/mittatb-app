@@ -3,13 +3,13 @@ import {
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
-import {useAuthState, VippsSignInErrorCode} from '@atb/auth';
+import {useAuthContext, VippsSignInErrorCode} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {storage} from '@atb/storage';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   getTextForLanguage,
   LoginTexts,
@@ -25,8 +25,8 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {useOnboardingState} from '@atb/onboarding';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useOnboardingContext} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
 
@@ -43,17 +43,17 @@ export const Root_LoginOptionsScreen = ({
 
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const {signInWithCustomToken} = useAuthState();
+  const {signInWithCustomToken} = useAuthContext();
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
   const appStatus = useAppStateStatus();
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const {configurableLinks} = useFirestoreConfiguration();
-  const {completeOnboardingSection} = useOnboardingState();
+  const {configurableLinks} = useFirestoreConfigurationContext();
+  const {completeOnboardingSection} = useOnboardingContext();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -163,7 +163,7 @@ export const Root_LoginOptionsScreen = ({
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
           <ThemeText
-            type="body__primary--jumbo--bold"
+            typography="body__primary--jumbo--bold"
             style={styles.title}
             color={themeColor}
           >
@@ -190,6 +190,7 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
           />
           <Button
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             mode="primary"
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
@@ -202,6 +203,7 @@ export const Root_LoginOptionsScreen = ({
             testID="chooseLoginPhoneButton"
           />
           <Button
+            expanded={true}
             mode="secondary"
             backgroundColor={themeColor}
             onPress={() =>
@@ -221,6 +223,7 @@ export const Root_LoginOptionsScreen = ({
         {termsInfoUrl && (
           <View style={styles.termsOfUseLinkContainer}>
             <Button
+              expanded={true}
               backgroundColor={themeColor}
               mode="tertiary"
               rightIcon={{svg: ExternalLink}}

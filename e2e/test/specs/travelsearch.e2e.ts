@@ -9,6 +9,7 @@ import NavigationHelper from '../utils/navigation.helper.ts';
 import TravelsearchFilterPage from '../pageobjects/travelsearch.filter.page.js';
 import TimeHelper from '../utils/time.helper.js';
 import {stringToNumArray} from '../utils/utils.js';
+import TimePickerPage from '../pageobjects/time.picker.page.js';
 
 describe('Travel search', () => {
   before(async () => {
@@ -133,23 +134,27 @@ describe('Travel search', () => {
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
 
-      await TravelsearchOverviewPage.waitForTravelSearchResults();
+      // Only check if there are travel search results (the given src/dst has few departures)
+      if (await TravelsearchOverviewPage.hasTravelSearchResults()) {
+        // Number of legs
+        const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
+        await TravelsearchOverviewPage.openFirstSearchResult();
+        await AppHelper.scrollDownUntilId(
+          'tripDetailsContentView',
+          `legContainer${noLegs - 1}`,
+        );
+        await AppHelper.scrollDownUntilId(
+          'tripDetailsContentView',
+          'travelTime',
+        );
+        const endLocation = await TravelsearchDetailsPage.getLocation(
+          'end',
+          noLegs - 1,
+        );
+        expect(endLocation).toContain(arrival);
 
-      // Number of legs
-      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
-      await TravelsearchOverviewPage.openFirstSearchResult();
-      await AppHelper.scrollDownUntilId(
-        'tripDetailsContentView',
-        `legContainer${noLegs - 1}`,
-      );
-      await AppHelper.scrollDownUntilId('tripDetailsContentView', 'travelTime');
-      const endLocation = await TravelsearchDetailsPage.getLocation(
-        'end',
-        noLegs - 1,
-      );
-      expect(endLocation).toContain(arrival);
-
-      await NavigationHelper.back();
+        await NavigationHelper.back();
+      }
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_travelsearch_should_have_correct_legs_in_the_details',
@@ -188,9 +193,9 @@ describe('Travel search', () => {
       // Set new departure time
       await TravelsearchFilterPage.openTravelSearchTimePicker();
       await TravelsearchFilterPage.chooseSearchBasedOn('Departure');
-      await TravelsearchFilterPage.openNativeTimePicker();
+      await TimePickerPage.openNativeTimePicker();
       await AppHelper.setTimePickerTime(depTimeHr, depTimeMin);
-      await TravelsearchFilterPage.searchButton.click();
+      await TimePickerPage.searchButton.click();
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 

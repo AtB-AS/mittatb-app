@@ -1,12 +1,16 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {useFirestoreConfiguration, TariffZone} from '@atb/configuration';
+import {TariffZone} from '@atb/configuration';
 import {SearchLocation} from '@atb/favorites';
 import {useGeocoder} from '@atb/geocoder';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
+import {
+  TariffZoneSearchTexts,
+  TariffZonesTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useDebounce} from '@atb/utils/use-debounce';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -18,26 +22,34 @@ import {
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TariffZoneResults} from '@atb/tariff-zones-selector/TariffZoneResults';
-import {VenueResults, LocationAndTariffZone} from './VenueResults';
+import {LocationAndTariffZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
+import {
+  usePurchaseSelectionBuilder,
+  useSelectableTariffZones,
+} from '@atb/purchase-selection';
+import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;
 
 export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, label},
+    params: {selection, fromOrTo},
   },
 }) => {
   const styles = useThemeStyles();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const [text, setText] = useState('');
 
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const {tariffZones} = useFirestoreConfiguration();
+  const tariffZones = useSelectableTariffZones(
+    selection.preassignedFareProduct,
+  );
 
   const getMatchingTariffZone = useCallback(
     (location: SearchLocation) =>
@@ -48,30 +60,28 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
   );
 
   const onSelectZone = (tariffZone: TariffZone) => {
-    navigation.navigate({
-      name: callerRouteName as any,
-      params: {
-        [callerRouteParam]: {
-          ...tariffZone,
-          resultType: 'zone',
-        },
-      },
-      merge: true,
-    });
+    const zone: TariffZoneWithMetadata = {...tariffZone, resultType: 'zone'};
+    navigateToMapScreen(zone);
   };
 
   const onSelectVenue = (location: SearchLocation) => {
     const tariffZone = getMatchingTariffZone(location);
-    navigation.navigate({
-      name: callerRouteName as any,
-      params: {
-        [callerRouteParam]: {
-          ...tariffZone,
-          resultType: 'venue',
-          venueName: location.name,
-        },
-      },
-      merge: true,
+    const zone: TariffZoneWithMetadata | undefined = tariffZone && {
+      ...tariffZone,
+      resultType: 'venue',
+      venueName: location.name,
+    };
+    navigateToMapScreen(zone);
+  };
+
+  const navigateToMapScreen = (zone?: TariffZoneWithMetadata) => {
+    const builder = selectionBuilder.fromSelection(selection);
+    if (zone && fromOrTo === 'from') builder.fromZone(zone);
+    if (zone && fromOrTo === 'to') builder.toZone(zone);
+    const newSelection = builder.build();
+
+    navigation.navigate('Root_PurchaseTariffZonesSearchByMapScreen', {
+      selection: newSelection,
     });
   };
 
@@ -87,7 +97,7 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation} = useGeolocationContext();
 
   const {locations, isSearching, error} =
     useGeocoder(debouncedText, geolocation?.coordinates ?? null, true) ?? [];
@@ -129,7 +139,11 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
           <TextInputSectionItem
             ref={inputRef}
             radius="top-bottom"
-            label={label}
+            label={
+              fromOrTo === 'from'
+                ? t(TariffZonesTexts.location.zonePicker.labelFrom)
+                : t(TariffZonesTexts.location.zonePicker.labelTo)
+            }
             value={text}
             onChangeText={setText}
             showClear={Boolean(text?.length)}

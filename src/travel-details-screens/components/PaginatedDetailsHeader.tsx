@@ -35,8 +35,8 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
         <View style={styles.container}>
           <View style={styles.buttonLeft}>
             <Button
-              type="medium"
-              compact={true}
+              expanded={false}
+              type="small"
               mode="tertiary"
               disabled={!hasPrevious}
               leftIcon={{svg: ArrowLeft}}
@@ -58,8 +58,8 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
           </ThemeText>
           <View style={styles.buttonRight}>
             <Button
-              type="medium"
-              compact={true}
+              expanded={false}
+              type="small"
               mode="tertiary"
               disabled={!hasNext}
               rightIcon={{svg: ArrowRight}}
@@ -95,7 +95,8 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: theme.spacing.medium,
+    padding: theme.spacing.xSmall,
+    paddingBottom: theme.spacing.medium,
   },
   wrapper: {
     borderBottomWidth: theme.border.width.slim,

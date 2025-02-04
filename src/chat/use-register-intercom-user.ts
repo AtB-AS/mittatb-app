@@ -3,12 +3,12 @@ import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {storage} from '@atb/storage';
 import {checkGeolocationPermission} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useEffect} from 'react';
 import {useIntercomMetadata} from './use-intercom-metadata';
 
 export function useRegisterIntercomUser() {
-  const {enable_intercom} = useRemoteConfig();
+  const {enable_intercom} = useRemoteConfigContext();
   const {updateMetadata} = useIntercomMetadata();
 
   useEffect(() => {

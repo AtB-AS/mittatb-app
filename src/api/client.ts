@@ -13,13 +13,9 @@ import {
   RequestIdHeaderName,
   Authorization,
 } from './headers';
-import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {Platform} from 'react-native';
-import {
-  getCurrentUserIdGlobal,
-  getIdTokenGlobal,
-} from '@atb/auth/AuthContext.tsx';
+import {getCurrentUserIdGlobal, getIdTokenGlobal} from '@atb/auth/AuthContext';
 
 type InternalUpstreamServerError = {
   errorCode: 602;
@@ -29,13 +25,10 @@ type InternalUpstreamServerError = {
 
 export const client = createClient(API_BASE_URL);
 
-const RETRY_COUNT = 3;
 const DEFAULT_TIMEOUT = 15000;
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
-    // Should retry if network error or 5xx idempotent request
-    retry?: boolean;
     // Use id token as bearer token in authorization header
     authWithIdToken?: boolean;
     // Force refresh id token from firebase before request
@@ -43,18 +36,6 @@ declare module 'axios' {
     // Whether the error logging to Bugsnag should be skipped for a given error
     skipErrorLogging?: (error: AxiosError) => boolean;
   }
-}
-
-function shouldRetry(error: AxiosError): boolean {
-  const isRateLimited = error.response?.status === 429;
-  if (isRateLimited) return false;
-
-  const shouldForceRefresh = error.config?.forceRefreshIdToken;
-  if (shouldForceRefresh) return true;
-
-  return Boolean(error.config?.retry) &&
-    (getAxiosErrorType(error) === 'network-error' ||
-      isIdempotentRequestError(error));
 }
 
 export function createClient(baseUrl: string | undefined) {
@@ -68,7 +49,6 @@ export function createClient(baseUrl: string | undefined) {
   client.interceptors.request.use(requestIdTokenHandler);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
-  axiosRetry(client, {retries: RETRY_COUNT, retryCondition: shouldRetry});
   return client;
 }
 
@@ -153,13 +133,8 @@ function responseErrorHandler(error: AxiosError) {
   return Promise.reject(error);
 }
 
-const shouldSkipLogging = (error: AxiosError) => {
-  const configuredToSkipLogging = error.config?.skipErrorLogging?.(error);
-  const willRetry =
-    shouldRetry(error) &&
-    (error.config?.['axios-retry'] as any)?.retryCount < RETRY_COUNT;
-  return configuredToSkipLogging || willRetry;
-};
+const shouldSkipLogging = (error: AxiosError) =>
+  error.config?.skipErrorLogging?.(error);
 
 export type TimeoutRequest = {
   didTimeout: boolean;
@@ -172,7 +147,7 @@ export type TimeoutRequest = {
 export const useTimeoutRequest = (): TimeoutRequest => {
   const controller = new AbortController();
   let didTimeout = false;
-  let timerId: number | undefined;
+  let timerId: NodeJS.Timeout | undefined;
 
   const start = () => {
     timerId = setTimeout(() => {

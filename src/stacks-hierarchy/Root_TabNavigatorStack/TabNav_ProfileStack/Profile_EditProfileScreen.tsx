@@ -6,8 +6,8 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useAuthState} from '@atb/auth';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useAuthContext} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -15,8 +15,8 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -29,7 +29,7 @@ export const Profile_EditProfileScreen = ({
     authenticationType,
     customerNumber,
     phoneNumber: authPhoneNumber,
-  } = useAuthState();
+  } = useAuthContext();
   const {
     mutate: updateProfile,
     isLoading: isLoadingUpdateProfile,
@@ -44,8 +44,8 @@ export const Profile_EditProfileScreen = ({
     refetch: refetchProfile,
     isRefetching: isRefetchingProfile,
   } = useProfileQuery();
-  const {disable_email_field_in_profile_page} = useRemoteConfig();
-  const {theme} = useTheme();
+  const {disable_email_field_in_profile_page} = useRemoteConfigContext();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
   const [email, setEmail] = useState('');
@@ -97,7 +97,7 @@ export const Profile_EditProfileScreen = ({
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
-            type="heading--medium"
+            typography="heading--medium"
             color={themeColor}
             style={{flexShrink: 1}}
           >
@@ -169,7 +169,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.email.label)}
                   </ThemeText>
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.email
                         .disabledWithRemoteConfig,
@@ -203,7 +203,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.phone.loggedIn(
                         phoneNumber,
@@ -215,6 +215,7 @@ export const Profile_EditProfileScreen = ({
 
               <View style={styles.submitSection}>
                 <Button
+                  expanded={true}
                   mode="primary"
                   text={t(EditProfileTexts.button.save)}
                   onPress={onSubmit}
@@ -248,20 +249,20 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
             {phoneNumber && (
               <ThemeText
-                type="body__secondary"
+                typography="body__secondary"
                 color="secondary"
                 style={styles.profileItem}
               >
                 {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
               </ThemeText>
             )}
-            {customerNumber && (
+            {!!customerNumber && (
               <>
                 <ThemeText>
                   {t(EditProfileTexts.profileInfo.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
@@ -275,6 +276,7 @@ export const Profile_EditProfileScreen = ({
           </View>
           <View style={styles.deleteProfile}>
             <Button
+              expanded={true}
               mode="primary"
               interactiveColor={theme.color.interactive.destructive}
               leftIcon={{svg: Delete}}

@@ -7,9 +7,12 @@ import React, {
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {default as StorybookApp} from '../../.storybook';
-import {StatusBar, Text} from 'react-native';
+import {StatusBar} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
+import {ThemeText} from '@atb/components/text';
 
 type StorybookContextState = {
   isEnabled: boolean;
@@ -37,10 +40,12 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
       {isEnabled ? (
         <SafeAreaView style={{flex: 1}}>
           <StatusBar translucent={true} />
-          <PressableOpacity onPress={() => setEnabled(false)}>
-            <Text style={{marginLeft: 12, fontSize: 18}}>
-              {'<-- Back to app'}
-            </Text>
+          <PressableOpacity
+            onPress={() => setEnabled(false)}
+            style={{flexDirection: 'row', padding: 8, alignItems: 'center'}}
+          >
+            <ThemeIcon svg={ArrowLeft} />
+            <ThemeText style={{marginLeft: 4}}>Back to app</ThemeText>
           </PressableOpacity>
           <StorybookApp />
         </SafeAreaView>

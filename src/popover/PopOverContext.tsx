@@ -40,10 +40,8 @@ export const PopOverContextProvider: React.FC = ({children}) => {
       if (!isPopOverSeen(popOver.oneTimeKey)) {
         // Run after interactions to allow potential page transitions
         // or similar animations to complete before the popover is displayed.
-
-        // PopOver temporarily disabled 
+        // PopOver temporarily disabled
         // see https://github.com/AtB-AS/kundevendt/issues/17628
-        
         // InteractionManager.runAfterInteractions(() =>
         //   setPopOvers((val) => [...val, popOver]),
         // );
@@ -86,7 +84,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function usePopOver() {
+export function usePopOverContext() {
   const context = useContext(PopOverContext);
   if (context === undefined) {
     throw new Error(

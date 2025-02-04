@@ -1,28 +1,26 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {getReferenceDataName} from '@atb/configuration';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
-import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
@@ -31,9 +29,13 @@ import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
-import {useAuthState} from '@atb/auth';
-import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useFeatureToggles} from "@atb/feature-toggles";
+import {useAuthContext} from '@atb/auth';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {
+  type PurchaseSelectionType,
+  useSelectableUserProfiles,
+} from '@atb/purchase-selection';
+import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -43,71 +45,29 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
-  const {authenticationType} = useAuthState();
+  const {theme} = useThemeContext();
+  const {authenticationType} = useAuthContext();
+  const selection = params.selection;
 
-  const isFree = params.toPlace
-    ? 'isFree' in params.toPlace && !!params.toPlace.isFree
-    : false;
+  const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
-  const {selection, preassignedFareProductAlternatives} = useOfferDefaults(
-    params.preassignedFareProduct,
-    params.fareProductTypeConfig,
-    params.userProfilesWithCount,
-    params.fromPlace,
-    params.toPlace,
-    params.travelDate,
+  const preassignedFareProductAlternatives = useProductAlternatives(selection);
+  const selectableUserProfiles = useSelectableUserProfiles(
+    selection.preassignedFareProduct,
   );
 
-  const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
-    navigation.setParams({
-      preassignedFareProduct: fp,
-    });
-    if (fp.limitations.latestActivationDate && selection.travelDate) {
-      if (
-        isAfter(
-          selection.travelDate,
-          new Date(fp.limitations.latestActivationDate * 1000),
-        )
-      )
-        navigation.setParams({travelDate: undefined});
-      else if (showActivationDateWarning) {
-        setShowActivationDateWarning(false);
-      }
-    } else if (showActivationDateWarning) {
-      setShowActivationDateWarning(false);
-    }
-  };
-
-  const setUserProfilesWithCount = useCallback(
-    (userProfilesWithCount: UserProfileWithCount[]) => {
-      navigation.setParams({userProfilesWithCount});
-    },
-    [navigation],
-  );
+  const setSelection = (s: PurchaseSelectionType) =>
+    navigation.setParams({selection: s});
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
 
-  const [showActivationDateWarning, setShowActivationDateWarning] =
-    useState<boolean>(false);
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
-  const {
-    timeSelectionMode,
-    travellerSelectionMode,
-    zoneSelectionMode,
-    requiresTokenOnMobile,
-  } = selection.fareProductTypeConfig.configuration;
+  const {travellerSelectionMode, zoneSelectionMode, requiresTokenOnMobile} =
+    selection.fareProductTypeConfig.configuration;
 
   const fareProductOnBehalfOfEnabled =
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-
-  const offerEndpoint =
-    zoneSelectionMode === 'none'
-      ? 'authority'
-      : zoneSelectionMode === 'multiple-stop-harbor'
-      ? 'stop-places'
-      : 'zones';
 
   const {
     isSearchingOffer,
@@ -118,7 +78,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     selection,
-    offerEndpoint,
     preassignedFareProductAlternatives,
     isOnBehalfOfToggle,
   );
@@ -137,18 +96,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       mode: params.mode,
     };
 
-  const maximumDateObjectIfExisting = selection.preassignedFareProduct.limitations
-    ?.latestActivationDate
-    ? new Date(selection.preassignedFareProduct.limitations.latestActivationDate * 1000)
-    : undefined;
-
   const canSelectUserProfile = isUserProfileSelectable(
     travellerSelectionMode,
-    selection.userProfilesWithCount,
+    selectableUserProfiles,
   );
 
   const isOnBehalfOfEnabled =
-      useFeatureToggles().isOnBehalfOfEnabled && fareProductOnBehalfOfEnabled;
+    useFeatureTogglesContext().isOnBehalfOfEnabled &&
+    fareProductOnBehalfOfEnabled;
 
   const isLoggedIn = authenticationType === 'phone';
 
@@ -158,11 +113,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selection.userProfilesWithCount.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
 
-  const isEmptyOffer = error?.type === 'empty-offers';
-
   const handleTicketInfoButtonPress = () => {
     const parameters = {
-      fareProductTypeConfigType: params.fareProductTypeConfig.type,
+      fareProductTypeConfigType: selection.fareProductTypeConfig.type,
       preassignedFareProductId: preassignedFareProduct.id,
     };
     analytics.logEvent(
@@ -191,7 +144,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   return (
     <FullScreenView
       headerProps={{
-        title: getTextForLanguage(params.fareProductTypeConfig.name, language),
+        title: getTextForLanguage(
+          selection.fareProductTypeConfig.name,
+          language,
+        ),
         leftButton: {
           type: 'cancel',
           onPress: closeModal,
@@ -203,7 +159,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
-          fareProductTypeConfig={params.fareProductTypeConfig}
+          fareProductTypeConfig={selection.fareProductTypeConfig}
           preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
@@ -218,13 +174,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           )}
           {error &&
-            (isEmptyOffer ? (
+            (error.type === 'not-available' ? (
               <MessageInfoBox
-                type="info"
-                message={t(
-                  PurchaseOverviewTexts.errorMessageBox.productUnavailable(
+                type="warning"
+                title={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable.title(
                     getReferenceDataName(preassignedFareProduct, language),
                   ),
+                )}
+                message={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable
+                    .message,
                 )}
                 style={styles.selectionComponent}
               />
@@ -242,49 +202,40 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ))}
 
           <ProductSelection
-            preassignedFareProduct={selection.preassignedFareProduct}
-            fareProductTypeConfig={params.fareProductTypeConfig}
-            setSelectedProduct={onSelectPreassignedFareProduct}
+            selection={selection}
+            setSelection={setSelection}
             style={styles.selectionComponent}
           />
 
           <TravellerSelection
-            setUserProfilesWithCount={setUserProfilesWithCount}
-            fareProductTypeConfig={selection.fareProductTypeConfig}
-            selectionMode={travellerSelectionMode}
-            userProfilesWithCount={selection.userProfilesWithCount}
-            style={styles.selectionComponent}
-            setIsOnBehalfOfToggle={setIsOnBehalfOfToggle}
+            selection={selection}
             isOnBehalfOfToggle={isOnBehalfOfToggle}
-          />
-          <FromToSelection
-            fareProductTypeConfig={params.fareProductTypeConfig}
-            fromPlace={selection.fromPlace}
-            toPlace={selection.toPlace}
-            preassignedFareProduct={selection.preassignedFareProduct}
+            onSave={(selection, onBehalfOfToggle) => {
+              setSelection(selection);
+              setIsOnBehalfOfToggle(onBehalfOfToggle);
+            }}
             style={styles.selectionComponent}
-            onSelect={(params) => {
+          />
+
+          <FromToSelection
+            selection={selection}
+            style={styles.selectionComponent}
+            onSelect={(selection) => {
               navigation.setParams({onFocusElement: undefined});
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
                   ? 'Root_PurchaseHarborSearchScreen'
                   : 'Root_PurchaseTariffZonesSearchByMapScreen',
-                params,
+                {selection},
               );
             }}
             ref={focusRefs}
           />
 
           <StartTimeSelection
-            selectionMode={timeSelectionMode}
-            color={theme.color.interactive[2]}
-            travelDate={selection.travelDate}
-            setTravelDate={(travelDate) => navigation.setParams({travelDate})}
-            validFromTime={selection.travelDate}
-            maximumDate={maximumDateObjectIfExisting}
+            selection={selection}
+            setSelection={setSelection}
             style={styles.selectionComponent}
-            showActivationDateWarning={showActivationDateWarning}
-            setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
           {isOnBehalfOfAllowed && !canSelectUserProfile && (
@@ -329,8 +280,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
-                  fromTariffZone: selection.fromPlace.id,
-                  toTariffZone: selection.toPlace.id,
+                  fromTariffZone: selection.zones?.from.id || 'none',
+                  toTariffZone: selection.zones?.to.id || 'none',
                   userTypes: userTypeStrings,
                 }}
               />
@@ -338,12 +289,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           )}
 
           <Summary
+            selection={selection}
             isLoading={isSearchingOffer}
             isFree={isFree}
             isError={!!error || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            userProfilesWithCount={selection.userProfilesWithCount}
             summaryButtonText={
               isOnBehalfOfToggle
                 ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
@@ -351,10 +302,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             }
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
-                fareProduct: params.fareProductTypeConfig.name,
+                fareProduct: selection.fareProductTypeConfig.name,
                 tariffZone: {
-                  from: selection.fromPlace.id,
-                  to: selection.toPlace.id,
+                  from: selection.zones?.from.id,
+                  to: selection.zones?.to.id,
+                },
+                stopPlaces: {
+                  from: selection.stopPlaces?.from?.id,
+                  to: selection.stopPlaces?.to?.id,
                 },
                 userProfilesWithCount: selection.userProfilesWithCount.map(
                   (t) => ({

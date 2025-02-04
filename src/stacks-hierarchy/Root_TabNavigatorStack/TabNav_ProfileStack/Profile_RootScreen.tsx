@@ -1,19 +1,17 @@
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
+import {useMobileTokenContext} from '@atb/mobile-token';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
-  useTicketingState,
-  useHasReservationOrActiveFareContract,
+  useTicketingContext,
+  useHasReservationOrAvailableFareContract,
 } from '@atb/ticketing';
 import {
   dictionary,
@@ -24,7 +22,7 @@ import {
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
-import {IS_QA_ENV} from '@env';
+import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
 import React from 'react';
 import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
@@ -39,13 +37,13 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -53,11 +51,11 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_ticketing, enable_vipps_login} = useRemoteConfig();
-  const {clearTokenAtLogout} = useMobileTokenContextState();
+  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
+  const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   const {
     authenticationType,
     signOut,
@@ -65,14 +63,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     customerNumber,
     retryAuth,
     authStatus,
-  } = useAuthState();
+  } = useAuthContext();
   const config = useLocalConfig();
-  const {customerProfile} = useTicketingState();
-  const hasReservationOrActiveFareContract =
-    useHasReservationOrActiveFareContract();
+  const {customerProfile} = useTicketingContext();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
 
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {configurableLinks} = useFirestoreConfigurationContext();
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
@@ -84,27 +82,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
-  const {disable_travelcard} = useRemoteConfig();
+  const {disable_travelcard} = useRemoteConfigContext();
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {isPushNotificationsEnabled, isTravelAidEnabled} = useFeatureToggles();
+  const {
+    isPushNotificationsEnabled,
+    isTravelAidEnabled,
+    isBonusProgramEnabled,
+  } = useFeatureTogglesContext();
 
-  const {logEvent} = useAnalytics();
-
-  const {open: openBottomSheet} = useBottomSheet();
-  async function selectFavourites() {
-    openBottomSheet(() => {
-      return (
-        <SelectFavouritesBottomSheet
-          onEditFavouriteDeparture={() =>
-            navigation.navigate('Profile_FavoriteDeparturesScreen')
-          }
-        />
-      );
-    });
-  }
+  const {logEvent} = useAnalyticsContext();
 
   return (
     <>
@@ -114,7 +103,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           rightButton: {type: 'chat'},
         }}
       >
-        <View testID="profileHomeScrollView" style={style.contentContainer}>
+        <View
+          testID="profileHomeScrollView"
+          importantForAccessibility="no"
+          style={style.contentContainer}
+        >
           <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
           <Section>
             {authenticationType === 'phone' && (
@@ -123,19 +116,19 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                 </ThemeText>
                 {phoneNumber && (
-                  <ThemeText type="body__secondary" color="secondary">
+                  <ThemeText typography="body__secondary" color="secondary">
                     {phoneNumber}
                   </ThemeText>
                 )}
               </GenericSectionItem>
             )}
-            {customerNumber && (
+            {!!customerNumber && (
               <GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
@@ -188,15 +181,24 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               }
               testID="ticketHistoryButton"
             />
+            {isBonusProgramEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+              />
+            )}
             {authenticationType !== 'phone' && (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
                 onPress={() => {
-                  if (hasReservationOrActiveFareContract) {
+                  if (hasReservationOrAvailableFareContract) {
                     navigation.navigate(
-                      'Root_LoginActiveFareContractWarningScreen',
+                      'Root_LoginAvailableFareContractWarningScreen',
                       {},
                     );
                   } else if (enable_vipps_login) {
@@ -274,16 +276,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
-
-          {isTravelAidEnabled ? (
+            {isTravelAidEnabled ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.settings.linkSectionItems.travelAid
                     .label,
                 )}
-                onPress={() =>
-                  navigation.navigate('Profile_TravelAidScreen')
-                }
+                onPress={() => navigation.navigate('Profile_TravelAidScreen')}
                 testID="travelAidButton"
               />
             ) : null}
@@ -516,20 +515,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem
-                  text={t(
-                    ProfileTexts.sections.favorites.linkSectionItems
-                      .frontpageFavourites.label,
-                  )}
-                  accessibility={{
-                    accessibilityHint: t(
-                      ProfileTexts.sections.favorites.linkSectionItems
-                        .frontpageFavourites.a11yHint,
-                    ),
-                  }}
-                  testID="favoriteDeparturesButton"
-                  onPress={selectFavourites}
-                />
-                <LinkSectionItem
                   text="Design system"
                   testID="designSystemButton"
                   onPress={() =>
@@ -549,7 +534,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             </>
           )}
           <View style={style.debugInfoContainer}>
-            <ThemeText type="body__secondary" color="secondary">
+            <ThemeText typography="body__secondary" color="secondary">
               v{version} ({buildNumber})
             </ThemeText>
             {config?.installId && (
@@ -559,22 +544,31 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     <ScreenReaderAnnouncement
                       message={t(ProfileTexts.installId.wasCopiedAlert)}
                     />
-                    <ThemeText type="body__secondary" color="secondary">
+                    <ThemeText typography="body__secondary" color="secondary">
                       ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
                     </ThemeText>
                   </>
                 }
                 copyContent={config.installId}
+                accessibilityLabel={t(
+                  ProfileTexts.installId.a11yLabel(config.installId),
+                )}
+                accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText
-                  accessibilityHint={t(ProfileTexts.installId.a11yHint)}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {t(ProfileTexts.installId.label)}: {config.installId}
+                <ThemeText typography="body__secondary" color="secondary">
+                  {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}
+            <ThemeText
+              typography="body__secondary"
+              color="secondary"
+              accessibilityLabel={t(
+                ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),
+              )}
+            >
+              {t(ProfileTexts.orgNumber(APP_ORG_NUMBER))}
+            </ThemeText>
           </View>
         </View>
       </FullScreenView>

@@ -3,6 +3,7 @@ const FavoriteDeparturesTexts = {
   header: {
     title: _('Favorittavganger', 'Favourite departures', 'Favorittavgangar'),
   },
+  favoriteButton: _('Favoritt', 'Favourite', 'Favoritt'),
   favoriteItemDelete: {
     a11yHint: _(
       'Aktivér for å fjerne favorittavgang',

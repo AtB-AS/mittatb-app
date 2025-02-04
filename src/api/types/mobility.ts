@@ -1,6 +1,8 @@
 import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Feature, Point} from 'geojson';
+import {isValidPhoneNumber} from 'libphonenumber-js';
+import {isValidEmail} from '@atb/utils/validation';
 
 export type ViolationsReportingInitQuery = {
   lng: string;
@@ -18,6 +20,7 @@ export type ViolationsReportingProvider = {
 
 export type ParkingViolationType = {
   code: string;
+  /** @deprecated Icon is only used by the app in v. 1.61 and earlier */
   icon: string;
 };
 
@@ -153,6 +156,7 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
     .string()
     .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
+  operatorId: z.string(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
@@ -169,6 +173,74 @@ const ShmoImageFileSchema = z.object({
   fileType: z.string(),
   fileData: z.string().describe('base64 encoded image data'),
 });
+
+export enum SupportType {
+  UNABLE_TO_OPEN = 'UNABLE_TO_OPEN',
+  UNABLE_TO_CLOSE = 'UNABLE_TO_CLOSE',
+  REFUND = 'REFUND',
+  ACCIDENT_OR_BROKEN = 'ACCIDENT_OR_BROKEN',
+  OTHER = 'OTHER',
+}
+
+export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
+
+export const SendSupportRequestBodySchema = z.object({
+  bookingId: z.string().uuid().optional().nullable(),
+  assetId: z.string().optional().nullable(),
+  supportType: z.nativeEnum(SupportType),
+  contactInformationEndUser: z
+    .object({
+      phonePrefix: z.string().nullish(),
+      phoneNumber: z.string().nullish(),
+      email: z.string().nullish(),
+    })
+    .transform((data) => ({
+      phone:
+        data.phonePrefix && data.phoneNumber
+          ? `+${data.phonePrefix}${data.phoneNumber}`
+          : undefined,
+      email: data.email || undefined,
+    }))
+    .superRefine((data, ctx) => {
+      const email = data.email || undefined;
+
+      if (!data.phone && !email) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [],
+        });
+      }
+
+      if (data.phone && !isValidPhoneNumber(data.phone)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['phoneNumber'],
+        });
+      }
+
+      if (email && !isValidEmail(email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+        });
+      }
+    }),
+  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).optional().nullable(),
+  place: z
+    .object({
+      coordinates: ShmoCoordinatesSchema,
+      name: z.string().optional(),
+    })
+    .optional(),
+});
+
+export type SendSupportRequestBodyInput = z.input<
+  typeof SendSupportRequestBodySchema
+>;
+
+export type SendSupportRequestBody = z.infer<
+  typeof SendSupportRequestBodySchema
+>;
 
 type StartFinishingEvent = {event: ShmoBookingEventType.START_FINISHING};
 type FinishEvent = {

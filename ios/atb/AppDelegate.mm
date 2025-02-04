@@ -10,26 +10,6 @@
 
 #import "RNBootSplash.h"
 
-#ifdef FB_SONARKIT_ENABLED
-#import <FlipperKit/FlipperClient.h>
-#import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
-#import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
-#import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
-#import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
-#import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-#import <FlipperPerformancePlugin.h>
-static void InitializeFlipper(UIApplication *application) {
-  FlipperClient *client = [FlipperClient sharedClient];
-  SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
-  [client addPlugin:[[FlipperKitLayoutPlugin alloc] initWithRootNode:application withDescriptorMapper:layoutDescriptorMapper]];
-  [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
-  [client addPlugin:[FlipperKitReactPlugin new]];
-  [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
-  [client addPlugin:[FlipperPerformancePlugin new]];
-  [client start];
-}
-#endif
-
 @implementation AppDelegate
 
 @synthesize launchOptions;
@@ -45,10 +25,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.launchOptions = launchOptions;
-  
-  #ifdef FB_SONARKIT_ENABLED
-    InitializeFlipper(application);
-  #endif
+
   NSString *intercomPath = [[NSBundle mainBundle] pathForResource:@"Intercom" ofType:@"plist"];
   NSDictionary *intercomDict = [[NSDictionary alloc] initWithContentsOfFile:intercomPath];
   NSString* intercomApiKey = [intercomDict objectForKey:@"IntercomApiKey"];
@@ -72,12 +49,12 @@ static void InitializeFlipper(UIApplication *application) {
   }
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  
+
   self.moduleName = @"no.mittatb";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  
+
   AtBRootView *rootView = [[AtBRootView alloc] initWithBridge:bridge
                                                    moduleName:@"atb"
                                             initialProperties:self.initialProps];
@@ -97,7 +74,7 @@ static void InitializeFlipper(UIApplication *application) {
 {
   return [self getBundleURL];
 }
- 
+
 - (NSURL *)getBundleURL
 {
 #if DEBUG

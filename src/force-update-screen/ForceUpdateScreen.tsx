@@ -4,7 +4,7 @@ import {Logo} from '@atb/assets/svg/mono-icons/logo';
 import {Linking, Platform, ScrollView, View} from 'react-native';
 import React, {useState} from 'react';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   ForceUpdateTexts,
   getTextForLanguage,
@@ -12,17 +12,17 @@ import {
 } from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 
-const getThemeColor = (theme: Theme) =>  theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const ForceUpdateScreen = () => {
   const [error, setError] = useState<boolean>(false);
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {t, language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {configurableLinks} = useFirestoreConfigurationContext();
 
   const iconDimension = 80;
 
@@ -38,7 +38,7 @@ export const ForceUpdateScreen = () => {
             />
           </View>
           <ThemeText
-            type="body__primary--big--bold"
+            typography="body__primary--big--bold"
             style={styles.title}
             color={themeColor}
           >
@@ -48,6 +48,7 @@ export const ForceUpdateScreen = () => {
             {t(ForceUpdateTexts.subText)}
           </ThemeText>
           <Button
+            expanded={true}
             rightIcon={{svg: ExternalLink}}
             onPress={() => {
               const link = Platform.select({

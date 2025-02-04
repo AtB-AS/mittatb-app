@@ -1,7 +1,7 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import React, {createContext, useContext, useState} from 'react';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type TimeContextState = {
   /**
@@ -24,7 +24,7 @@ export const getServerNow = () => Date.now() - serverDiff;
 
 export const TimeContextProvider: React.FC = ({children}) => {
   const [serverNow, setServerNow] = useState(Date.now());
-  const {isServerTimeEnabled} = useFeatureToggles();
+  const {isServerTimeEnabled} = useFeatureTogglesContext();
 
   useInterval(
     () => {
@@ -39,7 +39,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
       }
     },
     [isServerTimeEnabled],
-    2500,
+    1000,
     false,
     true,
   );
@@ -55,7 +55,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useTimeContextState() {
+export function useTimeContext() {
   const context = useContext(TimeContext);
   if (context === undefined) {
     throw new Error(

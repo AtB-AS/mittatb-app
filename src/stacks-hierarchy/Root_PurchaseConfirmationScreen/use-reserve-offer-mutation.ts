@@ -5,10 +5,10 @@ import {
   TicketRecipientType,
   reserveOffers,
 } from '@atb/ticketing';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 
 type Args = {
   offers: ReserveOffer[];
@@ -23,8 +23,8 @@ export const useReserveOfferMutation = ({
   recipient,
   shouldSavePaymentMethod,
 }: Args) => {
-  const {abtCustomerId, phoneNumber} = useAuthState();
-  const {enable_auto_sale: autoSale} = useRemoteConfig();
+  const {abtCustomerId, phoneNumber} = useAuthContext();
+  const {enable_auto_sale: autoSale} = useRemoteConfigContext();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -37,7 +37,6 @@ export const useReserveOfferMutation = ({
         paymentType: paymentMethod.paymentType,
         recurringPaymentId: paymentMethod.recurringCard?.id,
         shouldSavePaymentMethod,
-        opts: {retry: true},
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
         phoneNumber,

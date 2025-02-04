@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -48,8 +48,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     },
     forwardedRef,
   ) => {
-    const {topContainer, spacing, contentContainer} = useSectionItem(props);
-    const {theme, themeName} = useTheme();
+    const {topContainer, contentContainer} = useSectionItem(props);
+    const {theme, themeName} = useThemeContext();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const {t} = useTranslation();
@@ -60,6 +60,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     useEffect(() => {
       giveFocus(errorFocusRef);
     }, [errorText]);
+
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -91,25 +92,25 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor:
-            theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;
       }
     };
 
-    const padding = {
-      // There are some oddities with handling padding
-      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom: spacing - Platform.select({android: 4, default: 0}),
-      paddingTop: spacing - Platform.select({android: 5, default: 0}),
-    };
+    /*
+        Android handles padding and fonts a little oddly.
+        The short story is that we in some cases have to hard code
+        padding like this to get it to look the same on iOS
+        and Android.
+        See https://codeburst.io/react-native-quirks-2fb1ae0bbf8
+     */
+    const androidPaddingOverwrite =
+      Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
-    // Remove padding from topContainerStyle
-    const {padding: _dropThis, ...topContainerStyle} = topContainer;
     const containerPadding = {
-      paddingHorizontal: spacing,
+      paddingHorizontal: theme.spacing.medium,
     };
 
     return (
@@ -117,19 +118,25 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         style={[
           styles.container,
           inlineLabel ? styles.containerInline : styles.containerMultiline,
-          topContainerStyle,
+          topContainer,
+          androidPaddingOverwrite,
           containerPadding,
           getBorderColor(),
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
-        <ThemeText type="body__secondary" style={styles.label}>
+        <ThemeText typography="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={inlineLabel ? contentContainer : undefined}>
+        <View
+          style={[
+            styles.internalInputContainer,
+            inlineLabel ? contentContainer : undefined,
+          ]}
+        >
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, padding, style]}
+            style={[styles.input, style]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -172,6 +179,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
+    paddingVertical: 0,
 
     fontSize: theme.typography.body__primary.fontSize,
   },
@@ -187,18 +195,18 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
+  },
+  internalInputContainer: {
+    justifyContent: 'center',
   },
   label: {
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
   },
-  inputContainer: {
-    position: 'relative',
-  },
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacing.medium,
   },
   clearButton: {
     alignSelf: 'center',

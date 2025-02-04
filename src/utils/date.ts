@@ -4,6 +4,7 @@ import {
   Locale,
   RoundingMethod,
   addHours,
+  addMinutes as fnsAddMinutes,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
@@ -22,12 +23,14 @@ import {
   parseISO,
   roundToNearestMinutes,
   set,
+  isValid,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
   formatInTimeZone,
   fromZonedTime,
   toZonedTime,
+  getTimezoneOffset,
 } from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
@@ -38,6 +41,7 @@ import {
   parse as parseIso8601Duration,
   toSeconds as toSecondsIso8601Duration,
 } from 'iso8601-duration';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 const CET = 'Europe/Oslo';
 /**
@@ -65,6 +69,8 @@ function format(
 }
 
 const humanizer = humanizeDuration.humanizer({});
+
+export const parseDate = (d: string) => parseISO(d);
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
@@ -115,7 +121,9 @@ export function secondsToDuration(
   opts?: humanizeDuration.Options,
 ): string {
   const currentLanguage = language === Language.English ? 'en' : 'no';
-  return humanizeDuration(seconds * 1000, {
+  const value = Math.max(seconds, 0);
+
+  return humanizeDuration(value * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
     language: currentLanguage,
@@ -342,7 +350,7 @@ export function formatToShortDateTimeWithRelativeDayNames(
 
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
-  return format(parsed, 'PP, p', {
+  return format(parsed, 'dd. MMM yyyy, HH:mm', {
     locale: languageToLocale(language),
   });
 }
@@ -510,6 +518,9 @@ export function differenceInMinutesStrings(
   return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }
 
+export const addMinutes = (date: string | Date, minutes: number): Date =>
+  fnsAddMinutes(parseIfNeeded(date), minutes);
+
 const languageToLocale = (language: Language): Locale => {
   switch (language) {
     case Language.Norwegian:
@@ -592,3 +603,31 @@ function getHumanizer(
 
   return humanizer(ms, opts);
 }
+
+export const isValidDateString = (dateString: string) => {
+  const parsedDate = parseISO(dateString);
+  return isValid(parsedDate);
+};
+
+/**
+ * Recursively transforms iso date strings fields to Date fields.
+ */
+export const convertIsoStringFieldsToDate = (value: any): any => {
+  if (!value) return value;
+  if (Array.isArray(value)) {
+    return value.map(convertIsoStringFieldsToDate);
+  } else if (typeof value === 'object') {
+    return Object.entries(value).reduce<any>((acc, [key, fieldValue]) => {
+      acc[key] = convertIsoStringFieldsToDate(fieldValue);
+      return acc;
+    }, {});
+  } else if (typeof value === 'string' && isValidDateString(value)) {
+    return parseISO(value);
+  }
+  return value;
+};
+
+export const getTimeZoneOffsetInMinutes = () => {
+  const offsetMs = getTimezoneOffset(CET, new Date());
+  return offsetMs / ONE_MINUTE_MS;
+};

@@ -10,24 +10,35 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
-import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {addPaymentMethod, RecurringPayment} from '@atb/ticketing';
+import {getExpireDate} from '@atb/stacks-hierarchy/utils';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {
+  addPaymentMethod,
+  humanizePaymentType,
+  RecurringPayment,
+} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
-import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
-import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
+import {
+  closeInAppBrowser,
+  openInAppBrowser,
+} from '@atb/in-app-browser/in-app-browser';
+import {useAuthContext} from '@atb/auth';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -46,29 +57,39 @@ export const Profile_PaymentMethodsScreen = () => {
   } = useDeleteRecurringPaymentMutation();
 
   const {
-    mutateAsync: authorizeRecurringPayment,
-    isError: authorizeRecurringPaymentError,
-  } = useAuthorizeRecurringPaymentMutation();
-
-  const {
     mutateAsync: cancelRecurringPayment,
     isError: cancelRecurringPaymentError,
   } = useCancelRecurringPaymentMutation();
 
+  const [awaitingRecurringPaymentId, setAwaitingRecurringPaymentId] =
+    useState<number>();
+
+  const callback = useCallback(async () => {
+    closeInAppBrowser();
+    await refetchRecurringPayment();
+  }, [refetchRecurringPayment]);
+
+  // In cases where the recurring payment appears in firestore before the
+  // callback is called, we can cancel the payment flow and reload the recurring
+  // payment list.
+  useOnRecurringPaymentReceived({
+    recurringPaymentId: awaitingRecurringPaymentId,
+    callback,
+  });
+
   const isError =
     recurringPaymentError ||
     deleteRecurringPaymentError ||
-    authorizeRecurringPaymentError ||
     cancelRecurringPaymentError;
 
-  const addPaymentMethodCallbackHandler = (url: string) => {
+  const addPaymentMethodCallbackHandler = async (url: string) => {
     if (url.includes('response_code') && url.includes('recurring_payment_id')) {
       const responseCode = queryString.parseUrl(url).query.response_code;
       const paymentId = Number(
         queryString.parseUrl(url).query.recurring_payment_id,
       );
       if (responseCode === 'OK') {
-        authorizeRecurringPayment(paymentId);
+        refetchRecurringPayment();
       } else if (responseCode === 'Cancel') {
         cancelRecurringPayment(paymentId);
       }
@@ -78,7 +99,8 @@ export const Profile_PaymentMethodsScreen = () => {
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
     const response = await addPaymentMethod(callbackUrl);
-    openInAppBrowser(
+    setAwaitingRecurringPaymentId(response.data.recurring_payment_id);
+    await openInAppBrowser(
       response.data.terminal_url,
       'cancel',
       callbackUrl,
@@ -148,9 +170,9 @@ const Card = (props: {
   removePaymentHandler: (card: RecurringPayment) => void;
 }) => {
   const {card, removePaymentHandler} = props;
-  const paymentName = getPaymentTypeName(card.payment_type);
+  const paymentName = humanizePaymentType(card.payment_type);
   const style = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const fontScale = useFontScale();
 
@@ -168,7 +190,7 @@ const Card = (props: {
         </View>
 
         <View style={style.cardIcons}>
-          <PaymentBrand icon={card.payment_type} />
+          <PaymentBrand paymentType={card.payment_type} />
           <PressableOpacity
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
@@ -194,15 +216,13 @@ const Card = (props: {
             <SvgDelete
               height={21 * fontScale}
               width={21 * fontScale}
-              fill={
-                theme.color.interactive.destructive.default.background
-              }
+              fill={theme.color.interactive.destructive.default.background}
             />
           </PressableOpacity>
         </View>
       </View>
 
-      <ThemeText color="secondary" type="body__secondary">
+      <ThemeText color="secondary" typography="body__secondary">
         {getExpireDate(card.expires_at)}
       </ThemeText>
     </View>
@@ -231,6 +251,53 @@ const GenericError = () => {
       />
     </View>
   );
+};
+
+export const useOnRecurringPaymentReceived = ({
+  recurringPaymentId,
+  callback,
+}: {
+  recurringPaymentId: number | undefined;
+  callback: () => void;
+}) => {
+  const {userId} = useAuthContext();
+
+  const mapRecurringPaymentIds = (
+    d: FirebaseFirestoreTypes.DocumentSnapshot,
+  ): number => {
+    const recurringPayment = d.data();
+    if (!recurringPayment) {
+      throw new Error('No recurring payment data');
+    }
+
+    return recurringPayment.id;
+  };
+
+  useEffect(() => {
+    if (!recurringPaymentId) return;
+
+    const recurringPaymentsUnsub = firestore()
+      .collection('customers')
+      .doc(userId)
+      .collection('recurringPayments')
+      .orderBy('created', 'desc')
+      .onSnapshot(
+        (snapshot) => {
+          const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
+          if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
+            callback();
+          }
+        },
+        (err) => {
+          Bugsnag.notify(err, function (event) {
+            event.addMetadata('payment', {userId});
+          });
+        },
+      );
+    return () => {
+      recurringPaymentsUnsub();
+    };
+  }, [userId, recurringPaymentId, callback]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({

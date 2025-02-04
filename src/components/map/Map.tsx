@@ -1,6 +1,6 @@
 import {
   getCurrentCoordinatesGlobal,
-  useGeolocationState,
+  useGeolocationContext,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
@@ -15,6 +15,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
+import {BonusProgramMapButton} from './components/bonus-program/BonusProgramMapButton';
 import {MapFilter} from './components/filter/MapFilter';
 
 import {useControlPositionsStyle} from './hooks/use-control-styles';
@@ -50,8 +51,8 @@ import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/mobility/SelectedFeatureIcon';
@@ -69,7 +70,7 @@ export const Map = (props: MapProps) => {
   const shouldShowMapVehiclesAndStations =
     props.selectionMode === 'ExploreEntities'; // should probably split map components instead
 
-  const {getCurrentCoordinates} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
@@ -97,8 +98,8 @@ export const Map = (props: MapProps) => {
     mapCameraRef,
     startingCoordinates,
   );
-  //console.log('selectedFeature', JSON.stringify(selectedFeature));
-  const {bottomSheetCurrentlyAutoSelected} = useMapState();
+
+  const {bottomSheetCurrentlyAutoSelected} = useMapContext();
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -110,8 +111,11 @@ export const Map = (props: MapProps) => {
     selectedFeature?.properties,
   ).success;
 
-  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureToggles();
+  const {
+    isBonusProgramEnabled,
+    isGeofencingZonesEnabled,
+    isShmoDeepIntegrationEnabled,
+  } = useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -321,7 +325,25 @@ export const Map = (props: MapProps) => {
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
         </MapboxGL.MapView>
-        <View style={controlStyles.controlsContainer}>
+        {isBonusProgramEnabled && props.selectionMode === 'ExploreEntities' && (
+          <View
+            style={[
+              controlStyles.mapButtonsContainer,
+              controlStyles.mapButtonsContainerLeft,
+            ]}
+          >
+            <BonusProgramMapButton
+              onPress={() => onMapClick({source: 'bonus-program-button'})}
+            />
+          </View>
+        )}
+
+        <View
+          style={[
+            controlStyles.mapButtonsContainer,
+            controlStyles.mapButtonsContainerRight,
+          ]}
+        >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
 
           {shouldShowMapFilter && (
@@ -339,9 +361,10 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled && (
-          <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-        )}
+        {isShmoDeepIntegrationEnabled &&
+          props.selectionMode === 'ExploreEntities' && (
+            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
+          )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

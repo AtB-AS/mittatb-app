@@ -22,14 +22,7 @@ const DepartureDetailsTexts = {
       `Passed ${stopPlaceName} at ${time}`,
       `Passerte ${stopPlaceName} kl. ${time}`,
     ),
-  noPassedStop: (stopPlaceName: string, time: string) =>
-    _(
-      `Kjører fra ${stopPlaceName} kl. ${time}`,
-      `Departs from ${stopPlaceName} at ${time}`,
-      `Køyrer frå ${stopPlaceName} kl. ${time}`,
-    ),
-  onTime: _(`I rute`, `On time`, `I rute`),
-  notOnTime: _(`Etter rutetid`, `Behind scheduled time`, `Etter rutetid`),
+
   live: (transportMode: string) =>
     _(
       `Følg ${transportMode.toLowerCase()}`,

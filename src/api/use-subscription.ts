@@ -22,7 +22,7 @@ export function useSubscription({
   useEffect(() => {
     if (!url || !enabled) return;
 
-    let retryTimeout: number | null = null;
+    let retryTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
       const ws = new WebSocket(url);
 
@@ -90,7 +90,7 @@ export function useSubscription({
 const retryWithCappedBackoff = (
   retryCount: MutableRefObject<number>,
   retry: () => void,
-): number => {
+): NodeJS.Timeout => {
   const delay = Math.min(
     Math.pow(2, retryCount.current) * 1000,
     RETRY_INTERVAL_CAP_IN_SECONDS * 1000,

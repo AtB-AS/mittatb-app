@@ -4,34 +4,31 @@ import {
 } from '@react-navigation/material-top-tabs';
 import {TicketTabNav_PurchaseTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/TicketTabNav_PurchaseTabScreen';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {TicketTabNav_ActiveFareProductsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_ActiveFareProductsTabScreen';
+import {TicketTabNav_AvailableFareContractsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_AvailableFareContractsTabScreen';
 import React from 'react';
 import {TicketTabNavStackParams} from './navigation-types';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingState,
-} from '@atb/ticketing';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useFareContracts} from '@atb/ticketing';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContextState} from '@atb/time';
+import {useTimeContext} from '@atb/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
 export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
-  const {fareContracts} = useTicketingState();
-  const {serverNow} = useTimeContextState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
+  const {serverNow} = useTimeContext();
+  const {fareContracts: availableFareContracts} = useFareContracts(
+    {availability: 'available'},
     serverNow,
   );
-  const initialRoute: keyof TicketTabNavStackParams = activeFareContracts.length
-    ? 'TicketTabNav_ActiveFareProductsTabScreen'
-    : 'TicketTabNav_PurchaseTabScreen';
+  const initialRoute: keyof TicketTabNavStackParams =
+    availableFareContracts.length
+      ? 'TicketTabNav_AvailableFareContractsTabScreen'
+      : 'TicketTabNav_PurchaseTabScreen';
 
   return (
     <TopTabNav.Navigator
@@ -49,11 +46,11 @@ export const Ticketing_TicketTabNavStack = () => {
         }}
       />
       <TopTabNav.Screen
-        name="TicketTabNav_ActiveFareProductsTabScreen"
-        component={TicketTabNav_ActiveFareProductsTabScreen}
+        name="TicketTabNav_AvailableFareContractsTabScreen"
+        component={TicketTabNav_AvailableFareContractsTabScreen}
         options={{
           tabBarLabel: t(
-            TicketingTexts.activeFareProductsAndReservationsTab.label,
+            TicketingTexts.availableFareProductsAndReservationsTab.label,
           ),
           tabBarTestID: 'activeTicketsTab',
         }}
@@ -68,7 +65,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
   navigation,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={styles.container}>
       {state.routes.map((route: Route<string>, index: number) => {
@@ -101,7 +98,9 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
           });
         };
 
-        const tabColor = isFocused ? theme.color.background.neutral[1] : theme.color.background.accent[0];
+        const tabColor = isFocused
+          ? theme.color.background.neutral[1]
+          : theme.color.background.accent[0];
         return (
           <PressableOpacity
             key={index}
@@ -118,7 +117,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             ]}
           >
             <ThemeText
-              type={isFocused ? 'body__primary--bold' : 'body__primary'}
+              typography={isFocused ? 'body__primary--bold' : 'body__primary'}
               color={tabColor}
               testID={options.tabBarTestID}
             >

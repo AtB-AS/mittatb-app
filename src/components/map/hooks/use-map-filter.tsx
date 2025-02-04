@@ -1,6 +1,6 @@
 import {MapFilter, MapFilterType} from '../types';
 import {storage} from '@atb/storage';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useCallback} from 'react';
 
 const STORAGE_KEY = '@ATB_user_map_filters';
@@ -10,7 +10,7 @@ const fallback: MapFilterType = {
 };
 
 export const useUserMapFilters = () => {
-  const {default_map_filter} = useRemoteConfig();
+  const {default_map_filter} = useRemoteConfigContext();
   const getMapFilter = useCallback(
     () =>
       storage

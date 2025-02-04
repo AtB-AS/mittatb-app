@@ -9,11 +9,9 @@ export const carnetFareContract = {
   version: '1',
   qrCode:
     'ChYKFBISGhBioVl1qEVO/6iNfWGTutfhEkYKPzA9AhxHUC0xlHwngf3rC7SJnzaH1wme48tOIjRWjS8mAh0AxfqUUU6iO6eA8JnbSxKtZCD3nFJQSRuqJqMx1RoBTjAB',
-  minimumSecurityLevel: -200,
   customerAccountId: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   orderId: 'E69J9NJH',
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
   travelRights: [carnetTravelRight],
-  paymentTypeGroup: ['PAYMENTCARD'],
   totalTaxAmount: '46.07',
 };

@@ -1,9 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeIconProps} from './ThemeIcon';
-import {
-  ContrastColor,
-} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type NotificationIndicatorProps = {
@@ -70,7 +68,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     right: 0,
     top: 0,
-    borderRadius: theme.border.radius.circle,
+    borderRadius: theme.border.radius.large,
     zIndex: 10,
     overflow: 'hidden',
   },

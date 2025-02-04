@@ -13,9 +13,10 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
+import {getColorByOption} from '../utils';
 
-type BorderedInfoBoxMetaProps = BorderedInfoBoxProps & ThemedStoryProps;
+type BorderedInfoBoxMetaProps = ThemedStoryProps<BorderedInfoBoxProps>;
 
 const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
   title: 'BorderedInfoBox',
@@ -27,42 +28,60 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (Story, {args}) => (
-      <View
-        style={{
-          justifyContent: 'center',
-          padding: 12,
-          flex: 1,
-          gap: 12,
-        }}
-      >
-        <Story args={{...args, type: 'small', text: 'Small box'}} />
-        <Story args={{...args, type: 'large', text: 'This is a large box'}} />
-        <Story
-          args={{
-            ...args,
-            type: 'large',
-            children: (
-              <View style={{flexDirection: 'row'}}>
-                <ThemeIcon
-                  svg={Info}
-                  style={{marginRight: 4}}
-                  color={args.backgroundColor}
-                />
-                <ThemeText
-                  type="body__tertiary"
-                  color={args.backgroundColor}
-                  style={{flex: 1}}
-                >
-                  This is a large box with custom child component. Can have
-                  icons, line breaks, and such.
-                </ThemeText>
-              </View>
-            ),
+    (Story, {args}) => {
+      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            padding: 12,
+            flex: 1,
+            gap: 12,
           }}
-        />
-      </View>
-    ),
+        >
+          <Story
+            args={{
+              ...args,
+              type: 'small',
+              text: 'Small box',
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              type: 'large',
+              text: 'This is a large box',
+              backgroundColor: storyContrastColor,
+            }}
+          />
+          <Story
+            args={{
+              ...args,
+              type: 'large',
+              backgroundColor: storyContrastColor,
+              children: (
+                <View style={{flexDirection: 'row'}}>
+                  <ThemeIcon
+                    svg={Info}
+                    style={{marginRight: 4}}
+                    color={storyContrastColor}
+                  />
+                  <ThemeText
+                    typography="body__tertiary"
+                    color={storyContrastColor}
+                    style={{flex: 1}}
+                  >
+                    This is a large box with custom child component. Can have
+                    icons, line breaks, and such.
+                  </ThemeText>
+                </View>
+              ),
+            }}
+          />
+        </View>
+      );
+    },
     ThemedStoryDecorator,
   ],
 };

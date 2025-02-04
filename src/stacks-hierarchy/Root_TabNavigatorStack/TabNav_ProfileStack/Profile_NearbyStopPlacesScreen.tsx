@@ -1,5 +1,5 @@
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
 import {
@@ -32,12 +32,15 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
           initialLocation: location,
         })
       }
-      onSelectStopPlace={useCallback((place: StopPlace) => {
-        navigation.navigate('Profile_PlaceScreen', {
-          place,
-          mode: route.params.mode,
-        });
-      }, [navigation, route.params.mode])}
+      onSelectStopPlace={useCallback(
+        (place: StopPlace) => {
+          navigation.navigate('Profile_PlaceScreen', {
+            place,
+            mode: route.params.mode,
+          });
+        },
+        [navigation, route.params.mode],
+      )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
     />

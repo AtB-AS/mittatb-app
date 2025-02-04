@@ -7,7 +7,7 @@ import {
 } from '@atb/components/sections';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   CancelledDepartureTexts,
   DeparturesTexts,
@@ -44,7 +44,7 @@ import {
   toMostCriticalStatus,
 } from '@atb/situations/utils';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {Mode, Statuses} from '@atb-as/theme';
+import type {Mode, Statuses} from '@atb/theme';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -75,7 +75,7 @@ export function LineItem({
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
     date: dep.aimedTime,
-    fromQuayId: group.lineInfo?.quayId,
+    fromStopPosition: dep.stopPositionInPattern,
     serviceDate: dep.serviceDate,
     isTripCancelled: dep.cancellation,
   }));
@@ -84,7 +84,10 @@ export function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View style={[topContainer, {padding: 0}]} testID={testID}>
+    <View
+      style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}
+      testID={testID}
+    >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <PressableOpacity
           style={[contentContainer, styles.lineHeader]}
@@ -231,7 +234,7 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   const rightIcon = getSvgForDeparture(departure, themeName);
   const leftIcon =
@@ -254,7 +257,7 @@ function DepartureTimeItem({
       {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
 
       <ThemeText
-        type="body__primary--bold"
+        typography="body__primary--bold"
         style={[
           styles.departureText,
           departure.cancellation && styles.strikethrough,

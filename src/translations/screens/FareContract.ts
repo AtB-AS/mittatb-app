@@ -15,11 +15,7 @@ const FareContractTexts = {
   },
   validityHeader: {
     valid: (duration: string) =>
-      _(
-        `Gyldig i ${duration}`,
-        `Valid through ${duration}`,
-        `Gyldig i ${duration}`,
-      ),
+      _(`${duration} igjen`, `${duration} left`, `${duration} igjen`),
     recentlyExpired: (duration: string) =>
       _(
         `Utløpt for ${duration} siden`,
@@ -154,24 +150,32 @@ const FareContractTexts = {
       },
     },
     harbors: {
-      directions: (from: string, to: string) =>
-        _(
-          `Fra ${from}, til ${to}`,
-          `From ${from}, to ${to}`,
-          `Frå ${from}, til ${to}`,
-        ),
       error: _(
         'Kunne ikke laste kaier.',
         'Could not load harbors.',
         'Kunne ikkje laste kaier.',
       ),
     },
+    fromTo: (from: string, to: string, isTwoWay: boolean) =>
+      isTwoWay
+        ? _(
+            `Mellom ${from} og ${to}, i begge retninger`,
+            `Between ${from} and ${to}, in both directions`,
+            `Mellom ${from} og ${to}, i begge retningar`,
+          )
+        : _(
+            `Fra ${from}, til ${to},`,
+            `From ${from}, to ${to}`,
+            `Frå ${from}, til ${to}`,
+          ),
+    validIn: (zone: string) =>
+      _(`Gyldig i ${zone}`, `Valid in ${zone}`, `Gyldig i ${zone}`),
     infoButtonA11yHint: _(
       'Aktivér for å gå til billettinformasjon',
       'Activate to go to ticket information',
       'Aktivér for å gå til billetinformasjon',
     ),
-    usedAccesses: _("Brukte klipp", "Used tickets", "Brukte klipp")
+    usedAccesses: _('Brukte klipp', 'Used tickets', 'Brukte klipp'),
   },
   activateNow: {
     startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
@@ -257,9 +261,9 @@ const FareContractTexts = {
   },
   fareContractInfo: {
     noInspectionIcon: _(
-      'Ugyldig\ni kontroll',
-      'Invalid in\ninspection',
-      'Ugyldig\ni kontroll',
+      'Ikke bruk i\nkontroll',
+      'Do not use in\ninspection',
+      'Ikkje bruk i\nkontroll',
     ),
     noInspectionIconA11yLabel: _(
       'Ugyldig i kontroll',
@@ -270,6 +274,11 @@ const FareContractTexts = {
   label: {
     travellers: _('Reisende', 'Travellers', 'Reisande'),
     zone: _('Sone', 'Zone', 'Sone'),
+    transportModes: _(
+      'Transportmiddel',
+      'Transportmiddel',
+      'Means of transport',
+    ),
     includedBenefits: _(
       'Inkludert i billetten',
       'Included in the ticket',

@@ -4,6 +4,7 @@ export type AnalyticsEventContext =
   | 'Departure details'
   | 'Favorites'
   | 'Flexible transport'
+  | 'Journey aid'
   | 'Loading boundary'
   | 'Location search'
   | 'Map'

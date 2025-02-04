@@ -6,17 +6,17 @@ import {Linking} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 
 export const ServiceDisruptionSheet = () => {
   const {t} = useTranslation();
-  const {service_disruption_url} = useRemoteConfig();
+  const {service_disruption_url} = useRemoteConfigContext();
   const hasValidServiceDisruptionUrl = !!service_disruption_url;
   const style = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
   return (
     <BottomSheetContainer
@@ -37,6 +37,7 @@ export const ServiceDisruptionSheet = () => {
               <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
             </Section>
             <Button
+              expanded={true}
               mode="secondary"
               text={t(ServiceDisruptionsTexts.button.text)}
               accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}

@@ -4,9 +4,9 @@ import {
   isNavigationIcon,
   NavigationIconTypes,
 } from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
-import React from 'react';
+import React, {RefObject} from 'react';
 import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -25,6 +25,7 @@ export type ButtonSectionItemProps = SectionItemProps<{
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
   testID?: string;
+  focusRef?: RefObject<any>;
 }> &
   AccessibilityProps;
 
@@ -35,6 +36,7 @@ export function ButtonSectionItem({
   placeholder,
   label,
   highlighted,
+  focusRef,
 
   icon,
   onIconPress,
@@ -45,12 +47,13 @@ export function ButtonSectionItem({
   ...props
 }: ButtonSectionItemProps) {
   const sectionStyles = useSectionStyle();
-  const {topContainer, contentContainer, spacing} = useSectionItem(props);
+  const {theme} = useThemeContext();
+  const {topContainer, contentContainer} = useSectionItem(props);
   const styles = useSymbolPickerStyle();
   const hasIcon = Boolean(icon);
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
 
-  const padding = {padding: spacing};
+  const padding = {padding: theme.spacing.medium};
 
   const handlerWithoutPress =
     hasIcon && !onIconPress ? (
@@ -73,7 +76,9 @@ export function ButtonSectionItem({
     isStringText(value) || !value ? (
       <ThemeText
         numberOfLines={1}
-        type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
+        typography={
+          value && highlighted ? 'body__primary--bold' : 'body__primary'
+        }
         style={!value && styles.faded}
       >
         {value ?? placeholder}
@@ -89,10 +94,11 @@ export function ButtonSectionItem({
       <PressableOpacity
         onPress={onPress}
         style={[topContainer, styles.container, containerPadding]}
+        ref={focusRef}
         {...props}
       >
         <View style={sectionStyles.spaceBetween}>
-          <ThemeText type="body__secondary" style={styles.label}>
+          <ThemeText typography="body__secondary" style={styles.label}>
             {label}
           </ThemeText>
           {inlineValue && (

@@ -1,4 +1,7 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 export type DeparturesQuery = {
   quays: Array<{
@@ -13,6 +16,7 @@ export type DeparturesQuery = {
       realtime: boolean;
       predictionInaccurate: boolean;
       cancellation: boolean;
+      stopPositionInPattern: number;
       quay: {id: string};
       destinationDisplay?: {frontText?: string; via?: Array<string>};
       serviceJourney: {
@@ -25,46 +29,15 @@ export type DeparturesQuery = {
           publicCode?: string;
           transportMode?: Types.TransportMode;
           transportSubmode?: Types.TransportSubmode;
-          notices: Array<{id: string; text?: string}>;
+          notices: Array<NoticeFragment>;
         };
-        journeyPattern?: {notices: Array<{id: string; text?: string}>};
-        notices: Array<{id: string; text?: string}>;
+        journeyPattern?: {notices: Array<NoticeFragment>};
+        notices: Array<NoticeFragment>;
       };
-      situations: Array<{
-        id: string;
-        situationNumber?: string;
-        reportType?: Types.ReportType;
-        summary: Array<{language?: string; value: string}>;
-        description: Array<{language?: string; value: string}>;
-        advice: Array<{language?: string; value: string}>;
-        infoLinks?: Array<{uri: string; label?: string}>;
-        validityPeriod?: {startTime?: any; endTime?: any};
-      }>;
-      notices: Array<{id: string; text?: string}>;
-      bookingArrangements?: {
-        bookingMethods?: Array<Types.BookingMethod>;
-        latestBookingTime?: any;
-        bookingNote?: string;
-        bookWhen?: Types.PurchaseWhen;
-        minimumBookingPeriod?: string;
-        bookingContact?: {
-          contactPerson?: string;
-          email?: string;
-          url?: string;
-          phone?: string;
-          furtherDetails?: string;
-        };
-      };
+      situations: Array<SituationFragment>;
+      notices: Array<NoticeFragment>;
+      bookingArrangements?: BookingArrangementFragment;
     }>;
-    situations: Array<{
-      id: string;
-      situationNumber?: string;
-      reportType?: Types.ReportType;
-      summary: Array<{language?: string; value: string}>;
-      description: Array<{language?: string; value: string}>;
-      advice: Array<{language?: string; value: string}>;
-      infoLinks?: Array<{uri: string; label?: string}>;
-      validityPeriod?: {startTime?: any; endTime?: any};
-    }>;
+    situations: Array<SituationFragment>;
   }>;
 };

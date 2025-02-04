@@ -7,7 +7,7 @@ import Ticketing, {
 } from '@atb/translations/screens/Ticketing';
 import {ProfileScreenProps} from './navigation-types';
 import {StyleSheet} from '@atb/theme';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = ProfileScreenProps<'Profile_TicketHistorySelectionScreen'>;
 
@@ -15,7 +15,7 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {isOnBehalfOfEnabled} = useFeatureToggles();
+  const {isOnBehalfOfEnabled} = useFeatureTogglesContext();
 
   return (
     <FullScreenView
@@ -29,14 +29,14 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
     >
       <Section style={styles.content}>
         <LinkSectionItem
-          text={t(TicketHistoryModeTexts.expired.title)}
+          text={t(TicketHistoryModeTexts.historical.title)}
           accessibility={{
-            accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
+            accessibilityHint: t(TicketHistoryModeTexts.historical.titleA11y),
           }}
-          testID="expiredTicketsButton"
+          testID="historicTicketsButton"
           onPress={() =>
             navigation.navigate('Profile_TicketHistoryScreen', {
-              mode: 'expired',
+              mode: 'historical',
             })
           }
         />

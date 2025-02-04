@@ -1,12 +1,12 @@
 import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
-import {useAnnouncementsState} from '@atb/announcements';
+import {useAnnouncementsContext} from '@atb/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/onboarding';
@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const Announcements = ({style}: Props) => {
-  const {findAnnouncements} = useAnnouncementsState();
+  const {findAnnouncements} = useAnnouncementsContext();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const now = useNow(10000);
-  const {isConsentGranted} = useBeaconsState();
+  const {isConsentGranted} = useBeaconsContext();
 
   const shareTravelHabitsIsOnboarded =
     useOnboardingSectionIsOnboarded('shareTravelHabits');

@@ -52,6 +52,7 @@ class TravelSearchOverviewPage {
     await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
     await this.firstTripResult.click();
     await ElementHelper.waitForElement('id', `tripDetailsContentView`);
+    await ElementHelper.waitForElement('id', `legContainer0`);
   }
 
   /**
@@ -60,6 +61,14 @@ class TravelSearchOverviewPage {
   async waitForTravelSearchResults() {
     await ElementHelper.waitForElement('id', `tripSearchContentView`, 20000);
     await ElementHelper.waitForElement('id', `tripSearchSearchResult0`, 20000);
+  }
+
+  /**
+   * Check if there are any travel search results
+   */
+  async hasTravelSearchResults() {
+    await ElementHelper.waitForElement('id', `tripSearchContentView`, 20000);
+    return ElementHelper.isElementExisting('tripSearchSearchResult0', 20);
   }
 
   /**

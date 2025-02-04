@@ -3,12 +3,12 @@ import {
   StoredLocationFavorite,
   UserFavorites,
 } from '@atb/favorites';
-import {useSearchHistory} from '@atb/search-history';
+import {useSearchHistoryContext} from '@atb/search-history';
 import {LocationSearchResultType} from './types';
 import {getLocationLayer} from '@atb/utils/location';
 
 export function useFilteredJourneySearch(searchText?: string) {
-  const {journeyHistory} = useSearchHistory();
+  const {journeyHistory} = useSearchHistoryContext();
 
   if (!searchText) {
     return journeyHistory;

@@ -7,6 +7,7 @@ import {
   FareProductGroup,
   FareProductGroupType,
   OperatorBenefitId,
+  ScooterFaq,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -15,6 +16,8 @@ import {isDefined} from '@atb/utils/presence';
 import {
   FlexibleTransportOption,
   NotificationConfig,
+  StopSignalButtonConfig,
+  type StopSignalButtonConfigType,
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
@@ -139,6 +142,20 @@ export function mapToMobilityOperators(operators?: any) {
     .filter(isDefined);
 }
 
+export function mapToScooterFaqs(scooterFaqs?: any) {
+  if (!scooterFaqs) return;
+  if (!Array.isArray(scooterFaqs)) return;
+  return scooterFaqs
+    .map((scooterFaq) => {
+      const parseResult = ScooterFaq.safeParse(scooterFaq);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
 export function mapToBenefitIdsRequiringValueCode(
   benefitIdsRequiringValueCode?: any,
 ) {
@@ -180,3 +197,12 @@ export function mapToNotificationConfig(config?: any) {
   }
   return parseResult.data;
 }
+
+export const mapToStopSignalButtonConfig = (
+  config?: any,
+): StopSignalButtonConfigType => {
+  const parseResult = StopSignalButtonConfig.safeParse(config);
+  return parseResult.success
+    ? parseResult.data
+    : StopSignalButtonConfig.parse({});
+};

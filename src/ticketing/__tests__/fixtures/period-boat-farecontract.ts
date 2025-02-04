@@ -9,11 +9,9 @@ export const periodBoatFareContract = {
   version: '1',
   qrCode:
     'ChYKFBISGhANvqDoNVlNJqZxxTQcXpuiEkYKPzA9Ah0A1jaI46tFV5bNuVmhphKdGY+QestjJ9q52HG/4QIcT0/0ykhobiOB+zXaewI7Wf3sGHOxgcv2LZ3NIxoBTjAB',
-  minimumSecurityLevel: -200,
   customerAccountId: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   orderId: '8MTTWRI4',
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
   travelRights: [periodBoatTravelRight],
-  paymentTypeGroup: ['PAYMENTCARD'],
   totalTaxAmount: '895.82',
 };

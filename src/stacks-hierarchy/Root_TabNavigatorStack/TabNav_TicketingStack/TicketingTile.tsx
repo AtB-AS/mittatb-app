@@ -1,12 +1,10 @@
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {
-  TransportColor,
-} from '@atb/theme/colors';
+import {TransportColor} from '@atb/theme/colors';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -25,18 +23,20 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  transportColor: TransportColor['city'];
+  transportColor: TransportColor;
   title?: string;
   description?: string;
   accessibilityLabel?: string;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const themeColor = accented ? theme.color.background.accent[3] : theme.color.background.neutral[0];
+  const themeColor = accented
+    ? theme.color.background.accent[3]
+    : theme.color.background.neutral[0];
   const themePrimaryColor = transportColor.primary;
-  const themeSecondaryColor = transportColor.secondary
+  const themeSecondaryColor = transportColor.secondary;
 
   return (
     <PressableOpacity
@@ -55,7 +55,7 @@ export const TicketingTile = ({
       <View style={styles.spreadContent} testID={testID}>
         <View style={styles.contentContainer}>
           <ThemeText
-            type="body__secondary--bold"
+            typography="body__secondary--bold"
             style={styles.title}
             accessibilityLabel={title}
             color={themeColor}
@@ -64,7 +64,7 @@ export const TicketingTile = ({
             {title}
           </ThemeText>
           <ThemeText
-            type="body__tertiary"
+            typography="body__tertiary"
             style={styles.description}
             color="secondary"
           >

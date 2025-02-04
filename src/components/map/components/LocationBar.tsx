@@ -8,7 +8,7 @@ import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -16,7 +16,7 @@ import {
 } from '@atb/translations';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
@@ -31,12 +31,12 @@ type Props = {
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0]
-const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation} = useGeolocationContext();
   const {closestLocation, isSearching, error} = useReverseGeocoder(
     coordinates || null,
   );
@@ -88,11 +88,14 @@ const Icon: React.FC<{
   location?: Location;
   hasError: boolean;
 }> = ({isSearching, location, hasError}) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return (
     <View style={{marginHorizontal: 12}}>
       {isSearching ? (
-        <ActivityIndicator animating={true} color={getBackgroundColor(theme).foreground.primary} />
+        <ActivityIndicator
+          animating={true}
+          color={getBackgroundColor(theme).foreground.primary}
+        />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (
@@ -112,8 +115,10 @@ const LocationText: React.FC<{
   const {title, subtitle} = getLocationText(t, location, error);
   return (
     <>
-      <ThemeText type="body__secondary">{title}</ThemeText>
-      {subtitle && <ThemeText type="body__tertiary">{subtitle}</ThemeText>}
+      <ThemeText typography="body__secondary">{title}</ThemeText>
+      {subtitle && (
+        <ThemeText typography="body__tertiary">{subtitle}</ThemeText>
+      )}
     </>
   );
 };

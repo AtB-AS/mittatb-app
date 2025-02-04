@@ -1,4 +1,4 @@
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {SvgCssUri} from 'react-native-svg/css';
@@ -17,7 +17,7 @@ export const BrandingImage = ({
   style,
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
-  const {enable_vehicle_operator_logo} = useRemoteConfig();
+  const {enable_vehicle_operator_logo} = useRemoteConfigContext();
   const isSvg = (url: string) => url.endsWith('.svg');
 
   return (

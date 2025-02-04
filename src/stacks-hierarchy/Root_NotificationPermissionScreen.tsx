@@ -8,14 +8,14 @@ import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
-import {useNotifications} from '@atb/notifications';
+import {useNotificationsContext} from '@atb/notifications';
 
 export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 
-  const {requestPermissions} = useNotifications();
+  const {requestPermissions} = useNotificationsContext();
   const buttonOnPress = useCallback(async () => {
     await requestPermissions();
     continueFromOnboardingSection('notificationPermission');

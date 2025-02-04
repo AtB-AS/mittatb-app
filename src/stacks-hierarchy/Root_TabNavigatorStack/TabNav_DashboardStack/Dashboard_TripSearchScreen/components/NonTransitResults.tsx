@@ -7,7 +7,7 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
@@ -25,7 +25,7 @@ type Props = {
 
 export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
 
@@ -46,6 +46,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
         const analyticsMetadata = {mode, duration: durationShort};
         return (
           <Button
+            expanded={false}
             onPress={() => onDetailsPressed(tripPattern, {analyticsMetadata})}
             style={style.tripMode}
             key={modeText}

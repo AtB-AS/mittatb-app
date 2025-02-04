@@ -1,21 +1,29 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 export function useControlPositionsStyle(extraPaddingBottom = false) {
   const {top, bottom} = useSafeAreaInsets();
-  const {theme} = useTheme();
-  const {height: bottomSheetHeight} = useBottomSheet();
+  const {theme} = useThemeContext();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
   const {minHeight} = useBottomNavigationStyles();
 
   const bottomPaddingIfBottomSheetIsOpen = bottomSheetHeight
     ? bottomSheetHeight - minHeight
     : 0;
 
-  return useMemo<{[key: string]: ViewStyle}>(
+  return useMemo<{
+    [key in
+      | 'backArrowContainer'
+      | 'positionArrowContainer'
+      | 'mapButtonsContainer'
+      | 'mapButtonsContainerLeft'
+      | 'mapButtonsContainerRight'
+      | 'locationContainer']: ViewStyle;
+  }>(
     () => ({
       backArrowContainer: {
         position: 'absolute',
@@ -27,12 +35,20 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
         top: top + theme.spacing.medium,
         right: theme.spacing.medium,
       },
-      controlsContainer: {
+
+      mapButtonsContainer: {
         position: 'absolute',
         bottom:
           (extraPaddingBottom ? bottom : 0) +
           bottomPaddingIfBottomSheetIsOpen +
           theme.spacing.medium,
+      },
+
+      mapButtonsContainerLeft: {
+        left: theme.spacing.medium,
+      },
+
+      mapButtonsContainerRight: {
         right: theme.spacing.medium,
       },
       locationContainer: {

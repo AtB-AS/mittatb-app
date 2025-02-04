@@ -3,7 +3,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -68,12 +68,14 @@ export const ParkAndRideBottomSheet = ({
       <ScrollView>
         <View style={styles.buttonsContainer}>
           <Button
+            expanded={true}
             text={t(DeparturesDialogSheetTexts.travelFrom.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
             mode="primary"
             style={styles.travelButton}
           />
           <Button
+            expanded={true}
             text={t(DeparturesDialogSheetTexts.travelTo.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
             mode="primary"
@@ -84,7 +86,7 @@ export const ParkAndRideBottomSheet = ({
           <Section>
             <GenericSectionItem>
               <View style={styles.parkingName}>
-                <ThemeText type="body__secondary" color="secondary">
+                <ThemeText typography="body__secondary" color="secondary">
                   {heading}
                 </ThemeText>
                 <WalkingDistance distance={distance} />

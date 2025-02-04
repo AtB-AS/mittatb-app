@@ -1,6 +1,6 @@
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {
   dictionary,
@@ -15,7 +15,7 @@ import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SituationType} from './types';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
@@ -34,16 +34,16 @@ export const SituationBottomSheet = forwardRef<View, Props>(
   ({situation}, focusRef) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
     const interactiveColor = theme.color.interactive[0];
-  
+
     const summary = getTextForLanguage(situation.summary, language);
     const description = getTextForLanguage(situation.description, language);
     const advice = getTextForLanguage(situation.advice, language);
     const infoLinks = filterInfoLinks(situation.infoLinks);
     const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
     const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
-    const {close} = useBottomSheet();
+    const {close} = useBottomSheetContext();
 
     return (
       <BottomSheetContainer
@@ -66,7 +66,10 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                       situation={situation}
                       style={styles.summaryIcon}
                     />
-                    <ThemeText type="heading__title" style={styles.summaryText}>
+                    <ThemeText
+                      typography="heading__title"
+                      style={styles.summaryText}
+                    >
                       {summary || description}
                     </ThemeText>
                   </View>
@@ -94,7 +97,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                       style={styles.validityIcon}
                     />
                     <ThemeText
-                      type="body__secondary"
+                      typography="body__secondary"
                       color="secondary"
                       style={styles.validityText}
                     >
@@ -108,6 +111,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
         </ScrollView>
         <FullScreenFooter>
           <Button
+            expanded={true}
             style={styles.button}
             onPress={close}
             interactiveColor={interactiveColor}
@@ -175,7 +179,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       accessibilityRole="link"
       style={styles.infoLink}
     >
-      <ThemeText type="body__primary--underline" color="secondary">
+      <ThemeText typography="body__primary--underline" color="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
     </PressableOpacity>

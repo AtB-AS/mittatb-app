@@ -9,18 +9,18 @@ import React, {
 import {PostHog, PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
-  const {userId, authenticationType} = useAuthState();
+  const {userId, authenticationType} = useAuthContext();
   const appStatus = useAppStateStatus();
-  const {isPosthogEnabled} = useFeatureToggles();
+  const {isPosthogEnabled} = useFeatureTogglesContext();
 
   const authTypeRef = useRef(authenticationType);
   useEffect(() => {
@@ -63,7 +63,7 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
   );
 };
 
-export const useAnalytics = () => {
+export const useAnalyticsContext = () => {
   const postHog = useContext(AnalyticsContext);
   return useMemo(
     () => ({

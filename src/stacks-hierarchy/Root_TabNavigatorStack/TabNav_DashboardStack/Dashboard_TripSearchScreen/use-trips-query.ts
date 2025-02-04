@@ -4,17 +4,16 @@ import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites';
-import {DateString, SearchTime} from '@atb/journey-date-picker';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useSearchHistory} from '@atb/search-history';
-import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useSearchHistoryContext} from '@atb/search-history';
+import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
@@ -22,14 +21,14 @@ import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 export function useTripsQuery(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-  searchTime: SearchTime = {
+  searchTime: TripSearchTime = {
     option: 'now',
     date: new Date().toISOString(),
   },
   filtersSelection: TravelSearchFiltersSelectionType | undefined,
 ): {
   tripPatterns: TripPatternWithKey[];
-  timeOfLastSearch: DateString;
+  timeOfLastSearch: string;
   loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;
@@ -44,14 +43,14 @@ export function useTripsQuery(
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
-  const {addJourneySearchEntry} = useSearchHistory();
-  const analytics = useAnalytics();
+  const {addJourneySearchEntry} = useSearchHistoryContext();
+  const analytics = useAnalyticsContext();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
     tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
     tripsSearch_target_number_of_page_hits: config_target_page_hits,
-  } = useRemoteConfig();
+  } = useRemoteConfigContext();
 
   const clearTrips = useCallback(() => {
     setTripPatterns([]);

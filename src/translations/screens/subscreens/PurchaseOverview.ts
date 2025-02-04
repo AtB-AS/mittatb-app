@@ -18,12 +18,19 @@ const PurchaseOverviewTexts = {
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
       'Oops - vi klarte ikkje å finne prisinformasjonen. Prøv igjen 🤞',
     ),
-    productUnavailable: (productName: string) =>
-      _(
-        `${productName} er ikke tilgjengelig akkurat nå.`,
-        `${productName} is not available right now.`,
-        `${productName} er ikkje tilgjengeleg nett no.`,
+    productUnavailable: {
+      title: (productName: string) =>
+        _(
+          `${productName} er ikke gyldig på dette tidspunktet`,
+          `${productName} is not valid at this time`,
+          `${productName} er ikkje gyldig på dette tidspunktet`,
+        ),
+      message: _(
+        `Du må velge en annen billett fra billettoversikten.`,
+        `You need to choose a different ticket from the ticket overview.`,
+        `Du må velje ein annan billett frå billettoversikta.`,
       ),
+    },
   },
   travellers: {
     prefix: _('Nåværende valg: ', 'Current selection: ', 'Noverande val: '),
@@ -187,16 +194,19 @@ const PurchaseOverviewTexts = {
       'Vel starttidspunkt',
     ),
     now: _('Oppstart nå', 'Start now', 'Start no'),
-    later: _('Oppstart senere', 'Start later', 'Oppstart seinare'),
+    laterTime: (time: string) =>
+      _(`Oppstart ${time}`, `Start ${time}`, `Start ${time}`),
+    laterOption: _('Oppstart senere', 'Start later', 'Start seinare'),
+    a11yLabel: (time?: string) =>
+      _(
+        `Valgt oppstartstidspunkt: ${time || 'nå'}`,
+        `Selected start time:  ${time || 'now'}`,
+        `Vald starttidspunkt:  ${time || 'no'}`,
+      ),
     a11yLaterHint: _(
-      'Aktiver for å velge et senere oppstartstidspunkt',
-      'Activate to select a later start time',
-      'Aktivér for å velje eit seinare starttidspunkt',
-    ),
-    a11yNowHint: _(
-      'Aktiver for å sette oppstartstidspunkt til nå.',
-      'Activate to set ticket start time to now.',
-      'Aktivér for å sette starttidspunkt til no',
+      'Aktiver for å velge oppstartstidspunkt',
+      'Activate to select start time',
+      'Aktivér for å velje starttidspunkt',
     ),
   },
   summary: {
@@ -335,10 +345,6 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         'The person you buy a ticket for, must be logged in to the Svipper app to get the ticket.',
         'Den du kjøper billett til, må vere logga inn i Svipper-appen for å få billetten.',
       ),
-    },
-    startTime: {
-      now: _('Start nå', 'Start now', 'Start no'),
-      later: _('Start senere', 'Start later', 'Start seinare'),
     },
     flexDiscount: {
       link: _(

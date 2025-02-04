@@ -9,7 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox} from '@atb/situations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -21,8 +21,8 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useTransportColor} from '@atb/utils/use-transport-color';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {
@@ -51,7 +51,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {BookingOptions} from './BookingOptions';
 import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
 import {
@@ -94,18 +94,18 @@ export const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
+  const onCloseFocusRef = React.useRef(null);
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
-  const legColor = useTransportationColor(
+  const legColor = useTransportColor(
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
-  ).background;
-  const iconColor = useTransportationColor().background;
+  ).secondary.background;
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -125,7 +125,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(30000);
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfigContext();
   const bookingStatus = getBookingStatus(
     leg.bookingArrangements,
     leg.aimedStartTime,
@@ -137,9 +137,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const shouldShowButtonForOpeningFlexBottomSheet =
     isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
+
   function openBookingDetails() {
-    openBottomSheet(() => <FlexibleTransportBookingDetailsSheet leg={leg} />);
+    openBottomSheet(
+      () => <FlexibleTransportBookingDetailsSheet leg={leg} />,
+      onCloseFocusRef,
+    );
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
@@ -150,7 +154,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
-        {step && leg.mode && (
+        {!!step && leg.mode && (
           <AccessibleText
             style={style.a11yHelper}
             prefix={t(
@@ -202,7 +206,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
             accessibilityLabel={
               t(
                 TripDetailsTexts.trip.leg.transport.a11ylabel(
-                  t(getTranslatedModeName(leg.mode)),
+                  t(
+                    getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
+                  ),
                   getLineName(t, leg),
                 ),
               ) +
@@ -219,13 +225,22 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
+            {leg.transportSubmode === TransportSubmode.NightBus && (
+              <ThemeText
+                color="secondary"
+                typography="body__secondary"
+                style={style.secondaryTransportLabel}
+              >
+                {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
+              </ThemeText>
+            )}
             <ThemeText style={style.legLineName}>
               {getLineName(t, leg)}
             </ThemeText>
             {isFlexible && (
               <ThemeText
                 color="secondary"
-                type="body__secondary"
+                typography="body__secondary"
                 style={style.onDemandTransportLabel}
               >
                 {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
@@ -249,6 +264,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
               now={now}
+              focusRef={onCloseFocusRef}
               onPressConfig={
                 shouldShowButtonForOpeningFlexBottomSheet
                   ? {
@@ -287,6 +303,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           <TripRow>
             <Button
               type="small"
+              expanded={false}
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor={theme.color.interactive[3]}
@@ -304,7 +321,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
               <ThemeText
                 style={style.realtimeText}
-                type="body__secondary"
+                typography="body__secondary"
                 color="secondary"
               >
                 {realtimeText}
@@ -344,7 +361,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
       </View>
       {showInterchangeSection && (
         <InterchangeSection
-          iconColor={iconColor}
           publicCode={publicCode}
           interchangeDetails={interchangeDetails}
           maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
@@ -387,8 +403,8 @@ const IntermediateInfo = ({
         serviceJourneyId: leg.serviceJourney.id,
         date: leg.expectedStartTime,
         serviceDate: leg.intermediateEstimatedCalls[0].date,
-        fromQuayId: leg.fromPlace.quay?.id,
-        toQuayId: leg.toPlace.quay?.id,
+        fromStopPosition: leg.fromEstimatedCall?.stopPositionInPattern || 0,
+        toStopPosition: leg.toEstimatedCall?.stopPositionInPattern,
       };
       onPressDeparture([departureData], 0);
     }
@@ -411,7 +427,7 @@ const IntermediateInfo = ({
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
@@ -436,7 +452,7 @@ const WalkSection = (leg: Leg) => {
       }
       testID="footLeg"
     >
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {isWalkTimeOfSignificance
           ? t(
               TripDetailsTexts.trip.leg.walk.label(
@@ -461,7 +477,7 @@ const BikeSection = (leg: Leg) => {
       }
       testID="bikeLeg"
     >
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText typography="body__secondary" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.bicycle.label(
             secondsToDuration(leg.duration ?? 0, language),
@@ -475,7 +491,7 @@ const BikeSection = (leg: Leg) => {
 const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[3];
 
   if (id === AUTHORITY) return null;
@@ -483,7 +499,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     return (
       <TripRow>
         <View style={style.authoritySection}>
-          <ThemeText type="body__secondary" color="secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
           </ThemeText>
         </View>
@@ -493,7 +509,11 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText type="body__secondary" color="secondary" accessible={false}>
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          accessible={false}
+        >
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
         </ThemeText>
         <Button
@@ -505,6 +525,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           onPress={() => url && Linking.openURL(url)}
           mode="primary"
           type="small"
+          expanded={false}
           interactiveColor={interactiveColor}
           text={name}
         />
@@ -514,14 +535,13 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
 };
 
 type InterchangeSectionProps = {
-  iconColor: string;
   publicCode: string;
   interchangeDetails: InterchangeDetails;
   maximumWaitTime?: number;
   staySeated?: boolean;
 };
+
 function InterchangeSection({
-  iconColor,
   publicCode,
   interchangeDetails,
   maximumWaitTime,
@@ -529,6 +549,7 @@ function InterchangeSection({
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const legColor = useTransportColor().secondary;
 
   let text = '';
   if (publicCode && staySeated) {
@@ -570,7 +591,11 @@ function InterchangeSection({
 
   return (
     <View style={style.interchangeSection}>
-      <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
+      <TripLegDecoration
+        color={legColor.background}
+        hasStart={false}
+        hasEnd={false}
+      />
       <TripRow>
         <MessageInfoBox type="info" message={text} />
       </TripRow>
@@ -582,6 +607,7 @@ export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
+
 export function mapLegToTimeValues(leg: Leg) {
   const legIsMissingRealTime = !leg.realtime;
   return {
@@ -597,6 +623,7 @@ export function mapLegToTimeValues(leg: Leg) {
     },
   };
 }
+
 function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
@@ -653,6 +680,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'bold',
   },
   onDemandTransportLabel: {
+    paddingTop: theme.spacing.xSmall,
+  },
+  secondaryTransportLabel: {
     paddingTop: theme.spacing.xSmall,
   },
   flexBookingOptions: {

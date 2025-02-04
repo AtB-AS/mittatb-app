@@ -2,7 +2,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -49,9 +49,11 @@ export const OperatorBenefit = ({benefit, formFactor, style}: Props) => {
             />
             <View style={styles.benefitContent}>
               {heading && (
-                <ThemeText type="body__primary--bold">{heading}</ThemeText>
+                <ThemeText typography="body__primary--bold">
+                  {heading}
+                </ThemeText>
               )}
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {text}
               </ThemeText>
             </View>

@@ -2,8 +2,8 @@ import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {addOpacity} from '@atb/utils/add-opacity';
 import {ContrastColor} from '@atb/theme/colors';
+import {addOpacity} from '@atb/utils/add-opacity';
 
 export type BorderedInfoBoxProps =
   | {
@@ -31,7 +31,11 @@ export const BorderedInfoBox = ({
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={backgroundColor} testID={testID}>
+        <ThemeText
+          typography="body__tertiary"
+          color={backgroundColor}
+          testID={testID}
+        >
           {props.text}
         </ThemeText>
       ) : (
@@ -41,10 +45,10 @@ export const BorderedInfoBox = ({
   );
 };
 
-const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
-  StyleSheet.createThemeHook((theme) => ({
+const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) => {
+  return StyleSheet.createThemeHook((theme) => ({
     container: {
-      borderColor: addOpacity(textColor, 0.1),
+      borderColor: addOpacity(textColor, 0.2),
       borderWidth: theme.border.width.slim,
       borderRadius: theme.border.radius.regular,
       paddingHorizontal:
@@ -55,3 +59,4 @@ const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
       alignSelf: 'flex-start',
     },
   }))();
+};

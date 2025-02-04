@@ -77,10 +77,10 @@ export function ToggleSectionItem({
         {leftImage && (
           <View style={styles.leftImageContainer}>{leftImage}</View>
         )}
-        <View style={{flexDirection: 'column', flex: 1}}>
+        <View style={styles.contentContainer}>
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>
-              <ThemeText type={textType}>{text}</ThemeText>
+              <ThemeText typography={textType}>{text}</ThemeText>
             </View>
             {label && <LabelInfo label={label} />}
             <Toggle
@@ -95,9 +95,8 @@ export function ToggleSectionItem({
           </View>
           {subtext && (
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color="secondary"
-              style={styles.subtext}
               isMarkdown={isSubtextMarkdown}
             >
               {subtext}
@@ -114,9 +113,10 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     marginRight: theme.spacing.small,
     justifyContent: 'center',
   },
-  textContainer: {flex: 1, marginRight: theme.spacing.small},
-  subtext: {
-    marginTop: theme.spacing.xSmall,
-    marginRight: theme.spacing.small,
+  contentContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    gap: theme.spacing.small,
   },
+  textContainer: {flex: 1, marginRight: theme.spacing.small},
 }));

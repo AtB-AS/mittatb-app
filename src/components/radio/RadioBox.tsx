@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
@@ -37,12 +37,16 @@ export function RadioBox({
   interactiveColor,
 }: Props) {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const spacing = useSpacing(type);
 
-  const currentInteractiveColor = interactiveColor ?? theme.color.interactive[2]
+  const currentInteractiveColor =
+    interactiveColor ?? theme.color.interactive[2];
   const themeColor = currentInteractiveColor[selected ? 'active' : 'default'];
-  const {background: backgroundColor, foreground: { primary: textColor }} = themeColor;
+  const {
+    background: backgroundColor,
+    foreground: {primary: textColor},
+  } = themeColor;
 
   return (
     <PressableOpacity
@@ -66,7 +70,7 @@ export function RadioBox({
       testID={testID}
     >
       <ThemeText
-        type="heading__title"
+        typography="heading__title"
         color={themeColor}
         style={{...styles.title, marginBottom: spacing}}
       >
@@ -74,7 +78,7 @@ export function RadioBox({
       </ThemeText>
       <View style={{...styles.icon, marginBottom: spacing}}>{icon}</View>
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color={themeColor}
         style={{...styles.description, marginBottom: spacing}}
         accessible={false}
@@ -92,7 +96,7 @@ export function RadioBox({
 }
 
 function useSpacing(type: ContainerSizingType) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   switch (type) {
     case 'compact':
       return theme.spacing.small;

@@ -3,8 +3,8 @@ import {Linking, View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {Statuses} from '@atb-as/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {Statuses} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
@@ -16,6 +16,7 @@ type Props = SectionItemProps<{
   title?: MessageInfoBoxProps['title'];
   message: MessageInfoBoxProps['message'];
   onPressConfig?: MessageInfoBoxProps['onPressConfig'];
+  focusRef?: React.Ref<any>;
 }>;
 
 export function MessageSectionItem({
@@ -23,11 +24,12 @@ export function MessageSectionItem({
   title,
   message,
   onPressConfig,
+  focusRef,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
   const styles = useStyles(messageType)();
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const a11yLabel = useA11yLabel(
     messageType,
     title,
@@ -52,6 +54,7 @@ export function MessageSectionItem({
       accessibilityRole={accessibilityRole}
       accessibilityLabel={a11yLabel}
       style={[topContainer, styles.container]}
+      focusRef={focusRef}
     >
       <ThemeIcon
         style={styles.icon}
@@ -61,7 +64,7 @@ export function MessageSectionItem({
       <View style={styles.textContent}>
         {title && (
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             style={styles.title}
             color={messageType}
             testID="title"
@@ -74,7 +77,7 @@ export function MessageSectionItem({
           <ThemeText
             color={messageType}
             style={styles.linkText}
-            type="body__primary--underline"
+            typography="body__primary--underline"
           >
             {onPressConfig.text}
           </ThemeText>

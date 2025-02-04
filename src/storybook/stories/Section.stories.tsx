@@ -3,7 +3,6 @@ import {
   RadioSectionItem,
   ButtonSectionItem,
   CounterSectionItem,
-  DateInputSectionItem,
   ExpandableSectionItem,
   FavoriteDepartureSectionItem,
   FavoriteSectionItem,
@@ -17,13 +16,12 @@ import {
   Section,
   SectionProps,
   TextInputSectionItem,
-  TimeInputSectionItem,
   ToggleSectionItem,
   InternalLabeledSectionItem,
   RadioGroupSection,
   ContainerSizingType,
 } from '@atb/components/sections';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {ScrollView, View} from 'react-native';
 import {
   themedStoryControls,
@@ -32,9 +30,10 @@ import {
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
-import { themes } from '@atb/theme/colors';
+import {Warning} from '@atb/assets/svg/mono-icons/status';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
-type SectionMetaProps = SectionProps & ThemedStoryProps;
+type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
 
 const SectionMeta: Meta<SectionMetaProps> = {
@@ -55,7 +54,9 @@ const SectionMeta: Meta<SectionMetaProps> = {
 export default SectionMeta;
 
 export const ListedSectionItems: Meta<SectionMetaProps> = {
-  args: {style: {margin: 12}, backgroundColor: themes.light.color.background.neutral[2]},
+  args: {
+    style: {margin: 12},
+  },
   decorators: [
     (Story, {args}) => (
       <ScrollView>
@@ -92,7 +93,6 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <FavoriteDepartureSectionItem
                   favorite={{
                     id: '1',
-                    stopId: '2',
                     lineId: '3',
                     quayId: '4',
                     quayName: 'FavoriteDepartureSectionItem',
@@ -141,11 +141,13 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   text="ToggleSectionItem"
                   onValueChange={() => {}}
                 />
-                <DateInputSectionItem
-                  value={new Date().toISOString()}
-                  onChange={() => {}}
+                <ToggleSectionItem
+                  leftImage={<ThemeIcon svg={Warning} />}
+                  text="ToggleSectionItem"
+                  isSubtextMarkdown={true}
+                  subtext={`1. This is a list \n 2. made with markdown`}
+                  onValueChange={() => {}}
                 />
-                <TimeInputSectionItem value="22:22" onChange={() => {}} />
               </Section>
             ),
           }}
@@ -182,7 +184,7 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
 };
 
 export const RadioSection: Meta<SectionMetaProps> = {
-  args: {style: {margin: 12}, backgroundColor: themes.light.color.background.neutral[1]},
+  args: {style: {margin: 12}},
   decorators: [
     (Story, {args}) => (
       <Story

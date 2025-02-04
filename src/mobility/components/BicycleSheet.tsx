@@ -6,7 +6,8 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {
   BicycleTexts,
   MobilityTexts,
@@ -94,7 +95,7 @@ export const BicycleSheet = ({
                             'ELECTRIC_ASSIST') &&
                         vehicle.currentFuelPercent ? (
                           <MobilityStat
-                            svg={Battery}
+                            svg={BatteryHigh}
                             primaryStat={vehicle.currentFuelPercent + '%'}
                             secondaryStat={t(
                               MobilityTexts.range(

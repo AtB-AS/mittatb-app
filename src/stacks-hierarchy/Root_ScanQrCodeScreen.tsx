@@ -4,13 +4,13 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Camera} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ScreenContainer} from './Root_ParkingViolationsReporting/components/ScreenContainer';
+import {ScreenContainer} from './Root_ScooterHelp/components/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
-import {AutoSelectableBottomSheetType, useMapState} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {tGlobal} from '@atb/LocaleProvider';
@@ -24,7 +24,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const isFocused = useIsFocusedAndActive();
   const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
-    useMapState();
+    useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
 
   const {

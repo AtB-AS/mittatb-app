@@ -23,15 +23,11 @@ export type FocusedEstimatedCallState = {
 
 export const getFocusedEstimatedCall = (
   estimatedCalls: EstimatedCallWithQuayFragment[],
-  fromQuayId?: string,
+  fromStopPosition: number,
 ): FocusedEstimatedCallState => {
-  const selectedCallIndex =
-    estimatedCalls.findIndex(
-      // TODO: This can be wrong if there are multiple stops on the same quay
-      (estimatedCall) => estimatedCall.quay?.id === fromQuayId,
-    ) ?? 0;
-  const selectedCall: EstimatedCallWithQuayFragment =
-    estimatedCalls[selectedCallIndex];
+  const selectedCall =
+    estimatedCalls.find((c) => c.stopPositionInPattern === fromStopPosition) ||
+    estimatedCalls[0];
 
   let previousOrCurrentCallIndex = -1;
   estimatedCalls.forEach((estimatedCall, index) => {
@@ -56,7 +52,7 @@ export const getFocusedEstimatedCall = (
   // Data on service journey progress
   if (previousOrCurrentCall) {
     // Has not yet arrived at the selected stop
-    if (selectedCallIndex > previousOrCurrentCallIndex) {
+    if (fromStopPosition > previousOrCurrentCall.stopPositionInPattern) {
       return {
         status: TravelAidStatus.NotYetArrived,
         focusedEstimatedCall: selectedCall,

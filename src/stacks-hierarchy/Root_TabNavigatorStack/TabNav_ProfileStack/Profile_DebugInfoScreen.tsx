@@ -1,21 +1,21 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {usePreferences, UserPreferences} from '@atb/preferences';
+import {useMobileTokenContext} from '@atb/mobile-token';
+import {usePreferencesContext, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
-  useRemoteConfig,
+  useRemoteConfigContext,
 } from '@atb/RemoteConfigContext';
-import {useGlobalMessagesState} from '@atb/global-messages';
+import {useGlobalMessagesContext} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -31,13 +31,13 @@ import {
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
-import {useAnnouncementsState} from '@atb/announcements';
-import {useNotifications} from '@atb/notifications';
-import {useTimeContextState} from '@atb/time';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useOnboardingState} from '@atb/onboarding';
+import {useAnnouncementsContext} from '@atb/announcements';
+import {useNotificationsContext} from '@atb/notifications';
+import {useTimeContext} from '@atb/time';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -46,14 +46,14 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
   const {
     onboardingSections,
     restartOnboardingSection,
     restartAllOnboardingSections,
-  } = useOnboardingState();
+  } = useOnboardingContext();
 
   const {
     onboardForBeacons,
@@ -64,19 +64,19 @@ export const Profile_DebugInfoScreen = () => {
     isBeaconsSupported,
     getPrivacyDashboardUrl,
     getPrivacyTermsUrl,
-  } = useBeaconsState();
-  const {resetDismissedGlobalMessages} = useGlobalMessagesState();
+  } = useBeaconsContext();
+  const {resetDismissedGlobalMessages} = useGlobalMessagesContext();
   const {
     userId,
     retryAuth,
     debug: {user, idTokenResult},
-  } = useAuthState();
+  } = useAuthContext();
 
   const {
     debug: {overrides, setOverride},
-  } = useFeatureToggles();
+  } = useFeatureTogglesContext();
 
-  const {resetDismissedAnnouncements} = useAnnouncementsState();
+  const {resetDismissedAnnouncements} = useAnnouncementsContext();
 
   const {
     tokens,
@@ -92,8 +92,8 @@ export const Profile_DebugInfoScreen = () => {
       renewToken,
       wipeToken,
     },
-  } = useMobileTokenContextState();
-  const {serverNow} = useTimeContextState();
+  } = useMobileTokenContext();
+  const {serverNow} = useTimeContext();
 
   const {
     fcmToken,
@@ -101,9 +101,9 @@ export const Profile_DebugInfoScreen = () => {
     register: registerNotifications,
     requestPermissions: requestPushNotificationPermissions,
     checkPermissions: checkPushNotificationPermissions,
-  } = useNotifications();
+  } = useNotificationsContext();
 
-  const remoteConfig = useRemoteConfig();
+  const remoteConfig = useRemoteConfigContext();
 
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
@@ -120,7 +120,7 @@ export const Profile_DebugInfoScreen = () => {
       );
   }
 
-  const {setPreference, preferences} = usePreferences();
+  const {setPreference, preferences} = usePreferencesContext();
   const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
     preferences;
 
@@ -333,16 +333,19 @@ export const Profile_DebugInfoScreen = () => {
                   Notification status: {pushNotificationPermissionStatus}
                 </ThemeText>
                 <Button
+                  expanded={true}
                   style={styles.button}
                   onPress={requestPushNotificationPermissions}
                   text="Request permissions"
                 />
                 <Button
+                  expanded={true}
                   style={styles.button}
                   onPress={checkPushNotificationPermissions}
                   text="Check permissions"
                 />
                 <Button
+                  expanded={true}
                   style={styles.button}
                   onPress={() =>
                     registerNotifications(
@@ -385,7 +388,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               preferences && (
                 <View>
-                  <ThemeText type="body__secondary">
+                  <ThemeText typography="body__secondary">
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
@@ -430,12 +433,14 @@ export const Profile_DebugInfoScreen = () => {
                   serverNow,
                 ).toISOString()}`}</ThemeText>
                 <Button
+                  expanded={true}
                   style={styles.button}
                   text="Reload token(s)"
                   onPress={retry}
                 />
                 {nativeToken && (
                   <Button
+                    expanded={true}
                     style={styles.button}
                     text="Wipe token"
                     onPress={wipeToken}
@@ -443,6 +448,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 {nativeToken && (
                   <Button
+                    expanded={true}
                     style={styles.button}
                     text="Validate token"
                     onPress={validateToken}
@@ -450,6 +456,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 {nativeToken && (
                   <Button
+                    expanded={true}
                     style={styles.button}
                     text="Renew token"
                     onPress={renewToken}
@@ -466,6 +473,7 @@ export const Profile_DebugInfoScreen = () => {
                         </ThemeText>
                       ))}
                       <Button
+                        expanded={true}
                         onPress={() => removeRemoteToken(token.id)}
                         text="Remove"
                       />
@@ -496,6 +504,7 @@ export const Profile_DebugInfoScreen = () => {
                     }`}</ThemeText>
                   </View>
                   <Button
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const granted = await onboardForBeacons(true);
@@ -506,6 +515,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Onboard and give consent"
                   />
                   <Button
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       await revokeBeacons();
@@ -515,6 +525,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Revoke"
                   />
                   <Button
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       await deleteCollectedData();
@@ -523,6 +534,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Delete Collected Data"
                   />
                   <Button
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyDashboardUrl =
@@ -535,6 +547,7 @@ export const Profile_DebugInfoScreen = () => {
                     text="Open Privacy Dashboard"
                   />
                   <Button
+                    expanded={true}
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
@@ -608,7 +621,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText type="heading__title" color="secondary">
+          <ThemeText typography="heading__title" color="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
@@ -628,11 +641,11 @@ function MapEntry({title, value}: {title: string; value: any}) {
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
-            <ThemeText type="body__primary--bold">{title}: </ThemeText>
+            <ThemeText typography="body__primary--bold">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
           </PressableOpacity>
         ) : (
-          <ThemeText type="body__primary--bold">{title}: </ThemeText>
+          <ThemeText typography="body__primary--bold">{title}: </ThemeText>
         )}
         {isExpanded && <MapValue value={value} />}
       </View>

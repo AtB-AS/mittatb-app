@@ -1,26 +1,30 @@
-import { Platform, StatusBarProps, TextStyle } from 'react-native';
-import { APP_ORG } from '@env';
+import {Platform, StatusBarProps, TextStyle} from 'react-native';
+import {APP_ORG} from '@env';
 
 import {
-  ContrastColorFs,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
-  InteractiveColor as  GenericInteractiveColor,
-  Statuses,
+  StatusColorName,
   TextColor,
-  TextNames,
-  textNames,
-  ThemeFs,
-  ThemeVariant
+  ThemeVariant,
 } from '@atb-as/theme';
-import { AppOrgs } from '../../types/app-orgs';
+import {AppOrgs} from '../../types/app-orgs';
 
-type ContrastColor = ContrastColorFs
-type Mode = keyof Themes
+export type {
+  StatusColorName as Statuses,
+  Mode,
+  TextColor,
+  ContrastColor,
+  TextNames,
+  InteractiveColor,
+  TransportColors,
+  TransportColor,
+  StatusColors,
+  StatusColor,
+} from '@atb-as/theme';
 
-export type { Statuses, Mode, TextColor, ContrastColor, TextNames };
-export { textNames };
+export {textNames} from '@atb-as/theme';
 
 const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   switch (appOrg) {
@@ -36,9 +40,7 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
   }
 };
 
-const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG), {
-  useFigmaStructure: true
-});
+const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
@@ -72,10 +74,10 @@ type AppThemeExtension = {
   typography: typeof textTypeStyles;
 };
 
-export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(mainThemes, {
+export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   light: {
     tripLegDetail,
-    statusBarStyle: 'light-content',
+    statusBarStyle: 'dark-content',
 
     typography: textTypeStyles,
   },
@@ -87,13 +89,13 @@ export const themes = createExtendedThemes<AppThemeExtension, ThemeFs>(mainTheme
   },
 });
 
-export const isStatusColor = (color: unknown, theme: Theme): color is Statuses => Object.keys(theme.color.status).includes(color as string)
-export const isTextColor = (color: unknown, theme: Theme): color is TextColor => Object.keys(theme.color.foreground.dynamic).includes(color as string)
-
-// @TODO: Make part of @AtB-as/theme
+export const isStatusColor = (
+  color: unknown,
+  theme: Theme,
+): color is StatusColorName =>
+  Object.keys(theme.color.status).includes(color as string);
+export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
+  Object.keys(theme.color.foreground.dynamic).includes(color as string);
 
 export type Themes = typeof themes;
-export type Theme = typeof themes['light'];
-export type InteractiveColor = GenericInteractiveColor<ContrastColor>;
-export type TransportColor = Theme['color']['transport'];
-export type StatusColor = Theme['color']['status'];
+export type Theme = Themes['light'];

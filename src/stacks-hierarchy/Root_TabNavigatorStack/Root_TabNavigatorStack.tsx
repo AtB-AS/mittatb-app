@@ -7,13 +7,13 @@ import {
 import {MapPin} from '../../assets/svg/mono-icons/map';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
-import {usePreferenceItems} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {
   settingToRouteName,
   useBottomNavigationStyles,
@@ -29,15 +29,15 @@ import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow, useOnboardingNavigation} from '@atb/onboarding';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
 export const Root_TabNavigatorStack = () => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
-  const {startScreen} = usePreferenceItems();
+  const {startScreen} = usePreferencesContext().preferences;
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   useOnPushNotificationOpened();
@@ -46,7 +46,7 @@ export const Root_TabNavigatorStack = () => {
 
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
-  const {customerNumber} = useAuthState();
+  const {customerNumber} = useAuthContext();
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
@@ -124,7 +124,9 @@ export const Root_TabNavigatorStack = () => {
           Profile,
           lineHeight,
           'profileTab',
-          customerNumber === undefined ? {color: theme.color.status.error.primary} : undefined,
+          customerNumber === undefined
+            ? {color: theme.color.status.error.primary}
+            : undefined,
         )}
       />
     </Tab.Navigator>
@@ -156,7 +158,7 @@ function tabSettings(
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
         testID={testID}

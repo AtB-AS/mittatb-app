@@ -6,12 +6,14 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 import {TileWithButton, TileWithButtonProps} from '@atb/components/tile';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {themes} from '@atb/theme/colors';
 
-type TileWithButtonMetaProps = TileWithButtonProps & ThemedStoryProps;
+type TileWithButtonMetaProps = ThemedStoryProps<
+  TileWithButtonProps & {interactiveColorType: string}
+>;
 
 const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
   title: 'TileWithButton',
@@ -23,7 +25,7 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
         type: 'select',
       },
     },
-    interactiveColor: {
+    interactiveColorType: {
       options: [...Object.keys(themes['light'].color.interactive)],
       control: {
         type: 'select',
@@ -33,7 +35,7 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
   },
   args: {
     mode: 'compact',
-    interactiveColor: themes.light.color.interactive[2],
+    interactiveColorType: '0',
     accessibilityLabel: 'Accessibility label',
     buttonText: 'Button text',
     buttonSvg: SvgArrowRight,
@@ -41,14 +43,28 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (_: any, {args}: {args: any}) => (
-      <View style={{justifyContent: 'center', flexDirection: 'row'}}>
-        {/* FIXME: Should use <Story> here, but that doesn't work well with children */}
-        <TileWithButton {...args}>
-          <View style={{width: 100, height: 50, backgroundColor: 'orange'}} />
-        </TileWithButton>
-      </View>
-    ),
+    (Story, {args}) => {
+      const interactiveColors = themes[args.theme].color.interactive;
+      const storyInteractiveColor =
+        interactiveColors[
+          args.interactiveColorType as keyof typeof interactiveColors
+        ];
+      return (
+        <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+          <Story
+            args={{
+              ...args,
+              interactiveColor: storyInteractiveColor,
+              children: (
+                <View
+                  style={{width: 100, height: 50, backgroundColor: 'orange'}}
+                />
+              ),
+            }}
+          />
+        </View>
+      );
+    },
     ThemedStoryDecorator,
   ],
 };

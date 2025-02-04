@@ -7,12 +7,12 @@ import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 
 export const Root_LocationWhenInUsePermissionScreen = () => {
   const {t} = useTranslation();
 
-  const {requestLocationPermission} = useGeolocationState();
+  const {requestLocationPermission} = useGeolocationContext();
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 

@@ -10,12 +10,12 @@ import {
 } from '@atb/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {stripMarkdown} from '@atb/components/text';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -34,10 +34,10 @@ export const FareProductHeader = forwardRef<View, Props>(
     ref,
   ) => {
     const {t, language} = useTranslation();
-    const {theme} = useTheme();
+    const {theme} = useThemeContext();
     const themeColor = theme.color.background.accent[0];
     const styles = useStyle();
-    const {isTicketInformationEnabled} = useFeatureToggles();
+    const {isTicketInformationEnabled} = useFeatureTogglesContext();
 
     const productDescription = stripMarkdown(
       getTextForLanguage(
@@ -54,7 +54,7 @@ export const FareProductHeader = forwardRef<View, Props>(
             iconSize="normal"
           />
           <ThemeText
-            type="heading--medium"
+            typography="heading--medium"
             color={themeColor}
             style={styles.headerText}
           >
@@ -64,7 +64,7 @@ export const FareProductHeader = forwardRef<View, Props>(
         {isTicketInformationEnabled && (
           <View style={styles.headerSubSection}>
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color={themeColor}
               style={styles.ticketDescription}
               numberOfLines={1}
@@ -72,11 +72,13 @@ export const FareProductHeader = forwardRef<View, Props>(
               {productDescription}
             </ThemeText>
             <Button
+              expanded={false}
               type="small"
               leftIcon={{svg: Info}}
               interactiveColor={theme.color.interactive[1]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
+              testID="ticketInformationButton"
             />
           </View>
         )}
@@ -95,7 +97,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   headerSubSection: {
     marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.accent[1].background,
+    borderTopColor: theme.color.background.neutral[0].background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -11,6 +11,11 @@ import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view'
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {
+  type A11yLiveRegion,
+  useLiveRegionAnnouncement,
+} from '@atb/components/screen-reader-announcement';
+import {isDefined} from '@atb/utils/presence';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -35,6 +40,8 @@ export type MessageInfoBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
+  a11yLiveRegion?: A11yLiveRegion;
+  focusRef?: React.Ref<any>;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -46,12 +53,16 @@ export const MessageInfoBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
+  a11yLiveRegion,
+  focusRef,
   testID,
 }: MessageInfoBoxProps) => {
-  const {theme, themeName} = useTheme();
+  const {theme, themeName} = useThemeContext();
   const styles = useStyles(type)();
   const {t} = useTranslation();
-  const iconColorProps = {color: theme.color.status[type].secondary.foreground.primary};
+  const iconColorProps = {
+    color: theme.color.status[type].secondary.foreground.primary,
+  };
   const textColor = theme.color.status[type].secondary.foreground.primary;
 
   const onPress =
@@ -62,8 +73,12 @@ export const MessageInfoBox = ({
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
   const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
-    .filter((s): s is string => !!s)
+    .filter(isDefined)
     .join(screenReaderPause);
+  const liveRegionA11yProps = useLiveRegionAnnouncement(
+    a11yLabel,
+    a11yLiveRegion,
+  );
 
   return (
     <PressableOpacityOrView
@@ -71,6 +86,7 @@ export const MessageInfoBox = ({
       style={[styles.container, style]}
       accessible={false}
       testID={testID}
+      focusRef={focusRef}
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -81,21 +97,20 @@ export const MessageInfoBox = ({
       )}
       <View
         style={styles.content}
-        accessible={true}
         accessibilityRole={
           onPressConfig && ('action' in onPressConfig ? 'button' : 'link')
         }
-        accessibilityLabel={a11yLabel}
         accessibilityHint={
           onPressConfig &&
           ('action' in onPressConfig
             ? t(MessageBoxTexts.a11yHintActionPrefix)
             : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
         }
+        {...liveRegionA11yProps}
       >
         {title && (
           <ThemeText
-            type="body__primary--bold"
+            typography="body__primary--bold"
             color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
@@ -105,7 +120,7 @@ export const MessageInfoBox = ({
         )}
         <ThemeText
           color={textColor}
-          type="body__primary"
+          typography="body__primary"
           isMarkdown={isMarkdown}
         >
           {message}
@@ -114,7 +129,7 @@ export const MessageInfoBox = ({
           <ThemeText
             color={textColor}
             style={styles.linkText}
-            type="body__primary--underline"
+            typography="body__primary--underline"
           >
             {onPressConfig.text}
           </ThemeText>

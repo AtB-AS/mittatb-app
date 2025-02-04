@@ -2,7 +2,7 @@ import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -25,7 +25,7 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
   const onConsume = async () => {
     setIsLoading(true);
@@ -66,6 +66,7 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
           </GenericSectionItem>
         </Section>
         <Button
+          expanded={true}
           onPress={onConsume}
           text={t(FareContractTexts.carnet.activateCarnet)}
           rightIcon={{svg: Confirm}}

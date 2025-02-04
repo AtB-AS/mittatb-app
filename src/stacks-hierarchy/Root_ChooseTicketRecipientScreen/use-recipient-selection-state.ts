@@ -2,8 +2,8 @@ import {Dispatch, useReducer} from 'react';
 import {
   OnBehalfOfErrorCode,
   RecipientSelectionState,
-} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {OnBehalfOfAccountType} from "@atb/on-behalf-of/types.ts";
+} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
 
 type RecipientSelectionAction =
   | {type: 'SELECT_RECIPIENT'; recipient?: OnBehalfOfAccountType}

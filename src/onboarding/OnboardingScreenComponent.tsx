@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 
 import {View} from 'react-native';
@@ -25,7 +25,7 @@ type OnboardingScreenComponentParams = {
   testID?: string;
 };
 
-const getThemeColor= (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export const OnboardingScreenComponent = ({
   illustration,
@@ -38,7 +38,7 @@ export const OnboardingScreenComponent = ({
   testID,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
 
@@ -47,6 +47,7 @@ export const OnboardingScreenComponent = ({
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
+        expanded: false,
       }}
       footerDescription={footerDescription}
       testID={testID ? `${testID}` : 'next'}
@@ -54,7 +55,7 @@ export const OnboardingScreenComponent = ({
       <View style={styles.header}>{illustration}</View>
       <View ref={focusRef} accessible collapsable={false}>
         <ThemeText
-          type="body__primary--big--bold"
+          typography="body__primary--big--bold"
           color={themeColor}
           style={styles.title}
           accessibilityRole="header"
@@ -63,7 +64,7 @@ export const OnboardingScreenComponent = ({
         </ThemeText>
       </View>
       <ThemeText
-        type="body__primary"
+        typography="body__primary"
         color={themeColor}
         style={styles.description}
       >
@@ -76,7 +77,7 @@ export const OnboardingScreenComponent = ({
           accessibilityHint={descriptionLink.a11yHint}
         >
           <ThemeText
-            type="body__primary--underline"
+            typography="body__primary--underline"
             color={themeColor}
             style={styles.descriptionLink}
           >

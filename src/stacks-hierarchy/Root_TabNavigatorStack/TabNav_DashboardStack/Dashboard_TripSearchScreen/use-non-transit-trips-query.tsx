@@ -1,5 +1,4 @@
 import {Location} from '@atb/favorites';
-import {SearchTime} from '@atb/journey-date-picker';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
 import {SearchStateType} from '../types';
@@ -13,12 +12,13 @@ import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import type {DateOptionAndValue} from '@atb/date-picker';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-  searchTime: SearchTime = {
+  searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'> = {
     option: 'now',
     date: new Date().toISOString(),
   },
@@ -29,7 +29,7 @@ export const useNonTransitTripsQuery = (
   );
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
-  const {isNonTransitTripSearchEnabled} = useFeatureToggles();
+  const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
 
   useEffect(() => {
     if (!isNonTransitTripSearchEnabled) return;

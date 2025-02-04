@@ -53,8 +53,8 @@ export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,
   serviceDate: string,
-  date?: string,
-  fromQuayId?: string,
+  date: string | undefined,
+  fromStopPosition: number,
   isTripCancelled?: boolean,
 ) => void;
 
@@ -92,6 +92,7 @@ export type MapSelectionActionType =
       coords: Coordinates;
     }
   | {source: 'filters-button'}
+  | {source: 'bonus-program-button'}
   | {source: 'external-map-button'; url: string};
 
 export type CameraFocusModeType =

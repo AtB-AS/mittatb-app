@@ -1,40 +1,35 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  getReferenceDataName,
   PreassignedFareProduct,
   ProductTypeTransportModes,
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
 import {ContrastColor} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
   sentTicket?: boolean;
 };
 
 export const InspectionSymbol = ({
   preassignedFareProduct,
-  fromTariffZone,
-  toTariffZone,
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
@@ -44,7 +39,7 @@ export const InspectionSymbol = ({
     fareProductTypeConfig?.transportModes[0].subMode,
   );
 
-  const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
+  const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
 
   const themeColor = isInspectable
     ? theme.color.transport[transportColor].primary
@@ -61,8 +56,6 @@ export const InspectionSymbol = ({
       {isInspectable && !sentTicket ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
           themeColor={themeColor}
         />
       ) : (
@@ -73,8 +66,6 @@ export const InspectionSymbol = ({
 };
 
 const InspectableContent = ({
-  fromTariffZone,
-  toTariffZone,
   preassignedFareProduct,
   themeColor,
 }: {
@@ -83,10 +74,9 @@ const InspectableContent = ({
   toTariffZone?: TariffZone;
   themeColor: ContrastColor;
 }) => {
-  const {language} = useTranslation();
   const styles = useStyles();
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
@@ -101,17 +91,6 @@ const InspectableContent = ({
     fareProductTypeConfig?.transportModes,
   );
 
-  const fromTariffZoneName =
-    fromTariffZone && getReferenceDataName(fromTariffZone, language);
-  const toTariffZoneName =
-    toTariffZone && getReferenceDataName(toTariffZone, language);
-
-  const shouldShowZoneNames =
-    fromTariffZoneName &&
-    toTariffZoneName &&
-    fromTariffZoneName.length < 3 &&
-    toTariffZoneName.length < 3;
-
   return (
     <View
       style={[
@@ -121,16 +100,6 @@ const InspectableContent = ({
         },
       ]}
     >
-      {shouldShowZoneNames && (
-        <ThemeText
-          type="body__primary--bold"
-          allowFontScaling={false}
-          color={shouldFill ? themeColor.foreground.primary : undefined}
-        >
-          {fromTariffZoneName}
-          {fromTariffZone.id !== toTariffZone.id && '-' + toTariffZoneName}
-        </ThemeText>
-      )}
       <ThemeIcon
         svg={InspectionSvg}
         color={shouldFill ? themeColor : undefined}
@@ -146,7 +115,7 @@ const NotInspectableContent = () => {
   return (
     <View style={styles.symbolContent}>
       <ThemeText
-        type="body__tertiary"
+        typography="body__tertiary"
         style={{
           textAlign: 'center',
         }}
@@ -182,7 +151,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     borderRadius: 1000,
     borderColor: theme.color.status.warning.primary.background,
-    borderWidth: 5,
+    borderWidth: 2,
   },
   symbolContent: {
     height: '100%',

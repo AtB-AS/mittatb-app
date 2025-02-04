@@ -1,14 +1,21 @@
 import {Quay as Quay_v2} from '../api/types/trips';
 import {dictionary, TranslatedString} from '../translations';
-import {AnyMode} from '@atb/components/icon-box';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {Quay} from '@atb/api/types/generated/journey_planner_v3_types';
 
-export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
+export function getTranslatedModeName(
+  mode?: AnyMode,
+  subMode?: AnySubMode,
+): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
+  const legSubModeNames = dictionary.travel.legSubModes;
   switch (mode) {
     case 'bus':
     case 'coach':
+      if (subMode === 'nightBus') {
+        return legSubModeNames.nightBus;
+      }
       return legModeNames.bus;
     case 'rail':
       return legModeNames.rail;

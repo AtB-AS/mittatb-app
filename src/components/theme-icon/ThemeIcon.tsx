@@ -1,11 +1,11 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {
   ContrastColor,
   Statuses,
   TextColor,
   Theme,
   isStatusColor,
-  isTextColor
+  isTextColor,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -15,12 +15,13 @@ import {
   NotificationIndicatorProps,
 } from './NotificationIndicator';
 import React from 'react';
-import {notifyBugsnag} from '@atb/utils/bugsnag-utils.ts';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   color?: ContrastColor | TextColor | ColorValue;
   size?: keyof Theme['icon']['size'];
+  customSize?: number;
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
 } & Omit<SvgProps, 'color' | 'fill'>;
@@ -28,24 +29,27 @@ export type ThemeIconProps = {
 export const ThemeIcon = ({
   svg,
   color,
-  size = "normal",
+  size = 'normal',
+  customSize,
   notification,
   style,
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element | null => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const fontScale = useFontScale();
-  const fill = useColor(color)
+  const fill = useColor(color);
 
   if (!svg) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
     return null;
   }
 
+  const unscaledIconSize = customSize ?? theme.icon.size[size];
+
   const iconSize = allowFontScaling
-    ? theme.icon.size[size] * fontScale
-    : theme.icon.size[size];
+    ? unscaledIconSize * fontScale
+    : unscaledIconSize;
 
   const settings = {
     fill,
@@ -67,14 +71,14 @@ export const ThemeIcon = ({
 };
 
 function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   if (typeof color === 'object') {
     return color.foreground.primary;
   } else if (isStatusColor(color, theme)) {
     return theme.color.status[color].primary.background;
   } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary']
+    return theme.color.foreground.dynamic[color ?? 'primary'];
   } else {
-    return color
+    return color;
   }
 }

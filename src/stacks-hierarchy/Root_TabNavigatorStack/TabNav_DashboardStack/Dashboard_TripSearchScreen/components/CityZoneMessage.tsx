@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/images';
@@ -14,11 +14,11 @@ import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/configuration';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ActionButton = {
@@ -43,7 +43,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
 }) => {
   const style = useStyle();
   const {t} = useTranslation();
-  const {cityZones} = useFirestoreConfiguration();
+  const {cityZones} = useFirestoreConfigurationContext();
   const enabledCityZones = cityZones.filter((cityZone) => cityZone.enabled);
   const fromCityZone = useFindCityZoneInLocation(from, enabledCityZones);
   const toCityZone = useFindCityZoneInLocation(to, enabledCityZones);
@@ -86,11 +86,14 @@ const CityZoneBox = ({
   actionButtons,
   onDismiss,
 }: CityZoneBoxProps) => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const styles = useStyle();
   const {t} = useTranslation();
   const generalColor = theme.color.background.neutral[0];
-  const {background: backgroundColor, foreground: {primary: textColor}} = generalColor;
+  const {
+    background: backgroundColor,
+    foreground: {primary: textColor},
+  } = generalColor;
   return (
     <View style={[styles.container, {backgroundColor}]} accessible={false}>
       <View style={styles.icon}>
@@ -104,9 +107,9 @@ const CityZoneBox = ({
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
               <Button
+                expanded={false}
                 key={actionButton.id}
                 type="small"
-                compact={true}
                 interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}
                 onPress={actionButton.onPress}
@@ -139,10 +142,10 @@ const CityZoneBox = ({
 
 const useActionButtons = (cityZone?: CityZone) => {
   const {t, language} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
   const interactiveAccentColor = theme.color.interactive[3];
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   if (!cityZone) {
     return [];

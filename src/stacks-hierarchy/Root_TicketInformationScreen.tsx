@@ -7,27 +7,27 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScrollView, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {TipsAndInformation} from '@atb/tips-and-information';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/mobility/components/MobilitySingleBenefitInfoSectionItem';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
 export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfiguration();
-  const {isTipsAndInformationEnabled} = useFeatureToggles();
+    useFirestoreConfigurationContext();
+  const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
     props.route.params.preassignedFareProductId,
   );
@@ -67,12 +67,12 @@ export const Root_TicketInformationScreen = (props: Props) => {
                       iconSize="xSmall"
                       modes={fareProductTypeConfig?.transportModes}
                     />
-                    <ThemeText type="body__primary--bold">
+                    <ThemeText typography="body__primary--bold">
                       {getTextForLanguage(fareProductTypeConfig.name, language)}
                     </ThemeText>
                   </View>
                 )}
-                <ThemeText type="body__secondary" isMarkdown={true}>
+                <ThemeText typography="body__secondary" isMarkdown={true}>
                   {getTextForLanguage(
                     preassignedFareProduct.productDescription,
                     language,

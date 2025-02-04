@@ -1,18 +1,22 @@
-import {ValidityStatus, useSortFcOrReservationByValidityAndCreation} from "../utils";
-import {FareContract, Reservation} from "@atb/ticketing/types";
+import {
+  ValidityStatus,
+  useSortFcOrReservationByValidityAndCreation,
+} from '../utils';
+import {FareContract, Reservation, TravelRight} from '@atb/ticketing/types';
 
 import {LoadingParams} from '@atb/loading-screen/types';
-import React from "react";
-import {addMinutes} from "date-fns";
+import React from 'react';
+import {addMinutes} from 'date-fns';
 
 const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: false,
   authStatus: 'authenticated',
   firestoreConfigStatus: 'success',
+  remoteConfigIsLoaded: true,
 };
 
 jest.mock('@atb/auth/AuthContext', () => {});
-jest.mock('@atb/mobile-token/MobileTokenContext', () => {});
+jest.mock('@atb/mobile-token', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
 jest.mock('@atb/configuration/FirestoreConfigurationContext', () => {});
 jest.mock('@atb/api', () => {});
@@ -25,14 +29,14 @@ jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
 jest.mock('react-native-device-info', () => {});
 jest.mock('react-native-inappbrowser-reborn', () => {});
 jest.mock('@atb/auth', () => ({
-  useAuthState: () => ({
+  useAuthContext: () => ({
     authStatus: DEFAULT_MOCK_STATE,
     abtCustomerId: '1',
     retryAuth: () => {},
   }),
 }));
-jest.spyOn(React, 'useCallback').mockImplementation(f => f);
-jest.spyOn(React, 'useMemo').mockImplementation(f => f());
+jest.spyOn(React, 'useCallback').mockImplementation((f) => f);
+jest.spyOn(React, 'useMemo').mockImplementation((f) => f());
 
 type MockedFareContract = FareContract & {
   validityStatus: ValidityStatus;
@@ -42,31 +46,40 @@ type MockedReservation = Reservation & {
   validityStatus: ValidityStatus;
 };
 
-function mockupFareContract(id: string, validityStatus: ValidityStatus, minutes: number): MockedFareContract {
+function mockupFareContract(
+  id: string,
+  validityStatus: ValidityStatus,
+  minutes: number,
+): MockedFareContract {
   return {
     id: id,
     created: addMinutes(new Date(), minutes),
-    version: "1",
-    customerAccountId: "1",
-    purchasedBy: "1",
-    orderId: "1",
+    version: '1',
+    customerAccountId: '1',
+    purchasedBy: '1',
+    orderId: '1',
     state: 0,
-    totalAmount: "0",
-    minimumSecurityLevel: 1,
-    travelRights: [],
-    qrCode: "",
+    totalAmount: '0',
+    travelRights: [{} as any as TravelRight],
+    qrCode: '',
     validityStatus: validityStatus,
+    paymentType: ['VISA'],
+    totalTaxAmount: '0',
   };
 }
 
-function mockupReservation(id: string, validityStatus: ValidityStatus, minutes: number): MockedReservation {
+function mockupReservation(
+  id: string,
+  validityStatus: ValidityStatus,
+  minutes: number,
+): MockedReservation {
   return {
     orderId: id,
     created: addMinutes(new Date(), minutes),
     paymentId: 1,
     transactionId: 1,
     paymentType: 2,
-    url: "http://example.com",
+    url: 'http://example.com',
     validityStatus: validityStatus,
   };
 }
@@ -81,7 +94,11 @@ describe('Sort by Validity', () => {
       mockupReservation('3', 'valid', 0),
     ];
 
-    const result = useSortFcOrReservationByValidityAndCreation(now, fcOrReservations, (_, fareContract) => (fareContract as MockedFareContract).validityStatus);
+    const result = useSortFcOrReservationByValidityAndCreation(
+      now,
+      fcOrReservations,
+      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
+    );
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -101,7 +118,11 @@ describe('Sort by Validity', () => {
       mockupFareContract('2', 'valid', 0),
     ];
 
-    const result = useSortFcOrReservationByValidityAndCreation(now, fcOrReservations, (_, fareContract) => (fareContract as MockedFareContract).validityStatus);
+    const result = useSortFcOrReservationByValidityAndCreation(
+      now,
+      fcOrReservations,
+      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
+    );
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -112,5 +133,30 @@ describe('Sort by Validity', () => {
     });
 
     expect(ids).toEqual(['3', '2', '1']);
+  });
+
+  it('Multiple reservations and valid fare contracts', async () => {
+    const fcOrReservations: (FareContract | Reservation)[] = [
+      mockupReservation('1', 'reserving', 0),
+      mockupReservation('2', 'reserving', 0.1),
+      mockupFareContract('3', 'valid', 0.1),
+      mockupFareContract('4', 'valid', 0.11),
+    ];
+
+    const result = useSortFcOrReservationByValidityAndCreation(
+      now,
+      fcOrReservations,
+      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
+    );
+    const ids: string[] = result.map((fcOrReservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      if (isFareContract) {
+        return fcOrReservation.id;
+      } else {
+        return fcOrReservation.orderId;
+      }
+    });
+
+    expect(ids).toEqual(['2', '1', '4', '3']);
   });
 });

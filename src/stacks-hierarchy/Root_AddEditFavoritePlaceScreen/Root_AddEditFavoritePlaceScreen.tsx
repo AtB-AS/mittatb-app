@@ -1,18 +1,18 @@
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -34,10 +34,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     addFavoriteLocation: addFavorite,
     removeFavoriteLocation: removeFavorite,
     updateFavoriteLocation: updateFavorite,
-  } = useFavorites();
+  } = useFavoritesContext();
   const editItem = route?.params?.editItem;
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -49,6 +49,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     'searchLocation',
     editItem?.location,
   );
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -104,32 +105,35 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
 
   const openEmojiSheet = () => {
-    openBottomSheet(() => (
-      <EmojiSheet
-        localizedCategories={[
-          t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
-          t(AddEditFavoriteTexts.emojiSheet.categories.people),
-          t(AddEditFavoriteTexts.emojiSheet.categories.animals),
-          t(AddEditFavoriteTexts.emojiSheet.categories.food),
-          t(AddEditFavoriteTexts.emojiSheet.categories.activities),
-          t(AddEditFavoriteTexts.emojiSheet.categories.travel),
-          t(AddEditFavoriteTexts.emojiSheet.categories.objects),
-          t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
-        ]}
-        value={emoji ?? null}
-        closeOnSelect={true}
-        onEmojiSelected={(emoji) => {
-          if (emoji == null) {
-            setEmoji(undefined);
-          } else {
-            setEmoji(emoji);
-          }
-        }}
-      />
-    ));
+    openBottomSheet(
+      () => (
+        <EmojiSheet
+          localizedCategories={[
+            t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
+            t(AddEditFavoriteTexts.emojiSheet.categories.people),
+            t(AddEditFavoriteTexts.emojiSheet.categories.animals),
+            t(AddEditFavoriteTexts.emojiSheet.categories.food),
+            t(AddEditFavoriteTexts.emojiSheet.categories.activities),
+            t(AddEditFavoriteTexts.emojiSheet.categories.travel),
+            t(AddEditFavoriteTexts.emojiSheet.categories.objects),
+            t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
+          ]}
+          value={emoji ?? null}
+          closeOnSelect={true}
+          onEmojiSelected={(emoji) => {
+            if (emoji == null) {
+              setEmoji(undefined);
+            } else {
+              setEmoji(emoji);
+            }
+          }}
+        />
+      ),
+      onCloseFocusRef,
+    );
   };
 
   const openEmojiPopup = () => {
@@ -199,14 +203,16 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               !emoji ? (
                 <ThemeIcon svg={Pin} />
               ) : (
-                <ThemeText type="body__primary">{emoji}</ThemeText>
+                <ThemeText typography="body__primary">{emoji}</ThemeText>
               )
             }
             testID="iconButton"
+            focusRef={onCloseFocusRef}
           />
         </Section>
         {emoji && (
           <Button
+            expanded={false}
             text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
             type="small"
             mode="tertiary"
@@ -222,6 +228,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         <View style={styles.buttonContainer}>
           {editItem && (
             <Button
+              expanded={true}
               onPress={deleteItem}
               interactiveColor={theme.color.interactive.destructive}
               rightIcon={{svg: SvgDelete}}
@@ -231,6 +238,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           )}
 
           <Button
+            expanded={true}
             interactiveColor={theme.color.interactive[0]}
             onPress={save}
             rightIcon={{svg: SvgConfirm}}

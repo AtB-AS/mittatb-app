@@ -1,6 +1,10 @@
 import {useCallback, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {UserCountState} from './types';
+import {
+  useSelectableUserProfiles,
+  type PurchaseSelectionType,
+} from '@atb/purchase-selection';
 
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
@@ -8,8 +12,7 @@ type ReducerState = {
 
 type CountReducerAction =
   | {type: 'INCREMENT_COUNT'; userType: string}
-  | {type: 'DECREMENT_COUNT'; userType: string}
-  | {type: 'UPDATE_SELECTABLE'; selectableUserProfiles: UserProfileWithCount[]};
+  | {type: 'DECREMENT_COUNT'; userType: string};
 
 type CountReducer = (
   prevState: ReducerState,
@@ -48,28 +51,23 @@ const countReducer: CountReducer = (prevState, action): ReducerState => {
         ),
       };
     }
-    case 'UPDATE_SELECTABLE': {
-      return {
-        ...prevState,
-        userProfilesWithCount: action.selectableUserProfiles.map(
-          (selectable) => ({
-            ...selectable,
-            count:
-              prevState.userProfilesWithCount.find(
-                (prev) => prev.id === selectable.id,
-              )?.count || 0,
-          }),
-        ),
-      };
-    }
   }
 };
 
 export function useUserCountState(
-  userProfilesWithCount: UserProfileWithCount[],
+  selection: PurchaseSelectionType,
 ): UserCountState {
+  const selectableUserProfiles = useSelectableUserProfiles(
+    selection.preassignedFareProduct,
+  );
+  const initialUserProfilesWithCount = selectableUserProfiles.map((u) => ({
+    ...u,
+    count:
+      selection.userProfilesWithCount.find(({id}) => id === u.id)?.count ?? 0,
+  }));
+
   const [userCountState, dispatch] = useReducer(countReducer, {
-    userProfilesWithCount,
+    userProfilesWithCount: initialUserProfilesWithCount,
   });
 
   const addCount = useCallback(
@@ -80,16 +78,10 @@ export function useUserCountState(
     (userType: string) => dispatch({type: 'DECREMENT_COUNT', userType}),
     [dispatch],
   );
-  const updateSelectable = useCallback(
-    (selectableUserProfiles: UserProfileWithCount[]) =>
-      dispatch({type: 'UPDATE_SELECTABLE', selectableUserProfiles}),
-    [dispatch],
-  );
 
   return {
     ...userCountState,
     addCount,
     removeCount,
-    updateSelectable,
   };
 }

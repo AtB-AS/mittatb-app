@@ -2,7 +2,7 @@ import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ThemeText} from '@atb/components/text';
 import {FlatList} from 'react-native-gesture-handler';
-import React, {useCallback} from 'react';
+import React, {RefObject, useCallback} from 'react';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   EstimatedCallItem,
@@ -23,7 +23,6 @@ type EstimatedCallRenderItem = {
 type Props = Pick<
   QuaySectionProps,
   | 'quay'
-  | 'stopPlace'
   | 'addedFavoritesVisibleOnDashboard'
   | 'navigateToDetails'
   | 'mode'
@@ -35,7 +34,6 @@ type Props = Pick<
 };
 export const EstimatedCallList = ({
   quay,
-  stopPlace,
   departures,
   addedFavoritesVisibleOnDashboard,
   navigateToDetails,
@@ -47,12 +45,15 @@ export const EstimatedCallList = ({
   const {t} = useTranslation();
   const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
     quay,
-    stopPlace,
     addedFavoritesVisibleOnDashboard,
   );
 
   const onPressFavorite = useCallback(
-    (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) =>
+    (
+      departure: EstimatedCall,
+      existingFavorite: StoredFavoriteDeparture | undefined,
+      onCloseRef: RefObject<any>,
+    ) =>
       onMarkFavourite(
         {
           ...departure.serviceJourney.line,
@@ -60,6 +61,7 @@ export const EstimatedCallList = ({
           destinationDisplay: departure.destinationDisplay,
         },
         existingFavorite,
+        onCloseRef,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -70,7 +72,7 @@ export const EstimatedCallList = ({
       departure.serviceJourney.id,
       departure.date,
       departure.aimedDepartureTime,
-      departure.quay.id,
+      departure.stopPositionInPattern,
       departure.cancellation,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,10 +109,10 @@ export const EstimatedCallList = ({
 
   const keyExtractor = useCallback(
     ({departure}: EstimatedCallItemProps) =>
-      // ServiceJourney ID is not a unique key if a ServiceJourney
-      // passes by the same stop several times, (e.g. Ringen in Oslo)
-      // which is why it is used in combination with aimedDepartureTime.
-      departure.serviceJourney.id + departure.aimedDepartureTime,
+      // ServiceJourney ID is not a unique key if a ServiceJourney passes by the
+      // same stop several times, (e.g. Ringen in Oslo) which is why it is used
+      // in combination with stopPositionInPattern.
+      departure.serviceJourney.id + departure.stopPositionInPattern,
     [],
   );
 
@@ -129,7 +131,7 @@ export const EstimatedCallList = ({
             >
               <ThemeText
                 color="secondary"
-                type="body__secondary"
+                typography="body__secondary"
                 style={{textAlign: 'center', width: '100%'}}
               >
                 {showOnlyFavorites

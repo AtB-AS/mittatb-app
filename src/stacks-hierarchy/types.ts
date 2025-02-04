@@ -1,8 +1,4 @@
 import {PaymentType, RecurringPayment} from '@atb/ticketing';
-import {FareProductTypeConfig, PreassignedFareProduct} from "@atb/configuration";
-import {UserProfileWithCount} from "@atb/fare-contracts";
-import {TariffZoneWithMetadata} from "@atb/tariff-zones-selector";
-import {StopPlaceFragmentWithIsFree} from "@atb/harbors/types.ts";
 
 export enum SavedPaymentMethodType {
   /**
@@ -20,7 +16,7 @@ export enum SavedPaymentMethodType {
 
 type CardPaymentMethod = {
   savedType: SavedPaymentMethodType;
-  paymentType: PaymentType.Mastercard | PaymentType.Visa;
+  paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
   recurringCard?: RecurringPayment;
 };
 type VippsPaymentMethod = {
@@ -29,12 +25,3 @@ type VippsPaymentMethod = {
   recurringCard?: undefined;
 };
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
-
-export type PurchaseSelectionType = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-  userProfilesWithCount: UserProfileWithCount[];
-  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
-  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
-  travelDate?: string;
-};

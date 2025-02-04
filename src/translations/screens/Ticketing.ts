@@ -12,7 +12,7 @@ type TicketHistoryModeText = {
 export const TicketHistoryModeTexts: {
   [key in TicketHistoryMode]: TicketHistoryModeText;
 } = {
-  expired: {
+  historical: {
     title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
     titleA11y: _(
       'Aktiver for å vise dine utløpte billetter',
@@ -87,7 +87,7 @@ const TicketingTexts = {
       ),
     },
   },
-  activeFareProductsAndReservationsTab: {
+  availableFareProductsAndReservationsTab: {
     label: _('Mine billetter', 'My tickets', 'Mine billettar'),
     noActiveTicketsTitle: _(
       'Ingen aktive billetter',
@@ -170,9 +170,9 @@ const TicketingTexts = {
   },
   reservation: {
     reserving: _(
-      'Prosesseres... ikke gyldig enda',
-      'Processing... not yet valid',
-      'Prosesserer... ikkje gyldig enda',
+      'Venter på prosessering...',
+      'Waiting for processing...',
+      'Ventar på prosessering...',
     ),
     approved: _(
       'Betaling godkjent. Henter billett...',
@@ -267,24 +267,6 @@ const TicketingTexts = {
       'Ticket sent to someone else',
       'Billett sendt til andre',
     ),
-  },
-  ticketAssistantTile: {
-    title: _(
-      'Billettveileder for buss og trikk',
-      'Ticket assistant for bus and tram',
-      'Billettrettleiar for buss og trikk',
-    ),
-    description: _(
-      'Få hjelp til å velge billetten som passer best for deg.',
-      'Get help choosing the ticket that suits you the best.',
-      'Få hjelp til å velje billetten som passar best for deg.',
-    ),
-    a11yHint: _(
-      'Aktiver for å åpne billettveilederen',
-      'Activate to open the ticket assistant',
-      'Aktiver for å opne billettrettleiaren',
-    ),
-    label: _('FORSLAG', 'SUGGESTIONS', 'FORSLAG'),
   },
   tipsAndInformationTile: {
     title: _(

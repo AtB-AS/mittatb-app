@@ -1,13 +1,25 @@
-const {getDefaultConfig} = require('@react-native/metro-config');
+const path = require('path');
+const withStorybook = require('@storybook/react-native/metro/withStorybook');
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const {
+  wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config');
+
+const defaultConfig = getDefaultConfig(__dirname);
 
 /**
  * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
+ * https://reactnative.dev/docs/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = getDefaultConfig(__dirname);
+let config = {};
 
-config.resolver.resolverMainFields.unshift("sbmodern");
+config = mergeConfig(defaultConfig, config);
+config = withStorybook(config, {
+  enabled: true,
+  configPath: path.resolve(__dirname, './.storybook'),
+});
+config = wrapWithReanimatedMetroConfig(config);
 
 module.exports = config;

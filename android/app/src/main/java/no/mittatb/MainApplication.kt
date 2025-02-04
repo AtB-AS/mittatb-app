@@ -42,7 +42,6 @@ class MainApplication : MultiDexApplication(), ReactApplication {
             // If you opted-in for the New Architecture, we load the native entry point for this app.
             load()
         }
-        ReactNativeFlipperInitializer.initializeFlipper(this, reactNativeHost.reactInstanceManager);
     }
 
     private fun tryInitializeBugsnag() {

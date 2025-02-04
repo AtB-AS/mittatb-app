@@ -1,11 +1,13 @@
 import {TripPattern} from '@atb/api/types/trips';
 
+// NOTE: The iOS departure widget is dependent on this type. When changing it,
+// make sure to update the widget as well.
 export type ServiceJourneyDeparture = {
   serviceJourneyId: string;
   date: string;
   serviceDate: string;
-  fromQuayId?: string;
-  toQuayId?: string;
+  fromStopPosition: number;
+  toStopPosition?: number;
   isTripCancelled?: boolean;
 };
 

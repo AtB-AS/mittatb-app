@@ -8,44 +8,45 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {
-  useFirestoreConfiguration,
-  PreassignedFareProduct,
   isProductSellableInApp,
-  FareProductTypeConfig,
+  useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
-import {useTicketingState} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {
+  type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
+} from '@atb/purchase-selection';
 
 type Props = {
   color: InteractiveColor;
-  selectedProduct: PreassignedFareProduct;
-  fareProductTypeConfig: FareProductTypeConfig;
-  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  selection: PurchaseSelectionType;
+  setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByAlias({
   color,
-  selectedProduct,
-  fareProductTypeConfig,
-  setSelectedProduct,
+  selection,
+  setSelection,
   style,
 }: Props) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {customerProfile} = useTicketingContext();
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type)
+    .filter((product) => product.type === selection.preassignedFareProduct.type)
     .filter(onlyUniquesBasedOnField('productAliasId', true));
 
   const title = useTextForLanguage(
-    fareProductTypeConfig.configuration.productSelectionTitle,
+    selection.fareProductTypeConfig.configuration.productSelectionTitle,
   );
 
   return (
@@ -69,11 +70,18 @@ export function ProductSelectionByAlias({
               color={color}
               text={text}
               selected={
-                selectedProduct.productAliasId
-                  ? selectedProduct.productAliasId === fp.productAliasId
-                  : selectedProduct.id === fp.id
+                selection.preassignedFareProduct.productAliasId
+                  ? selection.preassignedFareProduct.productAliasId ===
+                    fp.productAliasId
+                  : selection.preassignedFareProduct.id === fp.id
               }
-              onPress={() => setSelectedProduct(fp)}
+              onPress={() => {
+                const newSelection = selectionBuilder
+                  .fromSelection(selection)
+                  .product(fp)
+                  .build();
+                setSelection(newSelection);
+              }}
               key={i}
             />
           );

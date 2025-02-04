@@ -1,8 +1,8 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {SearchTime} from './types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {DepartureSearchTime} from './types';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -48,10 +48,10 @@ export const PlaceScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
-  const [searchTime, setSearchTime] = useState<SearchTime>({
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
@@ -90,8 +90,8 @@ export const PlaceScreenComponent = ({
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
     isTripCancelled?: boolean,
   ) => {
     if (!date) return;
@@ -101,7 +101,7 @@ export const PlaceScreenComponent = ({
           serviceJourneyId,
           serviceDate,
           date,
-          fromQuayId,
+          fromStopPosition,
           isTripCancelled,
         },
       ],
@@ -167,6 +167,7 @@ export const PlaceScreenComponent = ({
       {onPressClose && (
         <View style={styles.closeButton}>
           <Button
+            expanded={true}
             interactiveColor={interactiveColor}
             text={t(DeparturesTexts.closeButton.label)}
             onPress={onPressClose}

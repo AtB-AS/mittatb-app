@@ -1,4 +1,3 @@
-import {PaymentType} from '@atb/ticketing';
 import {format, parseISO} from 'date-fns';
 import {ErrorType} from '@atb/api/utils';
 import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
@@ -8,19 +7,6 @@ import {
   useTariffZoneFromLocation,
 } from '@atb/tariff-zones-selector';
 import {useMemo} from 'react';
-
-export function getPaymentTypeName(paymentType: PaymentType) {
-  switch (paymentType) {
-    case PaymentType.Visa:
-      return 'Visa';
-    case PaymentType.Mastercard:
-      return 'MasterCard';
-    case PaymentType.Vipps:
-      return 'Vipps';
-    default:
-      return '';
-  }
-}
 
 export function getExpireDate(iso: string): string {
   const date = parseISO(iso);
@@ -79,12 +65,24 @@ export const useFilterTariffZone = (
   tariffZones: TariffZone[],
   allowedTariffZoneRefs: string[],
 ): TariffZone[] => {
-
   return useMemo<TariffZone[]>(() => {
     if (allowedTariffZoneRefs.length === 0) {
       return tariffZones;
-    } 
-  
-    return tariffZones.filter((tariffZone) => allowedTariffZoneRefs.some((allowedZone) => tariffZone.id === allowedZone));
+    }
+
+    return tariffZones.filter((tariffZone) =>
+      allowedTariffZoneRefs.some(
+        (allowedZone) => tariffZone.id === allowedZone,
+      ),
+    );
   }, [tariffZones, allowedTariffZoneRefs]);
-}
+};
+
+/**
+ * Parses unknown param data as an integer, or falls back to undefined.
+ */
+export const parseParamAsInt = (data: any): number | undefined => {
+  if (typeof data === 'string') return parseInt(data) || undefined;
+  if (typeof data === 'number') return Math.round(data);
+  return undefined;
+};

@@ -6,7 +6,7 @@ import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedEntityChanges} from './use-update-bottom-sheet-when-selected-entity-changes';
 import {Coordinates} from '@atb/utils/coordinates';
-import {useMapState} from '@atb/MapContext';
+import {useMapContext} from '@atb/MapContext';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
@@ -27,7 +27,7 @@ export const useMapSelectionChangeEffect = (
   const [mapSelectionAction, setMapSelectionAction] = useState<
     MapSelectionActionType | undefined
   >({source: 'my-position', coords: startingCoordinates});
-  const {setBottomSheetCurrentlyAutoSelected} = useMapState();
+  const {setBottomSheetCurrentlyAutoSelected} = useMapContext();
 
   const cameraFocusMode = useDecideCameraFocusMode(mapSelectionAction);
   const distance =

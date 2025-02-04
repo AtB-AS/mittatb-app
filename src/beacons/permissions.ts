@@ -118,7 +118,10 @@ export const allowedPermissionsForBeacons = async () => {
   // For iOS below 13, Bluetooth permission is set as "on" for apps
   // For that reason, we don't need to check for Bluetooth permission
   // NOTE: This is a fix for iOS 12 and below were the SDK crashes if bluetooth is not included
-  if (permissionStatuses.bluetooth || (Platform.OS === 'ios' && parseInt(Platform.Version, 10) < 13)) {
+  if (
+    permissionStatuses.bluetooth ||
+    (Platform.OS === 'ios' && parseInt(Platform.Version, 10) < 13)
+  ) {
     kettleModulesArray.push(KettleModules.BLUETOOTH);
   }
   if (permissionStatuses.locationAlways) {

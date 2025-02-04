@@ -10,9 +10,10 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
+import {getColorByOption} from '../utils';
 
-type MessageInfoTextMetaProps = MessageInfoTextProps & ThemedStoryProps;
+type MessageInfoTextMetaProps = ThemedStoryProps<MessageInfoTextProps>;
 
 const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
   title: 'MessageInfoText',
@@ -27,14 +28,25 @@ const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
     ...themedStoryDefaultArgs,
   },
   decorators: [
-    (Story, {args}) => (
-      <View style={{alignItems: 'center'}}>
-        <Story args={{...args, type: 'info'}} />
-        <Story args={{...args, type: 'valid'}} />
-        <Story args={{...args, type: 'warning'}} />
-        <Story args={{...args, type: 'error'}} />
-      </View>
-    ),
+    (Story, {args}) => {
+      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
+      return (
+        <View style={{alignItems: 'center'}}>
+          <Story
+            args={{...args, type: 'info', textColor: storyContrastColor}}
+          />
+          <Story
+            args={{...args, type: 'valid', textColor: storyContrastColor}}
+          />
+          <Story
+            args={{...args, type: 'warning', textColor: storyContrastColor}}
+          />
+          <Story
+            args={{...args, type: 'error', textColor: storyContrastColor}}
+          />
+        </View>
+      );
+    },
     ThemedStoryDecorator,
   ],
 };

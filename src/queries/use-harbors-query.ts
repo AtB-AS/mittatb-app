@@ -7,7 +7,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ONE_HOUR_MS} from '@atb/utils/durations.ts';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {ProductTypeTransportModes} from '@atb-as/config-specs';
 import {onlyUniques} from '@atb/utils/only-uniques';
 

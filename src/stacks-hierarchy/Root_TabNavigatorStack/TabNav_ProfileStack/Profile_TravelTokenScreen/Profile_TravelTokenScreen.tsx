@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import React from 'react';
@@ -8,15 +8,14 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {Section, GenericSectionItem} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 
 export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {disable_travelcard} = useRemoteConfig();
+  const {disable_travelcard} = useRemoteConfigContext();
   const {data} = useTokenToggleDetailsQuery();
 
   return (
@@ -29,13 +28,9 @@ export const Profile_TravelTokenScreen = () => {
         }
         leftButton={{type: 'back'}}
       />
-      <ScrollView style={styles.scrollView}>
-        <TravelTokenBox
-          showIfThisDevice={true}
-          alwaysShowErrors={true}
-          interactiveColor={theme.color.interactive[0]}
-        />
-        <Section style={styles.tokenInfoSection}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+        <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>
               <TokenToggleInfo style={styles.tokenInfoView} />
@@ -53,11 +48,9 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
-  scrollView: {
+  content: {
+    rowGap: theme.spacing.medium,
     padding: theme.spacing.medium,
-  },
-  tokenInfoSection: {
-    marginBottom: theme.spacing.medium,
   },
   tokenInfoView: {flexDirection: 'row'},
 }));

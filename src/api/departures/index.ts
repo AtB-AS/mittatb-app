@@ -1,12 +1,7 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {
-  FavoriteDeparture,
-  UserFavoriteDepartures,
-} from '@atb/favorites';
-import {
-  DeparturesRealtimeData,
-} from '@atb/sdk';
+import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites';
+import {DeparturesRealtimeData} from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {client} from '../client';
@@ -75,7 +70,6 @@ export async function getFavouriteDepartures(
     lineId: f.lineId,
     quayId: f.quayId,
     quayName: f.quayName,
-    stopId: f.stopId,
     lineLineNumber: f.lineLineNumber,
     destinationDisplay: f.destinationDisplay,
     lineTransportationMode: f.lineTransportationMode,

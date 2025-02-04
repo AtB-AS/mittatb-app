@@ -1,6 +1,6 @@
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {MapTexts, TripSearchTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
@@ -27,7 +27,7 @@ export const MapFilterSheet = ({
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
   const [filter, setFilter] = useState<MapFilterType>();
-  const {close: closeBottomSheet} = useBottomSheet();
+  const {close: closeBottomSheet} = useBottomSheetContext();
 
   useEffect(() => {
     getMapFilter().then((f) => {
@@ -65,6 +65,7 @@ export const MapFilterSheet = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
+          expanded={true}
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={() => {
             setMapFilter(filter);

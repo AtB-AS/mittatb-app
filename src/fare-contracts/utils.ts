@@ -1,23 +1,19 @@
 import {
-  CarnetTravelRight,
   FareContract,
   Reservation,
   FareContractState,
-  NormalTravelRight,
-  flattenCarnetTravelRightAccesses,
-  isCarnet,
-  isCarnetTravelRight,
+  flattenTravelRightAccesses,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-  isNormalTravelRight,
   CarnetTravelRightUsedAccess,
+  TravelRight,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
-  useFirestoreConfiguration,
+  useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
@@ -28,9 +24,11 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/mobile-token';
 import {useCallback, useMemo} from 'react';
-import {useAuthState} from '@atb/auth';
+import {useAuthContext} from '@atb/auth';
+import humanizeDuration from 'humanize-duration';
+import type {UnitMapType} from '@atb/fare-contracts/types';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -69,13 +67,11 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
 
-  if (isCarnet(fc)) {
-    const usedAccesses = flattenCarnetTravelRightAccesses(
-      fc.travelRights as CarnetTravelRight[],
-    ).usedAccesses;
-    return getLastUsedAccess(now, usedAccesses).status;
+  const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
+  if (fareContractAccesses) {
+    return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
   } else {
-    const firstTravelRight = fc.travelRights.filter(isNormalTravelRight)[0];
+    const firstTravelRight = fc.travelRights[0];
     return getRelativeValidity(
       now,
       firstTravelRight.startDateTime.getTime(),
@@ -93,31 +89,33 @@ export const useSortFcOrReservationByValidityAndCreation = (
     currentUserId?: string,
   ) => ValidityStatus | undefined,
 ): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthState();
+  const {abtCustomerId: currentUserId} = useAuthContext();
   const getFcOrReservationOrder = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
-      if (!isFareContract) return 1;
+      if (!isFareContract) return -1;
 
       const validityStatus = getFareContractStatus(
         now,
         fcOrReservation,
         currentUserId,
       );
-      return validityStatus === 'valid' ? 1 : 0;
+      return validityStatus === 'valid' ? 0 : 1;
     },
     [getFareContractStatus, now, currentUserId],
   );
 
-  const fareContractsAndReservationsSorted = useMemo(() => {
+  return useMemo(() => {
     return fcOrReservations.sort((a, b) => {
-      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
-      return order === 0 ? b.created.getTime() - a.created.getTime() : order;
+      const orderA = getFcOrReservationOrder(a);
+      const orderB = getFcOrReservationOrder(b);
+      // Negative return value for a - b means "place a before b"
+      if (orderA !== orderB) return orderA - orderB;
+      // Make sure most recent dates comes first
+      return b.created.getTime() - a.created.getTime();
     });
   }, [fcOrReservations, getFcOrReservationOrder]);
-
-  return fareContractsAndReservationsSorted;
 };
 
 export const mapToUserProfilesWithCount = (
@@ -152,7 +150,7 @@ export const mapToUserProfilesWithCount = (
 
 export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
-  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  const {mobileTokenStatus, tokens} = useMobileTokenContext();
   switch (mobileTokenStatus) {
     case 'success-and-inspectable':
     case 'fallback':
@@ -176,7 +174,7 @@ export const useNonInspectableTokenWarning = () => {
 
 export const useOtherDeviceIsInspectableWarning = () => {
   const {t} = useTranslation();
-  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  const {mobileTokenStatus, tokens} = useMobileTokenContext();
   switch (mobileTokenStatus) {
     case 'success-and-inspectable':
     case 'fallback':
@@ -206,7 +204,7 @@ export const useTariffZoneSummary = (
   toTariffZone?: TariffZone,
 ) => {
   const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
 
   if (!fromTariffZone || !toTariffZone) return undefined;
 
@@ -258,8 +256,7 @@ export const useDefaultPreassignedFareProduct = (
 };
 
 type FareContractInfoProps = {
-  isCarnetFareContract: boolean;
-  travelRights: NormalTravelRight[];
+  travelRights: TravelRight[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -273,14 +270,10 @@ export function getFareContractInfo(
   fc: FareContract,
   currentUserId?: string,
 ): FareContractInfoProps {
-  const isCarnetFareContract = isCarnet(fc);
-
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
-  const travelRights = fc.travelRights.filter(
-    isCarnetFareContract ? isCarnetTravelRight : isNormalTravelRight,
-  );
+  const travelRights = fc.travelRights;
   const firstTravelRight = travelRights[0];
 
   const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
@@ -288,9 +281,7 @@ export function getFareContractInfo(
 
   const validityStatus = getValidityStatus(now, fc, isSent);
 
-  const carnetTravelRightAccesses = isCarnetFareContract
-    ? flattenCarnetTravelRightAccesses(travelRights as CarnetTravelRight[])
-    : undefined;
+  const carnetTravelRightAccesses = flattenTravelRightAccesses(travelRights);
 
   const lastUsedAccess =
     carnetTravelRightAccesses &&
@@ -309,7 +300,6 @@ export function getFareContractInfo(
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
 
   return {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     validFrom,
@@ -318,4 +308,51 @@ export function getFareContractInfo(
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   };
+}
+
+export const getReservationStatus = (reservation: Reservation) => {
+  const paymentStatus = reservation.paymentStatus;
+  switch (paymentStatus) {
+    case 'CAPTURE':
+      return 'approved';
+    case 'REJECT':
+      return 'rejected';
+    default:
+      return 'reserving';
+  }
+};
+
+/**
+ * These are following the rules from AtB-AS/kundevendt#4220, which apply for validityDuration of FareContracts
+ * https://github.com/AtB-AS/kundevendt/issues/4220#issuecomment-2615206325
+ * @param seconds
+ */
+export function fareContractValidityUnits(
+  seconds: number,
+): humanizeDuration.Unit[] {
+  const oneMinuteInSeconds = 60;
+  const oneHourInSeconds = oneMinuteInSeconds * 60;
+  const oneDayInSeconds = oneHourInSeconds * 24;
+  const sevenDaysInSeconds = oneDayInSeconds * 7;
+  const unitMap: UnitMapType = [
+    {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
+    {
+      range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+      units: ['m', 's'],
+    },
+    {
+      range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
+      units: ['h', 'm'],
+    },
+    {
+      range: {low: oneDayInSeconds, high: sevenDaysInSeconds - 1},
+      units: ['d', 'h'],
+    },
+    {range: {low: sevenDaysInSeconds, high: Infinity}, units: ['d']},
+  ];
+
+  return (
+    unitMap.find(({range}) => seconds >= range.low && seconds <= range.high)
+      ?.units ?? ['d', 'h', 'm']
+  );
 }

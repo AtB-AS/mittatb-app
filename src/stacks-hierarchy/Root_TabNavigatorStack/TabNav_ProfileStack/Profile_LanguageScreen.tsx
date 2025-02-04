@@ -3,7 +3,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {Preference_Language, usePreferences} from '@atb/preferences';
+import {Preference_Language, usePreferencesContext} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   appLanguages,
@@ -15,18 +15,26 @@ import React from 'react';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 const identity = (s: string) => s;
 export const Profile_LanguageScreen = () => {
   const {
     setPreference,
     preferences: {useSystemLanguage = true, language},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   const style = useStyle();
   const {t} = useTranslation();
+  const {isNynorskEnabled} = useFeatureTogglesContext();
 
   const languages = Array.from(appLanguages);
+
+  const languagesExceptNynorsk = languages.filter((lang) => lang !== 'nn');
+
+  const selectableLanguages = isNynorskEnabled
+    ? languages
+    : languagesExceptNynorsk;
 
   return (
     <FullScreenView
@@ -57,7 +65,7 @@ export const Profile_LanguageScreen = () => {
         </Section>
         {!useSystemLanguage && (
           <RadioGroupSection<Preference_Language>
-            items={languages}
+            items={selectableLanguages}
             keyExtractor={identity}
             itemToText={(item) => {
               return t(LanguageSettingsTexts.options[item]);

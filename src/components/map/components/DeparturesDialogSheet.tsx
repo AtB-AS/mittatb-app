@@ -4,7 +4,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {
-  SearchTime,
+  DepartureSearchTime,
   StopPlacesView,
   useStopsDetailsDataQuery,
 } from '@atb/place-screen';
@@ -14,7 +14,7 @@ import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {isDefined} from '@atb/utils/presence.ts';
+import {isDefined} from '@atb/utils/presence';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -24,8 +24,8 @@ type DeparturesDialogSheetProps = {
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
+    date: string | undefined,
+    fromStopPosition: number,
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
@@ -41,7 +41,7 @@ export const DeparturesDialogSheet = ({
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
-  const [searchTime, setSearchTime] = useState<SearchTime>({
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });

@@ -40,15 +40,29 @@ const dictionary = {
         `Ukjent transportmiddel`,
       ),
     },
+    legSubModes: {
+      nightBus: _('Nattbuss', 'Night bus', `Nattbuss`),
+    },
     line: _('Linje', 'Line', 'Linje'),
     time: {
       aimedPrefix: _('Rutetid', 'Route time', `Rutetid`),
       expectedPrefix: _('Sanntid', 'Realtime', `Sanntid`),
     },
   },
+  appNavigation: {
+    close: {
+      text: _('Lukk', 'Close', 'Lukk'),
+      a11yHint: _(
+        'Aktivér for å lukke',
+        'Activate to close',
+        'Aktivér for å lukke',
+      ),
+    },
+  },
   date: {
     units: {
       now: _('Nå', 'Now', `No`),
+      later: _('Senere', 'Later', `Seinare`),
       short: {
         year: _('år', 'y', `år`),
         month: _('m', 'm', `mnd`),
@@ -104,6 +118,7 @@ const dictionary = {
     valid: _('Suksess', 'Success', `Suksess`),
     error: _('Feil', 'Error', `Feil`),
   },
+  confirm: _('Bekreft', 'Confirm', `Bekreft`),
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   cancel: _('Avbryt', 'Cancel', `Avbryt`),
   remove: _('Fjern', 'Remove', `Fjern`),
@@ -116,6 +131,12 @@ const dictionary = {
   unchecked: _('ikke avhuket', 'unchecked', 'Ikkje avhuket'),
   selected: _('Valgt', 'selected', 'Valgt'),
   unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
+  genericErrorMsg: _(
+    'Noe gikk galt',
+    'Something went wrong',
+    `Noko gjekk gale`,
+  ),
+  zone: _('Sone', 'Zone', 'Sone'),
 };
 
 export default orgSpecificTranslations(dictionary, {

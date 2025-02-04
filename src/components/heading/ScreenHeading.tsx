@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '../text';
@@ -11,22 +11,15 @@ type ScreenHeadingProps = {
 };
 
 export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
-  (
-    {
-      text,
-      color,
-      accessibilityLabel,
-    }: ScreenHeadingProps,
-    ref,
-  ) => {
+  ({text, color, accessibilityLabel}: ScreenHeadingProps, ref) => {
     const styles = useStyles();
-    const {theme} = useTheme();
-    color = color ?? theme.color.background.accent[0]
+    const {theme} = useThemeContext();
+    color = color ?? theme.color.background.accent[0];
 
     return (
       <View style={styles.container} ref={ref} accessible role="heading">
         <ThemeText
-          type="heading--medium"
+          typography="heading--medium"
           color={color}
           accessibilityLabel={accessibilityLabel}
         >

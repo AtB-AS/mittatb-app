@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {PhoneSignInErrorCode, useAuthState} from '@atb/auth';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {PhoneSignInErrorCode, useAuthContext} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,
@@ -32,9 +32,9 @@ export const Root_LoginPhoneInputScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const {signInWithPhoneNumber} = useAuthState();
+  const {signInWithPhoneNumber} = useAuthContext();
   const focusRef = useFocusOnLoad();
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -106,7 +106,7 @@ export const Root_LoginPhoneInputScreen = ({
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              type="body__primary--jumbo--bold"
+              typography="body__primary--jumbo--bold"
               style={styles.title}
               color={themeColor}
             >
@@ -155,6 +155,7 @@ export const Root_LoginPhoneInputScreen = ({
 
             {!isSubmitting && (
               <Button
+                expanded={true}
                 style={styles.submitButton}
                 interactiveColor={theme.color.interactive[0]}
                 onPress={onNext}

@@ -1,5 +1,5 @@
 import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Platform, View} from 'react-native';
@@ -14,7 +14,7 @@ export const Profile_AppearanceScreen = () => {
     overrideOSThemePreference,
     useAndroidSystemFont,
     updateAndroidFontOverride,
-  } = useTheme();
+  } = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
 

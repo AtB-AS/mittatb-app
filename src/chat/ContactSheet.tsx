@@ -1,45 +1,45 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContactSheetTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {
   BottomSheetContainer,
-  useBottomSheet,
+  useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom, {Space} from '@intercom/intercom-react-native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
 import {Theme} from '@atb/theme/colors';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   onReportParkingViolation: () => void;
 };
 
-const getInteractiveColor = (theme: Theme) => theme.color.interactive[2]
-const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0]
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
+const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme()
+  const {theme} = useThemeContext();
 
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
-    useRemoteConfig();
-  const analytics = useAnalytics();
-  const {isParkingViolationsReportingEnabled} = useFeatureToggles();
+    useRemoteConfigContext();
+  const analytics = useAnalyticsContext();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const showWebsiteFeedback = !!customer_feedback_url;
   const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
-  const {close} = useBottomSheet();
+  const {close} = useBottomSheetContext();
 
   return (
     <BottomSheetContainer title={t(ContactSheetTexts.header.title)}>
@@ -47,6 +47,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
         <View style={styles.buttonContainer}>
           {showWebsiteFeedback ? (
             <Button
+              expanded={true}
               interactiveColor={getInteractiveColor(theme)}
               text={t(ContactSheetTexts.customer_feedback_website.button)}
               accessibilityHint={t(
@@ -64,6 +65,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
 
           {showIntercomFeedback ? (
             <Button
+              expanded={true}
               {...screenReaderHidden}
               text={t(ContactSheetTexts.customer_feedback.button)}
               accessibilityHint={t(
@@ -87,6 +89,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             />
           ) : undefined}
           <Button
+            expanded={true}
             backgroundColor={getBackgroundColor(theme)}
             text={t(ContactSheetTexts.customer_service.button)}
             accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
@@ -101,6 +104,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
           />
           {isParkingViolationsReportingEnabled && (
             <Button
+              expanded={true}
               backgroundColor={getBackgroundColor(theme)}
               text={t(ContactSheetTexts.parking_violations.buttonText)}
               accessibilityHint={t(

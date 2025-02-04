@@ -17,19 +17,19 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils.ts';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/ticketing';
-import {useFeatureToggles} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/feature-toggles';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
   fareProductTypeConfig: FareProductTypeConfig;
   recipient?: TicketRecipientType;
   isSearchingOffer: boolean;
-  fromPlace: TariffZone | StopPlaceFragment;
-  toPlace: TariffZone | StopPlaceFragment;
+  fromPlace: TariffZone | StopPlaceFragment | undefined;
+  toPlace: TariffZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
   travelDate?: string;
 };
@@ -46,12 +46,12 @@ export const PreassignedFareContractSummary = ({
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {isShowValidTimeInfoEnabled} = useFeatureToggles();
+  const {isShowValidTimeInfoEnabled} = useFeatureTogglesContext();
 
   const {zoneSelectionMode} = fareProductTypeConfig.configuration;
 
-  const fromPlaceName = getPlaceName(fromPlace, language);
-  const toPlaceName = getPlaceName(toPlace, language);
+  const fromPlaceName = fromPlace ? getPlaceName(fromPlace, language) : '';
+  const toPlaceName = toPlace ? getPlaceName(toPlace, language) : '';
 
   const travelDateText = travelDate
     ? t(
@@ -66,7 +66,7 @@ export const PreassignedFareContractSummary = ({
     return (
       <ThemeText
         style={styles.smallTopMargin}
-        type="body__secondary"
+        typography="body__secondary"
         color="secondary"
         testID="summaryText"
       >
@@ -92,7 +92,7 @@ export const PreassignedFareContractSummary = ({
         );
       default:
         return summary(
-          fromPlace.id === toPlace.id
+          fromPlace?.id === toPlace?.id
             ? t(
                 PurchaseConfirmationTexts.validityTexts.zone.single(
                   fromPlaceName,
@@ -117,7 +117,7 @@ export const PreassignedFareContractSummary = ({
           </ThemeText>
           {recipient && (
             <ThemeText
-              type="body__secondary"
+              typography="body__secondary"
               color="secondary"
               style={styles.sendingToText}
               testID="onBehalfOfText"
@@ -139,7 +139,7 @@ export const PreassignedFareContractSummary = ({
             )}
           <SummaryText />
           {!isSearchingOffer &&
-            validDurationSeconds &&
+            !!validDurationSeconds &&
             isShowValidTimeInfoEnabled &&
             summary(
               t(

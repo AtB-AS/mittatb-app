@@ -3,11 +3,10 @@ import {translation as _} from '../commons';
 export const ParkingViolationTexts = {
   selectViolation: {
     title: _(
-      'Rapporter feilparkering av sparkesykkel',
-      'Report scooter parking violations',
-      'Rapporter feilparkering av sparkesykkel',
+      'Rapporter feilparkering',
+      'Report parking violation',
+      'Rapporter feilparkering',
     ),
-    description: _('Velg feil', 'Select violation', 'Velg feil'),
     violationDescription: (code: string) => {
       switch (code) {
         case 'no_parking':
@@ -93,9 +92,9 @@ export const ParkingViolationTexts = {
   },
   confirmation: {
     title: _(
-      'Feilparkering rapportert!',
-      'Report sent!',
-      'Feilparkering rapportert!',
+      'Feilparkering rapportert',
+      'Report sent',
+      'Feilparkering rapportert',
     ),
     description: (providerName?: string) =>
       _(
@@ -109,7 +108,6 @@ export const ParkingViolationTexts = {
           providerName ?? 'operatøren'
         } og til kommunen.`,
       ),
-    closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
   issue: {
     general: {

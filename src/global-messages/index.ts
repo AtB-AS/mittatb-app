@@ -1,6 +1,6 @@
 export {
   GlobalMessagesContextProvider,
-  useGlobalMessagesState,
+  useGlobalMessagesContext,
 } from './GlobalMessagesContext';
 
 export {GlobalMessage} from '@atb/global-messages/GlobalMessage';

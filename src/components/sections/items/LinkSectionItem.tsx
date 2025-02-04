@@ -9,7 +9,7 @@ import {
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb/configuration';
@@ -30,7 +30,7 @@ type Props = SectionItemProps<{
   interactiveColor?: InteractiveColor;
 }>;
 
-export const LinkSectionItem = forwardRef<View, Props>(
+export const LinkSectionItem = forwardRef<any, Props>(
   (
     {
       text,
@@ -51,8 +51,9 @@ export const LinkSectionItem = forwardRef<View, Props>(
     const {contentContainer, topContainer} = useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const {theme} = useTheme();
-    const themeColor = interactiveColor?.default ?? theme.color.interactive[2].default;
+    const {theme} = useThemeContext();
+    const themeColor =
+      interactiveColor?.default ?? theme.color.interactive[2].default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
         <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />
@@ -86,7 +87,7 @@ export const LinkSectionItem = forwardRef<View, Props>(
         <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
             style={[contentContainer, {color: themeColor.foreground.primary}]}
-            type={textType}
+            typography={textType}
           >
             {text}
           </ThemeText>
@@ -95,7 +96,7 @@ export const LinkSectionItem = forwardRef<View, Props>(
         </View>
         {subtitle && (
           <View style={disabledStyle}>
-            <ThemeText color="secondary" type="body__secondary">
+            <ThemeText color="secondary" typography="body__secondary">
               {subtitle}
             </ThemeText>
           </View>

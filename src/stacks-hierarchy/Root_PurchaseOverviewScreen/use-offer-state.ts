@@ -1,6 +1,6 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {PreassignedFareProduct, TariffZone} from '@atb/configuration';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {
   FlexDiscountLadder,
   Offer,
@@ -11,15 +11,14 @@ import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {PurchaseSelectionType} from '@atb/stacks-hierarchy/types';
+import {PurchaseSelectionType} from '@atb/purchase-selection';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
 };
 
 export type OfferError = {
-  type: ErrorType | 'empty-offers';
+  type: ErrorType | 'empty-offers' | 'not-available';
 };
 
 type OfferState = {
@@ -164,7 +163,6 @@ const initialState: OfferState = {
 
 export function useOfferState(
   selection: PurchaseSelectionType,
-  offerEndpoint: 'zones' | 'authority' | 'stop-places',
   preassignedFareProductAlternatives: PreassignedFareProduct[],
   isOnBehalfOf: boolean = false,
 ) {
@@ -173,7 +171,7 @@ export function useOfferState(
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if ('isFree' in selection.toPlace && selection.toPlace.isFree) {
+      if (selection.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
@@ -186,39 +184,39 @@ export function useOfferState(
           count: t.count,
         }));
 
-      if (!offerTravellers.length) {
+      const isTravellersValid = offerTravellers.length > 0;
+      const isStopPlacesValid = selection.stopPlaces
+        ? selection.stopPlaces.from && selection.stopPlaces.to
+        : true;
+      const isSelectionValid = isTravellersValid && isStopPlacesValid;
+
+      if (!isSelectionValid) {
         dispatch({type: 'CLEAR_OFFER'});
       } else {
         try {
-          if (
-            offerEndpoint === 'stop-places' &&
-            (isTariffZone(selection.fromPlace) ||
-              isTariffZone(selection.toPlace))
-          ) {
-            dispatch({type: 'CLEAR_OFFER'});
-            return;
-          }
-
-          const zones = [
-            ...new Set([selection.fromPlace.id, selection.toPlace.id]),
-          ];
-
-          const placeParams =
-            offerEndpoint === 'stop-places'
-              ? {from: selection.fromPlace.id, to: selection.toPlace.id}
-              : {zones};
           const params = {
-            ...placeParams,
+            zones: selection.zones && [
+              ...new Set([selection.zones.from.id, selection.zones.to.id]),
+            ],
+            from: selection.stopPlaces?.from!.id,
+            to: selection.stopPlaces?.to!.id,
             is_on_behalf_of: isOnBehalfOf,
             travellers: offerTravellers,
             products: preassignedFareProductAlternatives.map((p) => p.id),
             travel_date: selection.travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
+
+          const offerEndpoint = selection.stopPlaces
+            ? 'stop-places'
+            : selection.zones
+            ? 'zones'
+            : 'authority';
+
           const response = await searchOffers(offerEndpoint, params, {
             cancelToken,
-            retry: true,
             authWithIdToken: true,
+            skipErrorLogging: isNotAvailableError,
           });
 
           cancelToken?.throwIfRequested();
@@ -233,8 +231,10 @@ export function useOfferState(
               },
             });
           }
-        } catch (err) {
-          const errorType = getAxiosErrorType(err);
+        } catch (err: any) {
+          const errorType = isNotAvailableError(err)
+            ? 'not-available'
+            : getAxiosErrorType(err);
           if (errorType !== 'cancel') {
             console.warn(err);
             dispatch({
@@ -247,12 +247,7 @@ export function useOfferState(
         }
       }
     },
-    [
-      selection,
-      preassignedFareProductAlternatives,
-      offerEndpoint,
-      isOnBehalfOf,
-    ],
+    [selection, preassignedFareProductAlternatives, isOnBehalfOf],
   );
 
   useEffect(() => {
@@ -274,6 +269,5 @@ export function useOfferState(
   };
 }
 
-function isTariffZone(place: TariffZone | StopPlaceFragment) {
-  return 'geometry' in place;
-}
+const isNotAvailableError = (err: any) =>
+  err.response?.status === 400 && err.response?.data === 'NotAvailable';

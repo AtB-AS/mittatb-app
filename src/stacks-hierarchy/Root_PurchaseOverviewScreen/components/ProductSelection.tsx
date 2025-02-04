@@ -1,32 +1,28 @@
-import {PreassignedFareProduct} from '@atb/configuration';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
-import { useTheme } from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
+import type {PurchaseSelectionType} from '@atb/purchase-selection';
 
 type ProductSelectionProps = {
-  preassignedFareProduct: PreassignedFareProduct;
-  fareProductTypeConfig: FareProductTypeConfig;
-  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  selection: PurchaseSelectionType;
+  setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelection({
-  preassignedFareProduct,
-  fareProductTypeConfig,
-  setSelectedProduct,
+  selection,
+  setSelection,
   style,
 }: ProductSelectionProps) {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
 
-  switch (fareProductTypeConfig.configuration.productSelectionMode) {
+  switch (selection.fareProductTypeConfig.configuration.productSelectionMode) {
     case 'product':
       return (
         <ProductSelectionByProducts
-          selectedProduct={preassignedFareProduct}
-          fareProductTypeConfig={fareProductTypeConfig}
-          setSelectedProduct={setSelectedProduct}
+          selection={selection}
+          setSelection={setSelection}
           style={style}
         />
       );
@@ -35,9 +31,8 @@ export function ProductSelection({
       return (
         <ProductSelectionByAlias
           color={theme.color.interactive[2]}
-          selectedProduct={preassignedFareProduct}
-          fareProductTypeConfig={fareProductTypeConfig}
-          setSelectedProduct={setSelectedProduct}
+          selection={selection}
+          setSelection={setSelection}
           style={style}
         />
       );

@@ -1,5 +1,5 @@
 import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
-import {OnBehalfOfAccountType} from "@atb/on-behalf-of/types.ts";
+import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
 
 export type OnBehalfOfErrorCode =
   | GetAccountByPhoneErrorCode

@@ -84,7 +84,6 @@ export const fetchOnBehalfOfAccounts =
     client
       .get(`${profileEndpoint}/on-behalf-of/accounts`, {
         authWithIdToken: true,
-        retry: false,
       })
       .then((response) => response.data);
 

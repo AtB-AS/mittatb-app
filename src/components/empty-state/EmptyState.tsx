@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import React from 'react';
 
 export type EmptyStateProps = {
@@ -24,8 +24,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   testID,
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme()
-  const interactiveColor = theme.color.interactive[3]
+  const {theme} = useThemeContext();
+  const interactiveColor = theme.color.interactive[3];
 
   return (
     <View
@@ -34,14 +34,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     >
       {illustrationComponent}
       <ThemeText
-        type="body__primary--bold"
+        typography="body__primary--bold"
         color="secondary"
         style={styles.emptyStateTitle}
       >
         {title}
       </ThemeText>
       <ThemeText
-        type="body__secondary"
+        typography="body__secondary"
         color="secondary"
         style={styles.emptyStateDetails}
       >
@@ -49,11 +49,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </ThemeText>
       {buttonProps && (
         <Button
+          expanded={false}
           interactiveColor={interactiveColor}
           text={buttonProps.text}
           mode="primary"
           onPress={buttonProps.onPress}
-          compact={true}
           type="small"
         />
       )}

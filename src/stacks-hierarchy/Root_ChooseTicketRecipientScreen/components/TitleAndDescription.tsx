@@ -13,7 +13,7 @@ export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
       <>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            type="heading--big"
+            typography="heading--big"
             color={themeColor}
             style={styles.title}
           >
@@ -22,7 +22,7 @@ export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
         </View>
         <View accessible={true}>
           <ThemeText
-            type="body__primary"
+            typography="body__primary"
             color={themeColor}
             style={styles.description}
           >

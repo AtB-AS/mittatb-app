@@ -1,6 +1,6 @@
 # Managing new releases
 
-Currently we distribute builds through AppCenter, but build on Github with Github Actions. We target a single branch, `master`, and build for two different environments:
+Currently we distribute builds through Firebase App distribution, but build on Github with Github Actions. We target a single branch, `master`, and build for two different environments:
 
 - `staging` - Continous integrated and distributed to test devices and development team. Also where we do most of our [QA](https://github.com/AtB-AS/org/blob/master/guides/workflow-and-qa-progress-apps.md).
 - `store` - Periodic manually triggered by Github-releases, and distributed to internal testers on the "alpha" release plan (TestFlight for iOS and Alpha-channel on Google Play Store). When a `store` build is ready for Production-channels, we promote the builds inside the respective store-pages (Github is not involved).

@@ -1,5 +1,7 @@
 import {
   dateWithReplacedTime,
+  formatLocaleTime,
+  formatToClockOrLongRelativeMinutes,
   iso8601DurationToSeconds,
   minutesBetween,
   secondsBetween,
@@ -16,11 +18,14 @@ import {
   Mode,
   TariffZone,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {dictionary, TranslateFunction} from '@atb/translations';
+import {dictionary, Language, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
-import {Statuses} from '@atb-as/theme';
+import {Statuses} from '@atb/theme';
+import {isDefined} from '@atb/utils/presence';
+import {screenReaderPause} from '@atb/components/text';
+import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -57,16 +62,16 @@ export const getNoticesForLeg = (leg: Leg) =>
     ...(leg.serviceJourney?.notices || []),
     ...(leg.serviceJourney?.journeyPattern?.notices || []),
     ...(leg.fromEstimatedCall?.notices || []),
+    ...(leg.toEstimatedCall?.notices || []),
   ]);
 
 export const getNoticesForServiceJourney = (
   serviceJourney: ServiceJourneyWithEstCallsFragment,
-  fromQuayId?: string,
+  fromStopPosition: number,
 ) => {
-  const focusedEstimatedCall =
-    serviceJourney.estimatedCalls?.find(
-      ({quay}) => quay?.id && quay.id === fromQuayId,
-    ) || serviceJourney.estimatedCalls?.[0];
+  const focusedEstimatedCall = serviceJourney.estimatedCalls?.find(
+    (c) => c.stopPositionInPattern === fromStopPosition,
+  );
 
   return filterNotices([
     ...serviceJourney.notices,
@@ -105,9 +110,11 @@ const MIN_SIGNIFICANT_WAIT_IN_SECONDS = 30;
 export function timeIsShort(seconds: number) {
   return seconds / 60 <= TIME_LIMIT_IN_MINUTES;
 }
+
 export function significantWalkTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WALK_IN_SECONDS;
 }
+
 export function significantWaitTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
@@ -471,3 +478,32 @@ export const getShouldShowLiveVehicle = (
     ? minutesBetween(aimedStartTime, new Date()) > -10
     : false;
 };
+
+export function getLineAndTimeA11yLabel(
+  estimatedCall: EstimatedCallWithMetadata,
+  publicCode: string,
+  t: TranslateFunction,
+  language: Language,
+) {
+  return [
+    getLineA11yLabel(estimatedCall.destinationDisplay, publicCode, t),
+    estimatedCall.realtime
+      ? t(dictionary.a11yRealTimePrefix)
+      : t(dictionary.a11yRouteTimePrefix),
+    formatToClockOrLongRelativeMinutes(
+      estimatedCall.expectedDepartureTime,
+      language,
+      t(dictionary.date.units.now),
+      9,
+    ),
+    secondsBetween(
+      estimatedCall.aimedDepartureTime,
+      estimatedCall.expectedDepartureTime,
+    ) >= 60
+      ? t(dictionary.a11yRouteTimePrefix) +
+        formatLocaleTime(estimatedCall.aimedDepartureTime, language)
+      : undefined,
+  ]
+    .filter(isDefined)
+    .join(screenReaderPause);
+}

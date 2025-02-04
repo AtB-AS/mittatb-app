@@ -1,4 +1,7 @@
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import type {QuayFragment} from '@atb/api/types/generated/fragments/quays';
+import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 export type EstimatedCallWithQuayFragment = {
   actualArrivalTime?: any;
@@ -12,42 +15,10 @@ export type EstimatedCallWithQuayFragment = {
   forAlighting: boolean;
   forBoarding: boolean;
   realtime: boolean;
+  stopPositionInPattern: number;
   destinationDisplay?: {frontText?: string; via?: Array<string>};
-  quay: {
-    id: string;
-    name: string;
-    publicCode?: string;
-    stopPlace?: {
-      id: string;
-      name: string;
-      latitude?: number;
-      longitude?: number;
-    };
-    tariffZones: Array<{id: string; name?: string}>;
-  };
-  notices: Array<{id: string; text?: string}>;
-  situations: Array<{
-    id: string;
-    situationNumber?: string;
-    reportType?: Types.ReportType;
-    summary: Array<{language?: string; value: string}>;
-    description: Array<{language?: string; value: string}>;
-    advice: Array<{language?: string; value: string}>;
-    infoLinks?: Array<{uri: string; label?: string}>;
-    validityPeriod?: {startTime?: any; endTime?: any};
-  }>;
-  bookingArrangements?: {
-    bookingMethods?: Array<Types.BookingMethod>;
-    latestBookingTime?: any;
-    bookingNote?: string;
-    bookWhen?: Types.PurchaseWhen;
-    minimumBookingPeriod?: string;
-    bookingContact?: {
-      contactPerson?: string;
-      email?: string;
-      url?: string;
-      phone?: string;
-      furtherDetails?: string;
-    };
-  };
+  quay: QuayFragment;
+  notices: Array<NoticeFragment>;
+  situations: Array<SituationFragment>;
+  bookingArrangements?: BookingArrangementFragment;
 };

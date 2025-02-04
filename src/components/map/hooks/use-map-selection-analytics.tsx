@@ -1,7 +1,7 @@
 import {Feature, Point} from 'geojson';
 import {useMemo} from 'react';
-import {useAnalytics} from '@atb/analytics';
 import {isStopPlaceFeature} from '../utils';
+import {useAnalyticsContext} from '@atb/analytics';
 import {
   isBicycleFeature,
   isBikeStationFeature,
@@ -10,7 +10,7 @@ import {
 } from '@atb/mobility/utils';
 
 export const useMapSelectionAnalytics = () => {
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
   return useMemo(
     () => ({
       logMapSelection: (selectedFeature: Feature<Point>) => {

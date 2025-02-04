@@ -14,14 +14,17 @@ import {
   getNoticesForServiceJourney,
 } from '@atb/travel-details-screens/utils';
 import {useTranslation} from '@atb/translations';
+import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   title?: string;
+  publicCode?: string;
   subMode?: TransportSubmode;
   situations: SituationFragment[];
   notices: NoticeFragment[];
+  line?: LineFragment;
 };
 
 type EstimatedCallMetadata = {
@@ -49,8 +52,8 @@ export function useDepartureData(
       );
       const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
         serviceJourney.estimatedCalls || [],
-        activeItem.fromQuayId,
-        activeItem.toQuayId,
+        activeItem.fromStopPosition,
+        activeItem.toStopPosition,
       );
 
       const focusedEstimatedCall = estimatedCallsWithMetadata.find(
@@ -59,14 +62,13 @@ export function useDepartureData(
 
       const publicCode =
         serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = `${publicCode} ${formatDestinationDisplay(
+      const title = `${formatDestinationDisplay(
         t,
         focusedEstimatedCall.destinationDisplay,
       )}`;
-
       const notices = getNoticesForServiceJourney(
         serviceJourney,
-        activeItem.fromQuayId,
+        activeItem.fromStopPosition,
       );
 
       const situations = focusedEstimatedCall.situations.sort((n1, n2) =>
@@ -76,10 +78,12 @@ export function useDepartureData(
       return {
         mode: serviceJourney.transportMode,
         title,
+        publicCode,
         subMode: serviceJourney.transportSubmode,
         estimatedCallsWithMetadata,
         situations,
         notices,
+        line: serviceJourney.line,
       };
     },
     [activeItem, t],
@@ -101,15 +105,15 @@ export function useDepartureData(
 
 function addMetadataToEstimatedCalls(
   estimatedCalls: EstimatedCallWithQuayFragment[],
-  fromQuayId?: string,
-  toQuayId?: string,
+  fromStopPosition: number,
+  toStopPosition?: number,
 ): EstimatedCallWithMetadata[] {
   let currentGroup: EstimatedCallMetadata['group'] = 'passed';
 
   return estimatedCalls.reduce<EstimatedCallWithMetadata[]>(
     (calls, currentCall, index) => {
       const previousCall = calls[calls.length - 1];
-      if (currentCall.quay?.id === fromQuayId) {
+      if (currentCall.stopPositionInPattern === fromStopPosition) {
         if (previousCall) previousCall.metadata.isEndOfGroup = true;
         currentGroup = 'trip';
       }
@@ -122,7 +126,7 @@ function addMetadataToEstimatedCalls(
         isEndOfGroup: index === estimatedCalls.length - 1,
       };
 
-      if (currentCall.quay?.id === toQuayId) {
+      if (currentCall.stopPositionInPattern === toStopPosition) {
         metadata.isEndOfGroup = true;
         currentGroup = 'after';
       }

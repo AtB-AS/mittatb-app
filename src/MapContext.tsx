@@ -63,7 +63,7 @@ export const MapContextProvider: React.FC = ({children}) => {
  * to be selected in the bottomSheet. Then the next time the map is in view, useAutoSelectMapItem
  * will select it automatically.
  */
-export function useMapState() {
+export function useMapContext() {
   const context = useContext(MapContext);
   if (context === undefined) {
     throw new Error('useMapState must be used within a MapContextProvider');

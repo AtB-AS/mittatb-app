@@ -1,16 +1,16 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/departures/types';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {
   QuaySection,
   QuaySectionProps,
 } from '@atb/departure-list/section-items/quay-section';
-import {useFavorites} from '@atb/favorites';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useFavoritesContext} from '@atb/favorites';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DeparturesTexts,
   FavoriteDeparturesTexts,
@@ -45,15 +45,16 @@ export const DeparturesWidget = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const {favoriteDepartures} = useFavorites();
-  const {location} = useGeolocationState();
+  const {favoriteDepartures} = useFavoritesContext();
+  const {location} = useGeolocationContext();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
+  const onCloseFocusRef = React.useRef(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheetContext();
 
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet(() => {
@@ -62,7 +63,7 @@ export const DeparturesWidget = ({
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    });
+    }, onCloseFocusRef);
   }
 
   const sortedStopPlaceGroups = location
@@ -85,7 +86,7 @@ export const DeparturesWidget = ({
               <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
-                  type="body__secondary"
+                  typography="body__secondary"
                   color="secondary"
                   style={styles.noFavouritesText}
                   testID="noFavoriteWidget"
@@ -126,6 +127,7 @@ export const DeparturesWidget = ({
 
       {!!favoriteDepartures.length && (
         <Button
+          expanded={true}
           mode="secondary"
           backgroundColor={themeColor}
           onPress={openFrontpageFavouritesBottomSheet}

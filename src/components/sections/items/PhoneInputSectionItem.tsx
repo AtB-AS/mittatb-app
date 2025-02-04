@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -57,8 +57,8 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     },
     forwardedRef,
   ) => {
-    const {topContainer, spacing} = useSectionItem(props);
-    const {theme, themeName} = useTheme();
+    const {topContainer} = useSectionItem(props);
+    const {theme, themeName} = useThemeContext();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const [isSelectingPrefix, setIsSelectingPrefix] = useState(false);
@@ -107,26 +107,26 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor:
-            theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.interactive.destructive.default.background,
         };
       } else {
         return undefined;
       }
     };
 
-    const padding = {
-      // There are some oddities with handling padding
-      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom: spacing - Platform.select({android: 4, default: 0}),
-      paddingTop: spacing - Platform.select({android: 5, default: 0}),
+    const containerPadding = {
+      paddingHorizontal: theme.spacing.medium,
     };
 
-    // Remove padding from topContainerStyle
-    const {padding: _dropThis, ...topContainerStyle} = topContainer;
-    const containerPadding = {
-      paddingHorizontal: spacing,
-    };
+    /*
+        Android handles padding and fonts a little oddly.
+        The short story is that we in some cases have to hard code
+        padding like this to get it to look the same on iOS
+        and Android.
+        See https://codeburst.io/react-native-quirks-2fb1ae0bbf8
+     */
+    const androidRowGapOverwrite =
+      Platform.OS === 'android' ? {rowGap: 3} : undefined;
 
     const onSelectPrefix = (country_code: string) => {
       setIsSelectingPrefix(false);
@@ -156,14 +156,15 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           style={[
             styles.container,
             label ? styles.containerMultiline : null,
-            topContainerStyle,
+            topContainer,
             containerPadding,
+            androidRowGapOverwrite,
             getBorderColor(),
           ]}
           onAccessibilityEscape={accessibilityEscapeKeyboard}
         >
           {label && (
-            <ThemeText type="body__secondary" style={styles.label}>
+            <ThemeText typography="body__secondary" style={styles.label}>
               {label}
             </ThemeText>
           )}
@@ -187,7 +188,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             )}
             <InternalTextInput
               ref={combinedRef}
-              style={[styles.input, padding, style]}
+              style={[styles.input, style]}
               placeholderTextColor={theme.color.foreground.dynamic.secondary}
               onFocus={onFocusEvent}
               onBlur={onBlurEvent}
@@ -253,6 +254,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
+    paddingVertical: 0,
     fontSize: theme.typography.body__primary.fontSize,
     flexGrow: 1,
   },
@@ -267,6 +269,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
   },
   label: {
     minWidth: 60 - theme.spacing.medium,

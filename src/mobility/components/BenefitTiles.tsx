@@ -84,13 +84,13 @@ export const BenefitTile = ({
           }}
         />
         <ThemeText
-          type="body__tertiary--bold"
+          typography="body__tertiary--bold"
           color={interactiveColor.default}
         >
           {title}
         </ThemeText>
         <ThemeText
-          type="body__tertiary"
+          typography="body__tertiary"
           color="secondary"
           style={styles.description}
         >

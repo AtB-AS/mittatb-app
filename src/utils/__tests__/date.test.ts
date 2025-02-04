@@ -4,10 +4,12 @@
 import {Language} from '@atb/translations';
 import timeMocker from 'timezone-mock';
 import {
+  convertIsoStringFieldsToDate,
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
-} from '../date';
+  secondsToDuration,
+} from '../date'; // Adjust the path if needed
 
 type TimeZone =
   | 'US/Pacific'
@@ -86,16 +88,35 @@ describe.each<TimeZone>([
   });
 
   describe('formatToLongDateTime', () => {
-    test('for norwegian (bokmål) format', () => {
+    const currentYear = new Date().getFullYear();
+    test('for norwegian (bokmål) format, current year', () => {
       expect(
-        formatToLongDateTime('2024-09-01T12:00:00Z', Language.Norwegian),
+        formatToLongDateTime(
+          `${currentYear}-09-01T12:00:00Z`,
+          Language.Norwegian,
+        ),
       ).toBe('01. sep. 14:00');
     });
 
-    test('for english format', () => {
+    test('for english format, current year', () => {
       expect(
-        formatToLongDateTime('2024-09-01T12:00:00Z', Language.English),
+        formatToLongDateTime(
+          `${currentYear}-09-01T12:00:00Z`,
+          Language.English,
+        ),
       ).toBe('01. Sep 14:00');
+    });
+
+    test('for norwegian (bokmål) format, not current year', () => {
+      expect(
+        formatToLongDateTime(`2020-09-01T12:00:00Z`, Language.Norwegian),
+      ).toBe('01. sep. 2020, 14:00');
+    });
+
+    test('for english format, not current year', () => {
+      expect(
+        formatToLongDateTime(`2020-09-01T12:00:00Z`, Language.English),
+      ).toBe('01. Sep 2020, 14:00');
     });
   });
 });
@@ -123,3 +144,191 @@ function timeZoneToOffset(timeZone: TimeZone): number {
       return 9.5;
   }
 }
+
+describe('convertIsoStringFieldsToDate', () => {
+  it('should convert ISO string date fields to Date objects', () => {
+    const input = {
+      createdAt: '2024-11-28T14:30:00Z',
+      updatedAt: '2024-11-29T10:00:00Z',
+    };
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result.createdAt).toBeInstanceOf(Date);
+    expect(result.updatedAt).toBeInstanceOf(Date);
+  });
+
+  it('should handle nested objects and convert date fields inside them', () => {
+    const input = {
+      nested: {
+        startDate: '2024-11-01T10:00:00Z',
+        endDate: '2024-11-02T12:00:00Z',
+      },
+    };
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result.nested.startDate).toBeInstanceOf(Date);
+    expect(result.nested.endDate).toBeInstanceOf(Date);
+  });
+
+  it('should handle arrays containing ISO date strings', () => {
+    const input = [
+      {createdAt: '2024-11-28T14:30:00Z'},
+      {createdAt: '2024-11-29T08:00:00Z'},
+    ];
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result[0].createdAt).toBeInstanceOf(Date);
+    expect(result[1].createdAt).toBeInstanceOf(Date);
+  });
+
+  it('should handle arrays of nested objects', () => {
+    const input = [
+      {nested: {startDate: '2024-11-01T10:00:00Z'}},
+      {nested: {startDate: '2024-11-02T12:00:00Z'}},
+    ];
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result[0].nested.startDate).toBeInstanceOf(Date);
+    expect(result[1].nested.startDate).toBeInstanceOf(Date);
+  });
+
+  it('should not alter non-date fields', () => {
+    const input = {
+      name: 'Entity 1',
+      value: 100,
+      active: true,
+    };
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result.name).toBe('Entity 1');
+    expect(result.value).toBe(100);
+    expect(result.active).toBe(true);
+  });
+
+  it('should handle empty objects and arrays gracefully', () => {
+    const inputObject = {};
+    const inputArray: any[] = [];
+    expect(convertIsoStringFieldsToDate(inputObject)).toEqual({});
+    expect(convertIsoStringFieldsToDate(inputArray)).toEqual([]);
+  });
+
+  it('should handle deeply nested structures with multiple date fields', () => {
+    const input = {
+      level1: {
+        level2: {
+          level3: {
+            date1: '2024-11-01T10:00:00Z',
+            date2: '2024-11-02T12:00:00Z',
+          },
+        },
+      },
+    };
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result.level1.level2.level3.date1).toBeInstanceOf(Date);
+    expect(result.level1.level2.level3.date2).toBeInstanceOf(Date);
+  });
+
+  it('should handle nested structures on different levels together with non-date fields', () => {
+    const input = {
+      level1: {
+        date1: '2024-11-01T10:00:00Z',
+        active: true,
+        level2: {
+          date1: '2024-11-01T10:00:00Z',
+          name: 'Entity 1',
+          level3: {
+            date1: '2024-11-01T10:00:00Z',
+            date2: '2024-11-02T12:00:00Z',
+            value: 100,
+          },
+        },
+      },
+    };
+    const result = convertIsoStringFieldsToDate(input);
+    expect(result.level1.date1).toBeInstanceOf(Date);
+    expect(result.level1.active).toBe(true);
+    expect(result.level1.level2.date1).toBeInstanceOf(Date);
+    expect(result.level1.level2.name).toBe('Entity 1');
+    expect(result.level1.level2.level3.date1).toBeInstanceOf(Date);
+    expect(result.level1.level2.level3.date2).toBeInstanceOf(Date);
+    expect(result.level1.level2.level3.value).toBe(100);
+    expect(result.level1.level2.whatever).toBeUndefined();
+  });
+});
+
+describe('secondsToDuration', () => {
+  // Basic Functionality
+  describe('Basic conversions', () => {
+    test('converts 500 seconds to duration string in English', () => {
+      const result = secondsToDuration(500, Language.English);
+      expect(result).toBe('8 minutes');
+    });
+
+    test('converts 500 seconds to duration string in Norwegian', () => {
+      const result = secondsToDuration(500, Language.Norwegian);
+      expect(result).toBe('8 minutter');
+    });
+  });
+
+  // Edge Cases
+  describe('Edge case handling', () => {
+    test('handles 59 seconds at low range', () => {
+      const result = secondsToDuration(59, Language.English);
+      expect(result).toBe('1 minute');
+    });
+
+    test('handles 60 seconds (start of minutes range)', () => {
+      const result = secondsToDuration(60, Language.English);
+      expect(result).toBe('1 minute');
+    });
+
+    test('handles 3658 seconds (slightly above hours range)', () => {
+      const result = secondsToDuration(3658, Language.English);
+      expect(result).toBe('1 hour, 1 minute');
+    });
+
+    test('handles 3600 seconds (start of hours range)', () => {
+      const result = secondsToDuration(3600, Language.English);
+      expect(result).toBe('1 hour');
+    });
+  });
+
+  // Large Durations
+  describe('Large durations', () => {
+    test('handles durations greater than a day', () => {
+      const result = secondsToDuration(90000, Language.English);
+      expect(result).toBe('1 day, 1 hour');
+    });
+  });
+
+  // Custom Options
+  describe('Custom options passed to humanizeDuration', () => {
+    test('applies custom options (e.g., largest units) correctly', () => {
+      const result = secondsToDuration(3661, Language.English, {
+        largest: 1,
+      });
+      expect(result).toBe('1 hour');
+    });
+  });
+
+  // Invalid or Corner Case Inputs
+  describe('Invalid or edge case inputs', () => {
+    test('handles negative seconds gracefully', () => {
+      const result = secondsToDuration(-500, Language.English);
+      expect(result).toBe('0 minutes');
+    });
+
+    test('handles exactly 0 seconds', () => {
+      const result = secondsToDuration(0, Language.English);
+      expect(result).toBe('0 minutes');
+    });
+  });
+
+  // Unit Map Logic
+  describe('Unit map logic', () => {
+    test('uses minutes and seconds for durations under an hour', () => {
+      const result = secondsToDuration(120, Language.English);
+      expect(result).toBe('2 minutes');
+    });
+
+    test('uses hours and minutes for durations under a day', () => {
+      const result = secondsToDuration(7200, Language.English);
+      expect(result).toBe('2 hours');
+    });
+  });
+});

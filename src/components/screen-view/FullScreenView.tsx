@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {RefreshControlProps, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
@@ -7,7 +7,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
-import { ContrastColor } from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -28,8 +28,9 @@ type PropsWithParallaxContent = Props &
 
 export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
-  const {theme} = useTheme();
-  const themeColor = props.headerProps.color ?? theme.color.background.accent[0];
+  const {theme} = useThemeContext();
+  const themeColor =
+    props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
   const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
 
@@ -70,7 +71,7 @@ export function FullScreenView(props: Props) {
           contentColor={props.contentColor}
         />
       )}
-      {props.footer && (
+      {!!props.footer && (
         <FullScreenFooter footerColor={backgroundColor}>
           {props.footer}
         </FullScreenFooter>

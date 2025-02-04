@@ -19,42 +19,48 @@ on:
         required: true
         default: 'master'
   schedule:
-    - cron: '0 7 * * *'
+    - cron: '0 7 * * 1-5'
 
 jobs:
   run_tests:
     name: Performance measures for Android
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
-      TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
+      TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
     environment: atb
     timeout-minutes: 90
+    env:
+      ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
+      ENV_API_LEVEL: ${{ github.event.inputs.api_level || 30 }}
+      ENV_TEST_ITERATIONS: ${{ github.event.inputs.test_iterations || 1 }}
+      ENV_MAX_RETRIES: ${{ github.event.inputs.max_retries || 1 }}
     steps:
       - name: Set env variables
-        env:
-          DEFAULT_BRANCH: 'master'
-          DEFAULT_API_LEVEL: 30
-          DEFAULT_TEST_ITERATIONS: 1
-          DEFAULT_MAX_RETRIES: 1
-        run: |
-          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
-          echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
-          echo "INPUT_TEST_ITERATIONS=${{ github.event.inputs.test_iterations || env.DEFAULT_TEST_ITERATIONS }}" >> $GITHUB_ENV
-          echo "INPUT_MAX_RETRIES=${{ github.event.inputs.max_retries || env.DEFAULT_MAX_RETRIES }}" >> $GITHUB_ENV
-          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          ref: ${{ env.INPUT_BRANCH }}
+          ref: ${{ env.ENV_BRANCH }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
 
       # Download APK
-      - name: Get AppCenter APK
-        id: get-appcenter-apk
-        run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: e2e
+      - name: Get Firebase AppDistribution APK
+        id: get-appdistribution-apk
+        run: python get-appdistribution-apk.py
+        working-directory: e2e/firestore
         env:
-          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
-          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: "True"
 
       # E2E init
       - name: Enable KVM
@@ -63,18 +69,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install Flashlight
-        #run: sh ./scripts/install-flashlight.sh
         run: curl https://get.flashlight.dev | bash
-        #working-directory: e2e
-      #- name: Install Appium
-      #  run: npm install -g appium
-      #- name: Install uiautomator2 driver
-      #  run: appium driver install uiautomator2
-      - name: Add Entur private registry credentials
-        run: bash ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Setup Python and its dependencies
+        uses: ./.github/actions/python-setup
       - name: Install E2E tests
         run: yarn install
         working-directory: e2e
@@ -82,47 +79,80 @@ jobs:
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
+      # Emulator cache
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-default-${{ env.ENV_API_LEVEL }}
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
+          arch: x86_64
+          target: default
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         continue-on-error: true
         with:
-          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
-          api-level: ${{ env.INPUT_API_LEVEL }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
+          target: default
           profile: pixel_5
-          emulator-build: 11237101
+          emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
-          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
+          disable-animations: true
+          script: ./scripts/run-flashlight-tests.sh ${{ env.ENV_TEST_ITERATIONS }} ${{ env.ENV_MAX_RETRIES }}
+          pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
+          TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
 
       # Results
-      - name: Check for performance report
-        run: |
-          if [ ! -f ./e2e/performance_measures_*.json ];
-          then
-            exit 1
-          else
-            cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
-          fi
-      - name: Create performance summary
-        working-directory: e2e/performance
-        run: npx tsx createPerformanceSummary.ts
-        env:
-          TESTED_VERSION: ${{ steps.get-appcenter-apk.outputs.TESTED_VERSION }}
-      - name: Print performance summary
-        working-directory: e2e/performance
-        run: cat performance_measures_summary.json | jq .
+      #- name: Check for performance report
+      #  run: |
+      #    if [ ! -f ./e2e/performance_measures_*.json ];
+      #    then
+      #      exit 1
+      #    else
+      #      cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
+      #    fi
+      #- name: Create performance summary
+      #  working-directory: e2e/performance
+      #  run: npx tsx createPerformanceSummary.ts
+      #  env:
+      #    TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
+      #- name: Print performance summary
+      #  working-directory: e2e/performance
+      #  run: cat performance_measures_summary.json | jq .
 
       # Uploads
       - name: Upload performance reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance_measures
           path: |
@@ -130,15 +160,15 @@ jobs:
           retention-days: 1
       - name: Upload performance summary
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance_measures_summary
           path: |
-            ./e2e/performance/performance_measures_summary.json
+            ./e2e/performance_measures_summary_*.json
           retention-days: 1
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png

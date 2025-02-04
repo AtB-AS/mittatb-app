@@ -1,4 +1,5 @@
 import {StyleSheet} from '@atb/theme';
+import {RefObject} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 
 type Props = {
@@ -6,6 +7,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   size?: number;
   color?: string;
+  focusRef?: RefObject<any>;
 };
 
 export const CaptureButton = ({
@@ -13,11 +15,12 @@ export const CaptureButton = ({
   onCapture,
   size,
   color,
+  focusRef,
 }: Props) => {
   const style = useStyles({size, color})();
   return (
     <View style={containerStyle}>
-      <TouchableOpacity onPress={onCapture} style={style.button}>
+      <TouchableOpacity onPress={onCapture} style={style.button} ref={focusRef}>
         <View style={style.innerButton} />
       </TouchableOpacity>
     </View>

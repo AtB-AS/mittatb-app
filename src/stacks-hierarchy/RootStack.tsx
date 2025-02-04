@@ -1,6 +1,6 @@
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
 import {
   DefaultTheme,
@@ -35,17 +35,15 @@ import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/R
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
-import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {Root_LoginActiveFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginActiveFareContractWarningScreen';
+import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
-import {useFlipper} from '@react-navigation/devtools';
 import {
   LoadingScreen,
   LoadingScreenBoundary,
@@ -56,18 +54,23 @@ import {
   Root_ParkingViolationsPhotoScreen,
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
-} from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+} from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
-import {compareVersion} from '@atb/utils/compare-version.ts';
+import {compareVersion} from '@atb/utils/compare-version';
+import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
+import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
+import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {parseParamAsInt} from './utils';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -78,13 +81,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const RootStack = () => {
   const isLoadingAppState = useIsLoadingAppState();
   const {getInitialNavigationContainerState} = useOnboardingFlow();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
-  const {minimum_app_version} = useRemoteConfig();
+  const {minimum_app_version} = useRemoteConfigContext();
 
-  useFlipper(navRef);
-
-  useBeaconsState();
+  useBeaconsContext();
   useTestIds();
 
   // init Intercom user
@@ -129,18 +130,18 @@ export const RootStack = () => {
     ];
 
     if (path.includes('details')) {
+      const item: ServiceJourneyDeparture = {
+        serviceJourneyId: params.serviceJourneyId as string,
+        date: (params.date as string) || new Date().toISOString(),
+        serviceDate: params.serviceDate as string,
+        fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+        toStopPosition: parseParamAsInt(params.toStopPosition),
+      };
       destination.push({
         name: 'Departures_DepartureDetailsScreen',
         params: {
           activeItemIndex: 0,
-          items: [
-            {
-              serviceJourneyId: params.serviceJourneyId,
-              serviceDate: params.serviceDate,
-              date: new Date(),
-              fromQuayId: params.quayId,
-            },
-          ],
+          items: [item],
         },
       });
     }
@@ -197,7 +198,7 @@ export const RootStack = () => {
                         screens: {
                           Ticketing_RootScreen: {
                             screens: {
-                              TicketTabNav_ActiveFareProductsTabScreen:
+                              TicketTabNav_AvailableFareContractsTabScreen:
                                 'ticketing',
                             },
                           },
@@ -362,13 +363,8 @@ export const RootStack = () => {
                 component={Root_ShareTravelHabitsScreen}
               />
               <Stack.Screen
-                name="Root_TicketAssistantStack"
-                component={Root_TicketAssistantStack}
-                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-              />
-              <Stack.Screen
-                name="Root_LoginActiveFareContractWarningScreen"
-                component={Root_LoginActiveFareContractWarningScreen}
+                name="Root_LoginAvailableFareContractWarningScreen"
+                component={Root_LoginAvailableFareContractWarningScreen}
               />
               <Stack.Screen
                 name="Root_LoginOptionsScreen"
@@ -395,6 +391,18 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
                 component={Root_ActiveTokenOnPhoneRequiredForFareProductScreen}
+              />
+              <Stack.Screen
+                name="Root_ScooterHelpScreen"
+                component={Root_ScooterHelpScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorScreen"
+                component={Root_ContactScooterOperatorScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorConfirmationScreen"
+                component={Root_ContactScooterOperatorConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

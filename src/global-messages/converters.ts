@@ -1,16 +1,16 @@
-import { Statuses } from '@atb-as/theme';
-import { isArray } from 'lodash';
-import { APP_VERSION } from '@env';
-import { Platform } from 'react-native';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import {Statuses} from '@atb/theme';
+import {isArray} from 'lodash';
+import {APP_VERSION} from '@env';
+import {Platform} from 'react-native';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {
   AppPlatformType,
   GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
-import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
-import { mapToRules } from '@atb/rule-engine';
+import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
+import {mapToRules} from '@atb/rule-engine';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {

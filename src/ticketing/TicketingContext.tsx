@@ -1,11 +1,10 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
-import {useAuthState} from '../auth';
+import {useAuthContext} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
-import {CustomerProfile, isNormalTravelRight} from '.';
+import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
-import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type TicketingReducerState = {
@@ -53,9 +52,8 @@ const ticketingReducer: TicketingReducer = (
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );
-      // Filter out fare contracts that doesn't have any normal travel rights
-      const fareContracts = action.fareContracts.filter((fc) =>
-        fc.travelRights.some((tr) => isNormalTravelRight(tr)),
+      const fareContracts = action.fareContracts.filter(
+        (fc) => FareContract.safeParse(fc).success,
       );
       return {
         ...prevState,
@@ -85,8 +83,11 @@ const ticketingReducer: TicketingReducer = (
       );
       const sentToOthersFareContractOrderIds = prevState.sentFareContracts.map(
         (fc) => fc.orderId,
-      )
-      const combinedOrderIds = [...currentFareContractOrderIds, ...sentToOthersFareContractOrderIds];
+      );
+      const combinedOrderIds = [
+        ...currentFareContractOrderIds,
+        ...sentToOthersFareContractOrderIds,
+      ];
       return {
         ...prevState,
         reservations: action.reservations.filter(
@@ -118,7 +119,6 @@ type TicketingState = {
   fareContracts: FareContract[];
   sentFareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
-  resubscribeFirestoreListeners: () => void;
 } & Pick<
   TicketingReducerState,
   | 'reservations'
@@ -139,10 +139,9 @@ const initialReducerState: TicketingReducerState = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
-  const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
-  const {userId} = useAuthState();
-  const {enable_ticketing} = useRemoteConfig();
+  const {userId} = useAuthContext();
+  const {enable_ticketing} = useRemoteConfigContext();
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -223,7 +222,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [resubscribeToggle, userId, enable_ticketing]);
+  }, [userId, enable_ticketing]);
 
   return (
     <TicketingContext.Provider
@@ -233,7 +232,6 @@ export const TicketingContextProvider: React.FC = ({children}) => {
           state.fareContracts
             .concat(state.sentFareContracts)
             .find((fc) => fc.orderId === orderId),
-        resubscribeFirestoreListeners: resubscribe,
       }}
     >
       {children}
@@ -251,7 +249,7 @@ function isAbortedPaymentStatus(status: PaymentStatus): boolean {
   return abortedPaymentStatus.includes(status);
 }
 
-export function useTicketingState() {
+export function useTicketingContext() {
   const context = useContext(TicketingContext);
   if (context === undefined) {
     throw new Error(

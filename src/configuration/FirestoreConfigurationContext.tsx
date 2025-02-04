@@ -22,6 +22,7 @@ import {
   TariffZone,
   UserProfile,
   MobilityOperatorType,
+  ScooterFaqType,
   OperatorBenefitIdType,
   FirestoreConfigStatus,
   NotificationConfigType,
@@ -33,15 +34,22 @@ import {
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
+  mapToScooterFaqs,
   mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
+  mapToStopSignalButtonConfig,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {
+  StopSignalButtonConfig,
+  type StopSignalButtonConfigType,
+} from '@atb-as/config-specs';
 
 export const defaultVatPercent: number = 12;
+export const defaultStopSignalButtonConfig = StopSignalButtonConfig.parse({});
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -62,10 +70,12 @@ type ConfigurationContextState = {
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
+  scooterFaqs: ScooterFaqType[] | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
   notificationConfig: NotificationConfigType | undefined;
+  stopSignalButtonConfig: StopSignalButtonConfigType;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -102,6 +112,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
+  const [scooterFaqs, setScooterFaqs] = useState<ScooterFaqType[]>([]);
   const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
     useState<OperatorBenefitIdType[]>([]);
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
@@ -110,6 +121,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [notificationConfig, setNotificationConfig] = useState<
     NotificationConfigType | undefined
   >();
+  const [stopSignalButtonConfig, setStopSignalButtonConfig] =
+    useState<StopSignalButtonConfigType>(defaultStopSignalButtonConfig);
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
@@ -192,6 +205,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setMobilityOperators(mobilityOperators);
           }
 
+          const scooterFaqs = getScooterFaqsFromSnapshot(snapshot);
+          if (scooterFaqs) {
+            setScooterFaqs(scooterFaqs);
+          }
+
           const benefitIdsRequiringValueCode =
             getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
           if (benefitIdsRequiringValueCode) {
@@ -210,6 +228,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (notificationConfig) {
             setNotificationConfig(notificationConfig);
           }
+
+          const stopSignalButtonConfig =
+            getStopSignalButtonConfigFromSnapshot(snapshot);
+          setStopSignalButtonConfig(stopSignalButtonConfig);
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -239,6 +261,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     setBenefitIdsRequiringValueCode([]);
     setHarborConnectionOverrides([]);
     setNotificationConfig(undefined);
+    setStopSignalButtonConfig(defaultStopSignalButtonConfig);
   };
 
   useEffect(() => {
@@ -265,9 +288,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       appTexts,
       configurableLinks,
       mobilityOperators,
+      scooterFaqs,
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
       notificationConfig,
+      stopSignalButtonConfig,
       firestoreConfigStatus,
     };
   }, [
@@ -285,9 +310,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     appTexts,
     configurableLinks,
     mobilityOperators,
+    scooterFaqs,
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
     notificationConfig,
+    stopSignalButtonConfig,
     firestoreConfigStatus,
   ]);
 
@@ -303,7 +330,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useFirestoreConfiguration() {
+export function useFirestoreConfigurationContext() {
   const context = useContext(FirestoreConfigurationContext);
   if (context === undefined) {
     throw new Error(
@@ -558,6 +585,13 @@ function getMobilityOperatorsFromSnapshot(
   return mapToMobilityOperators(operators?.get('operators'));
 }
 
+function getScooterFaqsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): ScooterFaqType[] | undefined {
+  const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToScooterFaqs(faqs?.get('scooterFaqs'));
+}
+
 function getBenefitIdsRequiringValueCodeFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): OperatorBenefitIdType[] | undefined {
@@ -585,4 +619,13 @@ function getNotificationConfigFromSnapshot(
     (doc) => doc.id == 'notificationConfig',
   );
   return mapToNotificationConfig(notificationConfig?.data());
+}
+
+function getStopSignalButtonConfigFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): StopSignalButtonConfigType {
+  const config = snapshot.docs.find(
+    (doc) => doc.id == 'stopSignalButtonConfig',
+  );
+  return mapToStopSignalButtonConfig(config?.data());
 }

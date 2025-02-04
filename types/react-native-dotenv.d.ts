@@ -12,6 +12,7 @@ declare module '@env' {
   export const MAPBOX_NSR_SOURCE_LAYER_ID: string; // the name given to the tileset in data manager in mapbox studio
   export const AUTHORITY: string;
   export const APP_ORG: import('./app-orgs').AppOrgs;
+  export const APP_ORG_NUMBER: string;
   export const APP_GROUP_NAME: string;
   export const APP_SCHEME: string;
   export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').TariffZoneAuthorities;

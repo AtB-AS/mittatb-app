@@ -1,6 +1,6 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -11,28 +11,26 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {Button} from '@atb/components/button';
-import {usePreferences} from '@atb/preferences';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {usePreferencesContext} from '@atb/preferences';
 import Bugsnag from '@bugsnag/react-native';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useAnalyticsContext} from '@atb/analytics';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {enable_travel_aid_stop_button} = useRemoteConfig();
-  const {setPreference, preferences} = usePreferences();
-  const {contactPhoneNumber} = useFirestoreConfiguration();
+  const {theme} = useThemeContext();
+  const {setPreference, preferences} = usePreferencesContext();
+  const {contactPhoneNumber} = useFirestoreConfigurationContext();
+  const analytics = useAnalyticsContext();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
 
   const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
   const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
-
-  const toggleValue = !enable_travel_aid_stop_button
-    ? false
-    : preferences.journeyAidEnabled;
 
   return (
     <FullScreenView
@@ -51,12 +49,19 @@ export const Profile_TravelAidScreen = () => {
         <Section>
           <ToggleSectionItem
             text={travelAidToggleTitle}
-            value={toggleValue}
-            onValueChange={(checked) =>
-              setPreference({journeyAidEnabled: checked})
-            }
+            value={preferences.journeyAidEnabled}
+            onValueChange={(checked) => {
+              analytics.logEvent(
+                'Journey aid',
+                'Journey aid preference toggled',
+                {
+                  enabled: checked,
+                  screenReaderEnabled,
+                },
+              );
+              setPreference({journeyAidEnabled: checked});
+            }}
             subtext={travelAidSubtext}
-            disabled={!enable_travel_aid_stop_button}
             isSubtextMarkdown
             testID="toggleTravelAid"
           />
@@ -64,6 +69,7 @@ export const Profile_TravelAidScreen = () => {
             <View style={styles.buttonContainer}>
               {hasContactPhoneNumber && (
                 <Button
+                  expanded={true}
                   mode="secondary"
                   backgroundColor={backgroundColor}
                   text={t(TravelAidSettingsTexts.button.contact.title)}

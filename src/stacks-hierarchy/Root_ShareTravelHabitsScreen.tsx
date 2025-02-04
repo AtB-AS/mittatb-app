@@ -6,26 +6,26 @@ import {
 import React, {useCallback} from 'react';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useAnalytics} from '@atb/analytics';
+import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useAnalyticsContext} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {useFocusEffect} from '@react-navigation/native';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
 
-  const {configurableLinks} = useFirestoreConfiguration();
+  const {configurableLinks} = useFirestoreConfigurationContext();
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 
-  const {onboardForBeacons} = useBeaconsState();
+  const {onboardForBeacons} = useBeaconsContext();
 
-  const analytics = useAnalytics();
+  const analytics = useAnalyticsContext();
 
   // call useFocusEffect to send analytics once when the screen is shown
   useFocusEffect(

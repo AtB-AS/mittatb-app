@@ -20,31 +20,35 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarbors} from '@atb/harbors';
+import {usePurchaseSelectionBuilder} from '@atb/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
-export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
-  const {fromHarbor, fareProductTypeConfig, preassignedFareProduct} =
-    route.params;
-
+export const Root_PurchaseHarborSearchScreen = ({
+  navigation,
+  route: {
+    params: {selection},
+  },
+}: Props) => {
   const {t} = useTranslation();
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
   const onSave = (selectedStopPlace: StopPlaceFragment) => {
-    selectedStopPlace &&
-      navigation.navigate({
-        name: 'Root_PurchaseOverviewScreen',
-        params: {
-          mode: 'Ticket',
-          fareProductTypeConfig,
-          preassignedFareProduct,
-          fromPlace: fromHarbor ?? selectedStopPlace,
-          toPlace: fromHarbor ? selectedStopPlace : undefined,
-          onFocusElement: fromHarbor ? 'toHarbor' : 'fromHarbor',
-        },
-        merge: true,
-      });
+    const builder = selectionBuilder.fromSelection(selection);
+    if (!selection.stopPlaces?.from) builder.fromStopPlace(selectedStopPlace);
+    if (selection.stopPlaces?.from) builder.toStopPlace(selectedStopPlace);
+    const newSelection = builder.build();
+    navigation.navigate({
+      name: 'Root_PurchaseOverviewScreen',
+      params: {
+        mode: 'Ticket',
+        selection: newSelection,
+        onFocusElement: selection.stopPlaces?.from ? 'toHarbor' : 'fromHarbor',
+      },
+      merge: true,
+    });
   };
 
   const styles = useStyles();
@@ -55,8 +59,8 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     isFocused && giveFocus(inputRef);
   }, [isFocused]);
   const harborsQuery = useHarbors({
-    fromHarborId: fromHarbor?.id,
-    transportModes: fareProductTypeConfig.transportModes,
+    fromHarborId: selection.stopPlaces?.from?.id,
+    transportModes: selection.fareProductTypeConfig.transportModes,
   });
 
   const debouncedText = useDebounce(text, 200);
@@ -66,7 +70,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
       <View style={styles.headerContainer}>
         <FullScreenHeader
           title={
-            fromHarbor
+            selection.stopPlaces?.from
               ? t(HarborSearchTexts.header.titleTo)
               : t(HarborSearchTexts.header.titleFrom)
           }
@@ -79,7 +83,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
             ref={inputRef}
             radius="top-bottom"
             label={
-              fromHarbor
+              selection.stopPlaces?.from
                 ? t(HarborSearchTexts.stopPlaces.to)
                 : t(HarborSearchTexts.stopPlaces.from)
             }
@@ -103,10 +107,10 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         {harborsQuery.isLoading && <ActivityIndicator />}
         {harborsQuery.isError && (
           <>
-            <ScreenReaderAnnouncement message={t(HarborSearchTexts.error)} />
+            <ScreenReaderAnnouncement message={t(dictionary.genericErrorMsg)} />
             <MessageInfoBox
               type="error"
-              message={t(HarborSearchTexts.error)}
+              message={t(dictionary.genericErrorMsg)}
               onPressConfig={{
                 text: t(dictionary.retry),
                 action: harborsQuery.refetch,
@@ -119,7 +123,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
             harbors={harborsQuery.data ?? []}
             onSelect={onSave}
             searchText={debouncedText}
-            fromHarborName={fromHarbor?.name}
+            fromHarborName={selection.stopPlaces?.from?.name}
           />
         )}
       </ScrollView>

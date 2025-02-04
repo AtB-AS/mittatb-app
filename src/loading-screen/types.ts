@@ -5,10 +5,11 @@ import {FirestoreConfigStatus} from '@atb/configuration/types';
 export type LoadingStatus = 'loading' | 'success' | 'timeout';
 
 export type LoadingParams = {
-  userId?: string,
+  userId?: string;
   isLoadingAppState: boolean;
   authStatus: AuthStatus;
   firestoreConfigStatus: FirestoreConfigStatus;
+  remoteConfigIsLoaded: boolean;
 };
 
 export type LoadingState = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   dictionary,
   LoadingScreenTexts,
@@ -11,9 +11,10 @@ import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useAnalytics} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/analytics';
+import {spellOut} from '@atb/utils/accessibility';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -21,11 +22,11 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
   const styles = useStyles();
   const localConfig = useLocalConfig();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
-  const {customer_service_url} = useRemoteConfig();
-  const analytics = useAnalytics();
+  const {customer_service_url} = useRemoteConfigContext();
+  const analytics = useAnalyticsContext();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,7 +34,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
         <View>
           <View ref={focusRef} accessible={true}>
             <ThemeText
-              type="heading--jumbo"
+              typography="heading--jumbo"
               style={styles.header}
               color={themeColor}
             >
@@ -46,10 +47,10 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
           {localConfig && (
             <ThemeText
               color={themeColor}
-              type="body__secondary"
+              typography="body__secondary"
               accessibilityLabel={t(
                 LoadingScreenTexts.error.installId(
-                  localConfig.installId.split('').join(' '),
+                  spellOut(localConfig.installId),
                 ),
               )}
             >
@@ -59,6 +60,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
         </View>
         <View>
           <Button
+            expanded={true}
             text={t(dictionary.retry)}
             onPress={() => {
               analytics.logEvent(
@@ -70,6 +72,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
             testID="retryAuthButton"
           />
           <Button
+            expanded={true}
             style={styles.customerServiceButton}
             onPress={() => {
               analytics.logEvent(

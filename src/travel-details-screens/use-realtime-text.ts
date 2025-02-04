@@ -1,7 +1,6 @@
-import {usePreferences} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/preferences';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
-import {formatToClock, isInThePast} from '@atb/utils/date';
-import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
+import {formatToClock} from '@atb/utils/date';
 import {ServiceJourneyEstimatedCall} from '@atb/api/types/trips';
 
 export const useRealtimeText = (
@@ -13,7 +12,7 @@ export const useRealtimeText = (
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
-  } = usePreferences();
+  } = usePreferencesContext();
 
   if (lastPassedStop && lastPassedStop.quay?.name) {
     return t(
@@ -29,36 +28,5 @@ export const useRealtimeText = (
     );
   }
 
-  const firstStop = estimatedCalls[0];
-
-  if (
-    firstStop?.quay?.name &&
-    firstStop.realtime &&
-    !isInThePast(firstStop.expectedDepartureTime)
-  ) {
-    return t(
-      DepartureDetailsTexts.noPassedStop(
-        firstStop.quay.name,
-        formatToClock(
-          firstStop.expectedDepartureTime,
-          language,
-          'floor',
-          debugShowSeconds,
-        ),
-      ),
-    );
-  }
-  const timeRepType = getTimeRepresentationType({
-    missingRealTime: !firstStop?.realtime,
-    aimedTime: firstStop?.aimedDepartureTime,
-    expectedTime: firstStop?.expectedDepartureTime,
-  });
-  switch (timeRepType) {
-    case 'no-significant-difference':
-      return t(DepartureDetailsTexts.onTime);
-    case 'significant-difference':
-      return t(DepartureDetailsTexts.notOnTime);
-    default:
-      return undefined;
-  }
+  return undefined;
 };

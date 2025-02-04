@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
 
 import {Button, ButtonProps} from '@atb/components/button';
@@ -8,7 +8,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenView} from '@atb/components/screen-view';
-
 
 export type OnboardingFullScreenViewProps = PropsWithChildren<{
   footerButton: ButtonProps;
@@ -29,7 +28,7 @@ export const OnboardingFullScreenView = ({
   secondaryTestID,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   const interactiveColor = theme.color.interactive[0];
 
@@ -45,7 +44,7 @@ export const OnboardingFullScreenView = ({
           {footerDescription && (
             <ScrollView style={styles.footerScrollView}>
               <ThemeText
-                type="body__tertiary"
+                typography="body__tertiary"
                 color={themeColor}
                 style={styles.footerDescription}
               >
@@ -54,6 +53,7 @@ export const OnboardingFullScreenView = ({
             </ScrollView>
           )}
           <Button
+            expanded={true}
             interactiveColor={interactiveColor}
             mode="primary"
             onPress={footerButton.onPress}
@@ -64,6 +64,7 @@ export const OnboardingFullScreenView = ({
           />
           {secondaryFooterButton && (
             <Button
+              expanded={true}
               backgroundColor={themeColor}
               mode="secondary"
               onPress={secondaryFooterButton.onPress}

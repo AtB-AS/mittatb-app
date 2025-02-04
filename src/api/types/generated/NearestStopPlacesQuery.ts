@@ -1,4 +1,5 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 
 export type NearestStopPlacesQuery = {
   nearest?: {
@@ -18,16 +19,7 @@ export type NearestStopPlacesQuery = {
                 name: string;
                 publicCode?: string;
                 stopPlace?: {id: string};
-                situations: Array<{
-                  id: string;
-                  situationNumber?: string;
-                  reportType?: Types.ReportType;
-                  summary: Array<{language?: string; value: string}>;
-                  description: Array<{language?: string; value: string}>;
-                  advice: Array<{language?: string; value: string}>;
-                  infoLinks?: Array<{uri: string; label?: string}>;
-                  validityPeriod?: {startTime?: any; endTime?: any};
-                }>;
+                situations: Array<SituationFragment>;
               }>;
             }
           | {};

@@ -10,12 +10,12 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
-import {Meta} from '@storybook/react-native';
+import {Meta} from '@storybook/react';
 
 const ON_PRESS_CONFIG = {action: () => {}, text: 'Press me!'};
 const ON_DISMISS = () => {};
 
-type MessageInfoBoxMetaProps = MessageInfoBoxProps & ThemedStoryProps;
+type MessageInfoBoxMetaProps = ThemedStoryProps<MessageInfoBoxProps>;
 
 const MessageInfoBoxMeta: Meta<MessageInfoBoxMetaProps> = {
   title: 'MessageInfoBox',
