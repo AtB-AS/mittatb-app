@@ -28,7 +28,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useOnboardingContext} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
-import {closeInAppBrowser, openInAppBrowser} from '@atb/in-app-browser';
+import {closeInAppBrowseriOs, openInAppBrowser} from '@atb/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -105,7 +105,7 @@ export const Root_LoginOptionsScreen = ({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
-        closeInAppBrowser();
+        closeInAppBrowseriOs();
         setIsLoading(true);
         const code = queryString.parseUrl(event.url).query.code;
         if (code) {

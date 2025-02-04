@@ -1,1 +1,1 @@
-export {closeInAppBrowser, openInAppBrowser} from './in-app-browser';
+export {closeInAppBrowseriOs, openInAppBrowser} from './in-app-browser';
