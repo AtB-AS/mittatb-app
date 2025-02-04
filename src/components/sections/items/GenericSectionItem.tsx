@@ -16,9 +16,9 @@ export function GenericSectionItem({children, accessibility, ...props}: Props) {
 
   return (
     <View style={[topContainer, props.style]} {...accessibility}>
-      {Children.map(children, (child) => (
-        <View style={style.spaceBetween}>{child}</View>
-      ))}
+      {Children.map(children, (child) =>
+        !!child ? <View style={style.spaceBetween}>{child}</View> : null,
+      )}
     </View>
   );
 }

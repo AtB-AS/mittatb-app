@@ -23,6 +23,8 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
    > ⓘ When installing cocoapods, use `gem install cocoapods -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`COCOAPODS: 1.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
+   >
+   > If you experience various mysterious errors when running `yarn android` you probably have the wrong JDK. See **Common errors**** below for fix. 
 3. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
 4. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 
@@ -94,6 +96,20 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
+#### Mysterious, unexplainable build errors when building the android app
+ *Example:* `Could not resolve all files for configuration ':adrianso_react-native-device-brightness:androidJdkImage'.`
+
+ Run this command to check if you have the correct JDK: 
+```sh
+npx react-native doctor
+```
+
+If it tells you that the JDK is wrong (probably too new) follow this guide to correctly set up your environment:
+
+[Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
+
+The `doctor` command can also help you troubleshoot other problems.
+
 #### Command failed: `xcrun simctl list --json devices`
 
 You might have Command Line Tools set without Xcode (eg. when using homebrew without xcode). Change Command Line Tool to Xcode:
@@ -134,7 +150,7 @@ See the [design system](https://github.com/AtB-AS/design-system) and [`@atb-as/g
 
 ## Distributing new app versions (deploy)
 
-For test devices and developer devices we do continuous distribution through direct groups on AppCenter and Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
+For test devices and developer devices we do continuous distribution through direct groups on Firebase App Distribution, which is built on commits to master. When a GitHub release is made, a new version is distributed to TestFlight and Google Play. More details on the release process can be found in the [here](./docs/Release.md).
 
 ## Storybook
 

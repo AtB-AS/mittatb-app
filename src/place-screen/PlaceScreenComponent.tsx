@@ -1,7 +1,7 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {SearchTime} from './types';
+import {DepartureSearchTime} from './types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
@@ -51,7 +51,7 @@ export const PlaceScreenComponent = ({
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
 
-  const [searchTime, setSearchTime] = useState<SearchTime>({
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });

@@ -54,7 +54,7 @@ import {
   Root_ParkingViolationsPhotoScreen,
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
-} from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+} from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
@@ -66,7 +66,11 @@ import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
-import {Root_ScooterHelpScreen} from './Root_ParkingViolationsReporting/Root_ScooterHelpScreen';
+import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
+import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
+import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {parseParamAsInt} from './utils';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -126,18 +130,18 @@ export const RootStack = () => {
     ];
 
     if (path.includes('details')) {
+      const item: ServiceJourneyDeparture = {
+        serviceJourneyId: params.serviceJourneyId as string,
+        date: (params.date as string) || new Date().toISOString(),
+        serviceDate: params.serviceDate as string,
+        fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+        toStopPosition: parseParamAsInt(params.toStopPosition),
+      };
       destination.push({
         name: 'Departures_DepartureDetailsScreen',
         params: {
           activeItemIndex: 0,
-          items: [
-            {
-              serviceJourneyId: params.serviceJourneyId,
-              serviceDate: params.serviceDate,
-              date: new Date(),
-              fromQuayId: params.quayId,
-            },
-          ],
+          items: [item],
         },
       });
     }
@@ -391,6 +395,14 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ScooterHelpScreen"
                 component={Root_ScooterHelpScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorScreen"
+                component={Root_ContactScooterOperatorScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorConfirmationScreen"
+                component={Root_ContactScooterOperatorConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

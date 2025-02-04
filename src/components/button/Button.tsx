@@ -5,6 +5,7 @@ import React, {useRef} from 'react';
 import {
   ActivityIndicator,
   Animated,
+  type ColorValue,
   Easing,
   PressableProps,
   StyleProp,
@@ -47,7 +48,7 @@ type ButtonIconProps = {
 };
 
 type ButtonModeAwareProps =
-  | {mode?: 'primary'; interactiveColor?: InteractiveColor}
+  | {mode?: 'primary'}
   | {
       mode: Exclude<ButtonMode, 'primary'>;
       backgroundColor?: ContrastColor;
@@ -59,8 +60,8 @@ export type ButtonProps = {
   type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
+  interactiveColor?: InteractiveColor;
   active?: boolean;
-  compact?: boolean;
   expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -82,7 +83,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       disabled,
       active,
       loading = false,
-      compact = false,
       expanded,
       hasShadow = false,
       style,
@@ -94,10 +94,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const styles = useButtonStyle();
     const {theme} = useThemeContext();
 
-    const interactiveColor =
-      'interactiveColor' in props && props.interactiveColor
-        ? props.interactiveColor
-        : theme.color.interactive[0];
+    const interactiveColor = props.interactiveColor
+      ? props.interactiveColor
+      : theme.color.interactive[0];
     const backgroundColor =
       'backgroundColor' in props && props.backgroundColor
         ? props.backgroundColor
@@ -116,7 +115,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const spacing = compact ? theme.spacing.small : theme.spacing.medium;
+    const spacing = theme.spacing.medium;
     const {background: buttonColor} =
       interactiveColor[active ? 'active' : 'default'];
 
@@ -127,20 +126,31 @@ export const Button = React.forwardRef<any, ButtonProps>(
         : interactiveColor[active ? 'active' : 'default'].foreground.primary;
 
     const borderColor =
-      active && mode === 'primary'
-        ? interactiveColor.default.background
+      active && mode !== 'tertiary'
+        ? interactiveColor.outline.background
         : modeData.visibleBorder
         ? textColor
+        : 'transparent';
+
+    const backgroundColorValue: ColorValue =
+      active && mode !== 'tertiary'
+        ? buttonColor
+        : modeData.withBackground
+        ? buttonColor
         : 'transparent';
 
     const styleContainer: ViewStyle[] = [
       styles.button,
       {
-        backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
+        backgroundColor: backgroundColorValue,
         borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
         borderRadius: theme.border.radius.circle,
+        borderWidth:
+          type === 'small'
+            ? theme.border.width.slim
+            : theme.border.width.medium,
         ...(expanded && type === 'small'
           ? {
               justifyContent: 'center',
@@ -265,11 +275,10 @@ const useTextMarginHorizontal = (
   return maxIconSize + theme.spacing.xSmall;
 };
 
-const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useButtonStyle = StyleSheet.createThemeHook(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: theme.border.width.medium,
   },
 }));
 

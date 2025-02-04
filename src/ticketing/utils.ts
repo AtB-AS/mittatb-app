@@ -1,60 +1,39 @@
 import {flatten, sumBy, startCase} from 'lodash';
 import {
   FareContract,
-  CarnetTravelRight,
   TravelRight,
   CarnetTravelRightUsedAccess,
   LastUsedAccessState,
   UsedAccessStatus,
-  NormalTravelRight,
   PaymentType,
 } from './types';
 import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
 
-export function isCarnetTravelRight(
-  travelRight: TravelRight | undefined,
-): travelRight is CarnetTravelRight {
-  return !!travelRight && 'maximumNumberOfAccesses' in travelRight;
-}
-
-export function isCarnet(fareContract: FareContract): boolean {
-  return fareContract.travelRights.some(isCarnetTravelRight);
-}
-
-export function isNormalTravelRight(
-  travelRight: TravelRight | undefined,
-): travelRight is NormalTravelRight {
-  return (
-    !!travelRight &&
-    'startDateTime' in travelRight &&
-    !!travelRight.startDateTime
-  );
-}
-
 export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
-
-type FlattenedCarnetTravelRights = {
+type FlattenedAccesses = {
   usedAccesses: CarnetTravelRightUsedAccess[];
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
 };
+export function flattenTravelRightAccesses(
+  travelRights: TravelRight[],
+): FlattenedAccesses | undefined {
+  // If there are no accesses, return undefined
+  if (!hasTravelRightAccesses(travelRights)) return undefined;
 
-export function flattenCarnetTravelRightAccesses(
-  travelRights: CarnetTravelRight[],
-): FlattenedCarnetTravelRights {
   const allUsedAccesses = travelRights.map((t) => t.usedAccesses ?? []);
   const usedAccesses = flatten(allUsedAccesses).sort(
     (a, b) => a.startDateTime.getTime() - b.startDateTime.getTime(),
   );
   const maximumNumberOfAccesses = sumBy(
     travelRights,
-    (t) => t.maximumNumberOfAccesses,
+    (t) => t.maximumNumberOfAccesses ?? 0,
   );
   const numberOfUsedAccesses = sumBy(
     travelRights,
-    (t) => t.numberOfUsedAccesses,
+    (t) => t.numberOfUsedAccesses ?? 0,
   );
   return {
     usedAccesses,
@@ -69,7 +48,10 @@ export function isCanBeConsumedNowFareContract(
   currentUserId: string | undefined,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
-  if (!isCarnet(f)) return false;
+
+  // Fare contracts without accesses cannot be consumed
+  if (!hasTravelRightAccesses(f.travelRights)) return false;
+
   return getAvailabilityStatus(f, now).status === 'upcoming';
 }
 
@@ -79,7 +61,11 @@ export function isCanBeActivatedNowFareContract(
   currentUserId: string | undefined,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
-  if (isCarnet(f)) return false;
+
+  // A fare contract with accesses (carnets) cannot be activated by itself. It
+  // is instead "consumed" to activate an access
+  if (hasTravelRightAccesses(f.travelRights)) return false;
+
   return getAvailabilityStatus(f, now).status === 'upcoming';
 }
 
@@ -109,6 +95,10 @@ function getUsedAccessValidity(
   if (now > validTo) return 'inactive';
   if (now < validFrom) return 'upcoming';
   return 'valid';
+}
+
+export function hasTravelRightAccesses(travelRights: TravelRight[]) {
+  return travelRights.some((tr) => tr.maximumNumberOfAccesses !== undefined);
 }
 
 export function humanizePaymentType(paymentType: PaymentType) {

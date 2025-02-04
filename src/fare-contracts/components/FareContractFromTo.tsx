@@ -1,34 +1,23 @@
 import {ContrastColor} from '@atb-as/theme';
-import {ArrowDown, ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
-import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {type RecentFareContractType} from '@atb/recent-fare-contracts';
+import {FareContract, TravelRightDirection} from '@atb/ticketing';
+import {ZonesFromTo} from '@atb/fare-contracts/components/ZonesFromTo';
+import {HarborsFromTo} from '@atb/fare-contracts/components/HarborsFromTo';
 import {
   findReferenceDataById,
-  getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {useHarbors} from '@atb/harbors';
-import {type RecentFareContractType} from '@atb/recent-fare-contracts';
-import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  isNormalTravelRight,
-  TravelRightDirection,
-} from '@atb/ticketing';
-import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
   mode: 'small' | 'large';
 };
 
-type FareContractPropsSub = {
+export type FareContractPropsSub = {
   fc: FareContract;
 };
 
-type RecentFareContractPropsSub = {
+export type RecentFareContractPropsSub = {
   rfc: RecentFareContractType;
 };
 
@@ -36,74 +25,26 @@ type FareContractFromToProps = FareContractFromToBaseProps &
   (FareContractPropsSub | RecentFareContractPropsSub);
 
 export const FareContractFromTo = (props: FareContractFromToProps) => {
-  const tariffZoneRefs = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      if (isNormalTravelRight(travelRight)) {
-        return travelRight.tariffZoneRefs ?? [];
-      }
-    } else if (hasRecentFareContract(props)) {
-      if (props.rfc.fromTariffZone) {
-        return [
-          props.rfc.fromTariffZone.id,
-          ...(props.rfc.toTariffZone ? [props.rfc.toTariffZone.id] : []),
-        ];
-      }
-    }
-    return [];
-  })();
+  const controllerData = useFareContractFromToController(
+    'rfc' in props ? props.rfc : props.fc,
+  );
 
-  const direction = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      if (isNormalTravelRight(travelRight)) {
-        if (!!travelRight.direction) {
-          // A travelRight between quays (e.g. for boat)
-          return travelRight.direction;
-        } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
-          // A travelRight between several zones (e.g. for bus)
-          return TravelRightDirection.Both;
-        }
-      }
-    } else if (hasRecentFareContract(props)) {
-      if (!!props.rfc.direction) {
-        return props.rfc.direction;
-      } else if (props.rfc.fromTariffZone?.id !== props.rfc.toTariffZone?.id) {
-        return TravelRightDirection.Both;
-      }
-    }
-  })();
+  if (!controllerData) return null;
 
-  const {startPointRef = undefined, endPointRef = undefined} = (() => {
-    if (hasFareContract(props)) {
-      const travelRight = props.fc.travelRights[0];
-      if (!isNormalTravelRight(travelRight)) return {};
-      return {
-        startPointRef: travelRight.startPointRef,
-        endPointRef: travelRight.endPointRef,
-      };
-    } else if (hasRecentFareContract(props) && props.rfc.pointToPointValidity) {
-      return {
-        startPointRef: props.rfc.pointToPointValidity.fromPlace,
-        endPointRef: props.rfc.pointToPointValidity.toPlace,
-      };
-    }
-    return {};
-  })();
-  if (tariffZoneRefs.length) {
+  if (controllerData.mode === 'zones') {
     return (
       <ZonesFromTo
-        tarifZoneRefs={tariffZoneRefs}
+        tariffZoneRefs={controllerData.tariffZoneRefs}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
     );
-  } else if (startPointRef) {
+  } else if (controllerData.mode === 'harbors') {
     return (
       <HarborsFromTo
-        startPointRef={startPointRef}
-        endPointRef={endPointRef}
-        direction={direction}
+        startPointRef={controllerData.startPointRef}
+        endPointRef={controllerData.endPointRef}
+        direction={controllerData.direction}
         mode={props.mode}
         backgroundColor={props.backgroundColor}
       />
@@ -112,200 +53,119 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   return null;
 };
 
-type ZonesProps = {
-  tarifZoneRefs: string[];
-  mode: 'small' | 'large';
-  backgroundColor: ContrastColor;
-};
-
-const ZonesFromTo = ({tarifZoneRefs, mode, backgroundColor}: ZonesProps) => {
-  const {tariffZones} = useFirestoreConfigurationContext();
-  const {t, language} = useTranslation();
-
-  const fromZoneId = tarifZoneRefs[0];
-  const fromZone = findReferenceDataById(tariffZones, fromZoneId);
-  if (!fromZone) return null;
-  const fromZoneText = `${t(dictionary.zone)} ${getReferenceDataName(
-    fromZone,
-    language,
-  )}`;
-
-  const toZoneId = tarifZoneRefs[tarifZoneRefs.length - 1];
-  const toZone =
-    fromZoneId !== toZoneId
-      ? findReferenceDataById(tariffZones, toZoneId)
-      : undefined;
-  const toZoneText = toZone
-    ? `${t(dictionary.zone)} ${getReferenceDataName(toZone, language)}`
-    : undefined;
-
-  return (
-    <BorderedFromToBox
-      fromText={fromZoneText}
-      toText={toZoneText}
-      direction={TravelRightDirection.Both}
-      mode={mode}
-      backgroundColor={backgroundColor}
-    />
-  );
-};
-
-type HarborsProps = {
+type HarborsFromToData = {
+  mode: 'harbors';
   startPointRef: string;
   endPointRef?: string;
-  direction?: TravelRightDirection;
-  mode: 'small' | 'large';
-  backgroundColor: ContrastColor;
+  direction: TravelRightDirection;
 };
 
-const HarborsFromTo = ({
-  startPointRef,
-  endPointRef,
-  direction,
-  mode,
-  backgroundColor,
-}: HarborsProps) => {
-  const {data: harbors} = useHarbors();
-  const startPointName = harbors.find((h) => h.id === startPointRef)?.name;
-  if (!startPointName) return null;
-
-  const endPointName = endPointRef
-    ? harbors.find((h) => h.id === endPointRef)?.name
-    : undefined;
-
-  return (
-    <BorderedFromToBox
-      fromText={startPointName}
-      toText={endPointName}
-      direction={direction}
-      mode={mode}
-      backgroundColor={backgroundColor}
-    />
-  );
+type ZonesFromToData = {
+  mode: 'zones';
+  tariffZoneRefs: string[];
 };
 
-type BorderedFromToBoxProps = {
-  fromText: string;
-  toText?: string;
-  direction?: TravelRightDirection;
-  mode: 'small' | 'large';
-  backgroundColor: ContrastColor;
-};
+type FareContractFromToControllerDataType =
+  | HarborsFromToData
+  | ZonesFromToData
+  | undefined;
 
-const BorderedFromToBox = ({
-  fromText,
-  toText,
-  direction,
-  mode,
-  backgroundColor,
-}: BorderedFromToBoxProps) => {
-  const styles = useStyles();
-  const {t} = useTranslation();
-
-  const accessibilityLabel = !!toText
-    ? t(
-        FareContractTexts.details.fromTo(
-          fromText,
-          toText ?? fromText,
-          direction === TravelRightDirection.Both,
-        ),
-      )
-    : t(FareContractTexts.details.validIn(fromText));
-
-  const smallLayout = () => {
-    if (!toText)
-      return (
-        <View style={styles.smallContent}>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
-            {fromText}
-          </ThemeText>
-        </View>
+function useFareContractFromToController(
+  fcOrRfc: FareContract | RecentFareContractType,
+): FareContractFromToControllerDataType {
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfigurationContext();
+  const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
+    if (isFareContract(fcOrRfc)) {
+      const productRef = fcOrRfc.travelRights[0].fareProductRef;
+      const preassignedFareProduct = findReferenceDataById(
+        preassignedFareProducts,
+        productRef,
       );
-    return (
-      <View style={styles.smallContent}>
-        <ThemeIcon
-          color={backgroundColor}
-          svg={
-            direction === TravelRightDirection.Both ? ArrowUpDown : ArrowDown
-          }
-          size="small"
-        />
-        <View style={styles.smallContentText}>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
-            {fromText}
-          </ThemeText>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
-            {toText}
-          </ThemeText>
-        </View>
-      </View>
-    );
-  };
+      return c.type === preassignedFareProduct?.type;
+    } else if (isRecentFareContract(fcOrRfc)) {
+      return c.type === fcOrRfc.preassignedFareProduct.type;
+    }
+  });
 
-  const largeLayout = () => (
-    <View style={styles.largeContent}>
-      <ThemeText color={backgroundColor} typography="body__primary--bold">
-        {fromText}
-      </ThemeText>
-      {toText && (
-        <>
-          <ThemeIcon
-            color={backgroundColor}
-            svg={
-              direction === TravelRightDirection.Both ? ArrowUpDown : ArrowDown
-            }
-            size="normal"
-          />
-          <ThemeText color={backgroundColor} typography="body__primary--bold">
-            {toText}
-          </ThemeText>
-        </>
-      )}
-    </View>
-  );
+  if (fareProductTypeConfig?.configuration.zoneSelectionMode === 'none') {
+    return undefined;
+  }
 
-  return (
-    <View
-      style={styles.borderedInfoBoxContainer}
-      accessible
-      accessibilityLabel={accessibilityLabel}
-    >
-      <BorderedInfoBox backgroundColor={backgroundColor} type={mode}>
-        {mode === 'large' ? largeLayout() : smallLayout()}
-      </BorderedInfoBox>
-    </View>
-  );
-};
+  const tariffZoneRefs = (() => {
+    if (isFareContract(fcOrRfc)) {
+      const travelRight = fcOrRfc.travelRights[0];
+      return travelRight.tariffZoneRefs ?? [];
+    } else if (isRecentFareContract(fcOrRfc)) {
+      if (fcOrRfc.fromTariffZone) {
+        return [
+          fcOrRfc.fromTariffZone.id,
+          ...(fcOrRfc.toTariffZone ? [fcOrRfc.toTariffZone.id] : []),
+        ];
+      }
+    }
+    return [];
+  })();
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  borderedInfoBoxContainer: {
-    flex: 1,
-  },
-  largeContent: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    rowGap: theme.spacing.xSmall,
-  },
-  smallContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    columnGap: theme.spacing.xSmall,
-  },
-  smallContentText: {
-    flexDirection: 'column',
-    paddingLeft: theme.spacing.xSmall,
-  },
-}));
+  const direction = (() => {
+    if (isFareContract(fcOrRfc)) {
+      const travelRight = fcOrRfc.travelRights[0];
+      if (!!travelRight.direction) {
+        // A travelRight between quays (e.g. for boat)
+        return travelRight.direction;
+      } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
+        // A travelRight between several zones (e.g. for bus)
+        return TravelRightDirection.Both;
+      }
+    } else if (isRecentFareContract(fcOrRfc)) {
+      if (!!fcOrRfc.direction) {
+        return fcOrRfc.direction;
+      } else if (fcOrRfc.fromTariffZone?.id !== fcOrRfc.toTariffZone?.id) {
+        return TravelRightDirection.Both;
+      }
+    }
+    // Fall back to Forwards
+    return TravelRightDirection.Forwards;
+  })();
 
-function hasFareContract(
-  props: FareContractFromToProps,
-): props is FareContractFromToBaseProps & FareContractPropsSub {
-  return 'fc' in props;
+  const {startPointRef = undefined, endPointRef = undefined} = (() => {
+    if (isFareContract(fcOrRfc)) {
+      const travelRight = fcOrRfc.travelRights[0];
+      return {
+        startPointRef: travelRight.startPointRef,
+        endPointRef: travelRight.endPointRef,
+      };
+    } else if (isRecentFareContract(fcOrRfc) && fcOrRfc.pointToPointValidity) {
+      return {
+        startPointRef: fcOrRfc.pointToPointValidity.fromPlace,
+        endPointRef: fcOrRfc.pointToPointValidity.toPlace,
+      };
+    }
+    return {};
+  })();
+
+  if (!!startPointRef)
+    return {
+      mode: 'harbors',
+      startPointRef,
+      endPointRef,
+      direction,
+    };
+  else if (!!tariffZoneRefs.length)
+    return {
+      mode: 'zones',
+      tariffZoneRefs,
+    };
 }
 
-function hasRecentFareContract(
-  props: FareContractFromToProps,
-): props is FareContractFromToBaseProps & RecentFareContractPropsSub {
-  return 'rfc' in props;
+function isFareContract(
+  fcOrRfc: FareContract | RecentFareContractType,
+): fcOrRfc is FareContract {
+  return 'travelRights' in fcOrRfc;
+}
+
+function isRecentFareContract(
+  fcOrRfc: FareContract | RecentFareContractType,
+): fcOrRfc is RecentFareContractType {
+  return 'fromTariffZone' in fcOrRfc;
 }

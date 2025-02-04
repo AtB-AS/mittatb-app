@@ -3,25 +3,27 @@ import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
-import {DeparturesTexts, Language, useTranslation} from '@atb/translations';
 import {
-  formatToClock,
-  formatToShortDate,
-  formatToVerboseDateTime,
+  DeparturesTexts,
+  Language,
+  type TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
+import {
+  formatToLongDateTime,
   isInThePast,
-  isWithinSameDate,
   parseISOFromCET,
 } from '@atb/utils/date';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {addDays, isToday, parseISO} from 'date-fns';
 import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
-import {SearchTime} from '../types';
-import {DepartureTimeSheet} from './DepartureTimeSheet';
+import {DepartureDateOptions, DepartureSearchTime} from '../types';
+import {DatePickerSheet} from '@atb/date-picker';
 
 type DateSelectionProps = {
-  searchTime: SearchTime;
-  setSearchTime: (searchTime: SearchTime) => void;
+  searchTime: DepartureSearchTime;
+  setSearchTime: (searchTime: DepartureSearchTime) => void;
 };
 
 export const DateSelection = ({
@@ -40,25 +42,10 @@ export const DateSelection = ({
 
   const searchTimeText =
     searchTime.option === 'now'
-      ? t(DeparturesTexts.dateNavigation.today)
-      : formatToTwoLineDateTime(searchTime.date, language);
+      ? t(DeparturesTexts.dateNavigation.departureNow)
+      : formatToTwoLineDateTime(searchTime.date, language, t);
 
-  const getA11ySearchTimeText = () => {
-    const parsedDate = parseISOFromCET(searchTime.date);
-    if (searchTime.option === 'now')
-      return t(DeparturesTexts.dateNavigation.today);
-
-    if (isWithinSameDate(parsedDate, new Date()))
-      return (
-        t(DeparturesTexts.dateNavigation.today) +
-        ', ' +
-        formatToClock(parsedDate, language, 'floor')
-      );
-
-    return formatToVerboseDateTime(parsedDate, language);
-  };
-
-  const onSetSearchTime = (time: SearchTime) => {
+  const onSetSearchTime = (time: DepartureSearchTime) => {
     if (isInThePast(time.date)) {
       setSearchTime({
         date: new Date().toISOString(),
@@ -73,11 +60,15 @@ export const DateSelection = ({
   const onLaterTimePress = () => {
     openBottomSheet(
       () => (
-        <DepartureTimeSheet
+        <DatePickerSheet
           ref={onOpenFocusRef}
-          initialTime={searchTime}
-          setSearchTime={onSetSearchTime}
-          allowTimeInPast={false}
+          initialDate={searchTime.date}
+          onSave={onSetSearchTime}
+          options={DepartureDateOptions.map((option) => ({
+            option,
+            text: t(DeparturesTexts.dateNavigation.options[option]),
+            selected: searchTime.option === option,
+          }))}
         />
       ),
       onCloseFocusRef,
@@ -97,7 +88,7 @@ export const DateSelection = ({
             : undefined
         }
         mode="tertiary"
-        compact={true}
+        type="small"
         leftIcon={{svg: ArrowLeft}}
         disabled={disablePreviousDayNavigation}
         accessibilityHint={
@@ -111,13 +102,8 @@ export const DateSelection = ({
         expanded={false}
         onPress={onLaterTimePress}
         text={searchTimeText}
-        accessibilityLabel={t(
-          DeparturesTexts.dateNavigation.a11ySelectedLabel(
-            getA11ySearchTimeText(),
-          ),
-        )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        compact={true}
+        type="small"
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         testID="setDateButton"
@@ -133,7 +119,7 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.nextDay)
             : undefined
         }
-        compact={true}
+        type="small"
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
@@ -143,7 +129,10 @@ export const DateSelection = ({
   );
 };
 
-function changeDay(searchTime: SearchTime, days: number): SearchTime {
+function changeDay(
+  searchTime: DepartureSearchTime,
+  days: number,
+): DepartureSearchTime {
   const date =
     searchTime.option === 'now'
       ? addDays(parseISO(searchTime.date).setHours(0, 0), days)
@@ -154,14 +143,15 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
   };
 }
 
-function formatToTwoLineDateTime(isoDate: string, language: Language) {
-  if (isWithinSameDate(isoDate, new Date())) {
-    return formatToClock(isoDate, language, 'floor');
-  }
-  return (
-    formatToShortDate(isoDate, language) +
-    '\n' +
-    formatToClock(isoDate, language, 'floor')
+function formatToTwoLineDateTime(
+  isoDate: string,
+  language: Language,
+  t: TranslateFunction,
+) {
+  return t(
+    DeparturesTexts.dateNavigation.departureLater(
+      '\n' + formatToLongDateTime(isoDate, language),
+    ),
   );
 }
 

@@ -2,6 +2,7 @@ import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
+  dictionary,
   FareContractTexts,
   TranslateFunction,
   useTranslation,
@@ -10,7 +11,6 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {TextNames} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
-import _ from 'lodash';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 
 const modesDisplayLimit: number = 2;
@@ -26,17 +26,26 @@ const removeDuplicateStringsFilter = (
   arr: string[],
 ): boolean => arr.indexOf(val) === i;
 
+/*
+    Renders transportModes as natural text, e.g. "Buss og trikk"
+ */
 export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,
 ): string => {
   if (!modes) return '';
-  return _.capitalize(
-    modes
-      .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
-      .filter(removeDuplicateStringsFilter)
-      .join('/'),
-  );
+  return modes
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
+    .filter(removeDuplicateStringsFilter)
+    .map((str, i, arr) => {
+      if (i === 0) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      } else if (i === arr.length - 1) {
+        return ` ${t(dictionary.listConcatWord)} ${str}`;
+      }
+      return `, ${str}`;
+    })
+    .join('');
 };
 
 export const TransportModes = ({

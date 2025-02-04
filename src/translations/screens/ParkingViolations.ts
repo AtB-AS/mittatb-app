@@ -92,9 +92,9 @@ export const ParkingViolationTexts = {
   },
   confirmation: {
     title: _(
-      'Feilparkering rapportert!',
-      'Report sent!',
-      'Feilparkering rapportert!',
+      'Feilparkering rapportert',
+      'Report sent',
+      'Feilparkering rapportert',
     ),
     description: (providerName?: string) =>
       _(
@@ -108,7 +108,6 @@ export const ParkingViolationTexts = {
           providerName ?? 'operatøren'
         } og til kommunen.`,
       ),
-    closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
   issue: {
     general: {

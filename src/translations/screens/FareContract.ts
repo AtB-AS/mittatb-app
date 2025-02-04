@@ -15,11 +15,7 @@ const FareContractTexts = {
   },
   validityHeader: {
     valid: (duration: string) =>
-      _(
-        `Gyldig i ${duration}`,
-        `Valid through ${duration}`,
-        `Gyldig i ${duration}`,
-      ),
+      _(`${duration} igjen`, `${duration} left`, `${duration} igjen`),
     recentlyExpired: (duration: string) =>
       _(
         `Utløpt for ${duration} siden`,
@@ -265,9 +261,9 @@ const FareContractTexts = {
   },
   fareContractInfo: {
     noInspectionIcon: _(
-      'Ugyldig\ni kontroll',
-      'Invalid in\ninspection',
-      'Ugyldig\ni kontroll',
+      'Ikke bruk i\nkontroll',
+      'Do not use in\ninspection',
+      'Ikkje bruk i\nkontroll',
     ),
     noInspectionIconA11yLabel: _(
       'Ugyldig i kontroll',
@@ -278,6 +274,11 @@ const FareContractTexts = {
   label: {
     travellers: _('Reisende', 'Travellers', 'Reisande'),
     zone: _('Sone', 'Zone', 'Sone'),
+    transportModes: _(
+      'Transportmiddel',
+      'Transportmiddel',
+      'Means of transport',
+    ),
     includedBenefits: _(
       'Inkludert i billetten',
       'Included in the ticket',

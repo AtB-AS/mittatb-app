@@ -10,7 +10,7 @@
 # Mobility (App, BFF)
 /src/mobility/ @gorandalum @marius-at-atb @reidzeibel
 
-# Builds (GH Actions, App Store, Play Store, App Center)
+# Builds (GH Actions, App Store, Play Store, Firebase App Distribution)
 /.github/workflows/ @gorandalum @jorelosorio @reidzeibel
 /env/ @gorandalum @jorelosorio @reidzeibel
 /fastlane/ @gorandalum @jorelosorio @reidzeibel

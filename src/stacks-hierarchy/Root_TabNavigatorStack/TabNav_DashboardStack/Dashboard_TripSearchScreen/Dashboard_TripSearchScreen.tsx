@@ -17,11 +17,6 @@ import {
   SelectableLocationType,
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {
-  getSearchTimeLabel,
-  SearchTime,
-  useSearchTimeValue,
-} from '@atb/journey-date-picker';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -39,7 +34,11 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
-import {SearchForLocations} from '../types';
+import {
+  type SearchForLocations,
+  TripDateOptions,
+  type TripSearchTime,
+} from '../types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
@@ -52,8 +51,13 @@ import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/Ta
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOverContext} from '@atb/popover';
-import {areDefaultFiltersSelected} from './utils';
+import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {isDefined} from '@atb/utils/presence';
+import {onlyUniques} from '@atb/utils/only-uniques';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {DatePickerSheet} from '@atb/date-picker';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -72,6 +76,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const headerBackgroundColor = getHeaderBackgroundColor(theme);
   const interactiveColor = theme.color.interactive[1];
   const statusColor = theme.color.status.valid.primary;
+  const [searchTime, setSearchTime] = useState<TripSearchTime>({
+    option: 'now',
+    date: new Date().toISOString(),
+  });
 
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
@@ -86,10 +94,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const currentLocation = location || undefined;
 
   const {from, to} = useLocations(currentLocation);
-  const searchTime = useSearchTimeValue('searchTime', {
-    option: 'now',
-    date: new Date().toISOString(),
-  });
 
   const filtersState = useTravelSearchFiltersState({
     onCloseFocusRef: filterButtonRef,
@@ -213,11 +217,25 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
   }
 
-  function onSearchTimePress() {
-    navigation.navigate('Dashboard_JourneyDatePickerScreen', {
-      searchTime,
-    });
-  }
+  const searchTimeButtonRef = useRef();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
+  const onSearchTimePress = () => {
+    openBottomSheet(
+      () => (
+        <DatePickerSheet
+          ref={onOpenFocusRef}
+          initialDate={searchTime.date}
+          onSave={setSearchTime}
+          options={TripDateOptions.map((option) => ({
+            option,
+            text: t(TripSearchTexts.dateInput.options[option]),
+            selected: searchTime.option === option,
+          }))}
+        />
+      ),
+      searchTimeButtonRef,
+    );
+  };
 
   const refresh = () => {
     navigation.setParams({
@@ -340,16 +358,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   language,
                 )}
                 accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
-                accessibilityLabel={getSearchTimeLabel(
-                  searchTime,
-                  timeOfLastSearch,
-                  t,
-                  language,
-                )}
                 mode="primary"
                 interactiveColor={interactiveColor}
-                compact={true}
+                type="small"
                 style={styles.searchTimeButton}
+                ref={searchTimeButtonRef}
                 onPress={onSearchTimePress}
                 testID="dashboardDateTimePicker"
                 rightIcon={{
@@ -371,7 +384,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
                     interactiveColor={interactiveColor}
-                    compact={true}
+                    type="small"
                     onPress={filtersState.openBottomSheet}
                     testID="filterButton"
                     ref={filterButtonRef}
@@ -404,6 +417,29 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
+          <View style={styles.globalMessage}>
+            <GlobalMessage
+              textColor={theme.color.background.neutral[0]}
+              globalMessageContext={GlobalMessageContextEnum.appTripResults}
+              ruleVariables={{
+                transportModes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.mode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+                transportSubmodes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.transportSubmode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+                authorities: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.authority?.id)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
+              }}
+            />
+          </View>
           {from && to && (
             <View>
               {filtersState.enabled && (
@@ -613,7 +649,7 @@ function translateLocation(location: Location | undefined): string {
 
 function computeNoResultReasons(
   t: TFunc<typeof Language>,
-  date?: SearchTime,
+  date?: TripSearchTime,
   from?: Location,
   to?: Location,
 ): string[] {
@@ -681,5 +717,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
+  },
+  globalMessage: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
 }));

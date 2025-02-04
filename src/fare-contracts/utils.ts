@@ -1,16 +1,12 @@
 import {
-  CarnetTravelRight,
   FareContract,
   Reservation,
   FareContractState,
-  NormalTravelRight,
-  flattenCarnetTravelRightAccesses,
-  isCarnet,
-  isCarnetTravelRight,
+  flattenTravelRightAccesses,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-  isNormalTravelRight,
   CarnetTravelRightUsedAccess,
+  TravelRight,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
@@ -31,6 +27,8 @@ import {
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useCallback, useMemo} from 'react';
 import {useAuthContext} from '@atb/auth';
+import humanizeDuration from 'humanize-duration';
+import type {UnitMapType} from '@atb/fare-contracts/types';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -69,13 +67,11 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
 
-  if (isCarnet(fc)) {
-    const usedAccesses = flattenCarnetTravelRightAccesses(
-      fc.travelRights as CarnetTravelRight[],
-    ).usedAccesses;
-    return getLastUsedAccess(now, usedAccesses).status;
+  const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
+  if (fareContractAccesses) {
+    return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
   } else {
-    const firstTravelRight = fc.travelRights.filter(isNormalTravelRight)[0];
+    const firstTravelRight = fc.travelRights[0];
     return getRelativeValidity(
       now,
       firstTravelRight.startDateTime.getTime(),
@@ -260,8 +256,7 @@ export const useDefaultPreassignedFareProduct = (
 };
 
 type FareContractInfoProps = {
-  isCarnetFareContract: boolean;
-  travelRights: NormalTravelRight[];
+  travelRights: TravelRight[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -275,14 +270,10 @@ export function getFareContractInfo(
   fc: FareContract,
   currentUserId?: string,
 ): FareContractInfoProps {
-  const isCarnetFareContract = isCarnet(fc);
-
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
-  const travelRights = fc.travelRights.filter(
-    isCarnetFareContract ? isCarnetTravelRight : isNormalTravelRight,
-  );
+  const travelRights = fc.travelRights;
   const firstTravelRight = travelRights[0];
 
   const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
@@ -290,9 +281,7 @@ export function getFareContractInfo(
 
   const validityStatus = getValidityStatus(now, fc, isSent);
 
-  const carnetTravelRightAccesses = isCarnetFareContract
-    ? flattenCarnetTravelRightAccesses(travelRights as CarnetTravelRight[])
-    : undefined;
+  const carnetTravelRightAccesses = flattenTravelRightAccesses(travelRights);
 
   const lastUsedAccess =
     carnetTravelRightAccesses &&
@@ -311,7 +300,6 @@ export function getFareContractInfo(
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
 
   return {
-    isCarnetFareContract,
     travelRights,
     validityStatus,
     validFrom,
@@ -333,3 +321,38 @@ export const getReservationStatus = (reservation: Reservation) => {
       return 'reserving';
   }
 };
+
+/**
+ * These are following the rules from AtB-AS/kundevendt#4220, which apply for validityDuration of FareContracts
+ * https://github.com/AtB-AS/kundevendt/issues/4220#issuecomment-2615206325
+ * @param seconds
+ */
+export function fareContractValidityUnits(
+  seconds: number,
+): humanizeDuration.Unit[] {
+  const oneMinuteInSeconds = 60;
+  const oneHourInSeconds = oneMinuteInSeconds * 60;
+  const oneDayInSeconds = oneHourInSeconds * 24;
+  const sevenDaysInSeconds = oneDayInSeconds * 7;
+  const unitMap: UnitMapType = [
+    {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
+    {
+      range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+      units: ['m', 's'],
+    },
+    {
+      range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
+      units: ['h', 'm'],
+    },
+    {
+      range: {low: oneDayInSeconds, high: sevenDaysInSeconds - 1},
+      units: ['d', 'h'],
+    },
+    {range: {low: sevenDaysInSeconds, high: Infinity}, units: ['d']},
+  ];
+
+  return (
+    unitMap.find(({range}) => seconds >= range.low && seconds <= range.high)
+      ?.units ?? ['d', 'h', 'm']
+  );
+}

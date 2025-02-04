@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import React from 'react';
@@ -15,7 +15,6 @@ import {TokenToggleInfo} from '@atb/token-toggle-info';
 export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {disable_travelcard} = useRemoteConfigContext();
   const {data} = useTokenToggleDetailsQuery();
 
@@ -30,11 +29,7 @@ export const Profile_TravelTokenScreen = () => {
         leftButton={{type: 'back'}}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        <TravelTokenBox
-          showIfThisDevice={true}
-          alwaysShowErrors={true}
-          interactiveColor={theme.color.interactive[2]}
-        />
+        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
         <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>

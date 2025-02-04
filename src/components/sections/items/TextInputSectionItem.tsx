@@ -48,7 +48,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     },
     forwardedRef,
   ) => {
-    const {topContainer, spacing, contentContainer} = useSectionItem(props);
+    const {topContainer, contentContainer} = useSectionItem(props);
     const {theme, themeName} = useThemeContext();
     const styles = useInputStyle(theme, themeName);
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
@@ -60,6 +60,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     useEffect(() => {
       giveFocus(errorFocusRef);
     }, [errorText]);
+
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -98,17 +99,18 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       }
     };
 
-    const padding = {
-      // There are some oddities with handling padding
-      // on Android and fonts: https://codeburst.io/react-native-quirks-2fb1ae0bbf80
-      paddingBottom: spacing - Platform.select({android: 4, default: 0}),
-      paddingTop: spacing - Platform.select({android: 5, default: 0}),
-    };
+    /*
+        Android handles padding and fonts a little oddly.
+        The short story is that we in some cases have to hard code
+        padding like this to get it to look the same on iOS
+        and Android.
+        See https://codeburst.io/react-native-quirks-2fb1ae0bbf8
+     */
+    const androidPaddingOverwrite =
+      Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
-    // Remove padding from topContainerStyle
-    const {padding: _dropThis, ...topContainerStyle} = topContainer;
     const containerPadding = {
-      paddingHorizontal: spacing,
+      paddingHorizontal: theme.spacing.medium,
     };
 
     return (
@@ -116,7 +118,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         style={[
           styles.container,
           inlineLabel ? styles.containerInline : styles.containerMultiline,
-          topContainerStyle,
+          topContainer,
+          androidPaddingOverwrite,
           containerPadding,
           getBorderColor(),
         ]}
@@ -125,10 +128,15 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         <ThemeText typography="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={inlineLabel ? contentContainer : undefined}>
+        <View
+          style={[
+            styles.internalInputContainer,
+            inlineLabel ? contentContainer : undefined,
+          ]}
+        >
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, padding, style]}
+            style={[styles.input, style]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -171,6 +179,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
+    paddingVertical: 0,
 
     fontSize: theme.typography.body__primary.fontSize,
   },
@@ -186,18 +195,18 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
+    rowGap: theme.spacing.small,
+  },
+  internalInputContainer: {
+    justifyContent: 'center',
   },
   label: {
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
   },
-  inputContainer: {
-    position: 'relative',
-  },
   inputClear: {
     position: 'absolute',
     right: 0,
-    bottom: theme.spacing.medium,
   },
   clearButton: {
     alignSelf: 'center',

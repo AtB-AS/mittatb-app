@@ -1,6 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
-import {SearchTime, StopPlaceAndQuay} from '../types';
+import {DepartureSearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
@@ -30,8 +30,8 @@ type Props = {
     date: string | undefined,
     fromStopPosition: number,
   ) => void;
-  searchTime: SearchTime;
-  setSearchTime: (searchTime: SearchTime) => void;
+  searchTime: DepartureSearchTime;
+  setSearchTime: (searchTime: DepartureSearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;

@@ -2,7 +2,7 @@ import {
   ValidityStatus,
   useSortFcOrReservationByValidityAndCreation,
 } from '../utils';
-import {FareContract, Reservation} from '@atb/ticketing/types';
+import {FareContract, Reservation, TravelRight} from '@atb/ticketing/types';
 
 import {LoadingParams} from '@atb/loading-screen/types';
 import React from 'react';
@@ -60,10 +60,11 @@ function mockupFareContract(
     orderId: '1',
     state: 0,
     totalAmount: '0',
-    minimumSecurityLevel: 1,
-    travelRights: [],
+    travelRights: [{} as any as TravelRight],
     qrCode: '',
     validityStatus: validityStatus,
+    paymentType: ['VISA'],
+    totalTaxAmount: '0',
   };
 }
 

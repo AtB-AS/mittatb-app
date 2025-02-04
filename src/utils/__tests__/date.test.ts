@@ -8,7 +8,8 @@ import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
-} from '../date';
+  secondsToDuration,
+} from '../date'; // Adjust the path if needed
 
 type TimeZone =
   | 'US/Pacific'
@@ -247,5 +248,87 @@ describe('convertIsoStringFieldsToDate', () => {
     expect(result.level1.level2.level3.date2).toBeInstanceOf(Date);
     expect(result.level1.level2.level3.value).toBe(100);
     expect(result.level1.level2.whatever).toBeUndefined();
+  });
+});
+
+describe('secondsToDuration', () => {
+  // Basic Functionality
+  describe('Basic conversions', () => {
+    test('converts 500 seconds to duration string in English', () => {
+      const result = secondsToDuration(500, Language.English);
+      expect(result).toBe('8 minutes');
+    });
+
+    test('converts 500 seconds to duration string in Norwegian', () => {
+      const result = secondsToDuration(500, Language.Norwegian);
+      expect(result).toBe('8 minutter');
+    });
+  });
+
+  // Edge Cases
+  describe('Edge case handling', () => {
+    test('handles 59 seconds at low range', () => {
+      const result = secondsToDuration(59, Language.English);
+      expect(result).toBe('1 minute');
+    });
+
+    test('handles 60 seconds (start of minutes range)', () => {
+      const result = secondsToDuration(60, Language.English);
+      expect(result).toBe('1 minute');
+    });
+
+    test('handles 3658 seconds (slightly above hours range)', () => {
+      const result = secondsToDuration(3658, Language.English);
+      expect(result).toBe('1 hour, 1 minute');
+    });
+
+    test('handles 3600 seconds (start of hours range)', () => {
+      const result = secondsToDuration(3600, Language.English);
+      expect(result).toBe('1 hour');
+    });
+  });
+
+  // Large Durations
+  describe('Large durations', () => {
+    test('handles durations greater than a day', () => {
+      const result = secondsToDuration(90000, Language.English);
+      expect(result).toBe('1 day, 1 hour');
+    });
+  });
+
+  // Custom Options
+  describe('Custom options passed to humanizeDuration', () => {
+    test('applies custom options (e.g., largest units) correctly', () => {
+      const result = secondsToDuration(3661, Language.English, {
+        largest: 1,
+      });
+      expect(result).toBe('1 hour');
+    });
+  });
+
+  // Invalid or Corner Case Inputs
+  describe('Invalid or edge case inputs', () => {
+    test('handles negative seconds gracefully', () => {
+      const result = secondsToDuration(-500, Language.English);
+      expect(result).toBe('0 minutes');
+    });
+
+    test('handles exactly 0 seconds', () => {
+      const result = secondsToDuration(0, Language.English);
+      expect(result).toBe('0 minutes');
+    });
+  });
+
+  // Unit Map Logic
+  describe('Unit map logic', () => {
+    test('uses minutes and seconds for durations under an hour', () => {
+      const result = secondsToDuration(120, Language.English);
+      expect(result).toBe('2 minutes');
+    });
+
+    test('uses hours and minutes for durations under a day', () => {
+      const result = secondsToDuration(7200, Language.English);
+      expect(result).toBe('2 hours');
+    });
   });
 });

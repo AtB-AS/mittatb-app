@@ -385,45 +385,10 @@ platform :ios do
       skip_waiting_for_build_processing:true,
     )
   end
-
-  desc 'Upload the build to AppCenter'
-  lane :appcenter_staging do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY']
-    )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_KEY"],
-      owner_name: "AtB-AS",
-      app_name: "MittAtb-1",
-      owner_type: "organization",
-      destinations: "*",
-      file: "AtB.ipa",
-      dsym: "AtB.app.dSYM.zip",
-      notify_testers: true
-    )
-  end
-
-  desc 'Upload the build to AppCenter for distribution to TestFlight'
-  lane :appcenter_testflight do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY', 'RELEASE_NOTES', 'RELEASE_URL']
-    )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_KEY"],
-      owner_name: "AtB-AS",
-      app_name: "MittAtb-1",
-      owner_type: "organization",
-      file: "AtB.ipa",
-      destination_type: "store",
-      destinations: "AtB Internal",
-      release_notes: ENV['RELEASE_NOTES'][0..3999],
-      release_notes_link: ENV['RELEASE_URL']
-    )
-  end
 end
 
 platform :android do
-  desc 'Upload the build to AppCenter'
+  desc 'Upload the build to Firebase app distribution'
 
   lane :build do
     ensure_env_vars(
@@ -510,38 +475,6 @@ platform :android do
       aab: ENV['AAB_FILE_NAME'],
       package_name: ENV['ANDROID_PACKAGE_NAME'],
       release_status: "draft"
-    )
-  end
-
-  lane :appcenter_staging do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']
-    )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_KEY"],
-      owner_name: "AtB-AS",
-      app_name: "MittAtb",
-      owner_type: "organization",
-      destinations: "*",
-      file: ENV['APK_FILE_NAME'],
-      notify_testers: true
-    )
-  end
-
-  lane :appcenter_alpha do
-    ensure_env_vars(
-      env_vars: ['APPCENTER_API_KEY', 'RELEASE_NOTES', 'RELEASE_URL']
-    )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_KEY"],
-      owner_name: "AtB-AS",
-      app_name: "MittAtb",
-      owner_type: "organization",
-      file: "app-store.apk",
-      destination_type: "store",
-      destinations: "Alpha",
-      release_notes: ENV['RELEASE_NOTES'][0..499],
-      release_notes_link: ENV['RELEASE_URL']
     )
   end
 end

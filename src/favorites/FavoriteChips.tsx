@@ -119,7 +119,7 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  return <Button {...props} compact={true} />;
+  return <Button {...props} type="small" />;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

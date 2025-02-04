@@ -5,16 +5,17 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
+  fareContractValidityUnits,
   isValidFareContract,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
   useTariffZoneSummary,
 } from '@atb/fare-contracts/utils';
+import {FareContractInfoDetailsProps} from './FareContractInfoDetails';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {secondsToDuration} from '@atb/utils/date';
-import {FareContractInfoDetailsProps} from './FareContractInfo';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {secondsToDuration} from '@atb/utils/date';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   style?: StyleProp<ViewStyle>;
@@ -151,6 +152,7 @@ export const useFareContractInfoTexts = (
   const durationText = secondsToDuration(secondsUntilValid, language, {
     conjunction,
     serialComma: false,
+    units: fareContractValidityUnits(secondsUntilValid),
   });
 
   const tokenWarning = useNonInspectableTokenWarning();
