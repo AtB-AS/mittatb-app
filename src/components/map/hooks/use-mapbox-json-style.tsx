@@ -10,7 +10,7 @@ export const useMapboxJsonStyle: () => string | undefined = () => {
     () =>
       JSON.stringify({
         ...(themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle),
-        sprite: 'http://localhost:3000/sprite/v1/' + themeName, // todo: replace with remote config url
+        sprite: 'http://10.100.0.114:8082/v1_2/' + themeName, // todo: replace with remote config url
       }),
     [themeName],
   );

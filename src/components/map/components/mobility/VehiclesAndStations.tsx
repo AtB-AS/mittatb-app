@@ -56,7 +56,7 @@ export const VehiclesAndStations = ({selectedFeature}: SelectedFeatureProp) => (
     maxZoomLevel={19}
     tileUrlTemplates={[
       // TODO: add URL from remote config here
-      'http://localhost:8080/mobility/v1/tiles/vehicles_clustered,stations/{z}/{x}/{y}',
+      'http://10.100.0.114:8080/mobility/v1/tiles/vehicles_clustered,stations/{z}/{x}/{y}',
     ]}
   >
     <VehiclesWithClusters selectedFeature={selectedFeature} />
