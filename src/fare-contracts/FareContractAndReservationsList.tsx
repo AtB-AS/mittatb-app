@@ -1,7 +1,7 @@
 import React from 'react';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
+import {FareContract, Reservation} from '@atb/ticketing';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {useAnalyticsContext} from '@atb/analytics';
 import {EmptyState} from '@atb/components/empty-state';
@@ -14,10 +14,9 @@ import type {EmptyStateProps} from '@atb/components/empty-state';
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
-  reservations?: Reservation[];
-  fareContracts?: FareContract[];
+  reservations: Reservation[];
+  fareContracts: FareContract[];
   now: number;
-  travelCard?: TravelCard;
   emptyStateConfig: Pick<
     EmptyStateProps,
     'title' | 'details' | 'illustrationComponent'
@@ -34,7 +33,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalyticsContext();
 
-  const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];
+  const fcOrReservations = [...fareContracts, ...reservations];
 
   const fareContractsAndReservationsSorted =
     useSortFcOrReservationByValidityAndCreation(
