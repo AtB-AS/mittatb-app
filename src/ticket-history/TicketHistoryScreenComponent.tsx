@@ -17,6 +17,8 @@ import {
 } from '@atb/ticket-history';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {useAuthContext} from '@atb/auth';
+import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
+import React from 'react';
 
 export const TicketHistoryScreenComponent = ({
   mode,
@@ -69,9 +71,11 @@ export const TicketHistoryScreenComponent = ({
             customerAccountId,
           )}
           now={serverNow}
-          mode={mode}
-          emptyStateTitleText={t(TicketingTexts.ticketHistory.emptyState)}
-          emptyStateDetailsText={t(TicketHistoryModeTexts[mode].emptyDetail)}
+          emptyStateConfig={{
+            title: t(TicketingTexts.ticketHistory.emptyState),
+            details: t(TicketHistoryModeTexts[mode].emptyDetail),
+            illustrationComponent: emptyStateImage(mode),
+          }}
         />
       </View>
     </FullScreenView>
@@ -93,6 +97,15 @@ const displayReservations = (
       return reservations.filter(
         (reservation) => reservation.customerAccountId !== customerAccountId,
       );
+  }
+};
+
+const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
+  switch (emptyStateMode) {
+    case 'historical':
+      return <TicketTilted height={84} />;
+    case 'sent':
+      return <HoldingHands height={84} />;
   }
 };
 
