@@ -3,7 +3,7 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
+import {FormFactorFilterType} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -157,16 +157,6 @@ export const formatPricePerUnit = (
   }
   return undefined;
 };
-
-export const getOperators = (
-  filter: MobilityMapFilterType,
-  formFactor: FormFactor,
-) => filter[formFactor]?.operators ?? [];
-
-export const isShowAll = (
-  filter: MobilityMapFilterType,
-  formFactor: FormFactor,
-) => !!filter[formFactor]?.showAll;
 
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;

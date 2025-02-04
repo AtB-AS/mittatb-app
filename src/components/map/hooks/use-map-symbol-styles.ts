@@ -1,4 +1,4 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {nsrSymbolItems} from './useNsrSymbolLayers';
 import {SelectedFeatureProp} from '../types';
 
@@ -8,7 +8,7 @@ export const useMapSymbolStyles = (
   pinType: 'vehicle' | 'station' | 'stop',
   textSizeFactor: number = 1.0,
 ) => {
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   const isDarkMode = themeName === 'dark';
 
   const featureId = ['get', 'id'];

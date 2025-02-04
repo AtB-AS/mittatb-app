@@ -1,5 +1,5 @@
 import {MAPBOX_NSR_SOURCE_LAYER_ID} from '@env';
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {SelectedFeatureProp} from '../types';
 
 const getNsrLayerSourceProps = (layerId: string) => ({
@@ -104,7 +104,7 @@ const getLayerPropsDeterminedByZoomLevel = (
 export const useNsrSymbolLayers = (
   selectedFeature: SelectedFeatureProp['selectedFeature'],
 ) => {
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
   return nsrSymbolItems.map((nsrSymbolItem) => {
     const {showAsDefaultAtZoomLevel, iconCode} = nsrSymbolItem;
 
@@ -325,7 +325,7 @@ export const nsrSymbolItems = [
 ];
 
 const useCircleAndTextItems = () => {
-  const {theme} = useTheme();
+  const {theme} = useThemeContext();
   return [
     {
       // Quays from mapbox geojson via the asag repo do not contain info to know which stopPlaceType it belongs to. As a Martin Tile Vector Source though, we can add add this. E.g. then we can select boat instead of city for boat harbour quays.

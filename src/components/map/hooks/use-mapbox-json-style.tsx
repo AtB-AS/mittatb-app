@@ -1,10 +1,10 @@
-import {useTheme} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {mapboxLightStyle} from '../mapbox-styles/mapbox-light-style';
 import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
 
 export const useMapboxJsonStyle: () => string | undefined = () => {
-  const {themeName} = useTheme();
+  const {themeName} = useThemeContext();
 
   const mapboxJsonStyle = useMemo(
     () =>
