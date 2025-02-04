@@ -280,7 +280,6 @@ export const useOnRecurringPaymentReceived = ({
       .collection('customers')
       .doc(userId)
       .collection('recurringPayments')
-      .orderBy('created', 'desc')
       .onSnapshot(
         (snapshot) => {
           const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
