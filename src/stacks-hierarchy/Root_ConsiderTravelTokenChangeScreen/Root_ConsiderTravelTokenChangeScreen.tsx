@@ -24,7 +24,6 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const interactiveColor = theme.color.interactive[2];
   const focusRef = useFocusOnLoad();
   const {disable_travelcard} = useRemoteConfigContext();
 
@@ -76,11 +75,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
       >
         {t(ConsiderTravelTokenChangeTexts.description)}
       </ThemeText>
-      <TravelTokenBox
-        showIfThisDevice={true}
-        alwaysShowErrors={true}
-        interactiveColor={interactiveColor}
-      />
+      <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
     </OnboardingFullScreenView>
   );
 };
