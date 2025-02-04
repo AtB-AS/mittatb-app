@@ -89,6 +89,7 @@ export const Profile_DebugInfoScreen = () => {
     debug: {
       nativeTokenStatus,
       remoteTokensStatus,
+      createToken: initToken,
       validateToken,
       removeRemoteToken,
       renewToken,
@@ -447,6 +448,12 @@ export const Profile_DebugInfoScreen = () => {
                 <ThemeText>{`Now: ${new Date(
                   serverNow,
                 ).toISOString()}`}</ThemeText>
+                <Button
+                  expanded={true}
+                  style={styles.button}
+                  text="Create new token"
+                  onPress={initToken}
+                />
                 <Button
                   expanded={true}
                   style={styles.button}

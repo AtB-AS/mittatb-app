@@ -70,6 +70,7 @@ type MobileTokenContextState = {
   debug: {
     nativeTokenStatus: QueryStatus;
     remoteTokensStatus: QueryStatus;
+    createToken: () => void;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
@@ -209,6 +210,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
+          createToken: () => mobileTokenClient.create(uuid()),
           validateToken: () => tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
