@@ -949,7 +949,6 @@ export const Profile_DesignSystemScreen = ({
             text="Some short text and interactive color"
             selected={selected}
             onPress={() => setSelected(!selected)}
-            color={theme.color.interactive[2]}
           />
           <RadioSectionItem
             text="Some very long text over here which goes over multiple lines"

@@ -6,7 +6,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {InteractiveColor} from '@atb/theme/colors';
+
 import {SvgProps} from 'react-native-svg';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {RadioIcon} from '@atb/components/radio';
@@ -20,7 +20,6 @@ type Props = SectionItemProps<{
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => JSX.Element;
   selected: boolean;
-  color?: InteractiveColor;
   rightAction?: {
     icon: (props: SvgProps) => JSX.Element;
     onPress: () => void;
@@ -40,7 +39,6 @@ export function RadioSectionItem({
   accessibilityLabel,
   accessibilityHint,
   testID,
-  color,
   rightAction,
   ...props
 }: Props) {
@@ -49,23 +47,17 @@ export function RadioSectionItem({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const interactiveColor = color || theme.color.interactive[2];
+  const color = theme.color.interactive[2];
 
-  const backgroundColor = interactiveColor
-    ? selected
-      ? interactiveColor.active.background
-      : interactiveColor.default.background
-    : topContainer.backgroundColor;
+  const backgroundColor = selected
+    ? color.active.background
+    : color.default.background;
 
-  const textColor = interactiveColor
-    ? selected
-      ? interactiveColor.active.foreground.primary
-      : interactiveColor.default.foreground.primary
-    : theme.color.foreground.dynamic.primary;
+  const textColor = selected
+    ? color.active.foreground.primary
+    : color.default.foreground.primary;
 
-  const selectedRadioColor = interactiveColor
-    ? interactiveColor.outline.background
-    : theme.color.foreground.dynamic.primary;
+  const selectedRadioColor = color.outline.background;
 
   const a11yLabel =
     (accessibilityLabel || `${text}, ${hideSubtext ? '' : subtext}`) +
