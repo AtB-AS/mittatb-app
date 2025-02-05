@@ -179,7 +179,6 @@ const PurchaseOverviewTexts = {
     confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
   },
   startTime: {
-
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
     now: _('Nå', 'Now', 'No'),
     laterTime: (time: string) =>
