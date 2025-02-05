@@ -19,8 +19,8 @@ import {useFeatureCollectionWithExtraProps} from './Stations';
 type Props = {
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
-  onMapItemClick: (e: OnPressEvent) => void;
-  onClusterClick: (
+  onMapItemClick?: (e: OnPressEvent) => void;
+  onClusterClick?: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
@@ -69,7 +69,9 @@ export const Bicycles = ({
         clusterProperties={getClusterPropertiesWithVehicleTypeFormFactorProp(
           FormFactor.Bicycle,
         )}
-        onPress={(e) => onClusterClick(e, clustersSource)}
+        onPress={
+          !onClusterClick ? undefined : (e) => onClusterClick(e, clustersSource)
+        }
       >
         <MapboxGL.SymbolLayer
           id="bicycleClusterIcon"

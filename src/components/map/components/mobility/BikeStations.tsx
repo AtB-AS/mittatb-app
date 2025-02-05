@@ -72,7 +72,9 @@ export const BikeStations = ({
           ),
           count: ['+', ['get', 'count']],
         }}
-        onPress={(e) => onClusterClick?.(e, clustersSource)}
+        onPress={
+          !onClusterClick ? undefined : (e) => onClusterClick(e, clustersSource)
+        }
         tolerance={0}
       >
         <MapboxGL.SymbolLayer

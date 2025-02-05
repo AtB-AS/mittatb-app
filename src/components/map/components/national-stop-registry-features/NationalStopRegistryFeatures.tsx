@@ -13,7 +13,7 @@ import {hitboxCoveringIconOnly} from '../../utils';
  */
 export type NsrProps = {
   selectedFeaturePropertyId?: string;
-  onMapItemClick: (e: OnPressEvent) => void;
+  onMapItemClick?: (e: OnPressEvent) => void;
 };
 
 // For data from National Stop Registry (NSR) (See https://stoppested.entur.org and https://developer.entur.org/pages-nsr-nsr)

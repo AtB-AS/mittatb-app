@@ -71,7 +71,9 @@ export const CarStations = ({
           ...getClusterPropertiesWithVehicleTypeFormFactorProp(FormFactor.Car),
           count: ['+', ['get', 'count']],
         }}
-        onPress={(e) => onClusterClick?.(e, clustersSource)}
+        onPress={
+          !onClusterClick ? undefined : (e) => onClusterClick(e, clustersSource)
+        }
       >
         <MapboxGL.SymbolLayer
           id="carStationClusterPin"

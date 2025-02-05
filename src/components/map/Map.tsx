@@ -245,7 +245,7 @@ export const Map = (props: MapProps) => {
     ],
   );
 
-  const onMapItemClick = useCallback(
+  const onMapItemClickHandler = useCallback(
     (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
@@ -263,8 +263,12 @@ export const Map = (props: MapProps) => {
     },
     [onMapClick],
   );
+  const onMapItemClick =
+    props.selectionMode === 'ExploreLocation'
+      ? undefined
+      : onMapItemClickHandler;
 
-  const onClusterClick = useCallback(
+  const onClusterClickHandler = useCallback(
     (feature) => {
       onMapClick({
         source: 'cluster-click',
@@ -273,6 +277,10 @@ export const Map = (props: MapProps) => {
     },
     [onMapClick],
   );
+  const onClusterClick =
+    props.selectionMode === 'ExploreLocation'
+      ? undefined
+      : onClusterClickHandler;
 
   // The onPress handling is slow on old android devices with this feature enabled
   const [showSelectedFeature, setShowSelectedFeature] = useState(true);

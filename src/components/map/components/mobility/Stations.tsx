@@ -71,7 +71,7 @@ export const Stations = ({
         zoomLevel: clusterExpansionZoom,
         animationDuration: 200,
       });
-      onClusterClick && onClusterClick(feature);
+      onClusterClick?.(feature);
     }
   };
 

@@ -18,8 +18,8 @@ type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
   mapViewRef: RefObject<MapboxGL.MapView>;
   vehicles: VehicleFeatures;
-  onMapItemClick: (e: OnPressEvent) => void;
-  onClusterClick: (feature: Feature<Point, Cluster>) => void;
+  onMapItemClick?: (e: OnPressEvent) => void;
+  onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
 export const Vehicles = ({
@@ -51,7 +51,7 @@ export const Vehicles = ({
         zoomLevel: toZoomLevel,
         animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
       });
-      onClusterClick(feature);
+      onClusterClick?.(feature);
     }
   };
 
