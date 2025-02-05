@@ -10,7 +10,7 @@ import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {formatFarePrice} from '@atb/utils/numbers';
+import {formatPriceToString} from '@atb/utils/numbers';
 
 export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   const style = useStyles();
@@ -19,7 +19,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
     FareContractTexts.details.orderId(fareContract.orderId),
   );
   const firstTravelRight = fareContract.travelRights[0];
-  const priceString = formatFarePrice(
+  const priceString = formatPriceToString(
     parseFloat(fareContract.totalAmount),
     language,
   );

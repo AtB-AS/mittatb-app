@@ -8,7 +8,7 @@ import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
 } from '@atb/components/map';
-import {formatFarePrice} from '@atb/utils/numbers';
+import {formatPriceToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
@@ -123,9 +123,9 @@ export const ScooterTexts = {
     price: (price: number, language: Language) =>
       price > 0
         ? _(
-            `+ ${formatFarePrice(price, language)} kr for oppstart`,
-            `+ ${formatFarePrice(price, language)} kr to unlock`,
-            `+ ${formatFarePrice(price, language)} kr for å låse opp`,
+            `+ ${formatPriceToString(price, language)} kr for oppstart`,
+            `+ ${formatPriceToString(price, language)} kr to unlock`,
+            `+ ${formatPriceToString(price, language)} kr for å låse opp`,
           )
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },

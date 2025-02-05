@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {formatFarePrice} from '@atb/utils/numbers';
+import {formatPriceToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import type {PurchaseSelectionType} from '@atb/purchase-selection';
@@ -35,8 +35,8 @@ export function Summary({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const formattedPrice = formatFarePrice(price, language);
-  const formattedOriginalPrice = formatFarePrice(originalPrice, language);
+  const formattedPrice = formatPriceToString(price, language);
+  const formattedOriginalPrice = formatPriceToString(originalPrice, language);
   const hasSelection = selection.userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {

@@ -1,12 +1,12 @@
 import {Language} from '@atb/translations';
 
-export const formatFarePrice = (
+export const formatPriceToString = (
   str: number,
   language: Language,
   fractionDigits?: number,
-  isVat?: boolean /**Always show 2 decimals in VAT value*/,
+  alwaysShowTwoDecimals?: boolean /**Always show 2 decimals in VAT value*/,
 ) => {
-  const minFractionDigits = isVat ? 2 : str % 1 == 0 ? 0 : 2;
+  const minFractionDigits = alwaysShowTwoDecimals ? 2 : str % 1 == 0 ? 0 : 2;
   return str.toLocaleString(language, {
     minimumFractionDigits: minFractionDigits,
     maximumFractionDigits: fractionDigits || 2,
