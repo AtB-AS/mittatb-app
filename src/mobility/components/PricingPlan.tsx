@@ -6,7 +6,8 @@ import {
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {useTranslation} from '@atb/translations';
-import {formatPrice, hasMultiplePricingPlans} from '@atb/mobility/utils';
+import {formatNumberToString} from '@atb/utils/numbers';
+import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
@@ -68,11 +69,11 @@ const PriceInfo = ({
 
   return (
     <MobilityStat
-      primaryStat={`${formatPrice(
+      primaryStat={`${formatNumberToString(
         pricingSegment.rate,
         language,
       )} kr per ${unit}`}
-      secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
+      secondaryStat={t(ScooterTexts.pricingPlan.price(price, language))}
       secondaryStatStyle={
         price > 0 && eligibleBenefit === 'free-unlock'
           ? {textDecorationLine: 'line-through'}
