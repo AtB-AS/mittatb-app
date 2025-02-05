@@ -6,11 +6,7 @@ import {
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  flattenTravelRightAccesses,
-  getLastUsedAccess,
-} from '@atb/ticketing';
+import {FareContract, getLastUsedAccess} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -26,6 +22,7 @@ import {FareContractDetailItem} from './components/FareContractDetailItem';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
+import {flattenTravelRightAccesses} from '@atb-as/utils';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;

@@ -7,7 +7,7 @@ import {
   UsedAccessStatus,
   PaymentType,
 } from './types';
-import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
+import {getAvailabilityStatus} from '@atb-as/utils';
 
 export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;

@@ -2,7 +2,6 @@ import {
   FareContract,
   Reservation,
   FareContractState,
-  flattenTravelRightAccesses,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
   CarnetTravelRightUsedAccess,
@@ -27,6 +26,7 @@ import {
 import {useMobileTokenContext} from '@atb/mobile-token';
 import humanizeDuration from 'humanize-duration';
 import type {UnitMapType} from '@atb/fare-contracts/types';
+import {flattenTravelRightAccesses} from '@atb-as/utils';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 

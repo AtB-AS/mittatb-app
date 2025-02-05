@@ -1,9 +1,5 @@
-import {
-  type AvailabilityStatus,
-  type FareContract,
-  FareContractState,
-} from './types';
-import {flattenTravelRightAccesses} from './utils';
+import {type FareContract, FareContractState} from './types';
+import {flattenTravelRightAccesses, AvailabilityStatus} from '@atb-as/utils';
 
 /**
  * Get availability status of a fare contract

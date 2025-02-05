@@ -1,8 +1,4 @@
-import {
-  FareContract,
-  flattenTravelRightAccesses,
-  getLastUsedAccess,
-} from '@atb/ticketing';
+import {FareContract, getLastUsedAccess} from '@atb/ticketing';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -10,6 +6,7 @@ import {fullDateTime} from '@atb/utils/date';
 import {getValidityStatus} from '@atb/fare-contracts';
 import {useThemeContext} from '@atb/theme';
 import {useTimeContext} from '@atb/time';
+import {flattenTravelRightAccesses} from '@atb-as/utils';
 
 type Props = {
   fc: FareContract;
