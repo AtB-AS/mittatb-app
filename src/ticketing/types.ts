@@ -281,11 +281,3 @@ export type AddPaymentMethodResponse = {
   recurring_payment_id: number;
   terminal_url: string;
 };
-
-export type AvailabilityStatus =
-  | {availability: 'available'; status: 'upcoming' | 'valid'}
-  | {
-      availability: 'historical';
-      status: 'expired' | 'empty' | 'refunded' | 'cancelled';
-    }
-  | {availability: 'invalid'; status: 'unspecified' | 'invalid'};
