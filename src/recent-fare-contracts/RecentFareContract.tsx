@@ -158,16 +158,11 @@ export const RecentFareContract = ({
           mode="small"
         />
 
-        {userProfilesWithCount.map(() => (
-          <FareContractDetailItem
-            content={[
-              `${getTransportModeText(
-                fareProductTypeConfig.transportModes,
-                t,
-              )}`,
-            ]}
-          />
-        ))}
+        <FareContractDetailItem
+          content={[
+            `${getTransportModeText(fareProductTypeConfig.transportModes, t)}`,
+          ]}
+        />
 
         {userProfilesWithCount.length <= 2 &&
           userProfilesWithCount.map((u) => (
