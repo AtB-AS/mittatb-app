@@ -11,8 +11,16 @@ import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {formatDecimalNumber} from '@atb/utils/numbers';
+import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 
-export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
+type OrderDetailsSectionItemProps = {
+  fareContract: FareContract;
+};
+
+export const OrderDetailsSectionItem = ({
+  fareContract,
+  ...props
+}: SectionItemProps<OrderDetailsSectionItemProps>) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(
@@ -24,41 +32,59 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
     language,
     2,
   );
+  const {topContainer} = useSectionItem(props);
 
   return (
-    <View accessible={true}>
-      <ThemeText typography="body__secondary" color="secondary">
-        {t(
-          FareContractTexts.details.purchaseTime(
-            fullDateTime(
-              fromUnixTime(fareContract.created.getTime() / 1000),
-              language,
+    <View style={[topContainer]} accessible={true}>
+      {!fareContract.bookingId && (
+        <ThemeText typography="body__secondary" color="secondary">
+          {t(
+            FareContractTexts.details.purchaseTime(
+              fullDateTime(
+                fromUnixTime(fareContract.created.getTime() / 1000),
+                language,
+              ),
             ),
-          ),
-        )}
-      </ThemeText>
+          )}
+        </ThemeText>
+      )}
+
       <ThemeText
         typography="body__secondary"
         color="secondary"
         style={style.marginTop}
       >
-        {t(
-          FareContractTexts.details.validFrom(
-            fullDateTime(firstTravelRight.startDateTime, language),
-          ),
-        )}
+        {fareContract.bookingId
+          ? t(
+              FareContractTexts.shmoDetails.tripStarted(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )
+          : t(
+              FareContractTexts.details.validFrom(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )}
       </ThemeText>
+
       <ThemeText
         typography="body__secondary"
         color="secondary"
         style={style.marginTop}
       >
-        {t(
-          FareContractTexts.details.validTo(
-            fullDateTime(firstTravelRight.endDateTime, language),
-          ),
-        )}
+        {fareContract.bookingId
+          ? t(
+              FareContractTexts.shmoDetails.tripEnded(
+                fullDateTime(firstTravelRight.endDateTime, language),
+              ),
+            )
+          : t(
+              FareContractTexts.details.validTo(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )}
       </ThemeText>
+
       {fareContract.state !== FareContractState.Refunded && priceString && (
         <ThemeText
           typography="body__secondary"
@@ -68,6 +94,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
+
       {fareContract.state !== FareContractState.Refunded && (
         <ThemeText
           typography="body__secondary"
@@ -76,6 +103,13 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
         >
           {t(FareContractTexts.details.paymentMethod)}
           {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
+        </ThemeText>
+      )}
+      {fareContract.bookingId && (
+        <ThemeText style={style.marginTop}>
+          {t(
+            FareContractTexts.details.bookingId(fareContract?.bookingId ?? ''),
+          )}
         </ThemeText>
       )}
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>

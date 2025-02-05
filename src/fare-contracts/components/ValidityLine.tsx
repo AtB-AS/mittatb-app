@@ -61,6 +61,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'expired':
     case 'inactive':
     case 'rejected':
+    case 'scooterUsed':
     case 'cancelled':
     case 'sent':
       return (

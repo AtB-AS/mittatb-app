@@ -170,6 +170,19 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
   return `${rangeInKm} km`;
 };
 
+export const getTimeUsedMinutes = (start: Date, end: Date) => {
+  const startDatetime = new Date(start);
+  const endDatetime = new Date(end);
+
+  const timeUsedMillies = endDatetime.getTime() - startDatetime.getTime();
+  const minutes = Math.floor(timeUsedMillies / 60000);
+  const seconds = Math.floor((timeUsedMillies % 60000) / 1000);
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+    2,
+    '0',
+  )}`;
+};
+
 const getPercentageBattery = (batteryPercentage: number) => {
   let newBatteryPercentage = batteryPercentage;
   if (batteryPercentage % 1 !== 0 && batteryPercentage < 1) {

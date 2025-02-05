@@ -7,13 +7,13 @@ import {
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {FareContractInfoDetails} from '../FareContractInfoDetails';
+import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
+import {OrderDetailsSectionItem} from '@atb/fare-contracts/sections/OrderDetailsSectionItem';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -41,14 +41,10 @@ import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {Description} from '@atb/fare-contracts/components/FareContractDescription';
-import {ValidTo} from '@atb/fare-contracts/components/ValidTo';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
-import {ProductName} from '@atb/fare-contracts/components/ProductName';
-import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
+import {ScooterTripDetailsSectionItem} from '@atb/mobility/components/ScooterTripDetailsSectionItem';
+import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
+import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 
 type Props = {
   fareContract: FareContract;
@@ -108,7 +104,7 @@ export const DetailsContent: React.FC<Props> = ({
     useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => tr.userProfileRef),
+    fc.travelRights.map((tr) => tr.userProfileRef ?? ''),
     userProfiles,
   );
 
@@ -129,42 +125,27 @@ export const DetailsContent: React.FC<Props> = ({
 
   return (
     <Section style={styles.section}>
-      <GenericSectionItem
-        style={{
-          paddingVertical: 0,
-        }}
-      >
-        <WithValidityLine fc={fc}>
-          <ProductName fc={fc} />
-          <ValidityTime fc={fc} />
-          <ValidTo fc={fc} />
-          <Description fc={fc} />
-        </WithValidityLine>
-        <View style={styles.fareContractDetails}>
-          {isSent && !!phoneNumber && (
-            <MessageInfoBox
-              type="warning"
-              message={t(
-                FareContractTexts.details.sentTo(
-                  recipientName || formatPhoneNumber(phoneNumber),
-                ),
-              )}
-            />
-          )}
-          <FareContractFromTo
-            backgroundColor={theme.color.background.neutral['0']}
-            mode="large"
-            fc={fc}
-          />
-        </View>
-      </GenericSectionItem>
-      <GenericSectionItem type="spacious">
-        <FareContractInfoDetails
+      {fc.bookingId ? (
+        <FareContractShmoHeaderSectionItem fareContract={fc} />
+      ) : (
+        <FareContractHeaderSectionItem fareContract={fc} />
+      )}
+
+      {fc.bookingId ? (
+        <ScooterTripDetailsSectionItem
+          startDateTime={fc.travelRights[0].startDateTime}
+          endDateTime={fc.travelRights[0].endDateTime}
+          totalAmount={fc.totalAmount}
+          withHeader={true}
+        />
+      ) : (
+        <FareContractInfoDetailsSectionItem
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />
-      </GenericSectionItem>
+      )}
+
       {isInspectable && validityStatus === 'valid' && (
         <GenericSectionItem
           style={
@@ -220,9 +201,9 @@ export const DetailsContent: React.FC<Props> = ({
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
-      <GenericSectionItem>
-        <OrderDetails fareContract={fc} />
-      </GenericSectionItem>
+
+      <OrderDetailsSectionItem fareContract={fc} />
+
       <LinkSectionItem
         text={t(FareContractTexts.details.askForReceipt)}
         onPress={onReceiptNavigate}

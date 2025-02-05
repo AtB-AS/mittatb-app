@@ -109,6 +109,10 @@ function validityTimeText(
         return t(FareContractTexts.validityHeader.expired(dateTime));
       }
     }
+    case 'scooterUsed': {
+      const dateTime = formatToLongDateTime(toDate(validTo), language);
+      return t(FareContractTexts.shmoDetails.tripEnded(dateTime));
+    }
     case 'reserving':
       return t(FareContractTexts.validityHeader.reserving);
     case 'sent':
