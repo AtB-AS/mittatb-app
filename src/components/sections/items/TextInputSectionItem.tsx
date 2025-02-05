@@ -2,6 +2,7 @@ import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   NativeSyntheticEvent,
+  Platform,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
@@ -98,8 +99,15 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       }
     };
 
-    // Remove padding from topContainerStyle
-    const {padding: _dropThis, ...topContainerStyle} = topContainer;
+    /*
+        Android handles padding and fonts a little oddly.
+        The short story is that we in some cases have to hard code
+        padding like this to get it to look the same on iOS
+        and Android.
+        See https://codeburst.io/react-native-quirks-2fb1ae0bbf8
+     */
+    const androidPaddingOverwrite =
+      Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
     const containerPadding = {
       paddingHorizontal: theme.spacing.medium,
@@ -110,7 +118,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         style={[
           styles.container,
           inlineLabel ? styles.containerInline : styles.containerMultiline,
-          topContainerStyle,
+          topContainer,
+          androidPaddingOverwrite,
           containerPadding,
           getBorderColor(),
         ]}
@@ -119,7 +128,12 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         <ThemeText typography="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={inlineLabel ? contentContainer : undefined}>
+        <View
+          style={[
+            styles.internalInputContainer,
+            inlineLabel ? contentContainer : undefined,
+          ]}
+        >
           <InternalTextInput
             ref={combinedRef}
             style={[styles.input, style]}
@@ -183,14 +197,12 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     paddingTop: theme.spacing.small,
     rowGap: theme.spacing.small,
   },
+  internalInputContainer: {
+    justifyContent: 'center',
+  },
   label: {
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    position: 'relative',
   },
   inputClear: {
     position: 'absolute',

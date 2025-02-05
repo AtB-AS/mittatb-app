@@ -4,10 +4,9 @@ import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites';
-import {DateString, SearchTime} from '@atb/journey-date-picker';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useSearchHistoryContext} from '@atb/search-history';
-import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
@@ -22,14 +21,14 @@ import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 export function useTripsQuery(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
-  searchTime: SearchTime = {
+  searchTime: TripSearchTime = {
     option: 'now',
     date: new Date().toISOString(),
   },
   filtersSelection: TravelSearchFiltersSelectionType | undefined,
 ): {
   tripPatterns: TripPatternWithKey[];
-  timeOfLastSearch: DateString;
+  timeOfLastSearch: string;
   loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;

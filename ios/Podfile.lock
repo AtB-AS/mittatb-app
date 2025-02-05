@@ -2101,6 +2101,8 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - react-native-date-picker (5.0.8):
+    - React-Core
   - react-native-device-brightness (1.2.7):
     - React
   - react-native-geolocation (3.3.0):
@@ -2435,6 +2437,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-compressor (from `../node_modules/react-native-compressor`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-device-brightness (from `../node_modules/@adrianso/react-native-device-brightness`)"
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
@@ -2599,6 +2602,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-compressor:
     :path: "../node_modules/react-native-compressor"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-device-brightness:
     :path: "../node_modules/@adrianso/react-native-device-brightness"
   react-native-geolocation:
@@ -2792,6 +2797,7 @@ SPEC CHECKSUMS:
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 401b164386595138c3ee5c2106ff117d54c3ba22
   react-native-compressor: 58eeb2c4c9dc4c898c7085d7e72a02f7ea4cfb64
+  react-native-date-picker: 8a0d56cdef18f61945e6d0dfd250dc1b8e7a313e
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-geolocation: 47fbfaa7d5c6fa4049e942eef41300030d49cd5e
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06

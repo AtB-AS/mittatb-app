@@ -42,7 +42,13 @@ const DeparturesTexts = {
       'Activate to go to previous day',
       'Aktiver for å gå til førre dag',
     ),
-    today: _('I dag', 'Today', 'I dag'),
+    options: {
+      now: _('Avreise nå', 'Leave now', 'Avreise no'),
+      departure: _('Avreisetid', 'Leave at', 'Avreisetid'),
+    },
+    departureNow: _(`Avreise nå`, `Leave now`, `Avreise no`),
+    departureLater: (time: string) =>
+      _(`Avreisetid ${time}`, `Leave at ${time}`, `Avreisetid ${time}`),
     a11yDisabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
     a11yChangeDateHint: _(
       'Aktiver for å forandre dato',
@@ -55,15 +61,6 @@ const DeparturesTexts = {
         `Selected date, ${dateTime}`,
         `Vald dato: ${dateTime}`,
       ),
-  },
-  dateInput: {
-    confirm: _('Bekreft', 'Confirm', 'Bekreft'),
-    header: _('Velg dato og tid', 'Select date and time', 'Vel dato og tid'),
-    a11yInPastHint: _(
-      'Aktivér for å bekrefte tidsvalg.',
-      'Activate to confirm time and date.',
-      'Aktivér for å bekrefte tidspunktet.',
-    ),
   },
   noDepartures: _(
     'Ingen avganger i dette tidsrommet.',

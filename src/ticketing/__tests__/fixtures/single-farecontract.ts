@@ -9,7 +9,6 @@ export const singleFareContract = {
   version: '1',
   qrCode:
     'ChYKFBISGhD21zmOb3NHrZqJ7Zp0kR/dEkUKPjA8Ahsup12ve5onG3q1++dKV8Ya/UJpDUNsOi3jsgoCHQCIDNWKPBObWQyrGgBr+yKIxPz94Au4rh++HtIMGgFOMAE=',
-  minimumSecurityLevel: -200,
   customerAccountId: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   orderId: '1MNPXN7A',
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
@@ -30,6 +29,5 @@ export const singleFareContract = {
       id: 'ATB:CustomerPurchasePackage:556ebc7d-6d55-4096-98fc-d5bf6243b36b',
     },
   ],
-  paymentTypeGroup: ['PAYMENTCARD'],
   totalTaxAmount: '9.11',
 };

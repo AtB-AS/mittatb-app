@@ -9,7 +9,6 @@ import {Dashboard_TravelDetailsMapScreen} from '@atb/stacks-hierarchy/Root_TabNa
 import {Dashboard_PlaceScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_PlaceScreen';
 import {Dashboard_FavoriteDeparturesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_FavoriteDeparturesScreen';
 import {Dashboard_TripDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripDetailsScreen';
-import {Dashboard_JourneyDatePickerScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_JourneyDatePickerScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {Dashboard_TravelAidScreen} from './Dashboard_TravelAidScreen';
 
@@ -42,10 +41,6 @@ export const TabNav_DashboardStack = () => {
       <Stack.Screen
         name="Dashboard_TravelDetailsMapScreen"
         component={Dashboard_TravelDetailsMapScreen}
-      />
-      <Stack.Screen
-        name="Dashboard_JourneyDatePickerScreen"
-        component={Dashboard_JourneyDatePickerScreen}
       />
       <Stack.Screen
         name="Dashboard_NearbyStopPlacesScreen"

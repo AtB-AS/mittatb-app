@@ -234,7 +234,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <StartTimeSelection
             selection={selection}
-            color={theme.color.interactive[2]}
             setSelection={setSelection}
             style={styles.selectionComponent}
           />

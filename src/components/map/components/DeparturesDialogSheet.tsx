@@ -4,7 +4,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {
-  SearchTime,
+  DepartureSearchTime,
   StopPlacesView,
   useStopsDetailsDataQuery,
 } from '@atb/place-screen';
@@ -41,7 +41,7 @@ export const DeparturesDialogSheet = ({
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
-  const [searchTime, setSearchTime] = useState<SearchTime>({
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });

@@ -41,7 +41,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getFilteredLegsByWalkOrWaitTime,
@@ -59,12 +58,13 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import type {TripSearchTime} from '../../types';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   resultIndex: number;
-  searchTime: SearchTime;
+  searchTime: TripSearchTime;
   testID?: string;
 };
 

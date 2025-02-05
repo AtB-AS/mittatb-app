@@ -3,6 +3,7 @@ import {
   AccessibilityInfo,
   Keyboard,
   NativeSyntheticEvent,
+  Platform,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
@@ -113,11 +114,19 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       }
     };
 
-    // Remove padding from topContainerStyle
-    const {padding: _dropThis, ...topContainerStyle} = topContainer;
     const containerPadding = {
       paddingHorizontal: theme.spacing.medium,
     };
+
+    /*
+        Android handles padding and fonts a little oddly.
+        The short story is that we in some cases have to hard code
+        padding like this to get it to look the same on iOS
+        and Android.
+        See https://codeburst.io/react-native-quirks-2fb1ae0bbf8
+     */
+    const androidRowGapOverwrite =
+      Platform.OS === 'android' ? {rowGap: 3} : undefined;
 
     const onSelectPrefix = (country_code: string) => {
       setIsSelectingPrefix(false);
@@ -147,8 +156,9 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           style={[
             styles.container,
             label ? styles.containerMultiline : null,
-            topContainerStyle,
+            topContainer,
             containerPadding,
+            androidRowGapOverwrite,
             getBorderColor(),
           ]}
           onAccessibilityEscape={accessibilityEscapeKeyboard}

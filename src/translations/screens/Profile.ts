@@ -33,6 +33,9 @@ const ProfileTexts = {
         ticketHistory: {
           label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
         },
+        bonus: {
+          label: _('Bonus', 'Bonus', 'Bonus'),
+        },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
