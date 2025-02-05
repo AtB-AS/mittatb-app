@@ -49,7 +49,7 @@ export async function openInAppBrowser(
 /**
  * This function is only available for iOS.
  */
-export function closeInAppBrowseriOs() {
+export function closeInAppBrowseriOS() {
   InAppBrowser.close();
   InAppBrowser.closeAuth();
 }
