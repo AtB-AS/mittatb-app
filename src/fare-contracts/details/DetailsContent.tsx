@@ -41,7 +41,6 @@ import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 import {ScooterTripDetailsSectionItem} from '@atb/mobility/components/ScooterTripDetailsSectionItem';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
@@ -80,15 +79,7 @@ export const DetailsContent: React.FC<Props> = ({
   } = getFareContractInfo(now, fc, currentUserId);
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
-  const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(fc.customerAccountId);
-  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
-    enabled: !!phoneNumber,
-  });
-  const recipientName =
-    phoneNumber &&
-    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
 
   const firstTravelRight = travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();

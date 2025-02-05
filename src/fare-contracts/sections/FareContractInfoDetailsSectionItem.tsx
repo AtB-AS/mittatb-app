@@ -53,10 +53,6 @@ export const FareContractInfoDetailsSectionItem = ({
   toTariffZone,
   userProfilesWithCount,
   status,
-  testID,
-  now,
-  validTo,
-  fareProductType,
   ...props
 }: SectionItemProps<FareContractInfoDetailsProps>) => {
   const {t, language} = useTranslation();

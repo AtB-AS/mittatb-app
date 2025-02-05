@@ -35,7 +35,7 @@ export const OrderDetailsSectionItem = ({
   const {topContainer} = useSectionItem(props);
 
   return (
-    <View style={[topContainer]} accessible={true}>
+    <View style={topContainer} accessible={true}>
       {!fareContract.bookingId && (
         <ThemeText typography="body__secondary" color="secondary">
           {t(
