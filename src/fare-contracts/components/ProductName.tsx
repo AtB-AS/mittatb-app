@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContract} from '@atb/ticketing';
+import {type FareContract} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,

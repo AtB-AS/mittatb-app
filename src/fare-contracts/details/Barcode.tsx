@@ -7,7 +7,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {FareContract} from '@atb/ticketing';
+import {FareContract} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';

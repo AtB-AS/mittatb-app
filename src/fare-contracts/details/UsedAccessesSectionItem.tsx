@@ -1,4 +1,4 @@
-import {CarnetTravelRightUsedAccess} from '@atb/ticketing';
+import {UsedAccess} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -6,7 +6,7 @@ import {fullDateTime} from '@atb/utils/date';
 import React from 'react';
 import {useSectionItem} from '@atb/components/sections';
 
-type Props = {usedAccesses: CarnetTravelRightUsedAccess[]};
+type Props = {usedAccesses: UsedAccess[]};
 
 export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
   const {topContainer} = useSectionItem({});

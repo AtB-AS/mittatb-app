@@ -1,12 +1,14 @@
 import {
-  FareContract,
   Reservation,
-  FareContractState,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-  CarnetTravelRightUsedAccess,
-  TravelRight,
 } from '@atb/ticketing';
+import {
+  FareContract,
+  FareContractState,
+  UsedAccess,
+  TravelRight,
+} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -220,7 +222,7 @@ type FareContractInfoProps = {
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
-  usedAccesses?: CarnetTravelRightUsedAccess[];
+  usedAccesses?: UsedAccess[];
   maximumNumberOfAccesses?: number;
   numberOfUsedAccesses?: number;
 };

@@ -1,6 +1,6 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
-import {FareContract, TravelRightDirection} from '@atb/ticketing';
+import {FareContract, TravelRightDirection} from '@atb-as/utils';
 import {ZonesFromTo} from '@atb/fare-contracts/components/ZonesFromTo';
 import {HarborsFromTo} from '@atb/fare-contracts/components/HarborsFromTo';
 import {

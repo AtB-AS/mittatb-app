@@ -11,9 +11,9 @@ import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {
   isCanBeConsumedNowFareContract,
-  FareContract,
   isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
+import {FareContract} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';

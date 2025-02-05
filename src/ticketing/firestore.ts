@@ -3,7 +3,8 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {addHours} from 'date-fns';
-import {CustomerProfile, FareContract, Reservation} from './types';
+import {CustomerProfile, Reservation} from './types';
+import {FareContract} from '@atb-as/utils';
 
 type SnapshotListener<T> = {
   onSnapshot: (snapshot: T) => void;

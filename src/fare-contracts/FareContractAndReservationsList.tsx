@@ -1,14 +1,14 @@
 import React from 'react';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {FareContract, Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/ticketing';
 import {useAnalyticsContext} from '@atb/analytics';
 import {EmptyState} from '@atb/components/empty-state';
-import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation-by-validity-and-creation';
+import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
-import {useAuthContext} from '@atb/auth';
+import {FareContract} from '@atb-as/utils';
 
 type Props = {
   reservations: Reservation[];
@@ -30,13 +30,11 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-  const {abtCustomerId} = useAuthContext();
 
   const fcOrReservations = [...fareContracts, ...reservations];
 
   const fareContractsAndReservationsSorted =
-    sortFcOrReservationByValidityAndCreation(
-      abtCustomerId,
+    useSortFcOrReservationByValidityAndCreation(
       now,
       fcOrReservations,
       (currentTime, fareContract, currentUserId) =>

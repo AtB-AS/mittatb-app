@@ -1,12 +1,6 @@
 import {startCase} from 'lodash';
-import {
-  FareContract,
-  TravelRight,
-  CarnetTravelRightUsedAccess,
-  LastUsedAccessState,
-  UsedAccessStatus,
-  PaymentType,
-} from './types';
+import {LastUsedAccessState, UsedAccessStatus, PaymentType} from './types';
+import {FareContract, TravelRight, UsedAccess} from '@atb-as/utils';
 import {getAvailabilityStatus} from '@atb-as/utils';
 
 export function isSentOrReceivedFareContract(fc: FareContract) {
@@ -42,7 +36,7 @@ export function isCanBeActivatedNowFareContract(
 
 export function getLastUsedAccess(
   now: number,
-  usedAccesses: CarnetTravelRightUsedAccess[],
+  usedAccesses: UsedAccess[],
 ): LastUsedAccessState {
   const lastUsedAccess = usedAccesses.slice(-1).pop();
 

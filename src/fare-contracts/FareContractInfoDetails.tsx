@@ -6,7 +6,8 @@ import {
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {FareContract, getLastUsedAccess} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/ticketing';
+import {FareContract} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';

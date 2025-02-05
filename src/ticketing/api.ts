@@ -1,10 +1,7 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {
-  AddPaymentMethodResponse,
-  FareContract,
-  ReserveOfferRequestBody,
-} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {FareContract} from '@atb-as/utils';
 import {client} from '../api';
 import {
   Offer,

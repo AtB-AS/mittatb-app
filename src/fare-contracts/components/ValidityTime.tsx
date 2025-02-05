@@ -18,7 +18,7 @@ import {
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
-import type {FareContract} from '@atb/ticketing';
+import type {FareContract} from '@atb-as/utils';
 
 type Props = {
   fc: FareContract;

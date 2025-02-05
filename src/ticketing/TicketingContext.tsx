@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {useAuthContext} from '../auth';
-import {Reservation, FareContract, PaymentStatus} from './types';
+import {Reservation, PaymentStatus} from './types';
+import {FareContract} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';

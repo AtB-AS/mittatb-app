@@ -1,10 +1,10 @@
 import {useTicketingContext} from '@atb/ticketing/TicketingContext';
-import type {AvailabilityStatus, FareContract} from '@atb/ticketing/types';
+import type {FareContract} from '@atb-as/utils';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/ticketing/api';
 import {useAuthContext} from '@atb/auth';
-import {getAvailabilityStatus} from '@atb-as/utils';
+import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;

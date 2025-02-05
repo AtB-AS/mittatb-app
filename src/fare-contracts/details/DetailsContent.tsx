@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  FareContract,
   hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
+import {FareContract} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetails} from '../FareContractInfoDetails';
 import {

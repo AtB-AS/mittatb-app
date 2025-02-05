@@ -13,7 +13,7 @@ import {
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';

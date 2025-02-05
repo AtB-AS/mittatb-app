@@ -1,8 +1,5 @@
-import {
-  FareContract,
-  FareContractState,
-  humanizePaymentTypeString,
-} from '@atb/ticketing';
+import {humanizePaymentTypeString} from '@atb/ticketing';
+import {FareContract, FareContractState} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
