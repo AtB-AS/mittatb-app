@@ -1,6 +1,5 @@
 import {StyleSheet} from '@atb/theme';
 import {
-  type FareContract,
   Reservation,
   useFareContracts,
   useTicketingContext,
