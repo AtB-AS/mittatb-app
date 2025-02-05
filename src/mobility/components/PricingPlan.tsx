@@ -6,7 +6,7 @@ import {
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {useTranslation} from '@atb/translations';
-import {formatPriceToString} from '@atb/utils/numbers';
+import {formatNumberToString} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
@@ -69,7 +69,7 @@ const PriceInfo = ({
 
   return (
     <MobilityStat
-      primaryStat={`${formatPriceToString(
+      primaryStat={`${formatNumberToString(
         pricingSegment.rate,
         language,
       )} kr per ${unit}`}

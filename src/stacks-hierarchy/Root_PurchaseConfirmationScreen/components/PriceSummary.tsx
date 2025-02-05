@@ -7,7 +7,7 @@ import {
 } from '@atb/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {formatPriceToString} from '@atb/utils/numbers';
+import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {UserProfileWithCountAndOffer} from '../../Root_PurchaseOverviewScreen/use-offer-state';
@@ -31,14 +31,9 @@ export const PriceSummary = ({
   const {vatPercent} = useFirestoreConfigurationContext();
 
   const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
-  const vatAmountString = formatPriceToString(
-    vatAmount,
-    language,
-    undefined,
-    true,
-  );
-  const vatPercentString = formatPriceToString(vatPercent, language);
-  const totalPriceString = formatPriceToString(totalPrice, language);
+  const vatAmountString = formatNumberToString(vatAmount, language, 2);
+  const vatPercentString = formatNumberToString(vatPercent, language);
+  const totalPriceString = formatNumberToString(totalPrice, language);
 
   const {travellerSelectionMode} = fareProductTypeConfig.configuration;
 
@@ -102,9 +97,9 @@ const PricePerUserProfile = ({
   const price = count * (offer.prices[0].amount_float || 0);
   const originalPrice = count * (offer.prices[0].original_amount_float || 0);
 
-  const priceString = formatPriceToString(price, language);
+  const priceString = formatNumberToString(price, language);
   const originalPriceString = originalPrice
-    ? formatPriceToString(originalPrice, language)
+    ? formatNumberToString(originalPrice, language)
     : undefined;
 
   const hasFlexDiscount = price < originalPrice;

@@ -8,13 +8,9 @@ import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {
-  formatPrice,
-  formatPricePerUnit,
-  formatRange,
-  getBatteryLevelIcon,
-} from '../utils';
+import {formatPricePerUnit, formatRange, getBatteryLevelIcon} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
+import {formatNumberToString} from '@atb/utils/numbers';
 
 type Props = {
   pricingPlan: PricingPlanFragment;
@@ -59,7 +55,7 @@ export const VehicleCard = ({
             />
             <VehicleCardStat
               icon={Unlock}
-              stat={formatPrice(pricingPlan.price, language) + ' kr'}
+              stat={formatNumberToString(pricingPlan.price, language) + ' kr'}
               description={t(ScooterTexts.unlock)}
             />
 
