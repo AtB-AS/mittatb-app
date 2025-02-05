@@ -15,7 +15,11 @@ import Bugsnag from '@bugsnag/react-native';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {tokenService} from './tokenService';
 import {mobileTokenClient} from './mobileTokenClient';
-import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {
+  errorToMetadata,
+  logToBugsnag,
+  notifyBugsnag,
+} from '@atb/utils/bugsnag-utils';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -42,7 +46,10 @@ export const wipeToken = async (tokensIds: string[], traceId: string) => {
     try {
       await tokenService.removeToken(id, traceId);
     } catch (err: any) {
-      logToBugsnag(`Other error found during wipe token, ${err}`);
+      logToBugsnag(
+        `Other error found during wipe token, ${err}`,
+        errorToMetadata(err),
+      );
       // if it is not entity deleted error, throw it so it notifies bugsnag
       throw err;
     }
@@ -79,6 +86,7 @@ export const getMobileTokenErrorHandlingStrategy = (
 
   logToBugsnag(
     `mobile token handle error ${err} with resolution ${errorResolution}`,
+    errorToMetadata(err),
   );
 
   notifyBugsnag(err, {

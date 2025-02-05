@@ -10,7 +10,7 @@ import {
   MOBILE_TOKEN_QUERY_KEY,
   wipeToken,
 } from '../utils';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils';
+import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import Bugsnag from '@bugsnag/react-native';
 
 export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
@@ -65,16 +65,16 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
-      logToBugsnag(`Get token error ${err}`);
+      logToBugsnag(`Get token error ${err}`, errorToMetadata(err));
       const errHandling = getMobileTokenErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
-          logToBugsnag(`Get token needs to reset token`);
+          logToBugsnag(`Get token needs to reset token`, errorToMetadata(err));
           await wipeToken(getSdkErrorTokenIds(err), traceId);
           logError(err, traceId);
           break;
         case 'unspecified':
-          logToBugsnag(`Get token error unspecified resolution`);
+          logToBugsnag(`Get token error unspecified resolution`, errorToMetadata(err));
           logError(err, traceId);
           throw err;
       }
@@ -90,24 +90,24 @@ const loadNativeToken = async (userId: string, traceId: string) => {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
         await tokenService.validate(token, traceId);
       } catch (err: any) {
-        logToBugsnag(`Validation error on token ${token.getTokenId()}, ${err}`);
+        logToBugsnag(`Validation error on token ${token.getTokenId()}`, errorToMetadata(err));
         // Check if the error has an error handling strategy implemented
         const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
         if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
-          logToBugsnag(`Token needs renewal ${token.getTokenId()}, ${err}`);
+          logToBugsnag(`Token needs renewal ${token.getTokenId()}`, errorToMetadata(err));
           logError(err, traceId);
           // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
         } else if (tokenSdkErrorHandling === 'reset') {
           // token needs reset, therefore, wipe token
-          logToBugsnag(`Token needs reset, wipe ${token.getTokenId()}, ${err}`);
+          logToBugsnag(`Token needs reset, wipe ${token.getTokenId()}`, errorToMetadata(err));
           logError(err, traceId);
           await wipeToken([token.tokenId], traceId);
           token = undefined;
         } else {
           // other errors
           logToBugsnag(
-            `Other error during validation of ${token.getTokenId()}, ${err}`,
+            `Other error during validation of ${token.getTokenId()}`, errorToMetadata(err),
           );
           logError(err, traceId);
           throw err;
@@ -127,7 +127,15 @@ const loadNativeToken = async (userId: string, traceId: string) => {
       suggested by the SDK.
      */
     logToBugsnag(`Creating new mobile token`);
-    token = await mobileTokenClient.create(traceId);
+    try {
+      token = await mobileTokenClient.create(traceId);
+      logToBugsnag(`Created new token ${token.getTokenId()}`);
+    } catch(err: any) {
+      
+      logToBugsnag(`Got error while creating new mobile token `, errorToMetadata(err))
+      logError(err, traceId)
+      throw err;
+    }
   }
   await storage.set('@ATB_last_mobile_token_user', userId!);
   return token;
