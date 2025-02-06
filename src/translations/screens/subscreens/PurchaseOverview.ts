@@ -97,11 +97,7 @@ const PurchaseOverviewTexts = {
   zones: {
     title: {
       single: {
-        text: _(
-          'Velg holdeplass/sone (kun én)',
-          'Select stop/zone (only one)',
-          'Vel haldeplass/sone (berre éin)',
-        ),
+        text: _('Holdeplass/sone', 'Stop/zone', 'Haldeplass/sone'),
         a11yLabel: _(
           'Velg holdeplass eller sone (kun én)',
           'Select stop or zone (only one)',
@@ -109,11 +105,7 @@ const PurchaseOverviewTexts = {
         ),
       },
       multiple: {
-        text: _(
-          'Velg holdeplass/sone(r)',
-          'Select stop/zone(s)',
-          'Vel haldeplassar/soner',
-        ),
+        text: _('Holdeplass/sone', 'Stop/zone', 'Haldeplass/sone'),
         a11yLabel: _(
           'Velg holdeplass eller soner',
           'Select stop or zones',
@@ -156,9 +148,8 @@ const PurchaseOverviewTexts = {
     ),
   },
   travellerSelection: {
-    titleSingle: _('Velg reisende', 'Select a traveller', 'Vel ein reisande'),
-    titleMultiple: _('Velg reisende', 'Select travellers', 'Vel reisande'),
-    titleNotSelectable: _('Reisende', 'Traveller', 'Reisande'),
+    titleSingle: _('Reisende', 'Traveller', 'Reisande'),
+    titleMultiple: _('Reisende', 'Travellers', 'Reisande'),
     a11yLabelPrefixSingle: _(
       'Valgt reisende:',
       'Selected traveller:',
@@ -188,15 +179,11 @@ const PurchaseOverviewTexts = {
     confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
   },
   startTime: {
-    title: _(
-      'Velg oppstartstidspunkt',
-      'Select start time',
-      'Vel starttidspunkt',
-    ),
-    now: _('Oppstart nå', 'Start now', 'Start no'),
+    title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
+    now: _('Nå', 'Now', 'No'),
     laterTime: (time: string) =>
       _(`Oppstart ${time}`, `Start ${time}`, `Start ${time}`),
-    laterOption: _('Oppstart senere', 'Start later', 'Start seinare'),
+    laterOption: _('Senere', 'Later', 'Seinare'),
     a11yLabel: (time?: string) =>
       _(
         `Valgt oppstartstidspunkt: ${time || 'nå'}`,

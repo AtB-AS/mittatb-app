@@ -13,6 +13,8 @@ import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {usePopOverContext} from '@atb/popover';
 import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
 import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
+import {TravelTokenBox} from '@atb/travel-token-box';
+import {TicketTilted} from '@atb/assets/svg/color/images';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -99,19 +101,22 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           />
         }
       >
+        <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
-          showTokenInfo={true}
-          emptyStateTitleText={t(
-            TicketingTexts.availableFareProductsAndReservationsTab
-              .noActiveTicketsTitle,
-          )}
-          emptyStateDetailsText={t(
-            TicketingTexts.availableFareProductsAndReservationsTab
-              .noActiveTicketsDetails,
-          )}
+          emptyStateConfig={{
+            title: t(
+              TicketingTexts.availableFareProductsAndReservationsTab
+                .noActiveTicketsTitle,
+            ),
+            details: t(
+              TicketingTexts.availableFareProductsAndReservationsTab
+                .noActiveTicketsDetails,
+            ),
+            illustrationComponent: <TicketTilted height={84} />,
+          }}
         />
         <Section>
           {hasHistoricalFareContracts && (

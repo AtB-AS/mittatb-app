@@ -1,47 +1,39 @@
 import React from 'react';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
-import {TravelTokenBox} from '@atb/travel-token-box';
+import {FareContract, Reservation} from '@atb/ticketing';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {useAnalyticsContext} from '@atb/analytics';
-import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
-import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
 import {getFareContractInfo} from './utils';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
+import type {EmptyStateProps} from '@atb/components/empty-state';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
-  reservations?: Reservation[];
-  fareContracts?: FareContract[];
+  reservations: Reservation[];
+  fareContracts: FareContract[];
   now: number;
-  travelCard?: TravelCard;
-  showTokenInfo?: boolean;
-  mode?: TicketHistoryMode;
-  emptyStateTitleText: string;
-  emptyStateDetailsText: string;
+  emptyStateConfig: Pick<
+    EmptyStateProps,
+    'title' | 'details' | 'illustrationComponent'
+  >;
 };
 
 export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
   now,
-  showTokenInfo,
-  mode = 'historical',
-  emptyStateTitleText,
-  emptyStateDetailsText,
+  emptyStateConfig,
 }) => {
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalyticsContext();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
-  const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];
+  const fcOrReservations = [...fareContracts, ...reservations];
 
   const fareContractsAndReservationsSorted =
     useSortFcOrReservationByValidityAndCreation(
@@ -54,20 +46,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      {showTokenInfo && (
-        <TravelTokenBox
-          showIfThisDevice={false}
-          alwaysShowErrors={false}
-          interactiveColor={interactiveColor}
-        />
-      )}
       {!fareContractsAndReservationsSorted.length && (
-        <EmptyState
-          title={emptyStateTitleText}
-          details={emptyStateDetailsText}
-          illustrationComponent={emptyStateImage(mode)}
-          testID="fareContracts"
-        />
+        <EmptyState {...emptyStateConfig} testID="fareContracts" />
       )}
       {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
         <FareContractOrReservation
@@ -88,15 +68,6 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       ))}
     </View>
   );
-};
-
-const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
-  switch (emptyStateMode) {
-    case 'historical':
-      return <TicketTilted height={84} />;
-    case 'sent':
-      return <HoldingHands height={84} />;
-  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

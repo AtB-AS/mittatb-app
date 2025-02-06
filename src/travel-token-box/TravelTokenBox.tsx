@@ -9,25 +9,24 @@ import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button'; // re-add when new onboarding ready
-import {InteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
+const getInteractiveColor = (th: Theme) => th.color.interactive[2];
+
 export function TravelTokenBox({
   showIfThisDevice,
   alwaysShowErrors,
-  interactiveColor,
 }: {
   showIfThisDevice: boolean;
   alwaysShowErrors: boolean;
-  interactiveColor: InteractiveColor;
 }) {
   const {theme} = useThemeContext();
-  const themeTextColor = interactiveColor ?? theme.color.interactive[2];
+  const interactiveColor = getInteractiveColor(theme);
 
-  const styles = useStyles(themeTextColor)();
+  const styles = useStyles();
   const {t} = useTranslation();
   const {mobileTokenStatus, isInspectable, tokens, retry} =
     useMobileTokenContext();
@@ -79,7 +78,7 @@ export function TravelTokenBox({
           <View style={styles.activeTravelTokenInfo}>
             <ThemeText
               typography="body__primary--bold"
-              color={themeTextColor.default}
+              color={interactiveColor.default}
             >
               {t(TravelTokenBoxTexts.title) +
                 t(
@@ -93,7 +92,7 @@ export function TravelTokenBox({
 
             <TravelTokenDeviceTitle
               inspectableToken={inspectableToken}
-              themeTextColor={themeTextColor.default}
+              themeTextColor={interactiveColor.default}
             />
           </View>
         </View>
@@ -107,7 +106,7 @@ export function TravelTokenBox({
       <Button
         expanded={true}
         mode="secondary"
-        backgroundColor={themeTextColor.default}
+        backgroundColor={interactiveColor.default}
         onPress={onPressChangeButton}
         text={
           inspectableToken
@@ -120,21 +119,20 @@ export function TravelTokenBox({
   );
 }
 
-const useStyles = (interactiveColor: InteractiveColor) =>
-  StyleSheet.createThemeHook((theme: Theme) => ({
-    container: {
-      backgroundColor: interactiveColor.default.background,
-      padding: theme.spacing.xLarge,
-      rowGap: theme.spacing.medium,
-      borderRadius: theme.border.radius.regular,
-    },
-    content: {
-      display: 'flex',
-      flexDirection: 'row',
-      columnGap: theme.spacing.medium,
-    },
-    activeTravelTokenInfo: {
-      flex: 1,
-      rowGap: theme.spacing.xSmall,
-    },
-  }));
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    backgroundColor: getInteractiveColor(theme).default.background,
+    padding: theme.spacing.xLarge,
+    rowGap: theme.spacing.medium,
+    borderRadius: theme.border.radius.regular,
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: theme.spacing.medium,
+  },
+  activeTravelTokenInfo: {
+    flex: 1,
+    rowGap: theme.spacing.xSmall,
+  },
+}));

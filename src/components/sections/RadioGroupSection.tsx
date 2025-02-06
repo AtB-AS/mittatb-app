@@ -2,7 +2,6 @@ import React from 'react';
 import {RadioSectionItem} from './items/RadioSectionItem.tsx';
 import {Section, SectionProps} from './Section';
 import {HeaderSectionItem} from './items/HeaderSectionItem';
-import {InteractiveColor} from '@atb/theme/colors';
 
 type Props<T> = Omit<SectionProps, 'children'> & {
   items: T[];
@@ -14,7 +13,6 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;
-  color?: InteractiveColor;
   itemToRightAction?: (
     item: T,
   ) => React.ComponentProps<typeof RadioSectionItem>['rightAction'];
@@ -30,7 +28,6 @@ export function RadioGroupSection<T>({
   selected,
   onSelect,
   headerText,
-  color,
   accessibilityHint,
   itemToRightAction,
   ...props
@@ -51,7 +48,6 @@ export function RadioGroupSection<T>({
             subtext={itemToSubtext?.(item, index)}
             onPress={() => onSelect?.(item, index)}
             testID={'radioButton' + itemToText(item, index)}
-            color={color}
             accessibilityHint={thisItemSelected ? '' : accessibilityHint}
             accessibilityLabel={itemToA11yLabel?.(item)}
             rightAction={itemToRightAction?.(item)}

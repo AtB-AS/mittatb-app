@@ -10,8 +10,8 @@ import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {formatDecimalNumber} from '@atb/utils/numbers';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
+import {formatNumberToString} from '@atb/utils/numbers';
 
 type OrderDetailsSectionItemProps = {
   fareContract: FareContract;
@@ -27,10 +27,9 @@ export const OrderDetailsSectionItem = ({
     FareContractTexts.details.orderId(fareContract.orderId),
   );
   const firstTravelRight = fareContract.travelRights[0];
-  const priceString = formatDecimalNumber(
+  const priceString = formatNumberToString(
     parseFloat(fareContract.totalAmount),
     language,
-    2,
   );
   const {topContainer} = useSectionItem(props);
 
