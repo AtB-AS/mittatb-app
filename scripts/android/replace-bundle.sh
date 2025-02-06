@@ -51,6 +51,10 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
+    echo "Add timestamp file"
+    TIMESTAMP_FILE="decompiled-apk/assets/checksum.txt"
+    date +%s > $TIMESTAMP_FILE
+
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
