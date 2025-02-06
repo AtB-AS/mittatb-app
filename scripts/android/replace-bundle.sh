@@ -51,8 +51,8 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
-    echo "Modify AndroidManifest.xml to change checksum"
-    yq e '.manifest.application."meta-data"+=[{"@android:name":"build.timestamp","@android:value": env(BUILD_ID)}]' -i decompiled-apk/AndroidManifest.xml
+    echo "Set build id to the bundle"
+    printf "\n// Build ID: %s\n" "$BUILD_ID" >> decompiled-apk/assets/index.android.bundle
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
