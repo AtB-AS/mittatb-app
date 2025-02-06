@@ -51,8 +51,10 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
-    echo "Set build id to the bundle"
-    printf "\n// Build ID: %s\n" "$BUILD_ID" >> decompiled-apk/assets/index.android.bundle
+    echo "Modify smali code to alter checksum"
+    SMALI_FILE=$(find decompiled-apk/smali*/ -name "*.smali" | head -n 1)
+    printf "\n    const-string v0, \"build_%s\"\n" "$BUILD_ID" >> "$SMALI_FILE"
+    echo "Modified fallback smali file: $SMALI_FILE"
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
