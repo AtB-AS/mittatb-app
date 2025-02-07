@@ -5,6 +5,8 @@ import {RadioIcon} from './RadioIcon';
 import React from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {InteractiveColor} from '@atb/theme/colors';
+import {useTranslation} from '@atb/translations';
+import {getRadioA11y} from './utils';
 
 type ContainerSizingType = 'compact' | 'standard' | 'spacious';
 
@@ -38,6 +40,7 @@ export function RadioBox({
 }: Props) {
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
   const spacing = useSpacing(type);
 
   const currentInteractiveColor =
@@ -59,13 +62,8 @@ export function RadioBox({
         style,
       ]}
       onPress={onPress}
-      accessibilityLabel={a11yLabel}
       accessibilityHint={a11yHint}
-      accessibilityRole="radio"
-      accessibilityState={{
-        selected,
-        disabled,
-      }}
+      {...getRadioA11y(a11yLabel, selected, t, disabled)}
       disabled={disabled}
       testID={testID}
     >
