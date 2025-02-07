@@ -56,11 +56,11 @@ else
     echo $TIMESTAMP > decompiled-apk/assets/timestamp.txt
     yq e '.doNotCompress += ["assets/timestamp.txt"]' -i decompiled-apk/apktool.yml
 
-    # Verify the file is included
-    unzip -l temp-$APK_FILE_NAME | grep "timestamp.txt"
-
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
+
+    # Verify the file is included
+    unzip -l temp-$APK_FILE_NAME | grep "timestamp.txt"
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
     /usr/local/lib/android/sdk/build-tools/34.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
