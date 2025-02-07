@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
@@ -17,6 +17,8 @@ import {LabelInfo} from '@atb/components/label-info';
 type Props = SectionItemProps<
   {
     text: string;
+    prefix?: React.ReactNode;
+    suffix?: React.ReactNode;
     textType?: TextNames;
     label?: LabelType;
     showIconText?: boolean;
@@ -42,6 +44,8 @@ type Props = SectionItemProps<
  */
 export function ExpandableSectionItem({
   text,
+  prefix,
+  suffix,
   textType,
   showIconText = false,
   label,
@@ -91,9 +95,11 @@ export function ExpandableSectionItem({
         testID={testID}
         {...accessibility}
       >
+        {prefix}
         <ThemeText style={contentContainer} typography={textType}>
           {text}
         </ThemeText>
+        {suffix}
         {label && <LabelInfo label={label} />}
         <ExpandIcon expanded={expanded} showText={showIconText} />
       </PressableOpacity>
