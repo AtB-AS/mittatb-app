@@ -25,8 +25,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {useCallback, useMemo} from 'react';
-import {useAuthContext} from '@atb/auth';
 import humanizeDuration from 'humanize-duration';
 import type {UnitMapType} from '@atb/fare-contracts/types';
 
@@ -79,44 +77,6 @@ export function getValidityStatus(
     );
   }
 }
-
-export const useSortFcOrReservationByValidityAndCreation = (
-  now: number,
-  fcOrReservations: (Reservation | FareContract)[],
-  getFareContractStatus: (
-    now: number,
-    fc: FareContract,
-    currentUserId?: string,
-  ) => ValidityStatus | undefined,
-): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthContext();
-  const getFcOrReservationOrder = useCallback(
-    (fcOrReservation: FareContract | Reservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      // Make reservations go first, then fare contracts
-      if (!isFareContract) return -1;
-
-      const validityStatus = getFareContractStatus(
-        now,
-        fcOrReservation,
-        currentUserId,
-      );
-      return validityStatus === 'valid' ? 0 : 1;
-    },
-    [getFareContractStatus, now, currentUserId],
-  );
-
-  return useMemo(() => {
-    return fcOrReservations.sort((a, b) => {
-      const orderA = getFcOrReservationOrder(a);
-      const orderB = getFcOrReservationOrder(b);
-      // Negative return value for a - b means "place a before b"
-      if (orderA !== orderB) return orderA - orderB;
-      // Make sure most recent dates comes first
-      return b.created.getTime() - a.created.getTime();
-    });
-  }, [fcOrReservations, getFcOrReservationOrder]);
-};
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
