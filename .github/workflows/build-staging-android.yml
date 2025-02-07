@@ -6,7 +6,7 @@ on:
         description: 'Forces a new build and ignores the cache'
         required: false
         type: choice
-        default: false
+        default: true
         options:
           - true
           - false
