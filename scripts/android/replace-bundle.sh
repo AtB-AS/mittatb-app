@@ -51,10 +51,13 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
-    echo "Modify smali code to alter checksum"
-    SMALI_FILE=$(find decompiled-apk/smali*/ -name "*.smali" | head -n 1)
-    printf "\n    const-string v0, \"build_%s\"\n" "$BUILD_ID" >> "$SMALI_FILE"
-    echo "Modified fallback smali file: $SMALI_FILE"
+    # Add a timestamp file
+    TIMESTAMP=$(date +%s)
+    echo $TIMESTAMP > decompiled-apk/assets/timestamp.txt
+    yq e '.doNotCompress += ["assets/timestamp.txt"]' -i decompiled-apk/apktool.yml
+
+    # Verify the file is included
+    unzip -l temp-$APK_FILE_NAME | grep "timestamp.txt"
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
