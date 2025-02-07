@@ -6,10 +6,10 @@ on:
         description: 'Forces a new build and ignores the cache'
         required: false
         type: choice
-        default: true
+        default: 'true'
         options:
-          - true
-          - false
+          - 'true'
+          - 'false'
   push:
     branches:
       - master
