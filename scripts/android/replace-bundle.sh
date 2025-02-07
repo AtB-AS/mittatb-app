@@ -57,7 +57,7 @@ else
     yq e '.doNotCompress += ["assets/timestamp.txt"]' -i decompiled-apk/apktool.yml
 
     echo "Re-compile Android APK"
-    apktool b decompiled-apk -o temp-$APK_FILE_NAME
+    apktool b --force-all decompiled-apk -o temp-$APK_FILE_NAME
 
     # Verify the file is included
     unzip -l temp-$APK_FILE_NAME | grep "timestamp.txt"
