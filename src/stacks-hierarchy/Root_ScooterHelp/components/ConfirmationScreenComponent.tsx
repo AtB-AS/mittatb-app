@@ -44,6 +44,7 @@ export const ConfirmationScreenComponent = ({
             style={styles.title}
             color={themeColor}
             typography="heading--big"
+            accessibilityRole="header"
           >
             {title}
           </ThemeText>
