@@ -1,6 +1,13 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, FeatureCollection, LineString, Point, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  LineString,
+  Point,
+  Position,
+} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
@@ -24,6 +31,7 @@ import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
+import {ClusterOfVehiclesProperties} from '@atb/api/types/mobility';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -92,8 +100,6 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  vehicles?: VehiclesState;
-  stations?: StationsState;
   includeSnackbar?: boolean;
 } & (
   | {
@@ -108,13 +114,6 @@ export type MapProps = {
     }
 );
 
-export type Cluster = {
-  cluster_id: number;
-  cluster: boolean;
-  point_count_abbreviated: string;
-  point_count: number;
-};
-
 export type MapSelectionActionType =
   | {
       source: 'map-click';
@@ -126,7 +125,7 @@ export type MapSelectionActionType =
     }
   | {
       source: 'cluster-click';
-      feature: Feature<Point, Cluster>;
+      feature: Feature<Point, ClusterOfVehiclesProperties>;
     }
   | {
       source: 'my-position';
@@ -240,4 +239,12 @@ type GeofencingZoneExplanationType = {
 
 export type GeofencingZoneExplanationsType = {
   [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+};
+
+export type SelectedMapItemProperties = GeoJsonProperties & {
+  id?: string;
+};
+// export type SelectedFeature = Feature<Point, SelectedMapItemProperties>;
+export type SelectedFeatureIdProp = {
+  selectedFeatureId: SelectedMapItemProperties['id'];
 };

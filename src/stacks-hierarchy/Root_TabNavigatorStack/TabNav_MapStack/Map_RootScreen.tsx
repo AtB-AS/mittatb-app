@@ -8,7 +8,6 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useStations, useVehicles} from '@atb/mobility';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -16,12 +15,8 @@ export type MapScreenParams = {
 
 export const Map_RootScreen = ({
   navigation,
-  route,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const mobilityFilters = route.params?.initialFilters?.mobility;
-  const vehicles = useVehicles(mobilityFilters);
-  const stations = useStations(mobilityFilters);
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
@@ -77,8 +72,6 @@ export const Map_RootScreen = ({
   return (
     <Map
       selectionMode="ExploreEntities"
-      vehicles={vehicles}
-      stations={stations}
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}

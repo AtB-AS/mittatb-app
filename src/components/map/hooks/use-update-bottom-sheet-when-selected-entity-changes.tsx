@@ -1,4 +1,4 @@
-import {MapFilterType, MapProps, MapSelectionActionType} from '../types';
+import {MapProps, MapSelectionActionType} from '../types';
 import React, {
   RefObject,
   useCallback,
@@ -11,12 +11,7 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {
-  findEntityAtClick,
-  isParkAndRide,
-  isQuayFeature,
-  isStopPlace,
-} from '../utils';
+import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -30,7 +25,6 @@ import {
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {MapFilterSheet} from '../components/filter/MapFilterSheet';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
 
 /**
@@ -78,13 +72,10 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           : mapSelectionAction?.source === 'map-click'
           ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
-      if (isQuayFeature(selectedFeature)) {
-        setSelectedFeature(undefined);
-      } else {
-        setSelectedFeature(selectedFeature);
-        if (selectedFeature) {
-          analytics.logMapSelection(selectedFeature);
-        }
+
+      setSelectedFeature(selectedFeature);
+      if (selectedFeature) {
+        analytics.logMapSelection(selectedFeature);
       }
     })();
   }, [mapSelectionAction, analytics, mapViewRef]);
@@ -93,23 +84,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     (async function () {
       if (!isFocused) return;
       if (mapProps.selectionMode !== 'ExploreEntities') return;
-
-      if (mapSelectionAction?.source === 'filters-button') {
-        openBottomSheet(
-          () => (
-            <MapFilterSheet
-              onFilterChanged={(filter: MapFilterType) => {
-                analytics.logEvent('Map', 'Filter changed', {filter});
-                mapProps.vehicles?.onFilterChange(filter.mobility);
-                mapProps.stations?.onFilterChange(filter.mobility);
-              }}
-              onClose={closeCallback}
-            />
-          ),
-          onCloseFocusRef,
-        );
-        return;
-      }
 
       if (mapSelectionAction?.source === 'external-map-button') {
         openBottomSheet(

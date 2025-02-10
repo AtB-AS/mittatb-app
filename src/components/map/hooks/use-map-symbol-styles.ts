@@ -1,17 +1,17 @@
 import {useThemeContext} from '@atb/theme';
 
 import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr-layers';
-import {NsrProps} from '../components/national-stop-registry-features/NationalStopRegistryFeatures';
 import {
   ExpressionField,
   Expression,
   SymbolLayerStyleProps,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
+import {SelectedMapItemProperties} from '../types';
 
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = (
-  selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
+  selectedFeaturePropertyId: SelectedMapItemProperties['id'],
   pinType: PinType,
   textSizeFactor: number = 1.0,
 ) => {
@@ -22,9 +22,9 @@ export const useMapSymbolStyles = (
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
   const isSelected: Expression = ['==', featureId, selectedFeatureId];
 
-  const countPropName = 'point_count'; // switch to 'count' when using vector source for shared mobility items
+  const countPropName = 'count';
   const count: Expression = ['get', countPropName];
-  const numVehiclesAvailable: Expression = ['get', 'count']; // switch to 'num_vehicles_available' when using vector source for shared mobility items
+  const numVehiclesAvailable: Expression = ['get', 'num_vehicles_available'];
 
   const isCluster: Expression = [
     'all',

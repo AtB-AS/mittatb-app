@@ -30,7 +30,7 @@ export const SelectedFeatureIcon = ({
     return null;
   }
 
-  const numVehiclesAvailable: Expression = ['get', 'count']; // switch to num_vehicles_available when using vector source
+  const numVehiclesAvailable: Expression = ['get', 'num_vehicles_available'];
 
   const textField: Expression = [
     'to-string',
@@ -85,8 +85,7 @@ function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
     case 'Quay':
       return 'stop';
     default:
-      // If it's not one of the above entityTypes, check vehicleTypesAvailable
-      if (selectedFeatureProperties?.vehicleTypesAvailable !== undefined) {
+      if (selectedFeatureProperties?.is_virtual_station !== undefined) {
         return 'station';
       } else {
         return 'vehicle';
