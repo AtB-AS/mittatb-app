@@ -16,10 +16,8 @@ import {useAuthContext} from '@atb/auth';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {
-  getFareContractInfo,
-  useSortFcOrReservationByValidityAndCreation,
-} from '@atb/fare-contracts/utils';
+import {getFareContractInfo} from '@atb/fare-contracts/utils';
+import {sortFcOrReservationByValidityAndCreation} from '@atb/fare-contracts/sort-fc-or-reservation-by-validity-and-creation';
 import {useAnalyticsContext} from '@atb/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
@@ -55,7 +53,8 @@ export const TicketHistoryScreenComponent = ({
     customerAccountId,
   );
 
-  const sortedItems = useSortFcOrReservationByValidityAndCreation(
+  const sortedItems = sortFcOrReservationByValidityAndCreation(
+    customerAccountId,
     serverNow,
     [...fareContractsToShow, ...reservationsToShow],
     (currentTime, fareContract, currentUserId) =>
