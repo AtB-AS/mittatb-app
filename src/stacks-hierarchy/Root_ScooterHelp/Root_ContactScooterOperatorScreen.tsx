@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -29,7 +29,6 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {TransitionPresets} from '@react-navigation/stack';
@@ -42,7 +41,6 @@ export const Root_ContactScooterOperatorScreen = ({
 }: Root_ContactScooterOperatorScreenProps) => {
   const {vehicleId, operatorId} = route.params;
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
