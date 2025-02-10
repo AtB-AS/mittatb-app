@@ -24,16 +24,18 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {EmptyState} from '@atb/components/empty-state';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '@atb/stacks-hierarchy';
+
+type Props = TicketHistoryScreenParams & {
+  onPressFareContract: (orderId: string) => void;
+};
 
 export const TicketHistoryScreenComponent = ({
   mode,
-}: TicketHistoryScreenParams) => {
+  onPressFareContract,
+}: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
   const {serverNow} = useTimeContext();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const analytics = useAnalyticsContext();
   const {fareContracts: historicalFareContracts} = useFareContracts(
     {availability: 'historical'},
@@ -74,12 +76,7 @@ export const TicketHistoryScreenComponent = ({
             now={serverNow}
             onPressFareContract={() => {
               analytics.logEvent('Ticketing', 'Ticket details clicked');
-              navigation.navigate({
-                name: 'Root_FareContractDetailsScreen',
-                params: {
-                  orderId: item.orderId,
-                },
-              });
+              onPressFareContract(item.orderId);
             }}
             fcOrReservation={item}
             index={index}
