@@ -32,6 +32,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,
+          onlyStopPlacesCheckboxInitialState: true,
         })
       }
       onSelectStopPlace={useCallback(

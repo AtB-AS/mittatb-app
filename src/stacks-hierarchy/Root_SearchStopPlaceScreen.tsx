@@ -36,6 +36,7 @@ export const Root_SearchStopPlaceScreen = ({
         placeholder={t(AddEditFavoriteTexts.fields.location.placeholder)}
         favoriteChipTypes={[]}
         onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+        onlyStopPlacesCheckboxInitialState={true}
       />
     </View>
   );

@@ -20,6 +20,7 @@ export const Root_LocationSearchByTextScreen = ({
       favoriteChipTypes,
       initialLocation,
       includeJourneyHistory = false,
+      onlyStopPlacesCheckboxInitialState,
     },
   },
 }: Props) => {
@@ -70,6 +71,7 @@ export const Root_LocationSearchByTextScreen = ({
             : undefined
         }
         includeJourneyHistory={includeJourneyHistory}
+        onlyStopPlacesCheckboxInitialState={onlyStopPlacesCheckboxInitialState}
         onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
       />
     </View>

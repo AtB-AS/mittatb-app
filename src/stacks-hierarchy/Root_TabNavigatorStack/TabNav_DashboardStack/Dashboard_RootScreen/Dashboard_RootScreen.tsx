@@ -124,6 +124,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       callerRouteParam,
       initialLocation,
       includeJourneyHistory: true,
+      onlyStopPlacesCheckboxInitialState: false,
     });
 
   const setCurrentLocationOrRequest = useCallback(async () => {

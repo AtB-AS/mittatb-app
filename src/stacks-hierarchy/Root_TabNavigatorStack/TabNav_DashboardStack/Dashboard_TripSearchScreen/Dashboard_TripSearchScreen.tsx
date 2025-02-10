@@ -170,6 +170,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       callerRouteParam,
       initialLocation,
       includeJourneyHistory: true,
+      onlyStopPlacesCheckboxInitialState: false,
     });
 
   const setCurrentLocationOrRequest = useCallback(
