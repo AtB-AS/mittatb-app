@@ -80,6 +80,7 @@ export function LocationSearchContent({
   const [onlyStopPlaces, setOnlyStopPlaces] = usePersistedBoolState(
     storage,
     '@ATB_only_stop_places_checkbox',
+    true,
   );
 
   const {location: geolocation} = useGeolocationContext();
