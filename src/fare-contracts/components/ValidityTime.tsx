@@ -18,10 +18,10 @@ import {
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
-import type {FareContract} from '@atb/ticketing';
+import type {FareContractType} from '@atb-as/utils';
 
 type Props = {
-  fc: FareContract;
+  fc: FareContractType;
 };
 
 export const ValidityTime = ({fc}: Props) => {

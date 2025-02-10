@@ -1,6 +1,7 @@
 import {PurchaseReservation} from '@atb/fare-contracts/PurchaseReservation';
 import React from 'react';
-import {FareContract, Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ErrorBoundary} from '@atb/error-boundary';
 import {FareContractView} from './FareContractView';
@@ -12,7 +13,7 @@ export function FareContractOrReservation({
   index,
   isStatic,
 }: {
-  fcOrReservation: FareContract | Reservation;
+  fcOrReservation: FareContractType | Reservation;
   onPressFareContract: () => void;
   now: number;
   index: number;

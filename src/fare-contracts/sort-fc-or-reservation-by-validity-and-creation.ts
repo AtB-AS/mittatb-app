@@ -1,18 +1,19 @@
-import {FareContract, Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/ticketing';
 import type {ValidityStatus} from '@atb/fare-contracts/utils';
+import {FareContractType} from '@atb-as/utils';
 
 export const sortFcOrReservationByValidityAndCreation = (
   userId: string | undefined,
   now: number,
-  fcOrReservations: (Reservation | FareContract)[],
+  fcOrReservations: (Reservation | FareContractType)[],
   getFareContractStatus: (
     now: number,
-    fc: FareContract,
+    fc: FareContractType,
     currentUserId?: string,
   ) => ValidityStatus | undefined,
-): (FareContract | Reservation)[] => {
+): (FareContractType | Reservation)[] => {
   const getFcOrReservationOrder = (
-    fcOrReservation: FareContract | Reservation,
+    fcOrReservation: FareContractType | Reservation,
   ) => {
     const isFareContract = 'travelRights' in fcOrReservation;
     // Make reservations go first, then fare contracts

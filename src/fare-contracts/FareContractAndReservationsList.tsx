@@ -1,6 +1,6 @@
 import React from 'react';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {FareContract, Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/ticketing';
 import {useAnalyticsContext} from '@atb/analytics';
 import {EmptyState} from '@atb/components/empty-state';
 import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation-by-validity-and-creation';
@@ -8,11 +8,12 @@ import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
+import {FareContractType} from '@atb-as/utils';
 import {useAuthContext} from '@atb/auth';
 
 type Props = {
   reservations: Reservation[];
-  fareContracts: FareContract[];
+  fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
   emptyStateConfig: Pick<

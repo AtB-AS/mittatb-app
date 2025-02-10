@@ -10,9 +10,9 @@ import {
 import {
   listRecentFareContracts,
   RecentFareContractBackend,
-  TravelRightDirection,
   useTicketingContext,
 } from '@atb/ticketing';
+import {TravelRightDirection} from '@atb-as/utils';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {RecentFareContractType} from '@atb/recent-fare-contracts/types';

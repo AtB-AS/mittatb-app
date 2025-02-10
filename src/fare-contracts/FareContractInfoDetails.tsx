@@ -6,11 +6,8 @@ import {
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  flattenTravelRightAccesses,
-  getLastUsedAccess,
-} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -26,6 +23,8 @@ import {FareContractDetailItem} from './components/FareContractDetailItem';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
+import {getAccesses} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -109,7 +108,7 @@ export const FareContractInfoDetails = (
 };
 
 export const getFareContractInfoDetails = (
-  fareContract: FareContract,
+  fareContract: FareContractType,
   now: number,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
@@ -136,13 +135,11 @@ export const getFareContractInfoDetails = (
     productRef,
   );
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map((tr) => tr.userProfileRef),
+    fareContract.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 
-  const flattenedAccesses = flattenTravelRightAccesses(
-    fareContract.travelRights,
-  );
+  const flattenedAccesses = getAccesses(fareContract);
   if (flattenedAccesses) {
     const {usedAccesses} = flattenedAccesses;
     const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
