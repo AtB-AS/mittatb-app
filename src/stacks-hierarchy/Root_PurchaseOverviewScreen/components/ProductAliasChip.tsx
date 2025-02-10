@@ -3,6 +3,8 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useTranslation} from '@atb/translations';
+import {getRadioA11y} from '@atb/components/radio';
 
 type Props = {
   color: InteractiveColor;
@@ -14,6 +16,7 @@ type Props = {
 export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
 
   const currentColor = color[selected ? 'active' : 'default'];
 
@@ -35,9 +38,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
       ]}
       onPress={onPress}
       accessible={true}
-      accessibilityRole="radio"
-      accessibilityState={{selected}}
-      accessibilityLabel={text}
+      {...getRadioA11y(text, selected, t)}
       testID={'chip' + text.replace(' ', '')}
     >
       <ThemeText
