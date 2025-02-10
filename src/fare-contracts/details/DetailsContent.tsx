@@ -5,7 +5,7 @@ import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetails} from '../FareContractInfoDetails';
 import {
@@ -49,9 +49,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
+import {isDefined} from '@atb/utils/presence';
 
 type Props = {
-  fareContract: FareContract;
+  fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
@@ -108,7 +109,7 @@ export const DetailsContent: React.FC<Props> = ({
     useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => tr.userProfileRef),
+    fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 

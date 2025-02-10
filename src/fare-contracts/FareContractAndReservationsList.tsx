@@ -8,11 +8,11 @@ import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 
 type Props = {
   reservations: Reservation[];
-  fareContracts: FareContract[];
+  fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
   emptyStateConfig: Pick<

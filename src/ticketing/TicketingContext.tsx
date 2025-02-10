@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {useAuthContext} from '../auth';
 import {Reservation, PaymentStatus} from './types';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
@@ -9,8 +9,8 @@ import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type TicketingReducerState = {
-  fareContracts: FareContract[];
-  sentFareContracts: FareContract[];
+  fareContracts: FareContractType[];
+  sentFareContracts: FareContractType[];
   reservations: Reservation[];
   rejectedReservations: Reservation[];
   isRefreshingFareContracts: boolean;
@@ -20,11 +20,11 @@ type TicketingReducerState = {
 type TicketingReducerAction =
   | {
       type: 'UPDATE_FARE_CONTRACTS';
-      fareContracts: FareContract[];
+      fareContracts: FareContractType[];
     }
   | {
       type: 'UPDATE_SENT_FARE_CONTRACTS';
-      fareContracts: FareContract[];
+      fareContracts: FareContractType[];
     }
   | {
       type: 'UPDATE_RESERVATIONS';
@@ -54,7 +54,7 @@ const ticketingReducer: TicketingReducer = (
         (fc) => fc.orderId,
       );
       const fareContracts = action.fareContracts.filter(
-        (fc) => FareContract.safeParse(fc).success,
+        (fc) => FareContractType.safeParse(fc).success,
       );
       return {
         ...prevState,
@@ -117,9 +117,9 @@ const ticketingReducer: TicketingReducer = (
 };
 
 type TicketingState = {
-  fareContracts: FareContract[];
-  sentFareContracts: FareContract[];
-  findFareContractByOrderId: (id: string) => FareContract | undefined;
+  fareContracts: FareContractType[];
+  sentFareContracts: FareContractType[];
+  findFareContractByOrderId: (id: string) => FareContractType | undefined;
 } & Pick<
   TicketingReducerState,
   | 'reservations'

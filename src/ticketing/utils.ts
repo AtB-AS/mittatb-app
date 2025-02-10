@@ -1,14 +1,14 @@
 import {startCase} from 'lodash';
 import {LastUsedAccessState, UsedAccessStatus, PaymentType} from './types';
-import {FareContract, TravelRight, UsedAccess} from '@atb-as/utils';
+import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
 import {getAvailabilityStatus} from '@atb-as/utils';
 
-export function isSentOrReceivedFareContract(fc: FareContract) {
+export function isSentOrReceivedFareContract(fc: FareContractType) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
 
 export function isCanBeConsumedNowFareContract(
-  f: FareContract,
+  f: FareContractType,
   now: number,
   currentUserId: string | undefined,
 ) {
@@ -21,7 +21,7 @@ export function isCanBeConsumedNowFareContract(
 }
 
 export function isCanBeActivatedNowFareContract(
-  f: FareContract,
+  f: FareContractType,
   now: number,
   currentUserId: string | undefined,
 ) {
@@ -36,7 +36,7 @@ export function isCanBeActivatedNowFareContract(
 
 export function getLastUsedAccess(
   now: number,
-  usedAccesses: UsedAccess[],
+  usedAccesses: UsedAccessType[],
 ): LastUsedAccessState {
   const lastUsedAccess = usedAccesses.slice(-1).pop();
 
@@ -62,7 +62,7 @@ function getUsedAccessValidity(
   return 'valid';
 }
 
-export function hasTravelRightAccesses(travelRights: TravelRight[]) {
+export function hasTravelRightAccesses(travelRights: TravelRightType[]) {
   return travelRights.some((tr) => tr.maximumNumberOfAccesses !== undefined);
 }
 

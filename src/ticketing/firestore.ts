@@ -4,7 +4,7 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import {addHours} from 'date-fns';
 import {CustomerProfile, Reservation} from './types';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 
 type SnapshotListener<T> = {
   onSnapshot: (snapshot: T) => void;
@@ -14,8 +14,8 @@ type SnapshotListener<T> = {
 export function setupFirestoreListeners(
   abtCustomerId: string,
   listeners: {
-    fareContracts: SnapshotListener<FareContract[]>;
-    sentFareContracts: SnapshotListener<FareContract[]>;
+    fareContracts: SnapshotListener<FareContractType[]>;
+    sentFareContracts: SnapshotListener<FareContractType[]>;
     reservations: SnapshotListener<Reservation[]>;
     rejectedReservations: SnapshotListener<Reservation[]>;
     customer: SnapshotListener<CustomerProfile>;
@@ -54,7 +54,7 @@ export function setupFirestoreListeners(
 
   const mapFareContract = (
     d: FirebaseFirestoreTypes.DocumentSnapshot,
-  ): FareContract => {
+  ): FareContractType => {
     const fareContract = d.data();
     if (!fareContract) {
       throw new Error('No fare contract data');
@@ -95,7 +95,8 @@ export function setupFirestoreListeners(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const fareContracts = snapshot.docs.map<FareContract>(mapFareContract);
+        const fareContracts =
+          snapshot.docs.map<FareContractType>(mapFareContract);
         listeners.fareContracts.onSnapshot(fareContracts);
 
         Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
@@ -118,7 +119,7 @@ export function setupFirestoreListeners(
     .onSnapshot(
       (snapshot) => {
         const sentFareContracts =
-          snapshot.docs.map<FareContract>(mapFareContract);
+          snapshot.docs.map<FareContractType>(mapFareContract);
         listeners.sentFareContracts.onSnapshot(sentFareContracts);
 
         Bugsnag.leaveBreadcrumb('sentfarecontract_snapshot', {

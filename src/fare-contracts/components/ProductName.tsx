@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContract} from '@atb-as/utils';
+import {type FareContractType} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -10,7 +10,7 @@ import {useTranslation} from '@atb/translations';
 import {useThemeContext} from '@atb/theme';
 
 type Props = {
-  fc: FareContract;
+  fc: FareContractType;
   testID?: string;
 };
 

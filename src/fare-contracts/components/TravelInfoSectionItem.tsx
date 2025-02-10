@@ -8,7 +8,7 @@ import {
   hasTravelRightAccesses,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
-import {type FareContract} from '@atb-as/utils';
+import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
@@ -27,8 +27,9 @@ import {
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
+import {isDefined} from '@atb/utils/presence';
 
-type Props = {fc: FareContract};
+type Props = {fc: FareContractType};
 
 export const TravelInfoSectionItem = ({fc}: Props) => {
   // TRANSLATION
@@ -62,7 +63,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   });
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    travelRights.map((tr) => tr.userProfileRef),
+    travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 

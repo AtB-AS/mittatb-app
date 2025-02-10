@@ -7,7 +7,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
@@ -22,7 +22,7 @@ import {useGetSignedTokenQuery} from '@atb/mobile-token/hooks/use-get-signed-tok
 
 type Props = {
   validityStatus: ValidityStatus;
-  fc: FareContract;
+  fc: FareContractType;
 };
 
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
@@ -83,7 +83,7 @@ function useScreenBrightnessIncrease() {
  * Show aztec code for mobile token. This can also fall back to static aztec if
  * anything goes wrong when getting the signed mobile token.
  */
-const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
+const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {data: signedToken} = useGetSignedTokenQuery();
@@ -177,7 +177,7 @@ const LoadingBarcode = () => {
   );
 };
 
-const StaticAztec = ({fc}: {fc: FareContract}) => {
+const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
@@ -212,7 +212,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   );
 };
 
-const StaticQrCode = ({fc}: {fc: FareContract}) => {
+const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();

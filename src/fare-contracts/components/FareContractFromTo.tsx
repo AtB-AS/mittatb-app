@@ -1,6 +1,6 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
-import {FareContract, TravelRightDirection} from '@atb-as/utils';
+import {FareContractType, TravelRightDirection} from '@atb-as/utils';
 import {ZonesFromTo} from '@atb/fare-contracts/components/ZonesFromTo';
 import {HarborsFromTo} from '@atb/fare-contracts/components/HarborsFromTo';
 import {
@@ -14,7 +14,7 @@ type FareContractFromToBaseProps = {
 };
 
 export type FareContractPropsSub = {
-  fc: FareContract;
+  fc: FareContractType;
 };
 
 export type RecentFareContractPropsSub = {
@@ -71,7 +71,7 @@ type FareContractFromToControllerDataType =
   | undefined;
 
 function useFareContractFromToController(
-  fcOrRfc: FareContract | RecentFareContractType,
+  fcOrRfc: FareContractType | RecentFareContractType,
 ): FareContractFromToControllerDataType {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
@@ -159,13 +159,13 @@ function useFareContractFromToController(
 }
 
 function isFareContract(
-  fcOrRfc: FareContract | RecentFareContractType,
-): fcOrRfc is FareContract {
+  fcOrRfc: FareContractType | RecentFareContractType,
+): fcOrRfc is FareContractType {
   return 'travelRights' in fcOrRfc;
 }
 
 function isRecentFareContract(
-  fcOrRfc: FareContract | RecentFareContractType,
+  fcOrRfc: FareContractType | RecentFareContractType,
 ): fcOrRfc is RecentFareContractType {
   return 'fromTariffZone' in fcOrRfc;
 }

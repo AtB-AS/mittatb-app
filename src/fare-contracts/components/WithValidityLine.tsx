@@ -3,7 +3,7 @@ import {ValidityLine} from '@atb/fare-contracts/components/ValidityLine';
 import {View} from 'react-native';
 import React, {type PropsWithChildren} from 'react';
 import type {Reservation} from '@atb/ticketing';
-import {FareContract} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 import {
   getFareContractInfo,
   getReservationStatus,
@@ -17,7 +17,7 @@ import {
 
 type Props = PropsWithChildren<
   | {
-      fc: FareContract;
+      fc: FareContractType;
     }
   | ({reservation: Reservation} & {enabledLine?: boolean})
 >;

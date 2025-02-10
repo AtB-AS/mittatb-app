@@ -4,10 +4,10 @@ import {
   getLastUsedAccess,
 } from '@atb/ticketing';
 import {
-  FareContract,
+  FareContractType,
   FareContractState,
-  UsedAccess,
-  TravelRight,
+  UsedAccessType,
+  TravelRightType,
 } from '@atb-as/utils';
 import {
   findReferenceDataById,
@@ -28,7 +28,7 @@ import {
 import {useMobileTokenContext} from '@atb/mobile-token';
 import humanizeDuration from 'humanize-duration';
 import type {UnitMapType} from '@atb/fare-contracts/types';
-import {flattenTravelRightAccesses} from '@atb-as/utils';
+import {getAccesses} from '@atb-as/utils';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -60,14 +60,14 @@ export const userProfileCountAndName = (
 
 export function getValidityStatus(
   now: number,
-  fc: FareContract,
+  fc: FareContractType,
   isSentFareContract?: boolean,
 ): ValidityStatus {
   if (fc.state === FareContractState.Refunded) return 'refunded';
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
 
-  const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
+  const fareContractAccesses = getAccesses(fc);
   if (fareContractAccesses) {
     return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
   } else {
@@ -218,18 +218,18 @@ export const useDefaultPreassignedFareProduct = (
 };
 
 type FareContractInfoProps = {
-  travelRights: TravelRight[];
+  travelRights: TravelRightType[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
-  usedAccesses?: UsedAccess[];
+  usedAccesses?: UsedAccessType[];
   maximumNumberOfAccesses?: number;
   numberOfUsedAccesses?: number;
 };
 
 export function getFareContractInfo(
   now: number,
-  fc: FareContract,
+  fc: FareContractType,
   currentUserId?: string,
 ): FareContractInfoProps {
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
@@ -243,7 +243,7 @@ export function getFareContractInfo(
 
   const validityStatus = getValidityStatus(now, fc, isSent);
 
-  const carnetTravelRightAccesses = flattenTravelRightAccesses(travelRights);
+  const carnetTravelRightAccesses = getAccesses(fc);
 
   const lastUsedAccess =
     carnetTravelRightAccesses &&

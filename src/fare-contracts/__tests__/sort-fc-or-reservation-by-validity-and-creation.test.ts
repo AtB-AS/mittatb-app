@@ -3,7 +3,7 @@ import {
   useSortFcOrReservationByValidityAndCreation,
 } from '../utils';
 import {Reservation} from '@atb/ticketing/types';
-import {FareContract, TravelRight} from '@atb-as/utils';
+import {FareContractType, TravelRightType} from '@atb-as/utils';
 
 import {LoadingParams} from '@atb/loading-screen/types';
 import React from 'react';
@@ -39,7 +39,7 @@ jest.mock('@atb/auth', () => ({
 jest.spyOn(React, 'useCallback').mockImplementation((f) => f);
 jest.spyOn(React, 'useMemo').mockImplementation((f) => f());
 
-type MockedFareContract = FareContract & {
+type MockedFareContract = FareContractType & {
   validityStatus: ValidityStatus;
 };
 
@@ -61,7 +61,7 @@ function mockupFareContract(
     orderId: '1',
     state: 0,
     totalAmount: '0',
-    travelRights: [{} as any as TravelRight],
+    travelRights: [{} as any as TravelRightType],
     qrCode: '',
     validityStatus: validityStatus,
     paymentType: ['VISA'],
@@ -89,7 +89,7 @@ describe('Sort by Validity', () => {
   const now = Date.now();
 
   it('Should sort fc or reservation by validity first', async () => {
-    const fcOrReservations: (FareContract | Reservation)[] = [
+    const fcOrReservations: (FareContractType | Reservation)[] = [
       mockupFareContract('1', 'valid', -1),
       mockupFareContract('2', 'valid', -2),
       mockupReservation('3', 'valid', 0),
@@ -113,7 +113,7 @@ describe('Sort by Validity', () => {
   });
 
   it('Reservation should be first if reservation is being processing', async () => {
-    const fcOrReservations: (FareContract | Reservation)[] = [
+    const fcOrReservations: (FareContractType | Reservation)[] = [
       mockupFareContract('1', 'valid', -1),
       mockupReservation('3', 'reserving', 0),
       mockupFareContract('2', 'valid', 0),
@@ -137,7 +137,7 @@ describe('Sort by Validity', () => {
   });
 
   it('Multiple reservations and valid fare contracts', async () => {
-    const fcOrReservations: (FareContract | Reservation)[] = [
+    const fcOrReservations: (FareContractType | Reservation)[] = [
       mockupReservation('1', 'reserving', 0),
       mockupReservation('2', 'reserving', 0.1),
       mockupFareContract('3', 'valid', 0.1),

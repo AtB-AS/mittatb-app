@@ -1,5 +1,5 @@
 import {humanizePaymentTypeString} from '@atb/ticketing';
-import {FareContract, FareContractState} from '@atb-as/utils';
+import {FareContractType, FareContractState} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -9,7 +9,11 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {formatNumberToString} from '@atb/utils/numbers';
 
-export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
+export const OrderDetails = ({
+  fareContract,
+}: {
+  fareContract: FareContractType;
+}) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(

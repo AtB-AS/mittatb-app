@@ -6,7 +6,7 @@ import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReser
 import {findReferenceDataById} from '@atb/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
 import {Reservation} from '@atb/ticketing';
-import {TravelRightDirection, FareContract} from '@atb-as/utils';
+import {TravelRightDirection, FareContractType} from '@atb-as/utils';
 import {addDays} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
@@ -192,7 +192,7 @@ export const Profile_FareContractsScreen = () => {
     CARNET_TICKET,
     CARNET_TICKET_INACTIVE,
     YOUTH_TICKET,
-  ] as FareContract[];
+  ] as FareContractType[];
 
   return (
     <View style={styles.container}>
