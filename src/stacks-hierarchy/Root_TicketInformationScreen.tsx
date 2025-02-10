@@ -61,23 +61,28 @@ export const Root_TicketInformationScreen = (props: Props) => {
             />
             <Section>
               <GenericSectionItem>
-                {fareProductTypeConfig && (
-                  <View style={styles.descriptionHeading}>
-                    <TransportationIconBoxList
-                      iconSize="xSmall"
-                      modes={fareProductTypeConfig?.transportModes}
-                    />
-                    <ThemeText typography="body__primary--bold">
-                      {getTextForLanguage(fareProductTypeConfig.name, language)}
-                    </ThemeText>
-                  </View>
-                )}
-                <ThemeText typography="body__secondary" isMarkdown={true}>
-                  {getTextForLanguage(
-                    preassignedFareProduct.productDescription,
-                    language,
+                <View style={styles.descriptionContainer}>
+                  {fareProductTypeConfig && (
+                    <View style={styles.descriptionHeading}>
+                      <TransportationIconBoxList
+                        iconSize="xSmall"
+                        modes={fareProductTypeConfig?.transportModes}
+                      />
+                      <ThemeText typography="body__primary--bold">
+                        {getTextForLanguage(
+                          fareProductTypeConfig.name,
+                          language,
+                        )}
+                      </ThemeText>
+                    </View>
                   )}
-                </ThemeText>
+                  <ThemeText typography="body__secondary" isMarkdown={true}>
+                    {getTextForLanguage(
+                      preassignedFareProduct.productDescription,
+                      language,
+                    )}
+                  </ThemeText>
+                </View>
               </GenericSectionItem>
               {benefits?.map((b) => (
                 <MobilitySingleBenefitInfoSectionItem benefit={b} key={b.id} />
@@ -109,6 +114,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       marginHorizontal: theme.spacing.medium,
       marginBottom: Math.max(bottom, theme.spacing.medium),
       rowGap: theme.spacing.small,
+    },
+    descriptionContainer: {
+      flex: 1,
     },
     descriptionHeading: {
       flexDirection: 'row',
