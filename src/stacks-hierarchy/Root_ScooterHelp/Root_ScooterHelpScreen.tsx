@@ -5,7 +5,6 @@ import {ThemeText} from '@atb/components/text';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ScooterHelpTexts} from '@atb/translations/screens/ScooterHelp';
-import {ScreenContainer} from './components/ScreenContainer';
 import {
   ExpandableSectionItem,
   LinkSectionItem,

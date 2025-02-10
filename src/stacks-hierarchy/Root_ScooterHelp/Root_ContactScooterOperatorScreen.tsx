@@ -10,7 +10,7 @@ import {
   Section,
   TextInputSectionItem,
 } from '@atb/components/sections';
-import {ContentHeading, ScreenHeading} from '@atb/components/heading';
+import {ContentHeading} from '@atb/components/heading';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {
@@ -33,7 +33,6 @@ import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {TransitionPresets} from '@react-navigation/stack';
-import {FullScreenView} from '@atb/components/screen-view';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -44,7 +43,6 @@ export const Root_ContactScooterOperatorScreen = ({
   const {vehicleId, operatorId} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
