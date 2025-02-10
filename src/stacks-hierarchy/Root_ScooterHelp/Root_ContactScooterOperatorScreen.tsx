@@ -10,7 +10,7 @@ import {
   Section,
   TextInputSectionItem,
 } from '@atb/components/sections';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {
@@ -32,6 +32,8 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
+import {TransitionPresets} from '@react-navigation/stack';
+import {FullScreenView} from '@atb/components/screen-view';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -50,6 +52,7 @@ export const Root_ContactScooterOperatorScreen = ({
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
       operatorName,
+      transitionPreset: TransitionPresets.SlideFromRightIOS,
     });
   };
 
@@ -69,16 +72,13 @@ export const Root_ContactScooterOperatorScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'back', withIcon: true}}
         setFocusOnLoad={false}
-        color={themeColor}
+        title={t(ContactScooterOperatorTexts.title(operatorName))}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
           <View style={styles.contentContainer}>
-            <ThemeText style={styles.title} typography="heading--medium">
-              {t(ContactScooterOperatorTexts.title(operatorName))}
-            </ThemeText>
             <ContentHeading
               text={t(ContactScooterOperatorTexts.supportType.header)}
             />
@@ -246,7 +246,6 @@ export const Root_ContactScooterOperatorScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {
@@ -256,9 +255,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
     paddingBottom: theme.spacing.xLarge,
-  },
-  title: {
-    marginBottom: theme.spacing.large,
   },
   description: {
     padding: theme.spacing.medium,

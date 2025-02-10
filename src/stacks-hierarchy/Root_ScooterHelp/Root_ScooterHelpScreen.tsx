@@ -11,10 +11,12 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {TransitionPresets} from '@react-navigation/stack';
+import {FullScreenView} from '@atb/components/screen-view';
 
 export type ScooterHelpScreenProps =
   RootStackScreenProps<'Root_ScooterHelpScreen'>;
@@ -30,9 +32,14 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   const {operatorName, operatorId} = useVehicle(vehicleId);
 
   return (
-    <ScreenContainer
-      leftHeaderButton={{type: 'close'}}
-      title={t(ScooterHelpTexts.title)}
+    <FullScreenView
+      headerProps={{
+        title: t(ScooterHelpTexts.title),
+        rightButton: {type: 'close', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading ref={focusRef} text={t(ScooterHelpTexts.title)} />
+      )}
     >
       <View style={style.container}>
         <ContentHeading text={t(ScooterHelpTexts.contactAndReport)} />
@@ -44,6 +51,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
                 navigation.navigate('Root_ContactScooterOperatorScreen', {
                   vehicleId,
                   operatorId,
+                  transitionPreset: TransitionPresets.SlideFromRightIOS,
                 });
               }}
             />
@@ -51,7 +59,9 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
           <LinkSectionItem
             text={t(ScooterHelpTexts.reportParking)}
             onPress={() =>
-              navigation.navigate('Root_ParkingViolationsSelectScreen')
+              navigation.navigate('Root_ParkingViolationsSelectScreen', {
+                transitionPreset: TransitionPresets.SlideFromRightIOS,
+              })
             }
           />
         </Section>
@@ -76,7 +86,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
           ))}
         </Section>
       </View>
-    </ScreenContainer>
+    </FullScreenView>
   );
 };
 

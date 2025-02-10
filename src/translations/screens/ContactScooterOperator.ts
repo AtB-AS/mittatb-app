@@ -33,7 +33,7 @@ export const ContactScooterOperatorTexts = {
         case SupportType.ACCIDENT_OR_BROKEN:
           return _(
             'Ulykke eller skade',
-            'Accident or broken',
+            'Accident or damage',
             'Ulykke eller skade',
           );
         case SupportType.REFUND:
@@ -105,7 +105,7 @@ export const ContactScooterOperatorTexts = {
     description: (operatorName: string) => {
       return _(
         `Lokasjonen din blir delt med ${operatorName}. ${operatorName} kan ta kontakt med deg på e-post eller telefon ved behov.`,
-        `Your location will be shared with ${operatorName}. ${operatorName} can contact you by e-mail or phone if necessary.`,
+        `Your location will be shared with ${operatorName}. ${operatorName} may contact you by e-mail or phone if necessary.`,
         `Lokasjonen din blir delt med ${operatorName}. ${operatorName} kan ta kontakt med deg på e-post eller telefon ved behov.`,
       );
     },
