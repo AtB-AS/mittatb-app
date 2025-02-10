@@ -61,7 +61,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
             />
             <Section>
               <GenericSectionItem>
-                <View style={{flex: 1}}>
+                <View style={styles.descriptionContainer}>
                   {fareProductTypeConfig && (
                     <View style={styles.descriptionHeading}>
                       <TransportationIconBoxList
@@ -114,6 +114,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       marginHorizontal: theme.spacing.medium,
       marginBottom: Math.max(bottom, theme.spacing.medium),
       rowGap: theme.spacing.small,
+    },
+    descriptionContainer: {
+      flex: 1,
     },
     descriptionHeading: {
       flexDirection: 'row',
