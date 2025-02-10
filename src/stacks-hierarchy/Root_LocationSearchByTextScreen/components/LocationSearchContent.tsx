@@ -41,6 +41,7 @@ type LocationSearchContentProps = {
   onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
+  onlyStopPlacesCheckboxInitialState: boolean;
   onAddFavorite: () => void;
 };
 
@@ -56,6 +57,7 @@ export function LocationSearchContent({
   onlyLocalTariffZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
+  onlyStopPlacesCheckboxInitialState,
   onAddFavorite,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
@@ -80,6 +82,7 @@ export function LocationSearchContent({
   const [onlyStopPlaces, setOnlyStopPlaces] = usePersistedBoolState(
     storage,
     '@ATB_only_stop_places_checkbox',
+    onlyStopPlacesCheckboxInitialState,
   );
 
   const {location: geolocation} = useGeolocationContext();

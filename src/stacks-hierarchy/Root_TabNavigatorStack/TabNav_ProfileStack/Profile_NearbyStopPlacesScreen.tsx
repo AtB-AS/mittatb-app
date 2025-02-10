@@ -30,6 +30,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,
+          onlyStopPlacesCheckboxInitialState: true,
         })
       }
       onSelectStopPlace={useCallback(
