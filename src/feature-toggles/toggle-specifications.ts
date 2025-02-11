@@ -136,7 +136,7 @@ export const toggleSpecifications = [
   {
     name: 'isInAppReviewEnabled',
     remoteConfigKey: 'enable_in_app_review',
-  }
+  },
 ] as const satisfies readonly FeatureToggleSpecification[];
 
 /**

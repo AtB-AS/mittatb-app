@@ -344,8 +344,9 @@ export function getConfig(): RemoteConfig {
   const vehicles_poll_interval =
     values['vehicles_poll_interval']?.asNumber() ??
     defaultRemoteConfig.vehicles_poll_interval;
-  const enable_in_app_review = values['enable_in_app_review']?.asBoolean() ??
-  defaultRemoteConfig.enable_in_app_review;
+  const enable_in_app_review =
+    values['enable_in_app_review']?.asBoolean() ??
+    defaultRemoteConfig.enable_in_app_review;
 
   return {
     customer_feedback_url,
