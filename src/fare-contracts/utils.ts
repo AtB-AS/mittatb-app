@@ -29,6 +29,8 @@ import {useMobileTokenContext} from '@atb/mobile-token';
 import humanizeDuration from 'humanize-duration';
 import type {UnitMapType} from '@atb/fare-contracts/types';
 import {getAccesses} from '@atb-as/utils';
+import {useAuthContext} from '@atb/auth';
+import {useCallback, useMemo} from 'react';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -79,6 +81,46 @@ export function getValidityStatus(
     );
   }
 }
+
+export const hasShmoBookingId = (fc?: FareContractType) => !!fc?.bookingId;
+
+export const useSortFcOrReservationByValidityAndCreation = (
+  now: number,
+  fcOrReservations: (Reservation | FareContractType)[],
+  getFareContractStatus: (
+    now: number,
+    fc: FareContractType,
+    currentUserId?: string,
+  ) => ValidityStatus | undefined,
+): (FareContractType | Reservation)[] => {
+  const {abtCustomerId: currentUserId} = useAuthContext();
+  const getFcOrReservationOrder = useCallback(
+    (fcOrReservation: FareContractType | Reservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      // Make reservations go first, then fare contracts
+      if (!isFareContract) return -1;
+
+      const validityStatus = getFareContractStatus(
+        now,
+        fcOrReservation,
+        currentUserId,
+      );
+      return validityStatus === 'valid' ? 0 : 1;
+    },
+    [getFareContractStatus, now, currentUserId],
+  );
+
+  return useMemo(() => {
+    return fcOrReservations.sort((a, b) => {
+      const orderA = getFcOrReservationOrder(a);
+      const orderB = getFcOrReservationOrder(b);
+      // Negative return value for a - b means "place a before b"
+      if (orderA !== orderB) return orderA - orderB;
+      // Make sure most recent dates comes first
+      return b.created.getTime() - a.created.getTime();
+    });
+  }, [fcOrReservations, getFcOrReservationOrder]);
+};
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],

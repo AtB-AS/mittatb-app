@@ -24,6 +24,7 @@ import {
   roundToNearestMinutes,
   set,
   isValid,
+  intervalToDuration,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -130,6 +131,31 @@ export function secondsToDuration(
     ...opts,
   });
 }
+
+/**
+ *
+ * @param start The start date of the interval
+ * @param end The end date of the interval
+ * @returns A formatted string representing the time between the two dates in the format hh:mm:ss if the interval is over 60 min and mm:ss if the interval is under 60 min.
+ */
+export const getTimeBetweenFormatted = (start: Date, end: Date) => {
+  const {
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
+  } = intervalToDuration({
+    start: start,
+    end: end,
+  });
+
+  const formatWithZero = (value: number) => String(value).padStart(2, '0');
+  const minusPrefix = start.getTime() > end.getTime() ? '-' : '';
+  const hourPrefix = hours > 0 ? formatWithZero(hours) + ':' : '';
+
+  return `${minusPrefix}${hourPrefix}${formatWithZero(
+    Math.abs(minutes),
+  )}:${formatWithZero(Math.abs(seconds))}`;
+};
 
 /**
  * Return seconds between start and end. If end is before start the returned

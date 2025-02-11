@@ -18,11 +18,12 @@ import {
   userProfileCountAndName,
   useTariffZoneSummary,
   ValidityStatus,
-} from '../fare-contracts/utils';
-import {FareContractDetailItem} from './components/FareContractDetailItem';
-import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
-import {UserProfileWithCount} from './types';
+} from '../utils';
+import {FareContractDetailItem} from '../components/FareContractDetailItem';
+import {InspectionSymbol} from '../components/InspectionSymbol';
+import {UserProfileWithCount} from '../types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
+import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {getAccesses} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
 
@@ -45,18 +46,18 @@ export type FareContractInfoDetailsProps = {
   fareProductType?: string;
 };
 
-export const FareContractInfoDetails = (
-  props: FareContractInfoDetailsProps,
-) => {
-  const {
-    fromTariffZone,
-    toTariffZone,
-    userProfilesWithCount,
-    status,
-    preassignedFareProduct,
-  } = props;
+export const FareContractInfoDetailsSectionItem = ({
+  preassignedFareProduct,
+  fromTariffZone,
+  toTariffZone,
+  userProfilesWithCount,
+  status,
+  ...props
+}: SectionItemProps<FareContractInfoDetailsProps>) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+
+  const {topContainer} = useSectionItem(props);
 
   const tariffZoneSummary = useTariffZoneSummary(
     preassignedFareProduct,
@@ -75,7 +76,7 @@ export const FareContractInfoDetails = (
     isValidFareContract(status) || isStatusSent;
 
   return (
-    <View style={styles.container} accessible={true}>
+    <View style={[topContainer, styles.container]} accessible={true}>
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
           {!!fareProductTypeConfig?.transportModes.length && (

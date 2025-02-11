@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
-import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfoDetails';
+import {getFareContractInfoDetails} from '@atb/fare-contracts/sections/FareContractInfoDetailsSectionItem';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DashboardTexts,

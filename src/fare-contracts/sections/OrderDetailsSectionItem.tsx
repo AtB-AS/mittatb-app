@@ -7,13 +7,18 @@ import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
+import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
+import {hasShmoBookingId} from '../utils';
 
-export const OrderDetails = ({
-  fareContract,
-}: {
+type OrderDetailsSectionItemProps = {
   fareContract: FareContractType;
-}) => {
+};
+
+export const OrderDetailsSectionItem = ({
+  fareContract,
+  ...props
+}: SectionItemProps<OrderDetailsSectionItemProps>) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(
@@ -24,41 +29,59 @@ export const OrderDetails = ({
     parseFloat(fareContract.totalAmount),
     language,
   );
+  const {topContainer} = useSectionItem(props);
 
   return (
-    <View accessible={true}>
-      <ThemeText typography="body__secondary" color="secondary">
-        {t(
-          FareContractTexts.details.purchaseTime(
-            fullDateTime(
-              fromUnixTime(fareContract.created.getTime() / 1000),
-              language,
+    <View style={topContainer} accessible={true}>
+      {!hasShmoBookingId(fareContract) && (
+        <ThemeText typography="body__secondary" color="secondary">
+          {t(
+            FareContractTexts.details.purchaseTime(
+              fullDateTime(
+                fromUnixTime(fareContract.created.getTime() / 1000),
+                language,
+              ),
             ),
-          ),
-        )}
-      </ThemeText>
+          )}
+        </ThemeText>
+      )}
+
       <ThemeText
         typography="body__secondary"
         color="secondary"
         style={style.marginTop}
       >
-        {t(
-          FareContractTexts.details.validFrom(
-            fullDateTime(firstTravelRight.startDateTime, language),
-          ),
-        )}
+        {hasShmoBookingId(fareContract)
+          ? t(
+              FareContractTexts.shmoDetails.tripStarted(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )
+          : t(
+              FareContractTexts.details.validFrom(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )}
       </ThemeText>
+
       <ThemeText
         typography="body__secondary"
         color="secondary"
         style={style.marginTop}
       >
-        {t(
-          FareContractTexts.details.validTo(
-            fullDateTime(firstTravelRight.endDateTime, language),
-          ),
-        )}
+        {hasShmoBookingId(fareContract)
+          ? t(
+              FareContractTexts.shmoDetails.tripEnded(
+                fullDateTime(firstTravelRight.endDateTime, language),
+              ),
+            )
+          : t(
+              FareContractTexts.details.validTo(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )}
       </ThemeText>
+
       {fareContract.state !== FareContractState.Refunded && priceString && (
         <ThemeText
           typography="body__secondary"
@@ -68,6 +91,7 @@ export const OrderDetails = ({
           {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
+
       {fareContract.state !== FareContractState.Refunded && (
         <ThemeText
           typography="body__secondary"
@@ -76,6 +100,15 @@ export const OrderDetails = ({
         >
           {t(FareContractTexts.details.paymentMethod)}
           {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
+        </ThemeText>
+      )}
+      {hasShmoBookingId(fareContract) && (
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          style={style.marginTop}
+        >
+          {t(FareContractTexts.details.bookingId(fareContract.bookingId ?? ''))}
         </ThemeText>
       )}
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>

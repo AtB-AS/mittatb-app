@@ -16,6 +16,7 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthContext} from '@atb/auth';
 import {ErrorBoundary} from '@atb/error-boundary';
+import {hasShmoBookingId} from '@atb/fare-contracts/utils';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -67,7 +68,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       <FullScreenHeader
         leftButton={{type: 'close'}}
         rightButton={
-          enable_ticket_information
+          enable_ticket_information && !hasShmoBookingId(fareContract)
             ? {
                 type: 'info',
                 onPress: navigateToTicketInfoScreen,
