@@ -68,7 +68,7 @@ describe('usePersistedBoolState', () => {
     expect(hook.result.current[0]).toBe(true);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
-    await hook.waitFor(() => expect(storage.get).toHaveReturned());
+    await hook.waitForNextUpdate();
     expect(hook.result.current[0]).toBe(false);
 
     expect(storage.get).toHaveBeenCalledTimes(1);
