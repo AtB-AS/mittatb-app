@@ -42,7 +42,7 @@ type LocationSearchContentProps = {
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
   onlyStopPlacesCheckboxInitialState: boolean;
-  onAddFavorite: () => void;
+  onAddFavoritePlace: () => void;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -58,7 +58,7 @@ export function LocationSearchContent({
   includeHistory = true,
   includeJourneyHistory = false,
   onlyStopPlacesCheckboxInitialState,
-  onAddFavorite,
+  onAddFavoritePlace,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavoritesContext();
@@ -164,7 +164,7 @@ export function LocationSearchContent({
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
             style={styles.chipBox}
-            onAddFavorite={onAddFavorite}
+            onAddFavoritePlace={onAddFavoritePlace}
           />
         )}
         {isOnlyStopPlacesCheckboxEnabled && (
