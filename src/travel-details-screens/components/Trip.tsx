@@ -188,7 +188,7 @@ export const Trip: React.FC<TripProps> = ({
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
                           onScreenClose: async () => {
-                            requestReview();
+                            legVehiclePosition && requestReview();
                           },
                         })
                     : undefined
