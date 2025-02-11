@@ -40,7 +40,6 @@ export type ValidityStatus =
   | 'inactive'
   | 'rejected'
   | 'approved'
-  | 'scooterUsed'
   | 'sent';
 
 export function getRelativeValidity(
@@ -71,8 +70,6 @@ export function getValidityStatus(
   const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
   if (fareContractAccesses) {
     return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
-  } else if (fc.bookingId) {
-    return 'scooterUsed';
   } else {
     const firstTravelRight = fc.travelRights[0];
     return getRelativeValidity(
@@ -82,6 +79,8 @@ export function getValidityStatus(
     );
   }
 }
+
+export const hasShmoBookingId = (fc: FareContract) => !!fc.bookingId;
 
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,

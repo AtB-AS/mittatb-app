@@ -12,6 +12,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
+import {hasShmoBookingId} from '../utils';
 
 type OrderDetailsSectionItemProps = {
   fareContract: FareContract;
@@ -35,7 +36,7 @@ export const OrderDetailsSectionItem = ({
 
   return (
     <View style={topContainer} accessible={true}>
-      {!fareContract.bookingId && (
+      {!hasShmoBookingId(fareContract) && (
         <ThemeText typography="body__secondary" color="secondary">
           {t(
             FareContractTexts.details.purchaseTime(
@@ -53,7 +54,7 @@ export const OrderDetailsSectionItem = ({
         color="secondary"
         style={style.marginTop}
       >
-        {fareContract.bookingId
+        {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripStarted(
                 fullDateTime(firstTravelRight.startDateTime, language),
@@ -71,7 +72,7 @@ export const OrderDetailsSectionItem = ({
         color="secondary"
         style={style.marginTop}
       >
-        {fareContract.bookingId
+        {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripEnded(
                 fullDateTime(firstTravelRight.endDateTime, language),
@@ -104,11 +105,13 @@ export const OrderDetailsSectionItem = ({
           {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
         </ThemeText>
       )}
-      {fareContract.bookingId && (
-        <ThemeText style={style.marginTop}>
-          {t(
-            FareContractTexts.details.bookingId(fareContract?.bookingId ?? ''),
-          )}
+      {hasShmoBookingId(fareContract) && (
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          style={style.marginTop}
+        >
+          {t(FareContractTexts.details.bookingId(fareContract.bookingId ?? ''))}
         </ThemeText>
       )}
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>

@@ -3,10 +3,10 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Duration} from '@atb/assets/svg/mono-icons/mobility';
 import {ThemeText} from '@atb/components/text';
-import {getTimeUsedMinutes} from '../utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
+import {getTimeBetweenFormatted} from '@atb/utils/date';
 
 type Props = {
   startDateTime: Date;
@@ -15,7 +15,7 @@ type Props = {
   withHeader: boolean;
 };
 
-export const ScooterTripDetailsSectionItem = ({
+export const ShmoTripDetailsSectionItem = ({
   startDateTime,
   endDateTime,
   totalAmount,
@@ -27,15 +27,15 @@ export const ScooterTripDetailsSectionItem = ({
   const styles = useStyles();
   const {topContainer} = useSectionItem(props);
 
-  const timeUsed = getTimeUsedMinutes(startDateTime, endDateTime);
+  const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
   return (
     <View style={[topContainer, styles.container]}>
       {withHeader && (
         <View style={styles.heading}>
-          <ThemeText typography="body__secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {t(MobilityTexts.time)}
           </ThemeText>
-          <ThemeText typography="body__secondary">
+          <ThemeText typography="body__secondary" color="secondary">
             {t(MobilityTexts.totalCost)}
           </ThemeText>
         </View>
@@ -60,6 +60,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: theme.spacing.medium,
   },
   content: {
     flexDirection: 'row',

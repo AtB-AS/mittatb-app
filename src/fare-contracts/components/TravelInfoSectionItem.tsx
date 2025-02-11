@@ -27,7 +27,6 @@ import {
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
-import {ScooterTripDetailsSectionItem} from '@atb/mobility/components/ScooterTripDetailsSectionItem';
 
 type Props = {fc: FareContract};
 
@@ -104,15 +103,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
               content={[userProfileCountAndName(u, language)]}
             />
           ))}
-
-          {fc.bookingId && (
-            <ScooterTripDetailsSectionItem
-              startDateTime={fc.travelRights[0].startDateTime}
-              endDateTime={fc.travelRights[0].endDateTime}
-              totalAmount={fc.totalAmount}
-              withHeader={true}
-            />
-          )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
           <InspectionSymbol

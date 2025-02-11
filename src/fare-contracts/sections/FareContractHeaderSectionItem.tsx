@@ -73,20 +73,9 @@ export const FareContractHeaderSectionItem = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  globalMessages: {
-    flex: 1,
-    rowGap: theme.spacing.medium,
-  },
-  section: {
-    marginBottom: theme.spacing.large,
-  },
   fareContractDetails: {
     flex: 1,
     paddingBottom: theme.spacing.large,
     rowGap: theme.spacing.medium,
-  },
-  enlargedWhiteBarcodePaddingView: {
-    backgroundColor: '#ffffff',
-    paddingVertical: theme.spacing.xLarge * 2,
   },
 }));

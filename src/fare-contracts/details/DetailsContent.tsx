@@ -10,6 +10,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
 import {
   getFareContractInfo,
+  hasShmoBookingId,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
@@ -41,7 +42,7 @@ import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
-import {ScooterTripDetailsSectionItem} from '@atb/mobility/components/ScooterTripDetailsSectionItem';
+import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 
@@ -116,14 +117,14 @@ export const DetailsContent: React.FC<Props> = ({
 
   return (
     <Section style={styles.section}>
-      {fc.bookingId ? (
+      {hasShmoBookingId(fc) ? (
         <FareContractShmoHeaderSectionItem fareContract={fc} />
       ) : (
         <FareContractHeaderSectionItem fareContract={fc} />
       )}
 
-      {fc.bookingId ? (
-        <ScooterTripDetailsSectionItem
+      {hasShmoBookingId(fc) ? (
+        <ShmoTripDetailsSectionItem
           startDateTime={fc.travelRights[0].startDateTime}
           endDateTime={fc.travelRights[0].endDateTime}
           totalAmount={fc.totalAmount}

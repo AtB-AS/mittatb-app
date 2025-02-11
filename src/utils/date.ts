@@ -24,6 +24,7 @@ import {
   roundToNearestMinutes,
   set,
   isValid,
+  intervalToDuration,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -130,6 +131,25 @@ export function secondsToDuration(
     ...opts,
   });
 }
+
+export const getTimeBetweenFormatted = (start: Date, end: Date) => {
+  const {
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
+  } = intervalToDuration({
+    start: start,
+    end: end,
+  });
+
+  const formatWithZero = (value: number) => String(value).padStart(2, '0');
+  const minusPrefix = start.getTime() > end.getTime() ? '-' : '';
+  const hourPrefix = hours > 0 ? formatWithZero(hours) + ':' : '';
+
+  return `${minusPrefix}${hourPrefix}${formatWithZero(
+    Math.abs(minutes),
+  )}:${formatWithZero(Math.abs(seconds))}`;
+};
 
 /**
  * Return seconds between start and end. If end is before start the returned
