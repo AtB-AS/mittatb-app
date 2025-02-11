@@ -232,7 +232,7 @@ export const DepartureDetailsScreenComponent = ({
       mode: mode,
       subMode: subMode,
       onScreenClose: async () => {
-        await requestReview();
+        requestReview();
       },
     });
   };
