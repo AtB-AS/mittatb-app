@@ -52,7 +52,6 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       onBlur,
       showClear,
       onClear,
-      style,
       ...props
     },
     forwardedRef,
@@ -151,78 +150,82 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       .sort((a, b) => (a.country_name > b.country_name ? 1 : -1));
 
     return (
-      <View>
-        <View
-          style={[
-            styles.container,
-            label ? styles.containerMultiline : null,
-            topContainer,
-            containerPadding,
-            androidRowGapOverwrite,
-            getBorderColor(),
-          ]}
-          onAccessibilityEscape={accessibilityEscapeKeyboard}
-        >
-          {label && (
-            <ThemeText typography="body__secondary" style={styles.label}>
-              {label}
-            </ThemeText>
-          )}
-          <View style={prefix ? styles.containerInline : null}>
-            {prefix && (
-              <PressableOpacity
-                style={styles.prefix}
-                onPress={onOpenPrefixSelection}
-                accessibilityRole="button"
-                accessibilityLabel={t(
-                  SectionTexts.phoneInput.a11yLabel(prefix),
-                )}
-              >
-                <ThemeText>+{prefix}</ThemeText>
-                <ThemeIcon
-                  style={styles.expandIcon}
-                  svg={isSelectingPrefix ? ExpandLess : ExpandMore}
-                  size="normal"
-                />
-              </PressableOpacity>
+      <View
+        style={[
+          styles.container,
+          label ? styles.containerMultiline : null,
+          topContainer,
+          containerPadding,
+          androidRowGapOverwrite,
+          getBorderColor(),
+        ]}
+      >
+        <View style={styles.inputContainer}>
+          <View
+            onAccessibilityEscape={accessibilityEscapeKeyboard}
+            style={styles.inputContent}
+          >
+            {label && (
+              <ThemeText typography="body__secondary" style={styles.label}>
+                {label}
+              </ThemeText>
             )}
-            <InternalTextInput
-              ref={combinedRef}
-              style={[styles.input, style]}
-              placeholderTextColor={theme.color.foreground.dynamic.secondary}
-              onFocus={onFocusEvent}
-              onBlur={onBlurEvent}
-              maxFontSizeMultiplier={MAX_FONT_SCALE}
-              testID={loginPhoneInputId}
-              {...props}
-            />
-            {showClear ? (
-              <View style={styles.inputClear}>
+            <View style={styles.containerInline}>
+              {prefix && (
                 <PressableOpacity
-                  accessible={true}
+                  style={styles.prefix}
+                  onPress={onOpenPrefixSelection}
                   accessibilityRole="button"
-                  accessibilityLabel={t(SectionTexts.textInput.clear)}
-                  hitSlop={insets.all(8)}
-                  onPress={onClearEvent}
+                  accessibilityLabel={t(
+                    SectionTexts.phoneInput.a11yLabel(prefix),
+                  )}
                 >
-                  <ThemeIcon svg={Close} />
+                  <ThemeText>+{prefix}</ThemeText>
+                  <ThemeIcon
+                    style={styles.expandIcon}
+                    svg={isSelectingPrefix ? ExpandLess : ExpandMore}
+                    size="normal"
+                  />
                 </PressableOpacity>
-              </View>
-            ) : null}
-          </View>
-          {errorText !== undefined && (
-            <View
-              ref={errorFocusRef}
-              accessible={true}
-              style={styles.error}
-              accessibilityRole="alert"
-              accessibilityLabel={`${t(
-                dictionary.messageTypes.error,
-              )}, ${errorText}`}
-            >
-              <MessageInfoText message={errorText} type="error" />
+              )}
+              <InternalTextInput
+                ref={combinedRef}
+                style={styles.input}
+                placeholderTextColor={theme.color.foreground.dynamic.secondary}
+                onFocus={onFocusEvent}
+                onBlur={onBlurEvent}
+                maxFontSizeMultiplier={MAX_FONT_SCALE}
+                testID={loginPhoneInputId}
+                {...props}
+              />
             </View>
-          )}
+            {errorText !== undefined && (
+              <View
+                ref={errorFocusRef}
+                accessible={true}
+                style={styles.error}
+                accessibilityRole="alert"
+                accessibilityLabel={`${t(
+                  dictionary.messageTypes.error,
+                )}, ${errorText}`}
+              >
+                <MessageInfoText message={errorText} type="error" />
+              </View>
+            )}
+          </View>
+          {showClear ? (
+            <View style={styles.inputClear}>
+              <PressableOpacity
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={t(SectionTexts.textInput.clear)}
+                hitSlop={insets.all(8)}
+                onPress={onClearEvent}
+              >
+                <ThemeIcon svg={Close} />
+              </PressableOpacity>
+            </View>
+          ) : null}
         </View>
         {isSelectingPrefix && (
           <ScrollView style={styles.prefixList} ref={prefixListRef}>
@@ -251,12 +254,16 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 );
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
+  inputContainer: {
+    flexDirection: 'row',
+  },
+  inputContent: {
+    flex: 1,
+  },
   input: {
     color: theme.color.foreground.dynamic.primary,
-    paddingRight: 40,
-    paddingVertical: 0,
     fontSize: theme.typography.body__primary.fontSize,
-    flexGrow: 1,
+    flex: 1,
   },
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
@@ -283,9 +290,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     marginRight: theme.spacing.small,
   },
   inputClear: {
-    position: 'absolute',
-    right: 0,
-    bottom: theme.spacing.medium,
     alignSelf: 'center',
   },
   prefixList: {
