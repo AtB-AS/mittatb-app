@@ -3,12 +3,13 @@ import {useAnalyticsContext} from '@atb/analytics';
 import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useCallback} from 'react';
 
 export function useInAppReviewFlow() {
   const analytics = useAnalyticsContext();
   const {isInAppReviewEnabled} = useFeatureTogglesContext();
 
-  const requestReview = async () => {
+  const requestReview = useCallback(async () => {
     if (!isInAppReviewEnabled) {
       return;
     }
@@ -53,7 +54,7 @@ export function useInAppReviewFlow() {
       // https://github.com/MinaSamir11/react-native-in-app-review#errors-and-google-play-app-store-error-codes
       Bugsnag.notify(error as any);
     }
-  };
+  }, [analytics, isInAppReviewEnabled]);
 
   return {requestReview};
 }
