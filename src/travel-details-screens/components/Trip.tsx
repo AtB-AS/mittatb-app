@@ -45,6 +45,7 @@ import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -69,6 +70,7 @@ export const Trip: React.FC<TripProps> = ({
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfigContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
+  const {requestReview} = useInAppReviewFlow();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -185,6 +187,9 @@ export const Trip: React.FC<TripProps> = ({
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
+                          onScreenClose: async () => {
+                            await requestReview();
+                          },
                         })
                     : undefined
                 }
@@ -260,6 +265,7 @@ function getInterchangeDetails(
   }
   return undefined;
 }
+
 function translatedError(error: AxiosError, t: TranslateFunction): string {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {

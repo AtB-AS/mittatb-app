@@ -72,6 +72,7 @@ import {useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {getFavoriteIcon} from '@atb/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
+import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -107,6 +108,8 @@ export const DepartureDetailsScreenComponent = ({
 
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
+
+  const {requestReview} = useInAppReviewFlow();
 
   const [
     {
@@ -228,6 +231,9 @@ export const DepartureDetailsScreenComponent = ({
       vehicleWithPosition: vehiclePosition,
       mode: mode,
       subMode: subMode,
+      onScreenClose: async () => {
+        await requestReview();
+      },
     });
   };
 

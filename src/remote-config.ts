@@ -73,6 +73,7 @@ export type RemoteConfig = {
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
   vehicles_poll_interval: number;
+  enable_in_app_review: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -146,6 +147,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
   vehicles_poll_interval: 20000,
+  enable_in_app_review: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -342,6 +344,8 @@ export function getConfig(): RemoteConfig {
   const vehicles_poll_interval =
     values['vehicles_poll_interval']?.asNumber() ??
     defaultRemoteConfig.vehicles_poll_interval;
+  const enable_in_app_review = values['enable_in_app_review']?.asBoolean() ??
+  defaultRemoteConfig.enable_in_app_review;
 
   return {
     customer_feedback_url,
@@ -410,6 +414,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
+    enable_in_app_review,
   };
 }
 

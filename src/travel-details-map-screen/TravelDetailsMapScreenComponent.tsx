@@ -51,6 +51,11 @@ export type TravelDetailsMapScreenParams = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   mapFilter?: MapFilterType;
+  // An event to notify that the screen close button was pressed and can take some actions before it is closed,
+  // it differs from `onPressBack` which is called/overridden by the parent call-in Dashboard_TravelDetailsMapScreen.tsx
+  // By doing this, it prevents replacing `onPressBack` with a different action that prevents calling the navigation
+  // at the top view or avoids overflow in the stack.
+  onScreenClose?: () => void;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -66,6 +71,7 @@ export const TravelDetailsMapScreenComponent = ({
   vehicleWithPosition,
   toPlace,
   fromPlace,
+  onScreenClose,
   onPressBack,
   mode,
   subMode,
@@ -216,7 +222,12 @@ export const TravelDetailsMapScreenComponent = ({
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
           accessibilityLabel={t(MapTexts.exitButton.a11yLabel)}
-          onBack={onPressBack}
+          onBack={() => {
+            // Notify that the screen was closed,
+            // before passing the back action to the parent view.
+            onScreenClose?.();
+            onPressBack();
+          }}
         />
       </View>
       <View
