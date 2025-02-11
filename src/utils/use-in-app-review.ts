@@ -1,7 +1,6 @@
 import InAppReview from 'react-native-in-app-review';
 import {useAnalyticsContext} from '@atb/analytics';
 import Bugsnag from '@bugsnag/react-native';
-import {Platform} from 'react-native';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useCallback} from 'react';
 
@@ -18,7 +17,7 @@ export function useInAppReviewFlow() {
     // Check if in-app review functionality is available on this device.
     if (!InAppReview.isAvailable()) {
       analytics.logEvent(
-        'InAppReview',
+        'In App Review',
         'Device does not support in-app review',
       );
       return;
@@ -37,14 +36,12 @@ export function useInAppReviewFlow() {
       // feedback on whether the user left a review or closed the prompt.
       if (hasFlowFinishedSuccessfully) {
         analytics.logEvent(
-          'InAppReview',
-          Platform.OS === 'android'
-            ? 'User completed or dismissed the review flow'
-            : 'Review prompt launched successfully',
+          'In App Review',
+          'Review prompt launched successfully',
         );
       } else {
         analytics.logEvent(
-          'InAppReview',
+          'In App Review',
           'In-app review failed to be presented',
         );
       }
