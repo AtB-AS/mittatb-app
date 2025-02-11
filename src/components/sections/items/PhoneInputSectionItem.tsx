@@ -160,20 +160,20 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           getBorderColor(),
         ]}
       >
-        <View style={styles.inputContainer}>
+        <View style={styles.inputWrapper}>
           <View
             onAccessibilityEscape={accessibilityEscapeKeyboard}
-            style={styles.inputContent}
+            style={styles.inputMainContent}
           >
             {label && (
               <ThemeText typography="body__secondary" style={styles.label}>
                 {label}
               </ThemeText>
             )}
-            <View style={styles.containerInline}>
+            <View style={styles.inputRow}>
               {prefix && (
                 <PressableOpacity
-                  style={styles.prefix}
+                  style={styles.inputPrefix}
                   onPress={onOpenPrefixSelection}
                   accessibilityRole="button"
                   accessibilityLabel={t(
@@ -190,12 +190,13 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
               )}
               <InternalTextInput
                 ref={combinedRef}
-                style={styles.input}
+                style={styles.inputPhoneNumber}
                 placeholderTextColor={theme.color.foreground.dynamic.secondary}
                 onFocus={onFocusEvent}
                 onBlur={onBlurEvent}
                 maxFontSizeMultiplier={MAX_FONT_SCALE}
                 testID={loginPhoneInputId}
+                keyboardType="number-pad"
                 {...props}
               />
             </View>
@@ -254,36 +255,36 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 );
 
 const useInputStyle = StyleSheet.createTheme((theme) => ({
-  inputContainer: {
-    flexDirection: 'row',
-  },
-  inputContent: {
-    flex: 1,
-  },
-  input: {
-    color: theme.color.foreground.dynamic.primary,
-    fontSize: theme.typography.body__primary.fontSize,
-    flex: 1,
-  },
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderWidth: theme.border.width.slim,
     borderColor: theme.color.background.neutral[0].background,
   },
-  containerInline: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
   containerMultiline: {
     paddingTop: theme.spacing.small,
     rowGap: theme.spacing.small,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+  },
+  inputMainContent: {
+    flex: 1,
+  },
+  inputRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   label: {
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
   },
-  prefix: {
+  inputPrefix: {
     flexDirection: 'row',
+  },
+  inputPhoneNumber: {
+    color: theme.color.foreground.dynamic.primary,
+    fontSize: theme.typography.body__primary.fontSize,
+    flex: 1,
   },
   expandIcon: {
     marginLeft: theme.spacing.xSmall,

@@ -190,7 +190,6 @@ export const Root_ContactScooterOperatorScreen = ({
                   ContactScooterOperatorTexts.contactInfo.phone.placeholder,
                 )}
                 showClear
-                keyboardType="number-pad"
                 textContentType="telephoneNumber"
                 errorText={
                   !isPhoneNumberValid && showError

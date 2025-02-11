@@ -48,7 +48,6 @@ export const PhoneAndNameInputSection = ({
           prefix={prefix}
           onChangePrefix={onChangePrefix}
           showClear={true}
-          keyboardType="number-pad"
           placeholder={t(PhoneInputTexts.input.placeholder.sendTicket)}
           autoFocus={true}
           textContentType="telephoneNumber"
