@@ -39,7 +39,7 @@ export function useInAppReviewFlow() {
           'InAppReview',
           Platform.OS === 'android'
             ? 'User completed or dismissed the review flow'
-            : 'Review prompt launched successfully', // Simplified the logic using a ternary operator
+            : 'Review prompt launched successfully',
         );
       } else {
         analytics.logEvent(
