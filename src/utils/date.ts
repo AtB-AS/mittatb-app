@@ -132,6 +132,12 @@ export function secondsToDuration(
   });
 }
 
+/**
+ *
+ * @param start The start date of the interval
+ * @param end The end date of the interval
+ * @returns A formatted string representing the time between the two dates in the format hh:mm:ss if the interval is over 60 min and mm:ss if the interval is under 60 min.
+ */
 export const getTimeBetweenFormatted = (start: Date, end: Date) => {
   const {
     hours = 0,
