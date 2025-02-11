@@ -243,8 +243,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
-            onAddFavorite={() =>
-              navigation.navigate('Root_SearchStopPlaceScreen')
+            onAddFavoritePlace={() =>
+              navigation.navigate('Root_SearchFavoritePlaceScreen')
             }
           />
         </View>

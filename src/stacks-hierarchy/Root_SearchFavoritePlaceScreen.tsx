@@ -7,12 +7,9 @@ import React from 'react';
 import {Keyboard, View} from 'react-native';
 import {RootStackScreenProps} from './navigation-types';
 
-export type SearchStopPlaceProps =
-  RootStackScreenProps<'Root_SearchStopPlaceScreen'>;
+type Props = RootStackScreenProps<'Root_SearchFavoritePlaceScreen'>;
 
-export const Root_SearchStopPlaceScreen = ({
-  navigation,
-}: SearchStopPlaceProps) => {
+export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
 
@@ -35,7 +32,9 @@ export const Root_SearchStopPlaceScreen = ({
         label={t(AddEditFavoriteTexts.fields.location.label)}
         placeholder={t(AddEditFavoriteTexts.fields.location.placeholder)}
         favoriteChipTypes={[]}
-        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+        onAddFavoritePlace={() =>
+          navigation.navigate('Root_SearchFavoritePlaceScreen')
+        }
         onlyStopPlacesCheckboxInitialState={false}
       />
     </View>

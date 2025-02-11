@@ -72,7 +72,9 @@ export const Root_LocationSearchByTextScreen = ({
         }
         includeJourneyHistory={includeJourneyHistory}
         onlyStopPlacesCheckboxInitialState={onlyStopPlacesCheckboxInitialState}
-        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+        onAddFavoritePlace={() =>
+          navigation.navigate('Root_SearchFavoritePlaceScreen')
+        }
       />
     </View>
   );
