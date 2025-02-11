@@ -4,7 +4,6 @@ import {
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
-import buffer from '@turf/buffer';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
@@ -95,9 +94,6 @@ export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
   (plan.perKmPricing && plan.perMinPricing) ||
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);
-
-export const extend = (midpoint: Feature<Point>, range: number) =>
-  buffer(midpoint, range, {units: 'meters'});
 
 export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
