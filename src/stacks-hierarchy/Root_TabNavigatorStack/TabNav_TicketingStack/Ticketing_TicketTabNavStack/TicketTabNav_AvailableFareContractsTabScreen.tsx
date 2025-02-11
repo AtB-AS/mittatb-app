@@ -106,6 +106,9 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
+          onPressFareContract={(orderId) =>
+            navigation.navigate('Root_FareContractDetailsScreen', {orderId})
+          }
           emptyStateConfig={{
             title: t(
               TicketingTexts.availableFareProductsAndReservationsTab

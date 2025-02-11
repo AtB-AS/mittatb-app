@@ -11,9 +11,11 @@ const createStorage = (initialValue?: string) =>
   } as any as StorageService);
 
 describe('usePersistedBoolState', () => {
-  it('should be false if no value in storage', async () => {
+  it('should be false if initial state false and no value in storage', async () => {
     const storage = createStorage();
-    const hook = renderHook(() => usePersistedBoolState(storage, STORAGE_KEY));
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, false),
+    );
 
     expect(hook.result.current[0]).toBe(false);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
@@ -25,9 +27,27 @@ describe('usePersistedBoolState', () => {
     expect(storage.set).toHaveBeenCalledTimes(0);
   });
 
+  it('should be true if initial state true and no value in storage', async () => {
+    const storage = createStorage();
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, true),
+    );
+
+    expect(hook.result.current[0]).toBe(true);
+    expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
+
+    await hook.waitFor(() => expect(storage.get).toHaveReturned());
+    expect(hook.result.current[0]).toBe(true);
+
+    expect(storage.get).toHaveBeenCalledTimes(1);
+    expect(storage.set).toHaveBeenCalledTimes(0);
+  });
+
   it('should be true after update from storage', async () => {
     const storage = createStorage('true');
-    const hook = renderHook(() => usePersistedBoolState(storage, STORAGE_KEY));
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, false),
+    );
 
     expect(hook.result.current[0]).toBe(false);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
@@ -41,9 +61,11 @@ describe('usePersistedBoolState', () => {
 
   it('should be false after update from storage', async () => {
     const storage = createStorage('false');
-    const hook = renderHook(() => usePersistedBoolState(storage, STORAGE_KEY));
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, true),
+    );
 
-    expect(hook.result.current[0]).toBe(false);
+    expect(hook.result.current[0]).toBe(true);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
     await hook.waitFor(() => expect(storage.get).toHaveReturned());
@@ -55,7 +77,9 @@ describe('usePersistedBoolState', () => {
 
   it('setting true should give true as state and invoke storing the value', async () => {
     const storage = createStorage();
-    const hook = renderHook(() => usePersistedBoolState(storage, STORAGE_KEY));
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, false),
+    );
 
     const [_, setState] = hook.result.current;
     await act(async () => setState(true));
@@ -69,7 +93,9 @@ describe('usePersistedBoolState', () => {
 
   it('setting false should give false as state and invoke storing the value', async () => {
     const storage = createStorage('false');
-    const hook = renderHook(() => usePersistedBoolState(storage, STORAGE_KEY));
+    const hook = renderHook(() =>
+      usePersistedBoolState(storage, STORAGE_KEY, false),
+    );
 
     const [_, setState] = hook.result.current;
     await act(async () => setState(false));

@@ -1,10 +1,10 @@
 import {useTicketingContext} from '@atb/ticketing/TicketingContext';
-import type {AvailabilityStatus, FareContract} from '@atb/ticketing/types';
-import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
+import type {FareContractType} from '@atb-as/utils';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/ticketing/api';
 import {useAuthContext} from '@atb/auth';
+import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -22,7 +22,7 @@ type AvailabilityStatusInput = {
 export const useFareContracts = (
   availabilityStatus: AvailabilityStatusInput,
   now: number,
-): {fareContracts: FareContract[]; refetch: () => void} => {
+): {fareContracts: FareContractType[]; refetch: () => void} => {
   const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
   const {refetch: getFareContractsFromBackend} = useGetFareContractsQuery(
     availabilityStatus.availability,

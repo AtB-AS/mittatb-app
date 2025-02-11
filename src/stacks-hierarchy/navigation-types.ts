@@ -112,7 +112,7 @@ export type RootStackParamList = StackParams<{
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
   Root_ScanQrCodeScreen: undefined;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
-  Root_SearchStopPlaceScreen: undefined;
+  Root_SearchFavoritePlaceScreen: undefined;
   Root_ShareTravelHabitsScreen: undefined;
   Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;

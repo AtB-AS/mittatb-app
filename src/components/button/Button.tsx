@@ -283,7 +283,12 @@ const useButtonStyle = StyleSheet.createThemeHook(() => ({
 }));
 
 function getTextType(mode: string, type: string) {
-  if (mode === 'tertiary') return 'body__primary';
   if (type === 'small') return 'body__secondary';
-  return 'body__primary--bold';
+  switch (mode) {
+    case 'primary':
+    case 'secondary':
+      return 'body__primary--bold';
+    case 'tertiary':
+      return 'body__primary';
+  }
 }

@@ -29,7 +29,8 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
       editItem: item,
     });
   };
-  const onAddButtonClick = () => navigation.push('Root_SearchStopPlaceScreen');
+  const onAddButtonClick = () =>
+    navigation.push('Root_SearchFavoritePlaceScreen');
   const onSortClick = () => navigation.push('Profile_SortFavoritesScreen');
 
   return (

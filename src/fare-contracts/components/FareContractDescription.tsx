@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContract} from '@atb/ticketing';
+import {type FareContractType} from '@atb-as/utils';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
@@ -9,7 +9,7 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 
 type Props = {
-  fc: FareContract;
+  fc: FareContractType;
   testID?: string;
 };
 

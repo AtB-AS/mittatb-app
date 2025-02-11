@@ -4,8 +4,9 @@ import {type StorageService} from '@atb/storage';
 export const usePersistedBoolState = (
   storage: StorageService,
   storageKey: string,
+  initialState: boolean,
 ): [boolean, (b: boolean) => void] => {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(initialState);
 
   useEffect(() => {
     storage.get(storageKey).then((v) => {

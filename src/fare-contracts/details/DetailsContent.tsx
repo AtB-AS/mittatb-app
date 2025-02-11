@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  FareContract,
   hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
 import {
@@ -45,9 +45,10 @@ import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesS
 import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
+import {isDefined} from '@atb/utils/presence';
 
 type Props = {
-  fareContract: FareContract;
+  fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
@@ -96,7 +97,7 @@ export const DetailsContent: React.FC<Props> = ({
     useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => tr.userProfileRef ?? ''),
+    fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 

@@ -24,7 +24,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
-  onAddFavorite: () => void;
+  onAddFavoritePlace: () => void;
 };
 
 export const FavoriteChips: React.FC<Props> = ({
@@ -33,7 +33,7 @@ export const FavoriteChips: React.FC<Props> = ({
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
-  onAddFavorite,
+  onAddFavoritePlace,
 }) => {
   const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
@@ -109,7 +109,7 @@ export const FavoriteChips: React.FC<Props> = ({
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             leftIcon={{svg: Add}}
-            onPress={onAddFavorite}
+            onPress={onAddFavoritePlace}
             testID="addFavoriteButton"
           />
         )}
