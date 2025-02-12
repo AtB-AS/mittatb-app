@@ -1,5 +1,12 @@
 import React, {ReactElement, useEffect, useRef} from 'react';
-import {Animated, Dimensions, Easing, View} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  StyleProp,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
@@ -71,14 +78,16 @@ export const ValidityLine = (props: Props): ReactElement => {
   }
 };
 
-const LineWithVerticalBars = ({
+export const LineWithVerticalBars = ({
   backgroundColor,
   lineColor,
   animate = true,
+  style,
 }: {
   backgroundColor: string;
   lineColor: string;
   animate?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
@@ -91,6 +100,7 @@ const LineWithVerticalBars = ({
           {
             backgroundColor,
           },
+          style,
         ]}
       >
         {[...Array(numberOfVerticalLines)].map((e, i) => (
