@@ -101,7 +101,10 @@ export const FareContractInfoDetailsSectionItem = ({
           )}
         </View>
         {isValidOrSentFareContract && (
-          <InspectionSymbol {...props} sentTicket={isStatusSent} />
+          <InspectionSymbol
+            preassignedFareProduct={preassignedFareProduct}
+            sentTicket={isStatusSent}
+          />
         )}
       </View>
     </View>
