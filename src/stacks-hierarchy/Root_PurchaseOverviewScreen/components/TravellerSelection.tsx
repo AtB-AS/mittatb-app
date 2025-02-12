@@ -194,13 +194,9 @@ export function TravellerSelection({
     <View style={style}>
       <ContentHeading
         text={
-          canSelectUserProfile
-            ? t(
-                selectionMode == 'multiple'
-                  ? PurchaseOverviewTexts.travellerSelection.titleMultiple
-                  : PurchaseOverviewTexts.travellerSelection.titleSingle,
-              )
-            : t(PurchaseOverviewTexts.travellerSelection.titleNotSelectable)
+          selectionMode == 'multiple'
+            ? t(PurchaseOverviewTexts.travellerSelection.titleMultiple)
+            : t(PurchaseOverviewTexts.travellerSelection.titleSingle)
         }
       />
       <Section {...accessibility}>

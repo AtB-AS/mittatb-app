@@ -107,7 +107,6 @@ export const ExistingRecipientsList = ({
           onSelect={(item) =>
             !activeDeletions.includes(item.accountId) && onSelect(item)
           }
-          color={theme.color.interactive[2]}
           style={styles.recipientList}
           itemToRightAction={(item) => ({
             icon: (props) => (

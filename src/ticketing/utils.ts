@@ -1,49 +1,14 @@
-import {flatten, sumBy, startCase} from 'lodash';
-import {
-  FareContract,
-  TravelRight,
-  CarnetTravelRightUsedAccess,
-  LastUsedAccessState,
-  UsedAccessStatus,
-  PaymentType,
-} from './types';
-import {getAvailabilityStatus} from '@atb/ticketing/get-availability-status';
+import {startCase} from 'lodash';
+import {LastUsedAccessState, UsedAccessStatus, PaymentType} from './types';
+import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
+import {getAvailabilityStatus} from '@atb-as/utils';
 
-export function isSentOrReceivedFareContract(fc: FareContract) {
+export function isSentOrReceivedFareContract(fc: FareContractType) {
   return fc.customerAccountId !== fc.purchasedBy;
-}
-type FlattenedAccesses = {
-  usedAccesses: CarnetTravelRightUsedAccess[];
-  maximumNumberOfAccesses: number;
-  numberOfUsedAccesses: number;
-};
-export function flattenTravelRightAccesses(
-  travelRights: TravelRight[],
-): FlattenedAccesses | undefined {
-  // If there are no accesses, return undefined
-  if (!hasTravelRightAccesses(travelRights)) return undefined;
-
-  const allUsedAccesses = travelRights.map((t) => t.usedAccesses ?? []);
-  const usedAccesses = flatten(allUsedAccesses).sort(
-    (a, b) => a.startDateTime.getTime() - b.startDateTime.getTime(),
-  );
-  const maximumNumberOfAccesses = sumBy(
-    travelRights,
-    (t) => t.maximumNumberOfAccesses ?? 0,
-  );
-  const numberOfUsedAccesses = sumBy(
-    travelRights,
-    (t) => t.numberOfUsedAccesses ?? 0,
-  );
-  return {
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  };
 }
 
 export function isCanBeConsumedNowFareContract(
-  f: FareContract,
+  f: FareContractType,
   now: number,
   currentUserId: string | undefined,
 ) {
@@ -56,7 +21,7 @@ export function isCanBeConsumedNowFareContract(
 }
 
 export function isCanBeActivatedNowFareContract(
-  f: FareContract,
+  f: FareContractType,
   now: number,
   currentUserId: string | undefined,
 ) {
@@ -71,7 +36,7 @@ export function isCanBeActivatedNowFareContract(
 
 export function getLastUsedAccess(
   now: number,
-  usedAccesses: CarnetTravelRightUsedAccess[],
+  usedAccesses: UsedAccessType[],
 ): LastUsedAccessState {
   const lastUsedAccess = usedAccesses.slice(-1).pop();
 
@@ -97,7 +62,7 @@ function getUsedAccessValidity(
   return 'valid';
 }
 
-export function hasTravelRightAccesses(travelRights: TravelRight[]) {
+export function hasTravelRightAccesses(travelRights: TravelRightType[]) {
   return travelRights.some((tr) => tr.maximumNumberOfAccesses !== undefined);
 }
 

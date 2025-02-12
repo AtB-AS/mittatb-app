@@ -1,10 +1,7 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {
-  AddPaymentMethodResponse,
-  FareContract,
-  ReserveOfferRequestBody,
-} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {FareContractType} from '@atb-as/utils';
 import {client} from '../api';
 import {
   Offer,
@@ -190,7 +187,7 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 
 export async function getFareContracts(
   availability: 'available' | 'historical',
-): Promise<FareContract[]> {
+): Promise<FareContractType[]> {
   const url = `ticket/v4/list?availability=${capitalize(availability)}`;
   const response = await client.get(url, {
     authWithIdToken: true,
@@ -199,5 +196,7 @@ export async function getFareContracts(
     convertIsoStringFieldsToDate,
   );
   // TODO: Log errors during parsing
-  return fareContracts.filter((fc: any) => FareContract.safeParse(fc).success);
+  return fareContracts.filter(
+    (fc: any) => FareContractType.safeParse(fc).success,
+  );
 }

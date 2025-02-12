@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -29,9 +29,9 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {getThemeColor} from './components/ScreenContainer';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
+import {TransitionPresets} from '@react-navigation/stack';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -41,8 +41,6 @@ export const Root_ContactScooterOperatorScreen = ({
 }: Root_ContactScooterOperatorScreenProps) => {
   const {vehicleId, operatorId} = route.params;
   const styles = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {operatorName} = useVehicle(vehicleId);
@@ -50,6 +48,7 @@ export const Root_ContactScooterOperatorScreen = ({
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
       operatorName,
+      transitionPreset: TransitionPresets.SlideFromRightIOS,
     });
   };
 
@@ -69,16 +68,13 @@ export const Root_ContactScooterOperatorScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'back', withIcon: true}}
         setFocusOnLoad={false}
-        color={themeColor}
+        title={t(ContactScooterOperatorTexts.title(operatorName))}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
           <View style={styles.contentContainer}>
-            <ThemeText style={styles.title} typography="heading--medium">
-              {t(ContactScooterOperatorTexts.title(operatorName))}
-            </ThemeText>
             <ContentHeading
               text={t(ContactScooterOperatorTexts.supportType.header)}
             />
@@ -194,7 +190,6 @@ export const Root_ContactScooterOperatorScreen = ({
                   ContactScooterOperatorTexts.contactInfo.phone.placeholder,
                 )}
                 showClear
-                keyboardType="number-pad"
                 textContentType="telephoneNumber"
                 errorText={
                   !isPhoneNumberValid && showError
@@ -246,7 +241,6 @@ export const Root_ContactScooterOperatorScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {
@@ -256,9 +250,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
     paddingBottom: theme.spacing.xLarge,
-  },
-  title: {
-    marginBottom: theme.spacing.large,
   },
   description: {
     padding: theme.spacing.medium,

@@ -7,7 +7,6 @@ import {
 import {getReferenceDataName} from '@atb/configuration';
 import {RadioGroupSection} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useThemeContext} from '@atb/theme';
 import type {UserCountState} from './types';
 
 export function SingleTravellerSelection({
@@ -16,7 +15,6 @@ export function SingleTravellerSelection({
   removeCount,
 }: UserCountState) {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
 
   const select = (u: UserProfileWithCount) => {
@@ -36,7 +34,6 @@ export function SingleTravellerSelection({
       }
       selected={selectedProfile}
       onSelect={select}
-      color={theme.color.interactive[2]}
       accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
     />
   );

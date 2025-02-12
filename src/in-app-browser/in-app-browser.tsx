@@ -46,7 +46,10 @@ export async function openInAppBrowser(
   StatusBar.popStackEntry(statusBarStyle);
 }
 
-export function closeInAppBrowser() {
+/**
+ * This function is only available for iOS.
+ */
+export function closeInAppBrowseriOS() {
   InAppBrowser.close();
   InAppBrowser.closeAuth();
 }

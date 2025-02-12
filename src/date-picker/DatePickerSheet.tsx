@@ -49,7 +49,7 @@ export const DatePickerSheet = <T extends string>({
 }: Props<T>) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
+  const {theme, themeName} = useThemeContext();
   const locale = useLocaleContext();
 
   const [isSpinning, setIsSpinning] = useState(false);
@@ -93,6 +93,7 @@ export const DatePickerSheet = <T extends string>({
             onStateChange={(state) => setIsSpinning(state === 'spinning')}
             // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
             timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
+            theme={themeName}
           />
         )}
 
@@ -119,6 +120,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingBottom: keyboardHeight + safeAreaBottom,
     },
     scrollViewContent: {alignItems: 'center'},
-    button: {marginTop: theme.spacing.medium},
+    button: {marginVertical: theme.spacing.medium},
   };
 });

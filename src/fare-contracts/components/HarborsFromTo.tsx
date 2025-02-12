@@ -1,4 +1,4 @@
-import {TravelRightDirection} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb-as/utils';
 import {ContrastColor} from '@atb-as/theme';
 import {BorderedFromToBox} from '@atb/fare-contracts/components/BorderedFromToBox';
 import {useHarbors} from '@atb/harbors';

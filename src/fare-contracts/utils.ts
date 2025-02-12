@@ -1,13 +1,14 @@
 import {
-  FareContract,
   Reservation,
-  FareContractState,
-  flattenTravelRightAccesses,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-  CarnetTravelRightUsedAccess,
-  TravelRight,
 } from '@atb/ticketing';
+import {
+  FareContractType,
+  FareContractState,
+  UsedAccessType,
+  TravelRightType,
+} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -25,10 +26,11 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {useCallback, useMemo} from 'react';
-import {useAuthContext} from '@atb/auth';
 import humanizeDuration from 'humanize-duration';
 import type {UnitMapType} from '@atb/fare-contracts/types';
+import {getAccesses} from '@atb-as/utils';
+import {useAuthContext} from '@atb/auth';
+import {useCallback, useMemo} from 'react';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -60,14 +62,14 @@ export const userProfileCountAndName = (
 
 export function getValidityStatus(
   now: number,
-  fc: FareContract,
+  fc: FareContractType,
   isSentFareContract?: boolean,
 ): ValidityStatus {
   if (fc.state === FareContractState.Refunded) return 'refunded';
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
 
-  const fareContractAccesses = flattenTravelRightAccesses(fc.travelRights);
+  const fareContractAccesses = getAccesses(fc);
   if (fareContractAccesses) {
     return getLastUsedAccess(now, fareContractAccesses.usedAccesses).status;
   } else {
@@ -80,18 +82,20 @@ export function getValidityStatus(
   }
 }
 
+export const hasShmoBookingId = (fc?: FareContractType) => !!fc?.bookingId;
+
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,
-  fcOrReservations: (Reservation | FareContract)[],
+  fcOrReservations: (Reservation | FareContractType)[],
   getFareContractStatus: (
     now: number,
-    fc: FareContract,
+    fc: FareContractType,
     currentUserId?: string,
   ) => ValidityStatus | undefined,
-): (FareContract | Reservation)[] => {
+): (FareContractType | Reservation)[] => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const getFcOrReservationOrder = useCallback(
-    (fcOrReservation: FareContract | Reservation) => {
+    (fcOrReservation: FareContractType | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
       if (!isFareContract) return -1;
@@ -256,18 +260,18 @@ export const useDefaultPreassignedFareProduct = (
 };
 
 type FareContractInfoProps = {
-  travelRights: TravelRight[];
+  travelRights: TravelRightType[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
-  usedAccesses?: CarnetTravelRightUsedAccess[];
+  usedAccesses?: UsedAccessType[];
   maximumNumberOfAccesses?: number;
   numberOfUsedAccesses?: number;
 };
 
 export function getFareContractInfo(
   now: number,
-  fc: FareContract,
+  fc: FareContractType,
   currentUserId?: string,
 ): FareContractInfoProps {
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
@@ -281,7 +285,7 @@ export function getFareContractInfo(
 
   const validityStatus = getValidityStatus(now, fc, isSent);
 
-  const carnetTravelRightAccesses = flattenTravelRightAccesses(travelRights);
+  const carnetTravelRightAccesses = getAccesses(fc);
 
   const lastUsedAccess =
     carnetTravelRightAccesses &&

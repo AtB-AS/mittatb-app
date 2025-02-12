@@ -31,7 +31,7 @@ import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recur
 import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 import {APP_SCHEME} from '@env';
 import {
-  closeInAppBrowser,
+  closeInAppBrowseriOS,
   openInAppBrowser,
 } from '@atb/in-app-browser/in-app-browser';
 import {useAuthContext} from '@atb/auth';
@@ -65,7 +65,7 @@ export const Profile_PaymentMethodsScreen = () => {
     useState<number>();
 
   const callback = useCallback(async () => {
-    closeInAppBrowser();
+    closeInAppBrowseriOS();
     await refetchRecurringPayment();
   }, [refetchRecurringPayment]);
 
@@ -280,7 +280,6 @@ export const useOnRecurringPaymentReceived = ({
       .collection('customers')
       .doc(userId)
       .collection('recurringPayments')
-      .orderBy('created', 'desc')
       .onSnapshot(
         (snapshot) => {
           const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);

@@ -6,11 +6,8 @@ import {
   UserProfile,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContract,
-  flattenTravelRightAccesses,
-  getLastUsedAccess,
-} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -21,11 +18,14 @@ import {
   userProfileCountAndName,
   useTariffZoneSummary,
   ValidityStatus,
-} from '../fare-contracts/utils';
-import {FareContractDetailItem} from './components/FareContractDetailItem';
-import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
-import {UserProfileWithCount} from './types';
+} from '../utils';
+import {FareContractDetailItem} from '../components/FareContractDetailItem';
+import {InspectionSymbol} from '../components/InspectionSymbol';
+import {UserProfileWithCount} from '../types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
+import {SectionItemProps, useSectionItem} from '@atb/components/sections';
+import {getAccesses} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -46,18 +46,18 @@ export type FareContractInfoDetailsProps = {
   fareProductType?: string;
 };
 
-export const FareContractInfoDetails = (
-  props: FareContractInfoDetailsProps,
-) => {
-  const {
-    fromTariffZone,
-    toTariffZone,
-    userProfilesWithCount,
-    status,
-    preassignedFareProduct,
-  } = props;
+export const FareContractInfoDetailsSectionItem = ({
+  preassignedFareProduct,
+  fromTariffZone,
+  toTariffZone,
+  userProfilesWithCount,
+  status,
+  ...props
+}: SectionItemProps<FareContractInfoDetailsProps>) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+
+  const {topContainer} = useSectionItem(props);
 
   const tariffZoneSummary = useTariffZoneSummary(
     preassignedFareProduct,
@@ -76,7 +76,7 @@ export const FareContractInfoDetails = (
     isValidFareContract(status) || isStatusSent;
 
   return (
-    <View style={styles.container} accessible={true}>
+    <View style={[topContainer, styles.container]} accessible={true}>
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
           {!!fareProductTypeConfig?.transportModes.length && (
@@ -101,7 +101,10 @@ export const FareContractInfoDetails = (
           )}
         </View>
         {isValidOrSentFareContract && (
-          <InspectionSymbol {...props} sentTicket={isStatusSent} />
+          <InspectionSymbol
+            preassignedFareProduct={preassignedFareProduct}
+            sentTicket={isStatusSent}
+          />
         )}
       </View>
     </View>
@@ -109,7 +112,7 @@ export const FareContractInfoDetails = (
 };
 
 export const getFareContractInfoDetails = (
-  fareContract: FareContract,
+  fareContract: FareContractType,
   now: number,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
@@ -136,13 +139,11 @@ export const getFareContractInfoDetails = (
     productRef,
   );
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map((tr) => tr.userProfileRef),
+    fareContract.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 
-  const flattenedAccesses = flattenTravelRightAccesses(
-    fareContract.travelRights,
-  );
+  const flattenedAccesses = getAccesses(fareContract);
   if (flattenedAccesses) {
     const {usedAccesses} = flattenedAccesses;
     const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);

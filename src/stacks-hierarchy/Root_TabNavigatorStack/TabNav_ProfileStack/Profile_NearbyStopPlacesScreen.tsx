@@ -30,6 +30,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,
+          onlyStopPlacesCheckboxInitialState: true,
         })
       }
       onSelectStopPlace={useCallback(
@@ -42,7 +43,9 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
         [navigation, route.params.mode],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
-      onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+      onAddFavoritePlace={() =>
+        navigation.navigate('Root_SearchFavoritePlaceScreen')
+      }
     />
   );
 };

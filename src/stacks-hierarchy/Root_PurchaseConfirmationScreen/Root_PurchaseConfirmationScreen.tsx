@@ -45,7 +45,7 @@ import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
-import {closeInAppBrowser} from '@atb/in-app-browser';
+import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
@@ -126,7 +126,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurring_payment_id,
     );
-    closeInAppBrowser();
+    closeInAppBrowseriOS();
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',
       params: {

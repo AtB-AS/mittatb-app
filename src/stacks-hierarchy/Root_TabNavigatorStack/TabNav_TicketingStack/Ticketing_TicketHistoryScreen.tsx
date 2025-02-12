@@ -4,6 +4,13 @@ import {TicketingScreenProps} from './navigation-types';
 
 type Props = TicketingScreenProps<'Ticketing_TicketHistoryScreen'>;
 
-export const Ticketing_TicketHistoryScreen = ({route}: Props) => {
-  return <TicketHistoryScreenComponent mode={route.params.mode} />;
+export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
+  return (
+    <TicketHistoryScreenComponent
+      mode={route.params.mode}
+      onPressFareContract={(orderId) =>
+        navigation.navigate('Root_FareContractDetailsScreen', {orderId})
+      }
+    />
+  );
 };

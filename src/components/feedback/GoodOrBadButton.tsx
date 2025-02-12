@@ -6,6 +6,7 @@ import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Theme} from '@atb/theme/colors';
+import {getRadioA11y} from '@atb/components/radio';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -25,23 +26,23 @@ export const GoodOrBadButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
 
+  const text =
+    opinion === Opinions.Good
+      ? t(FeedbackTexts.goodOrBadTexts.good)
+      : t(FeedbackTexts.goodOrBadTexts.bad);
+
   return (
     <View style={styles.outerGoodOrBad}>
       <PressableOpacity
         onPress={() =>
           setSelectedOpinion(checked ? Opinions.NotClickedYet : opinion)
         }
-        accessibilityRole="radio"
-        accessibilityState={{selected: checked}}
-        accessibilityHint={`${
-          opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)
-        }
-        ${opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
-        ${
+        {...getRadioA11y(text, checked, t)}
+        accessibilityHint={
           checked
             ? t(FeedbackTexts.alternatives.a11yHints.checked)
             : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-        }`}
+        }
       >
         <View
           style={

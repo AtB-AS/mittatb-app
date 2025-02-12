@@ -1,4 +1,4 @@
-import {getFareContractInfo} from '@atb/fare-contracts/utils';
+import {getFareContractInfo, hasShmoBookingId} from '@atb/fare-contracts/utils';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -11,9 +11,9 @@ import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {
   isCanBeConsumedNowFareContract,
-  FareContract,
   isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
@@ -23,10 +23,12 @@ import {Description} from '@atb/fare-contracts/components/FareContractDescriptio
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {TravelInfoSectionItem} from '@atb/fare-contracts/components/TravelInfoSectionItem';
 import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
+import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
+import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
 
 type Props = {
   now: number;
-  fareContract: FareContract;
+  fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
   testID?: string;
@@ -63,14 +65,28 @@ export const FareContractView: React.FC<Props> = ({
 
   return (
     <Section testID={testID}>
-      <GenericSectionItem style={styles.header}>
-        <WithValidityLine fc={fareContract}>
-          <ProductName fc={fareContract} />
-          <ValidityTime fc={fareContract} />
-          <Description fc={fareContract} />
-        </WithValidityLine>
-      </GenericSectionItem>
-      <TravelInfoSectionItem fc={fareContract} />
+      {hasShmoBookingId(fareContract) ? (
+        <FareContractShmoHeaderSectionItem fareContract={fareContract} />
+      ) : (
+        <GenericSectionItem style={styles.header}>
+          <WithValidityLine fc={fareContract}>
+            <ProductName fc={fareContract} />
+            <ValidityTime fc={fareContract} />
+            <Description fc={fareContract} />
+          </WithValidityLine>
+        </GenericSectionItem>
+      )}
+
+      {hasShmoBookingId(fareContract) ? (
+        <ShmoTripDetailsSectionItem
+          startDateTime={fareContract.travelRights[0].startDateTime}
+          endDateTime={fareContract.travelRights[0].endDateTime}
+          totalAmount={fareContract.totalAmount}
+          withHeader={true}
+        />
+      ) : (
+        <TravelInfoSectionItem fc={fareContract} />
+      )}
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}

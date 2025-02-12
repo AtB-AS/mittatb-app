@@ -82,7 +82,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   // If markdown is enabled, we need to wrap the content in a <View></View> to properly align the <Text></Text> elements,
   // by doing this we also avoid to wrap the list elements inside the markdown render in a Text component, which is not allowed.
   if (isMarkdown) {
-    return <View style={{flex: 1}}>{content}</View>;
+    return <View>{content}</View>;
   }
 
   return <Text {...textProps}>{content}</Text>;

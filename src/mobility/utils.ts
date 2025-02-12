@@ -8,7 +8,7 @@ import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {Language} from '@atb/translations';
-import {formatDecimalNumber} from '@atb/utils/numbers';
+import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {
@@ -99,7 +99,7 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
     rangeInMeters > 5000
       ? (rangeInMeters / 1000).toFixed(0)
-      : formatDecimalNumber(rangeInMeters / 1000, language, 1);
+      : formatNumberToString(rangeInMeters / 1000, language, 0, 1);
   return `${rangeInKm} km`;
 };
 
@@ -129,12 +129,6 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
   }
 };
 
-export const formatPrice = (number: number, language: Language) => {
-  return Number.isInteger(number)
-    ? number
-    : formatDecimalNumber(number, language, 2);
-};
-
 export const formatPricePerUnit = (
   pricePlan: PricingPlanFragment,
   language: Language,
@@ -144,12 +138,15 @@ export const formatPricePerUnit = (
 
   if (perMinPrice) {
     return {
-      price: `${formatPrice(perMinPrice.rate, language)} kr`,
+      price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
       unit: 'min',
     };
   }
   if (perKmPrice) {
-    return {price: `${formatPrice(perKmPrice.rate, language)} kr`, unit: 'km'};
+    return {
+      price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+      unit: 'km',
+    };
   }
   return undefined;
 };

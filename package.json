@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.63.0",
+  "version": "1.64.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -29,9 +29,10 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^5.3.0",
+    "@atb-as/config-specs": "^5.7.0",
     "@atb-as/generate-assets": "^15.0.1",
     "@atb-as/theme": "^13.1.3",
+    "@atb-as/utils": "^2.0.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "2.1.6",
