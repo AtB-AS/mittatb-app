@@ -4,6 +4,11 @@ import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
 import {SelectedFeatureIdProp} from '../../types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
+import {
+  TileLayerName,
+  useTileUrlTemplate,
+} from '../../hooks/use-tile-url-template';
+
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
 
@@ -61,25 +66,27 @@ export const VehiclesAndStations = ({
   showVehicles: boolean;
   showStations: boolean;
 }) => {
-  if (!showVehicles && !showStations) return null;
+  // Could consider adding the sources only if shown.
+  // The reason not to, is to simplify potential cache tile hotloading on the server.
+  const tileLayerNames: TileLayerName[] = ['vehicles_clustered', 'stations'];
+  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
+
+  if ((!showVehicles && !showStations) || !tileUrlTemplate) return null;
+
   return (
     <MapboxGL.VectorSource
       id={vehiclesAndStationsVectorSourceId}
       hitbox={hitboxCoveringIconOnly}
       minZoomLevel={14}
       maxZoomLevel={19}
-      tileUrlTemplates={[
-        // TODO: add URL from remote config here
-        // consider: only load the source used?
-        'http://localhost:8080/mobility/v1/tiles/vehicles_clustered,stations/{z}/{x}/{y}',
-      ]}
+      tileUrlTemplates={[tileUrlTemplate]}
       onPress={onPress}
     >
       <>
-        {showVehicles && (
+        {!!showVehicles && (
           <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
         )}
-        {showStations && <Stations selectedFeatureId={selectedFeatureId} />}
+        {!!showStations && <Stations selectedFeatureId={selectedFeatureId} />}
       </>
     </MapboxGL.VectorSource>
   );
