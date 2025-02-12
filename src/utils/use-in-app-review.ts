@@ -6,6 +6,7 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {storage} from '@atb/storage';
 
 const LAST_IN_APP_REVIEW_PROMPT_KEY = '@ATB_in_app_review_last_request';
+const IN_APP_REVIEW_PRESENTED_KEY = '@ATB_in_app_review_presented';
 const INTERVAL_BETWEEN_PROMPTS = 5 * 24 * 60 * 60 * 1000; // 5 days
 
 export function useInAppReviewFlow() {
@@ -25,8 +26,17 @@ export function useInAppReviewFlow() {
       );
       return;
     }
+
     (async () => {
       try {
+        const inAppReviewPresented = await storage.get(
+          IN_APP_REVIEW_PRESENTED_KEY,
+        );
+
+        if (inAppReviewPresented === 'true') {
+          return;
+        }
+
         const lastPromptDateString = await storage.get(
           LAST_IN_APP_REVIEW_PROMPT_KEY,
         );
@@ -53,6 +63,9 @@ export function useInAppReviewFlow() {
         const hasFlowFinishedSuccessfully =
           await InAppReview.RequestInAppReview();
         if (hasFlowFinishedSuccessfully) {
+          // Store that review was presented to avoid present it
+          await storage.set(IN_APP_REVIEW_PRESENTED_KEY, 'true');
+
           // Android:
           // The review flow has completed.  The API does not indicate
           // whether the user left a review or dismissed the dialog.
