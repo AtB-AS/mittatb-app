@@ -229,19 +229,37 @@ struct DepartureGroup: Codable {
     var departures: [DepartureTime]
 }
 
+struct DestinationDisplay: Codable {
+    let frontText: String?
+    let via: [String]?
+  
+    init(frontText: String?, via: [String]?) {
+        self.frontText = frontText
+        self.via = via
+    }
+  
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.frontText = try container.decodeIfPresent(String.self, forKey: .frontText)
+        self.via = try container.decodeIfPresent([String].self, forKey: .via)
+    }
+}
+
 struct DepartureLineInfo: Codable {
     let lineId: String
     let lineNumber: String
     let transportMode: TransportMode?
     let transportSubmode: TransportSubMode?
     let quayId: String
+    let destinationDisplay: DestinationDisplay?
 
-    init(lineId: String, lineNumber: String, transportMode: TransportMode?, transportSubmode: TransportSubMode?, quayId: String) {
+    init(lineId: String, lineNumber: String, transportMode: TransportMode?, transportSubmode: TransportSubMode?, quayId: String, destinationDisplay: DestinationDisplay) {
         self.lineId = lineId
         self.lineNumber = lineNumber
         self.transportMode = transportMode
         self.transportSubmode = transportSubmode
         self.quayId = quayId
+        self.destinationDisplay = destinationDisplay
     }
 
     init(from decoder: Decoder) throws {
@@ -251,6 +269,7 @@ struct DepartureLineInfo: Codable {
         transportMode = try container.decodeIfPresent(TransportMode.self, forKey: .transportMode)
         transportSubmode = try container.decodeIfPresent(TransportSubMode.self, forKey: .transportSubmode)
         quayId = try container.decode(String.self, forKey: .quayId)
+        destinationDisplay = try container.decodeIfPresent(DestinationDisplay.self, forKey: .destinationDisplay)
     }
 }
 
@@ -333,8 +352,9 @@ struct FavouriteDeparture: Codable {
     let quayName: String
     let quayPublicCode: String?
     let quayId: String
+    let destinationDisplay: DestinationDisplay?
 
-    init(id: String, lineId: String, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String) {
+    init(id: String, lineId: String, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String, destinationDisplay: DestinationDisplay) {
         self.id = id
         self.lineId = lineId
         self.lineLineNumber = lineLineNumber
@@ -343,6 +363,7 @@ struct FavouriteDeparture: Codable {
         self.quayName = quayName
         self.quayPublicCode = quayPublicCode
         self.quayId = quayId
+        self.destinationDisplay = destinationDisplay
     }
 
     init(from decoder: Decoder) throws {
@@ -355,10 +376,18 @@ struct FavouriteDeparture: Codable {
         quayName = try container.decode(String.self, forKey: .quayName)
         quayPublicCode = try container.decodeIfPresent(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
+        destinationDisplay = try container.decodeIfPresent(DestinationDisplay.self, forKey: .destinationDisplay)
     }
 }
 
 // MARK: Extensions
+
+extension DestinationDisplay {
+    static let dummy: DestinationDisplay = .init(
+        frontText: "Ranheim",
+        via: []
+    )
+}
 
 extension FavouriteDeparture {
     static let dummy: FavouriteDeparture = .init(
@@ -369,7 +398,8 @@ extension FavouriteDeparture {
         lineTransportationSubMode: TransportSubMode.undefined,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
-        quayId: "NSR:Quay:71184"
+        quayId: "NSR:Quay:71184",
+        destinationDisplay: DestinationDisplay.dummy
     )
 }
 
@@ -408,7 +438,8 @@ extension DepartureGroup {
         lineNumber: "1",
         transportMode: TransportMode.bus,
         transportSubmode: TransportSubMode.undefined,
-        quayId: "NSR:Quay:71184"
+        quayId: "NSR:Quay:71184",
+        destinationDisplay: DestinationDisplay.dummy
     ),
     departures: [Int](0 ..< 10).map { index in
         let timeInterval = CGFloat(index) * 300
