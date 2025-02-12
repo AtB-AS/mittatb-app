@@ -6,7 +6,7 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {AxiosError} from 'axios';
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
@@ -46,6 +46,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {useFocusEffect} from '@react-navigation/native';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -110,6 +111,17 @@ export const Trip: React.FC<TripProps> = ({
   const tripHasLegsWeCantSellTicketsFor = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modesWeSellTicketsFor,
+  );
+
+  const shouldShowRequestReview = useRef(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldShowRequestReview.current) {
+        requestReview();
+        shouldShowRequestReview.current = false;
+      }
+    }, [requestReview]),
   );
 
   return (
@@ -179,7 +191,8 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) => {
+                        shouldShowRequestReview.current = true;
                         onPressDetailsMap({
                           legs: mapData.mapLegs,
                           fromPlace: mapData.start,
@@ -187,10 +200,8 @@ export const Trip: React.FC<TripProps> = ({
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
-                          onScreenClose: async () => {
-                            legVehiclePosition && requestReview();
-                          },
-                        })
+                        });
+                      }
                     : undefined
                 }
                 onPressDeparture={onPressDeparture}

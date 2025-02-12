@@ -27,8 +27,8 @@ import {useInterval} from '@atb/utils/use-interval';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {Feature, Point, Position} from 'geojson';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, BackHandler, Platform, View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {ActivityIndicator, Platform, View} from 'react-native';
 import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
@@ -51,11 +51,6 @@ export type TravelDetailsMapScreenParams = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   mapFilter?: MapFilterType;
-  // An event to notify that the screen close button was pressed and can take some actions before it is closed,
-  // it differs from `onPressBack` which is called/overridden by the parent call-in Dashboard_TravelDetailsMapScreen.tsx
-  // By doing this, it prevents replacing `onPressBack` with a different action that prevents calling the navigation
-  // at the top view or avoids overflow in the stack.
-  onScreenClose?: () => void;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -71,7 +66,6 @@ export const TravelDetailsMapScreenComponent = ({
   vehicleWithPosition,
   toPlace,
   fromPlace,
-  onScreenClose,
   onPressBack,
   mode,
   subMode,
@@ -153,25 +147,6 @@ export const TravelDetailsMapScreenComponent = ({
     });
   };
 
-  const onBackCallback = useCallback(() => {
-    // Notify that the screen was closed,
-    // before passing the back action to the parent view.
-    onScreenClose?.();
-    onPressBack();
-  }, [onPressBack, onScreenClose]);
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        onBackCallback();
-        return true;
-      },
-    );
-
-    return () => backHandler.remove();
-  }, [onBackCallback]);
-
   useEffect(() => {
     const location = liveVehicle?.location;
     if (!location) return;
@@ -241,7 +216,7 @@ export const TravelDetailsMapScreenComponent = ({
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
           accessibilityLabel={t(MapTexts.exitButton.a11yLabel)}
-          onBack={onBackCallback}
+          onBack={onPressBack}
         />
       </View>
       <View
