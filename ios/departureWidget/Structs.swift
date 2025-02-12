@@ -231,15 +231,13 @@ struct DepartureGroup: Codable {
 
 struct DepartureLineInfo: Codable {
     let lineId: String
-    let lineName: String?
     let lineNumber: String
     let transportMode: TransportMode?
     let transportSubmode: TransportSubMode?
     let quayId: String
 
-    init(lineId: String, lineName: String?, lineNumber: String, transportMode: TransportMode?, transportSubmode: TransportSubMode?, quayId: String) {
+    init(lineId: String, lineNumber: String, transportMode: TransportMode?, transportSubmode: TransportSubMode?, quayId: String) {
         self.lineId = lineId
-        self.lineName = lineName
         self.lineNumber = lineNumber
         self.transportMode = transportMode
         self.transportSubmode = transportSubmode
@@ -249,7 +247,6 @@ struct DepartureLineInfo: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         lineId = try container.decode(String.self, forKey: .lineId)
-        lineName = try container.decodeIfPresent(String.self, forKey: .lineName)
         lineNumber = try container.decode(String.self, forKey: .lineNumber)
         transportMode = try container.decodeIfPresent(TransportMode.self, forKey: .transportMode)
         transportSubmode = try container.decodeIfPresent(TransportSubMode.self, forKey: .transportSubmode)
@@ -330,7 +327,6 @@ struct DepartureLinkLabel: Hashable {
 struct FavouriteDeparture: Codable {
     let id: String
     let lineId: String
-    let lineName: String?
     let lineLineNumber: String
     let lineTransportationMode: TransportMode?
     let lineTransportationSubMode: TransportSubMode?
@@ -338,10 +334,9 @@ struct FavouriteDeparture: Codable {
     let quayPublicCode: String?
     let quayId: String
 
-    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String) {
+    init(id: String, lineId: String, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String) {
         self.id = id
         self.lineId = lineId
-        self.lineName = lineName
         self.lineLineNumber = lineLineNumber
         self.lineTransportationMode = lineTransportationMode
         self.lineTransportationSubMode = lineTransportationSubMode
@@ -354,7 +349,6 @@ struct FavouriteDeparture: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         lineId = try container.decode(String.self, forKey: .lineId)
-        lineName = try container.decodeIfPresent(String.self, forKey: .lineName)
         lineLineNumber = try container.decode(String.self, forKey: .lineLineNumber)
         lineTransportationMode = try container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
         lineTransportationSubMode = try container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
@@ -370,7 +364,6 @@ extension FavouriteDeparture {
     static let dummy: FavouriteDeparture = .init(
         id: "",
         lineId: "ATB:Line:2_2",
-        lineName: "Ranheim",
         lineLineNumber: "1",
         lineTransportationMode: TransportMode.bus,
         lineTransportationSubMode: TransportSubMode.undefined,
@@ -412,7 +405,6 @@ extension DepartureGroup {
     lineInfo:
     DepartureLineInfo(
         lineId: "",
-        lineName: "Ranheim",
         lineNumber: "1",
         transportMode: TransportMode.bus,
         transportSubmode: TransportSubMode.undefined,
