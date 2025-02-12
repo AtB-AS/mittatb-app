@@ -563,6 +563,10 @@ function getConfigurableLinksFromSnapshot(
   const externalRealtimeMap = mapLanguageAndTextType(
     urls?.get('externalRealtimeMap'),
   );
+  const tileServerBaseUrl = mapLanguageAndTextType(
+    urls?.get('tileServerBaseUrl'),
+  );
+  const mapboxSpriteUrl = mapLanguageAndTextType(urls?.get('mapboxSpriteUrl'));
 
   return {
     ticketingInfo,
@@ -575,6 +579,8 @@ function getConfigurableLinksFromSnapshot(
     iosStoreListing,
     androidStoreListing,
     externalRealtimeMap,
+    tileServerBaseUrl,
+    mapboxSpriteUrl,
   };
 }
 
