@@ -2,19 +2,24 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {mapboxLightStyle} from '../mapbox-styles/mapbox-light-style';
 import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 
 export const useMapboxJsonStyle: () => string | undefined = () => {
   const {themeName} = useThemeContext();
-  const {mapbox_sprite_url} = useRemoteConfigContext();
+  const {language} = useTranslation();
+
+  const {configurableLinks} = useFirestoreConfigurationContext();
+  const mapboxSpriteUrl =
+    getTextForLanguage(configurableLinks?.mapboxSpriteUrl, language) ?? '';
 
   const mapboxJsonStyle = useMemo(
     () =>
       JSON.stringify({
         ...(themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle),
-        sprite: mapbox_sprite_url + themeName,
+        sprite: mapboxSpriteUrl + themeName,
       }),
-    [themeName, mapbox_sprite_url],
+    [themeName, mapboxSpriteUrl],
   );
 
   return mapboxJsonStyle;
