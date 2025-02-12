@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
-import {useTranslation} from '@atb/translations';
+import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/time';
 import {LineWithVerticalBars} from '@atb/fare-contracts/components/ValidityLine';
