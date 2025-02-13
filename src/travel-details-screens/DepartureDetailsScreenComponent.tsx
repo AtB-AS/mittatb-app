@@ -14,7 +14,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/modules/situations';
 import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
