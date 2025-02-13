@@ -10,7 +10,7 @@ import {
   GlobalMessageType,
 } from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
-import {mapToRules} from '@atb/rule-engine';
+import {mapToRules} from '@atb/modules/rule-engine';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {

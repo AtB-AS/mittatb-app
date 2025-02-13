@@ -1,7 +1,7 @@
 import {Statuses} from '@atb/theme';
 import {LanguageAndTextType} from '@atb/translations';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {Rule} from '@atb/rule-engine/rules';
+import {Rule} from '@atb/modules/rule-engine';
 
 export type AppPlatformType = 'ios' | 'android';
 

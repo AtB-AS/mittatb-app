@@ -17,7 +17,7 @@ import {
   GlobalMessageRaw,
   GlobalMessageType,
 } from './types';
-import {checkRules, RuleVariables} from '@atb/rule-engine/rules';
+import {checkRules, RuleVariables} from '@atb/modules/rule-engine';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
