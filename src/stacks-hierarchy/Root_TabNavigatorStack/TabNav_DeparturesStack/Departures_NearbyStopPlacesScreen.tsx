@@ -31,6 +31,7 @@ export const Departures_NearbyStopPlacesScreen = ({
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,
+          onlyStopPlacesCheckboxInitialState: true,
         })
       }
       onSelectStopPlace={useCallback(
@@ -43,7 +44,9 @@ export const Departures_NearbyStopPlacesScreen = ({
         [navigation, route.params.mode],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
-      onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+      onAddFavoritePlace={() =>
+        navigation.navigate('Root_SearchFavoritePlaceScreen')
+      }
     />
   );
 };

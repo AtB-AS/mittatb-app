@@ -129,7 +129,6 @@ export const Root_LoginPhoneInputScreen = ({
               prefix={prefix}
               onChangePrefix={setPrefix}
               showClear={true}
-              keyboardType="number-pad"
               placeholder={t(PhoneInputTexts.input.placeholder.login)}
               autoFocus={true}
               textContentType="telephoneNumber"

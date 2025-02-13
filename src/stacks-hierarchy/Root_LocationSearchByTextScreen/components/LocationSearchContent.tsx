@@ -41,7 +41,8 @@ type LocationSearchContentProps = {
   onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
-  onAddFavorite: () => void;
+  onlyStopPlacesCheckboxInitialState: boolean;
+  onAddFavoritePlace: () => void;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -56,7 +57,8 @@ export function LocationSearchContent({
   onlyLocalTariffZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
-  onAddFavorite,
+  onlyStopPlacesCheckboxInitialState,
+  onAddFavoritePlace,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavoritesContext();
@@ -80,6 +82,7 @@ export function LocationSearchContent({
   const [onlyStopPlaces, setOnlyStopPlaces] = usePersistedBoolState(
     storage,
     '@ATB_only_stop_places_checkbox',
+    onlyStopPlacesCheckboxInitialState,
   );
 
   const {location: geolocation} = useGeolocationContext();
@@ -161,7 +164,7 @@ export function LocationSearchContent({
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
             style={styles.chipBox}
-            onAddFavorite={onAddFavorite}
+            onAddFavoritePlace={onAddFavoritePlace}
           />
         )}
         {isOnlyStopPlacesCheckboxEnabled && (

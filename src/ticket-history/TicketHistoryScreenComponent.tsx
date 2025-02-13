@@ -16,24 +16,24 @@ import {useAuthContext} from '@atb/auth';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {
-  getFareContractInfo,
-  useSortFcOrReservationByValidityAndCreation,
-} from '@atb/fare-contracts/utils';
+import {getFareContractInfo} from '@atb/fare-contracts/utils';
+import {sortFcOrReservationByValidityAndCreation} from '@atb/fare-contracts/sort-fc-or-reservation-by-validity-and-creation';
 import {useAnalyticsContext} from '@atb/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {EmptyState} from '@atb/components/empty-state';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '@atb/stacks-hierarchy';
+
+type Props = TicketHistoryScreenParams & {
+  onPressFareContract: (orderId: string) => void;
+};
 
 export const TicketHistoryScreenComponent = ({
   mode,
-}: TicketHistoryScreenParams) => {
+  onPressFareContract,
+}: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
   const {serverNow} = useTimeContext();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const analytics = useAnalyticsContext();
   const {fareContracts: historicalFareContracts} = useFareContracts(
     {availability: 'historical'},
@@ -53,7 +53,8 @@ export const TicketHistoryScreenComponent = ({
     customerAccountId,
   );
 
-  const sortedItems = useSortFcOrReservationByValidityAndCreation(
+  const sortedItems = sortFcOrReservationByValidityAndCreation(
+    customerAccountId,
     serverNow,
     [...fareContractsToShow, ...reservationsToShow],
     (currentTime, fareContract, currentUserId) =>
@@ -74,12 +75,7 @@ export const TicketHistoryScreenComponent = ({
             now={serverNow}
             onPressFareContract={() => {
               analytics.logEvent('Ticketing', 'Ticket details clicked');
-              navigation.navigate({
-                name: 'Root_FareContractDetailsScreen',
-                params: {
-                  orderId: item.orderId,
-                },
-              });
+              onPressFareContract(item.orderId);
             }}
             fcOrReservation={item}
             index={index}

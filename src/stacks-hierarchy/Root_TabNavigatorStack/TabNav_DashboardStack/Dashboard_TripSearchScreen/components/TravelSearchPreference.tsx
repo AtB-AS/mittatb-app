@@ -2,7 +2,6 @@ import {RadioSegments} from '@atb/components/radio';
 import React from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
-import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -29,20 +28,16 @@ export const TravelSearchPreference = ({
       <ThemeText style={styles.heading} typography="body__primary--bold">
         {getTextForLanguage(preference.title, language)}
       </ThemeText>
-      <Section>
-        <GenericSectionItem>
-          <RadioSegments
-            activeIndex={selectedIndex}
-            color={theme.color.interactive[2]}
-            options={preference.options.map((option) => ({
-              text: getTextForLanguage(option.text, language) ?? '',
-              onPress: () => {
-                onPreferenceChange({...preference, selectedOption: option.id});
-              },
-            }))}
-          />
-        </GenericSectionItem>
-      </Section>
+      <RadioSegments
+        activeIndex={selectedIndex}
+        color={theme.color.interactive[2]}
+        options={preference.options.map((option) => ({
+          text: getTextForLanguage(option.text, language) ?? '',
+          onPress: () => {
+            onPreferenceChange({...preference, selectedOption: option.id});
+          },
+        }))}
+      />
     </View>
   );
 };

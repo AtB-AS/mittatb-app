@@ -1,5 +1,5 @@
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {TravelRightDirection} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb-as/utils';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';

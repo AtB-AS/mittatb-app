@@ -4,7 +4,7 @@ import {
   TariffZone,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {TravelRightDirection} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb-as/utils';
 
 export type RecentFareContractType = {
   /**

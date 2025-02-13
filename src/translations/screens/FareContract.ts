@@ -51,6 +51,20 @@ const FareContractTexts = {
     upcoming: _(`Kommende klipp`, `Upcoming ticket`, `Kommande klipp`),
     inactive: _(`Ingen aktive klipp`, `No active ticket`, `Ingen aktive klipp`),
   },
+  shmoDetails: {
+    tripStarted: (dateTime: string) =>
+      _(
+        `Tur startet ${dateTime}`,
+        `Trip started ${dateTime}`,
+        `Tur startet ${dateTime}`,
+      ),
+    tripEnded: (dateTime: string) =>
+      _(
+        `Tur avsluttet ${dateTime}`,
+        `Trip ended ${dateTime}`,
+        `Tur avsluttet ${dateTime}`,
+      ),
+  },
   details: {
     header: {
       title: _('Billettdetaljer', 'Ticket details', 'Billettdetaljar'),
@@ -61,7 +75,13 @@ const FareContractTexts = {
       'Betalingsmetode: ',
     ),
     orderId: (orderId: string) =>
-      _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`, `Ordre-id: ${orderId}`),
+      _(`Ordre-ID: ${orderId}`, `Order ID: ${orderId}`, `Ordre-ID: ${orderId}`),
+    bookingId: (bookingId: string) =>
+      _(
+        `Booking-ID: ${bookingId}`,
+        `Booking ID: ${bookingId}`,
+        `Booking-ID: ${bookingId}`,
+      ),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`, `Kjøpt ${dateTime}`),
     validFrom: (dateTime: string) =>

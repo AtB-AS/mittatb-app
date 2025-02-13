@@ -24,7 +24,7 @@ import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
-import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
+import {Root_SearchFavoritePlaceScreen} from './Root_SearchFavoritePlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
 import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen';
@@ -355,8 +355,8 @@ export const RootStack = () => {
                 component={Root_AddEditFavoritePlaceScreen}
               />
               <Stack.Screen
-                name="Root_SearchStopPlaceScreen"
-                component={Root_SearchStopPlaceScreen}
+                name="Root_SearchFavoritePlaceScreen"
+                component={Root_SearchFavoritePlaceScreen}
               />
               <Stack.Screen
                 name="Root_ShareTravelHabitsScreen"

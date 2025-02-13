@@ -1,8 +1,5 @@
-import {
-  FareContract,
-  flattenTravelRightAccesses,
-  getLastUsedAccess,
-} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -10,9 +7,10 @@ import {fullDateTime} from '@atb/utils/date';
 import {getValidityStatus} from '@atb/fare-contracts';
 import {useThemeContext} from '@atb/theme';
 import {useTimeContext} from '@atb/time';
+import {getAccesses} from '@atb-as/utils';
 
 type Props = {
-  fc: FareContract;
+  fc: FareContractType;
 };
 
 export const ValidTo = ({fc}: Props) => {
@@ -23,7 +21,7 @@ export const ValidTo = ({fc}: Props) => {
   if (getValidityStatus(serverNow, fc) !== 'valid') return null;
 
   let endDateTime = firstTravelRight.endDateTime;
-  const flattenedAccesses = flattenTravelRightAccesses(fc.travelRights);
+  const flattenedAccesses = getAccesses(fc);
   if (flattenedAccesses) {
     const {validTo: usedAccessValidTo} = getLastUsedAccess(
       serverNow,

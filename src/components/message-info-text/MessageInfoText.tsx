@@ -44,14 +44,15 @@ export const MessageInfoText = ({
         />
       )}
 
-      <ThemeText
-        color={textColor}
-        isMarkdown={isMarkdown}
-        typography="body__secondary"
-        style={styles.text}
-      >
-        {message}
-      </ThemeText>
+      <View style={styles.text}>
+        <ThemeText
+          color={textColor}
+          isMarkdown={isMarkdown}
+          typography="body__secondary"
+        >
+          {message}
+        </ThemeText>
+      </View>
 
       {iconPosition === 'right' && (
         <ThemeIcon
@@ -69,6 +70,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
   },
   text: {
-    flexShrink: 1,
+    flex: 1,
   },
 }));

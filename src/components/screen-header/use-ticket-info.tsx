@@ -4,7 +4,8 @@ import {
   isOfFareProductRef,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {FareContract, useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 
 type TicketInfoParams = {
   fareProductTypeConfigType: string;
@@ -13,7 +14,7 @@ type TicketInfoParams = {
 
 type TicketInfo = {
   ticketInfoParams: TicketInfoParams | undefined;
-  fareContract: FareContract | undefined;
+  fareContract: FareContractType | undefined;
   preassignedFareProduct: PreassignedFareProduct | undefined;
 };
 

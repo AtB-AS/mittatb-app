@@ -7,4 +7,5 @@ export type Root_LocationSearchByTextScreenParams = {
   favoriteChipTypes?: ChipTypeGroup[];
   initialLocation?: Location;
   includeJourneyHistory?: boolean;
+  onlyStopPlacesCheckboxInitialState: boolean;
 };

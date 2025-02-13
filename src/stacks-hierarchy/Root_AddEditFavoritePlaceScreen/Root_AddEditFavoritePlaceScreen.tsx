@@ -173,6 +173,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
                 label: t(AddEditFavoriteTexts.fields.location.label),
                 favoriteChipTypes: ['location', 'map'],
                 initialLocation: location,
+                onlyStopPlacesCheckboxInitialState: false,
               })
             }
             testID="locationSearchButton"

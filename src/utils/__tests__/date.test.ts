@@ -8,6 +8,7 @@ import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
+  getTimeBetweenFormatted,
   secondsToDuration,
 } from '../date'; // Adjust the path if needed
 
@@ -118,6 +119,51 @@ describe.each<TimeZone>([
         formatToLongDateTime(`2020-09-01T12:00:00Z`, Language.English),
       ).toBe('01. Sep 2020, 14:00');
     });
+  });
+});
+
+describe('getTimeBetweenFormatted', () => {
+  // format in hh:mm:ss over 60min and mm:ss under 60 min
+  test('For a few hours', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T14:00:00Z');
+    expect(getTimeBetweenFormatted(startTime, endTime)).toBe('02:00:00');
+  });
+
+  test('For tens of minutes', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T12:24:21Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('24:21'));
+  });
+
+  test('For a few minutes', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T12:04:46Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('04:46'));
+  });
+
+  test('For a few seconds', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T12:00:32Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('00:32'));
+  });
+
+  test('For one second', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T12:00:01Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('00:01'));
+  });
+
+  test('For equal start and endtime', () => {
+    const startTime = new Date('2024-09-01T12:00:00Z');
+    const endTime = new Date('2024-09-01T12:00:00Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('00:00'));
+  });
+
+  test('For negative value', () => {
+    const startTime = new Date('2024-09-01T12:23:10Z');
+    const endTime = new Date('2024-09-01T12:00:00Z');
+    expect(expect(getTimeBetweenFormatted(startTime, endTime)).toBe('-23:10'));
   });
 });
 

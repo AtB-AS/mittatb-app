@@ -110,6 +110,8 @@ export const MobilityTexts = {
     ),
     retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   },
+  totalCost: _('Totalkostnad', 'Total cost', 'Totalkostnad'),
+  time: _('Tid', 'Time', 'Tid'),
 };
 
 export const ScooterTexts = {

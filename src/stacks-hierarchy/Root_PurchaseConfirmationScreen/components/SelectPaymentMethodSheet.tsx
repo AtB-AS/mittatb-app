@@ -19,6 +19,7 @@ import {
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
 import {PaymentType, humanizePaymentType} from '@atb/ticketing';
+import {getRadioA11y} from '@atb/components/radio';
 
 type Props = {
   onSelect: (
@@ -198,10 +199,8 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
       <PressableOpacity
         style={[styles.paymentMethod, styles.centerRow]}
         onPress={() => onSelect(paymentMethod)}
-        accessibilityLabel={paymentTexts.label}
         accessibilityHint={paymentTexts.hint}
-        accessibilityRole="radio"
-        accessibilityState={{selected: selected}}
+        {...getRadioA11y(paymentTexts.label, selected, t)}
         testID={getPaymentTestId(paymentMethod, index)}
       >
         <View style={styles.column}>

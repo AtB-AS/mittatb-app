@@ -271,6 +271,9 @@ export const DepartureDetailsScreenComponent = ({
             )}
             {shouldShowButtonsRow && (
               <View style={styles.actionButtons}>
+                {shouldShowFavoriteButton && (
+                  <FavoriteButton fromCall={fromCall} line={line} />
+                )}
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
                     <Button
@@ -286,10 +289,6 @@ export const DepartureDetailsScreenComponent = ({
                       onPress={handleMapButtonPress}
                     />
                   </View>
-                )}
-
-                {shouldShowFavoriteButton && (
-                  <FavoriteButton fromCall={fromCall} line={line} />
                 )}
               </View>
             )}
@@ -802,7 +801,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   actionButtons: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     gap: theme.spacing.medium,
     marginTop: theme.spacing.medium,
   },

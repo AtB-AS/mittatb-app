@@ -5,10 +5,10 @@ import {useAuthContext} from '@atb/auth';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 import {
-  type FareContract,
   hasTravelRightAccesses,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
+import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
 import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
@@ -27,8 +27,9 @@ import {
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
+import {isDefined} from '@atb/utils/presence';
 
-type Props = {fc: FareContract};
+type Props = {fc: FareContractType};
 
 export const TravelInfoSectionItem = ({fc}: Props) => {
   // TRANSLATION
@@ -62,7 +63,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   });
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    travelRights.map((tr) => tr.userProfileRef),
+    travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 
