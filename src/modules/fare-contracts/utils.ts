@@ -247,18 +247,6 @@ export function tariffZonesSummary(
   }
 }
 
-export const useDefaultPreassignedFareProduct = (
-  preAssignedFareProducts: PreassignedFareProduct[],
-): PreassignedFareProduct => {
-  const defaultFareProduct = preAssignedFareProducts.find((p) => p.isDefault);
-
-  if (defaultFareProduct) {
-    return defaultFareProduct;
-  }
-
-  return preAssignedFareProducts[0];
-};
-
 type FareContractInfoProps = {
   travelRights: TravelRightType[];
   validityStatus: ValidityStatus;
