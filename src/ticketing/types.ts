@@ -118,6 +118,7 @@ export enum PaymentType {
 
 export type RecurringPayment = {
   id: number;
+  card_expires_at: string;
   expires_at: string;
   masked_pan: string;
   payment_type: number;

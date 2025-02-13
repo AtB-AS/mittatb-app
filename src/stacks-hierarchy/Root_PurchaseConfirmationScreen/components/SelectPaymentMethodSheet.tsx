@@ -18,8 +18,13 @@ import {
   SavedPaymentMethodType,
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
-import {PaymentType, humanizePaymentType} from '@atb/ticketing';
-import {getRadioA11y} from '@atb/components/radio';
+import {
+  PaymentType,
+  RecurringPayment,
+  humanizePaymentType,
+} from '@atb/ticketing';
+import {RadioIcon, getRadioA11y} from '@atb/components/radio';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   onSelect: (
@@ -148,6 +153,8 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthContext();
+  const {theme} = useThemeContext();
+  const radioColor = theme.color.interactive[2].outline.background;
 
   function getPaymentTexts(method: PaymentMethod): {
     text: string;
@@ -187,12 +194,81 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
     }
   }
 
+  function getDifferenceBetweenDates(
+    startDate: Date,
+    endDate: Date = new Date(),
+  ): number {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    const diffTime = start.getTime() - end.getTime();
+    return diffTime / (1000 * 60 * 60 * 24);
+  }
+
+  type ExpiryMessage = {
+    expiryMessageCardType: 'card' | 'nets';
+    expiryMessageCardTime: 'afterExpiration' | 'beforeExpiration';
+    expiryMessageType: 'error' | 'warning';
+    expiryTime?: string;
+  } | null;
+
+  function getExpiryStatus(
+    type: 'card' | 'nets',
+    difference: number,
+    expiryTime?: string,
+  ): ExpiryMessage {
+    if (difference < 1) {
+      return {
+        expiryMessageCardType: type,
+        expiryMessageCardTime: 'afterExpiration',
+        expiryMessageType: type === 'card' ? 'error' : 'warning',
+      };
+    } else if (difference <= 30) {
+      return {
+        expiryMessageCardType: type,
+        expiryMessageCardTime: 'beforeExpiration',
+        expiryMessageType: 'warning',
+        expiryTime,
+      };
+    }
+    return null;
+  }
+
+  function getCardExpiryStatus(recurringCard: RecurringPayment): ExpiryMessage {
+    const cardVsToday = getDifferenceBetweenDates(
+      new Date(recurringCard.card_expires_at),
+    );
+    const netsVsToday = getDifferenceBetweenDates(
+      new Date(recurringCard.expires_at),
+    );
+
+    const cardStatus = getExpiryStatus(
+      'card',
+      cardVsToday,
+      recurringCard.card_expires_at,
+    );
+    if (cardStatus) return cardStatus;
+
+    const netsStatus = getExpiryStatus(
+      'nets',
+      netsVsToday,
+      recurringCard.expires_at,
+    );
+    return netsStatus;
+  }
+
   const paymentTexts = getPaymentTexts(paymentMethod);
 
   const canSaveCard =
     authenticationType === 'phone' &&
     paymentMethod.savedType === 'normal' &&
     paymentMethod.paymentType !== PaymentType.Vipps;
+
+  const reccuringCardStatus =
+    paymentMethod.recurringCard &&
+    getCardExpiryStatus(paymentMethod.recurringCard);
 
   return (
     <View style={styles.card}>
@@ -206,23 +282,40 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
         <View style={styles.column}>
           <View style={styles.row}>
             <View style={styles.centerRow}>
-              <RadioView checked={selected} />
-              <ThemeText>{paymentTexts.text}</ThemeText>
-              {paymentMethod.recurringCard && (
-                <ThemeText
-                  style={styles.maskedPanPadding}
-                  testID={getPaymentTestId(paymentMethod, index) + 'Number'}
-                >
-                  **** {`${paymentMethod.recurringCard.masked_pan}`}
-                </ThemeText>
-              )}
+              <RadioIcon checked={selected} color={radioColor} />
+              <View style={styles.reccuringCard}>
+                <ThemeText>{paymentTexts.text}</ThemeText>
+                {paymentMethod.recurringCard && (
+                  <ThemeText
+                    style={styles.maskedPanPadding}
+                    testID={getPaymentTestId(paymentMethod, index) + 'Number'}
+                  >
+                    **** {`${paymentMethod.recurringCard.masked_pan}`}
+                  </ThemeText>
+                )}
+              </View>
+              <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
-            <PaymentBrand paymentType={paymentMethod.paymentType} />
           </View>
-          {paymentMethod.recurringCard && (
-            <ThemeText style={styles.expireDate}>
-              {getExpireDate(paymentMethod.recurringCard.expires_at)}
-            </ThemeText>
+
+          {reccuringCardStatus && (
+            <MessageInfoText
+              style={styles.warningMessage}
+              type={reccuringCardStatus.expiryMessageType}
+              message={`${t(
+                SelectPaymentMethodTexts.expiry_messages[
+                  reccuringCardStatus.expiryMessageCardType as 'nets' | 'card'
+                ][
+                  reccuringCardStatus.expiryMessageCardTime as
+                    | 'beforeExpiration'
+                    | 'afterExpiration'
+                ],
+              )} ${
+                reccuringCardStatus.expiryTime
+                  ? getExpireDate(reccuringCardStatus?.expiryTime)
+                  : ''
+              }`}
+            />
           )}
         </View>
       </PressableOpacity>
@@ -231,8 +324,14 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
           onPress={() => onSetShouldSave(!shouldSave)}
           style={styles.saveMethodSection}
         >
-          <ThemeText style={styles.saveMethodTextPadding}>
+          <ThemeText>
             {t(SelectPaymentMethodTexts.save_payment_method_description.text)}
+          </ThemeText>
+          <ThemeText typography="body__secondary" color="secondary">
+            {t(
+              SelectPaymentMethodTexts.save_payment_method_description
+                .information,
+            )}
           </ThemeText>
           <View style={styles.saveButton}>
             <Checkbox
@@ -251,21 +350,6 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
           </View>
         </PressableOpacity>
       )}
-    </View>
-  );
-};
-
-type CheckedProps = {
-  checked: boolean;
-};
-
-const RadioView: React.FC<CheckedProps> = ({checked}) => {
-  const styles = useStyles();
-  return (
-    <View
-      style={[styles.radio, checked ? styles.radioSelected : styles.radioBlank]}
-    >
-      {checked ? <View style={styles.radioInner} /> : null}
     </View>
   );
 };
@@ -297,9 +381,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
   },
   saveMethodSection: {
-    paddingHorizontal: theme.spacing.xLarge,
-    paddingBottom: theme.spacing.xLarge,
+    paddingHorizontal: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
+    paddingTop: theme.spacing.small,
+    borderTopWidth: theme.border.width.slim,
+    borderTopColor: theme.color.border.primary.background,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.medium,
   },
+
   container: {
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
@@ -312,13 +403,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   paymentMethod: {
     flex: 1,
     flexDirection: 'column',
-    padding: theme.spacing.xLarge,
+    padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
   },
+
   centerRow: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   radioSelected: {
     backgroundColor: theme.color.background.accent[3].background,
@@ -346,24 +439,25 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: theme.spacing.small,
   },
   saveButtonCheckbox: {
-    marginRight: theme.spacing.small,
-  },
-  expireDate: {
-    opacity: 0.6,
-    paddingTop: theme.spacing.small,
-    paddingLeft: 36,
+    marginRight: theme.spacing.medium,
   },
   confirmButton: {
     marginTop: theme.spacing.small,
   },
   maskedPanPadding: {
-    paddingLeft: theme.spacing.small,
+    color: theme.color.foreground.dynamic.secondary,
   },
-  saveMethodTextPadding: {
+  reccuringCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.xSmall,
+    paddingLeft: theme.spacing.medium,
+    marginRight: 'auto',
+  },
+
+  warningMessage: {
     paddingTop: theme.spacing.medium,
-    opacity: 0.6,
   },
 }));

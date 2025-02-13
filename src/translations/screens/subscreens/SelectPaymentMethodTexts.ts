@@ -18,12 +18,45 @@ const SelectPaymentMethodTexts = {
   },
   save_payment_method_description: {
     text: _(
-      'Lagre bankkortet for fremtidige betalinger',
-      'Save the payment card for future usage',
-      'Lagre betalingskortet for framtidige betalingar',
+      'Vil du lagre bankkortet for fremtidige betalinger?',
+      'Would you like to save your bank card for future payments?',
+      'Vil du lagre bankkortet for framtidige betalingar?',
+    ),
+
+    information: _(
+      'Vi lagrer kortinformasjonen i opptil 3 år.',
+      'We store the card information for up to 3 years.',
+      'Vi lagrar kortinformasjonen i opptil 3 år.',
     ),
   },
-  save_card: _('Lagre kort', 'Save card', 'Lagre kort'),
+  save_card: _('Lagre bankkort', 'Save bank card', 'Lagre bankkort'),
+  expiry_messages: {
+    nets: {
+      beforeExpiration: _(
+        'Du må legge til kortet på nytt',
+        'You need to add the card again',
+        'Du må leggje til kortet på nytt',
+      ),
+      afterExpiration: _(
+        'Du må legge til kortet på nytt for å betale',
+        'You need to add the card again to make a payment',
+        'Du må leggje til kortet på nytt for å betale',
+      ),
+    },
+    card: {
+      beforeExpiration: _(
+        'Kortet utløper',
+        'The card expires',
+        'Kortet utløper',
+      ),
+      afterExpiration: _(
+        'Kortet er utløpt',
+        'The card has expired.',
+        'Kortet er utløpt',
+      ),
+    },
+  },
+
   a11yHint: {
     notSave: _(
       'Aktiver for ikke å lagre kort',

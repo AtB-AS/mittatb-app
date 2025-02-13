@@ -14,7 +14,7 @@ export type Brand = {
   size?: number;
 };
 
-export const PaymentBrand: React.FC<Brand> = ({paymentType, size = 40}) => {
+export const PaymentBrand: React.FC<Brand> = ({paymentType, size = 20}) => {
   const fontScale = useFontScale();
   return (
     <View style={{aspectRatio: 1, height: size * fontScale}}>
