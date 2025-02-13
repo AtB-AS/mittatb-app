@@ -37,7 +37,7 @@ import {useTimeContext} from '@atb/time';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);

@@ -17,7 +17,7 @@ import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {Description} from '@atb/fare-contracts/components/FareContractDescription';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';

@@ -30,7 +30,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/harbors';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,

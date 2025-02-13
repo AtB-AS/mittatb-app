@@ -39,7 +39,7 @@ import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/Mobili
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from '@atb/fare-contracts/details/UsedAccessesSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';

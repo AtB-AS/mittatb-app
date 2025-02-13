@@ -15,7 +15,7 @@ import {
 } from '@atb/modules/purchase-selection';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAuthContext} from '@atb/auth';
 
 type TravellerSelectionSheetProps = {

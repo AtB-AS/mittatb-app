@@ -27,7 +27,7 @@ import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
 import {useAnalyticsContext} from '@atb/analytics';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {storage} from '@atb/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 

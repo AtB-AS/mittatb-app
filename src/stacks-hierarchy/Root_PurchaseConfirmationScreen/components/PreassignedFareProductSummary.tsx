@@ -24,7 +24,7 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/ticketing';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;

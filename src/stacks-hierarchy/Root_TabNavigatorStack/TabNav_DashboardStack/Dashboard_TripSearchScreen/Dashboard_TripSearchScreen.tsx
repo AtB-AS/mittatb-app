@@ -52,7 +52,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,

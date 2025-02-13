@@ -23,7 +23,7 @@ import {usePopOverContext} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthContext} from '@atb/auth';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,

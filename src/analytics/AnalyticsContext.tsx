@@ -12,7 +12,7 @@ import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 

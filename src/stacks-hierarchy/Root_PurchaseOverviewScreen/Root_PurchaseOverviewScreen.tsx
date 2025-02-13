@@ -33,7 +33,7 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/auth';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,

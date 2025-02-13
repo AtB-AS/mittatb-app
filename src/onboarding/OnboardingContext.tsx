@@ -26,7 +26,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type OnboardingState = {
   isLoading: boolean;

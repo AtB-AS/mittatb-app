@@ -68,7 +68,7 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {useOnMarkFavouriteDepartures} from '@atb/favorites';
