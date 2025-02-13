@@ -5,12 +5,12 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  fareContractValidityUnits,
   isValidFareContract,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
   useTariffZoneSummary,
 } from './utils';
+import {fareContractValidityUnits} from './fare-contract-validity-units';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';

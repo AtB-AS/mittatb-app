@@ -10,11 +10,8 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {
-  fareContractValidityUnits,
-  getFareContractInfo,
-  ValidityStatus,
-} from '../utils';
+import {getFareContractInfo, ValidityStatus} from '../utils';
+import {fareContractValidityUnits} from '../fare-contract-validity-units';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
