@@ -69,12 +69,12 @@ struct Provider: IntentTimelineProvider {
                 }
                 var departures: [DepartureTime] = []
 
-                if departure.lineName == nil {
+                if departure.destinationDisplay?.frontText == nil {
                     quayGroup.group.forEach { line in
                         departures.append(contentsOf: line.departures)
                     }
                 } else {
-                    guard let lineDepartures = quayGroup.group.first(where: { $0.lineInfo.lineName == departure.lineName })?.departures else {
+                    guard let lineDepartures = quayGroup.group.first(where: { $0.lineInfo.destinationDisplay?.frontText == departure.destinationDisplay?.frontText })?.departures else {
                         return completion(noDeparturesTimeline)
                     }
                     departures = lineDepartures
