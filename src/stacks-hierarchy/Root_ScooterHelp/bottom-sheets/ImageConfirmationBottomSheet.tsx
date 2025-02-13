@@ -4,7 +4,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {PhotoFile} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -25,6 +25,7 @@ export const ImageConfirmationBottomSheet = ({
   onConfirm,
 }: Props) => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const {close} = useBottomSheetContext();
   return (
@@ -61,6 +62,7 @@ export const ImageConfirmationBottomSheet = ({
           mode="secondary"
           onPress={close}
           text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       </ScrollView>
     </BottomSheetContainer>

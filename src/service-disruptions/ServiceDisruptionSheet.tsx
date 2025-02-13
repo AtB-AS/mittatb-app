@@ -47,6 +47,7 @@ export const ServiceDisruptionSheet = () => {
                 Linking.openURL(service_disruption_url);
               }}
               testID="navigateToServiceDisruptions"
+              backgroundColor={theme.color.background.neutral[1]}
             />
           </>
         )}

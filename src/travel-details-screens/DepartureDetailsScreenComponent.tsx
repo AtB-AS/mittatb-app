@@ -313,6 +313,7 @@ export const DepartureDetailsScreenComponent = ({
                 showPagination={hasMultipleItems}
                 currentDate={activeItem?.date}
                 isTripCancelled={activeItem?.isTripCancelled}
+                backgroundColor={backgroundColor}
               />
             ) : (
               <MessageInfoBox

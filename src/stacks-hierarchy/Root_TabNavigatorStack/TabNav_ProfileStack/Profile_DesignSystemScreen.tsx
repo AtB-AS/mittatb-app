@@ -598,6 +598,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="secondary"
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={true}
@@ -605,6 +606,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     active={true}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={true}
@@ -612,6 +614,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                 </View>
 
@@ -627,6 +630,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={true}
@@ -634,6 +638,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     active={true}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={true}
@@ -641,6 +646,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                 </View>
 
@@ -683,6 +689,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -691,6 +698,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     active={true}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -698,6 +706,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -706,6 +715,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     disabled={true}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                 </View>
 
@@ -752,6 +762,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="small"
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -761,6 +772,7 @@ export const Profile_DesignSystemScreen = ({
                     type="small"
                     active={true}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -769,6 +781,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="small"
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -778,6 +791,7 @@ export const Profile_DesignSystemScreen = ({
                     type="small"
                     disabled={true}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                 </View>
 
@@ -864,6 +878,7 @@ export const Profile_DesignSystemScreen = ({
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -873,6 +888,7 @@ export const Profile_DesignSystemScreen = ({
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -898,6 +914,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     expanded={false}
@@ -905,6 +922,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     text="Example"
@@ -924,6 +942,7 @@ export const Profile_DesignSystemScreen = ({
                     expanded={false}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
                     text="Example"
@@ -933,6 +952,7 @@ export const Profile_DesignSystemScreen = ({
                     expanded={false}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
+                    backgroundColor={theme.color.background.neutral[0]}
                   />
                 </View>
               </View>
@@ -1141,7 +1161,7 @@ function presser() {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   buttonContainer: {
