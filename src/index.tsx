@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {OnboardingContextProvider} from './onboarding';
-import {GlobalMessagesContextProvider} from './global-messages';
+import {GlobalMessagesContextProvider} from '@atb/modules/global-messages';
 import {MapContextProvider} from './MapContext';
 import {GeolocationContextProvider} from './GeolocationContext';
 import {RootStack} from '@atb/stacks-hierarchy';

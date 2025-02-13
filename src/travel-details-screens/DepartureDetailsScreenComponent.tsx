@@ -53,7 +53,10 @@ import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalyticsContext} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';

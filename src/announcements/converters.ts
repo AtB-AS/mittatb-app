@@ -7,7 +7,7 @@ import {
 } from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
-import {AppPlatformType} from '@atb/global-messages/types';
+import {AppPlatformType} from '@atb/modules/global-messages/types';
 import {Platform} from 'react-native';
 import {mapToRules} from '@atb/rule-engine';
 

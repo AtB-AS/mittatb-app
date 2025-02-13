@@ -8,7 +8,10 @@ import {
   TariffZone,
   getReferenceDataName,
 } from '@atb/configuration';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,

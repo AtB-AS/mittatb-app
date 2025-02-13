@@ -15,7 +15,7 @@ import {
   RemoteConfigContextState,
   useRemoteConfigContext,
 } from '@atb/RemoteConfigContext';
-import {useGlobalMessagesContext} from '@atb/global-messages';
+import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';

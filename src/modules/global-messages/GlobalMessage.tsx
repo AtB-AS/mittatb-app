@@ -1,16 +1,13 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
-import {useGlobalMessagesContext} from '@atb/global-messages/GlobalMessagesContext';
+import {useGlobalMessagesContext} from './GlobalMessagesContext';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
-import {
-  GlobalMessageContextEnum,
-  GlobalMessageType,
-} from '@atb/global-messages/types';
+import {GlobalMessageContextEnum, GlobalMessageType} from './types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
-import {RuleVariables} from '../rule-engine/rules';
+import {RuleVariables} from '@atb/rule-engine/rules';
 import {ContrastColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useAuthContext} from '@atb/auth';

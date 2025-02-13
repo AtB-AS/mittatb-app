@@ -8,7 +8,7 @@ import {
   GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
-} from '@atb/global-messages/types';
+} from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {mapToRules} from '@atb/rule-engine';
 export function mapToGlobalMessages(

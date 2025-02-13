@@ -35,7 +35,10 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/configuration';

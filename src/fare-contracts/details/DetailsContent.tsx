@@ -24,7 +24,7 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
   useGlobalMessagesContext,
-} from '@atb/global-messages';
+} from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFirestoreConfigurationContext} from '@atb/configuration';

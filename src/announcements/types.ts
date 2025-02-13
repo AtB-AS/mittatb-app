@@ -1,6 +1,6 @@
 import {LanguageAndTextType} from '@atb/configuration';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AppPlatformType} from '@atb/global-messages/types';
+import {AppPlatformType} from '@atb/modules/global-messages/types';
 import {Rule} from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;

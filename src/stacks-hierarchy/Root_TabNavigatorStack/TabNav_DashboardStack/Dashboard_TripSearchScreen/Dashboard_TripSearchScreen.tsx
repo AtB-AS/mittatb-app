@@ -53,7 +53,10 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOverContext} from '@atb/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/feature-toggles';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
