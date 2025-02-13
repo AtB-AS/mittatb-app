@@ -1161,7 +1161,7 @@ function presser() {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   buttonContainer: {
