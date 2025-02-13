@@ -3,7 +3,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {useFareContracts} from '@atb/ticketing';
-import {useNotificationsContext} from '@atb/notifications';
+import {useNotificationsContext} from './use-push-notifications';
 import {useTimeContext} from '@atb/time';
 
 export function useHasFareContractWithActivatedNotification(): boolean {

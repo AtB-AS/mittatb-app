@@ -32,7 +32,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
 import {useAnnouncementsContext} from '@atb/announcements';
-import {useNotificationsContext} from '@atb/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/time';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useOnboardingContext} from '@atb/onboarding';

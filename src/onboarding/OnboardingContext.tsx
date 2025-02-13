@@ -18,8 +18,8 @@ import {
   onboardingSectionsInPrioritizedOrder,
 } from '@atb/onboarding';
 import {ShouldShowArgsType} from '@atb/onboarding/types';
-import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
-import {useNotificationsContext} from '@atb/notifications';
+import {useHasFareContractWithActivatedNotification} from '@atb/modules/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {AuthStateChangeListenerCallback, useAuthContext} from '@atb/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
