@@ -3,10 +3,9 @@ import {
   GenericSectionItem,
   Section,
 } from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {BonusProfileTexts, useTranslation} from '@atb/translations';
-import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -16,10 +15,12 @@ import {ContentHeading} from '@atb/components/heading';
 import {BonusPriceTag} from '@atb/bonus';
 import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 
 export const Profile_BonusScreen = () => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
 
   const currentPoints = 5; // TODO: get actual value when available
@@ -61,7 +62,13 @@ export const Profile_BonusScreen = () => {
           <ExpandableSectionItem
             text={t(BonusProfileTexts.spendPoints.bikeRental.title)}
             showIconText={false}
-            prefix={<StarFill style={styles.logo} />}
+            prefix={
+              <BrandingImage
+                logoUrl="https://storage.googleapis.com/atb-mobility-platform-staging.appspot.com/operator-logos/trondheim-bysykkel.png"
+                logoSize={theme.typography['heading--big'].fontSize}
+                style={styles.logo}
+              />
+            }
             suffix={<BonusPriceTag price={5} style={styles.bonusPriceTag} />}
             expandContent={
               <ThemeText isMarkdown={true}>
@@ -114,5 +121,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   logo: {
     marginRight: theme.spacing.small,
+    borderRadius: theme.border.radius.small,
+    overflow: 'hidden',
   },
 }));
