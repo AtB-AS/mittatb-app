@@ -17,7 +17,7 @@ import {
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
   Language,
@@ -27,7 +27,7 @@ import {
 } from '@atb/translations';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import humanizeDuration from 'humanize-duration';
-import type {UnitMapType} from '@atb/fare-contracts/types';
+import type {UnitMapType} from './types';
 import {getAccesses} from '@atb-as/utils';
 import {useAuthContext} from '@atb/auth';
 import {useCallback, useMemo} from 'react';

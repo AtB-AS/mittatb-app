@@ -11,7 +11,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,

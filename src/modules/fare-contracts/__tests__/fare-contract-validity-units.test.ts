@@ -1,4 +1,4 @@
-import {fareContractValidityUnits} from '@atb/fare-contracts/utils';
+import {fareContractValidityUnits} from '../utils';
 import {LoadingParams} from '@atb/loading-screen/types';
 import React from 'react';
 

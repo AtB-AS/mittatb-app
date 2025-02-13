@@ -10,15 +10,15 @@ import {
 } from '@atb/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
+import {FareContractFromTo} from './FareContractFromTo';
+import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
   userProfileCountAndName,
-} from '@atb/fare-contracts/utils';
-import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+} from '../utils';
+import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   findReferenceDataById,
@@ -26,7 +26,7 @@ import {
 } from '@atb/configuration';
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
-import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
+import {CarnetFooter} from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
 
 type Props = {fc: FareContractType};

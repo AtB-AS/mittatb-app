@@ -1,4 +1,4 @@
-import {getFareContractInfo, hasShmoBookingId} from '@atb/fare-contracts/utils';
+import {getFareContractInfo, hasShmoBookingId} from './utils';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -18,11 +18,11 @@ import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {ProductName} from '@atb/fare-contracts/components/ProductName';
-import {Description} from '@atb/fare-contracts/components/FareContractDescription';
-import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
-import {TravelInfoSectionItem} from '@atb/fare-contracts/components/TravelInfoSectionItem';
-import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
+import {ProductName} from './components/ProductName';
+import {Description} from './components/FareContractDescription';
+import {WithValidityLine} from './components/WithValidityLine';
+import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
+import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
 

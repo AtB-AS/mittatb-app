@@ -4,7 +4,7 @@ import {
   useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {ValidityStatus} from '@atb/fare-contracts/utils';
+import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';

@@ -1,5 +1,5 @@
 import {Reservation} from '@atb/ticketing';
-import type {ValidityStatus} from '@atb/fare-contracts/utils';
+import type {ValidityStatus} from './utils';
 import {FareContractType} from '@atb-as/utils';
 
 export const sortFcOrReservationByValidityAndCreation = (

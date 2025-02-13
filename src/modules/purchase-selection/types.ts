@@ -4,7 +4,7 @@ import {
   UserProfile,
   TariffZone,
 } from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 import {CustomerProfile} from '@atb/ticketing';

@@ -3,7 +3,7 @@ import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {ProductName} from '@atb/fare-contracts/components/ProductName';
+import {ProductName} from '../components/ProductName';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useTimeContext} from '@atb/time';

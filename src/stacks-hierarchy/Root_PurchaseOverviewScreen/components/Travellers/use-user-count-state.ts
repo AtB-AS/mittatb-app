@@ -1,5 +1,5 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {UserCountState} from './types';
 import {
   useSelectableUserProfiles,

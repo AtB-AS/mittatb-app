@@ -4,7 +4,7 @@ import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {fullDateTime} from '@atb/utils/date';
-import {getValidityStatus} from '@atb/fare-contracts';
+import {getValidityStatus} from '@atb/modules/fare-contracts';
 import {useThemeContext} from '@atb/theme';
 import {useTimeContext} from '@atb/time';
 import {getAccesses} from '@atb-as/utils';

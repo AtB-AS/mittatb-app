@@ -2,7 +2,7 @@ import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {ValidityStatus} from '@atb/fare-contracts/utils';
+import {ValidityStatus} from '../utils';
 import {Ticket} from '@atb/assets/svg/color/images';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {Ticket as SentTicket} from '@atb/assets/svg/mono-icons/ticketing';

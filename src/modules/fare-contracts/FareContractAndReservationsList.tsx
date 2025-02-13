@@ -1,5 +1,5 @@
 import React from 'react';
-import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
+import {FareContractOrReservation} from './FareContractOrReservation';
 import {Reservation} from '@atb/ticketing';
 import {useAnalyticsContext} from '@atb/analytics';
 import {EmptyState} from '@atb/components/empty-state';

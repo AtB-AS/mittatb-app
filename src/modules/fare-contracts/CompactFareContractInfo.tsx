@@ -10,10 +10,10 @@ import {
   useNonInspectableTokenWarning,
   userProfileCountAndName,
   useTariffZoneSummary,
-} from '@atb/fare-contracts/utils';
+} from './utils';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';
 

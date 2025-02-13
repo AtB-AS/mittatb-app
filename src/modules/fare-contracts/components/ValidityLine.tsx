@@ -2,7 +2,7 @@ import React, {ReactElement, useEffect, useRef} from 'react';
 import {Animated, Dimensions, Easing, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
-import {ValidityStatus} from '@atb/fare-contracts/utils';
+import {ValidityStatus} from '../utils';
 import {SectionSeparator} from '@atb/components/sections';
 import {useValidityLineColors} from '../use-validity-line-colors';
 import {useMobileTokenContext} from '@atb/mobile-token';

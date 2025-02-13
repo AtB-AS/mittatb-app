@@ -1,4 +1,4 @@
-import {PurchaseReservation} from '@atb/fare-contracts/PurchaseReservation';
+import {PurchaseReservation} from './PurchaseReservation';
 import React from 'react';
 import {Reservation} from '@atb/ticketing';
 import {FareContractType} from '@atb-as/utils';

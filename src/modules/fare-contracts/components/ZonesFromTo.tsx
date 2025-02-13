@@ -6,7 +6,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {TravelRightDirection} from '@atb-as/utils';
-import {BorderedFromToBox} from '@atb/fare-contracts/components/BorderedFromToBox';
+import {BorderedFromToBox} from './BorderedFromToBox';
 import dictionary from '@atb/translations/dictionary';
 
 type ZonesFromToProps = {

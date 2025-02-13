@@ -1,5 +1,5 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
-import {DetailsContent} from '@atb/fare-contracts';
+import {DetailsContent} from '@atb/modules/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -16,7 +16,7 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthContext} from '@atb/auth';
 import {ErrorBoundary} from '@atb/error-boundary';
-import {hasShmoBookingId} from '@atb/fare-contracts/utils';
+import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 

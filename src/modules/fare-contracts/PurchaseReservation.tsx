@@ -9,8 +9,8 @@ import {Linking} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
-import {getReservationStatus} from '@atb/fare-contracts/utils';
+import {WithValidityLine} from './components/WithValidityLine';
+import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type Props = {

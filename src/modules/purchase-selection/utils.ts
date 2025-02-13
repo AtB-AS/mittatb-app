@@ -6,7 +6,7 @@ import type {
 } from './types';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   type FareProductTypeConfig,
   TariffZone,

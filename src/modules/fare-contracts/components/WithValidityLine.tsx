@@ -1,13 +1,10 @@
 import {StyleSheet} from '@atb/theme';
-import {ValidityLine} from '@atb/fare-contracts/components/ValidityLine';
+import {ValidityLine} from './ValidityLine';
 import {View} from 'react-native';
 import React, {type PropsWithChildren} from 'react';
 import type {Reservation} from '@atb/ticketing';
 import {FareContractType} from '@atb-as/utils';
-import {
-  getFareContractInfo,
-  getReservationStatus,
-} from '@atb/fare-contracts/utils';
+import {getFareContractInfo, getReservationStatus} from '../utils';
 import {useTimeContext} from '@atb/time';
 import {useAuthContext} from '@atb/auth';
 import {

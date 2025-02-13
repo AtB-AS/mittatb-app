@@ -9,7 +9,7 @@ import {
 } from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
