@@ -37,7 +37,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;

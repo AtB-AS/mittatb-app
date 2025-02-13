@@ -27,7 +27,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;

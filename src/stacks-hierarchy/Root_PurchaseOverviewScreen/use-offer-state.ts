@@ -11,7 +11,7 @@ import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
-import {PurchaseSelectionType} from '@atb/purchase-selection';
+import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;

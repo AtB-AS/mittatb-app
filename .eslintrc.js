@@ -2,7 +2,7 @@ const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = 'eslint-rules/';
 
 const restrictedImportComponents = {
-  group: ['@atb/components/*/', '@atb/purchase-selection/', '@atb/modules/*/'],
+  group: ['@atb/components/*/', '@atb/modules/*/'],
   message: 'Not allowed to import without going through their index file',
 };
 const restrictedImportAuth = {

@@ -4,7 +4,7 @@ import {UserCountState} from './types';
 import {
   useSelectableUserProfiles,
   type PurchaseSelectionType,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];

@@ -34,7 +34,7 @@ import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;

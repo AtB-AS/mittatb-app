@@ -5,4 +5,6 @@ export {
   getSvgForMostCriticalSituationOrNotice,
   getSituationOrNoticeA11yLabel,
   isSituationValidAtDate,
+  getMsgTypeForMostCriticalSituationOrNotice,
+  toMostCriticalStatus,
 } from './utils';
