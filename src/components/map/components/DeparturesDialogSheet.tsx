@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -40,6 +40,7 @@ export const DeparturesDialogSheet = ({
   navigateToTripSearch,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useBottomSheetStyles();
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
@@ -81,6 +82,7 @@ export const DeparturesDialogSheet = ({
               stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, target);
             }}
+            backgroundColor={theme.color.background.neutral[1]}
           />
         );
       }
