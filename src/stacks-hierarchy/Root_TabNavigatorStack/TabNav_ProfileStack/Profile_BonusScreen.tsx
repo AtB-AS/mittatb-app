@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -29,6 +29,8 @@ export const Profile_BonusScreen = () => {
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
+    useState<number>();
 
   const currentPoints = 5; // TODO: get actual value when available
 
@@ -49,7 +51,7 @@ export const Profile_BonusScreen = () => {
                 </ThemeText>
                 <ThemeIcon svg={StarFill} size="large" />
               </View>
-              <ThemeText typography="body__secondary">
+              <ThemeText typography="body__secondary" color="secondary">
                 {t(BonusProfileTexts.yourBonusPoints)}
               </ThemeText>
             </View>
@@ -65,57 +67,64 @@ export const Profile_BonusScreen = () => {
           </View>
         )}
         <ContentHeading text={t(BonusProfileTexts.spendPoints.heading)} />
-        {bonusProducts?.map(
-          (bonusProduct) =>
-            bonusProduct.isActive && (
-              <Section>
-                <ExpandableSectionItem
-                  text={
-                    getTextForLanguage(
-                      bonusProduct.productDescription.title,
+        <View style={styles.bonusProductsContainer}>
+          {bonusProducts?.map((bonusProduct, index) => (
+            <Section>
+              <ExpandableSectionItem
+                expanded={currentlyOpenBonusProduct === index}
+                onPress={() => {
+                  setCurrentlyOpenBonusProduct(index);
+                }}
+                text={
+                  getTextForLanguage(
+                    bonusProduct.productDescription.title,
+                    language,
+                  ) ?? ''
+                }
+                showIconText={false}
+                prefix={
+                  <BrandingImage
+                    logoUrl={
+                      mobilityOperators?.find(
+                        (op) => op.id === bonusProduct.operatorId,
+                      )?.brandAssets?.brandImageUrl
+                    }
+                    logoSize={theme.typography['heading--big'].fontSize}
+                    style={styles.logo}
+                  />
+                }
+                suffix={
+                  <BonusPriceTag
+                    price={bonusProduct.price.amount}
+                    style={styles.bonusPriceTag}
+                  />
+                }
+                expandContent={
+                  <ThemeText
+                    isMarkdown={true}
+                    typography="body__secondary"
+                    color="secondary"
+                  >
+                    {getTextForLanguage(
+                      bonusProduct.productDescription.description,
                       language,
-                    ) ?? ''
-                  }
-                  showIconText={false}
-                  prefix={
-                    <BrandingImage
-                      logoUrl={
-                        mobilityOperators?.find(
-                          (op) => op.id === bonusProduct.operatorId,
-                        )?.brandAssets?.brandImageUrl
-                      }
-                      logoSize={theme.typography['heading--big'].fontSize}
-                      style={styles.logo}
-                    />
-                  }
-                  suffix={
-                    <BonusPriceTag
-                      price={bonusProduct.price.amount}
-                      style={styles.bonusPriceTag}
-                    />
-                  }
-                  expandContent={
-                    <ThemeText isMarkdown={true}>
-                      {getTextForLanguage(
-                        bonusProduct.productDescription.description,
-                        language,
-                      ) ?? ''}
-                    </ThemeText>
-                  }
-                />
-              </Section>
-            ),
-        )}
+                    ) ?? ''}
+                  </ThemeText>
+                }
+              />
+            </Section>
+          ))}
+        </View>
         <ContentHeading text={t(BonusProfileTexts.readMore.heading)} />
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
               <ThemedCityBike />
-              <View style={{flex: 1}}>
+              <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
                   {t(BonusProfileTexts.readMore.info.title)}
                 </ThemeText>
-                <ThemeText typography="body__secondary">
+                <ThemeText typography="body__secondary" color="secondary">
                   {t(BonusProfileTexts.readMore.info.description)}
                 </ThemeText>
               </View>
@@ -145,12 +154,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
+  bonusProductsContainer: {
+    gap: theme.spacing.medium,
+  },
   bonusPriceTag: {
-    marginRight: theme.spacing.small,
+    marginHorizontal: theme.spacing.small,
   },
   logo: {
     marginRight: theme.spacing.small,
     borderRadius: theme.border.radius.small,
     overflow: 'hidden',
+  },
+  bonusProgramDescription: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
 }));
