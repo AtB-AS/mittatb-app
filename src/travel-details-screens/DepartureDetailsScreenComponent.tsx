@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useRef, useState} from 'react';
+import React, {RefObject, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -72,6 +72,8 @@ import {useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {getFavoriteIcon} from '@atb/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
+import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {useFocusEffect} from '@react-navigation/native';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -107,6 +109,8 @@ export const DepartureDetailsScreenComponent = ({
 
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
+
+  const {requestReview} = useInAppReviewFlow();
 
   const [
     {
@@ -211,6 +215,8 @@ export const DepartureDetailsScreenComponent = ({
     onPressTravelAid();
   };
 
+  const shouldShowRequestReview = useRef(false);
+
   const handleMapButtonPress = () => {
     if (!mapData) return;
     if (vehiclePosition) {
@@ -221,6 +227,7 @@ export const DepartureDetailsScreenComponent = ({
         subMode: subMode,
       });
     }
+    shouldShowRequestReview.current = true;
     onPressDetailsMap({
       legs: mapData.mapLegs,
       fromPlace: mapData.start,
@@ -230,6 +237,15 @@ export const DepartureDetailsScreenComponent = ({
       subMode: subMode,
     });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldShowRequestReview.current) {
+        shouldShowLive && requestReview();
+        shouldShowRequestReview.current = false;
+      }
+    }, [requestReview, shouldShowLive]),
+  );
 
   return (
     <View style={styles.container}>

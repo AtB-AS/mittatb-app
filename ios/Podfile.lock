@@ -2111,6 +2111,8 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.11.0):
     - React-Core
+  - react-native-in-app-review (4.3.3):
+    - React-Core
   - react-native-kettle-module (1.2.0):
     - glog
     - KettleKit (= 1.3.1)
@@ -2441,6 +2443,7 @@ DEPENDENCIES:
   - "react-native-device-brightness (from `../node_modules/@adrianso/react-native-device-brightness`)"
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-kettle-module (from `../node_modules/react-native-kettle-module`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2610,6 +2613,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
+  react-native-in-app-review:
+    :path: "../node_modules/react-native-in-app-review"
   react-native-kettle-module:
     :path: "../node_modules/react-native-kettle-module"
   react-native-pager-view:
@@ -2801,6 +2806,7 @@ SPEC CHECKSUMS:
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-geolocation: 47fbfaa7d5c6fa4049e942eef41300030d49cd5e
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
+  react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-kettle-module: b25a06da9c54d8c1422f189ce2c7819b3689b5a4
   react-native-pager-view: ce73434826e4dca60108c3b3a30d83792ff28b0c
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
@@ -2849,7 +2855,7 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
-  TokenStateReactNativeLib: cb1c6fc96795046bd9b69445804dbbc0010828c0
+  TokenStateReactNativeLib: 7d0ff81bceaa26361ad7fc5e90cf161eb1a4b921
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   VisualCodeModeliOSLib: 826875ce13fe87af1517d5d730a23181ca3b21be
   VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948

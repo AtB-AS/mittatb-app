@@ -133,6 +133,10 @@ export const toggleSpecifications = [
     name: 'isVehiclesInMapEnabled',
     remoteConfigKey: 'enable_vehicles_in_map',
   },
+  {
+    name: 'isInAppReviewEnabled',
+    remoteConfigKey: 'enable_in_app_review',
+  },
 ] as const satisfies readonly FeatureToggleSpecification[];
 
 /**
