@@ -2,7 +2,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {DepartureSearchTime} from './types';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -36,6 +36,8 @@ type Props = PlaceScreenParams & {
   onPressClose?: () => void;
 };
 
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
+
 export const PlaceScreenComponent = ({
   place,
   selectedQuayId,
@@ -50,6 +52,7 @@ export const PlaceScreenComponent = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
+  const themeColor = getThemeColor(theme);
 
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
@@ -144,6 +147,7 @@ export const PlaceScreenComponent = ({
             testID="departuresContentView"
             stopPlace={place}
             mode={mode}
+            backgroundColor={themeColor}
           />
         ) : (
           <StopPlacesView
@@ -160,6 +164,7 @@ export const PlaceScreenComponent = ({
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
             mode={mode}
+            backgroundColor={themeColor}
           />
         )}
       </View>
@@ -181,7 +186,7 @@ export const PlaceScreenComponent = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   closeButton: {

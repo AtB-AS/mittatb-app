@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
@@ -21,6 +21,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
 
   async function openVippsUrl(vippsUrl: string) {
     try {
@@ -86,6 +87,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
                 accessibilityRole="link"
                 text={t(TicketingTexts.reservation.goToVipps)}
                 mode="tertiary"
+                backgroundColor={theme.color.background.neutral[0]}
               />
             )}
         </GenericSectionItem>

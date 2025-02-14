@@ -6,6 +6,7 @@ import React from 'react';
 import {View, ViewProps} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
+import type {ContrastColor} from '@atb-as/theme';
 
 type PaginatedDetailsHeader = ViewProps & {
   page: number;
@@ -14,6 +15,7 @@ type PaginatedDetailsHeader = ViewProps & {
   showPagination?: boolean;
   currentDate?: string | Date;
   isTripCancelled?: boolean;
+  backgroundColor: ContrastColor;
 };
 export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   page,
@@ -23,6 +25,7 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   currentDate,
   showPagination = true,
   isTripCancelled = false,
+  backgroundColor,
 }) => {
   const styles = usePaginateStyles();
   const {t, language} = useTranslation();
@@ -44,6 +47,7 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               text={t(PaginationTexts.previous.label)}
               testID="previousTripButton"
               accessibilityHint={t(PaginationTexts.previous.a11yHint)}
+              backgroundColor={backgroundColor}
             />
           </View>
 
@@ -67,6 +71,7 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               text={t(PaginationTexts.next.label)}
               testID="nextTripButton"
               accessibilityHint={t(PaginationTexts.next.a11yHint)}
+              backgroundColor={backgroundColor}
             />
           </View>
         </View>

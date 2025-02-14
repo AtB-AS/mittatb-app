@@ -16,6 +16,7 @@ import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesD
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useAnalyticsContext} from '@atb/analytics';
+import type {ContrastColor} from '@atb-as/theme';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -38,6 +39,7 @@ type Props = {
   testID?: string;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
+  backgroundColor: ContrastColor;
 } & (
   | {
       mode: 'Map';
@@ -66,6 +68,7 @@ export const StopPlacesView = (props: Props) => {
     testID,
     mode,
     addedFavoritesVisibleOnDashboard,
+    backgroundColor,
   } = props;
   const styles = useStyles();
   const {favoriteDepartures} = useFavoritesContext();
@@ -204,6 +207,7 @@ export const StopPlacesView = (props: Props) => {
                 <DateSelection
                   searchTime={searchTime}
                   setSearchTime={setSearchTime}
+                  backgroundColor={backgroundColor}
                 />
               )}
             </View>

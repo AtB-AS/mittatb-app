@@ -20,15 +20,18 @@ import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {DepartureDateOptions, DepartureSearchTime} from '../types';
 import {DatePickerSheet} from '@atb/date-picker';
+import type {ContrastColor} from '@atb-as/theme';
 
 type DateSelectionProps = {
   searchTime: DepartureSearchTime;
   setSearchTime: (searchTime: DepartureSearchTime) => void;
+  backgroundColor: ContrastColor;
 };
 
 export const DateSelection = ({
   searchTime,
   setSearchTime,
+  backgroundColor,
 }: DateSelectionProps): JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -97,6 +100,7 @@ export const DateSelection = ({
             : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
         }
         testID="previousDayButton"
+        backgroundColor={backgroundColor}
       />
       <Button
         expanded={false}
@@ -108,6 +112,7 @@ export const DateSelection = ({
         rightIcon={{svg: DateIcon}}
         testID="setDateButton"
         ref={onCloseFocusRef}
+        backgroundColor={backgroundColor}
       />
       <Button
         expanded={false}
@@ -124,6 +129,7 @@ export const DateSelection = ({
         rightIcon={{svg: ArrowRight}}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
         testID="nextDayButton"
+        backgroundColor={backgroundColor}
       />
     </View>
   );

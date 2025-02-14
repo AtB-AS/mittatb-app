@@ -13,6 +13,7 @@ import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
+import type {ContrastColor} from '@atb-as/theme';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -32,6 +33,7 @@ export type QuayViewProps = {
   stopPlace: StopPlace;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
+  backgroundColor: ContrastColor;
 };
 
 export function QuayView({
@@ -45,6 +47,7 @@ export function QuayView({
   stopPlace,
   addedFavoritesVisibleOnDashboard,
   mode,
+  backgroundColor,
 }: QuayViewProps) {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -108,6 +111,7 @@ export function QuayView({
               <DateSelection
                 searchTime={searchTime}
                 setSearchTime={setSearchTime}
+                backgroundColor={backgroundColor}
               />
             </View>
           ) : null}

@@ -1,7 +1,7 @@
 import {shadows} from '@atb/components/map';
 import {ThemeText} from '@atb/components/text';
 import {Animated, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -38,6 +38,8 @@ export type SnackbarProps = {
   customVisibleDurationMS?: number;
 };
 
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
+
 // if position is ever toggled, it starts using two SnackbarInstances, one for top and one for bottom
 // one of them is always disabled
 export const Snackbar = (snackbarProps: SnackbarProps) => (
@@ -68,6 +70,8 @@ const SnackbarInstance = ({
 }: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const themeColor = getThemeColor(theme);
 
   const stableTextContent = useStableValue(textContent, isDisabled); // avoid triggering useEffects if no text has been changed
 
@@ -133,6 +137,7 @@ const SnackbarInstance = ({
                     hideSnackbar();
                   }
                 }}
+                backgroundColor={themeColor}
               />
             )}
 
@@ -174,7 +179,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   snackbar: {
     ...shadows,
     ...flowHorizontallyAndCenterAlignVertically,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: getThemeColor(theme).background,
     width: '88%',
     paddingLeft: theme.spacing.large,
     paddingRight: theme.spacing.xSmall,
