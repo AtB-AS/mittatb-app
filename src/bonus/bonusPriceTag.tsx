@@ -2,6 +2,7 @@ import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
+import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React, {ComponentProps} from 'react';
 import {View} from 'react-native';
 
@@ -10,11 +11,16 @@ type Props = ComponentProps<typeof View> & {
 };
 export const BonusPriceTag = ({price, ...props}: Props) => {
   const styles = useStyles();
+  const {t} = useTranslation();
 
   return (
     <View {...props} style={[styles.container, props.style]}>
       <ThemeText>{price}</ThemeText>
-      <ThemeIcon svg={StarFill} size="small" />
+      <ThemeIcon
+        svg={StarFill}
+        size="small"
+        accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+      />
     </View>
   );
 };

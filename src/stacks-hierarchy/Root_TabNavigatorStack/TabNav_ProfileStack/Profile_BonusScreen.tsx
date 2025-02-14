@@ -6,7 +6,7 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
-  BonusProfileTexts,
+  BonusProgramTexts,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
@@ -37,7 +37,7 @@ export const Profile_BonusScreen = () => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(BonusProfileTexts.header.title),
+        title: t(BonusProgramTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
     >
@@ -49,10 +49,14 @@ export const Profile_BonusScreen = () => {
                 <ThemeText typography="body__primary--jumbo--bold">
                   {currentPoints}
                 </ThemeText>
-                <ThemeIcon svg={StarFill} size="large" />
+                <ThemeIcon
+                  svg={StarFill}
+                  size="large"
+                  accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+                />
               </View>
               <ThemeText typography="body__secondary" color="secondary">
-                {t(BonusProfileTexts.yourBonusPoints)}
+                {t(BonusProgramTexts.yourBonusPoints)}
               </ThemeText>
             </View>
             <ThemedCityBike />
@@ -62,11 +66,11 @@ export const Profile_BonusScreen = () => {
           <View style={styles.noAccount}>
             <MessageInfoBox
               type="warning"
-              message={t(BonusProfileTexts.noProfile)}
+              message={t(BonusProgramTexts.noProfile)}
             />
           </View>
         )}
-        <ContentHeading text={t(BonusProfileTexts.spendPoints.heading)} />
+        <ContentHeading text={t(BonusProgramTexts.spendPoints.heading)} />
         <View style={styles.bonusProductsContainer}>
           {bonusProducts?.map(
             (bonusProduct, index) =>
@@ -118,17 +122,17 @@ export const Profile_BonusScreen = () => {
               ),
           )}
         </View>
-        <ContentHeading text={t(BonusProfileTexts.readMore.heading)} />
+        <ContentHeading text={t(BonusProgramTexts.readMore.heading)} />
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
               <ThemedCityBike />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
-                  {t(BonusProfileTexts.readMore.info.title)}
+                  {t(BonusProgramTexts.readMore.info.title)}
                 </ThemeText>
                 <ThemeText typography="body__secondary" color="secondary">
-                  {t(BonusProfileTexts.readMore.info.description)}
+                  {t(BonusProgramTexts.readMore.info.description)}
                 </ThemeText>
               </View>
             </View>

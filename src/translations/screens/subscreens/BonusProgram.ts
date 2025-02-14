@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
-const BonusProfileTexts = {
+const BonusProgramTexts = {
+  bonuspoints: _('Bonuspoeng', 'Bonus points', 'Bonuspoeng'),
   header: {
     title: _('Bonus', 'Bonus', 'Bonus'),
   },
@@ -32,4 +33,4 @@ const BonusProfileTexts = {
     },
   },
 };
-export default BonusProfileTexts;
+export default BonusProgramTexts;
