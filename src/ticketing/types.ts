@@ -82,7 +82,7 @@ export const FareContract = z.object({
   totalTaxAmount: z.string(),
   travelRights: z.array(TravelRight).nonempty(),
   version: z.string(),
-  purchasedBy: z.string(),
+  purchasedBy: z.string().optional(),
 });
 export type FareContract = z.infer<typeof FareContract>;
 
