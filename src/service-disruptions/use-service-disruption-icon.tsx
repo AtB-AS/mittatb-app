@@ -6,7 +6,7 @@ import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisrupti
 import {
   GlobalMessageContextEnum,
   useGlobalMessagesContext,
-} from '@atb/global-messages';
+} from '@atb/modules/global-messages';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';

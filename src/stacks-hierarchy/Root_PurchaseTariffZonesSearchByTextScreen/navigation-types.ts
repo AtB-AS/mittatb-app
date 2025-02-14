@@ -1,4 +1,4 @@
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type Root_PurchaseTariffZonesSearchByTextScreenParams = {
   selection: PurchaseSelectionType;

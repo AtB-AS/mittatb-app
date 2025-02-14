@@ -7,7 +7,7 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
-import {SituationOrNoticeIcon} from '@atb/situations';
+import {SituationOrNoticeIcon} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,

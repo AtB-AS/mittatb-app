@@ -6,7 +6,7 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   selection: PurchaseSelectionType;

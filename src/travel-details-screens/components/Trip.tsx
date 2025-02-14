@@ -6,7 +6,7 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {AxiosError} from 'axios';
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
@@ -35,7 +35,10 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
@@ -44,7 +47,9 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {useFocusEffect} from '@react-navigation/native';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -69,6 +74,7 @@ export const Trip: React.FC<TripProps> = ({
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfigContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
+  const {requestReview} = useInAppReviewFlow();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -108,6 +114,17 @@ export const Trip: React.FC<TripProps> = ({
   const tripHasLegsWeCantSellTicketsFor = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modesWeSellTicketsFor,
+  );
+
+  const shouldShowRequestReview = useRef(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldShowRequestReview.current) {
+        requestReview();
+        shouldShowRequestReview.current = false;
+      }
+    }, [requestReview]),
   );
 
   return (
@@ -177,7 +194,8 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) => {
+                        shouldShowRequestReview.current = true;
                         onPressDetailsMap({
                           legs: mapData.mapLegs,
                           fromPlace: mapData.start,
@@ -185,7 +203,8 @@ export const Trip: React.FC<TripProps> = ({
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
-                        })
+                        });
+                      }
                     : undefined
                 }
                 onPressDeparture={onPressDeparture}
@@ -260,6 +279,7 @@ function getInterchangeDetails(
   }
   return undefined;
 }
+
 function translatedError(error: AxiosError, t: TranslateFunction): string {
   const errorType = getAxiosErrorType(error);
   switch (errorType) {
