@@ -68,52 +68,55 @@ export const Profile_BonusScreen = () => {
         )}
         <ContentHeading text={t(BonusProfileTexts.spendPoints.heading)} />
         <View style={styles.bonusProductsContainer}>
-          {bonusProducts?.map((bonusProduct, index) => (
-            <Section>
-              <ExpandableSectionItem
-                expanded={currentlyOpenBonusProduct === index}
-                onPress={() => {
-                  setCurrentlyOpenBonusProduct(index);
-                }}
-                text={
-                  getTextForLanguage(
-                    bonusProduct.productDescription.title,
-                    language,
-                  ) ?? ''
-                }
-                showIconText={false}
-                prefix={
-                  <BrandingImage
-                    logoUrl={
-                      mobilityOperators?.find(
-                        (op) => op.id === bonusProduct.operatorId,
-                      )?.brandAssets?.brandImageUrl
+          {bonusProducts?.map(
+            (bonusProduct, index) =>
+              bonusProduct.isActive && (
+                <Section>
+                  <ExpandableSectionItem
+                    expanded={currentlyOpenBonusProduct === index}
+                    onPress={() => {
+                      setCurrentlyOpenBonusProduct(index);
+                    }}
+                    text={
+                      getTextForLanguage(
+                        bonusProduct.productDescription.title,
+                        language,
+                      ) ?? ''
                     }
-                    logoSize={theme.typography['heading--big'].fontSize}
-                    style={styles.logo}
+                    showIconText={false}
+                    prefix={
+                      <BrandingImage
+                        logoUrl={
+                          mobilityOperators?.find(
+                            (op) => op.id === bonusProduct.operatorId,
+                          )?.brandAssets?.brandImageUrl
+                        }
+                        logoSize={theme.typography['heading--big'].fontSize}
+                        style={styles.logo}
+                      />
+                    }
+                    suffix={
+                      <BonusPriceTag
+                        price={bonusProduct.price.amount}
+                        style={styles.bonusPriceTag}
+                      />
+                    }
+                    expandContent={
+                      <ThemeText
+                        isMarkdown={true}
+                        typography="body__secondary"
+                        color="secondary"
+                      >
+                        {getTextForLanguage(
+                          bonusProduct.productDescription.description,
+                          language,
+                        ) ?? ''}
+                      </ThemeText>
+                    }
                   />
-                }
-                suffix={
-                  <BonusPriceTag
-                    price={bonusProduct.price.amount}
-                    style={styles.bonusPriceTag}
-                  />
-                }
-                expandContent={
-                  <ThemeText
-                    isMarkdown={true}
-                    typography="body__secondary"
-                    color="secondary"
-                  >
-                    {getTextForLanguage(
-                      bonusProduct.productDescription.description,
-                      language,
-                    ) ?? ''}
-                  </ThemeText>
-                }
-              />
-            </Section>
-          ))}
+                </Section>
+              ),
+          )}
         </View>
         <ContentHeading text={t(BonusProfileTexts.readMore.heading)} />
         <Section>
