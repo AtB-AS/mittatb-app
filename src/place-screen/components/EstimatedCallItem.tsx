@@ -32,7 +32,7 @@ import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
-} from '@atb/situations/utils';
+} from '@atb/modules/situations';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {DepartureTime, EstimatedCallInfo} from '@atb/components/estimated-call';
 import {ThemeIcon} from '@atb/components/theme-icon';

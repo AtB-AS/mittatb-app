@@ -15,7 +15,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const identity = (s: string) => s;
 export const Profile_LanguageScreen = () => {

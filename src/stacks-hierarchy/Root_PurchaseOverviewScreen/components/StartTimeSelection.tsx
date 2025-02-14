@@ -7,7 +7,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 import {DatePickerSheet} from '@atb/date-picker';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';

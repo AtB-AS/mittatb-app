@@ -18,7 +18,10 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
+import {
+  isSituationValidAtDate,
+  SituationSectionItem,
+} from '@atb/modules/situations';
 import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 

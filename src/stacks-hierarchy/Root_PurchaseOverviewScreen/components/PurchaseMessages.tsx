@@ -1,8 +1,8 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {useOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 
 export type PurchaseWarningsProps = {
   requiresTokenOnMobile: boolean;

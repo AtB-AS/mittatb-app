@@ -26,7 +26,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
   useSelectableTariffZones,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type Props = {
   selection: PurchaseSelectionType;

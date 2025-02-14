@@ -42,7 +42,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
-} from '@atb/situations/utils';
+} from '@atb/modules/situations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import type {Mode, Statuses} from '@atb/theme';
 

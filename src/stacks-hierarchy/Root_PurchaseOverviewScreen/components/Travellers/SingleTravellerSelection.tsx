@@ -6,7 +6,7 @@ import {
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {RadioGroupSection} from '@atb/components/sections';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import type {UserCountState} from './types';
 
 export function SingleTravellerSelection({

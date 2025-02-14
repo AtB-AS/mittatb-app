@@ -1,6 +1,6 @@
 import InAppReview from 'react-native-in-app-review';
 import {useAnalyticsContext} from '@atb/analytics';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useCallback} from 'react';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {storage} from '@atb/storage';
@@ -73,17 +73,15 @@ export function useInAppReviewFlow() {
           // iOS:
           // The review prompt was successfully triggered. The API does not provide
           // feedback on whether the user left a review or closed the prompt.
-          if (hasFlowFinishedSuccessfully) {
-            analytics.logEvent(
-              'In App Review',
-              'Review prompt launched successfully',
-            );
-          } else {
-            analytics.logEvent(
-              'In App Review',
-              'In-app review failed to be presented',
-            );
-          }
+          analytics.logEvent(
+            'In App Review',
+            'Review prompt launched successfully',
+          );
+        } else {
+          analytics.logEvent(
+            'In App Review',
+            'In-app review failed to be presented',
+          );
         }
       } catch (error) {
         // Log and report any errors encountered during the in-app review request.

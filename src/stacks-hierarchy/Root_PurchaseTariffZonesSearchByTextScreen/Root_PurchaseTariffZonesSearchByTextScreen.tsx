@@ -28,7 +28,7 @@ import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {
   usePurchaseSelectionBuilder,
   useSelectableTariffZones,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;

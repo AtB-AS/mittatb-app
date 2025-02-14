@@ -35,7 +35,10 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
@@ -44,9 +47,9 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
 import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type TripProps = {
   tripPattern: TripPattern;

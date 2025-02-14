@@ -8,7 +8,10 @@ import React, {useMemo, useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ButtonModes, HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
 
