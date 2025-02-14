@@ -1,10 +1,15 @@
+import React from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
   Section,
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {BonusProfileTexts, useTranslation} from '@atb/translations';
+import {
+  BonusProfileTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
@@ -16,12 +21,14 @@ import {BonusPriceTag} from '@atb/bonus';
 import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
 
 export const Profile_BonusScreen = () => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
 
   const currentPoints = 5; // TODO: get actual value when available
 
@@ -58,25 +65,47 @@ export const Profile_BonusScreen = () => {
           </View>
         )}
         <ContentHeading text={t(BonusProfileTexts.spendPoints.heading)} />
-        <Section>
-          <ExpandableSectionItem
-            text={t(BonusProfileTexts.spendPoints.bikeRental.title)}
-            showIconText={false}
-            prefix={
-              <BrandingImage
-                logoUrl="https://storage.googleapis.com/atb-mobility-platform-staging.appspot.com/operator-logos/trondheim-bysykkel.png"
-                logoSize={theme.typography['heading--big'].fontSize}
-                style={styles.logo}
-              />
-            }
-            suffix={<BonusPriceTag price={5} style={styles.bonusPriceTag} />}
-            expandContent={
-              <ThemeText isMarkdown={true}>
-                {t(BonusProfileTexts.spendPoints.bikeRental.description)}
-              </ThemeText>
-            }
-          />
-        </Section>
+        {bonusProducts?.map(
+          (bonusProduct) =>
+            bonusProduct.isActive && (
+              <Section>
+                <ExpandableSectionItem
+                  text={
+                    getTextForLanguage(
+                      bonusProduct.productDescription.title,
+                      language,
+                    ) ?? ''
+                  }
+                  showIconText={false}
+                  prefix={
+                    <BrandingImage
+                      logoUrl={
+                        mobilityOperators?.find(
+                          (op) => op.id === bonusProduct.operatorId,
+                        )?.brandAssets?.brandImageUrl
+                      }
+                      logoSize={theme.typography['heading--big'].fontSize}
+                      style={styles.logo}
+                    />
+                  }
+                  suffix={
+                    <BonusPriceTag
+                      price={bonusProduct.price.amount}
+                      style={styles.bonusPriceTag}
+                    />
+                  }
+                  expandContent={
+                    <ThemeText isMarkdown={true}>
+                      {getTextForLanguage(
+                        bonusProduct.productDescription.description,
+                        language,
+                      ) ?? ''}
+                    </ThemeText>
+                  }
+                />
+              </Section>
+            ),
+        )}
         <ContentHeading text={t(BonusProfileTexts.readMore.heading)} />
         <Section>
           <GenericSectionItem>
