@@ -14,12 +14,11 @@ import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
-import {TransitionPresets} from '@react-navigation/stack';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import phone from 'phone';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -86,8 +85,7 @@ export const Root_LoginPhoneInputScreen = ({
       <FullScreenHeader
         leftButton={{
           type:
-            params?.transitionPreset ===
-            TransitionPresets.ModalSlideFromBottomIOS
+            params?.transitionOverride === 'slide-from-bottom'
               ? 'close'
               : 'back',
         }}

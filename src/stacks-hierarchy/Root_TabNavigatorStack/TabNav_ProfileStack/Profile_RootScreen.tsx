@@ -41,9 +41,8 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
-import {TransitionPresets} from '@react-navigation/stack';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -204,8 +203,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   } else if (enable_vipps_login) {
                     navigation.navigate('Root_LoginOptionsScreen', {
                       showGoBack: true,
-                      transitionPreset:
-                        TransitionPresets.ModalSlideFromBottomIOS,
+                      transitionOverride: 'slide-from-bottom',
                     });
                   } else {
                     navigation.navigate('Root_LoginPhoneInputScreen', {});

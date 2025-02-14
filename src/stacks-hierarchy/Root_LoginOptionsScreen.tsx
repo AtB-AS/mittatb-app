@@ -24,10 +24,9 @@ import queryString from 'query-string';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useOnboardingContext} from '@atb/onboarding';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {closeInAppBrowseriOS, openInAppBrowser} from '@atb/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -39,7 +38,7 @@ export const Root_LoginOptionsScreen = ({
   route: {params},
 }: Props) => {
   const showGoBack = params?.showGoBack;
-  const transitionPreset = params?.transitionPreset;
+  const transitionPreset = params?.transitionOverride;
 
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -150,9 +149,7 @@ export const Root_LoginOptionsScreen = ({
           showGoBack
             ? {
                 type:
-                  transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
-                    ? 'close'
-                    : 'back',
+                  transitionPreset === 'slide-from-bottom' ? 'close' : 'back',
               }
             : undefined
         }

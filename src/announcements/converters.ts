@@ -7,9 +7,9 @@ import {
 } from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
-import {AppPlatformType} from '@atb/global-messages/types';
+import {AppPlatformType} from '@atb/modules/global-messages';
 import {Platform} from 'react-native';
-import {mapToRules} from '@atb/rule-engine';
+import {mapToRules} from '@atb/modules/rule-engine';
 
 export const mapToAnnouncements = (
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<AnnouncementRaw>[],

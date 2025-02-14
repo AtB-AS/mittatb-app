@@ -2,7 +2,7 @@ import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
 import {useThemeContext} from '@atb/theme';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type ProductSelectionProps = {
   selection: PurchaseSelectionType;

@@ -3,7 +3,7 @@ import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {StyleProp, ViewStyle} from 'react-native';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type SelectionProps = {
   selection: PurchaseSelectionType;

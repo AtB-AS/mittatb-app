@@ -1,5 +1,5 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
-import {StackScreenProps, TransitionPreset} from '@react-navigation/stack';
+import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
@@ -9,7 +9,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -149,13 +149,17 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
 export type CustomScreenParams = {
-  transitionPreset?: TransitionPreset;
+  /**
+   * Parameter which can be used to override the transition specified in the
+   * stack navigator.
+   */
+  transitionOverride?: 'slide-from-right' | 'slide-from-bottom';
 };
 
 /**
  * This type is meant to be used on every stack params specification. It both:
  * - Checks that each key in the stack param list ends with "Screen" or "Stack"
- * - Adds the CustomScreenParams to the mapped value type., which makes it
+ * - Adds the CustomScreenParams to the mapped value type, which makes it
  *   possible to set transition when navigating.
  */
 export type StackParams<

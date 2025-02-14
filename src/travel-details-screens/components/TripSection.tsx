@@ -8,7 +8,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,

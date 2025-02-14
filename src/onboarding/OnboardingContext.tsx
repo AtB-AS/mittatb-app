@@ -18,15 +18,15 @@ import {
   onboardingSectionsInPrioritizedOrder,
 } from '@atb/onboarding';
 import {ShouldShowArgsType} from '@atb/onboarding/types';
-import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
-import {useNotificationsContext} from '@atb/notifications';
+import {useHasFareContractWithActivatedNotification} from '@atb/modules/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {AuthStateChangeListenerCallback, useAuthContext} from '@atb/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type OnboardingState = {
   isLoading: boolean;

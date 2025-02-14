@@ -25,7 +25,7 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useOnPushNotificationOpened} from '@atb/notifications';
+import {useOnPushNotificationOpened} from '@atb/modules/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow, useOnboardingNavigation} from '@atb/onboarding';

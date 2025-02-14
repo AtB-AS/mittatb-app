@@ -1,4 +1,4 @@
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 
 export type UserCountState = {
   userProfilesWithCount: UserProfileWithCount[];

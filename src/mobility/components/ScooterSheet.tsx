@@ -21,7 +21,7 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from './VehicleCard';
 
 type Props = {
