@@ -1,5 +1,5 @@
 import React from 'react';
-import {FareContract} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -14,7 +14,7 @@ import {getFareContractInfo} from '../utils';
 import {useMobileTokenContext} from '@atb/mobile-token';
 
 type Props = {
-  fareContract: FareContract;
+  fareContract: FareContractType;
 };
 
 export const FareContractShmoHeaderSectionItem = ({
