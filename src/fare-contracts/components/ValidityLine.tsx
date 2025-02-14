@@ -125,7 +125,7 @@ export const LineWithVerticalBars = ({
 const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
   const animatedOffset = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    if (!animate) return;
+    if (!animate) return animatedOffset.stopAnimation();
     return Animated.loop(
       Animated.timing(animatedOffset, {
         toValue: 1,
