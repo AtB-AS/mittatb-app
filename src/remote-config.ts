@@ -51,6 +51,7 @@ export type RemoteConfig = {
   enable_vehicle_operator_logo: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
+  enable_in_app_review: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
@@ -58,7 +59,6 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
-  mapbox_sprite_url: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -124,6 +124,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vehicle_operator_logo: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
+  enable_in_app_review: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
@@ -131,7 +132,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
-  mapbox_sprite_url: '',
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -277,6 +277,9 @@ export function getConfig(): RemoteConfig {
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
+  const enable_in_app_review =
+    values['enable_in_app_review']?.asBoolean() ??
+    defaultRemoteConfig.enable_in_app_review;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -298,9 +301,6 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
-  const mapbox_sprite_url =
-    values['mapbox_sprite_url']?.asString() ??
-    defaultRemoteConfig.mapbox_sprite_url;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -388,6 +388,7 @@ export function getConfig(): RemoteConfig {
     enable_vehicle_operator_logo,
     enable_vehicles_in_map,
     enable_vipps_login,
+    enable_in_app_review,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
@@ -395,7 +396,6 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
-    mapbox_sprite_url,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,

@@ -29,8 +29,8 @@ struct WidgetViewModel {
         departureGroup?.lineInfo
     }
 
-    private var lineName: String? {
-        entry.favouriteDeparture?.lineName ?? NSLocalizedString("all_variations", comment: "")
+    private var frontText: String? {
+        entry.favouriteDeparture?.destinationDisplay?.frontText ?? NSLocalizedString("all_variations", comment: "")
     }
 
     private var lineNumber: String? {
@@ -89,11 +89,11 @@ struct WidgetViewModel {
     }
 
     var lineDetails: String? {
-        guard let lineName = lineName, let lineNumber = lineNumber else {
+        guard let frontText = frontText, let lineNumber = lineNumber else {
             return nil
         }
 
-        return "\(lineNumber) \(lineName)"
+        return "\(lineNumber) \(frontText)"
     }
 
     var transportModeIcon: Image? {

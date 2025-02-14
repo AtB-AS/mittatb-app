@@ -27,7 +27,7 @@ class IntentHandler: INExtension, UseLocationIntentHandling {
 
                     let favoriteDeparture = FavoriteDeparture(
                         identifier: departure.id,
-                        display: "\(departure.lineLineNumber) \(departure.lineName ?? NSLocalizedString("all_variations", comment: ""))"
+                        display: "\(departure.lineLineNumber) \(departure.destinationDisplay?.frontText ?? NSLocalizedString("all_variations", comment: ""))"
                     )
 
                     return favoriteDeparture
