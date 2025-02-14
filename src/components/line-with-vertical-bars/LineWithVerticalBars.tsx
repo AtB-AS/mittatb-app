@@ -1,7 +1,13 @@
 import {StyleSheet} from '@atb/theme';
 import {useEffect, useRef} from 'react';
-import {StyleProp, ViewStyle, Animated, Easing, Dimensions} from 'react-native';
-import {View} from 'react-native-reanimated/lib/typescript/Animated';
+import {
+  StyleProp,
+  ViewStyle,
+  Animated,
+  Easing,
+  Dimensions,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
