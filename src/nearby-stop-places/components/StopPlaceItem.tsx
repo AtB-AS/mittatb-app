@@ -12,7 +12,7 @@ import {
   getSituationOrNoticeA11yLabel,
   isSituationValidAtDate,
   SituationOrNoticeIcon,
-} from '@atb/situations';
+} from '@atb/modules/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';

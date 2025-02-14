@@ -17,9 +17,12 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useNotificationsContext, isConfigEnabled} from '@atb/notifications';
+import {
+  useNotificationsContext,
+  isConfigEnabled,
+} from '@atb/modules/notifications';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {NotificationConfigGroup} from '@atb/notifications/types';
+import {NotificationConfigGroup} from '@atb/modules/notifications';
 import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';

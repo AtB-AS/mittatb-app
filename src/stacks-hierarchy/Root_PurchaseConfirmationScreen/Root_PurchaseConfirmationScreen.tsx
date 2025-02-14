@@ -11,8 +11,11 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';

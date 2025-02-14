@@ -1,10 +1,10 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {UserCountState} from './types';
 import {
   useSelectableUserProfiles,
   type PurchaseSelectionType,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
