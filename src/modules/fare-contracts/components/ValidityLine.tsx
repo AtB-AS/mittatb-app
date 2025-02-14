@@ -5,7 +5,7 @@ import {ValidityStatus} from '../utils';
 import {SectionSeparator} from '@atb/components/sections';
 import {useValidityLineColors} from '../use-validity-line-colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {LineWithVerticalBars} from '@atb/components/LineWithVerticalLine';
+import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 
 type Props =
   | {

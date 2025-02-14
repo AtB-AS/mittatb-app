@@ -6,7 +6,7 @@ import {useTimeContext} from '@atb/time';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useShmoBookingQuery} from '../queries/use-shmo-booking-query';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
-import {LineWithVerticalBars} from '@atb/components/LineWithVerticalLine';
+import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 
 type ShmoTripCardProps = {
   bookingId: ShmoBooking['bookingId'];
