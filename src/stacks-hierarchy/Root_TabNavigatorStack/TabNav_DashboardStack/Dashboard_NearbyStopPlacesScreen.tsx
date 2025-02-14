@@ -15,7 +15,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
   navigation,
   route,
 }: Props) => {
-  const fromLocation = useOnlySingleLocation('location');
+  const fromLocation = useOnlySingleLocation<typeof route>('location');
   const {t} = useTranslation();
 
   return (
