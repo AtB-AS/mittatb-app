@@ -151,10 +151,6 @@ export const PreassignedFareContractSummary = ({
                 ),
               ),
             )}
-          {fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-            summary(
-              t(PurchaseConfirmationTexts.validityTexts.harbor.onlyOnPhone),
-            )}
           <GlobalMessage
             style={styles.globalMessage}
             globalMessageContext={
