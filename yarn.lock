@@ -54,10 +54,10 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/utils@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-2.0.0.tgz#cd0849e617049ce729926ca1c935adb3e381219a"
-  integrity sha512-HxwNPjHYhfMvxPBzBWrwMJedgEwD8UZBO2y37NafqOSiqgC8aXgMiMJNGXU44Qcv3januJThmpoaXMVgPiQu/g==
+"@atb-as/utils@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.0.0.tgz#a48f44db00edf18c168cce326fb6961ff4cb9cca"
+  integrity sha512-lbkFUnDKsoBFJjGjJZf/8B03hyUoyaARXY++mT/q7aHuoqmk47KBwSqI60v/khi6KJPuT2dUeRPme7qgszWJHg==
   dependencies:
     lodash "^4.17.21"
     zod "^3.24.1"
