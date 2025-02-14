@@ -3,10 +3,10 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/time';
-import {LineWithVerticalBars} from '@atb/fare-contracts/components/ValidityLine';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useShmoBookingQuery} from '../queries/use-shmo-booking-query';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
+import {LineWithVerticalBars} from '@atb/components/LineWithVerticalLine';
 
 type ShmoTripCardProps = {
   bookingId: ShmoBooking['bookingId'];
