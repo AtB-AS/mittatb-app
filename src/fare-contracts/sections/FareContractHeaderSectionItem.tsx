@@ -1,5 +1,5 @@
 import React from 'react';
-import {FareContract, isSentOrReceivedFareContract} from '@atb/ticketing';
+import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
@@ -15,9 +15,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {WithValidityLine} from '@atb/fare-contracts/components/WithValidityLine';
 import {ProductName} from '@atb/fare-contracts/components/ProductName';
 import {ValidityTime} from '@atb/fare-contracts/components/ValidityTime';
+import {isSentOrReceivedFareContract} from '@atb/ticketing';
 
 type Props = {
-  fareContract: FareContract;
+  fareContract: FareContractType;
 };
 
 export const FareContractHeaderSectionItem = ({
