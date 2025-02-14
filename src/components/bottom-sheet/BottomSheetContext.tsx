@@ -3,6 +3,7 @@ import React, {
   ReactNode,
   Ref,
   RefObject,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -51,25 +52,28 @@ export const BottomSheetContextProvider: React.FC = ({children}) => {
   const onOpenFocusRef = useFocusOnLoad();
   const refToFocusOnClose = useRef<RefObject<any>>();
 
-  const close = () => {
+  const close = useCallback(() => {
     setContentFunction(() => () => null);
     setIsOpen(false);
     if (refToFocusOnClose.current) {
       giveFocus(refToFocusOnClose.current);
       refToFocusOnClose.current = undefined;
     }
-  };
+  }, []);
 
-  const open = (
-    contentFunction: () => ReactNode,
-    onCloseFocusRef: RefObject<any>,
-    useBackdrop: boolean = true,
-  ) => {
-    setContentFunction(() => contentFunction);
-    setBackdropEnabled(useBackdrop);
-    setIsOpen(true);
-    refToFocusOnClose.current = onCloseFocusRef;
-  };
+  const open = useCallback(
+    (
+      contentFunction: () => ReactNode,
+      onCloseFocusRef: RefObject<any>,
+      useBackdrop: boolean = true,
+    ) => {
+      setContentFunction(() => contentFunction);
+      setBackdropEnabled(useBackdrop);
+      setIsOpen(true);
+      refToFocusOnClose.current = onCloseFocusRef;
+    },
+    [],
+  );
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -83,13 +87,13 @@ export const BottomSheetContextProvider: React.FC = ({children}) => {
       },
     );
     return () => backHandler.remove();
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   const [height, setHeight] = useState<number>(0);
   const state = {
     open,
     close,
-    isOpen: () => isOpen,
+    isOpen: useCallback(() => isOpen, [isOpen]),
     height,
     onOpenFocusRef,
   };
