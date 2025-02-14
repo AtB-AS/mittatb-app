@@ -14,7 +14,6 @@ import {useMobileTokenContext} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
 import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
@@ -163,7 +162,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
                 'Root_PurchaseAsAnonymousConsequencesScreen',
                 {
                   showLoginButton: true,
-                  transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+                  transitionOverride: 'slide-from-bottom',
                 },
               )
             }

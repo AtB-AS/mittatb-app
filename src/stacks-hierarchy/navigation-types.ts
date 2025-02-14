@@ -1,5 +1,5 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
-import {StackScreenProps, TransitionPreset} from '@react-navigation/stack';
+import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
@@ -149,13 +149,17 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
 export type CustomScreenParams = {
-  transitionPreset?: TransitionPreset;
+  /**
+   * Parameter which can be used to override the transition specified in the
+   * stack navigator.
+   */
+  transitionOverride?: 'slide-from-right' | 'slide-from-bottom';
 };
 
 /**
  * This type is meant to be used on every stack params specification. It both:
  * - Checks that each key in the stack param list ends with "Screen" or "Stack"
- * - Adds the CustomScreenParams to the mapped value type., which makes it
+ * - Adds the CustomScreenParams to the mapped value type, which makes it
  *   possible to set transition when navigating.
  */
 export type StackParams<

@@ -2,6 +2,7 @@ import {CustomScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {
   StackNavigationOptions,
   TransitionPreset,
+  TransitionPresets,
 } from '@react-navigation/stack';
 
 /**
@@ -18,5 +19,19 @@ export const screenOptions: (
   (defaultTransitionPreset, stackNavigationOptions) =>
   ({route}) => ({
     ...stackNavigationOptions,
-    ...(route.params?.transitionPreset ?? defaultTransitionPreset),
+    ...getTransitionPreset(route.params, defaultTransitionPreset),
   });
+
+const getTransitionPreset = (
+  params: CustomScreenParams | undefined,
+  defaultTransitionPreset: TransitionPreset,
+) => {
+  if (!params?.transitionOverride) return defaultTransitionPreset;
+
+  switch (params.transitionOverride) {
+    case 'slide-from-bottom':
+      return TransitionPresets.ModalSlideFromBottomIOS;
+    case 'slide-from-right':
+      return TransitionPresets.SlideFromRightIOS;
+  }
+};

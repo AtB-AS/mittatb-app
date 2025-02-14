@@ -2,7 +2,6 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import React from 'react';
 import {AnonymousPurchaseConsequencesScreenComponent} from '@atb/anonymous-purchase-consequences-screen';
 import {RootStackParamList, RootStackScreenProps} from './navigation-types';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useCompleteUserCreationOnboardingAndEnterApp} from '@atb/utils/use-complete-user-creation-onboarding-and-enter-app';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 
@@ -35,9 +34,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
       onPressContinueWithoutLogin={completeUserCreationOnboardingAndEnterApp}
       leftButton={{
         type:
-          params?.transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
-            ? 'close'
-            : 'back',
+          params?.transitionOverride === 'slide-from-bottom' ? 'close' : 'back',
       }}
     />
   );

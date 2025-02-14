@@ -14,7 +14,6 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenView} from '@atb/components/screen-view';
 
 export type ScooterHelpScreenProps =
@@ -50,7 +49,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
                 navigation.navigate('Root_ContactScooterOperatorScreen', {
                   vehicleId,
                   operatorId,
-                  transitionPreset: TransitionPresets.SlideFromRightIOS,
+                  transitionOverride: 'slide-from-right',
                 });
               }}
             />
@@ -59,7 +58,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
             text={t(ScooterHelpTexts.reportParking)}
             onPress={() =>
               navigation.navigate('Root_ParkingViolationsSelectScreen', {
-                transitionPreset: TransitionPresets.SlideFromRightIOS,
+                transitionOverride: 'slide-from-right',
               })
             }
           />

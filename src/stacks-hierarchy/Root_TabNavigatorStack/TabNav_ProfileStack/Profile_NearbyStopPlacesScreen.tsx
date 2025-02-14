@@ -12,7 +12,7 @@ import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 
 export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
-  const fromLocation = useOnlySingleLocation('location');
+  const fromLocation = useOnlySingleLocation<typeof route>('location');
 
   const {t} = useTranslation();
 
