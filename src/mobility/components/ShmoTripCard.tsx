@@ -8,12 +8,15 @@ import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useShmoBookingQuery} from '../queries/use-shmo-booking-query';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 
-type Props = {
+type ShmoTripCardProps = {
   bookingId: ShmoBooking['bookingId'];
   activeBookingState: ShmoBookingState;
 };
 
-export const ShmoTripCard = ({bookingId, activeBookingState}: Props) => {
+export const ShmoTripCard = ({
+  bookingId,
+  activeBookingState,
+}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const {theme} = useThemeContext();
