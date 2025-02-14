@@ -10,7 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
-import {PurchaseMessages} from './components/PurchaseMessages';
+import {PurchaseMessage} from './components/PurchaseMessage.tsx';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
@@ -66,7 +66,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const analytics = useAnalyticsContext();
 
-  const {travellerSelectionMode, zoneSelectionMode, requiresTokenOnMobile} =
+  const {travellerSelectionMode, zoneSelectionMode} =
     selection.fareProductTypeConfig.configuration;
 
   const fareProductOnBehalfOfEnabled =
@@ -275,7 +275,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+              <PurchaseMessage />
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview
