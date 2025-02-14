@@ -1,7 +1,7 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import React, {createContext, useContext, useState} from 'react';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type TimeContextState = {
   /**

@@ -15,7 +15,7 @@ import {
   UserFavorites,
   useFavoritesContext,
 } from '@atb/favorites';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {
   SelectableLocationType,
   useLocationSearchValue,

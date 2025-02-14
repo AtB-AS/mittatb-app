@@ -14,7 +14,7 @@ import {
 } from '@atb/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';

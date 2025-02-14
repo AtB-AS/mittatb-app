@@ -8,7 +8,7 @@ import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
-import {useNotificationsContext} from '@atb/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 
 export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();

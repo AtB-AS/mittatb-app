@@ -9,7 +9,7 @@ import {
 import {getReferenceDataName} from '@atb/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {useThemeContext} from '@atb/theme';
 import type {UserCountState} from './types';
 

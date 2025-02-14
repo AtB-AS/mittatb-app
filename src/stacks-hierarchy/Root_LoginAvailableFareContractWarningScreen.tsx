@@ -12,7 +12,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
+import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 

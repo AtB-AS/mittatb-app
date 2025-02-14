@@ -7,7 +7,7 @@ module.exports = {
   },
   globalSetup: './__tests__/test-setup.js',
   coverageThreshold: {
-    './src/purchase-selection/': {
+    './src/modules/purchase-selection/': {
       branches: 100,
       functions: 100,
       lines: 100,

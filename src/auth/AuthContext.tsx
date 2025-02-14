@@ -31,7 +31,7 @@ import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/auth/use-update-intercom-on-user-change';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {useRefreshIdTokenWhenNecessary} from '@atb/auth/use-refresh-id-token-when-necessary';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;

@@ -16,8 +16,8 @@ import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
+import {FareContractFromTo} from '@atb/modules/fare-contracts';
+import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;

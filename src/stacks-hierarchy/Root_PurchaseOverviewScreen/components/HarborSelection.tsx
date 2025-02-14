@@ -10,7 +10,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;

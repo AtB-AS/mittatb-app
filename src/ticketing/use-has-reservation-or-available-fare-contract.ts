@@ -1,6 +1,6 @@
 import {useTicketingContext} from '@atb/ticketing/TicketingContext';
 import {useTimeContext} from '@atb/time';
-import {getReservationStatus} from '@atb/fare-contracts/utils';
+import {getReservationStatus} from '@atb/modules/fare-contracts';
 import {useFareContracts} from '@atb/ticketing/use-fare-contracts';
 
 export const useHasReservationOrAvailableFareContract = () => {

@@ -14,7 +14,7 @@ import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations'
 import {useIsFocused} from '@react-navigation/native';
 import {getStations} from '@atb/api/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const MIN_ZOOM_LEVEL = 11;
 const BUFFER_DISTANCE_IN_METERS = 500;

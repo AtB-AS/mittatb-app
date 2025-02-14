@@ -23,7 +23,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useOnboardingContext} from '@atb/onboarding';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

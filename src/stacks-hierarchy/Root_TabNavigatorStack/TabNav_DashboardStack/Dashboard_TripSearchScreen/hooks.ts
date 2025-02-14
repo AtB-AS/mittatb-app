@@ -8,7 +8,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 
 import {defaultJourneyModes} from './utils';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,

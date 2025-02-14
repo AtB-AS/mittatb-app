@@ -19,7 +19,7 @@ import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import phone from 'phone';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

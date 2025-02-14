@@ -1,4 +1,4 @@
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';

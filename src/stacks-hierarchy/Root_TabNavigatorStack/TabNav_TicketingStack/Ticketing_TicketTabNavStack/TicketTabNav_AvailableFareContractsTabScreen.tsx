@@ -2,7 +2,7 @@ import {StyleSheet} from '@atb/theme';
 import {useFareContracts, useTicketingContext} from '@atb/ticketing';
 import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
-import {FareContractAndReservationsList} from '@atb/fare-contracts';
+import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/analytics';
 import {useTimeContext} from '@atb/time';

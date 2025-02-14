@@ -15,7 +15,7 @@ import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {stripMarkdown} from '@atb/components/text';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;

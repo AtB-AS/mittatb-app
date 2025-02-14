@@ -11,7 +11,7 @@ import React from 'react';
 import {getReferenceDataName} from '@atb/configuration';
 import {TariffZoneWithMetadata} from './types';
 import {ViewStyle} from 'react-native';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   selection: PurchaseSelectionType;

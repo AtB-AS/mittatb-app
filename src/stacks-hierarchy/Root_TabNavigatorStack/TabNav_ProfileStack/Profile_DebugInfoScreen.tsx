@@ -15,7 +15,7 @@ import {
   RemoteConfigContextState,
   useRemoteConfigContext,
 } from '@atb/RemoteConfigContext';
-import {useGlobalMessagesContext} from '@atb/global-messages';
+import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -32,12 +32,12 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
 import {useAnnouncementsContext} from '@atb/announcements';
-import {useNotificationsContext} from '@atb/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/time';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);

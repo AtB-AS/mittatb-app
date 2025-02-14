@@ -4,7 +4,7 @@ import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 

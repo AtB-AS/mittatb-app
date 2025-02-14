@@ -20,7 +20,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarbors} from '@atb/harbors';
-import {usePurchaseSelectionBuilder} from '@atb/purchase-selection';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 

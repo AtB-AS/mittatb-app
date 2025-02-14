@@ -29,7 +29,7 @@ import {
 } from './get-focused-estimated-call';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/modules/situations';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
 import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
