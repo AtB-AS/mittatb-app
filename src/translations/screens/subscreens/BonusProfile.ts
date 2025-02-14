@@ -10,18 +10,6 @@ const BonusProfileTexts = {
   ),
   spendPoints: {
     heading: _('Bruk poeng på', 'Spend points on', 'Bruk poeng på'),
-    bikeRental: {
-      title: _(
-        '1 tur med bysykkel',
-        '1 ride with Trondheim bysykkel',
-        '1 tur med bysykkel',
-      ),
-      description: _(
-        'Du får en tur med Trondheim bysykkel på opptil 1 time.<br><br>Finn en sykkel i kartet og huk av for å bruke poeng for turen - husk hjelm!',
-        'You get a trip with Trondheim city bike of up to 1 hour.<br><br>Find a bike in the map and check the box to use points for the trip - remember to wear a helmet!',
-        'Du får ein tur med Trondheim bysykkel på opptil 1 time.<br><br>Finn ein sykkel i kartet og huk av for å bruka poeng for turen - hugs hjelm!',
-      ),
-    },
   },
   noProfile: _(
     'Du må logge inn for å få tilgang til Bonus.',
