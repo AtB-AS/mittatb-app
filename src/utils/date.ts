@@ -152,6 +152,10 @@ export const getTimeBetweenFormatted = (start: Date, end: Date) => {
   const minusPrefix = start.getTime() > end.getTime() ? '-' : '';
   const hourPrefix = hours > 0 ? formatWithZero(hours) + ':' : '';
 
+  if (hours === 0 && minutes === 0 && seconds === 0) {
+    return '00:00';
+  }
+
   return `${minusPrefix}${hourPrefix}${formatWithZero(
     Math.abs(minutes),
   )}:${formatWithZero(Math.abs(seconds))}`;
