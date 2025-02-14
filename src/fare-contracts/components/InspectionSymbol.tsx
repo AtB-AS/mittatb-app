@@ -84,7 +84,8 @@ const InspectableContent = ({
   const shouldFill =
     fareProductTypeConfig?.illustration?.includes('period') ||
     fareProductTypeConfig?.illustration === 'hour24' ||
-    fareProductTypeConfig?.illustration === 'youth';
+    fareProductTypeConfig?.illustration === 'youth' ||
+    fareProductTypeConfig?.illustration === 'city';
 
   const InspectionSvg = getInspectionSvg(
     fareProductTypeConfig?.illustration,
