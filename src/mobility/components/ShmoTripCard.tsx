@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
@@ -10,45 +10,35 @@ import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 
 type ShmoTripCardProps = {
   bookingId: ShmoBooking['bookingId'];
-  activeBookingState: ShmoBookingState;
 };
 
-export const ShmoTripCard = ({
-  bookingId,
-  activeBookingState,
-}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const {theme} = useThemeContext();
   const lineColor = theme.color.background.neutral[0].background;
   const backgroundColor = useTransportColor('scooter', 'escooter');
-  const [freezedTime, setFreezedTime] = useState<number | null>(null);
-  const {data: booking, refetch} = useShmoBookingQuery(bookingId, 15000);
-
-  useEffect(() => {
-    setFreezedTime(serverNow);
-    refetch();
-  }, [activeBookingState]);
+  const {data: booking} = useShmoBookingQuery(bookingId, 15000);
 
   return (
     <Section style={styles.container}>
       <LineWithVerticalBars
         backgroundColor={
-          activeBookingState === ShmoBookingState.IN_USE
+          booking?.state === ShmoBookingState.IN_USE
             ? backgroundColor.primary.background
             : backgroundColor.primary.foreground.disabled
         }
         lineColor={lineColor}
         style={styles.lineBars}
-        animate={activeBookingState === ShmoBookingState.IN_USE}
+        animate={booking?.state === ShmoBookingState.IN_USE}
       />
 
       <ShmoTripDetailsSectionItem
         startDateTime={booking?.departureTime ?? new Date()}
         endDateTime={
-          activeBookingState === ShmoBookingState.IN_USE
+          booking?.state === ShmoBookingState.IN_USE
             ? new Date(serverNow)
-            : new Date(booking?.arrivalTime ?? freezedTime ?? '')
+            : new Date(booking?.arrivalTime ?? '')
         }
         totalAmount={booking?.pricing.currentAmount.toString() ?? ''}
         withHeader={false}
