@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
-import {PurchaseMessage} from './components/PurchaseMessage.tsx';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
@@ -39,6 +38,7 @@ import {
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -58,6 +58,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
+  const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const setSelection = (s: PurchaseSelectionType) =>
     navigation.setParams({selection: s});
@@ -275,7 +276,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              <PurchaseMessage />
+              {inspectableTokenWarningText && (
+                <MessageInfoBox
+                  type="warning"
+                  message={inspectableTokenWarningText}
+                  isMarkdown={true}
+                />
+              )}
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview

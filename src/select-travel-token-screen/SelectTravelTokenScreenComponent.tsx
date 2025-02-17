@@ -9,7 +9,6 @@ import {
 } from '@atb/mobile-token';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {useFareContracts} from '@atb/ticketing';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -17,12 +16,6 @@ import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {
-  findReferenceDataById,
-  isOfFareProductRef,
-  useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import {useTimeContext} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
@@ -36,16 +29,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {theme} = useThemeContext();
 
   const {disable_travelcard} = useRemoteConfigContext();
-  const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfigurationContext();
-
   const {completeOnboardingSection} = useOnboardingContext();
 
   const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
   const {data} = useTokenToggleDetailsQuery();
-
-  const {serverNow} = useTimeContext();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -55,28 +43,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     inspectableToken,
   );
-
-  const {fareContracts: availableFareContracts} = useFareContracts(
-    {availability: 'available'},
-    serverNow,
-  );
-
-  const availableTravelRights = availableFareContracts.flatMap(
-    (fc) => fc.travelRights,
-  );
-
-  // Filter for unique travel rights config types
-  availableTravelRights.map((travelRight) => {
-    const preassignedFareProduct = findReferenceDataById(
-      preassignedFareProducts,
-      isOfFareProductRef(travelRight) ? travelRight.fareProductRef : '',
-    );
-
-    return (
-      preassignedFareProduct &&
-      fareProductTypeConfigs.find((c) => c.type === preassignedFareProduct.type)
-    );
-  });
 
   useEffect(() => {
     // Whenever a user enters this screen, the onboarding is done.
