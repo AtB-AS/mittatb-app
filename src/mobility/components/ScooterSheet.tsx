@@ -6,7 +6,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
+import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
   MobilityTexts,
   ScooterTexts,
@@ -99,7 +99,7 @@ export const ScooterSheet = ({
                     <MobilityStats
                       first={
                         <MobilityStat
-                          svg={Battery}
+                          svg={BatteryHigh}
                           primaryStat={vehicle.currentFuelPercent + '%'}
                           secondaryStat={t(
                             MobilityTexts.range(

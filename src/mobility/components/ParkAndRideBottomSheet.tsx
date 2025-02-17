@@ -3,7 +3,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
