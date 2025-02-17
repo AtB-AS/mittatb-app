@@ -49,23 +49,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .forType(fareProductTypeConfig.type)
       .build();
 
-    if (authenticationType !== 'phone') {
-      if (
-        fareProductTypeConfig.configuration.requiresLogin &&
-        !hasInspectableMobileToken
-      ) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          selection,
-        });
-        return;
-      }
-
-      if (fareProductTypeConfig.configuration.requiresLogin) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          selection,
-        });
-        return;
-      }
+    if (
+      authenticationType !== 'phone' &&
+      fareProductTypeConfig.configuration.requiresLogin
+    ) {
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        selection,
+      });
+      return;
     }
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
