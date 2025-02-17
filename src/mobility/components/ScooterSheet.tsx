@@ -5,7 +5,7 @@ import {
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
@@ -38,6 +38,7 @@ export const ScooterSheet = ({
   onVehicleReceived,
 }: Props) => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const {
     vehicle,
@@ -104,6 +105,7 @@ export const ScooterSheet = ({
                   mode="secondary"
                   onPress={onReportParkingViolation}
                   rightIcon={{svg: ArrowRight}}
+                  backgroundColor={theme.color.background.neutral[1]}
                 />
               )}
             </View>

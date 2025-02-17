@@ -51,7 +51,7 @@ type ButtonModeAwareProps =
   | {mode?: 'primary'}
   | {
       mode: Exclude<ButtonMode, 'primary'>;
-      backgroundColor?: ContrastColor;
+      backgroundColor: ContrastColor;
     };
 
 export type ButtonProps = {
@@ -98,7 +98,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       ? props.interactiveColor
       : theme.color.interactive[0];
     const backgroundColor =
-      'backgroundColor' in props && props.backgroundColor
+      'backgroundColor' in props
         ? props.backgroundColor
         : theme.color.background.neutral[0];
 

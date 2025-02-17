@@ -9,7 +9,7 @@ import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -26,6 +26,8 @@ type SelectableFavouriteDepartureData = {
   favorite: StoredFavoriteDeparture;
   testID?: string;
 };
+
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
 
 const SelectableFavouriteDeparture = ({
   handleSwitchFlip,
@@ -97,6 +99,7 @@ export const SelectFavouritesBottomSheet = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const themeColor = getThemeColor(theme);
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
@@ -180,6 +183,7 @@ export const SelectFavouritesBottomSheet = ({
             rightIcon={{svg: SvgArrowRight}}
             testID="editButton"
             mode="secondary"
+            backgroundColor={themeColor}
           />
         </View>
       </FullScreenFooter>
@@ -199,7 +203,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       padding: theme.spacing.medium,
     },
     flatListArea: {
-      backgroundColor: theme.color.background.neutral[0].background,
+      backgroundColor: getThemeColor(theme).background,
       margin: theme.spacing.medium,
       marginBottom: theme.spacing.xLarge,
       borderRadius: theme.border.radius.regular,

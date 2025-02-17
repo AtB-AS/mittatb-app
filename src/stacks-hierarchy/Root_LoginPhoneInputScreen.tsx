@@ -14,7 +14,6 @@ import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
-import {TransitionPresets} from '@react-navigation/stack';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -86,8 +85,7 @@ export const Root_LoginPhoneInputScreen = ({
       <FullScreenHeader
         leftButton={{
           type:
-            params?.transitionPreset ===
-            TransitionPresets.ModalSlideFromBottomIOS
+            params?.transitionOverride === 'slide-from-bottom'
               ? 'close'
               : 'back',
         }}

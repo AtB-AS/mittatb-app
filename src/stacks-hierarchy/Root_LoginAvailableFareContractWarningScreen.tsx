@@ -10,7 +10,6 @@ import {useFareContracts, useTicketingContext} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/time';
-import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 
@@ -42,7 +41,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
       });
     } else {
       navigation.navigate('Root_LoginPhoneInputScreen', {
-        transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+        transitionOverride: 'slide-from-bottom',
       });
     }
   };
