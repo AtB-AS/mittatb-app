@@ -52,6 +52,9 @@ export type PendingToken = {
 
 export type InitRequest = {
   name: string;
+  preferRequireAttestation?: boolean;
+  deviceInfo?: string[];
+  deviceInfoType?: string;
 };
 
 export type RemoveRequestParams = {

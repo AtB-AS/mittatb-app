@@ -97,7 +97,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
           `Validation error on token ${token.getTokenId()}`,
           errorToMetadata(err),
         );
-        // Check if the error has an error handling strategy implemented
+        // get the SDK-recommended error handling strategy
         const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
         if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
           logToBugsnag(

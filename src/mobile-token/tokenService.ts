@@ -43,16 +43,23 @@ export type TokenService = RemoteTokenService & {
 };
 
 const handleError = (err: any) => {
-  throw parseBffCallErrors(err.response?.data) || err;
+  throw parseBffCallErrors(err.response?.data);
 };
 
 export const tokenService: TokenService = {
-  initiateNewMobileToken: async (traceId) => {
+  initiateNewMobileToken: async (
+    preferRequireAttestation,
+    traceId,
+    deviceInfo,
+  ) => {
     const deviceName = await getDeviceName();
     const data: InitRequest = {
       name: deviceName,
+      preferRequireAttestation: preferRequireAttestation,
+      deviceInfo: deviceInfo.data,
+      deviceInfoType: deviceInfo.type,
     };
-    return client
+    return await client
       .post<InitiateTokenResponse>('/tokens/v4/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
@@ -65,7 +72,7 @@ export const tokenService: TokenService = {
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
   },
-  activateNewMobileToken: async (pendingToken, correlationId) =>
+  activateNewMobileToken: (pendingToken, correlationId) =>
     client
       .post<CompleteTokenInitializationResponse>(
         '/tokens/v4/activate',
@@ -116,6 +123,21 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
+  reattestMobileToken: (token, secureContainer, reattestation, correlationId) =>
+    client
+      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
+        headers: {
+          [CorrelationIdHeaderName]: correlationId,
+          [SignedTokenHeaderName]: secureContainer,
+          [AttestationHeaderName]: reattestation.data,
+          [AttestationTypeHeaderName]: reattestation.type,
+        },
+        authWithIdToken: true,
+        timeout: 15000,
+        skipErrorLogging: isRemoteTokenStateError,
+      })
+      .then(() => {})
+      .catch(handleError),
   getMobileTokenDetails: (token, secureContainer, traceId) =>
     client
       .get<GetTokenDetailsResponse>('/tokens/v4/details', {
@@ -145,8 +167,7 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.removed)
       .catch(handleError),
-
-  listTokens: async (traceId: string) =>
+  listTokens: (traceId: string) =>
     client
       .get<ListResponse>('/tokens/v4/list', {
         headers: {
@@ -158,11 +179,7 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
-  toggle: async (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) =>
+  toggle: (tokenId: string, traceId: string, bypassRestrictions: boolean) =>
     client
       .post<ToggleResponse>(
         '/tokens/v4/toggle',
@@ -179,7 +196,7 @@ export const tokenService: TokenService = {
       .then((res) => res.data.tokens)
       .catch(handleError),
 
-  getTokenToggleDetails: async () =>
+  getTokenToggleDetails: () =>
     client
       .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
         authWithIdToken: true,
@@ -195,13 +212,13 @@ export const tokenService: TokenService = {
       includeCertificate: false,
     };
 
-    await abtClient
-      .remoteClientCallHandler(
-        token.getContextId(),
-        tokenEncodingRequest,
-        traceId,
-        async (secureContainerToken, attestation) => {
-          return await client.get('/tokens/v4/validate', {
+    await abtClient.remoteClientCallHandler(
+      token.getContextId(),
+      tokenEncodingRequest,
+      traceId,
+      async (secureContainerToken, attestation) =>
+        client
+          .get('/tokens/v4/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainerToken,
@@ -211,9 +228,8 @@ export const tokenService: TokenService = {
             authWithIdToken: true,
             timeout: 15000,
             skipErrorLogging: isRemoteTokenStateError,
-          });
-        },
-      )
-      .catch(handleError);
+          })
+          .catch(handleError),
+    );
   },
 };

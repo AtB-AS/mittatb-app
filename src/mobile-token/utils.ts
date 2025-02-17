@@ -3,6 +3,7 @@ import {
   ClientNetworkError,
   mapTokenErrorResolution,
   TokenAction,
+  TokenEncodingInvalidError,
   TokenErrorResolution,
   TokenFactoryError,
 } from '@entur-private/abt-mobile-client-sdk';
@@ -77,6 +78,9 @@ export const getMobileTokenErrorHandlingStrategy = (
 
   // try to find the error resolution
   if (err instanceof TokenFactoryError) {
+    if (err instanceof TokenEncodingInvalidError) {
+      return 'reset';
+    }
     errorResolution = err.resolution;
   } else if (err instanceof RemoteTokenStateError) {
     errorResolution = mapTokenErrorResolution(err);

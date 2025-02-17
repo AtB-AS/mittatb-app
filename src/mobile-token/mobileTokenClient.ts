@@ -22,7 +22,13 @@ const CONTEXT_ID = 'main';
  * Unknown errors
  */
 const attestationCreationErrorStrategy =
-  new DefaultAttestationCreationErrorStrategy(true, false, true, true);
+  new DefaultAttestationCreationErrorStrategy(
+    true,
+    false,
+    true,
+    true,
+    localLogger,
+  );
 
 /**
  * Decides which error handling strategy should use the SDK-suggested solution)
@@ -31,7 +37,12 @@ const attestationCreationErrorStrategy =
  * Unknown errors
  */
 const attestationVerificationErrorStrategy =
-  new DefaultAttestationVerificationErrorStrategy(true, true, true);
+  new DefaultAttestationVerificationErrorStrategy(
+    true,
+    true,
+    true,
+    localLogger,
+  );
 
 export const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
@@ -54,7 +65,8 @@ export const abtClient = createClient({
 
 export const mobileTokenClient = {
   get: (traceId: string) => abtClient.getToken(CONTEXT_ID, traceId),
-  create: (traceId: string) => abtClient.createToken(CONTEXT_ID, traceId),
+  create: (traceId: string) =>
+    abtClient.createToken(CONTEXT_ID, false, traceId),
   encode: (token: Token, tokenActions?: TokenAction[]) =>
     encodeAsSecureContainer(
       CONTEXT_ID,
