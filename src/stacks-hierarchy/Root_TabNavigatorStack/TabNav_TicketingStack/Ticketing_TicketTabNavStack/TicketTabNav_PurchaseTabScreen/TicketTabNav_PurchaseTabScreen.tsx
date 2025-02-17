@@ -10,7 +10,6 @@ import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useAnalyticsContext} from '@atb/analytics';
-import {useMobileTokenContext} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
@@ -35,9 +34,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
 
-  const {tokens} = useMobileTokenContext();
-  const inspectableToken = tokens.find((t) => t.isInspectable);
-  const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
