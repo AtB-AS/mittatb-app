@@ -23,7 +23,10 @@ import {
 import {Language} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {
+  BonusProductType,
+  MobilityOperatorType,
+} from '@atb-as/config-specs/lib/mobility';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -269,3 +272,24 @@ export const getNewFilterState = (
     showAll: false,
   };
 };
+
+/**
+ * Checks if a bonus product is active and should be displayed
+ * @param bonusProduct - The bonus product to check
+ * @returns {boolean} True if the bonus product is active, false otherwise
+ */
+export const isActive = (bonusProduct: BonusProductType) =>
+  bonusProduct.isActive;
+
+/**
+ * Finds brand image URL for an operator from the mobility operators data
+ * @param operatorId - The ID of the operator
+ * @param mobilityOperators - Array of mobility operators
+ * @returns {string | undefined} The brand image URL if found, otherwise undefined
+ */
+export const findOperatorBrandImageUrl = (
+  operatorId: string,
+  mobilityOperators: MobilityOperatorType[] | undefined | null,
+) =>
+  mobilityOperators?.find((op) => op.id === operatorId)?.brandAssets
+    ?.brandImageUrl;

@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^5.7.0":
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.7.0.tgz#3d6bf3a29fad8209205eb09c4b89ae687fa622aa"
-  integrity sha512-WSMPq9f12N8p1ZvnsqxAVAoFS4u6wUdyd/6iPhFcKI6cgd2pqqpOHKNwIGzv5eE9nq6oWxnHrw4UVNX7VJFUKw==
+"@atb-as/config-specs@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.8.0.tgz#b4cddbaf11139f07b31d6eedc9b903d5fb92a3cc"
+  integrity sha512-uDYLOI8108xN7TdRgo4gNS5TZSCw/mXe6oi7D5JVFPTDPVMQbU7wM4Qs9KDizC5km/4WfuKnzMJGvP3B3jyJ6w==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -11651,9 +11651,9 @@ yocto-queue@^1.0.0:
   integrity sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==
 
 zod-to-json-schema@^3.20.4:
-  version "3.21.4"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.21.4.tgz#de97c5b6d4a25e9d444618486cb55c0c7fb949fd"
-  integrity sha512-fjUZh4nQ1s6HMccgIeE0VP4QG/YRGPmyjO9sAh890aQKPEk3nqbfUXhMFaC+Dr5KvYBm8BCyvfpZf2jY9aGSsw==
+  version "3.24.1"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.1.tgz#f08c6725091aadabffa820ba8d50c7ab527f227a"
+  integrity sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==
 
 zod@^3.24.1:
   version "3.24.1"

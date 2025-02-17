@@ -17,6 +17,8 @@ import {LabelInfo} from '@atb/components/label-info';
 type Props = SectionItemProps<
   {
     text: string;
+    prefixNode?: React.ReactNode;
+    suffixNode?: React.ReactNode;
     textType?: TextNames;
     label?: LabelType;
     showIconText?: boolean;
@@ -42,6 +44,8 @@ type Props = SectionItemProps<
  */
 export function ExpandableSectionItem({
   text,
+  prefixNode,
+  suffixNode,
   textType,
   showIconText = false,
   label,
@@ -91,9 +95,11 @@ export function ExpandableSectionItem({
         testID={testID}
         {...accessibility}
       >
+        {prefixNode}
         <ThemeText style={contentContainer} typography={textType}>
           {text}
         </ThemeText>
+        {suffixNode}
         {label && <LabelInfo label={label} />}
         <ExpandIcon expanded={expanded} showText={showIconText} />
       </PressableOpacity>
