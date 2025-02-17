@@ -1,1 +1,1 @@
-export {BonusPriceTag} from './bonusPriceTag';
+export {BonusPriceTag} from './BonusPriceTag';

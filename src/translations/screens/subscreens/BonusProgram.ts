@@ -14,7 +14,7 @@ const BonusProgramTexts = {
   },
   noProfile: _(
     'Du må logge inn for å få tilgang til Bonus.',
-    'You must log in to access the Bonus.',
+    'You must log in to get access to Bonus.',
     'Du må logga inn for å få tilgang til Bonus.',
   ),
   readMore: {

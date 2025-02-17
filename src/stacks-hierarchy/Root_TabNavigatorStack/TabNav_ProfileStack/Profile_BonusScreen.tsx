@@ -20,8 +20,12 @@ import {ContentHeading} from '@atb/components/heading';
 import {BonusPriceTag} from '@atb/bonus';
 import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {
+  BrandingImage,
+  findOperatorBrandImageUrl,
+  isActive,
+} from '@atb/mobility';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -72,55 +76,51 @@ export const Profile_BonusScreen = () => {
         )}
         <ContentHeading text={t(BonusProgramTexts.spendPoints.heading)} />
         <View style={styles.bonusProductsContainer}>
-          {bonusProducts?.map(
-            (bonusProduct, index) =>
-              bonusProduct.isActive && (
-                <Section>
-                  <ExpandableSectionItem
-                    expanded={currentlyOpenBonusProduct === index}
-                    onPress={() => {
-                      setCurrentlyOpenBonusProduct(index);
-                    }}
-                    text={
-                      getTextForLanguage(
-                        bonusProduct.productDescription.title,
-                        language,
-                      ) ?? ''
-                    }
-                    showIconText={false}
-                    prefix={
-                      <BrandingImage
-                        logoUrl={
-                          mobilityOperators?.find(
-                            (op) => op.id === bonusProduct.operatorId,
-                          )?.brandAssets?.brandImageUrl
-                        }
-                        logoSize={theme.typography['heading--big'].fontSize}
-                        style={styles.logo}
-                      />
-                    }
-                    suffix={
-                      <BonusPriceTag
-                        price={bonusProduct.price.amount}
-                        style={styles.bonusPriceTag}
-                      />
-                    }
-                    expandContent={
-                      <ThemeText
-                        isMarkdown={true}
-                        typography="body__secondary"
-                        color="secondary"
-                      >
-                        {getTextForLanguage(
-                          bonusProduct.productDescription.description,
-                          language,
-                        ) ?? ''}
-                      </ThemeText>
-                    }
+          {bonusProducts?.filter(isActive).map((bonusProduct, index) => (
+            <Section>
+              <ExpandableSectionItem
+                expanded={currentlyOpenBonusProduct === index}
+                onPress={() => {
+                  setCurrentlyOpenBonusProduct(index);
+                }}
+                text={
+                  getTextForLanguage(
+                    bonusProduct.productDescription.title,
+                    language,
+                  ) ?? ''
+                }
+                showIconText={false}
+                prefixNode={
+                  <BrandingImage
+                    logoUrl={findOperatorBrandImageUrl(
+                      bonusProduct.operatorId,
+                      mobilityOperators,
+                    )}
+                    logoSize={theme.typography['heading--big'].fontSize}
+                    style={styles.logo}
                   />
-                </Section>
-              ),
-          )}
+                }
+                suffixNode={
+                  <BonusPriceTag
+                    price={bonusProduct.price.amount}
+                    style={styles.bonusPriceTag}
+                  />
+                }
+                expandContent={
+                  <ThemeText
+                    isMarkdown={true}
+                    typography="body__secondary"
+                    color="secondary"
+                  >
+                    {getTextForLanguage(
+                      bonusProduct.productDescription.description,
+                      language,
+                    ) ?? ''}
+                  </ThemeText>
+                }
+              />
+            </Section>
+          ))}
         </View>
         <ContentHeading text={t(BonusProgramTexts.readMore.heading)} />
         <Section>
