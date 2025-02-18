@@ -4,6 +4,7 @@ import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useCallback} from 'react';
+import {IntercomTokenStatus} from '@atb/mobile-token/types';
 
 type Metadata = {
   'AtB-Firebase-Auth-Id': string;
@@ -17,7 +18,7 @@ type Metadata = {
   'AtB-OS-Font-Scale': number;
   'AtB-Screen-Size': string;
   'AtB-Mobile-Token-Id': string;
-  'AtB-Mobile-Token-Status': 'success' | 'error';
+  'AtB-Mobile-Token-Status': IntercomTokenStatus;
   'AtB-Mobile-Token-Error-Correlation-Id': string;
   'AtB-Beta-TripSearch': string;
 };
