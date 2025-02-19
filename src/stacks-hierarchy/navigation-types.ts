@@ -52,12 +52,6 @@ export type Root_LoginRequiredForFareProductScreenParams = {
   selection: PurchaseSelectionType;
 };
 
-export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
-  nextScreen:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>;
-};
-
 type Root_ParkingViolationsPhotoParams = {
   selectedViolations: ParkingViolationType[];
 };
@@ -128,7 +122,6 @@ export type RootStackParamList = StackParams<{
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
   Root_LoginPhoneInputScreen: undefined;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
-  Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_ParkingViolationsSelectScreen: undefined;
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;

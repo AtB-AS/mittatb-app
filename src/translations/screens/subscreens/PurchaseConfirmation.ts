@@ -50,11 +50,6 @@ const PurchaseConfirmationTexts = {
         'Applies for bus/tram in departure and destination zones',
         'Gjeld for buss/trikk i sonene du reiser til og frå',
       ),
-      onlyOnPhone: _(
-        'Kun gyldig på mobil',
-        'Only valid on phone',
-        'Kun gyldig på mobil',
-      ),
     },
     time: (validTime: string) =>
       _(
