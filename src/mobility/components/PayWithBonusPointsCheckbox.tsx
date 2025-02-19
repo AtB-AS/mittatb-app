@@ -52,7 +52,8 @@ export const PayWithBonusPointsCheckbox = ({
       <PressableOpacity
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel={'TODO'}
+        accessibilityLabel={t(BonusProgramTexts.checkbox.a11yLabel)}
+        accessibilityHint={t(BonusProgramTexts.checkbox.a11yHint)}
         disabled={disabled}
         style={[styles.container, disabled && {opacity: 0.5}]}
       >

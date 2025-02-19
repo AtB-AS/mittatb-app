@@ -33,5 +33,13 @@ const BonusProgramTexts = {
     },
   },
   youHave: _('Du har ', 'You have ', 'Du har '),
+  checkbox: {
+    a11yLabel: _('Bruk bonuspoeng', 'Use bonus points', 'Bruk bonuspoeng'),
+    a11yHint: _(
+      'Aktiver for å bruke bonuspoeng',
+      'Activate to use bonus points',
+      'Aktiver for å bruke bonuspoeng',
+    ),
+  },
 };
 export default BonusProgramTexts;
