@@ -122,7 +122,8 @@ describe('Visual tests', () => {
     }
   });
 
-  it('night ticket should be equal to baseline', async () => {
+  // DISABLED until after the WSC (since there's no element to scroll on the ticket tab)
+  xit('night ticket should be equal to baseline', async () => {
     try {
       await NavigationHelper.tapMenu('tickets');
       await NavigationHelper.tapMenu('tickets');
