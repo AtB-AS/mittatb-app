@@ -31,7 +31,49 @@ describe('Visual tests', () => {
     await AppHelper.pause(500);
   });
 
+  // NOTE! Without changing the time, there are few "stable" views
   it('travel search should be equal to baseline', async () => {
+    const departure = 'Prinsens gate';
+    const arrival = 'Solsiden';
+
+    try {
+      await NavigationHelper.tapMenu('assistant');
+      await NavigationHelper.tapMenu('assistant');
+
+      // Search
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await FrontPagePage.searchFrom.click();
+      await SearchPage.setSearchLocation(departure);
+      await ElementHelper.waitForElement('id', 'searchToButton');
+      await FrontPagePage.searchTo.click();
+      await SearchPage.setSearchLocation(arrival);
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+
+      // Check filter
+      await TravelsearchFilterPage.openFilter();
+      // Test: Filter (top)
+      await VisualHelper.visualTestScreen(
+        'travelSearch_filter_top',
+        testOptions,
+        newBaseline,
+      );
+      await AppHelper.scrollDownUntilId('filterView', 'saveFilterCheckbox');
+      // Test: Filter (bottom)
+      await VisualHelper.visualTestScreen(
+        'travelSearch_filter_bottom',
+        testOptions,
+        newBaseline,
+      );
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_visual_test_travelSearch');
+      throw errMsg;
+    }
+  });
+
+  // NOTE!
+  // Disabled due to not reachable date picker (https://github.com/henninghall/react-native-date-picker/issues/792)
+  // Will enable if updated in later react-native-date-picker
+  xit('DISABLED - travel search should be equal to baseline', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Solsiden';
     const depTimeHr = 0;
