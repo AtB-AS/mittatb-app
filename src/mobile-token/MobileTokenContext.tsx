@@ -114,14 +114,28 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
-    updateMetadata({
-      'AtB-Mobile-Token-Id': nativeToken ? nativeToken.tokenId : 'undefined',
-      'AtB-Mobile-Token-Status': getAttestationStatus(nativeToken),
-      'AtB-Mobile-Token-Error-Correlation-Id': nativeToken
+    if (nativeTokenStatus !== 'loading') {
+      const tokenId = nativeToken ? nativeToken.tokenId : 'undefined';
+      const tokenStatus = getAttestationStatus(nativeToken);
+      const tokenErrorCorrelationId = nativeToken
         ? 'undefined'
-        : traceId.current,
-    });
-  }, [nativeToken, updateMetadata]);
+        : traceId.current;
+
+      // Intercom update
+      updateMetadata({
+        'AtB-Mobile-Token-Id': tokenId,
+        'AtB-Mobile-Token-Status': tokenStatus,
+        'AtB-Mobile-Token-Error-Correlation-Id': tokenErrorCorrelationId,
+      });
+
+      // token status endpoint
+      tokenService.postTokenStatus(
+        tokenId,
+        tokenStatus,
+        tokenErrorCorrelationId,
+      );
+    }
+  }, [nativeToken, nativeTokenStatus, updateMetadata]);
 
   const {
     data: remoteTokens,
