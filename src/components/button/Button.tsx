@@ -21,26 +21,6 @@ import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 type ButtonType = 'large' | 'small';
 
-type ButtonSettings = {
-  withBackground: boolean;
-  visibleBorder: boolean;
-};
-
-const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
-  primary: {
-    withBackground: true,
-    visibleBorder: false,
-  },
-  secondary: {
-    withBackground: false,
-    visibleBorder: true,
-  },
-  tertiary: {
-    withBackground: false,
-    visibleBorder: false,
-  },
-};
-
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
@@ -71,188 +51,202 @@ export type ButtonProps = {
 
 const DISABLED_OPACITY = 0.2;
 
-export const Button = React.forwardRef<any, ButtonProps>(
-  (
+export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
+  const {
+    onPress,
+    mode = 'primary',
+    type = 'large',
+    leftIcon,
+    rightIcon,
+    text,
+    disabled,
+    loading = false,
+    expanded,
+    hasShadow = false,
+    style,
+    ...otherProps
+  } = props;
+
+  const styles = useButtonStyle();
+  const {theme} = useThemeContext();
+
+  const {mainContrastColor, borderColorValue} = getButtonColors(props, theme);
+
+  const fadeAnim = useRef(
+    new Animated.Value(disabled ? DISABLED_OPACITY : 1),
+  ).current;
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: disabled ? DISABLED_OPACITY : 1,
+      duration: 200,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  }, [disabled, fadeAnim]);
+
+  const spacing = theme.spacing.medium;
+
+  const styleContainer: ViewStyle[] = [
+    styles.button,
     {
-      onPress,
-      mode = 'primary',
-      type = 'large',
-      leftIcon,
-      rightIcon,
-      text,
-      disabled,
-      active,
-      loading = false,
-      expanded,
-      hasShadow = false,
-      style,
-      ...props
+      backgroundColor: mainContrastColor.background,
+      borderColor: borderColorValue,
+      paddingHorizontal: spacing,
+      paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
+      borderRadius: theme.border.radius.circle,
+      borderWidth:
+        type === 'small' ? theme.border.width.slim : theme.border.width.medium,
+      ...(expanded && type === 'small'
+        ? {
+            justifyContent: 'center',
+          }
+        : {
+            alignSelf: 'flex-start',
+          }),
     },
-    ref,
-  ) => {
-    const modeData = DefaultModeStyles[mode];
-    const styles = useButtonStyle();
-    const {theme} = useThemeContext();
+  ];
 
-    const interactiveColor = props.interactiveColor
-      ? props.interactiveColor
-      : theme.color.interactive[0];
-    const backgroundColor =
-      'backgroundColor' in props
-        ? props.backgroundColor
-        : theme.color.background.neutral[0];
+  const textMarginHorizontal = useTextMarginHorizontal(
+    expanded,
+    leftIcon,
+    rightIcon,
+  );
 
-    const fadeAnim = useRef(
-      new Animated.Value(disabled ? DISABLED_OPACITY : 1),
-    ).current;
-
-    React.useEffect(() => {
-      Animated.timing(fadeAnim, {
-        toValue: disabled ? DISABLED_OPACITY : 1,
-        duration: 200,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    }, [disabled, fadeAnim]);
-
-    const spacing = theme.spacing.medium;
-    const {background: buttonColor} =
-      interactiveColor[active ? 'active' : 'default'];
-
-    const textColorBasedOnBackground = backgroundColor.foreground.primary;
-    const textColor =
-      mode !== 'primary'
-        ? textColorBasedOnBackground
-        : interactiveColor[active ? 'active' : 'default'].foreground.primary;
-
-    const borderColor =
-      active && mode !== 'tertiary'
-        ? interactiveColor.outline.background
-        : modeData.visibleBorder
-        ? textColor
-        : 'transparent';
-
-    const backgroundColorValue: ColorValue =
-      active && mode !== 'tertiary'
-        ? buttonColor
-        : modeData.withBackground
-        ? buttonColor
-        : 'transparent';
-
-    const styleContainer: ViewStyle[] = [
-      styles.button,
-      {
-        backgroundColor: backgroundColorValue,
-        borderColor: borderColor,
-        paddingHorizontal: spacing,
-        paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
-        borderRadius: theme.border.radius.circle,
-        borderWidth:
-          type === 'small'
-            ? theme.border.width.slim
-            : theme.border.width.medium,
-        ...(expanded && type === 'small'
-          ? {
-              justifyContent: 'center',
-            }
-          : {
-              alignSelf: 'flex-start',
-            }),
-      },
-    ];
-
-    const textMarginHorizontal = useTextMarginHorizontal(
-      expanded,
-      leftIcon,
-      rightIcon,
-    );
-
-    const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
-      const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
-      if (expanded && text && type !== 'small') {
-        return {
-          position: 'absolute',
-          [iconSide]: spacing,
-          [iconMargin]: text ? theme.spacing.xSmall : undefined,
-        };
-      }
-
+  const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
+    const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
+    if (expanded && text && type !== 'small') {
       return {
+        position: 'absolute',
+        [iconSide]: spacing,
         [iconMargin]: text ? theme.spacing.xSmall : undefined,
       };
-    };
-
-    const styleText: TextStyle = {
-      color: textColor,
-      width: !expanded ? '100%' : undefined,
-    };
-    const textContainer: TextStyle = {
-      flex: !expanded ? undefined : 1,
-      alignItems: 'center',
-      marginHorizontal: textMarginHorizontal,
-      flexShrink: !expanded ? 1 : undefined,
-      ...(expanded &&
-        type === 'small' && {
-          flex: undefined,
-          marginHorizontal: theme.spacing.xSmall,
-        }),
-    };
-
-    const leftStyling: ViewStyle = iconStyle('left');
-    const rightStyling: ViewStyle = iconStyle('right');
-
-    if (!text && !(leftIcon || rightIcon)) {
-      return null;
     }
 
-    return (
-      <Animated.View
-        style={[
-          {
-            opacity: fadeAnim,
-          },
-          style,
-        ]}
+    return {
+      [iconMargin]: text ? theme.spacing.xSmall : undefined,
+    };
+  };
+
+  const styleText: TextStyle = {
+    width: !expanded ? '100%' : undefined,
+  };
+  const textContainer: TextStyle = {
+    flex: !expanded ? undefined : 1,
+    alignItems: 'center',
+    marginHorizontal: textMarginHorizontal,
+    flexShrink: !expanded ? 1 : undefined,
+    ...(expanded &&
+      type === 'small' && {
+        flex: undefined,
+        marginHorizontal: theme.spacing.xSmall,
+      }),
+  };
+
+  const leftStyling: ViewStyle = iconStyle('left');
+  const rightStyling: ViewStyle = iconStyle('right');
+
+  if (!text && !(leftIcon || rightIcon)) {
+    return null;
+  }
+
+  return (
+    <Animated.View
+      style={[
+        {
+          opacity: fadeAnim,
+        },
+        style,
+      ]}
+    >
+      <PressableOpacity
+        style={[styleContainer, hasShadow ? shadows : undefined]}
+        onPress={disabled || loading ? undefined : onPress}
+        disabled={disabled || loading}
+        accessibilityRole="button"
+        accessibilityState={{disabled: !!disabled}}
+        ref={ref}
+        {...otherProps}
       >
-        <PressableOpacity
-          style={[styleContainer, hasShadow ? shadows : undefined]}
-          onPress={disabled || loading ? undefined : onPress}
-          disabled={disabled || loading}
-          accessibilityRole="button"
-          accessibilityState={{disabled: !!disabled}}
-          ref={ref}
-          {...props}
-        >
-          {leftIcon && (
-            <View style={leftStyling}>
-              <ThemeIcon color={textColor} {...leftIcon} />
-            </View>
-          )}
-          {text && (
-            <View style={textContainer}>
-              <ThemeText
-                typography={getTextType(mode, type)}
-                style={styleText}
-                testID="buttonText"
-              >
-                {text}
-              </ThemeText>
-            </View>
-          )}
-          {(rightIcon || loading) && (
-            <View style={rightStyling}>
-              {loading ? (
-                <ActivityIndicator size="small" color={styleText.color} />
-              ) : (
-                rightIcon && <ThemeIcon color={textColor} {...rightIcon} />
-              )}
-            </View>
-          )}
-        </PressableOpacity>
-      </Animated.View>
-    );
-  },
-);
+        {leftIcon && (
+          <View style={leftStyling}>
+            <ThemeIcon color={mainContrastColor} {...leftIcon} />
+          </View>
+        )}
+        {text && (
+          <View style={textContainer}>
+            <ThemeText
+              typography={getTextType(mode, type)}
+              style={styleText}
+              color={mainContrastColor}
+              testID="buttonText"
+            >
+              {text}
+            </ThemeText>
+          </View>
+        )}
+        {(rightIcon || loading) && (
+          <View style={rightStyling}>
+            {loading ? (
+              <ActivityIndicator size="small" color={styleText.color} />
+            ) : (
+              rightIcon && (
+                <ThemeIcon color={mainContrastColor} {...rightIcon} />
+              )
+            )}
+          </View>
+        )}
+      </PressableOpacity>
+    </Animated.View>
+  );
+});
+
+/**
+ * Get the button colors based on the input props to the button. The returned
+ * mainContrastColor is the ContrastColor for the background and text of the
+ * button. In addition, a borderColorValue is returned for the border color. We
+ * can't really use a ContrastColor for this value since sometimes the color is
+ * background color and sometimes a foreground color, based on the mode and
+ * state of the button.
+ */
+const getButtonColors = (
+  props: ButtonProps,
+  theme: Theme,
+): {
+  mainContrastColor: ContrastColor;
+  borderColorValue: ColorValue;
+} => {
+  const interactiveColor = props.interactiveColor
+    ? props.interactiveColor
+    : theme.color.interactive[0];
+
+  switch (props.mode) {
+    case 'primary':
+    case undefined:
+      return {
+        mainContrastColor: props.active
+          ? interactiveColor.active
+          : interactiveColor.default,
+        borderColorValue: props.active
+          ? interactiveColor.outline.background
+          : interactiveColor.default.background,
+      };
+    case 'secondary':
+      return {
+        mainContrastColor: props.active
+          ? interactiveColor.active
+          : props.backgroundColor,
+        borderColorValue: props.active
+          ? interactiveColor.outline.background
+          : props.backgroundColor.foreground.primary,
+      };
+    case 'tertiary':
+      return {
+        mainContrastColor: props.backgroundColor,
+        borderColorValue: props.backgroundColor.background,
+      };
+  }
+};
 
 /**
  * Get the extra horizontal margin for the button text. This is for normal
