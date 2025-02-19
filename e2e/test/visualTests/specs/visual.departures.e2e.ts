@@ -34,7 +34,7 @@ describe('Visual tests', () => {
     await AppHelper.pause(500);
   });
 
-  it.only('departures should be equal to baseline', async () => {
+  it('departures should be equal to baseline', async () => {
     const stopPlace = 'Prinsens gate';
 
     try {

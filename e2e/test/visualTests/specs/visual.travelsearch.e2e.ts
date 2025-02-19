@@ -52,14 +52,16 @@ describe('Visual tests', () => {
       // Check filter
       await TravelsearchFilterPage.openFilter();
       // Test: Filter (top)
-      await VisualHelper.visualTestScreen(
+      await VisualHelper.visualTestElement(
+        'filterView',
         'travelSearch_filter_top',
         testOptions,
         newBaseline,
       );
       await AppHelper.scrollDownUntilId('filterView', 'saveFilterCheckbox');
       // Test: Filter (bottom)
-      await VisualHelper.visualTestScreen(
+      await VisualHelper.visualTestElement(
+        'filterView',
         'travelSearch_filter_bottom',
         testOptions,
         newBaseline,
