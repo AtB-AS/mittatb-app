@@ -27,6 +27,7 @@ export const BonusPriceTag = ({price, ...props}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    backgroundColor: theme.color.background.neutral[0].background,
     borderColor: theme.color.foreground.inverse.secondary,
     borderWidth: theme.border.width.slim,
     borderRadius: theme.border.radius.regular,
