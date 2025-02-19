@@ -165,8 +165,11 @@ describe('Travel search', () => {
 
   /**
    * Changing departure time should give correct travel search results
+   * NOTE!
+   * Disabled due to not reachable time picker (https://github.com/henninghall/react-native-date-picker/issues/792)
+   * Will enable if updated in later react-native-date-picker
    */
-  it('should search based on time', async () => {
+  xit('should search based on time', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
     const depTimeHr = 21;

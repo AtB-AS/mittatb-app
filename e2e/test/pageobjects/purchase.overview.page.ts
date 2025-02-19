@@ -50,7 +50,7 @@ class PurchaseOverviewPage {
   async selectTraveller() {
     const reqId = `//*[@resource-id="selectTravellerButton"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('text', 'Travellers');
+    await ElementHelper.waitForElement('id', 'counterInput_adult');
   }
 
   /**

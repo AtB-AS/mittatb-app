@@ -36,6 +36,77 @@ describe('Visual tests', () => {
 
   it('departures should be equal to baseline', async () => {
     const stopPlace = 'Prinsens gate';
+
+    try {
+      await NavigationHelper.tapMenu('departures');
+      await NavigationHelper.tapMenu('departures');
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await DepartureSearchPage.searchFrom.click();
+      await SearchPage.setSearchLocation(stopPlace);
+
+      // Stop place
+      await ElementHelper.waitForElement('id', 'departuresContentView');
+      await ElementHelper.expectText(stopPlace);
+
+      // Set departure time (next Wednesday)
+      await DepartureSearchPage.setFutureDepartureTime(2);
+      await ElementHelper.waitForElement('id', 'departuresContentView');
+      await ElementHelper.waitForElementNotExists('isLoading');
+
+      // Test: departures
+      await VisualHelper.visualTestElement(
+        'quaySection0',
+        'departures_quay0',
+        testOptions,
+        newBaseline,
+      );
+
+      // Departure details
+      await DepartureOverviewPage.openDeparture();
+      await ElementHelper.waitForElement('id', 'departureDetailsContentView');
+      await AppHelper.pause();
+
+      // Test: departure details
+      await VisualHelper.visualTestElement(
+        'departureDetails',
+        'departures_departureDetailsContent',
+        testOptions,
+        newBaseline,
+      );
+
+      // Enable journey aid
+      await NavigationHelper.tapMenu('profile');
+      await NavigationHelper.tapMenu('profile');
+      await ElementHelper.waitForElement('text', 'My profile');
+      await MyProfilePage.openSetting('travelAid');
+      await ElementHelper.waitForElement('text', 'Journey Aid');
+      await AccessibilityPage.toggleJourneyAid();
+      await NavigationHelper.tapMenu('departures');
+      await ElementHelper.waitForElement('id', 'departureDetailsContentView');
+      await DepartureDetailsPage.openJourneyAid();
+      await VisualHelper.visualTestScreen(
+        'departures_journeyAid',
+        testOptions,
+        newBaseline,
+      );
+      await VisualHelper.visualTestElement(
+        'journeyAidSection',
+        'departures_journeyAidSection',
+        testOptions,
+        newBaseline,
+      );
+      await JourneyAidPage.closeJourneyAid();
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_visual_test_departures');
+      throw errMsg;
+    }
+  });
+
+  // NOTE!
+  // Disabled due to not reachable date picker (https://github.com/henninghall/react-native-date-picker/issues/792)
+  // Will enable if updated in later react-native-date-picker
+  xit('DISABLED - departures should be equal to baseline', async () => {
+    const stopPlace = 'Prinsens gate';
     const depTimeHr = 0;
     const depTimeMin = 0;
     const searchDate = Config.departureDate();

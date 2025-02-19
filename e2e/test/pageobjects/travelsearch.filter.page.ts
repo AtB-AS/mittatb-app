@@ -17,7 +17,7 @@ class TravelSearchFilterPage {
   async openTravelSearchTimePicker() {
     const reqId = `//*[@resource-id="dashboardDateTimePicker"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('id', `radioButtonNow`);
+    await ElementHelper.waitForElement('text', `Leave at`);
   }
 
   /**
@@ -25,10 +25,11 @@ class TravelSearchFilterPage {
    * @param basedOn what to base on (Now | Departure | Arrival)
    */
   async chooseSearchBasedOn(basedOn: 'Now' | 'Departure' | 'Arrival') {
-    const reqId = `//*[@resource-id="radioButton${basedOn}"]`;
+    const reqId = `//*[@text="Leave at"]`;
     await $(reqId).click();
     if (basedOn !== 'Now') {
       await ElementHelper.waitForElement('id', `timePicker`);
+      //id: no.mittatb.debug:id/pickerWrapper
     }
   }
 
@@ -38,7 +39,7 @@ class TravelSearchFilterPage {
   async openFilter() {
     const reqId = `//*[@resource-id="filterButton"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('text', `Filter`);
+    await ElementHelper.waitForElement('id', `filterView`);
   }
 
   /**

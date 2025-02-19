@@ -74,6 +74,58 @@ class TimeHelper {
       travelTimeMin >= expectedMins - minVariation
     );
   }
+
+  /**
+   * Returns the date for the next weekday in question
+   * @param weekday Weekdays numbered from 0 (Monday) to 6 (Sunday)
+   */
+  getNextWeekDayDate(weekday: number) {
+    const today = new Date();
+    const increaseDays = weekday - today.getDay() + 7;
+    today.setDate(today.getDate() + increaseDays);
+
+    // Increase with a week to get same week day IF it's holiday
+    while (this.isHoliday(today.toISOString().split('T')[0])) {
+      today.setDate(today.getDate() + 7);
+    }
+    return today.toDateString().split(' ');
+  }
+
+  /**
+   * Check if a given date is a holiday
+   * @param testDate format YYYY-MM-DD
+   */
+  isHoliday = (testDate: string): boolean => {
+    // List of holidays, i.e. days with either routes as a Saturday or a Sunday
+    const holidays = [
+      '2024-12-24',
+      '2024-12-25',
+      '2024-12-26',
+      '2024-12-27',
+      '2024-12-28',
+      '2024-12-29',
+      '2024-12-30',
+      '2024-12-31',
+      '2025-01-01',
+      '2025-04-16',
+      '2025-04-17',
+      '2025-04-18',
+      '2025-04-21',
+      '2025-05-01',
+      '2025-05-29',
+      '2025-06-09',
+      '2025-12-24',
+      '2025-12-25',
+      '2025-12-26',
+      '2025-12-27',
+      '2025-12-28',
+      '2025-12-29',
+      '2025-12-30',
+      '2025-12-31',
+      '2026-01-01',
+    ];
+    return holidays.includes(testDate);
+  };
 }
 
 export default new TimeHelper();

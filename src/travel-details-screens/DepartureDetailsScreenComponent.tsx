@@ -418,6 +418,7 @@ export const DepartureDetailsScreenComponent = ({
             toStopPosition={activeItem.toStopPosition}
             alreadyShownSituationNumbers={alreadyShownSituationNumbers}
             onPressQuay={onPressQuay}
+            testID="departureDetails"
           />
         </View>
       </FullScreenView>
@@ -450,6 +451,7 @@ type CallGroupProps = {
   toStopPosition?: number;
   alreadyShownSituationNumbers: string[];
   onPressQuay: Props['onPressQuay'];
+  testID?: string;
 };
 
 function EstimatedCallRows({
@@ -459,6 +461,7 @@ function EstimatedCallRows({
   toStopPosition,
   alreadyShownSituationNumbers,
   onPressQuay,
+  testID,
 }: CallGroupProps) {
   const styles = useStopsStyle();
   const passedCalls = calls.filter((c) => c.metadata.group === 'passed');
@@ -489,7 +492,7 @@ function EstimatedCallRows({
   ) : null;
 
   return (
-    <View style={styles.estimatedCallRows}>
+    <View style={styles.estimatedCallRows} testID={testID}>
       {estimatedCallsToShow.map((call) => (
         <EstimatedCallRow
           key={call.stopPositionInPattern}
