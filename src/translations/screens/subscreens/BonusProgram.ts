@@ -32,5 +32,6 @@ const BonusProgramTexts = {
       ),
     },
   },
+  youHave: _('Du har ', 'You have ', 'Du har '),
 };
 export default BonusProgramTexts;
