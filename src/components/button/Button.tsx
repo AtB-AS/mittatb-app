@@ -205,9 +205,9 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
  * Get the button colors based on the input props to the button. The returned
  * mainContrastColor is the ContrastColor for the background and text of the
  * button. In addition, a borderColorValue is returned for the border color. We
- * can't really use a ContrastColor for this value since sometimes the color is
- * background color and sometimes a foreground color, based on the mode and
- * state of the button.
+ * can't really use a ContrastColor for the border color since sometimes the
+ * color is background color and sometimes a foreground color, based on the mode
+ * and state of the button.
  */
 const getButtonColors = (
   props: ButtonProps,
