@@ -5,12 +5,12 @@ import {mobileTokenClient} from '../mobileTokenClient';
 import {LIST_REMOTE_TOKENS_QUERY_KEY} from './use-list-remote-tokens-query';
 import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
 import {
-  getSdkErrorHandlingStrategy,
+  getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
+  wipeToken,
 } from '../utils';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {wipeToken} from '@atb/mobile-token/helpers';
 
 export const usePreemptiveRenewTokenMutation = (userId?: string) => {
   const queryClient = useQueryClient();
@@ -59,7 +59,7 @@ export const usePreemptiveRenewTokenMutation = (userId?: string) => {
           description: `Error renewing token ${token?.tokenId}`,
         },
       });
-      const errHandling = getSdkErrorHandlingStrategy(err);
+      const errHandling = getMobileTokenErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
           await wipeToken(getSdkErrorTokenIds(err), traceId);

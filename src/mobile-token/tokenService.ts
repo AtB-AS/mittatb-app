@@ -1,8 +1,9 @@
 import {
   ActivatedToken,
-  handleRemoteTokenStateError,
   isEmulator,
   RemoteTokenService,
+  TokenAction,
+  TokenEncodingRequest,
 } from '@entur-private/abt-mobile-client-sdk';
 
 import {client} from '@atb/api/client';
@@ -19,11 +20,9 @@ import {
   ToggleResponse,
   TokenLimitResponse,
 } from './types';
-import {
-  parseRemoteError,
-  RemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
 import {getDeviceName} from 'react-native-device-info';
+import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
+import {abtClient} from './mobileTokenClient';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
@@ -39,28 +38,28 @@ export type TokenService = RemoteTokenService & {
     traceId: string,
     bypassRestrictions: boolean,
   ) => Promise<RemoteToken[]>;
-  validate: (
-    token: ActivatedToken,
-    secureContainer: string,
-    traceId: string,
-  ) => Promise<void>;
+  validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
 };
 
 const handleError = (err: any) => {
-  throw parseRemoteError(err.response?.data) || err;
+  throw parseBffCallErrors(err.response?.data);
 };
 
-const isRemoteTokenStateError = (err: any) =>
-  parseRemoteError(err.response?.data) instanceof RemoteTokenStateError;
-
 export const tokenService: TokenService = {
-  initiateNewMobileToken: async (traceId) => {
+  initiateNewMobileToken: async (
+    preferRequireAttestation,
+    traceId,
+    deviceInfo,
+  ) => {
     const deviceName = await getDeviceName();
     const data: InitRequest = {
       name: deviceName,
+      preferRequireAttestation: preferRequireAttestation,
+      deviceInfo: deviceInfo.data,
+      deviceInfoType: deviceInfo.type,
     };
-    return client
+    return await client
       .post<InitiateTokenResponse>('/tokens/v4/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
@@ -73,7 +72,7 @@ export const tokenService: TokenService = {
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
   },
-  activateNewMobileToken: async (pendingToken, correlationId) =>
+  activateNewMobileToken: (pendingToken, correlationId) =>
     client
       .post<CompleteTokenInitializationResponse>(
         '/tokens/v4/activate',
@@ -89,14 +88,12 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
-  initiateMobileTokenRenewal: (token, secureContainer, traceId, attestation) =>
+  initiateMobileTokenRenewal: (token, secureContainer, correlationId) =>
     client
       .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', undefined, {
         headers: {
-          [CorrelationIdHeaderName]: traceId,
+          [CorrelationIdHeaderName]: correlationId,
           [SignedTokenHeaderName]: secureContainer,
-          [AttestationHeaderName]: attestation?.data || '',
-          [AttestationTypeHeaderName]: attestation?.type || '',
         },
         authWithIdToken: true,
         timeout: 15000,
@@ -109,7 +106,6 @@ export const tokenService: TokenService = {
     secureContainer,
     activatedToken,
     correlationId,
-    attestation,
   ) =>
     client
       .post<CompleteTokenRenawalResponse>(
@@ -119,8 +115,6 @@ export const tokenService: TokenService = {
           headers: {
             [CorrelationIdHeaderName]: correlationId,
             [SignedTokenHeaderName]: secureContainer,
-            [AttestationHeaderName]: attestation?.data || '',
-            [AttestationTypeHeaderName]: attestation?.type || '',
           },
           authWithIdToken: true,
           timeout: 15000,
@@ -129,14 +123,27 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
-  getMobileTokenDetails: (token, secureContainer, traceId, attestation) =>
+  reattestMobileToken: (token, secureContainer, reattestation, correlationId) =>
+    client
+      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
+        headers: {
+          [CorrelationIdHeaderName]: correlationId,
+          [SignedTokenHeaderName]: secureContainer,
+          [AttestationHeaderName]: reattestation.data,
+          [AttestationTypeHeaderName]: reattestation.type,
+        },
+        authWithIdToken: true,
+        timeout: 15000,
+        skipErrorLogging: isRemoteTokenStateError,
+      })
+      .then(() => {})
+      .catch(handleError),
+  getMobileTokenDetails: (token, secureContainer, traceId) =>
     client
       .get<GetTokenDetailsResponse>('/tokens/v4/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
-          [AttestationHeaderName]: attestation?.data || '',
-          [AttestationTypeHeaderName]: attestation?.type || '',
         },
         authWithIdToken: true,
         timeout: 15000,
@@ -160,8 +167,7 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.removed)
       .catch(handleError),
-
-  listTokens: async (traceId: string) =>
+  listTokens: (traceId: string) =>
     client
       .get<ListResponse>('/tokens/v4/list', {
         headers: {
@@ -173,11 +179,7 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
-  toggle: async (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) =>
+  toggle: (tokenId: string, traceId: string, bypassRestrictions: boolean) =>
     client
       .post<ToggleResponse>(
         '/tokens/v4/toggle',
@@ -194,7 +196,7 @@ export const tokenService: TokenService = {
       .then((res) => res.data.tokens)
       .catch(handleError),
 
-  getTokenToggleDetails: async () =>
+  getTokenToggleDetails: () =>
     client
       .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
         authWithIdToken: true,
@@ -203,20 +205,31 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data)
       .catch(handleError),
-  validate: async (token, secureContainer, traceId) =>
-    handleRemoteTokenStateError<any>(async (attestation) => {
-      return client
-        .get('/tokens/v4/validate', {
-          headers: {
-            [CorrelationIdHeaderName]: traceId,
-            [SignedTokenHeaderName]: secureContainer,
-            [AttestationHeaderName]: attestation?.data || '',
-            [AttestationTypeHeaderName]: attestation?.type || '',
-          },
-          authWithIdToken: true,
-          timeout: 15000,
-          skipErrorLogging: isRemoteTokenStateError,
-        })
-        .catch(handleError);
-    }, token),
+  validate: async (token, traceId) => {
+    const tokenEncodingRequest: TokenEncodingRequest = {
+      challenges: [],
+      tokenActions: [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS],
+      includeCertificate: false,
+    };
+
+    await abtClient.remoteClientCallHandler(
+      token.getContextId(),
+      tokenEncodingRequest,
+      traceId,
+      async (secureContainerToken, attestation) =>
+        client
+          .get('/tokens/v4/validate', {
+            headers: {
+              [CorrelationIdHeaderName]: traceId,
+              [SignedTokenHeaderName]: secureContainerToken,
+              [AttestationHeaderName]: attestation?.data,
+              [AttestationTypeHeaderName]: attestation?.type,
+            },
+            authWithIdToken: true,
+            timeout: 15000,
+            skipErrorLogging: isRemoteTokenStateError,
+          })
+          .catch(handleError),
+    );
+  },
 };
