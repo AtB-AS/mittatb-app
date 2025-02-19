@@ -9,6 +9,7 @@ end
 
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
+node_require('@entur-private/abt-token-state-react-native-lib/entur_private_pods.rb')
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -48,22 +49,13 @@ target 'app' do
 
   pod "Intercom"
 
-  $DontUseVendoredAbtMobile = true
-  $enturAbtMobileVersion = '2.1.6'
+  use_entur_private_pods
 
   if ENV['GH_ACCESS_TOKEN']
-    pod 'TokenCore', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => "release-#{$enturAbtMobileVersion}"
-    pod 'VisualCodeViewiOSLib', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => "release-#{$enturAbtMobileVersion}"
-    pod 'VisualCodeModeliOSLib', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => "release-#{$enturAbtMobileVersion}"
-    pod 'BarcodeiOSLib', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => "release-#{$enturAbtMobileVersion}"
-    pod 'AbtProtobufTokenIosStubs', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-protobuf-pods.git', :tag => '2.828.0'
+    pod 'AbtProtobufTokenIosStubs', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-protobuf-pods.git', :tag => '2.896.0'
   else
     # If no GH_ACCESS_TOKEN in env, then probably locally where the user uses personal ssh key
-    pod 'TokenCore', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => "release-#{$enturAbtMobileVersion}" # Possible to use ":branch => 'develop'" under local development
-    pod 'VisualCodeViewiOSLib', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => "release-#{$enturAbtMobileVersion}" # Possible to use ":branch => 'develop'" under local development
-    pod 'VisualCodeModeliOSLib', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => "release-#{$enturAbtMobileVersion}" # Possible to use ":branch => 'develop'" under local development
-    pod 'BarcodeiOSLib', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => "release-#{$enturAbtMobileVersion}" # Possible to use ":branch => 'develop'" under local development
-    pod 'AbtProtobufTokenIosStubs', :git => 'git@github.com:entur/abt-protobuf-pods.git', :tag => '2.828.0'
+    pod 'AbtProtobufTokenIosStubs', :git => 'git@github.com:entur/abt-protobuf-pods.git', :tag => '2.896.0'
   end
 
   post_install do |installer|

@@ -946,9 +946,13 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240116.2)
-  - AbtProtobufTokenIosStubs (2.828.0):
+  - AbtCommoniOSLib (3.3.2):
+    - DevicePpi (~> 1.2.20)
+  - AbtProtobufTokenIosStubs (2.896.0):
     - SwiftProtobuf (~> 1.22.0)
-  - BarcodeiOSLib (1.0.0)
+  - ApiLogiOSLib (3.3.2)
+  - BarcodeiOSLib (3.3.2):
+    - AbtCommoniOSLib
   - boost (1.83.0)
   - BoringSSL-GRPC (0.0.32):
     - BoringSSL-GRPC/Implementation (= 0.0.32)
@@ -960,6 +964,7 @@ PODS:
     - React-Core
   - BVLinearGradient (2.8.3):
     - React-Core
+  - DevicePpi (1.2.21)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.7)
   - FBReactNativeSpec (0.73.7):
@@ -2386,24 +2391,34 @@ PODS:
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
-  - TokenCore (1.0.0):
+  - TimeApiiOSLib (3.3.2)
+  - TokenCore (3.3.2):
     - AbtProtobufTokenIosStubs
-    - SwiftProtobuf (~> 1.22.0)
-  - TokenStateReactNativeLib (2.1.6):
+    - ApiLogiOSLib
+    - SwiftProtobuf (~> 1.22.1)
+    - TimeApiiOSLib
+  - TokenStateReactNativeLib (3.3.2):
+    - AbtCommoniOSLib
+    - ApiLogiOSLib
     - BarcodeiOSLib
     - React-Core
+    - TimeApiiOSLib
     - TokenCore
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (2.8.0)
-  - VisualCodeModeliOSLib (1.0.0)
-  - VisualCodeViewiOSLib (1.0.0):
+  - VisualCodeModeliOSLib (3.3.2):
+    - AbtCommoniOSLib
+  - VisualCodeViewiOSLib (3.3.2):
+    - AbtCommoniOSLib
     - VisualCodeModeliOSLib
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.828.0`)"
-  - "BarcodeiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
+  - "AbtCommoniOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/common-ios-lib`)"
+  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.896.0`)"
+  - "ApiLogiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/api-log-ios-lib`)"
+  - "BarcodeiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -2488,16 +2503,18 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
+  - "TimeApiiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib`)"
+  - "TokenCore (from `../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib`)"
   - "TokenStateReactNativeLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib`)"
-  - "VisualCodeModeliOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
-  - "VisualCodeViewiOSLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-2.1.6`)"
+  - "VisualCodeModeliOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib`)"
+  - "VisualCodeViewiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-view-ios-lib`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
+    - DevicePpi
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -2536,12 +2553,18 @@ SPEC REPOS:
     - Turf
 
 EXTERNAL SOURCES:
+  AbtCommoniOSLib:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/common-ios-lib"
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.828.0
+    :tag: 2.896.0
+  ApiLogiOSLib:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/api-log-ios-lib"
   BarcodeiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -2703,45 +2726,39 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  TimeApiiOSLib:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib"
   TokenCore:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib"
   TokenStateReactNativeLib:
     :path: "../node_modules/@entur-private/abt-token-state-react-native-lib"
   VisualCodeModeliOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib"
   VisualCodeViewiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
+    :path: !ruby/object:Pathname
+    path: "../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-view-ios-lib"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.828.0
-  BarcodeiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
-  TokenCore:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
-  VisualCodeModeliOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
-  VisualCodeViewiOSLib:
-    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-2.1.6
+    :tag: 2.896.0
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
-  AbtProtobufTokenIosStubs: b8d55473b0996915f7d75297e089b3af2f3f8831
-  BarcodeiOSLib: 9f460686e7d7150cde46c652e5244d9fa6b516ab
+  AbtCommoniOSLib: 244899edeaa2ec828566119d6d00c2cf7a93c8c1
+  AbtProtobufTokenIosStubs: 76426ea8c7c8cf76a750b04bcd4be8288bafae70
+  ApiLogiOSLib: bda60ece3f53fcbc6d1cfcbba4c0993057e6c2a7
+  BarcodeiOSLib: 45c0bb7f5f709c1c4147db333ee532169475e464
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
+  DevicePpi: 7f5b711e0a482584edbc1c0cdd24c7cfb46056e5
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 9f533d5a4c75ca77c8ed774aced1a91a0701781e
   FBReactNativeSpec: 40b791f4a1df779e7e4aa12c000319f4f216d40a
@@ -2854,13 +2871,14 @@ SPEC CHECKSUMS:
   RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  TokenCore: 3235fc5e40d5364f169618de8ba37929607618ff
-  TokenStateReactNativeLib: 7d0ff81bceaa26361ad7fc5e90cf161eb1a4b921
+  TimeApiiOSLib: f2586b843d413a5807028dcb15be51333263ff6d
+  TokenCore: d0b46e397c07ab1792aefeaa8fef4c7ede75820d
+  TokenStateReactNativeLib: 8a1f3dee2da8274bfffb57091ac191cbad05e3c6
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
-  VisualCodeModeliOSLib: 826875ce13fe87af1517d5d730a23181ca3b21be
-  VisualCodeViewiOSLib: 6f3ee3110493f2d6b2f9d7d093acc75a098bd948
+  VisualCodeModeliOSLib: b5ebe6b2ec4c3943be3c051eaa4a0177b35c4a1f
+  VisualCodeViewiOSLib: b8ebac9ec29ec84f02a010f01c541c8e35ccef44
   Yoga: 6d01ccde54c9f8b92492beb05d468dbfed1d9881
 
-PODFILE CHECKSUM: 2f28aba1e178d4016c03aa47ce81c83f30bc6834
+PODFILE CHECKSUM: 1f7496e83fec4c676fb25264fd8a580493401080
 
 COCOAPODS: 1.14.3

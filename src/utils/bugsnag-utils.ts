@@ -36,5 +36,9 @@ export const notifyBugsnag = (
 export const logToBugsnag = (message: string, metadata?: MetaData) =>
   Bugsnag.leaveBreadcrumb(message, metadata);
 
-export const errorToMetadata = (error: any) =>
-  'message' in error ? {errorMessage: error.message} : undefined;
+export const errorToMetadata = (error: any) => {
+  const name = 'name' in error ? {errorName: error.name} : undefined;
+  const message =
+    'message' in error ? {errorMessage: error.message} : undefined;
+  return name || message ? {...name, ...message} : undefined;
+};
