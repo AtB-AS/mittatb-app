@@ -37,6 +37,7 @@ export type RemoteConfig = {
   enable_posthog: boolean;
   enable_push_notifications: boolean;
   enable_realtime_map: boolean;
+  enable_refunds: boolean;
   enable_save_ticket_recipients: boolean;
   enable_server_time: boolean;
   enable_shmo_deep_integration: boolean;
@@ -110,6 +111,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_posthog: false,
   enable_push_notifications: false,
   enable_realtime_map: false,
+  enable_refunds: true,
   enable_save_ticket_recipients: false,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
@@ -237,6 +239,8 @@ export function getConfig(): RemoteConfig {
   const enable_realtime_map =
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
+  const enable_refunds =
+    values['enable_refunds']?.asBoolean() ?? defaultRemoteConfig.enable_refunds;
   const enable_save_ticket_recipients =
     values['enable_save_ticket_recipients']?.asBoolean() ??
     defaultRemoteConfig.enable_save_ticket_recipients;
@@ -374,6 +378,7 @@ export function getConfig(): RemoteConfig {
     enable_posthog,
     enable_push_notifications,
     enable_realtime_map,
+    enable_refunds,
     enable_save_ticket_recipients,
     enable_server_time,
     enable_shmo_deep_integration,

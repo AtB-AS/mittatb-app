@@ -10,7 +10,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {consumeCarnet} from '@atb/ticketing';
+import {refundFareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
@@ -21,7 +21,7 @@ type Props = {
   fareContractId: string;
 };
 
-export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
+export const RefundBottomSheet = ({fareContractId}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
@@ -29,16 +29,16 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
 
-  const onConsume = async () => {
+  const onRefund = async () => {
     setIsLoading(true);
     try {
-      await consumeCarnet(fareContractId);
-      analytics.logEvent('Ticketing', 'Carnet consumed');
+      await refundFareContract(fareContractId);
+      analytics.logEvent('Ticketing', 'Ticket refunded');
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);
       Bugsnag.notify({
-        name: `${errorData.responseStatus} error when consuming carnet`,
+        name: `${errorData.responseStatus} error when refunding fare contract`,
         message: `Error: ${JSON.stringify(errorData)}`,
       });
       setError(true);
@@ -48,7 +48,7 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
 
   return (
     <BottomSheetContainer
-      title={t(FareContractTexts.carnet.bottomSheetTitle)}
+      title={t(FareContractTexts.refund.bottomSheetTitle)}
       focusTitleOnLoad={true}
     >
       <ScrollView
@@ -57,21 +57,21 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
       >
         {error && (
           <MessageInfoBox
-            message={t(FareContractTexts.carnet.genericError)}
+            message={t(FareContractTexts.refund.genericError)}
             type="error"
           />
         )}
         <Section>
           <GenericSectionItem type="spacious">
             <ThemeText>
-              {t(FareContractTexts.carnet.bottomSheetDescription)}
+              {t(FareContractTexts.refund.bottomSheetDescription)}
             </ThemeText>
           </GenericSectionItem>
         </Section>
         <Button
           expanded={true}
-          onPress={onConsume}
-          text={t(FareContractTexts.carnet.activateCarnet)}
+          onPress={onRefund}
+          text={t(FareContractTexts.refund.confirm)}
           rightIcon={{svg: Confirm}}
           loading={isLoading}
         />
