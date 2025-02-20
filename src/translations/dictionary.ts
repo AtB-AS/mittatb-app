@@ -114,8 +114,8 @@ const dictionary = {
   },
   currency: {
     nok: {
-      label: _('kr', 'kr', `kr`),
-      a11yLabel: _('kroner', 'kroner', `kroner`),
+      short: _('kr', 'kr', `kr`),
+      long: _('kroner', 'kroner', `kroner`),
     },
   },
   messageActions: {

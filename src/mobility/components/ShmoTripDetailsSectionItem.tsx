@@ -56,7 +56,7 @@ export const ShmoTripDetailsSectionItem = ({
         style={styles.rightSection}
         accessible={true}
         accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${t(
-          dictionary.currency.nok.a11yLabel,
+          dictionary.currency.nok.long,
         )}`}
       >
         {withHeader && (
@@ -69,7 +69,7 @@ export const ShmoTripDetailsSectionItem = ({
           </ThemeText>
         )}
         <ThemeText typography="body__primary--big">
-          {totalAmount} {t(dictionary.currency.nok.label)}
+          {totalAmount} {t(dictionary.currency.nok.short)}
         </ThemeText>
       </View>
     </View>
