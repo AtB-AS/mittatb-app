@@ -1,3 +1,4 @@
+import {useAnalyticsContext} from '@atb/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
@@ -26,11 +27,13 @@ export const RefundBottomSheet = ({fareContractId}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
+  const analytics = useAnalyticsContext();
 
   const onRefund = async () => {
     setIsLoading(true);
     try {
       await refundFareContract(fareContractId);
+      analytics.logEvent('Ticketing', 'Ticket refunded');
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);
