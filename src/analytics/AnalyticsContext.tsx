@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {createContext, useContext, useEffect, useMemo} from 'react';
 import {PostHog, PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
@@ -16,34 +9,22 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
-  const [client, setClient] = useState<PostHog>();
   const {userId, authenticationType} = useAuthContext();
   const {isPosthogEnabled} = useFeatureTogglesContext();
 
-  const authTypeRef = useRef(authenticationType);
-  useEffect(() => {
-    authTypeRef.current = authenticationType;
-  }, [authenticationType]);
+  const client = useMemo(
+    () =>
+      isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY
+        ? new PostHog(POSTHOG_API_KEY, {host: POSTHOG_HOST})
+        : undefined,
+    [isPosthogEnabled],
+  );
 
   useEffect(() => {
-    if (isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY && !client) {
-      const postHog = new PostHog(POSTHOG_API_KEY, {
-        host: POSTHOG_HOST,
-      });
-      setClient(postHog);
+    if (userId) {
+      client?.identify(userId, {authenticationType});
     }
-  }, [isPosthogEnabled, client]);
-
-  useEffect(() => {
-    if (userId && client) {
-      client.identify(userId, {
-        authenticationType: authTypeRef.current,
-      });
-      return () => {
-        client?.reset();
-      };
-    }
-  }, [userId, client]);
+  }, [client, userId, authenticationType]);
 
   return (
     <AnalyticsContext.Provider value={client}>

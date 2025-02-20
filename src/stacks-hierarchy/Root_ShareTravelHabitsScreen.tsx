@@ -3,7 +3,7 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
@@ -14,7 +14,6 @@ import {
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useAnalyticsContext} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
-import {useFocusEffect} from '@react-navigation/native';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
@@ -26,13 +25,6 @@ export const Root_ShareTravelHabitsScreen = () => {
   const {onboardForBeacons} = useBeaconsContext();
 
   const analytics = useAnalyticsContext();
-
-  // call useFocusEffect to send analytics once when the screen is shown
-  useFocusEffect(
-    useCallback(() => {
-      analytics.logEvent('Onboarding', 'didSeeShareTravelHabitsScreen');
-    }, [analytics]),
-  );
 
   const choosePermissions = async () => {
     await onboardForBeacons(false);
