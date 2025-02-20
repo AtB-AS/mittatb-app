@@ -1,3 +1,4 @@
+import {useAnalyticsContext} from '@atb/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
@@ -18,19 +19,24 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   fareContractId: string;
+  fareProductType: string | undefined;
 };
 
-export const RefundBottomSheet = ({fareContractId}: Props) => {
+export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
+  const analytics = useAnalyticsContext();
 
   const onRefund = async () => {
     setIsLoading(true);
     try {
       await refundFareContract(fareContractId);
+      analytics.logEvent('Ticketing', 'Ticket refunded', {
+        fareProductType,
+      });
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);

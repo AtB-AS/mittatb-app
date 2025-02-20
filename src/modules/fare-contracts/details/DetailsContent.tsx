@@ -217,7 +217,10 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
       {fc.orderId && isRefundsEnabled && refundOptions?.refundable && (
-        <RefundSectionItem fareContractId={fc.id} />
+        <RefundSectionItem
+          fareContractId={fc.id}
+          fareProductType={preassignedFareProduct?.type}
+        />
       )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
         <ConsumeCarnetSectionItem

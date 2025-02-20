@@ -8,10 +8,12 @@ import {RefundBottomSheet} from './RefundBottomSheet';
 
 type RefundSectionItemProps = SectionItemProps<{
   fareContractId: string;
+  fareProductType: string | undefined;
 }>;
 
 export function RefundSectionItem({
   fareContractId,
+  fareProductType,
   ...sectionProps
 }: RefundSectionItemProps): JSX.Element {
   const {t} = useTranslation();
@@ -20,7 +22,12 @@ export function RefundSectionItem({
 
   const onPress = () => {
     open(
-      () => <RefundBottomSheet fareContractId={fareContractId} />,
+      () => (
+        <RefundBottomSheet
+          fareContractId={fareContractId}
+          fareProductType={fareProductType}
+        />
+      ),
       onCloseFocusRef,
     );
   };
