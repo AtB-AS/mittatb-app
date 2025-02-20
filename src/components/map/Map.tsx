@@ -14,7 +14,6 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
-import {BonusProgramMapButton} from './components/bonus-program/BonusProgramMapButton';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
@@ -305,19 +304,6 @@ export const Map = (props: MapProps) => {
             />
           )}
         </MapboxGL.MapView>
-        {isBonusProgramEnabled && props.selectionMode === 'ExploreEntities' && (
-          <View
-            style={[
-              controlStyles.mapButtonsContainer,
-              controlStyles.mapButtonsContainerLeft,
-            ]}
-          >
-            <BonusProgramMapButton
-              onPress={() => onMapClick({source: 'bonus-program-button'})}
-            />
-          </View>
-        )}
-
         <View
           style={[
             controlStyles.mapButtonsContainer,
