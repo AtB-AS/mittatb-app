@@ -74,7 +74,8 @@ const dictionary = {
         ms: _('ms', 'msec', `ms`),
       },
       long: {
-        minute: _('minutter', 'minutes', `minuttar`),
+        minutes: _('minutter', 'minutes', `minuttar`),
+        minute: _('minutt', 'minute', `minutt`),
       },
     },
     relativeDayNames: (daysDifference: number) => {

@@ -34,7 +34,7 @@ export const ShmoTripDetailsSectionItem = ({
         style={styles.leftSection}
         accessible={true}
         accessibilityLabel={`${t(MobilityTexts.time)} ${timeUsed} ${t(
-          dictionary.date.units.long.minute,
+          dictionary.date.units.long.minutes,
         )}`}
       >
         {withHeader && (
