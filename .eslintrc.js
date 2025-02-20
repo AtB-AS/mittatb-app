@@ -126,6 +126,9 @@ module.exports = {
     // Warning on usage of texts from translations module without using the translation function
     'rulesdir/translations-warning': 'warn',
 
+    // Warning on elements with accessible={true} without accessibilityLabel
+    'rulesdir/a11y-label-when-accessible': 'warn',
+
     // Warning on specific imports, with suggestion which imports to use instead
     'rulesdir/avoid-imports': [
       'warn',
