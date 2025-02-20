@@ -216,6 +216,30 @@ const FareContractTexts = {
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
   },
+  refund: {
+    refund: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    bottomSheetTitle: _(
+      'Vil du angre kjøpet?',
+      'Do you want to undo the purchase?',
+      'Vil du angre kjøpet?',
+    ),
+    bottomSheetDescription: _(
+      'Vi betaler tilbake hele verdien av billetten til det samme betalingsmiddelet som du kjøpte den med.',
+      'We will refund the full price of the ticket to the same payment method you used for the purchase.',
+      'Vi betalar tilbake heile verdien av billetten til det same betalingsmiddelet som du kjøpte han med.',
+    ),
+    confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    genericError: _(
+      'En feil har oppstått under refundering av billetten. Vennligst prøv igjen eller ta kontakt med kundeservice.',
+      'An error occurred while refunding the ticket. Please try again or contact customer service.',
+      'Ein feil har oppstått under refundering av billetten. Ver venleg og prøv igjen eller ta kontakt med kundeservice.',
+    ),
+    tooManyRefunds: _(
+      'Du har ikke mulighet til å refundere flere billetter akkurat nå. Ta kontakt med kundeservice for å gjøre flere refusjoner.',
+      'You do not have the ability to refund more tickets right now. Contact customer service for further refunds.',
+      'Du har ikke mulighet til å refundere flere billettar akkurat nå. Ta kontakt med kundeservice for videre refusjon.',
+    ),
+  },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(
