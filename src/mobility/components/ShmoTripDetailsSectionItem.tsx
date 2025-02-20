@@ -1,4 +1,4 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Duration} from '@atb/assets/svg/mono-icons/mobility';
@@ -30,7 +30,13 @@ export const ShmoTripDetailsSectionItem = ({
   const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
   return (
     <View style={[topContainer, styles.container]}>
-      <View style={styles.leftSection} accessible={true}>
+      <View
+        style={styles.leftSection}
+        accessible={true}
+        accessibilityLabel={`${t(MobilityTexts.time)} ${timeUsed} ${t(
+          dictionary.date.units.long.minute,
+        )}`}
+      >
         {withHeader && (
           <ThemeText
             typography="body__secondary"
@@ -46,7 +52,13 @@ export const ShmoTripDetailsSectionItem = ({
         </View>
       </View>
 
-      <View style={styles.rightSection} accessible={true}>
+      <View
+        style={styles.rightSection}
+        accessible={true}
+        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${t(
+          dictionary.currency.nok.a11yLabel,
+        )}`}
+      >
         {withHeader && (
           <ThemeText
             typography="body__secondary"
@@ -56,7 +68,9 @@ export const ShmoTripDetailsSectionItem = ({
             {t(MobilityTexts.totalCost)}
           </ThemeText>
         )}
-        <ThemeText typography="body__primary--big">{totalAmount} kr</ThemeText>
+        <ThemeText typography="body__primary--big">
+          {totalAmount} {t(dictionary.currency.nok.label)}
+        </ThemeText>
       </View>
     </View>
   );
