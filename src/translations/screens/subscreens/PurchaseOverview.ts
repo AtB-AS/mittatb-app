@@ -208,11 +208,6 @@ const PurchaseOverviewTexts = {
       'This trip is free and does not require a ticket.',
       'Denne reisa er gratis og krev ingen billett.',
     ),
-    messageRequiresMobile: _(
-      `Gjelder kun på mobil`,
-      `Only available on phone`,
-      `Gjeld kun på mobil`,
-    ),
     button: {
       payment: _('Til betaling', 'To payment', 'Til betaling'),
       sendToOthers: _('Gå videre', 'Continue', 'Gå vidare'),
