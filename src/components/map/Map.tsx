@@ -87,11 +87,8 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
-  const {
-    isBonusProgramEnabled,
-    isGeofencingZonesEnabled,
-    isShmoDeepIntegrationEnabled,
-  } = useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
