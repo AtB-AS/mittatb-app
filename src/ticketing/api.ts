@@ -200,3 +200,25 @@ export async function getFareContracts(
     (fc: any) => FareContractType.safeParse(fc).success,
   );
 }
+
+export async function getRefundOptions(fareContractId: string) {
+  // const url = `ticket/v4/refund-options/${fareContractId}`;
+  // const response = await client.get(url, {
+  //   authWithIdToken: true,
+  // });
+  // return response.data;
+
+  // TODO: Mock response for now:
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return {
+    refundable: true,
+  };
+}
+
+export async function refundFareContract(fareContractId: string) {
+  // const url = `ticket/v4/refund/${fareContractId}`;
+  // const response = await client.post(url, {}, {authWithIdToken: true});
+
+  // TODO: Mock response for now:
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+}
