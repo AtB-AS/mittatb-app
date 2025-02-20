@@ -11,7 +11,6 @@ import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
@@ -19,7 +18,6 @@ export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
   const {userId, authenticationType} = useAuthContext();
-  const appStatus = useAppStateStatus();
   const {isPosthogEnabled} = useFeatureTogglesContext();
 
   const authTypeRef = useRef(authenticationType);
@@ -47,14 +45,17 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
     }
   }, [userId, client]);
 
-  useEffect(() => {
-    client?.capture(`App status: ${appStatus}`);
-  }, [appStatus, client]);
-
   return (
     <AnalyticsContext.Provider value={client}>
       {client && (
-        <PostHogProvider autocapture={false} client={client}>
+        <PostHogProvider
+          autocapture={{
+            captureScreens: true,
+            captureLifecycleEvents: true,
+            captureTouches: false,
+          }}
+          client={client}
+        >
           {children}
         </PostHogProvider>
       )}
