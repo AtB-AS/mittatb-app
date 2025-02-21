@@ -23,12 +23,17 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from './VehicleCard';
+import {ShmoActionButtons} from './ShmoActionButtons';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ThemeText} from '@atb/components/text';
+import {useOperators} from '../use-operators';
 
 type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
+  navigateSupportCallback: () => void;
 };
 
 export const ScooterSheet = ({
@@ -36,6 +41,7 @@ export const ScooterSheet = ({
   onClose,
   onReportParkingViolation,
   onVehicleReceived,
+  navigateSupportCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -54,8 +60,10 @@ export const ScooterSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
+  const {mobilityOperators} = useOperators();
 
-  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   return (
     <BottomSheetContainer
@@ -88,25 +96,41 @@ export const ScooterSheet = ({
               />
             </ScrollView>
             <View style={styles.footer}>
-              {rentalAppUri && (
-                <OperatorActionButton
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  benefit={operatorBenefit}
-                  appStoreUri={appStoreUri}
-                  rentalAppUri={rentalAppUri}
-                />
-              )}
-              {isParkingViolationsReportingEnabled && (
-                <Button
-                  expanded={true}
-                  style={styles.parkingViolationsButton}
-                  text={t(MobilityTexts.reportParkingViolation)}
-                  mode="secondary"
-                  onPress={onReportParkingViolation}
-                  rightIcon={{svg: ArrowRight}}
-                  backgroundColor={theme.color.background.neutral[1]}
-                />
+              {isShmoDeepIntegrationEnabled &&
+              mobilityOperators?.find((e) => e.id === operatorId)
+                ?.isDeepIntegrationEnabled ? (
+                <>
+                  <ShmoActionButtons />
+                  <PressableOpacity
+                    style={styles.helpButton}
+                    onPress={navigateSupportCallback}
+                  >
+                    <ThemeText>{t(MobilityTexts.helpText)}</ThemeText>
+                  </PressableOpacity>
+                </>
+              ) : (
+                <>
+                  {rentalAppUri && (
+                    <OperatorActionButton
+                      operatorId={operatorId}
+                      operatorName={operatorName}
+                      benefit={operatorBenefit}
+                      appStoreUri={appStoreUri}
+                      rentalAppUri={rentalAppUri}
+                    />
+                  )}
+                  {isParkingViolationsReportingEnabled && (
+                    <Button
+                      expanded={true}
+                      style={styles.parkingViolationsButton}
+                      text={t(MobilityTexts.reportParkingViolation)}
+                      mode="secondary"
+                      onPress={onReportParkingViolation}
+                      rightIcon={{svg: ArrowRight}}
+                      backgroundColor={theme.color.background.neutral[1]}
+                    />
+                  )}
+                </>
               )}
             </View>
           </>
@@ -134,7 +158,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
     footer: {
@@ -146,6 +169,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     operatorNameAndLogo: {
       flexDirection: 'row',
+    },
+    helpButton: {
+      alignItems: 'center',
+      paddingTop: theme.spacing.medium,
     },
   };
 });
