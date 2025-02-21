@@ -9,8 +9,8 @@ import {
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {InteractiveColor, TextNames} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -27,7 +27,6 @@ type Props = SectionItemProps<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
-  interactiveColor?: InteractiveColor;
 }>;
 
 export const LinkSectionItem = forwardRef<any, Props>(
@@ -42,21 +41,21 @@ export const LinkSectionItem = forwardRef<any, Props>(
       disabled,
       textType,
       testID,
-      interactiveColor,
       ...props
     },
     forwardedRef,
   ) => {
     const {t} = useTranslation();
-    const {contentContainer, topContainer} = useSectionItem(props);
+    const {contentContainer, topContainer, interactiveColor} =
+      useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const {theme} = useThemeContext();
-    const themeColor =
-      interactiveColor?.default ?? theme.color.interactive[2].default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
-        <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />
+        <NavigationIcon
+          mode={icon}
+          fill={interactiveColor.default.foreground.primary}
+        />
       ) : (
         icon
       );
@@ -78,7 +77,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
-        style={[topContainer, {backgroundColor: themeColor.background}]}
+        style={topContainer}
         testID={testID}
         ref={forwardedRef}
         collapsable={false}
@@ -86,7 +85,10 @@ export const LinkSectionItem = forwardRef<any, Props>(
       >
         <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
-            style={[contentContainer, {color: themeColor.foreground.primary}]}
+            style={[
+              contentContainer,
+              {color: interactiveColor.default.foreground.primary},
+            ]}
             typography={textType}
           >
             {text}

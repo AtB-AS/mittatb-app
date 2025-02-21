@@ -42,16 +42,15 @@ export function RadioSectionItem({
   rightAction,
   ...props
 }: Props) {
-  const {contentContainer, topContainer} = useSectionItem(props);
+  const {contentContainer, topContainer} = useSectionItem({
+    ...props,
+    active: selected,
+  });
   const style = useSectionStyle();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const color = theme.color.interactive[2];
-
-  const backgroundColor = selected
-    ? color.active.background
-    : color.default.background;
 
   const textColor = selected
     ? color.active.foreground.primary
@@ -65,7 +64,7 @@ export function RadioSectionItem({
     t(selected ? dictionary.selected : dictionary.unselected);
 
   return (
-    <View style={[style.spaceBetween, topContainer, {backgroundColor}]}>
+    <View style={[style.spaceBetween, topContainer]}>
       <PressableOpacity
         onPress={() => onPress(!selected)}
         style={styles.mainContent}
