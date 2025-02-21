@@ -15,11 +15,16 @@ export const BonusPriceTag = ({price, ...props}: Props) => {
 
   return (
     <View {...props} style={[styles.container, props.style]}>
-      <ThemeText>{price}</ThemeText>
+      <ThemeText
+        accessible={true}
+        accessibilityLabel={t(BonusProgramTexts.costA11yLabel(price))}
+      >
+        {price}
+      </ThemeText>
       <ThemeIcon
         svg={StarFill}
         size="small"
-        accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+        accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
       />
     </View>
   );
