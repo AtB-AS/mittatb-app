@@ -14,6 +14,7 @@ export type BaseSectionItemProps = {
   radiusSize?: keyof Theme['border']['radius'];
   testID?: string;
   active?: boolean;
+  interactiveColor?: InteractiveColor;
 };
 
 export type SectionReturnType = {
@@ -30,9 +31,10 @@ export function useSectionItem({
   radius,
   radiusSize,
   active,
+  interactiveColor: customInteractiveColor,
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useThemeContext();
-  const interactiveColor = getInteractiveColor(theme);
+  const interactiveColor = customInteractiveColor ?? getInteractiveColor(theme);
 
   const topContainer: ViewStyle = {
     ...mapToPadding(theme, type),
@@ -40,8 +42,8 @@ export function useSectionItem({
     backgroundColor: transparent
       ? undefined
       : interactiveColor[active ? 'active' : 'default'].background,
-    borderColor: active ? interactiveColor.outline.background : undefined,
-    borderWidth: active ? theme.border.width.slim : undefined,
+    borderColor: interactiveColor[active ? 'outline' : 'default'].background,
+    borderWidth: theme.border.width.slim,
   };
   const contentContainer: ViewStyle = {
     flex: 1,
@@ -60,13 +62,13 @@ function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
     case 'block':
       return {
-        paddingVertical: theme.spacing.medium,
-        paddingHorizontal: theme.spacing.medium,
+        paddingVertical: theme.spacing.medium - theme.border.width.slim,
+        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
       };
     case 'spacious':
       return {
-        paddingVertical: theme.spacing.large,
-        paddingHorizontal: theme.spacing.medium,
+        paddingVertical: theme.spacing.large - theme.border.width.slim,
+        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
       };
   }
 }

@@ -27,7 +27,6 @@ type Props = SectionItemProps<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
-  interactiveColor?: InteractiveColor;
 }>;
 
 export const LinkSectionItem = forwardRef<any, Props>(
@@ -42,24 +41,21 @@ export const LinkSectionItem = forwardRef<any, Props>(
       disabled,
       textType,
       testID,
-      interactiveColor,
       ...props
     },
     forwardedRef,
   ) => {
     const {t} = useTranslation();
-    const {
-      contentContainer,
-      topContainer,
-      interactiveColor: genericSectionInteractiveColor,
-    } = useSectionItem(props);
+    const {contentContainer, topContainer, interactiveColor} =
+      useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const themeColor =
-      interactiveColor?.default ?? genericSectionInteractiveColor.default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
-        <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />
+        <NavigationIcon
+          mode={icon}
+          fill={interactiveColor.default.foreground.primary}
+        />
       ) : (
         icon
       );
@@ -81,10 +77,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
-        style={[
-          topContainer,
-          interactiveColor && {backgroundColor: themeColor.background},
-        ]}
+        style={[topContainer]}
         testID={testID}
         ref={forwardedRef}
         collapsable={false}
@@ -92,7 +85,10 @@ export const LinkSectionItem = forwardRef<any, Props>(
       >
         <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
-            style={[contentContainer, {color: themeColor.foreground.primary}]}
+            style={[
+              contentContainer,
+              {color: interactiveColor.default.foreground.primary},
+            ]}
             typography={textType}
           >
             {text}
