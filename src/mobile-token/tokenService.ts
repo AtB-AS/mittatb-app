@@ -40,6 +40,11 @@ export type TokenService = RemoteTokenService & {
   ) => Promise<RemoteToken[]>;
   validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
+  postTokenStatus: (
+    tokenId: string,
+    tokenStatus: string,
+    traceId: string,
+  ) => Promise<void>;
 };
 
 const handleError = (err: any) => {
@@ -230,6 +235,20 @@ export const tokenService: TokenService = {
             skipErrorLogging: isRemoteTokenStateError,
           })
           .catch(handleError),
+    );
+  },
+  postTokenStatus: async (tokenId, tokenStatus, traceId) => {
+    await client.post(
+      '/token/v1/status',
+      {
+        mobileTokenId: tokenId,
+        mobileTokenStatus: tokenStatus,
+        mobileTokenErrorCorrelationId: traceId,
+      },
+      {
+        authWithIdToken: true,
+        timeout: 15000,
+      },
     );
   },
 };
