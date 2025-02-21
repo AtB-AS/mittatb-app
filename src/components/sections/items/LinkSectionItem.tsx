@@ -9,8 +9,8 @@ import {
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {InteractiveColor, TextNames} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -77,7 +77,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
-        style={[topContainer]}
+        style={topContainer}
         testID={testID}
         ref={forwardedRef}
         collapsable={false}
