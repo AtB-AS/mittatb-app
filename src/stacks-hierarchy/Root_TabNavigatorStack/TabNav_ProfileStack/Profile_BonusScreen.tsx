@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -41,7 +41,7 @@ export const Profile_BonusScreen = () => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(BonusProgramTexts.header.title),
+        title: t(BonusProgramTexts.bonusProfile.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
     >
@@ -50,17 +50,25 @@ export const Profile_BonusScreen = () => {
           <GenericSectionItem style={styles.horizontalContainer}>
             <View>
               <View style={styles.currentPointsDisplay}>
-                <ThemeText typography="body__primary--jumbo--bold">
+                <ThemeText
+                  typography="body__primary--jumbo--bold"
+                  accessibilityLabel={t(
+                    BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
+                      currentPoints,
+                    ),
+                  )}
+                >
                   {currentPoints}
                 </ThemeText>
                 <ThemeIcon
                   svg={StarFill}
                   size="large"
-                  accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+                  accessible
+                  accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
                 />
               </View>
               <ThemeText typography="body__secondary" color="secondary">
-                {t(BonusProgramTexts.yourBonusPoints)}
+                {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
               </ThemeText>
             </View>
             <ThemedCityBike />
@@ -70,11 +78,13 @@ export const Profile_BonusScreen = () => {
           <View style={styles.noAccount}>
             <MessageInfoBox
               type="warning"
-              message={t(BonusProgramTexts.noProfile)}
+              message={t(BonusProgramTexts.bonusProfile.noProfile)}
             />
           </View>
         )}
-        <ContentHeading text={t(BonusProgramTexts.spendPoints.heading)} />
+        <ContentHeading
+          text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
+        />
         <View style={styles.bonusProductsContainer}>
           {bonusProducts?.filter(isActive).map((bonusProduct, index) => (
             <Section>
@@ -122,17 +132,19 @@ export const Profile_BonusScreen = () => {
             </Section>
           ))}
         </View>
-        <ContentHeading text={t(BonusProgramTexts.readMore.heading)} />
+        <ContentHeading
+          text={t(BonusProgramTexts.bonusProfile.readMore.heading)}
+        />
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
               <ThemedCityBike />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
-                  {t(BonusProgramTexts.readMore.info.title)}
+                  {t(BonusProgramTexts.bonusProfile.readMore.info.title)}
                 </ThemeText>
                 <ThemeText typography="body__secondary" color="secondary">
-                  {t(BonusProgramTexts.readMore.info.description)}
+                  {t(BonusProgramTexts.bonusProfile.readMore.info.description)}
                 </ThemeText>
               </View>
             </View>
