@@ -1,5 +1,10 @@
 import {ViewStyle} from 'react-native';
-import {Theme, useThemeContext} from '@atb/theme';
+import {
+  ContrastColor,
+  InteractiveColor,
+  Theme,
+  useThemeContext,
+} from '@atb/theme';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
@@ -8,27 +13,35 @@ export type BaseSectionItemProps = {
   radius?: RadiusModeType;
   radiusSize?: keyof Theme['border']['radius'];
   testID?: string;
+  active?: boolean;
 };
 
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
+  interactiveColor: InteractiveColor<ContrastColor>;
 };
+
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export function useSectionItem({
   transparent = false,
   type = 'block',
   radius,
   radiusSize,
+  active,
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useThemeContext();
+  const interactiveColor = getInteractiveColor(theme);
 
   const topContainer: ViewStyle = {
     ...mapToPadding(theme, type),
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
-      : theme.color.background.neutral[0].background,
+      : interactiveColor[active ? 'active' : 'default'].background,
+    borderColor: active ? interactiveColor.outline.background : undefined,
+    borderWidth: active ? theme.border.width.slim : undefined,
   };
   const contentContainer: ViewStyle = {
     flex: 1,
@@ -37,6 +50,7 @@ export function useSectionItem({
   return {
     topContainer,
     contentContainer,
+    interactiveColor,
   };
 }
 

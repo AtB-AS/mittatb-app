@@ -48,12 +48,15 @@ export const LinkSectionItem = forwardRef<any, Props>(
     forwardedRef,
   ) => {
     const {t} = useTranslation();
-    const {contentContainer, topContainer} = useSectionItem(props);
+    const {
+      contentContainer,
+      topContainer,
+      interactiveColor: genericSectionInteractiveColor,
+    } = useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const {theme} = useThemeContext();
     const themeColor =
-      interactiveColor?.default ?? theme.color.interactive[2].default;
+      interactiveColor?.default ?? genericSectionInteractiveColor.default;
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
         <NavigationIcon mode={icon} fill={themeColor.foreground.primary} />
@@ -78,7 +81,10 @@ export const LinkSectionItem = forwardRef<any, Props>(
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
-        style={[topContainer, {backgroundColor: themeColor.background}]}
+        style={[
+          topContainer,
+          interactiveColor && {backgroundColor: themeColor.background},
+        ]}
         testID={testID}
         ref={forwardedRef}
         collapsable={false}
