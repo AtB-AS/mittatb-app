@@ -19,6 +19,8 @@ import {
 import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 /**
  * When a new bottomSheetToAutoSelect is set and isn't already selected,
@@ -36,6 +38,9 @@ export const useAutoSelectMapItem = (
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
   const navigation = useNavigation<RootNavigationProps>();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
+  const {enable_vipps_login} = useRemoteConfigContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -92,6 +97,22 @@ export const useAutoSelectMapItem = (
                     vehicleId: bottomSheetToAutoSelect.id,
                   });
                 }}
+                loginCallback={() => {
+                  closeBottomSheet();
+                  if (hasReservationOrAvailableFareContract) {
+                    navigation.navigate(
+                      'Root_LoginAvailableFareContractWarningScreen',
+                      {},
+                    );
+                  } else if (enable_vipps_login) {
+                    navigation.navigate('Root_LoginOptionsScreen', {
+                      showGoBack: true,
+                      transitionOverride: 'slide-from-bottom',
+                    });
+                  } else {
+                    navigation.navigate('Root_LoginPhoneInputScreen', {});
+                  }
+                }}
               />
             );
             break;
@@ -146,5 +167,7 @@ export const useAutoSelectMapItem = (
     onReportParkingViolation,
     setBottomSheetCurrentlyAutoSelected,
     navigation,
+    enable_vipps_login,
+    hasReservationOrAvailableFareContract,
   ]);
 };

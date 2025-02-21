@@ -7,7 +7,11 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import React from 'react';
 import {useShmoBlockers} from '../use-shmo-blockers';
 
-export const ShmoActionButtons = () => {
+type ShmoActionButtonsProps = {
+  onLogin: () => void;
+};
+
+export const ShmoActionButtons = ({onLogin}: ShmoActionButtonsProps) => {
   const styles = useStyles();
   const {authenticationType} = useAuthContext();
   const {theme} = useThemeContext();
@@ -31,9 +35,7 @@ export const ShmoActionButtons = () => {
           expanded={true}
           type="large"
           accessibilityRole="button"
-          onPress={() => {
-            console.log('Button pressed');
-          }}
+          onPress={onLogin}
           text={t(MobilityTexts.loginBlocker)}
         />
       </>
