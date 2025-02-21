@@ -259,19 +259,6 @@ const SelectTravelTokenTexts = {
       `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
       `Vi forsøker å klargjere mobilen din til å bruke billettane, men det ser ut til at det tar litt tid. Sjekk om du har tilkopling til internett, og hvis ikkje vil appen prøve på nytt neste gong du får tilkopling.`,
     ),
-    notAllowedToUseTravelCardError: {
-      title: _(
-        'Kan ikke brukes på t:kort',
-        'Cannot be used on t:cards',
-        `Kan ikkje brukast på t:kort`,
-      ),
-      message: (ticketName: string) =>
-        _(
-          `Du har en aktiv ${ticketName}. Det er derfor ikke mulig å bytte til t:kort.`,
-          `You have an active ${ticketName}. It is therefore not possible to switch to a t:card.`,
-          `Du har ein aktiv ${ticketName}. Det vil difor ikkje vere mogleg å bytte til t:kort.`,
-        ),
-    },
     unnamedDevice: _('Enhet uten navn', 'Unnamed device', `Eining utan namn`),
   },
 };

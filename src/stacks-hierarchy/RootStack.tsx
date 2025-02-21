@@ -43,7 +43,6 @@ import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneI
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
-import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {
   LoadingScreen,
   LoadingScreenBoundary,
@@ -389,12 +388,6 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_ConfirmationScreen"
                   component={Root_ConfirmationScreen}
-                />
-                <Stack.Screen
-                  name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
-                  component={
-                    Root_ActiveTokenOnPhoneRequiredForFareProductScreen
-                  }
                 />
                 <Stack.Screen
                   name="Root_ScooterHelpScreen"
