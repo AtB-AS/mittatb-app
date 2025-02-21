@@ -1,4 +1,4 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Duration} from '@atb/assets/svg/mono-icons/mobility';
@@ -30,23 +30,47 @@ export const ShmoTripDetailsSectionItem = ({
   const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
   return (
     <View style={[topContainer, styles.container]}>
-      {withHeader && (
-        <View style={styles.heading}>
-          <ThemeText typography="body__secondary" color="secondary">
+      <View
+        style={styles.leftSection}
+        accessible={true}
+        accessibilityLabel={`${t(MobilityTexts.time)} ${timeUsed} ${t(
+          dictionary.date.units.long.minutes,
+        )}`}
+      >
+        {withHeader && (
+          <ThemeText
+            typography="body__secondary"
+            color="secondary"
+            accessibilityRole="header"
+          >
             {t(MobilityTexts.time)}
           </ThemeText>
-          <ThemeText typography="body__secondary" color="secondary">
-            {t(MobilityTexts.totalCost)}
-          </ThemeText>
-        </View>
-      )}
-
-      <View style={styles.content}>
+        )}
         <View style={styles.timeWrapper}>
           <ThemeIcon svg={Duration} color="primary" size="large" />
           <ThemeText typography="body__primary--big">{timeUsed}</ThemeText>
         </View>
-        <ThemeText typography="body__primary--big">{totalAmount} kr</ThemeText>
+      </View>
+
+      <View
+        style={styles.rightSection}
+        accessible={true}
+        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${t(
+          dictionary.currency.nok.long,
+        )}`}
+      >
+        {withHeader && (
+          <ThemeText
+            typography="body__secondary"
+            color="secondary"
+            accessibilityRole="header"
+          >
+            {t(MobilityTexts.totalCost)}
+          </ThemeText>
+        )}
+        <ThemeText typography="body__primary--big">
+          {totalAmount} {t(dictionary.currency.nok.short)}
+        </ThemeText>
       </View>
     </View>
   );
@@ -55,16 +79,17 @@ export const ShmoTripDetailsSectionItem = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  leftSection: {
     flexDirection: 'column',
+    gap: theme.spacing.medium,
   },
-  heading: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing.medium,
-  },
-  content: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  rightSection: {
+    flexDirection: 'column',
+    gap: theme.spacing.medium,
+    alignItems: 'flex-end',
   },
   timeWrapper: {
     flexDirection: 'row',
