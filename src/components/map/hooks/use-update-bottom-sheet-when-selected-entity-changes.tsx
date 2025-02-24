@@ -27,6 +27,8 @@ import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MapFilterSheet} from '../components/filter/MapFilterSheet';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
+import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
+import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -49,6 +51,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     useBottomSheetContext();
   const analytics = useMapSelectionAnalytics();
   const navigation = useNavigation<RootNavigationProps>();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
+  const {enable_vipps_login} = useRemoteConfigContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -179,6 +184,22 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                     vehicleId: selectedFeature.properties.id,
                   });
                 }}
+                loginCallback={() => {
+                  closeBottomSheet();
+                  if (hasReservationOrAvailableFareContract) {
+                    navigation.navigate(
+                      'Root_LoginAvailableFareContractWarningScreen',
+                      {},
+                    );
+                  } else if (enable_vipps_login) {
+                    navigation.navigate('Root_LoginOptionsScreen', {
+                      showGoBack: true,
+                      transitionOverride: 'slide-from-bottom',
+                    });
+                  } else {
+                    navigation.navigate('Root_LoginPhoneInputScreen', {});
+                  }
+                }}
               />
             );
           },
@@ -224,7 +245,15 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
+  }, [
+    mapSelectionAction,
+    selectedFeature,
+    isFocused,
+    distance,
+    analytics,
+    enable_vipps_login,
+    hasReservationOrAvailableFareContract,
+  ]);
 
   return {selectedFeature, onReportParkingViolation};
 };
