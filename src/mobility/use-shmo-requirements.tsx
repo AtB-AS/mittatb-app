@@ -1,6 +1,6 @@
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
-import { ShmoRequirementEnum, ShmoRequirementType } from './types';
+import {ShmoRequirementEnum, ShmoRequirementType} from './types';
 
 export const useShmoRequirements = () => {
   const {locationIsAvailable} = useGeolocationContext();

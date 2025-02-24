@@ -103,7 +103,7 @@ export const ScooterSheet = ({
                     expanded={true}
                     onPress={navigateSupportCallback}
                     text={t(MobilityTexts.helpText)}
-                    mode='tertiary'
+                    mode="tertiary"
                     backgroundColor={theme.color.background.neutral[1]}
                   />
                 </>
@@ -169,6 +169,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     operatorNameAndLogo: {
       flexDirection: 'row',
     },
-    
   };
 });

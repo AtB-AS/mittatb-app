@@ -3,7 +3,7 @@ import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React from 'react';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
-import { ButtonInfoTextCombo } from './ButtonInfoTextCombo.tsx';
+import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 
 export const ShmoActionButtons = () => {
   const {authenticationType} = useAuthContext();
@@ -14,13 +14,12 @@ export const ShmoActionButtons = () => {
 
   if (authenticationType != 'phone') {
     return (
-      <ButtonInfoTextCombo 
+      <ButtonInfoTextCombo
         onPress={() => {
           console.log('ButtonPress');
         }}
         buttonText={t(MobilityTexts.loginBlocker)}
         message={t(MobilityTexts.loginBlockerInfoMessage)}
-
       />
     );
   }
@@ -28,13 +27,12 @@ export const ShmoActionButtons = () => {
   // check if a user has any blockers for shmo
   if (blockers.some((blocker) => blocker.isBlocking)) {
     return (
-      <ButtonInfoTextCombo 
+      <ButtonInfoTextCombo
         onPress={() => {
           console.log('ButtonPress');
         }}
         buttonText={t(MobilityTexts.shmoBlockers)}
         message={t(MobilityTexts.shmoBlockersInfoMessage)}
-
       />
     );
   }
