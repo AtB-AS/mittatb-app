@@ -49,31 +49,20 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   );
 
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const cardPaymentTypes = paymentTypes.filter(
-    (paymentType) =>
-      paymentType === PaymentType.Mastercard ||
-      paymentType === PaymentType.Visa ||
-      paymentType === PaymentType.Amex,
-  );
-
-  const defaultPaymentMethods: PaymentMethod[] = [
-    // Vipps payment methods
+  const defaultPaymentMethods = [
     ...paymentTypes
-      .filter((paymentType) => paymentType === PaymentType.Vipps)
       .map((paymentType) => ({
         paymentType,
-        savedType:
-          SavedPaymentMethodType.Normal as SavedPaymentMethodType.Normal,
-        recurringCard: undefined,
-      })),
-
-    // Grouped card payment methods
+        savedType: SavedPaymentMethodType.Normal,
+      }))
+      .filter((method) => method.paymentType === PaymentType.Vipps),
     {
-      paymentType: cardPaymentTypes,
+      paymentType: paymentTypes.filter(
+        (paymentType) => paymentType !== PaymentType.Vipps,
+      ),
       savedType: SavedPaymentMethodType.Normal,
     },
   ];
-
   /* console.log('defaultPaymentMethods = ', defaultPaymentMethods);
   console.log('-------------------'); */
 
