@@ -24,8 +24,6 @@ import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from './VehicleCard';
 import {ShmoActionButtons} from './ShmoActionButtons';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {ThemeText} from '@atb/components/text';
 import {useOperators} from '../use-operators';
 
 type Props = {
@@ -101,12 +99,13 @@ export const ScooterSheet = ({
                 ?.isDeepIntegrationEnabled ? (
                 <>
                   <ShmoActionButtons />
-                  <PressableOpacity
-                    style={styles.helpButton}
+                  <Button
+                    expanded={true}
                     onPress={navigateSupportCallback}
-                  >
-                    <ThemeText>{t(MobilityTexts.helpText)}</ThemeText>
-                  </PressableOpacity>
+                    text={t(MobilityTexts.helpText)}
+                    mode='tertiary'
+                    backgroundColor={theme.color.background.neutral[1]}
+                  />
                 </>
               ) : (
                 <>
@@ -170,9 +169,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     operatorNameAndLogo: {
       flexDirection: 'row',
     },
-    helpButton: {
-      alignItems: 'center',
-      paddingTop: theme.spacing.medium,
-    },
+    
   };
 });

@@ -5,14 +5,14 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React from 'react';
-import {useShmoBlockers} from '../use-shmo-blockers';
+import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 
 export const ShmoActionButtons = () => {
   const styles = useStyles();
   const {authenticationType} = useAuthContext();
   const {theme} = useThemeContext();
 
-  const {blockers} = useShmoBlockers();
+  const {blockers} = useShmoRequirements();
 
   const {t} = useTranslation();
 

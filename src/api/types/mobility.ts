@@ -108,24 +108,6 @@ const ShmoBookingStateSchema = z.enum(
   Object.values(ShmoBookingState) as [ShmoBookingState, ...ShmoBookingState[]],
 );
 
-export enum ShmoBlockersEnum {
-  LOCATION = 'LOCATION',
-  PAYMENT_CARD = 'PAYMENT_CARD',
-  TERMS_AND_CONDITIONS = 'TERMS_AND_CONDITIONS',
-}
-
-export const ShmoBlockersSchema = z.enum(
-  Object.values(ShmoBlockersEnum) as [ShmoBlockersEnum, ...ShmoBlockersEnum[]],
-);
-
-export const ShmoBlockers = z.object({
-  blocker: ShmoBlockersSchema,
-  loading: z.boolean(),
-  isBlocking: z.boolean(),
-});
-
-export type ShmoBlockers = z.infer<typeof ShmoBlockers>;
-
 const ShmoPricingSchema = z.object({
   currentAmount: z.number(),
   finalAmount: z.number().optional().nullable(),
