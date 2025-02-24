@@ -1,6 +1,5 @@
 import {useAnalyticsContext} from '@atb/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
   useBottomSheetContext,
@@ -9,8 +8,9 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {refundFareContract} from '@atb/ticketing';
+import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
@@ -24,11 +24,14 @@ type Props = {
 
 export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
+  const {data: refundOptions, status: refundOptionsStatus} =
+    useRefundOptionsQuery(fareContractId);
 
   const onRefund = async () => {
     setIsLoading(true);
@@ -75,8 +78,11 @@ export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
           expanded={true}
           onPress={onRefund}
           text={t(FareContractTexts.refund.confirm)}
-          rightIcon={{svg: Confirm}}
-          loading={isLoading}
+          disabled={
+            refundOptionsStatus !== 'success' || !refundOptions?.refundable
+          }
+          loading={isLoading || refundOptionsStatus === 'loading'}
+          interactiveColor={theme.color.interactive.destructive}
         />
       </ScrollView>
     </BottomSheetContainer>
