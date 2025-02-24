@@ -8,9 +8,10 @@ import {
   Visa,
 } from '@atb/assets/svg/color/icons/ticketing';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 
 export type Brand = {
-  paymentType: PaymentType;
+  paymentType: PaymentMethod[];
   size?: number;
 };
 

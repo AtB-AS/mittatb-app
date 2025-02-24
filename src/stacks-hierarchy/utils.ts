@@ -7,6 +7,7 @@ import {
   useTariffZoneFromLocation,
 } from '@atb/tariff-zones-selector';
 import {useMemo} from 'react';
+import {ExpiryMessage, RecurringPayment} from '@atb/ticketing';
 
 export function getExpireDate(iso: string): string {
   const date = parseISO(iso);
@@ -85,4 +86,60 @@ export const parseParamAsInt = (data: any): number | undefined => {
   if (typeof data === 'string') return parseInt(data) || undefined;
   if (typeof data === 'number') return Math.round(data);
   return undefined;
+};
+
+export const getDaysBetweenDates = (
+  startDate: Date,
+  endDate: Date = new Date(),
+): number => {
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  const diffTime = startDate.getTime() - endDate.getTime();
+  return diffTime / (1000 * 60 * 60 * 24);
+};
+
+const getCardExpiryMessage = (
+  type: 'card' | 'nets',
+  difference: number,
+  expiryTime?: string,
+): ExpiryMessage => {
+  if (difference < 1) {
+    return {
+      expiryMessageCardType: type,
+      expiryMessageCardTime: 'afterExpiration',
+      expiryMessageType: type === 'card' ? 'error' : 'warning',
+    };
+  } else if (difference <= 30) {
+    return {
+      expiryMessageCardType: type,
+      expiryMessageCardTime: 'beforeExpiration',
+      expiryMessageType: 'warning',
+      expiryTime,
+    };
+  }
+  return null;
+};
+
+export const getCardExpiryStatus = (
+  recurringCard: RecurringPayment,
+): ExpiryMessage => {
+  const cardVsToday = getDaysBetweenDates(
+    new Date(recurringCard.card_expires_at),
+  );
+  const netsVsToday = getDaysBetweenDates(new Date(recurringCard.expires_at));
+
+  const cardStatus = getCardExpiryMessage(
+    'card',
+    cardVsToday,
+    recurringCard.card_expires_at,
+  );
+  if (cardStatus) return cardStatus;
+
+  const netsStatus = getCardExpiryMessage(
+    'nets',
+    netsVsToday,
+    recurringCard.expires_at,
+  );
+  return netsStatus;
 };

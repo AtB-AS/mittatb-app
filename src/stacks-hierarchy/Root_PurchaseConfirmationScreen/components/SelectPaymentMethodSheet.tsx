@@ -10,19 +10,17 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {getExpireDate} from '../../utils';
+import {getCardExpiryStatus, getExpireDate} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
+  CardPaymentMethod,
   PaymentMethod,
   SavedPaymentMethodType,
+  VippsPaymentMethod,
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
-import {
-  PaymentType,
-  RecurringPayment,
-  humanizePaymentType,
-} from '@atb/ticketing';
+import {PaymentType, humanizePaymentType} from '@atb/ticketing';
 import {RadioIcon, getRadioA11y} from '@atb/components/radio';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
@@ -51,16 +49,37 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   );
 
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
-    (paymentType) => ({
-      paymentType,
-      savedType: SavedPaymentMethodType.Normal,
-    }),
+  const cardPaymentTypes = paymentTypes.filter(
+    (paymentType) =>
+      paymentType === PaymentType.Mastercard ||
+      paymentType === PaymentType.Visa ||
+      paymentType === PaymentType.Amex,
   );
+
+  const defaultPaymentMethods: PaymentMethod[] = [
+    // Vipps payment methods
+    ...paymentTypes
+      .filter((paymentType) => paymentType === PaymentType.Vipps)
+      .map((paymentType) => ({
+        paymentType,
+        savedType:
+          SavedPaymentMethodType.Normal as SavedPaymentMethodType.Normal,
+        recurringCard: undefined,
+      })),
+
+    // Grouped card payment methods
+    {
+      paymentType: cardPaymentTypes,
+      savedType: SavedPaymentMethodType.Normal,
+    },
+  ];
+
+  /* console.log('defaultPaymentMethods = ', defaultPaymentMethods);
+  console.log('-------------------'); */
+
   const [selectedMethod, setSelectedMethod] = useState(
     currentOptions?.paymentMethod,
   );
-
   return (
     <BottomSheetContainer
       title={t(SelectPaymentMethodTexts.header.text)}
@@ -72,13 +91,20 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             {defaultPaymentMethods.map((method, index) => {
               return (
                 <PaymentMethodView
-                  key={method.paymentType}
+                  key={
+                    Array.isArray(method.paymentType)
+                      ? method.paymentType.join('-')
+                      : method.paymentType
+                  }
                   paymentMethod={method}
                   shouldSave={shouldSave}
                   onSetShouldSave={setShouldSave}
                   selected={
                     !selectedMethod?.recurringCard &&
-                    selectedMethod?.paymentType === method.paymentType
+                    (Array.isArray(method.paymentType)
+                      ? JSON.stringify(selectedMethod?.paymentType) ===
+                        JSON.stringify(method.paymentType)
+                      : selectedMethod?.paymentType === method.paymentType)
                   }
                   onSelect={(val: PaymentMethod) => {
                     setSelectedMethod(val);
@@ -174,6 +200,13 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
         hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
       };
     } else {
+      if (paymentTypeName == '') {
+        return {
+          text: t(PurchaseConfirmationTexts.paymentWithAnyService.text),
+          label: t(PurchaseConfirmationTexts.paymentWithAnyService.a11yLabel),
+          hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11Hint),
+        };
+      }
       return {
         text: paymentTypeName,
         label: t(
@@ -192,71 +225,6 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
     } else {
       return 'recurringPayment' + index;
     }
-  }
-
-  function getDifferenceBetweenDates(
-    startDate: Date,
-    endDate: Date = new Date(),
-  ): number {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    const diffTime = start.getTime() - end.getTime();
-    return diffTime / (1000 * 60 * 60 * 24);
-  }
-
-  type ExpiryMessage = {
-    expiryMessageCardType: 'card' | 'nets';
-    expiryMessageCardTime: 'afterExpiration' | 'beforeExpiration';
-    expiryMessageType: 'error' | 'warning';
-    expiryTime?: string;
-  } | null;
-
-  function getExpiryStatus(
-    type: 'card' | 'nets',
-    difference: number,
-    expiryTime?: string,
-  ): ExpiryMessage {
-    if (difference < 1) {
-      return {
-        expiryMessageCardType: type,
-        expiryMessageCardTime: 'afterExpiration',
-        expiryMessageType: type === 'card' ? 'error' : 'warning',
-      };
-    } else if (difference <= 30) {
-      return {
-        expiryMessageCardType: type,
-        expiryMessageCardTime: 'beforeExpiration',
-        expiryMessageType: 'warning',
-        expiryTime,
-      };
-    }
-    return null;
-  }
-
-  function getCardExpiryStatus(recurringCard: RecurringPayment): ExpiryMessage {
-    const cardVsToday = getDifferenceBetweenDates(
-      new Date(recurringCard.card_expires_at),
-    );
-    const netsVsToday = getDifferenceBetweenDates(
-      new Date(recurringCard.expires_at),
-    );
-
-    const cardStatus = getExpiryStatus(
-      'card',
-      cardVsToday,
-      recurringCard.card_expires_at,
-    );
-    if (cardStatus) return cardStatus;
-
-    const netsStatus = getExpiryStatus(
-      'nets',
-      netsVsToday,
-      recurringCard.expires_at,
-    );
-    return netsStatus;
   }
 
   const paymentTexts = getPaymentTexts(paymentMethod);
@@ -294,7 +262,15 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
                   </ThemeText>
                 )}
               </View>
-              <PaymentBrand paymentType={paymentMethod.paymentType} />
+              {Array.isArray(paymentMethod.paymentType) ? (
+                <View style={styles.cardBrandGroup}>
+                  {paymentMethod.paymentType.map((brand, index) => (
+                    <PaymentBrand key={index} paymentType={brand} />
+                  ))}
+                </View>
+              ) : (
+                <PaymentBrand paymentType={paymentMethod.paymentType} />
+              )}
             </View>
           </View>
 
@@ -459,5 +435,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 
   warningMessage: {
     paddingTop: theme.spacing.medium,
+  },
+
+  cardBrandGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: theme.spacing.medium,
   },
 }));

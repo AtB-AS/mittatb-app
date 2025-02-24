@@ -66,7 +66,7 @@ export function hasTravelRightAccesses(travelRights: TravelRightType[]) {
   return travelRights.some((tr) => tr.maximumNumberOfAccesses !== undefined);
 }
 
-export function humanizePaymentType(paymentType: PaymentType) {
+export function humanizePaymentType(paymentType: PaymentType | number[]) {
   switch (paymentType) {
     case PaymentType.Visa:
       return 'Visa';

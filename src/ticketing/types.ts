@@ -116,6 +116,12 @@ export enum PaymentType {
   Amex = 5,
 }
 
+export const AllCards = [
+  PaymentType.Vipps,
+  PaymentType.Visa,
+  PaymentType.Mastercard,
+];
+
 export type RecurringPayment = {
   id: number;
   card_expires_at: string;
@@ -123,6 +129,12 @@ export type RecurringPayment = {
   masked_pan: string;
   payment_type: number;
 };
+export type ExpiryMessage = {
+  expiryMessageCardType: 'card' | 'nets';
+  expiryMessageCardTime: 'afterExpiration' | 'beforeExpiration';
+  expiryMessageType: 'error' | 'warning';
+  expiryTime?: string;
+} | null;
 
 export type PaymentStatus =
   | 'AUTHENTICATE'

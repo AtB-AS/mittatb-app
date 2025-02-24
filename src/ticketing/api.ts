@@ -48,6 +48,61 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
+  const testResponse1 = [
+    {
+      card_expires_at: '2038-02-01T00:00:00Z',
+      expires_at: '2025-03-15T14:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //30 DAYS BEFORE NETS
+  const testResponse2 = [
+    {
+      card_expires_at: '2038-02-01T00:00:00Z',
+      expires_at: '2025-02-13T00:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //EXPIRED NETS
+  const testResponse3 = [
+    {
+      card_expires_at: '2025-03-14T14:33:34Z',
+      expires_at: '2028-02-13T00:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //30 DAYS BEFORE CARD
+  const testResponse4 = [
+    {
+      card_expires_at: '2025-02-13T06:33:34Z',
+      expires_at: '2028-02-13T00:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //card expired
+
+  const testResponse5 = [
+    {
+      card_expires_at: '2025-02-21T06:33:34Z',
+      expires_at: '2025-02-22T00:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //card and nets at the same time
+  const testResponse = [
+    {
+      card_expires_at: '2035-02-12T00:33:34Z',
+      expires_at: '2028-02-13T00:33:34Z',
+      id: 14900,
+      masked_pan: '4847',
+      payment_type: 3,
+    },
+  ]; //Default
   return response.data;
 }
 

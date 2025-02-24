@@ -10,12 +10,13 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
-import {getExpireDate} from '@atb/stacks-hierarchy/utils';
+import {getExpireDate, getCardExpiryStatus} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   addPaymentMethod,
   humanizePaymentType,
   RecurringPayment,
+  ExpiryMessage,
 } from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
@@ -39,6 +40,11 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
+//This text should be in the general dictionary because it is used in both
+// 'Select Payment Method' and 'Payment Methods Screen'
+//But I don't if something like that exists
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -176,21 +182,28 @@ const Card = (props: {
   const {t} = useTranslation();
   const fontScale = useFontScale();
 
+  const reccuringCardStatus = getCardExpiryStatus(card);
   return (
     <View style={style.card}>
       <View style={style.cardTop}>
-        <View>
+        <PaymentBrand paymentType={card.payment_type} />
+        <View style={style.cardText}>
           <ThemeText
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.cardInfo(paymentName, card.masked_pan),
             )}
           >
-            {paymentName} **** {card.masked_pan}
+            {paymentName}
+          </ThemeText>
+          <ThemeText typography="body__secondary">
+            **** {card.masked_pan}
           </ThemeText>
         </View>
 
         <View style={style.cardIcons}>
-          <PaymentBrand paymentType={card.payment_type} />
+          <ThemeText typography="body__secondary">
+            {t(PaymentMethodsTexts.deleteModal.confirmButton)}
+          </ThemeText>
           <PressableOpacity
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
@@ -198,7 +211,7 @@ const Card = (props: {
                 card.masked_pan,
               ),
             )}
-            style={{marginLeft: theme.spacing.medium}}
+            style={{marginLeft: theme.spacing.xSmall}}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentMethodsTexts.deleteModal.title),
@@ -216,15 +229,30 @@ const Card = (props: {
             <SvgDelete
               height={21 * fontScale}
               width={21 * fontScale}
-              fill={theme.color.interactive.destructive.default.background}
+              fill={theme.color.foreground.dynamic.primary}
             />
           </PressableOpacity>
         </View>
       </View>
-
-      <ThemeText color="secondary" typography="body__secondary">
-        {getExpireDate(card.expires_at)}
-      </ThemeText>
+      {reccuringCardStatus && (
+        <MessageInfoText
+          style={style.warningMessage}
+          type={reccuringCardStatus.expiryMessageType}
+          message={`${t(
+            SelectPaymentMethodTexts.expiry_messages[
+              reccuringCardStatus.expiryMessageCardType as 'nets' | 'card'
+            ][
+              reccuringCardStatus.expiryMessageCardTime as
+                | 'beforeExpiration'
+                | 'afterExpiration'
+            ],
+          )} ${
+            reccuringCardStatus.expiryTime
+              ? getExpireDate(reccuringCardStatus?.expiryTime)
+              : ''
+          }`}
+        />
+      )}
     </View>
   );
 };
@@ -311,11 +339,21 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
+  cardText: {
+    paddingLeft: theme.spacing.medium,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.xSmall,
+  },
   cardIcons: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'flex-end',
+  },
+  warningMessage: {
+    paddingTop: theme.spacing.medium,
   },
 }));

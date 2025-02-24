@@ -123,6 +123,20 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje denne betalingsmetoden',
     ),
   },
+
+  paymentWithAnyService: {
+    text: _(`Nytt kort`, `New card`, `Nytt kort`),
+    a11yLabel: _(
+      `Betal med Visa, Mastercard or American Express}`,
+      `Pay with Visa, Mastercard or American Express}`,
+      `Betal med Visa, Mastercard or American Express`,
+    ),
+    a11Hint: _(
+      'Aktivér for velge denne betalingsmåten',
+      'Activate to select this payment method',
+      'Aktivér for å velje denne betalingsmetoden',
+    ),
+  },
   paymentWithStoredCard: {
     a11yLabel: (brand: string, masked_pan: string) =>
       _(

@@ -116,14 +116,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
-    paymentMethod?.paymentType,
+    Array.isArray(paymentMethod?.paymentType)
+      ? paymentMethod?.paymentType[0]
+      : paymentMethod?.paymentType,
     useCallback(() => setVippsNotInstalledError(true), []),
   );
 
   const onPaymentCompleted = useCallback(async () => {
     saveLastUsedRecurringPaymentOrType(
       userId,
-      paymentMethod?.paymentType,
+      Array.isArray(paymentMethod?.paymentType)
+        ? paymentMethod?.paymentType[0]
+        : paymentMethod?.paymentType,
       reserveMutation.data?.recurring_payment_id,
     );
     closeInAppBrowseriOS();
@@ -189,7 +193,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   function getPaymentMethodTexts(method: PaymentMethod): string {
-    let str;
+    let str = '';
     switch (method.paymentType) {
       case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
@@ -331,7 +335,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
                   rightIcon={{
-                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
+                    svg: getPaymentTypeSvg(
+                      Array.isArray(paymentMethod.paymentType)
+                        ? paymentMethod.paymentType[0]
+                        : paymentMethod.paymentType,
+                    ),
                   }}
                   onPress={() => {
                     analytics.logEvent(
