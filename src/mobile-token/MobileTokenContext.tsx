@@ -9,7 +9,6 @@ import React, {
 import {useAuthContext} from '@atb/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
-  IntercomTokenStatus,
   MobileTokenStatus,
   RemoteToken,
   Token,
@@ -114,26 +113,25 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
-    if (nativeTokenStatus !== 'loading') {
-      const tokenId = nativeToken ? nativeToken.tokenId : 'undefined';
-      const tokenStatus = getAttestationStatus(nativeToken);
-      const tokenErrorCorrelationId = nativeToken
-        ? 'undefined'
-        : traceId.current;
+    if (nativeTokenStatus === 'success') {
+      const tokenId = nativeToken.tokenId;
+      const tokenStatus = nativeToken.isAttested()
+        ? 'attested'
+        : 'non-attested';
 
-      // Intercom update
       updateMetadata({
         'AtB-Mobile-Token-Id': tokenId,
         'AtB-Mobile-Token-Status': tokenStatus,
-        'AtB-Mobile-Token-Error-Correlation-Id': tokenErrorCorrelationId,
+        'AtB-Mobile-Token-Error-Correlation-Id': undefined,
       });
-
-      // token status endpoint
-      tokenService.postTokenStatus(
-        tokenId,
-        tokenStatus,
-        tokenErrorCorrelationId,
-      );
+      tokenService.postTokenStatus(tokenId, tokenStatus, undefined);
+    } else if (nativeTokenStatus === 'error') {
+      updateMetadata({
+        'AtB-Mobile-Token-Id': undefined,
+        'AtB-Mobile-Token-Status': 'error',
+        'AtB-Mobile-Token-Error-Correlation-Id': traceId.current,
+      });
+      tokenService.postTokenStatus(undefined, 'error', traceId.current);
     }
   }, [nativeToken, nativeTokenStatus, updateMetadata]);
 
@@ -382,17 +380,3 @@ const getTokenToggleDetails = async () => {
     return undefined;
   }
 };
-
-function getAttestationStatus(
-  nativeToken: ActivatedToken | undefined,
-): IntercomTokenStatus {
-  if (nativeToken) {
-    if (nativeToken.isAttested()) {
-      return 'attested';
-    } else {
-      return 'non-attested';
-    }
-  } else {
-    return 'error';
-  }
-}

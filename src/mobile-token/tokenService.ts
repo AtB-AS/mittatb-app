@@ -41,9 +41,9 @@ export type TokenService = RemoteTokenService & {
   validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
   postTokenStatus: (
-    tokenId: string,
+    tokenId: string | undefined,
     tokenStatus: string,
-    traceId: string,
+    traceId: string | undefined,
   ) => Promise<void>;
 };
 
