@@ -104,7 +104,6 @@ const loadNativeToken = async (userId: string, traceId: string) => {
             `Token needs renewal ${token.getTokenId()}`,
             errorToMetadata(err),
           );
-          logError(err, traceId);
           // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
         } else if (tokenSdkErrorHandling === 'reset') {
