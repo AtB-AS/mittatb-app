@@ -1,26 +1,26 @@
-import {ShmoBlockers, ShmoBlockersEnum} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
+import {ShmoRequirementEnum, ShmoRequirementType} from './types';
 
-export const useShmoBlockers = () => {
+export const useShmoRequirements = () => {
   const {locationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
 
-  const blockers: ShmoBlockers[] = [
+  const blockers: ShmoRequirementType[] = [
     {
-      blocker: ShmoBlockersEnum.LOCATION,
-      loading: false,
+      requirement: ShmoRequirementEnum.LOCATION,
+      isLoading: false,
       isBlocking: !locationIsAvailable,
     },
     {
-      blocker: ShmoBlockersEnum.PAYMENT_CARD,
-      loading: paymentsLoading,
+      requirement: ShmoRequirementEnum.PAYMENT_CARD,
+      isLoading: paymentsLoading,
       isBlocking: recurringPayments ? recurringPayments?.length === 0 : true,
     },
     {
-      blocker: ShmoBlockersEnum.TERMS_AND_CONDITIONS,
-      loading: false,
+      requirement: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
+      isLoading: false,
       isBlocking: true,
     },
   ];
