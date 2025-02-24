@@ -212,13 +212,13 @@ export const tokenService: TokenService = {
       includeCertificate: false,
     };
 
-    await abtClient.remoteClientCallHandler(
-      token.getContextId(),
-      tokenEncodingRequest,
-      traceId,
-      async (secureContainerToken, attestation) =>
-        client
-          .get('/tokens/v4/validate', {
+    await abtClient
+      .remoteClientCallHandler(
+        token.getContextId(),
+        tokenEncodingRequest,
+        traceId,
+        async (secureContainerToken, attestation) =>
+          client.get('/tokens/v4/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainerToken,
@@ -228,8 +228,8 @@ export const tokenService: TokenService = {
             authWithIdToken: true,
             timeout: 15000,
             skipErrorLogging: isRemoteTokenStateError,
-          })
-          .catch(handleError),
-    );
+          }),
+      )
+      .catch(handleError);
   },
 };
