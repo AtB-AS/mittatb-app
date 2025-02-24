@@ -5,7 +5,11 @@ import React from 'react';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 
-export const ShmoActionButton = () => {
+type ShmoActionButtonProps = {
+  onLogin: () => void;
+};
+
+export const ShmoActionButton = ({onLogin}: ShmoActionButtonProps) => {
   const {authenticationType} = useAuthContext();
 
   const {hasBlockers} = useShmoRequirements();
@@ -15,9 +19,7 @@ export const ShmoActionButton = () => {
   if (authenticationType != 'phone') {
     return (
       <ButtonInfoTextCombo
-        onPress={() => {
-          //console.log('ButtonPress');
-        }}
+        onPress={onLogin}
         buttonText={t(MobilityTexts.shmoRequirements.loginBlocker)}
         message={t(MobilityTexts.shmoRequirements.loginBlockerInfoMessage)}
       />

@@ -32,6 +32,8 @@ type Props = {
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
   navigateSupportCallback: () => void;
+
+  loginCallback: () => void;
 };
 
 export const ScooterSheet = ({
@@ -40,6 +42,7 @@ export const ScooterSheet = ({
   onReportParkingViolation,
   onVehicleReceived,
   navigateSupportCallback,
+  loginCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -98,7 +101,7 @@ export const ScooterSheet = ({
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
                 <>
-                  <ShmoActionButton />
+                  <ShmoActionButton onLogin={loginCallback} />
                   <Button
                     expanded={true}
                     onPress={navigateSupportCallback}
