@@ -5,10 +5,10 @@ import React from 'react';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 
-export const ShmoActionButtons = () => {
+export const ShmoActionButton = () => {
   const {authenticationType} = useAuthContext();
 
-  const {blockers} = useShmoRequirements();
+  const {hasBlockers} = useShmoRequirements();
 
   const {t} = useTranslation();
 
@@ -16,23 +16,22 @@ export const ShmoActionButtons = () => {
     return (
       <ButtonInfoTextCombo
         onPress={() => {
-          console.log('ButtonPress');
+          //console.log('ButtonPress');
         }}
-        buttonText={t(MobilityTexts.loginBlocker)}
-        message={t(MobilityTexts.loginBlockerInfoMessage)}
+        buttonText={t(MobilityTexts.shmoRequirements.loginBlocker)}
+        message={t(MobilityTexts.shmoRequirements.loginBlockerInfoMessage)}
       />
     );
   }
 
-  // check if a user has any blockers for shmo
-  if (blockers.some((blocker) => blocker.isBlocking)) {
+  if (hasBlockers) {
     return (
       <ButtonInfoTextCombo
         onPress={() => {
-          console.log('ButtonPress');
+          //console.log('ButtonPress');
         }}
-        buttonText={t(MobilityTexts.shmoBlockers)}
-        message={t(MobilityTexts.shmoBlockersInfoMessage)}
+        buttonText={t(MobilityTexts.shmoRequirements.shmoBlockers)}
+        message={t(MobilityTexts.shmoRequirements.shmoBlockersInfoMessage)}
       />
     );
   }

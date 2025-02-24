@@ -7,25 +7,28 @@ export const useShmoRequirements = () => {
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
 
-  const blockers: ShmoRequirementType[] = [
+  const requirements: ShmoRequirementType[] = [
     {
-      requirement: ShmoRequirementEnum.LOCATION,
+      requirementCode: ShmoRequirementEnum.LOCATION,
       isLoading: false,
       isBlocking: !locationIsAvailable,
     },
     {
-      requirement: ShmoRequirementEnum.PAYMENT_CARD,
+      requirementCode: ShmoRequirementEnum.PAYMENT_CARD,
       isLoading: paymentsLoading,
       isBlocking: recurringPayments ? recurringPayments?.length === 0 : true,
     },
     {
-      requirement: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
+      requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
       isLoading: false,
       isBlocking: true,
     },
   ];
 
+  const hasBlockers = requirements.some((req) => req.isBlocking);
+
   return {
-    blockers,
+    requirements,
+    hasBlockers,
   };
 };

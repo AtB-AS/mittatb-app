@@ -5,7 +5,7 @@ export enum ShmoRequirementEnum {
 }
 
 export type ShmoRequirementType = {
-  requirement: ShmoRequirementEnum;
+  requirementCode: ShmoRequirementEnum;
   isLoading: boolean;
   isBlocking: boolean;
 };
