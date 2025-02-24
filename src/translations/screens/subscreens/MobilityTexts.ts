@@ -23,6 +23,29 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Annet');
     }
   },
+  shmoRequirements: {
+    loginBlocker: _(
+      'Logg inn for å starte turen',
+      'Log in to start the trip',
+      'Logg inn for å starte turen',
+    ),
+    loginBlockerInfoMessage: _(
+      'Du må logge inn og ordne noen småting for å starte turen',
+      'You need to log in and fix some things to start the trip',
+      'Du må logge inn og ordne nokre småting for å starte turen',
+    ),
+    shmoBlockers: _(
+      'Ordne småting for å starte turen',
+      'Fix some things to start the trip',
+      'Ordne nokre småting for å starte turen',
+    ),
+    shmoBlockersInfoMessage: _(
+      'Du må ordne noen småting for å starte turen',
+      'You need to fix some things to start the trip',
+      'Du må ordne nokre småting for å starte turen',
+    ),
+  },
+  helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator', 'Ukjent operatør'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`, `Åpne ${operator}`),

@@ -17,6 +17,8 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 /**
  * When a new bottomSheetToAutoSelect is set and isn't already selected,
@@ -33,6 +35,7 @@ export const useAutoSelectMapItem = (
   } = useMapContext();
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
+  const navigation = useNavigation<RootNavigationProps>();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -83,6 +86,12 @@ export const useAutoSelectMapItem = (
                 onClose={closeBottomSheet}
                 onVehicleReceived={flyToMapItemLocation}
                 onReportParkingViolation={onReportParkingViolation}
+                navigateSupportCallback={() => {
+                  closeBottomSheet();
+                  navigation.navigate('Root_ScooterHelpScreen', {
+                    vehicleId: bottomSheetToAutoSelect.id,
+                  });
+                }}
               />
             );
             break;
@@ -136,5 +145,6 @@ export const useAutoSelectMapItem = (
     setBottomSheetToAutoSelect,
     onReportParkingViolation,
     setBottomSheetCurrentlyAutoSelected,
+    navigation,
   ]);
 };
