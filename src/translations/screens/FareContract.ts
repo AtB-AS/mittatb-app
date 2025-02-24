@@ -239,6 +239,11 @@ const FareContractTexts = {
       'You do not have the ability to refund more tickets right now. Contact customer service for further refunds.',
       'Du har ikke mulighet til å refundere flere billettar akkurat nå. Ta kontakt med kundeservice for videre refusjon.',
     ),
+    notRefundable: _(
+      'Billetten er ikke tilgjengelig for refusjon.',
+      'The ticket is not available for refund.',
+      'Billetten er ikkje tilgjengeleg for refusjon.',
+    ),
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>

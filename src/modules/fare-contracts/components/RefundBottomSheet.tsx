@@ -64,6 +64,12 @@ export const RefundBottomSheet = ({fareContractId}: Props) => {
             type="error"
           />
         )}
+        {refundOptions?.refundable === false && (
+          <MessageInfoBox
+            message={t(FareContractTexts.refund.notRefundable)}
+            type="error"
+          />
+        )}
         <Section>
           <GenericSectionItem type="spacious">
             <ThemeText>
