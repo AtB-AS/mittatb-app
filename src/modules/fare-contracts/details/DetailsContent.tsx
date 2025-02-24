@@ -46,7 +46,6 @@ import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetai
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
-import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 import {RefundSectionItem} from '../components/RefundSectionItem';
 
 type Props = {
@@ -74,7 +73,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled, isRefundsEnabled} =
     useFeatureTogglesContext();
-  const {data: refundOptions} = useRefundOptionsQuery(fc.id, isRefundsEnabled);
 
   const {
     travelRights,
@@ -206,9 +204,7 @@ export const DetailsContent: React.FC<Props> = ({
         onPress={onReceiptNavigate}
         testID="receiptButton"
       />
-      {isRefundsEnabled && refundOptions?.refundable && (
-        <RefundSectionItem fareContractId={fc.id} />
-      )}
+      {isRefundsEnabled && <RefundSectionItem fareContractId={fc.id} />}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
         <ConsumeCarnetSectionItem fareContractId={fc.id} />
       )}
