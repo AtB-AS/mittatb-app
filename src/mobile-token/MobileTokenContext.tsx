@@ -114,17 +114,16 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (nativeTokenStatus === 'success') {
-      const tokenId = nativeToken.tokenId;
       const tokenStatus = nativeToken.isAttested()
         ? 'attested'
         : 'non-attested';
 
       updateMetadata({
-        'AtB-Mobile-Token-Id': tokenId,
+        'AtB-Mobile-Token-Id': nativeToken.tokenId,
         'AtB-Mobile-Token-Status': tokenStatus,
         'AtB-Mobile-Token-Error-Correlation-Id': undefined,
       });
-      tokenService.postTokenStatus(tokenId, tokenStatus, undefined);
+      tokenService.postTokenStatus(nativeToken.tokenId, tokenStatus, undefined);
     } else if (nativeTokenStatus === 'error') {
       updateMetadata({
         'AtB-Mobile-Token-Id': undefined,
