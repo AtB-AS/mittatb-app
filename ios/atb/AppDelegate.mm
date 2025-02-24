@@ -3,7 +3,6 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
-#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 
 #import <Bugsnag/Bugsnag.h>
 #import <Firebase.h>
@@ -52,7 +51,6 @@
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
   self.moduleName = @"no.mittatb";
-  self.dependencyProvider = [[RCTAppDependencyProvider alloc] init];
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
@@ -74,10 +72,10 @@
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
-  return [self getBundleURL];
+  return [self bundleURL];
 }
 
-- (NSURL *)getBundleURL
+- (NSURL *)bundleURL
 {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
