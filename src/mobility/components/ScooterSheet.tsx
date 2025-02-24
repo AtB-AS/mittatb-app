@@ -23,7 +23,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from './VehicleCard';
-import {ShmoActionButtons} from './ShmoActionButtons';
+import {ShmoActionButton} from './ShmoActionButtons';
 import {useOperators} from '../use-operators';
 
 type Props = {
@@ -32,6 +32,7 @@ type Props = {
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
   navigateSupportCallback: () => void;
+
   loginCallback: () => void;
 };
 
@@ -100,7 +101,7 @@ export const ScooterSheet = ({
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
                 <>
-                  <ShmoActionButtons onLogin={loginCallback} />
+                  <ShmoActionButton onLogin={loginCallback} />
                   <Button
                     expanded={true}
                     onPress={navigateSupportCallback}
