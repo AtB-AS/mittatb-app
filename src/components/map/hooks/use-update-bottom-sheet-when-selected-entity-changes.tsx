@@ -245,7 +245,15 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
+  }, [
+    mapSelectionAction,
+    selectedFeature,
+    isFocused,
+    distance,
+    analytics,
+    enable_vipps_login,
+    hasReservationOrAvailableFareContract,
+  ]);
 
   return {selectedFeature, onReportParkingViolation};
 };
