@@ -40,6 +40,11 @@ export type TokenService = RemoteTokenService & {
   ) => Promise<RemoteToken[]>;
   validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
+  postTokenStatus: (
+    tokenId: string | undefined,
+    tokenStatus: string,
+    traceId: string | undefined,
+  ) => Promise<void>;
 };
 
 const handleError = (err: any) => {
@@ -212,13 +217,13 @@ export const tokenService: TokenService = {
       includeCertificate: false,
     };
 
-    await abtClient.remoteClientCallHandler(
-      token.getContextId(),
-      tokenEncodingRequest,
-      traceId,
-      async (secureContainerToken, attestation) =>
-        client
-          .get('/tokens/v4/validate', {
+    await abtClient
+      .remoteClientCallHandler(
+        token.getContextId(),
+        tokenEncodingRequest,
+        traceId,
+        async (secureContainerToken, attestation) =>
+          client.get('/tokens/v4/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainerToken,
@@ -228,8 +233,22 @@ export const tokenService: TokenService = {
             authWithIdToken: true,
             timeout: 15000,
             skipErrorLogging: isRemoteTokenStateError,
-          })
-          .catch(handleError),
+          }),
+      )
+      .catch(handleError);
+  },
+  postTokenStatus: async (tokenId, tokenStatus, traceId) => {
+    await client.post(
+      '/token/v1/status',
+      {
+        mobileTokenId: tokenId,
+        mobileTokenStatus: tokenStatus,
+        mobileTokenErrorCorrelationId: traceId,
+      },
+      {
+        authWithIdToken: true,
+        timeout: 15000,
+      },
     );
   },
 };

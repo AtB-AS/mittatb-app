@@ -23,9 +23,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from './VehicleCard';
-import {ShmoActionButtons} from './ShmoActionButtons';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {ThemeText} from '@atb/components/text';
+import {ShmoActionButton} from './ShmoActionButtons';
 import {useOperators} from '../use-operators';
 
 type Props = {
@@ -102,13 +100,14 @@ export const ScooterSheet = ({
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
                 <>
-                  <ShmoActionButtons onLogin={loginCallback} />
-                  <PressableOpacity
-                    style={styles.helpButton}
+                  <ShmoActionButton onLogin={loginCallback} />
+                  <Button
+                    expanded={true}
                     onPress={navigateSupportCallback}
-                  >
-                    <ThemeText>{t(MobilityTexts.helpText)}</ThemeText>
-                  </PressableOpacity>
+                    text={t(MobilityTexts.helpText)}
+                    mode="tertiary"
+                    backgroundColor={theme.color.background.neutral[1]}
+                  />
                 </>
               ) : (
                 <>
