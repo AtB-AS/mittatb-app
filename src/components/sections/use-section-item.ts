@@ -42,7 +42,11 @@ export function useSectionItem({
     backgroundColor: transparent
       ? undefined
       : interactiveColor[active ? 'active' : 'default'].background,
-    borderColor: interactiveColor[active ? 'outline' : 'default'].background,
+    borderColor: active
+      ? interactiveColor.outline.background
+      : transparent
+      ? 'transparent'
+      : interactiveColor.default.background,
     borderWidth: theme.border.width.slim,
   };
   const contentContainer: ViewStyle = {

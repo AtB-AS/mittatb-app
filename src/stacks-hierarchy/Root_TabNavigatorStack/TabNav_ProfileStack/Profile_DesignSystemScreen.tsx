@@ -964,8 +964,14 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem>
             <ThemeText>Generic section item</ThemeText>
           </GenericSectionItem>
+          <GenericSectionItem transparent>
+            <ThemeText>Transparent generic section item</ThemeText>
+          </GenericSectionItem>
           <GenericSectionItem active>
             <ThemeText>Active generic section item</ThemeText>
+          </GenericSectionItem>
+          <GenericSectionItem active transparent>
+            <ThemeText>Active transparent generic section item</ThemeText>
           </GenericSectionItem>
           <GenericSectionItem interactiveColor={theme.color.interactive[0]}>
             <ThemeText color={theme.color.foreground.light.primary}>
