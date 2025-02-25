@@ -15,18 +15,23 @@ export const BonusPriceTag = ({price, ...props}: Props) => {
 
   return (
     <View {...props} style={[styles.container, props.style]}>
-      <ThemeText>{price}</ThemeText>
+      <ThemeText
+        accessible={true}
+        accessibilityLabel={t(BonusProgramTexts.costA11yLabel(price))}
+      >
+        {price}
+      </ThemeText>
       <ThemeIcon
         svg={StarFill}
         size="small"
-        accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+        accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
       />
     </View>
   );
 };
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    backgroundColor: theme.color.background.neutral[0].background,
     borderColor: theme.color.foreground.inverse.secondary,
     borderWidth: theme.border.width.slim,
     borderRadius: theme.border.radius.regular,
