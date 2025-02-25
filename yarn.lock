@@ -9842,10 +9842,10 @@ react-native-bootsplash@^6.1.1:
     ts-dedent "^2.2.0"
     xml-formatter "^3.6.2"
 
-react-native-camera-kit@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-camera-kit/-/react-native-camera-kit-14.2.0.tgz#69fec729cfc9d40dc3904098965c6a2bf56b444f"
-  integrity sha512-rPk/4Ux52/Kc6oIPk0x6NsrvDkeL+kd/GAUJ4xBtTlnmiWjLTgeA2Vjgg9ik03mmyf6rV+LaqaOBT7KejhuHKQ==
+react-native-camera-kit@14.0.0-beta12:
+  version "14.0.0-beta12"
+  resolved "https://registry.yarnpkg.com/react-native-camera-kit/-/react-native-camera-kit-14.0.0-beta12.tgz#a9fb9dfe9e913b2b0bff54a5b236adc32069e125"
+  integrity sha512-SUBcjq/lcGX3unEXSDWkdegx/kw9Z7b3zj9Zo1vI7V/bvT7CFdSeZS39Z+LE5peVFbU74I58ETnqpIKjgj2STA==
 
 react-native-compressor@^1.10.4:
   version "1.10.4"

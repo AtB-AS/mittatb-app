@@ -100,7 +100,7 @@
     "react": "18.3.1",
     "react-native": "0.76.7",
     "react-native-bootsplash": "^6.1.1",
-    "react-native-camera-kit": "^14.2.0",
+    "react-native-camera-kit": "14.0.0-beta12",
     "react-native-compressor": "^1.10.4",
     "react-native-date-picker": "^5.0.8",
     "react-native-device-info": "^11.1.0",
