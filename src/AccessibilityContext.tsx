@@ -9,7 +9,11 @@ export const AccessibilityContext = createContext<AccessibilityState>({
   isScreenReaderEnabled: false,
 });
 
-export const AccessibilityContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const AccessibilityContextProvider = ({children}: Props) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   return (
     <AccessibilityContext.Provider value={{isScreenReaderEnabled}}>
@@ -22,7 +26,7 @@ export function useAccessibilityContext() {
   const context = useContext(AccessibilityContext);
   if (context === undefined) {
     throw new Error(
-      'useAccessabilityContext must be used within an AccessibilityProvedier',
+      'useAccessibilityContext must be used within an AccessibilityProvider',
     );
   }
   return context;
