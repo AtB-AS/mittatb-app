@@ -1,4 +1,4 @@
-import React, {ComponentProps} from 'react';
+import React from 'react';
 import {BonusPriceTag} from '@atb/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {

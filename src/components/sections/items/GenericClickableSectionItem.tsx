@@ -1,5 +1,5 @@
 import React, {PropsWithChildren, forwardRef} from 'react';
-import {AccessibilityProps, View, PressableProps} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {
