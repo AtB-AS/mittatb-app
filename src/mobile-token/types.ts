@@ -52,6 +52,9 @@ export type PendingToken = {
 
 export type InitRequest = {
   name: string;
+  preferRequireAttestation?: boolean;
+  deviceInfo?: string[];
+  deviceInfoType?: string;
 };
 
 export type RemoveRequestParams = {
@@ -100,3 +103,5 @@ export type MobileTokenStatus =
   | 'staticQr'
   | 'error'
   | 'fallback';
+
+export type IntercomTokenStatus = 'attested' | 'non-attested' | 'error';

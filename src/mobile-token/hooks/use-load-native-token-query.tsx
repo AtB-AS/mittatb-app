@@ -1,53 +1,31 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
-import {
-  ActivatedToken,
-  TokenAction,
-} from '@entur-private/abt-mobile-client-sdk';
+import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {tokenService} from '@atb/mobile-token/tokenService';
+import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {
-  TokenEncodingInvalidRemoteTokenStateError,
-  TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
-  TokenNotFoundRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
-import {v4 as uuid} from 'uuid';
-import {
-  getSdkErrorHandlingStrategy,
+  getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
+  wipeToken,
 } from '../utils';
-import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils';
-import {wipeToken} from '@atb/mobile-token/helpers';
+import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import Bugsnag from '@bugsnag/react-native';
 
 export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
 export const useLoadNativeTokenQuery = (
   enabled: boolean,
   userId: string | undefined,
+  traceId: string,
 ) => {
-  const {updateMetadata} = useIntercomMetadata();
-
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
     queryFn: async () => {
-      const traceId = uuid();
       try {
         const token = await loadNativeToken(userId!, traceId);
-        updateMetadata({
-          'AtB-Mobile-Token-Id': token.tokenId,
-          'AtB-Mobile-Token-Status': 'success',
-          'AtB-Mobile-Token-Error-Correlation-Id': undefined,
-        });
         return token;
       } catch (err: any) {
-        updateMetadata({
-          'AtB-Mobile-Token-Id': undefined,
-          'AtB-Mobile-Token-Status': 'error',
-          'AtB-Mobile-Token-Error-Correlation-Id': traceId,
-        });
         logError(err, traceId);
         throw err;
       }
@@ -87,13 +65,20 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
-      const errHandling = getSdkErrorHandlingStrategy(err);
+      logToBugsnag(`Get token error ${err}`, errorToMetadata(err));
+      const errHandling = getMobileTokenErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
-          logError(err, traceId);
+          logToBugsnag(`Get token needs to reset token`, errorToMetadata(err));
           await wipeToken(getSdkErrorTokenIds(err), traceId);
+          logError(err, traceId);
           break;
         case 'unspecified':
+          logToBugsnag(
+            `Get token error unspecified resolution`,
+            errorToMetadata(err),
+          );
+          logError(err, traceId);
           throw err;
       }
     }
@@ -106,22 +91,37 @@ const loadNativeToken = async (userId: string, traceId: string) => {
        */
       try {
         logToBugsnag(`Validating token ${token.getTokenId()}`);
-        const signedToken = await mobileTokenClient.encode(token, [
-          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-        ]);
-        await tokenService.validate(token, signedToken, traceId);
-      } catch (err) {
-        if (
-          err instanceof TokenMustBeReplacedRemoteTokenStateError ||
-          err instanceof TokenNotFoundRemoteTokenStateError
-        ) {
-          token = undefined;
-        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
-          wipeToken([token.tokenId], traceId);
-          token = undefined;
-        } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+        await tokenService.validate(token, traceId);
+      } catch (err: any) {
+        logToBugsnag(
+          `Validation error on token ${token.getTokenId()}`,
+          errorToMetadata(err),
+        );
+        // get the SDK-recommended error handling strategy
+        const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
+        if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+          logToBugsnag(
+            `Token needs renewal ${token.getTokenId()}`,
+            errorToMetadata(err),
+          );
+          // if the token only needs renewal, renew it
           token = await mobileTokenClient.renew(token, traceId);
+        } else if (tokenSdkErrorHandling === 'reset') {
+          // token needs reset, therefore, wipe token
+          logToBugsnag(
+            `Token needs reset, wipe ${token.getTokenId()}`,
+            errorToMetadata(err),
+          );
+          logError(err, traceId);
+          await wipeToken([token.tokenId], traceId);
+          token = undefined;
         } else {
+          // other errors
+          logToBugsnag(
+            `Other error during validation of ${token.getTokenId()}`,
+            errorToMetadata(err),
+          );
+          logError(err, traceId);
           throw err;
         }
       }
@@ -135,9 +135,21 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     - There has been a user change and the existing token has been wiped.
     - There was a validation error which signaled that a new token should
       be created.
+    - There was an error where the token resolution is `RESET` as 
+      suggested by the SDK.
      */
     logToBugsnag(`Creating new mobile token`);
-    token = await mobileTokenClient.create(traceId);
+    try {
+      token = await mobileTokenClient.create(traceId);
+      logToBugsnag(`Created new token ${token.getTokenId()}`);
+    } catch (err: any) {
+      logToBugsnag(
+        `Got error while creating new mobile token `,
+        errorToMetadata(err),
+      );
+      logError(err, traceId);
+      throw err;
+    }
   }
   await storage.set('@ATB_last_mobile_token_user', userId!);
   return token;
