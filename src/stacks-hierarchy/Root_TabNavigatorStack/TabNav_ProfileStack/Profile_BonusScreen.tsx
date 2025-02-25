@@ -47,6 +47,14 @@ export const Profile_BonusScreen = () => {
       }}
     >
       <View style={styles.container}>
+        {authenticationType !== 'phone' && (
+          <View style={styles.noAccount}>
+            <MessageInfoBox
+              type="warning"
+              message={t(BonusProgramTexts.bonusProfile.noProfile)}
+            />
+          </View>
+        )}
         <Section>
           <GenericSectionItem style={styles.horizontalContainer}>
             <View>
@@ -75,14 +83,6 @@ export const Profile_BonusScreen = () => {
             <ThemedCityBike />
           </GenericSectionItem>
         </Section>
-        {authenticationType !== 'phone' && (
-          <View style={styles.noAccount}>
-            <MessageInfoBox
-              type="warning"
-              message={t(BonusProgramTexts.bonusProfile.noProfile)}
-            />
-          </View>
-        )}
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
