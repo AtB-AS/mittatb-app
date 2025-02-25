@@ -1,7 +1,7 @@
 import {Pressable, PressableProps, StyleProp, ViewStyle} from 'react-native';
 import React, {forwardRef} from 'react';
 
-type PressableOpacityProps = {
+export type PressableOpacityProps = {
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
