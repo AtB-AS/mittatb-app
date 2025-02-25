@@ -1,5 +1,10 @@
 import {ViewStyle} from 'react-native';
-import {Theme, useThemeContext} from '@atb/theme';
+import {
+  ContrastColor,
+  InteractiveColor,
+  Theme,
+  useThemeContext,
+} from '@atb/theme';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
@@ -8,27 +13,41 @@ export type BaseSectionItemProps = {
   radius?: RadiusModeType;
   radiusSize?: keyof Theme['border']['radius'];
   testID?: string;
+  active?: boolean;
+  interactiveColor?: InteractiveColor;
 };
 
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
+  interactiveColor: InteractiveColor<ContrastColor>;
 };
+
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export function useSectionItem({
   transparent = false,
   type = 'block',
   radius,
   radiusSize,
+  active,
+  interactiveColor: customInteractiveColor,
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useThemeContext();
+  const interactiveColor = customInteractiveColor ?? getInteractiveColor(theme);
 
   const topContainer: ViewStyle = {
     ...mapToPadding(theme, type),
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
-      : theme.color.background.neutral[0].background,
+      : interactiveColor[active ? 'active' : 'default'].background,
+    borderColor: active
+      ? interactiveColor.outline.background
+      : transparent
+      ? 'transparent'
+      : interactiveColor.default.background,
+    borderWidth: theme.border.width.slim,
   };
   const contentContainer: ViewStyle = {
     flex: 1,
@@ -37,6 +56,7 @@ export function useSectionItem({
   return {
     topContainer,
     contentContainer,
+    interactiveColor,
   };
 }
 
@@ -46,13 +66,13 @@ function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
     case 'block':
       return {
-        paddingVertical: theme.spacing.medium,
-        paddingHorizontal: theme.spacing.medium,
+        paddingVertical: theme.spacing.medium - theme.border.width.slim,
+        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
       };
     case 'spacious':
       return {
-        paddingVertical: theme.spacing.large,
-        paddingHorizontal: theme.spacing.medium,
+        paddingVertical: theme.spacing.large - theme.border.width.slim,
+        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
       };
   }
 }
