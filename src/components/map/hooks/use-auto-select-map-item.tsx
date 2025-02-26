@@ -113,6 +113,10 @@ export const useAutoSelectMapItem = (
                     navigation.navigate('Root_LoginPhoneInputScreen', {});
                   }
                 }}
+                startOnboardingCallback={() => {
+                  closeBottomSheet();
+                  navigation.navigate('Root_ShmoOnboardingScreen');
+                }}
               />
             );
             break;

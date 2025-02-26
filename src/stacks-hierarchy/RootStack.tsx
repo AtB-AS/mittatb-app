@@ -66,6 +66,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
+import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -392,6 +393,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_ScooterHelpScreen"
                   component={Root_ScooterHelpScreen}
+                />
+                <Stack.Screen
+                  name="Root_ShmoOnboardingScreen"
+                  component={Root_ShmoOnboardingScreen}
                 />
                 <Stack.Screen
                   name="Root_ContactScooterOperatorScreen"
