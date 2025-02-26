@@ -17,7 +17,7 @@ export const Root_ShmoOnboardingScreen = ({}: ShmoOnboardingProps) => {
     if (!hasBlockers) {
       navigation.goBack();
     }
-  }, [hasBlockers]);
+  }, [hasBlockers, navigation]);
 
   if (
     requirements.find(
