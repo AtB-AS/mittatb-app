@@ -32,11 +32,12 @@ export const Profile_BonusScreen = () => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const {bonusProducts, mobilityOperators, bonusTexts} =
+    useFirestoreConfigurationContext();
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
     useState<number>();
 
-  const currentPoints = 5; // TODO: get actual value when available
+  const userBonusPoints = 5; // TODO: get actual value when available
   const activeBonusProducts = bonusProducts?.filter(isActive);
 
   return (
@@ -63,11 +64,11 @@ export const Profile_BonusScreen = () => {
                   typography="body__primary--jumbo--bold"
                   accessibilityLabel={t(
                     BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
-                      currentPoints,
+                      userBonusPoints,
                     ),
                   )}
                 >
-                  {currentPoints}
+                  {userBonusPoints}
                 </ThemeText>
                 <ThemeIcon
                   svg={StarFill}
@@ -151,10 +152,16 @@ export const Profile_BonusScreen = () => {
               <ThemedCityBike />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
-                  {t(BonusProgramTexts.bonusProfile.readMore.info.title)}
+                  {getTextForLanguage(
+                    bonusTexts?.howBonusWorks.title,
+                    language,
+                  ) ?? ''}
                 </ThemeText>
                 <ThemeText typography="body__secondary" color="secondary">
-                  {t(BonusProgramTexts.bonusProfile.readMore.info.description)}
+                  {getTextForLanguage(
+                    bonusTexts?.howBonusWorks.description,
+                    language,
+                  ) ?? ''}
                 </ThemeText>
               </View>
             </View>

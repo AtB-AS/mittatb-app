@@ -41,18 +41,6 @@ const BonusProgramTexts = {
     ),
     readMore: {
       heading: _('Les mer', 'Read more', 'Les meir'),
-      info: {
-        title: _(
-          'Hvordan funker Bonus?',
-          'How does the Bonus work?',
-          'Korleis fungerer bonus?',
-        ),
-        description: _(
-          'Tjen poeng hver gang du kjøper en billett for buss eller trikk i sone A.',
-          'Earn points every time you buy a bus or tram ticket in zone A.',
-          'Ten poeng kvar gong du kjøper ein billett for buss eller trikk i sone A.',
-        ),
-      },
     },
   },
   youHave: _('Du har ', 'You have ', 'Du har '),
