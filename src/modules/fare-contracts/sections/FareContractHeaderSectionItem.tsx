@@ -36,7 +36,9 @@ export const FareContractHeaderSectionItem = ({
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(fc.customerAccountId);
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    isSent ? fc.purchasedBy : undefined,
+  );
   const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
     enabled: !!phoneNumber,
   });
