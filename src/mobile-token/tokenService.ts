@@ -23,6 +23,10 @@ import {
 import {getDeviceName} from 'react-native-device-info';
 import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
 import {abtClient} from './mobileTokenClient';
+import {
+  TokenReattestationRemoteTokenStateError,
+  TokenReattestationRequiredError,
+} from '@entur-private/abt-token-server-javascript-interface';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
@@ -223,17 +227,32 @@ export const tokenService: TokenService = {
         tokenEncodingRequest,
         traceId,
         async (secureContainerToken, attestation) =>
-          client.get('/tokens/v4/validate', {
-            headers: {
-              [CorrelationIdHeaderName]: traceId,
-              [SignedTokenHeaderName]: secureContainerToken,
-              [AttestationHeaderName]: attestation?.data,
-              [AttestationTypeHeaderName]: attestation?.type,
-            },
-            authWithIdToken: true,
-            timeout: 15000,
-            skipErrorLogging: isRemoteTokenStateError,
-          }),
+          client
+            .get('/tokens/v4/validate', {
+              headers: {
+                [CorrelationIdHeaderName]: traceId,
+                [SignedTokenHeaderName]: secureContainerToken,
+                [AttestationHeaderName]: attestation?.data,
+                [AttestationTypeHeaderName]: attestation?.type,
+              },
+              authWithIdToken: true,
+              timeout: 15000,
+              skipErrorLogging: isRemoteTokenStateError,
+            })
+            .catch((err) => {
+              // for some reason, Reattestation must be handled here,
+              // otherwise it will cause a reset, and we don't want that to happen
+              // if we handle token Renewal here using `handleError`, the renewed
+              // token will be invalid to use on inspection.
+              const parsedError = parseBffCallErrors(err.response?.data);
+              if (
+                parsedError instanceof
+                  TokenReattestationRemoteTokenStateError ||
+                parsedError instanceof TokenReattestationRequiredError
+              ) {
+                throw parsedError;
+              } else throw err;
+            }),
       )
       .catch(handleError);
   },
