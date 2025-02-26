@@ -14,18 +14,13 @@ export const BonusPriceTag = ({amount, ...props}: Props) => {
   const {t} = useTranslation();
 
   return (
-    <View {...props} style={[styles.container, props.style]}>
-      <ThemeText
-        accessible={true}
-        accessibilityLabel={t(BonusProgramTexts.costA11yLabel(amount))}
-      >
-        {amount}
-      </ThemeText>
-      <ThemeIcon
-        svg={StarFill}
-        size="small"
-        accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
-      />
+    <View
+      {...props}
+      style={[styles.container, props.style]}
+      accessibilityLabel={t(BonusProgramTexts.costA11yLabel(amount))}
+    >
+      <ThemeText>{amount}</ThemeText>
+      <ThemeIcon svg={StarFill} size="small" />
     </View>
   );
 };
