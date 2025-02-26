@@ -10,7 +10,6 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {getExpireDate} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
@@ -18,13 +17,8 @@ import {
   SavedPaymentMethodType,
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
-import {
-  PaymentType,
-  RecurringPayment,
-  humanizePaymentType,
-} from '@atb/ticketing';
+import {PaymentType, humanizePaymentType} from '@atb/ticketing';
 import {RadioIcon, getRadioA11y} from '@atb/components/radio';
-import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   onSelect: (
@@ -194,81 +188,12 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
     }
   }
 
-  function getDifferenceBetweenDates(
-    startDate: Date,
-    endDate: Date = new Date(),
-  ): number {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    const diffTime = start.getTime() - end.getTime();
-    return diffTime / (1000 * 60 * 60 * 24);
-  }
-
-  type ExpiryMessage = {
-    expiryMessageCardType: 'card' | 'nets';
-    expiryMessageCardTime: 'afterExpiration' | 'beforeExpiration';
-    expiryMessageType: 'error' | 'warning';
-    expiryTime?: string;
-  } | null;
-
-  function getExpiryStatus(
-    type: 'card' | 'nets',
-    difference: number,
-    expiryTime?: string,
-  ): ExpiryMessage {
-    if (difference < 1) {
-      return {
-        expiryMessageCardType: type,
-        expiryMessageCardTime: 'afterExpiration',
-        expiryMessageType: type === 'card' ? 'error' : 'warning',
-      };
-    } else if (difference <= 30) {
-      return {
-        expiryMessageCardType: type,
-        expiryMessageCardTime: 'beforeExpiration',
-        expiryMessageType: 'warning',
-        expiryTime,
-      };
-    }
-    return null;
-  }
-
-  function getCardExpiryStatus(recurringCard: RecurringPayment): ExpiryMessage {
-    const cardVsToday = getDifferenceBetweenDates(
-      new Date(recurringCard.card_expires_at),
-    );
-    const netsVsToday = getDifferenceBetweenDates(
-      new Date(recurringCard.expires_at),
-    );
-
-    const cardStatus = getExpiryStatus(
-      'card',
-      cardVsToday,
-      recurringCard.card_expires_at,
-    );
-    if (cardStatus) return cardStatus;
-
-    const netsStatus = getExpiryStatus(
-      'nets',
-      netsVsToday,
-      recurringCard.expires_at,
-    );
-    return netsStatus;
-  }
-
   const paymentTexts = getPaymentTexts(paymentMethod);
 
   const canSaveCard =
     authenticationType === 'phone' &&
     paymentMethod.savedType === 'normal' &&
     paymentMethod.paymentType !== PaymentType.Vipps;
-
-  const reccuringCardStatus =
-    paymentMethod.recurringCard &&
-    getCardExpiryStatus(paymentMethod.recurringCard);
 
   return (
     <View style={styles.card}>
@@ -297,26 +222,6 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
               <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
           </View>
-
-          {reccuringCardStatus && (
-            <MessageInfoText
-              style={styles.warningMessage}
-              type={reccuringCardStatus.expiryMessageType}
-              message={`${t(
-                SelectPaymentMethodTexts.expiry_messages[
-                  reccuringCardStatus.expiryMessageCardType as 'nets' | 'card'
-                ][
-                  reccuringCardStatus.expiryMessageCardTime as
-                    | 'beforeExpiration'
-                    | 'afterExpiration'
-                ],
-              )} ${
-                reccuringCardStatus.expiryTime
-                  ? getExpireDate(reccuringCardStatus?.expiryTime)
-                  : ''
-              }`}
-            />
-          )}
         </View>
       </PressableOpacity>
       {selected && canSaveCard && (

@@ -30,32 +30,6 @@ const SelectPaymentMethodTexts = {
     ),
   },
   save_card: _('Lagre bankkort', 'Save bank card', 'Lagre bankkort'),
-  expiry_messages: {
-    nets: {
-      beforeExpiration: _(
-        'Du må legge til kortet på nytt',
-        'You need to add the card again',
-        'Du må leggje til kortet på nytt',
-      ),
-      afterExpiration: _(
-        'Du må legge til kortet på nytt for å betale',
-        'You need to add the card again to make a payment',
-        'Du må leggje til kortet på nytt for å betale',
-      ),
-    },
-    card: {
-      beforeExpiration: _(
-        'Kortet utløper',
-        'The card expires',
-        'Kortet utløper',
-      ),
-      afterExpiration: _(
-        'Kortet er utløpt',
-        'The card has expired.',
-        'Kortet er utløpt',
-      ),
-    },
-  },
 
   a11yHint: {
     notSave: _(
