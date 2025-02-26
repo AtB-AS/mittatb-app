@@ -1,8 +1,8 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
   bonuspoints: _('Bonuspoeng', 'Bonus points', 'Bonuspoeng'),
-  costA11yLabel: (price: number) =>
-    _(`Koster ${price}`, `Costs ${price}`, `Kostar ${price}`),
+  costA11yLabel: (amount: number) =>
+    _(`Koster ${amount}`, `Costs ${amount}`, `Kostar ${amount}`),
 
   bonusProfile: {
     header: {
@@ -13,12 +13,8 @@ const BonusProgramTexts = {
       'Your bonus points',
       'Bonuspoenga dine',
     ),
-    yourBonusPointsA11yLabel: (bonuspoints: number) =>
-      _(
-        `Du har ${bonuspoints}`,
-        `You have ${bonuspoints}`,
-        `Du har ${bonuspoints}`,
-      ),
+    yourBonusPointsA11yLabel: (amount: number) =>
+      _(`Du har ${amount}`, `You have ${amount}`, `Du har ${amount}`),
 
     spendPoints: {
       heading: _('Bruk poeng på', 'Spend points on', 'Bruk poeng på'),

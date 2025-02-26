@@ -19,14 +19,12 @@ import {
 import {View} from 'react-native';
 
 type Props = SectionProps & {
-  userBonusPoints: number;
   bonusProduct: BonusProductType;
   isChecked: boolean;
   onPress: () => void;
 };
 
 export const PayWithBonusPointsCheckbox = ({
-  userBonusPoints,
   bonusProduct,
   isChecked,
   onPress,
@@ -36,6 +34,7 @@ export const PayWithBonusPointsCheckbox = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
+  const userBonusPoints = 4; // TODO: get actual value using hook when available
   const disabled = userBonusPoints < bonusProduct.price.amount;
 
   return (
@@ -68,7 +67,7 @@ export const PayWithBonusPointsCheckbox = ({
             </View>
           </View>
           <BonusPriceTag
-            price={bonusProduct.price.amount}
+            amount={bonusProduct.price.amount}
             style={{alignSelf: 'flex-start'}}
           />
         </View>

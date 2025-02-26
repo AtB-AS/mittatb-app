@@ -112,7 +112,7 @@ export const Profile_BonusScreen = () => {
                 }
                 suffixNode={
                   <BonusPriceTag
-                    price={bonusProduct.price.amount}
+                    amount={bonusProduct.price.amount}
                     style={styles.bonusPriceTag}
                   />
                 }
