@@ -2,16 +2,13 @@ import React, {PropsWithChildren, forwardRef} from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {
-  PressableOpacity,
-  PressableOpacityProps,
-} from '@atb/components/pressable-opacity';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = PropsWithChildren<
   SectionItemProps<
     {
       onPress?(): void;
-      disabled: boolean;
+      disabled?: boolean;
     } & AccessibilityProps
   >
 >;
