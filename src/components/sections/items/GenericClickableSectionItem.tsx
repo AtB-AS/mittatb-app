@@ -11,8 +11,8 @@ type Props = PropsWithChildren<
   SectionItemProps<
     {
       onPress?(): void;
-    } & AccessibilityProps &
-      PressableOpacityProps
+      disabled: boolean;
+    } & AccessibilityProps
   >
 >;
 
@@ -21,7 +21,11 @@ export const GenericClickableSectionItem = forwardRef<any, Props>(
     const {topContainer} = useSectionItem(props);
 
     return (
-      <PressableOpacity {...props} ref={focusRef}>
+      <PressableOpacity
+        {...props}
+        ref={focusRef}
+        style={props.disabled && {opacity: 0.5}}
+      >
         <View style={topContainer}>{children}</View>
       </PressableOpacity>
     );

@@ -44,7 +44,7 @@ export const PayWithBonusPointsCheckbox = ({
         onPress={onPress}
         disabled={disabled}
       >
-        <View style={[styles.container, disabled && {opacity: 0.5}]}>
+        <View style={styles.container}>
           <Checkbox checked={isChecked} />
           <View style={styles.textContainer}>
             <ThemeText>
