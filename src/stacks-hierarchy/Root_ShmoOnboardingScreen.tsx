@@ -4,14 +4,12 @@ import {LocationBlocker} from '@atb/mobility/components/onboarding/LocationBlock
 import {PaymentBlocker} from '@atb/mobility/components/onboarding/PaymentBlocker';
 import {ShmoRequirementEnum} from '@atb/mobility/types';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
-import {useNavigation} from '@react-navigation/native';
+import {RootStackScreenProps} from './navigation-types';
 
-export type ShmoOnboardingProps = {};
+type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
-export const Root_ShmoOnboardingScreen = ({}: ShmoOnboardingProps) => {
+export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
   const {requirements, hasBlockers} = useShmoRequirements();
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (!hasBlockers) {
