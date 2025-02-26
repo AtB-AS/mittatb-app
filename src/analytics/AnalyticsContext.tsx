@@ -1,10 +1,20 @@
 import React, {createContext, useContext, useEffect, useMemo} from 'react';
-import {PostHog, PostHogProvider} from 'posthog-react-native';
+import {
+  PostHog,
+  type PostHogAutocaptureOptions,
+  PostHogProvider,
+} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+
+const AUTO_CAPTURE_OPTIONS: PostHogAutocaptureOptions = {
+  captureScreens: true,
+  captureLifecycleEvents: true,
+  captureTouches: false,
+};
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
@@ -29,14 +39,7 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
   return (
     <AnalyticsContext.Provider value={client}>
       {client && (
-        <PostHogProvider
-          autocapture={{
-            captureScreens: true,
-            captureLifecycleEvents: true,
-            captureTouches: false,
-          }}
-          client={client}
-        >
+        <PostHogProvider autocapture={AUTO_CAPTURE_OPTIONS} client={client}>
           {children}
         </PostHogProvider>
       )}
