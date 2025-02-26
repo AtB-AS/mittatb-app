@@ -43,7 +43,6 @@ export const PayWithBonusPointsCheckbox = ({
         active={isChecked}
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel={t(BonusProgramTexts.checkbox.a11yLabel)}
         accessibilityHint={t(BonusProgramTexts.checkbox.a11yHint)}
         disabled={disabled}
       >
@@ -62,7 +61,7 @@ export const PayWithBonusPointsCheckbox = ({
                 color={theme.color.foreground.dynamic.secondary}
                 svg={StarFill}
                 size="small"
-                accessibilityHint={t(BonusProgramTexts.bonuspoints)}
+                accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
               />
             </View>
           </View>
