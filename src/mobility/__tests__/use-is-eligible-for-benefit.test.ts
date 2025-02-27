@@ -40,7 +40,7 @@ const trdBysykkelFreeUnlockOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'Your periodic ticket includes free use of city bikes from Trondheim Bysykkel.',
+        'Your periodic ticket includes free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
@@ -62,7 +62,7 @@ const trdBysykkelFreeUnlockOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'Our periodic tickets include free use of city bikes from Trondheim Bysykkel.',
+        'Our periodic tickets include free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
@@ -74,7 +74,7 @@ const trdBysykkelFreeUnlockOperatorBenefit: OperatorBenefitType = {
     url: 'https://app.trondheimbysykkel.no/voucher/{VALUE_CODE}',
     name: [
       {lang: 'nob', value: 'Aktiver hos Trondheim Bysykkel'},
-      {lang: 'en', value: 'Activate at Trondheim Bysykkel'},
+      {lang: 'en', value: 'Activate at Trondheim City Bike'},
       {lang: 'nno', value: 'Aktiver hos Trondheim Bysykkel'},
     ],
   },
@@ -87,7 +87,7 @@ const trdBysykkelFreeUnlockOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'The ticket includes free use of city bikes from Trondheim Bysykkel.',
+        'The ticket includes free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
@@ -114,7 +114,7 @@ const trdBysykkelFreeUseOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'Your periodic ticket includes free use of city bikes from Trondheim Bysykkel.',
+        'Your periodic ticket includes free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
@@ -136,7 +136,7 @@ const trdBysykkelFreeUseOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'Our periodic tickets include free use of city bikes from Trondheim Bysykkel.',
+        'Our periodic tickets include free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
@@ -148,7 +148,7 @@ const trdBysykkelFreeUseOperatorBenefit: OperatorBenefitType = {
     url: 'https://trondheimbysykkel.no/kjop/at-b-gratis',
     name: [
       {lang: 'nob', value: 'Aktiver hos Trondheim Bysykkel'},
-      {lang: 'en', value: 'Activate at Trondheim Bysykkel'},
+      {lang: 'en', value: 'Activate at Trondheim City Bike'},
       {lang: 'nno', value: 'Aktiver hos Trondheim Bysykkel'},
     ],
   },
@@ -161,7 +161,7 @@ const trdBysykkelFreeUseOperatorBenefit: OperatorBenefitType = {
     {
       lang: 'en',
       value:
-        'The ticket includes free use of city bikes from Trondheim Bysykkel.',
+        'The ticket includes free use of city bikes from Trondheim City Bike.',
     },
     {
       lang: 'nno',
