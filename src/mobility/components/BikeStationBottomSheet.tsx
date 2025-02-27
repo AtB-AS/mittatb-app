@@ -146,7 +146,9 @@ export const BikeStationBottomSheet = ({
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   isChecked={useBonusPoints}
-                  onPress={() => setUseBonusPoints(!useBonusPoints)}
+                  onPress={() =>
+                    setUseBonusPoints((useBonusPoints) => !useBonusPoints)
+                  }
                   style={styles.useBonusPointsSection}
                 />
               )}
