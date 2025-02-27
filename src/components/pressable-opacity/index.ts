@@ -1,1 +1,1 @@
-export {PressableOpacity} from './PressableOpacity';
+export {PressableOpacity, type PressableOpacityProps} from './PressableOpacity';
