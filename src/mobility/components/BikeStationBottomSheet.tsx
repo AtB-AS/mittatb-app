@@ -1,5 +1,5 @@
 import {useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useState} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
@@ -26,6 +26,10 @@ import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {PayWithBonusPointsCheckbox} from '@atb/mobility/components/PayWithBonusPointsCheckbox';
+import {findRelevantBonusProduct} from '../utils';
 
 type Props = {
   stationId: string;
@@ -55,7 +59,15 @@ export const BikeStationBottomSheet = ({
     availableBikes,
   } = useBikeStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const {bonusProducts} = useFirestoreConfigurationContext();
+  const bonusProduct = findRelevantBonusProduct(
+    bonusProducts,
+    operatorId,
+    FormFactor.Bicycle,
+  );
 
+  const [useBonusPoints, setUseBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
@@ -130,6 +142,16 @@ export const BikeStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
+              {isBonusProgramEnabled && bonusProduct && (
+                <PayWithBonusPointsCheckbox
+                  bonusProduct={bonusProduct}
+                  isChecked={useBonusPoints}
+                  onPress={() =>
+                    setUseBonusPoints((useBonusPoints) => !useBonusPoints)
+                  }
+                  style={styles.useBonusPointsSection}
+                />
+              )}
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
@@ -189,6 +211,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     operatorNameAndLogo: {
       flexDirection: 'row',
+    },
+    useBonusPointsSection: {
+      marginTop: theme.spacing.medium,
     },
   };
 });
