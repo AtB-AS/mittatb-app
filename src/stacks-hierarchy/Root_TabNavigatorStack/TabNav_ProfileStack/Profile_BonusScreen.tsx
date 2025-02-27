@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -122,7 +122,7 @@ export const Profile_BonusScreen = () => {
                   }
                   suffixNode={
                     <BonusPriceTag
-                      price={bonusProduct.price.amount}
+                      amount={bonusProduct.price.amount}
                       style={styles.bonusPriceTag}
                     />
                   }

@@ -1,8 +1,12 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
   bonuspoints: _('Bonuspoeng', 'Bonus points', 'Bonuspoeng'),
-  costA11yLabel: (price: number) =>
-    _(`Koster ${price}`, `Costs ${price}`, `Kostar ${price}`),
+  costA11yLabel: (amount: number) =>
+    _(
+      `Koster ${amount} bonuspoeng`,
+      `Costs ${amount} bonus points`,
+      `Kostar ${amount} bonuspoeng`,
+    ),
 
   bonusProfile: {
     header: {
@@ -44,13 +48,5 @@ const BonusProgramTexts = {
     },
   },
   youHave: _('Du har ', 'You have ', 'Du har '),
-  checkbox: {
-    a11yLabel: _('Bruk bonuspoeng', 'Use bonus points', 'Bruk bonuspoeng'),
-    a11yHint: _(
-      'Aktiver for å bruke bonuspoeng',
-      'Activate to use bonus points',
-      'Aktiver for å bruke bonuspoeng',
-    ),
-  },
 };
 export default BonusProgramTexts;
