@@ -24,6 +24,7 @@ export const BonusPriceTag = ({amount, ...props}: Props) => {
     </View>
   );
 };
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.color.background.neutral[0].background,

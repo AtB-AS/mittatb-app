@@ -58,24 +58,19 @@ export const Profile_BonusScreen = () => {
         )}
         <Section>
           <GenericSectionItem style={styles.horizontalContainer}>
-            <View>
+            <View
+              accessible
+              accessibilityLabel={t(
+                BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
+                  userBonusPoints,
+                ),
+              )}
+            >
               <View style={styles.currentPointsDisplay}>
-                <ThemeText
-                  typography="body__primary--jumbo--bold"
-                  accessibilityLabel={t(
-                    BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
-                      userBonusPoints,
-                    ),
-                  )}
-                >
+                <ThemeText typography="body__primary--jumbo--bold">
                   {userBonusPoints}
                 </ThemeText>
-                <ThemeIcon
-                  svg={StarFill}
-                  size="large"
-                  accessible
-                  accessibilityLabel={t(BonusProgramTexts.bonuspoints)}
-                />
+                <ThemeIcon svg={StarFill} size="large" />
               </View>
               <ThemeText typography="body__secondary" color="secondary">
                 {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}

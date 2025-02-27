@@ -1,12 +1,13 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
-  bonuspoints: _('Bonuspoeng', 'Bonus points', 'Bonuspoeng'),
   costA11yLabel: (amount: number) =>
     _(
       `Koster ${amount} bonuspoeng`,
       `Costs ${amount} bonus points`,
       `Kostar ${amount} bonuspoeng`,
     ),
+
+  youHave: _('Du har ', 'You have ', 'Du har '),
 
   bonusProfile: {
     header: {
@@ -19,9 +20,9 @@ const BonusProgramTexts = {
     ),
     yourBonusPointsA11yLabel: (bonuspoints: number) =>
       _(
-        `Du har ${bonuspoints}`,
-        `You have ${bonuspoints}`,
-        `Du har ${bonuspoints}`,
+        `Du har ${bonuspoints} bonuspoeng`,
+        `You have ${bonuspoints} bonuspoints`,
+        `Du har ${bonuspoints} bonuspoeng`,
       ),
 
     spendPoints: {
@@ -47,6 +48,5 @@ const BonusProgramTexts = {
       heading: _('Les mer', 'Read more', 'Les meir'),
     },
   },
-  youHave: _('Du har ', 'You have ', 'Du har '),
 };
 export default BonusProgramTexts;
