@@ -37,8 +37,8 @@ export const Checkbox: React.FC<CheckedProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveCheckbox: {
-    height: theme.spacing.large,
-    width: theme.spacing.large,
+    height: theme.icon.size.normal,
+    width: theme.icon.size.normal,
     borderRadius: theme.border.radius.small,
     borderWidth: theme.border.width.medium,
     borderColor: getCheckedColor(theme),

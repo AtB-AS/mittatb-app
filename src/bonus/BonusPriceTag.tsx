@@ -7,26 +7,27 @@ import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 
 type Props = ComponentProps<typeof View> & {
-  price: number;
+  amount: number;
 };
-export const BonusPriceTag = ({price, ...props}: Props) => {
+export const BonusPriceTag = ({amount, ...props}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   return (
-    <View {...props} style={[styles.container, props.style]}>
-      <ThemeText>{price}</ThemeText>
-      <ThemeIcon
-        svg={StarFill}
-        size="small"
-        accessibilityHint={t(BonusProgramTexts.bonuspoints)}
-      />
+    <View
+      {...props}
+      style={[styles.container, props.style]}
+      accessibilityLabel={t(BonusProgramTexts.costA11yLabel(amount))}
+    >
+      <ThemeText>{amount}</ThemeText>
+      <ThemeIcon svg={StarFill} size="small" />
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    backgroundColor: theme.color.background.neutral[0].background,
     borderColor: theme.color.foreground.inverse.secondary,
     borderWidth: theme.border.width.slim,
     borderRadius: theme.border.radius.regular,
