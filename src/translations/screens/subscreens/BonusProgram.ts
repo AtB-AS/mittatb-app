@@ -21,7 +21,7 @@ const BonusProgramTexts = {
     yourBonusPointsA11yLabel: (bonuspoints: number) =>
       _(
         `Du har ${bonuspoints} bonuspoeng`,
-        `You have ${bonuspoints} bonuspoints`,
+        `You have ${bonuspoints} bonus points`,
         `Du har ${bonuspoints} bonuspoeng`,
       ),
 
@@ -29,7 +29,7 @@ const BonusProgramTexts = {
       heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),
     },
     noData: _(
-      'Vi klarer ikke hente informasjon om Bonus. Sjekk om du har internett din og prøv på nytt.',
+      'Vi klarer ikke hente informasjon om Bonus. Sjekk om du har internett og prøv på nytt.',
       'We are unable to fetch information about Bonus. Check your internet connection and try again.',
       'Me klarar ikkje hente informasjon om Bonus. Sjekk om du har internett og prøv på nytt.',
     ),
