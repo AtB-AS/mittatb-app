@@ -3,6 +3,7 @@ import {type RecentFareContractType} from '@atb/recent-fare-contracts';
 import {FareContractType, TravelRightDirection} from '@atb-as/utils';
 import {ZonesFromTo} from './ZonesFromTo';
 import {HarborsFromTo} from './HarborsFromTo';
+import {SchoolFromTo} from './SchoolFromTo';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
@@ -31,26 +32,34 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
 
   if (!controllerData) return null;
 
-  if (controllerData.mode === 'zones') {
-    return (
-      <ZonesFromTo
-        tariffZoneRefs={controllerData.tariffZoneRefs}
-        mode={props.mode}
-        backgroundColor={props.backgroundColor}
-      />
-    );
-  } else if (controllerData.mode === 'harbors') {
-    return (
-      <HarborsFromTo
-        startPointRef={controllerData.startPointRef}
-        endPointRef={controllerData.endPointRef}
-        direction={controllerData.direction}
-        mode={props.mode}
-        backgroundColor={props.backgroundColor}
-      />
-    );
+  switch (controllerData.mode) {
+    case 'zones':
+      return (
+        <ZonesFromTo
+          tariffZoneRefs={controllerData.tariffZoneRefs}
+          mode={props.mode}
+          backgroundColor={props.backgroundColor}
+        />
+      );
+    case 'harbors':
+      return (
+        <HarborsFromTo
+          startPointRef={controllerData.startPointRef}
+          endPointRef={controllerData.endPointRef}
+          direction={controllerData.direction}
+          mode={props.mode}
+          backgroundColor={props.backgroundColor}
+        />
+      );
+    case 'school':
+      return (
+        <SchoolFromTo
+          schoolName={controllerData.schoolName}
+          backgroundColor={props.backgroundColor}
+          mode={props.mode}
+        />
+      );
   }
-  return null;
 };
 
 type HarborsFromToData = {
@@ -65,9 +74,15 @@ type ZonesFromToData = {
   tariffZoneRefs: string[];
 };
 
+type SchoolFromToData = {
+  mode: 'school';
+  schoolName: string;
+};
+
 type FareContractFromToControllerDataType =
   | HarborsFromToData
   | ZonesFromToData
+  | SchoolFromToData
   | undefined;
 
 function useFareContractFromToController(
@@ -75,6 +90,17 @@ function useFareContractFromToController(
 ): FareContractFromToControllerDataType {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
+
+  if (isFareContract(fcOrRfc)) {
+    const firstTravelRight = fcOrRfc.travelRights.at(0);
+    if (firstTravelRight?.schoolName) {
+      return {
+        mode: 'school',
+        schoolName: firstTravelRight.schoolName,
+      };
+    }
+  }
+
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     if (isFareContract(fcOrRfc)) {
       const productRef = fcOrRfc.travelRights[0].fareProductRef;
