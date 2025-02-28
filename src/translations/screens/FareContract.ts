@@ -244,6 +244,9 @@ const FareContractTexts = {
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
   },
+  school: {
+    home: _('Hjem', 'Home', 'Heim'),
+  },
   receipt: {
     header: {
       title: _('Send kvittering', 'Send receipt', 'Send kvittering'),
