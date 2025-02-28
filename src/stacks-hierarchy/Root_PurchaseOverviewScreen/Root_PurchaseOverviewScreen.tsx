@@ -33,10 +33,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {
-  type PurchaseSelectionType,
-  useSelectableUserProfiles,
-} from '@atb/modules/purchase-selection';
+import {useSelectableUserProfiles} from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 
@@ -50,7 +47,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const selection = params.selection;
+
+  const [selection, setSelection] = useState(params.selection);
+  useEffect(() => setSelection(params.selection), [params.selection]);
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
@@ -59,9 +58,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selection.preassignedFareProduct,
   );
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
-
-  const setSelection = (s: PurchaseSelectionType) =>
-    navigation.setParams({selection: s});
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
 
