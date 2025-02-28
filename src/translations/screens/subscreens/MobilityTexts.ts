@@ -14,7 +14,7 @@ export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('El-sparkesykkel', 'El-scooter', 'El-sparkesykkel');
+        return _('El-sparkesykkel', 'E-scooter', 'El-sparkesykkel');
       case FormFactor.Bicycle:
         return _('Sykkel', 'Bicycle', 'Sykkel');
       case FormFactor.Car:
@@ -38,39 +38,43 @@ export const MobilityTexts = {
         `Du må gå igjennom ${numberOfBlockers} steg før du kan starte turen`,
       ),
     location: {
-      locationTitle: _(
+      title: _(
         'Vi trenger din posisjon',
         'We need your location',
         'Vi treng posisjonen din',
       ),
-      locationDescription: _(
+      description: _(
         'Du må gi tilgang til posisjonen din for å bruke en el-sparkesykkel',
         'You need to give access to your location to use an electric scooter',
         'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
       ),
-      locationButton: _('Del posisjon', 'Share location', 'Del posisjon'),
+      button: _('Del posisjon', 'Share location', 'Del posisjon'),
     },
     payment: {
-      paymentTitle: _(
+      title: _(
         'Vi trenger et betalingskort',
         'We need a payment card',
         'Vi treng eit betalingskort',
       ),
-      paymentDescription: _(
-        'Du må legge til et Visa, Mastercard eller American express for å bruke en el-sparkesykkel',
-        'You need to add a Visa, Mastercard or American express to use an electric scooter',
-        'Du må legge til et Visa, Mastercard eller American express for å bruke ein el-sparkesykkel',
+      description: _(
+        'Du må legge til et betalingskort for å bruke en el-sparkesykkel',
+        'You need to add a payment card to use an electric scooter',
+        'Du må legge til et betalingskort for å bruke ein el-sparkesykkel',
       ),
-      paymentButton: _('Legg til kort', 'Add card', 'Legg til kort'),
+      button: _(
+        'Legg til betalingskort',
+        'Add payment card',
+        'Legg til betalingskort',
+      ),
     },
     terms: {
-      termsTitle: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
-      termsButtonOne: _(
+      title: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
+      buttonOne: _(
         'Godta bruksvilkår',
         'Accept terms of use',
         'Godta bruksvilkår',
       ),
-      termsButtonTwo: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
+      buttonTwo: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
     },
   },
   helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),
