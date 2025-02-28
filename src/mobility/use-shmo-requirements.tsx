@@ -9,6 +9,11 @@ export const useShmoRequirements = () => {
 
   const requirements: ShmoRequirementType[] = [
     {
+      requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
+      isLoading: false,
+      isBlocking: false,
+    },
+    {
       requirementCode: ShmoRequirementEnum.LOCATION,
       isLoading: false,
       isBlocking: !locationIsAvailable,
@@ -18,17 +23,14 @@ export const useShmoRequirements = () => {
       isLoading: paymentsLoading,
       isBlocking: recurringPayments ? recurringPayments?.length === 0 : true,
     },
-    {
-      requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
-      isLoading: false,
-      isBlocking: true,
-    },
   ];
 
   const hasBlockers = requirements.some((req) => req.isBlocking);
+  const numberOfBlockers = requirements.filter((req) => req.isBlocking).length;
 
   return {
     requirements,
     hasBlockers,
+    numberOfBlockers,
   };
 };
