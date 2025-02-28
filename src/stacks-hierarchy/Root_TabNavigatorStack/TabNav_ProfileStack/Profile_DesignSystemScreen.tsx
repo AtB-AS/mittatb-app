@@ -961,6 +961,26 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <Section style={styles.section}>
+          <GenericSectionItem>
+            <ThemeText>Generic section item</ThemeText>
+          </GenericSectionItem>
+          <GenericSectionItem transparent>
+            <ThemeText>Transparent generic section item</ThemeText>
+          </GenericSectionItem>
+          <GenericSectionItem active>
+            <ThemeText>Active generic section item</ThemeText>
+          </GenericSectionItem>
+          <GenericSectionItem active transparent>
+            <ThemeText>Active transparent generic section item</ThemeText>
+          </GenericSectionItem>
+          <GenericSectionItem interactiveColor={theme.color.interactive[0]}>
+            <ThemeText color={theme.color.foreground.light.primary}>
+              Generic section item with interactiveColor
+            </ThemeText>
+          </GenericSectionItem>
+        </Section>
+
+        <Section style={styles.section}>
           <ToggleSectionItem
             text="Some short text"
             leftImage={<ThemeIcon svg={Bus} />}
@@ -977,6 +997,15 @@ export const Profile_DesignSystemScreen = ({
             leftIcon={Bus}
             selected={selected}
             onPress={() => setSelected(!selected)}
+          />
+          <RadioSectionItem
+            text="With right action"
+            selected={selected}
+            onPress={() => setSelected(!selected)}
+            rightAction={{
+              onPress: presser,
+              icon: Delete,
+            }}
           />
           <RadioSectionItem
             text="With right action"
@@ -1011,7 +1040,7 @@ export const Profile_DesignSystemScreen = ({
           />
 
           <LinkSectionItem
-            text="Some longer text"
+            text="Disabled link"
             onPress={() => {}}
             disabled
             icon={<ThemeIcon svg={Edit} />}
@@ -1034,7 +1063,17 @@ export const Profile_DesignSystemScreen = ({
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} color="error" />}
           />
+          <LinkSectionItem
+            text="Link with interactiveColor"
+            interactiveColor={theme.color.interactive[0]}
+          />
+          <LinkSectionItem
+            text="Active link with interactveColor"
+            interactiveColor={theme.color.interactive[0]}
+            active
+          />
           <LinkSectionItem text="Link with label" label="new" />
+          <LinkSectionItem active text="Active link" />
         </Section>
 
         <Section style={styles.section}>
