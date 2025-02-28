@@ -143,6 +143,28 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
           if (preassignedFareProducts) {
+            const pap: PreassignedFareProduct = {
+              distributionChannel: [],
+              id: 'school-ticket',
+              limitations: {userProfileRefs: []},
+              name: {value: 'School ticket', lang: 'en'},
+              type: 'SchoolTicket',
+              version: '1.0',
+              description: [
+                {
+                  value:
+                    'You get two tickets every day that you can use to travel to and from school',
+                  lang: 'en',
+                },
+                {
+                  value:
+                    'Du får to billetter hver dag som du kan bruke til å reise til og fra skolen',
+                  lang: 'nb',
+                },
+              ],
+              alternativeNames: [],
+            };
+            preassignedFareProducts.push(pap);
             setPreassignedFareProducts(preassignedFareProducts);
           }
 
@@ -184,6 +206,50 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const fareProductTypeConfigs =
             getFareProductTypeConfigsFromSnapshot(snapshot);
           if (fareProductTypeConfigs) {
+            const fp: FareProductTypeConfig = {
+              description: [
+                {
+                  value:
+                    'You get two tickets every day that you can use to travel to and from school',
+                  lang: 'en',
+                },
+                {
+                  value:
+                    'Du får to billetter hver dag som du kan bruke til å reise til og fra skolen',
+                  lang: 'nb',
+                },
+              ],
+              name: [
+                {
+                  value: 'School ticket',
+                  lang: 'en',
+                },
+                {
+                  value: 'Skolebillett',
+                  lang: 'nb',
+                },
+              ],
+              isCollectionOfAccesses: true,
+              transportModes: [
+                {mode: 'bus'},
+                {mode: 'tram'},
+                {mode: 'water', subMode: 'highSpeedPassengerService'},
+              ],
+              type: 'SchoolTicket',
+              direction: 'two-way',
+              illustration: 'school',
+              configuration: {
+                onBehalfOfEnabled: false,
+                productSelectionMode: 'none',
+                requiresLogin: false,
+                requiresTokenOnMobile: false,
+                timeSelectionMode: 'none',
+                travellerSelectionMode: 'none',
+                zoneSelectionMode: 'none',
+                offerEndpoint: 'authority',
+              },
+            };
+            fareProductTypeConfigs.push(fp);
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
