@@ -143,6 +143,37 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
           if (preassignedFareProducts) {
+            // https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/databases/-default-/data/~2Fcustomers~2FQw3fhcJudvgCYR7yHScbFd1mPtP2~2FfareContracts~2FATB:FareContract:e09612d0-af0f-4b7d-8f42-1d6eab7db8e3
+            const pap: PreassignedFareProduct = {
+              distributionChannel: [],
+              id: 'ATB:AmountOfPriceUnitProduct:f05fc7ab',
+              limitations: {
+                userProfileRefs: [],
+                appVersionMin: '1.64',
+              },
+              name: {value: 'School ticket', lang: 'en'},
+              type: 'SchoolTicket',
+              version: '', // TODO
+              description: [
+                {
+                  value:
+                    'You get two tickets every day that you can use to travel to and from school',
+                  lang: 'eng',
+                },
+                {
+                  value:
+                    'Du får to billetter hver dag som du kan bruke for å reise til og fra skolen',
+                  lang: 'nob',
+                },
+              ],
+              alternativeNames: [
+                {
+                  value: 'Skolebillett',
+                  lang: 'nob',
+                },
+              ],
+            };
+            preassignedFareProducts.push(pap);
             setPreassignedFareProducts(preassignedFareProducts);
           }
 
@@ -184,6 +215,50 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const fareProductTypeConfigs =
             getFareProductTypeConfigsFromSnapshot(snapshot);
           if (fareProductTypeConfigs) {
+            const fp: FareProductTypeConfig = {
+              description: [
+                {
+                  value:
+                    'You get two tickets every day that you can use to travel to and from school',
+                  lang: 'en',
+                },
+                {
+                  value:
+                    'Du får to billetter hver dag som du kan bruke til å reise til og fra skolen',
+                  lang: 'nb',
+                },
+              ],
+              name: [
+                {
+                  value: 'School ticket',
+                  lang: 'en',
+                },
+                {
+                  value: 'Skolebillett',
+                  lang: 'nb',
+                },
+              ],
+              isCollectionOfAccesses: true,
+              transportModes: [
+                {mode: 'bus'},
+                {mode: 'tram'},
+                {mode: 'water', subMode: 'highSpeedPassengerService'},
+              ],
+              type: 'SchoolTicket',
+              direction: 'two-way',
+              illustration: 'school',
+              configuration: {
+                onBehalfOfEnabled: false,
+                productSelectionMode: 'none',
+                requiresLogin: false,
+                requiresTokenOnMobile: false,
+                timeSelectionMode: 'none',
+                travellerSelectionMode: 'none',
+                zoneSelectionMode: 'none',
+                offerEndpoint: 'authority',
+              },
+            };
+            fareProductTypeConfigs.push(fp);
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
