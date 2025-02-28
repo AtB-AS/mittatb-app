@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import {RulesBlocker} from '@atb/mobility/components/onboarding/RulesBlocker';
-import {LocationBlocker} from '@atb/mobility/components/onboarding/LocationBlocker';
-import {PaymentBlocker} from '@atb/mobility/components/onboarding/PaymentBlocker';
+import {RulesScreenComponent} from '@atb/mobility/components/onboarding/RulesScreenComponent';
+import {LocationScreenComponent} from '@atb/mobility/components/onboarding/LocationScreenComponent';
+import {PaymentScreenComponent} from '@atb/mobility/components/onboarding/PaymentScreenComponent';
 import {ShmoRequirementEnum} from '@atb/mobility/types';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
 import {RootStackScreenProps} from './navigation-types';
@@ -22,14 +22,14 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.TERMS_AND_CONDITIONS,
     )?.isBlocking
   ) {
-    return <RulesBlocker />;
+    return <RulesScreenComponent />;
   }
 
   if (
     requirements.find((e) => e.requirementCode === ShmoRequirementEnum.LOCATION)
       ?.isBlocking
   ) {
-    return <LocationBlocker />;
+    return <LocationScreenComponent />;
   }
 
   if (
@@ -37,7 +37,7 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.PAYMENT_CARD,
     )?.isBlocking
   ) {
-    return <PaymentBlocker />;
+    return <PaymentScreenComponent />;
   }
 
   return null;
