@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {OnboardingScreenComponent} from '@atb/onboarding';
 import {MyLocation} from '@atb/assets/svg/color/images';
