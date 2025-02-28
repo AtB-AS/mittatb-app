@@ -72,6 +72,8 @@ export const useMapSymbolStyles = (
     ...stopPlacesExpression,
     ['==', vehicle_type_form_factor, 'SCOOTER'],
     'scooter',
+    ['==', vehicle_type_form_factor, 'SCOOTER_STANDING'],
+    'scooter',
     ['==', vehicle_type_form_factor, 'BICYCLE'],
     'citybike',
     ['==', vehicle_type_form_factor, 'CAR'],

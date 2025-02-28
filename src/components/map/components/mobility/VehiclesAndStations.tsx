@@ -9,6 +9,10 @@ import {
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
 import {StyleJsonVectorSource} from '../../hooks/use-mapbox-json-style';
+import {
+  Expression,
+  FilterExpression,
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
@@ -20,38 +24,74 @@ export const VehiclesWithClusters = ({
     selectedFeatureId,
     'vehicle',
   );
+
+  const filter: FilterExpression = useMemo(
+    () => ['all', ['!', isSelected]],
+    [isSelected],
+  );
+
+  const style = useMemo(
+    () => ({
+      ...iconStyle,
+      ...textStyle,
+    }),
+    [iconStyle, textStyle],
+  );
+
   return (
     <MapboxGL.SymbolLayer
       id="vehicles-clustered-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
       minZoomLevel={14}
-      filter={['!', isSelected]}
-      style={{
-        ...iconStyle,
-        ...textStyle,
-      }}
+      filter={filter}
+      style={style}
     />
   );
 };
 
-export const Stations = ({selectedFeatureId}: SelectedFeatureIdProp) => {
+export const Stations = ({
+  selectedFeatureId,
+  showNonVirtualStations,
+}: SelectedFeatureIdProp & {
+  showNonVirtualStations: boolean;
+}) => {
+  const showVirtualStations = false; // not supported yet. Also – consider using a virtualStationsFilter prop instead
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
     selectedFeatureId,
     'station',
   );
+
+  const filter: FilterExpression = useMemo(() => {
+    const isVirtualStation: Expression = ['get', 'is_virtual_station'];
+    return [
+      'all',
+      ['!', isSelected],
+      [
+        'any',
+        ['==', isVirtualStation, showVirtualStations],
+        ['!=', isVirtualStation, showNonVirtualStations],
+      ],
+    ];
+  }, [isSelected, showVirtualStations, showNonVirtualStations]);
+
+  const style = useMemo(
+    () => ({
+      ...iconStyle,
+      ...textStyle,
+      iconAllowOverlap: false, // todo: server side clustering for stations
+    }),
+    [iconStyle, textStyle],
+  );
+
   return (
     <MapboxGL.SymbolLayer
       id="stations-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="stations"
       minZoomLevel={14}
-      filter={['!', isSelected]}
-      style={{
-        ...iconStyle,
-        ...textStyle,
-        iconAllowOverlap: false, // todo: server side clustering for stations
-      }}
+      filter={filter}
+      style={style}
     />
   );
 };
@@ -80,7 +120,12 @@ export const VehiclesAndStations = ({
         {!!showVehicles && (
           <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
         )}
-        {!!showStations && <Stations selectedFeatureId={selectedFeatureId} />}
+        {!!showStations && (
+          <Stations
+            selectedFeatureId={selectedFeatureId}
+            showNonVirtualStations={true}
+          />
+        )}
       </>
     </MapboxGL.VectorSource>
   );
