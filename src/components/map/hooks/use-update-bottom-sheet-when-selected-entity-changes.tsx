@@ -200,6 +200,10 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                     navigation.navigate('Root_LoginPhoneInputScreen', {});
                   }
                 }}
+                startOnboardingCallback={() => {
+                  closeBottomSheet();
+                  navigation.navigate('Root_ShmoOnboardingScreen');
+                }}
               />
             );
           },
