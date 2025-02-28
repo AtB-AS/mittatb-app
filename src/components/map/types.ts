@@ -132,7 +132,6 @@ export type MapSelectionActionType =
       coords: Coordinates;
     }
   | {source: 'filters-button'}
-  | {source: 'bonus-program-button'}
   | {source: 'external-map-button'; url: string};
 
 export type CameraFocusModeType =

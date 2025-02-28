@@ -16,11 +16,11 @@ import {useAuthContext} from '@atb/auth';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {getFareContractInfo} from '@atb/fare-contracts/utils';
-import {sortFcOrReservationByValidityAndCreation} from '@atb/fare-contracts/sort-fc-or-reservation-by-validity-and-creation';
+import {getFareContractInfo} from '@atb/modules/fare-contracts';
+import {sortFcOrReservationByValidityAndCreation} from '@atb/modules/fare-contracts';
 import {useAnalyticsContext} from '@atb/analytics';
 import {FlatList} from 'react-native-gesture-handler';
-import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
+import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
 
 type Props = TicketHistoryScreenParams & {

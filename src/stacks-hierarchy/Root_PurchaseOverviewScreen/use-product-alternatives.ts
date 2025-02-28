@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 
 export const useProductAlternatives = (selection: PurchaseSelectionType) => {

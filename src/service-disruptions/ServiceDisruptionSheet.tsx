@@ -5,7 +5,10 @@ import React from 'react';
 import {Linking} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
@@ -47,6 +50,7 @@ export const ServiceDisruptionSheet = () => {
                 Linking.openURL(service_disruption_url);
               }}
               testID="navigateToServiceDisruptions"
+              backgroundColor={theme.color.background.neutral[1]}
             />
           </>
         )}

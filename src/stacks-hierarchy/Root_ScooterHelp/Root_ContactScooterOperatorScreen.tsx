@@ -31,7 +31,6 @@ import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
-import {TransitionPresets} from '@react-navigation/stack';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -48,7 +47,7 @@ export const Root_ContactScooterOperatorScreen = ({
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
       operatorName,
-      transitionPreset: TransitionPresets.SlideFromRightIOS,
+      transitionOverride: 'slide-from-right',
     });
   };
 

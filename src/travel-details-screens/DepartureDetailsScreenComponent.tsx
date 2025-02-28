@@ -14,7 +14,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/modules/situations';
 import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useRef, useState} from 'react';
+import React, {RefObject, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -53,7 +53,10 @@ import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalyticsContext} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
@@ -65,13 +68,15 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {getFavoriteIcon} from '@atb/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
+import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {useFocusEffect} from '@react-navigation/native';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -107,6 +112,8 @@ export const DepartureDetailsScreenComponent = ({
 
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
+
+  const {requestReview} = useInAppReviewFlow();
 
   const [
     {
@@ -211,6 +218,8 @@ export const DepartureDetailsScreenComponent = ({
     onPressTravelAid();
   };
 
+  const shouldShowRequestReview = useRef(false);
+
   const handleMapButtonPress = () => {
     if (!mapData) return;
     if (vehiclePosition) {
@@ -221,6 +230,7 @@ export const DepartureDetailsScreenComponent = ({
         subMode: subMode,
       });
     }
+    shouldShowRequestReview.current = true;
     onPressDetailsMap({
       legs: mapData.mapLegs,
       fromPlace: mapData.start,
@@ -230,6 +240,15 @@ export const DepartureDetailsScreenComponent = ({
       subMode: subMode,
     });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (shouldShowRequestReview.current) {
+        shouldShowLive && requestReview();
+        shouldShowRequestReview.current = false;
+      }
+    }, [requestReview, shouldShowLive]),
+  );
 
   return (
     <View style={styles.container}>
@@ -313,6 +332,7 @@ export const DepartureDetailsScreenComponent = ({
                 showPagination={hasMultipleItems}
                 currentDate={activeItem?.date}
                 isTripCancelled={activeItem?.isTripCancelled}
+                backgroundColor={backgroundColor}
               />
             ) : (
               <MessageInfoBox
@@ -398,6 +418,7 @@ export const DepartureDetailsScreenComponent = ({
             toStopPosition={activeItem.toStopPosition}
             alreadyShownSituationNumbers={alreadyShownSituationNumbers}
             onPressQuay={onPressQuay}
+            testID="departureDetails"
           />
         </View>
       </FullScreenView>
@@ -430,6 +451,7 @@ type CallGroupProps = {
   toStopPosition?: number;
   alreadyShownSituationNumbers: string[];
   onPressQuay: Props['onPressQuay'];
+  testID?: string;
 };
 
 function EstimatedCallRows({
@@ -439,6 +461,7 @@ function EstimatedCallRows({
   toStopPosition,
   alreadyShownSituationNumbers,
   onPressQuay,
+  testID,
 }: CallGroupProps) {
   const styles = useStopsStyle();
   const passedCalls = calls.filter((c) => c.metadata.group === 'passed');
@@ -469,7 +492,7 @@ function EstimatedCallRows({
   ) : null;
 
   return (
-    <View style={styles.estimatedCallRows}>
+    <View style={styles.estimatedCallRows} testID={testID}>
       {estimatedCallsToShow.map((call) => (
         <EstimatedCallRow
           key={call.stopPositionInPattern}

@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
-import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
@@ -19,7 +18,10 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -30,12 +32,13 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/auth';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -55,6 +58,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
+  const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const setSelection = (s: PurchaseSelectionType) =>
     navigation.setParams({selection: s});
@@ -63,7 +67,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const analytics = useAnalyticsContext();
 
-  const {travellerSelectionMode, zoneSelectionMode, requiresTokenOnMobile} =
+  const {travellerSelectionMode, zoneSelectionMode} =
     selection.fareProductTypeConfig.configuration;
 
   const fareProductOnBehalfOfEnabled =
@@ -272,7 +276,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+              {inspectableTokenWarningText && (
+                <MessageInfoBox
+                  type="warning"
+                  message={inspectableTokenWarningText}
+                  isMarkdown={true}
+                />
+              )}
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview

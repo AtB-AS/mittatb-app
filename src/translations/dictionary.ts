@@ -73,7 +73,10 @@ const dictionary = {
         second: _('sek', 'sec', `s`),
         ms: _('ms', 'msec', `ms`),
       },
-      long: {},
+      long: {
+        minutes: _('minutter', 'minutes', `minuttar`),
+        minute: _('minutt', 'minute', `minutt`),
+      },
     },
     relativeDayNames: (daysDifference: number) => {
       switch (daysDifference) {
@@ -108,6 +111,12 @@ const dictionary = {
   distance: {
     km: _('km', 'km', `km`),
     m: _('m', 'm', `m`),
+  },
+  currency: {
+    nok: {
+      short: _('kr', 'kr', `kr`),
+      long: _('kroner', 'kroner', `kroner`),
+    },
   },
   messageActions: {
     positiveButton: _('OK', 'OK', 'OK'),

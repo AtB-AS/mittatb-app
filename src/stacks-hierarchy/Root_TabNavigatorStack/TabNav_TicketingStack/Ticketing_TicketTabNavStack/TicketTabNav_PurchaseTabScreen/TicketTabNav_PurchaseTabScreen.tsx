@@ -10,16 +10,14 @@ import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useAnalyticsContext} from '@atb/analytics';
-import {useMobileTokenContext} from '@atb/mobile-token';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
 import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
 import type {RecentFareContractType} from '@atb/recent-fare-contracts';
-import {usePurchaseSelectionBuilder} from '@atb/purchase-selection';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -35,12 +33,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
 
-  const {tokens, mobileTokenStatus} = useMobileTokenContext();
-  const inspectableToken = tokens.find((t) => t.isInspectable);
-  const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
-  const hasMobileTokenError =
-    mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
-
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
@@ -52,41 +44,13 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .forType(fareProductTypeConfig.type)
       .build();
 
-    if (authenticationType !== 'phone') {
-      if (
-        fareProductTypeConfig.configuration.requiresLogin &&
-        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !hasInspectableMobileToken
-      ) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          selection,
-        });
-        return;
-      }
-
-      if (fareProductTypeConfig.configuration.requiresLogin) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          selection,
-        });
-        return;
-      }
-    } else if (
-      fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-      !hasInspectableMobileToken &&
-      !hasMobileTokenError
+    if (
+      authenticationType !== 'phone' &&
+      fareProductTypeConfig.configuration.requiresLogin
     ) {
-      navigation.navigate(
-        'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-        {
-          nextScreen: {
-            screen: 'Root_PurchaseOverviewScreen',
-            params: {
-              selection,
-              mode: 'Ticket',
-            },
-          },
-        },
-      );
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        selection,
+      });
       return;
     }
 
@@ -163,7 +127,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
                 'Root_PurchaseAsAnonymousConsequencesScreen',
                 {
                   showLoginButton: true,
-                  transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+                  transitionOverride: 'slide-from-bottom',
                 },
               )
             }

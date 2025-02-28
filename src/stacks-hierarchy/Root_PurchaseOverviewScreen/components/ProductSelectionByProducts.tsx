@@ -25,7 +25,7 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
-} from '@atb/purchase-selection';
+} from '@atb/modules/purchase-selection';
 
 type ProductSelectionByProductsProps = {
   selection: PurchaseSelectionType;

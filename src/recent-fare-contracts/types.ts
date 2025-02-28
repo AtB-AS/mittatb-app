@@ -3,7 +3,7 @@ import {
   PreassignedFareProduct,
   TariffZone,
 } from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TravelRightDirection} from '@atb-as/utils';
 
 export type RecentFareContractType = {

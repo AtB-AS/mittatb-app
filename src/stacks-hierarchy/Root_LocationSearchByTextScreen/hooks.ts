@@ -1,11 +1,9 @@
-import {ParamListBase, RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {Location} from '@atb/favorites';
 import {SelectableLocationType} from './types';
 import React, {useRef} from 'react';
 
-export function useLocationSearchValue<
-  T extends RouteProp<any, any> & {params: ParamListBase},
->(
+export function useLocationSearchValue<T extends RouteProp<any, any>>(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): SelectableLocationType | undefined {
@@ -30,9 +28,7 @@ export function useLocationSearchValue<
   return location;
 }
 
-export function useOnlySingleLocation<
-  T extends RouteProp<any, any> & {params: ParamListBase},
->(
+export function useOnlySingleLocation<T extends RouteProp<any, any>>(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): Location | undefined {

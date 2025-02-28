@@ -1,37 +1,49 @@
-import Bugsnag, {Event} from '@bugsnag/react-native';
-import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
+import {
+  errorToMetadata,
+  logToBugsnag,
+  notifyBugsnag,
+} from '@atb/utils/bugsnag-utils';
+import {ClientLogger} from '@entur-private/abt-log-javascript-lib';
+import {RemoteLogger} from '@entur-private/abt-mobile-client-sdk/lib/logger';
 
-export const localLogger: ClientConfig['localLogger'] = {
+export const localLogger: ClientLogger = {
   debug: (msg, metadata?) => {
-    Bugsnag.leaveBreadcrumb('Mobiletoken sdk debug message: ' + msg, metadata);
+    logToBugsnag('Mobiletoken sdk debug message: ' + msg, {metadata: metadata});
   },
   info: (msg, metadata?) => {
-    Bugsnag.leaveBreadcrumb('Mobiletoken sdk info message: ' + msg, metadata);
+    logToBugsnag('Mobiletoken sdk info message: ' + msg, {metadata: metadata});
   },
   warn: (msg, err, metadata?) => {
+    logToBugsnag('Mobiletoken sdk info message: ' + msg, metadata);
     const onError = toOnErrorCallback('warning', msg, metadata);
-    if (err) Bugsnag.notify(err, onError);
+    if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
   },
   error: (msg, err, metadata?) => {
+    logToBugsnag('Mobiletoken sdk info message: ' + msg, metadata);
     const onError = toOnErrorCallback('error', msg, metadata);
-    if (err) Bugsnag.notify(err, onError);
+    if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
   },
 };
 
-export const remoteLogger: ClientConfig['remoteLogger'] = (err) => {
-  const onError = toOnErrorCallback(
-    'error',
-    'Mobiletoken sdk remote logger error',
-  );
-  Bugsnag.notify(err, onError);
+export const remoteLogger: RemoteLogger = {
+  message: (message, level) => {
+    logToBugsnag(`Mobiletoken sdk remote logger ${level} message: ${message}`);
+  },
+  error: (err) => {
+    notifyBugsnag(err, {
+      errorGroupHash: 'token',
+      metadata: {
+        error: 'Mobiletoken sdk remote logger caught an error',
+        ...errorToMetadata(err),
+      },
+    });
+  },
 };
 
-const toOnErrorCallback =
-  (logLevel: string, msg: string, metadata?: Record<string, string>) =>
-  (event: Event) => {
-    event.addMetadata('metadata', {
-      logLevel: logLevel,
-      originalMessage: msg,
-      ...(metadata || {}),
-    });
+const toOnErrorCallback = (logLevel: string, msg: string, metadata?: Error) => {
+  return {
+    logLevel: logLevel,
+    originalMessage: msg,
+    ...(errorToMetadata(metadata) || {}),
   };
+};

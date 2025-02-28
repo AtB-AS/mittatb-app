@@ -15,7 +15,7 @@ import {
   RemoteConfigContextState,
   useRemoteConfigContext,
 } from '@atb/RemoteConfigContext';
-import {useGlobalMessagesContext} from '@atb/global-messages';
+import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -32,12 +32,13 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 
 import {useAnnouncementsContext} from '@atb/announcements';
-import {useNotificationsContext} from '@atb/notifications';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/time';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -87,10 +88,15 @@ export const Profile_DebugInfoScreen = () => {
     debug: {
       nativeTokenStatus,
       remoteTokensStatus,
+      createToken: initToken,
       validateToken,
       removeRemoteToken,
       renewToken,
       wipeToken,
+      nativeTokenError,
+      remoteTokenError,
+      setSabotage,
+      sabotage,
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
@@ -423,15 +429,25 @@ export const Profile_DebugInfoScreen = () => {
                     <ThemeText>{`Token end: ${new Date(
                       nativeToken.getValidityEnd(),
                     ).toISOString()}`}</ThemeText>
+                    <ThemeText>{`Is native token attested: ${nativeToken.isAttested()}`}</ThemeText>
+                    <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
                   </View>
                 )}
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
+                <ThemeText>{`Native token error: ${nativeTokenError}`}</ThemeText>
                 <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
+                <ThemeText>{`Remote tokens error: ${remoteTokenError}`}</ThemeText>
                 <ThemeText>{`Now: ${new Date(
                   serverNow,
                 ).toISOString()}`}</ThemeText>
+                <Button
+                  expanded={true}
+                  style={styles.button}
+                  text="Create new token"
+                  onPress={initToken}
+                />
                 <Button
                   expanded={true}
                   style={styles.button}
@@ -479,6 +495,18 @@ export const Profile_DebugInfoScreen = () => {
                       />
                     </View>
                   ))}
+                />
+                <ExpandableSectionItem
+                  text="Sabotage Tokens"
+                  showIconText={true}
+                  expandContent={
+                    <View>
+                      <DebugSabotage
+                        sabotage={sabotage}
+                        setSabotage={setSabotage}
+                      />
+                    </View>
+                  }
                 />
               </View>
             }

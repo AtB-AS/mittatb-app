@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {useAuthContext} from '@atb/auth';
@@ -19,9 +20,9 @@ import Bugsnag from '@bugsnag/react-native';
 import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
-  TokenAction,
+  AttestationSabotage,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
+import {isInspectable, MOBILE_TOKEN_QUERY_KEY, wipeToken} from './utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
@@ -37,9 +38,9 @@ import {
   LOAD_NATIVE_TOKEN_QUERY_KEY,
   useLoadNativeTokenQuery,
 } from './hooks/use-load-native-token-query';
-import {wipeToken} from '@atb/mobile-token/helpers';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
 
@@ -67,10 +68,15 @@ type MobileTokenContextState = {
   debug: {
     nativeTokenStatus: QueryStatus;
     remoteTokensStatus: QueryStatus;
+    createToken: () => void;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
     wipeToken: () => void;
+    nativeTokenError: any;
+    remoteTokenError: any;
+    setSabotage: (attestationSabotage?: AttestationSabotage) => void;
+    sabotage: AttestationSabotage | undefined;
   };
 };
 
@@ -81,6 +87,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
+  const {updateMetadata} = useIntercomMetadata();
 
   const {token_timeout_in_seconds} = useRemoteConfigContext();
   const mobileTokenEnabled = hasEnabledMobileToken();
@@ -88,6 +95,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const traceId = useRef<string>(uuid());
+
   useEffect(() => setIsLoggingOut(false), [userId]);
 
   const enabled =
@@ -96,11 +106,39 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     authStatus === 'authenticated' &&
     !isLoggingOut;
 
-  const {data: nativeToken, status: nativeTokenStatus} =
-    useLoadNativeTokenQuery(enabled, userId);
+  const {
+    data: nativeToken,
+    status: nativeTokenStatus,
+    error: nativeTokenError,
+  } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
-  const {data: remoteTokens, status: remoteTokensStatus} =
-    useListRemoteTokensQuery(enabled, nativeToken);
+  useEffect(() => {
+    if (nativeTokenStatus === 'success') {
+      const tokenStatus = nativeToken.isAttested()
+        ? 'attested'
+        : 'non-attested';
+
+      updateMetadata({
+        'AtB-Mobile-Token-Id': nativeToken.tokenId,
+        'AtB-Mobile-Token-Status': tokenStatus,
+        'AtB-Mobile-Token-Error-Correlation-Id': undefined,
+      });
+      tokenService.postTokenStatus(nativeToken.tokenId, tokenStatus, undefined);
+    } else if (nativeTokenStatus === 'error') {
+      updateMetadata({
+        'AtB-Mobile-Token-Id': undefined,
+        'AtB-Mobile-Token-Status': 'error',
+        'AtB-Mobile-Token-Error-Correlation-Id': traceId.current,
+      });
+      tokenService.postTokenStatus(undefined, 'error', traceId.current);
+    }
+  }, [nativeToken, nativeTokenStatus, updateMetadata]);
+
+  const {
+    data: remoteTokens,
+    status: remoteTokensStatus,
+    error: remoteTokenError,
+  } = useListRemoteTokensQuery(enabled, nativeToken);
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
   useEffect(() => {
@@ -179,14 +217,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
-          validateToken: () =>
-            mobileTokenClient
-              .encode(nativeToken!, [
-                TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-              ])
-              .then((signed) =>
-                tokenService.validate(nativeToken!, signed, uuid()),
-              ),
+          createToken: () => mobileTokenClient.create(uuid()),
+          validateToken: () => tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
@@ -212,6 +244,17 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               ),
             [queryClient, nativeToken],
           ),
+          nativeTokenError: nativeTokenError,
+          remoteTokenError: remoteTokenError,
+          setSabotage: (attestationSabotage?: AttestationSabotage) => {
+            setSabotage(attestationSabotage);
+            if (attestationSabotage) {
+              mobileTokenClient.setDebugSabotage(attestationSabotage);
+            } else {
+              mobileTokenClient.clearDebugSabotage();
+            }
+          },
+          sabotage: sabotage,
         },
       }}
     >

@@ -1,6 +1,6 @@
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import type {RecentFareContractType} from './types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -16,8 +16,8 @@ import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FareContractFromTo} from '@atb/fare-contracts/components/FareContractFromTo';
-import {FareContractDetailItem} from '@atb/fare-contracts/components/FareContractDetailItem';
+import {FareContractFromTo} from '@atb/modules/fare-contracts';
+import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -60,12 +60,11 @@ export const RecentFareContract = ({
     transportModes: fareProductTypeConfig?.transportModes,
   });
 
+  const productName = getReferenceDataName(preassignedFareProduct, language);
+
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
-    const modeInfo = `${getReferenceDataName(
-      preassignedFareProduct,
-      language,
-    )} ${t(
+    const modeInfo = `${productName} ${t(
       RecentFareContractsTexts.a11yPreLabels.transportModes,
     )}${getTransportModeText(fareProductTypeConfig.transportModes, t)}`;
 
@@ -147,7 +146,7 @@ export const RecentFareContract = ({
           typography="body__primary--bold"
           color={interactiveColor.default}
         >
-          {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
+          {productName}
         </ThemeText>
       </View>
 
@@ -167,17 +166,21 @@ export const RecentFareContract = ({
         {userProfilesWithCount.length <= 2 &&
           userProfilesWithCount.map((u) => (
             <FareContractDetailItem
+              key={u.id}
               content={[`${u.count} ${getReferenceDataName(u, language)}`]}
             />
           ))}
 
         {userProfilesWithCount.length > 2 && (
           <>
-            {userProfilesWithCount.slice(0, 1).map((u) => (
-              <FareContractDetailItem
-                content={[`${u.count} ${getReferenceDataName(u, language)}`]}
-              />
-            ))}
+            <FareContractDetailItem
+              content={[
+                `${userProfilesWithCount[0].count} ${getReferenceDataName(
+                  userProfilesWithCount[0],
+                  language,
+                )}`,
+              ]}
+            />
             <ThemeText
               typography="body__tertiary"
               testID={`${testID}TravellersOthers`}

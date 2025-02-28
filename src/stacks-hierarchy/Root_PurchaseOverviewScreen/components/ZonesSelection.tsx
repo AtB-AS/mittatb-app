@@ -26,7 +26,7 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
-import type {PurchaseSelectionType} from '@atb/purchase-selection';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type ZonesSelectionProps = {
   selection: PurchaseSelectionType;

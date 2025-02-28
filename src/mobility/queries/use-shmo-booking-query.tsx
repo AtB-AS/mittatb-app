@@ -9,7 +9,10 @@ export const getShmoBookingQueryKey = (
   acceptLanguage: string,
 ) => ['GET_SHMO_BOOKING_QUERY_KEY', bookingId, acceptLanguage];
 
-export const useShmoBookingQuery = (bookingId?: ShmoBooking['bookingId']) => {
+export const useShmoBookingQuery = (
+  bookingId?: ShmoBooking['bookingId'],
+  refetchInterval: number | false = false,
+) => {
   const acceptLanguage = useAcceptLanguage();
 
   const bookingIdString = bookingId || '';
@@ -22,5 +25,6 @@ export const useShmoBookingQuery = (bookingId?: ShmoBooking['bookingId']) => {
     staleTime: ONE_HOUR_MS,
     cacheTime: ONE_HOUR_MS,
     enabled: isValidBookingId,
+    refetchInterval,
   });
 };

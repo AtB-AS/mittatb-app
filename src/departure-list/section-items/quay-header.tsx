@@ -10,7 +10,10 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
+import {
+  isSituationValidAtDate,
+  SituationMessageBox,
+} from '@atb/modules/situations';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';

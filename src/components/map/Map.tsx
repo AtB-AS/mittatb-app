@@ -17,7 +17,6 @@ import {
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
-import {BonusProgramMapButton} from './components/bonus-program/BonusProgramMapButton';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
@@ -52,7 +51,7 @@ import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
@@ -105,11 +104,8 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
-  const {
-    isBonusProgramEnabled,
-    isGeofencingZonesEnabled,
-    isShmoDeepIntegrationEnabled,
-  } = useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -337,19 +333,6 @@ export const Map = (props: MapProps) => {
             />
           )}
         </MapboxGL.MapView>
-        {isBonusProgramEnabled && props.selectionMode === 'ExploreEntities' && (
-          <View
-            style={[
-              controlStyles.mapButtonsContainer,
-              controlStyles.mapButtonsContainerLeft,
-            ]}
-          >
-            <BonusProgramMapButton
-              onPress={() => onMapClick({source: 'bonus-program-button'})}
-            />
-          </View>
-        )}
-
         <View
           style={[
             controlStyles.mapButtonsContainer,

@@ -7,7 +7,7 @@ import Ticketing, {
 } from '@atb/translations/screens/Ticketing';
 import {ProfileScreenProps} from './navigation-types';
 import {StyleSheet} from '@atb/theme';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = ProfileScreenProps<'Profile_TicketHistorySelectionScreen'>;
 

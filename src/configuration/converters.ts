@@ -8,6 +8,8 @@ import {
   FareProductGroupType,
   OperatorBenefitId,
   ScooterFaq,
+  BonusProduct,
+  BonusTexts,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -154,6 +156,29 @@ export function mapToScooterFaqs(scooterFaqs?: any) {
       return parseResult.data;
     })
     .filter(isDefined);
+}
+
+export function mapToBonusProducts(bonusProducts?: any) {
+  if (!bonusProducts) return;
+  if (!Array.isArray(bonusProducts)) return;
+  return bonusProducts
+    .map((bonusProduct) => {
+      const parseResult = BonusProduct.safeParse(bonusProduct);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToBonusTexts(bonusTexts?: any) {
+  if (!bonusTexts) return;
+  const parseResult = BonusTexts.safeParse(bonusTexts);
+  if (!parseResult.success) {
+    return;
+  }
+  return parseResult.data;
 }
 
 export function mapToBenefitIdsRequiringValueCode(

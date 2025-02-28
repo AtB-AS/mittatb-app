@@ -9,7 +9,7 @@ import {
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
-import {useFeatureTogglesContext} from '@atb/feature-toggles';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   filter: MobilityMapFilterType;

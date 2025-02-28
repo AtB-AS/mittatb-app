@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {OnboardingContextProvider} from './onboarding';
-import {GlobalMessagesContextProvider} from './global-messages';
+import {GlobalMessagesContextProvider} from '@atb/modules/global-messages';
 import {MapContextProvider} from './MapContext';
 import {GeolocationContextProvider} from './GeolocationContext';
 import {RootStack} from '@atb/stacks-hierarchy';
@@ -30,15 +30,14 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
-import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
-import {NotificationContextProvider} from './notifications';
+import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from './beacons/BeaconsContext';
-import {FeatureTogglesContextProvider} from '@atb/feature-toggles';
+import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 
 configureAndStartBugsnag();
@@ -90,47 +89,45 @@ export const App = () => {
                     <FeatureTogglesContextProvider>
                       <AuthContextProvider>
                         <TimeContextProvider>
-                          <AnalyticsContextProvider>
-                            <AccessibilityContextProvider>
-                              <ThemeContextProvider>
-                                <FavoritesContextProvider>
-                                  <FiltersContextProvider>
-                                    <SearchHistoryContextProvider>
-                                      <FirestoreConfigurationContextProvider>
-                                        <TicketingContextProvider>
-                                          <MobileTokenContextProvider>
-                                            <AppLanguageContextProvider>
-                                              <GeolocationContextProvider>
-                                                <MapContextProvider>
-                                                  <GlobalMessagesContextProvider>
-                                                    <AnnouncementsContextProvider>
-                                                      <NotificationContextProvider>
-                                                        <PopOverContextProvider>
-                                                          <BottomSheetContextProvider>
-                                                            <FeedbackQuestionsContextProvider>
-                                                              <BeaconsContextProvider>
-                                                                <OnboardingContextProvider>
-                                                                  <RootStack />
-                                                                </OnboardingContextProvider>
-                                                              </BeaconsContextProvider>
-                                                            </FeedbackQuestionsContextProvider>
-                                                          </BottomSheetContextProvider>
-                                                        </PopOverContextProvider>
-                                                      </NotificationContextProvider>
-                                                    </AnnouncementsContextProvider>
-                                                  </GlobalMessagesContextProvider>
-                                                </MapContextProvider>
-                                              </GeolocationContextProvider>
-                                            </AppLanguageContextProvider>
-                                          </MobileTokenContextProvider>
-                                        </TicketingContextProvider>
-                                      </FirestoreConfigurationContextProvider>
-                                    </SearchHistoryContextProvider>
-                                  </FiltersContextProvider>
-                                </FavoritesContextProvider>
-                              </ThemeContextProvider>
-                            </AccessibilityContextProvider>
-                          </AnalyticsContextProvider>
+                          <AccessibilityContextProvider>
+                            <ThemeContextProvider>
+                              <FavoritesContextProvider>
+                                <FiltersContextProvider>
+                                  <SearchHistoryContextProvider>
+                                    <FirestoreConfigurationContextProvider>
+                                      <TicketingContextProvider>
+                                        <MobileTokenContextProvider>
+                                          <AppLanguageContextProvider>
+                                            <GeolocationContextProvider>
+                                              <MapContextProvider>
+                                                <GlobalMessagesContextProvider>
+                                                  <AnnouncementsContextProvider>
+                                                    <NotificationContextProvider>
+                                                      <PopOverContextProvider>
+                                                        <BottomSheetContextProvider>
+                                                          <FeedbackQuestionsContextProvider>
+                                                            <BeaconsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
+                                                            </BeaconsContextProvider>
+                                                          </FeedbackQuestionsContextProvider>
+                                                        </BottomSheetContextProvider>
+                                                      </PopOverContextProvider>
+                                                    </NotificationContextProvider>
+                                                  </AnnouncementsContextProvider>
+                                                </GlobalMessagesContextProvider>
+                                              </MapContextProvider>
+                                            </GeolocationContextProvider>
+                                          </AppLanguageContextProvider>
+                                        </MobileTokenContextProvider>
+                                      </TicketingContextProvider>
+                                    </FirestoreConfigurationContextProvider>
+                                  </SearchHistoryContextProvider>
+                                </FiltersContextProvider>
+                              </FavoritesContextProvider>
+                            </ThemeContextProvider>
+                          </AccessibilityContextProvider>
                         </TimeContextProvider>
                       </AuthContextProvider>
                     </FeatureTogglesContextProvider>
