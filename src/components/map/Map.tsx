@@ -68,7 +68,7 @@ export const Map = (props: MapProps) => {
     props.selectionMode === 'ExploreLocation',
   );
 
-  const shouldShowMapVehiclesAndStations =
+  const shouldShowVehiclesAndStations =
     props.selectionMode === 'ExploreEntities'; // should probably split map components instead
 
   const startingCoordinates = useMemo(
@@ -93,7 +93,8 @@ export const Map = (props: MapProps) => {
   );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
-  const mapboxJsonStyle = useMapboxJsonStyle();
+
+  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -323,7 +324,7 @@ export const Map = (props: MapProps) => {
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
-          {shouldShowMapVehiclesAndStations && (
+          {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={
                 enableShowSelectedFeature
