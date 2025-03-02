@@ -84,12 +84,16 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
             />
           )}
 
-          {userProfilesWithCount.map((u, i) => (
-            <FareContractDetailItem
-              key={`userProfile-${i}`}
-              content={[userProfileCountAndName(u, language)]}
-            />
-          ))}
+          {firstTravelRight.travelerName ? (
+            <FareContractDetailItem content={[firstTravelRight.travelerName]} />
+          ) : (
+            userProfilesWithCount.map((u, i) => (
+              <FareContractDetailItem
+                key={`userProfile-${i}`}
+                content={[userProfileCountAndName(u, language)]}
+              />
+            ))
+          )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
           <InspectionSymbol
