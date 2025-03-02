@@ -35,6 +35,7 @@ export type FareContractInfoProps = {
 };
 
 export type FareContractInfoDetailsProps = {
+  fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;

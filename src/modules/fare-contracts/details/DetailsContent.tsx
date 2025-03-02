@@ -133,6 +133,7 @@ export const DetailsContent: React.FC<Props> = ({
         />
       ) : (
         <FareContractInfoDetailsSectionItem
+          fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
