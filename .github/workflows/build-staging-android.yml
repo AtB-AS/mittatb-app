@@ -55,7 +55,7 @@ jobs:
           node-version: 18
       - name: Get potential cached node_modules
         if: env.ENV_FORCE_BUILD != 'true'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: modules-cache
         with:
           path: '**/node_modules'
@@ -76,7 +76,7 @@ jobs:
       - name: Override native config files
         run: bash ./scripts/android/override-config-files.sh
       - name: Get potential cached APK
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: apk-cache
         with:
           path: app-staging.apk

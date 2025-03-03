@@ -11,12 +11,12 @@ export function useTransportColor(
   subMode?: AnySubMode,
   isFlexible?: boolean,
 ): TransportColor<ContrastColor> {
-  const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
+  const themeColor = getTransportColorKey(mode, subMode, isFlexible);
   const {theme} = useThemeContext();
   return theme.color.transport[themeColor];
 }
 
-export const useThemeColorForTransportMode = (
+const getTransportColorKey = (
   mode?: AnyMode,
   subMode?: AnySubMode,
   isFlexible?: boolean,
