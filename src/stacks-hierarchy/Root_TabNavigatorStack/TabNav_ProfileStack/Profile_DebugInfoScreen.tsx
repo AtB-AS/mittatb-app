@@ -39,6 +39,7 @@ import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
+import {DebugTokenServerAddress} from '@atb/mobile-token/DebugTokenServerAddress';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -505,6 +506,15 @@ export const Profile_DebugInfoScreen = () => {
                         sabotage={sabotage}
                         setSabotage={setSabotage}
                       />
+                    </View>
+                  }
+                />
+                <ExpandableSectionItem
+                  text="Modify Server Endpoint"
+                  showIconText={true}
+                  expandContent={
+                    <View>
+                      <DebugTokenServerAddress />
                     </View>
                   }
                 />
