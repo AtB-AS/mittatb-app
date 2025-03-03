@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from './utils';
@@ -34,9 +34,8 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   testID,
 }) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
-  const transportationColor = theme.color.transport[themeColor].primary;
+  const transportColor = useTransportColor(mode, subMode, isFlexible);
+  const transportationColor = transportColor.primary;
   const backgroundColor = disabled
     ? transportationColor.foreground.disabled
     : transportationColor.background;
