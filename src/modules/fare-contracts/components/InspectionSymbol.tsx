@@ -11,7 +11,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
 import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transport-color';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
@@ -34,7 +34,7 @@ export const InspectionSymbol = ({
     (c) => c.type === preassignedFareProduct?.type,
   );
 
-  const transportColor = useThemeColorForTransportMode(
+  const transportColor = useTransportColor(
     fareProductTypeConfig?.transportModes[0].mode,
     fareProductTypeConfig?.transportModes[0].subMode,
   );
@@ -42,7 +42,7 @@ export const InspectionSymbol = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
 
   const themeColor = isInspectable
-    ? theme.color.transport[transportColor].primary
+    ? transportColor.primary
     : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
