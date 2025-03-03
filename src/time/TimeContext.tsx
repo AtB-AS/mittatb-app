@@ -22,7 +22,11 @@ let serverDiff = 0;
  */
 export const getServerNow = () => Date.now() - serverDiff;
 
-export const TimeContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());
   const {isServerTimeEnabled} = useFeatureTogglesContext();
 

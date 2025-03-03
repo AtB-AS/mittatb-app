@@ -104,8 +104,12 @@ const defaultOnboardingState: OnboardingState = {
   loadedOnboardingSections: [],
 };
 
-export const OnboardingContextProvider: React.FC = ({children}) => {
-  const [state, dispatch] = useReducer<OnboardingReducer>(
+interface Props {
+  children: React.ReactNode;
+}
+
+export const OnboardingContextProvider = ({children}: Props) => {
+  const [state, dispatch] = useReducer(
     onboardingReducer,
     defaultOnboardingState,
   );
@@ -137,6 +141,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
 
       RNBootSplash.hide({fade: true});
     }
+
     loadOnboardingSettings();
   }, []);
 

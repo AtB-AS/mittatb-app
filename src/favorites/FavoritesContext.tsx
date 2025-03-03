@@ -48,10 +48,15 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
 );
 
-export const FavoritesContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const FavoritesContextProvider = ({children}: Props) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
   const [favoriteDepartures, setFavoriteDeparturesState] =
     useState<UserFavoriteDepartures>([]);
+
   async function populateFavorites() {
     const [favorites, favoriteDepartures] = await Promise.all([
       places.getFavorites(),

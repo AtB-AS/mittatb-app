@@ -1,6 +1,7 @@
-import {useRef, useEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 
 type IntervalCallback = () => Promise<void> | void;
+
 /***
  * Periodically execute a callback every N milliseconds.
  * Does not guarantee precision in interval if execution time of the callback is higher than delay.
@@ -58,5 +59,5 @@ export function useInterval(
     };
     // Concatenation of deps can't be statically checked, so disabling rule here
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [delay, disabled, triggerImmediately].concat(deps));
+  }, deps.concat(delay, disabled, triggerImmediately));
 }

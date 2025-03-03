@@ -41,7 +41,11 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
   undefined,
 );
 
-export const BottomSheetContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const BottomSheetContextProvider = ({children}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
   const [contentFunction, setContentFunction] = useState<() => ReactNode>(
@@ -49,7 +53,7 @@ export const BottomSheetContextProvider: React.FC = ({children}) => {
   );
 
   const onOpenFocusRef = useFocusOnLoad();
-  const refToFocusOnClose = useRef<RefObject<any>>();
+  const refToFocusOnClose = useRef<RefObject<any>>(undefined);
 
   const close = () => {
     setContentFunction(() => () => null);

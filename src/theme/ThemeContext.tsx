@@ -13,7 +13,9 @@ interface ThemeContextValue {
   useAndroidSystemFont: boolean;
 
   updateThemePreference(themeKey: keyof Themes): void;
+
   overrideOSThemePreference(override: boolean): void;
+
   updateAndroidFontOverride(override: boolean): void;
 }
 
@@ -38,7 +40,11 @@ export function useThemeContext() {
   return context;
 }
 
-export const ThemeContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const ThemeContextProvider = ({children}: Props) => {
   const colorScheme = useColorScheme();
   const {
     setPreference,

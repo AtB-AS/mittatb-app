@@ -2,7 +2,7 @@ import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicl
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {RefObject, useCallback, useEffect, useRef} from 'react';
+import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -23,7 +23,7 @@ import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
  * this hook opens the bottom sheet for it and flies to the correct map location
  */
 export const useAutoSelectMapItem = (
-  mapCameraRef: React.RefObject<CameraRef>,
+  mapCameraRef: React.RefObject<CameraRef | null>,
   onReportParkingViolation: () => void,
 ) => {
   const {

@@ -35,7 +35,7 @@ function overrideRenderWithToolTip(
   component: any,
   wrapper: (
     tooltip: React.ReactElement,
-    children: React.ReactChildren,
+    children: React.ReactNode,
   ) => React.ReactElement,
 ) {
   const originalRender = component.render;
@@ -85,7 +85,7 @@ function testIdTooltip(testId: string): React.ReactElement {
 
 function fragmentWrapper(
   toolTip: React.ReactElement,
-  children: React.ReactChildren,
+  children: React.ReactNode,
 ) {
   return React.createElement(
     React.Fragment,
@@ -98,7 +98,7 @@ function fragmentWrapper(
 
 function viewWrapper(
   toolTip: React.ReactElement,
-  children: React.ReactChildren,
+  children: React.ReactNode,
 ) {
   return React.createElement(
     View,

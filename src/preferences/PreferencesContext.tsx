@@ -16,7 +16,11 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
   undefined,
 );
 
-export const PreferencesContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const PreferencesContextProvider = ({children}: Props) => {
   const [preferences, setPreferencesState] = useState<UserPreferences>({});
   const colorScheme = useColorScheme();
 

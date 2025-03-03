@@ -3,7 +3,7 @@ import Bugsnag from '@bugsnag/react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -41,7 +41,11 @@ const NotificationContext = createContext<NotificationContextState | undefined>(
   undefined,
 );
 
-export const NotificationContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const NotificationContextProvider = ({children}: Props) => {
   const {language} = useLocaleContext();
   const [permissionStatus, setStatus] =
     useState<NotificationPermissionStatus>('loading');

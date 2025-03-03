@@ -22,7 +22,11 @@ const SearchHistoryContext = createContext<
   SearchHistoryContextState | undefined
 >(undefined);
 
-export const SearchHistoryContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const SearchHistoryContextProvider = ({children}: Props) => {
   const [history, setSearchHistory] = useState<SearchHistory>([]);
   const [journeyHistory, setJourneySearchHistory] = useState<
     JourneySearchHistoryEntry[]

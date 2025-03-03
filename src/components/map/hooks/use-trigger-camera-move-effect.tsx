@@ -28,7 +28,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
  */
 export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
 ) => {
   const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
@@ -64,7 +64,7 @@ export const useTriggerCameraMoveEffect = (
 const moveCameraToMapLines = (
   mapLines: MapLine[],
   padding: MapPadding,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
 ) => {
   const bbox = getMapLinesBoundingBox(mapLines);
   const northEast: Coordinates = {
@@ -100,7 +100,7 @@ const getMapLinesBoundingBox = (data: MapLine[]): BoundingBox => {
 
 const moveCameraToCoordinates = (
   coordinates: Coordinates,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
 ) => {
   flyToLocation({coordinates, mapCameraRef});
 };
@@ -108,7 +108,7 @@ const moveCameraToCoordinates = (
 const moveCameraToEntity = (
   entityFeature: Feature<Point>,
   padding: MapPadding | undefined,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
 ) => {
   const coordinates = mapPositionToCoordinates(
     entityFeature.geometry.coordinates,
@@ -135,7 +135,7 @@ const moveCameraToEntity = (
  */
 export const fitCameraWithinLocation = (
   centerCoordinate: Coordinates,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
   padding: MapPadding = 0,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {

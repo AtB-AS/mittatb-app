@@ -2,7 +2,11 @@ import React from 'react';
 import {lobot} from './';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
-export const AppLanguageContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const AppLanguageContextProvider = ({children}: Props) => {
   const locale = useLocaleContext();
 
   return (

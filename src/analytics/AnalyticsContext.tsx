@@ -16,7 +16,11 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
-export const AnalyticsContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const AnalyticsContextProvider = ({children}: Props) => {
   const [client, setClient] = useState<PostHog>();
   const {userId, authenticationType} = useAuthContext();
   const appStatus = useAppStateStatus();

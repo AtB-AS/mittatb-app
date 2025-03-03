@@ -85,7 +85,11 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
   undefined,
 );
 
-export const MobileTokenContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const MobileTokenContextProvider = ({children}: Props) => {
   const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
   const {updateMetadata} = useIntercomMetadata();

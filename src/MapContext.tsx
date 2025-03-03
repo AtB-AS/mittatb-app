@@ -27,7 +27,11 @@ type AutoSelectableBottomSheet = {
   id: string;
 };
 
-export const MapContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
 

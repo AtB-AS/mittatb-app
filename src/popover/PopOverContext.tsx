@@ -15,7 +15,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 export const POPOVER_ANIMATION_DURATION = 200;
 
 type PopOverType = {
-  target: React.RefObject<Component | null>;
+  target: React.RefObject<Component>;
   oneTimeKey: PopOverKey;
 };
 
@@ -27,7 +27,11 @@ const PopOverContext = createContext<PopOverContextType>({
   addPopOver: () => {},
 });
 
-export const PopOverContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const PopOverContextProvider = ({children}: Props) => {
   // Queue of popovers to display
   const [popOvers, setPopOvers] = useState<PopOverType[]>([]);
   const {isPopOverSeen, setPopOverSeen} = useOneTimePopover();

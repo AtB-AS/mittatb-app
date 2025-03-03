@@ -39,7 +39,11 @@ const GlobalMessagesContext = createContext<GlobalMessageContextState>(
   defaultGlobalMessageState,
 );
 
-const GlobalMessagesContextProvider: React.FC = ({children}) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const GlobalMessagesContextProvider = ({children}: Props) => {
   const [globalMessages, setGlobalMessages] = useState<GlobalMessageType[]>([]);
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
     GlobalMessageType[]

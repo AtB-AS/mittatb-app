@@ -8,7 +8,7 @@ import {
 import {getAvailableVehicles} from '@atb/mobility/utils';
 import {Camera, ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
-import {Feature, FeatureCollection, Point} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';
 import React, {RefObject} from 'react';
 import {Cluster} from '../../types';
 import {mapPositionToCoordinates} from '../../utils';
@@ -17,7 +17,7 @@ import {CarStations} from './CarStations';
 
 type Props = {
   stations: StationFeatures;
-  mapCameraRef: RefObject<Camera>;
+  mapCameraRef: RefObject<Camera | null>;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
@@ -32,9 +32,9 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
 
   const handleClusterClick = async (
     e: OnPressEvent,
-    clustersSource: RefObject<ShapeSource>,
+    clustersSource: RefObject<ShapeSource | null>,
   ) => {
-    const [feature, ,] = e.features;
+    const [feature] = e.features;
     if (isClusterFeature(feature)) {
       const clusterExpansionZoom =
         (await clustersSource.current?.getClusterExpansionZoom(feature)) ?? 0;
