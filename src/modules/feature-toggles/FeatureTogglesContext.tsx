@@ -13,9 +13,9 @@ const FeatureTogglesContext = createContext<
   FeatureTogglesContextState | undefined
 >(undefined);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const FeatureTogglesContextProvider = ({children}: Props) => {
   const remoteConfig = useRemoteConfigContext();

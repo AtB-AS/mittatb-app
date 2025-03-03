@@ -41,9 +41,9 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const BottomSheetContextProvider = ({children}: Props) => {
   const [isOpen, setIsOpen] = useState(false);

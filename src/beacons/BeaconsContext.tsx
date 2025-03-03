@@ -90,9 +90,9 @@ enum storeKey {
 
 const BeaconsContext = createContext<BeaconsContextState>(defaultState);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const BeaconsContextProvider = ({children}: Props) => {
   const {rationaleMessages} = useBeaconsMessages();

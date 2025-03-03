@@ -9,9 +9,9 @@ export const AccessibilityContext = createContext<AccessibilityState>({
   isScreenReaderEnabled: false,
 });
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const AccessibilityContextProvider = ({children}: Props) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();

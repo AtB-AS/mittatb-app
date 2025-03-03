@@ -22,9 +22,9 @@ const SearchHistoryContext = createContext<
   SearchHistoryContextState | undefined
 >(undefined);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const SearchHistoryContextProvider = ({children}: Props) => {
   const [history, setSearchHistory] = useState<SearchHistory>([]);

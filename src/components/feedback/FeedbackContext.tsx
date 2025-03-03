@@ -34,9 +34,9 @@ export type AlternativeType = {
 
 const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const FeedbackQuestionsContextProvider = ({children}: Props) => {
   const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);

@@ -89,9 +89,9 @@ const FirestoreConfigurationContext = createContext<
   ConfigurationContextState | undefined
 >(undefined);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [preassignedFareProducts, setPreassignedFareProducts] = useState<

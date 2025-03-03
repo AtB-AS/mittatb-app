@@ -48,9 +48,9 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const FavoritesContextProvider = ({children}: Props) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);

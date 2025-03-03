@@ -41,9 +41,9 @@ const NotificationContext = createContext<NotificationContextState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const NotificationContextProvider = ({children}: Props) => {
   const {language} = useLocaleContext();

@@ -138,9 +138,9 @@ Geolocation.setRNConfiguration({
   skipPermissionRequests: true,
 });
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const GeolocationContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(geolocationReducer, defaultState);

@@ -137,9 +137,9 @@ const initialReducerState: TicketingReducerState = {
   customerProfile: undefined,
 };
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider = ({children}: Props) => {

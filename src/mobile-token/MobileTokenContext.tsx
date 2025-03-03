@@ -84,9 +84,9 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const MobileTokenContextProvider = ({children}: Props) => {
   const {userId, authStatus} = useAuthContext();

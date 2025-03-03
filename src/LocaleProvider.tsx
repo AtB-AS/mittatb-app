@@ -38,9 +38,9 @@ const fallbackLocale: Locale = {
 
 export const LocaleContext = createContext<Locale>(norwegianLocale);
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 /**
  * We'll create a locale as a mix of system locale and language preferences set in 'My profile'

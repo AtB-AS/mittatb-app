@@ -22,9 +22,9 @@ let serverDiff = 0;
  */
 export const getServerNow = () => Date.now() - serverDiff;
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());

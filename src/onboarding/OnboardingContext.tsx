@@ -104,9 +104,9 @@ const defaultOnboardingState: OnboardingState = {
   loadedOnboardingSections: [],
 };
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const OnboardingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(

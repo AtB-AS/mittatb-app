@@ -27,9 +27,9 @@ const AnnouncementsContext = createContext<AnnouncementsContextState>({
   resetDismissedAnnouncements: () => {},
 });
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const AnnouncementsContextProvider = ({children}: Props) => {
   const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);

@@ -58,9 +58,9 @@ const useRetryIntervalWithBackoff = (): [number, () => void] => {
   return [retryInterval, incrementRetryInterval];
 };
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const RemoteConfigContextProvider = ({children}: Props) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);

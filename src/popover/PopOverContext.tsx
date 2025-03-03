@@ -27,9 +27,9 @@ const PopOverContext = createContext<PopOverContextType>({
   addPopOver: () => {},
 });
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const PopOverContextProvider = ({children}: Props) => {
   // Queue of popovers to display

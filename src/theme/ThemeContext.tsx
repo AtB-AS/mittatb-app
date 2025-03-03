@@ -40,9 +40,9 @@ export function useThemeContext() {
   return context;
 }
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const ThemeContextProvider = ({children}: Props) => {
   const colorScheme = useColorScheme();

@@ -11,9 +11,9 @@ const FiltersContext = createContext<FiltersContextState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const FiltersContextProvider = ({children}: Props) => {
   const [filters, setFiltersState] =

@@ -16,9 +16,9 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
   undefined,
 );
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 export const PreferencesContextProvider = ({children}: Props) => {
   const [preferences, setPreferencesState] = useState<UserPreferences>({});
