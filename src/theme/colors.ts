@@ -1,4 +1,4 @@
-import {Platform, StatusBarProps, TextStyle} from 'react-native';
+import {Platform, StatusBarProps} from 'react-native';
 import {APP_ORG} from '@env';
 
 import {
@@ -43,12 +43,12 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
 const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
 
 // Override semibold with bold to avoid Android Roboto bold bug.
-// See ttps://github.com/facebook/react-native/issues/25696
-const fontWeightFix: TextStyle = {
+// See https://github.com/facebook/react-native/issues/25696
+const fontWeightFix = {
   fontWeight: Platform.select({
     android: 'bold',
     default: '600',
-  }),
+  }) as 'bold' | '600',
 };
 
 const androidOrIos = Platform.OS === 'android' ? 'android' : 'ios';

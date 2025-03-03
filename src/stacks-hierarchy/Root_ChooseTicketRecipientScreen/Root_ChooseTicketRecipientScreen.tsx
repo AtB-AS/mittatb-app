@@ -34,7 +34,7 @@ export const Root_ChooseTicketRecipientScreen = ({
 
   const queryClient = useQueryClient();
 
-  const onDeleteRef = useRef();
+  const onDeleteRef = useRef(undefined);
 
   return (
     <View style={styles.container}>

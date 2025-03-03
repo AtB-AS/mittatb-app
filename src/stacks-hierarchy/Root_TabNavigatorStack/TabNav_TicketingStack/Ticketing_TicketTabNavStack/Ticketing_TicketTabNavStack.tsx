@@ -121,7 +121,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
               color={tabColor}
               testID={options.tabBarTestID}
             >
-              {label}
+              <>{label}</>
             </ThemeText>
           </PressableOpacity>
         );

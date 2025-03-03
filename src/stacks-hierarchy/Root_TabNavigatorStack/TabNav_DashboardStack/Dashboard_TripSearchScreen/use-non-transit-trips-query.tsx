@@ -28,7 +28,7 @@ export const useNonTransitTripsQuery = (
     [],
   );
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const cancelTokenRef = useRef<CancelTokenSource>();
+  const cancelTokenRef = useRef<CancelTokenSource>(undefined);
   const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
 
   useEffect(() => {

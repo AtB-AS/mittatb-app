@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -90,7 +90,11 @@ enum storeKey {
 
 const BeaconsContext = createContext<BeaconsContextState>(defaultState);
 
-const BeaconsContextProvider: React.FC = ({children}) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+const BeaconsContextProvider = ({children}: Props) => {
   const {rationaleMessages} = useBeaconsMessages();
   const [beaconsInfo, setBeaconsInfo] = useState<BeaconsInfo>();
   const [isConsentGranted, setIsConsentGranted] = useState<boolean>(false);

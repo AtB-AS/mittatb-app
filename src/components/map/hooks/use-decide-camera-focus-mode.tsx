@@ -34,7 +34,7 @@ export const useDecideCameraFocusMode = (
   selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
