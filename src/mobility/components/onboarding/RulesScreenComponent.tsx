@@ -29,7 +29,9 @@ export const RulesScreenComponent = ({
   const {theme} = useThemeContext();
   const {t} = useTranslation();
 
-  const onOpenTerms = () => {};
+  const onOpenTerms = () => {
+    // TODO: Implement external page for terms
+  };
 
   return (
     <OnboardingScreenComponent
