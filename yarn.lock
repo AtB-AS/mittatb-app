@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.10.1.tgz#ce69a80a6c41c36e9a4bdc44dc69d5ae4c2073c7"
-  integrity sha512-UEiPuGJB+YCNZyAnfkkU5R4D1/Rw80XspUfOubCJ2Cq5IR1Jb750fJWMNeKDAYY3es9PkQyuWejZH9n/bqjkIg==
+"@atb-as/config-specs@^5.12.2":
+  version "5.12.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.12.2.tgz#802af54873ca3d284eef084b4e3377c038472a07"
+  integrity sha512-HjGEYG9xgTcaAieOThewUvxV6S3HsP8jTd6h8FQYLubXNhPnew7P3tBZTvB6FKz5dBXQqtD42+AYz6uSwXMwwQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -33,10 +33,10 @@
     zod "^3.24.1"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^15.1.1":
-  version "15.1.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.1.1.tgz#639557a43ca3d323382be062363ad1027601076c"
-  integrity sha512-XwckzHmbmDeYE3ClC5FUBHNK8XB+KmS+dP70aF5KXxbFAR8iW+DJyFX5hjPiaL5O2YF2Po+st8OWFcRyj99F4A==
+"@atb-as/generate-assets@15.2.0":
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.2.0.tgz#af4ab9453307e9220afec40ff6871f53c58d2350"
+  integrity sha512-AFz1mERlVnk2V9cVYFqAEEUODCz2TVVMtFjkVb++KoatuSyLjOm2kli2vbVcUFsfIt0GPNPRXhEe9vu7ofjrug==
   dependencies:
     "@atb-as/theme" "^13.1.4"
     commander "^9.4.0"
