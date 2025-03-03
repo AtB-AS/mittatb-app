@@ -9,7 +9,6 @@ import React, {
 import {useAuthContext} from '@atb/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {
-  IntercomTokenStatus,
   MobileTokenStatus,
   RemoteToken,
   Token,
@@ -118,14 +117,26 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
-    updateMetadata({
-      'AtB-Mobile-Token-Id': nativeToken ? nativeToken.tokenId : 'undefined',
-      'AtB-Mobile-Token-Status': getAttestationStatus(nativeToken),
-      'AtB-Mobile-Token-Error-Correlation-Id': nativeToken
-        ? 'undefined'
-        : traceId.current,
-    });
-  }, [nativeToken, updateMetadata]);
+    if (nativeTokenStatus === 'success') {
+      const tokenStatus = nativeToken.isAttested()
+        ? 'attested'
+        : 'non-attested';
+
+      updateMetadata({
+        'AtB-Mobile-Token-Id': nativeToken.tokenId,
+        'AtB-Mobile-Token-Status': tokenStatus,
+        'AtB-Mobile-Token-Error-Correlation-Id': undefined,
+      });
+      tokenService.postTokenStatus(nativeToken.tokenId, tokenStatus, undefined);
+    } else if (nativeTokenStatus === 'error') {
+      updateMetadata({
+        'AtB-Mobile-Token-Id': undefined,
+        'AtB-Mobile-Token-Status': 'error',
+        'AtB-Mobile-Token-Error-Correlation-Id': traceId.current,
+      });
+      tokenService.postTokenStatus(undefined, 'error', traceId.current);
+    }
+  }, [nativeToken, nativeTokenStatus, updateMetadata]);
 
   const {
     data: remoteTokens,
@@ -372,17 +383,3 @@ const getTokenToggleDetails = async () => {
     return undefined;
   }
 };
-
-function getAttestationStatus(
-  nativeToken: ActivatedToken | undefined,
-): IntercomTokenStatus {
-  if (nativeToken) {
-    if (nativeToken.isAttested()) {
-      return 'attested';
-    } else {
-      return 'non-attested';
-    }
-  } else {
-    return 'error';
-  }
-}

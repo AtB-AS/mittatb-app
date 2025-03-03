@@ -33,7 +33,7 @@ export const remoteLogger: RemoteLogger = {
     notifyBugsnag(err, {
       errorGroupHash: 'token',
       metadata: {
-        error: 'Mobiletoken sdk remote logger error',
+        error: 'Mobiletoken sdk remote logger caught an error',
         ...errorToMetadata(err),
       },
     });

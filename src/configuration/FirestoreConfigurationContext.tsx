@@ -27,6 +27,7 @@ import {
   FirestoreConfigStatus,
   NotificationConfigType,
   BonusProductType,
+  BonusTextsType,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -37,6 +38,7 @@ import {
   mapToMobilityOperators,
   mapToScooterFaqs,
   mapToBonusProducts,
+  mapToBonusTexts,
   mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
   mapToTransportModeFilterOptions,
@@ -74,6 +76,7 @@ type ConfigurationContextState = {
   mobilityOperators: MobilityOperatorType[] | undefined;
   scooterFaqs: ScooterFaqType[] | undefined;
   bonusProducts: BonusProductType[] | undefined;
+  bonusTexts: BonusTextsType | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
@@ -121,6 +124,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   >([]);
   const [scooterFaqs, setScooterFaqs] = useState<ScooterFaqType[]>([]);
   const [bonusProducts, setBonusProducts] = useState<BonusProductType[]>([]);
+  const [bonusTexts, setBonusTexts] = useState<BonusTextsType>();
   const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
     useState<OperatorBenefitIdType[]>([]);
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
@@ -223,6 +227,11 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setBonusProducts(bonusProducts);
           }
 
+          const bonusTexts = getBonusTextsFromSnapshot(snapshot);
+          if (bonusTexts) {
+            setBonusTexts(bonusTexts);
+          }
+
           const benefitIdsRequiringValueCode =
             getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
           if (benefitIdsRequiringValueCode) {
@@ -303,6 +312,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       mobilityOperators,
       scooterFaqs,
       bonusProducts,
+      bonusTexts,
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
       notificationConfig,
@@ -326,6 +336,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     mobilityOperators,
     scooterFaqs,
     bonusProducts,
+    bonusTexts,
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
     notificationConfig,
@@ -618,6 +629,13 @@ function getBonusProductsFromSnapshot(
 ): BonusProductType[] | undefined {
   const products = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToBonusProducts(products?.get('bonusProducts'));
+}
+
+function getBonusTextsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): BonusTextsType | undefined {
+  const texts = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToBonusTexts(texts?.get('bonusTexts'));
 }
 
 function getBenefitIdsRequiringValueCodeFromSnapshot(

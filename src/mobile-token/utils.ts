@@ -11,6 +11,9 @@ import {isDefined} from '@atb/utils/presence';
 import {
   parseRemoteError,
   RemoteTokenStateError,
+  TokenMustBeRenewedRemoteTokenStateError,
+  TokenReattestationRemoteTokenStateError,
+  TokenReattestationRequiredError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
 import {getAxiosErrorType} from '@atb/api/utils';
@@ -83,6 +86,14 @@ export const getMobileTokenErrorHandlingStrategy = (
     }
     errorResolution = err.resolution;
   } else if (err instanceof RemoteTokenStateError) {
+    if (
+      err instanceof TokenMustBeRenewedRemoteTokenStateError ||
+      err instanceof TokenReattestationRemoteTokenStateError ||
+      err instanceof TokenReattestationRequiredError
+    ) {
+      // only require renewal or reattestation, do nothing
+      return 'unspecified';
+    }
     errorResolution = mapTokenErrorResolution(err);
   } else {
     return 'unspecified';

@@ -77,7 +77,7 @@ export const OrderDetailsSectionItem = ({
             )
           : t(
               FareContractTexts.details.validTo(
-                fullDateTime(firstTravelRight.startDateTime, language),
+                fullDateTime(firstTravelRight.endDateTime, language),
               ),
             )}
       </ThemeText>

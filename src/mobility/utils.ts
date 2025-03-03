@@ -25,6 +25,7 @@ import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {
   BonusProductType,
+  FormFactor as FormFactorSchema,
   MobilityOperatorType,
 } from '@atb-as/config-specs/lib/mobility';
 import {
@@ -280,6 +281,27 @@ export const getNewFilterState = (
  */
 export const isActive = (bonusProduct: BonusProductType) =>
   bonusProduct.isActive;
+
+/**
+ * Finds an active bonus product based on form factor and operator ID if it exists
+ * @param bonusProducts - Array of bonus products to search through
+ * @param operatorId - The ID of the mobility operator
+ * @param formFactor - The form factor to match
+ * @returns {BonusProductType | undefined} The matching bonus product if it exists, otherwise undefined
+ *
+ */
+export const findRelevantBonusProduct = (
+  bonusProducts: BonusProductType[] | undefined,
+  operatorId: MobilityOperatorType['id'] | undefined,
+  formFactor: FormFactor,
+) => {
+  return bonusProducts?.find(
+    (bonusProduct) =>
+      bonusProduct.formFactors.includes(FormFactorSchema.parse(formFactor)) &&
+      bonusProduct.operatorId == operatorId &&
+      bonusProduct.isActive,
+  );
+};
 
 /**
  * Finds brand image URL for an operator from the mobility operators data

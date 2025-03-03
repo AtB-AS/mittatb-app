@@ -23,6 +23,10 @@ import {
 import {getDeviceName} from 'react-native-device-info';
 import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
 import {abtClient} from './mobileTokenClient';
+import {
+  TokenReattestationRemoteTokenStateError,
+  TokenReattestationRequiredError,
+} from '@entur-private/abt-token-server-javascript-interface';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
@@ -40,6 +44,11 @@ export type TokenService = RemoteTokenService & {
   ) => Promise<RemoteToken[]>;
   validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
+  postTokenStatus: (
+    tokenId: string | undefined,
+    tokenStatus: string,
+    traceId: string | undefined,
+  ) => Promise<void>;
 };
 
 const handleError = (err: any) => {
@@ -212,24 +221,53 @@ export const tokenService: TokenService = {
       includeCertificate: false,
     };
 
-    await abtClient.remoteClientCallHandler(
-      token.getContextId(),
-      tokenEncodingRequest,
-      traceId,
-      async (secureContainerToken, attestation) =>
-        client
-          .get('/tokens/v4/validate', {
-            headers: {
-              [CorrelationIdHeaderName]: traceId,
-              [SignedTokenHeaderName]: secureContainerToken,
-              [AttestationHeaderName]: attestation?.data,
-              [AttestationTypeHeaderName]: attestation?.type,
-            },
-            authWithIdToken: true,
-            timeout: 15000,
-            skipErrorLogging: isRemoteTokenStateError,
-          })
-          .catch(handleError),
+    await abtClient
+      .remoteClientCallHandler(
+        token.getContextId(),
+        tokenEncodingRequest,
+        traceId,
+        async (secureContainerToken, attestation) =>
+          client
+            .get('/tokens/v4/validate', {
+              headers: {
+                [CorrelationIdHeaderName]: traceId,
+                [SignedTokenHeaderName]: secureContainerToken,
+                [AttestationHeaderName]: attestation?.data,
+                [AttestationTypeHeaderName]: attestation?.type,
+              },
+              authWithIdToken: true,
+              timeout: 15000,
+              skipErrorLogging: isRemoteTokenStateError,
+            })
+            .catch((err) => {
+              // for some reason, Reattestation must be handled here,
+              // otherwise it will cause a reset, and we don't want that to happen
+              // if we handle token Renewal here using `handleError`, the renewed
+              // token will be invalid to use on inspection.
+              const parsedError = parseBffCallErrors(err.response?.data);
+              if (
+                parsedError instanceof
+                  TokenReattestationRemoteTokenStateError ||
+                parsedError instanceof TokenReattestationRequiredError
+              ) {
+                throw parsedError;
+              } else throw err;
+            }),
+      )
+      .catch(handleError);
+  },
+  postTokenStatus: async (tokenId, tokenStatus, traceId) => {
+    await client.post(
+      '/token/v1/status',
+      {
+        mobileTokenId: tokenId,
+        mobileTokenStatus: tokenStatus,
+        mobileTokenErrorCorrelationId: traceId,
+      },
+      {
+        authWithIdToken: true,
+        timeout: 15000,
+      },
     );
   },
 };
