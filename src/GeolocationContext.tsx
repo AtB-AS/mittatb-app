@@ -143,10 +143,7 @@ interface Props {
 }
 
 export const GeolocationContextProvider = ({children}: Props) => {
-  const [state, dispatch] = useReducer(
-    geolocationReducer,
-    defaultState,
-  );
+  const [state, dispatch] = useReducer(geolocationReducer, defaultState);
   const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback

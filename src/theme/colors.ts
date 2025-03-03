@@ -1,4 +1,4 @@
-import {Platform, StatusBarProps, TextStyle} from 'react-native';
+import {Platform, StatusBarProps} from 'react-native';
 import {APP_ORG} from '@env';
 
 import {

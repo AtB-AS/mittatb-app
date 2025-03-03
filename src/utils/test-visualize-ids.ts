@@ -96,10 +96,7 @@ function fragmentWrapper(
   );
 }
 
-function viewWrapper(
-  toolTip: React.ReactElement,
-  children: React.ReactNode,
-) {
+function viewWrapper(toolTip: React.ReactElement, children: React.ReactNode) {
   return React.createElement(
     View,
     {
