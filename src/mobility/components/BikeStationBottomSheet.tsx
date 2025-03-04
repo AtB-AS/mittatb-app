@@ -147,7 +147,9 @@ export const BikeStationBottomSheet = ({
                   bonusProduct={bonusProduct}
                   isChecked={payWithBonusPoints}
                   onPress={() =>
-                    setPayWithBonusPoints((useBonusPoints) => !useBonusPoints)
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
                   }
                   style={styles.useBonusPointsSection}
                 />
