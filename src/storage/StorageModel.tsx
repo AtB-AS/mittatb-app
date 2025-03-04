@@ -11,6 +11,7 @@ type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
 export type StorageModel = {
   stored_user_locations: string;
   install_id: string;
+  '@ATB_debug_token_server_ip_address': string;
   '@ATB_feedback_display_stats': string;
   '@ATB_journey_search-history': string;
   '@ATB_last_mobile_token_user': string;
