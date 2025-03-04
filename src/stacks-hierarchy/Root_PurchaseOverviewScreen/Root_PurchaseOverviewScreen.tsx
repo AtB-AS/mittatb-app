@@ -36,6 +36,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useSelectableUserProfiles} from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
+import {useParamAsState} from '@atb/utils/use-param-as-state';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -48,8 +49,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
 
-  const [selection, setSelection] = useState(params.selection);
-  useEffect(() => setSelection(params.selection), [params.selection]);
+  const [selection, setSelection] = useParamAsState(params.selection);
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
