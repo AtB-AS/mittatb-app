@@ -125,7 +125,10 @@ export const Root_TabNavigatorStack = () => {
           lineHeight,
           'profileTab',
           customerNumber === undefined
-            ? {color: theme.color.status.error.primary}
+            ? {
+                color: theme.color.status.error.primary,
+                backgroundColor: interactiveColor.default,
+              }
             : undefined,
         )}
       />

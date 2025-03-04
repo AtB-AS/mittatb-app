@@ -24,7 +24,7 @@ type ButtonType = 'large' | 'small';
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
-  notification?: ThemeIconProps['notification'];
+  notification?: Pick<Required<ThemeIconProps>['notification'], 'color'>;
 };
 
 type ButtonModeAwareProps =
@@ -170,7 +170,10 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       >
         {leftIcon && (
           <View style={leftStyling}>
-            <ThemeIcon color={mainContrastColor} {...leftIcon} />
+            <ThemeIcon
+              color={mainContrastColor}
+              {...sanitizeIconProps(leftIcon, mainContrastColor)}
+            />
           </View>
         )}
         {text && (
@@ -191,7 +194,10 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
               <ActivityIndicator size="small" color={styleText.color} />
             ) : (
               rightIcon && (
-                <ThemeIcon color={mainContrastColor} {...rightIcon} />
+                <ThemeIcon
+                  color={mainContrastColor}
+                  {...sanitizeIconProps(rightIcon, mainContrastColor)}
+                />
               )
             )}
           </View>
@@ -200,6 +206,26 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     </Animated.View>
   );
 });
+
+/**
+ * Sanitize the icon props. As of now it does:
+ * - If notification, set the button background color as the notification
+ *   background color.
+ */
+const sanitizeIconProps = (
+  iconProps: ButtonIconProps,
+  buttonContrastColor: ContrastColor,
+): ThemeIconProps => {
+  return (
+    iconProps && {
+      ...iconProps,
+      notification: iconProps.notification && {
+        ...iconProps.notification,
+        backgroundColor: buttonContrastColor,
+      },
+    }
+  );
+};
 
 /**
  * Get the button colors based on the input props to the button. The returned
