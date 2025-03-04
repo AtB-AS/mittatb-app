@@ -1,3 +1,4 @@
+import {useAnalyticsContext} from '@atb/analytics';
 import {
   RuleAlcohol,
   RuleHelmet,
@@ -30,12 +31,14 @@ export const RulesScreenComponent = ({
   const {t, language} = useTranslation();
   const {configurableLinks} = useFirestoreConfigurationContext();
   const mobilityTerms = configurableLinks?.mobilityTermsUrl;
+  const analytics = useAnalyticsContext();
 
   const mobilityTermsUrl = getTextForLanguage(mobilityTerms, language);
 
   const onOpenTerms = () => {
     if (mobilityTermsUrl) {
       Linking.openURL(mobilityTermsUrl);
+      analytics.logEvent('Mobility', 'Open terms');
     }
   };
 
