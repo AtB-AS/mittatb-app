@@ -13,14 +13,15 @@ import {
   Position,
 } from 'geojson';
 import {
-  Cluster,
   MapSelectionActionType,
   MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
 } from './types';
-import distance from '@turf/distance';
-import {isStation} from '@atb/mobility/utils';
+import {
+  ClusterOfVehiclesProperties,
+  ClusterOfVehiclesPropertiesSchema,
+} from '@atb/api/types/mobility';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -101,22 +102,18 @@ export const isFeatureGeofencingZone = (
 
 export const isClusterFeature = (
   feature: Feature,
-): feature is Feature<Point, Cluster> =>
-  isFeaturePoint(feature) && feature.properties?.cluster;
+): feature is Feature<Point, ClusterOfVehiclesProperties> =>
+  ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
 
+export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
+  f.properties?.entityType === 'Quay';
+
 export const isParkAndRide = (
   f: Feature<Point>,
 ): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
-
-export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
-  typeof obj === 'object' &&
-  obj !== null &&
-  'type' in obj &&
-  typeof obj.type === 'string' &&
-  obj.type === 'FeatureCollection';
 
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
@@ -129,6 +126,7 @@ export const getCoordinatesFromMapSelectionAction = (
   switch (sc.source) {
     case 'my-position':
       return sc.coords;
+    case 'map-item':
     case 'map-click':
     case 'cluster-click':
       return mapPositionToCoordinates(sc.feature.geometry.coordinates);
@@ -214,17 +212,8 @@ export const toFeatureCollection = <
   features,
 });
 
-/**
- * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
- * @param visibleBounds
- */
-export const getVisibleRange = (visibleBounds: Position[]) => {
-  const [[_, latNE], [lonSW, latSW]] = visibleBounds;
-  return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
-};
+// disable for now
+export const shouldShowMapLines = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
 
-export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
-
-export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
+// disable for now
+export const shouldZoomToFeature = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
