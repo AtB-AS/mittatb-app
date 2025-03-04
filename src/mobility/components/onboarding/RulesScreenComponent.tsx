@@ -16,7 +16,7 @@ import {OnboardingScreenComponent} from '@atb/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 
 export type RulesScreenComponentProps = {
   onGiveConsent: (given: boolean) => void;
@@ -27,10 +27,16 @@ export const RulesScreenComponent = ({
 }: RulesScreenComponentProps) => {
   const {scooterConsentLines} = useFirestoreConfigurationContext();
   const {theme} = useThemeContext();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const {configurableLinks} = useFirestoreConfigurationContext();
+  const mobilityTerms = configurableLinks?.mobilityTermsUrl;
+
+  const mobilityTermsUrl = getTextForLanguage(mobilityTerms, language);
 
   const onOpenTerms = () => {
-    // TODO: Implement external page for terms
+    if (mobilityTermsUrl) {
+      Linking.openURL(mobilityTermsUrl);
+    }
   };
 
   return (
@@ -96,6 +102,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.medium,
     margin: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
+    paddingTop: theme.spacing.medium,
   },
   row: {
     flexDirection: 'row',

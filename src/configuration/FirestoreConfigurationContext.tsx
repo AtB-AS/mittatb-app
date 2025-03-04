@@ -603,6 +603,9 @@ function getConfigurableLinksFromSnapshot(
     urls?.get('tileServerBaseUrl'),
   );
   const mapboxSpriteUrl = mapLanguageAndTextType(urls?.get('mapboxSpriteUrl'));
+  const mobilityTermsUrl = mapLanguageAndTextType(
+    urls?.get('mobilityTermsUrl'),
+  );
 
   return {
     ticketingInfo,
@@ -617,6 +620,7 @@ function getConfigurableLinksFromSnapshot(
     externalRealtimeMap,
     tileServerBaseUrl,
     mapboxSpriteUrl,
+    mobilityTermsUrl,
   };
 }
 

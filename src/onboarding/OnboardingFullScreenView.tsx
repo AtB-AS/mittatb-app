@@ -89,7 +89,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
     marginHorizontal: theme.spacing.xLarge,
     justifyContent: 'center',
-    rowGap: theme.spacing.medium,
   },
   footerScrollView: {
     marginBottom: theme.spacing.small,
