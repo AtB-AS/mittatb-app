@@ -7,6 +7,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {OnboardingFullScreenView} from '@atb/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
+import {ScreenHeaderProps} from '@atb/components/screen-header';
 
 type DescriptionLink = {
   text: string;
@@ -23,6 +24,7 @@ type OnboardingScreenComponentParams = {
   buttonText: string;
   buttonOnPress: () => void;
   testID?: string;
+  headerProps?: ScreenHeaderProps;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -36,6 +38,7 @@ export const OnboardingScreenComponent = ({
   buttonText,
   buttonOnPress,
   testID,
+  headerProps,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
@@ -50,6 +53,7 @@ export const OnboardingScreenComponent = ({
         expanded: false,
       }}
       footerDescription={footerDescription}
+      fullScreenHeaderProps={headerProps}
       testID={testID ? `${testID}` : 'next'}
     >
       <View style={styles.header}>{illustration}</View>

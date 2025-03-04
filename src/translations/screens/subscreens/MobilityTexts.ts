@@ -14,7 +14,7 @@ export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
+        return _('El-sparkesykkel', 'E-scooter', 'El-sparkesykkel');
       case FormFactor.Bicycle:
         return _('Sykkel', 'Bicycle', 'Sykkel');
       case FormFactor.Car:
@@ -24,26 +24,58 @@ export const MobilityTexts = {
     }
   },
   shmoRequirements: {
-    loginBlocker: _(
-      'Logg inn for å starte turen',
-      'Log in to start the trip',
-      'Logg inn for å starte turen',
-    ),
+    loginBlocker: _('Logg inn', 'Log in', 'Logg inn'),
     loginBlockerInfoMessage: _(
-      'Du må logge inn og ordne noen småting for å starte turen',
-      'You need to log in and fix some things to start the trip',
-      'Du må logge inn og ordne nokre småting for å starte turen',
+      'Du må logge inn og gå igjennom noen steg for å starte turen',
+      'You need to log in and go through some steps to start the trip',
+      'Du må logge inn og gå igjennom nokre steg for å starte turen',
     ),
-    shmoBlockers: _(
-      'Ordne småting for å starte turen',
-      'Fix some things to start the trip',
-      'Ordne nokre småting for å starte turen',
-    ),
-    shmoBlockersInfoMessage: _(
-      'Du må ordne noen småting for å starte turen',
-      'You need to fix some things to start the trip',
-      'Du må ordne nokre småting for å starte turen',
-    ),
+    shmoBlockers: _('Fullfør steg', 'Complete steps', 'Fullfør steg'),
+    shmoBlockersInfoMessage: (numberOfBlockers: number) =>
+      _(
+        `Du må igjennom ${numberOfBlockers} steg før du kan starte turen`,
+        `You need to go through ${numberOfBlockers} steps before you can start the trip`,
+        `Du må gå igjennom ${numberOfBlockers} steg før du kan starte turen`,
+      ),
+    location: {
+      title: _(
+        'Vi trenger din posisjon',
+        'We need your location',
+        'Vi treng posisjonen din',
+      ),
+      description: _(
+        'Du må gi tilgang til posisjonen din for å bruke en el-sparkesykkel',
+        'You need to give access to your location to use an electric scooter',
+        'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
+      ),
+      button: _('Del posisjon', 'Share location', 'Del posisjon'),
+    },
+    payment: {
+      title: _(
+        'Vi trenger et betalingskort',
+        'We need a payment card',
+        'Vi treng eit betalingskort',
+      ),
+      description: _(
+        'Du må legge til et betalingskort for å bruke en el-sparkesykkel',
+        'You need to add a payment card to use an electric scooter',
+        'Du må legge til et betalingskort for å bruke ein el-sparkesykkel',
+      ),
+      button: _(
+        'Legg til betalingskort',
+        'Add payment card',
+        'Legg til betalingskort',
+      ),
+    },
+    terms: {
+      title: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
+      buttonOne: _(
+        'Godta bruksvilkår',
+        'Accept terms of use',
+        'Godta bruksvilkår',
+      ),
+      buttonTwo: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
+    },
   },
   helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator', 'Ukjent operatør'),

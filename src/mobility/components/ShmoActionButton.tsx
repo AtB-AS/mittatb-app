@@ -7,13 +7,15 @@ import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
+  onStartOnboarding: () => void;
 };
 
-export const ShmoActionButton = ({onLogin}: ShmoActionButtonProps) => {
+export const ShmoActionButton = ({
+  onLogin,
+  onStartOnboarding,
+}: ShmoActionButtonProps) => {
   const {authenticationType} = useAuthContext();
-
-  const {hasBlockers} = useShmoRequirements();
-
+  const {hasBlockers, numberOfBlockers} = useShmoRequirements();
   const {t} = useTranslation();
 
   if (authenticationType != 'phone') {
@@ -29,11 +31,13 @@ export const ShmoActionButton = ({onLogin}: ShmoActionButtonProps) => {
   if (hasBlockers) {
     return (
       <ButtonInfoTextCombo
-        onPress={() => {
-          //console.log('ButtonPress');
-        }}
+        onPress={onStartOnboarding}
         buttonText={t(MobilityTexts.shmoRequirements.shmoBlockers)}
-        message={t(MobilityTexts.shmoRequirements.shmoBlockersInfoMessage)}
+        message={t(
+          MobilityTexts.shmoRequirements.shmoBlockersInfoMessage(
+            numberOfBlockers,
+          ),
+        )}
       />
     );
   }
