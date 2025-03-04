@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
+  bonusPoints: _('bonuspoeng', 'bonus points', 'bonuspoeng'),
   costA11yLabel: (amount: number) =>
     _(
       `Koster ${amount} bonuspoeng`,
