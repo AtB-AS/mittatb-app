@@ -506,9 +506,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.medium,
     paddingVertical: theme.spacing.small,
   },
-  footerNotice: {
-    flexDirection: 'row',
-  },
+  footerNotice: {flex: 1},
   fromPlaceText: {
     flex: 3,
   },
