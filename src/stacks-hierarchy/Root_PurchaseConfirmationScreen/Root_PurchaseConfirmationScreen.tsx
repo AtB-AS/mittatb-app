@@ -1,10 +1,4 @@
 import {useAnalyticsContext} from '@atb/analytics';
-import {
-  Amex,
-  MasterCard,
-  Vipps,
-  Visa,
-} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -52,6 +46,9 @@ import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {formatNumberToString} from '@atb/utils/numbers';
+import {PaymentSelectionCard} from './components/PaymentSelectionCard';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -61,7 +58,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {userId} = useAuthContext();
 
   const interactiveColor = theme.color.interactive[0];
@@ -108,6 +105,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offer_id,
     }),
   );
+  const totalPriceString = formatNumberToString(totalPrice, language);
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -189,28 +187,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         reserveMutation.mutate();
       }
     }
-  }
-
-  function getPaymentMethodTexts(method: PaymentMethod): string {
-    let str;
-    switch (method.paymentType) {
-      case PaymentType.Vipps:
-        str = t(PurchaseConfirmationTexts.payWithVipps.text);
-        break;
-      case PaymentType.Visa:
-        str = t(PurchaseConfirmationTexts.payWithVisa.text);
-        break;
-      case PaymentType.Mastercard:
-        str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
-        break;
-      case PaymentType.Amex:
-        str = t(PurchaseConfirmationTexts.payWithAmex.text);
-        break;
-    }
-    if (method.recurringCard) {
-      str = str + ` (**** ${method.recurringCard.masked_pan})`;
-    }
-    return str;
   }
 
   async function selectPaymentMethod() {
@@ -318,6 +294,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
+        {paymentMethod && (
+          <Section>
+            <GenericSectionItem>
+              <PaymentSelectionCard
+                card={paymentMethod}
+                startAction={selectPaymentMethod}
+              />
+            </GenericSectionItem>
+          </Section>
+        )}
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -330,12 +316,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               <View style={styles.flexColumn}>
                 <Button
                   expanded={true}
-                  text={getPaymentMethodTexts(paymentMethod)}
+                  text={t(
+                    PurchaseConfirmationTexts.payTotal.text(totalPriceString),
+                  )}
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
-                  rightIcon={{
-                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
-                  }}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -401,19 +386,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 };
 
-function getPaymentTypeSvg(paymentType: PaymentType) {
-  switch (paymentType) {
-    case PaymentType.Mastercard:
-      return MasterCard;
-    case PaymentType.Vipps:
-      return Vipps;
-    case PaymentType.Visa:
-      return Visa;
-    case PaymentType.Amex:
-      return Amex;
-  }
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
@@ -422,6 +394,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   flexColumn: {
     flex: 1,
     flexDirection: 'column',
+    marginVertical: theme.spacing.medium,
   },
   flexRowCenter: {
     flex: 1,
@@ -440,5 +413,41 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   infoSection: {padding: theme.spacing.medium},
   purchaseInformation: {
     marginBottom: theme.spacing.medium,
+  },
+  content: {
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
+  },
+  card: {flex: 1, paddingVertical: theme.spacing.small},
+  cardTop: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cardIcons: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  },
+  paymentMethod: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.xSmall,
+    paddingLeft: theme.spacing.medium,
+    marginRight: 'auto',
+  },
+  maskedPan: {
+    color: theme.color.foreground.dynamic.secondary,
+  },
+
+  actionButton: {
+    marginLeft: theme.spacing.medium,
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

@@ -10,7 +10,6 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {getExpireDate} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
@@ -19,7 +18,9 @@ import {
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
 import {PaymentType, humanizePaymentType} from '@atb/ticketing';
-import {getRadioA11y} from '@atb/components/radio';
+import {RadioIcon, getRadioA11y} from '@atb/components/radio';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
 
 type Props = {
   onSelect: (
@@ -44,6 +45,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const [shouldSave, setShouldSave] = useState(
     currentOptions?.shouldSavePaymentMethod ?? false,
   );
+  const {authenticationType} = useAuthContext();
 
   const {paymentTypes} = useFirestoreConfigurationContext();
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
@@ -51,6 +53,16 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       paymentType,
       savedType: SavedPaymentMethodType.Normal,
     }),
+  );
+  const singlePaymentMethod = defaultPaymentMethods.filter(
+    (method) =>
+      method.paymentType !== PaymentType.Amex &&
+      method.paymentType !== PaymentType.Mastercard &&
+      method.paymentType !== PaymentType.Visa,
+  );
+
+  const multiplePaymentMethod = defaultPaymentMethods.filter(
+    (method) => method.paymentType !== PaymentType.Vipps,
   );
   const [selectedMethod, setSelectedMethod] = useState(
     currentOptions?.paymentMethod,
@@ -60,13 +72,18 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     <BottomSheetContainer
       title={t(SelectPaymentMethodTexts.header.text)}
       fullHeight
+      maxHeightValue={
+        authenticationType !== 'phone'
+          ? 0.33
+          : 0.33 + (recurringPaymentMethods?.length ?? 0) * 0.13
+      }
     >
       <View style={{flex: 1}}>
         <View style={{flexShrink: 1, flexGrow: 1}}>
           <ScrollView style={styles.paymentMethods}>
-            {defaultPaymentMethods.map((method, index) => {
+            {singlePaymentMethod.map((method, index) => {
               return (
-                <PaymentMethodView
+                <SinglePaymentMethod
                   key={method.paymentType}
                   paymentMethod={method}
                   shouldSave={shouldSave}
@@ -84,6 +101,34 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               );
             })}
 
+            {/*  I don't know what to pass to selected and onSelect, so I will avoid having a conflict with the types. */}
+
+            <MultiplePaymentMethodsRadioSection
+              shouldSave={shouldSave}
+              onSetShouldSave={setShouldSave}
+              selected={
+                !selectedMethod?.recurringCard &&
+                selectedMethod?.paymentType ===
+                  multiplePaymentMethod[0]?.paymentType
+              }
+              onSelect={() => {
+                setShouldSave(true);
+                setSelectedMethod(multiplePaymentMethod[0]);
+              }}
+              paymentGroup={multiplePaymentMethod}
+              index={2}
+            />
+
+            {authenticationType !== 'phone' && (
+              <MessageInfoText
+                style={styles.warningMessageAnonym}
+                message={t(
+                  AnonymousPurchases.consequences.select_payment_method,
+                )}
+                type="warning"
+              />
+            )}
+
             {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
               <View style={styles.listHeading}>
                 <ThemeText>
@@ -92,7 +137,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
               </View>
             )}
             {recurringPaymentMethods?.map((method, index) => (
-              <PaymentMethodView
+              <SinglePaymentMethod
                 key={method.recurringCard?.id}
                 paymentMethod={method}
                 selected={
@@ -128,6 +173,107 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   );
 };
 
+type MultiplePaymentMethodsProps = {
+  paymentMethod?: PaymentMethod;
+  selected: boolean;
+  onSelect: (value: PaymentMethod[]) => void;
+  shouldSave: boolean;
+  onSetShouldSave: (val: boolean) => void;
+  paymentGroup: PaymentMethod[];
+  index: number;
+};
+
+const MultiplePaymentMethodsRadioSection: React.FC<
+  MultiplePaymentMethodsProps
+> = ({selected, onSelect, shouldSave, onSetShouldSave, paymentGroup}) => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+  const {authenticationType} = useAuthContext();
+  const {theme} = useThemeContext();
+  const radioColor = theme.color.interactive[2].outline.background;
+
+  function getPaymentTexts(method: PaymentMethod[]): {
+    label: string;
+    hint: string;
+  } {
+    const methods = method
+      .map((payment) => humanizePaymentType(payment.paymentType))
+      .join(', ');
+
+    return {
+      label: t(
+        PurchaseConfirmationTexts.paymentWithMultiplePaymentMethods.a11yLabel(
+          methods,
+        ),
+      ),
+      hint: t(
+        PurchaseConfirmationTexts.paymentWithMultiplePaymentMethods.a11Hint,
+      ),
+    };
+  }
+
+  const paymentTexts = getPaymentTexts(paymentGroup);
+  const canSaveCard = authenticationType === 'phone';
+
+  return (
+    <View style={styles.card}>
+      <PressableOpacity
+        style={[styles.paymentMethod, styles.centerRow]}
+        onPress={() => onSelect(paymentGroup)}
+        accessibilityHint={paymentTexts.hint}
+        {...getRadioA11y(paymentTexts.label, selected, t)}
+        testID="multiple payment methods"
+      >
+        <View style={styles.column}>
+          <View style={styles.row}>
+            <View style={styles.centerRow}>
+              <RadioIcon checked={selected} color={radioColor} />
+              <View style={styles.reccuringCard}>
+                <ThemeText>
+                  {t(SelectPaymentMethodTexts.multiple_payment.title)}
+                </ThemeText>
+              </View>
+              <View style={styles.paymentIconsGroup}>
+                {paymentGroup.map((payment) => (
+                  <PaymentBrand paymentType={payment.paymentType} />
+                ))}
+              </View>
+            </View>
+          </View>
+        </View>
+      </PressableOpacity>
+      {selected && canSaveCard && (
+        <PressableOpacity
+          onPress={() => onSetShouldSave(!shouldSave)}
+          style={styles.saveMethodSection}
+        >
+          <ThemeText>
+            {t(SelectPaymentMethodTexts.multiple_payment.text)}
+          </ThemeText>
+          <ThemeText typography="body__secondary" color="secondary">
+            {t(SelectPaymentMethodTexts.multiple_payment.information)}
+          </ThemeText>
+          <View style={styles.saveButton}>
+            <Checkbox
+              style={styles.saveButtonCheckbox}
+              checked={shouldSave}
+              accessibility={{
+                accessibilityHint: t(
+                  shouldSave
+                    ? SelectPaymentMethodTexts.a11yHint.notSave
+                    : SelectPaymentMethodTexts.a11yHint.save,
+                ),
+              }}
+              testID="saveCard"
+            />
+            <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
+          </View>
+        </PressableOpacity>
+      )}
+    </View>
+  );
+};
+
 type PaymentMethodProps = {
   paymentMethod: PaymentMethod;
   selected: boolean;
@@ -137,7 +283,7 @@ type PaymentMethodProps = {
   index: number;
 };
 
-const PaymentMethodView: React.FC<PaymentMethodProps> = ({
+const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
   paymentMethod,
   selected,
   onSelect,
@@ -193,6 +339,8 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
     authenticationType === 'phone' &&
     paymentMethod.savedType === 'normal' &&
     paymentMethod.paymentType !== PaymentType.Vipps;
+  const {theme} = useThemeContext();
+  const radioColor = theme.color.interactive[2].outline.background;
 
   return (
     <View style={styles.card}>
@@ -206,24 +354,30 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
         <View style={styles.column}>
           <View style={styles.row}>
             <View style={styles.centerRow}>
-              <RadioView checked={selected} />
-              <ThemeText>{paymentTexts.text}</ThemeText>
-              {paymentMethod.recurringCard && (
-                <ThemeText
-                  style={styles.maskedPanPadding}
-                  testID={getPaymentTestId(paymentMethod, index) + 'Number'}
-                >
-                  **** {`${paymentMethod.recurringCard.masked_pan}`}
-                </ThemeText>
-              )}
+              <RadioIcon checked={selected} color={radioColor} />
+              <View style={styles.reccuringCard}>
+                <ThemeText>{paymentTexts.text}</ThemeText>
+                {paymentMethod.recurringCard && (
+                  <ThemeText
+                    style={styles.maskedPanPadding}
+                    testID={getPaymentTestId(paymentMethod, index) + 'Number'}
+                  >
+                    **** {`${paymentMethod.recurringCard.masked_pan}`}
+                  </ThemeText>
+                )}
+              </View>
+              <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
-            <PaymentBrand paymentType={paymentMethod.paymentType} />
           </View>
+
+          {/* this is just a template for the future message implementation
           {paymentMethod.recurringCard && (
-            <ThemeText style={styles.expireDate}>
-              {getExpireDate(paymentMethod.recurringCard.expires_at)}
-            </ThemeText>
-          )}
+            <MessageInfoText
+              style={styles.warningMessage}
+              message="Expiration messsage"
+              type="warning"
+            />
+          )} */}
         </View>
       </PressableOpacity>
       {selected && canSaveCard && (
@@ -231,8 +385,11 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
           onPress={() => onSetShouldSave(!shouldSave)}
           style={styles.saveMethodSection}
         >
-          <ThemeText style={styles.saveMethodTextPadding}>
-            {t(SelectPaymentMethodTexts.save_payment_method_description.text)}
+          <ThemeText>
+            {t(SelectPaymentMethodTexts.multiple_payment.text)}
+          </ThemeText>
+          <ThemeText typography="body__secondary" color="secondary">
+            {t(SelectPaymentMethodTexts.multiple_payment.information)}
           </ThemeText>
           <View style={styles.saveButton}>
             <Checkbox
@@ -251,21 +408,6 @@ const PaymentMethodView: React.FC<PaymentMethodProps> = ({
           </View>
         </PressableOpacity>
       )}
-    </View>
-  );
-};
-
-type CheckedProps = {
-  checked: boolean;
-};
-
-const RadioView: React.FC<CheckedProps> = ({checked}) => {
-  const styles = useStyles();
-  return (
-    <View
-      style={[styles.radio, checked ? styles.radioSelected : styles.radioBlank]}
-    >
-      {checked ? <View style={styles.radioInner} /> : null}
     </View>
   );
 };
@@ -297,9 +439,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
   },
   saveMethodSection: {
-    paddingHorizontal: theme.spacing.xLarge,
-    paddingBottom: theme.spacing.xLarge,
+    paddingHorizontal: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
+    paddingTop: theme.spacing.small,
+    borderTopWidth: theme.border.width.slim,
+    borderTopColor: theme.color.border.primary.background,
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.medium,
   },
+
   container: {
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
@@ -312,13 +461,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   paymentMethod: {
     flex: 1,
     flexDirection: 'column',
-    padding: theme.spacing.xLarge,
+    padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
   },
+
   centerRow: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   radioSelected: {
     backgroundColor: theme.color.background.accent[3].background,
@@ -346,24 +497,36 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    paddingTop: theme.spacing.small,
   },
   saveButtonCheckbox: {
-    marginRight: theme.spacing.small,
-  },
-  expireDate: {
-    opacity: 0.6,
-    paddingTop: theme.spacing.small,
-    paddingLeft: 36,
+    marginRight: theme.spacing.medium,
   },
   confirmButton: {
     marginTop: theme.spacing.small,
   },
   maskedPanPadding: {
-    paddingLeft: theme.spacing.small,
+    color: theme.color.foreground.dynamic.secondary,
   },
-  saveMethodTextPadding: {
+  reccuringCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.xSmall,
+    paddingLeft: theme.spacing.medium,
+    marginRight: 'auto',
+    color: theme.color.foreground.dynamic.secondary,
+  },
+
+  warningMessage: {
     paddingTop: theme.spacing.medium,
-    opacity: 0.6,
+  },
+  warningMessageAnonym: {
+    paddingTop: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium,
+  },
+
+  paymentIconsGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: theme.spacing.medium,
   },
 }));
