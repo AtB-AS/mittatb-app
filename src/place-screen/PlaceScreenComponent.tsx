@@ -70,7 +70,7 @@ export const PlaceScreenComponent = ({
   let missingStopData = false;
 
   if (stopsDetailsData && place.quays === undefined) {
-    if (stopsDetailsData.stopPlaces[0]) {
+    if (stopsDetailsData.stopPlaces[0].quays?.length) {
       place = stopsDetailsData.stopPlaces[0];
     } else {
       missingStopData = true;
