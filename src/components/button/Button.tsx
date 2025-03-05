@@ -23,7 +23,6 @@ type ButtonType = 'large' | 'small';
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
-  size?: keyof Theme['icon']['size'];
   notification?: ThemeIconProps['notification'];
 };
 
@@ -170,7 +169,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       >
         {leftIcon && (
           <View style={leftStyling}>
-            <ThemeIcon color={mainContrastColor} {...leftIcon} />
+            <ThemeIcon color={mainContrastColor} size="normal" {...leftIcon} />
           </View>
         )}
         {text && (
@@ -191,7 +190,11 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
               <ActivityIndicator size="small" color={styleText.color} />
             ) : (
               rightIcon && (
-                <ThemeIcon color={mainContrastColor} {...rightIcon} />
+                <ThemeIcon
+                  color={mainContrastColor}
+                  size="normal"
+                  {...rightIcon}
+                />
               )
             )}
           </View>
@@ -262,11 +265,7 @@ const useTextMarginHorizontal = (
   const {theme} = useThemeContext();
   if (!expand) return 0;
   if (!leftIcon && !rightIcon) return 0;
-  const maxIconSize = Math.max(
-    theme.icon.size[leftIcon?.size || 'normal'],
-    theme.icon.size[rightIcon?.size || 'normal'],
-  );
-  return maxIconSize + theme.spacing.xSmall;
+  return theme.icon.size['normal'] + theme.spacing.xSmall;
 };
 
 const useButtonStyle = StyleSheet.createThemeHook(() => ({
