@@ -17,7 +17,7 @@ export const ValidityLine = (props: Props): ReactElement => {
   const {status} = props;
 
   const {theme} = useThemeContext();
-  const {lineColor, backgroundColor} = useValidityLineColors(
+  const {backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
   );
   const {isInspectable} = useMobileTokenContext();
@@ -27,21 +27,18 @@ export const ValidityLine = (props: Props): ReactElement => {
       return (
         <LineWithVerticalBars
           backgroundColor={theme.color.foreground.dynamic.disabled}
-          lineColor={lineColor}
         />
       );
     case 'approved':
       return (
         <LineWithVerticalBars
           backgroundColor={theme.color.interactive[0].default.background}
-          lineColor={lineColor}
         />
       );
     case 'valid':
       return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={backgroundColor.background}
-          lineColor={lineColor}
           animate={props.animate}
         />
       ) : (

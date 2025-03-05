@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useEffect, useRef} from 'react';
 import {
   StyleProp,
@@ -15,18 +15,18 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export const LineWithVerticalBars = ({
   backgroundColor,
-  lineColor,
   animate = true,
   style,
 }: {
   backgroundColor: string;
-  lineColor: string;
   animate?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
+  const lineColor = theme.color.background.neutral[0].background;
   return (
     <View style={styles.container}>
       <View
