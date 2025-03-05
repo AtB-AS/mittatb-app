@@ -1,7 +1,8 @@
 /**
  * The number of accesses that should be displayed in a single row. To display
  * the correct amount of consumed carnets, maximumNumberOfAccesses should be
- * divisible by this number.
+ * divisible by this number. Does not apply if maximumNumberOfAccesses is less
+ * than CARNET_DIVIDER.
  */
 export const CARNET_DIVIDER = 10;
 
@@ -19,36 +20,41 @@ export function calculateCarnetData(
   maximumNumberOfAccesses: number,
   numberOfUsedAccesses: number,
 ) {
+  // For carnets with less than CARNET_DIVIDER accesses, maximumNumberOfAccesses
+  // can be used as the divider, in order to not display too many consumed dots.
+  const carnetDivider =
+    maximumNumberOfAccesses < CARNET_DIVIDER
+      ? maximumNumberOfAccesses
+      : CARNET_DIVIDER;
+
   // If the ticket status is active, it should be considered into calculation.
   const activeAccess = active ? 1 : 0;
 
   // Total number of remaining accesses, including multicarnets
   const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
 
-  // If `maximumNumberOfAccesses` are not divisible by `CARNET_DIVIDER`, we need
+  // If `maximumNumberOfAccesses` are not divisible by `carnetDivider`, we need
   // to add some extra dots, in order to not break the active dot position.
   const padding =
-    Math.abs(CARNET_DIVIDER - maximumNumberOfAccesses) % CARNET_DIVIDER;
+    Math.abs(carnetDivider - maximumNumberOfAccesses) % carnetDivider;
 
   // Number of additional dots that should be added when the padding is there.
   const numberOfAdditionalDots =
-    maximumNumberOfAccesses > CARNET_DIVIDER
-      ? CARNET_DIVIDER - padding
-      : padding;
+    maximumNumberOfAccesses > carnetDivider ? carnetDivider - padding : padding;
 
   // Determines whether we should add an extra multicarnet, due to the active
   // carnet being the last one in the current set.
   //
   // Should only add extra carnet when:
-  // - accessesRemaining is divisible by CARNET_DIVIDER
+  // - accessesRemaining is divisible by carnetDivider
   // - status is currently active
   const shouldAddExtraMultiCarnet =
-    accessesRemaining % CARNET_DIVIDER === 0 && active ? 1 : 0;
+    accessesRemaining % carnetDivider === 0 && active ? 1 : 0;
 
   // Calculates the amount of dots showing for the multi-carnet part. Prevent
   // negative when there are no accesses remaining.
   const numberOfMultiCarnets = Math.max(
-    Math.ceil(accessesRemaining / CARNET_DIVIDER - 1) +
+    Math.ceil(accessesRemaining / carnetDivider - 1) +
       shouldAddExtraMultiCarnet,
     0,
   );
@@ -58,14 +64,14 @@ export function calculateCarnetData(
   // multicarnet.
   const numberOfUsedDots =
     accessesRemaining === 0
-      ? CARNET_DIVIDER - activeAccess
+      ? carnetDivider - activeAccess
       : (numberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
-        CARNET_DIVIDER;
+        carnetDivider;
 
   // Calculates the amount of dots showing for the unused part
-  const numberOfUnusedDots = CARNET_DIVIDER - numberOfUsedDots - activeAccess;
+  const numberOfUnusedDots = carnetDivider - numberOfUsedDots - activeAccess;
 
-  const multiCarnetArray = Array(numberOfMultiCarnets).fill(CARNET_DIVIDER);
+  const multiCarnetArray = Array(numberOfMultiCarnets).fill(carnetDivider);
   const unusedArray = Array(numberOfUnusedDots).fill(true);
   const usedArray = Array(numberOfUsedDots).fill(false);
 

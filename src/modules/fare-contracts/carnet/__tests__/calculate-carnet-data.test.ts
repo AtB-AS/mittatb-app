@@ -1,5 +1,36 @@
 import {calculateCarnetData} from '../calculate-carnet-data';
 
+describe('Carnet footer: less than 10 tickets', () => {
+  it('1 ticket, 0 used, not active.', async () => {
+    const carnetData = calculateCarnetData(false, 1, 0);
+    expect(carnetData.accessesRemaining).toEqual(1);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+    expect(carnetData.unusedArray.length).toEqual(1);
+    expect(carnetData.usedArray.length).toEqual(0);
+  });
+  it('3 tickets, 1 used, not active.', async () => {
+    const carnetData = calculateCarnetData(false, 3, 1);
+    expect(carnetData.accessesRemaining).toEqual(2);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+    expect(carnetData.unusedArray.length).toEqual(2);
+    expect(carnetData.usedArray.length).toEqual(1);
+  });
+  it('1 ticket, 1 used, active.', async () => {
+    const carnetData = calculateCarnetData(true, 1, 1);
+    expect(carnetData.accessesRemaining).toEqual(0);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+    expect(carnetData.unusedArray.length).toEqual(0);
+    expect(carnetData.usedArray.length).toEqual(0);
+  });
+  it('3 tickets, 1 used, active.', async () => {
+    const carnetData = calculateCarnetData(true, 3, 1);
+    expect(carnetData.accessesRemaining).toEqual(2);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+    expect(carnetData.unusedArray.length).toEqual(2);
+    expect(carnetData.usedArray.length).toEqual(0);
+  });
+});
+
 describe('Carnet footer: 10 tickets', () => {
   for (let i = 0; i <= 10; i++) {
     it(`10 tickets, ${i} used, not active.`, async () => {
