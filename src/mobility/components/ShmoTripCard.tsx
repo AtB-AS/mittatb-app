@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/time';
@@ -15,8 +15,6 @@ type ShmoTripCardProps = {
 export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
-  const {theme} = useThemeContext();
-  const lineColor = theme.color.background.neutral[0].background;
   const backgroundColor = useTransportColor('scooter', 'escooter');
   const {data: booking} = useShmoBookingQuery(bookingId, 15000);
 
@@ -28,7 +26,6 @@ export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
             ? backgroundColor.primary.background
             : backgroundColor.primary.foreground.disabled
         }
-        lineColor={lineColor}
         style={styles.lineBars}
         animate={booking?.state === ShmoBookingState.IN_USE}
       />
