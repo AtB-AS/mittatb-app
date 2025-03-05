@@ -10,6 +10,7 @@ import {
   ScooterFaq,
   BonusProduct,
   BonusTexts,
+  ScooterConsentLine,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -150,6 +151,20 @@ export function mapToScooterFaqs(scooterFaqs?: any) {
   return scooterFaqs
     .map((scooterFaq) => {
       const parseResult = ScooterFaq.safeParse(scooterFaq);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToScooterConsentLines(scooterConsentLines?: any) {
+  if (!scooterConsentLines) return;
+  if (!Array.isArray(scooterConsentLines)) return;
+  return scooterConsentLines
+    .map((scooterConsentLine) => {
+      const parseResult = ScooterConsentLine.safeParse(scooterConsentLine);
       if (!parseResult.success) {
         return;
       }
