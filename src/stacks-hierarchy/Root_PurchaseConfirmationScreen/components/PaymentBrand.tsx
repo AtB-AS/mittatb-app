@@ -8,9 +8,10 @@ import {
   Visa,
 } from '@atb/assets/svg/color/icons/ticketing';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {Card} from '@atb/assets/svg/mono-icons/ticketing';
 
 export type Brand = {
-  paymentType: PaymentType;
+  paymentType: PaymentType | undefined;
   size?: number;
 };
 
@@ -26,7 +27,7 @@ export const PaymentBrand: React.FC<Brand> = ({paymentType, size = 20}) => {
 const Logo = ({
   paymentType,
 }: {
-  paymentType: PaymentType;
+  paymentType: PaymentType | undefined;
 }): JSX.Element | null => {
   switch (paymentType) {
     case PaymentType.Visa:
@@ -38,6 +39,6 @@ const Logo = ({
     case PaymentType.Amex:
       return <Amex height="100%" width="100%" />;
     default:
-      return null;
+      return <Card height="100%" width="100%" />;
   }
 };

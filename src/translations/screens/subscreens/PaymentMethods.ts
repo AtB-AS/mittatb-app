@@ -25,7 +25,7 @@ const PaymentMethodsTexts = {
       'Are you sure you want to remove this payment card?',
       'Er du sikker på at du vil fjerne dette betalingskortet?',
     ),
-    confirmButton: _('Fjern', 'Remove', 'Fjern'),
+    confirmButton: _('Fjern kort', 'Remove card', 'Fjern kort'),
     cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
   },
   a11y: {
@@ -52,6 +52,7 @@ const PaymentMethodsTexts = {
     'Payment with Vipps is available when purchasing a ticket',
     'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
   ),
+  editPaymentMethod: _('Endre', 'Edit', 'Endre'),
 };
 
 export default PaymentMethodsTexts;

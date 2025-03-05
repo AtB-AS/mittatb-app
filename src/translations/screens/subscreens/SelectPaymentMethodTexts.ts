@@ -16,13 +16,13 @@ const SelectPaymentMethodTexts = {
       'Aktiver for å bekrefte val av betalingsmåte',
     ),
   },
-  save_payment_method_description: {
+  multiple_payment: {
+    title: _('Nytt kort', 'New card', 'Nytt kort'),
     text: _(
       'Vil du lagre bankkortet for fremtidige betalinger?',
       'Would you like to save your bank card for future payments?',
       'Vil du lagre bankkortet for framtidige betalingar?',
     ),
-
     information: _(
       'Vi lagrer kortinformasjonen i opptil 3 år.',
       'We store the card information for up to 3 years.',
