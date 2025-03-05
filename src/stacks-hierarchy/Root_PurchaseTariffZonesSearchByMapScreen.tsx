@@ -22,7 +22,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
     selection.fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly =
     selection.preassignedFareProduct.zoneSelectionMode?.includes('single') ||
-    selectionMode === 'single';
+    selectionMode.includes('single');
 
   const {t} = useTranslation();
   const styles = useMapStyles();
