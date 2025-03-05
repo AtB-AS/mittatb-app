@@ -1,9 +1,9 @@
 import React, {ReactElement} from 'react';
 import {useThemeContext} from '@atb/theme';
 import {ValidityStatus} from '../utils';
-import {useValidityLineColors} from '../use-validity-line-colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
+import {useFareProductColor} from '../use-fare-product-color';
 
 type Props =
   | {
@@ -17,7 +17,7 @@ export const ValidityLine = (props: Props): ReactElement => {
   const {status} = props;
 
   const {theme} = useThemeContext();
-  const {backgroundColor} = useValidityLineColors(
+  const fareProductColor = useFareProductColor(
     status === 'valid' ? props.fareProductType : undefined,
   );
   const {isInspectable} = useMobileTokenContext();
@@ -38,7 +38,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'valid':
       return isInspectable ? (
         <LineWithVerticalBars
-          backgroundColor={backgroundColor.background}
+          backgroundColor={fareProductColor.background}
           animate={props.animate}
         />
       ) : (
