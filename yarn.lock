@@ -33,10 +33,10 @@
     zod "^3.24.1"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^15.1.1":
-  version "15.1.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.1.1.tgz#639557a43ca3d323382be062363ad1027601076c"
-  integrity sha512-XwckzHmbmDeYE3ClC5FUBHNK8XB+KmS+dP70aF5KXxbFAR8iW+DJyFX5hjPiaL5O2YF2Po+st8OWFcRyj99F4A==
+"@atb-as/generate-assets@^15.3.0":
+  version "15.3.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.3.0.tgz#aa174c8eeda9aa119a0753ff6182583eded6f829"
+  integrity sha512-Vm4K/dHxV84v9jN16oF4KB2A/Sw9gTrZRLLm9ixW5GDOZs0tV9k4zH8un6cEhi+hQPWSx3gGp+gdCaPUJLlX4w==
   dependencies:
     "@atb-as/theme" "^13.1.4"
     commander "^9.4.0"

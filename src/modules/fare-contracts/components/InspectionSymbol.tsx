@@ -10,7 +10,7 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
+import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
@@ -126,6 +126,7 @@ const getInspectionSvg = (
 ): ((props: SvgProps) => JSX.Element) => {
   if (illustration === 'night') return Moon;
   if (illustration === 'youth') return Youth;
+  if (illustration === 'school') return Student;
 
   return getTransportModeSvg(
     transportModes?.[0].mode,
