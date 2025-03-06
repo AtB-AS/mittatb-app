@@ -24,10 +24,7 @@ export const CarnetFooter: React.FC<Props> = ({
 
   return (
     <View
-      style={{
-        flexDirection: 'column',
-        flex: 1,
-      }}
+      style={styles.container}
       accessible={true}
       accessibilityLabel={t(
         FareContractTexts.carnet.numberOfUsedAccessesRemaining(
@@ -35,16 +32,14 @@ export const CarnetFooter: React.FC<Props> = ({
         ),
       )}
     >
-      <View>
-        <ThemeText typography="body__secondary">
-          {t(
-            FareContractTexts.carnet.numberOfUsedAccessesRemaining(
-              accessesRemaining,
-            ),
-          )}
-        </ThemeText>
-      </View>
-      <View style={styles.container}>
+      <ThemeText typography="body__secondary">
+        {t(
+          FareContractTexts.carnet.numberOfUsedAccessesRemaining(
+            accessesRemaining,
+          ),
+        )}
+      </ThemeText>
+      <View style={styles.dotContainer}>
         {multiCarnetArray.map((count, idx) => (
           <MultiCarnet key={idx} count={count} />
         ))}
@@ -87,9 +82,14 @@ function MultiCarnet({count}: {count: number}) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    rowGap: theme.spacing.medium,
+  },
+  dotContainer: {
+    flex: 1,
     flexDirection: 'row',
-    marginTop: theme.spacing.medium,
+    flexWrap: 'wrap',
+    columnGap: theme.spacing.large,
+    rowGap: theme.spacing.large,
   },
   triangle: {
     width: 0,
