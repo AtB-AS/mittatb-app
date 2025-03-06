@@ -204,11 +204,17 @@ export const DetailsContent: React.FC<Props> = ({
         testID="receiptButton"
       />
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
-        <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        <ConsumeCarnetSectionItem
+          fareContractId={fc.id}
+          fareProductType={preassignedFareProduct?.type}
+        />
       )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
-          <ActivateNowSectionItem fareContractId={fc.id} />
+          <ActivateNowSectionItem
+            fareContractId={fc.id}
+            fareProductType={preassignedFareProduct?.type}
+          />
         )}
     </Section>
   );
