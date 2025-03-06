@@ -1,3 +1,4 @@
+import {useAuthContext} from '@atb/auth';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useTranslation, getTextForLanguage} from '@atb/translations';
 
@@ -17,13 +18,21 @@ export const useTileUrlTemplate = (
 ): string | undefined => {
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfigurationContext();
+  const {userId} = useAuthContext();
+  const userIdParam = !userId ? '' : '?' + userId;
   const tileServerBaseUrl = getTextForLanguage(
     configurableLinks?.tileServerBaseUrl,
     language,
   );
+
   if (!tileServerBaseUrl || tileLayerNames.length === 0) {
     return undefined;
   } else {
-    return tileServerBaseUrl + tileLayerNames.join(',') + '/{z}/{x}/{y}';
+    return (
+      tileServerBaseUrl +
+      tileLayerNames.join(',') +
+      '/{z}/{x}/{y}' +
+      userIdParam
+    );
   }
 };
