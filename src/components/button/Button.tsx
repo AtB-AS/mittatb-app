@@ -23,7 +23,6 @@ type ButtonType = 'large' | 'small';
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
-  size?: keyof Theme['icon']['size'];
   notification?: Pick<Required<ThemeIconProps>['notification'], 'color'>;
 };
 
@@ -209,6 +208,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
 
 /**
  * Sanitize the icon props. As of now it does:
+ * - Sets icon size to normal
  * - If notification, set the button background color as the notification
  *   background color.
  */
@@ -219,6 +219,7 @@ const sanitizeIconProps = (
   return (
     iconProps && {
       ...iconProps,
+      size: 'normal',
       notification: iconProps.notification && {
         ...iconProps.notification,
         backgroundColor: buttonContrastColor,
@@ -288,11 +289,7 @@ const useTextMarginHorizontal = (
   const {theme} = useThemeContext();
   if (!expand) return 0;
   if (!leftIcon && !rightIcon) return 0;
-  const maxIconSize = Math.max(
-    theme.icon.size[leftIcon?.size || 'normal'],
-    theme.icon.size[rightIcon?.size || 'normal'],
-  );
-  return maxIconSize + theme.spacing.xSmall;
+  return theme.icon.size['normal'] + theme.spacing.xSmall;
 };
 
 const useButtonStyle = StyleSheet.createThemeHook(() => ({
