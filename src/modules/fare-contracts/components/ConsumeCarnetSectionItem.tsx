@@ -9,10 +9,12 @@ import {ConsumeCarnetBottomSheet} from './ConsumeCarnetBottomSheet';
 
 type ConsumeCarnetSectionItemProps = SectionItemProps<{
   fareContractId: string;
+  fareProductType: string | undefined;
 }>;
 
 export function ConsumeCarnetSectionItem({
   fareContractId,
+  fareProductType,
   ...sectionProps
 }: ConsumeCarnetSectionItemProps): JSX.Element {
   const {t} = useTranslation();
@@ -23,7 +25,12 @@ export function ConsumeCarnetSectionItem({
   const {open} = useBottomSheetContext();
   const onPress = () => {
     open(
-      () => <ConsumeCarnetBottomSheet fareContractId={fareContractId} />,
+      () => (
+        <ConsumeCarnetBottomSheet
+          fareContractId={fareContractId}
+          fareProductType={fareProductType}
+        />
+      ),
       onCloseFocusRef,
     );
   };
