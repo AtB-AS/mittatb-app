@@ -161,6 +161,7 @@ platform :ios do
       storage_mode: 'git',
       app_identifier: identifiers,
       force: true,
+      skip_confirmation: true,
       keychain_name: keychain_name,
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
