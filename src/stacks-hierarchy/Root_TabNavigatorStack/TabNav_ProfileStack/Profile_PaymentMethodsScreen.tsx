@@ -10,7 +10,6 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
-import {getExpireDate} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   addPaymentMethod,
@@ -179,18 +178,20 @@ const Card = (props: {
   return (
     <View style={style.card}>
       <View style={style.cardTop}>
-        <View>
+        <PaymentBrand paymentType={card.payment_type} />
+        <View style={style.paymentMethod}>
+          <ThemeText>{paymentName}</ThemeText>
           <ThemeText
+            style={style.maskedPan}
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.cardInfo(paymentName, card.masked_pan),
             )}
           >
-            {paymentName} **** {card.masked_pan}
+            **** {card.masked_pan}
           </ThemeText>
         </View>
 
         <View style={style.cardIcons}>
-          <PaymentBrand paymentType={card.payment_type} />
           <PressableOpacity
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
@@ -198,7 +199,7 @@ const Card = (props: {
                 card.masked_pan,
               ),
             )}
-            style={{marginLeft: theme.spacing.medium}}
+            style={style.actionButton}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentMethodsTexts.deleteModal.title),
@@ -213,18 +214,25 @@ const Card = (props: {
               });
             }}
           >
+            <ThemeText>
+              {t(PaymentMethodsTexts.deleteModal.confirmButton)}
+            </ThemeText>
             <SvgDelete
               height={21 * fontScale}
               width={21 * fontScale}
-              fill={theme.color.interactive.destructive.default.background}
+              fill={theme.color.foreground.dynamic.primary}
             />
           </PressableOpacity>
         </View>
       </View>
-
-      <ThemeText color="secondary" typography="body__secondary">
-        {getExpireDate(card.expires_at)}
-      </ThemeText>
+      {/* this is just a template for the future message implementation
+          {paymentMethod.recurringCard && (
+            <MessageInfoText
+              style={styles.warningMessage}
+              message="Expiration messsage"
+              type="warning"
+            />
+          )} */}
     </View>
   );
 };
@@ -317,5 +325,25 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'flex-end',
+  },
+  paymentMethod: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: theme.spacing.xSmall,
+    paddingLeft: theme.spacing.medium,
+    marginRight: 'auto',
+  },
+  maskedPan: {
+    color: theme.color.foreground.dynamic.secondary,
+  },
+
+  actionButton: {
+    marginLeft: theme.spacing.medium,
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: theme.spacing.xSmall,
+  },
+  warningMessage: {
+    paddingTop: theme.spacing.medium,
   },
 }));
