@@ -1,9 +1,14 @@
-import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
+import {
+  OnBehalfOfTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {forwardRef} from 'react';
+import React from 'react';
 
 export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
   ({themeColor}, focusRef) => {
@@ -26,7 +31,7 @@ export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
             color={themeColor}
             style={styles.description}
           >
-            {t(OnBehalfOfTexts.chooseReceiver.description)}
+            {t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
           </ThemeText>
         </View>
       </>

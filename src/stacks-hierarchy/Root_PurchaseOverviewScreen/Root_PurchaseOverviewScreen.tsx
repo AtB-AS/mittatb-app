@@ -28,15 +28,12 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {HoldingHands} from '@atb/assets/svg/color/images';
-import {ContentHeading} from '@atb/components/heading';
-import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useSelectableUserProfiles} from '@atb/modules/purchase-selection';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
+import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -47,27 +44,19 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const {authenticationType} = useAuthContext();
 
   const [selection, setSelection] = useParamAsState(params.selection);
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
-  const selectableUserProfiles = useSelectableUserProfiles(
-    selection.preassignedFareProduct,
-  );
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
 
   const analytics = useAnalyticsContext();
 
-  const {travellerSelectionMode, zoneSelectionMode} =
-    selection.fareProductTypeConfig.configuration;
-
-  const fareProductOnBehalfOfEnabled =
-    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
+  const {zoneSelectionMode} = selection.fareProductTypeConfig.configuration;
 
   const {
     isSearchingOffer,
@@ -96,19 +85,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       mode: params.mode,
     };
 
-  const canSelectUserProfile = isUserProfileSelectable(
-    travellerSelectionMode,
-    selectableUserProfiles,
-  );
-
-  const isOnBehalfOfEnabled =
-    useFeatureTogglesContext().isOnBehalfOfEnabled &&
-    fareProductOnBehalfOfEnabled;
-
-  const isLoggedIn = authenticationType === 'phone';
-
-  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
-
   const hasSelection =
     selection.userProfilesWithCount.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
@@ -125,6 +101,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     );
     navigation.navigate('Root_TicketInformationScreen', parameters);
   };
+  const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -141,6 +118,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     .filter((u) => u.count > 0)
     .map((u) => u.userTypeString);
 
+  const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
   return (
     <FullScreenView
       headerProps={{
@@ -209,13 +187,22 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <TravellerSelection
             selection={selection}
-            isOnBehalfOfToggle={isOnBehalfOfToggle}
-            onSave={(selection, onBehalfOfToggle) => {
+            onSave={(selection) => {
               setSelection(selection);
-              setIsOnBehalfOfToggle(onBehalfOfToggle);
             }}
             style={styles.selectionComponent}
           />
+
+          {shouldShowOnBehalfOf && (
+            <Section>
+              <ToggleSectionItem
+                text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+                value={isTravelerOnBehalfOfToggle}
+                onValueChange={setIsOnBehalfOfToggle}
+                testID="onBehalfOfToggle"
+              />
+            </Section>
+          )}
 
           <FromToSelection
             selection={selection}
@@ -237,27 +224,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setSelection={setSelection}
             style={styles.selectionComponent}
           />
-
-          {isOnBehalfOfAllowed && !canSelectUserProfile && (
-            <>
-              <ContentHeading
-                text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-              />
-              <Section>
-                <ToggleSectionItem
-                  leftImage={<HoldingHands />}
-                  text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-                  subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
-                  value={isOnBehalfOfToggle}
-                  textType="body__primary--bold"
-                  onValueChange={(checked) => {
-                    setIsOnBehalfOfToggle(checked);
-                  }}
-                  testID="onBehalfOfToggle"
-                />
-              </Section>
-            </>
-          )}
 
           <FlexTicketDiscountInfo
             userProfiles={userProfilesWithCountAndOffer}
@@ -346,6 +312,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       </ScrollView>
     </FullScreenView>
   );
+};
+
+const useShouldShowOnBehalfOf = (selection: PurchaseSelectionType) => {
+  const isOnBehalfOfEnabled =
+    useFeatureTogglesContext().isOnBehalfOfEnabled &&
+    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
+  const isLoggedIn = useAuthContext().authenticationType === 'phone';
+  return isOnBehalfOfEnabled && isLoggedIn;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
