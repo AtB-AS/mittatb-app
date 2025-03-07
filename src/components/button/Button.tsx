@@ -13,7 +13,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shadows} from '@atb/components/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
@@ -23,7 +23,7 @@ type ButtonType = 'large' | 'small';
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
-  notification?: Pick<Required<ThemeIconProps>['notification'], 'color'>;
+  notificationColor?: ContrastColor;
 };
 
 type ButtonModeAwareProps =
@@ -169,10 +169,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       >
         {leftIcon && (
           <View style={leftStyling}>
-            <ThemeIcon
-              color={mainContrastColor}
-              {...sanitizeIconProps(leftIcon, mainContrastColor)}
-            />
+            <ButtonIcon {...leftIcon} mainContrastColor={mainContrastColor} />
           </View>
         )}
         {text && (
@@ -193,9 +190,9 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
               <ActivityIndicator size="small" color={styleText.color} />
             ) : (
               rightIcon && (
-                <ThemeIcon
-                  color={mainContrastColor}
-                  {...sanitizeIconProps(rightIcon, mainContrastColor)}
+                <ButtonIcon
+                  {...rightIcon}
+                  mainContrastColor={mainContrastColor}
                 />
               )
             )}
@@ -206,27 +203,25 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   );
 });
 
-/**
- * Sanitize the icon props. As of now it does:
- * - Sets icon size to normal
- * - If notification, set the button background color as the notification
- *   background color.
- */
-const sanitizeIconProps = (
-  iconProps: ButtonIconProps,
-  buttonContrastColor: ContrastColor,
-): ThemeIconProps => {
-  return (
-    iconProps && {
-      ...iconProps,
-      size: 'normal',
-      notification: iconProps.notification && {
-        ...iconProps.notification,
-        backgroundColor: buttonContrastColor,
-      },
+const ButtonIcon = ({
+  svg,
+  notificationColor,
+  mainContrastColor,
+}: ButtonIconProps & {
+  mainContrastColor: ContrastColor;
+}) => (
+  <ThemeIcon
+    svg={svg}
+    color={mainContrastColor}
+    size="normal"
+    notification={
+      notificationColor && {
+        color: notificationColor,
+        backgroundColor: mainContrastColor,
+      }
     }
-  );
-};
+  />
+);
 
 /**
  * Get the button colors based on the input props to the button. The returned

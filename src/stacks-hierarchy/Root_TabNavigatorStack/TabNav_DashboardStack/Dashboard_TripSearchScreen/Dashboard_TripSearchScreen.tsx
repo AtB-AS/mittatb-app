@@ -370,10 +370,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 testID="dashboardDateTimePicker"
                 rightIcon={{
                   svg: Time,
-                  notification:
-                    searchTime.option !== 'now'
-                      ? {color: statusColor}
-                      : undefined,
+                  notificationColor:
+                    searchTime.option !== 'now' ? statusColor : undefined,
                 }}
               />
               {filtersState.enabled && (
@@ -390,10 +388,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     ref={filterButtonRef}
                     rightIcon={{
                       svg: Filter,
-                      notification: !areDefaultFiltersSelected(
+                      notificationColor: !areDefaultFiltersSelected(
                         filtersState.filtersSelection?.transportModes,
                       )
-                        ? {color: statusColor}
+                        ? statusColor
                         : undefined,
                     }}
                   />
