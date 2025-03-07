@@ -18,7 +18,11 @@ const AUTO_CAPTURE_OPTIONS: PostHogAutocaptureOptions = {
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
-export const AnalyticsContextProvider: React.FC = ({children}) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+export const AnalyticsContextProvider = ({children}: Props) => {
   const {userId, authenticationType} = useAuthContext();
   const {isPosthogEnabled} = useFeatureTogglesContext();
 

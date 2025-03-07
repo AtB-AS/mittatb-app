@@ -53,5 +53,5 @@ const initialState: GeocoderState = {
 };
 
 export function useGeocoderReducer() {
-  return useReducer<GeocoderReducer>(geocoderReducer, initialState);
+  return useReducer(geocoderReducer, initialState);
 }

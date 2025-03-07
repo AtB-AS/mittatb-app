@@ -10,7 +10,7 @@ type Props = {
   stations: StationsWithCount;
   onClusterClick: (
     e: OnPressEvent,
-    clustersSource: RefObject<ShapeSource>,
+    clustersSource: RefObject<ShapeSource | null>,
   ) => void;
 };
 

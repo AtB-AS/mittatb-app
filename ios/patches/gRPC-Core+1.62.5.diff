@@ -1,0 +1,13 @@
+diff --git a/cocoapods-patch-20250225-76064-re145g/gRPC-Core/src/core/lib/promise/detail/promise_like.h b/Pods/gRPC-Core/src/core/lib/promise/detail/promise_like.h
+index 395c32587..accbfbf15 100644
+--- a/cocoapods-patch-20250225-76064-re145g/gRPC-Core/src/core/lib/promise/detail/promise_like.h
++++ b/Pods/gRPC-Core/src/core/lib/promise/detail/promise_like.h
+@@ -71,7 +71,7 @@ class PromiseLike<void>;
+ 
+ template <typename F>
+ class PromiseLike<F, absl::enable_if_t<!std::is_void<
+-                         typename std::result_of<F()>::type>::value>> {
++typename absl::type_traits_internal::result_of<F()>::type>::value>> {
+  private:
+   GPR_NO_UNIQUE_ADDRESS F f_;
+ 

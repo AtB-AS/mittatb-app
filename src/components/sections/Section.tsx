@@ -29,7 +29,7 @@ export const Section = forwardRef<View, SectionProps>(
             radius: toRadius(index, lastIndex, firstIndex),
             radiusSize: 'regular',
             type,
-            ...child.props,
+            ...(child.props ?? {}),
           };
 
           return (

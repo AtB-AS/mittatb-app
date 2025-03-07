@@ -3,7 +3,7 @@ import {TouchableOpacity} from 'react-native';
 import {giveFocus} from './use-focus-on-load';
 
 export type FocusRefsType = {
-  [key: string]: RefObject<TouchableOpacity>;
+  [key: string]: RefObject<typeof TouchableOpacity>;
 };
 
 export function useFocusRefs(focusOnElementName: string | undefined) {

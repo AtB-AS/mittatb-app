@@ -137,8 +137,12 @@ const initialReducerState: TicketingReducerState = {
   customerProfile: undefined,
 };
 
+type Props = {
+  children: React.ReactNode;
+};
+
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
-export const TicketingContextProvider: React.FC = ({children}) => {
+export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
 
   const {userId} = useAuthContext();
