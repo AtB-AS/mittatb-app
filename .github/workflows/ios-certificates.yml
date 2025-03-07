@@ -42,6 +42,9 @@ jobs:
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY }} | base64 --decode > app-store-connect-api-key.json
           bundle exec fastlane ios generate_new_certificates
         env:
+          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
+          FASTLANE_MATCH_TYPE: ${{ inputs.environment }}
+          MATCH_DEPLOY_KEY: ${{ inputs.match-deploy-key }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

@@ -136,55 +136,33 @@ platform :ios do
   lane :generate_new_certificates do
     ensure_env_vars(
       env_vars: [
+        'FASTLANE_MATCH_FULL_NAME',
+        'FASTLANE_MATCH_EMAIL',
+        'FASTLANE_MATCH_GIT_SSH_URL',
+        'IOS_DEVICES_FILE',
         'IOS_DEVELOPMENT_TEAM_ID',
         'IOS_BUNDLE_IDENTIFIER',
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
-        'FASTLANE_MATCH_GIT_URL',
         'FASTLANE_MATCH_TYPE',
+        'MATCH_DEPLOY_KEY',
+        'APPCONNECT_API_KEY_PATH',
         'KEYCHAIN_NAME'
       ]
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
     match_nuke(
-      readonly: false,
+      type: ENV['FASTLANE_MATCH_TYPE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier: identifiers,
-      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
-      type:ENV['FASTLANE_MATCH_TYPE'],
-      skip_confirmation: true,
-      keychain_name: keychain_name,
-      include_all_certificates: true,
-      force: true,
-    )
-  end
-
-  desc 'Generate new certificates without nuking old ones'
-  lane :generate_new_certificates_without_nuke do
-    ensure_env_vars(
-      env_vars: [
-        'MATCH_PASSWORD',
-        'FASTLANE_MATCH_GIT_SSH_URL',
-        'FASTLANE_MATCH_TYPE',
-        'IOS_BUNDLE_IDENTIFIER',
-        'IOS_APP_WIDGET_IDENTIFIER',
-        'IOS_APP_INTENT_IDENTIFIER',
-        'IOS_DEVELOPMENT_TEAM_ID',
-        'KEYCHAIN_NAME'
-      ]
-    )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
-    keychain_name = ENV['KEYCHAIN_NAME']
-    match(
-      type: ENV["FASTLANE_MATCH_TYPE"],
-      app_identifier: identifiers,
+      git_url: ENV['FASTLANE_MATCH_GIT_URL'],
       storage_mode: 'git',
-      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
-      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      readonly: false,
+      app_identifier: identifiers,
       force: true,
       keychain_name: keychain_name,
+      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
+      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
+      git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true
     )
   end

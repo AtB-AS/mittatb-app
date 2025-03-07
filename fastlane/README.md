@@ -39,14 +39,6 @@ Removes the use of beacons from the app
 
 Generate new certificates
 
-### ios generate_new_certificates_without_nuke
-
-```sh
-[bundle exec] fastlane ios generate_new_certificates_without_nuke
-```
-
-Generate new certificates without nuking old ones
-
 ### ios get_certs
 
 ```sh
