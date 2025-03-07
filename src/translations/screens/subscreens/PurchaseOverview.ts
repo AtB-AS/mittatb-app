@@ -247,6 +247,8 @@ const PurchaseOverviewTexts = {
     ),
   },
   onBehalfOf: {
+    sectionTitle: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
+
     sectionSubText: _(
       'Den du kjøper billett til, må være innlogget i AtB-appen for å få billetten.',
       'The person you buy a ticket for, must be logged in to the AtB to recieve the ticket.',

@@ -74,6 +74,11 @@ function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
         paddingVertical: theme.spacing.large - theme.border.width.slim,
         paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
       };
+    case 'slim':
+      return {
+        paddingVertical: theme.spacing.xSmall,
+        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
+      };
   }
 }
 
