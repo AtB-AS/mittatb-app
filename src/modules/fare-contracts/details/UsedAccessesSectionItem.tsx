@@ -8,6 +8,8 @@ import {useSectionItem} from '@atb/components/sections';
 
 type Props = {usedAccesses: UsedAccessType[]};
 
+const MAX_LIST_LENGTH = 10;
+
 export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
   const {topContainer} = useSectionItem({});
   const {t, language} = useTranslation();
@@ -15,6 +17,7 @@ export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
   const dateStrings = usedAccesses
     .map((ua) => ua.startDateTime)
     .sort((d1, d2) => d2.getTime() - d1.getTime())
+    .slice(0, MAX_LIST_LENGTH)
     .map((d) => fullDateTime(d, language));
 
   return (
