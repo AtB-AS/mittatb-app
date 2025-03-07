@@ -155,9 +155,9 @@ platform :ios do
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
       keychain_name: keychain_name,
-      include_all_certificates: true
+      include_all_certificates: true,
+      force: true,
     )
-    get_certs
   end
 
   desc 'Generate new certificates without nuking old ones'

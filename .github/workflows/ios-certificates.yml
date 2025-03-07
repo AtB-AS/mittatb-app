@@ -8,8 +8,10 @@ on:
         type: choice
         options:
           - atb
+          - fram
           - nfk
-      environment: 
+          - troms
+      environment:
         description: 'App environment'
         required: true
         type: choice
@@ -17,24 +19,29 @@ on:
           - staging
           - store
           - development
+          - adhoc
 jobs:
   renew-certificates:
     name: Renew certificates
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     runs-on: macOS-13
+    env:
+      KEYCHAIN_NAME: "CI"
     steps:
       - name: Checkout project
-        uses: actions/checkout@v1
-      - name: Setup build dependencies, environment and assets
-        uses: ./.github/actions/ios-build-setup
+        uses: actions/checkout@v4
+      - name: Setup dependencies, environment and assets
+        uses: ./.github/actions/setup-certs
         with:
-          use-build-cache: 'true'
           app-environment: ${{ inputs.environment }}
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane generate certificates
-        run: bundle exec fastlane ios generate_new_certificates
+        run: |
+          echo ${{ secrets.APP_STORE_CONNECT_API_KEY }} | base64 --decode > app-store-connect-api-key.json
+          bundle exec fastlane ios generate_new_certificates
         env:
+          KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
