@@ -44,7 +44,7 @@ jobs:
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
           FASTLANE_MATCH_TYPE: ${{ inputs.environment }}
-          MATCH_DEPLOY_KEY: ${{ inputs.match-deploy-key }}
+          MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
