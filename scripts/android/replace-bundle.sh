@@ -51,8 +51,16 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
 
+    # Add a timestamp file
+    TIMESTAMP=$(date +%s)
+    echo $TIMESTAMP > decompiled-apk/assets/timestamp.txt
+    yq e '.doNotCompress += ["assets/timestamp.txt"]' -i decompiled-apk/apktool.yml
+
     echo "Re-compile Android APK"
-    apktool b decompiled-apk -o temp-$APK_FILE_NAME
+    apktool b --force-all decompiled-apk -o temp-$APK_FILE_NAME
+
+    # Verify the file is included
+    unzip -l temp-$APK_FILE_NAME | grep "timestamp.txt"
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
     /usr/local/lib/android/sdk/build-tools/34.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
