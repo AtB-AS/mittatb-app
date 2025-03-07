@@ -146,15 +146,18 @@ platform :ios do
         'FASTLANE_MATCH_TYPE',
         'MATCH_DEPLOY_KEY',
         'KEYCHAIN_NAME',
-        'MATCH_PASSWORD'
+        'MATCH_PASSWORD',
+        'APPCONNECT_API_KEY_PATH'
       ]
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
     match_nuke(
+      username: ENV['FASTLANE_MATCH_TYPE'],
       type: ENV['FASTLANE_MATCH_TYPE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+      api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
       storage_mode: 'git',
       app_identifier: identifiers,
       force: true,
