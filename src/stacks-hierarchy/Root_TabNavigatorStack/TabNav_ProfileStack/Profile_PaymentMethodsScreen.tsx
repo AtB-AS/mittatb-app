@@ -225,14 +225,6 @@ const Card = (props: {
           </PressableOpacity>
         </View>
       </View>
-      {/* this is just a template for the future message implementation
-          {paymentMethod.recurringCard && (
-            <MessageInfoText
-              style={styles.warningMessage}
-              message="Expiration messsage"
-              type="warning"
-            />
-          )} */}
     </View>
   );
 };

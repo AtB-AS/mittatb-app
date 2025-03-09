@@ -13,8 +13,10 @@ import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConf
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
+  CardPaymentMethod,
   PaymentMethod,
   SavedPaymentMethodType,
+  VippsPaymentMethod,
 } from '@atb/stacks-hierarchy/types';
 import {useAuthContext} from '@atb/auth';
 import {PaymentType, humanizePaymentType} from '@atb/ticketing';
@@ -54,122 +56,129 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       savedType: SavedPaymentMethodType.Normal,
     }),
   );
-  const singlePaymentMethod = defaultPaymentMethods.filter(
-    (method) =>
-      method.paymentType !== PaymentType.Amex &&
-      method.paymentType !== PaymentType.Mastercard &&
-      method.paymentType !== PaymentType.Visa,
+  const multiplePaymentMethod = defaultPaymentMethods.filter(
+    (method): method is CardPaymentMethod =>
+      method.paymentType in
+      {
+        [PaymentType.Mastercard]: true,
+        [PaymentType.Visa]: true,
+        [PaymentType.Amex]: true,
+      },
   );
 
-  const multiplePaymentMethod = defaultPaymentMethods.filter(
-    (method) => method.paymentType !== PaymentType.Vipps,
+  const singlePaymentMethod = defaultPaymentMethods.filter(
+    (method): method is VippsPaymentMethod =>
+      method.paymentType === PaymentType.Vipps,
   );
+
   const [selectedMethod, setSelectedMethod] = useState(
     currentOptions?.paymentMethod,
   );
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      fullHeight
-      maxHeightValue={
-        authenticationType !== 'phone'
-          ? 0.33
-          : 0.33 + (recurringPaymentMethods?.length ?? 0) * 0.13
-      }
-    >
-      <View style={{flex: 1}}>
-        <View style={{flexShrink: 1, flexGrow: 1}}>
-          <ScrollView style={styles.paymentMethods}>
-            {singlePaymentMethod.map((method, index) => {
-              return (
-                <SinglePaymentMethod
-                  key={method.paymentType}
-                  paymentMethod={method}
-                  shouldSave={shouldSave}
-                  onSetShouldSave={setShouldSave}
-                  selected={
-                    !selectedMethod?.recurringCard &&
-                    selectedMethod?.paymentType === method.paymentType
-                  }
-                  onSelect={(val: PaymentMethod) => {
-                    setSelectedMethod(val);
-                    setShouldSave(false);
-                  }}
-                  index={index}
-                />
-              );
-            })}
+    <View style={{flex: 1}}>
+      <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
+        <View style={{flex: 1}}>
+          <View
+            style={{
+              flexShrink: 1,
+              flexGrow: 1,
+              paddingBottom: theme.spacing.medium,
+            }}
+          >
+            <ScrollView style={styles.paymentMethods}>
+              {singlePaymentMethod.map((method, index) => {
+                return (
+                  <SinglePaymentMethod
+                    key={method.paymentType}
+                    paymentMethod={method}
+                    shouldSave={shouldSave}
+                    onSetShouldSave={setShouldSave}
+                    selected={
+                      !selectedMethod?.recurringCard &&
+                      selectedMethod?.paymentType === method.paymentType
+                    }
+                    onSelect={(val: PaymentMethod) => {
+                      setSelectedMethod(val);
+                      setShouldSave(false);
+                    }}
+                    index={index}
+                  />
+                );
+              })}
 
-            {/*  I don't know what to pass to selected and onSelect, so I will avoid having a conflict with the types. */}
+              {/*  I don't know what to pass to selected and onSelect, so I will avoid having a conflict with the types. */}
 
-            <MultiplePaymentMethodsRadioSection
-              shouldSave={shouldSave}
-              onSetShouldSave={setShouldSave}
-              selected={
-                !selectedMethod?.recurringCard &&
-                selectedMethod?.paymentType ===
-                  multiplePaymentMethod[0]?.paymentType
-              }
-              onSelect={() => {
-                setShouldSave(true);
-                setSelectedMethod(multiplePaymentMethod[0]);
-              }}
-              paymentGroup={multiplePaymentMethod}
-              index={2}
-            />
-
-            {authenticationType !== 'phone' && (
-              <MessageInfoText
-                style={styles.warningMessageAnonym}
-                message={t(
-                  AnonymousPurchases.consequences.select_payment_method,
-                )}
-                type="warning"
-              />
-            )}
-
-            {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
-              <View style={styles.listHeading}>
-                <ThemeText>
-                  {t(SelectPaymentMethodTexts.saved_cards.text)}
-                </ThemeText>
-              </View>
-            )}
-            {recurringPaymentMethods?.map((method, index) => (
-              <SinglePaymentMethod
-                key={method.recurringCard?.id}
-                paymentMethod={method}
-                selected={
-                  selectedMethod?.recurringCard?.id === method.recurringCard?.id
-                }
+              <MultiplePaymentMethodsRadioSection
                 shouldSave={shouldSave}
                 onSetShouldSave={setShouldSave}
-                onSelect={setSelectedMethod}
-                index={index}
+                selected={
+                  !selectedMethod?.recurringCard &&
+                  selectedMethod?.paymentType ===
+                    multiplePaymentMethod[0]?.paymentType
+                }
+                onSelect={() => {
+                  setShouldSave(true);
+                  setSelectedMethod(multiplePaymentMethod[0]);
+                }}
+                paymentGroup={multiplePaymentMethod}
+                testID="multiplePaymentSelection"
               />
-            ))}
-          </ScrollView>
+
+              {authenticationType !== 'phone' && (
+                <MessageInfoText
+                  style={styles.warningMessageAnonym}
+                  message={t(
+                    AnonymousPurchases.consequences.select_payment_method,
+                  )}
+                  type="warning"
+                />
+              )}
+
+              {recurringPaymentMethods &&
+                recurringPaymentMethods?.length > 0 && (
+                  <View style={styles.listHeading}>
+                    <ThemeText>
+                      {t(SelectPaymentMethodTexts.saved_cards.text)}
+                    </ThemeText>
+                  </View>
+                )}
+              {recurringPaymentMethods?.map((method, index) => (
+                <SinglePaymentMethod
+                  key={method.recurringCard?.id}
+                  paymentMethod={method}
+                  selected={
+                    selectedMethod?.recurringCard?.id ===
+                    method.recurringCard?.id
+                  }
+                  shouldSave={shouldSave}
+                  onSetShouldSave={setShouldSave}
+                  onSelect={setSelectedMethod}
+                  index={index}
+                />
+              ))}
+            </ScrollView>
+          </View>
+          <FullScreenFooter>
+            <Button
+              expanded={true}
+              style={styles.confirmButton}
+              interactiveColor={theme.color.interactive[0]}
+              text={t(SelectPaymentMethodTexts.confirm_button.text)}
+              accessibilityHint={t(
+                SelectPaymentMethodTexts.confirm_button.a11yhint,
+              )}
+              onPress={() => {
+                if (selectedMethod) onSelect(selectedMethod, shouldSave);
+              }}
+              disabled={!selectedMethod}
+              rightIcon={{svg: Confirm}}
+              testID="confirmButton"
+            />
+          </FullScreenFooter>
         </View>
-        <FullScreenFooter>
-          <Button
-            expanded={true}
-            style={styles.confirmButton}
-            interactiveColor={theme.color.interactive[0]}
-            text={t(SelectPaymentMethodTexts.confirm_button.text)}
-            accessibilityHint={t(
-              SelectPaymentMethodTexts.confirm_button.a11yhint,
-            )}
-            onPress={() => {
-              if (selectedMethod) onSelect(selectedMethod, shouldSave);
-            }}
-            disabled={!selectedMethod}
-            rightIcon={{svg: Confirm}}
-            testID="confirmButton"
-          />
-        </FullScreenFooter>
-      </View>
-    </BottomSheetContainer>
+      </BottomSheetContainer>
+    </View>
   );
 };
 
@@ -180,7 +189,7 @@ type MultiplePaymentMethodsProps = {
   shouldSave: boolean;
   onSetShouldSave: (val: boolean) => void;
   paymentGroup: PaymentMethod[];
-  index: number;
+  testID: string;
 };
 
 const MultiplePaymentMethodsRadioSection: React.FC<
@@ -369,15 +378,6 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
               <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
           </View>
-
-          {/* this is just a template for the future message implementation
-          {paymentMethod.recurringCard && (
-            <MessageInfoText
-              style={styles.warningMessage}
-              message="Expiration messsage"
-              type="warning"
-            />
-          )} */}
         </View>
       </PressableOpacity>
       {selected && canSaveCard && (
@@ -432,7 +432,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
   },
-  column: {flex: 1, flexDirection: 'column'},
+  column: {flex: 1},
   card: {
     marginVertical: theme.spacing.xSmall,
     borderRadius: theme.border.radius.regular,
@@ -444,8 +444,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacing.small,
     borderTopWidth: theme.border.width.slim,
     borderTopColor: theme.color.border.primary.background,
-    display: 'flex',
-    flexDirection: 'column',
     rowGap: theme.spacing.medium,
   },
 
@@ -460,7 +458,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paymentMethod: {
     flex: 1,
-    flexDirection: 'column',
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
   },
@@ -508,8 +505,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.color.foreground.dynamic.secondary,
   },
   reccuringCard: {
-    display: 'flex',
-    flexDirection: 'column',
     rowGap: theme.spacing.xSmall,
     paddingLeft: theme.spacing.medium,
     marginRight: 'auto',
@@ -525,7 +520,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 
   paymentIconsGroup: {
-    display: 'flex',
     flexDirection: 'row',
     columnGap: theme.spacing.medium,
   },

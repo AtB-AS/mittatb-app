@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {useWindowDimensions, View} from 'react-native';
+import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {BottomSheetHeader} from '@atb/components/bottom-sheet';
 
 export type BottomSheetContainerProps = {
@@ -24,6 +24,7 @@ export function BottomSheetContainer({
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
   const height = fullHeight ? maxHeight : 'auto';
+
   return (
     <View style={{maxHeight, height}} testID={testID}>
       <BottomSheetHeader
@@ -31,7 +32,7 @@ export function BottomSheetContainer({
         title={title}
         focusTitleOnLoad={focusTitleOnLoad}
       />
-      {children}
+      <ScrollView>{children}</ScrollView>
     </View>
   );
 }
