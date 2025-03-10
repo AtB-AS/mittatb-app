@@ -41,6 +41,10 @@ runs:
       shell: bash
       if: ${{ inputs.app-environment=='adhoc' }}
       run: cp env/${{ inputs.app-org }}/staging/.env fastlane/.env.default
+    - name: Copy AppStore
+      shell: bash
+      if: ${{ inputs.app-environment=='appstore' }}
+      run: cp env/${{ inputs.app-org }}/store/.env fastlane/.env.default
     - name: Setup ruby and bundle install
       uses: ruby/setup-ruby@v1
       with:
