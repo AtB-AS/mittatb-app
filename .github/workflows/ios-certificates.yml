@@ -37,7 +37,7 @@ jobs:
           bundle exec fastlane ios nuke_certificates
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-          FASTLANE_MATCH_TYPE: ${{ inputs.environment }}
+          FASTLANE_MATCH_TYPE: ${{ matrix.environment }}
           MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -68,7 +68,7 @@ jobs:
           bundle exec fastlane ios generate_new_certs
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-          FASTLANE_MATCH_TYPE: ${{ inputs.environment }}
+          FASTLANE_MATCH_TYPE: ${{ matrix.environment }}
           MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
