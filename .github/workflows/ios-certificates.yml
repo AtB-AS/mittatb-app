@@ -52,6 +52,7 @@ jobs:
     name: Regenerate & Get new certs
     environment: ${{ inputs.org }}
     timeout-minutes: 180
+    needs: nuke-certificates
     runs-on: macOS-13
     env:
       KEYCHAIN_NAME: "CI"
