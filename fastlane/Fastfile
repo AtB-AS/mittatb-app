@@ -167,7 +167,6 @@ platform :ios do
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true
     )
-    get_certs
   end
 
   desc 'Generate new certificate'
