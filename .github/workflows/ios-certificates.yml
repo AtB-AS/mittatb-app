@@ -19,7 +19,9 @@ jobs:
     runs-on: macOS-13
     strategy:
       matrix:
-        environment: [development, adhoc, appstore]
+        environment: [ development, adhoc, appstore ]
+      fail-fast: true
+      max-parallel: 1
     env:
       KEYCHAIN_NAME: "CI"
     steps:
@@ -50,7 +52,9 @@ jobs:
     runs-on: macOS-13
     strategy:
       matrix:
-        environment: [development, adhoc, appstore]
+        environment: [ development, adhoc, appstore ]
+      fail-fast: true
+      max-parallel: 1
     env:
       KEYCHAIN_NAME: "CI"
     steps:
