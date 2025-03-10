@@ -160,7 +160,6 @@ platform :ios do
       skip_confirmation: true,
       keychain_name: keychain_name,
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
-      include_all_certificates: true
     )
   end
 
@@ -207,7 +206,6 @@ platform :ios do
       keychain_name: keychain_name,
       keychain_password: ENV["MATCH_PASSWORD"],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
-      include_all_certificates: true,
       # Only fetch existing certificates and profiles, don't generate new ones
       readonly: false
     )
