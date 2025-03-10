@@ -10,8 +10,7 @@ export const DebugTokenServerAddress = () => {
 
   const saveDebugIpAddress = async (ipAddress: string) => {
     if (ipAddress.length > 0) {
-      const fullAddress = `http://${ipAddress}:8080`;
-      await storage.set('@ATB_debug_token_server_ip_address', fullAddress);
+      await storage.set('@ATB_debug_token_server_ip_address', ipAddress);
     } else {
       await storage.remove('@ATB_debug_token_server_ip_address');
     }
@@ -34,8 +33,8 @@ export const DebugTokenServerAddress = () => {
       <TextInput
         onChangeText={(text) => setIpAddress(text)}
         value={ipAddress}
-        inputMode="numeric"
-        placeholder="e.g. 10.100.1.89 (Leave blank to use default)"
+        inputMode="text"
+        placeholder="e.g. http://10.100.1.89:8080 (Leave blank to use default)"
         clearButtonMode="always"
       />
       <Button
