@@ -51,7 +51,6 @@ export const PayWithBonusPointsCheckbox = ({
       <GenericClickableSectionItem
         active={isChecked}
         onPress={onPress}
-        onAccessibilityTap={onPress}
         disabled={disabled}
         accessibilityRole="checkbox"
         accessibilityState={{checked: isChecked}}

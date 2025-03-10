@@ -75,9 +75,19 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
   };
 
   const navigateToMapScreen = (zone?: TariffZoneWithMetadata) => {
+    const isApplicableOnSingleZoneOnly =
+      selection.preassignedFareProduct.zoneSelectionMode?.includes('single') ||
+      selection.fareProductTypeConfig.configuration.zoneSelectionMode.includes(
+        'single',
+      );
+
     const builder = selectionBuilder.fromSelection(selection);
-    if (zone && fromOrTo === 'from') builder.fromZone(zone);
-    if (zone && fromOrTo === 'to') builder.toZone(zone);
+    if (zone && (fromOrTo === 'from' || isApplicableOnSingleZoneOnly)) {
+      builder.fromZone(zone);
+    }
+    if (zone && (fromOrTo === 'to' || isApplicableOnSingleZoneOnly)) {
+      builder.toZone(zone);
+    }
     const newSelection = builder.build();
 
     navigation.navigate('Root_PurchaseTariffZonesSearchByMapScreen', {

@@ -296,8 +296,8 @@ const FareContractTexts = {
     zone: _('Sone', 'Zone', 'Sone'),
     transportModes: _(
       'Transportmiddel',
-      'Transportmiddel',
       'Means of transport',
+      'Transportmiddel',
     ),
     includedBenefits: _(
       'Inkludert i billetten',
