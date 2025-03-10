@@ -11,20 +11,15 @@ on:
           - fram
           - nfk
           - troms
-      environment:
-        description: 'App environment'
-        required: true
-        type: choice
-        options:
-          - appstore
-          - development
-          - adhoc
 jobs:
   nuke-certificates:
     name: Nuke certificates
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     runs-on: macOS-13
+    strategy:
+      matrix:
+        environment: [development, adhoc, appstore]
     env:
       KEYCHAIN_NAME: "CI"
     steps:
@@ -33,7 +28,7 @@ jobs:
       - name: Setup dependencies, environment and assets
         uses: ./.github/actions/setup-certs
         with:
-          app-environment: ${{ inputs.environment }}
+          app-environment: ${{ matrix.environment }}
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane nuke
@@ -53,6 +48,9 @@ jobs:
     timeout-minutes: 180
     needs: nuke-certificates
     runs-on: macOS-13
+    strategy:
+      matrix:
+        environment: [development, adhoc, appstore]
     env:
       KEYCHAIN_NAME: "CI"
     steps:
@@ -61,7 +59,7 @@ jobs:
       - name: Setup dependencies, environment and assets
         uses: ./.github/actions/setup-certs
         with:
-          app-environment: ${{ inputs.environment }}
+          app-environment: ${{ matrix.environment }}
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane generate certificates
