@@ -40,7 +40,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const zonesRef = useRef<TouchableOpacity>(null);
+    const zonesRef = useRef<typeof TouchableOpacity>(null);
     useImperativeHandle(ref, () => ({
       zonesRef,
     }));

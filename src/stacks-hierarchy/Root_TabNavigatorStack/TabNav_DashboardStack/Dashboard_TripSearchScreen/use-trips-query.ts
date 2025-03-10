@@ -42,7 +42,7 @@ export function useTripsQuery(
   const [pageCursor, setPageCursor] = useState<string>();
   const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const cancelTokenRef = useRef<CancelTokenSource>();
+  const cancelTokenRef = useRef<CancelTokenSource>(undefined);
   const {addJourneySearchEntry} = useSearchHistoryContext();
   const analytics = useAnalyticsContext();
 

@@ -11,7 +11,11 @@ const FiltersContext = createContext<FiltersContextState | undefined>(
   undefined,
 );
 
-export const FiltersContextProvider: React.FC = ({children}) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+export const FiltersContextProvider = ({children}: Props) => {
   const [filters, setFiltersState] =
     useState<TravelSearchFiltersSelectionType>();
 

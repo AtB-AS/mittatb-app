@@ -24,7 +24,7 @@ export function useRateLimitWhen<T>(
   rateLimitDurationMS: number = 10000,
 ) {
   const [isRateLimited, setIsRateLimited] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | undefined>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const rateLimitIfNeeded = (data: T) => {
     if (predicate(data)) {

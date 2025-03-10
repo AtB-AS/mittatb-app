@@ -138,11 +138,12 @@ Geolocation.setRNConfiguration({
   skipPermissionRequests: true,
 });
 
-export const GeolocationContextProvider: React.FC = ({children}) => {
-  const [state, dispatch] = useReducer<GeolocationReducer>(
-    geolocationReducer,
-    defaultState,
-  );
+type Props = {
+  children: React.ReactNode;
+};
+
+export const GeolocationContextProvider = ({children}: Props) => {
+  const [state, dispatch] = useReducer(geolocationReducer, defaultState);
   const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
@@ -218,6 +219,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         }
       }
     }
+
     checkPermission();
   }, [appStatus, state.status]);
 

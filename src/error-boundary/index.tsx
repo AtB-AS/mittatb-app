@@ -8,10 +8,12 @@ type Props =
   | {
       type: 'full-screen';
       message?: string;
+      children: React.ReactNode;
     }
   | {
       type?: 'component';
       message: string;
+      children: React.ReactNode;
     };
 
 type State = {
@@ -40,6 +42,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
       componentStack: errorInfo.componentStack,
     });
   }
+
   render() {
     const {type = 'component', message} = this.props;
     const {hasError, errorCount, errorCode} = this.state;

@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useCallback,
   useContext,
@@ -27,7 +27,11 @@ const AnnouncementsContext = createContext<AnnouncementsContextState>({
   resetDismissedAnnouncements: () => {},
 });
 
-const AnnouncementsContextProvider: React.FC = ({children}) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+const AnnouncementsContextProvider = ({children}: Props) => {
   const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
 
   useEffect(() => {

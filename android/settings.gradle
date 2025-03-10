@@ -1,3 +1,8 @@
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+
 include ':libs:token:token-state-react-native-lib'
 project(':libs:token:token-state-react-native-lib').projectDir = new File(rootProject.projectDir, '../node_modules/@entur-private/abt-token-state-react-native-lib/android')
 
@@ -5,7 +10,6 @@ include ':libs:time:time-react-native-lib'
 project(':libs:time:time-react-native-lib').projectDir = new File(rootProject.projectDir, '../node_modules/@entur-private/abt-time-react-native-lib/android')
 
 rootProject.name = 'atb'
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
 includeBuild('../node_modules/@react-native/gradle-plugin')

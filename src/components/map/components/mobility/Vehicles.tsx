@@ -13,8 +13,8 @@ import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
 type Props = {
-  mapCameraRef: RefObject<MapboxGL.Camera>;
-  mapViewRef: RefObject<MapboxGL.MapView>;
+  mapCameraRef: RefObject<MapboxGL.Camera | null>;
+  mapViewRef: RefObject<MapboxGL.MapView | null>;
   vehicles: VehicleFeatures;
   onClusterClick: (feature: Feature<Point, Cluster>) => void;
 };
@@ -27,9 +27,9 @@ export const Vehicles = ({
 }: Props) => {
   const handleClusterClick = async (
     e: OnPressEvent,
-    clustersSource: RefObject<ShapeSource>,
+    clustersSource: RefObject<ShapeSource | null>,
   ) => {
-    const [feature, ,] = e.features;
+    const [feature] = e.features;
     if (isClusterFeature(feature)) {
       const clusterExpansionZoom =
         (await clustersSource.current?.getClusterExpansionZoom(feature)) ?? 0;
