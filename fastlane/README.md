@@ -31,13 +31,21 @@ Update new devices and provisioning profiles
 
 Removes the use of beacons from the app
 
-### ios generate_new_certificates
+### ios nuke_certificates
 
 ```sh
-[bundle exec] fastlane ios generate_new_certificates
+[bundle exec] fastlane ios nuke_certificates
 ```
 
-Generate new certificates
+Nuke certificates
+
+### ios generate_new_certs
+
+```sh
+[bundle exec] fastlane ios generate_new_certs
+```
+
+Generate new certificate
 
 ### ios get_certs
 

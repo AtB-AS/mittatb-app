@@ -132,8 +132,8 @@ platform :ios do
     end
   end
 
-  desc "Generate new certificates"
-  lane :generate_new_certificates do
+  desc "Nuke certificates"
+  lane :nuke_certificates do
     ensure_env_vars(
       env_vars: [
         'FASTLANE_MATCH_FULL_NAME',
@@ -160,13 +160,52 @@ platform :ios do
       api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
       storage_mode: 'git',
       app_identifier: identifiers,
-      force: true,
       skip_confirmation: true,
       keychain_name: keychain_name,
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true
+    )
+    get_certs
+  end
+
+  desc 'Generate new certificate'
+  lane :generate_new_certs do
+    ensure_env_vars(
+        env_vars: [
+          'FASTLANE_MATCH_FULL_NAME',
+          'FASTLANE_MATCH_EMAIL',
+          'FASTLANE_MATCH_GIT_SSH_URL',
+          'IOS_DEVELOPMENT_TEAM_ID',
+          'IOS_BUNDLE_IDENTIFIER',
+          'IOS_APP_WIDGET_IDENTIFIER',
+          'IOS_APP_INTENT_IDENTIFIER',
+          'FASTLANE_MATCH_TYPE',
+          'MATCH_DEPLOY_KEY',
+          'KEYCHAIN_NAME',
+          'MATCH_PASSWORD',
+          'APPCONNECT_API_KEY_PATH'
+        ]
+    )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    keychain_name = ENV['KEYCHAIN_NAME']
+    match(
+      username: ENV['FASTLANE_MATCH_TYPE'],
+      type: ENV['FASTLANE_MATCH_TYPE'],
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+      api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
+      storage_mode: 'git',
+      app_identifier: identifiers,
+      skip_confirmation: true,
+      keychain_name: keychain_name,
+      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
+      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
+      git_private_key: ENV['MATCH_DEPLOY_KEY'],
+      include_all_certificates: true,
+      # Only fetch existing certificates and profiles, don't generate new ones
+      readonly: false
     )
   end
 
