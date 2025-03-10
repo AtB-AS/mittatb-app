@@ -15,17 +15,18 @@ export const localLogger: ClientLogger = {
   },
   warn: (msg, err, metadata?) => {
     logToBugsnag(`Mobiletoken sdk warn message: ${msg} ${err}`, {
-      'name': metadata?.name,
-      'message' : metadata?.message,
-      'stack' : metadata?.stack
-    });    const onError = toOnErrorCallback('warning', msg, metadata);
+      name: metadata?.name,
+      message: metadata?.message,
+      stack: metadata?.stack,
+    });
+    const onError = toOnErrorCallback('warning', msg, metadata);
     if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
   },
   error: (msg, err, metadata?) => {
     logToBugsnag(`Mobiletoken sdk error message: ${msg} ${err}`, {
-      'name': metadata?.name,
-      'message' : metadata?.message,
-      'stack' : metadata?.stack
+      name: metadata?.name,
+      message: metadata?.message,
+      stack: metadata?.stack,
     });
     const onError = toOnErrorCallback('error', msg, metadata);
     if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
