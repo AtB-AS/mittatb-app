@@ -1,6 +1,6 @@
 import {dictionary, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {Alert, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';

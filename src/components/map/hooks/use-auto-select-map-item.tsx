@@ -201,5 +201,6 @@ export const useAutoSelectMapItem = (
     navigation,
     enable_vipps_login,
     hasReservationOrAvailableFareContract,
+    onEndTrip,
   ]);
 };
