@@ -136,8 +136,6 @@ platform :ios do
   lane :nuke_certificates do
     ensure_env_vars(
       env_vars: [
-        'FASTLANE_MATCH_FULL_NAME',
-        'FASTLANE_MATCH_EMAIL',
         'FASTLANE_MATCH_GIT_SSH_URL',
         'IOS_DEVELOPMENT_TEAM_ID',
         'IOS_BUNDLE_IDENTIFIER',
@@ -153,7 +151,6 @@ platform :ios do
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
     match_nuke(
-      username: ENV['FASTLANE_MATCH_TYPE'],
       type: ENV['FASTLANE_MATCH_TYPE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
@@ -162,8 +159,6 @@ platform :ios do
       app_identifier: identifiers,
       skip_confirmation: true,
       keychain_name: keychain_name,
-      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
-      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true
     )
@@ -173,8 +168,6 @@ platform :ios do
   lane :generate_new_certs do
     ensure_env_vars(
         env_vars: [
-          'FASTLANE_MATCH_FULL_NAME',
-          'FASTLANE_MATCH_EMAIL',
           'FASTLANE_MATCH_GIT_SSH_URL',
           'IOS_DEVELOPMENT_TEAM_ID',
           'IOS_BUNDLE_IDENTIFIER',
@@ -204,7 +197,6 @@ platform :ios do
     keychain_file_path = "#{keychain_path}-db"
 
     match(
-      username: ENV['FASTLANE_MATCH_TYPE'],
       type: ENV['FASTLANE_MATCH_TYPE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
@@ -214,8 +206,6 @@ platform :ios do
       skip_confirmation: true,
       keychain_name: keychain_name,
       keychain_password: ENV["MATCH_PASSWORD"],
-      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
-      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true,
       # Only fetch existing certificates and profiles, don't generate new ones
