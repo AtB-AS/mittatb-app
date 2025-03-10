@@ -27,6 +27,11 @@ export const ShmoTripDetailsSectionItem = ({
   const styles = useStyles();
   const {topContainer} = useSectionItem(props);
 
+  // format total amount to max 2 decimals
+  const formattedTotalAmount = !isNaN(parseFloat(totalAmount))
+    ? parseFloat(totalAmount).toFixed(2)
+    : 0;
+
   const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
   return (
     <View style={[topContainer, styles.container]}>
@@ -55,9 +60,9 @@ export const ShmoTripDetailsSectionItem = ({
       <View
         style={styles.rightSection}
         accessible={true}
-        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${t(
-          dictionary.currency.nok.long,
-        )}`}
+        accessibilityLabel={`${t(
+          MobilityTexts.totalCost,
+        )} ${formattedTotalAmount} ${t(dictionary.currency.nok.long)}`}
       >
         {withHeader && (
           <ThemeText
@@ -69,7 +74,7 @@ export const ShmoTripDetailsSectionItem = ({
           </ThemeText>
         )}
         <ThemeText typography="body__primary--big">
-          {totalAmount} {t(dictionary.currency.nok.short)}
+          {formattedTotalAmount} {t(dictionary.currency.nok.short)}
         </ThemeText>
       </View>
     </View>

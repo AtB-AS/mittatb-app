@@ -13,9 +13,9 @@ import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-s
 import {formatNumberToString} from '@atb/utils/numbers';
 
 type Props = {
-  pricingPlan: PricingPlanFragment;
-  currentFuelPercent: number | undefined;
-  currentRangeMeters: number;
+  pricingPlan: PricingPlanFragment | undefined;
+  currentFuelPercent: number | undefined | null;
+  currentRangeMeters: number | undefined | null;
   operatorName: string;
   brandLogoUrl: string | undefined;
 };
@@ -30,7 +30,9 @@ export const VehicleCard = ({
   const {t, language} = useTranslation();
   const styles = useStyles();
 
-  const price = formatPricePerUnit(pricingPlan, language);
+  const price = pricingPlan
+    ? formatPricePerUnit(pricingPlan, language)
+    : undefined;
 
   return (
     <Section style={styles.container}>
@@ -50,12 +52,14 @@ export const VehicleCard = ({
                   ? getBatteryLevelIcon(currentFuelPercent)
                   : BatteryHigh
               }
-              stat={formatRange(currentRangeMeters, language)}
+              stat={formatRange(currentRangeMeters ?? 0, language)}
               description={t(ScooterTexts.range)}
             />
             <VehicleCardStat
               icon={Unlock}
-              stat={formatNumberToString(pricingPlan.price, language) + ' kr'}
+              stat={
+                formatNumberToString(pricingPlan?.price ?? 0, language) + ' kr'
+              }
               description={t(ScooterTexts.unlock)}
             />
 

@@ -207,6 +207,7 @@ export const ShmoTesting = ({selectedVehicleId}: ShmoTestingProps) => {
         onPress={async () => {
           //analytics.logEvent('Map', 'Qr to Ids Pressed');
           const vehicleIdFromQrCode = await getVehicleIdFromQrCode();
+          console.log(vehicleIdFromQrCode, 'vehicleIdFromQrCode');
 
           setVehicleId(vehicleIdFromQrCode || '');
         }}

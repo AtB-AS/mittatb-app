@@ -10,6 +10,7 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {PhotoFile} from '@atb/components/camera';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -50,6 +51,10 @@ export type Root_LoginConfirmCodeScreenParams = {
 
 export type Root_LoginRequiredForFareProductScreenParams = {
   selection: PurchaseSelectionType;
+};
+
+type Root_PhotoCaptureParams = {
+  confirmImageCallback: (photo: PhotoFile) => void;
 };
 
 type Root_ParkingViolationsPhotoParams = {
@@ -126,6 +131,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
+  Root_PhotoCaptureScreen: Root_PhotoCaptureParams;
   Root_ScooterHelpScreen: Root_ScooterHelpScreenParams;
   Root_ShmoOnboardingScreen: undefined;
   Root_ContactScooterOperatorScreen: Root_ContactScooterOperatorScreenParams;

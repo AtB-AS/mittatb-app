@@ -10,15 +10,18 @@ import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 
 type ShmoTripCardProps = {
   bookingId: ShmoBooking['bookingId'];
+  //TODO: tempfix departuretime
+  departureTime: Date;
 };
 
-export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({bookingId, departureTime}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const {theme} = useThemeContext();
   const lineColor = theme.color.background.neutral[0].background;
   const backgroundColor = useTransportColor('scooter', 'escooter');
   const {data: booking} = useShmoBookingQuery(bookingId, 15000);
+  const startDateTime = booking?.departureTime ?? departureTime;
 
   return (
     <Section style={styles.container}>
@@ -34,7 +37,7 @@ export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
       />
 
       <ShmoTripDetailsSectionItem
-        startDateTime={booking?.departureTime ?? new Date()}
+        startDateTime={startDateTime}
         endDateTime={
           booking?.state === ShmoBookingState.IN_USE
             ? new Date(serverNow)

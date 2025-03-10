@@ -204,8 +204,8 @@ export const formatPricePerUnit = (
   pricePlan: PricingPlanFragment,
   language: Language,
 ) => {
-  const perMinPrice = pricePlan.perMinPricing?.[0];
-  const perKmPrice = pricePlan.perKmPricing?.[0];
+  const perMinPrice = pricePlan?.perMinPricing?.[0];
+  const perKmPrice = pricePlan?.perKmPricing?.[0];
 
   if (perMinPrice) {
     return {

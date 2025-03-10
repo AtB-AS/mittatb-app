@@ -112,6 +112,13 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
       });
+      //TODO: TEMPFIX
+      console.log('idsFromQrCode', idsFromQrCode);
+
+      idsFromQrCode.formFactor = FormFactor.Scooter;
+      idsFromQrCode.vehicleId =
+        'YRY:Vehicle:ea156985-05ff-3202-b2f8-62bb745c7b8b';
+
       idsFromQrCodeReceivedHandler(idsFromQrCode);
     },
     [getIdsFromQrCode, idsFromQrCodeReceivedHandler],

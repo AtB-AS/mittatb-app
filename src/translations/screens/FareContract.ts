@@ -58,11 +58,11 @@ const FareContractTexts = {
         `Trip started ${dateTime}`,
         `Tur startet ${dateTime}`,
       ),
-    tripEnded: (dateTime: string) =>
+    tripEnded: (dateTime?: string) =>
       _(
-        `Tur avsluttet ${dateTime}`,
-        `Trip ended ${dateTime}`,
-        `Tur avsluttet ${dateTime}`,
+        `Tur avsluttet ${dateTime ?? ''}`,
+        `Trip ended ${dateTime ?? ''}`,
+        `Tur avsluttet ${dateTime ?? ''}`,
       ),
   },
   details: {
