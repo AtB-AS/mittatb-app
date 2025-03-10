@@ -189,6 +189,20 @@ platform :ios do
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
+
+    create_keychain(
+        name: keychain_name,
+        password: ENV["MATCH_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 10800,
+        lock_when_sleeps: false
+    )
+
+    # Retrieve the keychain path from lane_context
+    keychain_path = lane_context[SharedValues::KEYCHAIN_PATH]
+    keychain_file_path = "#{keychain_path}-db"
+
     match(
       username: ENV['FASTLANE_MATCH_TYPE'],
       type: ENV['FASTLANE_MATCH_TYPE'],
@@ -199,6 +213,7 @@ platform :ios do
       app_identifier: identifiers,
       skip_confirmation: true,
       keychain_name: keychain_name,
+      keychain_password: ENV["MATCH_PASSWORD"],
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
       git_private_key: ENV['MATCH_DEPLOY_KEY'],
@@ -206,6 +221,8 @@ platform :ios do
       # Only fetch existing certificates and profiles, don't generate new ones
       readonly: false
     )
+
+    verify_installed_certificates(keychain: keychain_file_path)
   end
 
   desc 'Match certificates'
