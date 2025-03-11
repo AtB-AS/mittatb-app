@@ -353,14 +353,14 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled &&
+        {/*isShmoDeepIntegrationEnabled &&
           props.selectionMode === 'ExploreEntities' && (
             <ShmoTesting
               selectedVehicleId={selectedFeature?.properties?.id}
               showSelectedFeature={showSelectedFeature}
               setShowSelectedFeature={setShowSelectedFeature}
             />
-          )}
+          )*/}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

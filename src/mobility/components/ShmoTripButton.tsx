@@ -32,7 +32,7 @@ export const ShmoTripButton = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
 
-  const hardCodedVehicleId = 'YRY:Vehicle:ea146030-7a7f-395b-b19b-874b9cccc12b';
+  const hardCodedVehicleId = 'YRY:Vehicle:ea146030-b87a-3c0a-8737-d45e2ede3691';
 
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
