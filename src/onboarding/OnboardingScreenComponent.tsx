@@ -8,6 +8,7 @@ import {OnboardingFullScreenView} from '@atb/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
+import {ButtonProps} from '@atb/components/button';
 
 type DescriptionLink = {
   text: string;
@@ -16,15 +17,17 @@ type DescriptionLink = {
 };
 
 type OnboardingScreenComponentParams = {
-  illustration: JSX.Element;
+  illustration?: JSX.Element;
   title: string;
-  description: string;
+  description?: string;
   descriptionLink?: DescriptionLink;
   footerDescription?: string;
   buttonText: string;
+  secondaryFooterButton?: ButtonProps;
   buttonOnPress: () => void;
   testID?: string;
   headerProps?: ScreenHeaderProps;
+  contentNode?: JSX.Element;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -36,9 +39,11 @@ export const OnboardingScreenComponent = ({
   descriptionLink,
   footerDescription,
   buttonText,
+  secondaryFooterButton,
   buttonOnPress,
   testID,
   headerProps,
+  contentNode,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
@@ -52,6 +57,7 @@ export const OnboardingScreenComponent = ({
         text: buttonText,
         expanded: false,
       }}
+      secondaryFooterButton={secondaryFooterButton}
       footerDescription={footerDescription}
       fullScreenHeaderProps={headerProps}
       testID={testID ? `${testID}` : 'next'}
@@ -67,13 +73,16 @@ export const OnboardingScreenComponent = ({
           {title}
         </ThemeText>
       </View>
-      <ThemeText
-        typography="body__primary"
-        color={themeColor}
-        style={styles.description}
-      >
-        {description}
-      </ThemeText>
+      {description && (
+        <ThemeText
+          typography="body__primary"
+          color={themeColor}
+          style={styles.description}
+        >
+          {description}
+        </ThemeText>
+      )}
+      {contentNode}
       {descriptionLink && (
         <PressableOpacity
           onPress={descriptionLink.onPress}

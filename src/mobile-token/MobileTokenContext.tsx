@@ -24,8 +24,6 @@ import {
 } from '@entur-private/abt-mobile-client-sdk';
 import {isInspectable, MOBILE_TOKEN_QUERY_KEY, wipeToken} from './utils';
 
-import DeviceInfo from 'react-native-device-info';
-import {Platform} from 'react-native';
 import {tokenService} from './tokenService';
 import {QueryStatus, useQueryClient} from '@tanstack/react-query';
 import {useInterval} from '@atb/utils/use-interval';
@@ -94,7 +92,6 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   const {updateMetadata} = useIntercomMetadata();
 
   const {token_timeout_in_seconds} = useRemoteConfigContext();
-  const mobileTokenEnabled = hasEnabledMobileToken();
 
   const [isTimeout, setIsTimeout] = useState(false);
 
@@ -104,11 +101,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   useEffect(() => setIsLoggingOut(false), [userId]);
 
-  const enabled =
-    mobileTokenEnabled &&
-    !!userId &&
-    authStatus === 'authenticated' &&
-    !isLoggingOut;
+  const enabled = !!userId && authStatus === 'authenticated' && !isLoggingOut;
 
   const {
     data: nativeToken,
@@ -267,10 +260,6 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   );
 };
 
-/** Not enabled on mobile token simulator */
-const hasEnabledMobileToken = () =>
-  Platform.OS === 'android' || !DeviceInfo.isEmulatorSync();
-
 export function useMobileTokenContext() {
   const context = useContext(MobileTokenContext);
   if (context === undefined) {
@@ -316,10 +305,6 @@ const useMobileTokenStatus = (
   } = useRemoteConfigContext();
 
   const fallbackStatus = use_trygg_overgang_qr_code ? 'staticQr' : 'fallback';
-  // Treat iOS emulator as fallback
-  if (Platform.OS === 'ios' && DeviceInfo.isEmulatorSync()) {
-    return fallbackStatus;
-  }
 
   if (isTimeout)
     return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';

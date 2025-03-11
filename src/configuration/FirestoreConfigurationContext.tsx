@@ -28,6 +28,7 @@ import {
   NotificationConfigType,
   BonusProductType,
   BonusTextsType,
+  ScooterConsentLineType,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -44,6 +45,7 @@ import {
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
   mapToStopSignalButtonConfig,
+  mapToScooterConsentLines,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -75,6 +77,7 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   scooterFaqs: ScooterFaqType[] | undefined;
+  scooterConsentLines: ScooterConsentLineType[] | undefined;
   bonusProducts: BonusProductType[] | undefined;
   bonusTexts: BonusTextsType | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
@@ -123,6 +126,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     MobilityOperatorType[]
   >([]);
   const [scooterFaqs, setScooterFaqs] = useState<ScooterFaqType[]>([]);
+  const [scooterConsentLines, setScooterConsentLines] = useState<
+    ScooterConsentLineType[]
+  >([]);
   const [bonusProducts, setBonusProducts] = useState<BonusProductType[]>([]);
   const [bonusTexts, setBonusTexts] = useState<BonusTextsType>();
   const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
@@ -222,6 +228,12 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setScooterFaqs(scooterFaqs);
           }
 
+          const scooterConsentLines =
+            getScooterConsentLinesFromSnapshot(snapshot);
+          if (scooterConsentLines) {
+            setScooterConsentLines(scooterConsentLines);
+          }
+
           const bonusProducts = getBonusProductsFromSnapshot(snapshot);
           if (bonusProducts) {
             setBonusProducts(bonusProducts);
@@ -311,6 +323,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       configurableLinks,
       mobilityOperators,
       scooterFaqs,
+      scooterConsentLines,
       bonusProducts,
       bonusTexts,
       benefitIdsRequiringValueCode,
@@ -335,6 +348,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     configurableLinks,
     mobilityOperators,
     scooterFaqs,
+    scooterConsentLines,
     bonusProducts,
     bonusTexts,
     benefitIdsRequiringValueCode,
@@ -593,6 +607,9 @@ function getConfigurableLinksFromSnapshot(
     urls?.get('tileServerBaseUrl'),
   );
   const mapboxSpriteUrl = mapLanguageAndTextType(urls?.get('mapboxSpriteUrl'));
+  const mobilityTermsUrl = mapLanguageAndTextType(
+    urls?.get('mobilityTermsUrl'),
+  );
 
   return {
     ticketingInfo,
@@ -607,6 +624,7 @@ function getConfigurableLinksFromSnapshot(
     externalRealtimeMap,
     tileServerBaseUrl,
     mapboxSpriteUrl,
+    mobilityTermsUrl,
   };
 }
 
@@ -622,6 +640,13 @@ function getScooterFaqsFromSnapshot(
 ): ScooterFaqType[] | undefined {
   const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToScooterFaqs(faqs?.get('scooterFaqs'));
+}
+
+function getScooterConsentLinesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): ScooterConsentLineType[] | undefined {
+  const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToScooterConsentLines(consentLines?.get('scooterConsentLines'));
 }
 
 function getBonusProductsFromSnapshot(

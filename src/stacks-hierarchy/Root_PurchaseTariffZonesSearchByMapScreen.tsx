@@ -8,19 +8,21 @@ import {
   TariffZonesSelectorButtons,
   TariffZonesSelectorMap,
 } from '@atb/tariff-zones-selector';
+import {useParamAsState} from '@atb/utils/use-param-as-state';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByMapScreen'>;
 
 export const Root_PurchaseTariffZonesSearchByMapScreen = ({
   navigation,
-  route,
+  route: {params},
 }: Props) => {
-  const {selection} = route.params;
+  const [selection, setSelection] = useParamAsState(params.selection);
+
   const selectionMode =
     selection.fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly =
     selection.preassignedFareProduct.zoneSelectionMode?.includes('single') ||
-    selectionMode === 'single';
+    selectionMode.includes('single');
 
   const {t} = useTranslation();
   const styles = useMapStyles();
@@ -68,7 +70,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         selectNext={selectNext}
         isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
         onSelect={(selection) => {
-          navigation.setParams({selection});
+          setSelection(selection);
           setSelectNext((prev) =>
             isApplicableOnSingleZoneOnly
               ? 'from'

@@ -67,7 +67,7 @@ export const BikeStationBottomSheet = ({
     FormFactor.Bicycle,
   );
 
-  const [useBonusPoints, setUseBonusPoints] = useState(false);
+  const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
@@ -145,9 +145,11 @@ export const BikeStationBottomSheet = ({
               {isBonusProgramEnabled && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
-                  isChecked={useBonusPoints}
+                  isChecked={payWithBonusPoints}
                   onPress={() =>
-                    setUseBonusPoints((useBonusPoints) => !useBonusPoints)
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
                   }
                   style={styles.useBonusPointsSection}
                 />

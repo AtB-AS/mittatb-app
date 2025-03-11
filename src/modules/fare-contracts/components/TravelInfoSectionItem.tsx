@@ -32,16 +32,10 @@ import {isDefined} from '@atb/utils/presence';
 type Props = {fc: FareContractType};
 
 export const TravelInfoSectionItem = ({fc}: Props) => {
-  // TRANSLATION
   const {t, language} = useTranslation();
-
-  // DATA
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(fc.customerAccountId);
-  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
-    enabled: !!phoneNumber,
-  });
+
   const {
     travelRights,
     validityStatus,
@@ -49,9 +43,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     maximumNumberOfAccesses,
   } = getFareContractInfo(serverNow, fc, currentUserId);
   const firstTravelRight = travelRights[0];
-  const recipientName =
-    phoneNumber &&
-    onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
   const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
@@ -67,14 +58,9 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     userProfiles,
   );
 
-  // STYLE
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {topContainer} = useSectionItem({});
-
-  // LOGIC
-  const isSentOrReceived = isSentOrReceivedFareContract(fc);
-  const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
   return (
     <View
@@ -113,16 +99,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         )}
       </View>
 
-      {isSent && !!phoneNumber && (
-        <MessageInfoBox
-          type="warning"
-          message={t(
-            FareContractTexts.details.sentTo(
-              recipientName || formatPhoneNumber(phoneNumber),
-            ),
-          )}
-        />
-      )}
+      <SentToPhoneNumberMessageBox fc={fc} />
 
       {!!hasTravelRightAccesses(fc.travelRights) && (
         <CarnetFooter
@@ -132,6 +109,37 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         />
       )}
     </View>
+  );
+};
+
+const SentToPhoneNumberMessageBox = ({fc}: {fc: FareContractType}) => {
+  const {abtCustomerId: currentUserId} = useAuthContext();
+  const {t} = useTranslation();
+  const isSent =
+    isSentOrReceivedFareContract(fc) && fc.customerAccountId !== currentUserId;
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    isSent ? fc.customerAccountId : undefined,
+  );
+  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
+    enabled: !!phoneNumber,
+  });
+
+  if (!isSent) return null;
+  if (!phoneNumber) return null;
+
+  const recipientName = onBehalfOfAccounts?.find(
+    (a) => a.phoneNumber === phoneNumber,
+  )?.name;
+
+  return (
+    <MessageInfoBox
+      type="warning"
+      message={t(
+        FareContractTexts.details.sentTo(
+          recipientName || formatPhoneNumber(phoneNumber),
+        ),
+      )}
+    />
   );
 };
 

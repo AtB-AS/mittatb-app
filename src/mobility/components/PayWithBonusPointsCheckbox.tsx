@@ -6,7 +6,7 @@ import {
   Section,
   SectionProps,
 } from '@atb/components/sections';
-import {ThemeText} from '@atb/components/text';
+import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {BonusProductType} from '@atb/configuration/types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -37,12 +37,24 @@ export const PayWithBonusPointsCheckbox = ({
   const userBonusPoints = 4; // TODO: get actual value using hook when available
   const disabled = userBonusPoints < bonusProduct.price.amount;
 
+  const a11yLabel =
+    (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
+    screenReaderPause +
+    t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
+    screenReaderPause +
+    t(BonusProgramTexts.youHave) +
+    userBonusPoints +
+    t(BonusProgramTexts.bonusPoints);
+
   return (
     <Section {...props}>
       <GenericClickableSectionItem
         active={isChecked}
         onPress={onPress}
         disabled={disabled}
+        accessibilityRole="checkbox"
+        accessibilityState={{checked: isChecked}}
+        accessibilityLabel={a11yLabel}
       >
         <View style={styles.container}>
           <Checkbox checked={isChecked} />

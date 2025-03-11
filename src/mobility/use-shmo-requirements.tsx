@@ -1,17 +1,25 @@
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 import {ShmoRequirementEnum, ShmoRequirementType} from './types';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
+import {storage} from '@atb/storage';
 
 export const useShmoRequirements = () => {
   const {locationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
 
+  const [givenConsent, setGivenConsent] = usePersistedBoolState(
+    storage,
+    '@ATB_scooter_consent',
+    false,
+  );
+
   const requirements: ShmoRequirementType[] = [
     {
       requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
       isLoading: false,
-      isBlocking: false,
+      isBlocking: !givenConsent,
     },
     {
       requirementCode: ShmoRequirementEnum.LOCATION,
@@ -32,5 +40,6 @@ export const useShmoRequirements = () => {
     requirements,
     hasBlockers,
     numberOfBlockers,
+    setGivenConsent,
   };
 };
