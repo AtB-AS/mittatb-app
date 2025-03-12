@@ -47,7 +47,7 @@ export const useAutoSelectMapItem = (
 
   const {mutateAsync: sendShmoBookingEvent} = useSendShmoBookingEventMutation();
 
-  const onEndTrip = (file: PhotoFile, bookingId: string) => {
+  const onEndTrip = (file: string, bookingId: string) => {
     if (bookingId) {
       const finishEvent: ShmoBookingEvent = {
         event: ShmoBookingEventType.FINISH,
@@ -121,8 +121,7 @@ export const useAutoSelectMapItem = (
                 photoNavigation={(bookingId) => {
                   closeBottomSheet();
                   navigation.navigate('Root_PhotoCaptureScreen', {
-                    confirmImageCallback: (photo) =>
-                      onEndTrip(photo, bookingId),
+                    bookingId,
                   });
                 }}
                 loginCallback={() => {

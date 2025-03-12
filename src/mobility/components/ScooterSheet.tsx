@@ -201,6 +201,13 @@ export const ScooterSheet = ({
                 }}
                 text={t(MobilityTexts.trip.button.finishTrip)}
               />
+              <Button
+                expanded={true}
+                onPress={navigateSupportCallback}
+                text={t(MobilityTexts.helpText)}
+                mode="tertiary"
+                backgroundColor={theme.color.background.neutral[1]}
+              />
             </View>
           )}
         {!isLoading && (isError || (!vehicle && !bookingId)) && (

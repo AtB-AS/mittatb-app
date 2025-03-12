@@ -54,7 +54,7 @@ export type Root_LoginRequiredForFareProductScreenParams = {
 };
 
 type Root_PhotoCaptureParams = {
-  confirmImageCallback: (photo: PhotoFile) => void;
+  bookingId: string;
 };
 
 type Root_ParkingViolationsPhotoParams = {

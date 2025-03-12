@@ -32,7 +32,7 @@ export const ShmoTripButton = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
 
-  const hardCodedVehicleId = 'YRY:Vehicle:ea146030-b87a-3c0a-8737-d45e2ede3691';
+  const hardCodedVehicleId = 'YRY:Vehicle:ea146030-cf8a-32c6-b72f-34bf7438ff59';
 
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
@@ -173,7 +173,7 @@ export const ShmoTripButton = ({
         expanded={true}
         type="large"
         accessibilityRole="button"
-        onPress={showEndAlert}
+        onPress={startFinishingShmoBooking}
         loading={sendShmoBookingEventIsLoading}
         text={
           sendShmoBookingEventIsLoading
