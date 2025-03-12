@@ -393,7 +393,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   flexColumn: {
     flex: 1,
-    flexDirection: 'column',
     marginVertical: theme.spacing.medium,
   },
   flexRowCenter: {
@@ -413,41 +412,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   infoSection: {padding: theme.spacing.medium},
   purchaseInformation: {
     marginBottom: theme.spacing.medium,
-  },
-  content: {
-    padding: theme.spacing.medium,
-    rowGap: theme.spacing.medium,
-  },
-  card: {flex: 1, paddingVertical: theme.spacing.small},
-  cardTop: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  cardIcons: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-  },
-  paymentMethod: {
-    display: 'flex',
-    flexDirection: 'column',
-    rowGap: theme.spacing.xSmall,
-    paddingLeft: theme.spacing.medium,
-    marginRight: 'auto',
-  },
-  maskedPan: {
-    color: theme.color.foreground.dynamic.secondary,
-  },
-
-  actionButton: {
-    marginLeft: theme.spacing.medium,
-    display: 'flex',
-    flexDirection: 'row',
-    columnGap: theme.spacing.small,
-    paddingHorizontal: theme.spacing.medium,
   },
 }));

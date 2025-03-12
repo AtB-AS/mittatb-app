@@ -14,12 +14,12 @@ export enum SavedPaymentMethodType {
   Recurring = 'recurring',
 }
 
-type CardPaymentMethod = {
+export type CardPaymentMethod = {
   savedType: SavedPaymentMethodType;
   paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
   recurringCard?: RecurringPayment;
 };
-type VippsPaymentMethod = {
+export type VippsPaymentMethod = {
   savedType: SavedPaymentMethodType.Normal;
   paymentType: PaymentType.Vipps;
   recurringCard?: undefined;

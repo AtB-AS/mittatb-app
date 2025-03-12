@@ -1,6 +1,6 @@
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import SvgCheckboxChecked from '@atb/assets/svg/color/icons/input/CheckboxChecked';
 
@@ -22,6 +22,7 @@ export const Checkbox: React.FC<CheckedProps> = ({
   testID,
 }) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   return (
     <View
       accessibilityRole="checkbox"
@@ -30,7 +31,7 @@ export const Checkbox: React.FC<CheckedProps> = ({
       style={[style, styles.saveCheckbox, styles.saveCheckboxDefault]}
       testID={testID ? `${testID}Checkbox` : 'checkbox'}
     >
-      {checked ? <SvgCheckboxChecked width={20} /> : null}
+      {checked ? <SvgCheckboxChecked width={theme.icon.size.normal} /> : null}
     </View>
   );
 };

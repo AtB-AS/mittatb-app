@@ -9,7 +9,6 @@ import React from 'react';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {PaymentBrand} from './PaymentBrand';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
-import {MessageInfoText} from '@atb/components/message-info-text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
@@ -84,16 +83,6 @@ export const PaymentSelectionCard = (props: {
           </PressableOpacity>
         </View>
       </View>
-      {false && (
-        <>
-          {/* this is just a template for the future message implementation */}
-          <MessageInfoText
-            style={style.warningMessage}
-            message="Expiration messsage"
-            type="warning"
-          />
-        </>
-      )}
     </View>
   );
 };
@@ -103,7 +92,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacing.medium,
   },
 
-  card: {flex: 1, paddingVertical: theme.spacing.small},
+  card: {flex: 1},
   cardTop: {
     flex: 1,
     flexDirection: 'row',
@@ -114,12 +103,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    flexGrow: 1,
     justifyContent: 'flex-end',
   },
   paymentMethod: {
-    display: 'flex',
-    flexDirection: 'column',
     rowGap: theme.spacing.xSmall,
     paddingLeft: theme.spacing.medium,
     marginRight: 'auto',
@@ -130,7 +116,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 
   actionButton: {
     marginLeft: theme.spacing.medium,
-    display: 'flex',
     flexDirection: 'row',
     columnGap: theme.spacing.small,
     paddingHorizontal: theme.spacing.medium,
