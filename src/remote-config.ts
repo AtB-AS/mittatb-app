@@ -28,6 +28,7 @@ export type RemoteConfig = {
   enable_intercom: boolean;
   enable_loading_error_screen: boolean;
   enable_loading_screen: boolean;
+  enable_map_v2: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_on_behalf_of: boolean;
@@ -101,6 +102,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_intercom: false,
   enable_loading_error_screen: false,
   enable_loading_screen: true,
+  enable_map_v2: true,
   enable_non_transit_trip_search: true,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
@@ -212,6 +214,8 @@ export function getConfig(): RemoteConfig {
   const enable_loading_screen =
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
+  const enable_map_v2 =
+    values['enable_map_v2']?.asBoolean() ?? defaultRemoteConfig.enable_map_v2;
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
@@ -365,6 +369,7 @@ export function getConfig(): RemoteConfig {
     enable_intercom,
     enable_loading_error_screen,
     enable_loading_screen,
+    enable_map_v2,
     enable_non_transit_trip_search,
     enable_nynorsk,
     enable_on_behalf_of,

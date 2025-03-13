@@ -33,6 +33,7 @@ import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/Exte
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -49,7 +50,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
   onReportParkingViolation: () => void;
 } => {
-  const isMapV2Enabled = true; // todo: get remote config flag
+  const {isMapV2Enabled} = useFeatureTogglesContext();
 
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();

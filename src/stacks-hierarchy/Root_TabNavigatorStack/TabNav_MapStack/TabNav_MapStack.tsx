@@ -8,11 +8,12 @@ import {Map_TravelDetailsMapScreen} from './Map_TravelDetailsMapScreen';
 import {Map_PlaceScreen} from './Map_PlaceScreen';
 import {MapStackParams} from './navigation-types';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const Stack = createStackNavigator<MapStackParams>();
 
 export const TabNav_MapStack = () => {
-  const isMapV2Enabled = true; // todo add remote config flag
+  const {isMapV2Enabled} = useFeatureTogglesContext();
 
   return (
     <Stack.Navigator

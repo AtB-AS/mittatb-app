@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import {Map, MapV2} from '@atb/components/map';
 import {Location} from '@atb/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type Props = RootStackScreenProps<'Root_LocationSearchByMapScreen'>;
 
@@ -15,7 +16,7 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
     params: {callerRouteName, callerRouteParam, initialLocation},
   },
 }) => {
-  const isMapV2Enabled = false; // todo: get from remote config
+  const {isMapV2Enabled} = useFeatureTogglesContext();
 
   const onLocationSelect = (selectedLocation?: Location) => {
     navigation.navigate({
