@@ -100,6 +100,8 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
+  vehicles?: VehiclesState; // V1 only
+  stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
 } & (
   | {
@@ -114,6 +116,13 @@ export type MapProps = {
     }
 );
 
+export type Cluster = {
+  cluster_id: number;
+  cluster: boolean;
+  point_count_abbreviated: string;
+  point_count: number;
+};
+
 export type MapSelectionActionType =
   | {
       source: 'map-click';
@@ -125,6 +134,10 @@ export type MapSelectionActionType =
     }
   | {
       source: 'cluster-click';
+      feature: Feature<Point, Cluster>;
+    }
+  | {
+      source: 'cluster-click-v2';
       feature: Feature<Point, ClusterOfVehiclesProperties>;
     }
   | {

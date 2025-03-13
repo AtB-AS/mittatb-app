@@ -1,6 +1,7 @@
 import React from 'react';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {Map_RootScreen} from './Map_RootScreen';
+import {Map_RootScreenV2} from './Map_RootScreenV2';
 import {Map_DepartureDetailsScreen} from './Map_DepartureDetailsScreen';
 import {Map_TravelAidScreen} from './Map_TravelAidScreen';
 import {Map_TravelDetailsMapScreen} from './Map_TravelDetailsMapScreen';
@@ -11,6 +12,8 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 const Stack = createStackNavigator<MapStackParams>();
 
 export const TabNav_MapStack = () => {
+  const isMapV2Enabled = true; // todo add remote config flag
+
   return (
     <Stack.Navigator
       initialRouteName="Map_RootScreen"
@@ -18,7 +21,10 @@ export const TabNav_MapStack = () => {
         headerShown: false,
       })}
     >
-      <Stack.Screen name="Map_RootScreen" component={Map_RootScreen} />
+      <Stack.Screen
+        name="Map_RootScreen"
+        component={isMapV2Enabled ? Map_RootScreenV2 : Map_RootScreen}
+      />
       <Stack.Screen name="Map_PlaceScreen" component={Map_PlaceScreen} />
       <Stack.Screen
         name="Map_DepartureDetailsScreen"

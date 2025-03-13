@@ -12,12 +12,14 @@ export {
 } from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';
+export {MapV2} from './MapV2';
 export {
   flyToLocation,
   zoomIn,
   zoomOut,
   isClusterFeature,
   isFeaturePoint,
+  getVisibleRange,
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
@@ -51,6 +53,6 @@ export type {
 } from './types';
 export {useUserMapFilters} from './hooks/use-map-filter';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
-export {GeofencingZones} from './components/mobility';
+export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';

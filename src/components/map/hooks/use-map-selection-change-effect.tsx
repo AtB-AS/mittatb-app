@@ -24,6 +24,8 @@ export const useMapSelectionChangeEffect = (
   mapViewRef: RefObject<MapboxGL.MapView | null>,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
   startingCoordinates: Coordinates,
+  disableShouldShowMapLines?: boolean,
+  disableShouldZoomToFeature?: boolean,
 ) => {
   const [mapSelectionAction, setMapSelectionAction] = useState<
     MapSelectionActionType | undefined
@@ -37,6 +39,8 @@ export const useMapSelectionChangeEffect = (
     fromCoords,
     mapSelectionAction,
     mapViewRef,
+    disableShouldShowMapLines,
+    disableShouldZoomToFeature,
   );
   const distance =
     cameraFocusMode?.mode === 'map-lines'

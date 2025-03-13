@@ -18,11 +18,14 @@ import {
   MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
+  Cluster,
 } from './types';
 import {
   ClusterOfVehiclesProperties,
   ClusterOfVehiclesPropertiesSchema,
 } from '@atb/api/types/mobility';
+import distance from '@turf/distance';
+import {isStation} from '@atb/mobility/utils';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -103,6 +106,11 @@ export const isFeatureGeofencingZone = (
 
 export const isClusterFeature = (
   feature: Feature,
+): feature is Feature<Point, Cluster> =>
+  isFeaturePoint(feature) && feature.properties?.cluster;
+
+export const isClusterFeatureV2 = (
+  feature: Feature,
 ): feature is Feature<Point, ClusterOfVehiclesProperties> =>
   ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
 
@@ -130,6 +138,7 @@ export const getCoordinatesFromMapSelectionAction = (
     case 'map-item':
     case 'map-click':
     case 'cluster-click':
+    case 'cluster-click-v2':
       return mapPositionToCoordinates(sc.feature.geometry.coordinates);
     case 'filters-button':
     case 'external-map-button':
@@ -214,8 +223,17 @@ export const toFeatureCollection = <
   features,
 });
 
-// disable for now
-export const shouldShowMapLines = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
+/**
+ * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
+ * @param visibleBounds
+ */
+export const getVisibleRange = (visibleBounds: Position[]) => {
+  const [[_, latNE], [lonSW, latSW]] = visibleBounds;
+  return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
+};
 
-// disable for now
-export const shouldZoomToFeature = (_entityFeature: Feature<Point>) => false; //isStationFeature(entityFeature) || isStopPlaceFeature(entityFeature);
+export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
+  isStation(entityFeature) || isStopPlace(entityFeature);
+
+export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
+  isStation(entityFeature) || isStopPlace(entityFeature);

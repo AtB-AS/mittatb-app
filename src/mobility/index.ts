@@ -3,6 +3,8 @@ export {BikeStationBottomSheet} from './components/BikeStationBottomSheet';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
 export {ScooterSheet} from './components/ScooterSheet';
+export {useStations} from './use-stations';
+export {useVehicles} from './use-vehicles';
 export {
   isBikeStation,
   isCarStation,
@@ -12,4 +14,9 @@ export {
   isVehiclesClusteredFeature,
   isActive,
   findOperatorBrandImageUrl,
+  isScooterV2,
+  isBicycleV2,
+  isStationV2,
+  isBikeStationV2,
+  isCarStationV2,
 } from './utils';
