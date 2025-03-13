@@ -221,7 +221,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
   }
 
-  const searchTimeButtonRef = useRef(null);
+  const searchTimeButtonRef = useRef(undefined);
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onSearchTimePress = () => {
     openBottomSheet(
