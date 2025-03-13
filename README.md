@@ -30,6 +30,13 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Starting locally
 
+> [!TIP]
+> If it's been a while since the last time you ran the app, or there's recently been some changes to a unknown set of dependencies, this command should fix most problems:
+>
+> `yarn clean:install && yarn setup dev atb && bundle install && npx pod-install ios && cd android && ./gradlew clean && cd - && yarn start --reset-cache`
+>
+> Then `yarn ios --list-devices` or `yarn android` to build and launch the app
+
 #### First time setup
 
 0. Before cloning the project, make sure that the path you clone it into has no spaces (" ") in it.
