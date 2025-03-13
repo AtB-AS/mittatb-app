@@ -7,7 +7,14 @@ import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {View} from 'react-native';
 import {
   MapCameraConfig,
@@ -57,6 +64,7 @@ import {NationalStopRegistryFeatures} from './components/national-stop-registry-
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
+import {useIsFocused} from '@react-navigation/native';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -66,8 +74,9 @@ export const Map = (props: MapProps) => {
   const controlStyles = useControlPositionsStyle(
     props.selectionMode === 'ExploreLocation',
   );
-
+  const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations =
+    isFocused && // don't send tile requests while in the background, and always get fresh data upon enter
     props.selectionMode === 'ExploreEntities'; // should probably split map components instead
 
   const startingCoordinates = useMemo(
