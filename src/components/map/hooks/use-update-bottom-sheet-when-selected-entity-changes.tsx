@@ -38,7 +38,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   mapProps: MapProps,
   distance: number | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   closeCallback: () => void,
 ): {
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;

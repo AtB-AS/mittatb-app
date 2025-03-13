@@ -34,7 +34,11 @@ export type AlternativeType = {
 
 const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
-export const FeedbackQuestionsContextProvider: React.FC = ({children}) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+export const FeedbackQuestionsContextProvider = ({children}: Props) => {
   const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);
   const {feedback_questions} = useRemoteConfigContext();
 

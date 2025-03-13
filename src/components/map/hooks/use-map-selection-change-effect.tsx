@@ -21,8 +21,8 @@ import {useMapContext} from '@atb/MapContext';
  */
 export const useMapSelectionChangeEffect = (
   mapProps: MapProps,
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
   startingCoordinates: Coordinates,
 ) => {
   const [mapSelectionAction, setMapSelectionAction] = useState<
