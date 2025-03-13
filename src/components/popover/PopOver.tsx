@@ -14,7 +14,7 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type PopOverProps = {
-  from: React.RefObject<Component | null>;
+  from: React.RefObject<Component>;
   heading?: string;
   text: string;
   isOpen?: boolean;

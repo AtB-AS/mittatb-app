@@ -11,6 +11,7 @@ import {
   Point,
   Polygon,
   Position,
+  GeoJSON,
 } from 'geojson';
 import {
   Cluster,
@@ -43,7 +44,7 @@ export async function zoomOut(
 export function fitBounds(
   fromCoordinates: Coordinates,
   toCoordinates: Coordinates,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
   padding: MapPadding = [100, 100],
 ) {
   mapCameraRef.current?.fitBounds(
@@ -56,7 +57,7 @@ export function fitBounds(
 
 export const findEntityAtClick = async (
   clickedFeature: Feature<Point>,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
 ) => {
   const renderedFeatures = await getFeaturesAtClick(
     clickedFeature,
@@ -77,9 +78,9 @@ export const isFeatureMultiPolygon = (f: Feature): f is Feature<MultiPolygon> =>
 
 /**
  * When including MultiPolygons in GeoJSON as shape prop for MapboxGL.ShapeSource,
- * they are rendered as multiple Features with geometry.type="Polygon".
+ * they are rendered as multiple Features with geometry type of "Polygon".
  * So the GeoJSON input has type MultiPolygon, but queried features from the map have type Polygon
- * @param   {object}  feature GeoJson feature
+ * @param   {object}  f GeoJson feature
  * @returns {boolean} whether a feature has properties.polylineEncodedMultiPolygon instead of geometry.coordinates. Only GeofencingZones are known to use this.
  */
 export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
@@ -140,7 +141,7 @@ export const getCoordinatesFromMapSelectionAction = (
 
 export const getFeaturesAtClick = async (
   clickedFeature: Feature<Point>,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   filter?: Expression,
   layerIds?: string[],
 ) => {
@@ -162,11 +163,12 @@ export const getFeaturesAtClick = async (
 type FlyToLocationArgs = {
   coordinates?: Coordinates;
   padding?: CameraPadding;
-  mapCameraRef: RefObject<MapboxGL.Camera>;
+  mapCameraRef: RefObject<MapboxGL.Camera | null>;
   zoomLevel?: number;
   animationDuration?: number;
   animationMode?: CameraAnimationMode;
 };
+
 export function flyToLocation({
   coordinates,
   padding,

@@ -2,17 +2,20 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "34.0.0"
-        minSdkVersion = 23
-        compileSdkVersion = 34
-        targetSdkVersion = 34
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 35
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
         androidXBrowser = "1.7.0"
         RNMapboxMapsImpl = "mapbox"
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "26.1.10909125"
-        kotlin_version = "1.8.0"
+        kotlin_version = "1.9.25"
+        // Required for react-native-camera
+        // https://github.com/teslamotors/react-native-camera-kit/blob/master/example/android/build.gradle
+        kotlinVersion = "1.9.24"
     }
     repositories {
         google()
