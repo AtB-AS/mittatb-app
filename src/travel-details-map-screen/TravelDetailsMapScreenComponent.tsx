@@ -11,10 +11,11 @@ import {
   MapCameraConfig,
   MapFilterType,
   MapLeg,
-  MapRegion,
-  MapViewConfig,
+  NationalStopRegistryFeatures,
   PositionArrow,
   useControlPositionsStyle,
+  useMapViewConfig,
+  VehiclesAndStations,
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/GeolocationContext';
@@ -33,15 +34,13 @@ import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {useStations} from '@atb/mobility';
-import {Stations} from '@atb/components/map';
+
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
-
-const EMPTY_FILTER = {};
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -69,12 +68,14 @@ export const TravelDetailsMapScreenComponent = ({
   onPressBack,
   mode,
   subMode,
-  mapFilter,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+
+  const {isMapV2Enabled} = useFeatureTogglesContext();
+  const mapViewConfig = useMapViewConfig(true);
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -88,8 +89,6 @@ export const TravelDetailsMapScreenComponent = ({
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
-
-  const stations = useStations(mapFilter?.mobility ?? EMPTY_FILTER);
 
   const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
@@ -122,29 +121,8 @@ export const TravelDetailsMapScreenComponent = ({
           },
         };
 
-  const loadStations = (mapRegion: MapRegion) => {
-    stations?.updateRegion(mapRegion);
-  };
-
-  const onDidFinishLoadingMap = async () => {
-    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
-    const zoomLevel = await mapViewRef.current?.getZoom();
-    const center = await mapViewRef.current?.getCenter();
-    if (!visibleBounds || !zoomLevel || !center) return;
-    loadStations({
-      visibleBounds,
-      zoomLevel,
-      center,
-    });
-  };
-
   const onMapIdle = (state: MapState) => {
     setZoomLevel(state.properties.zoom);
-    loadStations({
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    });
   };
 
   useEffect(() => {
@@ -166,10 +144,9 @@ export const TravelDetailsMapScreenComponent = ({
         ref={mapViewRef}
         style={styles.map}
         pitchEnabled={false}
-        {...MapViewConfig}
+        {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onMapIdle={onMapIdle}
-        onDidFinishLoadingMap={onDidFinishLoadingMap}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -179,6 +156,20 @@ export const TravelDetailsMapScreenComponent = ({
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
+        {isMapV2Enabled && (
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={undefined}
+            onMapItemClick={undefined}
+          />
+        )}
+        {isMapV2Enabled && (
+          <VehiclesAndStations
+            selectedFeatureId={undefined}
+            onPress={undefined}
+            showVehicles={false}
+            showStations={true}
+          />
+        )}
         <MapboxGL.UserLocation
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
@@ -208,9 +199,6 @@ export const TravelDetailsMapScreenComponent = ({
             heading={cameraHeading}
             isError={isLiveConnected}
           />
-        )}
-        {stations && (
-          <Stations stations={stations.stations} mapCameraRef={mapCameraRef} />
         )}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>

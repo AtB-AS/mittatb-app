@@ -11,15 +11,17 @@ import {
   Point,
   Polygon,
   Position,
-  GeoJSON,
 } from 'geojson';
 import {
-  Cluster,
-  MapSelectionActionType,
   MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
+  Cluster,
 } from './types';
+import {
+  ClusterOfVehiclesProperties,
+  ClusterOfVehiclesPropertiesSchema,
+} from '@atb/api/types/mobility';
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
 
@@ -105,39 +107,25 @@ export const isClusterFeature = (
 ): feature is Feature<Point, Cluster> =>
   isFeaturePoint(feature) && feature.properties?.cluster;
 
+export const isClusterFeatureV2 = (
+  feature: Feature,
+): feature is Feature<Point, ClusterOfVehiclesProperties> =>
+  ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
+
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
+
+export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
+  f.properties?.entityType === 'Quay';
 
 export const isParkAndRide = (
   f: Feature<Point>,
 ): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
 
-export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
-  typeof obj === 'object' &&
-  obj !== null &&
-  'type' in obj &&
-  typeof obj.type === 'string' &&
-  obj.type === 'FeatureCollection';
-
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
   latitude: p[1],
 });
-
-export const getCoordinatesFromMapSelectionAction = (
-  sc: MapSelectionActionType,
-) => {
-  switch (sc.source) {
-    case 'my-position':
-      return sc.coords;
-    case 'map-click':
-    case 'cluster-click':
-      return mapPositionToCoordinates(sc.feature.geometry.coordinates);
-    case 'filters-button':
-    case 'external-map-button':
-      return undefined;
-  }
-};
 
 export const getFeaturesAtClick = async (
   clickedFeature: Feature<Point>,

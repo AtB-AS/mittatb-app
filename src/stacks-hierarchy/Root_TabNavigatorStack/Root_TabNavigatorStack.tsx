@@ -85,13 +85,16 @@ export const Root_TabNavigatorStack = () => {
       <Tab.Screen
         name="TabNav_MapStack"
         component={TabNav_MapStack}
-        options={tabSettings(
-          t(dictionary.navigation.map),
-          t(dictionary.navigation.map),
-          MapPin,
-          lineHeight,
-          'mapTab',
-        )}
+        options={{
+          ...tabSettings(
+            t(dictionary.navigation.map),
+            t(dictionary.navigation.map),
+            MapPin,
+            lineHeight,
+            'mapTab',
+          ),
+          ...{freezeOnBlur: false}, // needed to update the map to not load tiles from the vector source
+        }}
       />
       <Tab.Screen
         name="TabNav_DeparturesStack"

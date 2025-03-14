@@ -3,20 +3,18 @@ import {
   useGeolocationContext,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
+import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
+import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig} from './MapConfig';
+import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
-import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
-import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+import {GeofencingZoneCustomProps, MapProps} from './types';
 
 import {
   isFeaturePoint,
@@ -24,8 +22,11 @@ import {
   isFeatureGeofencingZone,
   isStopPlace,
   isParkAndRide,
+  isClusterFeatureV2,
+  isQuayFeature,
+  mapPositionToCoordinates,
+  flyToLocation,
 } from './utils';
-import isEqual from 'lodash.isequal';
 import {
   GeofencingZones,
   useGeofencingZoneTextContent,
@@ -33,8 +34,13 @@ import {
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
-import {isBicycle, isScooter} from '@atb/mobility';
-import {isCarStation, isStation} from '@atb/mobility/utils';
+import {
+  isBicycleV2,
+  isScooterV2,
+  isCarStationV2,
+  isStationV2,
+  isVehiclesClusteredFeature,
+} from '@atb/mobility';
 
 import {Snackbar, useSnackbar} from '../snackbar';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
@@ -42,19 +48,21 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
+import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
+import {useIsFocused} from '@react-navigation/native';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
-export const Map = (props: MapProps) => {
-  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
-
+export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle(false);
-
-  const mapViewConfig = useMapViewConfig(false);
+  const isFocused = useIsFocused();
+  const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig(shouldShowVehiclesAndStations);
 
   const startingCoordinates = useMemo(
     () =>
@@ -70,6 +78,8 @@ export const Map = (props: MapProps) => {
       mapViewRef,
       mapCameraRef,
       startingCoordinates,
+      true,
+      true,
     );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
@@ -81,7 +91,7 @@ export const Map = (props: MapProps) => {
       AutoSelectableBottomSheetType.Bicycle;
 
   const selectedFeatureIsAVehicle =
-    isScooter(selectedFeature) || isBicycle(selectedFeature);
+    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
   const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
@@ -119,50 +129,6 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneTextContent],
   );
 
-  const updateRegionForVehicles = props.vehicles?.updateRegion;
-  const updateRegionForStations = props.stations?.updateRegion;
-  const [mapRegion, setMapRegion] = useState<MapRegion>();
-  useEffect(() => {
-    if (!mapRegion) return;
-    updateRegionForVehicles?.(mapRegion);
-    updateRegionForStations?.(mapRegion);
-  }, [mapRegion, updateRegionForVehicles, updateRegionForStations]);
-
-  const onDidFinishLoadingMap = async () => {
-    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
-    const zoomLevel = await mapViewRef.current?.getZoom();
-    const center = await mapViewRef.current?.getCenter();
-
-    if (!visibleBounds || !zoomLevel || !center) return;
-
-    setMapRegion({
-      visibleBounds,
-      zoomLevel,
-      center,
-    });
-  };
-
-  /**
-   * OnMapIdle fires more often than expected, because of that we check if the
-   * map region is changed before updating its state.
-   *
-   * There is a slight performance overhead by deep comparing previous and new
-   * map regions on each on map idle, but since we have control over the size of
-   * the objects it should be ok. The risk of firing effects that uses the map
-   * region too often is greater than the risk introduced by the performance
-   * overhead.
-   */
-  const onMapIdle = (state: MapState) => {
-    const newMapRegion: MapRegion = {
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
-  };
-
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -184,12 +150,9 @@ export const Map = (props: MapProps) => {
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick.reduce(
-        (selected, currentFeature) =>
-          getFeatureWeight(currentFeature, positionClicked) >
-          getFeatureWeight(selected, positionClicked)
-            ? currentFeature
-            : selected,
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
       );
 
       /**
@@ -199,7 +162,12 @@ export const Map = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isFeatureGeofencingZone(featureToSelect)) {
+      if (isQuayFeature(featureToSelect)) {
+        // In this case we might want to either
+        // - select a stop place with the clicked quay sorted on top
+        // - have a bottom sheet with departures just for the clicked quay
+        return; // currently - do nothing
+      } else if (isFeatureGeofencingZone(featureToSelect)) {
         geofencingZoneOnPress(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
@@ -209,23 +177,61 @@ export const Map = (props: MapProps) => {
             source: 'map-click',
             feature: featureToSelect,
           });
-        } else if (isScooter(selectedFeature)) {
+        } else if (isScooterV2(selectedFeature)) {
           // outside of operational area, rules unspecified
           geofencingZoneOnPress(undefined);
         }
       }
     },
     [
-      geofencingZoneOnPress,
       hideSnackbar,
-      onMapClick,
       showGeofencingZones,
+      onMapClick,
+      geofencingZoneOnPress,
       selectedFeature,
     ],
   );
 
+  const onMapItemClick = useCallback(
+    async (e: OnPressEvent) => {
+      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
+      const featuresAtClick = e.features;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
+      );
+      if (isClusterFeatureV2(featureToSelect)) {
+        const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+        const toZoomLevel = Math.max(fromZoomLevel + 2);
+
+        flyToLocation({
+          coordinates: mapPositionToCoordinates(
+            featureToSelect.geometry.coordinates,
+          ),
+          padding: SLIGHTLY_RAISED_MAP_PADDING,
+          mapCameraRef,
+          zoomLevel: toZoomLevel,
+          animationDuration: 200,
+        });
+      } else if (isFeaturePoint(featureToSelect)) {
+        if (isQuayFeature(featureToSelect)) return;
+        // use isVehicleFeature here?
+        onMapClick({
+          source: 'map-item',
+          feature: featureToSelect,
+        });
+      }
+    },
+    [onMapClick],
+  );
+
+  // The onPress handling is slow on old android devices with this feature enabled
+  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
+  const enableShowSelectedFeature = showSelectedFeature; // being considered: setting this to Platform.OS !== 'android'; for temporary performance measure
+
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
@@ -233,8 +239,6 @@ export const Map = (props: MapProps) => {
             flex: 1,
           }}
           pitchEnabled={false}
-          onDidFinishLoadingMap={onDidFinishLoadingMap}
-          onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
           {...mapViewConfig}
@@ -248,7 +252,6 @@ export const Map = (props: MapProps) => {
             ]}
             {...MapCameraConfig}
           />
-
           {showGeofencingZones && (
             <GeofencingZones
               selectedVehicleId={
@@ -260,30 +263,31 @@ export const Map = (props: MapProps) => {
           )}
 
           {mapLines && <MapRoute lines={mapLines} />}
-          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {props.vehicles && (
-            <Vehicles
-              vehicles={props.vehicles.vehicles}
-              mapCameraRef={mapCameraRef}
-              mapViewRef={mapViewRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
-            />
+
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={
+              enableShowSelectedFeature
+                ? selectedFeature?.properties?.id
+                : undefined
+            }
+            onMapItemClick={onMapItemClick}
+          />
+
+          {enableShowSelectedFeature && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
           )}
-          {props.stations && (
-            <Stations
-              stations={props.stations.stations}
-              mapCameraRef={mapCameraRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
+
+          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
+          {shouldShowVehiclesAndStations && (
+            <VehiclesAndStations
+              selectedFeatureId={
+                enableShowSelectedFeature
+                  ? selectedFeature?.properties?.id
+                  : undefined
+              }
+              onPress={onMapItemClick}
+              showVehicles={true}
+              showStations={true}
             />
           )}
         </MapboxGL.MapView>
@@ -295,15 +299,6 @@ export const Map = (props: MapProps) => {
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
 
-          {(props.vehicles || props.stations) && (
-            <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
-              isLoading={
-                (props.vehicles?.isLoading || props.stations?.isLoading) ??
-                false
-              }
-            />
-          )}
           <PositionArrow
             onPress={async () => {
               const coordinates = await getCurrentCoordinates(true);
@@ -330,17 +325,27 @@ export const Map = (props: MapProps) => {
   );
 };
 
-const useMapStyles = StyleSheet.createThemeHook(() => ({
-  container: {flex: 1},
-}));
+function getFeatureToSelect(
+  featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
+  positionClicked: Position, // [lon, lat]
+) {
+  const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
+    getFeatureWeight(currentFeature, positionClicked) >
+    getFeatureWeight(selected, positionClicked)
+      ? currentFeature
+      : selected,
+  );
+  return featureToSelect;
+}
 
 function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
-      isScooter(feature) ||
-      isBicycle(feature) ||
-      isStation(feature) ||
-      isCarStation(feature) ||
+      isVehiclesClusteredFeature(feature) ||
+      isScooterV2(feature) ||
+      isBicycleV2(feature) ||
+      isStationV2(feature) ||
+      isCarStationV2(feature) ||
       isParkAndRide(feature)
       ? 3
       : 1;

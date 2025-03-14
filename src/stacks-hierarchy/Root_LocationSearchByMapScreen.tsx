@@ -3,7 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {Map} from '@atb/components/map';
+import {ExploreLocationMap} from '@atb/components/map';
 import {Location} from '@atb/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
@@ -33,10 +33,9 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
         title={t(LocationSearchTexts.mapSelection.header.title)}
         leftButton={{type: 'back'}}
       />
-      <Map
+      <ExploreLocationMap
         onLocationSelect={onLocationSelect}
         initialLocation={initialLocation}
-        selectionMode="ExploreLocation"
       />
     </View>
   );
