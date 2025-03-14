@@ -162,6 +162,14 @@ export const TravelDetailsMapScreenComponent = ({
             onMapItemClick={undefined}
           />
         )}
+        {isMapV2Enabled && (
+          <VehiclesAndStations
+            selectedFeatureId={undefined}
+            onPress={undefined}
+            showVehicles={false}
+            showStations={true}
+          />
+        )}
         <MapboxGL.UserLocation
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
@@ -190,14 +198,6 @@ export const TravelDetailsMapScreenComponent = ({
             zoomLevel={zoomLevel}
             heading={cameraHeading}
             isError={isLiveConnected}
-          />
-        )}
-        {isMapV2Enabled && (
-          <VehiclesAndStations
-            selectedFeatureId={undefined}
-            onPress={undefined}
-            showVehicles={false}
-            showStations={true}
           />
         )}
       </MapboxGL.MapView>
