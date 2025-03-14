@@ -66,6 +66,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_loading_screen',
   },
   {
+    name: 'isMapV2Enabled',
+    remoteConfigKey: 'enable_map_v2',
+  },
+  {
     name: 'isNonTransitTripSearchEnabled',
     remoteConfigKey: 'enable_non_transit_trip_search',
   },

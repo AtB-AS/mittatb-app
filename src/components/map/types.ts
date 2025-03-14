@@ -1,6 +1,13 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, FeatureCollection, LineString, Point, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  LineString,
+  Point,
+  Position,
+} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
@@ -24,17 +31,7 @@ import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
-
-/**
- * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
- * should behave
- *  - ExploreEntities: If only the map entities (Bus, Trams stops etc.) should be
- *    interactable, and will open a bottom sheet with details for the entity.
- *  - ExploreLocation: If every selected location should be interactable. It
- *    also shows the Location bar on top of the Map to show the currently
- *    selected location
- */
-export type MapSelectionMode = 'ExploreEntities' | 'ExploreLocation';
+import {ClusterOfVehiclesProperties} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -92,21 +89,13 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  vehicles?: VehiclesState;
-  stations?: StationsState;
+  vehicles?: VehiclesState; // V1 only
+  stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
-} & (
-  | {
-      selectionMode: 'ExploreLocation';
-      onLocationSelect: SelectionLocationCallback;
-    }
-  | {
-      selectionMode: 'ExploreEntities';
-      navigateToQuay: NavigateToQuayCallback;
-      navigateToDetails: NavigateToDetailsCallback;
-      navigateToTripSearch: NavigateToTripSearchCallback;
-    }
-);
+  navigateToQuay: NavigateToQuayCallback;
+  navigateToDetails: NavigateToDetailsCallback;
+  navigateToTripSearch: NavigateToTripSearchCallback;
+};
 
 export type Cluster = {
   cluster_id: number;
@@ -121,8 +110,16 @@ export type MapSelectionActionType =
       feature: Feature<Point>;
     }
   | {
+      source: 'map-item';
+      feature: Feature<Point>;
+    }
+  | {
       source: 'cluster-click';
       feature: Feature<Point, Cluster>;
+    }
+  | {
+      source: 'cluster-click-v2';
+      feature: Feature<Point, ClusterOfVehiclesProperties>;
     }
   | {
       source: 'my-position';
@@ -235,4 +232,12 @@ type GeofencingZoneExplanationType = {
 
 export type GeofencingZoneExplanationsType = {
   [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+};
+
+export type SelectedMapItemProperties = GeoJsonProperties & {
+  id?: string;
+};
+// export type SelectedFeature = Feature<Point, SelectedMapItemProperties>;
+export type SelectedFeatureIdProp = {
+  selectedFeatureId: SelectedMapItemProperties['id'];
 };
