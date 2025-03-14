@@ -11,9 +11,11 @@ import {
   MapCameraConfig,
   MapFilterType,
   MapLeg,
-  MapViewConfig,
+  NationalStopRegistryFeatures,
   PositionArrow,
   useControlPositionsStyle,
+  useMapViewConfig,
+  VehiclesAndStations,
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/GeolocationContext';
@@ -38,9 +40,7 @@ import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
-
-// todo: re-add this
-// import {VehiclesAndStations} from '@atb/components/map/components/mobility/VehiclesAndStations';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -73,6 +73,9 @@ export const TravelDetailsMapScreenComponent = ({
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+
+  const {isMapV2Enabled} = useFeatureTogglesContext();
+  const mapViewConfig = useMapViewConfig(true);
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -141,7 +144,7 @@ export const TravelDetailsMapScreenComponent = ({
         ref={mapViewRef}
         style={styles.map}
         pitchEnabled={false}
-        {...MapViewConfig}
+        {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onMapIdle={onMapIdle}
       >
@@ -153,6 +156,12 @@ export const TravelDetailsMapScreenComponent = ({
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
+        {isMapV2Enabled && (
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={undefined}
+            onMapItemClick={undefined}
+          />
+        )}
         <MapboxGL.UserLocation
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
@@ -183,13 +192,14 @@ export const TravelDetailsMapScreenComponent = ({
             isError={isLiveConnected}
           />
         )}
-        {/* Todo: re-add */}
-        {/* <VehiclesAndStations
-          selectedFeatureId={undefined}
-          onPress={undefined}
-          showVehicles={false}
-          showStations={true}
-        /> */}
+        {isMapV2Enabled && (
+          <VehiclesAndStations
+            selectedFeatureId={undefined}
+            onPress={undefined}
+            showVehicles={false}
+            showStations={true}
+          />
+        )}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow

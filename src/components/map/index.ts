@@ -15,6 +15,7 @@ export {Map} from './Map';
 export {MapV2} from './MapV2';
 export {ExploreLocationMap} from './ExploreLocationMap';
 export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {
   flyToLocation,
   zoomIn,
