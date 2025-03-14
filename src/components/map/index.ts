@@ -3,7 +3,6 @@ export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {SelectionPin} from './components/SelectionPin';
 export {
-  MapViewConfig,
   MapCameraConfig,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
