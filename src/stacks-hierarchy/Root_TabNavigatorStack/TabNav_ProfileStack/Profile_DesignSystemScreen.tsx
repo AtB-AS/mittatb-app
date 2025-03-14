@@ -818,7 +818,7 @@ export const Profile_DesignSystemScreen = ({
                   interactiveColor={theme.color.interactive[0]}
                   rightIcon={{
                     svg: Delete,
-                    notification: {color: theme.color.interactive[0].default},
+                    notificationColor: theme.color.interactive[0].default,
                   }}
                   style={{margin: 4}}
                 />
@@ -856,7 +856,7 @@ export const Profile_DesignSystemScreen = ({
                     interactiveColor={theme.color.interactive[0]}
                     leftIcon={{
                       svg: Add,
-                      notification: {color: theme.color.status.valid.primary},
+                      notificationColor: theme.color.status.valid.primary,
                     }}
                     style={{margin: 4}}
                   />
