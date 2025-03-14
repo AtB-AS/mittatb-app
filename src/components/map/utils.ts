@@ -11,10 +11,8 @@ import {
   Point,
   Polygon,
   Position,
-  GeoJSON,
 } from 'geojson';
 import {
-  MapSelectionActionType,
   MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
@@ -128,23 +126,6 @@ export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
   latitude: p[1],
 });
-
-export const getCoordinatesFromMapSelectionAction = (
-  sc: MapSelectionActionType,
-) => {
-  switch (sc.source) {
-    case 'my-position':
-      return sc.coords;
-    case 'map-item':
-    case 'map-click':
-    case 'cluster-click':
-    case 'cluster-click-v2':
-      return mapPositionToCoordinates(sc.feature.geometry.coordinates);
-    case 'filters-button':
-    case 'external-map-button':
-      return undefined;
-  }
-};
 
 export const getFeaturesAtClick = async (
   clickedFeature: Feature<Point>,
