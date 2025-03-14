@@ -12,6 +12,7 @@ export {
 } from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';
+export {MapV2} from './MapV2';
 export {
   flyToLocation,
   zoomIn,
@@ -54,3 +55,4 @@ export {useUserMapFilters} from './hooks/use-map-filter';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
 export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
+export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';

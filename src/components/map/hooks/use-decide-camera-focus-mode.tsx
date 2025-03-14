@@ -35,6 +35,8 @@ export const useDecideCameraFocusMode = (
   fromCoords: Coordinates | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView | null>,
+  disableShouldShowMapLines?: boolean,
+  disableShouldZoomToFeature?: boolean,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
@@ -63,7 +65,10 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
-      if (mapSelectionAction.source === 'cluster-click') {
+      if (
+        mapSelectionAction.source === 'cluster-click' ||
+        mapSelectionAction.source === 'cluster-click-v2'
+      ) {
         setCameraFocusMode(undefined);
         return;
       }
@@ -83,7 +88,14 @@ export const useDecideCameraFocusMode = (
             mapSelectionAction.feature,
             mapViewRef,
           );
-          setCameraFocusMode(await getFocusMode(entityFeature, fromCoords));
+          setCameraFocusMode(
+            await getFocusMode(
+              entityFeature,
+              fromCoords,
+              !!disableShouldShowMapLines,
+              !!disableShouldZoomToFeature,
+            ),
+          );
         }
       }
     })();
@@ -129,9 +141,11 @@ const fetchMapLines = async (
 const getFocusMode = async (
   entityFeature: Feature<Point> | undefined,
   fromCoords: Coordinates | undefined,
+  disableShouldShowMapLines: boolean,
+  disableShouldZoomToFeature: boolean,
 ): Promise<CameraFocusModeType | undefined> => {
   if (!entityFeature) return undefined;
-  if (shouldShowMapLines(entityFeature)) {
+  if (!disableShouldShowMapLines && shouldShowMapLines(entityFeature)) {
     const result = await fetchMapLines(fromCoords, entityFeature);
     if (result?.mapLines) {
       return {
@@ -144,6 +158,6 @@ const getFocusMode = async (
   return {
     mode: 'entity',
     entityFeature,
-    zoomTo: shouldZoomToFeature(entityFeature),
+    zoomTo: !disableShouldZoomToFeature && shouldZoomToFeature(entityFeature),
   };
 };

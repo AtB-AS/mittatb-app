@@ -1,5 +1,4 @@
 import {Feature, Point, Position} from 'geojson';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
@@ -14,6 +13,7 @@ import {
 import buffer from '@turf/buffer';
 import difference from '@turf/difference';
 import {featureCollection} from '@turf/helpers';
+
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
@@ -35,6 +35,24 @@ import {
   BatteryLow,
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
+import {
+  StationFeature,
+  StationFeatureSchema,
+  VehicleFeature,
+  VehicleFeatureSchema,
+  VehiclesClusteredFeature,
+  VehiclesClusteredFeatureSchema,
+} from '@atb/api/types/mobility';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+
+export const isVehiclesClusteredFeature = (
+  feature: Feature<Point> | undefined,
+): feature is VehiclesClusteredFeature =>
+  VehiclesClusteredFeatureSchema.safeParse(feature).success;
+
+export const isVehicleFeature = (
+  feature: Feature<Point> | undefined,
+): feature is VehicleFeature => VehicleFeatureSchema.safeParse(feature).success;
 
 export const isScooter = (
   feature: Feature<Point> | undefined,
@@ -42,16 +60,41 @@ export const isScooter = (
   feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter ||
   feature?.properties?.vehicleType?.formFactor === FormFactor.ScooterStanding;
 
+export const isScooterV2 = (
+  feature: Feature<Point> | undefined,
+): feature is VehicleFeature & {
+  properties: {
+    vehicle_type_form_factor: FormFactor.Scooter | FormFactor.ScooterStanding;
+  };
+} =>
+  isVehicleFeature(feature) &&
+  (feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
+    feature?.properties?.vehicle_type_form_factor ===
+      FormFactor.ScooterStanding);
+
 export const isBicycle = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, VehicleBasicFragment> =>
   feature?.properties?.vehicleType?.formFactor === FormFactor.Bicycle &&
   !isStation(feature);
 
+export const isBicycleV2 = (
+  feature: Feature<Point> | undefined,
+): feature is VehicleFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Bicycle};
+} =>
+  isVehiclesClusteredFeature(feature) &&
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
+  !isStationV2(feature);
+
 export const isStation = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, StationBasicFragment> =>
   feature?.properties?.__typename === 'Station';
+
+export const isStationV2 = (
+  feature: Feature<Point> | undefined,
+): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
 
 export const isBikeStation = (
   feature: Feature<Point> | undefined,
@@ -62,6 +105,14 @@ export const isBikeStation = (
     )) ??
   false;
 
+export const isBikeStationV2 = (
+  feature: Feature<Point> | undefined,
+): feature is StationFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Bicycle};
+} =>
+  isStationV2(feature) &&
+  feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
+
 export const isCarStation = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, StationBasicFragment> =>
@@ -71,6 +122,14 @@ export const isCarStation = (
     )) ??
   false;
 
+export const isCarStationV2 = (
+  feature: Feature<Point> | undefined,
+): feature is StationFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Car};
+} =>
+  isStationV2(feature) &&
+  feature.properties?.vehicle_type_form_factor === FormFactor.Car;
+
 export const getAvailableVehicles = (
   types: VehicleTypeAvailabilityBasicFragment[] | undefined,
   formFactor: FormFactor,
@@ -79,15 +138,6 @@ export const getAvailableVehicles = (
     ?.filter((type) => type.vehicleType.formFactor === formFactor)
     .map((type) => type.count)
     .reduce((sum, count) => sum + count, 0) ?? 0;
-
-export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
-  t: T | undefined | null,
-) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
-
-export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
-  (plan.perKmPricing && plan.perMinPricing) ||
-  (plan.perKmPricing && plan.perKmPricing.length > 1) ||
-  (plan.perMinPricing && plan.perMinPricing.length > 1);
 
 /**
  * Determines if vehicles need to be reloaded, by checking if the
@@ -165,6 +215,15 @@ const mapRegionToArea = (
   const range = getRadius(region.visibleBounds, bufferDistance);
   return {lat, lon, range};
 };
+
+export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
+  t: T | undefined | null,
+) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
+
+export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
+  (plan.perKmPricing && plan.perMinPricing) ||
+  (plan.perKmPricing && plan.perKmPricing.length > 1) ||
+  (plan.perMinPricing && plan.perMinPricing.length > 1);
 
 export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
