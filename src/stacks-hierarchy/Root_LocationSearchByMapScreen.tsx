@@ -3,10 +3,9 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {Map, MapV2} from '@atb/components/map';
+import {ExploreLocationMap} from '@atb/components/map';
 import {Location} from '@atb/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type Props = RootStackScreenProps<'Root_LocationSearchByMapScreen'>;
 
@@ -16,8 +15,6 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
     params: {callerRouteName, callerRouteParam, initialLocation},
   },
 }) => {
-  const {isMapV2Enabled} = useFeatureTogglesContext();
-
   const onLocationSelect = (selectedLocation?: Location) => {
     navigation.navigate({
       name: callerRouteName as any,
@@ -36,19 +33,10 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
         title={t(LocationSearchTexts.mapSelection.header.title)}
         leftButton={{type: 'back'}}
       />
-      {isMapV2Enabled ? (
-        <MapV2
-          onLocationSelect={onLocationSelect}
-          initialLocation={initialLocation}
-          selectionMode="ExploreLocation"
-        />
-      ) : (
-        <Map
-          onLocationSelect={onLocationSelect}
-          initialLocation={initialLocation}
-          selectionMode="ExploreLocation"
-        />
-      )}
+      <ExploreLocationMap
+        onLocationSelect={onLocationSelect}
+        initialLocation={initialLocation}
+      />
     </View>
   );
 };
