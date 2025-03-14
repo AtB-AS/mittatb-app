@@ -4,6 +4,7 @@ import {CameraStop} from '@rnmapbox/maps';
 import {Dimensions} from 'react-native';
 
 export const MapViewConfig = {
+  // todo remove MapViewConfig from this file
   compassEnabled: true,
   scaleBarEnabled: false,
   // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:

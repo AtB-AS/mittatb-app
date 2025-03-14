@@ -10,7 +10,7 @@ import {Feature, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, MapViewConfig} from './MapConfig';
+import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
@@ -29,6 +29,7 @@ import isEqual from 'lodash.isequal';
 import {
   GeofencingZones,
   useGeofencingZoneTextContent,
+  useMapViewConfig,
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
@@ -52,6 +53,8 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle(false);
+
+  const mapViewConfig = useMapViewConfig(false);
 
   const startingCoordinates = useMemo(
     () =>
@@ -234,7 +237,7 @@ export const Map = (props: MapProps) => {
           onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
-          {...MapViewConfig}
+          {...mapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
