@@ -33,17 +33,6 @@ import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ClusterOfVehiclesProperties} from '@atb/api/types/mobility';
 
-/**
- * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
- * should behave
- *  - ExploreEntities: If only the map entities (Bus, Trams stops etc.) should be
- *    interactable, and will open a bottom sheet with details for the entity.
- *  - ExploreLocation: If every selected location should be interactable. It
- *    also shows the Location bar on top of the Map to show the currently
- *    selected location
- */
-export type MapSelectionMode = 'ExploreEntities' | 'ExploreLocation';
-
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
@@ -103,18 +92,10 @@ export type MapProps = {
   vehicles?: VehiclesState; // V1 only
   stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
-} & (
-  | {
-      selectionMode: 'ExploreLocation';
-      onLocationSelect: SelectionLocationCallback;
-    }
-  | {
-      selectionMode: 'ExploreEntities';
-      navigateToQuay: NavigateToQuayCallback;
-      navigateToDetails: NavigateToDetailsCallback;
-      navigateToTripSearch: NavigateToTripSearchCallback;
-    }
-);
+  navigateToQuay: NavigateToQuayCallback;
+  navigateToDetails: NavigateToDetailsCallback;
+  navigateToTripSearch: NavigateToTripSearchCallback;
+};
 
 export type Cluster = {
   cluster_id: number;

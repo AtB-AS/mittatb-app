@@ -14,8 +14,6 @@ import {
   MapViewConfig,
   SLIGHTLY_RAISED_MAP_PADDING,
 } from './MapConfig';
-import {SelectionPin} from './components/SelectionPin';
-import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -55,23 +53,19 @@ import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const controlStyles = useControlPositionsStyle(
-    props.selectionMode === 'ExploreLocation',
-  );
+  const controlStyles = useControlPositionsStyle(false);
   const isFocused = useIsFocused();
-  const shouldShowVehiclesAndStations =
-    isFocused && // don't send tile requests while in the background, and always get fresh data upon enter
-    props.selectionMode === 'ExploreEntities'; // should probably split map components instead
+  const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
 
   const startingCoordinates = useMemo(
     () =>
@@ -81,20 +75,15 @@ export const MapV2 = (props: MapProps) => {
     [initialLocation],
   );
 
-  const {
-    mapLines,
-    selectedCoordinates,
-    onMapClick,
-    selectedFeature,
-    onReportParkingViolation,
-  } = useMapSelectionChangeEffect(
-    props,
-    mapViewRef,
-    mapCameraRef,
-    startingCoordinates,
-    true,
-    true,
-  );
+  const {mapLines, onMapClick, selectedFeature, onReportParkingViolation} =
+    useMapSelectionChangeEffect(
+      props,
+      mapViewRef,
+      mapCameraRef,
+      startingCoordinates,
+      true,
+      true,
+    );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
 
@@ -124,7 +113,6 @@ export const MapV2 = (props: MapProps) => {
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
-    props.selectionMode === 'ExploreEntities' &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
@@ -157,15 +145,6 @@ export const MapV2 = (props: MapProps) => {
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
-
-      // should split components instead of this, ExploreLocation should only depend on location state, not features
-      if (props.selectionMode == 'ExploreLocation') {
-        onMapClick({
-          source: 'map-click',
-          feature,
-        });
-        return;
-      }
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -210,7 +189,6 @@ export const MapV2 = (props: MapProps) => {
       }
     },
     [
-      props.selectionMode,
       hideSnackbar,
       showGeofencingZones,
       onMapClick,
@@ -219,7 +197,7 @@ export const MapV2 = (props: MapProps) => {
     ],
   );
 
-  const onMapItemClickHandler = useCallback(
+  const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
@@ -252,10 +230,6 @@ export const MapV2 = (props: MapProps) => {
     },
     [onMapClick],
   );
-  const onMapItemClick =
-    props.selectionMode === 'ExploreLocation'
-      ? undefined
-      : onMapItemClickHandler;
 
   // The onPress handling is slow on old android devices with this feature enabled
   const [showSelectedFeature, setShowSelectedFeature] = useState(true);
@@ -263,12 +237,6 @@ export const MapV2 = (props: MapProps) => {
 
   return (
     <View style={{flex: 1}}>
-      {props.selectionMode === 'ExploreLocation' && (
-        <LocationBar
-          coordinates={selectedCoordinates || startingCoordinates}
-          onSelect={props.onLocationSelect}
-        />
-      )}
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
@@ -315,15 +283,11 @@ export const MapV2 = (props: MapProps) => {
             onMapItemClick={onMapItemClick}
           />
 
-          {props.selectionMode !== 'ExploreLocation' &&
-            enableShowSelectedFeature && (
-              <SelectedFeatureIcon selectedFeature={selectedFeature} />
-            )}
+          {enableShowSelectedFeature && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
-            <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
-          )}
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={
@@ -357,14 +321,13 @@ export const MapV2 = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled &&
-          props.selectionMode === 'ExploreEntities' && (
-            <ShmoTesting
-              selectedVehicleId={selectedFeature?.properties?.id}
-              showSelectedFeature={showSelectedFeature}
-              setShowSelectedFeature={setShowSelectedFeature}
-            />
-          )}
+        {isShmoDeepIntegrationEnabled && (
+          <ShmoTesting
+            selectedVehicleId={selectedFeature?.properties?.id}
+            showSelectedFeature={showSelectedFeature}
+            setShowSelectedFeature={setShowSelectedFeature}
+          />
+        )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

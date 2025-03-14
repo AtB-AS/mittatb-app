@@ -71,7 +71,6 @@ export const Map_RootScreenV2 = ({
 
   return (
     <MapV2
-      selectionMode="ExploreEntities"
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}
