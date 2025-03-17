@@ -183,13 +183,6 @@ export const TravelDetailsMapScreenComponent = ({
             isError={isLiveConnected}
           />
         )}
-        {/* Todo: re-add */}
-        {/* <VehiclesAndStations
-          selectedFeatureId={undefined}
-          onPress={undefined}
-          showVehicles={false}
-          showStations={true}
-        /> */}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
