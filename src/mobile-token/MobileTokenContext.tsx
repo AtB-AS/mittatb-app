@@ -135,7 +135,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     data: remoteTokens,
     status: remoteTokensStatus,
     error: remoteTokenError,
-  } = useListRemoteTokensQuery(enabled, nativeToken);
+  } = useListRemoteTokensQuery(
+    enabled && nativeToken !== undefined,
+    nativeToken,
+  );
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
   useEffect(() => {

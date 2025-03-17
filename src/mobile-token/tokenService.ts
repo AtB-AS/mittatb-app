@@ -39,7 +39,10 @@ const IsEmulatorHeaderName = 'Atb-Is-Emulator';
 
 export type TokenService = RemoteTokenService & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
-  listTokens: (traceId: string) => Promise<RemoteToken[]>;
+  listTokens: (
+    secureContainer: string | undefined,
+    traceId: string,
+  ) => Promise<RemoteToken[]>;
   toggle: (
     tokenId: string,
     traceId: string,
@@ -202,10 +205,11 @@ export const tokenService: TokenService = {
       )
       .then((res) => res.data.removed)
       .catch(handleError),
-  listTokens: async (traceId: string) =>
+  listTokens: async (secureContainer, traceId) =>
     client
       .get<ListResponse>('/tokens/v4/list', {
         headers: {
+          [SignedTokenHeaderName]: secureContainer,
           [CorrelationIdHeaderName]: traceId,
         },
         baseURL: await getBaseUrl(),
