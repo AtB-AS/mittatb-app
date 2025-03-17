@@ -39,8 +39,6 @@ import {
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 
-// todo: re-add this
-// import {VehiclesAndStations} from '@atb/components/map/components/mobility/VehiclesAndStations';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
