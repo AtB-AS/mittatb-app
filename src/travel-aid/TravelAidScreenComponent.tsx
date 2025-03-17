@@ -20,7 +20,6 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
   FocusedEstimatedCallState,
@@ -58,7 +57,7 @@ export const TravelAidScreenComponent = ({
   });
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useThemeContext();
+  const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad();
 
   const hasSentStopSignal = sentStopSignalsCache.hasSent(
@@ -94,9 +93,6 @@ export const TravelAidScreenComponent = ({
         backgroundColor: bgContrastColor.background,
       }}
     >
-      <StatusBarOnFocus
-        barStyle={themeName === 'light' ? 'dark-content' : 'light-content'}
-      />
       <Button
         expanded={false}
         onPress={goBack}
