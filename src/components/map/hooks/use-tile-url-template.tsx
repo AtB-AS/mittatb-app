@@ -19,7 +19,7 @@ export const useTileUrlTemplate = (
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfigurationContext();
   const {userId} = useAuthContext();
-  const userIdParam = !userId ? '' : '?' + userId;
+  const userIdParam = !userId ? '' : '?userId=' + userId;
   const tileServerBaseUrl = getTextForLanguage(
     configurableLinks?.tileServerBaseUrl,
     language,
