@@ -39,7 +39,6 @@ import {
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 
-
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
   vehicleWithPosition?: VehicleWithPosition;
