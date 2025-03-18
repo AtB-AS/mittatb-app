@@ -22,7 +22,12 @@ import {
   ActivatedToken,
   AttestationSabotage,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable, MOBILE_TOKEN_QUERY_KEY, wipeToken} from './utils';
+import {
+  getMobileTokenErrorHandlingStrategy,
+  isInspectable,
+  MOBILE_TOKEN_QUERY_KEY,
+  wipeToken,
+} from './utils';
 
 import {tokenService} from './tokenService';
 import {QueryStatus, useQueryClient} from '@tanstack/react-query';
@@ -67,7 +72,6 @@ type MobileTokenContextState = {
     nativeTokenStatus: QueryStatus;
     remoteTokensStatus: QueryStatus;
     createToken: () => void;
-    validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
     wipeToken: () => void;
@@ -86,6 +90,8 @@ type Props = {
   children: React.ReactNode;
 };
 
+const RETRY_MAX_COUNT = 3;
+
 export const MobileTokenContextProvider = ({children}: Props) => {
   const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
@@ -97,6 +103,8 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const [isRenewingOrResetting, setIsRenewingOrResetting] = useState(false);
+  const [retryCount, setRetryCount] = useState<number>(0);
   const traceId = useRef<string>(uuid());
 
   useEffect(() => setIsLoggingOut(false), [userId]);
@@ -177,6 +185,68 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     }
   }, [nativeTokenStatus, token_timeout_in_seconds]);
 
+  /**
+   * This useEffect is used to check if the token needs renewal/reset.
+   *
+   * After loading both local/native token and remote tokens list,
+   * check if the local token has a counterpart remote token.
+   *
+   * If the local token id exists in remote tokens list id, do nothing.
+   * If the local token id doesn't exit in remote tokens list, the
+   * remote token might be expired or removed, do this:
+   *
+   *      1.  Try renewing the token
+   *      2a. If the renewal success, good
+   *      2b. If renewal fails, check the error, in a normal operation
+   *          it should return TokenMustBeReplacedError.
+   *      3.  Wipe the token and re-create token.
+   *      4.  Reset the queries so it can re-check if the token is
+   *          created properly.
+   *      5.  If the token is not found until 3 times,
+   */
+  useEffect(() => {
+    const renewOrResetToken = async (
+      token: ActivatedToken,
+      traceId: string,
+    ) => {
+      try {
+        logToBugsnag(`Try renewing token ${token.tokenId}`);
+        setIsRenewingOrResetting(true);
+        const renewedToken = await mobileTokenClient.renew(token, traceId);
+        logToBugsnag(`Succesfully renewed token ${renewedToken.tokenId}`);
+      } catch (error: any) {
+        logToBugsnag(
+          `Error renewing token ${token.tokenId} with trace ID ${traceId}`,
+        );
+        if (getMobileTokenErrorHandlingStrategy(error) === 'reset') {
+          logToBugsnag(`Error handling during renewal suggests resetting`);
+          logToBugsnag(
+            `Wiping token ${token.tokenId} with trace ID ${traceId}`,
+          );
+          await wipeToken([token.tokenId], traceId);
+          logToBugsnag(`Token wiped`);
+        }
+      } finally {
+        logToBugsnag(`Resetting queries to restart token process`);
+        queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+        setIsRenewingOrResetting(false);
+        setRetryCount((previous) => previous + 1);
+      }
+    };
+
+    if (remoteTokens && nativeToken) {
+      const isTokenExist =
+        remoteTokens.filter((token) => token.id === nativeToken.tokenId)
+          .length > 0;
+      if (!isTokenExist && retryCount < RETRY_MAX_COUNT) {
+        logToBugsnag(
+          `Token ${nativeToken.tokenId} does not exist on remote, should try to renew or reset the token.`,
+        );
+        renewOrResetToken(nativeToken, traceId.current);
+      }
+    }
+  }, [queryClient, nativeToken, remoteTokens, retryCount]);
+
   useInterval(
     () => checkRenewMutate({token: nativeToken, traceId: uuid()}),
     [checkRenewMutate, nativeToken],
@@ -190,6 +260,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     remoteTokensStatus,
     nativeToken,
     remoteTokens,
+    isRenewingOrResetting,
     isTimeout,
   );
 
@@ -218,7 +289,6 @@ export const MobileTokenContextProvider = ({children}: Props) => {
           nativeTokenStatus,
           remoteTokensStatus,
           createToken: () => mobileTokenClient.create(uuid()),
-          validateToken: () => tokenService.validate(nativeToken!, uuid()),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
@@ -299,6 +369,7 @@ const useMobileTokenStatus = (
   remoteTokensStatus: QueryStatus,
   nativeToken: ActivatedToken | undefined,
   remoteTokens: RemoteToken[] | undefined,
+  isRenewingOrResetting: boolean,
   isTimeout: boolean,
 ): MobileTokenStatus => {
   const {
@@ -311,6 +382,8 @@ const useMobileTokenStatus = (
 
   if (isTimeout)
     return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';
+
+  if (isRenewingOrResetting) return 'loading';
 
   switch (loadNativeTokenStatus) {
     case 'loading':

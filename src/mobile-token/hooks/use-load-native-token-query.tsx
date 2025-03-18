@@ -2,8 +2,6 @@ import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
 import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
-import {tokenService} from '@atb/mobile-token/tokenService';
-import {TokenMustBeRenewedRemoteTokenStateError} from '@entur-private/abt-token-server-javascript-interface';
 import {
   getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
@@ -82,50 +80,6 @@ const loadNativeToken = async (userId: string, traceId: string) => {
           throw err;
       }
     }
-
-    if (token) {
-      /*
-      If native token exists then validate it. The validation request will
-      throw an error if validation fails, and these errors will be handled
-      as best possible.
-       */
-      try {
-        logToBugsnag(`Validating token ${token.getTokenId()}`);
-        await tokenService.validate(token, traceId);
-      } catch (err: any) {
-        logToBugsnag(
-          `Validation error on token ${token.getTokenId()}`,
-          errorToMetadata(err),
-        );
-        // get the SDK-recommended error handling strategy
-        const tokenSdkErrorHandling = getMobileTokenErrorHandlingStrategy(err);
-        if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
-          logToBugsnag(
-            `Token needs renewal ${token.getTokenId()}`,
-            errorToMetadata(err),
-          );
-          // if the token only needs renewal, renew it
-          token = await mobileTokenClient.renew(token, traceId);
-        } else if (tokenSdkErrorHandling === 'reset') {
-          // token needs reset, therefore, wipe token
-          logToBugsnag(
-            `Token needs reset, wipe ${token.getTokenId()}`,
-            errorToMetadata(err),
-          );
-          logError(err, traceId);
-          await wipeToken([token.tokenId], traceId);
-          token = undefined;
-        } else {
-          // other errors
-          logToBugsnag(
-            `Other error during validation of ${token.getTokenId()}`,
-            errorToMetadata(err),
-          );
-          logError(err, traceId);
-          throw err;
-        }
-      }
-    }
   }
 
   if (!token) {
@@ -133,8 +87,6 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     If token is undefined, then create a new one. We can end up here if:
     - No token previously created on this device.
     - There has been a user change and the existing token has been wiped.
-    - There was a validation error which signaled that a new token should
-      be created.
     - There was an error where the token resolution is `RESET` as 
       suggested by the SDK.
      */
