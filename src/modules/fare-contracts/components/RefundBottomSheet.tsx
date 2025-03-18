@@ -18,11 +18,11 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  fareContractId: string;
+  orderId: string;
   fareProductType: string | undefined;
 };
 
-export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
+export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -31,12 +31,12 @@ export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
   const {data: refundOptions, status: refundOptionsStatus} =
-    useRefundOptionsQuery(fareContractId);
+    useRefundOptionsQuery(orderId);
 
   const onRefund = async () => {
     setIsLoading(true);
     try {
-      await refundFareContract(fareContractId);
+      await refundFareContract(orderId);
       analytics.logEvent('Ticketing', 'Ticket refunded', {
         fareProductType,
       });
@@ -67,7 +67,7 @@ export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
             type="error"
           />
         )}
-        {refundOptions?.refundable === false && (
+        {refundOptions?.is_refundable === false && (
           <MessageInfoBox
             message={t(FareContractTexts.refund.notRefundable)}
             type="error"
@@ -85,7 +85,7 @@ export const RefundBottomSheet = ({fareContractId, fareProductType}: Props) => {
           onPress={onRefund}
           text={t(FareContractTexts.refund.confirm)}
           disabled={
-            refundOptionsStatus !== 'success' || !refundOptions?.refundable
+            refundOptionsStatus !== 'success' || !refundOptions?.is_refundable
           }
           loading={isLoading || refundOptionsStatus === 'loading'}
           interactiveColor={theme.color.interactive.destructive}

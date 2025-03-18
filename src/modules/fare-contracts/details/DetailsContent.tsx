@@ -216,7 +216,7 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       {fc.orderId && isRefundsEnabled && (
         <RefundSectionItem
-          fareContractId={fc.id}
+          orderId={fc.orderId}
           fareProductType={preassignedFareProduct?.type}
         />
       )}

@@ -7,12 +7,12 @@ import React, {RefObject, useRef} from 'react';
 import {RefundBottomSheet} from './RefundBottomSheet';
 
 type RefundSectionItemProps = SectionItemProps<{
-  fareContractId: string;
+  orderId: string;
   fareProductType: string | undefined;
 }>;
 
 export function RefundSectionItem({
-  fareContractId,
+  orderId,
   fareProductType,
   ...sectionProps
 }: RefundSectionItemProps): JSX.Element {
@@ -24,7 +24,7 @@ export function RefundSectionItem({
     open(
       () => (
         <RefundBottomSheet
-          fareContractId={fareContractId}
+          orderId={orderId}
           fareProductType={fareProductType}
         />
       ),

@@ -9,6 +9,7 @@ import {
   PaymentType,
   RecentFareContractBackend,
   RecurringPayment,
+  RefundOptions,
   ReserveOffer,
   SendReceiptResponse,
   TicketRecipientType,
@@ -201,24 +202,16 @@ export async function getFareContracts(
   );
 }
 
-export async function getRefundOptions(fareContractId: string) {
-  // const url = `ticket/v4/refund-options/${fareContractId}`;
-  // const response = await client.get(url, {
-  //   authWithIdToken: true,
-  // });
-  // return response.data;
-
-  // TODO: Mock response for now:
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    refundable: true,
-  };
+export async function getRefundOptions(orderId: string) {
+  const url = `sales/v1/refund/options/${orderId}`;
+  const response = await client.get<RefundOptions>(url, {
+    authWithIdToken: true,
+  });
+  return response.data;
 }
 
-export async function refundFareContract(fareContractId: string) {
-  // const url = `ticket/v4/refund/${fareContractId}`;
-  // const response = await client.post(url, {}, {authWithIdToken: true});
-
-  // TODO: Mock response for now:
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+export async function refundFareContract(orderId: string) {
+  const url = `sales/v1/refund`;
+  const response = await client.post(url, {orderId}, {authWithIdToken: true});
+  return response.data;
 }
