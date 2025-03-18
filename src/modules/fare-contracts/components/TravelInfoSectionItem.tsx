@@ -4,11 +4,8 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {useAuthContext} from '@atb/auth';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {
-  hasTravelRightAccesses,
-  isSentOrReceivedFareContract,
-} from '@atb/ticketing';
-import {type FareContractType} from '@atb-as/utils';
+import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
@@ -26,7 +23,10 @@ import {
 } from '@atb/configuration';
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
-import {CarnetFooter} from '../carnet/CarnetFooter';
+import {
+  CarnetFooter,
+  MAX_ACCESSES_FOR_CARNET_FOOTER,
+} from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
 
 type Props = {fc: FareContractType};
@@ -61,6 +61,11 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {topContainer} = useSectionItem({});
+
+  const accesses = getAccesses(fc);
+  const shouldShowCarnetFooter =
+    accesses &&
+    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
   return (
     <View
@@ -105,7 +110,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
 
       <SentToPhoneNumberMessageBox fc={fc} />
 
-      {!!hasTravelRightAccesses(fc.travelRights) && (
+      {shouldShowCarnetFooter && (
         <CarnetFooter
           active={validityStatus === 'valid'}
           maximumNumberOfAccesses={maximumNumberOfAccesses!}

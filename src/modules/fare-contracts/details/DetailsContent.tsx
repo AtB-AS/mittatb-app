@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
 import {
@@ -34,7 +33,10 @@ import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useAuthContext} from '@atb/auth';
-import {CarnetFooter} from '../carnet/CarnetFooter';
+import {
+  CarnetFooter,
+  MAX_ACCESSES_FOR_CARNET_FOOTER,
+} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
@@ -116,6 +118,11 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
+  const accesses = getAccesses(fc);
+  const shouldShowCarnetFooter =
+    accesses &&
+    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
+
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
@@ -151,7 +158,7 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {hasTravelRightAccesses(fc.travelRights) && (
+      {shouldShowCarnetFooter && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}
