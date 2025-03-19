@@ -8,7 +8,7 @@ import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature} from 'geojson';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, MapViewConfig} from './MapConfig';
+import {MapCameraConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
@@ -18,8 +18,8 @@ import {SelectionLocationCallback} from './types';
 import {isFeaturePoint} from './utils';
 import {Location} from '@atb/favorites';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+import {useMapViewConfig} from './hooks/use-map-view-config';
 
 type ExploreLocationMapProps = {
   initialLocation?: Location;
@@ -67,11 +67,7 @@ export const ExploreLocationMap = ({
     }
   };
 
-  const mapboxJsonStyle = useMapboxJsonStyle(false);
-
-  const customMapViewConfigProps = isMapV2Enabled
-    ? {styleURL: undefined, styleJSON: mapboxJsonStyle}
-    : {};
+  const mapViewConfig = useMapViewConfig(false);
 
   return (
     <View style={styles.container}>
@@ -87,11 +83,7 @@ export const ExploreLocationMap = ({
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="exploreLocationMapView"
-          {...{
-            ...MapViewConfig,
-            // only updating Map.tsx for now.
-            ...customMapViewConfigProps,
-          }}
+          {...mapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}

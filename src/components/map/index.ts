@@ -3,7 +3,6 @@ export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {SelectionPin} from './components/SelectionPin';
 export {
-  MapViewConfig,
   MapCameraConfig,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
@@ -14,6 +13,8 @@ export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';
 export {MapV2} from './MapV2';
 export {ExploreLocationMap} from './ExploreLocationMap';
+export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {
   flyToLocation,
   zoomIn,
@@ -54,6 +55,7 @@ export type {
 } from './types';
 export {useUserMapFilters} from './hooks/use-map-filter';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
+export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';

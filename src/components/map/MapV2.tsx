@@ -9,11 +9,7 @@ import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {
-  MapCameraConfig,
-  MapViewConfig,
-  SLIGHTLY_RAISED_MAP_PADDING,
-} from './MapConfig';
+import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -34,6 +30,7 @@ import {
 import {
   GeofencingZones,
   useGeofencingZoneTextContent,
+  useMapViewConfig,
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
@@ -51,7 +48,6 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
@@ -66,6 +62,7 @@ export const MapV2 = (props: MapProps) => {
   const controlStyles = useControlPositionsStyle(false);
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig(shouldShowVehiclesAndStations);
 
   const startingCoordinates = useMemo(
     () =>
@@ -86,8 +83,6 @@ export const MapV2 = (props: MapProps) => {
     );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
-
-  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -246,12 +241,7 @@ export const MapV2 = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
-          {...{
-            ...MapViewConfig,
-            // only updating Map.tsx for now.
-            styleURL: undefined,
-            styleJSON: mapboxJsonStyle,
-          }}
+          {...mapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
