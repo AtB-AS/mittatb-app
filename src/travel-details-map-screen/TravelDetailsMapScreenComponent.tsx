@@ -74,7 +74,7 @@ export const TravelDetailsMapScreenComponent = ({
   const isFocusedAndActive = useIsFocusedAndActive();
 
   const {isMapV2Enabled} = useFeatureTogglesContext();
-  const mapViewConfig = useMapViewConfig(true);
+  const mapViewConfig = useMapViewConfig(false);
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
