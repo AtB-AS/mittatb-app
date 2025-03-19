@@ -21,11 +21,11 @@ const MapViewStaticConfig = {
 export const useMapViewConfig = (shouldShowVehiclesAndStations: boolean) => {
   const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
+  const configMapV1 = {styleURL: MAPBOX_STOP_PLACES_STYLE_URL};
+  const configMapV2 = {styleJSON: mapboxJsonStyle};
 
   return {
     ...MapViewStaticConfig,
-    ...{
-      styleURL: isMapV2Enabled ? mapboxJsonStyle : MAPBOX_STOP_PLACES_STYLE_URL,
-    },
+    ...(isMapV2Enabled ? configMapV2 : configMapV1),
   };
 };
