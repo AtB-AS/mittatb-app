@@ -15,7 +15,6 @@ import {
   PositionArrow,
   useControlPositionsStyle,
   useMapViewConfig,
-  VehiclesAndStations,
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/GeolocationContext';
@@ -160,14 +159,6 @@ export const TravelDetailsMapScreenComponent = ({
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={undefined}
             onMapItemClick={undefined}
-          />
-        )}
-        {isMapV2Enabled && (
-          <VehiclesAndStations
-            selectedFeatureId={undefined}
-            onPress={undefined}
-            showVehicles={false}
-            showStations={true}
           />
         )}
         <MapboxGL.UserLocation
