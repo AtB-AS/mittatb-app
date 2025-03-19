@@ -1,9 +1,4 @@
-import {
-  CameraFocusModeType,
-  MapLeg,
-  MapSelectionActionType,
-  MapSelectionMode,
-} from '../types';
+import {CameraFocusModeType, MapLeg, MapSelectionActionType} from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
@@ -31,7 +26,6 @@ const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
  * the map lines back from the hook so the Map-component can draw them.
  */
 export const useDecideCameraFocusMode = (
-  selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView | null>,
@@ -73,31 +67,18 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
-      switch (selectionMode) {
-        case 'ExploreLocation': {
-          setCameraFocusMode({
-            mode: 'coordinates',
-            coordinates: mapPositionToCoordinates(
-              mapSelectionAction.feature.geometry.coordinates,
-            ),
-          });
-          break;
-        }
-        case 'ExploreEntities': {
-          const entityFeature = await findEntityAtClick(
-            mapSelectionAction.feature,
-            mapViewRef,
-          );
-          setCameraFocusMode(
-            await getFocusMode(
-              entityFeature,
-              fromCoords,
-              !!disableShouldShowMapLines,
-              !!disableShouldZoomToFeature,
-            ),
-          );
-        }
-      }
+      const entityFeature = await findEntityAtClick(
+        mapSelectionAction.feature,
+        mapViewRef,
+      );
+      setCameraFocusMode(
+        await getFocusMode(
+          entityFeature,
+          fromCoords,
+          !!disableShouldShowMapLines,
+          !!disableShouldZoomToFeature,
+        ),
+      );
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction]);

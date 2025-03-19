@@ -13,6 +13,7 @@ export {
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';
 export {MapV2} from './MapV2';
+export {ExploreLocationMap} from './ExploreLocationMap';
 export {
   flyToLocation,
   zoomIn,
