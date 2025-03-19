@@ -8,7 +8,6 @@ import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {forwardRef} from 'react';
-import React from 'react';
 
 export const TitleAndDescription = forwardRef<any, {themeColor: ContrastColor}>(
   ({themeColor}, focusRef) => {
@@ -43,7 +42,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {marginTop: theme.spacing.medium, textAlign: 'center'},
   description: {
     textAlign: 'center',
-    marginTop: theme.spacing.medium,
+    margin: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
   },
 }));

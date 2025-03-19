@@ -341,7 +341,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                     rootPurchaseConfirmationScreenParams,
                   );
             }}
-            style={styles.summary}
           />
         </View>
       </ScrollView>
@@ -374,9 +373,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     selectionComponent: {
       rowGap: theme.spacing.medium,
-    },
-    summary: {
-      marginVertical: theme.spacing.medium,
     },
   };
 });
