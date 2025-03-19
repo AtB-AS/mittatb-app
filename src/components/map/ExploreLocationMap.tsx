@@ -67,7 +67,7 @@ export const ExploreLocationMap = ({
     }
   };
 
-  const mapViewConfig = useMapViewConfig(false);
+  const mapViewConfig = useMapViewConfig();
 
   return (
     <View style={styles.container}>

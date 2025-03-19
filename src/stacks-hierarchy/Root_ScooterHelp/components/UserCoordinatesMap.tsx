@@ -14,7 +14,7 @@ type Props = {
 };
 export const UserCoordinatesMap = ({userCoordinates, style}: Props) => {
   const cameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewConfig = useMapViewConfig(false);
+  const mapViewConfig = useMapViewConfig();
 
   return (
     <View style={[{flex: 1}, style]}>

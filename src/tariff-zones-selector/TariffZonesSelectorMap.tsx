@@ -92,7 +92,7 @@ const TariffZonesSelectorMap = ({
     onSelect(newSelection);
   };
 
-  const mapViewConfig = useMapViewConfig(false);
+  const mapViewConfig = useMapViewConfig();
   const {isMapV2Enabled} = useFeatureTogglesContext();
 
   return (
