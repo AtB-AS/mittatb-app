@@ -60,19 +60,17 @@ export function useSectionItem({
   };
 }
 
-type Padding = Pick<ViewStyle, 'paddingVertical' | 'paddingHorizontal'>;
+type Padding = Pick<ViewStyle, 'padding'>;
 
 function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
     case 'block':
       return {
-        paddingVertical: theme.spacing.medium - theme.border.width.slim,
-        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
+        padding: theme.spacing.medium - theme.border.width.slim,
       };
     case 'spacious':
       return {
-        paddingVertical: theme.spacing.large - theme.border.width.slim,
-        paddingHorizontal: theme.spacing.medium - theme.border.width.slim,
+        padding: theme.spacing.large - theme.border.width.slim,
       };
   }
 }
