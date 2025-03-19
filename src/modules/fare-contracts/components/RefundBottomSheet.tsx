@@ -61,12 +61,6 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        {error && (
-          <MessageInfoBox
-            message={t(FareContractTexts.refund.genericError)}
-            type="error"
-          />
-        )}
         {refundOptions?.is_refundable === false && (
           <MessageInfoBox
             message={t(FareContractTexts.refund.notRefundable)}
@@ -80,6 +74,12 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
+        {error && (
+          <MessageInfoBox
+            message={t(FareContractTexts.refund.genericError)}
+            type="error"
+          />
+        )}
         <Button
           expanded={true}
           onPress={onRefund}
@@ -89,6 +89,15 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
           }
           loading={isLoading || refundOptionsStatus === 'loading'}
           interactiveColor={theme.color.interactive.destructive}
+        />
+        <Button
+          backgroundColor={theme.color.background.neutral[1]}
+          onPress={() => {
+            close();
+          }}
+          text={t(FareContractTexts.refund.cancel)}
+          mode="secondary"
+          expanded={true}
         />
       </ScrollView>
     </BottomSheetContainer>
