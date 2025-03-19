@@ -62,7 +62,7 @@ export const MapV2 = (props: MapProps) => {
   const controlStyles = useControlPositionsStyle(false);
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig(shouldShowVehiclesAndStations);
+  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const startingCoordinates = useMemo(
     () =>

@@ -54,7 +54,7 @@ export const Map = (props: MapProps) => {
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle(false);
 
-  const mapViewConfig = useMapViewConfig(false);
+  const mapViewConfig = useMapViewConfig();
 
   const startingCoordinates = useMemo(
     () =>

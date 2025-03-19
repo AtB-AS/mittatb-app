@@ -19,10 +19,17 @@ const MapViewStaticConfig = {
   }),
 };
 
+type MapViewConfigOptions = {
+  shouldShowVehiclesAndStations?: boolean;
+  useDarkModeForV1?: boolean;
+};
+
 export const useMapViewConfig = (
-  shouldShowVehiclesAndStations: boolean,
-  useDarkModeForV1: boolean = false,
+  mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
+  const {shouldShowVehiclesAndStations = false, useDarkModeForV1 = false} =
+    mapViewConfigOptions || {};
+
   const {themeName} = useThemeContext();
   const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
