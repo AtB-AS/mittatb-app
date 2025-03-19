@@ -42,7 +42,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
-  const abortControllerRef = useRef<AbortController>();
+  const abortControllerRef = useRef<AbortController>(undefined);
   const pollTime = pollingTimeInSeconds * 1000;
 
   const reload = useCallback(

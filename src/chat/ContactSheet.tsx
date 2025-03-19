@@ -80,10 +80,8 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               }}
               rightIcon={{
                 svg: Chat,
-                notification: unreadCount
-                  ? {
-                      color: theme.color.status.valid.primary,
-                    }
+                notificationColor: unreadCount
+                  ? theme.color.status.valid.primary
                   : undefined,
               }}
             />

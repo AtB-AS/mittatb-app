@@ -11,7 +11,7 @@ type Props = {
   bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
   onClusterClick: (
     e: OnPressEvent,
-    clustersSource: RefObject<ShapeSource>,
+    clustersSource: RefObject<ShapeSource | null>,
   ) => void;
 };
 

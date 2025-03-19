@@ -19,9 +19,9 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Requirements
 
-1. Ruby v2.7.6: With something like [rbenv](https://github.com/rbenv/rbenv)
+1. Ruby v3.1.0: With something like [rbenv](https://github.com/rbenv/rbenv)
 2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
-   > ⓘ When installing cocoapods, use `gem install cocoapods -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`COCOAPODS: 1.x.x`).
+   > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
    >
    > If you experience various mysterious errors when running `yarn android` you probably have the wrong JDK. See **Common errors**** below for fix. 
@@ -29,6 +29,13 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 4. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 
 ### Starting locally
+
+> [!TIP]
+> If it's been a while since the last time you ran the app, or there's recently been some changes to a unknown set of dependencies, this command should fix most problems:
+>
+> `yarn clean:install && yarn setup dev atb && bundle install && npx pod-install ios && cd android && ./gradlew clean && cd - && yarn start --reset-cache`
+>
+> Then `yarn ios --list-devices` or `yarn android` to build and launch the app
 
 #### First time setup
 

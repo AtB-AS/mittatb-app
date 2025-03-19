@@ -76,7 +76,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {callerRoute} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const headerBackgroundColor = getHeaderBackgroundColor(theme);
   const interactiveColor = theme.color.interactive[1];
   const statusColor = theme.color.status.valid.primary;
   const [searchTime, setSearchTime] = useState<TripSearchTime>({
@@ -221,7 +220,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
   }
 
-  const searchTimeButtonRef = useRef();
+  const searchTimeButtonRef = useRef(undefined);
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onSearchTimePress = () => {
     openBottomSheet(
@@ -371,13 +370,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 testID="dashboardDateTimePicker"
                 rightIcon={{
                   svg: Time,
-                  notification:
-                    searchTime.option !== 'now'
-                      ? {
-                          color: statusColor,
-                          backgroundColor: headerBackgroundColor,
-                        }
-                      : undefined,
+                  notificationColor:
+                    searchTime.option !== 'now' ? statusColor : undefined,
                 }}
               />
               {filtersState.enabled && (
@@ -394,13 +388,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     ref={filterButtonRef}
                     rightIcon={{
                       svg: Filter,
-                      notification: !areDefaultFiltersSelected(
+                      notificationColor: !areDefaultFiltersSelected(
                         filtersState.filtersSelection?.transportModes,
                       )
-                        ? {
-                            color: statusColor,
-                            backgroundColor: headerBackgroundColor,
-                          }
+                        ? statusColor
                         : undefined,
                     }}
                   />

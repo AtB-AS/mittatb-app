@@ -1,0 +1,53 @@
+name: Update devices
+description: 'Updates devices and provisioning profile'
+inputs:
+  app-environment:
+    default: "adhoc"
+    required: true
+    description: "The environment to renew"
+  app-org:
+    default: "atb"
+    required: true
+    description: "App org name"
+  git-crypt-key:
+    description: "The git-crypt key to unlock the repository files with"
+    required: true
+  ruby-version:
+    description: "The ruby version to use"
+    default: "3.1.0"
+    required: false
+  keychain-name:
+    description: "The keychain name where the keys are going to be stored"
+    default: "CI"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Set global env vars
+      shell: bash
+      run: |
+        echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+        echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
+    - name: Decrypt env files
+      shell: bash
+      run: sh ./scripts/git-crypt-unlock.sh
+      env:
+        GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
+    - name: Copy Development files
+      shell: bash
+      if: ${{ inputs.app-environment=='development' }}
+      run: cp env/${{ inputs.app-org }}/dev/.env fastlane/.env.default
+    - name: Copy Adhoc files
+      shell: bash
+      if: ${{ inputs.app-environment=='adhoc' }}
+      run: cp env/${{ inputs.app-org }}/staging/.env fastlane/.env.default
+    - name: Copy AppStore
+      shell: bash
+      if: ${{ inputs.app-environment=='appstore' }}
+      run: cp env/${{ inputs.app-org }}/store/.env fastlane/.env.default
+    - name: Setup ruby and bundle install
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        cache-version: 1
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically

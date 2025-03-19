@@ -1,5 +1,4 @@
-import {RefObject, useState} from 'react';
-import {getCoordinatesFromMapSelectionAction} from '../utils';
+import {RefObject, useCallback, useState} from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';
@@ -21,9 +20,11 @@ import {useMapContext} from '@atb/MapContext';
  */
 export const useMapSelectionChangeEffect = (
   mapProps: MapProps,
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
   startingCoordinates: Coordinates,
+  disableShouldShowMapLines?: boolean,
+  disableShouldZoomToFeature?: boolean,
 ) => {
   const [mapSelectionAction, setMapSelectionAction] = useState<
     MapSelectionActionType | undefined
@@ -33,15 +34,18 @@ export const useMapSelectionChangeEffect = (
   const {setBottomSheetCurrentlyAutoSelected} = useMapContext();
 
   const cameraFocusMode = useDecideCameraFocusMode(
-    mapProps.selectionMode,
     fromCoords,
     mapSelectionAction,
     mapViewRef,
+    disableShouldShowMapLines,
+    disableShouldZoomToFeature,
   );
   const distance =
     cameraFocusMode?.mode === 'map-lines'
       ? cameraFocusMode.distance
       : undefined;
+
+  const closeCallback = useCallback(() => setMapSelectionAction(undefined), []);
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   const {selectedFeature, onReportParkingViolation} =
@@ -50,22 +54,24 @@ export const useMapSelectionChangeEffect = (
       distance,
       mapSelectionAction,
       mapViewRef,
-      () => setMapSelectionAction(undefined),
+      closeCallback,
     );
+
+  const onMapClick = useCallback(
+    (sc: MapSelectionActionType) => {
+      setBottomSheetCurrentlyAutoSelected(undefined);
+      setMapSelectionAction(sc);
+      setFromCoords(currentLocation?.coordinates);
+    },
+    [currentLocation?.coordinates, setBottomSheetCurrentlyAutoSelected],
+  );
 
   return {
     mapLines:
       cameraFocusMode?.mode === 'map-lines'
         ? cameraFocusMode.mapLines
         : undefined,
-    onMapClick: (sc: MapSelectionActionType) => {
-      setBottomSheetCurrentlyAutoSelected(undefined);
-      setMapSelectionAction(sc);
-      setFromCoords(currentLocation?.coordinates);
-    },
-    selectedCoordinates: mapSelectionAction
-      ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
-      : undefined,
+    onMapClick,
     selectedFeature,
     onReportParkingViolation,
   };

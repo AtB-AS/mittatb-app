@@ -11,10 +11,7 @@ import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
-import {SelectionPin} from './components/SelectionPin';
-import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
-import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -44,16 +41,17 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
 
 export const Map = (props: MapProps) => {
+  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
+
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
-  const controlStyles = useControlPositionsStyle(
-    props.selectionMode === 'ExploreLocation',
-  );
+  const controlStyles = useControlPositionsStyle(false);
 
   const startingCoordinates = useMemo(
     () =>
@@ -63,18 +61,13 @@ export const Map = (props: MapProps) => {
     [initialLocation],
   );
 
-  const {
-    mapLines,
-    selectedCoordinates,
-    onMapClick,
-    selectedFeature,
-    onReportParkingViolation,
-  } = useMapSelectionChangeEffect(
-    props,
-    mapViewRef,
-    mapCameraRef,
-    startingCoordinates,
-  );
+  const {mapLines, onMapClick, selectedFeature, onReportParkingViolation} =
+    useMapSelectionChangeEffect(
+      props,
+      mapViewRef,
+      mapCameraRef,
+      startingCoordinates,
+    );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
 
@@ -102,7 +95,6 @@ export const Map = (props: MapProps) => {
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
-    props.selectionMode === 'ExploreEntities' &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
@@ -231,12 +223,6 @@ export const Map = (props: MapProps) => {
 
   return (
     <View style={styles.container}>
-      {props.selectionMode === 'ExploreLocation' && (
-        <LocationBar
-          coordinates={selectedCoordinates || startingCoordinates}
-          onSelect={props.onLocationSelect}
-        />
-      )}
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
@@ -272,9 +258,6 @@ export const Map = (props: MapProps) => {
 
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
-            <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
-          )}
           {props.vehicles && (
             <Vehicles
               vehicles={props.vehicles.vehicles}
@@ -330,10 +313,13 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled &&
-          props.selectionMode === 'ExploreEntities' && (
-            <ShmoTesting selectedVehicleId={selectedFeature?.properties?.id} />
-          )}
+        {isShmoDeepIntegrationEnabled && (
+          <ShmoTesting
+            selectedVehicleId={selectedFeature?.properties?.id}
+            showSelectedFeature={showSelectedFeature}
+            setShowSelectedFeature={setShowSelectedFeature}
+          />
+        )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

@@ -1,9 +1,4 @@
-import {
-  CameraFocusModeType,
-  MapLeg,
-  MapSelectionActionType,
-  MapSelectionMode,
-} from '../types';
+import {CameraFocusModeType, MapLeg, MapSelectionActionType} from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
@@ -31,10 +26,11 @@ const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
  * the map lines back from the hook so the Map-component can draw them.
  */
 export const useDecideCameraFocusMode = (
-  selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
+  disableShouldShowMapLines?: boolean,
+  disableShouldZoomToFeature?: boolean,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
@@ -63,29 +59,26 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
-      if (mapSelectionAction.source === 'cluster-click') {
+      if (
+        mapSelectionAction.source === 'cluster-click' ||
+        mapSelectionAction.source === 'cluster-click-v2'
+      ) {
         setCameraFocusMode(undefined);
         return;
       }
 
-      switch (selectionMode) {
-        case 'ExploreLocation': {
-          setCameraFocusMode({
-            mode: 'coordinates',
-            coordinates: mapPositionToCoordinates(
-              mapSelectionAction.feature.geometry.coordinates,
-            ),
-          });
-          break;
-        }
-        case 'ExploreEntities': {
-          const entityFeature = await findEntityAtClick(
-            mapSelectionAction.feature,
-            mapViewRef,
-          );
-          setCameraFocusMode(await getFocusMode(entityFeature, fromCoords));
-        }
-      }
+      const entityFeature = await findEntityAtClick(
+        mapSelectionAction.feature,
+        mapViewRef,
+      );
+      setCameraFocusMode(
+        await getFocusMode(
+          entityFeature,
+          fromCoords,
+          !!disableShouldShowMapLines,
+          !!disableShouldZoomToFeature,
+        ),
+      );
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction]);
@@ -129,9 +122,11 @@ const fetchMapLines = async (
 const getFocusMode = async (
   entityFeature: Feature<Point> | undefined,
   fromCoords: Coordinates | undefined,
+  disableShouldShowMapLines: boolean,
+  disableShouldZoomToFeature: boolean,
 ): Promise<CameraFocusModeType | undefined> => {
   if (!entityFeature) return undefined;
-  if (shouldShowMapLines(entityFeature)) {
+  if (!disableShouldShowMapLines && shouldShowMapLines(entityFeature)) {
     const result = await fetchMapLines(fromCoords, entityFeature);
     if (result?.mapLines) {
       return {
@@ -144,6 +139,6 @@ const getFocusMode = async (
   return {
     mode: 'entity',
     entityFeature,
-    zoomTo: shouldZoomToFeature(entityFeature),
+    zoomTo: !disableShouldZoomToFeature && shouldZoomToFeature(entityFeature),
   };
 };

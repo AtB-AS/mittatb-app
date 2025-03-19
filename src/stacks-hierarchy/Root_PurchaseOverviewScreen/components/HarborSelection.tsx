@@ -25,8 +25,8 @@ export const HarborSelection = forwardRef<
   const {t} = useTranslation();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const fromHarborRef = useRef<TouchableOpacity>(null);
-  const toHarborRef = useRef<TouchableOpacity>(null);
+  const fromHarborRef = useRef<typeof TouchableOpacity>(null);
+  const toHarborRef = useRef<typeof TouchableOpacity>(null);
   useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
 
   if (!selection.stopPlaces) return null;
@@ -73,7 +73,7 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  TouchableOpacity,
+  typeof TouchableOpacity,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();

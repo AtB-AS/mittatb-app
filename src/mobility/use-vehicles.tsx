@@ -61,7 +61,7 @@ export const useVehicles: (
   }, [isFocused]);
 
   const loadVehicles = useCallback(
-    async (signal) => {
+    async (signal: any) => {
       if (isVehiclesInMapEnabled && area) {
         const scooterOperators = getOperators(filter, FormFactor.Scooter);
         const includeScooters =

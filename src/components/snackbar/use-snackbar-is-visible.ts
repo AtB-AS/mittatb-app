@@ -30,7 +30,7 @@ export const useSnackbarIsVisible = (
 
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>();
+  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const clearCurrentTimeout = () =>
     timeoutIdRef.current ? clearTimeout(timeoutIdRef.current) : void 0;
 
