@@ -5,6 +5,5 @@ export const useRefundOptionsQuery = (orderId: string) => {
   return useQuery({
     queryKey: ['getRefundOptions', orderId],
     queryFn: () => getRefundOptions(orderId),
-    refetchInterval: 20000,
   });
 };

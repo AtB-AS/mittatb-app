@@ -230,10 +230,15 @@ const FareContractTexts = {
       'Hvis du ikkje treng billetten likevel, kan du angre kjøpet og få tilbake pengane. Det kan ta litt tid før pengane er tilbake på kontoen din.',
     ),
     confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    genericRefundOptionsError: _(
+      'En feil oppstod under lasting av statusen til billetten. Vennligst prøv igjen, eller ta kontakt med kundeservice.',
+      'An error occurred while loading information about the ticket. Please try again, or contact customer service.',
+      'Ein feil oppstod under lasting av statusen til billetten. Ver venleg og prøv igjen, eller ta kontakt med kundeservice.',
+    ),
     genericError: _(
-      'En feil har oppstått under refundering av billetten. Vennligst prøv igjen eller ta kontakt med kundeservice.',
-      'An error occurred while refunding the ticket. Please try again or contact customer service.',
-      'Ein feil har oppstått under refundering av billetten. Ver venleg og prøv igjen eller ta kontakt med kundeservice.',
+      'En feil har oppstått under refundering av billetten. Vennligst prøv igjen, eller ta kontakt med kundeservice.',
+      'An error occurred while refunding the ticket. Please try again, or contact customer service.',
+      'Ein feil har oppstått under refundering av billetten. Ver venleg og prøv igjen, eller ta kontakt med kundeservice.',
     ),
     notRefundable: _(
       'Billetten er ikke tilgjengelig for refusjon.',

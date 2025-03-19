@@ -1,5 +1,4 @@
 import {useAnalyticsContext} from '@atb/analytics';
-import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {
   BottomSheetContainer,
   useBottomSheetContext,
@@ -9,11 +8,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {refundFareContract} from '@atb/ticketing';
+import {useRefundFareContractMutation} from '@atb/ticketing/use-refund-mutation';
 import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -26,31 +24,22 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
   const {data: refundOptions, status: refundOptionsStatus} =
     useRefundOptionsQuery(orderId);
 
-  const onRefund = async () => {
-    setIsLoading(true);
-    try {
-      await refundFareContract(orderId);
+  const {mutate: refund, status: refundStatus} =
+    useRefundFareContractMutation();
+
+  useEffect(() => {
+    if (refundStatus === 'success') {
       analytics.logEvent('Ticketing', 'Ticket refunded', {
         fareProductType,
       });
       close();
-    } catch (e: any) {
-      const errorData = getAxiosErrorMetadata(e);
-      Bugsnag.notify({
-        name: `${errorData.responseStatus} error when refunding fare contract`,
-        message: `Error: ${JSON.stringify(errorData)}`,
-      });
-      setError(true);
     }
-    setIsLoading(false);
-  };
+  }, [refundStatus, analytics, close]);
 
   return (
     <BottomSheetContainer
@@ -74,20 +63,26 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
-        {error && (
+        {refundStatus === 'error' && (
           <MessageInfoBox
             message={t(FareContractTexts.refund.genericError)}
             type="error"
           />
         )}
+        {refundOptionsStatus === 'error' && (
+          <MessageInfoBox
+            type="error"
+            message={t(FareContractTexts.refund.genericRefundOptionsError)}
+          />
+        )}
         <Button
           expanded={true}
-          onPress={onRefund}
+          onPress={() => refund(orderId)}
           text={t(FareContractTexts.refund.confirm)}
-          disabled={
-            refundOptionsStatus !== 'success' || !refundOptions?.is_refundable
+          disabled={!refundOptions?.is_refundable}
+          loading={
+            refundStatus === 'loading' || refundOptionsStatus === 'loading'
           }
-          loading={isLoading || refundOptionsStatus === 'loading'}
           interactiveColor={theme.color.interactive.destructive}
         />
         <Button
