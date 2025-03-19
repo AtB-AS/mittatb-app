@@ -38,7 +38,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  const mapViewConfig = useMapViewConfig(false);
+  const mapViewConfig = useMapViewConfig(false, true);
 
   /*
    * Workaround for iOS as setting default bounds on camera is not working fully
