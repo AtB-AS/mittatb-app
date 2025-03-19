@@ -72,6 +72,7 @@ export const SelectedFeatureIcon = ({
           iconAnchor: 'bottom',
           iconOffset: [0, 10], // compensation for shadow
           iconSize: 1,
+          iconAllowOverlap: true,
         }}
       />
     </MapboxGL.ShapeSource>
