@@ -202,7 +202,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
    *      3.  Wipe the token and re-create token.
    *      4.  Reset the queries so it can re-check if the token is
    *          created properly.
-   *      5.  If the token is not found until 3 times,
+   *      5.  If the token creation/renewal fails, show fallback
    */
   useEffect(() => {
     const renewOrResetToken = async (
