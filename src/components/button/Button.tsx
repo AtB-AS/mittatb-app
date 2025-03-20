@@ -187,7 +187,10 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
         {(rightIcon || loading) && (
           <View style={rightStyling}>
             {loading ? (
-              <ActivityIndicator size="small" color={styleText.color} />
+              <ActivityIndicator
+                size="small"
+                color={mainContrastColor.foreground.primary}
+              />
             ) : (
               rightIcon && (
                 <ButtonIcon
