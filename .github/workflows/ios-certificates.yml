@@ -16,7 +16,7 @@ jobs:
     name: Nuke certificates
     environment: ${{ inputs.org }}
     timeout-minutes: 180
-    runs-on: macOS-13
+    runs-on: macOS-14
     strategy:
       matrix:
         environment: [ development, adhoc, appstore ]
@@ -49,7 +49,7 @@ jobs:
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     needs: nuke-certificates
-    runs-on: macOS-13
+    runs-on: macOS-14
     strategy:
       matrix:
         environment: [ development, adhoc, appstore ]
