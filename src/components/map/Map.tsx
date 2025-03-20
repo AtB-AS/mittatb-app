@@ -38,16 +38,14 @@ import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
+import {useActiveShmoBooking} from './hooks/use-active-shmo-booking';
 
 export const Map = (props: MapProps) => {
-  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
-
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -95,6 +93,8 @@ export const Map = (props: MapProps) => {
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
+
+  useActiveShmoBooking(mapCameraRef);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -180,7 +180,7 @@ export const Map = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      if (!isFeaturePoint(feature)) return;
+      if (!isFeaturePoint(feature) || activeShmoBooking) return;
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -228,6 +228,7 @@ export const Map = (props: MapProps) => {
       onMapClick,
       showGeofencingZones,
       selectedFeature,
+      activeShmoBooking,
     ],
   );
 
@@ -332,14 +333,6 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled &&
-          props.selectionMode === 'ExploreEntities' && (
-            <ShmoTesting
-              selectedVehicleId={selectedFeature?.properties?.id}
-              showSelectedFeature={showSelectedFeature}
-              setShowSelectedFeature={setShowSelectedFeature}
-            />
-          )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

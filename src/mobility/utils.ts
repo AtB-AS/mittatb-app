@@ -20,7 +20,7 @@ import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {Language} from '@atb/translations';
+import {dictionary, Language} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {
@@ -44,6 +44,7 @@ import {
   VehiclesClusteredFeatureSchema,
 } from '@atb/api/types/mobility';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {TFunc} from '@leile/lobo-t';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -331,6 +332,16 @@ export const getNewFilterState = (
     operators,
     showAll: false,
   };
+};
+
+export const formatErrorMessage = (
+  errorResponse: any,
+  t: TFunc<typeof Language>,
+) => {
+  return (errorResponse && errorResponse.response.status === 500) ||
+    errorResponse.response.status === 404
+    ? t(dictionary.genericErrorMsg)
+    : errorResponse.response.data;
 };
 
 /**

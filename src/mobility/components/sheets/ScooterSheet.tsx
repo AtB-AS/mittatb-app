@@ -20,11 +20,12 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {VehicleCard} from './VehicleCard';
-import {ShmoActionButton} from './ShmoActionButton';
-import {useOperators} from '../use-operators';
+import {VehicleCard} from '../VehicleCard';
+import {ShmoActionButton} from '../ShmoActionButton';
+import {useOperators} from '../../use-operators';
+import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
 
 type Props = {
   vehicleId: VehicleId;
@@ -59,6 +60,8 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
+  const {isLoading: shmoReqIsLoading} = useShmoRequirements();
+
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
@@ -70,16 +73,16 @@ export const ScooterSheet = ({
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.5}
+      maxHeightValue={0.6}
       onClose={onClose}
     >
       <>
-        {isLoading && (
+        {(isLoading || shmoReqIsLoading) && (
           <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !isError && vehicle && (
+        {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
           <>
             <ScrollView style={styles.container}>
               {operatorBenefit && (
@@ -99,18 +102,21 @@ export const ScooterSheet = ({
             </ScrollView>
             <View style={styles.footer}>
               {isShmoDeepIntegrationEnabled &&
+              operatorId &&
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
                 <>
                   <ShmoActionButton
                     onLogin={loginCallback}
                     onStartOnboarding={startOnboardingCallback}
+                    vehicleId={id}
+                    operatorId={operatorId}
                   />
                   <Button
                     expanded={true}
                     onPress={navigateSupportCallback}
                     text={t(MobilityTexts.helpText)}
-                    mode="tertiary"
+                    mode="secondary"
                     backgroundColor={theme.color.background.neutral[1]}
                   />
                 </>
@@ -169,6 +175,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacing.medium),
       marginHorizontal: theme.spacing.medium,
+      gap: theme.spacing.medium,
     },
     parkingViolationsButton: {
       marginTop: theme.spacing.medium,

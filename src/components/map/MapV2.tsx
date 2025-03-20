@@ -48,7 +48,6 @@ import {
 } from '@atb/mobility';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
@@ -59,6 +58,7 @@ import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
+import {useActiveShmoBooking} from './hooks/use-active-shmo-booking';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -116,6 +116,8 @@ export const MapV2 = (props: MapProps) => {
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
+  useActiveShmoBooking(mapCameraRef);
+
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
@@ -156,7 +158,7 @@ export const MapV2 = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      if (!isFeaturePoint(feature)) return;
+      if (!isFeaturePoint(feature) || activeShmoBooking) return;
 
       // should split components instead of this, ExploreLocation should only depend on location state, not features
       if (props.selectionMode == 'ExploreLocation') {
@@ -216,6 +218,7 @@ export const MapV2 = (props: MapProps) => {
       onMapClick,
       geofencingZoneOnPress,
       selectedFeature,
+      activeShmoBooking,
     ],
   );
 
@@ -223,7 +226,8 @@ export const MapV2 = (props: MapProps) => {
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      if (!featuresAtClick || featuresAtClick.length === 0 || activeShmoBooking)
+        return;
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,
         positionClicked,
@@ -250,7 +254,7 @@ export const MapV2 = (props: MapProps) => {
         });
       }
     },
-    [onMapClick],
+    [onMapClick, activeShmoBooking],
   );
   const onMapItemClick =
     props.selectionMode === 'ExploreLocation'
@@ -258,7 +262,7 @@ export const MapV2 = (props: MapProps) => {
       : onMapItemClickHandler;
 
   // The onPress handling is slow on old android devices with this feature enabled
-  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
+  const [showSelectedFeature, _setShowSelectedFeature] = useState(true);
   const enableShowSelectedFeature = showSelectedFeature; // being considered: setting this to Platform.OS !== 'android'; for temporary performance measure
 
   return (
@@ -357,14 +361,6 @@ export const MapV2 = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled &&
-          props.selectionMode === 'ExploreEntities' && (
-            <ShmoTesting
-              selectedVehicleId={selectedFeature?.properties?.id}
-              showSelectedFeature={showSelectedFeature}
-              setShowSelectedFeature={setShowSelectedFeature}
-            />
-          )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
