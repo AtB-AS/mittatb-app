@@ -13,9 +13,6 @@ export function useFareProductColor(fareProductType?: string): ContrastColor {
   const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
   const transportColor = useTransportColor(mode, subMode);
 
-  if (fareProductTypeConfig?.illustration === 'school') {
-    return theme.color.transport.flexible.primary;
-  }
   if (!mode) {
     return theme.color.status.valid.primary;
   }
