@@ -153,7 +153,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      padding: theme.spacing.medium,
     },
     countActions: {
       flexDirection: 'row',
