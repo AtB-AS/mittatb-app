@@ -89,9 +89,9 @@ export const ActiveScooterSheet = ({
                 <ShmoTripCard bookingId={activeBooking.bookingId} />
                 <VehicleCard
                   pricingPlan={pricePlan}
-                  currentFuelPercent={activeBooking.stateOfCharge ?? 0}
+                  currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
-                    (activeBooking.currentRangeKm as number) * 1000 // Convert km to meters
+                    (activeBooking.asset.currentRangeKm as number) * 1000 // Convert km to meters
                   }
                   operatorName={activeBooking.operator.name}
                   brandLogoUrl=""
