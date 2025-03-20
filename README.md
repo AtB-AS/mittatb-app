@@ -88,6 +88,10 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Common errors
 
+#### Missing `cocoapods-patch` or other ruby dependencies
+
+Sometimes, we add new dependencies to the Gemfile, requiring a new bundle install. If you encounter an issue where a library is missing, please do a new `bundle install` in the root directory.
+
 #### Missing `ANDROID_SDK_ROOT`
 
 By following [React Native Guide](https://reactnative.dev/docs/getting-started) you can get an error saying ANDROID_SDK_ROOT is undefined. Set this in addition to your bashrc (or similar), such as:
