@@ -47,7 +47,6 @@ export function MultipleTravellersSelection({
           count={u.count}
           addCount={() => addTraveller(u.userTypeString)}
           removeCount={() => removeTraveller(u.userTypeString)}
-          type="spacious"
           testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color={theme.color.interactive[2]}
           subtext={getTextForLanguage(u.alternativeDescriptions, language)}
