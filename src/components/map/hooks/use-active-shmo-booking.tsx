@@ -12,11 +12,13 @@ import {ActiveScooterSheet} from '@atb/mobility/components/sheets/ActiveScooterS
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
-export const useActiveShmoBooking = (
+export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   const {
     bottomSheetToAutoSelect,
     setBottomSheetToAutoSelect,
@@ -51,9 +53,13 @@ export const useActiveShmoBooking = (
   }, [mapCameraRef, getCurrentCoordinates]);
 
   useEffect(() => {
-    if (!isFocused) return;
+    if (!isFocused && !isShmoDeepIntegrationEnabled) return;
     try {
-      if (activeBooking) {
+      if (
+        activeBooking
+        /* TODO: uncomment this when formfactor is in use
+        && activeBooking.asset.formFactor === FormFactor.Scooter*/
+      ) {
         switch (activeBooking.state) {
           case ShmoBookingState.IN_USE:
             openBottomSheet(
@@ -108,5 +114,6 @@ export const useActiveShmoBooking = (
     setBottomSheetToAutoSelect,
     navigation,
     activeBooking,
+    isShmoDeepIntegrationEnabled,
   ]);
 };

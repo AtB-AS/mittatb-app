@@ -51,7 +51,7 @@ import {NationalStopRegistryFeatures} from './components/national-stop-registry-
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
-import {useActiveShmoBooking} from './hooks/use-active-shmo-booking';
+import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const MapV2 = (props: MapProps) => {
@@ -100,7 +100,7 @@ export const MapV2 = (props: MapProps) => {
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
-  useActiveShmoBooking(mapCameraRef);
+  useShmoActiveBottomSheet(mapCameraRef);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
