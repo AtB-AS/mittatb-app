@@ -24,7 +24,7 @@ import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
 
 type Props = TicketHistoryScreenParams & {
-  onPressFareContract: (orderId: string) => void;
+  onPressFareContract: (fareContractId: string) => void;
 };
 
 export const TicketHistoryScreenComponent = ({
@@ -74,8 +74,12 @@ export const TicketHistoryScreenComponent = ({
           <FareContractOrReservation
             now={serverNow}
             onPressFareContract={() => {
-              analytics.logEvent('Ticketing', 'Ticket details clicked');
-              onPressFareContract(item.orderId);
+              // Reservations don't have `id`, but also don't show the link to
+              // ticket details.
+              if ('id' in item) {
+                analytics.logEvent('Ticketing', 'Ticket details clicked');
+                onPressFareContract(item.id);
+              }
             }}
             fcOrReservation={item}
             index={index}

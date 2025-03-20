@@ -54,8 +54,12 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
         <FareContractOrReservation
           now={now}
           onPressFareContract={() => {
-            analytics.logEvent('Ticketing', 'Ticket details clicked');
-            onPressFareContract(fcOrReservation.orderId);
+            // Reservations don't have `id`, but also don't show the link to
+            // ticket details.
+            if ('id' in fcOrReservation) {
+              analytics.logEvent('Ticketing', 'Ticket details clicked');
+              onPressFareContract(fcOrReservation.id);
+            }
           }}
           key={fcOrReservation.orderId}
           fcOrReservation={fcOrReservation}
