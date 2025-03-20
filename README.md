@@ -90,7 +90,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 #### Missing `cocoapods-patch` or other ruby dependencies
 
-Sometimes, we add new dependencies to the Gemfile, requiring a new bundle install. If you encounter an issue where a library is missing, please install a new bundle in the root directory.
+Sometimes, we add new dependencies to the Gemfile, requiring a new bundle install. If you encounter an issue where a library is missing, please do a new `bundle install` in the root directory.
 
 #### Missing `ANDROID_SDK_ROOT`
 
