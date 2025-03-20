@@ -94,6 +94,10 @@ const ShmoPricingPlanSchema = z.object({
     .describe('Array of pricing segments, optional'),
 });
 
+const FormFactorSchema = z.enum(
+  Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
+);
+
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
   IN_USE = 'IN_USE',
@@ -123,7 +127,7 @@ const AssetSchema = z.object({
   licensePlate: z.string().optional().nullable(),
   stateOfCharge: z.number().int().optional().nullable(),
   currentRangeKm: z.number().int().optional().nullable(),
-  formFactor: z.nativeEnum(FormFactor).optional().nullable(),
+  formFactor: FormFactorSchema.nullable().optional(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -255,10 +259,6 @@ type FinishEvent = {
 } & z.infer<typeof ShmoImageFileSchema>;
 
 export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
-
-const FormFactorSchema = z.enum(
-  Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
-);
 
 export const IdsFromQrCodeResponseSchema = z.object({
   operatorId: z.string(),
