@@ -42,7 +42,6 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
-import {useActiveShmoBooking} from './hooks/use-active-shmo-booking';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -87,8 +86,6 @@ export const Map = (props: MapProps) => {
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
-
-  useActiveShmoBooking(mapCameraRef);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -173,7 +170,7 @@ export const Map = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      if (!isFeaturePoint(feature) || activeShmoBooking) return;
+      if (!isFeaturePoint(feature)) return;
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -221,7 +218,6 @@ export const Map = (props: MapProps) => {
       onMapClick,
       showGeofencingZones,
       selectedFeature,
-      activeShmoBooking,
     ],
   );
 
