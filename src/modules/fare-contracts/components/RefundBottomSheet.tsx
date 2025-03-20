@@ -87,9 +87,7 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
         />
         <Button
           backgroundColor={theme.color.background.neutral[1]}
-          onPress={() => {
-            close();
-          }}
+          onPress={close}
           text={t(FareContractTexts.refund.cancel)}
           mode="secondary"
           expanded={true}
