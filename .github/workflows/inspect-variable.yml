@@ -20,7 +20,7 @@ jobs:
     name: Inspect
     environment: ${{ inputs.org }}
     timeout-minutes: 5
-    runs-on: macOS-13
+    runs-on: macOS-14
     steps:
       - name: Curl variable
         run: curl -X POST https://us-central1-atb-mobility-platform.cloudfunctions.net/logbody -d "$VARIABLE"
