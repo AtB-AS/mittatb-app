@@ -196,7 +196,7 @@ export type AddPaymentMethodResponse = {
 
 /**
  * Defined by RefundOptionsResponse in
- * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs#L31
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs
  */
 export type RefundOptions = {
   is_refundable: boolean;
