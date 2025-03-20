@@ -119,6 +119,13 @@ const ShmoOperatorSchema = z.object({
   name: z.string(),
 });
 
+const AssetSchema = z.object({
+  licensePlate: z.string().optional().nullable(),
+  stateOfCharge: z.number().int().optional().nullable(),
+  currentRangeKm: z.number().int().optional().nullable(),
+  formFactor: z.nativeEnum(FormFactor).optional().nullable(),
+});
+
 export const ShmoBookingSchema = z.object({
   bookingId: z.string().uuid(),
   state: ShmoBookingStateSchema,
@@ -127,9 +134,9 @@ export const ShmoBookingSchema = z.object({
   departureTime: z.coerce.date().optional().nullable(),
   arrivalTime: z.coerce.date().optional().nullable(),
   operator: ShmoOperatorSchema,
-  stateOfCharge: z.number().int().optional().nullable(),
-  currentRangeKm: z.number().int().optional().nullable(),
   pricing: ShmoPricingSchema,
+  asset: AssetSchema,
+  comment: z.string().optional().nullable(),
 });
 
 export type ShmoBooking = z.infer<typeof ShmoBookingSchema>;
