@@ -4,12 +4,14 @@ import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
+
 import {
   flyToLocation,
   hitboxCoveringIconOnly,
   MapCameraConfig,
-  MapViewConfig,
+  NationalStopRegistryFeatures,
   PositionArrow,
+  useMapViewConfig,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
@@ -27,6 +29,7 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableTariffZones,
 } from '@atb/modules/purchase-selection';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -89,6 +92,9 @@ const TariffZonesSelectorMap = ({
     onSelect(newSelection);
   };
 
+  const mapViewConfig = useMapViewConfig();
+  const {isMapV2Enabled} = useFeatureTogglesContext();
+
   return (
     <>
       {a11yContext.isScreenReaderEnabled ? (
@@ -129,8 +135,14 @@ const TariffZonesSelectorMap = ({
             style={{
               flex: 1,
             }}
-            {...MapViewConfig}
+            {...mapViewConfig}
           >
+            {isMapV2Enabled && (
+              <NationalStopRegistryFeatures
+                selectedFeaturePropertyId={undefined}
+                onMapItemClick={undefined}
+              />
+            )}
             <MapboxGL.ShapeSource
               id="tariffZonesShape"
               shape={featureCollection}

@@ -9,13 +9,7 @@ import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {
-  MapCameraConfig,
-  MapViewConfig,
-  SLIGHTLY_RAISED_MAP_PADDING,
-} from './MapConfig';
-import {SelectionPin} from './components/SelectionPin';
-import {LocationBar} from './components/LocationBar';
+import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -36,6 +30,7 @@ import {
 import {
   GeofencingZones,
   useGeofencingZoneTextContent,
+  useMapViewConfig,
 } from '@atb/components/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
@@ -52,26 +47,22 @@ import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useMapboxJsonStyle} from './hooks/use-mapbox-json-style';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
 import {useActiveShmoBooking} from './hooks/use-active-shmo-booking';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const controlStyles = useControlPositionsStyle(
-    props.selectionMode === 'ExploreLocation',
-  );
+  const controlStyles = useControlPositionsStyle(false);
   const isFocused = useIsFocused();
-  const shouldShowVehiclesAndStations =
-    isFocused && // don't send tile requests while in the background, and always get fresh data upon enter
-    props.selectionMode === 'ExploreEntities'; // should probably split map components instead
+  const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const startingCoordinates = useMemo(
     () =>
@@ -81,24 +72,17 @@ export const MapV2 = (props: MapProps) => {
     [initialLocation],
   );
 
-  const {
-    mapLines,
-    selectedCoordinates,
-    onMapClick,
-    selectedFeature,
-    onReportParkingViolation,
-  } = useMapSelectionChangeEffect(
-    props,
-    mapViewRef,
-    mapCameraRef,
-    startingCoordinates,
-    true,
-    true,
-  );
+  const {mapLines, onMapClick, selectedFeature, onReportParkingViolation} =
+    useMapSelectionChangeEffect(
+      props,
+      mapViewRef,
+      mapCameraRef,
+      startingCoordinates,
+      true,
+      true,
+    );
 
   const {bottomSheetCurrentlyAutoSelected} = useMapContext();
-
-  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
 
   const aVehicleIsAutoSelected =
     bottomSheetCurrentlyAutoSelected?.type ===
@@ -126,7 +110,6 @@ export const MapV2 = (props: MapProps) => {
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
-    props.selectionMode === 'ExploreEntities' &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
@@ -159,15 +142,6 @@ export const MapV2 = (props: MapProps) => {
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
       if (!isFeaturePoint(feature) || activeShmoBooking) return;
-
-      // should split components instead of this, ExploreLocation should only depend on location state, not features
-      if (props.selectionMode == 'ExploreLocation') {
-        onMapClick({
-          source: 'map-click',
-          feature,
-        });
-        return;
-      }
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -212,7 +186,6 @@ export const MapV2 = (props: MapProps) => {
       }
     },
     [
-      props.selectionMode,
       hideSnackbar,
       showGeofencingZones,
       onMapClick,
@@ -222,7 +195,7 @@ export const MapV2 = (props: MapProps) => {
     ],
   );
 
-  const onMapItemClickHandler = useCallback(
+  const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
@@ -256,10 +229,6 @@ export const MapV2 = (props: MapProps) => {
     },
     [onMapClick, activeShmoBooking],
   );
-  const onMapItemClick =
-    props.selectionMode === 'ExploreLocation'
-      ? undefined
-      : onMapItemClickHandler;
 
   // The onPress handling is slow on old android devices with this feature enabled
   const [showSelectedFeature, _setShowSelectedFeature] = useState(true);
@@ -267,12 +236,6 @@ export const MapV2 = (props: MapProps) => {
 
   return (
     <View style={{flex: 1}}>
-      {props.selectionMode === 'ExploreLocation' && (
-        <LocationBar
-          coordinates={selectedCoordinates || startingCoordinates}
-          onSelect={props.onLocationSelect}
-        />
-      )}
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
@@ -282,12 +245,7 @@ export const MapV2 = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
-          {...{
-            ...MapViewConfig,
-            // only updating Map.tsx for now.
-            styleURL: undefined,
-            styleJSON: mapboxJsonStyle,
-          }}
+          {...mapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
@@ -319,15 +277,11 @@ export const MapV2 = (props: MapProps) => {
             onMapItemClick={onMapItemClick}
           />
 
-          {props.selectionMode !== 'ExploreLocation' &&
-            enableShowSelectedFeature && (
-              <SelectedFeatureIcon selectedFeature={selectedFeature} />
-            )}
+          {enableShowSelectedFeature && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
-            <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
-          )}
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={

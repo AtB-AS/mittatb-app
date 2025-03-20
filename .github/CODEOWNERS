@@ -2,27 +2,28 @@
 # https://github.com/AtB-AS/docs-private/blob/main/kundevendt-development-guidelines.md#systemdomain-captains
 
 # App
-* @gorandalum @marius-at-atb @jorelosorio @rosvik @strandlie
+* @marius-at-atb @jorelosorio @rosvik @strandlie
 
-# Mobile token (App, Webshop, Token-server)
-/src/mobile-token/ @gorandalum @jorelosorio @hanne-at-atb
+# Mobile token
+/src/mobile-token/ @rosvik @reidzeibel @jorelosorio
 
-# Mobility (App, BFF)
-/src/mobility/ @gorandalum @marius-at-atb @reidzeibel
+# Mobility
+/src/mobility/ @rosvik @marius-at-atb @Dahly96
+/src/bonus/ @rosvik @marius-at-atb @jorunnl
 
-# Builds (GH Actions, App Store, Play Store, Firebase App Distribution)
-/.github/workflows/ @gorandalum @jorelosorio @reidzeibel
-/env/ @gorandalum @jorelosorio @reidzeibel
-/fastlane/ @gorandalum @jorelosorio @reidzeibel
-/scripts/ @gorandalum @jorelosorio @reidzeibel
-/tools/ @gorandalum @jorelosorio @reidzeibel
+# Builds and CI
+/.github/workflows/ @rosvik @jorelosorio @reidzeibel
+/env/ @rosvik @jorelosorio @reidzeibel
+/fastlane/ @rosvik @jorelosorio @reidzeibel
+/scripts/ @rosvik @jorelosorio @reidzeibel
+/tools/ @rosvik @jorelosorio @reidzeibel
 
-# Firebase (Firestore, RemoteConfig, Configs, Typings)
-/src/configuration/ @gorandalum @reidzeibel @jorelosorio
+# Configuration
+/src/configuration/ @rosvik @reidzeibel @jorelosorio
 
 # Tests
-/e2e/ @gorandalum @marius-at-atb @jorelosorio @rosvik @tormoseng
+/e2e/ @rosvik @tormoseng @hanne-at-atb @reidzeibel
 
 # Native code
-/android/ @gorandalum @reidzeibel @jorelosorio
-/ios/ @gorandalum @jorelosorio @reidzeibel
+/android/ @rosvik @reidzeibel @jorelosorio
+/ios/ @rosvik @jorelosorio @reidzeibel

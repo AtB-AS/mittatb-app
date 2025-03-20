@@ -12,6 +12,7 @@ import {
   PlatformVersionHeaderName,
   RequestIdHeaderName,
   Authorization,
+  DistributionChannelHeaderName,
 } from './headers';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {Platform} from 'react-native';
@@ -75,6 +76,7 @@ function requestHandler(
     config.headers[FirebaseAuthIdHeaderName] = authId;
   }
 
+  config.headers[DistributionChannelHeaderName] = 'App';
   config.headers[AppVersionHeaderName] = APP_VERSION;
   config.headers[PlatformHeaderName] = Platform.OS;
   config.headers[PlatformVersionHeaderName] = Platform.Version;

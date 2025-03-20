@@ -1,5 +1,4 @@
-import {RefObject, useCallback, useMemo, useState} from 'react';
-import {getCoordinatesFromMapSelectionAction} from '../utils';
+import {RefObject, useCallback, useState} from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';
@@ -35,7 +34,6 @@ export const useMapSelectionChangeEffect = (
   const {setBottomSheetCurrentlyAutoSelected} = useMapContext();
 
   const cameraFocusMode = useDecideCameraFocusMode(
-    mapProps.selectionMode,
     fromCoords,
     mapSelectionAction,
     mapViewRef,
@@ -68,21 +66,12 @@ export const useMapSelectionChangeEffect = (
     [currentLocation?.coordinates, setBottomSheetCurrentlyAutoSelected],
   );
 
-  const selectedCoordinates = useMemo(
-    () =>
-      mapSelectionAction
-        ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
-        : undefined,
-    [mapSelectionAction],
-  );
-
   return {
     mapLines:
       cameraFocusMode?.mode === 'map-lines'
         ? cameraFocusMode.mapLines
         : undefined,
     onMapClick,
-    selectedCoordinates,
     selectedFeature,
     onReportParkingViolation,
   };

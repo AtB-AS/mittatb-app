@@ -96,7 +96,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   useEffect(() => {
     (async function () {
       if (!isFocused) return;
-      if (mapProps.selectionMode !== 'ExploreEntities') return;
 
       if (mapSelectionAction?.source === 'filters-button') {
         openBottomSheet(

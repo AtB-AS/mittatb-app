@@ -2,8 +2,8 @@ import {Coordinates} from '@atb/utils/coordinates';
 import MapboxGL from '@rnmapbox/maps';
 import {
   MapCameraConfig,
-  MapViewConfig,
   SelectionPin,
+  useMapViewConfig,
 } from '@atb/components/map';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {useRef} from 'react';
@@ -14,12 +14,13 @@ type Props = {
 };
 export const UserCoordinatesMap = ({userCoordinates, style}: Props) => {
   const cameraRef = useRef<MapboxGL.Camera>(null);
+  const mapViewConfig = useMapViewConfig();
 
   return (
     <View style={[{flex: 1}, style]}>
       {userCoordinates && (
         <MapboxGL.MapView
-          {...MapViewConfig}
+          {...mapViewConfig}
           compassEnabled={false}
           zoomEnabled={false}
           scrollEnabled={false}

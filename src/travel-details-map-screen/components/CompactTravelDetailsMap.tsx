@@ -1,6 +1,6 @@
-import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
+import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/components/map';
 
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
@@ -31,13 +31,14 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   buttonText,
   onExpand,
 }) => {
-  const {themeName} = useThemeContext();
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
   const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
   const bounds = useMemo(() => getMapBounds(features), [features]);
+
+  const mapViewConfig = useMapViewConfig({useDarkModeForV1: true});
 
   /*
    * Workaround for iOS as setting default bounds on camera is not working fully
@@ -57,8 +58,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
 
   const styles = useStyles();
 
-  const darkmode = themeName === 'dark';
-
   if (disableMap) {
     return null;
   }
@@ -71,8 +70,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           scrollEnabled={false}
           rotateEnabled={false}
           zoomEnabled={false}
-          {...MapViewConfig}
-          styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
+          {...mapViewConfig}
           compassEnabled={false}
           onPress={onExpand}
         >
