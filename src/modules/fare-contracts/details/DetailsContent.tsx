@@ -205,11 +205,13 @@ export const DetailsContent: React.FC<Props> = ({
 
       <OrderDetailsSectionItem fareContract={fc} />
 
-      <LinkSectionItem
-        text={t(FareContractTexts.details.askForReceipt)}
-        onPress={onReceiptNavigate}
-        testID="receiptButton"
-      />
+      {fc.orderId && fc.version && (
+        <LinkSectionItem
+          text={t(FareContractTexts.details.askForReceipt)}
+          onPress={onReceiptNavigate}
+          testID="receiptButton"
+        />
+      )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
         <ConsumeCarnetSectionItem
           fareContractId={fc.id}
