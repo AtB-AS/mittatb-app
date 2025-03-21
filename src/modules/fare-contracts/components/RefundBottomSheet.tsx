@@ -39,7 +39,7 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
       });
       close();
     }
-  }, [refundStatus, analytics, close]);
+  }, [refundStatus, fareProductType, analytics, close]);
 
   return (
     <BottomSheetContainer
