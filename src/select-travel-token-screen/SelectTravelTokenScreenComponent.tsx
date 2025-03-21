@@ -20,6 +20,7 @@ import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useOnboardingContext} from '@atb/onboarding';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {onAfterSave: () => void};
 
@@ -107,7 +108,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
                 setSelectedType('travel-card');
                 setSelectedToken(travelCardToken);
               }}
-              style={styles.leftRadioBox}
               testID="selectTravelcard"
               interactiveColor={theme.color.interactive[2]}
             />
@@ -137,7 +137,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           <MessageInfoBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
-            style={styles.errorMessageBox}
             isMarkdown={true}
           />
         )}
@@ -145,36 +144,33 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           <MessageInfoBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
-            style={styles.errorMessageBox}
             isMarkdown={false}
           />
         )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
-          <RadioGroupSection<Token>
-            type="spacious"
-            style={styles.selectDeviceSection}
-            items={mobileTokens}
-            keyExtractor={(token) => token.id}
-            itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
-            selected={selectedToken}
-            onSelect={setSelectedToken}
-            headerText={t(
-              TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
-            )}
-          />
+          <>
+            <ContentHeading
+              text={t(
+                TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
+              )}
+            />
+            <RadioGroupSection<Token>
+              items={mobileTokens}
+              keyExtractor={(token) => token.id}
+              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
+              selected={selectedToken}
+              onSelect={setSelectedToken}
+            />
+          </>
         ) : null}
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
             message={t(dictionary.genericErrorMsg)}
-            style={styles.errorMessageBox}
           />
         )}
         {data?.toggleLimit !== undefined && (
-          <TokenToggleInfo
-            style={styles.tokenInfo}
-            textColor={theme.color.background.accent[0]}
-          />
+          <TokenToggleInfo textColor={theme.color.background.accent[0]} />
         )}
         {toggleMutation.isLoading ? (
           <ActivityIndicator size="large" />
@@ -198,27 +194,12 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.color.background.accent[0].background,
     flex: 1,
   },
-  tokenInfo: {
-    flexDirection: 'row',
-    marginTop: theme.spacing.small,
-    marginBottom: theme.spacing.large,
-  },
   scrollView: {
     padding: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   radioArea: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing.medium,
-    alignContent: 'center',
-  },
-  leftRadioBox: {
-    marginRight: theme.spacing.medium,
-  },
-  selectDeviceSection: {
-    marginBottom: theme.spacing.medium,
-  },
-  errorMessageBox: {
-    marginBottom: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
 }));
