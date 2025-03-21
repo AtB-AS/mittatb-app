@@ -60,7 +60,10 @@ export function useSectionItem({
   };
 }
 
-type Padding = Pick<ViewStyle, 'padding'>;
+type Padding = Pick<
+  ViewStyle,
+  'padding' | 'paddingVertical' | 'paddingHorizontal'
+>;
 
 function mapToPadding(theme: Theme, type: ContainerSizingType): Padding {
   switch (type) {
