@@ -19,11 +19,11 @@ const BonusProgramTexts = {
       'Your bonus points',
       'Bonuspoenga dine',
     ),
-    yourBonusPointsA11yLabel: (bonuspoints: number) =>
+    yourBonusPointsA11yLabel: (bonuspoints: number | null | undefined) =>
       _(
-        `Du har ${bonuspoints} bonuspoeng`,
-        `You have ${bonuspoints} bonus points`,
-        `Du har ${bonuspoints} bonuspoeng`,
+        `Du har ${bonuspoints ?? 'ukjent antall'} bonuspoeng`,
+        `You have ${bonuspoints ?? 'unknown number of'} bonus points`,
+        `Du har ${bonuspoints ?? 'ukjent tal på'} bonuspoeng`,
       ),
 
     spendPoints: {
@@ -39,6 +39,11 @@ const BonusProgramTexts = {
       'Logg inn for å tjene og bruke poeng',
       'Log in to earn and spend points',
       'Logg inn for å tene og bruke poeng',
+    ),
+    noBonusPoints: _(
+      'Vi klarer ikke hente bonuspoengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to fetch your bonus points right now. You will still earn points as usual.',
+      'Me klarer ikkje henta bonuspoenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
     noBonusProducts: _(
       'Vi klarer ikke hente fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
