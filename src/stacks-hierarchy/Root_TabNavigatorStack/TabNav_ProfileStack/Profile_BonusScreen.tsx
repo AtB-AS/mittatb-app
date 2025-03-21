@@ -32,7 +32,7 @@ export const Profile_BonusScreen = () => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const {data: userBonusPoints, status: userBonusPointsStatus} =
+  const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
   const {bonusProducts, mobilityOperators, bonusTexts} =
     useFirestoreConfigurationContext();
@@ -57,9 +57,9 @@ export const Profile_BonusScreen = () => {
             />
           </View>
         )}
-        <UserBonusPointsSection
-          userBonusPoints={userBonusPoints}
-          userBonusPointsStatus={userBonusPointsStatus}
+        <UserBonusBalanceSection
+          userBonusBalance={userBonusBalance}
+          userBonusBalanceStatus={userBonusBalanceStatus}
         />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
@@ -161,7 +161,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     gap: theme.spacing.small,
   },
-  currentPointsDisplay: {
+  currentBalanceDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
@@ -185,21 +185,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-type UserBonusPointsSectionProps = {
-  userBonusPointsStatus: 'loading' | 'error' | 'success';
-  userBonusPoints: number | null | undefined;
+type UserBonusBalanceSectionProps = {
+  userBonusBalanceStatus: 'loading' | 'error' | 'success';
+  userBonusBalance: number | null | undefined;
 };
 
-function UserBonusPointsSection({
-  userBonusPointsStatus,
-  userBonusPoints,
-}: UserBonusPointsSectionProps): JSX.Element {
+function UserBonusBalanceSection({
+  userBonusBalanceStatus,
+  userBonusBalance,
+}: UserBonusBalanceSectionProps): JSX.Element {
   const styles = useStyles();
   const {t} = useTranslation();
 
   return (
     <>
-      {userBonusPointsStatus === 'error' && (
+      {userBonusBalanceStatus === 'error' && (
         <MessageInfoBox
           type="error"
           message="Vi klarer ikke å hente dine bonuspoeng nå. Du vil fortsatt tjene poeng som vanlig."
@@ -210,17 +210,17 @@ function UserBonusPointsSection({
           <View
             accessible
             accessibilityLabel={t(
-              BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
-                userBonusPointsStatus === 'error' ? 0 : userBonusPoints,
+              BonusProgramTexts.bonusProfile.yourBonusBalanceA11yLabel(
+                userBonusBalanceStatus === 'error' ? 0 : userBonusBalance,
               ),
             )}
           >
-            <View style={styles.currentPointsDisplay}>
-              {userBonusPointsStatus === 'loading' ? (
+            <View style={styles.currentBalanceDisplay}>
+              {userBonusBalanceStatus === 'loading' ? (
                 <ActivityIndicator />
               ) : (
                 <ThemeText typography="body__primary--jumbo--bold">
-                  {userBonusPointsStatus === 'error' ? '--' : userBonusPoints}
+                  {userBonusBalanceStatus === 'error' ? '--' : userBonusBalance}
                 </ThemeText>
               )}
               <ThemeIcon svg={StarFill} size="large" />
