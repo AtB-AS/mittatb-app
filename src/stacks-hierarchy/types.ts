@@ -27,6 +27,6 @@ export type VippsPaymentMethod = {
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
 
 export type PaymentSelection = {
-  kind: 'new_recurring' | 'saved_recurring' | 'non_recurring';
+  saveOption: 'new_recurring' | 'saved_recurring' | 'non_recurring';
   paymentMethod: PaymentMethod;
 };

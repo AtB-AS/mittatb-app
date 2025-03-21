@@ -89,7 +89,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                   shouldSave={shouldSave}
                   onSetShouldSave={setShouldSave}
                   selected={
-                    selectedCard?.kind == 'non_recurring' &&
+                    selectedCard?.saveOption == 'non_recurring' &&
                     selectedCard?.paymentMethod?.paymentType ===
                       method.paymentType
                   }
@@ -105,7 +105,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             <MultiplePaymentMethodsRadioSection
               shouldSave={shouldSave}
               onSetShouldSave={setShouldSave}
-              selected={selectedCard?.kind === 'new_recurring'}
+              selected={selectedCard?.saveOption === 'new_recurring'}
               onSelect={(val: PaymentSelection) => {
                 setShouldSave(true);
                 setSelectedMethod(val.paymentMethod);
@@ -139,7 +139,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 shouldSave={shouldSave}
                 onSetShouldSave={setShouldSave}
                 selected={
-                  selectedCard?.kind == 'saved_recurring' &&
+                  selectedCard?.saveOption == 'saved_recurring' &&
                   selectedCard?.paymentMethod?.recurringCard?.id ===
                     method.recurringCard?.id
                 }
@@ -217,7 +217,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
   const paymentTexts = getPaymentTexts(paymentGroup);
   const canSaveCard = authenticationType === 'phone';
   const paymentSelection: PaymentSelection = {
-    kind: 'new_recurring',
+    saveOption: 'new_recurring',
     paymentMethod: {
       paymentType: PaymentType.Visa,
       savedType: SavedPaymentMethodType.Normal,
@@ -351,7 +351,9 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
   const paymentSelection: PaymentSelection = {
-    kind: paymentMethod.recurringCard ? 'saved_recurring' : 'non_recurring',
+    saveOption: paymentMethod.recurringCard
+      ? 'saved_recurring'
+      : 'non_recurring',
     paymentMethod: paymentMethod,
   };
 
