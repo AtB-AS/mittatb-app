@@ -28,8 +28,8 @@ import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {PayWithBonusPointsCheckbox} from '@atb/bonus';
-import {findRelevantBonusProduct} from '@atb/bonus/utils';
+import {PayWithBonusPointsCheckbox} from '@atb/modules/bonus';
+import {findRelevantBonusProduct} from '@atb/modules/bonus/utils';
 
 type Props = {
   stationId: string;
