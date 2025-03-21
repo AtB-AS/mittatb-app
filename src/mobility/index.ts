@@ -12,7 +12,6 @@ export {
   isScooter,
   isVehicleFeature,
   isVehiclesClusteredFeature,
-  isActive,
   findOperatorBrandImageUrl,
   isScooterV2,
   isBicycleV2,
