@@ -29,7 +29,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const analytics = useAnalyticsContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
-    useTicketInfo(route.params.orderId);
+    useTicketInfo(route.params.fareContractId);
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&

@@ -15,8 +15,8 @@ import {ContentHeading} from '@atb/components/heading';
 import {useFareContracts} from '@atb/ticketing';
 
 type Props = {
-  onPressDetails?: (orderId: string) => void;
-  onPressBuy(): void;
+  onPressDetails: (fareContractId: string) => void;
+  onPressBuy: () => void;
   style?: ViewStyle;
 };
 
@@ -66,9 +66,7 @@ export const CompactFareContracts: React.FC<Props> = ({
                 key={fareContract.id}
                 {...fareContractInfoDetailsProps}
                 now={serverNow}
-                onPressDetails={() => {
-                  onPressDetails?.(fareContract.orderId);
-                }}
+                onPressDetails={() => onPressDetails(fareContract.id)}
                 testID={'fareContract' + index}
               />
             );

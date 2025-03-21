@@ -256,11 +256,11 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         {enable_ticketing && (
           <CompactFareContracts
             style={style.contentSection}
-            onPressDetails={(orderId: string) => {
+            onPressDetails={(fareContractId: string) => {
               return navigation.navigate({
                 name: 'Root_FareContractDetailsScreen',
                 params: {
-                  orderId: orderId,
+                  fareContractId: fareContractId,
                 },
               });
             }}

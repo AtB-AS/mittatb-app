@@ -8,8 +8,8 @@ export const Profile_TicketHistoryScreen = ({route, navigation}: Props) => {
   return (
     <TicketHistoryScreenComponent
       mode={route.params.mode}
-      onPressFareContract={(orderId) =>
-        navigation.navigate('Root_FareContractDetailsScreen', {orderId})
+      onPressFareContract={(fareContractId) =>
+        navigation.navigate('Root_FareContractDetailsScreen', {fareContractId})
       }
     />
   );

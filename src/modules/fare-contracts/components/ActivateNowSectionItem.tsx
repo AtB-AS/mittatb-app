@@ -8,10 +8,12 @@ import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
 
 type ActivateNowSectionItemProps = SectionItemProps<{
   fareContractId: string;
+  fareProductType: string | undefined;
 }>;
 
 export function ActivateNowSectionItem({
   fareContractId,
+  fareProductType,
   ...sectionProps
 }: ActivateNowSectionItemProps): JSX.Element {
   const {t} = useTranslation();
@@ -20,7 +22,12 @@ export function ActivateNowSectionItem({
 
   const onPress = () => {
     open(
-      () => <ActivateNowBottomSheet fareContractId={fareContractId} />,
+      () => (
+        <ActivateNowBottomSheet
+          fareContractId={fareContractId}
+          fareProductType={fareProductType}
+        />
+      ),
       onCloseFocusRef,
     );
   };

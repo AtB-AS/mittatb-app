@@ -18,9 +18,9 @@ type TicketInfo = {
   preassignedFareProduct: PreassignedFareProduct | undefined;
 };
 
-export const useTicketInfo = (orderId: string): TicketInfo => {
-  const {findFareContractByOrderId} = useTicketingContext();
-  const fareContract = findFareContractByOrderId(orderId);
+export const useTicketInfo = (fareContractId: string): TicketInfo => {
+  const {findFareContractById} = useTicketingContext();
+  const fareContract = findFareContractById(fareContractId);
   const firstTravelRight = fareContract?.travelRights[0];
 
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
