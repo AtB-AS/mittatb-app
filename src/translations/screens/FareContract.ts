@@ -225,25 +225,25 @@ const FareContractTexts = {
       'Vil du angre billettkjøpet?',
     ),
     bottomSheetDescription: _(
-      'Hvis du ikke trenger billetten likevel, kan du angre kjøpet og få pengene tilbake. Det kan ta litt tid før pengene er tilbake på kontoen din.',
-      "If you don't need the ticket after all, you can undo the purchase and get your money back. It might take some time before the money is refunded to your account.",
-      'Hvis du ikkje treng billetten likevel, kan du angre kjøpet og få tilbake pengane. Det kan ta litt tid før pengane er tilbake på kontoen din.',
+      'Her kan du angre kjøpet av billetten og få pengene tilbake. Pengene er tilbake på konto innen få virkedager.',
+      'Here you can undo the ticket purchase and get your money back. The money will be back in your account within a few business days.',
+      'Her kan du angre kjøpet av billetten og få pengane tilbake. Pengane er tilbake på kontoen din innen få virkedagar.',
     ),
     confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
-    genericRefundOptionsError: _(
-      'En feil oppstod under lasting av statusen til billetten. Vennligst prøv igjen, eller ta kontakt med kundeservice.',
-      'An error occurred while loading information about the ticket. Please try again, or contact customer service.',
-      'Ein feil oppstod under lasting av statusen til billetten. Ver venleg og prøv igjen, eller ta kontakt med kundeservice.',
-    ),
     genericError: _(
-      'En feil har oppstått under refundering av billetten. Vennligst prøv igjen, eller ta kontakt med kundeservice.',
-      'An error occurred while refunding the ticket. Please try again, or contact customer service.',
-      'Ein feil har oppstått under refundering av billetten. Ver venleg og prøv igjen, eller ta kontakt med kundeservice.',
+      'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
+      'We are unable to refund this purchase. Please try again or contact customer service.',
+      'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
     ),
-    notRefundable: _(
-      'Billetten er ikke tilgjengelig for refusjon.',
-      'The ticket is not available for refund.',
-      'Billetten er ikkje tilgjengeleg for refusjon.',
+    readMore: _(
+      'Les mer om refusjonsregler',
+      'Read more about refund rules',
+      'Les meir om refusjonsreglar',
+    ),
+    readMoreA11yLabel: _(
+      'Les mer om refusjonsregler, åpner side i nettleser',
+      'Read more about refund rules, opens page in browser',
+      'Les meir om refusjonreglar, åpner side i nettlesar',
     ),
   },
   carnet: {

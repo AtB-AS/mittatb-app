@@ -49,6 +49,7 @@ import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSecti
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
 import {RefundSectionItem} from '../components/RefundSectionItem';
+import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 
 type Props = {
   fareContract: FareContractType;
@@ -73,8 +74,8 @@ export const DetailsContent: React.FC<Props> = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
-  const {isActivateTicketNowEnabled, isRefundsEnabled} =
-    useFeatureTogglesContext();
+  const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
+  const {data: refundOptions} = useRefundOptionsQuery(fc.orderId);
 
   const {
     travelRights,
@@ -214,7 +215,7 @@ export const DetailsContent: React.FC<Props> = ({
           testID="receiptButton"
         />
       )}
-      {fc.orderId && isRefundsEnabled && (
+      {refundOptions?.is_refundable && (
         <RefundSectionItem
           orderId={fc.orderId}
           fareProductType={preassignedFareProduct?.type}
