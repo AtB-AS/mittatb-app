@@ -193,3 +193,11 @@ export type AddPaymentMethodResponse = {
   recurring_payment_id: number;
   terminal_url: string;
 };
+
+/**
+ * Defined by RefundOptionsResponse in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs
+ */
+export type RefundOptions = {
+  is_refundable: boolean;
+};

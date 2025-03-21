@@ -321,7 +321,7 @@ const ProfileTexts = {
           ),
         },
         refund: {
-          label: _('Refusjon', 'Refund', 'Refusjon'),
+          label: _('Refusjon', 'Refunds', 'Refusjon'),
           a11yLabel: _(
             'Refusjon, åpner side i nettleser',
             'Refund, opens page in browser',

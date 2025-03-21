@@ -9,6 +9,7 @@ import {
   PaymentType,
   RecentFareContractBackend,
   RecurringPayment,
+  RefundOptions,
   ReserveOffer,
   SendReceiptResponse,
   TicketRecipientType,
@@ -199,4 +200,18 @@ export async function getFareContracts(
   return fareContracts.filter(
     (fc: any) => FareContractType.safeParse(fc).success,
   );
+}
+
+export async function getRefundOptions(orderId: string) {
+  const url = `sales/v1/refund/options/${orderId}`;
+  const response = await client.get<RefundOptions>(url, {
+    authWithIdToken: true,
+  });
+  return response.data;
+}
+
+export async function refundFareContract(orderId: string) {
+  const url = `sales/v1/refund`;
+  const response = await client.post(url, {orderId}, {authWithIdToken: true});
+  return response.data;
 }
