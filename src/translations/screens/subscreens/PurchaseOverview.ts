@@ -176,7 +176,7 @@ const PurchaseOverviewTexts = {
   travellerSelectionSheet: {
     title: _('Reisende', 'Travellers', 'Reisande'),
     close: _('Lukk', 'Close', 'Lukk'),
-    confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
+    confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft valg'),
   },
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
@@ -210,7 +210,7 @@ const PurchaseOverviewTexts = {
     ),
     button: {
       payment: _('Til betaling', 'To payment', 'Til betaling'),
-      sendToOthers: _('Gå videre', 'Continue', 'Gå vidare'),
+      sendToOthers: _('Velg mottaker', 'Select recipient', 'Vel mottakar'),
     },
     ordinaryPriceA11yLabel: (priceString: string) =>
       _(
@@ -248,15 +248,17 @@ const PurchaseOverviewTexts = {
   },
   onBehalfOf: {
     sectionTitle: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
+
     sectionSubText: _(
       'Den du kjøper billett til, må være innlogget i AtB-appen for å få billetten.',
-      'The person you buy a ticket for, must be logged in to the AtB app to get the ticket.',
+      'The person you buy a ticket for, must be logged in to the AtB app to recieve the ticket.',
       'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
     ),
+
     sendToOthersText: _(
-      'Sendes til noen andre',
-      'Sending to someone else',
-      'Sendast til nokon andre',
+      'Send billetten til noen andre',
+      'Send the ticket to someone else',
+      'Send biletten til nokon andre',
     ),
   },
   ticketInformation: {
