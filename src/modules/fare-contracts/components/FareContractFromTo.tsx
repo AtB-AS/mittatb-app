@@ -33,7 +33,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   if (!controllerData) return null;
 
   switch (controllerData.mode) {
-    case 'zones':
+    case FareContractFromToMode.Zones:
       return (
         <ZonesFromTo
           tariffZoneRefs={controllerData.tariffZoneRefs}
@@ -41,7 +41,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
           backgroundColor={props.backgroundColor}
         />
       );
-    case 'harbors':
+    case FareContractFromToMode.Harbors:
       return (
         <HarborsFromTo
           startPointRef={controllerData.startPointRef}
@@ -51,7 +51,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
           backgroundColor={props.backgroundColor}
         />
       );
-    case 'school':
+    case FareContractFromToMode.School:
       return (
         <SchoolFromTo
           schoolName={controllerData.schoolName}
@@ -62,20 +62,25 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
   }
 };
 
+enum FareContractFromToMode {
+  Zones = 'zones',
+  Harbors = 'harbors',
+  School = 'school',
+}
 type HarborsFromToData = {
-  mode: 'harbors';
+  mode: FareContractFromToMode.Harbors;
   startPointRef: string;
   endPointRef?: string;
   direction: TravelRightDirection;
 };
 
 type ZonesFromToData = {
-  mode: 'zones';
+  mode: FareContractFromToMode.Zones;
   tariffZoneRefs: string[];
 };
 
 type SchoolFromToData = {
-  mode: 'school';
+  mode: FareContractFromToMode.School;
   schoolName: string;
 };
 
@@ -95,7 +100,7 @@ function useFareContractFromToController(
     const firstTravelRight = fcOrRfc.travelRights.at(0);
     if (firstTravelRight?.schoolName) {
       return {
-        mode: 'school',
+        mode: FareContractFromToMode.School,
         schoolName: firstTravelRight.schoolName,
       };
     }
@@ -172,14 +177,14 @@ function useFareContractFromToController(
 
   if (!!startPointRef)
     return {
-      mode: 'harbors',
+      mode: FareContractFromToMode.Harbors,
       startPointRef,
       endPointRef,
       direction,
     };
   else if (!!tariffZoneRefs.length)
     return {
-      mode: 'zones',
+      mode: FareContractFromToMode.Zones,
       tariffZoneRefs,
     };
 }
