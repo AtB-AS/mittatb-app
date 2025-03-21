@@ -38,7 +38,7 @@ export const useShmoActiveBottomSheet = (
     setBottomSheetCurrentlyAutoSelected(undefined);
   }, [close, setBottomSheetCurrentlyAutoSelected]);
 
-  const flyToMapItemLocation = useCallback(async () => {
+  const flyToUserLocation = useCallback(async () => {
     const coordiantes = await getCurrentCoordinates();
     mapCameraRef &&
       flyToLocation({
@@ -53,7 +53,7 @@ export const useShmoActiveBottomSheet = (
   }, [mapCameraRef, getCurrentCoordinates]);
 
   useEffect(() => {
-    if (!isFocused && !isShmoDeepIntegrationEnabled) return;
+    if (!isFocused || !isShmoDeepIntegrationEnabled) return;
     try {
       if (
         activeBooking
@@ -66,7 +66,7 @@ export const useShmoActiveBottomSheet = (
               () => (
                 <ActiveScooterSheet
                   onClose={closeBottomSheet}
-                  onVehicleReceived={flyToMapItemLocation}
+                  onActiveBookingReceived={flyToUserLocation}
                   navigateSupportCallback={() => {
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
@@ -110,7 +110,7 @@ export const useShmoActiveBottomSheet = (
     bottomSheetToAutoSelect,
     openBottomSheet,
     isFocused,
-    flyToMapItemLocation,
+    flyToUserLocation,
     setBottomSheetToAutoSelect,
     navigation,
     activeBooking,

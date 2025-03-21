@@ -14,6 +14,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatErrorMessage} from '../utils.ts';
+import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext.tsx';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
@@ -33,6 +34,7 @@ export const ShmoActionButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const coordinates = getCurrentCoordinatesGlobal();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -41,31 +43,36 @@ export const ShmoActionButton = ({
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
 
+  //TODO: This recurringPaymentId logic will be updated with new paymentcard component being created
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
+  const lastRecurringPaymentMethod =
+    !!recurringPaymentMethods && recurringPaymentMethods.length > 0
+      ? recurringPaymentMethods[recurringPaymentMethods.length - 1]
+      : undefined;
+
+  const recurringPaymentId =
+    lastRecurringPaymentMethod?.savedType === 'recurring'
+      ? lastRecurringPaymentMethod?.recurringCard?.id
+      : '';
 
   const initShmoBooking = useCallback(() => {
-    if (
-      vehicleId &&
-      recurringPaymentMethods &&
-      recurringPaymentMethods.length > 0
-    ) {
-      //TODO: This recurringPaymentId logic will be updated with new paymentcard component being created
-      const lastRecurringPaymentMethod =
-        recurringPaymentMethods[recurringPaymentMethods.length - 1];
-
-      const recurringPaymentId =
-        lastRecurringPaymentMethod.savedType === 'recurring'
-          ? lastRecurringPaymentMethod?.recurringCard?.id
-          : 0;
-      const initReqBody: InitShmoOneStopBookingRequestBody = {
-        recurringPaymentId: recurringPaymentId ?? 0,
-        coordinates: {latitude: 0, longitude: 0},
-        assetId: vehicleId,
-        operatorId: operatorId,
-      };
-      initShmoOneStopBooking(initReqBody);
-    }
-  }, [initShmoOneStopBooking, vehicleId, operatorId, recurringPaymentMethods]);
+    const initReqBody: InitShmoOneStopBookingRequestBody = {
+      recurringPaymentId: recurringPaymentId ?? (0 as any),
+      coordinates: {
+        latitude: coordinates?.latitude ?? 0,
+        longitude: coordinates?.longitude ?? 0,
+      },
+      assetId: vehicleId ?? '',
+      operatorId: operatorId,
+    };
+    initShmoOneStopBooking(initReqBody);
+  }, [
+    initShmoOneStopBooking,
+    vehicleId,
+    operatorId,
+    coordinates,
+    recurringPaymentId,
+  ]);
 
   if (authenticationType != 'phone') {
     return (

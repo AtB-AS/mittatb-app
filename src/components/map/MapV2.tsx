@@ -7,7 +7,7 @@ import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -230,10 +230,6 @@ export const MapV2 = (props: MapProps) => {
     [onMapClick, activeShmoBooking],
   );
 
-  // The onPress handling is slow on old android devices with this feature enabled
-  const [showSelectedFeature, _setShowSelectedFeature] = useState(true);
-  const enableShowSelectedFeature = showSelectedFeature; // being considered: setting this to Platform.OS !== 'android'; for temporary performance measure
-
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -269,26 +265,16 @@ export const MapV2 = (props: MapProps) => {
           {mapLines && <MapRoute lines={mapLines} />}
 
           <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={
-              enableShowSelectedFeature
-                ? selectedFeature?.properties?.id
-                : undefined
-            }
+            selectedFeaturePropertyId={selectedFeature?.properties?.id}
             onMapItemClick={onMapItemClick}
           />
 
-          {enableShowSelectedFeature && (
-            <SelectedFeatureIcon selectedFeature={selectedFeature} />
-          )}
+          <SelectedFeatureIcon selectedFeature={selectedFeature} />
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
-              selectedFeatureId={
-                enableShowSelectedFeature
-                  ? selectedFeature?.properties?.id
-                  : undefined
-              }
+              selectedFeatureId={selectedFeature?.properties?.id}
               onPress={onMapItemClick}
               showVehicles={true}
               showStations={true}

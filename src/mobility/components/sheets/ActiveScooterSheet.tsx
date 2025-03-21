@@ -15,10 +15,7 @@ import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {
-  PricingPlanFragment,
-  PricingSegmentFragment,
-} from '@atb/api/types/generated/fragments/mobility-shared';
+import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
@@ -26,13 +23,13 @@ import {formatErrorMessage} from '@atb/mobility/utils';
 
 type Props = {
   onClose: () => void;
-  onVehicleReceived?: () => void;
+  onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
 };
 
 export const ActiveScooterSheet = ({
   onClose,
-  onVehicleReceived,
+  onActiveBookingReceived,
   navigateSupportCallback,
 }: Props) => {
   const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
@@ -40,14 +37,7 @@ export const ActiveScooterSheet = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
 
-  const pricePlan: PricingPlanFragment = {
-    price: activeBooking?.pricingPlan.price ?? 0,
-    perMinPricing: activeBooking?.pricingPlan
-      .perMinPricing as unknown as Array<PricingSegmentFragment>,
-    perKmPricing: [],
-  };
-
-  useDoOnceOnItemReceived(onVehicleReceived, activeBooking);
+  useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
@@ -88,13 +78,14 @@ export const ActiveScooterSheet = ({
               <ScrollView style={styles.container}>
                 <ShmoTripCard bookingId={activeBooking.bookingId} />
                 <VehicleCard
-                  pricingPlan={pricePlan}
+                  pricingPlan={activeBooking.pricingPlan as PricingPlanFragment}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
-                    (activeBooking.asset.currentRangeKm as number) * 1000 // Convert km to meters
+                    activeBooking.asset?.currentRangeKm
+                      ? activeBooking.asset.currentRangeKm * 1000
+                      : 0
                   }
                   operatorName={activeBooking.operator.name}
-                  brandLogoUrl=""
                 />
               </ScrollView>
               <View style={styles.footer}>
