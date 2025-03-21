@@ -79,6 +79,23 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   onPress={() => {}}
                   selected={false}
                 />
+                <RadioSectionItem
+                  text="RadioSectionItem selected"
+                  onPress={() => {}}
+                  selected={true}
+                />
+                <RadioSectionItem
+                  text="RadioSectionItem transparent"
+                  onPress={() => {}}
+                  selected={false}
+                  transparent
+                />
+                <RadioSectionItem
+                  text="RadioSectionItem transparent selected"
+                  onPress={() => {}}
+                  selected={true}
+                  transparent
+                />
                 <CounterSectionItem
                   text="CounterSectionItem"
                   count={2}
@@ -191,12 +208,25 @@ export const RadioSection: Meta<SectionMetaProps> = {
         args={{
           ...args,
           children: (
-            <RadioGroupSection
-              items={['Radio group option 1', 'Radio group option 2']}
-              keyExtractor={(s) => s}
-              itemToText={(t) => t}
-              selected="Radio group option 1"
-            />
+            <View style={{rowGap: 20}}>
+              <RadioGroupSection
+                items={['Radio group option 1', 'Radio group option 2']}
+                keyExtractor={(s) => s}
+                itemToText={(t) => t}
+                selected="Radio group option 1"
+              />
+
+              <RadioGroupSection
+                items={[
+                  'Spacious radio group option 1',
+                  'Spacious radio group option 2',
+                ]}
+                keyExtractor={(s) => s}
+                itemToText={(t) => t}
+                selected="Spacious radio group option 1"
+                type="spacious"
+              />
+            </View>
           ),
         }}
       />
