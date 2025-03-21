@@ -1,7 +1,6 @@
 import React, {ReactNode} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import {BottomSheetHeader} from '@atb/components/bottom-sheet';
-import {ScrollView} from 'react-native-gesture-handler';
 
 export type BottomSheetContainerProps = {
   children: ReactNode;
@@ -32,7 +31,7 @@ export function BottomSheetContainer({
         title={title}
         focusTitleOnLoad={focusTitleOnLoad}
       />
-      <ScrollView>{children}</ScrollView>
+      {children}
     </View>
   );
 }

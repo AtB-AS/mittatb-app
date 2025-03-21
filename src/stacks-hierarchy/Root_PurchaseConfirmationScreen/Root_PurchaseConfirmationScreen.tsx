@@ -298,7 +298,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           <Section>
             <GenericSectionItem>
               <PaymentSelectionCard
-                card={paymentMethod}
+                paymentMethod={paymentMethod}
                 startAction={selectPaymentMethod}
               />
             </GenericSectionItem>

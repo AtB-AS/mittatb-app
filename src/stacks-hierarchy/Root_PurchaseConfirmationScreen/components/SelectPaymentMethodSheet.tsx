@@ -15,6 +15,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   CardPaymentMethod,
   PaymentMethod,
+  PaymentSelection,
   SavedPaymentMethodType,
   VippsPaymentMethod,
 } from '@atb/stacks-hierarchy/types';
@@ -23,6 +24,7 @@ import {PaymentType, humanizePaymentType} from '@atb/ticketing';
 import {RadioIcon, getRadioA11y} from '@atb/components/radio';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = {
   onSelect: (
@@ -63,104 +65,112 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 
   const multiplePaymentMethod = defaultPaymentMethods.filter(
     (method): method is CardPaymentMethod =>
-      method.paymentType in
-      {
-        [PaymentType.Mastercard]: true,
-        [PaymentType.Visa]: true,
-        [PaymentType.Amex]: true,
-      },
+      [PaymentType.Mastercard, PaymentType.Visa, PaymentType.Amex].includes(
+        method.paymentType,
+      ),
   );
 
   const [selectedMethod, setSelectedMethod] = useState(
     currentOptions?.paymentMethod,
   );
 
+  const [selectedCard, setSelectedCard] = useState<PaymentSelection>();
+
   return (
     <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
-      <View style={{flex: 1}}>
-        <View style={styles.paymentMethods}>
-          {singlePaymentMethod.map((method, index) => {
-            return (
+      <ScrollView>
+        <View style={{flex: 1}}>
+          <View style={styles.paymentMethods}>
+            {singlePaymentMethod.map((method, index) => {
+              return (
+                <SinglePaymentMethod
+                  key={method.paymentType}
+                  paymentMethod={method}
+                  shouldSave={shouldSave}
+                  onSetShouldSave={setShouldSave}
+                  selected={
+                    selectedCard?.kind == 'non_recurring' &&
+                    selectedCard?.paymentMethod?.paymentType ===
+                      method.paymentType
+                  }
+                  onSelect={(val: PaymentSelection) => {
+                    setSelectedMethod(val.paymentMethod);
+                    setSelectedCard(val);
+                    setShouldSave(false);
+                  }}
+                  index={index}
+                />
+              );
+            })}
+            <MultiplePaymentMethodsRadioSection
+              shouldSave={shouldSave}
+              onSetShouldSave={setShouldSave}
+              selected={selectedCard?.kind === 'new_recurring'}
+              onSelect={(val: PaymentSelection) => {
+                setShouldSave(true);
+                setSelectedMethod(val.paymentMethod);
+                setSelectedCard(val);
+              }}
+              paymentGroup={multiplePaymentMethod}
+              testID="multiplePaymentMethods"
+            />
+
+            {authenticationType !== 'phone' && (
+              <MessageInfoText
+                style={styles.warningMessageAnonym}
+                message={t(
+                  AnonymousPurchases.consequences.select_payment_method,
+                )}
+                type="warning"
+              />
+            )}
+
+            {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
+              <View style={styles.listHeading}>
+                <ThemeText>
+                  {t(SelectPaymentMethodTexts.saved_cards.text)}
+                </ThemeText>
+              </View>
+            )}
+            {recurringPaymentMethods?.map((method, index) => (
               <SinglePaymentMethod
-                key={method.paymentType}
+                key={method.recurringCard?.id}
                 paymentMethod={method}
                 shouldSave={shouldSave}
                 onSetShouldSave={setShouldSave}
                 selected={
-                  !selectedMethod?.recurringCard &&
-                  selectedMethod?.paymentType === method.paymentType
+                  selectedCard?.kind == 'saved_recurring' &&
+                  selectedCard?.paymentMethod?.recurringCard?.id ===
+                    method.recurringCard?.id
                 }
-                onSelect={(val: PaymentMethod) => {
-                  setSelectedMethod(val);
+                onSelect={(val: PaymentSelection) => {
+                  setSelectedMethod(val.paymentMethod);
+                  setSelectedCard(val);
                   setShouldSave(false);
                 }}
                 index={index}
               />
-            );
-          })}
-          <MultiplePaymentMethodsRadioSection
-            shouldSave={shouldSave}
-            onSetShouldSave={setShouldSave}
-            selected={
-              !selectedMethod?.recurringCard &&
-              selectedMethod?.paymentType ===
-                multiplePaymentMethod[0]?.paymentType
-            }
-            onSelect={() => {
-              setShouldSave(true);
-              setSelectedMethod(multiplePaymentMethod[0]);
-            }}
-            paymentGroup={multiplePaymentMethod}
-            testID="multiplePaymentMethods"
-          />
-
-          {authenticationType !== 'phone' && (
-            <MessageInfoText
-              style={styles.warningMessageAnonym}
-              message={t(AnonymousPurchases.consequences.select_payment_method)}
-              type="warning"
+            ))}
+          </View>
+          <FullScreenFooter>
+            <Button
+              expanded={true}
+              style={styles.confirmButton}
+              interactiveColor={theme.color.interactive[0]}
+              text={t(SelectPaymentMethodTexts.confirm_button.text)}
+              accessibilityHint={t(
+                SelectPaymentMethodTexts.confirm_button.a11yhint,
+              )}
+              onPress={() => {
+                if (selectedMethod) onSelect(selectedMethod, shouldSave);
+              }}
+              disabled={!selectedMethod}
+              rightIcon={{svg: Confirm}}
+              testID="confirmButton"
             />
-          )}
-
-          {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
-            <View style={styles.listHeading}>
-              <ThemeText>
-                {t(SelectPaymentMethodTexts.saved_cards.text)}
-              </ThemeText>
-            </View>
-          )}
-          {recurringPaymentMethods?.map((method, index) => (
-            <SinglePaymentMethod
-              key={method.recurringCard?.id}
-              paymentMethod={method}
-              selected={
-                selectedMethod?.recurringCard?.id === method.recurringCard?.id
-              }
-              shouldSave={shouldSave}
-              onSetShouldSave={setShouldSave}
-              onSelect={setSelectedMethod}
-              index={index}
-            />
-          ))}
+          </FullScreenFooter>
         </View>
-        <FullScreenFooter>
-          <Button
-            expanded={true}
-            style={styles.confirmButton}
-            interactiveColor={theme.color.interactive[0]}
-            text={t(SelectPaymentMethodTexts.confirm_button.text)}
-            accessibilityHint={t(
-              SelectPaymentMethodTexts.confirm_button.a11yhint,
-            )}
-            onPress={() => {
-              if (selectedMethod) onSelect(selectedMethod, shouldSave);
-            }}
-            disabled={!selectedMethod}
-            rightIcon={{svg: Confirm}}
-            testID="confirmButton"
-          />
-        </FullScreenFooter>
-      </View>
+      </ScrollView>
     </BottomSheetContainer>
   );
 };
@@ -168,7 +178,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 type MultiplePaymentMethodsProps = {
   paymentMethod?: PaymentMethod;
   selected: boolean;
-  onSelect: (value: PaymentMethod[]) => void;
+  onSelect: (value: PaymentSelection) => void;
   shouldSave: boolean;
   onSetShouldSave: (val: boolean) => void;
   paymentGroup: PaymentMethod[];
@@ -206,12 +216,19 @@ const MultiplePaymentMethodsRadioSection: React.FC<
 
   const paymentTexts = getPaymentTexts(paymentGroup);
   const canSaveCard = authenticationType === 'phone';
+  const paymentSelection: PaymentSelection = {
+    kind: 'new_recurring',
+    paymentMethod: {
+      paymentType: PaymentType.Visa,
+      savedType: SavedPaymentMethodType.Normal,
+    },
+  };
 
   return (
     <View style={styles.card}>
       <PressableOpacity
         style={[styles.paymentMethod, styles.centerRow]}
-        onPress={() => onSelect(paymentGroup)}
+        onPress={() => onSelect(paymentSelection)}
         accessibilityHint={paymentTexts.hint}
         {...getRadioA11y(paymentTexts.label, selected, t)}
         testID="multiple payment methods"
@@ -269,7 +286,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
 type PaymentMethodProps = {
   paymentMethod: PaymentMethod;
   selected: boolean;
-  onSelect: (value: PaymentMethod) => void;
+  onSelect: (value: PaymentSelection) => void;
   shouldSave: boolean;
   onSetShouldSave: (val: boolean) => void;
   index: number;
@@ -333,12 +350,16 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
     paymentMethod.paymentType !== PaymentType.Vipps;
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
+  const paymentSelection: PaymentSelection = {
+    kind: paymentMethod.recurringCard ? 'saved_recurring' : 'non_recurring',
+    paymentMethod: paymentMethod,
+  };
 
   return (
     <View style={styles.card}>
       <PressableOpacity
         style={[styles.paymentMethod, styles.centerRow]}
-        onPress={() => onSelect(paymentMethod)}
+        onPress={() => onSelect(paymentSelection)}
         accessibilityHint={paymentTexts.hint}
         {...getRadioA11y(paymentTexts.label, selected, t)}
         testID={getPaymentTestId(paymentMethod, index)}
@@ -361,15 +382,6 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
               <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
           </View>
-
-          {/* this is just a template for the future message implementation
-          {paymentMethod.recurringCard && (
-            <MessageInfoText
-              style={styles.warningMessage}
-              message="Expiration messsage"
-              type="warning"
-            />
-          )} */}
         </View>
       </PressableOpacity>
       {selected && canSaveCard && (

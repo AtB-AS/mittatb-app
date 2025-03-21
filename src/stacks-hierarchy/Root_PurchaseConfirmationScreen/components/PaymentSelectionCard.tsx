@@ -20,24 +20,27 @@ export type Brand = {
 };
 
 export const PaymentSelectionCard = (props: {
-  card: PaymentMethod;
+  paymentMethod: PaymentMethod;
   startAction: Function;
 }) => {
-  const {card, startAction} = props;
-  const paymentName = humanizePaymentType(card.paymentType);
+  const {paymentMethod, startAction} = props;
+  const paymentName = humanizePaymentType(paymentMethod.paymentType);
   const style = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const fontScale = useFontScale();
   const multiplePaymentMethods = !(
-    card.recurringCard || card.paymentType === PaymentType.Vipps
+    paymentMethod.recurringCard ||
+    paymentMethod.paymentType === PaymentType.Vipps
   );
 
   return (
     <View style={style.card}>
       <View style={style.cardTop}>
         <PaymentBrand
-          paymentType={multiplePaymentMethods ? undefined : card.paymentType}
+          paymentType={
+            multiplePaymentMethods ? undefined : paymentMethod.paymentType
+          }
         />
         <View style={style.paymentMethod}>
           <ThemeText>
@@ -46,17 +49,17 @@ export const PaymentSelectionCard = (props: {
               : paymentName}
           </ThemeText>
           {!multiplePaymentMethods &&
-            card.paymentType !== PaymentType.Vipps && (
+            paymentMethod.paymentType !== PaymentType.Vipps && (
               <ThemeText
                 style={style.maskedPan}
                 accessibilityLabel={t(
                   PaymentMethodsTexts.a11y.cardInfo(
                     paymentName,
-                    card.recurringCard?.masked_pan ?? '',
+                    paymentMethod.recurringCard?.masked_pan ?? '',
                   ),
                 )}
               >
-                **** {card.recurringCard?.masked_pan}
+                **** {paymentMethod.recurringCard?.masked_pan}
               </ThemeText>
             )}
         </View>
@@ -66,7 +69,7 @@ export const PaymentSelectionCard = (props: {
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
-                card.recurringCard?.masked_pan ?? '',
+                paymentMethod.recurringCard?.masked_pan ?? '',
               ),
             )}
             style={style.actionButton}

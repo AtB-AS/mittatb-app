@@ -31,7 +31,9 @@ export const Checkbox: React.FC<CheckedProps> = ({
       style={[style, styles.saveCheckbox, styles.saveCheckboxDefault]}
       testID={testID ? `${testID}Checkbox` : 'checkbox'}
     >
-      {checked ? <SvgCheckboxChecked width={theme.icon.size.normal} /> : null}
+      {checked ? (
+        <SvgCheckboxChecked fill="white" width={theme.icon.size.normal} />
+      ) : null}
     </View>
   );
 };
