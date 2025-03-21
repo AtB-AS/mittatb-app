@@ -17,7 +17,7 @@ type Props = {
   currentFuelPercent: number | undefined;
   currentRangeMeters: number;
   operatorName: string;
-  brandLogoUrl: string | undefined;
+  brandLogoUrl?: string;
 };
 
 export const VehicleCard = ({

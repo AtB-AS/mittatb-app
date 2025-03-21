@@ -2,7 +2,7 @@ export {CarSharingStationBottomSheet} from './components/CarSharingStationBottom
 export {BikeStationBottomSheet} from './components/BikeStationBottomSheet';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
-export {ScooterSheet} from './components/ScooterSheet';
+export {ScooterSheet} from './components/sheets/ScooterSheet';
 export {useStations} from './use-stations';
 export {useVehicles} from './use-vehicles';
 export {
