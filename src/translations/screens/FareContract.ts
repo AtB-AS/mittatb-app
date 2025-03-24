@@ -216,6 +216,36 @@ const FareContractTexts = {
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
   },
+  refund: {
+    cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+    refund: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    bottomSheetTitle: _(
+      'Vil du angre billettkjøpet?',
+      'Do you want to undo the ticket purchase?',
+      'Vil du angre billettkjøpet?',
+    ),
+    bottomSheetDescription: _(
+      'Her kan du angre kjøpet av billetten og få pengene tilbake. Pengene er tilbake på konto innen få virkedager.',
+      'Here you can undo the ticket purchase and get your money back. The money will be back in your account within a few business days.',
+      'Her kan du angre kjøpet av billetten og få pengane tilbake. Pengane er tilbake på kontoen din innen få virkedagar.',
+    ),
+    confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    genericError: _(
+      'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
+      'We are unable to refund this purchase. Please try again or contact customer service.',
+      'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
+    ),
+    readMore: _(
+      'Les mer om refusjonsregler',
+      'Read more about refund rules',
+      'Les meir om refusjonsreglar',
+    ),
+    readMoreA11yLabel: _(
+      'Les mer om refusjonsregler, åpner side i nettleser',
+      'Read more about refund rules, opens page in browser',
+      'Les meir om refusjonreglar, åpner side i nettlesar',
+    ),
+  },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(
