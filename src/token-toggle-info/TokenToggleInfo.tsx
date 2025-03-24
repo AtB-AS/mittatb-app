@@ -1,52 +1,41 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {ThemeText} from '@atb/components/text';
+import {ActivityIndicator} from 'react-native';
 import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,
 } from '@atb/utils/date';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ContrastColor, Mode} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {ContrastColor, Statuses} from '@atb/theme/colors';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type TokenToggleInfoProps = {
-  style?: StyleProp<ViewStyle>;
   textColor?: ContrastColor;
 };
 
-export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
+export const TokenToggleInfo = ({textColor}: TokenToggleInfoProps) => {
   const styles = useStyles();
   const {data, isLoading} = useTokenToggleDetailsQuery();
 
   const limit = data?.toggleLimit ?? 0;
 
   return isLoading ? (
-    <ActivityIndicator style={[styles.loader, style]} />
+    <ActivityIndicator style={styles.loader} />
   ) : (
-    <TokenToggleContent
-      toggleLimit={limit}
-      textColor={textColor}
-      style={style}
-    />
+    <TokenToggleContent toggleLimit={limit} textColor={textColor} />
   );
 };
 
 type TokenToggleContentProps = {
-  style?: StyleProp<ViewStyle>;
   toggleLimit: number;
   textColor?: ContrastColor;
 };
 
 const TokenToggleContent = ({
-  style,
   toggleLimit,
   textColor,
 }: TokenToggleContentProps) => {
   const {t, language} = useTranslation();
-  const {themeName} = useThemeContext();
-  const styles = useStyles();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
@@ -83,39 +72,27 @@ const TokenToggleContent = ({
   };
 
   return (
-    <View style={style}>
-      <ThemeIcon svg={getToggleInfoIcon(toggleLimit, themeName)} />
-      <ThemeText
-        style={styles.content}
-        accessibilityLabel={getToggleInfo(
-          toggleLimit,
-          countRenewalDateA11yLabel,
-        )}
-        color={textColor}
-        accessible={true}
-      >
-        {getToggleInfo(toggleLimit, countRenewalDate)}
-      </ThemeText>
-    </View>
+    <MessageInfoText
+      message={getToggleInfo(toggleLimit, countRenewalDate)}
+      type={getToggleInfoIcon(toggleLimit)}
+      a11yLabel={getToggleInfo(toggleLimit, countRenewalDateA11yLabel)}
+      textColor={textColor}
+    />
   );
 };
 
-const getToggleInfoIcon = (toggleLimit: number, themeName: Mode) => {
+const getToggleInfoIcon = (toggleLimit: number): Statuses => {
   switch (toggleLimit) {
     case 0:
-      return messageTypeToIcon('error', true, themeName);
+      return 'error';
     case 1:
-      return messageTypeToIcon('warning', true, themeName);
+      return 'warning';
     default:
-      return messageTypeToIcon('info', true, themeName);
+      return 'info';
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  content: {
-    marginLeft: theme.spacing.xSmall,
-    flex: 1,
-  },
+const useStyles = StyleSheet.createThemeHook(() => ({
   loader: {
     alignSelf: 'center',
     flex: 1,
