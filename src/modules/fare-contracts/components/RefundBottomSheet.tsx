@@ -1,3 +1,4 @@
+import {FareContractState} from '@atb-as/utils';
 import {useAnalyticsContext} from '@atb/analytics';
 import SvgExternalLink from '@atb/assets/svg/mono-icons/navigation/ExternalLink';
 import {
@@ -25,9 +26,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 type Props = {
   orderId: string;
   fareProductType: string | undefined;
+  state: FareContractState;
 };
 
-export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
+export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
@@ -39,7 +41,7 @@ export const RefundBottomSheet = ({orderId, fareProductType}: Props) => {
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
   const {data: refundOptions, status: refundOptionsStatus} =
-    useRefundOptionsQuery(orderId);
+    useRefundOptionsQuery(orderId, state);
 
   const {mutate: refund, status: refundStatus} =
     useRefundFareContractMutation();

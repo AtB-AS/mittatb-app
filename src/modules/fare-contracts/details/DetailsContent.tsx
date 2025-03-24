@@ -75,7 +75,7 @@ export const DetailsContent: React.FC<Props> = ({
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
-  const {data: refundOptions} = useRefundOptionsQuery(fc.orderId);
+  const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
   const {
     travelRights,
@@ -219,6 +219,7 @@ export const DetailsContent: React.FC<Props> = ({
         <RefundSectionItem
           orderId={fc.orderId}
           fareProductType={preassignedFareProduct?.type}
+          state={fc.state}
         />
       )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
