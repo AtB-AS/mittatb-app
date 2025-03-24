@@ -7,6 +7,6 @@ export const useRefundOptionsQuery = (orderId: string) => {
   return useQuery({
     queryKey: ['getRefundOptions', orderId],
     queryFn: () => getRefundOptions(orderId),
-    enabled: isRefundsEnabled,
+    enabled: isRefundsEnabled && !!orderId,
   });
 };
