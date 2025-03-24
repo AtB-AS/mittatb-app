@@ -29,7 +29,7 @@ export const useStations: (
   initialFilter?: MobilityMapFilterType,
 ) => StationsState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
-  const {isCityBikesInMapEnabled, isCarSharingInMapEnabled} =
+  const {isCityBikesInMapEnabled, isCarSharingInMapEnabled, isMapV2Enabled} =
     useFeatureTogglesContext();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
@@ -40,7 +40,8 @@ export const useStations: (
 
   const [stations, setStations] = useState<StationFeatures>(emptyStations);
 
-  const enableStations = isCityBikesInMapEnabled || isCarSharingInMapEnabled;
+  const enableStations =
+    (isCityBikesInMapEnabled || isCarSharingInMapEnabled) && !isMapV2Enabled;
 
   useEffect(() => {
     if (!initialFilter) {

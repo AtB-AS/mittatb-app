@@ -36,7 +36,13 @@ export const useVehicles: (
   initialFilter?: MobilityMapFilterType,
 ) => VehiclesState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
-  const {isVehiclesInMapEnabled} = useFeatureTogglesContext();
+  const {
+    isVehiclesInMapEnabled: isVehiclesInMapEnabledFeatureFlag,
+    isMapV2Enabled,
+  } = useFeatureTogglesContext();
+  const isVehiclesInMapEnabled =
+    isVehiclesInMapEnabledFeatureFlag && !isMapV2Enabled;
+
   const {getMapFilter} = useUserMapFilters();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
