@@ -38,18 +38,13 @@ const FareContractTexts = {
     unknown: _(`Ukjent`, `Unknown`, `Ukjent`),
     inactive: _(`Inaktiv`, `Inactive`, `Inaktiv`),
     inactiveCarnet: _(
-      `Ingen aktive klipp`,
-      `No active ticket`,
-      `Ingen aktive klipp`,
+      'Ingen aktive billetter',
+      'No active tickets',
+      'Ingen aktive billettar',
     ),
     uninspectable: (duration: string) =>
       _(`Utløper ${duration}`, `Expires ${duration}`, `Går ut ${duration}`),
     durationDelimiter: _(' og ', ' and ', ' og '),
-  },
-  usedAccessValidityIcon: {
-    valid: _(`Gyldig billett`, `Valid ticket`, `Gyldig billett`),
-    upcoming: _(`Kommende klipp`, `Upcoming ticket`, `Kommande klipp`),
-    inactive: _(`Ingen aktive klipp`, `No active ticket`, `Ingen aktive klipp`),
   },
   shmoDetails: {
     tripStarted: (dateTime: string) =>
@@ -195,7 +190,7 @@ const FareContractTexts = {
       'Activate to go to ticket information',
       'Aktivér for å gå til billetinformasjon',
     ),
-    usedAccesses: _('Brukte klipp', 'Used tickets', 'Brukte klipp'),
+    usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
   },
   activateNow: {
     startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
