@@ -16,6 +16,12 @@ export type RemoteToken = {
   type: string;
   state: string;
   allowedActions: string[];
+  deviceId?: string;
+  libraryVersion?: string;
+  appVersion?: string;
+  appVersionCode?: string;
+  osVersion?: string;
+  osApiLevel?: string;
   keyValues?: KeyValue[];
 };
 
