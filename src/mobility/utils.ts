@@ -36,6 +36,8 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
+  isShmoPricingPlan,
+  ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
   VehicleFeature,
@@ -261,23 +263,24 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
 };
 
 export const formatPricePerUnit = (
-  pricePlan: PricingPlanFragment,
+  pricePlan: PricingPlanFragment | ShmoPricingPlan,
   language: Language,
 ) => {
   const perMinPrice = pricePlan.perMinPricing?.[0];
-  const perKmPrice = pricePlan.perKmPricing?.[0];
 
   if (perMinPrice) {
     return {
       price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
       unit: 'min',
     };
-  }
-  if (perKmPrice) {
-    return {
-      price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-      unit: 'km',
-    };
+  } else if (!isShmoPricingPlan(pricePlan)) {
+    const perKmPrice = pricePlan.perKmPricing?.[0];
+    if (perKmPrice) {
+      return {
+        price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+        unit: 'km',
+      };
+    }
   }
   return undefined;
 };

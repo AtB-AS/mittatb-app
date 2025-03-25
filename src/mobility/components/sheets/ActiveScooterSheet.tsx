@@ -15,7 +15,6 @@ import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
@@ -78,7 +77,7 @@ export const ActiveScooterSheet = ({
               <ScrollView style={styles.container}>
                 <ShmoTripCard bookingId={activeBooking.bookingId} />
                 <VehicleCard
-                  pricingPlan={activeBooking.pricingPlan as PricingPlanFragment}
+                  pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
                     activeBooking.asset?.currentRangeKm
