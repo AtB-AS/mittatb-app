@@ -1,7 +1,7 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
@@ -13,19 +13,13 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useAuthContext} from '@atb/auth';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
-  isOnBehalfOfToggle: boolean;
-  onSave: (selection: PurchaseSelectionType, onBehalfOfToggle: boolean) => void;
+  onSave: (selection: PurchaseSelectionType) => void;
 };
 export const TravellerSelectionSheet = ({
   selection,
-  isOnBehalfOfToggle,
   onSave,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
@@ -36,14 +30,10 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
-  const [isTravelerOnBehalfOfToggle, setIsTravelerOnBehalfOfToggle] =
-    useState<boolean>(isOnBehalfOfToggle);
 
   const noProfilesSelected = userCountState.userProfilesWithCount.every(
     (u) => !u.count,
   );
-
-  const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
 
   return (
     <BottomSheetContainer
@@ -56,19 +46,6 @@ export const TravellerSelectionSheet = ({
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}
-        {shouldShowOnBehalfOf && (
-          <Section style={styles.onBehalfOfContainer}>
-            <ToggleSectionItem
-              leftImage={<HoldingHands />}
-              text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-              subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
-              value={isTravelerOnBehalfOfToggle}
-              textType="body__primary--bold"
-              onValueChange={setIsTravelerOnBehalfOfToggle}
-              testID="onBehalfOfToggle"
-            />
-          </Section>
-        )}
       </ScrollView>
       <FullScreenFooter>
         <Button
@@ -80,7 +57,7 @@ export const TravellerSelectionSheet = ({
               .fromSelection(selection)
               .userProfiles(userCountState.userProfilesWithCount)
               .build();
-            onSave(newSelection, isTravelerOnBehalfOfToggle);
+            onSave(newSelection);
           }}
           rightIcon={{svg: Confirm}}
           testID="confirmButton"
@@ -88,14 +65,6 @@ export const TravellerSelectionSheet = ({
       </FullScreenFooter>
     </BottomSheetContainer>
   );
-};
-
-const useShouldShowOnBehalfOf = (selection: PurchaseSelectionType) => {
-  const isOnBehalfOfEnabled =
-    useFeatureTogglesContext().isOnBehalfOfEnabled &&
-    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-  const isLoggedIn = useAuthContext().authenticationType === 'phone';
-  return isOnBehalfOfEnabled && isLoggedIn;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {

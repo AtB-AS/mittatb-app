@@ -119,7 +119,7 @@ const ticketingReducer: TicketingReducer = (
 type TicketingState = {
   fareContracts: FareContractType[];
   sentFareContracts: FareContractType[];
-  findFareContractByOrderId: (id: string) => FareContractType | undefined;
+  findFareContractById: (id: string) => FareContractType | undefined;
 } & Pick<
   TicketingReducerState,
   | 'reservations'
@@ -233,10 +233,10 @@ export const TicketingContextProvider = ({children}: Props) => {
     <TicketingContext.Provider
       value={{
         ...state,
-        findFareContractByOrderId: (orderId) =>
+        findFareContractById: (id) =>
           state.fareContracts
             .concat(state.sentFareContracts)
-            .find((fc) => fc.orderId === orderId),
+            .find((fc) => fc.id === id),
       }}
     >
       {children}

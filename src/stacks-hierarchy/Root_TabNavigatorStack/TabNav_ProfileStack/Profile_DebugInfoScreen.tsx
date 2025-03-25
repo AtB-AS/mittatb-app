@@ -90,7 +90,6 @@ export const Profile_DebugInfoScreen = () => {
       nativeTokenStatus,
       remoteTokensStatus,
       createToken: initToken,
-      validateToken,
       removeRemoteToken,
       renewToken,
       wipeToken,
@@ -461,14 +460,6 @@ export const Profile_DebugInfoScreen = () => {
                     style={styles.button}
                     text="Wipe token"
                     onPress={wipeToken}
-                  />
-                )}
-                {nativeToken && (
-                  <Button
-                    expanded={true}
-                    style={styles.button}
-                    text="Validate token"
-                    onPress={validateToken}
                   />
                 )}
                 {nativeToken && (

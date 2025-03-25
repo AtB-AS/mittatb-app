@@ -9,7 +9,9 @@
 
 # Mobility
 /src/mobility/ @rosvik @marius-at-atb @Dahly96
-/src/bonus/ @rosvik @marius-at-atb @jorunnl
+
+# Bonus
+/src/modules/bonus/ @rosvik @marius-at-atb @jorunnl
 
 # Builds and CI
 /.github/workflows/ @rosvik @jorelosorio @reidzeibel

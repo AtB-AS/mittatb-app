@@ -19,20 +19,16 @@ export const OrderDetailsSectionItem = ({
   fareContract,
   ...props
 }: SectionItemProps<OrderDetailsSectionItemProps>) => {
-  const style = useStyles();
+  const styles = useStyles();
   const {t, language} = useTranslation();
-  const orderIdText = t(
-    FareContractTexts.details.orderId(fareContract.orderId),
-  );
   const firstTravelRight = fareContract.travelRights[0];
-  const priceString = formatNumberToString(
-    parseFloat(fareContract.totalAmount),
-    language,
-  );
+  const priceString = !!fareContract.totalAmount
+    ? formatNumberToString(parseFloat(fareContract.totalAmount), language)
+    : undefined;
   const {topContainer} = useSectionItem(props);
 
   return (
-    <View style={topContainer} accessible={true}>
+    <View style={[topContainer, styles.container]} accessible={true}>
       {!hasShmoBookingId(fareContract) && (
         <ThemeText typography="body__secondary" color="secondary">
           {t(
@@ -46,11 +42,7 @@ export const OrderDetailsSectionItem = ({
         </ThemeText>
       )}
 
-      <ThemeText
-        typography="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
+      <ThemeText typography="body__secondary" color="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripStarted(
@@ -64,11 +56,7 @@ export const OrderDetailsSectionItem = ({
             )}
       </ThemeText>
 
-      <ThemeText
-        typography="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
+      <ThemeText typography="body__secondary" color="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripEnded(
@@ -83,41 +71,34 @@ export const OrderDetailsSectionItem = ({
       </ThemeText>
 
       {fareContract.state !== FareContractState.Refunded && priceString && (
-        <ThemeText
-          typography="body__secondary"
-          color="secondary"
-          style={style.marginTop}
-        >
+        <ThemeText typography="body__secondary" color="secondary">
           {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
 
-      {fareContract.state !== FareContractState.Refunded && (
-        <ThemeText
-          typography="body__secondary"
-          color="secondary"
-          style={style.marginTop}
-        >
-          {t(FareContractTexts.details.paymentMethod)}
-          {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
-        </ThemeText>
-      )}
+      {!!fareContract.paymentType.length &&
+        fareContract.state !== FareContractState.Refunded && (
+          <ThemeText typography="body__secondary" color="secondary">
+            {t(FareContractTexts.details.paymentMethod)}
+            {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
+          </ThemeText>
+        )}
       {hasShmoBookingId(fareContract) && (
-        <ThemeText
-          typography="body__secondary"
-          color="secondary"
-          style={style.marginTop}
-        >
+        <ThemeText typography="body__secondary" color="secondary">
           {t(FareContractTexts.details.bookingId(fareContract.bookingId ?? ''))}
         </ThemeText>
       )}
-      <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
+      {fareContract.orderId && (
+        <ThemeText>
+          {t(FareContractTexts.details.orderId(fareContract.orderId))}
+        </ThemeText>
+      )}
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  marginTop: {
-    marginTop: theme.spacing.xSmall,
+  container: {
+    gap: theme.spacing.xSmall,
   },
 }));

@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  hasTravelRightAccesses,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
 import {
@@ -34,7 +33,10 @@ import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useAuthContext} from '@atb/auth';
-import {CarnetFooter} from '../carnet/CarnetFooter';
+import {
+  CarnetFooter,
+  MAX_ACCESSES_FOR_CARNET_FOOTER,
+} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
@@ -46,6 +48,8 @@ import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetai
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
+import {RefundSectionItem} from '../components/RefundSectionItem';
+import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 
 type Props = {
   fareContract: FareContractType;
@@ -71,6 +75,7 @@ export const DetailsContent: React.FC<Props> = ({
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
+  const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
   const {
     travelRights,
@@ -116,6 +121,11 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
+  const accesses = getAccesses(fc);
+  const shouldShowCarnetFooter =
+    accesses &&
+    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
+
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
@@ -133,6 +143,7 @@ export const DetailsContent: React.FC<Props> = ({
         />
       ) : (
         <FareContractInfoDetailsSectionItem
+          fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
@@ -150,7 +161,7 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {hasTravelRightAccesses(fc.travelRights) && (
+      {shouldShowCarnetFooter && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}
@@ -197,17 +208,32 @@ export const DetailsContent: React.FC<Props> = ({
 
       <OrderDetailsSectionItem fareContract={fc} />
 
-      <LinkSectionItem
-        text={t(FareContractTexts.details.askForReceipt)}
-        onPress={onReceiptNavigate}
-        testID="receiptButton"
-      />
+      {fc.orderId && fc.version && (
+        <LinkSectionItem
+          text={t(FareContractTexts.details.askForReceipt)}
+          onPress={onReceiptNavigate}
+          testID="receiptButton"
+        />
+      )}
+      {refundOptions?.is_refundable && (
+        <RefundSectionItem
+          orderId={fc.orderId}
+          fareProductType={preassignedFareProduct?.type}
+          state={fc.state}
+        />
+      )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
-        <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        <ConsumeCarnetSectionItem
+          fareContractId={fc.id}
+          fareProductType={preassignedFareProduct?.type}
+        />
       )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
-          <ActivateNowSectionItem fareContractId={fc.id} />
+          <ActivateNowSectionItem
+            fareContractId={fc.id}
+            fareProductType={preassignedFareProduct?.type}
+          />
         )}
     </Section>
   );

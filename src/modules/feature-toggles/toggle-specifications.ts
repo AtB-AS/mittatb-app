@@ -106,6 +106,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_realtime_map',
   },
   {
+    name: 'isRefundsEnabled',
+    remoteConfigKey: 'enable_refunds',
+  },
+  {
     name: 'isServerTimeEnabled',
     remoteConfigKey: 'enable_server_time',
   },

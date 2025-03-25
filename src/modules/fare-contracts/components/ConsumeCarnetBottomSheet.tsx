@@ -1,3 +1,4 @@
+import {useAnalyticsContext} from '@atb/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
@@ -18,19 +19,27 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   fareContractId: string;
+  fareProductType: string | undefined;
 };
 
-export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
+export const ConsumeCarnetBottomSheet = ({
+  fareContractId,
+  fareProductType,
+}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
+  const analytics = useAnalyticsContext();
 
   const onConsume = async () => {
     setIsLoading(true);
     try {
       await consumeCarnet(fareContractId);
+      analytics.logEvent('Ticketing', 'Consumed carnet', {
+        fareProductType,
+      });
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);

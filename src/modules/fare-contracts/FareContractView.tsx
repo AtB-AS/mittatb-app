@@ -25,6 +25,10 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/configuration';
 
 type Props = {
   now: number;
@@ -55,7 +59,11 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const firstTravelRight = travelRights[0];
-
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    firstTravelRight.fareProductRef,
+  );
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
@@ -92,7 +100,10 @@ export const FareContractView: React.FC<Props> = ({
       )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
-          <ActivateNowSectionItem fareContractId={fareContract.id} />
+          <ActivateNowSectionItem
+            fareContractId={fareContract.id}
+            fareProductType={preassignedFareProduct?.type}
+          />
         )}
       {!isStatic && (
         <LinkSectionItem
@@ -106,7 +117,10 @@ export const FareContractView: React.FC<Props> = ({
         />
       )}
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
-        <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
+        <ConsumeCarnetSectionItem
+          fareContractId={fareContract.id}
+          fareProductType={preassignedFareProduct?.type}
+        />
       )}
     </Section>
   );

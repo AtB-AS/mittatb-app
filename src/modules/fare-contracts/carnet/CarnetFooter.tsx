@@ -5,6 +5,8 @@ import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
 
+export const MAX_ACCESSES_FOR_CARNET_FOOTER = 50;
+
 type Props = {
   active: boolean;
   maximumNumberOfAccesses: number;

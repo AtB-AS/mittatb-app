@@ -70,6 +70,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderTopRightRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     overflow: 'hidden',
+    flex: 1,
   },
   content: {
     paddingVertical: theme.spacing.large,

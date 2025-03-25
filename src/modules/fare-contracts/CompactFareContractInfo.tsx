@@ -78,17 +78,24 @@ const CompactFareContractInfoTexts = (
   } = props;
   const {language} = useTranslation();
   const styles = useStyles();
+  const firstTravelRight = props.fareContract.travelRights[0];
 
   return (
     <View style={styles.textsContainer}>
       <ThemeText typography="body__primary--bold" style={styles.expireTime}>
         {timeUntilExpire}
       </ThemeText>
-      {userProfilesWithCount.map((u) => (
-        <ThemeText key={u.id} typography="body__secondary" color="secondary">
-          {userProfileCountAndName(u, language)}
+      {firstTravelRight.travelerName ? (
+        <ThemeText typography="body__secondary" color="secondary">
+          {firstTravelRight.travelerName}
         </ThemeText>
-      ))}
+      ) : (
+        userProfilesWithCount.map((u) => (
+          <ThemeText key={u.id} typography="body__secondary" color="secondary">
+            {userProfileCountAndName(u, language)}
+          </ThemeText>
+        ))
+      )}
       {productName && (
         <ThemeText typography="body__secondary" color="secondary">
           {productName}
