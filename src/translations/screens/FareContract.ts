@@ -259,9 +259,9 @@ const FareContractTexts = {
       'Aktiver ein enkeltbillett',
     ),
     bottomSheetDescription: _(
-      'Billetten blir gyldig med en gang. Man kan bare aktivere én enkeltbillett fra klippekortet om gangen.',
-      'The ticket becomes valid immediately. You can only activate one single ticket from the punch card at a time.',
-      'Billetten blir gyldig med ein gong. Du kan berre aktivere ein enkeltbillett frå klippekortet om gongen.',
+      'Billetten blir gyldig med en gang du starter den. Kun en billett kan aktiveres av gangen.',
+      'The ticket becomes valid as soon as you start it. Only one ticket can be activated at a time.',
+      'Billetten blir gyldig med ein gong du startar den. Berre ein billett kan aktiverast av gangen.',
     ),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
