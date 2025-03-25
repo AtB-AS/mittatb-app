@@ -100,7 +100,7 @@ export const ScooterSheet = ({
             operatorId &&
             mobilityOperators?.find((e) => e.id === operatorId)
               ?.isDeepIntegrationEnabled ? (
-              <>
+              <View style={styles.actionWrapper}>
                 <ShmoActionButton
                   onLogin={loginCallback}
                   onStartOnboarding={startOnboardingCallback}
@@ -114,7 +114,7 @@ export const ScooterSheet = ({
                   mode="secondary"
                   backgroundColor={theme.color.background.neutral[1]}
                 />
-              </>
+              </View>
             ) : (
               <>
                 {rentalAppUri && (
@@ -170,10 +170,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
+    actionWrapper: {
+      gap: theme.spacing.medium,
+    },
     footer: {
       marginBottom: Math.max(bottom, theme.spacing.medium),
       marginHorizontal: theme.spacing.medium,
-      gap: theme.spacing.medium,
     },
     parkingViolationsButton: {
       marginTop: theme.spacing.medium,
