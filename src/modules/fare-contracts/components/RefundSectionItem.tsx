@@ -1,21 +1,24 @@
-import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject, useRef} from 'react';
-import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
+import {RefundBottomSheet} from './RefundBottomSheet';
+import {FareContractState} from '@atb-as/utils';
 
-type ActivateNowSectionItemProps = SectionItemProps<{
-  fareContractId: string;
+type RefundSectionItemProps = SectionItemProps<{
+  orderId: string;
   fareProductType: string | undefined;
+  state: FareContractState;
 }>;
 
-export function ActivateNowSectionItem({
-  fareContractId,
+export function RefundSectionItem({
+  orderId,
   fareProductType,
+  state,
   ...sectionProps
-}: ActivateNowSectionItemProps): JSX.Element {
+}: RefundSectionItemProps): JSX.Element {
   const {t} = useTranslation();
   const {open} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -23,9 +26,10 @@ export function ActivateNowSectionItem({
   const onPress = () => {
     open(
       () => (
-        <ActivateNowBottomSheet
-          fareContractId={fareContractId}
+        <RefundBottomSheet
+          orderId={orderId}
           fareProductType={fareProductType}
+          state={state}
         />
       ),
       onCloseFocusRef,
@@ -34,9 +38,9 @@ export function ActivateNowSectionItem({
 
   return (
     <LinkSectionItem
-      text={t(FareContractTexts.activateNow.startNow)}
+      text={t(FareContractTexts.refund.refund)}
       onPress={onPress}
-      icon={<ThemeIcon svg={TicketValid} />}
+      icon={<ThemeIcon svg={TicketInvalid} />}
       ref={onCloseFocusRef}
       {...sectionProps}
     />

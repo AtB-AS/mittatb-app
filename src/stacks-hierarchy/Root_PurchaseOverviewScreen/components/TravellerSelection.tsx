@@ -31,14 +31,12 @@ import {
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
-  isOnBehalfOfToggle: boolean;
-  onSave: (selection: PurchaseSelectionType, onBehalfOfToggle: boolean) => void;
+  onSave: (selection: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function TravellerSelection({
   selection,
-  isOnBehalfOfToggle,
   onSave,
   style,
 }: TravellerSelectionProps) {
@@ -100,10 +98,6 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
-  const sendingToOthersAccessibility = isOnBehalfOfToggle
-    ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
-    : '';
-
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(
         selection.userProfilesWithCount[0].alternativeDescriptions,
@@ -127,7 +121,6 @@ export function TravellerSelection({
           )) +
       ' ' +
       travellersDetailsText +
-      sendingToOthersAccessibility +
       travellerInfo +
       screenReaderPause,
     accessibilityHint: canSelectUserProfile
@@ -140,9 +133,8 @@ export function TravellerSelection({
       () => (
         <TravellerSelectionSheet
           selection={selection}
-          isOnBehalfOfToggle={isOnBehalfOfToggle}
-          onSave={(selection, onBehalfOfToggle) => {
-            onSave(selection, onBehalfOfToggle);
+          onSave={(selection) => {
+            onSave(selection);
             closeBottomSheet();
           }}
         />
@@ -166,11 +158,6 @@ export function TravellerSelection({
         {!canSelectUserProfile && (
           <ThemeText typography="body__secondary" color="secondary">
             {travellerInfo}
-          </ThemeText>
-        )}
-        {isOnBehalfOfToggle && canSelectUserProfile && (
-          <ThemeText typography="body__secondary" color="secondary">
-            {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           </ThemeText>
         )}
 

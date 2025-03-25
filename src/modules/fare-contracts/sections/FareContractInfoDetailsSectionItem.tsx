@@ -35,6 +35,7 @@ export type FareContractInfoProps = {
 };
 
 export type FareContractInfoDetailsProps = {
+  fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
@@ -47,6 +48,7 @@ export type FareContractInfoDetailsProps = {
 };
 
 export const FareContractInfoDetailsSectionItem = ({
+  fareContract,
   preassignedFareProduct,
   fromTariffZone,
   toTariffZone,
@@ -69,6 +71,7 @@ export const FareContractInfoDetailsSectionItem = ({
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
+  const firstTravelRight = fareContract.travelRights[0];
 
   const isStatusSent = status === 'sent';
 
@@ -87,12 +90,19 @@ export const FareContractInfoDetailsSectionItem = ({
               ]}
             />
           )}
-          <FareContractDetailItem
-            header={t(FareContractTexts.label.travellers)}
-            content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, language),
-            )}
-          />
+          {firstTravelRight.travelerName ? (
+            <FareContractDetailItem
+              header={t(FareContractTexts.label.travellers)}
+              content={[firstTravelRight.travelerName]}
+            />
+          ) : (
+            <FareContractDetailItem
+              header={t(FareContractTexts.label.travellers)}
+              content={userProfilesWithCount.map((u) =>
+                userProfileCountAndName(u, language),
+              )}
+            />
+          )}
           {tariffZoneSummary && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
@@ -158,6 +168,7 @@ export const getFareContractInfoDetails = (
     status: validityStatus,
     now: now,
     validTo: validTo,
+    fareContract,
   };
 };
 

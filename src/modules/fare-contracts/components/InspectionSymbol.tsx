@@ -10,12 +10,12 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
 } from '@atb/configuration';
-import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {useTransportColor} from '@atb/utils/use-transport-color';
+import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
+import {useFareProductColor} from '../use-fare-product-color';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
@@ -29,20 +29,10 @@ export const InspectionSymbol = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
 
-  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
-  );
-
-  const transportColor = useTransportColor(
-    fareProductTypeConfig?.transportModes[0].mode,
-    fareProductTypeConfig?.transportModes[0].subMode,
-  );
-
+  const fareProductColor = useFareProductColor(preassignedFareProduct?.type);
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
-
   const themeColor = isInspectable
-    ? transportColor.primary
+    ? fareProductColor
     : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
@@ -136,6 +126,7 @@ const getInspectionSvg = (
 ): ((props: SvgProps) => JSX.Element) => {
   if (illustration === 'night') return Moon;
   if (illustration === 'youth') return Youth;
+  if (illustration === 'school') return Student;
 
   return getTransportModeSvg(
     transportModes?.[0].mode,

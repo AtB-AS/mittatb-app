@@ -33,7 +33,7 @@ export const Profile_TravelTokenScreen = () => {
         <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>
-              <TokenToggleInfo style={styles.tokenInfoView} />
+              <TokenToggleInfo />
             </GenericSectionItem>
           )}
         </Section>
@@ -52,5 +52,4 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     rowGap: theme.spacing.medium,
     padding: theme.spacing.medium,
   },
-  tokenInfoView: {flexDirection: 'row'},
 }));

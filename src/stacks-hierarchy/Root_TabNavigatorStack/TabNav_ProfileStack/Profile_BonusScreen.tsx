@@ -17,15 +17,11 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {ContentHeading} from '@atb/components/heading';
-import {BonusPriceTag} from '@atb/bonus';
+import {BonusPriceTag, isActive} from '@atb/modules/bonus';
 import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {
-  BrandingImage,
-  findOperatorBrandImageUrl,
-  isActive,
-} from '@atb/mobility';
+import {BrandingImage, findOperatorBrandImageUrl} from '@atb/mobility';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();

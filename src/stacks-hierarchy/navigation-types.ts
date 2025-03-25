@@ -32,7 +32,7 @@ type ReceiptScreenRouteParams = {
 };
 
 type FareContractDetailsRouteParams = {
-  orderId: string;
+  fareContractId: string;
 };
 
 type TicketInformationScreenParams = {

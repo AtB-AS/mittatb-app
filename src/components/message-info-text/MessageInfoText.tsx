@@ -9,6 +9,7 @@ import {ContrastColor, TextColor} from '@atb/theme/colors';
 export type MessageInfoTextProps = {
   type: Statuses;
   message: string;
+  a11yLabel?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
@@ -20,6 +21,7 @@ export const MessageInfoText = ({
   type,
   style,
   message,
+  a11yLabel,
   iconPosition = 'left',
   testID,
   textColor,
@@ -35,7 +37,7 @@ export const MessageInfoText = ({
       style={[styles.container, style]}
       accessible={true}
       testID={testID}
-      accessibilityLabel={message}
+      accessibilityLabel={a11yLabel ?? message}
     >
       {iconPosition === 'left' && (
         <ThemeIcon

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BonusPriceTag} from '@atb/bonus';
+import {BonusPriceTag} from '@atb/modules/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,

@@ -27,7 +27,6 @@ const getTransportColorKey = (
     case 'coach':
       if (subMode === 'localBus') return 'city';
       if (subMode === 'airportLinkBus') return 'airportExpress';
-      if (subMode === 'shuttleBus') return 'shuttle';
       return 'region';
     case 'bicycle':
       return 'bike';

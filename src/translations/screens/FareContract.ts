@@ -38,18 +38,13 @@ const FareContractTexts = {
     unknown: _(`Ukjent`, `Unknown`, `Ukjent`),
     inactive: _(`Inaktiv`, `Inactive`, `Inaktiv`),
     inactiveCarnet: _(
-      `Ingen aktive klipp`,
-      `No active ticket`,
-      `Ingen aktive klipp`,
+      'Ingen aktive billetter',
+      'No active tickets',
+      'Ingen aktive billettar',
     ),
     uninspectable: (duration: string) =>
       _(`Utløper ${duration}`, `Expires ${duration}`, `Går ut ${duration}`),
     durationDelimiter: _(' og ', ' and ', ' og '),
-  },
-  usedAccessValidityIcon: {
-    valid: _(`Gyldig billett`, `Valid ticket`, `Gyldig billett`),
-    upcoming: _(`Kommende klipp`, `Upcoming ticket`, `Kommande klipp`),
-    inactive: _(`Ingen aktive klipp`, `No active ticket`, `Ingen aktive klipp`),
   },
   shmoDetails: {
     tripStarted: (dateTime: string) =>
@@ -195,7 +190,7 @@ const FareContractTexts = {
       'Activate to go to ticket information',
       'Aktivér for å gå til billetinformasjon',
     ),
-    usedAccesses: _('Brukte klipp', 'Used tickets', 'Brukte klipp'),
+    usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
   },
   activateNow: {
     startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
@@ -216,6 +211,36 @@ const FareContractTexts = {
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
   },
+  refund: {
+    cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+    refund: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    bottomSheetTitle: _(
+      'Vil du angre billettkjøpet?',
+      'Do you want to undo the ticket purchase?',
+      'Vil du angre billettkjøpet?',
+    ),
+    bottomSheetDescription: _(
+      'Her kan du angre kjøpet av billetten og få pengene tilbake. Pengene er tilbake på konto innen få virkedager.',
+      'Here you can undo the ticket purchase and get your money back. The money will be back in your account within a few business days.',
+      'Her kan du angre kjøpet av billetten og få pengane tilbake. Pengane er tilbake på kontoen din innen få virkedagar.',
+    ),
+    confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    genericError: _(
+      'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
+      'We are unable to refund this purchase. Please try again or contact customer service.',
+      'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
+    ),
+    readMore: _(
+      'Les mer om refusjonsregler',
+      'Read more about refund rules',
+      'Les meir om refusjonsreglar',
+    ),
+    readMoreA11yLabel: _(
+      'Les mer om refusjonsregler, åpner side i nettleser',
+      'Read more about refund rules, opens page in browser',
+      'Les meir om refusjonreglar, åpner side i nettlesar',
+    ),
+  },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(
@@ -234,15 +259,18 @@ const FareContractTexts = {
       'Aktiver ein enkeltbillett',
     ),
     bottomSheetDescription: _(
-      'Billetten blir gyldig med en gang. Man kan bare aktivere én enkeltbillett fra klippekortet om gangen.',
-      'The ticket becomes valid immediately. You can only activate one single ticket from the punch card at a time.',
-      'Billetten blir gyldig med ein gong. Du kan berre aktivere ein enkeltbillett frå klippekortet om gongen.',
+      'Billetten blir gyldig med en gang du starter den. Kun en billett kan aktiveres av gangen.',
+      'The ticket becomes valid as soon as you start it. Only one ticket can be activated at a time.',
+      'Billetten blir gyldig med ein gong du startar den. Berre ein billett kan aktiverast av gangen.',
     ),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
+  },
+  school: {
+    home: _('Hjem', 'Home', 'Heim'),
   },
   receipt: {
     header: {

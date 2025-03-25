@@ -23,11 +23,7 @@ import {
 import {dictionary, Language} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {
-  BonusProductType,
-  FormFactor as FormFactorSchema,
-  MobilityOperatorType,
-} from '@atb-as/config-specs/lib/mobility';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -345,35 +341,6 @@ export const formatErrorMessage = (
     errorResponse.response.status === 404
     ? t(dictionary.genericErrorMsg)
     : errorResponse.response.data;
-};
-
-/**
- * Checks if a bonus product is active and should be displayed
- * @param bonusProduct - The bonus product to check
- * @returns {boolean} True if the bonus product is active, false otherwise
- */
-export const isActive = (bonusProduct: BonusProductType) =>
-  bonusProduct.isActive;
-
-/**
- * Finds an active bonus product based on form factor and operator ID if it exists
- * @param bonusProducts - Array of bonus products to search through
- * @param operatorId - The ID of the mobility operator
- * @param formFactor - The form factor to match
- * @returns {BonusProductType | undefined} The matching bonus product if it exists, otherwise undefined
- *
- */
-export const findRelevantBonusProduct = (
-  bonusProducts: BonusProductType[] | undefined,
-  operatorId: MobilityOperatorType['id'] | undefined,
-  formFactor: FormFactor,
-) => {
-  return bonusProducts?.find(
-    (bonusProduct) =>
-      bonusProduct.formFactors.includes(FormFactorSchema.parse(formFactor)) &&
-      bonusProduct.operatorId == operatorId &&
-      bonusProduct.isActive,
-  );
 };
 
 /**
