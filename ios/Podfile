@@ -41,7 +41,7 @@ $RNMapboxMapsImpl = 'mapbox'
 # Fix for: Apple Invalid Privacy Manifest
 # https://github.com/mapbox/mapbox-maps-ios/releases/tag/v10.17.0
 # This is a temporary fix until the next release of the Mapbox Maps SDK for React Native.
-$RNMapboxMapsVersion = '~> 10.18.2'
+$RNMapboxMapsVersion = '~> 10.19.0'
 
 target 'app' do
   config = use_native_modules!
