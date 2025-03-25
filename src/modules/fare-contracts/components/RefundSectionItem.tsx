@@ -5,15 +5,18 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject, useRef} from 'react';
 import {RefundBottomSheet} from './RefundBottomSheet';
+import {FareContractState} from '@atb-as/utils';
 
 type RefundSectionItemProps = SectionItemProps<{
   orderId: string;
   fareProductType: string | undefined;
+  state: FareContractState;
 }>;
 
 export function RefundSectionItem({
   orderId,
   fareProductType,
+  state,
   ...sectionProps
 }: RefundSectionItemProps): JSX.Element {
   const {t} = useTranslation();
@@ -26,6 +29,7 @@ export function RefundSectionItem({
         <RefundBottomSheet
           orderId={orderId}
           fareProductType={fareProductType}
+          state={state}
         />
       ),
       onCloseFocusRef,
