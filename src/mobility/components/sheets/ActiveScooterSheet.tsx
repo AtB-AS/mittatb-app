@@ -1,5 +1,4 @@
 import React, {useCallback} from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -10,7 +9,6 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
@@ -20,15 +18,14 @@ import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatErrorMessage} from '@atb/mobility/utils';
+import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
-  onClose: () => void;
   onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
 };
 
 export const ActiveScooterSheet = ({
-  onClose,
   onActiveBookingReceived,
   navigateSupportCallback,
 }: Props) => {
@@ -61,10 +58,9 @@ export const ActiveScooterSheet = ({
   }, [activeBooking, sendShmoBookingEvent]);
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.7}
-      onClose={onClose}
+    <BottomSheetScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -133,20 +129,24 @@ export const ActiveScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </BottomSheetScrollView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
+    container: {
+      width: '100%',
+    },
+    contentContainer: {
+      width: '100%',
+      paddingBottom: Math.max(bottom, theme.spacing.medium),
+    },
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     operatorBenefit: {
-      marginBottom: theme.spacing.medium,
-    },
-    container: {
       marginBottom: theme.spacing.medium,
     },
     footer: {

@@ -1,8 +1,7 @@
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import React, {RefObject, useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
@@ -21,6 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useBottomSheetV2} from '@atb/components/bottom-sheet-v2';
 
 /**
  * When a new bottomSheetToAutoSelect is set and isn't already selected,
@@ -36,17 +36,14 @@ export const useAutoSelectMapItem = (
     setBottomSheetCurrentlyAutoSelected,
   } = useMapContext();
   const isFocused = useIsFocusedAndActive();
-  const {open: openBottomSheet, close} = useBottomSheetContext();
+  const {setContent, snapToIndex, close} = useBottomSheetV2();
   const navigation = useNavigation<RootNavigationProps>();
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
 
-  // NOTE: This ref is not used for anything since the map doesn't support
-  // screen readers, but a ref is required when opening bottom sheets.
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-
   const closeBottomSheet = useCallback(() => {
+    console.log('closingBottomsheetcallback');
     close();
     setBottomSheetCurrentlyAutoSelected(undefined);
   }, [close, setBottomSheetCurrentlyAutoSelected]);
@@ -88,16 +85,17 @@ export const useAutoSelectMapItem = (
             BottomSheetComponent = (
               <ScooterSheet
                 vehicleId={bottomSheetToAutoSelect.id}
-                onClose={closeBottomSheet}
                 onVehicleReceived={flyToMapItemLocation}
                 onReportParkingViolation={onReportParkingViolation}
                 navigateSupportCallback={() => {
+                  console.log('navigateSupportCallback');
                   closeBottomSheet();
                   navigation.navigate('Root_ScooterHelpScreen', {
                     vehicleId: bottomSheetToAutoSelect.id,
                   });
                 }}
                 loginCallback={() => {
+                  console.log('loginCallback');
                   closeBottomSheet();
                   if (hasReservationOrAvailableFareContract) {
                     navigation.navigate(
@@ -114,6 +112,7 @@ export const useAutoSelectMapItem = (
                   }
                 }}
                 startOnboardingCallback={() => {
+                  console.log('startOnboardingCallback');
                   closeBottomSheet();
                   navigation.navigate('Root_ShmoOnboardingScreen');
                 }}
@@ -152,7 +151,8 @@ export const useAutoSelectMapItem = (
         }
 
         if (!!BottomSheetComponent) {
-          openBottomSheet(() => BottomSheetComponent, onCloseFocusRef, false);
+          setContent(BottomSheetComponent);
+          snapToIndex(1);
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);
@@ -164,7 +164,6 @@ export const useAutoSelectMapItem = (
   }, [
     closeBottomSheet,
     bottomSheetToAutoSelect,
-    openBottomSheet,
     isFocused,
     flyToMapItemLocation,
     setBottomSheetToAutoSelect,
@@ -173,5 +172,7 @@ export const useAutoSelectMapItem = (
     navigation,
     enable_vipps_login,
     hasReservationOrAvailableFareContract,
+    setContent,
+    snapToIndex,
   ]);
 };

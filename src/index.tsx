@@ -39,6 +39,7 @@ import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from './beacons/BeaconsContext';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
+import {BottomSheetContextProviderV2} from './components/bottom-sheet-v2/BottomSheetProviderV2';
 
 configureAndStartBugsnag();
 configureReanimatedLogger({
@@ -104,15 +105,17 @@ export const App = () => {
                                                   <AnnouncementsContextProvider>
                                                     <NotificationContextProvider>
                                                       <PopOverContextProvider>
-                                                        <BottomSheetContextProvider>
-                                                          <FeedbackQuestionsContextProvider>
-                                                            <BeaconsContextProvider>
-                                                              <OnboardingContextProvider>
-                                                                <RootStack />
-                                                              </OnboardingContextProvider>
-                                                            </BeaconsContextProvider>
-                                                          </FeedbackQuestionsContextProvider>
-                                                        </BottomSheetContextProvider>
+                                                        <BottomSheetContextProviderV2>
+                                                          <BottomSheetContextProvider>
+                                                            <FeedbackQuestionsContextProvider>
+                                                              <BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
+                                                              </BeaconsContextProvider>
+                                                            </FeedbackQuestionsContextProvider>
+                                                          </BottomSheetContextProvider>
+                                                        </BottomSheetContextProviderV2>
                                                       </PopOverContextProvider>
                                                     </NotificationContextProvider>
                                                   </AnnouncementsContextProvider>

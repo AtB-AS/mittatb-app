@@ -1,7 +1,5 @@
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import React, {RefObject, useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {flyToLocation} from '../utils';
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
@@ -13,25 +11,21 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useBottomSheetV2} from '@atb/components/bottom-sheet-v2';
+import {useMapContext} from '@atb/MapContext';
 
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const {
-    bottomSheetToAutoSelect,
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-  } = useMapContext();
   const isFocused = useIsFocusedAndActive();
-  const {open: openBottomSheet, close} = useBottomSheetContext();
   const navigation = useNavigation<RootNavigationProps>();
   const {getCurrentCoordinates} = useGeolocationContext();
+  const {setContent, snapToIndex, close} = useBottomSheetV2();
 
-  // NOTE: This ref is not used for anything since the map doesn't support
-  // screen readers, but a ref is required when opening bottom sheets.
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const {bottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
+    useMapContext();
 
   const closeBottomSheet = useCallback(() => {
     close();
@@ -62,58 +56,54 @@ export const useShmoActiveBottomSheet = (
       ) {
         switch (activeBooking.state) {
           case ShmoBookingState.IN_USE:
-            openBottomSheet(
-              () => (
-                <ActiveScooterSheet
-                  onClose={closeBottomSheet}
-                  onActiveBookingReceived={flyToUserLocation}
-                  navigateSupportCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
-                    });
-                  }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
+            setContent(
+              <ActiveScooterSheet
+                onActiveBookingReceived={flyToUserLocation}
+                navigateSupportCallback={() => {
+                  console.log('navigateSupportCallback11111');
+                  closeBottomSheet();
+                  navigation.navigate('Root_ScooterHelpScreen', {
+                    vehicleId: 'fixthis', //TODO:this will be fixed in another PR
+                  });
+                }}
+              />,
             );
+            snapToIndex(1);
+            setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
             break;
           case ShmoBookingState.FINISHING:
-            openBottomSheet(
-              () => (
-                <FinishedScooterSheet
-                  onClose={closeBottomSheet}
-                  navigateSupportCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
-                    });
-                  }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
+            setContent(
+              <FinishedScooterSheet
+                onClose={closeBottomSheet}
+                navigateSupportCallback={() => {
+                  closeBottomSheet();
+                  navigation.navigate('Root_ScooterHelpScreen', {
+                    vehicleId: 'fixthis', //TODO:this will be fixed in another PR
+                  });
+                }}
+              />,
             );
+            snapToIndex(1);
+            setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
             break;
           default:
             break;
         }
-        setBottomSheetToAutoSelect(undefined);
       }
     } catch (e) {
       console.warn('Failed to open bottom sheet from active booking');
       console.error(e);
     }
   }, [
-    closeBottomSheet,
-    bottomSheetToAutoSelect,
-    openBottomSheet,
     isFocused,
     flyToUserLocation,
-    setBottomSheetToAutoSelect,
     navigation,
     activeBooking,
     isShmoDeepIntegrationEnabled,
+    snapToIndex,
+    setContent,
+    closeBottomSheet,
+    bottomSheetToAutoSelect,
+    setBottomSheetCurrentlyAutoSelected,
   ]);
 };

@@ -47,7 +47,6 @@ export const useTriggerCameraMoveEffect = (
    * padding.
    */
   useEffect(() => {
-    if (!bottomSheetHeight) return;
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
     } else if (cameraFocusMode?.mode === 'entity') {
