@@ -23,6 +23,18 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Annet');
     }
   },
+  photo: {
+    header: _(
+      'Ta bilde av el-sparkesykkelen',
+      'Take a photo of the escooter',
+      'Ta eit bilde av el-sparkesykkelen',
+    ),
+    subHeader: _(
+      'Hold ca. 5 meter avstand. Unngå folk i bildet',
+      'Keep a distence of 5 meters. Avoid capturing people in the photo',
+      'Hold ca. 5 meter avstand. Unngå folk i bildet',
+    ),
+  },
   shmoRequirements: {
     loginBlocker: _('Logg inn', 'Log in', 'Logg inn'),
     loginBlockerInfoMessage: _(
@@ -167,6 +179,24 @@ export const MobilityTexts = {
   },
   totalCost: _('Totalkostnad', 'Total cost', 'Totalkostnad'),
   time: _('Tid', 'Time', 'Tid'),
+  trip: {
+    button: {
+      start: _('Start tur', 'Start trip', 'Start tur'),
+      startLoading: _('Starter tur', 'Starting trip', 'Startar tur'),
+      end: _('Avslutt tur', 'End trip', 'Avslutt tur'),
+      endLoading: _('Avslutter tur', 'Ending trip', 'Avsluttar tur'),
+      finishTrip: _('Lukk', 'Close', 'Lukk'),
+    },
+    endAlert: {
+      header: _(
+        'Vil du avslutte turen?',
+        'Do you want to end the trip?',
+        'Vil du avslutte turen?',
+      ),
+      continue: _('Fortsett turen', 'Continue the trip', 'Hald fram turen'),
+      end: _('Avslutt turen', 'End the trip', 'Avslutt turen'),
+    },
+  },
 };
 
 export const ScooterTexts = {

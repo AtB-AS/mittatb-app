@@ -20,7 +20,7 @@ import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {Language} from '@atb/translations';
+import {dictionary, Language} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
@@ -32,6 +32,8 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
+  isShmoPricingPlan,
+  ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
   VehicleFeature,
@@ -40,6 +42,7 @@ import {
   VehiclesClusteredFeatureSchema,
 } from '@atb/api/types/mobility';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {TFunc} from '@leile/lobo-t';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -256,23 +259,24 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
 };
 
 export const formatPricePerUnit = (
-  pricePlan: PricingPlanFragment,
+  pricePlan: PricingPlanFragment | ShmoPricingPlan,
   language: Language,
 ) => {
   const perMinPrice = pricePlan.perMinPricing?.[0];
-  const perKmPrice = pricePlan.perKmPricing?.[0];
 
   if (perMinPrice) {
     return {
       price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
       unit: 'min',
     };
-  }
-  if (perKmPrice) {
-    return {
-      price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-      unit: 'km',
-    };
+  } else if (!isShmoPricingPlan(pricePlan)) {
+    const perKmPrice = pricePlan.perKmPricing?.[0];
+    if (perKmPrice) {
+      return {
+        price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+        unit: 'km',
+      };
+    }
   }
   return undefined;
 };
@@ -327,6 +331,16 @@ export const getNewFilterState = (
     operators,
     showAll: false,
   };
+};
+
+export const formatErrorMessage = (
+  errorResponse: any,
+  t: TFunc<typeof Language>,
+) => {
+  return (errorResponse && errorResponse.response.status === 500) ||
+    errorResponse.response.status === 404
+    ? t(dictionary.genericErrorMsg)
+    : errorResponse.response.data;
 };
 
 /**
