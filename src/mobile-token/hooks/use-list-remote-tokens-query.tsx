@@ -1,6 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
 import {tokenService} from '@atb/mobile-token/tokenService';
-import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {
   getTravelCardId,
   isInspectable,
