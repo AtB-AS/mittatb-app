@@ -208,25 +208,12 @@ export const RadioSection: Meta<SectionMetaProps> = {
         args={{
           ...args,
           children: (
-            <View style={{rowGap: 20}}>
-              <RadioGroupSection
-                items={['Radio group option 1', 'Radio group option 2']}
-                keyExtractor={(s) => s}
-                itemToText={(t) => t}
-                selected="Radio group option 1"
-              />
-
-              <RadioGroupSection
-                items={[
-                  'Spacious radio group option 1',
-                  'Spacious radio group option 2',
-                ]}
-                keyExtractor={(s) => s}
-                itemToText={(t) => t}
-                selected="Spacious radio group option 1"
-                type="spacious"
-              />
-            </View>
+            <RadioGroupSection
+              items={['Radio group option 1', 'Radio group option 2']}
+              keyExtractor={(s) => s}
+              itemToText={(t) => t}
+              selected="Radio group option 1"
+            />
           ),
         }}
       />
