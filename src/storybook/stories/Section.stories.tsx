@@ -79,6 +79,23 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   onPress={() => {}}
                   selected={false}
                 />
+                <RadioSectionItem
+                  text="RadioSectionItem selected"
+                  onPress={() => {}}
+                  selected={true}
+                />
+                <RadioSectionItem
+                  text="RadioSectionItem transparent"
+                  onPress={() => {}}
+                  selected={false}
+                  transparent
+                />
+                <RadioSectionItem
+                  text="RadioSectionItem transparent selected"
+                  onPress={() => {}}
+                  selected={true}
+                  transparent
+                />
                 <CounterSectionItem
                   text="CounterSectionItem"
                   count={2}
