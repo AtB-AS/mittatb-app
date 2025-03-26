@@ -2,15 +2,17 @@ import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {RemoteToken} from '../types';
 import {useQueryClient} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
-import {mobileTokenClient} from '../mobileTokenClient';
+import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {
   getMobileTokenErrorHandlingStrategy,
   MOBILE_TOKEN_QUERY_KEY,
   wipeToken,
 } from '../utils';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils';
+import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
+import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
+import {useAuthContext} from '@atb/auth';
 
 const RETRY_MAX_COUNT = 3;
 
@@ -48,6 +50,9 @@ const RETRY_MAX_COUNT = 3;
  * - Device ID
  *
  */
+
+const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.2';
+
 export const useValidateToken = (
   nativeToken: ActivatedToken | undefined,
   remoteTokens: RemoteToken[] | undefined,
@@ -56,6 +61,7 @@ export const useValidateToken = (
   const queryClient = useQueryClient();
   const [retryCount, setRetryCount] = useState<number>(0);
   const [isRenewingOrResetting, setIsRenewingOrResetting] = useState(false);
+  const {userId} = useAuthContext();
 
   useEffect(() => {
     const renewOrResetToken = async (
@@ -67,6 +73,10 @@ export const useValidateToken = (
         setIsRenewingOrResetting(true);
         const renewedToken = await mobileTokenClient.renew(token, traceId);
         logToBugsnag(`Succesfully renewed token ${renewedToken.tokenId}`);
+        queryClient.setQueryData(
+          [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
+          renewedToken,
+        );
       } catch (error: any) {
         logToBugsnag(
           `Error renewing token ${token.tokenId} with trace ID ${traceId}`,
@@ -78,13 +88,19 @@ export const useValidateToken = (
           );
           await wipeToken([token.tokenId], traceId);
           logToBugsnag(`Token wiped`);
+          logToBugsnag(`Resetting queries to restart token process`);
+          queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+        } else {
+          notifyBugsnag(error, {
+            errorGroupHash: 'token',
+            metadata: {
+              description: `Got an error while renewing token ${token.tokenId}`,
+            },
+          });
         }
-      } finally {
-        logToBugsnag(`Resetting queries to restart token process`);
-        queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
-        setIsRenewingOrResetting(false);
-        setRetryCount((previous) => previous + 1);
       }
+      setIsRenewingOrResetting(false);
+      setRetryCount((previous) => previous + 1);
     };
 
     const checkShouldRenew = async (remoteToken: RemoteToken) => {
@@ -102,8 +118,41 @@ export const useValidateToken = (
       const isDeviceIdSame =
         remoteToken.deviceId === (await DeviceInfo.getUniqueId());
       // match the library version here with the package.json version;
-      const isLibraryVersionSame = remoteToken.libraryVersion === '3.3.2';
+      const isLibraryVersionSame = remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
 
+      logToBugsnag(
+        `Checking token details to see if we should renew the token`,
+      );
+
+      logToBugsnag(`OS version`, {
+        token: remoteToken.osVersion,
+        device: DeviceInfo.getSystemVersion(),
+      });
+
+      logToBugsnag(`OS API level`, {
+        token: remoteToken.osApiLevel,
+        device: apiLevel.toString(),
+      });
+
+      logToBugsnag(`App version`, {
+        token: remoteToken.appVersion,
+        device: DeviceInfo.getVersion(),
+      });
+
+      logToBugsnag(`App version code`, {
+        token: remoteToken.appVersionCode,
+        device: DeviceInfo.getBuildNumber(),
+      });
+
+      logToBugsnag(`Device ID`, {
+        token: remoteToken.deviceId,
+        device: DeviceInfo.getUniqueId(),
+      });
+
+      logToBugsnag(`Library version`, {
+        token: remoteToken.libraryVersion,
+        device: MOBILE_TOKEN_LIBRARY_VERSION,
+      });
       return !(
         isOsVersionSame &&
         isOsApiLevelSame &&
@@ -127,11 +176,14 @@ export const useValidateToken = (
 
       if (token && token.type === 'mobile') {
         checkShouldRenew(token).then((shouldRenew) => {
-          if (shouldRenew) renewOrResetToken(nativeToken, traceId);
+          if (shouldRenew) {
+            logToBugsnag('Token should be renewed because there are difference between details on the token and the device')
+            renewOrResetToken(nativeToken, traceId);
+          }
         });
       }
     }
-  }, [queryClient, nativeToken, remoteTokens, retryCount, traceId]);
+  }, [queryClient, nativeToken, remoteTokens, retryCount, traceId, userId]);
 
   return {
     isRenewingOrResetting,
