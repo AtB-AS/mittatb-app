@@ -59,6 +59,7 @@ type MobileTokenContextState = {
   clearTokenAtLogout: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
   nativeToken?: ActivatedToken;
+  secureContainer?: string;
   /**
    * Low level debug details and functions of the mobile token process, for the
    * debug screen
@@ -237,6 +238,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
         }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
+        secureContainer,
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
