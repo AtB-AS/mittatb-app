@@ -5,7 +5,7 @@ import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '../use-token-toggle-details';
 import {LIST_REMOTE_TOKENS_QUERY_KEY} from './use-list-remote-tokens-query';
 import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
 import {useAuthContext} from '@atb/auth';
-import {useMobileTokenContext} from '../MobileTokenContext';
+import {useMobileTokenContext} from '@atb/mobile-token/MobileTokenContext';
 
 type Args = {
   tokenId: string;
