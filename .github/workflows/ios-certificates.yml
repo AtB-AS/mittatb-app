@@ -43,6 +43,7 @@ jobs:
           MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
 
   get-certs:
     name: Regenerate & Get new certs
@@ -76,3 +77,4 @@ jobs:
           MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
