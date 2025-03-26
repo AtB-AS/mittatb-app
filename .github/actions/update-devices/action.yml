@@ -13,9 +13,6 @@ inputs:
   app-store-connect-api-key:
     description: "The App Store Connect API key"
     required: true
-  match-deploy-key:
-    description: "The Match deploy key"
-    required: true
   ruby-version:
     description: "The ruby version to use"
     default: "3.1.0"
@@ -59,5 +56,4 @@ runs:
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
           FASTLANE_MATCH_TYPE: ${{ inputs.app-environment }}
-          MATCH_DEPLOY_KEY: ${{ inputs.match-deploy-key }}
           KEYCHAIN_NAME: ${{ inputs.keychain-name }}

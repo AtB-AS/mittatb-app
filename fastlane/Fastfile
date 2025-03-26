@@ -47,7 +47,6 @@ platform :ios do
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
         'FASTLANE_MATCH_TYPE',
-        'MATCH_DEPLOY_KEY',
         'APPCONNECT_API_KEY_PATH',
         'KEYCHAIN_NAME'
       ]
@@ -71,7 +70,6 @@ platform :ios do
       keychain_name: keychain_name,
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
-      git_private_key: ENV['MATCH_DEPLOY_KEY'],
       include_all_certificates: true
     )
   end
@@ -142,7 +140,6 @@ platform :ios do
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
         'FASTLANE_MATCH_TYPE',
-        'MATCH_DEPLOY_KEY',
         'KEYCHAIN_NAME',
         'MATCH_PASSWORD',
         'APPCONNECT_API_KEY_PATH',
@@ -161,7 +158,6 @@ platform :ios do
       app_identifier: identifiers,
       skip_confirmation: true,
       keychain_name: keychain_name,
-      git_private_key: ENV['MATCH_DEPLOY_KEY'],
     )
   end
 
@@ -175,7 +171,6 @@ platform :ios do
           'IOS_APP_WIDGET_IDENTIFIER',
           'IOS_APP_INTENT_IDENTIFIER',
           'FASTLANE_MATCH_TYPE',
-          'MATCH_DEPLOY_KEY',
           'KEYCHAIN_NAME',
           'MATCH_PASSWORD',
           'APPCONNECT_API_KEY_PATH',
@@ -209,7 +204,6 @@ platform :ios do
       skip_confirmation: true,
       keychain_name: keychain_name,
       keychain_password: ENV["MATCH_PASSWORD"],
-      git_private_key: ENV['MATCH_DEPLOY_KEY'],
       # Only fetch existing certificates and profiles, don't generate new ones
       readonly: false
     )
