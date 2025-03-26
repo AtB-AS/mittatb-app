@@ -15,6 +15,7 @@ import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
 import {useAuthContext} from '@atb/auth';
 
 const RETRY_MAX_COUNT = 3;
+const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.2';
 
 /**
  * This hook is used to check if the token needs renewal/reset.
@@ -26,14 +27,14 @@ const RETRY_MAX_COUNT = 3;
  * If the local token id doesn't exit in remote tokens list, the
  * remote token might be expired or removed, do this:
  *
- *      1.  Try renewing the token
- *      2a. If the renewal success, good
- *      2b. If renewal fails, check the error, in a normal operation
+ *    1.  Try renewing the token
+ *        - If the renewal success, good
+ *        - If renewal fails, check the error, in a normal operation
  *          it should return TokenMustBeReplacedError.
- *      3.  Wipe the token and re-create token.
- *      4.  Reset the queries so it can re-check if the token is
- *          created properly.
- *      5.  If the token creation/renewal fails, show fallback
+ *    2.  Wipe the token and re-create token.
+ *    3.  Reset the queries so it can re-check if the token is
+ *        created properly.
+ *    4.  If the token creation/renewal fails, show fallback
  *
  *
  * If the local token has a counterpart remote token, do a check whether
@@ -50,9 +51,6 @@ const RETRY_MAX_COUNT = 3;
  * - Device ID
  *
  */
-
-const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.2';
-
 export const useValidateToken = (
   nativeToken: ActivatedToken | undefined,
   remoteTokens: RemoteToken[] | undefined,
