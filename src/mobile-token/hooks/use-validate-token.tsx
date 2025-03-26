@@ -118,7 +118,8 @@ export const useValidateToken = (
       const isDeviceIdSame =
         remoteToken.deviceId === (await DeviceInfo.getUniqueId());
       // match the library version here with the package.json version;
-      const isLibraryVersionSame = remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
+      const isLibraryVersionSame =
+        remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
 
       logToBugsnag(
         `Checking token details to see if we should renew the token`,
@@ -177,7 +178,9 @@ export const useValidateToken = (
       if (token && token.type === 'mobile') {
         checkShouldRenew(token).then((shouldRenew) => {
           if (shouldRenew) {
-            logToBugsnag('Token should be renewed because there are difference between details on the token and the device')
+            logToBugsnag(
+              'Token should be renewed because there are difference between details on the token and the device',
+            );
             renewOrResetToken(nativeToken, traceId);
           }
         });
