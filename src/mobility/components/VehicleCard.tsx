@@ -11,13 +11,14 @@ import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatPricePerUnit, formatRange, getBatteryLevelIcon} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {formatNumberToString} from '@atb/utils/numbers';
+import {ShmoPricingPlan} from '@atb/api/types/mobility';
 
 type Props = {
-  pricingPlan: PricingPlanFragment;
+  pricingPlan: PricingPlanFragment | ShmoPricingPlan;
   currentFuelPercent: number | undefined;
   currentRangeMeters: number;
   operatorName: string;
-  brandLogoUrl: string | undefined;
+  brandLogoUrl?: string;
 };
 
 export const VehicleCard = ({

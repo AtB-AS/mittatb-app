@@ -7,7 +7,7 @@ import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -43,7 +43,6 @@ import {
 } from '@atb/mobility';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
@@ -52,6 +51,7 @@ import {NationalStopRegistryFeatures} from './components/national-stop-registry-
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
+import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 
 export const MapV2 = (props: MapProps) => {
@@ -100,6 +100,8 @@ export const MapV2 = (props: MapProps) => {
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
+  useShmoActiveBottomSheet(mapCameraRef);
+
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
@@ -139,7 +141,7 @@ export const MapV2 = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      if (!isFeaturePoint(feature)) return;
+      if (!isFeaturePoint(feature) || activeShmoBooking) return;
 
       if (!showGeofencingZones) {
         onMapClick({source: 'map-click', feature});
@@ -189,6 +191,7 @@ export const MapV2 = (props: MapProps) => {
       onMapClick,
       geofencingZoneOnPress,
       selectedFeature,
+      activeShmoBooking,
     ],
   );
 
@@ -196,7 +199,8 @@ export const MapV2 = (props: MapProps) => {
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      if (!featuresAtClick || featuresAtClick.length === 0 || activeShmoBooking)
+        return;
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,
         positionClicked,
@@ -223,12 +227,8 @@ export const MapV2 = (props: MapProps) => {
         });
       }
     },
-    [onMapClick],
+    [onMapClick, activeShmoBooking],
   );
-
-  // The onPress handling is slow on old android devices with this feature enabled
-  const [showSelectedFeature, setShowSelectedFeature] = useState(true);
-  const enableShowSelectedFeature = showSelectedFeature; // being considered: setting this to Platform.OS !== 'android'; for temporary performance measure
 
   return (
     <View style={{flex: 1}}>
@@ -265,26 +265,16 @@ export const MapV2 = (props: MapProps) => {
           {mapLines && <MapRoute lines={mapLines} />}
 
           <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={
-              enableShowSelectedFeature
-                ? selectedFeature?.properties?.id
-                : undefined
-            }
+            selectedFeaturePropertyId={selectedFeature?.properties?.id}
             onMapItemClick={onMapItemClick}
           />
 
-          {enableShowSelectedFeature && (
-            <SelectedFeatureIcon selectedFeature={selectedFeature} />
-          )}
+          <SelectedFeatureIcon selectedFeature={selectedFeature} />
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
-              selectedFeatureId={
-                enableShowSelectedFeature
-                  ? selectedFeature?.properties?.id
-                  : undefined
-              }
+              selectedFeatureId={selectedFeature?.properties?.id}
               onPress={onMapItemClick}
               showVehicles={true}
               showStations={true}
@@ -311,13 +301,6 @@ export const MapV2 = (props: MapProps) => {
             }}
           />
         </View>
-        {isShmoDeepIntegrationEnabled && (
-          <ShmoTesting
-            selectedVehicleId={selectedFeature?.properties?.id}
-            showSelectedFeature={showSelectedFeature}
-            setShowSelectedFeature={setShowSelectedFeature}
-          />
-        )}
         {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>

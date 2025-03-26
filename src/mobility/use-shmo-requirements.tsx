@@ -33,6 +33,7 @@ export const useShmoRequirements = () => {
     },
   ];
 
+  const isLoading = requirements.some((req) => req.isLoading);
   const hasBlockers = requirements.some((req) => req.isBlocking);
   const numberOfBlockers = requirements.filter((req) => req.isBlocking).length;
 
@@ -41,5 +42,6 @@ export const useShmoRequirements = () => {
     hasBlockers,
     numberOfBlockers,
     setGivenConsent,
+    isLoading,
   };
 };
