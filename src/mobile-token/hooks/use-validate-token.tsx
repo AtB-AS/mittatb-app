@@ -114,7 +114,7 @@ export const useValidateToken = (
       const isAppVersionCodeSame =
         remoteToken.appVersionCode === DeviceInfo.getBuildNumber();
       const isDeviceIdSame =
-        remoteToken.deviceId === (await DeviceInfo.getUniqueId());
+        remoteToken.deviceId === (await DeviceInfo.syncUniqueId());
       // match the library version here with the package.json version;
       const isLibraryVersionSame =
         remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
@@ -145,7 +145,7 @@ export const useValidateToken = (
 
       logToBugsnag(`Device ID`, {
         token: remoteToken.deviceId,
-        device: await DeviceInfo.getUniqueId(),
+        device: await DeviceInfo.syncUniqueId(),
       });
 
       logToBugsnag(`Library version`, {
