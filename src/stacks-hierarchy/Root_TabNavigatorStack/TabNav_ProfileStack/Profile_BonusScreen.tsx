@@ -199,12 +199,6 @@ function UserBonusBalanceSection({
 
   return (
     <>
-      {userBonusBalanceStatus === 'error' && (
-        <MessageInfoBox
-          type="error"
-          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
-        />
-      )}
       <Section>
         <GenericSectionItem style={styles.horizontalContainer}>
           <View
@@ -233,6 +227,12 @@ function UserBonusBalanceSection({
           <ThemedCityBike />
         </GenericSectionItem>
       </Section>
+      {userBonusBalanceStatus === 'error' && (
+        <MessageInfoBox
+          type="error"
+          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+        />
+      )}
     </>
   );
 }

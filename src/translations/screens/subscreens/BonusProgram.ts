@@ -42,14 +42,14 @@ const BonusProgramTexts = {
       'Logg inn for å tene og bruke poeng',
     ),
     noBonusBalance: _(
-      'Vi klarer ikke hente bonuspoengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to fetch your bonus points right now. You will still earn points as usual.',
-      'Me klarer ikkje henta bonuspoenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
+      'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display your points right now. You will still earn points as usual.',
+      'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
     noBonusProducts: _(
-      'Vi klarer ikke hente fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to fetch the benefits right now. You will still earn points as usual.',
-      'Me klarer ikkje hente fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
+      'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display the benefits right now. You will still earn points as usual.',
+      'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
       heading: _('Les mer', 'Read more', 'Les meir'),

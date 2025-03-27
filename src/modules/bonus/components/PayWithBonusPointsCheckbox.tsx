@@ -52,56 +52,60 @@ export const PayWithBonusPointsCheckbox = ({
     );
 
   return (
-    <Section {...props}>
-      <GenericClickableSectionItem
-        active={isChecked}
-        onPress={onPress}
-        disabled={disabled}
-        accessibilityRole="checkbox"
-        accessibilityState={{checked: isChecked}}
-        accessibilityLabel={a11yLabel}
-      >
-        <View style={styles.container}>
-          <Checkbox checked={isChecked} />
-          <View style={styles.textContainer}>
-            <ThemeText>
-              {getTextForLanguage(bonusProduct.paymentDescription, language) ??
-                ''}
-            </ThemeText>
-            {userBonusBalanceStatus === 'error' && (
-              <MessageInfoBox
-                type="error"
-                message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
-              />
-            )}
-            <View style={styles.currentPointsRow}>
-              <ThemeText typography="body__secondary" color="secondary">
-                {t(BonusProgramTexts.youHave)}{' '}
-                {(() => {
-                  switch (userBonusBalanceStatus) {
-                    case 'loading':
-                      return <ActivityIndicator />;
-                    case 'error':
-                      return '--';
-                    default:
-                      return userBonusBalance;
-                  }
-                })()}
+    <>
+      <Section {...props}>
+        <GenericClickableSectionItem
+          active={isChecked}
+          onPress={onPress}
+          disabled={disabled}
+          accessibilityRole="checkbox"
+          accessibilityState={{checked: isChecked}}
+          accessibilityLabel={a11yLabel}
+        >
+          <View style={styles.container}>
+            <Checkbox checked={isChecked} />
+            <View style={styles.textContainer}>
+              <ThemeText>
+                {getTextForLanguage(
+                  bonusProduct.paymentDescription,
+                  language,
+                ) ?? ''}
               </ThemeText>
-              <ThemeIcon
-                color={theme.color.foreground.dynamic.secondary}
-                svg={StarFill}
-                size="small"
-              />
+              <View style={styles.currentPointsRow}>
+                <ThemeText typography="body__secondary" color="secondary">
+                  {t(BonusProgramTexts.youHave)}{' '}
+                  {(() => {
+                    switch (userBonusBalanceStatus) {
+                      case 'loading':
+                        return <ActivityIndicator />;
+                      case 'error':
+                        return '--';
+                      default:
+                        return userBonusBalance;
+                    }
+                  })()}
+                </ThemeText>
+                <ThemeIcon
+                  color={theme.color.foreground.dynamic.secondary}
+                  svg={StarFill}
+                  size="small"
+                />
+              </View>
             </View>
+            <BonusPriceTag
+              amount={bonusProduct.price.amount}
+              style={{alignSelf: 'flex-start'}}
+            />
           </View>
-          <BonusPriceTag
-            amount={bonusProduct.price.amount}
-            style={{alignSelf: 'flex-start'}}
-          />
-        </View>
-      </GenericClickableSectionItem>
-    </Section>
+        </GenericClickableSectionItem>
+      </Section>
+      {userBonusBalanceStatus === 'error' && (
+        <MessageInfoBox
+          type="error"
+          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+        />
+      )}
+    </>
   );
 };
 
