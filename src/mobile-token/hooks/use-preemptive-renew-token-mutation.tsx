@@ -2,7 +2,6 @@ import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import Bugsnag from '@bugsnag/react-native';
 import {mobileTokenClient} from '../mobileTokenClient';
-import {LIST_REMOTE_TOKENS_QUERY_KEY} from './use-list-remote-tokens-query';
 import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
 import {
   getMobileTokenErrorHandlingStrategy,
@@ -42,10 +41,6 @@ export const usePreemptiveRenewTokenMutation = (userId?: string) => {
     },
     onSuccess: (renewedToken) => {
       if (renewedToken) {
-        queryClient.invalidateQueries([
-          MOBILE_TOKEN_QUERY_KEY,
-          LIST_REMOTE_TOKENS_QUERY_KEY,
-        ]);
         queryClient.setQueryData(
           [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
           renewedToken,
