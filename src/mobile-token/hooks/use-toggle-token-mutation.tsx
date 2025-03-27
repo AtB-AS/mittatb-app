@@ -25,7 +25,7 @@ export const useToggleTokenMutation = () => {
           LIST_REMOTE_TOKENS_QUERY_KEY,
           userId,
           nativeToken?.tokenId,
-          secureContainer
+          secureContainer,
         ],
         tokens,
       );
