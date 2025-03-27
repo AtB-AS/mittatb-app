@@ -145,7 +145,7 @@ export const useValidateToken = (
 
       logToBugsnag(`Device ID`, {
         token: remoteToken.deviceId,
-        device: DeviceInfo.getUniqueId(),
+        device: await DeviceInfo.getUniqueId(),
       });
 
       logToBugsnag(`Library version`, {
