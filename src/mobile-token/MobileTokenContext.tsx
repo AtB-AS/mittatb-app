@@ -59,6 +59,7 @@ type MobileTokenContextState = {
   clearTokenAtLogout: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
   nativeToken?: ActivatedToken;
+  secureContainer?: string;
   /**
    * Low level debug details and functions of the mobile token process, for the
    * debug screen
@@ -96,6 +97,8 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const [secureContainer, setSecureContainer] = useState<string>();
+
   const traceId = useRef<string>(uuid());
 
   useEffect(() => setIsLoggingOut(false), [userId]);
@@ -109,6 +112,17 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
+    const loadSecureContainer = async () => {
+      if (nativeToken) {
+        setSecureContainer(undefined);
+        await mobileTokenClient.encode(nativeToken).then((secureContainer) => {
+          setSecureContainer(secureContainer);
+        });
+      }
+    };
+
+    loadSecureContainer();
+
     if (nativeTokenStatus === 'success') {
       const tokenStatus = nativeToken.isAttested()
         ? 'attested'
@@ -135,8 +149,9 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     status: remoteTokensStatus,
     error: remoteTokenError,
   } = useListRemoteTokensQuery(
-    enabled && nativeToken !== undefined,
-    nativeToken,
+    enabled && nativeToken !== undefined && secureContainer !== undefined,
+    nativeToken?.tokenId,
+    secureContainer,
   );
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
@@ -147,8 +162,11 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     queryClient.invalidateQueries([
       MOBILE_TOKEN_QUERY_KEY,
       LIST_REMOTE_TOKENS_QUERY_KEY,
+      userId,
+      nativeToken?.tokenId,
+      secureContainer,
     ]);
-  }, [queryClient, nativeToken?.tokenId]);
+  }, [queryClient, userId, nativeToken?.tokenId, secureContainer]);
 
   useEffect(() => {
     if (nativeTokenStatus === 'loading') {
@@ -220,6 +238,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
         }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
+        secureContainer,
         debug: {
           nativeTokenStatus,
           remoteTokensStatus,
