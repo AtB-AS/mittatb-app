@@ -66,8 +66,8 @@ jobs:
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.6
-          cache-version: 1
+          ruby-version: 3.1.0
+          cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
         run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}

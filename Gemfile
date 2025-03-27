@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 # install correct ruby version with rbenv, which can be installed with brew install rbenv
-ruby '2.7.6'
+ruby '3.1.0'
 
-gem "fastlane"
+gem "fastlane", "2.226.0"
 gem "dotenv"
 # Cocoapods 1.15 introduced a bug which break the build. We will remove the upper
 # bound in the template on Cocoapods with next React Native release.
