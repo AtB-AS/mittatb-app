@@ -14,7 +14,7 @@ type Args = {
 export const useToggleTokenMutation = () => {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
-  const {nativeToken} = useMobileTokenContext();
+  const {nativeToken, secureContainer} = useMobileTokenContext();
   return useMutation({
     mutationFn: ({tokenId, bypassRestrictions}: Args) =>
       tokenService.toggle(tokenId, uuid(), bypassRestrictions),
@@ -24,7 +24,8 @@ export const useToggleTokenMutation = () => {
           MOBILE_TOKEN_QUERY_KEY,
           LIST_REMOTE_TOKENS_QUERY_KEY,
           userId,
-          nativeToken,
+          nativeToken?.tokenId,
+          secureContainer
         ],
         tokens,
       );
