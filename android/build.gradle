@@ -16,6 +16,7 @@ buildscript {
         // Required for react-native-camera
         // https://github.com/teslamotors/react-native-camera-kit/blob/master/example/android/build.gradle
         kotlinVersion = "1.9.24"
+        googlePlayServicesIidVersion = "17.0.0"
     }
     repositories {
         google()
