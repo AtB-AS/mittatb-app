@@ -202,7 +202,7 @@ function UserBonusBalanceSection({
       {userBonusBalanceStatus === 'error' && (
         <MessageInfoBox
           type="error"
-          message="Vi klarer ikke å hente dine bonuspoeng nå. Du vil fortsatt tjene poeng som vanlig."
+          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
         />
       )}
       <Section>
@@ -210,8 +210,8 @@ function UserBonusBalanceSection({
           <View
             accessible
             accessibilityLabel={t(
-              BonusProgramTexts.bonusProfile.yourBonusBalanceA11yLabel(
-                userBonusBalanceStatus === 'error' ? 0 : userBonusBalance,
+              BonusProgramTexts.yourBonusBalanceA11yLabel(
+                userBonusBalanceStatus === 'error' ? null : userBonusBalance,
               ),
             )}
           >

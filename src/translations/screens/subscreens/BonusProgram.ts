@@ -10,6 +10,13 @@ const BonusProgramTexts = {
 
   youHave: _('Du har ', 'You have ', 'Du har '),
 
+  yourBonusBalanceA11yLabel: (bonusBalance: number | null | undefined) =>
+    _(
+      `Du har ${bonusBalance ?? 'ukjent antall'} bonuspoeng`,
+      `You have ${bonusBalance ?? 'unknown number of'} bonus points`,
+      `Du har ${bonusBalance ?? 'ukjent mengde'} bonuspoeng`,
+    ),
+
   bonusProfile: {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),
@@ -19,12 +26,6 @@ const BonusProgramTexts = {
       'Your bonus points',
       'Bonuspoenga dine',
     ),
-    yourBonusBalanceA11yLabel: (bonusBalance: number | null | undefined) =>
-      _(
-        `Du har ${bonusBalance ?? 'ukjent antall'} bonuspoeng`,
-        `You have ${bonusBalance ?? 'unknown number of'} bonus points`,
-        `Du har ${bonusBalance ?? 'ukjent tal på'} bonuspoeng`,
-      ),
 
     spendPoints: {
       heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),

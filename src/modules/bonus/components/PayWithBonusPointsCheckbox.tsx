@@ -1,5 +1,4 @@
-import React from 'react';
-import {BonusPriceTag} from '@atb/modules/bonus';
+import {BonusPriceTag, useBonusBalanceQuery} from '@atb/modules/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,
@@ -16,7 +15,8 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -34,17 +34,22 @@ export const PayWithBonusPointsCheckbox = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const userBonusPoints = 4; // TODO: get actual value using hook when available
-  const disabled = userBonusPoints < bonusProduct.price.amount;
+  const {data: userBonusBalance, status: userBonusBalanceStatus} =
+    useBonusBalanceQuery();
+  const disabled =
+    typeof userBonusBalance != 'number' ||
+    userBonusBalance < bonusProduct.price.amount;
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
     screenReaderPause +
     t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
     screenReaderPause +
-    t(BonusProgramTexts.youHave) +
-    userBonusPoints +
-    t(BonusProgramTexts.bonusPoints);
+    t(
+      BonusProgramTexts.yourBonusBalanceA11yLabel(
+        userBonusBalanceStatus === 'error' ? null : userBonusBalance,
+      ),
+    );
 
   return (
     <Section {...props}>
@@ -63,9 +68,25 @@ export const PayWithBonusPointsCheckbox = ({
               {getTextForLanguage(bonusProduct.paymentDescription, language) ??
                 ''}
             </ThemeText>
+            {userBonusBalanceStatus === 'error' && (
+              <MessageInfoBox
+                type="error"
+                message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+              />
+            )}
             <View style={styles.currentPointsRow}>
               <ThemeText typography="body__secondary" color="secondary">
-                {t(BonusProgramTexts.youHave) + userBonusPoints}
+                {t(BonusProgramTexts.youHave)}{' '}
+                {(() => {
+                  switch (userBonusBalanceStatus) {
+                    case 'loading':
+                      return <ActivityIndicator />;
+                    case 'error':
+                      return '--';
+                    default:
+                      return userBonusBalance;
+                  }
+                })()}
               </ThemeText>
               <ThemeIcon
                 color={theme.color.foreground.dynamic.secondary}
