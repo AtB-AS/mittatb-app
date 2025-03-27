@@ -49,7 +49,7 @@ runs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ inputs.ruby-version }}
-          cache-version: 1
+          cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Update devices and provisioning profiles
         shell: bash
