@@ -10,14 +10,18 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {ContentHeading} from '@atb/components/heading';
-import {BonusPriceTag, isActive} from '@atb/modules/bonus';
+import {
+  BonusPriceTag,
+  isActive,
+  useBonusBalanceQuery,
+} from '@atb/modules/bonus';
 import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
@@ -28,12 +32,13 @@ export const Profile_BonusScreen = () => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const {data: userBonusBalance, status: userBonusBalanceStatus} =
+    useBonusBalanceQuery();
   const {bonusProducts, mobilityOperators, bonusTexts} =
     useFirestoreConfigurationContext();
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
     useState<number>();
 
-  const userBonusPoints = 5; // TODO: get actual value when available
   const activeBonusProducts = bonusProducts?.filter(isActive);
 
   return (
@@ -52,29 +57,10 @@ export const Profile_BonusScreen = () => {
             />
           </View>
         )}
-        <Section>
-          <GenericSectionItem style={styles.horizontalContainer}>
-            <View
-              accessible
-              accessibilityLabel={t(
-                BonusProgramTexts.bonusProfile.yourBonusPointsA11yLabel(
-                  userBonusPoints,
-                ),
-              )}
-            >
-              <View style={styles.currentPointsDisplay}>
-                <ThemeText typography="body__primary--jumbo--bold">
-                  {userBonusPoints}
-                </ThemeText>
-                <ThemeIcon svg={StarFill} size="large" />
-              </View>
-              <ThemeText typography="body__secondary" color="secondary">
-                {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
-              </ThemeText>
-            </View>
-            <ThemedCityBike />
-          </GenericSectionItem>
-        </Section>
+        <UserBonusBalanceSection
+          userBonusBalance={userBonusBalance}
+          userBonusBalanceStatus={userBonusBalanceStatus}
+        />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
@@ -175,10 +161,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     gap: theme.spacing.small,
   },
-  currentPointsDisplay: {
+  currentBalanceDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
+    height: theme.typography['body__primary--jumbo'].lineHeight,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
   bonusProductsContainer: {
@@ -197,3 +184,55 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
 }));
+
+type UserBonusBalanceSectionProps = {
+  userBonusBalanceStatus: 'loading' | 'error' | 'success';
+  userBonusBalance: number | null | undefined;
+};
+
+function UserBonusBalanceSection({
+  userBonusBalanceStatus,
+  userBonusBalance,
+}: UserBonusBalanceSectionProps): JSX.Element {
+  const styles = useStyles();
+  const {t} = useTranslation();
+
+  return (
+    <>
+      <Section>
+        <GenericSectionItem style={styles.horizontalContainer}>
+          <View
+            accessible
+            accessibilityLabel={t(
+              BonusProgramTexts.yourBonusBalanceA11yLabel(
+                userBonusBalanceStatus === 'error' ? null : userBonusBalance,
+              ),
+            )}
+          >
+            <View style={styles.currentBalanceDisplay}>
+              {userBonusBalanceStatus === 'loading' ? (
+                <ActivityIndicator />
+              ) : (
+                <ThemeText typography="body__primary--jumbo--bold">
+                  {userBonusBalanceStatus === 'error' ? '--' : userBonusBalance}
+                </ThemeText>
+              )}
+              <ThemeIcon svg={StarFill} size="large" />
+            </View>
+
+            <ThemeText typography="body__secondary" color="secondary">
+              {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
+            </ThemeText>
+          </View>
+          <ThemedCityBike />
+        </GenericSectionItem>
+      </Section>
+      {userBonusBalanceStatus === 'error' && (
+        <MessageInfoBox
+          type="error"
+          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+        />
+      )}
+    </>
+  );
+}
