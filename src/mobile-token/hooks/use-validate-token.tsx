@@ -102,6 +102,7 @@ export const useValidateToken = (
     };
 
     const checkShouldRenew = async (remoteToken: RemoteToken) => {
+      const uniqueId = await DeviceInfo.syncUniqueId();
       const apiLevel =
         Platform.OS === 'ios'
           ? DeviceInfo.getSystemVersion()
@@ -113,8 +114,7 @@ export const useValidateToken = (
         remoteToken.appVersion === DeviceInfo.getVersion();
       const isAppVersionCodeSame =
         remoteToken.appVersionCode === DeviceInfo.getBuildNumber();
-      const isDeviceIdSame =
-        remoteToken.deviceId === (await DeviceInfo.getUniqueId());
+      const isDeviceIdSame = remoteToken.deviceId === uniqueId;
       // match the library version here with the package.json version;
       const isLibraryVersionSame =
         remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
@@ -145,7 +145,7 @@ export const useValidateToken = (
 
       logToBugsnag(`Device ID`, {
         token: remoteToken.deviceId,
-        device: DeviceInfo.getUniqueId(),
+        device: uniqueId,
       });
 
       logToBugsnag(`Library version`, {
