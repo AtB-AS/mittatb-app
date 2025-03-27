@@ -61,7 +61,11 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
               onPressFareContract(fcOrReservation.id);
             }
           }}
-          key={fcOrReservation.orderId}
+          key={
+            'id' in fcOrReservation
+              ? fcOrReservation.id
+              : fcOrReservation.orderId
+          }
           fcOrReservation={fcOrReservation}
           index={index}
         />
