@@ -65,12 +65,15 @@ type Root_ParkingViolationsConfirmationParams = {
 };
 
 type Root_ScooterHelpScreenParams = {
-  vehicleId: string;
+  operatorName: string;
+  operatorId: string;
+  vehicleId: string | null;
 };
 
 type Root_ContactScooterOperatorScreenParams = {
-  vehicleId: string;
+  vehicleId: string | null;
   operatorId: string;
+  operatorName: string;
 };
 
 type Root_ContactScooterOperatorConfirmationScreenParams = {

@@ -35,6 +35,7 @@ type Props = {
   navigateSupportCallback: () => void;
   loginCallback: () => void;
   startOnboardingCallback: () => void;
+  navigation: any;
 };
 
 export const ScooterSheet = ({
@@ -45,6 +46,7 @@ export const ScooterSheet = ({
   navigateSupportCallback,
   loginCallback,
   startOnboardingCallback,
+  navigation,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -114,7 +116,14 @@ export const ScooterSheet = ({
                   />
                   <Button
                     expanded={true}
-                    onPress={navigateSupportCallback}
+                    onPress={() => {
+                      navigateSupportCallback();
+                      navigation.navigate('Root_ScooterHelpScreen', {
+                        vehicleId: id,
+                        operatorId,
+                        operatorName,
+                      });
+                    }}
                     text={t(MobilityTexts.helpText)}
                     mode="secondary"
                     backgroundColor={theme.color.background.neutral[1]}

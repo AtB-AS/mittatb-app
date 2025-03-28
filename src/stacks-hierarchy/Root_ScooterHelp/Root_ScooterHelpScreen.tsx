@@ -12,7 +12,6 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
-import {useVehicle} from '@atb/mobility/use-vehicle';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 
@@ -20,14 +19,15 @@ export type ScooterHelpScreenProps =
   RootStackScreenProps<'Root_ScooterHelpScreen'>;
 
 export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
-  const {vehicleId} = route.params;
+  /* vehicleId is only for support request body in Root_ContactScooterOperatorScreen,
+     it can be null when there is an active booking.
+     The support api accepts either vehicleId(as assetId) or a bookingId */
+  const {operatorName, operatorId, vehicleId} = route.params;
   const style = useStyles();
   const {t, language} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const {scooterFaqs} = useFirestoreConfigurationContext();
   const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
-
-  const {operatorName, operatorId} = useVehicle(vehicleId);
 
   return (
     <FullScreenView
@@ -49,6 +49,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
                 navigation.navigate('Root_ContactScooterOperatorScreen', {
                   vehicleId,
                   operatorId,
+                  operatorName,
                   transitionOverride: 'slide-from-right',
                 });
               }}

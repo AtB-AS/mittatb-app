@@ -91,12 +91,8 @@ export const useAutoSelectMapItem = (
                 onClose={closeBottomSheet}
                 onVehicleReceived={flyToMapItemLocation}
                 onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ScooterHelpScreen', {
-                    vehicleId: bottomSheetToAutoSelect.id,
-                  });
-                }}
+                navigateSupportCallback={closeBottomSheet}
+                navigation={navigation}
                 loginCallback={() => {
                   closeBottomSheet();
                   if (hasReservationOrAvailableFareContract) {
