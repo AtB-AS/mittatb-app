@@ -36,56 +36,68 @@ export const PaymentSelectionCard = (props: {
 
   return (
     <View style={style.card}>
-      <View style={style.cardTop}>
-        <PaymentBrand
-          paymentType={
-            multiplePaymentMethods ? undefined : paymentMethod.paymentType
-          }
-        />
-        <View style={style.paymentMethod}>
-          <ThemeText>
-            {multiplePaymentMethods
-              ? t(SelectPaymentMethodTexts.multiple_payment.title)
-              : paymentName}
-          </ThemeText>
-          {!multiplePaymentMethods &&
-            paymentMethod.paymentType !== PaymentType.Vipps && (
-              <ThemeText
-                style={style.maskedPan}
-                accessibilityLabel={t(
-                  PaymentMethodsTexts.a11y.cardInfo(
-                    paymentName,
-                    paymentMethod.recurringCard?.masked_pan ?? '',
-                  ),
-                )}
-              >
-                **** {paymentMethod.recurringCard?.masked_pan}
-              </ThemeText>
-            )}
-        </View>
+      <PressableOpacity
+        accessibilityLabel={t(
+          PaymentMethodsTexts.a11y.editCardIcon(
+            paymentName,
+            paymentMethod.recurringCard?.masked_pan ?? '',
+          ),
+        )}
+        onPress={() => {
+          startAction();
+        }}
+      >
+        <View style={style.cardTop}>
+          <PaymentBrand
+            paymentType={
+              multiplePaymentMethods ? undefined : paymentMethod.paymentType
+            }
+          />
+          <View style={style.paymentMethod}>
+            <ThemeText>
+              {multiplePaymentMethods
+                ? t(SelectPaymentMethodTexts.multiple_payment.title)
+                : paymentName}
+            </ThemeText>
+            {!multiplePaymentMethods &&
+              paymentMethod.paymentType !== PaymentType.Vipps && (
+                <ThemeText
+                  style={style.maskedPan}
+                  accessibilityLabel={t(
+                    PaymentMethodsTexts.a11y.cardInfo(
+                      paymentName,
+                      paymentMethod.recurringCard?.masked_pan ?? '',
+                    ),
+                  )}
+                >
+                  **** {paymentMethod.recurringCard?.masked_pan}
+                </ThemeText>
+              )}
+          </View>
 
-        <View style={style.cardIcons}>
-          <PressableOpacity
-            accessibilityLabel={t(
-              PaymentMethodsTexts.a11y.deleteCardIcon(
-                paymentName,
-                paymentMethod.recurringCard?.masked_pan ?? '',
-              ),
-            )}
-            style={style.actionButton}
-            onPress={() => {
-              startAction();
-            }}
-          >
-            <ThemeText>{t(PaymentMethodsTexts.editPaymentMethod)}</ThemeText>
-            <SvgEdit
-              height={21 * fontScale}
-              width={21 * fontScale}
-              fill={theme.color.foreground.dynamic.primary}
-            />
-          </PressableOpacity>
+          <View style={style.cardIcons}>
+            <PressableOpacity
+              accessibilityLabel={t(
+                PaymentMethodsTexts.a11y.editCardIcon(
+                  paymentName,
+                  paymentMethod.recurringCard?.masked_pan ?? '',
+                ),
+              )}
+              style={style.actionButton}
+              onPress={() => {
+                startAction();
+              }}
+            >
+              <ThemeText>{t(PaymentMethodsTexts.editPaymentMethod)}</ThemeText>
+              <SvgEdit
+                height={21 * fontScale}
+                width={21 * fontScale}
+                fill={theme.color.foreground.dynamic.primary}
+              />
+            </PressableOpacity>
+          </View>
         </View>
-      </View>
+      </PressableOpacity>
     </View>
   );
 };

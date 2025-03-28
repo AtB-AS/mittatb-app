@@ -74,8 +74,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     currentOptions?.paymentMethod,
   );
 
-  const [selectedCard, setSelectedCard] = useState<PaymentSelection>();
-
   return (
     <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
       <ScrollView>
@@ -88,15 +86,9 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                   paymentMethod={method}
                   shouldSave={shouldSave}
                   onSetShouldSave={setShouldSave}
-                  selected={
-                    selectedCard?.saveOption == 'non_recurring' &&
-                    selectedCard?.paymentMethod?.paymentType ===
-                      method.paymentType
-                  }
+                  selected={selectedMethod?.paymentType === method.paymentType}
                   onSelect={(val: PaymentSelection) => {
-                    setSelectedMethod(val.paymentMethod);
-                    setSelectedCard(val);
-                    setShouldSave(false);
+                    setSelectedMethod(val);
                   }}
                   index={index}
                 />
@@ -105,13 +97,15 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             <MultiplePaymentMethodsRadioSection
               shouldSave={shouldSave}
               onSetShouldSave={setShouldSave}
-              selected={selectedCard?.saveOption === 'new_recurring'}
+              selected={selectedMethod?.paymentType === PaymentType.PaymentCard}
               onSelect={(val: PaymentSelection) => {
-                setShouldSave(true);
-                setSelectedMethod(val.paymentMethod);
-                setSelectedCard(val);
+                setSelectedMethod(val);
               }}
               paymentGroup={multiplePaymentMethod}
+              paymentMethod={{
+                paymentType: PaymentType.PaymentCard,
+                savedType: SavedPaymentMethodType.Normal,
+              }}
               testID="multiplePaymentMethods"
             />
 
@@ -139,14 +133,10 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 shouldSave={shouldSave}
                 onSetShouldSave={setShouldSave}
                 selected={
-                  selectedCard?.saveOption == 'saved_recurring' &&
-                  selectedCard?.paymentMethod?.recurringCard?.id ===
-                    method.recurringCard?.id
+                  selectedMethod?.recurringCard?.id === method.recurringCard?.id
                 }
                 onSelect={(val: PaymentSelection) => {
-                  setSelectedMethod(val.paymentMethod);
-                  setSelectedCard(val);
-                  setShouldSave(false);
+                  setSelectedMethod(val);
                 }}
                 index={index}
               />
@@ -176,7 +166,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 };
 
 type MultiplePaymentMethodsProps = {
-  paymentMethod?: PaymentMethod;
+  paymentMethod: PaymentMethod;
   selected: boolean;
   onSelect: (value: PaymentSelection) => void;
   shouldSave: boolean;
@@ -187,7 +177,14 @@ type MultiplePaymentMethodsProps = {
 
 const MultiplePaymentMethodsRadioSection: React.FC<
   MultiplePaymentMethodsProps
-> = ({selected, onSelect, shouldSave, onSetShouldSave, paymentGroup}) => {
+> = ({
+  paymentMethod,
+  selected,
+  onSelect,
+  shouldSave,
+  onSetShouldSave,
+  paymentGroup,
+}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthContext();
@@ -216,13 +213,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
 
   const paymentTexts = getPaymentTexts(paymentGroup);
   const canSaveCard = authenticationType === 'phone';
-  const paymentSelection: PaymentSelection = {
-    saveOption: 'new_recurring',
-    paymentMethod: {
-      paymentType: PaymentType.Visa,
-      savedType: SavedPaymentMethodType.Normal,
-    },
-  };
+  const paymentSelection = defineSelection(paymentMethod, shouldSave);
 
   return (
     <View style={styles.card}>
@@ -346,16 +337,10 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
 
   const canSaveCard =
     authenticationType === 'phone' &&
-    paymentMethod.savedType === 'normal' &&
     paymentMethod.paymentType !== PaymentType.Vipps;
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
-  const paymentSelection: PaymentSelection = {
-    saveOption: paymentMethod.recurringCard
-      ? 'saved_recurring'
-      : 'non_recurring',
-    paymentMethod: paymentMethod,
-  };
+  const paymentSelection = defineSelection(paymentMethod);
 
   return (
     <View style={styles.card}>
@@ -417,6 +402,30 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
     </View>
   );
 };
+
+function defineSelection(
+  paymentMethod: PaymentMethod,
+  shouldSave: boolean = false,
+): PaymentSelection {
+  const paymentSelection: PaymentSelection =
+    paymentMethod.paymentType === PaymentType.PaymentCard
+      ? {
+          paymentType: PaymentType.PaymentCard,
+          shouldSavePaymentMethod: shouldSave,
+          savedType: SavedPaymentMethodType.Normal,
+        }
+      : paymentMethod.recurringCard
+      ? {
+          paymentType: paymentMethod.paymentType,
+          recurringCard: paymentMethod.recurringCard,
+          savedType: SavedPaymentMethodType.Recurring,
+        }
+      : {
+          paymentType: paymentMethod.paymentType,
+          savedType: SavedPaymentMethodType.Normal,
+        };
+  return paymentSelection;
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
