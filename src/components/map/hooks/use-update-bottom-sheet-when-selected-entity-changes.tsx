@@ -20,7 +20,6 @@ import {
   isCarStation,
   isScooter,
   ParkAndRideBottomSheet,
-  ScooterSheet,
   isScooterV2,
   isBicycleV2,
   isBikeStationV2,
@@ -28,7 +27,7 @@ import {
 } from '@atb/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+//import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
@@ -57,7 +56,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
   const analytics = useMapSelectionAnalytics();
-  const navigation = useNavigation<RootNavigationProps>();
+  const navigation = useNavigation<any>();
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
@@ -192,45 +191,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ? isScooterV2(selectedFeature)
           : isScooter(selectedFeature)
       ) {
-        openBottomSheet(
-          () => {
-            return (
-              <ScooterSheet
-                vehicleId={selectedFeature?.properties?.id}
-                onClose={closeCallback}
-                onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ScooterHelpScreen', {
-                    vehicleId: selectedFeature?.properties?.id,
-                  });
-                }}
-                loginCallback={() => {
-                  closeBottomSheet();
-                  if (hasReservationOrAvailableFareContract) {
-                    navigation.navigate(
-                      'Root_LoginAvailableFareContractWarningScreen',
-                      {},
-                    );
-                  } else if (enable_vipps_login) {
-                    navigation.navigate('Root_LoginOptionsScreen', {
-                      showGoBack: true,
-                      transitionOverride: 'slide-from-bottom',
-                    });
-                  } else {
-                    navigation.navigate('Root_LoginPhoneInputScreen', {});
-                  }
-                }}
-                startOnboardingCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ShmoOnboardingScreen');
-                }}
-              />
-            );
-          },
-          onCloseFocusRef,
-          false,
-        );
+        /*navigation.navigate('Map_ScooterSheetScreen', {
+          vehicleId: selectedFeature.properties?.id,
+        });*/
       } else if (
         isMapV2Enabled
           ? isBicycleV2(selectedFeature)

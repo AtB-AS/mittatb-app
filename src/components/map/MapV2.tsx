@@ -53,6 +53,7 @@ import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
 import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
+import {ScooterSheet} from '@atb/mobility/components/sheets/ScooterSheet';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -230,80 +231,102 @@ export const MapV2 = (props: MapProps) => {
     [onMapClick, activeShmoBooking],
   );
 
+  let MapBottomSheet: React.JSX.Element | undefined = undefined;
+  if (activeShmoBooking) {
+    //MapBottomSheet = ActiveScooterSheet;
+  } else {
+    switch (selectedFeature?.properties?.vehicle_type_form_factor) {
+      case 'SCOOTER_STANDING':
+        MapBottomSheet = (
+          <ScooterSheet
+            vehicleId={selectedFeature.properties.id}
+            onClose={() => null}
+            onReportParkingViolation={() => null}
+            onVehicleReceived={() => null}
+            navigateSupportCallback={() => null}
+            loginCallback={() => null}
+            startOnboardingCallback={() => null}
+          />
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
-        <MapboxGL.MapView
-          ref={mapViewRef}
-          style={{
-            flex: 1,
-          }}
-          pitchEnabled={false}
-          onPress={onFeatureClick}
-          testID="mapView"
-          {...mapViewConfig}
-        >
-          <MapboxGL.Camera
-            ref={mapCameraRef}
-            zoomLevel={15}
-            centerCoordinate={[
-              startingCoordinates.longitude,
-              startingCoordinates.latitude,
-            ]}
-            {...MapCameraConfig}
-          />
-          {showGeofencingZones && (
-            <GeofencingZones
-              selectedVehicleId={
-                aVehicleIsAutoSelected
-                  ? bottomSheetCurrentlyAutoSelected.id
-                  : selectedFeature?.properties?.id
-              }
-            />
-          )}
-
-          {mapLines && <MapRoute lines={mapLines} />}
-
-          <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={selectedFeature?.properties?.id}
-            onMapItemClick={onMapItemClick}
-          />
-
-          <SelectedFeatureIcon selectedFeature={selectedFeature} />
-
-          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {shouldShowVehiclesAndStations && (
-            <VehiclesAndStations
-              selectedFeatureId={selectedFeature?.properties?.id}
-              onPress={onMapItemClick}
-              showVehicles={true}
-              showStations={true}
-            />
-          )}
-        </MapboxGL.MapView>
-        <View
-          style={[
-            controlStyles.mapButtonsContainer,
-            controlStyles.mapButtonsContainerRight,
+      <MapboxGL.MapView
+        ref={mapViewRef}
+        style={{
+          flex: 1,
+        }}
+        pitchEnabled={false}
+        onPress={onFeatureClick}
+        testID="mapView"
+        {...mapViewConfig}
+      >
+        <MapboxGL.Camera
+          ref={mapCameraRef}
+          zoomLevel={15}
+          centerCoordinate={[
+            startingCoordinates.longitude,
+            startingCoordinates.latitude,
           ]}
-        >
-          <ExternalRealtimeMapButton onMapClick={onMapClick} />
-
-          <PositionArrow
-            onPress={async () => {
-              const coordinates = await getCurrentCoordinates(true);
-              if (coordinates) {
-                onMapClick({
-                  source: 'my-position',
-                  coords: coordinates,
-                });
-              }
-            }}
+          {...MapCameraConfig}
+        />
+        {showGeofencingZones && (
+          <GeofencingZones
+            selectedVehicleId={
+              aVehicleIsAutoSelected
+                ? bottomSheetCurrentlyAutoSelected.id
+                : selectedFeature?.properties?.id
+            }
           />
-        </View>
-        {showScanButton && <ScanButton />}
-        {includeSnackbar && <Snackbar {...snackbarProps} />}
+        )}
+
+        {mapLines && <MapRoute lines={mapLines} />}
+
+        <NationalStopRegistryFeatures
+          selectedFeaturePropertyId={selectedFeature?.properties?.id}
+          onMapItemClick={onMapItemClick}
+        />
+
+        <SelectedFeatureIcon selectedFeature={selectedFeature} />
+
+        <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
+        {shouldShowVehiclesAndStations && (
+          <VehiclesAndStations
+            selectedFeatureId={selectedFeature?.properties?.id}
+            onPress={onMapItemClick}
+            showVehicles={true}
+            showStations={true}
+          />
+        )}
+      </MapboxGL.MapView>
+      <View
+        style={[
+          controlStyles.mapButtonsContainer,
+          controlStyles.mapButtonsContainerRight,
+        ]}
+      >
+        <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
+        <PositionArrow
+          onPress={async () => {
+            const coordinates = await getCurrentCoordinates(true);
+            if (coordinates) {
+              onMapClick({
+                source: 'my-position',
+                coords: coordinates,
+              });
+            }
+          }}
+        />
       </View>
+      {showScanButton && <ScanButton />}
+      {includeSnackbar && <Snackbar {...snackbarProps} />}
+      {!!MapBottomSheet && MapBottomSheet}
     </View>
   );
 };

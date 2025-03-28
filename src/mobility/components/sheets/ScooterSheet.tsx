@@ -3,7 +3,7 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet-v2';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -11,7 +11,7 @@ import {
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
@@ -71,20 +71,20 @@ export const ScooterSheet = ({
     useFeatureTogglesContext();
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.6}
-      onClose={onClose}
-    >
-      <>
-        {(isLoading || shmoReqIsLoading) && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
-          </View>
-        )}
-        {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
-          <>
-            <ScrollView style={styles.container}>
+    <BottomSheetContainer onClose={onClose}>
+      <View
+        accessible={true}
+        accessibilityLabel="Vehicle information"
+        accessibilityRole="header"
+      >
+        <View accessibilityElementsHidden={false}>
+          {(isLoading || shmoReqIsLoading) && (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="large" />
+            </View>
+          )}
+          {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
+            <>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -99,63 +99,70 @@ export const ScooterSheet = ({
                 operatorName={operatorName}
                 brandLogoUrl={brandLogoUrl}
               />
-            </ScrollView>
-            <View style={styles.footer}>
-              {isShmoDeepIntegrationEnabled &&
-              operatorId &&
-              mobilityOperators?.find((e) => e.id === operatorId)
-                ?.isDeepIntegrationEnabled ? (
-                <View style={styles.actionWrapper}>
-                  <ShmoActionButton
-                    onLogin={loginCallback}
-                    onStartOnboarding={startOnboardingCallback}
-                    vehicleId={id}
-                    operatorId={operatorId}
-                  />
-                  <Button
-                    expanded={true}
-                    onPress={navigateSupportCallback}
-                    text={t(MobilityTexts.helpText)}
-                    mode="secondary"
-                    backgroundColor={theme.color.background.neutral[1]}
-                  />
-                </View>
-              ) : (
-                <>
-                  {rentalAppUri && (
-                    <OperatorActionButton
+
+              <View
+                style={styles.footer}
+                accessible={true}
+                importantForAccessibility="yes"
+              >
+                {isShmoDeepIntegrationEnabled &&
+                operatorId &&
+                mobilityOperators?.find((e) => e.id === operatorId)
+                  ?.isDeepIntegrationEnabled ? (
+                  <View style={styles.actionWrapper}>
+                    <ShmoActionButton
+                      onLogin={loginCallback}
+                      onStartOnboarding={startOnboardingCallback}
+                      vehicleId={id}
                       operatorId={operatorId}
-                      operatorName={operatorName}
-                      benefit={operatorBenefit}
-                      appStoreUri={appStoreUri}
-                      rentalAppUri={rentalAppUri}
                     />
-                  )}
-                  {isParkingViolationsReportingEnabled && (
                     <Button
                       expanded={true}
-                      style={styles.parkingViolationsButton}
-                      text={t(MobilityTexts.reportParkingViolation)}
+                      onPress={navigateSupportCallback}
+                      text={t(MobilityTexts.helpText)}
                       mode="secondary"
-                      onPress={onReportParkingViolation}
-                      rightIcon={{svg: ArrowRight}}
                       backgroundColor={theme.color.background.neutral[1]}
+                      accessibilityLabel={t(MobilityTexts.helpText)}
+                      accessibilityRole="button"
                     />
-                  )}
-                </>
-              )}
+                  </View>
+                ) : (
+                  <>
+                    {rentalAppUri && (
+                      <OperatorActionButton
+                        operatorId={operatorId}
+                        operatorName={operatorName}
+                        benefit={operatorBenefit}
+                        appStoreUri={appStoreUri}
+                        rentalAppUri={rentalAppUri}
+                      />
+                    )}
+                    {isParkingViolationsReportingEnabled && (
+                      <Button
+                        expanded={true}
+                        style={styles.parkingViolationsButton}
+                        text={t(MobilityTexts.reportParkingViolation)}
+                        mode="secondary"
+                        onPress={onReportParkingViolation}
+                        rightIcon={{svg: ArrowRight}}
+                        backgroundColor={theme.color.background.neutral[1]}
+                      />
+                    )}
+                  </>
+                )}
+              </View>
+            </>
+          )}
+          {!isLoading && (isError || !vehicle) && (
+            <View style={styles.footer}>
+              <MessageInfoBox
+                type="error"
+                message={t(ScooterTexts.loadingFailed)}
+              />
             </View>
-          </>
-        )}
-        {!isLoading && (isError || !vehicle) && (
-          <View style={styles.footer}>
-            <MessageInfoBox
-              type="error"
-              message={t(ScooterTexts.loadingFailed)}
-            />
-          </View>
-        )}
-      </>
+          )}
+        </View>
+      </View>
     </BottomSheetContainer>
   );
 };
@@ -163,13 +170,17 @@ export const ScooterSheet = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
+    container: {
+      width: '100%',
+    },
+    contentContainer: {
+      width: '100%',
+      paddingBottom: Math.max(bottom, theme.spacing.medium),
+    },
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacing.medium),
     },
     operatorBenefit: {
-      marginBottom: theme.spacing.medium,
-    },
-    container: {
       marginBottom: theme.spacing.medium,
     },
     actionWrapper: {

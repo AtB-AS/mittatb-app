@@ -6,7 +6,6 @@ import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
-  ScooterSheet,
 } from '@atb/mobility';
 import {flyToLocation} from '../utils';
 
@@ -85,40 +84,9 @@ export const useAutoSelectMapItem = (
         let BottomSheetComponent: JSX.Element | undefined = undefined;
         switch (bottomSheetToAutoSelect.type) {
           case AutoSelectableBottomSheetType.Scooter:
-            BottomSheetComponent = (
-              <ScooterSheet
-                vehicleId={bottomSheetToAutoSelect.id}
-                onClose={closeBottomSheet}
-                onVehicleReceived={flyToMapItemLocation}
-                onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ScooterHelpScreen', {
-                    vehicleId: bottomSheetToAutoSelect.id,
-                  });
-                }}
-                loginCallback={() => {
-                  closeBottomSheet();
-                  if (hasReservationOrAvailableFareContract) {
-                    navigation.navigate(
-                      'Root_LoginAvailableFareContractWarningScreen',
-                      {},
-                    );
-                  } else if (enable_vipps_login) {
-                    navigation.navigate('Root_LoginOptionsScreen', {
-                      showGoBack: true,
-                      transitionOverride: 'slide-from-bottom',
-                    });
-                  } else {
-                    navigation.navigate('Root_LoginPhoneInputScreen', {});
-                  }
-                }}
-                startOnboardingCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ShmoOnboardingScreen');
-                }}
-              />
-            );
+            /*navigation.navigate('Map_ScooterSheetScreen', {
+              vehicleId: bottomSheetToAutoSelect.id,
+            });*/
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (

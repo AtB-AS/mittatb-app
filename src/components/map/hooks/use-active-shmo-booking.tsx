@@ -1,17 +1,15 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import React, {RefObject, useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {flyToLocation} from '../utils';
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {ActiveScooterSheet} from '@atb/mobility/components/sheets/ActiveScooterSheet';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
-import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useShmoActiveBottomSheet = (
@@ -31,7 +29,7 @@ export const useShmoActiveBottomSheet = (
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  //const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const closeBottomSheet = useCallback(() => {
     close();
@@ -62,39 +60,12 @@ export const useShmoActiveBottomSheet = (
       ) {
         switch (activeBooking.state) {
           case ShmoBookingState.IN_USE:
-            openBottomSheet(
-              () => (
-                <ActiveScooterSheet
-                  onClose={closeBottomSheet}
-                  onActiveBookingReceived={flyToUserLocation}
-                  navigateSupportCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
-                    });
-                  }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
-            );
+            /*navigation.replace('Map_ActiveScooterSheetScreen', {
+              mapCameraRef,
+            });*/
             break;
           case ShmoBookingState.FINISHING:
-            openBottomSheet(
-              () => (
-                <FinishedScooterSheet
-                  onClose={closeBottomSheet}
-                  navigateSupportCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
-                    });
-                  }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
-            );
+            //navigation.replace('Map_FinishedScooterSheetScreen');
             break;
           default:
             break;
@@ -115,5 +86,6 @@ export const useShmoActiveBottomSheet = (
     navigation,
     activeBooking,
     isShmoDeepIntegrationEnabled,
+    mapCameraRef,
   ]);
 };

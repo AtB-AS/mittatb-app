@@ -34,7 +34,14 @@ export const VehicleCard = ({
   const price = formatPricePerUnit(pricingPlan, language);
 
   return (
-    <Section style={styles.container}>
+    <Section
+      style={styles.container}
+      accessible={true}
+      accessibilityLabel={`${operatorName} scooter ${currentFuelPercent}% battery, range ${formatRange(
+        currentRangeMeters,
+        language,
+      )}`}
+    >
       <GenericSectionItem>
         <OperatorNameAndLogo
           operatorName={operatorName}
