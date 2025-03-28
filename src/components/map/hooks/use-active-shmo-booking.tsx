@@ -13,6 +13,7 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
@@ -56,9 +57,8 @@ export const useShmoActiveBottomSheet = (
     if (!isFocused || !isShmoDeepIntegrationEnabled) return;
     try {
       if (
-        activeBooking
-        /* TODO: uncomment this when formfactor is in use
-        && activeBooking.asset.formFactor === FormFactor.Scooter*/
+        activeBooking &&
+        activeBooking.asset.formFactor === FormFactor.Scooter
       ) {
         switch (activeBooking.state) {
           case ShmoBookingState.IN_USE:
@@ -70,7 +70,9 @@ export const useShmoActiveBottomSheet = (
                   navigateSupportCallback={() => {
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
+                      operatorId: activeBooking.operator.id,
+                      operatorName: activeBooking.operator.name,
+                      vehicleId: null, //null when active booking, bookingId is used in support api instead
                     });
                   }}
                 />
@@ -87,7 +89,9 @@ export const useShmoActiveBottomSheet = (
                   navigateSupportCallback={() => {
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
+                      operatorId: activeBooking.operator.id,
+                      operatorName: activeBooking.operator.name,
+                      vehicleId: null, //null when active booking, bookingId is used in support api instead
                     });
                   }}
                 />

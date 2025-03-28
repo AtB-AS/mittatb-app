@@ -11,7 +11,6 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
@@ -38,11 +37,10 @@ export type Root_ContactScooterOperatorScreenProps =
 export const Root_ContactScooterOperatorScreen = ({
   route,
 }: Root_ContactScooterOperatorScreenProps) => {
-  const {vehicleId, operatorId} = route.params;
+  const {operatorId, operatorName, vehicleId} = route.params;
   const styles = useStyles();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
-  const {operatorName} = useVehicle(vehicleId);
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
@@ -264,7 +262,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
  */
 const useScooterContactFormController = (
   operatorId: string,
-  vehicleId: string,
+  vehicleId: string | null,
   onSuccess: () => void,
 ) => {
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
