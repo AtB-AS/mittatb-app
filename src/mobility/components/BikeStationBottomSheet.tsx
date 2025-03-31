@@ -153,7 +153,7 @@ export const BikeStationBottomSheet = ({
                       (payWithBonusPoints) => !payWithBonusPoints,
                     )
                   }
-                  style={styles.useBonusPointsSection}
+                  style={styles.payWithBonusPointsSection}
                 />
               )}
             </ScrollView>
@@ -216,7 +216,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     operatorNameAndLogo: {
       flexDirection: 'row',
     },
-    useBonusPointsSection: {
+    payWithBonusPointsSection: {
       marginTop: theme.spacing.medium,
     },
   };

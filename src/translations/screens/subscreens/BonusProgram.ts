@@ -10,6 +10,14 @@ const BonusProgramTexts = {
 
   youHave: _('Du har ', 'You have ', 'Du har '),
 
+  yourBonusBalanceA11yLabel: (bonusBalance: number | null) => {
+    return _(
+      `Du har ${bonusBalance ?? 'ukjent antall'} bonuspoeng`,
+      `You have ${bonusBalance ?? 'unknown number of'} bonus points`,
+      `Du har ${bonusBalance ?? 'ukjent mengde'} bonuspoeng`,
+    );
+  },
+
   bonusProfile: {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),
@@ -19,12 +27,6 @@ const BonusProgramTexts = {
       'Your bonus points',
       'Bonuspoenga dine',
     ),
-    yourBonusPointsA11yLabel: (bonuspoints: number) =>
-      _(
-        `Du har ${bonuspoints} bonuspoeng`,
-        `You have ${bonuspoints} bonus points`,
-        `Du har ${bonuspoints} bonuspoeng`,
-      ),
 
     spendPoints: {
       heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),
@@ -40,10 +42,15 @@ const BonusProgramTexts = {
       'Log in to earn and spend points',
       'Logg inn for å tene og bruke poeng',
     ),
+    noBonusBalance: _(
+      'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display your points right now. You will still earn points as usual.',
+      'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
+    ),
     noBonusProducts: _(
-      'Vi klarer ikke hente fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to fetch the benefits right now. You will still earn points as usual.',
-      'Me klarer ikkje hente fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
+      'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display the benefits right now. You will still earn points as usual.',
+      'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
       heading: _('Les mer', 'Read more', 'Les meir'),
