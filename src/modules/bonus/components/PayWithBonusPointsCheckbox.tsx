@@ -87,6 +87,7 @@ export const PayWithBonusPointsCheckbox = ({
       </Section>
       {userBonusBalanceStatus === 'error' && (
         <MessageInfoBox
+          style={styles.errorMessage}
           type="error"
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
         />
@@ -109,4 +110,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
   textContainer: {flex: 1},
+  errorMessage: {
+    marginTop: theme.spacing.medium,
+  },
 }));

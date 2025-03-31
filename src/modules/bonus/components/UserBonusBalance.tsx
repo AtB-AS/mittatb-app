@@ -1,5 +1,4 @@
 import {TextNames, useThemeContext} from '@atb/theme';
-import {ReactNode} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {useBonusBalanceQuery} from '..';
 import {ThemeText} from '@atb/components/text';
