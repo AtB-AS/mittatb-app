@@ -10,12 +10,17 @@ const BonusProgramTexts = {
 
   youHave: _('Du har ', 'You have ', 'Du har '),
 
-  yourBonusBalanceA11yLabel: (bonusBalance: number | null | undefined) =>
-    _(
-      `Du har ${bonusBalance ?? 'ukjent antall'} bonuspoeng`,
-      `You have ${bonusBalance ?? 'unknown number of'} bonus points`,
-      `Du har ${bonusBalance ?? 'ukjent mengde'} bonuspoeng`,
-    ),
+  yourBonusBalanceA11yLabel: (
+    bonusBalance: number | null | undefined,
+    bonusBalanceStatus: 'loading' | 'error' | 'success',
+  ) => {
+    const isValid = bonusBalance && bonusBalanceStatus === 'success';
+    return _(
+      `Du har ${isValid ? bonusBalance : 'ukjent antall'} bonuspoeng`,
+      `You have ${isValid ? bonusBalance : 'unknown number of'} bonus points`,
+      `Du har ${isValid ? bonusBalance : 'ukjent mengde'} bonuspoeng`,
+    );
+  },
 
   bonusProfile: {
     header: {

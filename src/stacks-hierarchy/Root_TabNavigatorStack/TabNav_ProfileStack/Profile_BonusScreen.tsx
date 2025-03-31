@@ -10,15 +10,14 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
+  UserBonusBalance,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
@@ -32,8 +31,6 @@ export const Profile_BonusScreen = () => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const {data: userBonusBalance, status: userBonusBalanceStatus} =
-    useBonusBalanceQuery();
   const {bonusProducts, mobilityOperators, bonusTexts} =
     useFirestoreConfigurationContext();
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
@@ -57,10 +54,7 @@ export const Profile_BonusScreen = () => {
             />
           </View>
         )}
-        <UserBonusBalanceSection
-          userBonusBalance={userBonusBalance}
-          userBonusBalanceStatus={userBonusBalanceStatus}
-        />
+        <UserBonusBalanceSection />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
@@ -185,17 +179,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-type UserBonusBalanceSectionProps = {
-  userBonusBalanceStatus: 'loading' | 'error' | 'success';
-  userBonusBalance: number | null | undefined;
-};
-
-function UserBonusBalanceSection({
-  userBonusBalanceStatus,
-  userBonusBalance,
-}: UserBonusBalanceSectionProps): JSX.Element {
+function UserBonusBalanceSection(): JSX.Element {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {data: userBonusBalance, status: userBonusBalanceStatus} =
+    useBonusBalanceQuery();
 
   return (
     <>
@@ -205,19 +193,13 @@ function UserBonusBalanceSection({
             accessible
             accessibilityLabel={t(
               BonusProgramTexts.yourBonusBalanceA11yLabel(
-                userBonusBalanceStatus === 'error' ? null : userBonusBalance,
+                userBonusBalance,
+                userBonusBalanceStatus,
               ),
             )}
           >
             <View style={styles.currentBalanceDisplay}>
-              {userBonusBalanceStatus === 'loading' ? (
-                <ActivityIndicator />
-              ) : (
-                <ThemeText typography="body__primary--jumbo--bold">
-                  {userBonusBalanceStatus === 'error' ? '--' : userBonusBalance}
-                </ThemeText>
-              )}
-              <ThemeIcon svg={StarFill} size="large" />
+              <UserBonusBalance size="large" />
             </View>
 
             <ThemeText typography="body__secondary" color="secondary">

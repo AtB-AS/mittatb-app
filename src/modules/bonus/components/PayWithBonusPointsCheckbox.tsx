@@ -6,17 +6,16 @@ import {
   SectionProps,
 } from '@atb/components/sections';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {BonusProductType} from '@atb/configuration/types';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {StyleSheet} from '@atb/theme';
 import {
   BonusProgramTexts,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {UserBonusBalance} from './UserBonusBalance';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -32,7 +31,6 @@ export const PayWithBonusPointsCheckbox = ({
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -47,7 +45,8 @@ export const PayWithBonusPointsCheckbox = ({
     screenReaderPause +
     t(
       BonusProgramTexts.yourBonusBalanceA11yLabel(
-        userBonusBalanceStatus === 'error' ? null : userBonusBalance,
+        userBonusBalance,
+        userBonusBalanceStatus,
       ),
     );
 
@@ -73,23 +72,9 @@ export const PayWithBonusPointsCheckbox = ({
               </ThemeText>
               <View style={styles.currentPointsRow}>
                 <ThemeText typography="body__secondary" color="secondary">
-                  {t(BonusProgramTexts.youHave)}{' '}
-                  {(() => {
-                    switch (userBonusBalanceStatus) {
-                      case 'loading':
-                        return <ActivityIndicator />;
-                      case 'error':
-                        return '--';
-                      default:
-                        return userBonusBalance;
-                    }
-                  })()}
+                  {t(BonusProgramTexts.youHave)}
                 </ThemeText>
-                <ThemeIcon
-                  color={theme.color.foreground.dynamic.secondary}
-                  svg={StarFill}
-                  size="small"
-                />
+                <UserBonusBalance size="small" />
               </View>
             </View>
             <BonusPriceTag
