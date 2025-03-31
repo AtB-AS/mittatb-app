@@ -1,6 +1,6 @@
 import {client} from '@atb/api';
 
-export const getBonusBalance = (): Promise<number | null> => {
+export const getBonusBalance = (): Promise<number> => {
   return client
     .get(`/bonus/v1/balance`, {
       authWithIdToken: true,

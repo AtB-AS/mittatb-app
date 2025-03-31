@@ -193,8 +193,9 @@ function UserBonusBalanceSection(): JSX.Element {
             accessible
             accessibilityLabel={t(
               BonusProgramTexts.yourBonusBalanceA11yLabel(
-                userBonusBalance,
-                userBonusBalanceStatus,
+                userBonusBalance && userBonusBalanceStatus === 'success'
+                  ? userBonusBalance
+                  : null,
               ),
             )}
           >

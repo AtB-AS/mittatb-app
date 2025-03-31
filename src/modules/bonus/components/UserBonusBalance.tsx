@@ -10,7 +10,7 @@ type Props = {
   size: 'small' | 'large';
 };
 
-const TYPOGRAPHY_MAPPING: Record<Props['size'], TextNames> = {
+const TYPOGRAPHY_BONUS_BALANCE: Record<Props['size'], TextNames> = {
   small: 'body__secondary',
   large: 'body__primary--jumbo--bold',
 };
@@ -21,18 +21,18 @@ export const UserBonusBalance = ({size}: Props) => {
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
-  let BonusBalance: number | ReactNode | null | undefined = userBonusBalance;
-  if (userBonusBalanceStatus === 'loading') {
-    BonusBalance = <ActivityIndicator />;
-  } else if (userBonusBalanceStatus === 'error') {
-    BonusBalance = '--';
-  }
-
   return (
     <>
-      <ThemeText typography={TYPOGRAPHY_MAPPING[size]} color="secondary">
-        {BonusBalance}
-      </ThemeText>
+      {userBonusBalanceStatus === 'loading' ? (
+        <ActivityIndicator />
+      ) : (
+        <ThemeText
+          typography={TYPOGRAPHY_BONUS_BALANCE[size]}
+          color="secondary"
+        >
+          {userBonusBalance ?? '--'}
+        </ThemeText>
+      )}
       <ThemeIcon
         color={theme.color.foreground.dynamic.secondary}
         svg={StarFill}

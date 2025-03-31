@@ -45,8 +45,9 @@ export const PayWithBonusPointsCheckbox = ({
     screenReaderPause +
     t(
       BonusProgramTexts.yourBonusBalanceA11yLabel(
-        userBonusBalance,
-        userBonusBalanceStatus,
+        userBonusBalance && userBonusBalanceStatus === 'success'
+          ? userBonusBalance
+          : null,
       ),
     );
 
