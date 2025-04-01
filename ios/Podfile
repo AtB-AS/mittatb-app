@@ -57,13 +57,6 @@ target 'app' do
 
   use_entur_private_pods
 
-  if ENV['GH_ACCESS_TOKEN']
-    pod 'AbtProtobufTokenIosStubs', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-protobuf-pods.git', :tag => '2.896.0'
-  else
-    # If no GH_ACCESS_TOKEN in env, then probably locally where the user uses personal ssh key
-    pod 'AbtProtobufTokenIosStubs', :git => 'git@github.com:entur/abt-protobuf-pods.git', :tag => '2.896.0'
-  end
-
   post_install do |installer|
     $RNMapboxMaps.post_install(installer)
 
