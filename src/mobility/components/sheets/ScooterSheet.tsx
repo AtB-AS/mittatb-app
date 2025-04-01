@@ -26,6 +26,7 @@ import {VehicleCard} from '../VehicleCard';
 import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 type Props = {
   vehicleId: VehicleId;
@@ -35,7 +36,7 @@ type Props = {
   navigateSupportCallback: () => void;
   loginCallback: () => void;
   startOnboardingCallback: () => void;
-  navigation: any;
+  navigation: RootNavigationProps;
 };
 
 export const ScooterSheet = ({
