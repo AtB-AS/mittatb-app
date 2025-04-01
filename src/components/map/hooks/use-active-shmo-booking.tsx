@@ -11,7 +11,6 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {ActiveScooterSheet} from '@atb/mobility/components/sheets/ActiveScooterSheet';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
-import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useShmoActiveBottomSheet = (
@@ -73,21 +72,10 @@ export const useShmoActiveBottomSheet = (
                       vehicleId: 'fixthis', //TODO:this will be fixed in another PR
                     });
                   }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
-            );
-            break;
-          case ShmoBookingState.FINISHING:
-            openBottomSheet(
-              () => (
-                <FinishedScooterSheet
-                  onClose={closeBottomSheet}
-                  navigateSupportCallback={() => {
+                  photoNavigation={() => {
                     closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: 'fixthis', //TODO:this will be fixed in another PR
+                    navigation.navigate('Root_ParkingPhotoScreen', {
+                      bookingId: activeBooking.bookingId,
                     });
                   }}
                 />

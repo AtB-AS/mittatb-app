@@ -3,18 +3,17 @@ import {
   useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import {PhotoFile} from '@atb/components/camera';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Coordinates} from '@atb/utils/coordinates';
-import {UserCoordinatesMap} from '../components/UserCoordinatesMap';
+import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ScooterHelp/components/UserCoordinatesMap';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 
 type Props = {
-  file: PhotoFile;
+  file: string;
   coordinates: Coordinates | undefined;
   onConfirm: () => void;
 };
@@ -36,7 +35,7 @@ export const ImageConfirmationBottomSheet = ({
         <View style={styles.imageAndPosition}>
           <View style={styles.fullHeight}>
             <Image
-              source={{uri: file.path}}
+              source={{uri: file}}
               style={{
                 resizeMode: 'cover',
                 aspectRatio: 3 / 4,

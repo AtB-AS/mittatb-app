@@ -5,7 +5,10 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
+import {
+  ScreenContainer,
+  getThemeColor,
+} from '../../components/PhotoCapture/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';

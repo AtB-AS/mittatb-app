@@ -13,6 +13,8 @@ import {useStations, useVehicles} from '@atb/mobility';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
+  showFinishedSheet?: boolean;
+  bookingId?: string;
 };
 
 export const Map_RootScreen = ({

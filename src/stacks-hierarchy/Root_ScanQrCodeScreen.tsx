@@ -4,7 +4,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Camera} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ScreenContainer} from './Root_ScooterHelp/components/ScreenContainer';
+import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
