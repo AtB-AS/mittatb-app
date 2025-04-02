@@ -11,7 +11,6 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
@@ -31,6 +30,7 @@ import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
+import {useOperators} from '@atb/mobility/use-operators';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -38,15 +38,16 @@ export type Root_ContactScooterOperatorScreenProps =
 export const Root_ContactScooterOperatorScreen = ({
   route,
 }: Root_ContactScooterOperatorScreenProps) => {
-  const {vehicleId, operatorId} = route.params;
+  const {operatorId, vehicleId} = route.params;
+  const operators = useOperators();
+  const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
-  const {operatorName} = useVehicle(vehicleId);
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
-      operatorName,
+      operatorName: operatorName ?? '',
       transitionOverride: 'slide-from-right',
     });
   };
@@ -69,7 +70,7 @@ export const Root_ContactScooterOperatorScreen = ({
       <FullScreenHeader
         leftButton={{type: 'back', withIcon: true}}
         setFocusOnLoad={false}
-        title={t(ContactScooterOperatorTexts.title(operatorName))}
+        title={t(ContactScooterOperatorTexts.title(operatorName ?? ''))}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
@@ -96,7 +97,7 @@ export const Root_ContactScooterOperatorScreen = ({
               <MessageInfoBox
                 message={t(
                   ContactScooterOperatorTexts.supportType.noEndInfo(
-                    operatorName,
+                    operatorName ?? '',
                   ),
                 )}
                 type="info"
@@ -209,7 +210,7 @@ export const Root_ContactScooterOperatorScreen = ({
               <ThemeText typography="body__tertiary">
                 {t(
                   ContactScooterOperatorTexts.location.description(
-                    operatorName,
+                    operatorName ?? '',
                   ),
                 )}
               </ThemeText>
@@ -219,7 +220,7 @@ export const Root_ContactScooterOperatorScreen = ({
               showError && (
                 <MessageInfoBox
                   message={t(
-                    ContactScooterOperatorTexts.submitError(operatorName),
+                    ContactScooterOperatorTexts.submitError(operatorName ?? ''),
                   )}
                   type="error"
                 />
@@ -264,7 +265,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
  */
 const useScooterContactFormController = (
   operatorId: string,
-  vehicleId: string,
+  vehicleId: string | null,
   onSuccess: () => void,
 ) => {
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
