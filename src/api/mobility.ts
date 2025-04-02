@@ -23,9 +23,9 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  AssetSchema,
   IdsFromQrCodeQuery,
   IdsFromQrCodeResponse,
-  IdsFromQrCodeResponseSchema,
   InitShmoOneStopBookingRequestBody,
   SendSupportRequestBody,
   ShmoBooking,
@@ -216,7 +216,7 @@ export const getIdsFromQrCode = (
       authWithIdToken: true,
       headers: {'Accept-Language': acceptLanguage},
     })
-    .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
+    .then((response) => AssetSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (

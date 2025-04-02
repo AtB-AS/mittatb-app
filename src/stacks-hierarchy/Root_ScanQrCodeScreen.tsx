@@ -58,8 +58,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       let type: AutoSelectableBottomSheetType | undefined = undefined;
       let id: string | undefined = undefined;
       if (idsFromQrCode.formFactor) {
-        if (idsFromQrCode.vehicleId) {
-          id = idsFromQrCode.vehicleId;
+        if (idsFromQrCode.id) {
+          id = idsFromQrCode.id;
           if (
             [
               FormFactor.Scooter,

@@ -128,7 +128,10 @@ const ShmoOperatorSchema = z.object({
   name: z.string(),
 });
 
-const AssetSchema = z.object({
+export const AssetSchema = z.object({
+  id: z.string(),
+  operator: ShmoOperatorSchema,
+  stationId: z.string().optional().nullable(),
   licensePlate: z.string().optional().nullable(),
   stateOfCharge: z.number().int().optional().nullable(),
   currentRangeKm: z.number().int().optional().nullable(),
@@ -142,7 +145,6 @@ export const ShmoBookingSchema = z.object({
   pricingPlan: ShmoPricingPlanSchema,
   departureTime: z.coerce.date().optional().nullable(),
   arrivalTime: z.coerce.date().optional().nullable(),
-  operator: ShmoOperatorSchema,
   pricing: ShmoPricingSchema,
   asset: AssetSchema,
   comment: z.string().optional().nullable(),
@@ -265,14 +267,7 @@ type FinishEvent = {
 
 export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
 
-export const IdsFromQrCodeResponseSchema = z.object({
-  operatorId: z.string(),
-  vehicleId: z.string().nullable().optional(),
-  stationId: z.string().nullable().optional(),
-  formFactor: FormFactorSchema.nullable().optional(),
-});
-
-export type IdsFromQrCodeResponse = z.infer<typeof IdsFromQrCodeResponseSchema>;
+export type IdsFromQrCodeResponse = z.infer<typeof AssetSchema>;
 
 export const IdsFromQrCodeQuerySchema = z.object({
   qrCodeUrl: z

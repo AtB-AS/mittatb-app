@@ -97,7 +97,7 @@ export const ShmoTesting = ({
       latitude: 0,
       longitude: 0,
     });
-    return idsFromQrCode.vehicleId;
+    return idsFromQrCode.id;
   };
 
   const initShmoBooking = useCallback(() => {
