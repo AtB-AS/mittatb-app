@@ -72,7 +72,6 @@ type Root_ScooterHelpScreenParams = {
 type Root_ContactScooterOperatorScreenParams = {
   vehicleId: string | null;
   operatorId: string;
-  operatorName: string;
 };
 
 type Root_ContactScooterOperatorConfirmationScreenParams = {

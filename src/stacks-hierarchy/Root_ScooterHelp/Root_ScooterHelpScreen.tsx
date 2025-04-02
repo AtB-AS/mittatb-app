@@ -52,7 +52,6 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
                 navigation.navigate('Root_ContactScooterOperatorScreen', {
                   vehicleId,
                   operatorId,
-                  operatorName,
                   transitionOverride: 'slide-from-right',
                 });
               }}
