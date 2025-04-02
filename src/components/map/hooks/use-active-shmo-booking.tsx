@@ -69,7 +69,7 @@ export const useShmoActiveBottomSheet = (
                   navigateSupportCallback={() => {
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
-                      operatorId: activeBooking.operator.id,
+                      operatorId: activeBooking.asset.operator.id,
                       bookingId: activeBooking.bookingId,
                     });
                   }}

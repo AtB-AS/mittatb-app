@@ -128,7 +128,10 @@ const ShmoOperatorSchema = z.object({
   name: z.string(),
 });
 
-const AssetSchema = z.object({
+export const AssetSchema = z.object({
+  id: z.string().optional(),
+  operator: ShmoOperatorSchema,
+  stationId: z.string().optional().nullable(),
   licensePlate: z.string().optional().nullable(),
   stateOfCharge: z.number().int().optional().nullable(),
   currentRangeKm: z.number().int().optional().nullable(),
@@ -142,7 +145,6 @@ export const ShmoBookingSchema = z.object({
   pricingPlan: ShmoPricingPlanSchema,
   departureTime: z.coerce.date().optional().nullable(),
   arrivalTime: z.coerce.date().optional().nullable(),
-  operator: ShmoOperatorSchema,
   pricing: ShmoPricingSchema,
   asset: AssetSchema,
   comment: z.string().optional().nullable(),
@@ -265,16 +267,9 @@ type FinishEvent = {
 
 export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
 
-export const IdsFromQrCodeResponseSchema = z.object({
-  operatorId: z.string(),
-  vehicleId: z.string().nullable().optional(),
-  stationId: z.string().nullable().optional(),
-  formFactor: FormFactorSchema.nullable().optional(),
-});
+export type AssetFromQrCodeResponse = z.infer<typeof AssetSchema>;
 
-export type IdsFromQrCodeResponse = z.infer<typeof IdsFromQrCodeResponseSchema>;
-
-export const IdsFromQrCodeQuerySchema = z.object({
+export const AssetFromQrCodeQuerySchema = z.object({
   qrCodeUrl: z
     .string()
     .min(1, {message: 'qrCodeUrl must be at least 1 character long'}),
@@ -282,7 +277,7 @@ export const IdsFromQrCodeQuerySchema = z.object({
   latitude,
 });
 
-export type IdsFromQrCodeQuery = z.infer<typeof IdsFromQrCodeQuerySchema>;
+export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;
 
 const GeoJsonCoordinatesSchema = z.union([
   z.tuple([longitude, latitude]), // lon, lat

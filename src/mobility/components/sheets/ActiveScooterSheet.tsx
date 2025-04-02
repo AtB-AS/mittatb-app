@@ -113,7 +113,7 @@ export const ActiveScooterSheet = ({
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
-                  operatorName={activeBooking.operator.name}
+                  operatorName={activeBooking.asset.operator.name}
                 />
               </ScrollView>
               <View style={styles.footer}>

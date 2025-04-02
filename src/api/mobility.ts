@@ -23,9 +23,9 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
-  IdsFromQrCodeQuery,
-  IdsFromQrCodeResponse,
-  IdsFromQrCodeResponseSchema,
+  AssetSchema,
+  AssetFromQrCodeQuery,
+  AssetFromQrCodeResponse,
   InitShmoOneStopBookingRequestBody,
   SendSupportRequestBody,
   ShmoBooking,
@@ -202,21 +202,21 @@ export const sendShmoBookingEvent = (
     .then((response) => ShmoBookingSchema.parse(response.data));
 };
 
-export const getIdsFromQrCode = (
-  params: IdsFromQrCodeQuery,
+export const getAssetFromQrCode = (
+  params: AssetFromQrCodeQuery,
   acceptLanguage: string,
   opts?: AxiosRequestConfig,
-): Promise<IdsFromQrCodeResponse> => {
+): Promise<AssetFromQrCodeResponse> => {
   params;
   const url = '/mobility/v1/asset/qr';
   const query = qs.stringify(params);
   return client
-    .get<IdsFromQrCodeResponse>(stringifyUrl(url, query), {
+    .get<AssetFromQrCodeResponse>(stringifyUrl(url, query), {
       ...opts,
       authWithIdToken: true,
       headers: {'Accept-Language': acceptLanguage},
     })
-    .then((response) => IdsFromQrCodeResponseSchema.parse(response.data));
+    .then((response) => AssetSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (

@@ -6,12 +6,12 @@ import {Camera} from '@atb/components/camera';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
+import {useGetAssetFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
-import {IdsFromQrCodeResponse} from '@atb/api/types/mobility';
+import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {tGlobal} from '@atb/LocaleProvider';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -28,10 +28,10 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
 
   const {
-    mutateAsync: getIdsFromQrCode,
-    isLoading: getIdsFromQrCodeIsLoading,
-    isError: getIdsFromQrCodeIsError,
-  } = useGetIdsFromQrCodeMutation();
+    mutateAsync: getAssetFromQrCode,
+    isLoading: getAssetFromQrCodeIsLoading,
+    isError: getAssetFromQrCodeIsError,
+  } = useGetAssetFromQrCodeMutation();
 
   const clearStateAndAlertResultError = useCallback(() => {
     setBottomSheetToAutoSelect(undefined);
@@ -53,37 +53,37 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     setBottomSheetToAutoSelect,
   ]);
 
-  const idsFromQrCodeReceivedHandler = useCallback(
-    (idsFromQrCode: IdsFromQrCodeResponse) => {
+  const assetFromQrCodeReceivedHandler = useCallback(
+    (assetFromQrCode: AssetFromQrCodeResponse) => {
       let type: AutoSelectableBottomSheetType | undefined = undefined;
       let id: string | undefined = undefined;
-      if (idsFromQrCode.formFactor) {
-        if (idsFromQrCode.vehicleId) {
-          id = idsFromQrCode.vehicleId;
+      if (assetFromQrCode.formFactor) {
+        if (assetFromQrCode.id) {
+          id = assetFromQrCode.id;
           if (
             [
               FormFactor.Scooter,
               FormFactor.ScooterSeated,
               FormFactor.ScooterStanding,
-            ].includes(idsFromQrCode.formFactor)
+            ].includes(assetFromQrCode.formFactor)
           ) {
             type = AutoSelectableBottomSheetType.Scooter;
           } else if (
             [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
-              idsFromQrCode.formFactor,
+              assetFromQrCode.formFactor,
             )
           ) {
             type = AutoSelectableBottomSheetType.Bicycle;
           }
-        } else if (idsFromQrCode.stationId) {
-          id = idsFromQrCode.stationId;
+        } else if (assetFromQrCode.stationId) {
+          id = assetFromQrCode.stationId;
           if (
             [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
-              idsFromQrCode.formFactor,
+              assetFromQrCode.formFactor,
             )
           ) {
             type = AutoSelectableBottomSheetType.BikeStation;
-          } else if ([FormFactor.Car].includes(idsFromQrCode.formFactor)) {
+          } else if ([FormFactor.Car].includes(assetFromQrCode.formFactor)) {
             type = AutoSelectableBottomSheetType.CarStation;
           }
         }
@@ -107,14 +107,14 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       const coordinates = getCurrentCoordinatesGlobal();
 
-      const idsFromQrCode = await getIdsFromQrCode({
+      const assetFromQrCode = await getAssetFromQrCode({
         qrCodeUrl: qr,
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
       });
-      idsFromQrCodeReceivedHandler(idsFromQrCode);
+      assetFromQrCodeReceivedHandler(assetFromQrCode);
     },
-    [getIdsFromQrCode, idsFromQrCodeReceivedHandler],
+    [getAssetFromQrCode, assetFromQrCodeReceivedHandler],
   );
 
   useEffect(() => {
@@ -122,20 +122,22 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   }, [isFocused]);
 
   useEffect(() => {
-    getIdsFromQrCodeIsError && clearStateAndAlertResultError();
-  }, [clearStateAndAlertResultError, getIdsFromQrCodeIsError]);
+    getAssetFromQrCodeIsError && clearStateAndAlertResultError();
+  }, [clearStateAndAlertResultError, getAssetFromQrCodeIsError]);
 
   return (
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       leftHeaderButton={
-        getIdsFromQrCodeIsLoading ? undefined : {type: 'close', withIcon: true}
+        getAssetFromQrCodeIsLoading
+          ? undefined
+          : {type: 'close', withIcon: true}
       }
-      isLoading={getIdsFromQrCodeIsLoading}
+      isLoading={getAssetFromQrCodeIsLoading}
     >
       {isFocused &&
-        !getIdsFromQrCodeIsLoading &&
-        !getIdsFromQrCodeIsError &&
+        !getAssetFromQrCodeIsLoading &&
+        !getAssetFromQrCodeIsError &&
         !hasCapturedQr && (
           <Camera mode="qr" style={styles.camera} onCapture={onQrCodeScanned} />
         )}
