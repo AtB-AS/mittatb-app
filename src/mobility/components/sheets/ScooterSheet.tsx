@@ -122,7 +122,6 @@ export const ScooterSheet = ({
                       navigation.navigate('Root_ScooterHelpScreen', {
                         vehicleId: id,
                         operatorId,
-                        operatorName,
                       });
                     }}
                     text={t(MobilityTexts.helpText)}

@@ -71,7 +71,6 @@ export const useShmoActiveBottomSheet = (
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
                       operatorId: activeBooking.operator.id,
-                      operatorName: activeBooking.operator.name,
                       vehicleId: null, //null when active booking, bookingId is used in support api instead
                     });
                   }}
@@ -90,7 +89,6 @@ export const useShmoActiveBottomSheet = (
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
                       operatorId: activeBooking.operator.id,
-                      operatorName: activeBooking.operator.name,
                       vehicleId: null, //null when active booking, bookingId is used in support api instead
                     });
                   }}

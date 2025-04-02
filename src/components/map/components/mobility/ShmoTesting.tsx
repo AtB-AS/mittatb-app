@@ -40,7 +40,7 @@ export const ShmoTesting = ({
     selectedVehicleId,
   );
   const [vehicleCode, setVehicleCode] = useState<string>('146030');
-  const {operatorId, operatorName} = useVehicle(vehicleId ?? '');
+  const {operatorId} = useVehicle(vehicleId ?? '');
 
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
@@ -234,7 +234,6 @@ export const ShmoTesting = ({
           navigation.navigate('Root_ScooterHelpScreen', {
             vehicleId: vehicleId ?? null,
             operatorId: operatorId ?? 'YRY:Operator:Ryde',
-            operatorName: operatorName,
           });
         }}
         text="Help"
