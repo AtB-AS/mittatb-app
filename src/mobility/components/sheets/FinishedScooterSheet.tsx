@@ -19,7 +19,7 @@ import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query'
 
 type Props = {
   onClose: () => void;
-  navigateSupportCallback: () => void;
+  navigateSupportCallback: (operatorId: string, bookingId: string) => void;
   bookingId: string;
 };
 
@@ -80,7 +80,12 @@ export const FinishedScooterSheet = ({
                 />
                 <Button
                   expanded={true}
-                  onPress={navigateSupportCallback}
+                  onPress={() =>
+                    navigateSupportCallback(
+                      booking.operator.id,
+                      booking.bookingId,
+                    )
+                  }
                   text={t(MobilityTexts.helpText)}
                   mode="secondary"
                   backgroundColor={theme.color.background.neutral[1]}

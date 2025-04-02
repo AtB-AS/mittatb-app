@@ -23,7 +23,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   /* vehicleId is only for support request body in Root_ContactScooterOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId) or a bookingId */
-  const {operatorId, vehicleId} = route.params;
+  const {operatorId, vehicleId, bookingId} = route.params;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const style = useStyles();
@@ -49,11 +49,19 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
             <LinkSectionItem
               text={t(ScooterHelpTexts.contactOperator(operatorName))}
               onPress={() => {
-                navigation.navigate('Root_ContactScooterOperatorScreen', {
-                  vehicleId,
-                  operatorId,
-                  transitionOverride: 'slide-from-right',
-                });
+                if (vehicleId) {
+                  navigation.navigate('Root_ContactScooterOperatorScreen', {
+                    vehicleId,
+                    operatorId,
+                    transitionOverride: 'slide-from-right',
+                  });
+                } else if (bookingId) {
+                  navigation.navigate('Root_ContactScooterOperatorScreen', {
+                    operatorId,
+                    bookingId,
+                    transitionOverride: 'slide-from-right',
+                  });
+                }
               }}
             />
           )}

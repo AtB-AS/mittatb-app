@@ -76,10 +76,11 @@ export const Map_RootScreenV2 = ({
               closeBottomSheet();
               navigation.setParams({showFinishedSheet: undefined});
             }}
-            navigateSupportCallback={() => {
+            navigateSupportCallback={(operatorId, bookingId) => {
               closeBottomSheet();
               navigation.navigate('Root_ScooterHelpScreen', {
-                vehicleId: route.params?.bookingId ?? '', //fixthis not bookingID
+                operatorId: operatorId,
+                bookingId: bookingId,
               });
             }}
           />

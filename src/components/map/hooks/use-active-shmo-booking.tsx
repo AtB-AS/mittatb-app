@@ -70,7 +70,7 @@ export const useShmoActiveBottomSheet = (
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
                       operatorId: activeBooking.operator.id,
-                      vehicleId: null, //null when active booking, bookingId is used in support api instead
+                      bookingId: activeBooking.bookingId,
                     });
                   }}
                   photoNavigation={() => {

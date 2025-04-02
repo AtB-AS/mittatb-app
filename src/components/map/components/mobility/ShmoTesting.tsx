@@ -231,10 +231,17 @@ export const ShmoTesting = ({
         accessibilityRole="button"
         onPress={() => {
           closeBottomSheet();
-          navigation.navigate('Root_ScooterHelpScreen', {
-            vehicleId: vehicleId ?? null,
-            operatorId: operatorId ?? 'YRY:Operator:Ryde',
-          });
+          if (vehicleId) {
+            navigation.navigate('Root_ScooterHelpScreen', {
+              vehicleId: vehicleId,
+              operatorId: operatorId ?? 'YRY:Operator:Ryde',
+            });
+          } else if (activeShmoBooking) {
+            navigation.navigate('Root_ScooterHelpScreen', {
+              operatorId: operatorId ?? 'YRY:Operator:Ryde',
+              bookingId: activeShmoBooking.bookingId,
+            });
+          }
         }}
         text="Help"
         hasShadow={true}
