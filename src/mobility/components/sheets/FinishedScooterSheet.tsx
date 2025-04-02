@@ -82,7 +82,7 @@ export const FinishedScooterSheet = ({
                   expanded={true}
                   onPress={() =>
                     navigateSupportCallback(
-                      booking.operator.id,
+                      booking.asset.operator.id,
                       booking.bookingId,
                     )
                   }
