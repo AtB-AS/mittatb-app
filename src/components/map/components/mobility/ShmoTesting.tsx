@@ -7,7 +7,7 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {useGetIdsFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
+import {useGetAssetFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
 import {useInitShmoOneStopBookingMutation} from '@atb/mobility/queries/use-init-shmo-one-stop-booking-mutation';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query';
@@ -74,10 +74,10 @@ export const ShmoTesting = ({
   }, [selectedVehicleId]);
 
   const {
-    mutateAsync: getIdsFromQrCode,
-    isLoading: getIdsFromQrCodeIsLoading,
-    isError: getIdsFromQrCodeIsError,
-  } = useGetIdsFromQrCodeMutation();
+    mutateAsync: getAssetFromQrCode,
+    isLoading: getAssetFromQrCodeIsLoading,
+    isError: getAssetFromQrCodeIsError,
+  } = useGetAssetFromQrCodeMutation();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -91,13 +91,13 @@ export const ShmoTesting = ({
     isError: sendShmoBookingEventIsError,
   } = useSendShmoBookingEventMutation();
 
-  const getVehicleIdFromQrCode = async () => {
-    const idsFromQrCode = await getIdsFromQrCode({
+  const getAssetIdFromQrCode = async () => {
+    const assetFromQrCode = await getAssetFromQrCode({
       qrCodeUrl: `https://m.ryde.vip/scooter.html?n=${vehicleCode}`,
       latitude: 0,
       longitude: 0,
     });
-    return idsFromQrCode.id;
+    return assetFromQrCode.id;
   };
 
   const initShmoBooking = useCallback(() => {
@@ -210,17 +210,17 @@ export const ShmoTesting = ({
         style={styles.filterButton}
         type="small"
         interactiveColor={
-          getIdsFromQrCodeIsError ? destructiveColor : interactiveColor
+          getAssetFromQrCodeIsError ? destructiveColor : interactiveColor
         }
         accessibilityRole="button"
         onPress={async () => {
           //analytics.logEvent('Map', 'Qr to Ids Pressed');
-          const vehicleIdFromQrCode = await getVehicleIdFromQrCode();
+          const vehicleIdFromQrCode = await getAssetIdFromQrCode();
 
           setVehicleId(vehicleIdFromQrCode || '');
         }}
         text="Qr to Ids"
-        loading={getIdsFromQrCodeIsLoading}
+        loading={getAssetFromQrCodeIsLoading}
         hasShadow={true}
       />
       <Button
