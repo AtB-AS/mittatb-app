@@ -232,7 +232,8 @@ export const ShmoTesting = ({
         onPress={() => {
           closeBottomSheet();
           navigation.navigate('Root_ScooterHelpScreen', {
-            vehicleId: vehicleId ?? '',
+            vehicleId: vehicleId ?? null,
+            operatorId: operatorId ?? 'YRY:Operator:Ryde',
           });
         }}
         text="Help"

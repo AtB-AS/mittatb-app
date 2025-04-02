@@ -26,6 +26,7 @@ import {VehicleCard} from '../VehicleCard';
 import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 type Props = {
   vehicleId: VehicleId;
@@ -35,6 +36,7 @@ type Props = {
   navigateSupportCallback: () => void;
   loginCallback: () => void;
   startOnboardingCallback: () => void;
+  navigation: RootNavigationProps;
 };
 
 export const ScooterSheet = ({
@@ -45,6 +47,7 @@ export const ScooterSheet = ({
   navigateSupportCallback,
   loginCallback,
   startOnboardingCallback,
+  navigation,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -114,7 +117,13 @@ export const ScooterSheet = ({
                   />
                   <Button
                     expanded={true}
-                    onPress={navigateSupportCallback}
+                    onPress={() => {
+                      navigateSupportCallback();
+                      navigation.navigate('Root_ScooterHelpScreen', {
+                        vehicleId: id,
+                        operatorId,
+                      });
+                    }}
                     text={t(MobilityTexts.helpText)}
                     mode="secondary"
                     backgroundColor={theme.color.background.neutral[1]}

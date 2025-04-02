@@ -69,11 +69,12 @@ type Root_ParkingPhotoScreenParams = {
 };
 
 type Root_ScooterHelpScreenParams = {
-  vehicleId: string;
+  operatorId: string;
+  vehicleId: string | null;
 };
 
 type Root_ContactScooterOperatorScreenParams = {
-  vehicleId: string;
+  vehicleId: string | null;
   operatorId: string;
 };
 

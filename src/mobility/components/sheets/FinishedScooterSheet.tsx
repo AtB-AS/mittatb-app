@@ -82,7 +82,7 @@ export const FinishedScooterSheet = ({
                   expanded={true}
                   onPress={navigateSupportCallback}
                   text={t(MobilityTexts.helpText)}
-                  mode="tertiary"
+                  mode="secondary"
                   backgroundColor={theme.color.background.neutral[1]}
                 />
               </View>

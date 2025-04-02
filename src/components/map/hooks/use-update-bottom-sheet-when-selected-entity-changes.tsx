@@ -199,12 +199,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                 vehicleId={selectedFeature?.properties?.id}
                 onClose={closeCallback}
                 onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ScooterHelpScreen', {
-                    vehicleId: selectedFeature?.properties?.id,
-                  });
-                }}
+                navigateSupportCallback={closeBottomSheet}
+                navigation={navigation}
                 loginCallback={() => {
                   closeBottomSheet();
                   if (hasReservationOrAvailableFareContract) {
