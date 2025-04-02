@@ -1,12 +1,12 @@
-import {getIdsFromQrCode} from '@atb/api/mobility';
-import {IdsFromQrCodeQuery} from '@atb/api/types/mobility';
+import {getAssetFromQrCode} from '@atb/api/mobility';
+import {AssetFromQrCodeQuery} from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
 import {useMutation} from '@tanstack/react-query';
 
-export const useGetIdsFromQrCodeMutation = () => {
+export const useGetAssetFromQrCodeMutation = () => {
   const acceptLanguage = useAcceptLanguage();
   return useMutation({
-    mutationFn: (idsFromQrCodeQuery: IdsFromQrCodeQuery) =>
-      getIdsFromQrCode(idsFromQrCodeQuery, acceptLanguage),
+    mutationFn: (assetFromQrCodeQuery: AssetFromQrCodeQuery) =>
+      getAssetFromQrCode(assetFromQrCodeQuery, acceptLanguage),
   });
 };
