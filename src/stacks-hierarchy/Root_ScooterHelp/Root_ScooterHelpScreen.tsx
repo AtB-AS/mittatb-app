@@ -14,6 +14,7 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
+import {useOperators} from '@atb/mobility/use-operators';
 
 export type ScooterHelpScreenProps =
   RootStackScreenProps<'Root_ScooterHelpScreen'>;
@@ -22,7 +23,9 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   /* vehicleId is only for support request body in Root_ContactScooterOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId) or a bookingId */
-  const {operatorName, operatorId, vehicleId} = route.params;
+  const {operatorId, vehicleId} = route.params;
+  const operators = useOperators();
+  const operatorName = operators.byId(operatorId)?.name;
   const style = useStyles();
   const {t, language} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
@@ -42,7 +45,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
       <View style={style.container}>
         <ContentHeading text={t(ScooterHelpTexts.contactAndReport)} />
         <Section>
-          {operatorId != undefined && (
+          {operatorId != undefined && operatorName && (
             <LinkSectionItem
               text={t(ScooterHelpTexts.contactOperator(operatorName))}
               onPress={() => {
