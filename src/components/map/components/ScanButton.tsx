@@ -9,7 +9,14 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
-export const ScanButton = () => {
+type ScanButtonProps = {
+  /*
+    onPressCallback is currently used to reset selectedFeature state from useUpdateBottomSheetWhenSelectedEntityChanges.
+    This can be removed if the reset function comes from MapContext instead.
+   */
+  onPressCallback: () => void;
+};
+export const ScanButton = ({onPressCallback}: ScanButtonProps) => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const styles = useStyles();
@@ -30,6 +37,7 @@ export const ScanButton = () => {
         closeBottomSheet();
         analytics.logEvent('Map', 'Scan');
         navigation.navigate('Root_ScanQrCodeScreen');
+        onPressCallback();
       }}
       text={t(MapTexts.qr.scan)}
       rightIcon={{svg: Qr}}
