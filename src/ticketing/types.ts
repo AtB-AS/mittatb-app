@@ -18,6 +18,7 @@ export type Reservation = {
 };
 
 export enum PaymentType {
+  PaymentCard = 1,
   Vipps = 2,
   Visa = 3,
   Mastercard = 4,
