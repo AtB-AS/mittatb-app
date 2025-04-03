@@ -37,8 +37,6 @@ import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {ScanButton} from './components/ScanButton';
-import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
@@ -80,8 +78,7 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooter(selectedFeature) || isBicycle(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -89,15 +86,6 @@ export const Map = (props: MapProps) => {
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
-
-  const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
-    useActiveShmoBookingQuery();
-
-  const showScanButton =
-    isShmoDeepIntegrationEnabled &&
-    !activeShmoBooking &&
-    !activeShmoBookingIsLoading &&
-    (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
 
   useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
@@ -313,7 +301,6 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {showScanButton && <ScanButton />}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

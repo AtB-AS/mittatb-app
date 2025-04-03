@@ -1,4 +1,9 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useMemo, useState} from 'react';
+import {AutoSelectableMapItem} from './components/map/hooks/use-auto-select-map-item';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import {FormFactor} from './api/types/generated/mobility-types_v2';
+
+type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -9,6 +14,8 @@ type MapContextState = {
   setBottomSheetCurrentlyAutoSelected: (
     bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
   ) => void;
+  setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
+  autoSelectedFeature?: AutoSelectedFeature;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -22,7 +29,7 @@ export enum AutoSelectableBottomSheetType {
   // ParkAndRideStation = 'PARK_AND_RIDE_STATION', // add support if needed
 }
 
-type AutoSelectableBottomSheet = {
+export type AutoSelectableBottomSheet = {
   type: AutoSelectableBottomSheetType;
   id: string;
 };
@@ -40,6 +47,34 @@ export const MapContextProvider = ({children}: Props) => {
     setBottomSheetCurrentlyAutoSelected,
   ] = useState<AutoSelectableBottomSheet>();
 
+  const [autoSelectedMapItem, setAutoSelectedMapItem] =
+    useState<AutoSelectableMapItem>();
+
+  // todo: support station selection
+  const autoSelectedFeature: AutoSelectedFeature = useMemo(
+    () =>
+      !autoSelectedMapItem?.id
+        ? undefined
+        : {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [autoSelectedMapItem?.lon, autoSelectedMapItem?.lat],
+            },
+            // properties should match the one received from the map onPressEvent
+            properties: {
+              id: autoSelectedMapItem.id,
+              system_id: autoSelectedMapItem?.system.id,
+              count: 1,
+              vehicle_type_form_factor:
+                mapAutoSelectableBottomSheetTypeToFormFactor(
+                  bottomSheetCurrentlyAutoSelected?.type,
+                ),
+            },
+          },
+    [autoSelectedMapItem, bottomSheetCurrentlyAutoSelected?.type],
+  );
+
   return (
     <MapContext.Provider
       value={{
@@ -47,6 +82,8 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetToAutoSelect,
         bottomSheetCurrentlyAutoSelected,
         setBottomSheetCurrentlyAutoSelected,
+        setAutoSelectedMapItem,
+        autoSelectedFeature,
       }}
     >
       {children}
@@ -73,4 +110,21 @@ export function useMapContext() {
     throw new Error('useMapState must be used within a MapContextProvider');
   }
   return context;
+}
+
+function mapAutoSelectableBottomSheetTypeToFormFactor(
+  autoSelectableBottomSheetType?: AutoSelectableBottomSheetType,
+): FormFactor | undefined {
+  switch (autoSelectableBottomSheetType) {
+    case AutoSelectableBottomSheetType.Bicycle:
+      return FormFactor.Bicycle;
+    case AutoSelectableBottomSheetType.Scooter:
+      return FormFactor.Scooter;
+    case AutoSelectableBottomSheetType.BikeStation:
+      return FormFactor.Bicycle;
+    case AutoSelectableBottomSheetType.CarStation:
+      return FormFactor.Car;
+    default:
+      return undefined;
+  }
 }

@@ -3,7 +3,6 @@ import {
   useGeolocationContext,
 } from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
@@ -45,7 +44,7 @@ import {
 import {Snackbar, useSnackbar} from '../snackbar';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
@@ -72,23 +71,22 @@ export const MapV2 = (props: MapProps) => {
     [initialLocation],
   );
 
-  const {mapLines, onMapClick, selectedFeature, onReportParkingViolation} =
-    useMapSelectionChangeEffect(
-      props,
-      mapViewRef,
-      mapCameraRef,
-      startingCoordinates,
-      true,
-      true,
-    );
+  const {
+    onMapClick,
+    selectedFeature: mapSelectionSelectedFeature,
+    onReportParkingViolation,
+    closeCallback: mapSelectionCloseCallback,
+  } = useMapSelectionChangeEffect(
+    props,
+    mapViewRef,
+    mapCameraRef,
+    startingCoordinates,
+    true,
+    true,
+  );
 
-  const {bottomSheetCurrentlyAutoSelected} = useMapContext();
-
-  const aVehicleIsAutoSelected =
-    bottomSheetCurrentlyAutoSelected?.type ===
-      AutoSelectableBottomSheetType.Scooter ||
-    bottomSheetCurrentlyAutoSelected?.type ===
-      AutoSelectableBottomSheetType.Bicycle;
+  const {autoSelectedFeature} = useMapContext();
+  const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
@@ -97,8 +95,7 @@ export const MapV2 = (props: MapProps) => {
     useFeatureTogglesContext();
 
   const showGeofencingZones =
-    isGeofencingZonesEnabled &&
-    (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
+    isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
 
   useShmoActiveBottomSheet(mapCameraRef);
 
@@ -112,7 +109,7 @@ export const MapV2 = (props: MapProps) => {
     isShmoDeepIntegrationEnabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
-    (!selectedFeature || selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
+    (!selectedFeature || selectedFeatureIsAVehicle);
 
   useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
 
@@ -254,15 +251,9 @@ export const MapV2 = (props: MapProps) => {
           />
           {showGeofencingZones && (
             <GeofencingZones
-              selectedVehicleId={
-                aVehicleIsAutoSelected
-                  ? bottomSheetCurrentlyAutoSelected.id
-                  : selectedFeature?.properties?.id
-              }
+              selectedVehicleId={selectedFeature?.properties?.id}
             />
           )}
-
-          {mapLines && <MapRoute lines={mapLines} />}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={selectedFeature?.properties?.id}
@@ -301,7 +292,9 @@ export const MapV2 = (props: MapProps) => {
             }}
           />
         </View>
-        {showScanButton && <ScanButton />}
+        {showScanButton && (
+          <ScanButton onPressCallback={mapSelectionCloseCallback} />
+        )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>

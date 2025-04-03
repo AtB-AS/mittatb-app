@@ -86,6 +86,7 @@ function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
     case 'Quay':
       return 'stop';
     default:
+      // would be nice to have a better check than this
       if (selectedFeatureProperties?.is_virtual_station !== undefined) {
         return 'station';
       } else {
