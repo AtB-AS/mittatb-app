@@ -3106,7 +3106,7 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@rnmapbox/maps@^10.1.31":
+"@rnmapbox/maps@^10.1.37":
   version "10.1.37"
   resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.1.37.tgz#fee835a18cc7377ba6a1515ce5a1d7e7c02a777c"
   integrity sha512-9TJ79pjj7v2vQOPJZXO5lJmlYi0xlesRnAPTAwfOjXlHdGPtiucXoxL8+e1xL0PJBVMqVJGOjPLeb1+05kGx2g==
