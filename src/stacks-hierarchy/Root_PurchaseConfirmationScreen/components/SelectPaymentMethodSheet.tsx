@@ -213,7 +213,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
 
   const paymentTexts = getPaymentTexts(paymentGroup);
   const canSaveCard = authenticationType === 'phone';
-  const paymentSelection = defineSelection(paymentMethod, shouldSave);
+  const paymentSelection = getPaymentSelection(paymentMethod, shouldSave);
 
   return (
     <View style={styles.card}>
@@ -287,13 +287,10 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
   paymentMethod,
   selected,
   onSelect,
-  shouldSave,
-  onSetShouldSave,
   index,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {authenticationType} = useAuthContext();
 
   function getPaymentTexts(method: PaymentMethod): {
     text: string;
@@ -334,13 +331,9 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
   }
 
   const paymentTexts = getPaymentTexts(paymentMethod);
-
-  const canSaveCard =
-    authenticationType === 'phone' &&
-    paymentMethod.paymentType !== PaymentType.Vipps;
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
-  const paymentSelection = defineSelection(paymentMethod);
+  const paymentSelection = getPaymentSelection(paymentMethod);
 
   return (
     <View style={styles.card}>
@@ -371,39 +364,11 @@ const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
           </View>
         </View>
       </PressableOpacity>
-      {selected && canSaveCard && (
-        <PressableOpacity
-          onPress={() => onSetShouldSave(!shouldSave)}
-          style={styles.saveMethodSection}
-        >
-          <ThemeText>
-            {t(SelectPaymentMethodTexts.multiple_payment.text)}
-          </ThemeText>
-          <ThemeText typography="body__secondary" color="secondary">
-            {t(SelectPaymentMethodTexts.multiple_payment.information)}
-          </ThemeText>
-          <View style={styles.saveButton}>
-            <Checkbox
-              style={styles.saveButtonCheckbox}
-              checked={shouldSave}
-              accessibility={{
-                accessibilityHint: t(
-                  shouldSave
-                    ? SelectPaymentMethodTexts.a11yHint.notSave
-                    : SelectPaymentMethodTexts.a11yHint.save,
-                ),
-              }}
-              testID="saveCard"
-            />
-            <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
-          </View>
-        </PressableOpacity>
-      )}
     </View>
   );
 };
 
-function defineSelection(
+function getPaymentSelection(
   paymentMethod: PaymentMethod,
   shouldSave: boolean = false,
 ): PaymentSelection {

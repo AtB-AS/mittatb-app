@@ -131,6 +131,7 @@ export const saveLastUsedRecurringPaymentOrType = async (
     });
   } else {
     try {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const recurringPaymentCards = await listRecurringPayments();
       const card = recurringPaymentCards.find((c) => {
         return c.id === recurringPaymentId;
