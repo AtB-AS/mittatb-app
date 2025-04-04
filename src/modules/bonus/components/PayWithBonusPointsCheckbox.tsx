@@ -34,9 +34,13 @@ export const PayWithBonusPointsCheckbox = ({
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
-  const disabled =
+
+  const isError =
     typeof userBonusBalance != 'number' ||
-    userBonusBalance < bonusProduct.price.amount;
+    Number.isNaN(userBonusBalance) ||
+    userBonusBalanceStatus === 'error';
+
+  const isDisabled = isError || userBonusBalance < bonusProduct.price.amount;
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
@@ -57,7 +61,7 @@ export const PayWithBonusPointsCheckbox = ({
         <GenericClickableSectionItem
           active={isChecked}
           onPress={onPress}
-          disabled={disabled}
+          disabled={isDisabled}
           accessibilityRole="checkbox"
           accessibilityState={{checked: isChecked}}
           accessibilityLabel={a11yLabel}
@@ -85,7 +89,7 @@ export const PayWithBonusPointsCheckbox = ({
           </View>
         </GenericClickableSectionItem>
       </Section>
-      {userBonusBalanceStatus === 'error' && (
+      {isError && (
         <MessageInfoBox
           style={styles.errorMessage}
           type="error"
