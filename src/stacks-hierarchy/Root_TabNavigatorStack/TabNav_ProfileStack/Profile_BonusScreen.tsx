@@ -159,7 +159,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
-    height: theme.typography['body__primary--jumbo'].lineHeight,
+    minHeight: theme.typography['body__primary--jumbo'].lineHeight,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
   bonusProductsContainer: {
