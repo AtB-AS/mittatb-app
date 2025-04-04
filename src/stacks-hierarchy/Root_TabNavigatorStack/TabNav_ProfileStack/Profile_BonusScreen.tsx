@@ -185,6 +185,9 @@ function UserBonusBalanceSection(): JSX.Element {
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
+  const isError =
+    Number.isNaN(userBonusBalance) || userBonusBalanceStatus === 'error';
+
   return (
     <>
       <Section>
@@ -210,7 +213,7 @@ function UserBonusBalanceSection(): JSX.Element {
           <ThemedCityBike />
         </GenericSectionItem>
       </Section>
-      {userBonusBalanceStatus === 'error' && (
+      {isError && (
         <MessageInfoBox
           type="error"
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
