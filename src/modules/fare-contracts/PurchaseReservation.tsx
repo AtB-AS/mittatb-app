@@ -5,7 +5,7 @@ import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
-import {Linking} from 'react-native';
+import {Linking, View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -81,14 +81,16 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
           </ThemeText>
           {reservation.paymentType === PaymentType.Vipps &&
             status === 'reserving' && (
-              <Button
-                expanded={true}
-                onPress={() => openVippsUrl(reservation.url)}
-                accessibilityRole="link"
-                text={t(TicketingTexts.reservation.goToVipps)}
-                mode="tertiary"
-                backgroundColor={theme.color.background.neutral[0]}
-              />
+              <View style={styles.vippsLinkContainer}>
+                <Button
+                  expanded={true}
+                  onPress={() => openVippsUrl(reservation.url)}
+                  accessibilityRole="link"
+                  text={t(TicketingTexts.reservation.goToVipps)}
+                  mode="tertiary"
+                  backgroundColor={theme.color.background.neutral[0]}
+                />
+              </View>
             )}
         </GenericSectionItem>
       </Section>
@@ -102,5 +104,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   statusText: {
     textAlign: 'center',
+  },
+  vippsLinkContainer: {
+    flex: 1,
   },
 }));
