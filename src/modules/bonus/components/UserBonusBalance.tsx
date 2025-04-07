@@ -29,9 +29,7 @@ export const UserBonusBalance = ({size}: Props) => {
           typography={TYPOGRAPHY_BONUS_BALANCE[size]}
           color="secondary"
         >
-          {userBonusBalance && !Number.isNaN(userBonusBalance)
-            ? userBonusBalance
-            : '--'}
+          {!Number.isNaN(userBonusBalance) ? userBonusBalance : '--'}
         </ThemeText>
       )}
       <ThemeIcon
