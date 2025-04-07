@@ -178,6 +178,7 @@ function tabSettings(
         typography="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
+        maxFontSizeMultiplier={1.2}
         testID={testID}
       >
         {tabBarLabel}
