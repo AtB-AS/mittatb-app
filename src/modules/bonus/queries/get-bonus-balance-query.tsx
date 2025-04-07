@@ -6,10 +6,12 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 export const useBonusBalanceQuery = () => {
   const {userId, authStatus} = useAuthContext();
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const {authenticationType} = useAuthContext();
+  const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
     queryKey: ['bonusUserBalance', userId],
-    queryFn: getBonusBalance,
+    queryFn: () => getBonusBalance(isLoggedIn),
     enabled: authStatus === 'authenticated' && isBonusProgramEnabled,
   });
 };
