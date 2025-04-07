@@ -1,4 +1,4 @@
-import React, {RefObject, useCallback, useEffect, useRef} from 'react';
+import React, {useCallback} from 'react';
 import {
   MapFilterType,
   MapV2,
@@ -8,27 +8,15 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
-  showFinishedSheet?: boolean;
-  bookingId?: string;
 };
 
 export const Map_RootScreenV2 = ({
   navigation,
-  route,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const {close: closeBottomSheet, open: openBottomSheet} =
-    useBottomSheetContext();
-  // NOTE: This ref is not used for anything since the map doesn't support
-  // screen readers, but a ref is required when opening bottom sheets.
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
@@ -65,38 +53,6 @@ export const Map_RootScreenV2 = ({
     },
     [navigation],
   );
-
-  useEffect(() => {
-    if (route.params?.showFinishedSheet && isShmoDeepIntegrationEnabled) {
-      openBottomSheet(
-        () => (
-          <FinishedScooterSheet
-            bookingId={route.params?.bookingId ?? ''}
-            onClose={() => {
-              closeBottomSheet();
-              navigation.setParams({showFinishedSheet: undefined});
-            }}
-            navigateSupportCallback={(operatorId, bookingId) => {
-              closeBottomSheet();
-              navigation.navigate('Root_ScooterHelpScreen', {
-                operatorId: operatorId,
-                bookingId: bookingId,
-              });
-            }}
-          />
-        ),
-        onCloseFocusRef,
-        false,
-      );
-    }
-  }, [
-    route.params?.showFinishedSheet,
-    isShmoDeepIntegrationEnabled,
-    route.params?.bookingId,
-    openBottomSheet,
-    closeBottomSheet,
-    navigation,
-  ]);
 
   const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
     (location, destination) => {

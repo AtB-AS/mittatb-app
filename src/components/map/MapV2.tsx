@@ -52,6 +52,7 @@ import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
 import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
+import {ShmoBookingState} from '@atb/api/types/mobility';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -138,9 +139,10 @@ export const MapV2 = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      if (!isFeaturePoint(feature) || activeShmoBooking) return;
+      const isActiveTrip = activeShmoBooking?.state === ShmoBookingState.IN_USE;
+      if (!isFeaturePoint(feature)) return;
 
-      if (!showGeofencingZones) {
+      if (!showGeofencingZones && !isActiveTrip) {
         onMapClick({source: 'map-click', feature});
         return;
       }
@@ -161,7 +163,7 @@ export const MapV2 = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isQuayFeature(featureToSelect)) {
+      if (isQuayFeature(featureToSelect) && !isActiveTrip) {
         // In this case we might want to either
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
@@ -171,12 +173,12 @@ export const MapV2 = (props: MapProps) => {
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
       } else {
-        if (isFeaturePoint(featureToSelect)) {
+        if (isFeaturePoint(featureToSelect) && !isActiveTrip) {
           onMapClick({
             source: 'map-click',
             feature: featureToSelect,
           });
-        } else if (isScooterV2(selectedFeature)) {
+        } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
           // outside of operational area, rules unspecified
           geofencingZoneOnPress(undefined);
         }
@@ -196,7 +198,11 @@ export const MapV2 = (props: MapProps) => {
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0 || activeShmoBooking)
+      if (
+        !featuresAtClick ||
+        featuresAtClick.length === 0 ||
+        activeShmoBooking?.state === ShmoBookingState.IN_USE
+      )
         return;
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,

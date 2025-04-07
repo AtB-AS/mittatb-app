@@ -19,11 +19,8 @@ export const useShmoActiveBottomSheet = (
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const {
-    bottomSheetToAutoSelect,
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-  } = useMapContext();
+  const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
+    useMapContext();
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
   const navigation = useNavigation<RootNavigationProps>();
@@ -44,7 +41,7 @@ export const useShmoActiveBottomSheet = (
       flyToLocation({
         coordinates: {
           latitude: coordiantes?.latitude ?? 0,
-          longitude: coordiantes?.latitude ?? 0,
+          longitude: coordiantes?.longitude ?? 0,
         },
         padding: SLIGHTLY_RAISED_MAP_PADDING,
         mapCameraRef,
@@ -96,7 +93,6 @@ export const useShmoActiveBottomSheet = (
     }
   }, [
     closeBottomSheet,
-    bottomSheetToAutoSelect,
     openBottomSheet,
     isFocused,
     flyToUserLocation,

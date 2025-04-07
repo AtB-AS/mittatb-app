@@ -63,7 +63,7 @@ export const ActiveScooterSheet = ({
         shmoBookingEvent: startFinishingEvent,
       });
 
-      if (res.state === ShmoBookingState.FINISHING) {
+      if (res?.state === ShmoBookingState.FINISHING) {
         photoNavigation(activeBooking?.bookingId);
       }
     }
@@ -93,6 +93,7 @@ export const ActiveScooterSheet = ({
       title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       maxHeightValue={0.7}
       onClose={onClose}
+      disableClose={sendShmoBookingEventIsLoading}
     >
       {isShmoDeepIntegrationEnabled && (
         <>

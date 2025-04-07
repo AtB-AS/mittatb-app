@@ -12,12 +12,14 @@ type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
   onClose?: () => void;
   focusTitleOnLoad: boolean;
+  disableClose?: boolean;
 };
 
 export const BottomSheetHeader = ({
   title,
   onClose,
   focusTitleOnLoad,
+  disableClose = false,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -66,6 +68,7 @@ export const BottomSheetHeader = ({
         accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
         accessibilityRole="button"
         testID="closeButton"
+        disabled={disableClose}
       >
         <ThemeIcon color={textColor} svg={Close} size="normal" />
       </TouchableOpacity>
