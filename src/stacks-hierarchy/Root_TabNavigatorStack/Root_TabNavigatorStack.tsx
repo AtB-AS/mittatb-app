@@ -1,10 +1,15 @@
 import {
-  Assistant as AssistantIcon,
+  AssistantFill,
+  Assistant,
   Departures,
+  DeparturesFill,
+  MapPinFill,
   Profile,
+  ProfileFill,
   Ticketing,
+  TicketingFill,
 } from '@atb/assets/svg/mono-icons/tab-bar';
-import {MapPin} from '../../assets/svg/mono-icons/map';
+import {MapPin} from '../../assets/svg/mono-icons/tab-bar';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {usePreferencesContext} from '@atb/preferences';
@@ -77,7 +82,8 @@ export const Root_TabNavigatorStack = () => {
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),
-          AssistantIcon,
+          Assistant,
+          AssistantFill,
           lineHeight,
           'assistantTab',
         )}
@@ -90,6 +96,7 @@ export const Root_TabNavigatorStack = () => {
             t(dictionary.navigation.map),
             t(dictionary.navigation.map),
             MapPin,
+            MapPinFill,
             lineHeight,
             'mapTab',
           ),
@@ -103,6 +110,7 @@ export const Root_TabNavigatorStack = () => {
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
           Departures,
+          DeparturesFill,
           lineHeight,
           'departuresTab',
         )}
@@ -114,6 +122,7 @@ export const Root_TabNavigatorStack = () => {
           t(dictionary.navigation.ticketing),
           t(dictionary.navigation.ticketing),
           Ticketing,
+          TicketingFill,
           lineHeight,
           'ticketsTab',
         )}
@@ -125,6 +134,7 @@ export const Root_TabNavigatorStack = () => {
           t(dictionary.navigation.profile),
           t(dictionary.navigation.profile_a11y),
           Profile,
+          ProfileFill,
           lineHeight,
           'profileTab',
           customerNumber === undefined
@@ -157,6 +167,7 @@ function tabSettings(
   tabBarLabel: string,
   tabBarA11yLabel: string,
   Icon: (svg: SvgProps) => JSX.Element,
+  IconSelected: (svg: SvgProps) => JSX.Element,
   lineHeight: number,
   testID: string,
   notification?: ThemeIconProps['notification'],
@@ -167,13 +178,18 @@ function tabSettings(
         typography="body__secondary"
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
+        maxFontSizeMultiplier={1.2}
         testID={testID}
       >
         {tabBarLabel}
       </ThemeText>
     ),
-    tabBarIcon: ({color}) => (
-      <ThemeIcon svg={Icon} color={color} notification={notification} />
+    tabBarIcon: ({color, focused}) => (
+      <ThemeIcon
+        svg={focused ? IconSelected : Icon}
+        color={color}
+        notification={notification}
+      />
     ),
   };
 }
