@@ -10,7 +10,7 @@ export const useBonusBalanceQuery = () => {
   const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
-    queryKey: ['bonusUserBalance', userId],
+    queryKey: ['bonusUserBalance', userId, isLoggedIn],
     queryFn: () => getBonusBalance(isLoggedIn),
     enabled: authStatus === 'authenticated' && isBonusProgramEnabled,
   });
