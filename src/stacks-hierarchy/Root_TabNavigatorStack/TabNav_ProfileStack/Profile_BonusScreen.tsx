@@ -159,7 +159,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
-    height: theme.typography['body__primary--jumbo'].lineHeight,
+    minHeight: theme.typography['body__primary--jumbo'].lineHeight,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
   bonusProductsContainer: {
@@ -184,6 +184,9 @@ function UserBonusBalanceSection(): JSX.Element {
   const {t} = useTranslation();
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
+
+  const isError =
+    Number.isNaN(userBonusBalance) || userBonusBalanceStatus === 'error';
 
   return (
     <>
@@ -210,7 +213,7 @@ function UserBonusBalanceSection(): JSX.Element {
           <ThemedCityBike />
         </GenericSectionItem>
       </Section>
-      {userBonusBalanceStatus === 'error' && (
+      {isError && (
         <MessageInfoBox
           type="error"
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
