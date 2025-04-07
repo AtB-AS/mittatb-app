@@ -33,22 +33,22 @@
     zod "^3.24.1"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@15.3.0":
-  version "15.3.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-15.3.0.tgz#aa174c8eeda9aa119a0753ff6182583eded6f829"
-  integrity sha512-Vm4K/dHxV84v9jN16oF4KB2A/Sw9gTrZRLLm9ixW5GDOZs0tV9k4zH8un6cEhi+hQPWSx3gGp+gdCaPUJLlX4w==
+"@atb-as/generate-assets@16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-16.0.0.tgz#ae88f29b2de00f441c469af899d6b93a6c73b835"
+  integrity sha512-vV3hFJSPlekeFgMPVssxeDUn3Fs3wD/qqcJPlVYzS0okLwEuA2br03TjIrjzvy7W1arDfWOy1onCARLQ3lO7PA==
   dependencies:
-    "@atb-as/theme" "^13.1.4"
+    "@atb-as/theme" "^13.1.5"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^13.1.4":
-  version "13.1.4"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.4.tgz#e8b2bb51809815ba6410b706c10014924fd56037"
-  integrity sha512-7/+nyYhxOtzzMkhaZ2oXbhvQw5WHO2SjsGQ3/Y0BG7vnZHZP0/Szub5nNCcei99HFi4giFOsdRe2TUBEWL4LqQ==
+"@atb-as/theme@^13.1.5":
+  version "13.1.5"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.5.tgz#a83a6ebb7638612a23845d55f8a811e40d083deb"
+  integrity sha512-ERKz3J0SxaObJK8GlWIw0f1yLds0I1gtSGx/29M9N2xQTzVcz2scXrRMnL4h2ztXz/zAM4vFQtWrUgnVDxn0Lw==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"
@@ -1344,20 +1344,7 @@
     "@babel/parser" "^7.26.9"
     "@babel/types" "^7.26.9"
 
-"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3":
-  version "7.26.9"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
-  integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==
-  dependencies:
-    "@babel/code-frame" "^7.26.2"
-    "@babel/generator" "^7.26.9"
-    "@babel/parser" "^7.26.9"
-    "@babel/template" "^7.26.9"
-    "@babel/types" "^7.26.9"
-    debug "^4.3.1"
-    globals "^11.1.0"
-
-"@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
+"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3", "@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
   version "7.26.9"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
   integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==

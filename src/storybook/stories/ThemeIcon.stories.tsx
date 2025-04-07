@@ -36,13 +36,7 @@ import {
   Phone as PhoneDevices,
 } from '@atb/assets/svg/mono-icons/devices';
 import {Logo} from '@atb/assets/svg/mono-icons/logo';
-import {
-  Map,
-  MapPin,
-  Pin,
-  PinInvalid,
-  PinValid,
-} from '@atb/assets/svg/mono-icons/map';
+import {Map, Pin, PinInvalid, PinValid} from '@atb/assets/svg/mono-icons/map';
 import {
   ArrowLeft,
   ArrowRight,
@@ -89,9 +83,15 @@ import {
 } from '@atb/assets/svg/mono-icons/status';
 import {
   Assistant,
+  AssistantFill,
   Departures,
+  DeparturesFill,
+  MapPin,
+  MapPinFill,
   Profile,
+  ProfileFill,
   Ticketing,
+  TicketingFill,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {
   Card,
@@ -212,7 +212,6 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
         'Phone (Devices)',
         'Logo',
         'Map',
-        'MapPin',
         'Pin',
         'PinInvalid',
         'PinValid',
@@ -253,9 +252,15 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
         'Unknown (Status)',
         'Warning',
         'Assistant',
+        'AssistantFill',
         'Departures',
+        'DeparturesFill',
+        'MapPin',
+        'MapPinFill',
         'Profile',
+        'ProfileFill',
         'Ticketing',
+        'TicketingFill',
         'Card',
         'H24',
         'Moon',
@@ -332,7 +337,6 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
         'Phone (Devices)': PhoneDevices,
         Logo: Logo,
         Map: Map,
-        MapPin: MapPin,
         Pin: Pin,
         PinInvalid: PinInvalid,
         PinValid: PinValid,
@@ -373,9 +377,15 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
         'Unknown (Status)': UnknownStatus,
         Warning: Warning,
         Assistant: Assistant,
+        AssistantFill: AssistantFill,
         Departures: Departures,
+        DeparturesFill: DeparturesFill,
+        MapPin: MapPin,
+        MapPinFill: MapPinFill,
         Profile: Profile,
+        ProfileFill: ProfileFill,
         Ticketing: Ticketing,
+        TicketingFill: TicketingFill,
         Card: Card,
         H24: H24,
         Moon: Moon,
