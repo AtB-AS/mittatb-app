@@ -16,6 +16,7 @@ import {
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {UserBonusBalance} from './UserBonusBalance';
+import {isDefined} from '@atb/utils/presence';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -36,7 +37,7 @@ export const PayWithBonusPointsCheckbox = ({
     useBonusBalanceQuery();
 
   const isError =
-    typeof userBonusBalance != 'number' ||
+    !isDefined(userBonusBalance) ||
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
 
