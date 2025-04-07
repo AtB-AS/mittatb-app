@@ -21,6 +21,12 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {InteractionManager} from 'react-native';
+
+export type AutoSelectableMapItem =
+  | VehicleExtendedFragment
+  | BikeStationFragment
+  | CarStationFragment;
 
 /**
  * When a new bottomSheetToAutoSelect is set and isn't already selected,
@@ -34,6 +40,7 @@ export const useAutoSelectMapItem = (
     bottomSheetToAutoSelect,
     setBottomSheetToAutoSelect,
     setBottomSheetCurrentlyAutoSelected,
+    setAutoSelectedMapItem,
   } = useMapContext();
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
@@ -49,29 +56,31 @@ export const useAutoSelectMapItem = (
   const closeBottomSheet = useCallback(() => {
     close();
     setBottomSheetCurrentlyAutoSelected(undefined);
-  }, [close, setBottomSheetCurrentlyAutoSelected]);
+    setAutoSelectedMapItem(undefined);
+  }, [close, setAutoSelectedMapItem, setBottomSheetCurrentlyAutoSelected]);
 
   const flyToMapItemLocation = useCallback(
-    (
-      mapItem:
-        | VehicleExtendedFragment
-        | BikeStationFragment
-        | CarStationFragment,
-    ) => {
-      mapCameraRef &&
-        flyToLocation({
-          coordinates: {
-            latitude: mapItem.lat,
-            longitude: mapItem.lon,
-          },
-          padding: SLIGHTLY_RAISED_MAP_PADDING,
-          mapCameraRef,
-          // zoom level removed here for now due to performance bug
-          // the bug has to do with onMapIdle being called too often
-          //zoomLevel: SCOOTERS_MAX_CLUSTER_LEVEL + 0.01, // ensure no clustering
-        });
+    (mapItem: AutoSelectableMapItem) => {
+      setAutoSelectedMapItem(mapItem);
+
+      InteractionManager.runAfterInteractions(() => {
+        /*
+          When an item has already been loaded, onMapItemReceived will be called immediately, in which case flyToLocation won't work.
+          This is why runAfterInteractions is used here. We may find that a setTimeout is needed as well.
+        */
+        mapCameraRef &&
+          flyToLocation({
+            coordinates: {
+              latitude: mapItem.lat,
+              longitude: mapItem.lon,
+            },
+            padding: SLIGHTLY_RAISED_MAP_PADDING,
+            mapCameraRef,
+            zoomLevel: 19, // no clustering at this zoom level
+          });
+      });
     },
-    [mapCameraRef],
+    [mapCameraRef, setAutoSelectedMapItem],
   );
 
   /**
