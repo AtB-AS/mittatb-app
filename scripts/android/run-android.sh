@@ -8,5 +8,5 @@ appId=$(envprop 'ANDROID_APPLICATION_ID')
 if [ "$(envprop 'KETTLE_API_KEY')" ]; then
   react-native run-android --appId "$appId" --mode=beaconsDebug
 else
-  react-native run-android --appId "$appId"
+  react-native run-android --appId "$appId" --mode=appDebug
 fi

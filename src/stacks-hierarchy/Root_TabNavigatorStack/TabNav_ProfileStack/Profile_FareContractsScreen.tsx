@@ -31,7 +31,7 @@ export const Profile_FareContractsScreen = () => {
     orderId: 'DW2N19A6',
     paymentId: 870266,
     paymentStatus: 'CREATE',
-    paymentType: 3,
+    paymentType: 2,
     // shouldStartNow: true,
     transactionId: 858879,
     url: 'https://test.epayment.nets.eu/Terminal/default.aspx?merchantId=12003727&transactionId=0643eeff83a1467f85a577cac32c36ed',
