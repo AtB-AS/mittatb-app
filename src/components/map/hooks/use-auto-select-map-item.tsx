@@ -102,7 +102,10 @@ export const useAutoSelectMapItem = (
         let BottomSheetComponent: JSX.Element | undefined = undefined;
         switch (bottomSheetToAutoSelect.type) {
           case AutoSelectableBottomSheetType.Scooter:
-            if (bottomSheetToAutoSelect?.state === ShmoBookingState.FINISHED) {
+            if (
+              bottomSheetToAutoSelect?.shmoBookingState ===
+              ShmoBookingState.FINISHED
+            ) {
               BottomSheetComponent = (
                 <FinishedScooterSheet
                   bookingId={bottomSheetToAutoSelect.id}
@@ -110,8 +113,8 @@ export const useAutoSelectMapItem = (
                   navigateSupportCallback={(operatorId, bookingId) => {
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
-                      operatorId: operatorId,
-                      bookingId: bookingId,
+                      operatorId,
+                      bookingId,
                     });
                   }}
                 />

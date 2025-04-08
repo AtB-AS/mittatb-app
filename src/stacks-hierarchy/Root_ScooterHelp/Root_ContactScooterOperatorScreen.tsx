@@ -30,7 +30,6 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {useOperators} from '@atb/mobility/use-operators';
-import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
@@ -277,7 +276,6 @@ const useScooterContactFormController = (
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
   const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
     getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
-  const {data: booking} = useShmoBookingQuery(bookingId);
 
   const [requestBody, setRequestBody] = useState<SendSupportRequestBodyInput>({
     supportType: SupportType.OTHER,
@@ -321,7 +319,7 @@ const useScooterContactFormController = (
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         assetId: vehicleId,
-        bookingId: booking?.bookingId,
+        bookingId,
         ...(currentUserCoordinates && {
           place: {
             coordinates: {

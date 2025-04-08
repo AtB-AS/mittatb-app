@@ -31,7 +31,11 @@ export const FinishedScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {data: booking, isLoading, isError} = useShmoBookingQuery(bookingId);
+  const {
+    data: shmoBooking,
+    isLoading,
+    isError,
+  } = useShmoBookingQuery(bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   return (
@@ -47,7 +51,7 @@ export const FinishedScooterSheet = ({
               <ActivityIndicator size="large" />
             </View>
           )}
-          {!isLoading && !isError && booking && (
+          {!isLoading && !isError && shmoBooking && (
             <>
               <View style={styles.footer}>
                 <ScrollView style={styles.container}>
@@ -59,10 +63,10 @@ export const FinishedScooterSheet = ({
                     </GenericSectionItem>
 
                     <ShmoTripDetailsSectionItem
-                      startDateTime={booking.departureTime ?? new Date()}
-                      endDateTime={new Date(booking.arrivalTime ?? '')}
+                      startDateTime={shmoBooking.departureTime ?? new Date()}
+                      endDateTime={new Date(shmoBooking.arrivalTime ?? '')}
                       totalAmount={
-                        booking.pricing.finalAmount?.toString() ?? ''
+                        shmoBooking.pricing.finalAmount?.toString() ?? ''
                       }
                       withHeader={true}
                     />
@@ -82,8 +86,8 @@ export const FinishedScooterSheet = ({
                   expanded={true}
                   onPress={() =>
                     navigateSupportCallback(
-                      booking.asset.operator.id,
-                      booking.bookingId,
+                      shmoBooking.asset.operator.id,
+                      shmoBooking.bookingId,
                     )
                   }
                   text={t(MobilityTexts.helpText)}
@@ -93,7 +97,7 @@ export const FinishedScooterSheet = ({
               </View>
             </>
           )}
-          {!isLoading && (isError || !booking) && (
+          {!isLoading && (isError || !shmoBooking) && (
             <View style={styles.footer}>
               <MessageInfoBox
                 type="error"

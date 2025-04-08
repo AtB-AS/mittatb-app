@@ -21,7 +21,7 @@ export type ParkingPhotoScreenProps =
 
 export const Root_ParkingPhotoScreen = ({
   navigation,
-  route: {params},
+  route,
 }: ParkingPhotoScreenProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -60,7 +60,7 @@ export const Root_ParkingPhotoScreen = ({
     // Convert to Base64
     const image = await fetch(compressed);
     const imageBlob = await image.blob();
-    const base64Image = (await blobToBase64(imageBlob)) as string;
+    const base64Image = await blobToBase64(imageBlob);
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
@@ -68,12 +68,12 @@ export const Root_ParkingPhotoScreen = ({
     setAutoSelectedMapItem(undefined);
     setBottomSheetToAutoSelect({
       type: AutoSelectableBottomSheetType.Scooter,
-      id: params.bookingId,
-      state: ShmoBookingState.FINISHED,
+      id: route.params.bookingId,
+      shmoBookingState: ShmoBookingState.FINISHED,
     });
 
     if (base64data) {
-      await onEndTrip(params.bookingId, base64data);
+      await onEndTrip(route.params.bookingId, base64data);
     }
     navigation.goBack();
   };

@@ -32,7 +32,7 @@ export enum AutoSelectableBottomSheetType {
 export type AutoSelectableBottomSheet = {
   type: AutoSelectableBottomSheetType;
   id: string;
-  state?: ShmoBookingState;
+  shmoBookingState?: ShmoBookingState;
 };
 
 type Props = {

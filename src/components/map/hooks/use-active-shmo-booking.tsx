@@ -36,12 +36,12 @@ export const useShmoActiveBottomSheet = (
   }, [close, setBottomSheetCurrentlyAutoSelected]);
 
   const flyToUserLocation = useCallback(async () => {
-    const coordiantes = await getCurrentCoordinates();
+    const coordinates = await getCurrentCoordinates();
     mapCameraRef &&
       flyToLocation({
         coordinates: {
-          latitude: coordiantes?.latitude ?? 0,
-          longitude: coordiantes?.longitude ?? 0,
+          latitude: coordinates?.latitude ?? 0,
+          longitude: coordinates?.longitude ?? 0,
         },
         padding: SLIGHTLY_RAISED_MAP_PADDING,
         mapCameraRef,

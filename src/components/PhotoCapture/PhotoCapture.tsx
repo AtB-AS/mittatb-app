@@ -6,6 +6,7 @@ import {RefObject, useRef} from 'react';
 import {ScreenContainer} from './ScreenContainer';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/sdk';
+import {useGeolocationContext} from '@atb/GeolocationContext';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
@@ -28,8 +29,11 @@ export const PhotoCapture = ({
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const {getCurrentCoordinates} = useGeolocationContext();
 
-  const handlePhotoCapture = (file: PhotoFile) => {
+  const handlePhotoCapture = async (file: PhotoFile) => {
+    //if there is no coordinates given, use the current user coordinates
+    const userCoordinates = await getCurrentCoordinates();
     openBottomSheet(
       () => (
         <ImageConfirmationBottomSheet
@@ -37,7 +41,7 @@ export const PhotoCapture = ({
             closeBottomSheet();
             onConfirmImage(file);
           }}
-          coordinates={coordinates}
+          coordinates={coordinates ?? userCoordinates}
           file={file.path}
         />
       ),
