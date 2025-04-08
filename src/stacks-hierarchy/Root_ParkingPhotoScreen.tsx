@@ -50,7 +50,6 @@ export const Root_ParkingPhotoScreen = ({
   };
 
   const onConfirmImage = async (photo: PhotoFile) => {
-    //const base64Data = await RNFS.readFile(photo.path, 'base64');
     const compressed = await Image.compress(photo.path, {
       maxHeight: 1024,
       maxWidth: 1024,
