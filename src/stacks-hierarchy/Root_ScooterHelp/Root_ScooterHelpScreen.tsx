@@ -23,7 +23,11 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   /* vehicleId is only for support request body in Root_ContactScooterOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId) or a bookingId */
-  const {operatorId, vehicleId, bookingId} = route.params;
+  const {operatorId} = route.params;
+  const vehicleId =
+    'vehicleId' in route.params ? route.params?.vehicleId : undefined;
+  const bookingId =
+    'bookingId' in route.params ? route.params?.bookingId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const style = useStyles();

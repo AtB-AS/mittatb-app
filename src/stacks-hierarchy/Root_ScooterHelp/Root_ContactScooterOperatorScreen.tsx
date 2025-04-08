@@ -37,7 +37,11 @@ export type Root_ContactScooterOperatorScreenProps =
 export const Root_ContactScooterOperatorScreen = ({
   route,
 }: Root_ContactScooterOperatorScreenProps) => {
-  const {operatorId, vehicleId, bookingId} = route.params;
+  const {operatorId} = route.params;
+  const vehicleId =
+    'vehicleId' in route.params ? route.params?.vehicleId : undefined;
+  const bookingId =
+    'bookingId' in route.params ? route.params?.bookingId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();

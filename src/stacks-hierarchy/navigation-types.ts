@@ -68,21 +68,12 @@ type Root_ParkingPhotoScreenParams = {
   bookingId: ShmoBooking['bookingId'];
 };
 
-type BaseScooterHelpParams = {
-  operatorId: string;
-};
-
-type Root_ScooterHelpScreenParams = BaseScooterHelpParams &
-  (
-    | {vehicleId: string; bookingId?: string}
-    | {vehicleId?: string; bookingId: string}
-  );
-
-type Root_ContactScooterOperatorScreenParams = BaseScooterHelpParams &
-  (
-    | {vehicleId: string; bookingId?: string}
-    | {vehicleId?: string; bookingId: string}
-  );
+type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+type Root_ScooterHelpScreenParams = ScooterHelpParams;
+type Root_ContactScooterOperatorScreenParams = ScooterHelpParams;
 
 type Root_ContactScooterOperatorConfirmationScreenParams = {
   operatorName: string;
