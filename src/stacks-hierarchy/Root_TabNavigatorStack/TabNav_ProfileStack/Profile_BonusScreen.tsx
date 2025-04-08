@@ -25,6 +25,7 @@ import {useAuthContext} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/mobility';
+import {isDefined} from '@atb/utils/presence';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -186,7 +187,9 @@ function UserBonusBalanceSection(): JSX.Element {
     useBonusBalanceQuery();
 
   const isError =
-    Number.isNaN(userBonusBalance) || userBonusBalanceStatus === 'error';
+    !isDefined(userBonusBalance) ||
+    Number.isNaN(userBonusBalance) ||
+    userBonusBalanceStatus === 'error';
 
   return (
     <>

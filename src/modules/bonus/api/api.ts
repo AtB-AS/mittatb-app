@@ -1,6 +1,10 @@
 import {client} from '@atb/api';
 
-export const getBonusBalance = (): Promise<number> => {
+export const getBonusBalance = (isLoggedIn: boolean): Promise<number> => {
+  if (!isLoggedIn) {
+    return Promise.resolve(0);
+  }
+
   return client
     .get(`/bonus/v1/balance`, {
       authWithIdToken: true,
