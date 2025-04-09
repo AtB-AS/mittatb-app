@@ -214,7 +214,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
     <View style={styles.card}>
       <PressableOpacity
         style={[styles.paymentMethod, styles.centerRow]}
-        onPress={() => onSelect()}
+        onPress={onSelect}
         accessibilityHint={paymentTexts.hint}
         {...getRadioA11y(paymentTexts.label, selected, t)}
         testID="multiple payment methods"
