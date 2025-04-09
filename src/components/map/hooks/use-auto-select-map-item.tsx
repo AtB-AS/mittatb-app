@@ -24,6 +24,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -50,6 +51,7 @@ export const useAutoSelectMapItem = (
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -106,19 +108,21 @@ export const useAutoSelectMapItem = (
               bottomSheetToAutoSelect?.shmoBookingState ===
               ShmoBookingState.FINISHED
             ) {
-              BottomSheetComponent = (
-                <FinishedScooterSheet
-                  bookingId={bottomSheetToAutoSelect.id}
-                  onClose={closeBottomSheet}
-                  navigateSupportCallback={(operatorId, bookingId) => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      operatorId,
-                      bookingId,
-                    });
-                  }}
-                />
-              );
+              if (isShmoDeepIntegrationEnabled) {
+                BottomSheetComponent = (
+                  <FinishedScooterSheet
+                    bookingId={bottomSheetToAutoSelect.id}
+                    onClose={closeBottomSheet}
+                    navigateSupportCallback={(operatorId, bookingId) => {
+                      closeBottomSheet();
+                      navigation.navigate('Root_ScooterHelpScreen', {
+                        operatorId,
+                        bookingId,
+                      });
+                    }}
+                  />
+                );
+              }
             } else {
               BottomSheetComponent = (
                 <ScooterSheet
@@ -207,5 +211,6 @@ export const useAutoSelectMapItem = (
     enable_vipps_login,
     hasReservationOrAvailableFareContract,
     close,
+    isShmoDeepIntegrationEnabled,
   ]);
 };

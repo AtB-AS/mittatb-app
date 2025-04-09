@@ -72,8 +72,8 @@ export const useShmoActiveBottomSheet = (
                     });
                   }}
                   photoNavigation={() => {
-                    closeBottomSheet();
                     mapSelectionCloseCallback();
+                    closeBottomSheet();
                     navigation.navigate('Root_ParkingPhotoScreen', {
                       bookingId: activeBooking.bookingId,
                     });
