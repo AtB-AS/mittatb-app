@@ -12,8 +12,7 @@ type CheckedProps = {
 };
 
 const getDefaultColor = (theme: Theme) => theme.color.background.neutral[0];
-const getCheckedColor = (theme: Theme) =>
-  theme.color.interactive[2].outline.background;
+const getCheckedColor = (theme: Theme) => theme.color.background.accent[3];
 
 export const Checkbox: React.FC<CheckedProps> = ({
   checked,
@@ -44,7 +43,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacing.large,
     borderRadius: theme.border.radius.small,
     borderWidth: theme.border.width.medium,
-    borderColor: getCheckedColor(theme),
+    borderColor: getCheckedColor(theme).background,
     alignItems: 'center',
     justifyContent: 'center',
   },

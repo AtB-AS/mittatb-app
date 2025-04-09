@@ -2,9 +2,7 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {ThemeText} from '@atb/components/text';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
@@ -334,31 +332,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   }}
                   loading={reserveMutation.isLoading}
                 />
-                <PressableOpacity
-                  style={styles.buttonTopSpacing}
-                  disabled={!!offerError}
-                  onPress={() => {
-                    analytics.logEvent(
-                      'Ticketing',
-                      'Change payment method clicked',
-                      {
-                        paymentMethod: paymentMethod?.paymentType,
-                        mode: params.mode,
-                      },
-                    );
-                    selectPaymentMethod();
-                  }}
-                  accessibilityHint={t(
-                    PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
-                  )}
-                  ref={onCloseFocusRef}
-                >
-                  <View style={styles.flexRowCenter}>
-                    <ThemeText typography="body__primary--bold">
-                      {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
-                    </ThemeText>
-                  </View>
-                </PressableOpacity>
               </View>
             ) : (
               <Button
@@ -394,14 +367,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   flexColumn: {
     flex: 1,
     marginVertical: theme.spacing.medium,
-  },
-  flexRowCenter: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonTopSpacing: {
-    marginTop: theme.spacing.xLarge,
   },
   errorMessage: {
     marginBottom: theme.spacing.medium,

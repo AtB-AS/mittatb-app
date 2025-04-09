@@ -14,16 +14,15 @@ import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 
-export type Brand = {
-  paymentType: PaymentType | undefined;
-  size?: number;
+type PaymentSelectionCardProps = {
+  paymentMethod: PaymentMethod;
+  startAction: () => void;
 };
 
-export const PaymentSelectionCard = (props: {
-  paymentMethod: PaymentMethod;
-  startAction: Function;
-}) => {
-  const {paymentMethod, startAction} = props;
+export const PaymentSelectionCard = ({
+  paymentMethod,
+  startAction,
+}: PaymentSelectionCardProps) => {
   const paymentName = humanizePaymentType(paymentMethod.paymentType);
   const style = useStyles();
   const {theme} = useThemeContext();
@@ -43,9 +42,7 @@ export const PaymentSelectionCard = (props: {
             paymentMethod.recurringCard?.masked_pan ?? '',
           ),
         )}
-        onPress={() => {
-          startAction();
-        }}
+        onPress={startAction}
       >
         <View style={style.cardTop}>
           <PaymentBrand

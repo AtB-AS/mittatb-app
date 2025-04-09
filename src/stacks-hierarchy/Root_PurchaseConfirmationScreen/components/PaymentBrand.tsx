@@ -12,12 +12,15 @@ import {Card} from '@atb/assets/svg/mono-icons/ticketing';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useThemeContext} from '@atb/theme';
 
-export type Brand = {
+type PaymentBrandProps = {
   paymentType: PaymentType | undefined;
   size?: number;
 };
 
-export const PaymentBrand: React.FC<Brand> = ({paymentType, size}) => {
+export const PaymentBrand: React.FC<PaymentBrandProps> = ({
+  paymentType,
+  size,
+}) => {
   const fontScale = useFontScale();
   const {theme} = useThemeContext();
   return (

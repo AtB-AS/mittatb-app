@@ -58,12 +58,12 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       savedType: SavedPaymentMethodType.Normal,
     }),
   );
-  const singlePaymentMethod = defaultPaymentMethods.filter(
+  const singlePaymentMethods = defaultPaymentMethods.filter(
     (method): method is VippsPaymentMethod =>
       method.paymentType === PaymentType.Vipps,
   );
 
-  const multiplePaymentMethod = defaultPaymentMethods.filter(
+  const multiplePaymentMethods = defaultPaymentMethods.filter(
     (method): method is CardPaymentMethod =>
       [PaymentType.Mastercard, PaymentType.Visa, PaymentType.Amex].includes(
         method.paymentType,
@@ -73,19 +73,19 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const [selectedMethod, setSelectedMethod] = useState(
     currentOptions?.paymentMethod,
   );
+  const toggleShouldSave = () => setShouldSave((shouldSave) => !shouldSave);
 
   return (
     <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.paymentMethods}>
-            {singlePaymentMethod.map((method, index) => {
+            {singlePaymentMethods.map((method, index) => {
               return (
                 <SinglePaymentMethod
                   key={method.paymentType}
                   paymentMethod={method}
                   shouldSave={shouldSave}
-                  onSetShouldSave={setShouldSave}
                   selected={selectedMethod?.paymentType === method.paymentType}
                   onSelect={(val: PaymentSelection) => {
                     setSelectedMethod(val);
@@ -96,16 +96,15 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             })}
             <MultiplePaymentMethodsRadioSection
               shouldSave={shouldSave}
-              onSetShouldSave={setShouldSave}
+              toggleShouldSave={toggleShouldSave}
               selected={selectedMethod?.paymentType === PaymentType.PaymentCard}
-              onSelect={(val: PaymentSelection) => {
-                setSelectedMethod(val);
+              onSelect={() => {
+                setSelectedMethod({
+                  paymentType: PaymentType.PaymentCard,
+                  savedType: SavedPaymentMethodType.Normal,
+                });
               }}
-              paymentGroup={multiplePaymentMethod}
-              paymentMethod={{
-                paymentType: PaymentType.PaymentCard,
-                savedType: SavedPaymentMethodType.Normal,
-              }}
+              paymentMethodsInGroup={multiplePaymentMethods}
               testID="multiplePaymentMethods"
             />
 
@@ -131,7 +130,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 key={method.recurringCard?.id}
                 paymentMethod={method}
                 shouldSave={shouldSave}
-                onSetShouldSave={setShouldSave}
                 selected={
                   selectedMethod?.recurringCard?.id === method.recurringCard?.id
                 }
@@ -166,24 +164,22 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 };
 
 type MultiplePaymentMethodsProps = {
-  paymentMethod: PaymentMethod;
   selected: boolean;
-  onSelect: (value: PaymentSelection) => void;
+  onSelect: () => void;
   shouldSave: boolean;
-  onSetShouldSave: (val: boolean) => void;
-  paymentGroup: PaymentMethod[];
+  toggleShouldSave: () => void;
+  paymentMethodsInGroup: PaymentMethod[];
   testID?: string;
 };
 
 const MultiplePaymentMethodsRadioSection: React.FC<
   MultiplePaymentMethodsProps
 > = ({
-  paymentMethod,
   selected,
   onSelect,
   shouldSave,
-  onSetShouldSave,
-  paymentGroup,
+  toggleShouldSave,
+  paymentMethodsInGroup,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -211,15 +207,14 @@ const MultiplePaymentMethodsRadioSection: React.FC<
     };
   }
 
-  const paymentTexts = getPaymentTexts(paymentGroup);
+  const paymentTexts = getPaymentTexts(paymentMethodsInGroup);
   const canSaveCard = authenticationType === 'phone';
-  const paymentSelection = getPaymentSelection(paymentMethod, shouldSave);
 
   return (
     <View style={styles.card}>
       <PressableOpacity
         style={[styles.paymentMethod, styles.centerRow]}
-        onPress={() => onSelect(paymentSelection)}
+        onPress={() => onSelect()}
         accessibilityHint={paymentTexts.hint}
         {...getRadioA11y(paymentTexts.label, selected, t)}
         testID="multiple payment methods"
@@ -234,8 +229,11 @@ const MultiplePaymentMethodsRadioSection: React.FC<
                 </ThemeText>
               </View>
               <View style={styles.paymentIconsGroup}>
-                {paymentGroup.map((payment) => (
-                  <PaymentBrand paymentType={payment.paymentType} />
+                {paymentMethodsInGroup.map((payment) => (
+                  <PaymentBrand
+                    paymentType={payment.paymentType}
+                    key={payment.paymentType}
+                  />
                 ))}
               </View>
             </View>
@@ -244,7 +242,7 @@ const MultiplePaymentMethodsRadioSection: React.FC<
       </PressableOpacity>
       {selected && canSaveCard && (
         <PressableOpacity
-          onPress={() => onSetShouldSave(!shouldSave)}
+          onPress={toggleShouldSave}
           style={styles.saveMethodSection}
         >
           <ThemeText>
@@ -274,16 +272,15 @@ const MultiplePaymentMethodsRadioSection: React.FC<
   );
 };
 
-type PaymentMethodProps = {
+type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
   selected: boolean;
   onSelect: (value: PaymentSelection) => void;
   shouldSave: boolean;
-  onSetShouldSave: (val: boolean) => void;
   index: number;
 };
 
-const SinglePaymentMethod: React.FC<PaymentMethodProps> = ({
+const SinglePaymentMethod: React.FC<SinglePaymentMethodProps> = ({
   paymentMethod,
   selected,
   onSelect,
