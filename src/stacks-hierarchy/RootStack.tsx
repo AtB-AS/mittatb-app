@@ -72,6 +72,7 @@ import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/analytics';
+import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -434,6 +435,10 @@ export const RootStack = () => {
                   name="Root_ChooseTicketRecipientScreen"
                   component={Root_ChooseTicketRecipientScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+                />
+                <Stack.Screen
+                  name="Root_ParkingPhotoScreen"
+                  component={Root_ParkingPhotoScreen}
                 />
               </Stack.Navigator>
             </AnalyticsContextProvider>

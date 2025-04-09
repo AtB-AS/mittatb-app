@@ -22,6 +22,9 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {InteractionManager} from 'react-native';
+import {ShmoBookingState} from '@atb/api/types/mobility';
+import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -48,16 +51,23 @@ export const useAutoSelectMapItem = (
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const closeBottomSheet = useCallback(() => {
-    close();
-    setBottomSheetCurrentlyAutoSelected(undefined);
     setAutoSelectedMapItem(undefined);
-  }, [close, setAutoSelectedMapItem, setBottomSheetCurrentlyAutoSelected]);
+    setBottomSheetCurrentlyAutoSelected(undefined);
+    setBottomSheetToAutoSelect(undefined);
+    close();
+  }, [
+    close,
+    setAutoSelectedMapItem,
+    setBottomSheetCurrentlyAutoSelected,
+    setBottomSheetToAutoSelect,
+  ]);
 
   const flyToMapItemLocation = useCallback(
     (mapItem: AutoSelectableMapItem) => {
@@ -94,36 +104,58 @@ export const useAutoSelectMapItem = (
         let BottomSheetComponent: JSX.Element | undefined = undefined;
         switch (bottomSheetToAutoSelect.type) {
           case AutoSelectableBottomSheetType.Scooter:
-            BottomSheetComponent = (
-              <ScooterSheet
-                vehicleId={bottomSheetToAutoSelect.id}
-                onClose={closeBottomSheet}
-                onVehicleReceived={flyToMapItemLocation}
-                onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={closeBottomSheet}
-                navigation={navigation}
-                loginCallback={() => {
-                  closeBottomSheet();
-                  if (hasReservationOrAvailableFareContract) {
-                    navigation.navigate(
-                      'Root_LoginAvailableFareContractWarningScreen',
-                      {},
-                    );
-                  } else if (enable_vipps_login) {
-                    navigation.navigate('Root_LoginOptionsScreen', {
-                      showGoBack: true,
-                      transitionOverride: 'slide-from-bottom',
-                    });
-                  } else {
-                    navigation.navigate('Root_LoginPhoneInputScreen', {});
-                  }
-                }}
-                startOnboardingCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ShmoOnboardingScreen');
-                }}
-              />
-            );
+            if (
+              bottomSheetToAutoSelect?.shmoBookingState ===
+              ShmoBookingState.FINISHED
+            ) {
+              if (isShmoDeepIntegrationEnabled) {
+                BottomSheetComponent = (
+                  <FinishedScooterSheet
+                    bookingId={bottomSheetToAutoSelect.id}
+                    onClose={closeBottomSheet}
+                    navigateSupportCallback={(operatorId, bookingId) => {
+                      closeBottomSheet();
+                      navigation.navigate('Root_ScooterHelpScreen', {
+                        operatorId,
+                        bookingId,
+                      });
+                    }}
+                  />
+                );
+              }
+            } else {
+              BottomSheetComponent = (
+                <ScooterSheet
+                  vehicleId={bottomSheetToAutoSelect.id}
+                  onClose={closeBottomSheet}
+                  onVehicleReceived={flyToMapItemLocation}
+                  onReportParkingViolation={onReportParkingViolation}
+                  navigateSupportCallback={closeBottomSheet}
+                  navigation={navigation}
+                  loginCallback={() => {
+                    closeBottomSheet();
+                    if (hasReservationOrAvailableFareContract) {
+                      navigation.navigate(
+                        'Root_LoginAvailableFareContractWarningScreen',
+                        {},
+                      );
+                    } else if (enable_vipps_login) {
+                      navigation.navigate('Root_LoginOptionsScreen', {
+                        showGoBack: true,
+                        transitionOverride: 'slide-from-bottom',
+                      });
+                    } else {
+                      navigation.navigate('Root_LoginPhoneInputScreen', {});
+                    }
+                  }}
+                  startOnboardingCallback={() => {
+                    closeBottomSheet();
+                    navigation.navigate('Root_ShmoOnboardingScreen');
+                  }}
+                />
+              );
+            }
+
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (
@@ -178,5 +210,7 @@ export const useAutoSelectMapItem = (
     navigation,
     enable_vipps_login,
     hasReservationOrAvailableFareContract,
+    close,
+    isShmoDeepIntegrationEnabled,
   ]);
 };

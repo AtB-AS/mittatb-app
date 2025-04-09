@@ -53,6 +53,7 @@ export const Map_RootScreenV2 = ({
     },
     [navigation],
   );
+
   const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
     (location, destination) => {
       navigation.navigate({

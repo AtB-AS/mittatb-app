@@ -5,7 +5,10 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {ScreenContainer, getThemeColor} from './components/ScreenContainer';
+import {
+  ScreenContainer,
+  getThemeColor,
+} from '../../components/PhotoCapture/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
@@ -64,7 +67,7 @@ export const Root_ParkingViolationsQrScreen = ({
     });
     const image = await fetch(compressed);
     const imageBlob = await image.blob();
-    const base64Image = (await blobToBase64(imageBlob)) as string;
+    const base64Image = await blobToBase64(imageBlob);
     // Remove metadata, e.g. 'data:image/png;base64',
     // and keep just the base64 encoded part of the image
     // Nivel does not accept the metadata being a part of the image.

@@ -16,28 +16,28 @@ export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const backgroundColor = useTransportColor('scooter', 'escooter');
-  const {data: booking} = useShmoBookingQuery(bookingId, 15000);
+  const {data: shmoBooking} = useShmoBookingQuery(bookingId, 15000);
 
   return (
     <Section style={styles.container}>
       <LineWithVerticalBars
         backgroundColor={
-          booking?.state === ShmoBookingState.IN_USE
+          shmoBooking?.state === ShmoBookingState.IN_USE
             ? backgroundColor.primary.background
             : backgroundColor.primary.foreground.disabled
         }
         style={styles.lineBars}
-        animate={booking?.state === ShmoBookingState.IN_USE}
+        animate={shmoBooking?.state === ShmoBookingState.IN_USE}
       />
 
       <ShmoTripDetailsSectionItem
-        startDateTime={booking?.departureTime ?? new Date()}
+        startDateTime={shmoBooking?.departureTime ?? new Date()}
         endDateTime={
-          booking?.state === ShmoBookingState.IN_USE
+          shmoBooking?.state === ShmoBookingState.IN_USE
             ? new Date(serverNow)
-            : new Date(booking?.arrivalTime ?? '')
+            : new Date(shmoBooking?.arrivalTime ?? '')
         }
-        totalAmount={booking?.pricing.currentAmount.toString() ?? ''}
+        totalAmount={shmoBooking?.pricing.currentAmount.toString() ?? ''}
         withHeader={false}
       />
     </Section>

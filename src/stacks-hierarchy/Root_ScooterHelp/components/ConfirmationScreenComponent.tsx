@@ -4,9 +4,9 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Check as CheckDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Check as CheckLight} from '@atb/assets/svg/color/icons/status/light';
-import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ScreenContainer';
 import {Button} from '@atb/components/button';
 import {dictionary, useTranslation} from '@atb/translations';
+import {ScreenContainer} from '@atb/components/PhotoCapture';
 
 type ConfirmationScreenComponentProps = {
   onClose: () => void;

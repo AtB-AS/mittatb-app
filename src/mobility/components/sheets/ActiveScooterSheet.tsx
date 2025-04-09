@@ -6,7 +6,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
@@ -15,7 +15,11 @@ import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
+import {
+  ShmoBookingEvent,
+  ShmoBookingEventType,
+  ShmoBookingState,
+} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatErrorMessage} from '@atb/mobility/utils';
@@ -24,12 +28,14 @@ type Props = {
   onClose: () => void;
   onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
+  photoNavigation: (bookingId: string) => void;
 };
 
 export const ActiveScooterSheet = ({
   onClose,
   onActiveBookingReceived,
   navigateSupportCallback,
+  photoNavigation,
 }: Props) => {
   const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
   const {t} = useTranslation();
@@ -52,18 +58,42 @@ export const ActiveScooterSheet = ({
       const startFinishingEvent: ShmoBookingEvent = {
         event: ShmoBookingEventType.START_FINISHING,
       };
-      await sendShmoBookingEvent({
+      const res = await sendShmoBookingEvent({
         bookingId: activeBooking.bookingId,
         shmoBookingEvent: startFinishingEvent,
       });
+
+      if (res?.state === ShmoBookingState.FINISHING) {
+        photoNavigation(activeBooking?.bookingId);
+      }
     }
-  }, [activeBooking, sendShmoBookingEvent]);
+  }, [activeBooking?.bookingId, photoNavigation, sendShmoBookingEvent]);
+
+  const showEndAlert = async () => {
+    Alert.alert(
+      t(MobilityTexts.trip.button.end),
+      t(MobilityTexts.trip.endAlert.header),
+
+      [
+        {
+          text: t(MobilityTexts.trip.endAlert.continue),
+          style: 'cancel',
+        },
+        {
+          text: t(MobilityTexts.trip.endAlert.end),
+          style: 'destructive',
+          onPress: startFinishingShmoBooking,
+        },
+      ],
+    );
+  };
 
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       maxHeightValue={0.7}
       onClose={onClose}
+      disableClose={sendShmoBookingEventIsLoading}
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -103,7 +133,7 @@ export const ActiveScooterSheet = ({
                     expanded={true}
                     type="large"
                     accessibilityRole="button"
-                    onPress={startFinishingShmoBooking}
+                    onPress={showEndAlert}
                     loading={sendShmoBookingEventIsLoading}
                     text={
                       sendShmoBookingEventIsLoading

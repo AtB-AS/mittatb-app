@@ -11,20 +11,17 @@ import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-b
 import {ActiveScooterSheet} from '@atb/mobility/components/sheets/ActiveScooterSheet';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/GeolocationContext';
-import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
+  mapSelectionCloseCallback: () => void,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const {
-    bottomSheetToAutoSelect,
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-  } = useMapContext();
+  const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
+    useMapContext();
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
   const navigation = useNavigation<RootNavigationProps>();
@@ -40,12 +37,12 @@ export const useShmoActiveBottomSheet = (
   }, [close, setBottomSheetCurrentlyAutoSelected]);
 
   const flyToUserLocation = useCallback(async () => {
-    const coordiantes = await getCurrentCoordinates();
+    const coordinates = await getCurrentCoordinates();
     mapCameraRef &&
       flyToLocation({
         coordinates: {
-          latitude: coordiantes?.latitude ?? 0,
-          longitude: coordiantes?.latitude ?? 0,
+          latitude: coordinates?.latitude ?? 0,
+          longitude: coordinates?.longitude ?? 0,
         },
         padding: SLIGHTLY_RAISED_MAP_PADDING,
         mapCameraRef,
@@ -71,25 +68,14 @@ export const useShmoActiveBottomSheet = (
                     closeBottomSheet();
                     navigation.navigate('Root_ScooterHelpScreen', {
                       operatorId: activeBooking.asset.operator.id,
-                      vehicleId: null, //null when active booking, bookingId is used in support api instead
+                      bookingId: activeBooking.bookingId,
                     });
                   }}
-                />
-              ),
-              onCloseFocusRef,
-              false,
-            );
-            break;
-          case ShmoBookingState.FINISHING:
-            openBottomSheet(
-              () => (
-                <FinishedScooterSheet
-                  onClose={closeBottomSheet}
-                  navigateSupportCallback={() => {
+                  photoNavigation={() => {
+                    mapSelectionCloseCallback();
                     closeBottomSheet();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      operatorId: activeBooking.asset.operator.id,
-                      vehicleId: null, //null when active booking, bookingId is used in support api instead
+                    navigation.navigate('Root_ParkingPhotoScreen', {
+                      bookingId: activeBooking.bookingId,
                     });
                   }}
                 />
@@ -109,7 +95,6 @@ export const useShmoActiveBottomSheet = (
     }
   }, [
     closeBottomSheet,
-    bottomSheetToAutoSelect,
     openBottomSheet,
     isFocused,
     flyToUserLocation,
@@ -117,5 +102,6 @@ export const useShmoActiveBottomSheet = (
     navigation,
     activeBooking,
     isShmoDeepIntegrationEnabled,
+    mapSelectionCloseCallback,
   ]);
 };

@@ -7,7 +7,7 @@ import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_Purc
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
-import {ParkingViolationType} from '@atb/api/types/mobility';
+import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
@@ -64,15 +64,16 @@ type Root_ParkingViolationsConfirmationParams = {
   providerName: string | undefined;
 };
 
-type Root_ScooterHelpScreenParams = {
-  operatorId: string;
-  vehicleId: string | null;
+type Root_ParkingPhotoScreenParams = {
+  bookingId: ShmoBooking['bookingId'];
 };
 
-type Root_ContactScooterOperatorScreenParams = {
-  vehicleId: string | null;
-  operatorId: string;
-};
+type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+type Root_ScooterHelpScreenParams = ScooterHelpParams;
+type Root_ContactScooterOperatorScreenParams = ScooterHelpParams;
 
 type Root_ContactScooterOperatorConfirmationScreenParams = {
   operatorName: string;
@@ -135,6 +136,7 @@ export type RootStackParamList = StackParams<{
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
+  Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

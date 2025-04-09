@@ -24,7 +24,6 @@ import {getParsedPrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSendSupportRequestMutation} from '@atb/mobility/queries/use-send-support-request-mutation';
-import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -38,7 +37,11 @@ export type Root_ContactScooterOperatorScreenProps =
 export const Root_ContactScooterOperatorScreen = ({
   route,
 }: Root_ContactScooterOperatorScreenProps) => {
-  const {operatorId, vehicleId} = route.params;
+  const {operatorId} = route.params;
+  const vehicleId =
+    'vehicleId' in route.params ? route.params?.vehicleId : undefined;
+  const bookingId =
+    'bookingId' in route.params ? route.params?.bookingId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
@@ -63,7 +66,12 @@ export const Root_ContactScooterOperatorScreen = ({
     onSubmit,
     showError,
     supportRequestStatus,
-  } = useScooterContactFormController(operatorId, vehicleId, onSuccess);
+  } = useScooterContactFormController(
+    operatorId,
+    vehicleId,
+    bookingId,
+    onSuccess,
+  );
 
   return (
     <View style={styles.container}>
@@ -265,13 +273,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
  */
 const useScooterContactFormController = (
   operatorId: string,
-  vehicleId: string | null,
+  vehicleId: string | undefined,
+  bookingId: string | undefined,
   onSuccess: () => void,
 ) => {
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
   const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
     getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
 
   const [requestBody, setRequestBody] = useState<SendSupportRequestBodyInput>({
     supportType: SupportType.OTHER,
@@ -315,7 +323,7 @@ const useScooterContactFormController = (
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         assetId: vehicleId,
-        bookingId: activeShmoBooking?.bookingId,
+        bookingId,
         ...(currentUserCoordinates && {
           place: {
             coordinates: {
