@@ -14,14 +14,34 @@ export enum SavedPaymentMethodType {
   Recurring = 'recurring',
 }
 
-type CardPaymentMethod = {
+export type CardPaymentMethod = {
   savedType: SavedPaymentMethodType;
-  paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
+  paymentType:
+    | PaymentType.Mastercard
+    | PaymentType.Visa
+    | PaymentType.Amex
+    | PaymentType.PaymentCard;
   recurringCard?: RecurringPayment;
 };
-type VippsPaymentMethod = {
+export type VippsPaymentMethod = {
   savedType: SavedPaymentMethodType.Normal;
   paymentType: PaymentType.Vipps;
   recurringCard?: undefined;
 };
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
+
+export type PaymentSelection =
+  | {
+      paymentType: PaymentType.Vipps;
+      savedType: SavedPaymentMethodType.Normal;
+    }
+  | {
+      paymentType: PaymentType.PaymentCard;
+      shouldSavePaymentMethod: boolean;
+      savedType: SavedPaymentMethodType.Normal;
+    }
+  | {
+      paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
+      recurringCard?: RecurringPayment;
+      savedType: SavedPaymentMethodType;
+    };

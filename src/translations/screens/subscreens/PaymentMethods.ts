@@ -25,7 +25,7 @@ const PaymentMethodsTexts = {
       'Are you sure you want to remove this payment card?',
       'Er du sikker på at du vil fjerne dette betalingskortet?',
     ),
-    confirmButton: _('Fjern', 'Remove', 'Fjern'),
+    confirmButton: _('Fjern kort', 'Remove card', 'Fjern kort'),
     cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
   },
   a11y: {
@@ -41,6 +41,12 @@ const PaymentMethodsTexts = {
         `Activate to remove ${paymentName} ending in ${masked_pan}`,
         `Aktiver for å fjerne ${paymentName} som sluttar på ${masked_pan}`,
       ),
+    editCardIcon: (paymentName: string, masked_pan: string) =>
+      _(
+        `Aktiver for å redigere betalingsmetode ${paymentName} som slutter på ${masked_pan}`,
+        `Activate to edit payment method ${paymentName} ending in ${masked_pan}`,
+        `Aktiver for å endre betalingsmåte ${paymentName} som sluttar på ${masked_pan}`,
+      ),
   },
   addPaymentMethod: _(
     'Legg til betalingskort',
@@ -52,6 +58,7 @@ const PaymentMethodsTexts = {
     'Payment with Vipps is available when purchasing a ticket',
     'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
   ),
+  editPaymentMethod: _('Endre', 'Edit', 'Endre'),
 };
 
 export default PaymentMethodsTexts;
