@@ -98,7 +98,7 @@ export const MapV2 = (props: MapProps) => {
   const showGeofencingZones =
     isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
 
-  useShmoActiveBottomSheet(mapCameraRef);
+  useShmoActiveBottomSheet(mapCameraRef, mapSelectionCloseCallback);
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();

@@ -16,6 +16,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
+  mapSelectionCloseCallback: () => void,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
@@ -72,6 +73,7 @@ export const useShmoActiveBottomSheet = (
                   }}
                   photoNavigation={() => {
                     closeBottomSheet();
+                    mapSelectionCloseCallback();
                     navigation.navigate('Root_ParkingPhotoScreen', {
                       bookingId: activeBooking.bookingId,
                     });
@@ -100,5 +102,6 @@ export const useShmoActiveBottomSheet = (
     navigation,
     activeBooking,
     isShmoDeepIntegrationEnabled,
+    mapSelectionCloseCallback,
   ]);
 };
