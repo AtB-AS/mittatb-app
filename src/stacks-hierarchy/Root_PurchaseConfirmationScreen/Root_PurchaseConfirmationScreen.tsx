@@ -10,7 +10,7 @@ import {
 } from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {PaymentType, ReserveOffer} from '@atb/ticketing';
+import {humanizePaymentType, PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,
@@ -44,9 +44,14 @@ import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  GenericSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {PaymentSelectionCard} from './components/PaymentSelectionCard';
+import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -294,12 +299,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         )}
         {paymentMethod && (
           <Section>
-            <GenericSectionItem>
-              <PaymentSelectionCard
-                paymentMethod={paymentMethod}
-                startAction={selectPaymentMethod}
-              />
-            </GenericSectionItem>
+            <GenericClickableSectionItem
+              onPress={selectPaymentMethod}
+              accessibilityLabel={t(
+                PaymentMethodsTexts.a11y.editCardIcon(
+                  humanizePaymentType(paymentMethod.paymentType),
+                  paymentMethod.recurringCard?.masked_pan ?? '',
+                ),
+              )}
+            >
+              <PaymentSelectionCard paymentMethod={paymentMethod} />
+            </GenericClickableSectionItem>
           </Section>
         )}
         {isSearchingOffer ? (
