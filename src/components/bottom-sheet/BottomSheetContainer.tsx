@@ -11,6 +11,7 @@ export type BottomSheetContainerProps = {
   onClose?: () => void;
   focusTitleOnLoad?: boolean;
   disableClose?: boolean;
+  disableHeader?: boolean;
 };
 
 export function BottomSheetContainer({
@@ -22,6 +23,7 @@ export function BottomSheetContainer({
   onClose,
   focusTitleOnLoad = true,
   disableClose = false,
+  disableHeader,
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
@@ -33,6 +35,7 @@ export function BottomSheetContainer({
         title={title}
         focusTitleOnLoad={focusTitleOnLoad}
         disableClose={disableClose}
+        disableHeader={disableHeader}
       />
       {children}
     </View>

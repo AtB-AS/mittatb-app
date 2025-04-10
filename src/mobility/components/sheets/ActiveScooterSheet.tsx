@@ -10,7 +10,6 @@ import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
@@ -25,14 +24,12 @@ import {ShmoTripCard} from '../ShmoTripCard';
 import {formatErrorMessage} from '@atb/mobility/utils';
 
 type Props = {
-  onClose: () => void;
   onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
 };
 
 export const ActiveScooterSheet = ({
-  onClose,
   onActiveBookingReceived,
   navigateSupportCallback,
   photoNavigation,
@@ -89,12 +86,7 @@ export const ActiveScooterSheet = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.7}
-      onClose={onClose}
-      disableClose={sendShmoBookingEventIsLoading}
-    >
+    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
+import {shadows} from '../map';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -49,6 +50,7 @@ export function AnimatedBottomSheet({
           ...styles.bottomSheet,
           transform: [{translateY}],
           maxHeight: windowHeight,
+          ...shadows,
         }}
         onLayout={onLayout}
       >
