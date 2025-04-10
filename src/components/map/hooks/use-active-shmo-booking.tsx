@@ -17,6 +17,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
   mapSelectionCloseCallback: () => void,
+  tabBarHeight?: number,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
@@ -82,6 +83,7 @@ export const useShmoActiveBottomSheet = (
               ),
               onCloseFocusRef,
               false,
+              tabBarHeight,
             );
             break;
           default:
@@ -103,5 +105,6 @@ export const useShmoActiveBottomSheet = (
     activeBooking,
     isShmoDeepIntegrationEnabled,
     mapSelectionCloseCallback,
+    tabBarHeight,
   ]);
 };

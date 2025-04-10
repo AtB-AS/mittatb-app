@@ -53,6 +53,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -63,6 +64,7 @@ export const MapV2 = (props: MapProps) => {
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
+  const tabBarHeight = useBottomTabBarHeight();
 
   const startingCoordinates = useMemo(
     () =>
@@ -84,6 +86,7 @@ export const MapV2 = (props: MapProps) => {
     startingCoordinates,
     true,
     true,
+    tabBarHeight,
   );
 
   const {autoSelectedFeature} = useMapContext();
@@ -98,7 +101,11 @@ export const MapV2 = (props: MapProps) => {
   const showGeofencingZones =
     isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
 
-  useShmoActiveBottomSheet(mapCameraRef, mapSelectionCloseCallback);
+  useShmoActiveBottomSheet(
+    mapCameraRef,
+    mapSelectionCloseCallback,
+    tabBarHeight,
+  );
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -112,7 +119,7 @@ export const MapV2 = (props: MapProps) => {
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle);
 
-  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
+  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation, tabBarHeight);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed

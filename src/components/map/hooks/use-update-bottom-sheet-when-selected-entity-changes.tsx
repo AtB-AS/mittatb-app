@@ -46,6 +46,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView | null>,
   closeCallback: () => void,
+  tabBarHeight?: number,
 ): {
   selectedFeature: Feature<Point, GeoJsonProperties> | undefined;
   onReportParkingViolation: () => void;
@@ -226,6 +227,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           },
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else if (
         isMapV2Enabled

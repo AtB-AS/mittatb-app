@@ -38,6 +38,7 @@ export type AutoSelectableMapItem =
 export const useAutoSelectMapItem = (
   mapCameraRef: React.RefObject<CameraRef | null>,
   onReportParkingViolation: () => void,
+  tabBarHeight?: number,
 ) => {
   const {
     bottomSheetToAutoSelect,
@@ -109,50 +110,60 @@ export const useAutoSelectMapItem = (
               ShmoBookingState.FINISHED
             ) {
               if (isShmoDeepIntegrationEnabled) {
-                BottomSheetComponent = (
-                  <FinishedScooterSheet
-                    bookingId={bottomSheetToAutoSelect.id}
-                    onClose={closeBottomSheet}
-                    navigateSupportCallback={(operatorId, bookingId) => {
-                      closeBottomSheet();
-                      navigation.navigate('Root_ScooterHelpScreen', {
-                        operatorId,
-                        bookingId,
-                      });
-                    }}
-                  />
+                openBottomSheet(
+                  () => (
+                    <FinishedScooterSheet
+                      bookingId={bottomSheetToAutoSelect.id}
+                      onClose={closeBottomSheet}
+                      navigateSupportCallback={(operatorId, bookingId) => {
+                        closeBottomSheet();
+                        navigation.navigate('Root_ScooterHelpScreen', {
+                          operatorId,
+                          bookingId,
+                        });
+                      }}
+                    />
+                  ),
+                  onCloseFocusRef,
+                  false,
+                  tabBarHeight,
                 );
               }
             } else {
-              BottomSheetComponent = (
-                <ScooterSheet
-                  vehicleId={bottomSheetToAutoSelect.id}
-                  onClose={closeBottomSheet}
-                  onVehicleReceived={flyToMapItemLocation}
-                  onReportParkingViolation={onReportParkingViolation}
-                  navigateSupportCallback={closeBottomSheet}
-                  navigation={navigation}
-                  loginCallback={() => {
-                    closeBottomSheet();
-                    if (hasReservationOrAvailableFareContract) {
-                      navigation.navigate(
-                        'Root_LoginAvailableFareContractWarningScreen',
-                        {},
-                      );
-                    } else if (enable_vipps_login) {
-                      navigation.navigate('Root_LoginOptionsScreen', {
-                        showGoBack: true,
-                        transitionOverride: 'slide-from-bottom',
-                      });
-                    } else {
-                      navigation.navigate('Root_LoginPhoneInputScreen', {});
-                    }
-                  }}
-                  startOnboardingCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ShmoOnboardingScreen');
-                  }}
-                />
+              openBottomSheet(
+                () => (
+                  <ScooterSheet
+                    vehicleId={bottomSheetToAutoSelect.id}
+                    onClose={closeBottomSheet}
+                    onVehicleReceived={flyToMapItemLocation}
+                    onReportParkingViolation={onReportParkingViolation}
+                    navigateSupportCallback={closeBottomSheet}
+                    navigation={navigation}
+                    loginCallback={() => {
+                      closeBottomSheet();
+                      if (hasReservationOrAvailableFareContract) {
+                        navigation.navigate(
+                          'Root_LoginAvailableFareContractWarningScreen',
+                          {},
+                        );
+                      } else if (enable_vipps_login) {
+                        navigation.navigate('Root_LoginOptionsScreen', {
+                          showGoBack: true,
+                          transitionOverride: 'slide-from-bottom',
+                        });
+                      } else {
+                        navigation.navigate('Root_LoginPhoneInputScreen', {});
+                      }
+                    }}
+                    startOnboardingCallback={() => {
+                      closeBottomSheet();
+                      navigation.navigate('Root_ShmoOnboardingScreen');
+                    }}
+                  />
+                ),
+                onCloseFocusRef,
+                false,
+                tabBarHeight,
               );
             }
 
@@ -212,5 +223,6 @@ export const useAutoSelectMapItem = (
     hasReservationOrAvailableFareContract,
     close,
     isShmoDeepIntegrationEnabled,
+    tabBarHeight,
   ]);
 };
