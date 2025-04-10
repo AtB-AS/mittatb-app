@@ -1,4 +1,3 @@
-import {FlexibleTransport} from '@atb/assets/svg/color/images';
 import {
   getTextForLanguage,
   TripDetailsTexts,
@@ -24,6 +23,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
+import {ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
@@ -78,7 +78,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
 
           {!isSmallScreen && (
             <View style={style.imageContainer}>
-              <FlexibleTransport height={107} />
+              <ThemedFlexibleTransport height={107} />
             </View>
           )}
 

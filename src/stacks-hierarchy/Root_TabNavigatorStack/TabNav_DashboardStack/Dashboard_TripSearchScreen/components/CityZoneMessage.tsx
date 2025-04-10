@@ -1,7 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, View} from 'react-native';
-import {FlexibleTransport} from '@atb/assets/svg/color/images';
 import {Location} from '@atb/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
@@ -20,6 +19,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/configuration';
 import {useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
 
 type ActionButton = {
   id: string;
@@ -62,7 +62,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
       <Section style={style.cityZoneMessage}>
         <CityZoneBox
           message={t(CityBoxMessageTexts.message(fromCityZone.name))}
-          icon={() => <FlexibleTransport />}
+          icon={() => <ThemedFlexibleTransport width={135} height={74} />}
           onDismiss={onDismiss}
           actionButtons={actionButtons}
         />

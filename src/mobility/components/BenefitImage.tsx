@@ -7,7 +7,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {
   ThemedBundlingCarSharing,
-  ThemedBundlingCityBike,
+  ThemedCityBike,
 } from '@atb/theme/ThemedAssets';
 
 type BenefitImageProps = {
@@ -38,9 +38,9 @@ export const BenefitImageAsset = ({
 }) => {
   switch (formFactor) {
     case FormFactor.Car:
-      return <ThemedBundlingCarSharing {...svgProps} />;
+      return <ThemedBundlingCarSharing height={54} width={70} {...svgProps} />;
     case FormFactor.Bicycle:
-      return <ThemedBundlingCityBike {...svgProps} />;
+      return <ThemedCityBike height={54} width={70} {...svgProps} />;
     default:
       return null;
   }
@@ -58,9 +58,9 @@ const BenefitEligibilityIndicator = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   indicator: {
     position: 'absolute',
-    right: theme.spacing.medium,
+    right: 0,
   },
 }));
