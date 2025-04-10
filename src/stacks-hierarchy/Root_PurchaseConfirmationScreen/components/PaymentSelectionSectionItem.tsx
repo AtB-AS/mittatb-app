@@ -22,7 +22,6 @@ export const PaymentSelectionSectionItem = ({
   paymentMethod,
   ...props
 }: PaymentSelectionCardProps) => {
-  const paymentName = humanizePaymentType(paymentMethod.paymentType);
   const style = useStyles();
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
@@ -31,6 +30,9 @@ export const PaymentSelectionSectionItem = ({
   );
   const {topContainer} = useSectionItem(props);
 
+  const paymentName =
+    humanizePaymentType(paymentMethod.paymentType) ||
+    t(PaymentMethodsTexts.a11y.paymentCard); // TODO: Figure out a better fallback value than "payment card"
   const a11yLabel = paymentMethod.recurringCard?.masked_pan
     ? t(
         PaymentMethodsTexts.a11y.editCardWithMaskedPan(
@@ -41,7 +43,12 @@ export const PaymentSelectionSectionItem = ({
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
 
   return (
-    <PressableOpacity {...props} accessibilityLabel={a11yLabel}>
+    <PressableOpacity
+      {...props}
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
+      accessibilityRole="button"
+    >
       <View style={[topContainer, style.container]}>
         <PaymentBrand
           paymentType={
