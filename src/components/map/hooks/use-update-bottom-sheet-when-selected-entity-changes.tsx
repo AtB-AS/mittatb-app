@@ -111,6 +111,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             />
           ),
           onCloseFocusRef,
+          true,
+          tabBarHeight,
         );
         return;
       }
@@ -124,6 +126,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             />
           ),
           onCloseFocusRef,
+          true,
+          tabBarHeight,
         );
         return;
       }
@@ -155,6 +159,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else if (
         isMapV2Enabled
@@ -171,6 +176,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else if (
         isMapV2Enabled
@@ -187,6 +193,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else if (
         isMapV2Enabled
@@ -245,6 +252,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           },
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else if (isParkAndRide(selectedFeature)) {
         openBottomSheet(
@@ -266,6 +274,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           },
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       } else {
         closeBottomSheet();

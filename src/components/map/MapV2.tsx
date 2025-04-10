@@ -223,7 +223,12 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: SLIGHTLY_RAISED_MAP_PADDING,
+          padding: {
+            ...SLIGHTLY_RAISED_MAP_PADDING,
+            paddingBottom:
+              SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + tabBarHeight,
+          },
+
           mapCameraRef,
           zoomLevel: toZoomLevel,
           animationDuration: 200,
@@ -237,7 +242,7 @@ export const MapV2 = (props: MapProps) => {
         });
       }
     },
-    [onMapClick, activeShmoBooking],
+    [activeShmoBooking?.state, tabBarHeight, onMapClick],
   );
 
   return (

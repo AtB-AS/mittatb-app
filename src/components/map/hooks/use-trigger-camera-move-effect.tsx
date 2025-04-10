@@ -29,6 +29,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  tabBarHeight?: number,
 ) => {
   const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
@@ -55,6 +56,7 @@ export const useTriggerCameraMoveEffect = (
         cameraFocusMode.entityFeature,
         cameraFocusMode.zoomTo ? padding : undefined,
         mapCameraRef,
+        tabBarHeight,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,6 +111,7 @@ const moveCameraToEntity = (
   entityFeature: Feature<Point>,
   padding: MapPadding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  tabBarHeight?: number,
 ) => {
   const coordinates = mapPositionToCoordinates(
     entityFeature.geometry.coordinates,
@@ -116,7 +119,11 @@ const moveCameraToEntity = (
   if (!padding) {
     flyToLocation({
       coordinates,
-      padding: SLIGHTLY_RAISED_MAP_PADDING,
+      padding: {
+        ...SLIGHTLY_RAISED_MAP_PADDING,
+        paddingBottom:
+          SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
+      },
       mapCameraRef,
       animationMode: 'easeTo',
     });

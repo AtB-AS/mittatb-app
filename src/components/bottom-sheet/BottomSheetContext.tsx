@@ -30,6 +30,10 @@ type BottomSheetState = {
     /** Ref to component which should be focused on sheet close */
     onCloseFocusRef: RefObject<any>,
     useBackdrop?: boolean,
+    /**
+     * Make sure if you use this prop in a tabscreen, that you handle navigating away by closing the bottomsheet.
+     * Example in Map_RootScreenV2 useEffect
+     */
     tabBarHeight?: number,
   ) => void;
   isOpen: () => boolean;

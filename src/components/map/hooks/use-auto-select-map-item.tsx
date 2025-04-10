@@ -85,13 +85,17 @@ export const useAutoSelectMapItem = (
               latitude: mapItem.lat,
               longitude: mapItem.lon,
             },
-            padding: SLIGHTLY_RAISED_MAP_PADDING,
+            padding: {
+              ...SLIGHTLY_RAISED_MAP_PADDING,
+              paddingBottom:
+                SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
+            },
             mapCameraRef,
             zoomLevel: 19, // no clustering at this zoom level
           });
       });
     },
-    [mapCameraRef, setAutoSelectedMapItem],
+    [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
   /**
@@ -110,63 +114,52 @@ export const useAutoSelectMapItem = (
               ShmoBookingState.FINISHED
             ) {
               if (isShmoDeepIntegrationEnabled) {
-                openBottomSheet(
-                  () => (
-                    <FinishedScooterSheet
-                      bookingId={bottomSheetToAutoSelect.id}
-                      onClose={closeBottomSheet}
-                      navigateSupportCallback={(operatorId, bookingId) => {
-                        closeBottomSheet();
-                        navigation.navigate('Root_ScooterHelpScreen', {
-                          operatorId,
-                          bookingId,
-                        });
-                      }}
-                    />
-                  ),
-                  onCloseFocusRef,
-                  false,
-                  tabBarHeight,
+                BottomSheetComponent = (
+                  <FinishedScooterSheet
+                    bookingId={bottomSheetToAutoSelect.id}
+                    onClose={closeBottomSheet}
+                    navigateSupportCallback={(operatorId, bookingId) => {
+                      closeBottomSheet();
+                      navigation.navigate('Root_ScooterHelpScreen', {
+                        operatorId,
+                        bookingId,
+                      });
+                    }}
+                  />
                 );
               }
             } else {
-              openBottomSheet(
-                () => (
-                  <ScooterSheet
-                    vehicleId={bottomSheetToAutoSelect.id}
-                    onClose={closeBottomSheet}
-                    onVehicleReceived={flyToMapItemLocation}
-                    onReportParkingViolation={onReportParkingViolation}
-                    navigateSupportCallback={closeBottomSheet}
-                    navigation={navigation}
-                    loginCallback={() => {
-                      closeBottomSheet();
-                      if (hasReservationOrAvailableFareContract) {
-                        navigation.navigate(
-                          'Root_LoginAvailableFareContractWarningScreen',
-                          {},
-                        );
-                      } else if (enable_vipps_login) {
-                        navigation.navigate('Root_LoginOptionsScreen', {
-                          showGoBack: true,
-                          transitionOverride: 'slide-from-bottom',
-                        });
-                      } else {
-                        navigation.navigate('Root_LoginPhoneInputScreen', {});
-                      }
-                    }}
-                    startOnboardingCallback={() => {
-                      closeBottomSheet();
-                      navigation.navigate('Root_ShmoOnboardingScreen');
-                    }}
-                  />
-                ),
-                onCloseFocusRef,
-                false,
-                tabBarHeight,
+              BottomSheetComponent = (
+                <ScooterSheet
+                  vehicleId={bottomSheetToAutoSelect.id}
+                  onClose={closeBottomSheet}
+                  onVehicleReceived={flyToMapItemLocation}
+                  onReportParkingViolation={onReportParkingViolation}
+                  navigateSupportCallback={closeBottomSheet}
+                  navigation={navigation}
+                  loginCallback={() => {
+                    closeBottomSheet();
+                    if (hasReservationOrAvailableFareContract) {
+                      navigation.navigate(
+                        'Root_LoginAvailableFareContractWarningScreen',
+                        {},
+                      );
+                    } else if (enable_vipps_login) {
+                      navigation.navigate('Root_LoginOptionsScreen', {
+                        showGoBack: true,
+                        transitionOverride: 'slide-from-bottom',
+                      });
+                    } else {
+                      navigation.navigate('Root_LoginPhoneInputScreen', {});
+                    }
+                  }}
+                  startOnboardingCallback={() => {
+                    closeBottomSheet();
+                    navigation.navigate('Root_ShmoOnboardingScreen');
+                  }}
+                />
               );
             }
-
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (
@@ -200,7 +193,12 @@ export const useAutoSelectMapItem = (
         }
 
         if (!!BottomSheetComponent) {
-          openBottomSheet(() => BottomSheetComponent, onCloseFocusRef, false);
+          openBottomSheet(
+            () => BottomSheetComponent,
+            onCloseFocusRef,
+            false,
+            tabBarHeight,
+          );
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);

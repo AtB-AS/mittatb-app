@@ -45,11 +45,15 @@ export const useShmoActiveBottomSheet = (
           latitude: coordinates?.latitude ?? 0,
           longitude: coordinates?.longitude ?? 0,
         },
-        padding: SLIGHTLY_RAISED_MAP_PADDING,
+        padding: {
+          ...SLIGHTLY_RAISED_MAP_PADDING,
+          paddingBottom:
+            SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
+        },
         mapCameraRef,
         zoomLevel: 15,
       });
-  }, [mapCameraRef, getCurrentCoordinates]);
+  }, [getCurrentCoordinates, mapCameraRef, tabBarHeight]);
 
   useEffect(() => {
     if (!isFocused || !isShmoDeepIntegrationEnabled) return;

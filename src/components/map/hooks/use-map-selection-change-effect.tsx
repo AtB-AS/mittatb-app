@@ -48,7 +48,7 @@ export const useMapSelectionChangeEffect = (
 
   const closeCallback = useCallback(() => setMapSelectionAction(undefined), []);
 
-  useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
+  useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef, tabBarHeight);
   const {selectedFeature, onReportParkingViolation} =
     useUpdateBottomSheetWhenSelectedEntityChanges(
       mapProps,
