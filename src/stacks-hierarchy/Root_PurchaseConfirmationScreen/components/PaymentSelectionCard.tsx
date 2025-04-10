@@ -1,17 +1,15 @@
 import {ThemeText} from '@atb/components/text';
-
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType, PaymentType} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
-
-import {useFontScale} from '@atb/utils/use-font-scale';
 import {PaymentBrand} from './PaymentBrand';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type PaymentSelectionCardProps = {
   paymentMethod: PaymentMethod;
@@ -22,9 +20,7 @@ export const PaymentSelectionCard = ({
 }: PaymentSelectionCardProps) => {
   const paymentName = humanizePaymentType(paymentMethod.paymentType);
   const style = useStyles();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const fontScale = useFontScale();
   const multiplePaymentMethods = !(
     paymentMethod.recurringCard ||
     paymentMethod.paymentType === PaymentType.Vipps
@@ -60,11 +56,7 @@ export const PaymentSelectionCard = ({
       </View>
       <View style={style.actionButton}>
         <ThemeText>{t(PaymentMethodsTexts.editPaymentMethod)}</ThemeText>
-        <SvgEdit
-          height={21 * fontScale}
-          width={21 * fontScale}
-          fill={theme.color.foreground.dynamic.primary}
-        />
+        <ThemeIcon svg={SvgEdit} />
       </View>
     </View>
   );
