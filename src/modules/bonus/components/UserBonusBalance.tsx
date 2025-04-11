@@ -1,4 +1,4 @@
-import {TextNames, useThemeContext} from '@atb/theme';
+import {TextNames, Theme, useThemeContext} from '@atb/theme';
 import {ActivityIndicator} from 'react-native';
 import {useBonusBalanceQuery} from '..';
 import {ThemeText} from '@atb/components/text';
@@ -15,31 +15,36 @@ const TYPOGRAPHY_BONUS_BALANCE: Record<Props['size'], TextNames> = {
   large: 'body__primary--jumbo--bold',
 };
 
+const getColor = (theme: Theme, size: Props['size']) => {
+  const colorMap: Record<Props['size'], string> = {
+    small: theme.color.foreground.dynamic.secondary,
+    large: theme.color.foreground.dynamic.primary,
+  };
+  return colorMap[size];
+};
+
 export const UserBonusBalance = ({size}: Props) => {
   const {theme} = useThemeContext();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
+  const color = getColor(theme, size);
+
   return (
     <>
       {userBonusBalanceStatus === 'loading' ? (
         <ActivityIndicator />
       ) : (
-        <ThemeText
-          typography={TYPOGRAPHY_BONUS_BALANCE[size]}
-          color="secondary"
-        >
-          {isDefined(userBonusBalance) && !Number.isNaN(userBonusBalance)
+        <ThemeText typography={TYPOGRAPHY_BONUS_BALANCE[size]} color={color}>
+          {isDefined(userBonusBalance) &&
+          typeof userBonusBalance === 'number' &&
+          !Number.isNaN(userBonusBalance)
             ? userBonusBalance
             : '--'}
         </ThemeText>
       )}
-      <ThemeIcon
-        color={theme.color.foreground.dynamic.secondary}
-        svg={StarFill}
-        size={size}
-      />
+      <ThemeIcon color={color} svg={StarFill} size={size} />
     </>
   );
 };
