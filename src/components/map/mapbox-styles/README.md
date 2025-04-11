@@ -70,23 +70,19 @@ Note: `sprite` is dynamically added in `useMapboxJsonStyle`, instead of here.
 
 ## Sprites
 
-For icon changes, the sprite must be updated. Sprites can [easily be created with Martin Tile Server](https://maplibre.org/martin/sources-sprites.html). Just place the svgs with correct file names in folders `light` and `dark`, and host it. With this in the Martin tile config:
+For icon changes, check out the [map-sprites](https://github.com/AtB-AS/map-sprites) repo.
 
-```yaml
-sprites:
-  paths:
-    - /light
-    - /dark
-```
+Final sprite assets required:
 
-The sprite assets will then be available at:
-
-- `/sprite/light@2x.png`
-- `/sprite/light@2x.json`
-- `/sprite/light.png`
-- `/sprite/light.json`
+- `light@2x.png`
+- `light@2x.json`
+- `light.png`
+- `light.json`
   <br /><br />
-- `/sprite/dark@2x.png`
-- `/sprite/dark@2x.json`
-- `/sprite/dark.png`
-- `/sprite/dark.json`
+- `dark@2x.png`
+- `dark@2x.json`
+- `dark.png`
+- `dark.json`
+
+These should be statically hosted.
+To use the new sprites, update `mapboxSpriteUrl` in the [firestore-configuration](https://github.com/AtB-AS/firestore-configuration) repo.
