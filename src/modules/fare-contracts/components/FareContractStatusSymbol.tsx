@@ -3,9 +3,9 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {ValidityStatus} from '../utils';
-import {Ticket} from '@atb/assets/svg/color/images';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {Ticket as SentTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {ThemedTicket} from '@atb/theme/ThemedAssets';
 
 export const FareContractStatusSymbol = ({
   status,
@@ -39,7 +39,7 @@ export const FareContractStatusSymbol = ({
     case 'approved':
       return (
         <ThemeIcon
-          svg={Ticket}
+          svg={ThemedTicket}
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}

@@ -14,7 +14,7 @@ import {usePopOverContext} from '@atb/popover';
 import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
 import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
-import {TicketTilted} from '@atb/assets/svg/color/images';
+import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -120,7 +120,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
               TicketingTexts.availableFareProductsAndReservationsTab
                 .noActiveTicketsDetails,
             ),
-            illustrationComponent: <TicketTilted height={84} />,
+            illustrationComponent: <ThemedTicketTilted height={84} />,
           }}
         />
         <Section>

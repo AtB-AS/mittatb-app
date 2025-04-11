@@ -2,13 +2,13 @@ import {useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
 
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
-import {PushNotification} from '@atb/assets/svg/color/images';
 
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
 import {useNotificationsContext} from '@atb/modules/notifications';
+import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
 
 export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();
@@ -23,7 +23,7 @@ export const Root_NotificationPermissionScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<PushNotification height={220} />}
+      illustration={<ThemedPushNotification height={220} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}
       buttonText={t(NotificationPermissionTexts.button)}

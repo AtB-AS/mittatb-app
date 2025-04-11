@@ -8,12 +8,12 @@ import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Psst} from '@atb/assets/svg/color/illustrations';
-import {Ticket} from '@atb/assets/svg/color/images';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
+import {ThemedTicket} from '@atb/theme/ThemedAssets';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -81,7 +81,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
-        <Ticket style={styles.illustration} />
+        <ThemedTicket style={styles.illustration} />
         <View style={styles.buttonView}>
           <Button
             expanded={true}

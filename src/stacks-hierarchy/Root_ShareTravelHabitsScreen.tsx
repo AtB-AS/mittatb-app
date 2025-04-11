@@ -5,7 +5,6 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {Linking} from 'react-native';
-import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   OnboardingScreenComponent,
@@ -14,6 +13,7 @@ import {
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
 import {useAnalyticsContext} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
+import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
@@ -41,7 +41,7 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<Beacons height={132} />}
+      illustration={<ThemedBeacons height={132} />}
       title={t(ShareTravelHabitsTexts.title)}
       description={
         t(ShareTravelHabitsTexts.description.improvement) +

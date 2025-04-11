@@ -13,7 +13,6 @@ import {
 } from '@atb/ticket-history';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {useAuthContext} from '@atb/auth';
-import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getFareContractInfo} from '@atb/modules/fare-contracts';
@@ -22,6 +21,7 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
+import {ThemedHoldingHands, ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 type Props = TicketHistoryScreenParams & {
   onPressFareContract: (fareContractId: string) => void;
@@ -121,9 +121,9 @@ const getReservationsToShow = (
 const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
   switch (emptyStateMode) {
     case 'historical':
-      return <TicketTilted height={84} />;
+      return <ThemedTicketTilted height={84} />;
     case 'sent':
-      return <HoldingHands height={84} />;
+      return <ThemedHoldingHands height={84} />;
   }
 };
 

@@ -101,7 +101,9 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
               disabled={false}
               selected={selectedType === 'travel-card'}
-              icon={<ThemedTokenTravelCard />}
+              icon={
+                <ThemedTokenTravelCard height={100} style={{maxWidth: 100}} />
+              }
               type="spacious"
               onPress={() => {
                 animateNextChange();
@@ -121,7 +123,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.phone.a11yHint)}
             disabled={false}
             selected={selectedType === 'mobile'}
-            icon={<ThemedTokenPhone />}
+            icon={<ThemedTokenPhone height={100} style={{maxWidth: 100}} />}
             type="spacious"
             onPress={() => {
               if (selectedToken?.type !== 'mobile') {

@@ -1,5 +1,6 @@
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
+import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {SvgCssUri} from 'react-native-svg/css';
 
