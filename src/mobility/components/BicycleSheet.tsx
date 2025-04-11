@@ -20,7 +20,6 @@ import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
@@ -157,10 +156,9 @@ export const BicycleSheet = ({
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     container: {
       paddingHorizontal: theme.spacing.medium,
@@ -174,7 +172,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
     },
     operatorNameAndLogo: {
