@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType, PaymentType} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {PaymentBrand} from './PaymentBrand';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
@@ -18,10 +18,10 @@ type PaymentSelectionCardProps = SectionItemProps<{
   onPress(): void;
 }>;
 
-export const PaymentSelectionSectionItem = ({
-  paymentMethod,
-  ...props
-}: PaymentSelectionCardProps) => {
+export const PaymentSelectionSectionItem = forwardRef<
+  any,
+  PaymentSelectionCardProps
+>(({paymentMethod, ...props}, focusRef) => {
   const style = useStyles();
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
@@ -45,6 +45,7 @@ export const PaymentSelectionSectionItem = ({
   return (
     <PressableOpacity
       {...props}
+      ref={focusRef}
       accessibilityLabel={a11yLabel}
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
@@ -83,7 +84,7 @@ export const PaymentSelectionSectionItem = ({
       </View>
     </PressableOpacity>
   );
-};
+});
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   warningMessage: {

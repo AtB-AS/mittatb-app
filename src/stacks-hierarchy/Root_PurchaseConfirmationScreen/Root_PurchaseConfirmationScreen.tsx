@@ -297,6 +297,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             <PaymentSelectionSectionItem
               paymentMethod={paymentMethod}
               onPress={selectPaymentMethod}
+              ref={onCloseFocusRef}
             />
           </Section>
         )}
