@@ -8,13 +8,13 @@ import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
 // this will be updated with new paymentcard component being created
 // eslint-disable-next-line no-restricted-imports
-import {usePreviousPaymentMethods} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext.tsx';
+import {usePreviousPaymentMethods} from '@atb/modules/payment';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;

@@ -2,8 +2,11 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import React, {RefObject, useRef, useState} from 'react';
+import {
+  BottomSheetContainer,
+  useBottomSheetContext,
+} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -27,6 +30,13 @@ import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {Section} from '@atb/components/sections';
+import {
+  PaymentMethod,
+  PaymentSelectionSectionItem,
+  SelectPaymentMethodSheet,
+  usePreviousPaymentMethods,
+} from '@atb/modules/payment';
 
 type Props = {
   vehicleId: VehicleId;
@@ -37,6 +47,7 @@ type Props = {
   loginCallback: () => void;
   startOnboardingCallback: () => void;
   navigation: RootNavigationProps;
+  //openChangePayment: (vehicleId: string) => void;
 };
 
 export const ScooterSheet = ({
@@ -48,7 +59,8 @@ export const ScooterSheet = ({
   loginCallback,
   startOnboardingCallback,
   navigation,
-}: Props) => {
+}: //openChangePayment,
+Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -62,13 +74,44 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
+  const {mobilityOperators} = useOperators();
+  const operatorIsIntegrationEnabled = mobilityOperators?.find(
+    (e) => e.id === operatorId,
+  )?.isDeepIntegrationEnabled;
 
   const {isLoading: shmoReqIsLoading} = useShmoRequirements();
+  const {open: openBottomSheet, close: closeBottomSheet} =
+    useBottomSheetContext();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod>();
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const {recurringPaymentMethods} = usePreviousPaymentMethods();
+
+  const paymentMethod =
+    selectedPaymentMethod ??
+    recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
+
+  console.log('paymentMethod', paymentMethod);
+  async function selectPaymentMethod() {
+    openBottomSheet(() => {
+      return (
+        <SelectPaymentMethodSheet
+          recurringPaymentMethods={recurringPaymentMethods}
+          onSelect={(paymentMethod: PaymentMethod) => {
+            setSelectedPaymentMethod(paymentMethod);
+            closeBottomSheet();
+          }}
+          currentOptions={{
+            paymentMethod,
+          }}
+        />
+      );
+    }, onCloseFocusRef);
+  }
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
-  const {mobilityOperators} = useOperators();
 
   const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
@@ -102,12 +145,21 @@ export const ScooterSheet = ({
                 operatorName={operatorName}
                 brandLogoUrl={brandLogoUrl}
               />
+              {paymentMethod &&
+                isShmoDeepIntegrationEnabled &&
+                operatorIsIntegrationEnabled && (
+                  <Section style={{paddingHorizontal: theme.spacing.medium}}>
+                    <PaymentSelectionSectionItem
+                      paymentMethod={paymentMethod}
+                      onPress={selectPaymentMethod}
+                    />
+                  </Section>
+                )}
             </ScrollView>
             <View style={styles.footer}>
               {isShmoDeepIntegrationEnabled &&
               operatorId &&
-              mobilityOperators?.find((e) => e.id === operatorId)
-                ?.isDeepIntegrationEnabled ? (
+              operatorIsIntegrationEnabled ? (
                 <View style={styles.actionWrapper}>
                   <ShmoActionButton
                     onLogin={loginCallback}

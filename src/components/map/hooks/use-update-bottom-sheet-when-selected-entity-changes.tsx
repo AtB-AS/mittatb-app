@@ -35,6 +35,8 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
+//import {PaymentMethod, SelectPaymentMethodSheet} from '@atb/modules/payment';
+
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
  * close the bottom sheet when navigating to other places, but it will be
@@ -196,6 +198,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           () => {
             return (
               <ScooterSheet
+                /*openChangePayment={(vehicleId) => {
+                  selectPaymentMethod(vehicleId);
+                }}*/
                 vehicleId={selectedFeature?.properties?.id}
                 onClose={closeCallback}
                 onReportParkingViolation={onReportParkingViolation}

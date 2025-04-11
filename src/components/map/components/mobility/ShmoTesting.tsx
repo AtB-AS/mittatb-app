@@ -12,7 +12,7 @@ import {useInitShmoOneStopBookingMutation} from '@atb/mobility/queries/use-init-
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query';
 // eslint-disable-next-line no-restricted-imports
-import {usePreviousPaymentMethods} from '@atb/stacks-hierarchy/saved-payment-utils';
+import {usePreviousPaymentMethods} from '@atb/modules/payment/saved-payment-utils';
 import {useCallback, useState} from 'react';
 import {TextInput, useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';

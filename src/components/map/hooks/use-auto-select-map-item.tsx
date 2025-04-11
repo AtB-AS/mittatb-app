@@ -69,6 +69,23 @@ export const useAutoSelectMapItem = (
     setBottomSheetToAutoSelect,
   ]);
 
+  /*async function selectPaymentMethod() {
+    openBottomSheet(() => {
+      return (
+        <SelectPaymentMethodSheet
+          recurringPaymentMethods={recurringPaymentMethods}
+          onSelect={(paymentMethod: PaymentMethod) => {
+            setSelectedPaymentMethod(paymentMethod);
+            closeBottomSheet();
+          }}
+          currentOptions={{
+            paymentMethod,
+          }}
+        />
+      );
+    }, onCloseFocusRef);
+  }*/
+
   const flyToMapItemLocation = useCallback(
     (mapItem: AutoSelectableMapItem) => {
       setAutoSelectedMapItem(mapItem);

@@ -8,23 +8,24 @@ import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {PaymentBrand} from './PaymentBrand';
+import {PaymentBrand} from '../../stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {Checkbox} from '@atb/components/checkbox';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {
-  CardPaymentMethod,
-  PaymentMethod,
-  PaymentSelection,
-  SavedPaymentMethodType,
-  VippsPaymentMethod,
-} from '@atb/stacks-hierarchy/types';
+
 import {useAuthContext} from '@atb/auth';
 import {PaymentType, humanizePaymentType} from '@atb/ticketing';
 import {RadioIcon, getRadioA11y} from '@atb/components/radio';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
 import {ScrollView} from 'react-native-gesture-handler';
+import {
+  CardPaymentMethod,
+  PaymentMethod,
+  PaymentSelection,
+  SavedPaymentMethodType,
+  VippsPaymentMethod,
+} from './types';
 
 type Props = {
   onSelect: (

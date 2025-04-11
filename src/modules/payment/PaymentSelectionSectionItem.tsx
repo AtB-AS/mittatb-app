@@ -3,15 +3,15 @@ import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType, PaymentType} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
-import {PaymentBrand} from './PaymentBrand';
+import {PaymentBrand} from '../../stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {PaymentMethod} from './types';
 
 type PaymentSelectionCardProps = SectionItemProps<{
   paymentMethod: PaymentMethod;
