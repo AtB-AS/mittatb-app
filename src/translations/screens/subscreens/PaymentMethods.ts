@@ -41,12 +41,24 @@ const PaymentMethodsTexts = {
         `Activate to remove ${paymentName} ending in ${masked_pan}`,
         `Aktiver for å fjerne ${paymentName} som sluttar på ${masked_pan}`,
       ),
-    editCardIcon: (paymentName: string, masked_pan: string) =>
+    editCard: (paymentName: string) =>
       _(
-        `Aktiver for å redigere betalingsmetode ${paymentName} som slutter på ${masked_pan}`,
-        `Activate to edit payment method ${paymentName} ending in ${masked_pan}`,
-        `Aktiver for å endre betalingsmåte ${paymentName} som sluttar på ${masked_pan}`,
+        `Betalingsmetode ${paymentName}.`,
+        `Payment method ${paymentName}.`,
+        `Betalingsmåte ${paymentName}.`,
       ),
+    editCardWithMaskedPan: (paymentName: string, masked_pan: string) =>
+      _(
+        `Betalingsmetode ${paymentName} som slutter på ${masked_pan}.`,
+        `Payment method ${paymentName} ending in ${masked_pan}.`,
+        `Betalingsmåte ${paymentName} som sluttar på ${masked_pan}.`,
+      ),
+    editCardHint: _(
+      'Aktiver for å endre betalingsmetode',
+      'Activate to edit payment method',
+      'Aktiver for å endre betalingsmåte',
+    ),
+    paymentCard: _('betalingskort', 'payment card', 'betalingskort'),
   },
   addPaymentMethod: _(
     'Legg til betalingskort',

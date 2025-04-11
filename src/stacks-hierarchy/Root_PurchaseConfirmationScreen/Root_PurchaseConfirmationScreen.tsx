@@ -44,9 +44,9 @@ import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
-import {PaymentSelectionCard} from './components/PaymentSelectionCard';
+import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -294,12 +294,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         )}
         {paymentMethod && (
           <Section>
-            <GenericSectionItem>
-              <PaymentSelectionCard
-                paymentMethod={paymentMethod}
-                startAction={selectPaymentMethod}
-              />
-            </GenericSectionItem>
+            <PaymentSelectionSectionItem
+              paymentMethod={paymentMethod}
+              onPress={selectPaymentMethod}
+            />
           </Section>
         )}
         {isSearchingOffer ? (
