@@ -8,7 +8,6 @@ import {
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -112,16 +111,15 @@ export const FinishedScooterSheet = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     container: {
       marginBottom: theme.spacing.medium,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
       gap: theme.spacing.medium,
     },

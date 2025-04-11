@@ -38,6 +38,7 @@ export type AutoSelectableMapItem =
 export const useAutoSelectMapItem = (
   mapCameraRef: React.RefObject<CameraRef | null>,
   onReportParkingViolation: () => void,
+  tabBarHeight?: number,
 ) => {
   const {
     bottomSheetToAutoSelect,
@@ -84,13 +85,17 @@ export const useAutoSelectMapItem = (
               latitude: mapItem.lat,
               longitude: mapItem.lon,
             },
-            padding: SLIGHTLY_RAISED_MAP_PADDING,
+            padding: {
+              ...SLIGHTLY_RAISED_MAP_PADDING,
+              paddingBottom:
+                SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
+            },
             mapCameraRef,
             zoomLevel: 19, // no clustering at this zoom level
           });
       });
     },
-    [mapCameraRef, setAutoSelectedMapItem],
+    [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
   /**
@@ -155,7 +160,6 @@ export const useAutoSelectMapItem = (
                 />
               );
             }
-
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (
@@ -189,7 +193,12 @@ export const useAutoSelectMapItem = (
         }
 
         if (!!BottomSheetComponent) {
-          openBottomSheet(() => BottomSheetComponent, onCloseFocusRef, false);
+          openBottomSheet(
+            () => BottomSheetComponent,
+            onCloseFocusRef,
+            false,
+            tabBarHeight,
+          );
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);
@@ -212,5 +221,6 @@ export const useAutoSelectMapItem = (
     hasReservationOrAvailableFareContract,
     close,
     isShmoDeepIntegrationEnabled,
+    tabBarHeight,
   ]);
 };

@@ -6,7 +6,6 @@ import {StyleSheet} from '@atb/theme';
 import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   NavigateToTripSearchCallback,
   ParkingType,
@@ -129,11 +128,10 @@ export const ParkAndRideBottomSheet = ({
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     buttonsContainer: {
       paddingHorizontal: theme.spacing.medium,

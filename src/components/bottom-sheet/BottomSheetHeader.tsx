@@ -13,6 +13,7 @@ type BottomSheetHeaderWithoutNavigationProps = {
   onClose?: () => void;
   focusTitleOnLoad: boolean;
   disableClose?: boolean;
+  disableHeader?: boolean;
 };
 
 export const BottomSheetHeader = ({
@@ -20,6 +21,7 @@ export const BottomSheetHeader = ({
   onClose,
   focusTitleOnLoad,
   disableClose = false,
+  disableHeader = false,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -41,6 +43,9 @@ export const BottomSheetHeader = ({
     foreground: {primary: textColor},
   } = themeColor.default;
 
+  if (disableHeader) {
+    return <View style={styles.headerBar} />;
+  }
   return (
     <View style={styles.container}>
       {/*Placeholder to center the title correctly*/}
@@ -91,7 +96,15 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       padding: theme.spacing.small,
       borderRadius: 100,
     },
-
+    headerBar: {
+      width: 75,
+      height: theme.spacing.small,
+      alignSelf: 'center',
+      borderRadius: theme.border.radius.large,
+      marginTop: theme.spacing.xSmall,
+      marginBottom: theme.spacing.medium,
+      backgroundColor: theme.color.background.neutral[3].background,
+    },
     headerTitle: {alignItems: 'center', flex: 1},
   };
 });

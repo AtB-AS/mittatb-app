@@ -7,7 +7,6 @@ import {Button} from '@atb/components/button';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type ExternalRealtimeMapLinkSheetProps = {
@@ -52,12 +51,11 @@ export const ExternalRealtimeMapSheet = ({
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     container: {
       backgroundColor: theme.color.background.neutral[1].background,
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     contentContainer: {
       rowGap: theme.spacing.medium,

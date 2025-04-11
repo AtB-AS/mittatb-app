@@ -25,6 +25,7 @@ export const useMapSelectionChangeEffect = (
   startingCoordinates: Coordinates,
   disableShouldShowMapLines?: boolean,
   disableShouldZoomToFeature?: boolean,
+  tabBarHeight?: number,
 ) => {
   const [mapSelectionAction, setMapSelectionAction] = useState<
     MapSelectionActionType | undefined
@@ -47,7 +48,7 @@ export const useMapSelectionChangeEffect = (
 
   const closeCallback = useCallback(() => setMapSelectionAction(undefined), []);
 
-  useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
+  useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef, tabBarHeight);
   const {selectedFeature, onReportParkingViolation} =
     useUpdateBottomSheetWhenSelectedEntityChanges(
       mapProps,
@@ -55,6 +56,7 @@ export const useMapSelectionChangeEffect = (
       mapSelectionAction,
       mapViewRef,
       closeCallback,
+      tabBarHeight,
     );
 
   const onMapClick = useCallback(

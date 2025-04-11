@@ -16,7 +16,6 @@ import {
   CarAvailabilityFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
@@ -145,10 +144,9 @@ export const CarSharingStationBottomSheet = ({
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
@@ -165,7 +163,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
     },
     icon: {
