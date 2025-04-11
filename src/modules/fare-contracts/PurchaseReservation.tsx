@@ -8,7 +8,6 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {WithValidityLine} from './components/WithValidityLine';
 import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -44,57 +43,55 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
 
   const paymentType = PaymentType[reservation.paymentType];
   return (
-    <PressableOpacity accessible={false} importantForAccessibility="no">
-      <Section>
-        <GenericSectionItem style={{paddingVertical: 0}}>
-          <WithValidityLine
-            reservation={reservation}
-            enabledLine={status !== 'rejected'}
-          >
-            <ThemeText typography="heading--medium" style={styles.statusText}>
-              {t(TicketingTexts.reservation[status])}
-            </ThemeText>
-          </WithValidityLine>
-        </GenericSectionItem>
-        <GenericSectionItem accessibility={{accessible: true}}>
-          {status == 'rejected' && (
-            <ThemeText typography="body__secondary" color="secondary">
-              {t(
-                TicketingTexts.reservation.orderDate(
-                  formatToLongDateTime(
-                    fromUnixTime(reservation.created.getTime() / 1000),
-                    language,
-                  ),
+    <Section>
+      <GenericSectionItem style={{paddingVertical: 0}}>
+        <WithValidityLine
+          reservation={reservation}
+          enabledLine={status !== 'rejected'}
+        >
+          <ThemeText typography="heading--medium" style={styles.statusText}>
+            {t(TicketingTexts.reservation[status])}
+          </ThemeText>
+        </WithValidityLine>
+      </GenericSectionItem>
+      <GenericSectionItem accessibility={{accessible: true}}>
+        {status == 'rejected' && (
+          <ThemeText typography="body__secondary" color="secondary">
+            {t(
+              TicketingTexts.reservation.orderDate(
+                formatToLongDateTime(
+                  fromUnixTime(reservation.created.getTime() / 1000),
+                  language,
                 ),
-              )}
-            </ThemeText>
-          )}
-          <ThemeText
-            typography="body__secondary"
-            color="secondary"
-            style={styles.detail}
-          >
-            {t(TicketingTexts.reservation.paymentMethod(paymentType))}
-          </ThemeText>
-          <ThemeText style={styles.detail}>
-            {t(TicketingTexts.reservation.orderId(reservation.orderId))}
-          </ThemeText>
-          {reservation.paymentType === PaymentType.Vipps &&
-            status === 'reserving' && (
-              <View style={styles.vippsLinkContainer}>
-                <Button
-                  expanded={true}
-                  onPress={() => openVippsUrl(reservation.url)}
-                  accessibilityRole="link"
-                  text={t(TicketingTexts.reservation.goToVipps)}
-                  mode="tertiary"
-                  backgroundColor={theme.color.background.neutral[0]}
-                />
-              </View>
+              ),
             )}
-        </GenericSectionItem>
-      </Section>
-    </PressableOpacity>
+          </ThemeText>
+        )}
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          style={styles.detail}
+        >
+          {t(TicketingTexts.reservation.paymentMethod(paymentType))}
+        </ThemeText>
+        <ThemeText style={styles.detail}>
+          {t(TicketingTexts.reservation.orderId(reservation.orderId))}
+        </ThemeText>
+        {reservation.paymentType === PaymentType.Vipps &&
+          status === 'reserving' && (
+            <View style={styles.vippsLinkContainer}>
+              <Button
+                expanded={true}
+                onPress={() => openVippsUrl(reservation.url)}
+                accessibilityRole="link"
+                text={t(TicketingTexts.reservation.goToVipps)}
+                mode="tertiary"
+                backgroundColor={theme.color.background.neutral[0]}
+              />
+            </View>
+          )}
+      </GenericSectionItem>
+    </Section>
   );
 };
 

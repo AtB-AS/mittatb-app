@@ -3,14 +3,17 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
+import {
+  PurchaseReservation,
+  useOtherDeviceIsInspectableWarning,
+} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {PaymentType, ReserveOffer} from '@atb/ticketing';
+import {PaymentType, ReserveOffer, useTicketingContext} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,
@@ -47,6 +50,7 @@ import {useAuthContext} from '@atb/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
+import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -65,6 +69,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
   const analytics = useAnalyticsContext();
+  const {reservations} = useTicketingContext();
 
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -112,6 +117,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     shouldSavePaymentMethod,
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
+
+  const reservation = reservations.find(
+    (r) => r.orderId === reserveMutation.data?.order_id,
+  );
+  const reservationIsPending =
+    reservation &&
+    reservation.paymentStatus !== 'REJECT' &&
+    reservation.paymentStatus !== 'CANCEL';
 
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
@@ -244,6 +257,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             style={styles.errorMessage}
           />
         )}
+        {reservation && <PurchaseReservation reservation={reservation} />}
         <PreassignedFareContractSummary
           fareProductTypeConfig={selection.fareProductTypeConfig}
           fromPlace={selection.zones?.from || selection.stopPlaces?.from}
@@ -316,7 +330,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     PurchaseConfirmationTexts.payTotal.text(totalPriceString),
                   )}
                   interactiveColor={interactiveColor}
-                  disabled={!!offerError}
+                  disabled={!!offerError || reservationIsPending}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -352,6 +366,21 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             )}
           </View>
         )}
+        {reserveMutation.data && reservationIsPending && (
+          <Button
+            expanded={true}
+            text="Cancel payment"
+            mode="primary"
+            rightIcon={{svg: SvgClose}}
+            interactiveColor={theme.color.interactive.destructive}
+            onPress={() => {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+            }}
+            accessibilityHint={t(
+              PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
+            )}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -366,14 +395,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginVertical: theme.spacing.medium,
   },
-  errorMessage: {
-    marginBottom: theme.spacing.medium,
+  errorMessage: {},
+  warningMessage: {},
+  infoSection: {
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
-  warningMessage: {
-    marginBottom: theme.spacing.medium,
-  },
-  infoSection: {padding: theme.spacing.medium},
-  purchaseInformation: {
-    marginBottom: theme.spacing.medium,
-  },
+  purchaseInformation: {},
 }));
