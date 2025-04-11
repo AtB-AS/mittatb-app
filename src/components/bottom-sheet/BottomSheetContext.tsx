@@ -165,7 +165,7 @@ const BottomSheetOnBackDrop = ({
         easing: Easing.out(Easing.exp),
         useNativeDriver: true,
       }).start(),
-    [animatedOffset, isOpen, tabBarHeight],
+    [animatedOffset, isOpen],
   );
 
   return (
