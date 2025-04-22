@@ -17,6 +17,7 @@ import {
   DestinationDisplay,
   Mode,
   TariffZone,
+  TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, Language, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
@@ -506,4 +507,17 @@ export function getLineAndTimeA11yLabel(
   ]
     .filter(isDefined)
     .join(screenReaderPause);
+}
+
+export function getNonFreeLegs(legs: Leg[]) {
+  return legs.filter((leg) => !isFreeLeg(leg));
+}
+export function isFreeLeg(leg: Leg) {
+  return (
+    leg.mode === Mode.Foot ||
+    leg.mode === Mode.Bicycle ||
+    // Ferry trips are free for travellers without a car
+    leg.transportSubmode === TransportSubmode.LocalCarFerry ||
+    leg.transportSubmode === TransportSubmode.LocalPassengerFerry
+  );
 }
