@@ -8,7 +8,7 @@ import {
   CarSharingStationBottomSheet,
   ScooterSheet,
 } from '@atb/mobility';
-import {flyToLocation} from '../utils';
+import {flyToLocation, getTabBarPaddingBottom} from '../utils';
 
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
@@ -16,7 +16,6 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
@@ -85,11 +84,7 @@ export const useAutoSelectMapItem = (
               latitude: mapItem.lat,
               longitude: mapItem.lon,
             },
-            padding: {
-              ...SLIGHTLY_RAISED_MAP_PADDING,
-              paddingBottom:
-                SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
-            },
+            padding: getTabBarPaddingBottom(tabBarHeight),
             mapCameraRef,
             zoomLevel: 19, // no clustering at this zoom level
           });

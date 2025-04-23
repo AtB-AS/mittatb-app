@@ -8,7 +8,7 @@ import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -25,6 +25,7 @@ import {
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
+  getTabBarPaddingBottom,
 } from './utils';
 import {
   GeofencingZones,
@@ -223,11 +224,7 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: {
-            ...SLIGHTLY_RAISED_MAP_PADDING,
-            paddingBottom:
-              SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + tabBarHeight,
-          },
+          padding: getTabBarPaddingBottom(tabBarHeight),
 
           mapCameraRef,
           zoomLevel: toZoomLevel,

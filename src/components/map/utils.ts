@@ -24,6 +24,7 @@ import {
 } from '@atb/api/types/mobility';
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
+import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -173,6 +174,17 @@ export function flyToLocation({
       animationMode,
       animationDuration: animationDuration ?? 750,
     });
+}
+
+export function getTabBarPaddingBottom(tabBarHeight: number | undefined) {
+  if (tabBarHeight) {
+    return {
+      ...SLIGHTLY_RAISED_MAP_PADDING,
+      paddingBottom: SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + tabBarHeight,
+    };
+  } else {
+    return SLIGHTLY_RAISED_MAP_PADDING;
+  }
 }
 
 export const toFeaturePoint = <

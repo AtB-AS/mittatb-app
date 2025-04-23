@@ -5,10 +5,14 @@ import MapboxGL from '@rnmapbox/maps';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
-import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
+import {
+  fitBounds,
+  flyToLocation,
+  getTabBarPaddingBottom,
+  mapPositionToCoordinates,
+} from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, Platform, StatusBar} from 'react-native';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 
 type BoundingBox = {
   xMin: number;
@@ -119,11 +123,7 @@ const moveCameraToEntity = (
   if (!padding) {
     flyToLocation({
       coordinates,
-      padding: {
-        ...SLIGHTLY_RAISED_MAP_PADDING,
-        paddingBottom:
-          SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + (tabBarHeight ?? 0),
-      },
+      padding: getTabBarPaddingBottom(tabBarHeight),
       mapCameraRef,
       animationMode: 'easeTo',
     });
