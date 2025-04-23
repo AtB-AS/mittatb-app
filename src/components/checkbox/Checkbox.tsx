@@ -1,8 +1,8 @@
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {StyleSheet} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
-import SvgCheckboxChecked from '@atb/assets/svg/color/icons/input/CheckboxChecked';
 
 type CheckedProps = {
   checked: boolean;
@@ -21,31 +21,35 @@ export const Checkbox: React.FC<CheckedProps> = ({
   testID,
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   return (
     <View
       accessibilityRole="checkbox"
       accessibilityState={{selected: checked}}
       {...accessibility}
-      style={[style, styles.saveCheckbox, styles.saveCheckboxDefault]}
+      style={[
+        style,
+        styles.saveCheckbox,
+        checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,
+      ]}
       testID={testID ? `${testID}Checkbox` : 'checkbox'}
     >
-      {checked ? (
-        <SvgCheckboxChecked fill="white" width={theme.icon.size.normal} />
-      ) : null}
+      {checked ? <Confirm fill="white" /> : null}
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveCheckbox: {
-    height: theme.spacing.large,
-    width: theme.spacing.large,
+    height: theme.icon.size.normal,
+    width: theme.icon.size.normal,
     borderRadius: theme.border.radius.small,
     borderWidth: theme.border.width.medium,
     borderColor: getCheckedColor(theme).background,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  saveCheckboxChecked: {
+    backgroundColor: getCheckedColor(theme).background,
   },
   saveCheckboxDefault: {
     backgroundColor: getDefaultColor(theme).background,

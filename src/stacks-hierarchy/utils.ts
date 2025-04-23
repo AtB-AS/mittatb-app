@@ -8,7 +8,6 @@ import {
 } from '@atb/tariff-zones-selector';
 import {useMemo} from 'react';
 
-//Will be used for saved payment method notifications/card expiration messages after backend implementation
 export function getExpireDate(iso: string): string {
   const date = parseISO(iso);
   // Subtract one day to get the correct expiry date
@@ -16,7 +15,7 @@ export function getExpireDate(iso: string): string {
   // and the date that shows on the card is the month before the card expires
   // Example: The card expires the moment the date is 02.2021, but the date on the card is 01.2021
   date.setDate(date.getDate() - 1);
-  return format(date, 'dd.MM.yy');
+  return format(date, 'MM/yy');
 }
 
 export function translateErrorType(

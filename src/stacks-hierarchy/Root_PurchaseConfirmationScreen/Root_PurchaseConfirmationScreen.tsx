@@ -1,8 +1,16 @@
 import {useAnalyticsContext} from '@atb/analytics';
+import {
+  Amex,
+  MasterCard,
+  Vipps,
+  Visa,
+} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {ThemeText} from '@atb/components/text';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
@@ -44,9 +52,6 @@ import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
-import {Section} from '@atb/components/sections';
-import {formatNumberToString} from '@atb/utils/numbers';
-import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -56,7 +61,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {userId} = useAuthContext();
 
   const interactiveColor = theme.color.interactive[0];
@@ -103,7 +108,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offer_id,
     }),
   );
-  const totalPriceString = formatNumberToString(totalPrice, language);
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -185,6 +189,28 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         reserveMutation.mutate();
       }
     }
+  }
+
+  function getPaymentMethodTexts(method: PaymentMethod): string {
+    let str;
+    switch (method.paymentType) {
+      case PaymentType.Vipps:
+        str = t(PurchaseConfirmationTexts.payWithVipps.text);
+        break;
+      case PaymentType.Visa:
+        str = t(PurchaseConfirmationTexts.payWithVisa.text);
+        break;
+      case PaymentType.Mastercard:
+        str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
+        break;
+      case PaymentType.Amex:
+        str = t(PurchaseConfirmationTexts.payWithAmex.text);
+        break;
+    }
+    if (method.recurringCard) {
+      str = str + ` (**** ${method.recurringCard.masked_pan})`;
+    }
+    return str;
   }
 
   async function selectPaymentMethod() {
@@ -292,14 +318,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {paymentMethod && (
-          <Section>
-            <PaymentSelectionSectionItem
-              paymentMethod={paymentMethod}
-              onPress={selectPaymentMethod}
-            />
-          </Section>
-        )}
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -312,11 +330,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               <View style={styles.flexColumn}>
                 <Button
                   expanded={true}
-                  text={t(
-                    PurchaseConfirmationTexts.payTotal.text(totalPriceString),
-                  )}
+                  text={getPaymentMethodTexts(paymentMethod)}
                   interactiveColor={interactiveColor}
                   disabled={!!offerError}
+                  rightIcon={{
+                    svg: getPaymentTypeSvg(paymentMethod.paymentType),
+                  }}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -330,6 +349,31 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   }}
                   loading={reserveMutation.isLoading}
                 />
+                <PressableOpacity
+                  style={styles.buttonTopSpacing}
+                  disabled={!!offerError}
+                  onPress={() => {
+                    analytics.logEvent(
+                      'Ticketing',
+                      'Change payment method clicked',
+                      {
+                        paymentMethod: paymentMethod?.paymentType,
+                        mode: params.mode,
+                      },
+                    );
+                    selectPaymentMethod();
+                  }}
+                  accessibilityHint={t(
+                    PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
+                  )}
+                  ref={onCloseFocusRef}
+                >
+                  <View style={styles.flexRowCenter}>
+                    <ThemeText typography="body__primary--bold">
+                      {t(PurchaseConfirmationTexts.changePaymentMethod.text)}
+                    </ThemeText>
+                  </View>
+                </PressableOpacity>
               </View>
             ) : (
               <Button
@@ -357,6 +401,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 };
 
+function getPaymentTypeSvg(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Mastercard:
+      return MasterCard;
+    case PaymentType.Vipps:
+      return Vipps;
+    case PaymentType.Visa:
+      return Visa;
+    case PaymentType.Amex:
+      return Amex;
+  }
+}
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
@@ -364,7 +421,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   flexColumn: {
     flex: 1,
-    marginVertical: theme.spacing.medium,
+    flexDirection: 'column',
+  },
+  flexRowCenter: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonTopSpacing: {
+    marginTop: theme.spacing.xLarge,
   },
   errorMessage: {
     marginBottom: theme.spacing.medium,

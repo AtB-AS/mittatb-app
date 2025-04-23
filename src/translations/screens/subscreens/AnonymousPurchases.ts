@@ -89,11 +89,6 @@ const AnonymousPurchases = {
         ),
       },
     },
-    select_payment_method: _(
-      'Logg inn for å lagre kort for fremtidige kjøp',
-      'Log in to save cards for future purchases',
-      'Logg inn for å lagra kort for framtidige kjøp',
-    ),
   },
   unknown_error: _(
     'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',

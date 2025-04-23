@@ -131,8 +131,6 @@ export const saveLastUsedRecurringPaymentOrType = async (
     });
   } else {
     try {
-      // Brief delay to display previous payment method immediately after adding a new card
-      await new Promise((resolve) => setTimeout(resolve, 3000));
       const recurringPaymentCards = await listRecurringPayments();
       const card = recurringPaymentCards.find((c) => {
         return c.id === recurringPaymentId;

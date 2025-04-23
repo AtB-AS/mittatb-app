@@ -131,17 +131,6 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje dette kortet',
     ),
   },
-
-  paymentWithMultiplePaymentMethods: {
-    a11yLabel: (brands: string) =>
-      _(`Betal med ${brands}`, `Pay with ${brands}`, `Betal med $${brands}`),
-    a11Hint: _(
-      'Aktivér for velge disse betalingsmåtene',
-      'Activate to select these payment methods',
-      'Aktivér for å velje desse betalingsmåtane',
-    ),
-  },
-
   choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
     a11yHint: _(
@@ -162,12 +151,26 @@ const PurchaseConfirmationTexts = {
       'Aktiver for å endre betalingsmåte',
     ),
   },
-
-  payTotal: {
-    text: (total: string) =>
-      _(`Betal ${total} kr`, `Pay ${total} kr`, `Betal ${total} kr`),
+  payWithVipps: {
+    text: _('Betal med Vipps', 'Pay with Vipps', 'Betale med Vipps'),
   },
-
+  payWithVisa: {
+    text: _('Betal med Visa', 'Pay with Visa', 'Betale med Visa'),
+  },
+  payWithMasterCard: {
+    text: _(
+      'Betal med MasterCard',
+      'Pay with MasterCard',
+      'Betal med MasterCard',
+    ),
+  },
+  payWithAmex: {
+    text: _(
+      'Betal med American Express',
+      'Pay with American Express',
+      'Betal med American Express',
+    ),
+  },
   ordinaryPricePrefix: _(`Ord. pris`, `Ord. price`, `Ord. pris`),
   ordinaryPricePrefixA11yLabel: _(
     `Ordinær pris`,
