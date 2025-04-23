@@ -10,7 +10,7 @@ export const SCOOTERS_MAX_ZOOM_LEVEL = 22;
 export const SCOOTERS_CLUSTER_RADIUS = 40;
 
 const {height: screenHeight} = Dimensions.get('screen');
-const basePadding = screenHeight * 0.1;
+const basePadding = screenHeight * 0.2;
 
 export const SLIGHTLY_RAISED_MAP_PADDING = {
   paddingTop: basePadding,

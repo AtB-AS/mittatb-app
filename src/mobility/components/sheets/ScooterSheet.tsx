@@ -13,7 +13,6 @@ import {
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
@@ -70,8 +69,11 @@ export const ScooterSheet = ({
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
   const {mobilityOperators} = useOperators();
 
-  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isParkingViolationsReportingEnabled,
+    isShmoDeepIntegrationEnabled,
+    isMapV2Enabled,
+  } = useFeatureTogglesContext();
 
   return (
     <BottomSheetContainer
@@ -105,6 +107,7 @@ export const ScooterSheet = ({
             </ScrollView>
             <View style={styles.footer}>
               {isShmoDeepIntegrationEnabled &&
+              isMapV2Enabled &&
               operatorId &&
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
@@ -170,10 +173,9 @@ export const ScooterSheet = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
@@ -185,7 +187,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       gap: theme.spacing.medium,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
     },
     parkingViolationsButton: {

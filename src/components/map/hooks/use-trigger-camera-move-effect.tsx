@@ -5,10 +5,14 @@ import MapboxGL from '@rnmapbox/maps';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
-import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
+import {
+  fitBounds,
+  flyToLocation,
+  getMapPadding,
+  mapPositionToCoordinates,
+} from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, Platform, StatusBar} from 'react-native';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 
 type BoundingBox = {
   xMin: number;
@@ -29,6 +33,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  tabBarHeight?: number,
 ) => {
   const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
@@ -55,6 +60,7 @@ export const useTriggerCameraMoveEffect = (
         cameraFocusMode.entityFeature,
         cameraFocusMode.zoomTo ? padding : undefined,
         mapCameraRef,
+        tabBarHeight,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,6 +115,7 @@ const moveCameraToEntity = (
   entityFeature: Feature<Point>,
   padding: MapPadding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  tabBarHeight?: number,
 ) => {
   const coordinates = mapPositionToCoordinates(
     entityFeature.geometry.coordinates,
@@ -116,7 +123,7 @@ const moveCameraToEntity = (
   if (!padding) {
     flyToLocation({
       coordinates,
-      padding: SLIGHTLY_RAISED_MAP_PADDING,
+      padding: getMapPadding(tabBarHeight),
       mapCameraRef,
       animationMode: 'easeTo',
     });

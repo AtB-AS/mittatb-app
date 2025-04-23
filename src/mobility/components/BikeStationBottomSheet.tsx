@@ -11,7 +11,6 @@ import {StyleSheet} from '@atb/theme';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
@@ -184,10 +183,9 @@ export const BikeStationBottomSheet = ({
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
@@ -206,7 +204,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginTop: theme.spacing.small,
     },
     footer: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
     },
     mobilityStatContainer: {

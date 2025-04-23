@@ -15,7 +15,6 @@ import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MobilityFilters} from '@atb/mobility/components/filter/MobilityFilters';
 
 type MapFilterSheetProps = {
@@ -86,10 +85,9 @@ export const MapFilterSheet = ({
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: theme.spacing.medium,
     },
     container: {
       marginHorizontal: theme.spacing.medium,
