@@ -1,6 +1,12 @@
-import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
+import {
+  Animated,
+  LayoutChangeEvent,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
+import {shadows} from '../map';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -8,9 +14,11 @@ export function AnimatedBottomSheet({
   animatedOffset,
   children,
   onLayout,
+  bottomOffset = 0,
 }: {
   animatedOffset: Animated.Value;
   children: ReactNode;
+  bottomOffset?: number;
   onLayout: (ev: LayoutChangeEvent) => void;
 }) {
   const styles = useStyles();
@@ -19,25 +27,35 @@ export function AnimatedBottomSheet({
     () =>
       animatedOffset.interpolate({
         inputRange: [0, 1],
-        outputRange: [windowHeight, 0],
+        outputRange: [windowHeight + bottomOffset, 0],
+        extrapolate: 'clamp',
       }),
-    [animatedOffset, windowHeight],
+    [animatedOffset, bottomOffset, windowHeight],
   );
   return (
-    <Animated.View
+    <View
       style={{
-        ...styles.bottomSheet,
-        transform: [
-          {
-            translateY,
-          },
-        ],
-        maxHeight: windowHeight,
+        position: 'absolute',
+        bottom: bottomOffset,
+        left: 0,
+        right: 0,
+        height: windowHeight,
+        overflow: 'hidden',
+        pointerEvents: 'box-none',
       }}
-      onLayout={onLayout}
     >
-      {children}
-    </Animated.View>
+      <Animated.View
+        style={{
+          ...styles.bottomSheet,
+          transform: [{translateY}],
+          maxHeight: windowHeight,
+          ...shadows,
+        }}
+        onLayout={onLayout}
+      >
+        {children}
+      </Animated.View>
+    </View>
   );
 }
 

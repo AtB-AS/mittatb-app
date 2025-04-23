@@ -8,7 +8,7 @@ import {
   CarSharingStationBottomSheet,
   ScooterSheet,
 } from '@atb/mobility';
-import {flyToLocation} from '../utils';
+import {flyToLocation, getMapPadding} from '../utils';
 
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
@@ -16,7 +16,6 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
@@ -38,6 +37,7 @@ export type AutoSelectableMapItem =
 export const useAutoSelectMapItem = (
   mapCameraRef: React.RefObject<CameraRef | null>,
   onReportParkingViolation: () => void,
+  tabBarHeight?: number,
 ) => {
   const {
     bottomSheetToAutoSelect,
@@ -84,13 +84,13 @@ export const useAutoSelectMapItem = (
               latitude: mapItem.lat,
               longitude: mapItem.lon,
             },
-            padding: SLIGHTLY_RAISED_MAP_PADDING,
+            padding: getMapPadding(tabBarHeight),
             mapCameraRef,
             zoomLevel: 19, // no clustering at this zoom level
           });
       });
     },
-    [mapCameraRef, setAutoSelectedMapItem],
+    [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
   /**
@@ -155,7 +155,6 @@ export const useAutoSelectMapItem = (
                 />
               );
             }
-
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (
@@ -189,7 +188,12 @@ export const useAutoSelectMapItem = (
         }
 
         if (!!BottomSheetComponent) {
-          openBottomSheet(() => BottomSheetComponent, onCloseFocusRef, false);
+          openBottomSheet(
+            () => BottomSheetComponent,
+            onCloseFocusRef,
+            false,
+            tabBarHeight,
+          );
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
         setBottomSheetToAutoSelect(undefined);
@@ -212,5 +216,6 @@ export const useAutoSelectMapItem = (
     hasReservationOrAvailableFareContract,
     close,
     isShmoDeepIntegrationEnabled,
+    tabBarHeight,
   ]);
 };

@@ -2,9 +2,8 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import React, {RefObject, useCallback, useEffect, useRef} from 'react';
-import {flyToLocation} from '../utils';
+import {flyToLocation, getMapPadding} from '../utils';
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
-import {SLIGHTLY_RAISED_MAP_PADDING} from '@atb/components/map';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
@@ -17,6 +16,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export const useShmoActiveBottomSheet = (
   mapCameraRef: React.RefObject<CameraRef | null>,
   mapSelectionCloseCallback: () => void,
+  tabBarHeight?: number,
 ) => {
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
@@ -44,11 +44,11 @@ export const useShmoActiveBottomSheet = (
           latitude: coordinates?.latitude ?? 0,
           longitude: coordinates?.longitude ?? 0,
         },
-        padding: SLIGHTLY_RAISED_MAP_PADDING,
+        padding: getMapPadding(tabBarHeight),
         mapCameraRef,
         zoomLevel: 15,
       });
-  }, [mapCameraRef, getCurrentCoordinates]);
+  }, [getCurrentCoordinates, mapCameraRef, tabBarHeight]);
 
   useEffect(() => {
     if (!isFocused || !isShmoDeepIntegrationEnabled) return;
@@ -62,7 +62,6 @@ export const useShmoActiveBottomSheet = (
             openBottomSheet(
               () => (
                 <ActiveScooterSheet
-                  onClose={closeBottomSheet}
                   onActiveBookingReceived={flyToUserLocation}
                   navigateSupportCallback={() => {
                     closeBottomSheet();
@@ -82,6 +81,7 @@ export const useShmoActiveBottomSheet = (
               ),
               onCloseFocusRef,
               false,
+              tabBarHeight,
             );
             break;
           default:
@@ -103,5 +103,6 @@ export const useShmoActiveBottomSheet = (
     activeBooking,
     isShmoDeepIntegrationEnabled,
     mapSelectionCloseCallback,
+    tabBarHeight,
   ]);
 };

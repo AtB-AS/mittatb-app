@@ -8,7 +8,7 @@ import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -25,6 +25,7 @@ import {
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
+  getMapPadding,
 } from './utils';
 import {
   GeofencingZones,
@@ -53,6 +54,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -63,6 +65,7 @@ export const MapV2 = (props: MapProps) => {
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
+  const tabBarHeight = useBottomTabBarHeight();
 
   const startingCoordinates = useMemo(
     () =>
@@ -84,6 +87,7 @@ export const MapV2 = (props: MapProps) => {
     startingCoordinates,
     true,
     true,
+    tabBarHeight,
   );
 
   const {autoSelectedFeature} = useMapContext();
@@ -92,13 +96,20 @@ export const MapV2 = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isGeofencingZonesEnabled,
+    isShmoDeepIntegrationEnabled,
+    isMapV2Enabled,
+  } = useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
 
-  useShmoActiveBottomSheet(mapCameraRef, mapSelectionCloseCallback);
+  useShmoActiveBottomSheet(
+    mapCameraRef,
+    mapSelectionCloseCallback,
+    tabBarHeight,
+  );
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -108,11 +119,12 @@ export const MapV2 = (props: MapProps) => {
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
+    isMapV2Enabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle);
 
-  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
+  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation, tabBarHeight);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -216,7 +228,8 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: SLIGHTLY_RAISED_MAP_PADDING,
+          padding: getMapPadding(tabBarHeight),
+
           mapCameraRef,
           zoomLevel: toZoomLevel,
           animationDuration: 200,
@@ -230,7 +243,7 @@ export const MapV2 = (props: MapProps) => {
         });
       }
     },
-    [onMapClick, activeShmoBooking],
+    [activeShmoBooking?.state, tabBarHeight, onMapClick],
   );
 
   return (
