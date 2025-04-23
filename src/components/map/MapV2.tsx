@@ -25,7 +25,7 @@ import {
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
-  getTabBarPaddingBottom,
+  getMapPadding,
 } from './utils';
 import {
   GeofencingZones,
@@ -228,7 +228,7 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: getTabBarPaddingBottom(tabBarHeight),
+          padding: getMapPadding(tabBarHeight),
 
           mapCameraRef,
           zoomLevel: toZoomLevel,

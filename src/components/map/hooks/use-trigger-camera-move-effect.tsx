@@ -8,7 +8,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {
   fitBounds,
   flyToLocation,
-  getTabBarPaddingBottom,
+  getMapPadding,
   mapPositionToCoordinates,
 } from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
@@ -123,7 +123,7 @@ const moveCameraToEntity = (
   if (!padding) {
     flyToLocation({
       coordinates,
-      padding: getTabBarPaddingBottom(tabBarHeight),
+      padding: getMapPadding(tabBarHeight),
       mapCameraRef,
       animationMode: 'easeTo',
     });

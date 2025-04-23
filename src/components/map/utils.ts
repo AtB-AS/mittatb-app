@@ -176,7 +176,7 @@ export function flyToLocation({
     });
 }
 
-export function getTabBarPaddingBottom(tabBarHeight: number | undefined) {
+export function getMapPadding(tabBarHeight: number | undefined) {
   if (tabBarHeight) {
     return {
       ...SLIGHTLY_RAISED_MAP_PADDING,

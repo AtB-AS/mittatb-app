@@ -14,16 +14,15 @@ export function AnimatedBottomSheet({
   animatedOffset,
   children,
   onLayout,
-  tabBarHeight,
+  bottomOffset = 0,
 }: {
   animatedOffset: Animated.Value;
   children: ReactNode;
-  tabBarHeight?: number;
+  bottomOffset?: number;
   onLayout: (ev: LayoutChangeEvent) => void;
 }) {
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
-  const bottomOffset = tabBarHeight ?? 0;
   const translateY = useMemo(
     () =>
       animatedOffset.interpolate({
@@ -37,7 +36,7 @@ export function AnimatedBottomSheet({
     <View
       style={{
         position: 'absolute',
-        bottom: tabBarHeight,
+        bottom: bottomOffset,
         left: 0,
         right: 0,
         height: windowHeight,

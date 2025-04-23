@@ -8,7 +8,7 @@ import {
   CarSharingStationBottomSheet,
   ScooterSheet,
 } from '@atb/mobility';
-import {flyToLocation, getTabBarPaddingBottom} from '../utils';
+import {flyToLocation, getMapPadding} from '../utils';
 
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
@@ -84,7 +84,7 @@ export const useAutoSelectMapItem = (
               latitude: mapItem.lat,
               longitude: mapItem.lon,
             },
-            padding: getTabBarPaddingBottom(tabBarHeight),
+            padding: getMapPadding(tabBarHeight),
             mapCameraRef,
             zoomLevel: 19, // no clustering at this zoom level
           });

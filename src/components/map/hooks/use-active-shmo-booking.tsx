@@ -2,7 +2,7 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import React, {RefObject, useCallback, useEffect, useRef} from 'react';
-import {flyToLocation, getTabBarPaddingBottom} from '../utils';
+import {flyToLocation, getMapPadding} from '../utils';
 import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
@@ -44,7 +44,7 @@ export const useShmoActiveBottomSheet = (
           latitude: coordinates?.latitude ?? 0,
           longitude: coordinates?.longitude ?? 0,
         },
-        padding: getTabBarPaddingBottom(tabBarHeight),
+        padding: getMapPadding(tabBarHeight),
         mapCameraRef,
         zoomLevel: 15,
       });
