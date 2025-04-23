@@ -1,5 +1,4 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
@@ -22,7 +21,10 @@ import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
-import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
+import {
+  canSellCollabTicket,
+  getNonFreeLegs,
+} from '@atb/travel-details-screens/utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
@@ -173,18 +175,18 @@ function usePurchaseSelectionFromTrip(
   )
     return;
 
-  const nonHumanLegs = getNonHumanLegs(tripPattern.legs);
+  const nonFreeLegs = getNonFreeLegs(tripPattern.legs);
 
-  if (!nonHumanLegs.length) {
+  if (!nonFreeLegs.length) {
     // Non-transit route, so no tickets needed.
     return;
   }
 
-  const ticketStartTime = calculateTicketStartTime(nonHumanLegs);
+  const ticketStartTime = calculateTicketStartTime(nonFreeLegs);
 
   const ticketInfoForBus = getTicketInfoForBus(
     tripPattern,
-    nonHumanLegs,
+    nonFreeLegs,
     fareProductTypeConfigs,
     tariffZones,
     ticketStartTime,
@@ -205,7 +207,7 @@ function usePurchaseSelectionFromTrip(
 
   const ticketInfoForBoat = getTicketInfoForBoat(
     tripPattern,
-    nonHumanLegs,
+    nonFreeLegs,
     fareProductTypeConfigs,
     harbors,
     ticketStartTime,
@@ -218,12 +220,6 @@ function usePurchaseSelectionFromTrip(
       .date(ticketInfoForBoat.ticketStartTime)
       .build();
   }
-}
-
-function getNonHumanLegs(legs: Leg[]) {
-  return legs.filter(
-    (leg) => leg.mode !== Mode.Foot && leg.mode !== Mode.Bicycle,
-  );
 }
 
 function calculateTicketStartTime(legs: Leg[]) {
@@ -243,7 +239,7 @@ type TicketInfoForBus = {
 
 function getTicketInfoForBus(
   tripPattern: TripPattern,
-  nonHumanLegs: Leg[],
+  nonFreeLegs: Leg[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   ticketStartTime?: string,
@@ -261,11 +257,11 @@ function getTicketInfoForBus(
   if (!hasOnlyValidBusLegs && !canSellCollab) return;
 
   const fromTariffZone = getTariffZoneWithMetadata(
-    nonHumanLegs[0].fromPlace,
+    nonFreeLegs[0].fromPlace,
     tariffZones,
   );
   const toTariffZone = getTariffZoneWithMetadata(
-    nonHumanLegs[nonHumanLegs.length - 1].toPlace,
+    nonFreeLegs[nonFreeLegs.length - 1].toPlace,
     tariffZones,
   );
 
