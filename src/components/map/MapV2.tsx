@@ -96,8 +96,11 @@ export const MapV2 = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isGeofencingZonesEnabled,
+    isShmoDeepIntegrationEnabled,
+    isMapV2Enabled,
+  } = useFeatureTogglesContext();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
@@ -116,6 +119,7 @@ export const MapV2 = (props: MapProps) => {
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
+    isMapV2Enabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle);

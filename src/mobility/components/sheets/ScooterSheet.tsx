@@ -69,8 +69,11 @@ export const ScooterSheet = ({
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
   const {mobilityOperators} = useOperators();
 
-  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isParkingViolationsReportingEnabled,
+    isShmoDeepIntegrationEnabled,
+    isMapV2Enabled,
+  } = useFeatureTogglesContext();
 
   return (
     <BottomSheetContainer
@@ -104,6 +107,7 @@ export const ScooterSheet = ({
             </ScrollView>
             <View style={styles.footer}>
               {isShmoDeepIntegrationEnabled &&
+              isMapV2Enabled &&
               operatorId &&
               mobilityOperators?.find((e) => e.id === operatorId)
                 ?.isDeepIntegrationEnabled ? (
