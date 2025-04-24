@@ -10,7 +10,7 @@ import {
 } from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {PaymentType, ReserveOffer} from '@atb/ticketing';
+import {OfferReservation, PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,
@@ -47,6 +47,7 @@ import {useAuthContext} from '@atb/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
+import {MutationStatus} from '@tanstack/react-query';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -55,11 +56,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {userId} = useAuthContext();
 
-  const interactiveColor = theme.color.interactive[0];
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
   const {previousPaymentMethod, recurringPaymentMethods} =
@@ -103,7 +102,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offer_id,
     }),
   );
-  const totalPriceString = formatNumberToString(totalPrice, language);
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -297,58 +295,98 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             />
           </Section>
         )}
-        {isSearchingOffer ? (
-          <ActivityIndicator
-            size="large"
-            color={theme.color.foreground.dynamic.primary}
-            style={{margin: theme.spacing.medium}}
-          />
-        ) : (
-          <View>
-            {paymentMethod ? (
-              <Button
-                expanded={true}
-                text={t(
-                  PurchaseConfirmationTexts.payTotal.text(totalPriceString),
-                )}
-                interactiveColor={interactiveColor}
-                disabled={!!offerError}
-                onPress={() => {
-                  analytics.logEvent(
-                    'Ticketing',
-                    'Pay with previous payment method clicked',
-                    {
-                      paymentMethod: paymentMethod?.paymentType,
-                      mode: params.mode,
-                    },
-                  );
-                  goToPayment();
-                }}
-                loading={reserveMutation.isLoading}
-              />
-            ) : (
-              <Button
-                expanded={true}
-                interactiveColor={interactiveColor}
-                text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
-                disabled={!!offerError}
-                accessibilityHint={t(
-                  PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
-                )}
-                onPress={() => {
-                  analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
-                    mode: params.mode,
-                  });
-                  selectPaymentMethod();
-                }}
-                testID="choosePaymentMethodButton"
-                ref={onCloseFocusRef}
-              />
-            )}
-          </View>
-        )}
+        <PaymentButton
+          isSearchingOffer={isSearchingOffer}
+          isOfferError={!!offerError}
+          mode={params.mode}
+          onCloseFocusRef={onCloseFocusRef}
+          totalPrice={totalPrice}
+          reserveStatus={reserveMutation.status}
+          paymentMethod={paymentMethod}
+          onSelectPaymentMethod={selectPaymentMethod}
+          onGoToPayment={goToPayment}
+        />
       </View>
     </FullScreenView>
+  );
+};
+
+type PaymentButtonProps = {
+  isSearchingOffer: boolean;
+  isOfferError: boolean;
+  totalPrice: number;
+  mode: 'TravelSearch' | 'Ticket' | undefined;
+  onCloseFocusRef: RefObject<any>;
+  reserveStatus: MutationStatus;
+  paymentMethod: PaymentMethod | undefined;
+  onSelectPaymentMethod: () => void;
+  onGoToPayment: () => void;
+};
+const PaymentButton = ({
+  isSearchingOffer,
+  isOfferError,
+  totalPrice,
+  mode,
+  onCloseFocusRef,
+  reserveStatus,
+  paymentMethod,
+  onSelectPaymentMethod,
+  onGoToPayment,
+}: PaymentButtonProps) => {
+  const {theme} = useThemeContext();
+  const {t, language} = useTranslation();
+  const analytics = useAnalyticsContext();
+  const totalPriceString = formatNumberToString(totalPrice, language);
+
+  if (isSearchingOffer)
+    return (
+      <ActivityIndicator
+        size="large"
+        color={theme.color.foreground.dynamic.primary}
+        style={{margin: theme.spacing.medium}}
+      />
+    );
+
+  if (!paymentMethod)
+    return (
+      <Button
+        expanded={true}
+        interactiveColor={theme.color.interactive[0]}
+        text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
+        disabled={!!isOfferError}
+        accessibilityHint={t(
+          PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
+        )}
+        onPress={() => {
+          analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
+            mode: mode,
+          });
+          onSelectPaymentMethod();
+        }}
+        testID="choosePaymentMethodButton"
+        ref={onCloseFocusRef}
+      />
+    );
+
+  return (
+    <Button
+      expanded={true}
+      text={t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))}
+      interactiveColor={theme.color.interactive[0]}
+      disabled={!!isOfferError || reserveStatus === 'success'}
+      onPress={() => {
+        analytics.logEvent(
+          'Ticketing',
+          'Pay with previous payment method clicked',
+          {
+            paymentMethod: paymentMethod?.paymentType,
+            mode: mode,
+          },
+        );
+        onGoToPayment();
+      }}
+      loading={reserveStatus === 'loading'}
+    />
   );
 };
 
