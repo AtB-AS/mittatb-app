@@ -2,7 +2,7 @@ import {useAnalyticsContext} from '@atb/analytics';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {FullScreenHeader} from '@atb/components/screen-header';
+import {FullScreenView} from '@atb/components/screen-view';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
@@ -25,7 +25,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   saveLastUsedRecurringPaymentOrType,
@@ -216,10 +216,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(PurchaseConfirmationTexts.title)}
-        leftButton={{
+    <FullScreenView
+      headerProps={{
+        title: t(PurchaseConfirmationTexts.title),
+        leftButton: {
           type: 'back',
           onPress: () => {
             if (reserveMutation.isSuccess) {
@@ -228,10 +228,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             }
             navigation.pop();
           },
-        }}
-        globalMessageContext={GlobalMessageContextEnum.appTicketing}
-      />
-      <ScrollView style={styles.infoSection}>
+        },
+        globalMessageContext: GlobalMessageContextEnum.appTicketing,
+      }}
+    >
+      <View style={styles.container}>
         {offerError && (
           <MessageInfoBox
             type="error"
@@ -241,7 +242,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               action: refreshOffer,
               text: t(dictionary.retry),
             }}
-            style={styles.errorMessage}
           />
         )}
         <PreassignedFareContractSummary
@@ -264,12 +264,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           <MessageInfoBox
             type="warning"
             message={inspectableTokenWarningText}
-            style={styles.warningMessage}
             isMarkdown={true}
           />
         )}
         <GlobalMessage
-          style={styles.purchaseInformation}
           globalMessageContext={
             GlobalMessageContextEnum.appPurchaseConfirmationBottom
           }
@@ -280,14 +278,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         />
         {reserveMutation.isError && (
           <MessageInfoBox
-            style={{marginBottom: theme.spacing.medium}}
             message={t(PurchaseConfirmationTexts.reserveError)}
             type="error"
           />
         )}
         {vippsNotInstalledError && (
           <MessageInfoBox
-            style={{marginBottom: theme.spacing.medium}}
             message={t(PurchaseConfirmationTexts.vippsInstalledError)}
             type="error"
           />
@@ -310,28 +306,26 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ) : (
           <View>
             {paymentMethod ? (
-              <View style={styles.flexColumn}>
-                <Button
-                  expanded={true}
-                  text={t(
-                    PurchaseConfirmationTexts.payTotal.text(totalPriceString),
-                  )}
-                  interactiveColor={interactiveColor}
-                  disabled={!!offerError}
-                  onPress={() => {
-                    analytics.logEvent(
-                      'Ticketing',
-                      'Pay with previous payment method clicked',
-                      {
-                        paymentMethod: paymentMethod?.paymentType,
-                        mode: params.mode,
-                      },
-                    );
-                    goToPayment();
-                  }}
-                  loading={reserveMutation.isLoading}
-                />
-              </View>
+              <Button
+                expanded={true}
+                text={t(
+                  PurchaseConfirmationTexts.payTotal.text(totalPriceString),
+                )}
+                interactiveColor={interactiveColor}
+                disabled={!!offerError}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Ticketing',
+                    'Pay with previous payment method clicked',
+                    {
+                      paymentMethod: paymentMethod?.paymentType,
+                      mode: params.mode,
+                    },
+                  );
+                  goToPayment();
+                }}
+                loading={reserveMutation.isLoading}
+              />
             ) : (
               <Button
                 expanded={true}
@@ -353,28 +347,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             )}
           </View>
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flex: 1,
-    backgroundColor: theme.color.background.neutral[1].background,
-  },
-  flexColumn: {
-    flex: 1,
-    marginVertical: theme.spacing.medium,
-  },
-  errorMessage: {
-    marginBottom: theme.spacing.medium,
-  },
-  warningMessage: {
-    marginBottom: theme.spacing.medium,
-  },
-  infoSection: {padding: theme.spacing.medium},
-  purchaseInformation: {
-    marginBottom: theme.spacing.medium,
+    padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
   },
 }));
