@@ -38,7 +38,7 @@ export const PriceSummary = ({
   const {travellerSelectionMode} = fareProductTypeConfig.configuration;
 
   return (
-    <Section style={styles.paymentSummaryContainer}>
+    <Section>
       {travellerSelectionMode !== 'none' && (
         <GenericSectionItem>
           {userProfilesWithCountAndOffer.map((u, i) => (
@@ -162,9 +162,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginEnd: theme.spacing.small,
     alignSelf: 'flex-end',
     textDecorationLine: 'line-through',
-  },
-  paymentSummaryContainer: {
-    marginVertical: theme.spacing.medium,
   },
   totalPaymentContainer: {
     flexDirection: 'row',
