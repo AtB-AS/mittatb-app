@@ -142,6 +142,13 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
+  waitingForPayment: _(
+    'Venter på betaling',
+    'Waiting for payment',
+    'Venter på betaling',
+  ),
+  cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
+
   choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
     a11yHint: _(

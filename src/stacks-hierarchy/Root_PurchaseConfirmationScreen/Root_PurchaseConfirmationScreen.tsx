@@ -3,14 +3,22 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
+import {
+  getReservationStatus,
+  useOtherDeviceIsInspectableWarning,
+} from '@atb/modules/fare-contracts';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {OfferReservation, PaymentType, ReserveOffer} from '@atb/ticketing';
+import {
+  OfferReservation,
+  PaymentType,
+  ReserveOffer,
+  useTicketingContext,
+} from '@atb/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,
@@ -47,6 +55,8 @@ import {useAuthContext} from '@atb/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
+import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
+import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
@@ -110,6 +120,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     shouldSavePaymentMethod,
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
+  useEffect(() => {
+    if (cancelPaymentMutation.isSuccess) {
+      cancelPaymentMutation.reset();
+      reserveMutation.reset();
+    }
+  }, [cancelPaymentMutation, reserveMutation]);
 
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
@@ -301,10 +317,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           mode={params.mode}
           onCloseFocusRef={onCloseFocusRef}
           totalPrice={totalPrice}
+          reserve={reserveMutation.data}
           reserveStatus={reserveMutation.status}
           paymentMethod={paymentMethod}
           onSelectPaymentMethod={selectPaymentMethod}
           onGoToPayment={goToPayment}
+          onCancelPayment={() => {
+            if (reserveMutation.isSuccess) {
+              cancelPaymentMutation.mutate(reserveMutation.data);
+            }
+          }}
         />
       </View>
     </FullScreenView>
@@ -317,10 +339,12 @@ type PaymentButtonProps = {
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   onCloseFocusRef: RefObject<any>;
+  reserve: OfferReservation | undefined;
   reserveStatus: MutationStatus;
   paymentMethod: PaymentMethod | undefined;
   onSelectPaymentMethod: () => void;
   onGoToPayment: () => void;
+  onCancelPayment: () => void;
 };
 const PaymentButton = ({
   isSearchingOffer,
@@ -328,15 +352,23 @@ const PaymentButton = ({
   totalPrice,
   mode,
   onCloseFocusRef,
+  reserve,
   reserveStatus,
   paymentMethod,
   onSelectPaymentMethod,
   onGoToPayment,
+  onCancelPayment,
 }: PaymentButtonProps) => {
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const analytics = useAnalyticsContext();
+  const styles = useStyles();
   const totalPriceString = formatNumberToString(totalPrice, language);
+
+  const {reservations} = useTicketingContext();
+  const reservation = reservations.find((r) => r.orderId === reserve?.order_id);
+  const isReserving =
+    !!reservation && getReservationStatus(reservation) === 'reserving';
 
   if (isSearchingOffer)
     return (
@@ -368,6 +400,29 @@ const PaymentButton = ({
       />
     );
 
+  if (isReserving)
+    return (
+      <>
+        <View style={styles.waitingForPayment}>
+          <ThemeText>
+            {t(PurchaseConfirmationTexts.waitingForPayment)}
+          </ThemeText>
+          <ActivityIndicator />
+        </View>
+        <Button
+          expanded={true}
+          text={t(PurchaseConfirmationTexts.cancelPayment)}
+          mode="primary"
+          rightIcon={{svg: SvgClose}}
+          interactiveColor={theme.color.interactive.destructive}
+          onPress={onCancelPayment}
+          accessibilityHint={t(
+            PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
+          )}
+        />
+      </>
+    );
+
   return (
     <Button
       expanded={true}
@@ -394,5 +449,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
+  },
+  waitingForPayment: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+    marginVertical: theme.spacing.medium,
   },
 }));
