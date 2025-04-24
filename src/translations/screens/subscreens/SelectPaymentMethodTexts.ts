@@ -4,7 +4,7 @@ const SelectPaymentMethodTexts = {
   header: {
     text: _(
       'Velg betalingsmåte',
-      'Select payment option',
+      'Select payment method',
       'Vel betalingsmetode',
     ),
   },
@@ -44,7 +44,14 @@ const SelectPaymentMethodTexts = {
     ),
   },
   saved_cards: {
-    text: _('Lagrede kort', 'Stored cards', 'Lagra kort'),
+    text: _('Lagrede kort', 'Saved cards', 'Lagra kort'),
+  },
+  other_cards: {
+    text: _(
+      'Andre betalingsmåter',
+      'Other payment methods',
+      'Andre betalingsmåtar',
+    ),
   },
 };
 
