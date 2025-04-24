@@ -107,13 +107,14 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
             </View>
 
             <View>
-              {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
-                <View style={styles.listHeading}>
-                  <ThemeText color="secondary">
-                    {t(SelectPaymentMethodTexts.other_cards.text)}
-                  </ThemeText>
-                </View>
-              )}
+              {recurringPaymentMethods &&
+                recurringPaymentMethods?.length > 0 && (
+                  <View style={styles.listHeading}>
+                    <ThemeText color="secondary">
+                      {t(SelectPaymentMethodTexts.other_cards.text)}
+                    </ThemeText>
+                  </View>
+                )}
 
               {singlePaymentMethods.map((method, index) => {
                 return (
