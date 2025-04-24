@@ -300,6 +300,11 @@ export function getFareContractInfo(
   };
 }
 
+/**
+ * Map reservation paymentStatus to a more "intuitive" status. Note that
+ * - CREDIT and CANCEL are filtered out in the Ticketing Context
+ * - AUTHENTICATE, CREATE, IMPORT and INITIATE are all considered "reserving"
+ */
 export const getReservationStatus = (reservation: Reservation) => {
   const paymentStatus = reservation.paymentStatus;
   switch (paymentStatus) {
