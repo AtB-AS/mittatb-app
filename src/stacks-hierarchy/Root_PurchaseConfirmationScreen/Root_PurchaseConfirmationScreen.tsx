@@ -213,7 +213,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             reserveMutation.reset();
             setVippsNotInstalledError(false);
             if (reserveMutation.isSuccess) {
-              cancelPaymentMutation.mutate(reserveMutation.data);
+              cancelPaymentMutation.mutate({
+                reservation: reserveMutation.data,
+                isUser: false,
+              });
               analytics.logEvent('Ticketing', 'Payment cancelled');
             }
             setSelectedPaymentMethod(paymentMethod);
@@ -237,7 +240,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           type: 'back',
           onPress: () => {
             if (reserveMutation.isSuccess) {
-              cancelPaymentMutation.mutate(reserveMutation.data);
+              cancelPaymentMutation.mutate({
+                reservation: reserveMutation.data,
+                isUser: false,
+              });
               analytics.logEvent('Ticketing', 'Payment cancelled');
             }
             navigation.pop();
@@ -324,7 +330,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onGoToPayment={goToPayment}
           onCancelPayment={() => {
             if (reserveMutation.isSuccess) {
-              cancelPaymentMutation.mutate(reserveMutation.data);
+              cancelPaymentMutation.mutate({
+                reservation: reserveMutation.data,
+                isUser: true,
+              });
             }
           }}
         />

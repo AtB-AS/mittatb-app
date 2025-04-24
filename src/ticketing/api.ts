@@ -170,11 +170,12 @@ export async function reserveOffers({
 }
 
 export async function cancelPayment(
-  payment_id: number,
-  transaction_id: number,
+  paymentId: number,
+  transactionId: number,
+  isUser: boolean,
 ): Promise<void> {
-  const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put(url, {}, {authWithIdToken: true});
+  const url = `ticket/v3/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
+  await client.put(url, undefined, {authWithIdToken: true});
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
