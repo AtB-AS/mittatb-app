@@ -317,6 +317,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             />
           </Section>
         )}
+        {cancelPaymentMutation.status === 'error' && (
+          <MessageInfoBox
+            message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+            type="error"
+          />
+        )}
         <PaymentButton
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}

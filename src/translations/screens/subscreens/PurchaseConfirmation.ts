@@ -148,6 +148,11 @@ const PurchaseConfirmationTexts = {
     'Venter på betaling',
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
+  cancelPaymentError: _(
+    'Vi klarte ikke å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller kontakt kundesenteret.',
+    'We were unable to cancel your purchase. Please check if you have received the ticket, or contact customer service.',
+    'Vi klarte ikkje å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller ta kontakt med kundesenteret.',
+  ),
 
   choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
