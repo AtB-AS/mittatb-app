@@ -6,8 +6,13 @@ type Params = {
   /** Whether or not the cancellation was triggered manually by a user */
   isUser: boolean;
 };
-export const useCancelPaymentMutation = () =>
+export const useCancelPaymentMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) =>
   useMutation({
     mutationFn: ({reservation, isUser}: Params) =>
       cancelPayment(reservation.payment_id, reservation.transaction_id, isUser),
+    onSuccess,
   });

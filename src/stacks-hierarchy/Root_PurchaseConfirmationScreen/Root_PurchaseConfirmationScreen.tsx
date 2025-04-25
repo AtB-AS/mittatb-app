@@ -119,13 +119,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     recipient,
     shouldSavePaymentMethod,
   });
-  const cancelPaymentMutation = useCancelPaymentMutation();
-  useEffect(() => {
-    if (cancelPaymentMutation.isSuccess) {
+  const cancelPaymentMutation = useCancelPaymentMutation({
+    onSuccess: () => {
       cancelPaymentMutation.reset();
       reserveMutation.reset();
-    }
-  }, [cancelPaymentMutation, reserveMutation]);
+    },
+  });
 
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
