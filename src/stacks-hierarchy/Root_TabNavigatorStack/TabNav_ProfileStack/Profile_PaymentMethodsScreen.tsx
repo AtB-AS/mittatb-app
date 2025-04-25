@@ -9,7 +9,6 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   addPaymentMethod,
@@ -38,6 +37,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
+import {PaymentBrand} from '@atb/modules/payment';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();

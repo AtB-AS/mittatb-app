@@ -12,3 +12,4 @@ export {
 } from './types';
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
 export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
+export {PaymentBrand} from './PaymentBrand';

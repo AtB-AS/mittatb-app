@@ -11,7 +11,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {PaymentMethod} from './types';
-import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
+import {PaymentBrand} from './PaymentBrand';
 
 type PaymentSelectionCardProps = SectionItemProps<{
   paymentMethod: PaymentMethod;

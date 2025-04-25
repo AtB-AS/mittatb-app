@@ -92,7 +92,6 @@ Props) => {
     selectedPaymentMethod ??
     recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
-  console.log('paymentMethod', paymentMethod);
   async function selectPaymentMethod() {
     openBottomSheet(() => {
       return (
