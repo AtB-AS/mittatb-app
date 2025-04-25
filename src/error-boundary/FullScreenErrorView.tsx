@@ -1,11 +1,10 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, themes} from '@atb/theme';
 import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Theme} from '@atb/theme/colors';
 import {CUSTOMER_SERVICE_URL} from '@env';
 
 type ErrorProps = {
@@ -15,10 +14,6 @@ type ErrorProps = {
 
 export function FullScreenErrorView({onRestartApp}: ErrorProps) {
   const styles = useStyles();
-  const {theme} = useThemeContext();
-
-  const getBackgroundColor = (theme: Theme) =>
-    theme.color.background.neutral[2];
 
   return (
     <SafeAreaView style={styles.safearea}>
@@ -40,7 +35,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
         />
         <Button
           mode="secondary"
-          backgroundColor={getBackgroundColor(theme)}
+          backgroundColor={themes['light'].color.background.neutral[2]}
           expanded={true}
           text="Kontakt oss"
           onPress={() => Linking.openURL(CUSTOMER_SERVICE_URL)}
@@ -58,7 +53,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[2].background,
   },
   svg: {
-    marginTop: 200,
     margin: theme.spacing.xLarge,
   },
   svgContainer: {
