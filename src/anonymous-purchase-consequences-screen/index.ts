@@ -1,1 +1,0 @@
-export {AnonymousPurchaseConsequencesScreenComponent} from './AnonymousPurchaseConsequencesScreenComponent';
