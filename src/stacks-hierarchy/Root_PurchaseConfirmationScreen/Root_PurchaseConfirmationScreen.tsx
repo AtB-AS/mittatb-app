@@ -100,9 +100,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
-    ({count, offer: {offer_id}}) => ({
+    ({count, offer: {offerId}}) => ({
       count,
-      offer_id,
+      offer_id: offerId,
     }),
   );
 

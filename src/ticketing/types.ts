@@ -58,13 +58,13 @@ export type FlexDiscountLadder = {
 
 export type OfferPrice = {
   amount: string;
-  amount_float?: number;
+  amountFloat?: number;
   currency: string;
-  vat_group?: string;
-  tax_amount?: string;
-  original_amount: string;
-  original_amount_float?: number;
-  original_tax_amount?: string;
+  vatGroup?: string;
+  taxAmount?: string;
+  originalAmount: string;
+  originalAmountFloat?: number;
+  originalTaxAmount?: string;
 };
 
 enum RouteType {
@@ -80,17 +80,17 @@ type Route = {
 };
 
 export type Offer = {
-  offer_id: string;
-  traveller_id: string;
+  offerId: string;
+  travellerId: string;
   route?: Route;
-  user_profile_id?: string;
-  user_profile_ids: string[];
-  prices: OfferPrice[];
-  fare_product?: string;
-  flex_discount_ladder?: FlexDiscountLadder;
-  valid_from?: string;
-  valid_to?: string;
-  should_start_now: boolean;
+  userProfileId?: string;
+  userProfileIds: string[];
+  price: OfferPrice;
+  fareProduct?: string;
+  flexDiscountLadder?: FlexDiscountLadder;
+  validFrom?: string;
+  validTo?: string;
+  shouldStartNow: boolean;
 };
 
 export type OfferSearchResponse = Offer[];

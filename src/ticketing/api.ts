@@ -29,10 +29,10 @@ export async function listRecentFareContracts(): Promise<
 }
 
 export type OfferSearchParams = {
-  is_on_behalf_of: boolean;
+  isOnBehalfOf: boolean;
   travellers: Traveller[];
   products: string[];
-  travel_date?: string;
+  travelDate?: string;
   zones?: string[];
   from?: string;
   to?: string;
@@ -40,7 +40,7 @@ export type OfferSearchParams = {
 
 type Traveller = {
   id: string;
-  user_type: string;
+  userType: string;
   count: number;
 };
 
@@ -114,7 +114,7 @@ export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  const url = `ticket/v3/search/${offerEndpoint}`;
+  const url = `sales/v1/search/${offerEndpoint}`;
 
   const response = await client.post<Offer[]>(url, params, opts);
 
