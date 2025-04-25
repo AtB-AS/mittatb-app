@@ -4,14 +4,15 @@ import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
-export function useControlPositionsStyle(extraPaddingBottom = false) {
+export function useControlPositionsStyle(
+  extraPaddingBottom = false,
+  bottomTabBarHeight = 0,
+) {
   const {top, bottom} = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const {height: bottomSheetHeight} = useBottomSheetContext();
   const {minHeight} = useBottomNavigationStyles();
-  const bottomTabBarHeight = useBottomTabBarHeight();
 
   const bottomPaddingIfBottomSheetIsOpen = bottomSheetHeight
     ? bottomSheetHeight - minHeight + bottomTabBarHeight

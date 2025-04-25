@@ -61,11 +61,11 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const controlStyles = useControlPositionsStyle(false);
+  const tabBarHeight = useBottomTabBarHeight();
+  const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
-  const tabBarHeight = useBottomTabBarHeight();
 
   const startingCoordinates = useMemo(
     () =>
