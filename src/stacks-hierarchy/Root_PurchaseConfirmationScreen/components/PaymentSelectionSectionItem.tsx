@@ -94,7 +94,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    rowGap: theme.spacing.medium,
+    flexWrap: 'wrap',
   },
   paymentMethod: {
     rowGap: theme.spacing.xSmall,
