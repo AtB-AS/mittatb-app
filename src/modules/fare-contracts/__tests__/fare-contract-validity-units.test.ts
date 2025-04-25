@@ -53,23 +53,30 @@ describe('fareContractValidityUnits', () => {
     });
   });
 
-  describe('minutes range (60 seconds to 59 minutes, 59 seconds)', () => {
+  describe('minutes range (60 seconds to 9 minutes, 59 seconds)', () => {
     it('should return minutes and seconds units for 60 seconds', () => {
       expect(fareContractValidityUnits(SECONDS_IN_MINUTE)).toEqual(['m', 's']);
     });
 
-    it('should return minutes and seconds units for 30 minutes', () => {
-      expect(fareContractValidityUnits(30 * SECONDS_IN_MINUTE)).toEqual([
+    it('should return minutes and seconds units for 9 minutes 59 seconds', () => {
+      expect(fareContractValidityUnits(10 * SECONDS_IN_MINUTE - 1)).toEqual([
         'm',
         's',
       ]);
     });
+  });
 
-    it('should return minutes and seconds units for 59 minutes, 59 seconds', () => {
-      expect(fareContractValidityUnits(SECONDS_IN_HOUR - 1)).toEqual([
-        'm',
-        's',
-      ]);
+  describe('minutes and second range (10 minutes to 59 minutes, 59 seconds)', () => {
+    it('should return minutes units for 10 minutes', () => {
+      expect(fareContractValidityUnits(10 * SECONDS_IN_MINUTE)).toEqual(['m']);
+    });
+
+    it('should return minutes units for 30 minutes', () => {
+      expect(fareContractValidityUnits(30 * SECONDS_IN_MINUTE)).toEqual(['m']);
+    });
+
+    it('should return minutes units for 59 minutes, 59 seconds', () => {
+      expect(fareContractValidityUnits(SECONDS_IN_HOUR - 1)).toEqual(['m']);
     });
   });
 

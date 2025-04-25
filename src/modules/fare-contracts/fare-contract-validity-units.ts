@@ -3,7 +3,7 @@ import type {UnitMapType} from './types';
 
 /**
  * These are following the rules from AtB-AS/kundevendt#4220, which apply for validityDuration of FareContracts
- * https://github.com/AtB-AS/kundevendt/issues/4220#issuecomment-2615206325
+ * https://github.com/AtB-AS/kundevendt/issues/4220
  * @param seconds
  */
 
@@ -12,13 +12,18 @@ export function fareContractValidityUnits(
 ): humanizeDuration.Unit[] {
   const oneMinuteInSeconds = 60;
   const oneHourInSeconds = oneMinuteInSeconds * 60;
+  const tenMinutesInSeconds = oneMinuteInSeconds * 10;
   const oneDayInSeconds = oneHourInSeconds * 24;
   const sevenDaysInSeconds = oneDayInSeconds * 7;
   const unitMap: UnitMapType = [
     {range: {low: -Infinity, high: oneMinuteInSeconds - 1}, units: ['s']},
     {
-      range: {low: oneMinuteInSeconds, high: oneHourInSeconds - 1},
+      range: {low: oneMinuteInSeconds, high: tenMinutesInSeconds - 1},
       units: ['m', 's'],
+    },
+    {
+      range: {low: tenMinutesInSeconds, high: oneHourInSeconds - 1},
+      units: ['m'],
     },
     {
       range: {low: oneHourInSeconds, high: oneDayInSeconds - 1},
