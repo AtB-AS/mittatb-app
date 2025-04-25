@@ -92,8 +92,8 @@ export const useMapSymbolStyles = (
       'ryde',
       ['==', ['slice', systemId, 0, 3], 'voi'],
       'voi',
-      ['==', ['slice', systemId, 0, 4], 'tier'],
-      'tier',
+      ['==', ['slice', systemId, 0, 4], 'dott'],
+      'dott',
       'generic',
     ],
   ];
