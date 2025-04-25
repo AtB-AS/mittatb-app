@@ -1,5 +1,5 @@
 import React, {RefObject} from 'react';
-import {useChatIcon} from '@atb/chat/use-chat-icon';
+import {useChatIcon} from './chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
