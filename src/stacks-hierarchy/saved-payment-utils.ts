@@ -7,6 +7,7 @@ import {PaymentMethod, SavedPaymentMethodType} from './types';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/ticketing';
+import {onlyUniques} from '@atb/utils/only-uniques';
 
 export function usePreviousPaymentMethods(): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -32,19 +33,8 @@ export function usePreviousPaymentMethods(): {
         if (!recurringPayment) return false;
       }
 
-      const enabledPaymentTypes: PaymentType[] = Array.from(
-        new Set(paymentTypes),
-      );
-      const paymentCardTypes: PaymentType[] = [
-        PaymentType.Amex,
-        PaymentType.Visa,
-        PaymentType.Mastercard,
-      ];
-
-      if (paymentTypes.some((type) => paymentCardTypes.includes(type))) {
-        enabledPaymentTypes.push(PaymentType.PaymentCard);
-      }
-      if (!enabledPaymentTypes.includes(paymentMethod.paymentType))
+      //Payment type is not enabled
+      if (!hasPaymentCard(paymentTypes).includes(paymentMethod.paymentType))
         return false;
 
       // Card has expired
@@ -83,6 +73,21 @@ export function usePreviousPaymentMethods(): {
     previousPaymentMethod: previousPaymentMethod,
   };
 }
+
+const hasPaymentCard = (paymentTypes: PaymentType[]): PaymentType[] => {
+  const paymentCardTypes: PaymentType[] = [
+    PaymentType.Amex,
+    PaymentType.Visa,
+    PaymentType.Mastercard,
+  ];
+
+  const enabledPaymentTypes: PaymentType[] = paymentTypes.filter(onlyUniques);
+
+  if (paymentTypes.some((type) => paymentCardTypes.includes(type))) {
+    enabledPaymentTypes.push(PaymentType.PaymentCard);
+  }
+  return enabledPaymentTypes;
+};
 
 type StoredPaymentMethods = {
   [key: string]: PaymentMethod | undefined;

@@ -304,7 +304,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             style={{margin: theme.spacing.medium}}
           />
         ) : (
-          <View style={{marginBottom: theme.spacing.small}}>
+          <View>
             {paymentMethod ? (
               <Button
                 expanded={true}
