@@ -2,8 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType, PaymentType} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
-import React from 'react';
-import {PaymentBrand} from '../../stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
+import React, {forwardRef} from 'react';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
@@ -12,16 +11,17 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {PaymentMethod} from './types';
+import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 
 type PaymentSelectionCardProps = SectionItemProps<{
   paymentMethod: PaymentMethod;
   onPress(): void;
 }>;
 
-export const PaymentSelectionSectionItem = ({
-  paymentMethod,
-  ...props
-}: PaymentSelectionCardProps) => {
+export const PaymentSelectionSectionItem = forwardRef<
+  any,
+  PaymentSelectionCardProps
+>(({paymentMethod, ...props}, focusRef) => {
   const style = useStyles();
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
@@ -45,6 +45,7 @@ export const PaymentSelectionSectionItem = ({
   return (
     <PressableOpacity
       {...props}
+      ref={focusRef}
       accessibilityLabel={a11yLabel}
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
@@ -83,7 +84,7 @@ export const PaymentSelectionSectionItem = ({
       </View>
     </PressableOpacity>
   );
-};
+});
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   warningMessage: {

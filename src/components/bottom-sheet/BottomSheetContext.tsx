@@ -30,6 +30,11 @@ type BottomSheetState = {
     /** Ref to component which should be focused on sheet close */
     onCloseFocusRef: RefObject<any>,
     useBackdrop?: boolean,
+    /**
+     * Make sure if you use this prop in a tabscreen, that you handle navigating away by closing the bottomsheet.
+     * Example in Map_RootScreenV2 useEffect
+     */
+    tabBarHeight?: number,
   ) => void;
   isOpen: () => boolean;
   close: () => void;
@@ -52,12 +57,14 @@ export const BottomSheetContextProvider = ({children}: Props) => {
   const [contentFunction, setContentFunction] = useState<() => ReactNode>(
     () => () => null,
   );
+  const [tabBarHeight, setTabBarHeight] = useState<number>();
 
   const onOpenFocusRef = useFocusOnLoad();
   const refToFocusOnClose = useRef<RefObject<any>>(undefined);
 
   const close = useCallback(() => {
     setContentFunction(() => () => null);
+    setTabBarHeight(undefined);
     setIsOpen(false);
     if (refToFocusOnClose.current) {
       giveFocus(refToFocusOnClose.current);
@@ -70,11 +77,13 @@ export const BottomSheetContextProvider = ({children}: Props) => {
       contentFunction: () => ReactNode,
       onCloseFocusRef: RefObject<any>,
       useBackdrop: boolean = true,
+      tabBarHeight?: number,
     ) => {
       setContentFunction(() => contentFunction);
       setBackdropEnabled(useBackdrop);
       setIsOpen(true);
       refToFocusOnClose.current = onCloseFocusRef;
+      setTabBarHeight(tabBarHeight);
     },
     [],
   );
@@ -118,6 +127,7 @@ export const BottomSheetContextProvider = ({children}: Props) => {
         height={height}
         setHeight={setHeight}
         contentFunction={contentFunction}
+        bottomOffset={tabBarHeight}
       />
     </BottomSheetContext.Provider>
   );
@@ -130,6 +140,7 @@ const BottomSheetOnBackDrop = ({
   height,
   setHeight,
   contentFunction,
+  bottomOffset,
 }: {
   isBackdropEnabled: boolean;
   isOpen: boolean;
@@ -137,6 +148,7 @@ const BottomSheetOnBackDrop = ({
   height: number;
   setHeight: (height: number) => void;
   contentFunction: () => ReactNode;
+  bottomOffset?: number;
 }) => {
   const onLayout = ({nativeEvent}: LayoutChangeEvent) => {
     setHeight(nativeEvent.layout.height);
@@ -162,7 +174,11 @@ const BottomSheetOnBackDrop = ({
           <ClickableBackground isOpen={isOpen} close={close} height={height} />
         </>
       )}
-      <AnimatedBottomSheet animatedOffset={animatedOffset} onLayout={onLayout}>
+      <AnimatedBottomSheet
+        animatedOffset={animatedOffset}
+        onLayout={onLayout}
+        bottomOffset={bottomOffset}
+      >
         {contentFunction()}
       </AnimatedBottomSheet>
     </>
