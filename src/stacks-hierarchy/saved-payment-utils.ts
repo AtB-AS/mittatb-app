@@ -33,8 +33,15 @@ export function usePreviousPaymentMethods(): {
         if (!recurringPayment) return false;
       }
 
-      //Payment type is not enabled
-      if (!hasPaymentCard(paymentTypes).includes(paymentMethod.paymentType))
+      // If a payment card PaymentType is enabled, add PaymentCard to the list
+      // of enabled payment types.
+      const enabledPaymentTypes: PaymentType[] =
+        paymentTypes.filter(onlyUniques);
+      if (hasPaymentCard(paymentTypes)) {
+        enabledPaymentTypes.push(PaymentType.PaymentCard);
+      }
+      // Payment type is not enabled
+      if (!enabledPaymentTypes.includes(paymentMethod.paymentType))
         return false;
 
       // Card has expired
@@ -74,19 +81,13 @@ export function usePreviousPaymentMethods(): {
   };
 }
 
-const hasPaymentCard = (paymentTypes: PaymentType[]): PaymentType[] => {
+const hasPaymentCard = (paymentTypes: PaymentType[]): boolean => {
   const paymentCardTypes: PaymentType[] = [
     PaymentType.Amex,
     PaymentType.Visa,
     PaymentType.Mastercard,
   ];
-
-  const enabledPaymentTypes: PaymentType[] = paymentTypes.filter(onlyUniques);
-
-  if (paymentTypes.some((type) => paymentCardTypes.includes(type))) {
-    enabledPaymentTypes.push(PaymentType.PaymentCard);
-  }
-  return enabledPaymentTypes;
+  return paymentTypes.some((type) => paymentCardTypes.includes(type));
 };
 
 type StoredPaymentMethods = {
