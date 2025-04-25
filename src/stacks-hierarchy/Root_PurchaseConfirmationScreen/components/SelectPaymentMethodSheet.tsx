@@ -453,7 +453,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.large,
   },
   paymentMethod: {
     flex: 1,

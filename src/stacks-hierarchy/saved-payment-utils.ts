@@ -32,8 +32,22 @@ export function usePreviousPaymentMethods(): {
         if (!recurringPayment) return false;
       }
 
+      const enabledPaymentTypes: PaymentType[] = Array.from(
+        new Set(paymentTypes),
+      );
+      const paymentCardTypes: PaymentType[] = [
+        PaymentType.Amex,
+        PaymentType.Visa,
+        PaymentType.Mastercard,
+      ];
+
+      if (paymentTypes.some((type) => paymentCardTypes.includes(type))) {
+        enabledPaymentTypes.push(PaymentType.PaymentCard);
+      }
+
       // Payment type is not enabled
-      if (!paymentTypes.includes(paymentMethod.paymentType)) return false;
+      if (!enabledPaymentTypes.includes(paymentMethod.paymentType))
+        return false;
 
       // Card has expired
       const expired =
