@@ -1,6 +1,6 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
-import {TipRaw, TipType} from '@atb/tips-and-information/types';
+import {TipRaw, TipType} from './types';
 
 export function mapToTips(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<TipRaw>[],
