@@ -1,8 +1,8 @@
 import React from 'react';
 import {OnboardingScreenComponent} from '@atb/onboarding';
-import {MyLocation} from '@atb/assets/svg/color/images';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
+import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
 
 export type PaymentScreenComponentProps = {};
 
@@ -13,7 +13,7 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
     <OnboardingScreenComponent
       illustration={
         //Updating in another issue
-        <MyLocation height={220} />
+        <ThemedMyLocation height={220} />
       }
       title={t(MobilityTexts.shmoRequirements.payment.title)}
       description={t(MobilityTexts.shmoRequirements.payment.description)}

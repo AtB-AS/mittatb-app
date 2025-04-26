@@ -1,9 +1,9 @@
 import React from 'react';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {OnboardingScreenComponent} from '@atb/onboarding';
-import {MyLocation} from '@atb/assets/svg/color/images';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
+import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
 
 export type LocationScreenComponentProps = {};
 
@@ -14,7 +14,7 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<MyLocation height={220} />}
+      illustration={<ThemedMyLocation height={220} />}
       title={t(MobilityTexts.shmoRequirements.location.title)}
       description={t(MobilityTexts.shmoRequirements.location.description)}
       buttonText={t(MobilityTexts.shmoRequirements.location.button)}

@@ -138,7 +138,7 @@ export const BikeStationBottomSheet = ({
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<ThemedCityBike />}
+                      fallback={<ThemedCityBike height={50} width={50} />}
                     />
                   </View>
                 </GenericSectionItem>

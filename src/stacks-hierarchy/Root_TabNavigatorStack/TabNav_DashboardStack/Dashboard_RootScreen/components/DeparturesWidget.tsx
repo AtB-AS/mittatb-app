@@ -83,7 +83,7 @@ export const DeparturesWidget = ({
         <Section>
           <GenericSectionItem>
             <View style={styles.noFavouritesView}>
-              <ThemedNoFavouriteDepartureImage />
+              <ThemedNoFavouriteDepartureImage height={97} width={87} />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
                   typography="body__secondary"
