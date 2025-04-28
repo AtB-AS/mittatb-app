@@ -15,6 +15,7 @@ type Args = {
   paymentMethod?: PaymentMethod;
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
+  onSuccess?: (reservation: OfferReservation) => void;
 };
 
 export const useReserveOfferMutation = ({
@@ -22,6 +23,7 @@ export const useReserveOfferMutation = ({
   paymentMethod,
   recipient,
   shouldSavePaymentMethod,
+  onSuccess,
 }: Args) => {
   const {abtCustomerId, phoneNumber} = useAuthContext();
   const {enable_auto_sale: autoSale} = useRemoteConfigContext();
@@ -44,10 +46,11 @@ export const useReserveOfferMutation = ({
         recipient,
       });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (recipient?.name) {
         queryClient.invalidateQueries([FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY]);
       }
+      onSuccess?.(data);
     },
   });
 };

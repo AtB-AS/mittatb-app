@@ -25,14 +25,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {RefObject, useCallback, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -118,6 +111,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
+    onSuccess: (data) => {
+      if (paymentMethod?.paymentType !== PaymentType.Vipps) {
+        openInAppBrowser(
+          data.url,
+          'cancel',
+          `${APP_SCHEME}://purchase-callback`,
+          onPaymentCompleted,
+        );
+      }
+    },
   });
   const cancelPaymentMutation = useCancelPaymentMutation({
     onSuccess: () => {
@@ -151,26 +154,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userId,
     paymentMethod?.paymentType,
     reserveMutation.data?.recurring_payment_id,
-  ]);
-
-  useEffect(() => {
-    if (
-      reserveMutation.isSuccess &&
-      paymentMethod?.paymentType !== PaymentType.Vipps &&
-      reserveMutation.data.url
-    ) {
-      openInAppBrowser(
-        reserveMutation.data.url,
-        'cancel',
-        `${APP_SCHEME}://purchase-callback`,
-        onPaymentCompleted,
-      );
-    }
-  }, [
-    reserveMutation.isSuccess,
-    reserveMutation.data?.url,
-    paymentMethod?.paymentType,
-    onPaymentCompleted,
   ]);
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
