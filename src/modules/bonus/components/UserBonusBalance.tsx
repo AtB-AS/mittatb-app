@@ -8,6 +8,7 @@ import {isDefined} from '@atb/utils/presence';
 
 type Props = {
   size: 'small' | 'large';
+  color: string;
 };
 
 const TYPOGRAPHY_BONUS_BALANCE: Record<Props['size'], TextNames> = {
@@ -15,21 +16,11 @@ const TYPOGRAPHY_BONUS_BALANCE: Record<Props['size'], TextNames> = {
   large: 'body__primary--jumbo--bold',
 };
 
-const getColor = (theme: Theme, size: Props['size']) => {
-  const colorMap: Record<Props['size'], string> = {
-    small: theme.color.foreground.dynamic.secondary,
-    large: theme.color.foreground.dynamic.primary,
-  };
-  return colorMap[size];
-};
 
-export const UserBonusBalance = ({size}: Props) => {
-  const {theme} = useThemeContext();
+export const UserBonusBalance = ({color, size}: Props) => {
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
-
-  const color = getColor(theme, size);
 
   return (
     <>
