@@ -69,11 +69,14 @@ export function TravelTokenBox({
         <View style={styles.content}>
           {isTravelCard ? (
             <ThemedTokenTravelCard
-              style={{maxWidth: 90}}
+              style={{maxWidth: 72, maxHeight: 72}}
               testID={inspectableToken.type + 'Icon'}
             />
           ) : (
-            <ThemedTokenPhone testID={inspectableToken.type + 'Icon'} />
+            <ThemedTokenPhone
+              style={{maxWidth: 72, maxHeight: 72}}
+              testID={inspectableToken.type + 'Icon'}
+            />
           )}
           <View style={styles.activeTravelTokenInfo}>
             <ThemeText

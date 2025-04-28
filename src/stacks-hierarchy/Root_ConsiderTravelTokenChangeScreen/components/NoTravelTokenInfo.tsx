@@ -5,10 +5,10 @@ import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/Mob
 
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
-import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 import {OnboardingFullScreenView} from '@atb/onboarding';
+import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -45,7 +45,7 @@ export function NoTravelTokenInfo({
           : t(MobileTokenOnboardingTexts.error.description)}
       </ThemeText>
       <View style={styles.illustration}>
-        <CrashSmall />
+        <ThemedCrashSmall />
       </View>
     </OnboardingFullScreenView>
   );

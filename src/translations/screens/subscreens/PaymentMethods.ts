@@ -25,7 +25,7 @@ const PaymentMethodsTexts = {
       'Are you sure you want to remove this payment card?',
       'Er du sikker på at du vil fjerne dette betalingskortet?',
     ),
-    confirmButton: _('Fjern kort', 'Remove card', 'Fjern kort'),
+    confirmButton: _('Fjern', 'Remove', 'Fjern'),
     cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
   },
   a11y: {

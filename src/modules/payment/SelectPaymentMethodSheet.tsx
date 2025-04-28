@@ -81,33 +81,75 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.paymentMethods}>
-            {singlePaymentMethods.map((method, index) => {
-              return (
+            <View>
+              {recurringPaymentMethods &&
+                recurringPaymentMethods?.length > 0 && (
+                  <View style={styles.listHeading}>
+                    <ThemeText color="secondary">
+                      {t(SelectPaymentMethodTexts.saved_cards.text)}
+                    </ThemeText>
+                  </View>
+                )}
+              {recurringPaymentMethods?.map((method, index) => (
                 <SinglePaymentMethod
-                  key={method.paymentType}
+                  key={method.recurringCard?.id}
                   paymentMethod={method}
                   shouldSave={shouldSave}
-                  selected={selectedMethod?.paymentType === method.paymentType}
+                  selected={
+                    selectedMethod?.recurringCard?.id ===
+                    method.recurringCard?.id
+                  }
                   onSelect={(val: PaymentSelection) => {
                     setSelectedMethod(val);
                   }}
                   index={index}
                 />
-              );
-            })}
-            <MultiplePaymentMethodsRadioSection
-              shouldSave={shouldSave}
-              toggleShouldSave={toggleShouldSave}
-              selected={selectedMethod?.paymentType === PaymentType.PaymentCard}
-              onSelect={() => {
-                setSelectedMethod({
-                  paymentType: PaymentType.PaymentCard,
-                  savedType: SavedPaymentMethodType.Normal,
-                });
-              }}
-              paymentMethodsInGroup={multiplePaymentMethods}
-              testID="multiplePaymentMethods"
-            />
+              ))}
+            </View>
+
+            <View>
+              {recurringPaymentMethods &&
+                recurringPaymentMethods?.length > 0 && (
+                  <View style={styles.listHeading}>
+                    <ThemeText color="secondary">
+                      {t(SelectPaymentMethodTexts.other_cards.text)}
+                    </ThemeText>
+                  </View>
+                )}
+
+              {singlePaymentMethods.map((method, index) => {
+                return (
+                  <SinglePaymentMethod
+                    key={method.paymentType}
+                    paymentMethod={method}
+                    shouldSave={shouldSave}
+                    selected={
+                      selectedMethod?.paymentType === method.paymentType
+                    }
+                    onSelect={(val: PaymentSelection) => {
+                      setSelectedMethod(val);
+                    }}
+                    index={index}
+                  />
+                );
+              })}
+
+              <MultiplePaymentMethodsRadioSection
+                shouldSave={shouldSave}
+                toggleShouldSave={toggleShouldSave}
+                selected={
+                  selectedMethod?.paymentType === PaymentType.PaymentCard
+                }
+                onSelect={() => {
+                  setSelectedMethod({
+                    paymentType: PaymentType.PaymentCard,
+                    savedType: SavedPaymentMethodType.Normal,
+                  });
+                }}
+                paymentMethodsInGroup={multiplePaymentMethods}
+                testID="multiplePaymentMethods"
+              />
+            </View>
 
             {authenticationType !== 'phone' && (
               <MessageInfoText
@@ -118,28 +160,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 type="warning"
               />
             )}
-
-            {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
-              <View style={styles.listHeading}>
-                <ThemeText>
-                  {t(SelectPaymentMethodTexts.saved_cards.text)}
-                </ThemeText>
-              </View>
-            )}
-            {recurringPaymentMethods?.map((method, index) => (
-              <SinglePaymentMethod
-                key={method.recurringCard?.id}
-                paymentMethod={method}
-                shouldSave={shouldSave}
-                selected={
-                  selectedMethod?.recurringCard?.id === method.recurringCard?.id
-                }
-                onSelect={(val: PaymentSelection) => {
-                  setSelectedMethod(val);
-                }}
-                index={index}
-              />
-            ))}
           </View>
           <FullScreenFooter>
             <Button
@@ -399,8 +419,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   listHeading: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: theme.spacing.large,
+
     paddingBottom: theme.spacing.small,
   },
   spinner: {
@@ -435,6 +454,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
+    rowGap: theme.spacing.large,
   },
   paymentMethod: {
     flex: 1,
