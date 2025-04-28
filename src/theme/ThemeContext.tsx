@@ -1,4 +1,4 @@
-import {RCTChangeNative} from '@atb/change-native';
+import {changeAppearance} from '@atb/modules/native-bridges';
 import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
 import {usePreferencesContext} from '../preferences';
@@ -61,10 +61,10 @@ export const ThemeContextProvider = ({children}: Props) => {
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
     if (overrideSystemAppearance && colorScheme !== storedColorScheme) {
-      RCTChangeNative.changeAppearance(storedColorScheme);
+      changeAppearance(storedColorScheme);
     }
     if (!overrideSystemAppearance) {
-      RCTChangeNative.changeAppearance(null);
+      changeAppearance(null);
     }
   }, [overrideSystemAppearance, storedColorScheme, colorScheme]);
 
