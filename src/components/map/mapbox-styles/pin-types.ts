@@ -24,7 +24,7 @@ export type VehicleIconCode =
 
 export type StationIconCode = 'sharedcar' | 'citybike';
 
-export type PinScooterCompany = 'generic' | 'voi' | 'ryde' | 'tier'; // todo: change 'tier' to 'dott' when sprite ready
+export type PinScooterCompany = 'generic' | 'voi' | 'ryde' | 'dott';
 
 export type LiveVehiclePinState =
   | 'active'
