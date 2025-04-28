@@ -118,6 +118,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           'cancel',
           `${APP_SCHEME}://purchase-callback`,
           onPaymentCompleted,
+          () =>
+            cancelPaymentMutation.mutate({
+              reservation: data,
+              isUser: false,
+            }),
         );
       }
     },
@@ -126,6 +131,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     onSuccess: () => {
       cancelPaymentMutation.reset();
       reserveMutation.reset();
+      analytics.logEvent('Ticketing', 'Payment cancelled');
     },
   });
 
@@ -192,14 +198,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             paymentMethod: PaymentMethod,
             shouldSavePaymentMethod: boolean,
           ) => {
-            reserveMutation.reset();
             setVippsNotInstalledError(false);
-            if (reserveMutation.isSuccess) {
+            if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
                 reservation: reserveMutation.data,
                 isUser: false,
               });
-              analytics.logEvent('Ticketing', 'Payment cancelled');
             }
             setSelectedPaymentMethod(paymentMethod);
             setShouldSavePaymentMethod(shouldSavePaymentMethod);
@@ -221,12 +225,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         leftButton: {
           type: 'back',
           onPress: () => {
-            if (reserveMutation.isSuccess) {
+            if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
                 reservation: reserveMutation.data,
                 isUser: false,
               });
-              analytics.logEvent('Ticketing', 'Payment cancelled');
             }
             navigation.pop();
           },
@@ -317,7 +320,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onSelectPaymentMethod={selectPaymentMethod}
           onGoToPayment={goToPayment}
           onCancelPayment={() => {
-            if (reserveMutation.isSuccess) {
+            if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
                 reservation: reserveMutation.data,
                 isUser: true,
