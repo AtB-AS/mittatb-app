@@ -81,7 +81,10 @@ export const PayWithBonusPointsCheckbox = ({
                 <ThemeText typography="body__secondary" color="secondary">
                   {t(BonusProgramTexts.youHave)}
                 </ThemeText>
-                <UserBonusBalance size="small" color={theme.color.foreground.dynamic.secondary}/>
+                <UserBonusBalance
+                  size="small"
+                  color={theme.color.foreground.dynamic.secondary}
+                />
               </View>
             </View>
             <BonusPriceTag

@@ -207,7 +207,10 @@ function UserBonusBalanceSection(): JSX.Element {
             )}
           >
             <View style={styles.currentBalanceDisplay}>
-              <UserBonusBalance size="large" color={theme.color.foreground.dynamic.primary}/>
+              <UserBonusBalance
+                size="large"
+                color={theme.color.foreground.dynamic.primary}
+              />
             </View>
 
             <ThemeText typography="body__secondary" color="secondary">

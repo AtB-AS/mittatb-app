@@ -16,9 +16,7 @@ const TYPOGRAPHY_BONUS_BALANCE: Record<Props['size'], TextNames> = {
   large: 'body__primary--jumbo--bold',
 };
 
-
 export const UserBonusBalance = ({color, size}: Props) => {
-
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
