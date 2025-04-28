@@ -213,21 +213,21 @@ const FareContractTexts = {
   },
   refund: {
     cancel: _('Avbryt', 'Cancel', 'Avbryt'),
-    refund: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    refund: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
     bottomSheetTitle: _(
       'Vil du angre billettkjøpet?',
-      'Do you want to undo the ticket purchase?',
+      'Do you want to cancel the ticket purchase?',
       'Vil du angre billettkjøpet?',
     ),
     bottomSheetDescription: _(
       'Her kan du angre kjøpet av billetten og få pengene tilbake. Pengene er tilbake på konto innen få virkedager.',
-      'Here you can undo the ticket purchase and get your money back. The money will be back in your account within a few business days.',
+      'Here you can cancel the ticket purchase and get your money back. The money will be back in your account within a few business days.',
       'Her kan du angre kjøpet av billetten og få pengane tilbake. Pengane er tilbake på kontoen din innen få virkedagar.',
     ),
-    confirm: _('Angre kjøp', 'Undo purchase', 'Angre kjøp'),
+    confirm: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
     genericError: _(
       'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
-      'We are unable to refund this purchase. Please try again or contact customer service.',
+      'We are unable to cancel this purchase. Please try again or contact customer service.',
       'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
     ),
     readMore: _(
