@@ -182,6 +182,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 
 function UserBonusBalanceSection(): JSX.Element {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -206,7 +207,10 @@ function UserBonusBalanceSection(): JSX.Element {
             )}
           >
             <View style={styles.currentBalanceDisplay}>
-              <UserBonusBalance size="large" />
+              <UserBonusBalance
+                size="large"
+                color={theme.color.foreground.dynamic.primary}
+              />
             </View>
 
             <ThemeText typography="body__secondary" color="secondary">
