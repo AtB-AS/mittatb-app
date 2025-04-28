@@ -1,4 +1,4 @@
-import {TextNames, Theme, useThemeContext} from '@atb/theme';
+import {TextNames} from '@atb/theme';
 import {ActivityIndicator} from 'react-native';
 import {useBonusBalanceQuery} from '..';
 import {ThemeText} from '@atb/components/text';
