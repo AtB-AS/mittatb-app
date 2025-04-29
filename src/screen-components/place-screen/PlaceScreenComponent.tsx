@@ -13,7 +13,7 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
 import {StopPlacesView} from './components/StopPlacesView';
-import {useStopsDetailsDataQuery} from '@atb/place-screen';
+import {useStopsDetailsDataQuery} from '@atb/screen-components/place-screen';
 
 export type PlaceScreenParams = {
   place: StopPlace;

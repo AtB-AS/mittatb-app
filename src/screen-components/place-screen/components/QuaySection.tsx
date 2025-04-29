@@ -22,7 +22,7 @@ import {
   isSituationValidAtDate,
   SituationSectionItem,
 } from '@atb/modules/situations';
-import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
+import {EstimatedCallList} from './EstimatedCallList';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 export type QuaySectionProps = {

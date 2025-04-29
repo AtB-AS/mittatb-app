@@ -4,15 +4,12 @@ import {ThemeText} from '@atb/components/text';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {RefObject, useCallback} from 'react';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {
-  EstimatedCallItem,
-  EstimatedCallItemProps,
-} from '@atb/place-screen/components/EstimatedCallItem';
+import {EstimatedCallItem, EstimatedCallItemProps} from './EstimatedCallItem';
 import {
   StoredFavoriteDeparture,
   useOnMarkFavouriteDepartures,
 } from '@atb/favorites';
-import {QuaySectionProps} from '@atb/place-screen/components/QuaySection';
+import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
 
 type EstimatedCallRenderItem = {

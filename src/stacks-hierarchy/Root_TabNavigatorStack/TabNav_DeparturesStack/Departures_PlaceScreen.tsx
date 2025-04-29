@@ -1,5 +1,5 @@
 import {DeparturesStackProps} from './navigation-types';
-import {PlaceScreenComponent} from '@atb/place-screen';
+import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
 
 type Props = DeparturesStackProps<'Departures_PlaceScreen'>;
 

@@ -1,4 +1,4 @@
-import {StopPlacesMode} from '../screen-components/nearby-stop-places';
+import {StopPlacesMode} from '../nearby-stop-places';
 import {addDays, differenceInSeconds, parseISO} from 'date-fns';
 
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
