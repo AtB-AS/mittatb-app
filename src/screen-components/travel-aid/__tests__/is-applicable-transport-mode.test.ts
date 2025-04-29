@@ -1,9 +1,9 @@
-import {isApplicableTransportMode} from '@atb/travel-aid/utils';
+import {isApplicableTransportMode} from '../utils';
 import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
+import type {ServiceJourneyWithGuaranteedCalls} from '../types';
 
 const withModes = (
   transportMode?: TransportMode,

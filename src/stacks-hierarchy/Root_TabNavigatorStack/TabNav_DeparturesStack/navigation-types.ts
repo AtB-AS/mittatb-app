@@ -6,7 +6,7 @@ import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/Departur
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
-import {TravelAidScreenParams} from '@atb/travel-aid/TravelAidScreenComponent';
+import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
 
 export type DeparturesStackParams = StackParams<{
   Departures_DepartureDetailsScreen: DepartureDetailsScreenParams;

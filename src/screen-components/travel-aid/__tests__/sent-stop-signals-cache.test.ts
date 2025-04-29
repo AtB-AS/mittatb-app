@@ -1,4 +1,4 @@
-import {createSentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
+import {createSentStopSignalsCache} from '../sent-stop-signals-cache';
 
 describe('sentStopSignalsCache', () => {
   let sentStopSignalsCache: ReturnType<typeof createSentStopSignalsCache>;

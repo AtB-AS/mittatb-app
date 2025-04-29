@@ -1,5 +1,5 @@
 import type {StopSignalModeAndSubmodesType} from '@atb-as/config-specs';
-import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
+import type {ServiceJourneyWithGuaranteedCalls} from './types';
 
 export const isApplicableTransportMode = (
   configModes: StopSignalModeAndSubmodesType[],

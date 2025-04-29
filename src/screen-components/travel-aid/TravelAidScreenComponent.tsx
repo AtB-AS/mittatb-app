@@ -30,13 +30,13 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {StopSignalButton} from '@atb/travel-aid/components/StopSignalButton';
-import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
-import {useStopSignalMutation} from '@atb/travel-aid/use-stop-signal-mutation';
+import {StopSignalButton} from './components/StopSignalButton';
+import type {ServiceJourneyWithGuaranteedCalls} from './types';
+import {useStopSignalMutation} from './use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
-import {createSentStopSignalsCache} from '@atb/travel-aid/sent-stop-signals-cache';
+import {createSentStopSignalsCache} from './sent-stop-signals-cache';
 import {LiveRegionWrapper} from '@atb/components/screen-reader-announcement';
 
 export type TravelAidScreenParams = {

@@ -7,14 +7,14 @@ import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragm
 import {AUTHORITY} from '@env';
 import {addMinutes, isBetween} from '@atb/utils/date';
 import React from 'react';
-import type {ServiceJourneyWithGuaranteedCalls} from '@atb/travel-aid/types';
+import type {ServiceJourneyWithGuaranteedCalls} from '../types';
 import {View} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import type {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
-import {isApplicableTransportMode} from '@atb/travel-aid/utils';
+import {isApplicableTransportMode} from '../utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAnalyticsContext} from '@atb/analytics';
 

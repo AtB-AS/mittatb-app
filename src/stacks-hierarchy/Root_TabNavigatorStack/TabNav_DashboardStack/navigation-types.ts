@@ -8,7 +8,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
-import {TravelAidScreenParams} from '@atb/travel-aid/TravelAidScreenComponent';
+import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
