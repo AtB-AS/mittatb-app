@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {LoadingState} from '@atb/loading-screen/types';
+import {LoadingState} from './types';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 export const useNotifyBugsnagOnTimeoutStatus = (

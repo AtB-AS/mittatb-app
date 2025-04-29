@@ -1,6 +1,6 @@
 import {act, renderHook} from '@testing-library/react-hooks';
-import {useLoadingState} from '@atb/loading-screen/use-loading-state';
-import {LoadingParams} from '@atb/loading-screen/types';
+import {useLoadingState} from '../use-loading-state';
+import {LoadingParams} from '../types';
 
 const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: true,
@@ -32,7 +32,7 @@ jest.mock('@atb/configuration', () => ({
     },
   }),
 }));
-jest.mock('@atb/loading-screen', () => ({
+jest.mock('@atb/screen-components/loading-screen', () => ({
   useIsLoadingAppState: () => mockState.isLoadingAppState,
 }));
 

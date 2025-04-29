@@ -47,7 +47,7 @@ import {
   LoadingScreen,
   LoadingScreenBoundary,
   useIsLoadingAppState,
-} from '@atb/loading-screen';
+} from '@atb/screen-components/loading-screen';
 import {
   Root_ParkingViolationsConfirmationScreen,
   Root_ParkingViolationsPhotoScreen,

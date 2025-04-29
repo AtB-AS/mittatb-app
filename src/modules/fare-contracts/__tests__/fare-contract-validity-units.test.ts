@@ -1,5 +1,5 @@
 import {fareContractValidityUnits} from '../fare-contract-validity-units';
-import {LoadingParams} from '@atb/loading-screen/types';
+import {LoadingParams} from '@atb/screen-components/loading-screen';
 import React from 'react';
 
 const DEFAULT_MOCK_STATE: LoadingParams = {

@@ -1,6 +1,6 @@
 import {renderHook} from '@testing-library/react-hooks';
-import {LoadingParams, LoadingStatus} from '@atb/loading-screen/types';
-import {useNotifyBugsnagOnTimeoutStatus} from '@atb/loading-screen/use-notify-bugsnag-on-timeout-status';
+import {LoadingParams, LoadingStatus} from '../types';
+import {useNotifyBugsnagOnTimeoutStatus} from '../use-notify-bugsnag-on-timeout-status';
 import React, {MutableRefObject} from 'react';
 import jestExpect from 'expect';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';

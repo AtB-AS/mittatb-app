@@ -1,8 +1,8 @@
 import {useAuthContext} from '@atb/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {LoadingParams, LoadingState} from '@atb/loading-screen/types';
+import {LoadingParams, LoadingState} from './types';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {useIsLoadingAppState} from '@atb/loading-screen';
+import {useIsLoadingAppState} from '@atb/screen-components/loading-screen';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
 export const useLoadingState = (timeoutMs: number): LoadingState => {

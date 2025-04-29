@@ -2,8 +2,8 @@ import React from 'react';
 import {LoadingScreen} from './LoadingScreen';
 import {LoadingErrorScreen} from './LoadingErrorScreen';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
-import {useLoadingState} from '@atb/loading-screen/use-loading-state';
-import {useNotifyBugsnagOnTimeoutStatus} from '@atb/loading-screen/use-notify-bugsnag-on-timeout-status';
+import {useLoadingState} from './use-loading-state';
+import {useNotifyBugsnagOnTimeoutStatus} from './use-notify-bugsnag-on-timeout-status';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
