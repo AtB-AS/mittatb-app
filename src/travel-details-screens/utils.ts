@@ -25,7 +25,6 @@ import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/boo
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
 import {isDefined} from '@atb/utils/presence';
-import {screenReaderPause} from '@atb/components/text';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
@@ -506,7 +505,7 @@ export function getLineAndTimeA11yLabel(
       : undefined,
   ]
     .filter(isDefined)
-    .join(screenReaderPause);
+    .join(', ');
 }
 
 export function getNonFreeLegs(legs: Leg[]) {

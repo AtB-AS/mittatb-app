@@ -1,6 +1,6 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/modules/fare-contracts';
-import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
