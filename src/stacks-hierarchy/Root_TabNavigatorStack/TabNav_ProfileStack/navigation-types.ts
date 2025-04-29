@@ -6,7 +6,7 @@ import {PlaceScreenParams} from '@atb/screen-components/place-screen';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
-import {TicketHistoryScreenParams} from '@atb/ticket-history';
+import {TicketHistoryScreenParams} from '@atb/screen-components/ticket-history';
 
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;

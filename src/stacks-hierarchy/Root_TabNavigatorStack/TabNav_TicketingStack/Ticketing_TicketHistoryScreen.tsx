@@ -1,5 +1,5 @@
 import React from 'react';
-import {TicketHistoryScreenComponent} from '@atb/ticket-history';
+import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
 import {TicketingScreenProps} from './navigation-types';
 
 type Props = TicketingScreenProps<'Ticketing_TicketHistoryScreen'>;
