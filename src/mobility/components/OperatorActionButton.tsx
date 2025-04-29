@@ -135,19 +135,32 @@ const OperatorActionButtonWithValueCode = ({
   const {t} = useTranslation();
 
   const {
-    mutateAsync: getValueCode,
-    isLoading: isLoading,
-    isError: isError,
-  } = buyValueCodeWithBonusPoints
-    ? // eslint-disable-next-line react-hooks/rules-of-hooks
-      useValueCodeMutation(operatorId)
-    : // eslint-disable-next-line react-hooks/rules-of-hooks
-      useBuyValueCodeWithBonusPointsQuery(bonusProductId);
+    mutateAsync: fetchValueCode,
+    isLoading: isFetchingValueCode,
+    isError: isFetchingValueCodeError,
+  } = useValueCodeMutation(operatorId);
+
+  const {
+    mutateAsync: buyBonusProduct,
+    isLoading: isBuyingValueCode,
+    isError: isBuyingValueCodeError,
+  } = useBuyValueCodeWithBonusPointsQuery(bonusProductId);
+
+  const getValueCode = useCallback(async () => {
+    return buyValueCodeWithBonusPoints ? buyBonusProduct() : fetchValueCode();
+  }, [buyValueCodeWithBonusPoints, buyBonusProduct, fetchValueCode]);
 
   const appSwitchButtonOnPress = useCallback(async () => {
     const valueCode = await getValueCode();
     valueCode && buttonOnPress(valueCode);
   }, [buttonOnPress, getValueCode]);
+
+  const isLoading = buyValueCodeWithBonusPoints
+    ? isBuyingValueCode
+    : isFetchingValueCode;
+  const isError = buyValueCodeWithBonusPoints
+    ? isBuyingValueCodeError
+    : isFetchingValueCodeError;
 
   if (isLoading) {
     return <ActivityIndicator />;
