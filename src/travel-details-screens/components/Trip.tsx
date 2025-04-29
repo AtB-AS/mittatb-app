@@ -23,7 +23,7 @@ import {
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
-} from '@atb/travel-details-map-screen';
+} from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';

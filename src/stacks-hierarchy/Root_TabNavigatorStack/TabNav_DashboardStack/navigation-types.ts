@@ -1,5 +1,5 @@
 import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {PlaceScreenParams} from '@atb/screen-components/place-screen';
 import {TripDetailsScreenParams} from '@atb/travel-details-screens/TripDetailsScreenComponent';
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';

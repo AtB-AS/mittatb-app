@@ -3,7 +3,7 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {PlaceScreenParams} from '@atb/screen-components/place-screen';
 import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';

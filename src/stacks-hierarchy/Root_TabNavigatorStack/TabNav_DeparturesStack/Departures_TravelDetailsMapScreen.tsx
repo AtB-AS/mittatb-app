@@ -1,4 +1,4 @@
-import {TravelDetailsMapScreenComponent} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import {TravelDetailsMapScreenComponent} from '@atb/screen-components/travel-details-map-screen';
 import {DeparturesStackProps} from './navigation-types';
 
 type Props = DeparturesStackProps<'Departures_TravelDetailsMapScreen'>;

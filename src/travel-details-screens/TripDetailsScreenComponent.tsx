@@ -18,7 +18,7 @@ import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_Purc
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {

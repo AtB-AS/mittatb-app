@@ -24,7 +24,7 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {animateNextChange} from '@atb/utils/animation';
 import {
   formatToVerboseFullDate,
