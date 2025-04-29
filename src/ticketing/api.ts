@@ -1,11 +1,11 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequest} from '.';
 import {FareContractType} from '@atb-as/utils';
 import {client} from '../api';
 import {
   Offer,
-  OfferReservation,
+  ReserveOfferResponse,
   PaymentType,
   RecentFareContractBackend,
   RecurringPayment,
@@ -146,9 +146,9 @@ export async function reserveOffers({
   phoneNumber,
   recipient,
   ...rest
-}: ReserveOfferParams): Promise<OfferReservation> {
+}: ReserveOfferParams): Promise<ReserveOfferResponse> {
   const url = 'ticket/v3/reserve';
-  const body: ReserveOfferRequestBody = {
+  const body: ReserveOfferRequest = {
     payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
     offers,
     payment_type: paymentType,
@@ -162,7 +162,7 @@ export async function reserveOffers({
       ? {alias: recipient.name, phone_number: recipient.phoneNumber}
       : undefined,
   };
-  const response = await client.post<OfferReservation>(url, body, {
+  const response = await client.post<ReserveOfferResponse>(url, body, {
     ...opts,
     authWithIdToken: true,
   });
@@ -170,11 +170,12 @@ export async function reserveOffers({
 }
 
 export async function cancelPayment(
-  payment_id: number,
-  transaction_id: number,
+  paymentId: number,
+  transactionId: number,
+  isUser: boolean,
 ): Promise<void> {
-  const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put(url, {}, {authWithIdToken: true});
+  const url = `ticket/v3/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
+  await client.put(url, undefined, {authWithIdToken: true});
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {

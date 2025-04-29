@@ -1,8 +1,22 @@
-import {cancelPayment, OfferReservation} from '@atb/ticketing';
+import {cancelPayment, ReserveOfferResponse} from '@atb/ticketing';
 import {useMutation} from '@tanstack/react-query';
 
-export const useCancelPaymentMutation = () =>
+type Params = {
+  reserveOfferResponse: ReserveOfferResponse;
+  /** Whether or not the cancellation was triggered manually by a user */
+  isUser: boolean;
+};
+export const useCancelPaymentMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) =>
   useMutation({
-    mutationFn: (reservation: OfferReservation) =>
-      cancelPayment(reservation.payment_id, reservation.transaction_id),
+    mutationFn: ({reserveOfferResponse, isUser}: Params) =>
+      cancelPayment(
+        reserveOfferResponse.payment_id,
+        reserveOfferResponse.transaction_id,
+        isUser,
+      ),
+    onSuccess,
   });
