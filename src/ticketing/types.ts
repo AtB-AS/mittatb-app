@@ -27,9 +27,9 @@ export enum PaymentType {
 
 export type RecurringPayment = {
   id: number;
-  expires_at: string;
-  masked_pan: string;
-  payment_type: number;
+  expiresAt: string;
+  maskedPan: string;
+  paymentType: number;
 };
 
 export type PaymentStatus =
@@ -199,8 +199,8 @@ export type TravelCard = {
 };
 
 export type AddPaymentMethodResponse = {
-  recurring_payment_id: number;
-  terminal_url: string;
+  recurringPaymentId: number;
+  terminalUrl: string;
 };
 
 /**

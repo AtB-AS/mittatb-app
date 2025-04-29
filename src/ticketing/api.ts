@@ -45,29 +45,36 @@ type Traveller = {
 };
 
 export async function listRecurringPayments(): Promise<RecurringPayment[]> {
-  const url = 'ticket/v3/recurring-payments';
+  const url = 'sales/v1/recurring-payments';
+
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
+
   return response.data;
 }
 
-export async function addPaymentMethod(paymentRedirectUrl: string) {
-  const url = `ticket/v3/recurring-payments`;
-  return client.post<AddPaymentMethodResponse>(
+export async function addPaymentMethod(
+  paymentRedirectUrl: string,
+): Promise<AddPaymentMethodResponse> {
+  const url = `sales/v1/recurring-payments`;
+
+  const response = await client.post<AddPaymentMethodResponse>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
   );
+
+  return response.data;
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}`;
+  const url = `sales/v1/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
 }
 
 export async function cancelRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}/cancel`;
+  const url = `sales/v1/recurring-payments/${paymentId}/cancel`;
   const response = await client.post<void>(url, {}, {authWithIdToken: true});
   return response.data;
 }
