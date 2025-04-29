@@ -116,7 +116,11 @@ export type ReserveOffer = {
   count: number;
 };
 
-export type ReserveOfferRequestBody = {
+/**
+ * Defined by `ReserveOfferRequest` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/reserve.rs
+ */
+export type ReserveOfferRequest = {
   offers: ReserveOffer[];
   /**
    * Recurring payment id should be provided if using a previously stored
@@ -157,7 +161,11 @@ export type TicketRecipientType = {
   name?: string;
 };
 
-export type OfferReservation = {
+/**
+ * Defined by `ReserveOfferResponse` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/reserve.rs
+ */
+export type ReserveOfferResponse = {
   order_id: string;
   payment_id: number;
   transaction_id: number;

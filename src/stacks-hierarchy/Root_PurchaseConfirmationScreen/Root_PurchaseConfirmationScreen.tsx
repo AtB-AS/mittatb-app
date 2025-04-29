@@ -14,7 +14,7 @@ import {
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
-  OfferReservation,
+  ReserveOfferResponse,
   PaymentType,
   ReserveOffer,
   useTicketingContext,
@@ -111,16 +111,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
-    onSuccess: (data) => {
+    onSuccess: (reserveOfferResponse) => {
       if (paymentMethod?.paymentType !== PaymentType.Vipps) {
         openInAppBrowser(
-          data.url,
+          reserveOfferResponse.url,
           'cancel',
           `${APP_SCHEME}://purchase-callback`,
           onPaymentCompleted,
           () =>
             cancelPaymentMutation.mutate({
-              reservation: data,
+              reserveOfferResponse,
               isUser: false,
             }),
         );
@@ -201,7 +201,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             setVippsNotInstalledError(false);
             if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
-                reservation: reserveMutation.data,
+                reserveOfferResponse: reserveMutation.data,
                 isUser: false,
               });
             }
@@ -227,7 +227,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onPress: () => {
             if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
-                reservation: reserveMutation.data,
+                reserveOfferResponse: reserveMutation.data,
                 isUser: false,
               });
             }
@@ -314,7 +314,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           mode={params.mode}
           onCloseFocusRef={onCloseFocusRef}
           totalPrice={totalPrice}
-          reserve={reserveMutation.data}
+          reserveOfferResponse={reserveMutation.data}
           reserveStatus={reserveMutation.status}
           paymentMethod={paymentMethod}
           onSelectPaymentMethod={selectPaymentMethod}
@@ -322,7 +322,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onCancelPayment={() => {
             if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
-                reservation: reserveMutation.data,
+                reserveOfferResponse: reserveMutation.data,
                 isUser: true,
               });
             }
@@ -339,7 +339,7 @@ type PaymentButtonProps = {
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   onCloseFocusRef: RefObject<any>;
-  reserve: OfferReservation | undefined;
+  reserveOfferResponse: ReserveOfferResponse | undefined;
   reserveStatus: MutationStatus;
   paymentMethod: PaymentMethod | undefined;
   onSelectPaymentMethod: () => void;
@@ -352,7 +352,7 @@ const PaymentButton = ({
   totalPrice,
   mode,
   onCloseFocusRef,
-  reserve,
+  reserveOfferResponse,
   reserveStatus,
   paymentMethod,
   onSelectPaymentMethod,
@@ -366,7 +366,9 @@ const PaymentButton = ({
   const totalPriceString = formatNumberToString(totalPrice, language);
 
   const {reservations} = useTicketingContext();
-  const reservation = reservations.find((r) => r.orderId === reserve?.order_id);
+  const reservation = reservations.find(
+    (r) => r.orderId === reserveOfferResponse?.order_id,
+  );
   const isReserving =
     !!reservation && getReservationStatus(reservation) === 'reserving';
 

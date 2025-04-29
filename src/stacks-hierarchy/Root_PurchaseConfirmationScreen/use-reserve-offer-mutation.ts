@@ -1,6 +1,6 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {
-  OfferReservation,
+  ReserveOfferResponse,
   ReserveOffer,
   TicketRecipientType,
   reserveOffers,
@@ -15,7 +15,7 @@ type Args = {
   paymentMethod?: PaymentMethod;
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
-  onSuccess?: (reservation: OfferReservation) => void;
+  onSuccess?: (reserveOfferResponse: ReserveOfferResponse) => void;
 };
 
 export const useReserveOfferMutation = ({
@@ -30,7 +30,7 @@ export const useReserveOfferMutation = ({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (): Promise<OfferReservation> => {
+    mutationFn: async (): Promise<ReserveOfferResponse> => {
       if (!paymentMethod) {
         return Promise.reject(new Error('No payment method provided'));
       }

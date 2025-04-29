@@ -1,11 +1,11 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequest} from '.';
 import {FareContractType} from '@atb-as/utils';
 import {client} from '../api';
 import {
   Offer,
-  OfferReservation,
+  ReserveOfferResponse,
   PaymentType,
   RecentFareContractBackend,
   RecurringPayment,
@@ -146,9 +146,9 @@ export async function reserveOffers({
   phoneNumber,
   recipient,
   ...rest
-}: ReserveOfferParams): Promise<OfferReservation> {
+}: ReserveOfferParams): Promise<ReserveOfferResponse> {
   const url = 'ticket/v3/reserve';
-  const body: ReserveOfferRequestBody = {
+  const body: ReserveOfferRequest = {
     payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
     offers,
     payment_type: paymentType,
@@ -162,7 +162,7 @@ export async function reserveOffers({
       ? {alias: recipient.name, phone_number: recipient.phoneNumber}
       : undefined,
   };
-  const response = await client.post<OfferReservation>(url, body, {
+  const response = await client.post<ReserveOfferResponse>(url, body, {
     ...opts,
     authWithIdToken: true,
   });
