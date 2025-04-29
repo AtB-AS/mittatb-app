@@ -129,15 +129,16 @@ export async function searchOffers(
 }
 
 export async function sendReceipt(
-  order_id: string,
-  order_version: number,
-  email: string,
+  orderId: string,
+  orderVersion: number,
+  emailAddress: string,
 ) {
-  const url = 'ticket/v3/receipt';
+  const url = 'sales/v1/receipt';
+
   const response = await client.post<SendReceiptResponse>(url, {
-    order_id,
-    order_version,
-    email_address: email,
+    orderId,
+    orderVersion,
+    emailAddress,
   });
 
   return response.data;
