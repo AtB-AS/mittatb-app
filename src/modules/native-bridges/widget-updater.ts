@@ -1,6 +1,6 @@
 import {NativeModules} from 'react-native';
 
-// Found in /ios/Modules/WidgetUpdaterBridge.m
+// Found in /ios/BridgeModules/WidgetUpdaterBridge.m
 interface WidgetUpdaterBridge {
   refreshWidgets(): void;
 }
