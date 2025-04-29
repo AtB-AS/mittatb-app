@@ -17,7 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {getDeviceNameWithUnitInfo} from './utils';
-import {TokenToggleInfo} from '@atb/token-toggle-info';
+import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useOnboardingContext} from '@atb/onboarding';
 import {ContentHeading} from '@atb/components/heading';
