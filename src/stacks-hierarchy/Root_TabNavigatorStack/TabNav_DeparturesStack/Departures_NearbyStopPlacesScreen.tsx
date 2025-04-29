@@ -3,7 +3,7 @@ import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchBy
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
 import {DeparturesStackProps} from './navigation-types';
-import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
+import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;

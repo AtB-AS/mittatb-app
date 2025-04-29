@@ -7,7 +7,7 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';

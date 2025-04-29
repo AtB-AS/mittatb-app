@@ -17,7 +17,7 @@ import {
 } from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   isSituationValidAtDate,
   SituationSectionItem,

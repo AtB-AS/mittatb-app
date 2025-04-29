@@ -4,7 +4,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
-import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
+import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/travel-aid/TravelAidScreenComponent';
 

@@ -7,7 +7,7 @@ import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
 import {DateSelection} from './DateSelection';
-import {StopPlacesMode} from '@atb/nearby-stop-places/types';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';

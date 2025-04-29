@@ -9,7 +9,7 @@ import {FavoriteToggle} from './FavoriteToggle';
 import {QuaySection} from './QuaySection';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {hasFavorites} from './StopPlacesView';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';

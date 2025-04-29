@@ -4,7 +4,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
-import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
+import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TicketHistoryScreenParams} from '@atb/ticket-history';
 

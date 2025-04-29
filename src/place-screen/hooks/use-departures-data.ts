@@ -25,7 +25,7 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '@atb/departure-list/utils';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';

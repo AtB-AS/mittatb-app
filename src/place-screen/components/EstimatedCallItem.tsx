@@ -28,7 +28,7 @@ import React, {memo, type RefObject, useRef} from 'react';
 import {View} from 'react-native';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
