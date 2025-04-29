@@ -63,7 +63,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {ForceUpdateScreen} from '@atb/force-update-screen';
+import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
