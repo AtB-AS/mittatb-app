@@ -69,7 +69,7 @@ import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen'
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';

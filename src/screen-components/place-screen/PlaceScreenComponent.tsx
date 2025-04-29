@@ -9,7 +9,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
 import {StopPlacesView} from './components/StopPlacesView';

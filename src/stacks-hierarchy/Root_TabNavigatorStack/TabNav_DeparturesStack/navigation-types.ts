@@ -2,7 +2,7 @@ import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {PlaceScreenParams} from '@atb/screen-components/place-screen';
-import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
+import {DepartureDetailsScreenParams} from '@atb/screen-components/travel-details-screens';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';

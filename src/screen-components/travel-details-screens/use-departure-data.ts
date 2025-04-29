@@ -9,10 +9,7 @@ import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import {
-  formatDestinationDisplay,
-  getNoticesForServiceJourney,
-} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay, getNoticesForServiceJourney} from './utils';
 import {useTranslation} from '@atb/translations';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 

@@ -11,7 +11,7 @@ import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
   getFilteredLegsByWalkOrWaitTime,
@@ -19,12 +19,12 @@ import {
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
   withinZoneIds,
-} from '@atb/travel-details-screens/utils';
+} from '../utils';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/screen-components/travel-details-map-screen';
-import {useGetServiceJourneyVehiclesQuery} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/components/map';
 import {Divider} from '@atb/components/divider';
 import {

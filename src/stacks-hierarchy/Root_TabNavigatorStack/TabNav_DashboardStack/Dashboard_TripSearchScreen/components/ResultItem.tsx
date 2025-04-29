@@ -50,13 +50,13 @@ import {
   isLineFlexibleTransport,
   significantWaitTime,
   significantWalkTime,
-} from '@atb/travel-details-screens/utils';
+} from '@atb/screen-components/travel-details-screens';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
-import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
+import {TripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import type {TripSearchTime} from '../../types';
 

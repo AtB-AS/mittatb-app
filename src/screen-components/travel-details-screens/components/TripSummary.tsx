@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {SummaryDetail} from '@atb/travel-details-screens/components/SummaryDetail';
+import {SummaryDetail} from './SummaryDetail';
 
 export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const {t, language} = useTranslation();

@@ -1,5 +1,5 @@
 import {PlaceScreenParams} from '@atb/screen-components/place-screen';
-import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
+import {DepartureDetailsScreenParams} from '@atb/screen-components/travel-details-screens';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {CompositeScreenProps} from '@react-navigation/native';

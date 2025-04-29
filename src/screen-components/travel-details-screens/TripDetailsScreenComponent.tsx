@@ -19,12 +19,9 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
-import {
-  canSellCollabTicket,
-  getNonFreeLegs,
-} from '@atb/travel-details-screens/utils';
+import {ServiceJourneyDeparture} from './types';
+import {useCurrentTripPatternWithUpdates} from './use-current-trip-pattern-with-updates';
+import {canSellCollabTicket, getNonFreeLegs} from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';

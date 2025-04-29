@@ -7,7 +7,7 @@ import {
   getBookingStatus,
   getLineA11yLabel,
   getNoticesForEstimatedCall,
-} from '@atb/travel-details-screens/utils';
+} from '@atb/screen-components/travel-details-screens';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
   CancelledDepartureTexts,

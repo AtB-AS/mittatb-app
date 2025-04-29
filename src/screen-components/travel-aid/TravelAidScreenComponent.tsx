@@ -2,7 +2,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {EstimatedCallInfo} from '@atb/components/estimated-call';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import React, {Ref} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
@@ -16,7 +16,7 @@ import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
 import {
   getLineA11yLabel,
   getNoticesForServiceJourney,
-} from '@atb/travel-details-screens/utils';
+} from '@atb/screen-components/travel-details-screens';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -29,7 +29,7 @@ import {
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/modules/situations';
-import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
+import {CancelledDepartureMessage} from '@atb/screen-components/travel-details-screens';
 import {StopSignalButton} from './components/StopSignalButton';
 import type {ServiceJourneyWithGuaranteedCalls} from './types';
 import {useStopSignalMutation} from './use-stop-signal-mutation';

@@ -7,7 +7,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -44,12 +44,12 @@ import {BookingInfoBox} from './BookingInfoBox';
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {TripProps} from '@atb/travel-details-screens/components/Trip';
+import {TripProps} from './Trip';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {useMapData} from '@atb/travel-details-screens/use-map-data';
-import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {useMapData} from '../use-map-data';
+import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {BookingOptions} from './BookingOptions';

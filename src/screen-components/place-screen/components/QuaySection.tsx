@@ -23,7 +23,7 @@ import {
   SituationSectionItem,
 } from '@atb/modules/situations';
 import {EstimatedCallList} from './EstimatedCallList';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 export type QuaySectionProps = {
   quay: Quay;

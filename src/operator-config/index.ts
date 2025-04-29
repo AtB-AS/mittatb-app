@@ -1,7 +1,7 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AUTHORITY} from '@env';
-import {isFreeLeg} from '@atb/travel-details-screens/utils';
+import {isFreeLeg} from '@atb/screen-components/travel-details-screens';
 
 const currentAppAuthorityId = AUTHORITY ?? 'ATB:Authority:2';
 

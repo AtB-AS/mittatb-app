@@ -15,7 +15,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalyticsContext} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
-import {TripPatternWithKey} from '@atb/travel-details-screens/types';
+import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 
 export function useTripsQuery(

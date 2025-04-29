@@ -18,7 +18,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type SelectableFavouriteDepartureData = {

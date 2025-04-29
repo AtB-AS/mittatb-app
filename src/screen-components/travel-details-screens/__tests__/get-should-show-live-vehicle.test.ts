@@ -1,5 +1,5 @@
-import {getShouldShowLiveVehicle} from '@atb/travel-details-screens/utils';
-import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
+import {getShouldShowLiveVehicle} from '../utils';
+import {EstimatedCallWithMetadata} from '../use-departure-data';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({}));
 jest.mock('@bugsnag/react-native', () => ({}));

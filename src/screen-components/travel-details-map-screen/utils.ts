@@ -10,7 +10,7 @@ import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
-import {isLineFlexibleTransport} from '@atb/travel-details-screens/utils';
+import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-screens';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: AnyMode;
