@@ -14,3 +14,18 @@ export const getBonusBalance = (isLoggedIn: boolean): Promise<number> => {
       return Number(response.data.balance);
     });
 };
+
+
+export const buyBonusProduct = (
+  bonusProductId: string | undefined,
+): Promise<string | null> => {
+  if (!bonusProductId) return Promise.resolve(null);
+  return client
+    .get(
+      `/bonus/v1/buy-product/value-code/${bonusProductId}`,
+      {
+        authWithIdToken: true,
+      },
+    )
+    .then((response) => String(response.data.code));
+};

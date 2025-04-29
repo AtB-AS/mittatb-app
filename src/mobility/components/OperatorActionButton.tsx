@@ -11,6 +11,7 @@ import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutatio
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
+import {useBuyValueCodeWithBonusPointsQuery} from '@atb/modules/bonus';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -18,6 +19,8 @@ type OperatorActionButtonProps = {
   benefit: OperatorBenefitType | undefined;
   appStoreUri: string | undefined;
   rentalAppUri: string;
+  buyValueCodeWithBonusPoints?: boolean;
+  bonusProductId?: string;
 };
 export const OperatorActionButton = ({
   operatorId,
@@ -25,6 +28,8 @@ export const OperatorActionButton = ({
   benefit,
   appStoreUri,
   rentalAppUri,
+  buyValueCodeWithBonusPoints,
+  bonusProductId,
 }: OperatorActionButtonProps) => {
   const analytics = useAnalyticsContext();
   const {t, language} = useTranslation();
@@ -54,7 +59,10 @@ export const OperatorActionButton = ({
 
   if (isLoadingEligible) {
     return <ActivityIndicator />;
-  } else if (isUserEligibleForBenefit && benefitRequiresValueCodeToUnlock) {
+  } else if (
+    (isUserEligibleForBenefit || buyValueCodeWithBonusPoints) &&
+    benefitRequiresValueCodeToUnlock
+  ) {
     const buttonOnPress = (valueCode?: string) => {
       let url = rentalAppUri;
       if (benefit?.callToAction.url) {
@@ -76,6 +84,8 @@ export const OperatorActionButton = ({
         operatorId={operatorId}
         buttonOnPress={buttonOnPress}
         buttonText={buttonText}
+        buyValueCodeWithBonusPoints={buyValueCodeWithBonusPoints}
+        bonusProductId={bonusProductId}
       />
     );
   } else {
@@ -112,28 +122,36 @@ const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
 
 type OperatorActionButtonWithValueCodeProps = AppSwitchButtonProps & {
   operatorId: string | undefined;
+  buyValueCodeWithBonusPoints: boolean | undefined;
+  bonusProductId?: string;
 };
 const OperatorActionButtonWithValueCode = ({
   operatorId,
   buttonOnPress,
   buttonText,
+  buyValueCodeWithBonusPoints,
+  bonusProductId,
 }: OperatorActionButtonWithValueCodeProps) => {
   const {t} = useTranslation();
 
   const {
-    mutateAsync: fetchValueCode,
-    isLoading: isFetchingValueCode,
-    isError: isFetchingValueCodeError,
-  } = useValueCodeMutation(operatorId);
+    mutateAsync: getValueCode,
+    isLoading: isLoading,
+    isError: isError,
+  } = buyValueCodeWithBonusPoints
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useValueCodeMutation(operatorId)
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useBuyValueCodeWithBonusPointsQuery(bonusProductId);
 
   const appSwitchButtonOnPress = useCallback(async () => {
-    const valueCode = await fetchValueCode();
+    const valueCode = await getValueCode();
     valueCode && buttonOnPress(valueCode);
-  }, [buttonOnPress, fetchValueCode]);
+  }, [buttonOnPress, getValueCode]);
 
-  if (isFetchingValueCode) {
+  if (isLoading) {
     return <ActivityIndicator />;
-  } else if (isFetchingValueCodeError) {
+  } else if (isError) {
     return (
       <MessageInfoBox
         type="error"
