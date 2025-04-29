@@ -3,7 +3,7 @@ import {orgSpecificTranslations} from '../../orgSpecificTranslations';
 
 const PurchaseOverviewTexts = {
   travelSearchInfo: _(
-    'Vi har fylt inn oppstartstidpunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
+    'Vi har fylt inn oppstartstidspunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
     'We have filled in the start time and stops for your journey. Please check that the details are correct.',
     'Vi har fylt inn oppstartstidspunkt og haldeplassar for reisa di. Ver venleg og sjekk at detaljane er korrekte.',
   ),
