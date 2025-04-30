@@ -215,7 +215,7 @@ export const DetailsContent: React.FC<Props> = ({
           testID="receiptButton"
         />
       )}
-      {refundOptions?.is_refundable && (
+      {refundOptions?.isRefundable && (
         <RefundSectionItem
           orderId={fc.orderId}
           fareProductType={preassignedFareProduct?.type}

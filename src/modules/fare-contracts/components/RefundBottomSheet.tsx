@@ -81,7 +81,7 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
           expanded={true}
           onPress={() => refund(orderId)}
           text={t(FareContractTexts.refund.confirm)}
-          disabled={!refundOptions?.is_refundable}
+          disabled={!refundOptions?.isRefundable}
           loading={
             refundStatus === 'loading' || refundOptionsStatus === 'loading'
           }
