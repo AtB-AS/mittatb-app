@@ -112,7 +112,7 @@ export type RecentFareContractBackend = {
 };
 
 export type ReserveOffer = {
-  offer_id: string;
+  offerId: string;
   count: number;
 };
 
@@ -126,33 +126,32 @@ export type ReserveOfferRequest = {
    * Recurring payment id should be provided if using a previously stored
    * payment card
    */
-  recurring_payment_id?: number;
+  recurringPaymentId?: number;
   /**
    * Payment type and the store payment flag should be provided if not using a
    * previously stored payment card
    */
-  payment_type?: PaymentType;
-  store_payment?: boolean;
+  paymentType?: PaymentType;
+  storePayment?: boolean;
   /**
    * Paying customer's phone number, with country prefix. The phone number and
    * redirect URL is only required for mobile payments types, e.g. Vipps.
    */
-  phone_number?: string;
-  payment_redirect_url?: string;
-  sca_exemption?: boolean;
+  phoneNumber?: string;
+  paymentRedirectUrl?: string;
+  scaExemption?: boolean;
   /** Only needed if fare contract should be created on a different account */
-  customer_account_id?: string;
+  customerAccountId?: string;
   /**
    * Only needed if fare contract should be created on a different account
    * which should be saved.
    */
-  store_alias?: {
+  storeAlias?: {
     alias: string;
     /** With country prefix */
-    phone_number: string;
+    phoneNumber: string;
   };
-  /** Experimental */
-  auto_sale?: boolean;
+  autoSale?: boolean;
 };
 
 export type TicketRecipientType = {
@@ -166,11 +165,11 @@ export type TicketRecipientType = {
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/reserve.rs
  */
 export type ReserveOfferResponse = {
-  order_id: string;
-  payment_id: number;
-  transaction_id: number;
+  orderId: string;
+  paymentId: number;
+  transactionId: number;
   url: string;
-  recurring_payment_id?: number;
+  recurringPaymentId?: number;
 };
 
 export type VippsRedirectParams = {

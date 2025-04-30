@@ -153,27 +153,31 @@ export async function reserveOffers({
   autoSale,
   phoneNumber,
   recipient,
-  ...rest
+  shouldSavePaymentMethod,
+  recurringPaymentId,
 }: ReserveOfferParams): Promise<ReserveOfferResponse> {
-  const url = 'ticket/v3/reserve';
+  const url = 'sales/v1/reserve';
+
   const body: ReserveOfferRequest = {
-    payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
+    paymentRedirectUrl: `${APP_SCHEME}://purchase-callback`,
     offers,
-    payment_type: paymentType,
-    store_payment: rest.shouldSavePaymentMethod,
-    recurring_payment_id: rest.recurringPaymentId,
-    sca_exemption: scaExemption,
-    customer_account_id: customerAccountId,
-    auto_sale: autoSale,
-    phone_number: phoneNumber,
-    store_alias: recipient?.name
-      ? {alias: recipient.name, phone_number: recipient.phoneNumber}
+    paymentType,
+    storePayment: shouldSavePaymentMethod,
+    recurringPaymentId,
+    scaExemption,
+    customerAccountId,
+    autoSale,
+    phoneNumber,
+    storeAlias: recipient?.name
+      ? {alias: recipient.name, phoneNumber: recipient.phoneNumber}
       : undefined,
   };
+
   const response = await client.post<ReserveOfferResponse>(url, body, {
     ...opts,
     authWithIdToken: true,
   });
+
   return response.data;
 }
 
@@ -182,7 +186,7 @@ export async function cancelPayment(
   transactionId: number,
   isUser: boolean,
 ): Promise<void> {
-  const url = `ticket/v3/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
+  const url = `sales/v1/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
   await client.put(url, undefined, {authWithIdToken: true});
 }
 
