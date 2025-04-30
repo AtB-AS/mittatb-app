@@ -1,13 +1,14 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
-
 import {Button, ButtonProps} from '@atb/components/button';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenView} from '@atb/components/screen-view';
+import {useTranslation} from '@atb/translations';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 
 export type OnboardingFullScreenViewProps = PropsWithChildren<{
   footerButton: ButtonProps;
@@ -16,6 +17,7 @@ export type OnboardingFullScreenViewProps = PropsWithChildren<{
   footerDescription?: string;
   testID?: string;
   secondaryTestID?: string;
+  isError?: boolean;
 }>;
 
 export const OnboardingFullScreenView = ({
@@ -26,6 +28,7 @@ export const OnboardingFullScreenView = ({
   footerDescription,
   testID,
   secondaryTestID,
+  isError,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -52,6 +55,7 @@ export const OnboardingFullScreenView = ({
               </ThemeText>
             </ScrollView>
           )}
+          {isError && <GenericError />}
           <Button
             expanded={true}
             interactiveColor={interactiveColor}
@@ -81,6 +85,18 @@ export const OnboardingFullScreenView = ({
     >
       <View style={styles.mainContent}>{children}</View>
     </FullScreenView>
+  );
+};
+
+const GenericError = () => {
+  const {t} = useTranslation();
+  return (
+    <View accessibilityLiveRegion="polite">
+      <MessageInfoBox
+        type="error"
+        message={t(PaymentMethodsTexts.genericError)}
+      />
+    </View>
   );
 };
 
