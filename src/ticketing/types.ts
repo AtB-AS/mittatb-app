@@ -95,17 +95,19 @@ export type Offer = {
 
 export type OfferSearchResponse = Offer[];
 
-export type RecentFareContractBackend = {
+/**
+ * Defined by `OrderDetails` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/order.rs
+ */
+export type RecentOrderDetails = {
   direction?: string;
   products: string[];
   zones: string[];
-  users: {
-    [user_profile: string]: string;
-  };
-  payment_method: string;
-  total_amount: string;
-  created_at: string;
-  point_to_point_validity: {
+  users: {[userProfile: string]: number};
+  paymentMethod: string;
+  totalAmount: string;
+  createdAt: string;
+  pointToPointValidity?: {
     fromPlace: string;
     toPlace: string;
   };

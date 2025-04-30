@@ -7,7 +7,7 @@ import {
   Offer,
   ReserveOfferResponse,
   PaymentType,
-  RecentFareContractBackend,
+  RecentOrderDetails,
   RecurringPayment,
   RefundOptions,
   ReserveOffer,
@@ -18,11 +18,9 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 
-export async function listRecentFareContracts(): Promise<
-  RecentFareContractBackend[]
-> {
-  const url = 'ticket/v3/recent';
-  const response = await client.get<RecentFareContractBackend[]>(url, {
+export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
+  const url = 'sales/v1/order/recent';
+  const response = await client.get<RecentOrderDetails[]>(url, {
     authWithIdToken: true,
   });
   return response.data;
