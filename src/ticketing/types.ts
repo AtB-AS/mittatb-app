@@ -153,6 +153,10 @@ export type ReserveOfferRequest = {
     /** With country prefix */
     phoneNumber: string;
   };
+  /**
+   * Uses auto sale for Nets. Defaults to false.
+   * https://developer.nexigroup.com/netaxept/en-EU/api/rest-v1/#netaxept-registeraspx-get-parameters-autosale
+   */
   autoSale?: boolean;
 };
 
