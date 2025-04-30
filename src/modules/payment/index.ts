@@ -8,8 +8,10 @@ export {
   type PaymentMethod,
   type VippsPaymentMethod,
   type CardPaymentMethod,
-  type SavedPaymentMethodType,
+  SavedPaymentMethodType,
 } from './types';
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
 export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
 export {PaymentBrand} from './PaymentBrand';
+export {SinglePaymentMethod} from './singlePaymentMethod';
+export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
