@@ -12,7 +12,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {TipsAndInformation} from '@atb/tips-and-information';
+import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/mobility/components/MobilitySingleBenefitInfoSectionItem';

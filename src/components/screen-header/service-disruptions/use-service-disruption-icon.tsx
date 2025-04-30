@@ -9,7 +9,7 @@ import {
 } from '@atb/modules/global-messages';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
-import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
+import {ServiceDisruptionSheet} from './ServiceDisruptionSheet';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {ContrastColor} from '@atb/theme/colors';
 import {useThemeContext} from '@atb/theme';

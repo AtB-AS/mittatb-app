@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {getTextForLanguage, Language, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import firestore from '@react-native-firebase/firestore';
-import {TipRaw, TipType} from '@atb/tips-and-information/types';
-import {mapToTips} from '@atb/tips-and-information/converters';
+import {TipRaw, TipType} from './types';
+import {mapToTips} from './converters';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 
 export const TipsAndInformation = () => {

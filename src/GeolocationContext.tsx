@@ -20,7 +20,7 @@ import {
   request,
   requestMultiple,
 } from 'react-native-permissions';
-import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
+import {useIntercomMetadata} from '@atb/chat';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';

@@ -7,7 +7,7 @@ import {
   BottomSheetContainer,
   useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
-import {useChatUnreadCount} from './use-chat-unread-count';
+import {useChatUnreadCount} from '@atb/chat';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
