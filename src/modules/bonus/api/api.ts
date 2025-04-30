@@ -11,6 +11,8 @@ export const getBonusBalance = (isLoggedIn: boolean): Promise<number> => {
       skipErrorLogging: (error) => error.response?.status === 404,
     })
     .then((response) => {
-      return Number(response.data.balance);
+      const value =
+        response.data.balance === null ? NaN : Number(response.data.balance);
+      return value;
     });
 };
