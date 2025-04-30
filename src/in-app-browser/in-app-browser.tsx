@@ -11,6 +11,7 @@ export async function openInAppBrowser(
   dismissButtonStyle: 'cancel' | 'close' | 'done',
   successUrl?: string,
   onSuccess?: (url: string) => void,
+  onCancel?: () => void,
 ) {
   const statusBarStyle = StatusBar.pushStackEntry({
     barStyle: successUrl ? 'light-content' : 'dark-content',
@@ -18,13 +19,16 @@ export async function openInAppBrowser(
   });
   try {
     if (!successUrl) {
-      await InAppBrowser.open(url, {
+      const result = await InAppBrowser.open(url, {
         animated: true,
         dismissButtonStyle,
         // Android: Makes the InAppBrowser stay open after the app goes to
         // background. Needs to be true for Vipps login and BankID.
         showInRecents: true,
       });
+      if (result.type === 'cancel') {
+        onCancel?.();
+      }
     } else {
       const result = await InAppBrowser.openAuth(url, successUrl, {
         animated: true,
@@ -38,6 +42,9 @@ export async function openInAppBrowser(
       });
       if (result.type === 'success') {
         onSuccess?.(result.url);
+      }
+      if (result.type === 'cancel') {
+        onCancel?.();
       }
     }
   } catch (error: any) {

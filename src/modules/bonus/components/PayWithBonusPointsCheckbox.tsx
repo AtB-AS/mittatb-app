@@ -7,7 +7,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {BonusProductType} from '@atb/configuration/types';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,
   getTextForLanguage,
@@ -31,6 +31,7 @@ export const PayWithBonusPointsCheckbox = ({
   ...props
 }: Props) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
@@ -80,7 +81,10 @@ export const PayWithBonusPointsCheckbox = ({
                 <ThemeText typography="body__secondary" color="secondary">
                   {t(BonusProgramTexts.youHave)}
                 </ThemeText>
-                <UserBonusBalance size="small" />
+                <UserBonusBalance
+                  size="small"
+                  color={theme.color.foreground.dynamic.secondary}
+                />
               </View>
             </View>
             <BonusPriceTag

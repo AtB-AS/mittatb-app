@@ -15,8 +15,7 @@ import {
   UserFavoriteDepartures,
   UserFavorites,
 } from './types';
-
-import {RCTWidgetUpdater} from '../widget-updater';
+import {refreshWidgets} from '@atb/modules/native-bridges';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
   ItemWithDestinationDisplayMigrationPairType,
@@ -97,7 +96,7 @@ export const FavoritesContextProvider = ({children}: Props) => {
       if (aFavoriteDepartureWasUpdated) {
         setFavoriteDeparturesState(upToDateFavoriteDepartures);
         await departures.setFavorites(upToDateFavoriteDepartures);
-        RCTWidgetUpdater.refreshWidgets();
+        refreshWidgets();
       }
     },
     [favoriteDepartures],
@@ -140,17 +139,17 @@ export const FavoritesContextProvider = ({children}: Props) => {
       }
       const favoritesUpdated = await departures.addFavorite(favoriteDeparture);
       setFavoriteDeparturesState(favoritesUpdated);
-      RCTWidgetUpdater.refreshWidgets();
+      refreshWidgets();
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
       setFavoriteDeparturesState(favorites);
-      RCTWidgetUpdater.refreshWidgets();
+      refreshWidgets();
     },
     async setFavoriteDepartures(favorites: UserFavoriteDepartures) {
       setFavoriteDeparturesState(favorites);
       await departures.setFavorites(favorites);
-      RCTWidgetUpdater.refreshWidgets();
+      refreshWidgets();
     },
     potentiallyMigrateFavoriteDepartures,
     async setDashboardFavorite(id: string, value: boolean) {

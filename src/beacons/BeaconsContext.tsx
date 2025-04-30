@@ -20,6 +20,7 @@ import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {initializeKettleSDK} from '@atb/modules/native-bridges';
 
 type BeaconsInfo = {
   /**
@@ -105,22 +106,19 @@ const BeaconsContextProvider = ({children}: Props) => {
 
   const updateBeaconsInfo = () => getBeaconsInfo().then(setBeaconsInfo);
 
-  const initializeKettleSDK = useCallback(
-    async (bypassPermissions: boolean) => {
-      // By checking permissions we can avoid initializing the SDK if the user
-      // have not granted any permissions. This is to avoid the SDK to start
-      // collecting data without the user knowing.
-      const permissions = await allowedPermissionsForBeacons();
-      if (
-        !isInitializedRef.current &&
-        (permissions.length > 0 || bypassPermissions)
-      ) {
-        await NativeModules.KettleSDKExtension.initializeKettleSDK();
-        isInitializedRef.current = true;
-      }
-    },
-    [],
-  );
+  const initializeKettle = useCallback(async (bypassPermissions: boolean) => {
+    // By checking permissions we can avoid initializing the SDK if the user
+    // have not granted any permissions. This is to avoid the SDK to start
+    // collecting data without the user knowing.
+    const permissions = await allowedPermissionsForBeacons();
+    if (
+      !isInitializedRef.current &&
+      (permissions.length > 0 || bypassPermissions)
+    ) {
+      await initializeKettleSDK();
+      isInitializedRef.current = true;
+    }
+  }, []);
 
   const stopBeacons = useCallback(() => {
     if (beaconsInfo?.isStarted && isInitializedRef.current) {
@@ -132,14 +130,14 @@ const BeaconsContextProvider = ({children}: Props) => {
   }, [beaconsInfo]);
 
   const getPrivacyDashboardUrl = useCallback(async () => {
-    await initializeKettleSDK(true);
+    await initializeKettle(true);
     return await Kettle.getPrivacyDashboardUrl();
-  }, [initializeKettleSDK]);
+  }, [initializeKettle]);
 
   const getPrivacyTermsUrl = useCallback(async () => {
-    await initializeKettleSDK(true);
+    await initializeKettle(true);
     return await Kettle.getPrivacyTermsUrl();
-  }, [initializeKettleSDK]);
+  }, [initializeKettle]);
 
   const onboardForBeacons = useCallback(
     async (alreadyConsented: boolean) => {
@@ -161,7 +159,7 @@ const BeaconsContextProvider = ({children}: Props) => {
       }
       if (permissionsGranted) {
         // Initialize beacons SDK after consent is granted
-        await initializeKettleSDK(false);
+        await initializeKettle(false);
         if (isInitializedRef.current) {
           Kettle.grant(BEACONS_CONSENTS);
           await updateBeaconsInfo();
@@ -176,26 +174,26 @@ const BeaconsContextProvider = ({children}: Props) => {
 
       return permissionsGranted;
     },
-    [isBeaconsSupported, rationaleMessages, initializeKettleSDK],
+    [isBeaconsSupported, rationaleMessages, initializeKettle],
   );
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    await initializeKettleSDK(true);
+    await initializeKettle(true);
     stopBeacons();
     Kettle.revoke(BEACONS_CONSENTS);
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
     await updateBeaconsInfo();
-  }, [isBeaconsSupported, stopBeacons, initializeKettleSDK]);
+  }, [isBeaconsSupported, stopBeacons, initializeKettle]);
 
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    await initializeKettleSDK(true);
+    await initializeKettle(true);
     Kettle.deleteCollectedData().catch((error) => {
       Bugsnag.notify(error);
     });
-  }, [isBeaconsSupported, initializeKettleSDK]);
+  }, [isBeaconsSupported, initializeKettle]);
 
   useEffect(() => {
     (async function () {
@@ -217,7 +215,7 @@ const BeaconsContextProvider = ({children}: Props) => {
         permissions.length > 0 &&
         !beaconsInfo?.isStarted
       ) {
-        await initializeKettleSDK(false);
+        await initializeKettle(false);
         if (!isInitializedRef.current) {
           return;
         }
@@ -238,7 +236,7 @@ const BeaconsContextProvider = ({children}: Props) => {
     isBeaconsSupported,
     beaconsInfo,
     isConsentGranted,
-    initializeKettleSDK,
+    initializeKettle,
     stopBeacons,
   ]);
 
