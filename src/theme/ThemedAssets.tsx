@@ -31,11 +31,15 @@ import {
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
+  BundlingCarSharingActive as BundlingCarSharingActiveDark,
+  BundlingCityBikeActive as BundlingCityBikeActiveDark,
   CityBike as CityBikeDark,
   ParkAndRide as ParkAndRideDark,
 } from '@atb/assets/svg/color/images/mobility/dark';
 import {
   BundlingCarSharing as BundlingCarSharingLight,
+  BundlingCarSharingActive as BundlingCarSharingActiveLight,
+  BundlingCityBikeActive as BundlingCityBikeActiveLight,
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
 } from '@atb/assets/svg/color/images/mobility/light';
@@ -90,6 +94,13 @@ export const ThemedBundlingCarSharing = ({...props}: SvgProps) => {
   const BundlingCarSharing =
     themeName === 'dark' ? BundlingCarSharingDark : BundlingCarSharingLight;
   return <BundlingCarSharing {...props} />;
+};
+
+export const ThemedBundlingCarSharingActive = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BundlingCarSharingActive =
+    themeName === 'dark' ? BundlingCarSharingActiveDark : BundlingCarSharingActiveLight;
+  return <BundlingCarSharingActive {...props} />;
 };
 
 export const ThemedFlexibleTransport = ({...props}: SvgProps) => {

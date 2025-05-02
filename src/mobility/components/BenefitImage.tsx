@@ -7,6 +7,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {
   ThemedBundlingCarSharing,
+  ThemedBundlingCarSharingActive,
   ThemedCityBike,
 } from '@atb/theme/ThemedAssets';
 
@@ -23,22 +24,28 @@ export const BenefitImage = ({
 }: BenefitImageProps): JSX.Element => {
   return (
     <View style={style}>
-      <BenefitImageAsset formFactor={formFactor} />
+      <BenefitImageAsset eligible={eligible} formFactor={formFactor} />
       {eligible && <BenefitEligibilityIndicator />}
     </View>
   );
 };
 
 export const BenefitImageAsset = ({
+  eligible,
   formFactor,
   svgProps,
 }: {
+  eligible: boolean;
   formFactor: FormFactor;
   svgProps?: SvgProps;
 }) => {
   switch (formFactor) {
     case FormFactor.Car:
-      return <ThemedBundlingCarSharing height={54} width={70} {...svgProps} />;
+      return eligible ? (
+        <ThemedBundlingCarSharingActive height={54} width={70} {...svgProps} />
+      ) : (
+        <ThemedBundlingCarSharing height={54} width={70} {...svgProps} />
+      );
     case FormFactor.Bicycle:
       return <ThemedCityBike height={54} width={70} {...svgProps} />;
     default:

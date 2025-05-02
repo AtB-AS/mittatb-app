@@ -62,7 +62,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
       <Section style={style.cityZoneMessage}>
         <CityZoneBox
           message={t(CityBoxMessageTexts.message(fromCityZone.name))}
-          icon={() => <ThemedFlexibleTransport width={135} height={74} />}
+          icon={() => <ThemedFlexibleTransport width={67} height={37} />}
           onDismiss={onDismiss}
           actionButtons={actionButtons}
         />
