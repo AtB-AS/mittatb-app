@@ -103,6 +103,13 @@ export const ThemedBundlingCarSharingActive = ({...props}: SvgProps) => {
   return <BundlingCarSharingActive {...props} />;
 };
 
+export const ThemedBundlingCityBikeActive = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BundlingCityBikeActive =
+    themeName === 'dark' ? BundlingCityBikeActiveDark : BundlingCityBikeActiveLight;
+  return <BundlingCityBikeActive {...props} />;
+};
+
 export const ThemedFlexibleTransport = ({...props}: SvgProps) => {
   const {themeName} = useThemeContext();
   const FlexibleTransport =
