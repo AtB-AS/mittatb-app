@@ -24,6 +24,7 @@ import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -69,23 +70,6 @@ export const useAutoSelectMapItem = (
     setBottomSheetToAutoSelect,
   ]);
 
-  /*async function selectPaymentMethod() {
-    openBottomSheet(() => {
-      return (
-        <SelectPaymentMethodSheet
-          recurringPaymentMethods={recurringPaymentMethods}
-          onSelect={(paymentMethod: PaymentMethod) => {
-            setSelectedPaymentMethod(paymentMethod);
-            closeBottomSheet();
-          }}
-          currentOptions={{
-            paymentMethod,
-          }}
-        />
-      );
-    }, onCloseFocusRef);
-  }*/
-
   const flyToMapItemLocation = useCallback(
     (mapItem: AutoSelectableMapItem) => {
       setAutoSelectedMapItem(mapItem);
@@ -108,6 +92,76 @@ export const useAutoSelectMapItem = (
       });
     },
     [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
+  );
+
+  const openScooterSheet = useCallback(
+    (vehicleId: string) => {
+      async function selectPaymentMethod(vehicleId: string) {
+        openBottomSheet(
+          () => {
+            return (
+              <SelectShmoPaymentMethodSheet
+                onSelect={() => {
+                  openScooterSheet(vehicleId);
+                }}
+                onClose={closeBottomSheet}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+        );
+      }
+
+      openBottomSheet(
+        () => {
+          return (
+            <ScooterSheet
+              selectPaymentMethod={() => selectPaymentMethod(vehicleId)}
+              vehicleId={vehicleId}
+              onClose={closeBottomSheet}
+              onVehicleReceived={flyToMapItemLocation}
+              onReportParkingViolation={onReportParkingViolation}
+              navigateSupportCallback={closeBottomSheet}
+              navigation={navigation}
+              loginCallback={() => {
+                closeBottomSheet();
+                if (hasReservationOrAvailableFareContract) {
+                  navigation.navigate(
+                    'Root_LoginAvailableFareContractWarningScreen',
+                    {},
+                  );
+                } else if (enable_vipps_login) {
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionOverride: 'slide-from-bottom',
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
+                }
+              }}
+              startOnboardingCallback={() => {
+                closeBottomSheet();
+                navigation.navigate('Root_ShmoOnboardingScreen');
+              }}
+            />
+          );
+        },
+        onCloseFocusRef,
+        false,
+        tabBarHeight,
+      );
+    },
+    [
+      openBottomSheet,
+      tabBarHeight,
+      closeBottomSheet,
+      flyToMapItemLocation,
+      onReportParkingViolation,
+      navigation,
+      hasReservationOrAvailableFareContract,
+      enable_vipps_login,
+    ],
   );
 
   /**
@@ -141,36 +195,7 @@ export const useAutoSelectMapItem = (
                 );
               }
             } else {
-              BottomSheetComponent = (
-                <ScooterSheet
-                  vehicleId={bottomSheetToAutoSelect.id}
-                  onClose={closeBottomSheet}
-                  onVehicleReceived={flyToMapItemLocation}
-                  onReportParkingViolation={onReportParkingViolation}
-                  navigateSupportCallback={closeBottomSheet}
-                  navigation={navigation}
-                  loginCallback={() => {
-                    closeBottomSheet();
-                    if (hasReservationOrAvailableFareContract) {
-                      navigation.navigate(
-                        'Root_LoginAvailableFareContractWarningScreen',
-                        {},
-                      );
-                    } else if (enable_vipps_login) {
-                      navigation.navigate('Root_LoginOptionsScreen', {
-                        showGoBack: true,
-                        transitionOverride: 'slide-from-bottom',
-                      });
-                    } else {
-                      navigation.navigate('Root_LoginPhoneInputScreen', {});
-                    }
-                  }}
-                  startOnboardingCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ShmoOnboardingScreen');
-                  }}
-                />
-              );
+              openScooterSheet(bottomSheetToAutoSelect.id);
             }
             break;
           case AutoSelectableBottomSheetType.Bicycle:
@@ -234,5 +259,6 @@ export const useAutoSelectMapItem = (
     close,
     isShmoDeepIntegrationEnabled,
     tabBarHeight,
+    openScooterSheet,
   ]);
 };

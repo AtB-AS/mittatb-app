@@ -25,6 +25,8 @@ import {
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {CardPaymentMethod, PaymentMethod} from '@atb/modules/payment';
+import {RequiredField} from '@atb/utils/object';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -185,6 +187,12 @@ export function getMapPadding(tabBarHeight: number | undefined) {
   } else {
     return SLIGHTLY_RAISED_MAP_PADDING;
   }
+}
+
+export function isCardPaymentMethod(
+  payment: PaymentMethod | undefined,
+): payment is RequiredField<CardPaymentMethod, 'recurringCard'> {
+  return !!payment && !!payment.recurringCard;
 }
 
 export const toFeaturePoint = <

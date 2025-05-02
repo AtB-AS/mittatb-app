@@ -2,11 +2,8 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React, {RefObject, useRef, useState} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
+import React from 'react';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -31,13 +28,13 @@ import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Section} from '@atb/components/sections';
 import {
-  PaymentMethod,
   PaymentSelectionSectionItem,
-  SelectPaymentMethodSheet,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
+import {useMapContext} from '@atb/MapContext';
 
 type Props = {
+  selectPaymentMethod: () => void;
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
@@ -46,10 +43,10 @@ type Props = {
   loginCallback: () => void;
   startOnboardingCallback: () => void;
   navigation: RootNavigationProps;
-  //openChangePayment: (vehicleId: string) => void;
 };
 
 export const ScooterSheet = ({
+  selectPaymentMethod,
   vehicleId: id,
   onClose,
   onReportParkingViolation,
@@ -58,8 +55,7 @@ export const ScooterSheet = ({
   loginCallback,
   startOnboardingCallback,
   navigation,
-}: //openChangePayment,
-Props) => {
+}: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -77,37 +73,15 @@ Props) => {
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
   )?.isDeepIntegrationEnabled;
-
-  const {isLoading: shmoReqIsLoading} = useShmoRequirements();
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethod>();
-
-  const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const {selectedPaymentMethod} = useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
-  const paymentMethod =
+  const defaultPaymentMethod =
     selectedPaymentMethod ??
     recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
-  async function selectPaymentMethod() {
-    openBottomSheet(() => {
-      return (
-        <SelectPaymentMethodSheet
-          recurringPaymentMethods={recurringPaymentMethods}
-          onSelect={(paymentMethod: PaymentMethod) => {
-            setSelectedPaymentMethod(paymentMethod);
-            closeBottomSheet();
-          }}
-          currentOptions={{
-            paymentMethod,
-          }}
-        />
-      );
-    }, onCloseFocusRef);
-  }
+  const {isLoading: shmoReqIsLoading} = useShmoRequirements();
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -146,12 +120,12 @@ Props) => {
                 operatorName={operatorName}
                 brandLogoUrl={brandLogoUrl}
               />
-              {paymentMethod &&
+              {defaultPaymentMethod &&
                 isShmoDeepIntegrationEnabled &&
                 operatorIsIntegrationEnabled && (
                   <Section style={{paddingHorizontal: theme.spacing.medium}}>
                     <PaymentSelectionSectionItem
-                      paymentMethod={paymentMethod}
+                      paymentMethod={defaultPaymentMethod}
                       onPress={selectPaymentMethod}
                     />
                   </Section>
@@ -168,6 +142,7 @@ Props) => {
                     onStartOnboarding={startOnboardingCallback}
                     vehicleId={id}
                     operatorId={operatorId}
+                    paymentMethod={defaultPaymentMethod}
                   />
                   <Button
                     expanded={true}

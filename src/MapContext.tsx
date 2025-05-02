@@ -1,9 +1,17 @@
-import React, {createContext, useContext, useMemo, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {AutoSelectableMapItem} from './components/map/hooks/use-auto-select-map-item';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from './api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from './api/types/mobility';
+import {PaymentMethod, usePreviousPaymentMethods} from './modules/payment';
+import {isCardPaymentMethod} from './components/map/utils';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -16,6 +24,8 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
+  selectedPaymentMethod?: PaymentMethod;
+  setSelectedPaymentMethod: (paymentMethod: PaymentMethod) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -42,6 +52,25 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    PaymentMethod | undefined
+  >(undefined);
+
+  const {previousPaymentMethod} = usePreviousPaymentMethods();
+
+  useEffect(() => {
+    const previousCardPaymentMethod = isCardPaymentMethod(previousPaymentMethod)
+      ? previousPaymentMethod
+      : undefined;
+
+    if (
+      previousCardPaymentMethod &&
+      isCardPaymentMethod(previousCardPaymentMethod)
+    ) {
+      setSelectedPaymentMethod(previousCardPaymentMethod);
+    }
+  }, [previousPaymentMethod]);
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -85,6 +114,8 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
+        selectedPaymentMethod,
+        setSelectedPaymentMethod,
       }}
     >
       {children}

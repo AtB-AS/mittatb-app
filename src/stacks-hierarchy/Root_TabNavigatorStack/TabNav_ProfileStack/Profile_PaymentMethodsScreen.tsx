@@ -19,9 +19,9 @@ import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-
 import {PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';
+import {GenericError} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -165,18 +165,6 @@ const NoCardsInfo = () => {
       <MessageInfoBox
         type="info"
         message={t(PaymentMethodsTexts.noStoredCards)}
-      />
-    </View>
-  );
-};
-
-const GenericError = () => {
-  const {t} = useTranslation();
-  return (
-    <View accessibilityLiveRegion="polite">
-      <MessageInfoBox
-        type="error"
-        message={t(PaymentMethodsTexts.genericError)}
       />
     </View>
   );
