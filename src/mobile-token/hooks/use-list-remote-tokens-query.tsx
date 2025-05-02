@@ -18,6 +18,7 @@ export const useListRemoteTokensQuery = (
   enabled: boolean,
   tokenId?: string,
   secureContainer?: string,
+  allTokenInspectable?: boolean,
 ) => {
   const {userId} = useAuthContext();
   return useQuery({
@@ -38,7 +39,7 @@ export const useListRemoteTokensQuery = (
         (t): Token => ({
           ...t,
           isThisDevice: t.id === tokenId,
-          isInspectable: isInspectable(t),
+          isInspectable: allTokenInspectable ?? isInspectable(t),
           type: isTravelCardToken(t) ? 'travel-card' : 'mobile',
           travelCardId: getTravelCardId(t),
         }),
