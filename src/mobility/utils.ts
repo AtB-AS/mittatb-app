@@ -333,14 +333,14 @@ export const getNewFilterState = (
   };
 };
 
-export const formatErrorMessage = (
+export const formatFriendlyShmoErrorMessage = (
   errorResponse: any,
   t: TFunc<typeof Language>,
 ) => {
-  return (errorResponse && errorResponse.response.status === 500) ||
-    errorResponse.response.status === 404
-    ? t(dictionary.genericErrorMsg)
-    : errorResponse.response.data;
+  return (
+    errorResponse?.response?.data?.userFriendlyErrorMessage ??
+    t(dictionary.genericErrorMsg)
+  );
 };
 
 /**
