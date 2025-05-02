@@ -70,6 +70,7 @@ export const ShmoActionButton = ({
     operatorId,
     coordinates,
     paymentMethod,
+    userId,
   ]);
 
   if (authenticationType != 'phone') {
