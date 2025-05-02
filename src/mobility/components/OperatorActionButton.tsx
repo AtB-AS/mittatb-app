@@ -11,7 +11,7 @@ import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutatio
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
-import {useBuyValueCodeWithBonusPointsQuery} from '@atb/modules/bonus';
+import {useBuyValueCodeWithBonusPointsMutation} from '@atb/modules/bonus';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -19,7 +19,7 @@ type OperatorActionButtonProps = {
   benefit: OperatorBenefitType | undefined;
   appStoreUri: string | undefined;
   rentalAppUri: string;
-  buyValueCodeWithBonusPoints?: boolean;
+  isBonusPayment?: boolean;
   bonusProductId?: string;
 };
 export const OperatorActionButton = ({
@@ -28,7 +28,7 @@ export const OperatorActionButton = ({
   benefit,
   appStoreUri,
   rentalAppUri,
-  buyValueCodeWithBonusPoints,
+  isBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
   const analytics = useAnalyticsContext();
@@ -60,7 +60,7 @@ export const OperatorActionButton = ({
   if (isLoadingEligible) {
     return <ActivityIndicator />;
   } else if (
-    (isUserEligibleForBenefit || buyValueCodeWithBonusPoints) &&
+    (isUserEligibleForBenefit || isBonusPayment) &&
     benefitRequiresValueCodeToUnlock
   ) {
     const buttonOnPress = (valueCode?: string) => {
@@ -84,7 +84,7 @@ export const OperatorActionButton = ({
         operatorId={operatorId}
         buttonOnPress={buttonOnPress}
         buttonText={buttonText}
-        buyValueCodeWithBonusPoints={buyValueCodeWithBonusPoints}
+        buyValueCodeWithBonusPoints={isBonusPayment}
         bonusProductId={bonusProductId}
       />
     );
@@ -144,11 +144,11 @@ const OperatorActionButtonWithValueCode = ({
     mutateAsync: buyBonusProduct,
     isLoading: isBuyingValueCode,
     isError: isBuyingValueCodeError,
-  } = useBuyValueCodeWithBonusPointsQuery(bonusProductId);
+  } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
 
-  const getValueCode = useCallback(async () => {
-    return buyValueCodeWithBonusPoints ? buyBonusProduct() : fetchValueCode();
-  }, [buyValueCodeWithBonusPoints, buyBonusProduct, fetchValueCode]);
+  const getValueCode = buyValueCodeWithBonusPoints
+    ? buyBonusProduct
+    : fetchValueCode;
 
   const appSwitchButtonOnPress = useCallback(async () => {
     const valueCode = await getValueCode();

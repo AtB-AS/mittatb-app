@@ -1,9 +1,9 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/auth';
-import {buyBonusProduct} from '../api/api';
+import {buyValueCodeWithBonusPoints} from '../api/api';
 import {getBonusBalanceQueryKey} from './get-bonus-balance-query';
 
-export const useBuyValueCodeWithBonusPointsQuery = (
+export const useBuyValueCodeWithBonusPointsMutation = (
   bonusProductId: string | undefined,
 ) => {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ export const useBuyValueCodeWithBonusPointsQuery = (
 
   return useMutation({
     mutationKey: ['bonusValueCode', userId, bonusProductId],
-    mutationFn: () => buyBonusProduct(bonusProductId),
+    mutationFn: () => buyValueCodeWithBonusPoints(bonusProductId),
     onSuccess: () =>
       queryClient.invalidateQueries(
         getBonusBalanceQueryKey(userId, isLoggedIn),

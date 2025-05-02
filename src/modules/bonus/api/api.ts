@@ -15,7 +15,7 @@ export const getBonusBalance = (isLoggedIn: boolean): Promise<number> => {
     });
 };
 
-export const buyBonusProduct = (
+export const buyValueCodeWithBonusPoints = (
   bonusProductId: string | undefined,
 ): Promise<string | null> => {
   if (!bonusProductId) return Promise.resolve(null);

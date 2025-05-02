@@ -5,4 +5,4 @@ export {
 } from './components';
 export {isActive, findRelevantBonusProduct} from './utils';
 export {useBonusBalanceQuery} from './queries/get-bonus-balance-query';
-export {useBuyValueCodeWithBonusPointsQuery} from './queries/use-buy-value-code-with-bonus-points-query';
+export {useBuyValueCodeWithBonusPointsMutation} from './queries/use-buy-value-code-with-bonus-points-query';
