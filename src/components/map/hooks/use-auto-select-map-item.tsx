@@ -122,10 +122,10 @@ export const useAutoSelectMapItem = (
               onClose={closeBottomSheet}
               onVehicleReceived={flyToMapItemLocation}
               onReportParkingViolation={onReportParkingViolation}
-              navigateSupportCallback={closeBottomSheet}
+              navigateSupportCallback={close}
               navigation={navigation}
               loginCallback={() => {
-                closeBottomSheet();
+                close();
                 if (hasReservationOrAvailableFareContract) {
                   navigation.navigate(
                     'Root_LoginAvailableFareContractWarningScreen',
@@ -141,7 +141,7 @@ export const useAutoSelectMapItem = (
                 }
               }}
               startOnboardingCallback={() => {
-                closeBottomSheet();
+                close();
                 navigation.navigate('Root_ShmoOnboardingScreen');
               }}
             />
@@ -161,6 +161,7 @@ export const useAutoSelectMapItem = (
       navigation,
       hasReservationOrAvailableFareContract,
       enable_vipps_login,
+      close,
     ],
   );
 
@@ -238,7 +239,6 @@ export const useAutoSelectMapItem = (
           );
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
-        setBottomSheetToAutoSelect(undefined);
       }
     } catch (e) {
       console.warn('Failed to open bottom sheet with auto select');

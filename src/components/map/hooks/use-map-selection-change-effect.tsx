@@ -32,7 +32,11 @@ export const useMapSelectionChangeEffect = (
   >({source: 'my-position', coords: startingCoordinates});
   const {location: currentLocation} = useGeolocationContext();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
-  const {setBottomSheetCurrentlyAutoSelected} = useMapContext();
+  const {
+    setBottomSheetCurrentlyAutoSelected,
+    setAutoSelectedMapItem,
+    setBottomSheetToAutoSelect,
+  } = useMapContext();
 
   const cameraFocusMode = useDecideCameraFocusMode(
     fromCoords,
@@ -46,7 +50,16 @@ export const useMapSelectionChangeEffect = (
       ? cameraFocusMode.distance
       : undefined;
 
-  const closeCallback = useCallback(() => setMapSelectionAction(undefined), []);
+  const closeCallback = useCallback(() => {
+    setMapSelectionAction(undefined);
+    setAutoSelectedMapItem(undefined);
+    setBottomSheetCurrentlyAutoSelected(undefined);
+    setBottomSheetToAutoSelect(undefined);
+  }, [
+    setAutoSelectedMapItem,
+    setBottomSheetCurrentlyAutoSelected,
+    setBottomSheetToAutoSelect,
+  ]);
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef, tabBarHeight);
   const {selectedFeature, onReportParkingViolation} =
