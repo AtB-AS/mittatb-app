@@ -90,11 +90,7 @@ export function useInAppReviewFlow() {
           // Log and report any errors encountered during the in-app review request.
           // For detailed error codes, refer to:
           // https://github.com/MinaSamir11/react-native-in-app-review#errors-and-google-play-app-store-error-codes
-          notifyBugsnag(
-            `Error: ${(error as Error).message}, Stack: ${
-              (error as Error).stack
-            }, Context: ${context}`,
-          );
+          notifyBugsnag(error as Error, {metadata: {context}});
         }
       })();
     },
