@@ -6,6 +6,7 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CUSTOMER_SERVICE_URL} from '@env';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type ErrorProps = {
   onRestartApp: () => void;
@@ -23,7 +24,8 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           Teknisk Trøbbel
         </ThemeText>
         <ThemeText style={styles.message}>
-          Noe gikk galt, og appen svarer ikke. Start på nytt, eller gå til våre nettsider for hjelp.
+          Noe gikk galt, og appen svarer ikke. Start på nytt, eller gå til våre
+          nettsider for hjelp.
         </ThemeText>
       </View>
       <View style={styles.container}>
@@ -37,7 +39,8 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           mode="secondary"
           backgroundColor={themes['light'].color.background.neutral[2]}
           expanded={true}
-          text="Kontakt oss"
+          text={getDomainName(CUSTOMER_SERVICE_URL)}
+          rightIcon={{svg: ExternalLink}}
           onPress={() => Linking.openURL(CUSTOMER_SERVICE_URL)}
           style={styles.button}
         />
@@ -45,6 +48,13 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
     </SafeAreaView>
   );
 }
+
+const getDomainName = (url: string) => {
+  const urlObj = new URL(url);
+  let hostname = urlObj.hostname;
+  hostname = hostname.replace(/^www\./i, '');
+  return hostname;
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
