@@ -56,7 +56,7 @@ const getContactButtonText = (url: string) => {
     hostname = hostname.replace(/^www\./i, '');
     return hostname;
   } catch {
-    return "Kontakt oss";
+    return 'Kontakt oss';
   }
 };
 
