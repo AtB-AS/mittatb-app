@@ -101,14 +101,18 @@ export const ThemedBundlingCarSharing = ({...props}: SvgProps) => {
 export const ThemedBundlingCarSharingActive = ({...props}: SvgProps) => {
   const {themeName} = useThemeContext();
   const BundlingCarSharingActive =
-    themeName === 'dark' ? BundlingCarSharingActiveDark : BundlingCarSharingActiveLight;
+    themeName === 'dark'
+      ? BundlingCarSharingActiveDark
+      : BundlingCarSharingActiveLight;
   return <BundlingCarSharingActive {...props} />;
 };
 
 export const ThemedBundlingCityBikeActive = ({...props}: SvgProps) => {
   const {themeName} = useThemeContext();
   const BundlingCityBikeActive =
-    themeName === 'dark' ? BundlingCityBikeActiveDark : BundlingCityBikeActiveLight;
+    themeName === 'dark'
+      ? BundlingCityBikeActiveDark
+      : BundlingCityBikeActiveLight;
   return <BundlingCityBikeActive {...props} />;
 };
 
@@ -122,8 +126,7 @@ export const ThemedFlexibleTransport = ({...props}: SvgProps) => {
 
 export const ThemedBestillMaxi = ({...props}: SvgProps) => {
   const {themeName} = useThemeContext();
-  const BestillMaxi =
-    themeName === 'dark' ? BestillMaxiDark : BestillMaxiLight;
+  const BestillMaxi = themeName === 'dark' ? BestillMaxiDark : BestillMaxiLight;
 
   return <BestillMaxi {...props} />;
 };

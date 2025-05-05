@@ -93,12 +93,7 @@ export const Results: React.FC<Props> = ({
             anyFiltersApplied,
             t,
           )}
-          illustrationComponent={
-            <ThemedOnBehalfOf
-              height={113}
-              width={113}
-            />
-          }
+          illustrationComponent={<ThemedOnBehalfOf height={113} width={113} />}
           testID="searchResults"
         />
       </View>

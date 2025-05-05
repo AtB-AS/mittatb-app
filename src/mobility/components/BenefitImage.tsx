@@ -22,7 +22,7 @@ export const BenefitImage = ({
 }: BenefitImageProps): JSX.Element => {
   return (
     <View style={style}>
-      <BenefitImageAsset formFactor={formFactor} eligible={eligible}/>
+      <BenefitImageAsset formFactor={formFactor} eligible={eligible} />
     </View>
   );
 };
@@ -53,4 +53,3 @@ export const BenefitImageAsset = ({
       return null;
   }
 };
-

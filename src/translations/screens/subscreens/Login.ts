@@ -83,16 +83,8 @@ const LoginTexts = {
       'This ticket requires that you are logged in to purchase.',
       'Denne billetten krev at du er innlogga for å kunne kjøpe.',
     ),
-    button: _(
-      'Logg inn',
-      'Log in',
-      'Logg inn',
-    ),
-    laterButton: _(
-      'Avbryt',
-      'Cancel',
-      'Avbryt',
-    ),
+    button: _('Logg inn', 'Log in', 'Logg inn'),
+    laterButton: _('Avbryt', 'Cancel', 'Avbryt'),
     carrotTitle: _(
       'Det er lurt å logge inn',
       'Smart travellers log in...',
