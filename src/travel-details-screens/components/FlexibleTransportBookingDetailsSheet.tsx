@@ -23,7 +23,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
-import {ThemedBestillMaxi, ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
+import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;

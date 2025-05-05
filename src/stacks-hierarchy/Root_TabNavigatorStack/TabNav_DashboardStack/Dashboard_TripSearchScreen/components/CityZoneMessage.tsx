@@ -19,7 +19,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/configuration';
 import {useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {ThemedBestillMaxi, ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
+import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 
 type ActionButton = {
   id: string;
