@@ -23,7 +23,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           Teknisk Trøbbel
         </ThemeText>
         <ThemeText style={styles.message}>
-          Noe gikk galt, og appen svarer ikke. Start på nytt, eller kontakt oss.
+          Noe gikk galt, og appen svarer ikke. Start på nytt, eller gå til våre nettsider for hjelp.
         </ThemeText>
       </View>
       <View style={styles.container}>
@@ -49,7 +49,6 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    justifyContent: 'space-between',
     backgroundColor: theme.color.background.neutral[2].background,
   },
   svg: {
@@ -63,10 +62,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.medium,
   },
   container: {
-    flex: 1,
-    paddingHorizontal: theme.spacing.xLarge,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
+    padding: theme.spacing.xLarge,
   },
   title: {
     textAlign: 'center',
