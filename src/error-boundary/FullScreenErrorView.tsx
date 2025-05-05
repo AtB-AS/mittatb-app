@@ -21,7 +21,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
       <View style={styles.svgContainer}>
         <ThemedCrashSmall height={200} style={styles.svg} />
         <ThemeText typography="body__primary--bold" style={styles.title}>
-          Teknisk Trøbbel
+          Teknisk trøbbel!
         </ThemeText>
         <ThemeText style={styles.message}>
           Noe gikk galt, og appen svarer ikke. Start på nytt, eller gå til våre
@@ -31,7 +31,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
       <View style={styles.container}>
         <Button
           expanded={true}
-          text="Start appen på nytt"
+          text="Start på nytt"
           onPress={onRestartApp}
           style={styles.button}
         />
