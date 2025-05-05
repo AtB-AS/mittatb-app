@@ -13,84 +13,93 @@ export function useInAppReviewFlow() {
   const analytics = useAnalyticsContext();
   const {isInAppReviewEnabled} = useFeatureTogglesContext();
 
-  const requestReview = useCallback(() => {
-    if (!isInAppReviewEnabled) {
-      return;
-    }
+  const requestReview = useCallback(
+    (context: string) => {
+      if (!isInAppReviewEnabled) {
+        return;
+      }
 
-    // Check if in-app review functionality is available on this device.
-    if (!InAppReview.isAvailable()) {
-      analytics.logEvent(
-        'In App Review',
-        'Device does not support in-app review',
-      );
-      return;
-    }
-
-    (async () => {
-      try {
-        const inAppReviewPresented = await storage.get(
-          IN_APP_REVIEW_PRESENTED_KEY,
+      // Check if in-app review functionality is available on this device.
+      if (!InAppReview.isAvailable()) {
+        analytics.logEvent(
+          'In App Review',
+          'In-app review is not supported on this device. Context: ' + context,
         );
+        return;
+      }
 
-        if (inAppReviewPresented === 'true') {
-          return;
-        }
+      (async () => {
+        try {
+          const inAppReviewPresented = await storage.get(
+            IN_APP_REVIEW_PRESENTED_KEY,
+          );
 
-        const lastPromptDateString = await storage.get(
-          LAST_IN_APP_REVIEW_PROMPT_KEY,
-        );
-
-        if (lastPromptDateString) {
-          const lastPromptDate = new Date(lastPromptDateString);
-          const currentDate = new Date();
-
-          const timeDifference =
-            currentDate.getTime() - lastPromptDate.getTime();
-
-          if (timeDifference <= INTERVAL_BETWEEN_PROMPTS) {
+          if (inAppReviewPresented === 'true') {
             return;
           }
-        }
 
-        // Store the date when there was an attempt to present the review,
-        // independent of the result or response.
-        await storage.set(
-          LAST_IN_APP_REVIEW_PROMPT_KEY,
-          new Date().toISOString(),
-        );
-
-        const hasFlowFinishedSuccessfully =
-          await InAppReview.RequestInAppReview();
-        if (hasFlowFinishedSuccessfully) {
-          // Store that review was presented to avoid present it
-          await storage.set(IN_APP_REVIEW_PRESENTED_KEY, 'true');
-
-          // Android:
-          // The review flow has completed.  The API does not indicate
-          // whether the user left a review or dismissed the dialog.
-
-          // iOS:
-          // The review prompt was successfully triggered. The API does not provide
-          // feedback on whether the user left a review or closed the prompt.
-          analytics.logEvent(
-            'In App Review',
-            'Review prompt launched successfully',
+          const lastPromptDateString = await storage.get(
+            LAST_IN_APP_REVIEW_PROMPT_KEY,
           );
-        } else {
-          analytics.logEvent(
-            'In App Review',
-            'In-app review failed to be presented',
+
+          if (lastPromptDateString) {
+            const lastPromptDate = new Date(lastPromptDateString);
+            const currentDate = new Date();
+
+            const timeDifference =
+              currentDate.getTime() - lastPromptDate.getTime();
+
+            if (timeDifference <= INTERVAL_BETWEEN_PROMPTS) {
+              return;
+            }
+          }
+
+          // Store the date when there was an attempt to present the review,
+          // independent of the result or response.
+          await storage.set(
+            LAST_IN_APP_REVIEW_PROMPT_KEY,
+            new Date().toISOString(),
+          );
+
+          const hasFlowFinishedSuccessfully =
+            await InAppReview.RequestInAppReview();
+          if (hasFlowFinishedSuccessfully) {
+            // Store that review was presented to avoid present it
+            await storage.set(IN_APP_REVIEW_PRESENTED_KEY, 'true');
+
+            // Android:
+            // The review flow has completed.  The API does not indicate
+            // whether the user left a review or dismissed the dialog.
+
+            // iOS:
+            // The review prompt was successfully triggered. The API does not provide
+            // feedback on whether the user left a review or closed the prompt.
+            analytics.logEvent(
+              'In App Review',
+              'In-app review prompt successfully launched in context: ' +
+                context,
+            );
+          } else {
+            analytics.logEvent(
+              'In App Review',
+              'Failed to present the in-app review prompt in context: ' +
+                context,
+            );
+          }
+        } catch (error) {
+          // Log and report any errors encountered during the in-app review request.
+          // For detailed error codes, refer to:
+          // https://github.com/MinaSamir11/react-native-in-app-review#errors-and-google-play-app-store-error-codes
+          notifyBugsnag(
+            `Error: ${(error as Error).message}, Stack: ${
+              (error as Error).stack
+            }, Context: ${context}`,
           );
         }
-      } catch (error) {
-        // Log and report any errors encountered during the in-app review request.
-        // For detailed error codes, refer to:
-        // https://github.com/MinaSamir11/react-native-in-app-review#errors-and-google-play-app-store-error-codes
-        notifyBugsnag(error as any);
-      }
-    })();
-  }, [isInAppReviewEnabled, analytics]);
+      })();
+    },
+    [isInAppReviewEnabled, analytics],
+  );
 
   return {requestReview};
 }

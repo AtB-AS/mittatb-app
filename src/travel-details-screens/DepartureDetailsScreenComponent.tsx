@@ -244,7 +244,7 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive && requestReview();
+        shouldShowLive && requestReview('Departure details');
         shouldShowRequestReview.current = false;
       }
     }, [requestReview, shouldShowLive]),
