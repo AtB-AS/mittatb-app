@@ -39,7 +39,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           mode="secondary"
           backgroundColor={themes['light'].color.background.neutral[2]}
           expanded={true}
-          text={getDomainName(CUSTOMER_SERVICE_URL)}
+          text={getContactButtonText(CUSTOMER_SERVICE_URL)}
           rightIcon={{svg: ExternalLink}}
           onPress={() => Linking.openURL(CUSTOMER_SERVICE_URL)}
           style={styles.button}
@@ -49,11 +49,15 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
   );
 }
 
-const getDomainName = (url: string) => {
-  const urlObj = new URL(url);
-  let hostname = urlObj.hostname;
-  hostname = hostname.replace(/^www\./i, '');
-  return hostname;
+const getContactButtonText = (url: string) => {
+  try {
+    const urlObj = new URL(url);
+    let hostname = urlObj.hostname;
+    hostname = hostname.replace(/^www\./i, '');
+    return hostname;
+  } catch {
+    return "Kontakt oss";
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
