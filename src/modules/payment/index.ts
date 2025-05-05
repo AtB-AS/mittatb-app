@@ -13,5 +13,5 @@ export {
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
 export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
 export {PaymentBrand} from './PaymentBrand';
-export {SinglePaymentMethod} from './singlePaymentMethod';
+export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';

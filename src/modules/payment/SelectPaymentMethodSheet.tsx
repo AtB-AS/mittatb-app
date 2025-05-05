@@ -21,7 +21,7 @@ import {
   SavedPaymentMethodType,
   VippsPaymentMethod,
 } from './types';
-import {SinglePaymentMethod} from './singlePaymentMethod';
+import {SinglePaymentMethod} from './SinglePaymentMethod';
 import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
 
 type Props = {

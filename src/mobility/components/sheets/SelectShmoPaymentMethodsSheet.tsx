@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -22,6 +22,8 @@ import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useMapContext} from '@atb/MapContext';
+import {LinkSectionItem, Section} from '@atb/components/sections';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = {
   onSelect: () => void;
@@ -37,8 +39,7 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
   const {selectedPaymentMethod, setSelectedPaymentMethod} = useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
-  const {onAddRecurringPayment, recurringPaymentLoading, isError} =
-    useRecurringPayment();
+  const {onAddRecurringPayment, isError} = useRecurringPayment();
 
   return (
     <BottomSheetContainer
@@ -83,18 +84,14 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
               />
             )}
             {isError && <GenericError />}
-            <Button
-              text={t(SelectPaymentMethodTexts.multiple_payment.title)}
-              onPress={onAddRecurringPayment}
-              accessibilityLabel={t(
-                SelectPaymentMethodTexts.multiple_payment.title,
-              )}
-              mode="secondary"
-              expanded={true}
-              backgroundColor={theme.color.background.neutral[0]}
-              loading={recurringPaymentLoading}
-              disabled={recurringPaymentLoading}
-            />
+
+            <Section>
+              <LinkSectionItem
+                text={t(PaymentMethodsTexts.addPaymentMethod)}
+                onPress={onAddRecurringPayment}
+                icon={<ThemeIcon svg={Add} />}
+              />
+            </Section>
           </View>
           <FullScreenFooter>
             <Button
@@ -143,7 +140,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
-    gap: theme.spacing.small,
+    gap: theme.spacing.xSmall,
   },
   confirmButton: {
     marginTop: theme.spacing.small,
