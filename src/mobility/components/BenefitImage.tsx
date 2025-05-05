@@ -48,7 +48,7 @@ export const BenefitImageAsset = ({
       );
     case FormFactor.Bicycle:
       return eligible ? (
-        <ThemedBundlingCityBikeActive height={54} width={70} {...svgProps} />
+        <ThemedBundlingCityBikeActive height={51} width={54.5} {...svgProps} />
       ) : (
         <ThemedCityBike height={54} width={70} {...svgProps} />
       );
