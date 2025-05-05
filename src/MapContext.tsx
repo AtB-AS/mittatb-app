@@ -57,20 +57,36 @@ export const MapContextProvider = ({children}: Props) => {
     PaymentMethod | undefined
   >(undefined);
 
-  const {previousPaymentMethod} = usePreviousPaymentMethods();
+  const {previousPaymentMethod, recurringPaymentMethods} =
+    usePreviousPaymentMethods();
 
   useEffect(() => {
-    const previousCardPaymentMethod = isCardPaymentMethod(previousPaymentMethod)
-      ? previousPaymentMethod
-      : undefined;
+    // If we have a previous card payment method (previousPaymentMethod might be set later so we need to check it)
+    if (previousPaymentMethod !== undefined) {
+      const previousCardPaymentMethod = isCardPaymentMethod(
+        previousPaymentMethod,
+      )
+        ? previousPaymentMethod
+        : undefined;
 
-    if (
-      previousCardPaymentMethod &&
-      isCardPaymentMethod(previousCardPaymentMethod)
-    ) {
-      setSelectedPaymentMethod(previousCardPaymentMethod);
+      // If we have a valid card payment method, use it
+      if (previousCardPaymentMethod) {
+        // Only update if different from current selection
+        if (previousCardPaymentMethod !== selectedPaymentMethod) {
+          setSelectedPaymentMethod(previousCardPaymentMethod);
+        }
+        // This is bestcase scenario, we can return
+        return;
+      }
     }
-  }, [previousPaymentMethod]);
+
+    // If we don't have a selected payment method yet, use fallback
+    if (!selectedPaymentMethod && recurringPaymentMethods?.length) {
+      const fallbackPaymentMethod =
+        recurringPaymentMethods[recurringPaymentMethods.length - 1];
+      setSelectedPaymentMethod(fallbackPaymentMethod);
+    }
+  }, [previousPaymentMethod, recurringPaymentMethods, selectedPaymentMethod]);
 
   const [
     bottomSheetCurrentlyAutoSelected,
