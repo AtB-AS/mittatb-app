@@ -32,7 +32,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       style={styles.emptyStateContainer}
       testID={testID ? `${testID}EmptyStateView` : 'emptyStateView'}
     >
-      {illustrationComponent}
+      <View style={{marginTop:24, marginBottom:24}}>
+        {illustrationComponent}
+      </View>
       <ThemeText
         typography="body__primary--bold"
         color="secondary"

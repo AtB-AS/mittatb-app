@@ -95,8 +95,8 @@ export const Results: React.FC<Props> = ({
           )}
           illustrationComponent={
             <ThemedOnBehalfOf
-              height={90}
-              style={styles.emptySearchResultsIllustration}
+              height={113}
+              width={113}
             />
           }
           testID="searchResults"
@@ -162,8 +162,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyStateContainer: {
     marginTop: theme.spacing.medium,
-  },
-  emptySearchResultsIllustration: {
-    marginBottom: theme.spacing.medium,
   },
 }));
