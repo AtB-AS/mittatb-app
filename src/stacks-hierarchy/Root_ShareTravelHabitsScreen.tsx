@@ -41,7 +41,7 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedBeacons height={132} />}
+      illustration={<ThemedBeacons height={171} />}
       title={t(ShareTravelHabitsTexts.title)}
       description={
         t(ShareTravelHabitsTexts.description.improvement) +
