@@ -92,7 +92,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   },
   {
     id: 'boat.nsr.api',
-    iconCode: 'ferry',
+    iconCode: 'boat',
     showAsDefaultAtZoomLevel: 10,
     filter: [
       'all',
