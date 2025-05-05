@@ -8,6 +8,7 @@ import {
   NoFavouriteDeparture as NoFavouriteDepartureLight,
   OnBehalfOf as OnBehalfOfLight,
   FlexibleTransport as FlexibleTransportLight,
+  BestillMaxi as BestillMaxiLight,
   CrashSmall as CrashSmallLight,
   TicketTilted as TicketTiltedLight,
   Ticket as TicketLight,
@@ -21,6 +22,7 @@ import {
   NoFavouriteDeparture as NoFavouriteDepartureDark,
   OnBehalfOf as OnBehalfOfDark,
   FlexibleTransport as FlexibleTransportDark,
+  BestillMaxi as BestillMaxiDark,
   CrashSmall as CrashSmallDark,
   TicketTilted as TicketTiltedDark,
   Ticket as TicketDark,
@@ -116,6 +118,14 @@ export const ThemedFlexibleTransport = ({...props}: SvgProps) => {
     themeName === 'dark' ? FlexibleTransportDark : FlexibleTransportLight;
 
   return <FlexibleTransport {...props} />;
+};
+
+export const ThemedBestillMaxi = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BestillMaxi =
+    themeName === 'dark' ? BestillMaxiDark : BestillMaxiLight;
+
+  return <BestillMaxi {...props} />;
 };
 
 export const ThemedCrashSmall = ({...props}: SvgProps) => {
