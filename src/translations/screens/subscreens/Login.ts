@@ -74,9 +74,9 @@ const LoginTexts = {
   },
   onboarding: {
     title: _(
-      'Logg inn for å kjøpe!',
-      'Log in to purchase!',
-      'Logg inn for å kjøpe!',
+      'Logg inn for å kjøpe',
+      'Log in to purchase',
+      'Logg inn for å kjøpe',
     ),
     description: _(
       'Denne billetten krever at du er innlogget for å kunne kjøpe.',
@@ -84,14 +84,14 @@ const LoginTexts = {
       'Denne billetten krev at du er innlogga for å kunne kjøpe.',
     ),
     button: _(
-      'Ta meg til innlogging',
-      'Take me to login',
-      'Ta meg til innlogging',
+      'Logg inn',
+      'Log in',
+      'Logg inn',
     ),
     laterButton: _(
-      'Jeg vil logge inn senere',
-      'I want to log in later',
-      'Eg vil logge inn seinare',
+      'Avbryt',
+      'Cancel',
+      'Avbryt',
     ),
     carrotTitle: _(
       'Det er lurt å logge inn',
