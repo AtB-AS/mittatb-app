@@ -71,22 +71,19 @@ export const MapContextProvider = ({children}: Props) => {
 
       // If we have a valid card payment method, use it
       if (previousCardPaymentMethod) {
-        // Only update if different from current selection
-        if (previousCardPaymentMethod !== selectedPaymentMethod) {
-          setSelectedPaymentMethod(previousCardPaymentMethod);
-        }
+        setSelectedPaymentMethod(previousCardPaymentMethod);
         // This is bestcase scenario, we can return
         return;
       }
     }
 
-    // If we don't have a selected payment method yet, use fallback
-    if (!selectedPaymentMethod && recurringPaymentMethods?.length) {
+    //use fallback
+    if (recurringPaymentMethods?.length) {
       const fallbackPaymentMethod =
         recurringPaymentMethods[recurringPaymentMethods.length - 1];
       setSelectedPaymentMethod(fallbackPaymentMethod);
     }
-  }, [previousPaymentMethod, recurringPaymentMethods, selectedPaymentMethod]);
+  }, [previousPaymentMethod, recurringPaymentMethods]);
 
   const [
     bottomSheetCurrentlyAutoSelected,

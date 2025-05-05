@@ -3,14 +3,11 @@ import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
-import {Add, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {useAuthContext} from '@atb/auth';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   PaymentMethod,
@@ -18,13 +15,7 @@ import {
   SinglePaymentMethod,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
-import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useMapContext} from '@atb/MapContext';
-import {LinkSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
-
 type Props = {
   onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
@@ -35,11 +26,8 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {authenticationType} = useAuthContext();
   const {selectedPaymentMethod, setSelectedPaymentMethod} = useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
-
-  const {onAddRecurringPayment, isError} = useRecurringPayment();
 
   return (
     <BottomSheetContainer
@@ -73,25 +61,6 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
                 />
               ))}
             </View>
-
-            {authenticationType !== 'phone' && (
-              <MessageInfoText
-                style={styles.warningMessageAnonym}
-                message={t(
-                  AnonymousPurchases.consequences.select_payment_method,
-                )}
-                type="warning"
-              />
-            )}
-            {isError && <GenericError />}
-
-            <Section>
-              <LinkSectionItem
-                text={t(PaymentMethodsTexts.addPaymentMethod)}
-                onPress={onAddRecurringPayment}
-                icon={<ThemeIcon svg={Add} />}
-              />
-            </Section>
           </View>
           <FullScreenFooter>
             <Button
@@ -104,7 +73,6 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
               )}
               onPress={() => {
                 if (selectedPaymentMethod) {
-                  setSelectedPaymentMethod(selectedPaymentMethod);
                   onSelect();
                 }
               }}
@@ -116,18 +84,6 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
         </View>
       </ScrollView>
     </BottomSheetContainer>
-  );
-};
-
-export const GenericError = () => {
-  const {t} = useTranslation();
-  return (
-    <View accessibilityLiveRegion="polite">
-      <MessageInfoBox
-        type="error"
-        message={t(PaymentMethodsTexts.genericError)}
-      />
-    </View>
   );
 };
 

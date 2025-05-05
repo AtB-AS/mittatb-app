@@ -21,7 +21,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';
-import {GenericError} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();
@@ -56,7 +55,14 @@ export const Profile_PaymentMethodsScreen = () => {
       )}
     >
       <View style={styles.content}>
-        {isError && <GenericError />}
+        {isError && (
+          <View accessibilityLiveRegion="polite">
+            <MessageInfoBox
+              type="error"
+              message={t(PaymentMethodsTexts.genericError)}
+            />
+          </View>
+        )}
         {recurringPayment && recurringPayment.length > 0 && (
           <Section>
             {recurringPayment.map((card) => (
