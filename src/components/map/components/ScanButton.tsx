@@ -15,15 +15,19 @@ type ScanButtonProps = {
     This can be removed if the reset function comes from MapContext instead.
    */
   onPressCallback: () => void;
+  tabBarHeight?: number;
 };
-export const ScanButton = ({onPressCallback}: ScanButtonProps) => {
+export const ScanButton = ({
+  onPressCallback,
+  tabBarHeight,
+}: ScanButtonProps) => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const styles = useStyles();
   const analytics = useAnalyticsContext();
   const navigation = useNavigation<RootNavigationProps>();
   const {t} = useTranslation();
-  const {mapButtonsContainer} = useControlPositionsStyle();
+  const {mapButtonsContainer} = useControlPositionsStyle(false, tabBarHeight);
   const {close: closeBottomSheet} = useBottomSheetContext();
 
   return (

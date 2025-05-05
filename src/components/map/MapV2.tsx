@@ -312,7 +312,10 @@ export const MapV2 = (props: MapProps) => {
           />
         </View>
         {showScanButton && (
-          <ScanButton onPressCallback={mapSelectionCloseCallback} />
+          <ScanButton
+            onPressCallback={mapSelectionCloseCallback}
+            tabBarHeight={tabBarHeight}
+          />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
