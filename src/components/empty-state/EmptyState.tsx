@@ -32,9 +32,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       style={styles.emptyStateContainer}
       testID={testID ? `${testID}EmptyStateView` : 'emptyStateView'}
     >
-      <View style={{marginTop: 24, marginBottom: 24}}>
-        {illustrationComponent}
-      </View>
+      <View style={styles.emptyStateIllustration}>{illustrationComponent}</View>
       <ThemeText
         typography="body__primary--bold"
         color="secondary"
@@ -78,5 +76,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyStateDetails: {
     textAlign: 'center',
     marginBottom: theme.spacing.medium,
+  },
+  emptyStateIllustration: {
+    marginTop: theme.spacing.xLarge,
+    marginBottom: theme.spacing.xLarge,
   },
 }));
