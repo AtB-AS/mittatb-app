@@ -2,7 +2,7 @@ import {Theme, Themes} from '@atb-as/theme';
 
 export type NsrPinIconCode =
   | 'commuterparking'
-  | 'ferry'
+  | 'boat'
   | 'tram'
   | 'metroandtram'
   | 'metro'
