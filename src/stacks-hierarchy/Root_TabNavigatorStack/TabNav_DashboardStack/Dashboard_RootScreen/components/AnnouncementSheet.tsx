@@ -22,7 +22,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
     <BottomSheetContainer
       title={getTextForLanguage(announcement.fullTitle, language)}
       onClose={() => {
-        requestReview('Announcement bottom sheet dismissed');
+        requestReview('Announcements: Bottom sheet dismissed');
       }}
     >
       <ScrollView style={style.container}>

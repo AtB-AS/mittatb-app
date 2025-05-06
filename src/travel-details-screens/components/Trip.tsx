@@ -121,7 +121,7 @@ export const Trip: React.FC<TripProps> = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        requestReview('Trip: Open details map');
+        requestReview('Trip details: Bus in map dismissed');
         shouldShowRequestReview.current = false;
       }
     }, [requestReview]),

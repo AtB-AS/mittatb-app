@@ -244,7 +244,7 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive && requestReview('Departure details');
+        shouldShowLive && requestReview('Departure details: Bus in map dismissed');
         shouldShowRequestReview.current = false;
       }
     }, [requestReview, shouldShowLive]),
