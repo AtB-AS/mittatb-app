@@ -263,6 +263,16 @@ const FareContractTexts = {
       'The ticket becomes valid as soon as you start it. Only one ticket can be activated at a time.',
       'Billetten blir gyldig med ein gong du startar den. Berre ein billett kan aktiverast av gangen.',
     ),
+    schoolErrorTitle: _(
+      'Kunne ikke aktivere denne billetten nå',
+      'Could not activate this ticket right now',
+      'Kunne ikkje aktivere denne billetten no',
+    ),
+    schoolErrorMessage: _(
+      'Du har enten prøvd å aktivere på et tidspunkt som ikke er tillatt, eller brukt opp de tilgjengelige billettene dine.',
+      'You have either tried to activate outside the allowed time, or you have used all of your available tickets.',
+      'Du har enten prøvd å aktivere på eit tidspunkt som ikkje er tillaten, eller brukt opp dei tilgjengelege billettane dine.',
+    ),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',
