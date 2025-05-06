@@ -4,7 +4,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -16,13 +15,20 @@ import {
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
 import {useMapContext} from '@atb/MapContext';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+
 type Props = {
   onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
   onClose?: () => void;
+  onGoToPaymentPage: () => void;
 };
 
-export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
+export const SelectShmoPaymentMethodSheet = ({
+  onSelect,
+  onClose,
+  onGoToPaymentPage,
+}: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -37,15 +43,16 @@ export const SelectShmoPaymentMethodSheet = ({onSelect, onClose}: Props) => {
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.paymentMethods}>
+            <MessageInfoBox
+              type="info"
+              title={t(SelectPaymentMethodTexts.new_card_info.title)}
+              message={t(SelectPaymentMethodTexts.new_card_info.text)}
+              onPressConfig={{
+                action: onGoToPaymentPage,
+                text: t(SelectPaymentMethodTexts.new_card_info.link_profile),
+              }}
+            />
             <View>
-              {recurringPaymentMethods &&
-                recurringPaymentMethods?.length > 0 && (
-                  <View style={styles.listHeading}>
-                    <ThemeText color="secondary">
-                      {t(SelectPaymentMethodTexts.saved_cards.text)}
-                    </ThemeText>
-                  </View>
-                )}
               {recurringPaymentMethods?.map((method, index) => (
                 <SinglePaymentMethod
                   key={method.recurringCard?.id}

@@ -105,6 +105,26 @@ export const useAutoSelectMapItem = (
                   openScooterSheet(vehicleId);
                 }}
                 onClose={closeBottomSheet}
+                onGoToPaymentPage={() => {
+                  // navigating like this to make sure the correct navigation history is in place.
+                  // So when going back from Profile_PaymentMethodsScreen you get to Profile_RootScreen
+                  closeBottomSheet();
+                  navigation.navigate('Root_TabNavigatorStack', {
+                    screen: 'TabNav_ProfileStack',
+                    params: {
+                      screen: 'Profile_RootScreen',
+                    },
+                  });
+
+                  setTimeout(() => {
+                    navigation.navigate('Root_TabNavigatorStack', {
+                      screen: 'TabNav_ProfileStack',
+                      params: {
+                        screen: 'Profile_PaymentMethodsScreen',
+                      },
+                    });
+                  }, 100);
+                }}
               />
             );
           },
