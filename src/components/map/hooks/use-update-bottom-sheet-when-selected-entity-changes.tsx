@@ -35,6 +35,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
 //import {PaymentMethod, SelectPaymentMethodSheet} from '@atb/modules/payment';
 
@@ -55,7 +56,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   onReportParkingViolation: () => void;
 } => {
   const {isMapV2Enabled} = useFeatureTogglesContext();
-
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} =
@@ -65,6 +65,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
+  const navigateToPaymentMethods = useEnterPaymentMethods();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -93,24 +94,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                 }}
                 onClose={closeCallback}
                 onGoToPaymentPage={() => {
-                  // navigating like this to make sure the correct navigation history is in place.
-                  // So when going back from Profile_PaymentMethodsScreen you get to Profile_RootScreen
                   closeBottomSheet();
-                  navigation.navigate('Root_TabNavigatorStack', {
-                    screen: 'TabNav_ProfileStack',
-                    params: {
-                      screen: 'Profile_RootScreen',
-                    },
-                  });
-
-                  setTimeout(() => {
-                    navigation.navigate('Root_TabNavigatorStack', {
-                      screen: 'TabNav_ProfileStack',
-                      params: {
-                        screen: 'Profile_PaymentMethodsScreen',
-                      },
-                    });
-                  }, 100);
+                  navigateToPaymentMethods();
                 }}
               />
             );
@@ -161,10 +146,11 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     [
       openBottomSheet,
       tabBarHeight,
-      selectedFeature?.properties?.id,
       closeCallback,
-      onReportParkingViolation,
+      selectedFeature?.properties?.id,
       closeBottomSheet,
+      navigateToPaymentMethods,
+      onReportParkingViolation,
       navigation,
       hasReservationOrAvailableFareContract,
       enable_vipps_login,

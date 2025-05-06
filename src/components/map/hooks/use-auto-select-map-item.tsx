@@ -25,6 +25,7 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -53,7 +54,7 @@ export const useAutoSelectMapItem = (
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-
+  const navigateToPaymentMethods = useEnterPaymentMethods();
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -106,24 +107,8 @@ export const useAutoSelectMapItem = (
                 }}
                 onClose={closeBottomSheet}
                 onGoToPaymentPage={() => {
-                  // navigating like this to make sure the correct navigation history is in place.
-                  // So when going back from Profile_PaymentMethodsScreen you get to Profile_RootScreen
                   closeBottomSheet();
-                  navigation.navigate('Root_TabNavigatorStack', {
-                    screen: 'TabNav_ProfileStack',
-                    params: {
-                      screen: 'Profile_RootScreen',
-                    },
-                  });
-
-                  setTimeout(() => {
-                    navigation.navigate('Root_TabNavigatorStack', {
-                      screen: 'TabNav_ProfileStack',
-                      params: {
-                        screen: 'Profile_PaymentMethodsScreen',
-                      },
-                    });
-                  }, 100);
+                  navigateToPaymentMethods();
                 }}
               />
             );
@@ -176,12 +161,13 @@ export const useAutoSelectMapItem = (
       openBottomSheet,
       tabBarHeight,
       closeBottomSheet,
+      navigateToPaymentMethods,
       flyToMapItemLocation,
       onReportParkingViolation,
+      close,
       navigation,
       hasReservationOrAvailableFareContract,
       enable_vipps_login,
-      close,
     ],
   );
 
