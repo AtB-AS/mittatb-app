@@ -23,7 +23,7 @@ export const Root_NotificationPermissionScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedPushNotification height={220} />}
+      illustration={<ThemedPushNotification height={214} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}
       buttonText={t(NotificationPermissionTexts.button)}

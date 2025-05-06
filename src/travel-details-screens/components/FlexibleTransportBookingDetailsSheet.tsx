@@ -23,7 +23,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
-import {ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
+import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
@@ -78,7 +78,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
 
           {!isSmallScreen && (
             <View style={style.imageContainer}>
-              <ThemedFlexibleTransport height={107} />
+              <ThemedBestillMaxi height={177} />
             </View>
           )}
 
@@ -164,6 +164,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingBottom: theme.spacing.large,
+    paddingTop: theme.spacing.large,
   },
   steps: {
     paddingHorizontal: theme.spacing.small,

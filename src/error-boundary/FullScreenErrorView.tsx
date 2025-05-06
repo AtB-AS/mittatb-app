@@ -6,6 +6,7 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CUSTOMER_SERVICE_URL} from '@env';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type ErrorProps = {
   onRestartApp: () => void;
@@ -20,16 +21,17 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
       <View style={styles.svgContainer}>
         <ThemedCrashSmall height={200} style={styles.svg} />
         <ThemeText typography="body__primary--bold" style={styles.title}>
-          Teknisk Trøbbel
+          Teknisk trøbbel!
         </ThemeText>
         <ThemeText style={styles.message}>
-          Noe gikk galt, og appen svarer ikke. Start på nytt, eller kontakt oss.
+          Noe gikk galt, og appen svarer ikke. Start på nytt, eller gå til våre
+          nettsider for hjelp.
         </ThemeText>
       </View>
       <View style={styles.container}>
         <Button
           expanded={true}
-          text="Start appen på nytt"
+          text="Start på nytt"
           onPress={onRestartApp}
           style={styles.button}
         />
@@ -37,7 +39,8 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           mode="secondary"
           backgroundColor={themes['light'].color.background.neutral[2]}
           expanded={true}
-          text="Kontakt oss"
+          text={getContactButtonText(CUSTOMER_SERVICE_URL)}
+          rightIcon={{svg: ExternalLink}}
           onPress={() => Linking.openURL(CUSTOMER_SERVICE_URL)}
           style={styles.button}
         />
@@ -46,10 +49,20 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
   );
 }
 
+const getContactButtonText = (url: string) => {
+  try {
+    const urlObj = new URL(url);
+    let hostname = urlObj.hostname;
+    hostname = hostname.replace(/^www\./i, '');
+    return hostname;
+  } catch {
+    return 'Kontakt oss';
+  }
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    justifyContent: 'space-between',
     backgroundColor: theme.color.background.neutral[2].background,
   },
   svg: {
@@ -63,10 +76,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.medium,
   },
   container: {
-    flex: 1,
-    paddingHorizontal: theme.spacing.xLarge,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
+    padding: theme.spacing.xLarge,
   },
   title: {
     textAlign: 'center',

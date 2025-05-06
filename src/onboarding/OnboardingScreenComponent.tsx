@@ -107,7 +107,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: theme.spacing.xLarge,
+    marginTop: theme.spacing.xLarge + theme.spacing.large,
     textAlign: 'center',
   },
   description: {
