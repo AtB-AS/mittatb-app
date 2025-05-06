@@ -15,7 +15,7 @@ export const useListRecurringPaymentsQuery = () => {
       authenticationType,
     ],
     queryFn: async () => {
-      if (authenticationType === 'phone') {
+      if (authenticationType === 'phone' && abtCustomerId) {
         return await listRecurringPayments();
       }
       return [];
