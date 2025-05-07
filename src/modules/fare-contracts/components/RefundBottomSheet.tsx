@@ -1,5 +1,5 @@
 import {FareContractState} from '@atb-as/utils';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import SvgExternalLink from '@atb/assets/svg/mono-icons/navigation/ExternalLink';
 import {
   BottomSheetContainer,

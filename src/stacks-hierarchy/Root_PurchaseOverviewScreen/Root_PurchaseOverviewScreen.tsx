@@ -16,7 +16,7 @@ import {TravellerSelection} from './components/TravellerSelection';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {
   GlobalMessage,

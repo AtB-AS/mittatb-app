@@ -1,5 +1,5 @@
-import {useAnalyticsContext} from '@atb/analytics';
 import {getErrorResponse} from '@atb/api/utils';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,

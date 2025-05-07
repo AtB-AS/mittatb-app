@@ -37,7 +37,7 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';

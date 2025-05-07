@@ -1,4 +1,4 @@
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {

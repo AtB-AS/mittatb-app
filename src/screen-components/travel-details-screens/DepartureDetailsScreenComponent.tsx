@@ -51,7 +51,7 @@ import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from './use-map-data';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {
   GlobalMessage,

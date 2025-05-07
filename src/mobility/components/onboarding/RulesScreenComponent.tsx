@@ -1,4 +1,4 @@
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   RuleAlcohol,
   RuleHelmet,

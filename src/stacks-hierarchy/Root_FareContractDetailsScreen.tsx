@@ -12,7 +12,7 @@ import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/time';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthContext} from '@atb/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';

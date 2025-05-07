@@ -26,7 +26,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {storage} from '@atb/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';

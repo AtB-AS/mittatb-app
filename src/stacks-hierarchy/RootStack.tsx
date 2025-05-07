@@ -71,7 +71,7 @@ import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_Contact
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
-import {AnalyticsContextProvider} from '@atb/analytics';
+import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 
 type ResultState = PartialState<NavigationState> & {

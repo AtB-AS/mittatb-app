@@ -9,7 +9,7 @@ import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareCo
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';

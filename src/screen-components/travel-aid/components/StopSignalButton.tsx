@@ -16,7 +16,7 @@ import {useFirestoreConfigurationContext} from '@atb/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '../utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export const StopSignalButton = ({
   serviceJourney,

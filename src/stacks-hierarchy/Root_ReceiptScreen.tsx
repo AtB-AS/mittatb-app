@@ -17,7 +17,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useProfileQuery} from '@atb/queries';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;

@@ -11,7 +11,7 @@ import {
   useOnboardingNavigation,
 } from '@atb/onboarding';
 import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 

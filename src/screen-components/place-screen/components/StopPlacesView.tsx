@@ -15,7 +15,7 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;

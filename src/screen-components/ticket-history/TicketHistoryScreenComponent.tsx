@@ -14,7 +14,7 @@ import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getFareContractInfo} from '@atb/modules/fare-contracts';
 import {sortFcOrReservationByValidityAndCreation} from '@atb/modules/fare-contracts';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';

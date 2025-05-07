@@ -4,7 +4,7 @@ import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useTimeContext} from '@atb/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';

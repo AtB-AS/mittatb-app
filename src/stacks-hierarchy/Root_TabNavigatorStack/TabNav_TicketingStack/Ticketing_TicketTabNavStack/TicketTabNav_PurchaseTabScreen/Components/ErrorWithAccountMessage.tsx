@@ -2,7 +2,7 @@ import {useAuthContext} from '@atb/auth';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {style?: StyleProp<ViewStyle>};
 

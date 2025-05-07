@@ -1,5 +1,5 @@
 import InAppReview from 'react-native-in-app-review';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useCallback} from 'react';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
