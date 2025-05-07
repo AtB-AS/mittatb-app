@@ -1,13 +1,18 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
-import {DepartureSearchTime, StopPlaceAndQuay} from '../types';
+import {StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
+<<<<<<< HEAD:src/screen-components/place-screen/components/StopPlacesView.tsx
 import {DateSelection} from './DateSelection';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+=======
+import {DateSelection} from '@atb/date-selection/DateSelection';
+import {StopPlacesMode} from '@atb/nearby-stop-places/types';
+>>>>>>> 85744d854 (refactor: Moved DateSelection from place-screen to date-picker, and renamed to date-selection):src/place-screen/components/StopPlacesView.tsx
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
@@ -17,6 +22,7 @@ import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useAnalyticsContext} from '@atb/analytics';
 import type {ContrastColor} from '@atb-as/theme';
+import type {DepartureSearchTime} from 'src/date-selection';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
