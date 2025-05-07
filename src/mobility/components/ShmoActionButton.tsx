@@ -10,7 +10,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {formatErrorMessage} from '../utils.ts';
+import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext.tsx';
 import {
   PaymentMethod,
@@ -102,7 +102,10 @@ export const ShmoActionButton = ({
       {initShmoOneStopBookingIsError && (
         <MessageInfoBox
           type="error"
-          message={formatErrorMessage(initShmoOneStopBookingError, t)}
+          message={formatFriendlyShmoErrorMessage(
+            initShmoOneStopBookingError,
+            t,
+          )}
         />
       )}
       <Button

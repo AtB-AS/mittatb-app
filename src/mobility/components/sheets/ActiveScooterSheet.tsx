@@ -20,7 +20,7 @@ import {
 } from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
-import {formatErrorMessage} from '@atb/mobility/utils';
+import {formatFriendlyShmoErrorMessage} from '@atb/mobility/utils';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -113,7 +113,10 @@ export const ActiveScooterSheet = ({
                   {sendShmoBookingEventIsError && (
                     <MessageInfoBox
                       type="error"
-                      message={formatErrorMessage(sendShmoBookingEventError, t)}
+                      message={formatFriendlyShmoErrorMessage(
+                        sendShmoBookingEventError,
+                        t,
+                      )}
                     />
                   )}
                   <Button
