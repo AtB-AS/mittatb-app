@@ -10,11 +10,11 @@ import {Location, SearchLocation} from '@atb/modules/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
-import type {DepartureSearchTime} from 'src/components/date-selection';
 import {
   StopPlacesView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
