@@ -60,7 +60,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {DatePickerSheet} from '@atb/date-picker';
+import {DatePickerSheet} from 'src/components/date-selection';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -539,6 +539,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     </View>
   );
 };
+
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {

@@ -16,7 +16,7 @@ import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
 import {FeatureCategory} from '@atb/sdk';
-import type {DateOptionAndValue} from '@atb/date-picker';
+import type {DateOptionAndValue} from 'src/components/date-selection';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
   Language,
