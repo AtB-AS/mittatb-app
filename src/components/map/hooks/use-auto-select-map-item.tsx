@@ -107,7 +107,7 @@ export const useAutoSelectMapItem = (
                 }}
                 onClose={closeBottomSheet}
                 onGoToPaymentPage={() => {
-                  closeBottomSheet();
+                  close();
                   navigateToPaymentMethods();
                 }}
               />
@@ -115,6 +115,7 @@ export const useAutoSelectMapItem = (
           },
           onCloseFocusRef,
           false,
+          tabBarHeight,
         );
       }
 

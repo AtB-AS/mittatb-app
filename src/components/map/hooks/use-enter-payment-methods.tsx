@@ -13,29 +13,21 @@ import {useCallback} from 'react';
 export const useEnterPaymentMethods = () => {
   const navigation = useNavigation<RootNavigationProps>();
 
-  return useCallback(() => {
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_ProfileStack',
-                state: {
-                  routes: [
-                    {name: 'Profile_RootScreen'},
-                    {name: 'Profile_PaymentMethodsScreen'},
-                  ],
-                  index: 1,
-                },
-              },
-            ],
-            index: 0,
-          },
-        },
-      ],
+  return useCallback(async () => {
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_ProfileStack',
+      params: {
+        screen: 'Profile_RootScreen',
+      },
     });
+
+    requestAnimationFrame(() =>
+      navigation.navigate('Root_TabNavigatorStack', {
+        screen: 'TabNav_ProfileStack',
+        params: {
+          screen: 'Profile_PaymentMethodsScreen',
+        },
+      }),
+    );
   }, [navigation]);
 };
