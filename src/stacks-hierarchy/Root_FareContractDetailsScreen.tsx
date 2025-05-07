@@ -15,7 +15,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAnalyticsContext} from '@atb/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthContext} from '@atb/auth';
-import {ErrorBoundary} from '@atb/error-boundary';
+import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;

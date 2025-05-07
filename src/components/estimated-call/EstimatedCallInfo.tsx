@@ -1,7 +1,7 @@
 import {Statuses, StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {usePreferencesContext} from '@atb/preferences';
 import {LineChip, LineChipServiceJourney} from './LineChip';
 import {ThemeIcon} from '../theme-icon';

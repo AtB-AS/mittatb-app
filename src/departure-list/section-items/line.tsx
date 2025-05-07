@@ -6,7 +6,7 @@ import {
   useSectionStyle,
 } from '@atb/components/sections';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   CancelledDepartureTexts,
@@ -35,7 +35,7 @@ import {
   filterNotices,
   formatDestinationDisplay,
   getBookingStatus,
-} from '@atb/travel-details-screens/utils';
+} from '@atb/screen-components/travel-details-screens';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';

@@ -9,7 +9,7 @@ interface PassPresentationBridge {
 
 const PassPresentationBridge =
   NativeModules.PassPresentationBridge as PassPresentationBridge;
-if (!PassPresentationBridge) {
+if (Platform.OS === 'ios' && !PassPresentationBridge) {
   throw new Error(
     'PassPresentationBridge module is not linked. Please check your native module setup.',
   );

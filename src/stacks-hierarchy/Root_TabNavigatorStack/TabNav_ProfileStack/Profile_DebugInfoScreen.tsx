@@ -97,6 +97,8 @@ export const Profile_DebugInfoScreen = () => {
       remoteTokenError,
       setSabotage,
       sabotage,
+      setAllTokenInspectable,
+      allTokenInspectable,
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
@@ -435,6 +437,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
+                <ThemeText>{`Override remote token inspectable: ${allTokenInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
                 <ThemeText>{`Native token error: ${nativeTokenError}`}</ThemeText>
                 <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
@@ -496,6 +499,32 @@ export const Profile_DebugInfoScreen = () => {
                       <DebugSabotage
                         sabotage={sabotage}
                         setSabotage={setSabotage}
+                      />
+                    </View>
+                  }
+                />
+                <ExpandableSectionItem
+                  text="Remote Token Inspectability"
+                  showIconText={true}
+                  expandContent={
+                    <View>
+                      <Button
+                        expanded={true}
+                        style={styles.button}
+                        text="Set no inspectable token"
+                        onPress={() => setAllTokenInspectable(false)}
+                      />
+                      <Button
+                        expanded={true}
+                        style={styles.button}
+                        text="Set all inspectable token"
+                        onPress={() => setAllTokenInspectable(true)}
+                      />
+                      <Button
+                        expanded={true}
+                        style={styles.button}
+                        text="Reset token inspectability to default"
+                        onPress={() => setAllTokenInspectable(undefined)}
                       />
                     </View>
                   }

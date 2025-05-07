@@ -1,5 +1,5 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
-import {PlaceScreenComponent} from '@atb/place-screen';
+import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
 
 type Props = DashboardScreenProps<'Dashboard_PlaceScreen'>;
 

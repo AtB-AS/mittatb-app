@@ -33,11 +33,11 @@ export const PaymentSelectionSectionItem = forwardRef<
   const paymentName =
     humanizePaymentType(paymentMethod.paymentType) ||
     t(PaymentMethodsTexts.a11y.paymentCard); // TODO: Figure out a better fallback value than "payment card"
-  const a11yLabel = paymentMethod.recurringCard?.masked_pan
+  const a11yLabel = paymentMethod.recurringCard?.maskedPan
     ? t(
         PaymentMethodsTexts.a11y.editCardWithMaskedPan(
           paymentName,
-          paymentMethod.recurringCard.masked_pan,
+          paymentMethod.recurringCard.maskedPan,
         ),
       )
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
@@ -69,11 +69,11 @@ export const PaymentSelectionSectionItem = forwardRef<
                 accessibilityLabel={t(
                   PaymentMethodsTexts.a11y.cardInfo(
                     paymentName,
-                    paymentMethod.recurringCard?.masked_pan ?? '',
+                    paymentMethod.recurringCard?.maskedPan ?? '',
                   ),
                 )}
               >
-                **** {paymentMethod.recurringCard?.masked_pan}
+                **** {paymentMethod.recurringCard?.maskedPan}
               </ThemeText>
             )}
         </View>

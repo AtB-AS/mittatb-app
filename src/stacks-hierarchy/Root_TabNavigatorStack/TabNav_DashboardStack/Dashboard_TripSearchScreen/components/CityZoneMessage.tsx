@@ -19,7 +19,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/configuration';
 import {useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {ThemedFlexibleTransport} from '@atb/theme/ThemedAssets';
+import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 
 type ActionButton = {
   id: string;
@@ -62,7 +62,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
       <Section style={style.cityZoneMessage}>
         <CityZoneBox
           message={t(CityBoxMessageTexts.message(fromCityZone.name))}
-          icon={() => <ThemedFlexibleTransport width={135} height={74} />}
+          icon={() => <ThemedBestillMaxi width={60} height={54} />}
           onDismiss={onDismiss}
           actionButtons={actionButtons}
         />
@@ -221,7 +221,6 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   icon: {
     marginRight: theme.spacing.medium,
-    justifyContent: 'center',
   },
   content: {
     flex: 1,

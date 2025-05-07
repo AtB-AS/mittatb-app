@@ -1,5 +1,5 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
-import {TravelDetailsMapScreenComponent} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import {TravelDetailsMapScreenComponent} from '@atb/screen-components/travel-details-map-screen';
 
 type Props = DashboardScreenProps<'Dashboard_TravelDetailsMapScreen'>;
 

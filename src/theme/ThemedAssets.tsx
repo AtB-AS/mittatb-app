@@ -8,6 +8,7 @@ import {
   NoFavouriteDeparture as NoFavouriteDepartureLight,
   OnBehalfOf as OnBehalfOfLight,
   FlexibleTransport as FlexibleTransportLight,
+  BestillMaxi as BestillMaxiLight,
   CrashSmall as CrashSmallLight,
   TicketTilted as TicketTiltedLight,
   Ticket as TicketLight,
@@ -21,6 +22,7 @@ import {
   NoFavouriteDeparture as NoFavouriteDepartureDark,
   OnBehalfOf as OnBehalfOfDark,
   FlexibleTransport as FlexibleTransportDark,
+  BestillMaxi as BestillMaxiDark,
   CrashSmall as CrashSmallDark,
   TicketTilted as TicketTiltedDark,
   Ticket as TicketDark,
@@ -31,11 +33,15 @@ import {
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
+  BundlingCarSharingActive as BundlingCarSharingActiveDark,
+  BundlingCityBikeActive as BundlingCityBikeActiveDark,
   CityBike as CityBikeDark,
   ParkAndRide as ParkAndRideDark,
 } from '@atb/assets/svg/color/images/mobility/dark';
 import {
   BundlingCarSharing as BundlingCarSharingLight,
+  BundlingCarSharingActive as BundlingCarSharingActiveLight,
+  BundlingCityBikeActive as BundlingCityBikeActiveLight,
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
 } from '@atb/assets/svg/color/images/mobility/light';
@@ -92,12 +98,37 @@ export const ThemedBundlingCarSharing = ({...props}: SvgProps) => {
   return <BundlingCarSharing {...props} />;
 };
 
+export const ThemedBundlingCarSharingActive = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BundlingCarSharingActive =
+    themeName === 'dark'
+      ? BundlingCarSharingActiveDark
+      : BundlingCarSharingActiveLight;
+  return <BundlingCarSharingActive {...props} />;
+};
+
+export const ThemedBundlingCityBikeActive = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BundlingCityBikeActive =
+    themeName === 'dark'
+      ? BundlingCityBikeActiveDark
+      : BundlingCityBikeActiveLight;
+  return <BundlingCityBikeActive {...props} />;
+};
+
 export const ThemedFlexibleTransport = ({...props}: SvgProps) => {
   const {themeName} = useThemeContext();
   const FlexibleTransport =
     themeName === 'dark' ? FlexibleTransportDark : FlexibleTransportLight;
 
   return <FlexibleTransport {...props} />;
+};
+
+export const ThemedBestillMaxi = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BestillMaxi = themeName === 'dark' ? BestillMaxiDark : BestillMaxiLight;
+
+  return <BestillMaxi {...props} />;
 };
 
 export const ThemedCrashSmall = ({...props}: SvgProps) => {

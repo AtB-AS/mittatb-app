@@ -1,5 +1,5 @@
 import {Feature, Point} from 'geojson';
-import {MapLine} from '@atb/travel-details-map-screen/utils';
+import {MapLine} from '@atb/screen-components/travel-details-map-screen';
 import {RefObject, useEffect} from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';

@@ -94,8 +94,8 @@ const PricePerUserProfile = ({
   const {t, language} = useTranslation();
   const {count, offer} = userProfile;
 
-  const price = count * (offer.prices[0].amount_float || 0);
-  const originalPrice = count * (offer.prices[0].original_amount_float || 0);
+  const price = count * (offer.price.amountFloat || 0);
+  const originalPrice = count * (offer.price.originalAmountFloat || 0);
 
   const priceString = formatNumberToString(price, language);
   const originalPriceString = originalPrice

@@ -7,7 +7,7 @@ import {
   NearbyTexts,
   useTranslation,
 } from '@atb/translations';
-import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
+import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 

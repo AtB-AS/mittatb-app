@@ -7,7 +7,7 @@ import {
   DepartureSearchTime,
   StopPlacesView,
   useStopsDetailsDataQuery,
-} from '@atb/place-screen';
+} from '@atb/screen-components/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';

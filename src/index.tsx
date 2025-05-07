@@ -14,7 +14,7 @@ import {SearchHistoryContextProvider} from './search-history';
 import {TicketingContextProvider} from './ticketing';
 import {RemoteConfigContextProvider} from './RemoteConfigContext';
 import {AuthContextProvider} from './auth';
-import {ErrorBoundary} from './error-boundary';
+import {ErrorBoundary} from './screen-components/error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import {configureAndStartBugsnag} from './diagnostics/bugsnagConfig';
 import {AccessibilityContextProvider} from '@atb/AccessibilityContext';

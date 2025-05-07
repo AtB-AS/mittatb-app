@@ -138,7 +138,7 @@ export const BikeStationBottomSheet = ({
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<ThemedCityBike height={50} width={50} />}
+                      fallback={<ThemedCityBike height={48} width={70} />}
                     />
                   </View>
                 </GenericSectionItem>
@@ -164,6 +164,8 @@ export const BikeStationBottomSheet = ({
                   benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
+                  isBonusPayment={payWithBonusPoints}
+                  bonusProductId={bonusProduct?.id}
                 />
               </View>
             )}
