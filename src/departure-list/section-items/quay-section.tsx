@@ -11,8 +11,8 @@ import {LineItem} from './line';
 import {QuayHeaderItem} from './quay-header';
 import {Location} from '@atb/favorites';
 import {StopPlace} from '@atb/api/types/trips';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 const LIMIT_SIZE = 5;
 

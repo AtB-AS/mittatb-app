@@ -1,5 +1,5 @@
 import {ProfileScreenProps} from './navigation-types';
-import {FavoriteDeparturesScreenComponent} from '@atb/favorite-departures/FavoriteDeparturesScreenComponent';
+import {FavoriteDeparturesScreenComponent} from '@atb/screen-components/favorite-departures';
 
 type Props = ProfileScreenProps<'Profile_FavoriteDeparturesScreen'>;
 

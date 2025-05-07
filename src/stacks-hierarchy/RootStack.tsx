@@ -47,7 +47,7 @@ import {
   LoadingScreen,
   LoadingScreenBoundary,
   useIsLoadingAppState,
-} from '@atb/loading-screen';
+} from '@atb/screen-components/loading-screen';
 import {
   Root_ParkingViolationsConfirmationScreen,
   Root_ParkingViolationsPhotoScreen,
@@ -63,13 +63,13 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {ForceUpdateScreen} from '@atb/force-update-screen';
+import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';

@@ -12,7 +12,7 @@ import {
 import React, {forwardRef} from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {useThemeContext} from '@atb/theme';
 
 type Props = {

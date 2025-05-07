@@ -6,7 +6,7 @@ import {
   NearbyTexts,
   useTranslation,
 } from '@atb/translations';
-import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
+import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;

@@ -13,7 +13,7 @@ import {
   useOnboardingNavigation,
 } from '@atb/onboarding';
 import {TravelTokenBox} from '@atb/travel-token-box';
-import {LoadingScreen} from '@atb/loading-screen';
+import {LoadingScreen} from '@atb/screen-components/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useCallback} from 'react';

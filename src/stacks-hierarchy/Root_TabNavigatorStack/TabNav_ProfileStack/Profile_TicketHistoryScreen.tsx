@@ -1,6 +1,6 @@
 import React from 'react';
 import {ProfileScreenProps} from './navigation-types';
-import {TicketHistoryScreenComponent} from '@atb/ticket-history';
+import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
 
 type Props = ProfileScreenProps<'Profile_TicketHistoryScreen'>;
 

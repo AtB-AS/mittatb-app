@@ -2,7 +2,7 @@ import {CameraFocusModeType, MapLeg, MapSelectionActionType} from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
-import {createMapLines} from '@atb/travel-details-map-screen/utils';
+import {createMapLines} from '@atb/screen-components/travel-details-map-screen';
 import {
   findEntityAtClick,
   mapPositionToCoordinates,

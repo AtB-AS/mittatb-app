@@ -10,7 +10,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;

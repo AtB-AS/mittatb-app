@@ -1,5 +1,5 @@
 import {MapScreenProps} from './navigation-types';
-import {TravelAidScreenComponent} from '@atb/travel-aid/TravelAidScreenComponent';
+import {TravelAidScreenComponent} from '@atb/screen-components/travel-aid';
 
 type Props = MapScreenProps<'Map_TravelAidScreen'>;
 
