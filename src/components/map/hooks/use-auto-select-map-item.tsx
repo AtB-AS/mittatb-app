@@ -24,6 +24,8 @@ import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -52,7 +54,7 @@ export const useAutoSelectMapItem = (
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-
+  const navigateToPaymentMethods = useEnterPaymentMethods();
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -93,6 +95,85 @@ export const useAutoSelectMapItem = (
     [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
+  const openScooterSheet = useCallback(
+    (vehicleId: string) => {
+      async function selectPaymentMethod(vehicleId: string) {
+        openBottomSheet(
+          () => {
+            return (
+              <SelectShmoPaymentMethodSheet
+                onSelect={() => {
+                  openScooterSheet(vehicleId);
+                }}
+                onClose={() => {
+                  openScooterSheet(vehicleId);
+                }}
+                onGoToPaymentPage={() => {
+                  close();
+                  navigateToPaymentMethods();
+                }}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+          tabBarHeight,
+        );
+      }
+
+      openBottomSheet(
+        () => {
+          return (
+            <ScooterSheet
+              selectPaymentMethod={() => selectPaymentMethod(vehicleId)}
+              vehicleId={vehicleId}
+              onClose={closeBottomSheet}
+              onVehicleReceived={flyToMapItemLocation}
+              onReportParkingViolation={onReportParkingViolation}
+              navigateSupportCallback={close}
+              navigation={navigation}
+              loginCallback={() => {
+                close();
+                if (hasReservationOrAvailableFareContract) {
+                  navigation.navigate(
+                    'Root_LoginAvailableFareContractWarningScreen',
+                    {},
+                  );
+                } else if (enable_vipps_login) {
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionOverride: 'slide-from-bottom',
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
+                }
+              }}
+              startOnboardingCallback={() => {
+                close();
+                navigation.navigate('Root_ShmoOnboardingScreen');
+              }}
+            />
+          );
+        },
+        onCloseFocusRef,
+        false,
+        tabBarHeight,
+      );
+    },
+    [
+      openBottomSheet,
+      tabBarHeight,
+      closeBottomSheet,
+      navigateToPaymentMethods,
+      flyToMapItemLocation,
+      onReportParkingViolation,
+      close,
+      navigation,
+      hasReservationOrAvailableFareContract,
+      enable_vipps_login,
+    ],
+  );
+
   /**
    * This should probably be aligned with useUpdateBottomSheetWhenSelectedEntityChanges,
    * allowing anything that can be selected by clicking the map, to also be selectable through QR code.
@@ -124,36 +205,7 @@ export const useAutoSelectMapItem = (
                 );
               }
             } else {
-              BottomSheetComponent = (
-                <ScooterSheet
-                  vehicleId={bottomSheetToAutoSelect.id}
-                  onClose={closeBottomSheet}
-                  onVehicleReceived={flyToMapItemLocation}
-                  onReportParkingViolation={onReportParkingViolation}
-                  navigateSupportCallback={closeBottomSheet}
-                  navigation={navigation}
-                  loginCallback={() => {
-                    closeBottomSheet();
-                    if (hasReservationOrAvailableFareContract) {
-                      navigation.navigate(
-                        'Root_LoginAvailableFareContractWarningScreen',
-                        {},
-                      );
-                    } else if (enable_vipps_login) {
-                      navigation.navigate('Root_LoginOptionsScreen', {
-                        showGoBack: true,
-                        transitionOverride: 'slide-from-bottom',
-                      });
-                    } else {
-                      navigation.navigate('Root_LoginPhoneInputScreen', {});
-                    }
-                  }}
-                  startOnboardingCallback={() => {
-                    closeBottomSheet();
-                    navigation.navigate('Root_ShmoOnboardingScreen');
-                  }}
-                />
-              );
+              openScooterSheet(bottomSheetToAutoSelect.id);
             }
             break;
           case AutoSelectableBottomSheetType.Bicycle:
@@ -196,7 +248,6 @@ export const useAutoSelectMapItem = (
           );
         }
         setBottomSheetCurrentlyAutoSelected(bottomSheetToAutoSelect);
-        setBottomSheetToAutoSelect(undefined);
       }
     } catch (e) {
       console.warn('Failed to open bottom sheet with auto select');
@@ -217,5 +268,6 @@ export const useAutoSelectMapItem = (
     close,
     isShmoDeepIntegrationEnabled,
     tabBarHeight,
+    openScooterSheet,
   ]);
 };

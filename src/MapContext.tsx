@@ -4,6 +4,8 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from './api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from './api/types/mobility';
+import {PaymentMethod} from './modules/payment';
+import {useSelectedShmoPaymentMethod} from './modules/payment/hooks/use-selected-shmo-payment-method';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -16,6 +18,8 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
+  selectedShmoPaymentMethod?: PaymentMethod;
+  setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -42,6 +46,9 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
+
+  const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
+    useSelectedShmoPaymentMethod();
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -85,6 +92,8 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
+        selectedShmoPaymentMethod,
+        setSelectedShmoPaymentMethod,
       }}
     >
       {children}

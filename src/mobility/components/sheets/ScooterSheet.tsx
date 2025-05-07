@@ -26,8 +26,15 @@ import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {Section} from '@atb/components/sections';
+import {
+  PaymentSelectionSectionItem,
+  usePreviousPaymentMethods,
+} from '@atb/modules/payment';
+import {useMapContext} from '@atb/MapContext';
 
 type Props = {
+  selectPaymentMethod: () => void;
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
@@ -39,6 +46,7 @@ type Props = {
 };
 
 export const ScooterSheet = ({
+  selectPaymentMethod,
   vehicleId: id,
   onClose,
   onReportParkingViolation,
@@ -61,13 +69,21 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
+  const {mobilityOperators} = useOperators();
+  const operatorIsIntegrationEnabled = mobilityOperators?.find(
+    (e) => e.id === operatorId,
+  )?.isDeepIntegrationEnabled;
+  const {selectedShmoPaymentMethod} = useMapContext();
+  const {recurringPaymentMethods} = usePreviousPaymentMethods();
+
+  const defaultPaymentMethod =
+    selectedShmoPaymentMethod ??
+    recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
   const {isLoading: shmoReqIsLoading} = useShmoRequirements();
-
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
-  const {mobilityOperators} = useOperators();
 
   const {
     isParkingViolationsReportingEnabled,
@@ -78,7 +94,7 @@ export const ScooterSheet = ({
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.6}
+      maxHeightValue={0.7}
       onClose={onClose}
     >
       <>
@@ -104,19 +120,30 @@ export const ScooterSheet = ({
                 operatorName={operatorName}
                 brandLogoUrl={brandLogoUrl}
               />
+              {defaultPaymentMethod &&
+                isShmoDeepIntegrationEnabled &&
+                isMapV2Enabled &&
+                operatorIsIntegrationEnabled && (
+                  <Section style={{paddingHorizontal: theme.spacing.medium}}>
+                    <PaymentSelectionSectionItem
+                      paymentMethod={defaultPaymentMethod}
+                      onPress={selectPaymentMethod}
+                    />
+                  </Section>
+                )}
             </ScrollView>
             <View style={styles.footer}>
               {isShmoDeepIntegrationEnabled &&
               isMapV2Enabled &&
               operatorId &&
-              mobilityOperators?.find((e) => e.id === operatorId)
-                ?.isDeepIntegrationEnabled ? (
+              operatorIsIntegrationEnabled ? (
                 <View style={styles.actionWrapper}>
                   <ShmoActionButton
                     onLogin={loginCallback}
                     onStartOnboarding={startOnboardingCallback}
                     vehicleId={id}
                     operatorId={operatorId}
+                    paymentMethod={defaultPaymentMethod}
                   />
                   <Button
                     expanded={true}

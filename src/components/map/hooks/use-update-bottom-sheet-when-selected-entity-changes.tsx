@@ -34,6 +34,8 @@ import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -52,7 +54,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   onReportParkingViolation: () => void;
 } => {
   const {isMapV2Enabled} = useFeatureTogglesContext();
-
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} =
@@ -62,6 +63,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
+  const navigateToPaymentMethods = useEnterPaymentMethods();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -77,6 +79,84 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     analytics.logEvent('Mobility', 'Report parking violation clicked');
     navigation.navigate('Root_ParkingViolationsSelectScreen');
   }, [closeWithCallback, analytics, navigation]);
+
+  const openScooterSheet = useCallback(
+    (vehicleId: string) => {
+      async function selectPaymentMethod() {
+        openBottomSheet(
+          () => {
+            return (
+              <SelectShmoPaymentMethodSheet
+                onSelect={() => {
+                  openScooterSheet(selectedFeature?.properties?.id);
+                }}
+                onClose={() => {
+                  openScooterSheet(selectedFeature?.properties?.id);
+                }}
+                onGoToPaymentPage={() => {
+                  closeBottomSheet();
+                  navigateToPaymentMethods();
+                }}
+              />
+            );
+          },
+          onCloseFocusRef,
+          false,
+          tabBarHeight,
+        );
+      }
+
+      openBottomSheet(
+        () => {
+          return (
+            <ScooterSheet
+              selectPaymentMethod={selectPaymentMethod}
+              vehicleId={vehicleId}
+              onClose={closeCallback}
+              onReportParkingViolation={onReportParkingViolation}
+              navigateSupportCallback={closeBottomSheet}
+              navigation={navigation}
+              loginCallback={() => {
+                closeBottomSheet();
+                if (hasReservationOrAvailableFareContract) {
+                  navigation.navigate(
+                    'Root_LoginAvailableFareContractWarningScreen',
+                    {},
+                  );
+                } else if (enable_vipps_login) {
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionOverride: 'slide-from-bottom',
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
+                }
+              }}
+              startOnboardingCallback={() => {
+                closeBottomSheet();
+                navigation.navigate('Root_ShmoOnboardingScreen');
+              }}
+            />
+          );
+        },
+        onCloseFocusRef,
+        false,
+        tabBarHeight,
+      );
+    },
+    [
+      openBottomSheet,
+      tabBarHeight,
+      closeCallback,
+      selectedFeature?.properties?.id,
+      closeBottomSheet,
+      navigateToPaymentMethods,
+      onReportParkingViolation,
+      navigation,
+      hasReservationOrAvailableFareContract,
+      enable_vipps_login,
+    ],
+  );
 
   useEffect(() => {
     (async function () {
@@ -200,42 +280,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ? isScooterV2(selectedFeature)
           : isScooter(selectedFeature)
       ) {
-        openBottomSheet(
-          () => {
-            return (
-              <ScooterSheet
-                vehicleId={selectedFeature?.properties?.id}
-                onClose={closeCallback}
-                onReportParkingViolation={onReportParkingViolation}
-                navigateSupportCallback={closeBottomSheet}
-                navigation={navigation}
-                loginCallback={() => {
-                  closeBottomSheet();
-                  if (hasReservationOrAvailableFareContract) {
-                    navigation.navigate(
-                      'Root_LoginAvailableFareContractWarningScreen',
-                      {},
-                    );
-                  } else if (enable_vipps_login) {
-                    navigation.navigate('Root_LoginOptionsScreen', {
-                      showGoBack: true,
-                      transitionOverride: 'slide-from-bottom',
-                    });
-                  } else {
-                    navigation.navigate('Root_LoginPhoneInputScreen', {});
-                  }
-                }}
-                startOnboardingCallback={() => {
-                  closeBottomSheet();
-                  navigation.navigate('Root_ShmoOnboardingScreen');
-                }}
-              />
-            );
-          },
-          onCloseFocusRef,
-          false,
-          tabBarHeight,
-        );
+        openScooterSheet(selectedFeature?.properties?.id);
       } else if (
         isMapV2Enabled
           ? isBicycleV2(selectedFeature)

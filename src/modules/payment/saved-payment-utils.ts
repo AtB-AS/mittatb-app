@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/auth';
@@ -67,12 +67,16 @@ export function usePreviousPaymentMethods(): {
     });
   }, [userId, isValidPaymentMethod]);
 
-  const recurringPaymentMethods = recurringPayments?.map(
-    (recurringPayment): PaymentMethod => ({
-      savedType: SavedPaymentMethodType.Recurring,
-      paymentType: recurringPayment.paymentType,
-      recurringCard: recurringPayment,
-    }),
+  const recurringPaymentMethods = useMemo(
+    () =>
+      recurringPayments?.map(
+        (recurringPayment): PaymentMethod => ({
+          savedType: SavedPaymentMethodType.Recurring,
+          paymentType: recurringPayment.paymentType,
+          recurringCard: recurringPayment,
+        }),
+      ),
+    [recurringPayments], // Only recalculate when recurringPayments changes
   );
 
   return {

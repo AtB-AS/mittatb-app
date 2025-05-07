@@ -31,10 +31,10 @@ import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   saveLastUsedRecurringPaymentOrType,
   usePreviousPaymentMethods,
-} from '../saved-payment-utils';
-import {PaymentMethod} from '../types';
+} from '../../modules/payment/saved-payment-utils';
+import {PaymentMethod} from '../../modules/payment/types';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
-import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
+import {SelectPaymentMethodSheet} from '../../modules/payment/SelectPaymentMethodSheet';
 import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
@@ -47,10 +47,10 @@ import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
-import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
 import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
+import {PaymentSelectionSectionItem} from '@atb/modules/payment';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 

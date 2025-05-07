@@ -6,21 +6,23 @@ import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
-// this will be updated with new paymentcard component being created
-// eslint-disable-next-line no-restricted-imports
-import {usePreviousPaymentMethods} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext.tsx';
+import {
+  PaymentMethod,
+  saveLastUsedRecurringPaymentOrType,
+} from '@atb/modules/payment';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
   onStartOnboarding: () => void;
   vehicleId: string;
   operatorId: string;
+  paymentMethod: PaymentMethod | undefined;
 };
 
 export const ShmoActionButton = ({
@@ -28,8 +30,9 @@ export const ShmoActionButton = ({
   onStartOnboarding,
   vehicleId,
   operatorId,
+  paymentMethod,
 }: ShmoActionButtonProps) => {
-  const {authenticationType} = useAuthContext();
+  const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers} = useShmoRequirements();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -43,21 +46,9 @@ export const ShmoActionButton = ({
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
 
-  //TODO: This recurringPaymentId logic will be updated with new paymentcard component being created
-  const {recurringPaymentMethods} = usePreviousPaymentMethods();
-  const lastRecurringPaymentMethod =
-    !!recurringPaymentMethods && recurringPaymentMethods.length > 0
-      ? recurringPaymentMethods[recurringPaymentMethods.length - 1]
-      : undefined;
-
-  const recurringPaymentId =
-    lastRecurringPaymentMethod?.savedType === 'recurring'
-      ? lastRecurringPaymentMethod?.recurringCard?.id
-      : '';
-
-  const initShmoBooking = useCallback(() => {
+  const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
-      recurringPaymentId: recurringPaymentId ?? (0 as any),
+      recurringPaymentId: paymentMethod?.recurringCard?.id ?? 0,
       coordinates: {
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
@@ -65,13 +56,21 @@ export const ShmoActionButton = ({
       assetId: vehicleId ?? '',
       operatorId: operatorId,
     };
-    initShmoOneStopBooking(initReqBody);
+    const res = await initShmoOneStopBooking(initReqBody);
+    if (res.bookingId) {
+      saveLastUsedRecurringPaymentOrType(
+        userId,
+        paymentMethod?.paymentType,
+        paymentMethod?.recurringCard?.id,
+      );
+    }
   }, [
     initShmoOneStopBooking,
     vehicleId,
     operatorId,
     coordinates,
-    recurringPaymentId,
+    paymentMethod,
+    userId,
   ]);
 
   if (authenticationType != 'phone') {
