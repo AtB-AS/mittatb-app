@@ -26,7 +26,7 @@ import {
   useAuthContext,
 } from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
+import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';

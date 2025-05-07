@@ -56,7 +56,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';

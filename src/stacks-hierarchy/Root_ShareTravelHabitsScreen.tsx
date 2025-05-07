@@ -10,9 +10,8 @@ import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/onboarding';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext, checkPermissionStatuses} from '@atb/modules/beacons';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 
 export const Root_ShareTravelHabitsScreen = () => {

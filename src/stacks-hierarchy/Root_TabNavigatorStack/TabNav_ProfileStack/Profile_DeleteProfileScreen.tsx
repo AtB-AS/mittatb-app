@@ -13,7 +13,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContext} from '@atb/time';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/LocaleProvider.tsx';
 
 export const Profile_DeleteProfileScreen = () => {

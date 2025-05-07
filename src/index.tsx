@@ -36,7 +36,7 @@ import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from '@atb/modules/notifications';
-import {BeaconsContextProvider} from './beacons/BeaconsContext';
+import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 

@@ -29,11 +29,11 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
+import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/time';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';

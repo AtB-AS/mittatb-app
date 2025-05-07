@@ -18,10 +18,12 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useSearchHistoryContext} from '@atb/search-history';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {
+  useBeaconsContext,
+  allowedPermissionsForBeacons,
+} from '@atb/modules/beacons';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {allowedPermissionsForBeacons} from '@atb/beacons/permissions';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 
 export const Profile_PrivacyScreen = () => {
