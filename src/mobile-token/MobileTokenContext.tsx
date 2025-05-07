@@ -37,7 +37,7 @@ import {
 } from './hooks/use-load-native-token-query';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
-import {useIntercomMetadata} from '@atb/chat';
+import {useIntercomMetadata} from '@atb/modules/chat';
 import {useValidateToken} from '@atb/mobile-token/hooks/use-validate-token';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;

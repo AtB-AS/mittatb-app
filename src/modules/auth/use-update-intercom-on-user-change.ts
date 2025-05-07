@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useIntercomMetadata} from '@atb/chat';
+import {useIntercomMetadata} from '@atb/modules/chat';
 import {AuthReducerState} from './AuthContext';
 import {mapAuthenticationType} from './utils';
 
