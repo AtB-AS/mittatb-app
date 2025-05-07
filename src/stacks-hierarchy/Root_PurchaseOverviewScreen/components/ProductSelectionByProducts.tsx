@@ -10,7 +10,7 @@ import {
   useFirestoreConfigurationContext,
   getReferenceDataName,
   isProductSellableInApp,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {
   HeaderSectionItem,

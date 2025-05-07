@@ -3,7 +3,7 @@ import {
   PreassignedFareProduct,
   UserProfile,
   TariffZone,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';

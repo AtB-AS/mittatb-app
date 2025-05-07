@@ -41,7 +41,7 @@ import {
 } from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';

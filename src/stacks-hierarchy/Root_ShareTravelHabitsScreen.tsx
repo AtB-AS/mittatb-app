@@ -5,7 +5,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {Linking} from 'react-native';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,

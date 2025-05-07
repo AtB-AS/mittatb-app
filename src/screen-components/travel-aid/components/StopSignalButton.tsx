@@ -12,7 +12,7 @@ import {View} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import type {MutationStatus} from '@tanstack/react-query';
 import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import type {StopSignalButtonConfigType} from '@atb-as/config-specs';
 import {isApplicableTransportMode} from '../utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';

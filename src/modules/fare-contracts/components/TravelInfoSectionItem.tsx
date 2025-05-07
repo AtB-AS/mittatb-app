@@ -20,7 +20,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTimeContext} from '@atb/time';
 import {useSectionItem} from '@atb/components/sections';
 import {

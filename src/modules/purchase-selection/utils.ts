@@ -1,4 +1,4 @@
-import {PreassignedFareProduct} from '@atb/configuration/types';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {compareVersion} from '@atb/utils/compare-version';
 import type {
   PurchaseSelectionBuilderInput,

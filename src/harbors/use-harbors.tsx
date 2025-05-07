@@ -1,7 +1,7 @@
 import {
   HarborConnectionOverrideType,
   ProductTypeTransportModes,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-overrides';
 import {useHarborsQuery} from '@atb/queries';

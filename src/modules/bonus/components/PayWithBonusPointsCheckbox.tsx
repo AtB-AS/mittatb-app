@@ -6,7 +6,7 @@ import {
   SectionProps,
 } from '@atb/components/sections';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
-import {BonusProductType} from '@atb/configuration/types';
+import {BonusProductType} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,

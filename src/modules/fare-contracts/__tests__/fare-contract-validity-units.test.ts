@@ -11,7 +11,7 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
 
 jest.mock('@atb/mobile-token', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
-jest.mock('@atb/configuration/FirestoreConfigurationContext', () => {});
+jest.mock('@atb/modules/configuration', () => {});
 jest.mock('@atb/api', () => {});
 jest.mock('@atb/time', () => {});
 jest.mock('@react-native-firebase/remote-config', () => {});

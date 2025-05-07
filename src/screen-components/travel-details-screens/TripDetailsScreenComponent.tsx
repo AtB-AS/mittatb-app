@@ -11,7 +11,7 @@ import {
   FareProductTypeConfig,
   TariffZone,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';

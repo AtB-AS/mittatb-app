@@ -1,5 +1,5 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';

@@ -244,7 +244,7 @@ const hyreSingleUnlockOperatorBenefit: OperatorBenefitType = {
   formFactors: ['CAR'],
 };
 
-jest.mock('@atb/configuration', () => ({
+jest.mock('@atb/modules/configuration', () => ({
   useFirestoreConfigurationContext: () => ({
     benefitIdsRequiringValueCode: ['single-unlock', 'free-unlock'],
   }),

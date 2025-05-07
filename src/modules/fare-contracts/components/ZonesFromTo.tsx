@@ -4,7 +4,7 @@ import {
   findReferenceDataById,
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {TravelRightDirection} from '@atb-as/utils';
 import {BorderedFromToBox} from './BorderedFromToBox';
 import dictionary from '@atb/translations/dictionary';

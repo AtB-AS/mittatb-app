@@ -3,7 +3,7 @@ import {
   findReferenceDataById,
   isOfFareProductRef,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTicketingContext} from '@atb/ticketing';
 import {FareContractType} from '@atb-as/utils';
 

@@ -1,4 +1,4 @@
-import {LanguageAndTextType} from '@atb/configuration';
+import {LanguageAndTextType} from '@atb/modules/configuration';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {AppPlatformType} from '@atb/modules/global-messages';
 import {Rule} from '@atb/modules/rule-engine';

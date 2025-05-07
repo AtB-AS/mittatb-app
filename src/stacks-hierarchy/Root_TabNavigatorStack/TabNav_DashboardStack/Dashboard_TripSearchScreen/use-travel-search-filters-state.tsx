@@ -1,7 +1,7 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React, {RefObject, useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useFiltersContext} from '@atb/travel-search-filters';
 import {
   FlexibleTransportOptionTypeWithSelectionType,

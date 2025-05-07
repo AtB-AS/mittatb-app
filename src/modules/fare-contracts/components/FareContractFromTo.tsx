@@ -7,7 +7,7 @@ import {SchoolFromTo} from './SchoolFromTo';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;

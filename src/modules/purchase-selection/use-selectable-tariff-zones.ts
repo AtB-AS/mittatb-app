@@ -1,5 +1,5 @@
 import {PreassignedFareProduct, type TariffZone} from '@atb-as/config-specs';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {isSelectableZone} from './utils';
 
 export function useSelectableTariffZones(

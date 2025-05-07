@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {MapSelectionActionType} from '../../types';
 
 type ExternalRealtimeMapButtonProps = {

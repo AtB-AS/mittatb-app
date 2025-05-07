@@ -8,7 +8,7 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
   UserProfile,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 

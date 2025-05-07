@@ -6,7 +6,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {

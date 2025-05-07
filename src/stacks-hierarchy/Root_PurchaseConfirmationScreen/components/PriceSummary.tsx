@@ -4,7 +4,7 @@ import {
   FareProductTypeConfig,
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';

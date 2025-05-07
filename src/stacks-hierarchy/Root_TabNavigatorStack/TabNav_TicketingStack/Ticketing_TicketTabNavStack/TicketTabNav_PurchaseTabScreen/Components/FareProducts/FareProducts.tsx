@@ -8,7 +8,7 @@ import {
   ProductTypeTransportModes,
   isProductSellableInApp,
   PreassignedFareProduct,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {flatMap} from '@atb/utils/array';
 import {
   TicketingTexts,

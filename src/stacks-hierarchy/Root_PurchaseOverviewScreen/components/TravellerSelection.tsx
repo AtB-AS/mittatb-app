@@ -5,7 +5,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,

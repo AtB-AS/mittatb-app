@@ -28,7 +28,7 @@ import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetai
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 
 type Props = {
   now: number;

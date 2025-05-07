@@ -1,9 +1,9 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {DetailsContent} from '@atb/modules/fare-contracts';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
-import {findReferenceDataById} from '@atb/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
 import {Reservation} from '@atb/ticketing';
 import {TravelRightDirection, FareContractType} from '@atb-as/utils';

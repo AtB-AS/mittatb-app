@@ -2,7 +2,7 @@ import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
-import {PreassignedFareProduct} from '@atb/configuration/types';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 
 const UserBenefits = z
   .object({

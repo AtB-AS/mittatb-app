@@ -10,7 +10,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 
 type Props = PropsWithChildren<
   | {

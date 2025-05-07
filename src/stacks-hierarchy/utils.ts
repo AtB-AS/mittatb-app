@@ -1,7 +1,7 @@
 import {format, parseISO} from 'date-fns';
 import {ErrorType} from '@atb/api/utils';
 import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
-import {TariffZone} from '@atb/configuration';
+import {TariffZone} from '@atb/modules/configuration';
 import {
   TariffZoneWithMetadata,
   useTariffZoneFromLocation,

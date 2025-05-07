@@ -11,8 +11,10 @@ import {
 import {Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {ScooterConsentLineType} from '@atb/configuration/types';
+import {
+  useFirestoreConfigurationContext,
+  ScooterConsentLineType,
+} from '@atb/modules/configuration';
 import {OnboardingScreenComponent} from '@atb/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';

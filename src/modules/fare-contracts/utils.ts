@@ -16,7 +16,7 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
   UserProfile,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,

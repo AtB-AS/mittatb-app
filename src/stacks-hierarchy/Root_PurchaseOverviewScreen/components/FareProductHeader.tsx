@@ -7,7 +7,7 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   FareProductTypeConfig,
   PreassignedFareProduct,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';

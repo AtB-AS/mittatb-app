@@ -6,7 +6,7 @@ import {
   useFirestoreConfigurationContext,
   findReferenceDataById,
   isProductSellableInApp,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {
   listRecentFareContracts,
   RecentOrderDetails,

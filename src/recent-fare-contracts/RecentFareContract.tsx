@@ -9,7 +9,7 @@ import {
   FareProductTypeConfig,
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';

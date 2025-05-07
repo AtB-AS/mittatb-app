@@ -1,7 +1,7 @@
 import {
   FlexibleTransportOptionType,
   TransportModeFilterOptionType,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {
   TravelSearchPreferenceOptionIdType,
   TravelSearchPreferenceType,

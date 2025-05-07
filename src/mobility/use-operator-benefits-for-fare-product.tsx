@@ -1,4 +1,4 @@
-import {PreassignedFareProduct} from '@atb/configuration/types';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {useFareProductBenefitsQuery} from '@atb/mobility/queries/use-fare-product-benefits-query';
 import {useOperators} from '@atb/mobility/use-operators';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';

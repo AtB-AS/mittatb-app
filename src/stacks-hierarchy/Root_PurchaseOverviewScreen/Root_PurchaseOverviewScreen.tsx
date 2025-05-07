@@ -1,5 +1,5 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,

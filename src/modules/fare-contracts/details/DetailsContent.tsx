@@ -26,8 +26,8 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';

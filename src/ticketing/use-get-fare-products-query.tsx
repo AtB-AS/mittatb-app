@@ -1,4 +1,4 @@
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getFareProducts} from '@atb/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/modules/auth';

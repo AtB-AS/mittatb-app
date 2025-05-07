@@ -1,6 +1,6 @@
 import {AuthStatus} from '@atb/modules/auth';
 import {RefObject} from 'react';
-import {FirestoreConfigStatus} from '@atb/configuration/types';
+import {FirestoreConfigStatus} from '@atb/modules/configuration';
 
 export type LoadingStatus = 'loading' | 'success' | 'timeout';
 

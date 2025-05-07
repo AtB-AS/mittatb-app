@@ -26,7 +26,7 @@ import {LocaleContextProvider} from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
-import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
+import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';

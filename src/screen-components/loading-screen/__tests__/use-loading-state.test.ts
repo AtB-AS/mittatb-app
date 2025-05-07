@@ -24,7 +24,7 @@ jest.mock('@atb/modules/auth', () => ({
     },
   }),
 }));
-jest.mock('@atb/configuration', () => ({
+jest.mock('@atb/modules/configuration', () => ({
   useFirestoreConfigurationContext: () => ({
     firestoreConfigStatus: mockState.firestoreConfigStatus,
     resubscribeFirestoreConfig: () => {

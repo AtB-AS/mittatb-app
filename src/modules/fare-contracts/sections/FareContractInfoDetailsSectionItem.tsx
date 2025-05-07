@@ -4,7 +4,7 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
   UserProfile,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {getLastUsedAccess} from '@atb/ticketing';
 import {FareContractType} from '@atb-as/utils';

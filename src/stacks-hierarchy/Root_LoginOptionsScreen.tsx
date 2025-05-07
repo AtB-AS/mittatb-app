@@ -24,7 +24,7 @@ import queryString from 'query-string';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useOnboardingContext} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {closeInAppBrowseriOS, openInAppBrowser} from '@atb/in-app-browser';

@@ -24,7 +24,7 @@ import {
 } from '@atb/modules/beacons';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export const Profile_PrivacyScreen = () => {
   const {t, language} = useTranslation();

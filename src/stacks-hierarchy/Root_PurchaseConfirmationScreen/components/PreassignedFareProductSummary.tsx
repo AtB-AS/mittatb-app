@@ -7,7 +7,7 @@ import {
   PreassignedFareProduct,
   TariffZone,
   getReferenceDataName,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,

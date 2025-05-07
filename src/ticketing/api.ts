@@ -14,7 +14,7 @@ import {
   SendReceiptResponse,
   TicketRecipientType,
 } from './types';
-import {PreassignedFareProduct} from '@atb/configuration';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 

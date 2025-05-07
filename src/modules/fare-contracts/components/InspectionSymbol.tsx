@@ -9,7 +9,7 @@ import {
   ProductTypeTransportModes,
   TariffZone,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/mobile-token';

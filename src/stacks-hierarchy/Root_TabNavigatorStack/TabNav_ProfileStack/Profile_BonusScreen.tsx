@@ -23,7 +23,7 @@ import {
 } from '@atb/modules/bonus';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/mobility';
 import {isDefined} from '@atb/utils/presence';
 

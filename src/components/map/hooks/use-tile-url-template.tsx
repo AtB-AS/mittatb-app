@@ -1,5 +1,5 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTranslation, getTextForLanguage} from '@atb/translations';
 
 /**
