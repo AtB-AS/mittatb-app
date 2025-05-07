@@ -122,6 +122,7 @@ export const ScooterSheet = ({
               />
               {defaultPaymentMethod &&
                 isShmoDeepIntegrationEnabled &&
+                isMapV2Enabled &&
                 operatorIsIntegrationEnabled && (
                   <Section style={{paddingHorizontal: theme.spacing.medium}}>
                     <PaymentSelectionSectionItem
