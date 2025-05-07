@@ -1,5 +1,5 @@
 import {useAnalyticsContext} from '@atb/analytics';
-import {getAxiosErrorMetadata} from '@atb/api/utils';
+import {getErrorResponse} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {consumeCarnet} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -29,12 +29,15 @@ export const ConsumeCarnetBottomSheet = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
+  const [isError, setError] = useState<boolean>(false);
+  const [isSchoolError, setSchoolError] = useState<boolean>(true);
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
 
   const onConsume = async () => {
     setIsLoading(true);
+    setError(false);
+    setSchoolError(false);
     try {
       await consumeCarnet(fareContractId);
       analytics.logEvent('Ticketing', 'Consumed carnet', {
@@ -42,12 +45,13 @@ export const ConsumeCarnetBottomSheet = ({
       });
       close();
     } catch (e: any) {
-      const errorData = getAxiosErrorMetadata(e);
-      Bugsnag.notify({
-        name: `${errorData.responseStatus} error when consuming carnet`,
-        message: `Error: ${JSON.stringify(errorData)}`,
-      });
-      setError(true);
+      const errorResponse = getErrorResponse(e);
+      notifyBugsnag('Error when consuming carnet', {metadata: errorResponse});
+      if (errorResponse?.kind === 'SCHOOL_CARNET_IS_NOT_CONSUMABLE') {
+        setSchoolError(true);
+      } else {
+        setError(true);
+      }
     }
     setIsLoading(false);
   };
@@ -61,10 +65,17 @@ export const ConsumeCarnetBottomSheet = ({
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        {error && (
+        {isError && (
           <MessageInfoBox
             message={t(FareContractTexts.carnet.genericError)}
             type="error"
+          />
+        )}
+        {isSchoolError && (
+          <MessageInfoBox
+            title={t(FareContractTexts.carnet.schoolErrorTitle)}
+            message={t(FareContractTexts.carnet.schoolErrorMessage)}
+            type="warning"
           />
         )}
         <Section>
