@@ -10,8 +10,11 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from './api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from './api/types/mobility';
-import {PaymentMethod, usePreviousPaymentMethods} from './modules/payment';
-import {isCardPaymentMethod} from './components/map/utils';
+import {
+  isCardPaymentMethod,
+  PaymentMethod,
+  usePreviousPaymentMethods,
+} from './modules/payment';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;

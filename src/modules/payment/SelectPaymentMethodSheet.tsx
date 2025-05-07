@@ -34,14 +34,12 @@ type Props = {
     paymentMethod?: PaymentMethod;
   };
   recurringPaymentMethods?: PaymentMethod[];
-  onClose?: () => void;
 };
 
 export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
   recurringPaymentMethods,
   currentOptions,
-  onClose,
 }) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -76,10 +74,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const toggleShouldSave = () => setShouldSave((shouldSave) => !shouldSave);
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      onClose={onClose}
-    >
+    <BottomSheetContainer title={t(SelectPaymentMethodTexts.header.text)}>
       <ScrollView>
         <View style={{flex: 1}}>
           <View style={styles.paymentMethods}>

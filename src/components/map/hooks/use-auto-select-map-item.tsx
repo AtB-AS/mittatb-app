@@ -105,7 +105,9 @@ export const useAutoSelectMapItem = (
                 onSelect={() => {
                   openScooterSheet(vehicleId);
                 }}
-                onClose={closeBottomSheet}
+                onClose={() => {
+                  openScooterSheet(vehicleId);
+                }}
                 onGoToPaymentPage={() => {
                   close();
                   navigateToPaymentMethods();

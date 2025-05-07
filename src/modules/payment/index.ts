@@ -15,3 +15,4 @@ export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
 export {PaymentBrand} from './PaymentBrand';
 export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
+export {isCardPaymentMethod} from './utils';

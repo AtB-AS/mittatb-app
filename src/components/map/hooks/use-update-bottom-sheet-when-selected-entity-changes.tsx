@@ -37,8 +37,6 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
 import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
-//import {PaymentMethod, SelectPaymentMethodSheet} from '@atb/modules/payment';
-
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
  * close the bottom sheet when navigating to other places, but it will be
@@ -92,7 +90,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                 onSelect={() => {
                   openScooterSheet(selectedFeature?.properties?.id);
                 }}
-                onClose={closeCallback}
+                onClose={() => {
+                  openScooterSheet(selectedFeature?.properties?.id);
+                }}
                 onGoToPaymentPage={() => {
                   closeBottomSheet();
                   navigateToPaymentMethods();
