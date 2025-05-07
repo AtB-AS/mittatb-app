@@ -127,6 +127,7 @@ export const StopPlacesView = (props: Props) => {
     <SectionList
       ListHeaderComponent={
         <>
+          <ThemeText>StopPlacesView</ThemeText>
           {didLoadingDataFail && (
             <View
               style={[

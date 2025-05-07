@@ -94,6 +94,10 @@ type Root_ConfirmationScreenParams = {
   nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
 };
 
+type Root_TripSearchScreenParams = {
+  selection: PurchaseSelectionType;
+};
+
 export type NextScreenParams<
   T extends keyof RootStackParamList = keyof RootStackParamList,
 > = {
@@ -141,6 +145,7 @@ export type RootStackParamList = StackParams<{
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
   Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
+  Root_TripSelectionScreen: Root_TripSearchScreenParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

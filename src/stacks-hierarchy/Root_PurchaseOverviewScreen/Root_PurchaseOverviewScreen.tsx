@@ -27,8 +27,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {ToggleSectionItem} from '@atb/components/sections';
-import {useAuthContext} from '@atb/modules/auth';
+import {GenericSectionItem, ToggleSectionItem} from '@atb/components/sections';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
@@ -39,6 +38,9 @@ import {
 } from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
+import {useAuthContext} from '@atb/modules/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -62,7 +64,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
-
   const analytics = useAnalyticsContext();
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -253,6 +254,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             }}
             ref={focusRefs}
           />
+
+          <GenericSectionItem>
+            <ThemeText>{JSON.stringify(selection.legs, null, 2)}</ThemeText>
+            <Button
+              onPress={() => {
+                navigation.push('Root_TripSelectionScreen', {selection});
+              }}
+              expanded={false}
+              text="Velg avganger"
+            />
+          </GenericSectionItem>
 
           <StartTimeSelection
             selection={selection}
