@@ -1,6 +1,6 @@
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {PermissionStatus} from 'react-native-permissions';
-import {AuthenticationType} from '@atb/auth/types';
+import {AuthenticationType} from '@atb/modules/auth';
 import {NotificationPermissionStatus} from '@atb/modules/notifications';
 import {MobileTokenStatus} from '@atb/mobile-token/types';
 

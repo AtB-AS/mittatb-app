@@ -4,7 +4,7 @@ import {
   NotificationConfigUpdate,
   updateNotificationConfig,
 } from './api';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 const QUERY_PARENT_KEY = 'notification/config';
 

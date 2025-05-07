@@ -1,4 +1,4 @@
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {LoadingParams, LoadingState} from './types';
 import {useFirestoreConfigurationContext} from '@atb/configuration';

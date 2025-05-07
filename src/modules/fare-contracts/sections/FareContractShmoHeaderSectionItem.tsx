@@ -7,7 +7,7 @@ import {ProductName} from '../components/ProductName';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useTimeContext} from '@atb/time';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';

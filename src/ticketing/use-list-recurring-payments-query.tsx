@@ -1,4 +1,4 @@
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {listRecurringPayments} from '@atb/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS} from '@atb/utils/durations';

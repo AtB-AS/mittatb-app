@@ -9,7 +9,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {TicketHistoryMode, TicketHistoryScreenParams} from './types';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getFareContractInfo} from '@atb/modules/fare-contracts';

@@ -44,7 +44,7 @@ import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {closeInAppBrowseriOS} from '@atb/in-app-browser';
 import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
 import {APP_SCHEME} from '@env';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';

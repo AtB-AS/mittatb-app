@@ -1,7 +1,7 @@
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {getFareProducts} from '@atb/ticketing';
 import {useQuery} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const useGetFareProductsQuery = () => {

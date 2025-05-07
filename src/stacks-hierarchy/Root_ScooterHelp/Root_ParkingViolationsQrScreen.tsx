@@ -17,7 +17,7 @@ import {
   blobToBase64,
   useParkingViolations,
 } from '@atb/parking-violations-reporting';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';

@@ -4,7 +4,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   useAuthContext,
-} from '@atb/auth';
+} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,

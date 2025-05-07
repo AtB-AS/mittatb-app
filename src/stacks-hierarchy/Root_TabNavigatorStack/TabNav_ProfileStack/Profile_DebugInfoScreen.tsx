@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/preferences';

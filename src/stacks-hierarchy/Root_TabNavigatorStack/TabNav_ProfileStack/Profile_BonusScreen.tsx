@@ -21,7 +21,7 @@ import {
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/mobility';

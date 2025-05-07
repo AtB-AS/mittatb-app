@@ -12,7 +12,7 @@ import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 const RETRY_MAX_COUNT = 3;
 const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14';

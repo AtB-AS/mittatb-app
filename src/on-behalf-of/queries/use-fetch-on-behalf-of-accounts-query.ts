@@ -1,4 +1,4 @@
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useQuery} from '@tanstack/react-query';
 import {fetchOnBehalfOfAccounts} from '@atb/api/profile';
 import {HALF_DAY_MS} from '@atb/utils/durations';

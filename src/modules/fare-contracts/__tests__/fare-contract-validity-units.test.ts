@@ -9,7 +9,6 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
   remoteConfigIsLoaded: true,
 };
 
-jest.mock('@atb/auth/AuthContext', () => {});
 jest.mock('@atb/mobile-token', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
 jest.mock('@atb/configuration/FirestoreConfigurationContext', () => {});
@@ -22,7 +21,7 @@ jest.mock('@react-native-firebase/auth', () => {});
 jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
 jest.mock('react-native-device-info', () => {});
 jest.mock('react-native-inappbrowser-reborn', () => {});
-jest.mock('@atb/auth', () => ({
+jest.mock('@atb/modules/auth', () => ({
   useAuthContext: () => ({
     authStatus: DEFAULT_MOCK_STATE,
     abtCustomerId: '1',

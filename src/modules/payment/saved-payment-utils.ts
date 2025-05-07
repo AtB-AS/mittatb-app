@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 import {PaymentMethod, SavedPaymentMethodType} from './types';
 import {useFirestoreConfigurationContext} from '@atb/configuration';

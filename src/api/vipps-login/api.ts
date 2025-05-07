@@ -1,6 +1,6 @@
 import {storage} from '@atb/storage';
 import {client} from '@atb/api/client';
-import {VippsSignInErrorCode} from '@atb/auth';
+import {VippsSignInErrorCode} from '@atb/modules/auth';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
 import {APP_SCHEME} from '@env';
 import {openInAppBrowser} from '@atb/in-app-browser';

@@ -3,7 +3,7 @@ import type {FareContractType} from '@atb-as/utils';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/ticketing/api';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 
 type AvailabilityStatusInput = {

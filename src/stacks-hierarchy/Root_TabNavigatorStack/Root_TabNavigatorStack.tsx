@@ -34,7 +34,7 @@ import {useOnPushNotificationOpened} from '@atb/modules/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow, useOnboardingNavigation} from '@atb/onboarding';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 

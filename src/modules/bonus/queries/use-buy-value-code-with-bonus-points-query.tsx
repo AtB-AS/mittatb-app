@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {buyValueCodeWithBonusPoints} from '../api/api';
 import {getBonusBalanceQueryKey} from './get-bonus-balance-query';
 

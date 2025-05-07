@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {getBonusBalance} from '../api/api';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 

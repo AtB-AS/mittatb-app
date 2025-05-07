@@ -14,7 +14,7 @@ import {useTimeContext} from '@atb/time';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapFilterType} from '@atb/components/map';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 

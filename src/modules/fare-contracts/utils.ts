@@ -27,7 +27,7 @@ import {
 } from '@atb/translations';
 import {useMobileTokenContext} from '@atb/mobile-token';
 import {getAccesses} from '@atb-as/utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';

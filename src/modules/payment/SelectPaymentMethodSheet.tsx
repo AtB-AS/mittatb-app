@@ -9,7 +9,7 @@ import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/Selec
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {PaymentType} from '@atb/ticketing';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';

@@ -29,7 +29,7 @@ import {
 } from '@entur-private/abt-token-server-javascript-interface';
 import {storage} from '@atb/storage';
 import {API_BASE_URL} from '@env';
-import {getCurrentUserIdGlobal} from '@atb/auth/AuthContext';
+import {getCurrentUserIdGlobal} from '@atb/modules/auth';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';

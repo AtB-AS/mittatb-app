@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
-import {useAuthContext} from '../auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {Reservation, PaymentStatus} from './types';
 import {FareContractType} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';

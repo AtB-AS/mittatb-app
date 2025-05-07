@@ -1,7 +1,7 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 import {isSentOrReceivedFareContract} from '@atb/ticketing';

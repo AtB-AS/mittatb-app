@@ -11,7 +11,7 @@ import {addDays} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 export const Profile_FareContractsScreen = () => {
   const styles = useStyles();

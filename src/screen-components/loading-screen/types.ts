@@ -1,4 +1,4 @@
-import {AuthStatus} from '@atb/auth';
+import {AuthStatus} from '@atb/modules/auth';
 import {RefObject} from 'react';
 import {FirestoreConfigStatus} from '@atb/configuration/types';
 

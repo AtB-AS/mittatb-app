@@ -1,6 +1,6 @@
 import {Dispatch, useEffect} from 'react';
 import {AuthReducerAction} from './types';
-import {AuthReducerState} from '@atb/auth/AuthContext';
+import {AuthReducerState} from './AuthContext';
 import {useQuery} from '@tanstack/react-query';
 import {
   errorToMetadata,

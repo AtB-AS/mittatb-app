@@ -1,7 +1,7 @@
 import {Dispatch} from 'react';
 import {AuthReducerAction} from './types';
-import {AuthReducerState} from '@atb/auth/AuthContext';
-import {secondsToTokenExpiry} from '@atb/auth/utils';
+import {AuthReducerState} from './AuthContext';
+import {secondsToTokenExpiry} from './utils';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {useInterval} from '@atb/utils/use-interval';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';

@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '../use-token-toggle-details';
 import {LIST_REMOTE_TOKENS_QUERY_KEY} from './use-list-remote-tokens-query';
 import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/mobile-token/MobileTokenContext';
 
 type Args = {

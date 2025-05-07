@@ -5,7 +5,7 @@ import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {FareContractFromTo} from '../components/FareContractFromTo';
 import {Description} from '../components/FareContractDescription';

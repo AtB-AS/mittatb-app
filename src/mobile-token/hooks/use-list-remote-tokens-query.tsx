@@ -9,7 +9,7 @@ import {
 import {Token} from '@atb/mobile-token/types';
 
 import {v4 as uuid} from 'uuid';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 
 export const LIST_REMOTE_TOKENS_QUERY_KEY = 'listRemoteTokens';

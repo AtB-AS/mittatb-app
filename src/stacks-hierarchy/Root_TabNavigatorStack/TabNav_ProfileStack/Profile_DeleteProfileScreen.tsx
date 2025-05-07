@@ -1,6 +1,6 @@
 import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFareContracts} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';

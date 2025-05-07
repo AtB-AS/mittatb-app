@@ -1,6 +1,6 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod} from './types';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {humanizePaymentType} from '@atb/ticketing';
 import {PressableOpacity} from '@atb/components/pressable-opacity';

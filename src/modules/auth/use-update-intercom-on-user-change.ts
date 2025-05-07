@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useIntercomMetadata} from '@atb/chat';
-import {AuthReducerState} from '@atb/auth/AuthContext';
-import {mapAuthenticationType} from '@atb/auth/utils';
+import {AuthReducerState} from './AuthContext';
+import {mapAuthenticationType} from './utils';
 
 export const useUpdateIntercomOnUserChange = (state: AuthReducerState) => {
   const {updateMetadata} = useIntercomMetadata();

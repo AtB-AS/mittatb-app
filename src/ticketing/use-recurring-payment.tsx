@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import {useCallback, useEffect, useState} from 'react';
 import {useDeleteRecurringPaymentMutation} from './use-delete-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from './use-cancel-recurring-payment-mutation';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
