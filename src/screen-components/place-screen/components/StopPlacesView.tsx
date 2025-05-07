@@ -16,7 +16,7 @@ import type {ContrastColor} from '@atb-as/theme';
 import {
   DateSelection,
   type DepartureSearchTime,
-} from 'src/components/date-selection';
+} from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   useFavoritesContext,
