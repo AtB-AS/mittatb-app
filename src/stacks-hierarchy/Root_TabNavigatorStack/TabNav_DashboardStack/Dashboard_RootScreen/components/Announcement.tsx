@@ -1,4 +1,8 @@
-import {ActionType, AnnouncementType} from '@atb/announcements/types';
+import {
+  ActionType,
+  AnnouncementType,
+  useAnnouncementsContext,
+} from '@atb/modules/announcements';
 import {ThemeText} from '@atb/components/text';
 import {
   DashboardTexts,
@@ -20,7 +24,6 @@ import {AnnouncementSheet} from './AnnouncementSheet';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useAnnouncementsContext} from '@atb/announcements';
 import Bugsnag from '@bugsnag/react-native';
 import {RefObject, useRef} from 'react';
 

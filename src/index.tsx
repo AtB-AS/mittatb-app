@@ -32,7 +32,7 @@ import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
-import {AnnouncementsContextProvider} from './announcements';
+import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from '@atb/modules/notifications';

@@ -1,5 +1,5 @@
 import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
-import {useAnnouncementsContext} from '@atb/announcements';
+import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
 import {DashboardTexts, useTranslation} from '@atb/translations';
