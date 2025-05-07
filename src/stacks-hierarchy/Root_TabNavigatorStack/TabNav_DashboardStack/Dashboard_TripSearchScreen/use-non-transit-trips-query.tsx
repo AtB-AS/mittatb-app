@@ -13,7 +13,7 @@ import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import type {DateOptionAndValue} from 'src/date-selection';
+import type {DateOptionAndValue} from '@atb/date-selection';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
