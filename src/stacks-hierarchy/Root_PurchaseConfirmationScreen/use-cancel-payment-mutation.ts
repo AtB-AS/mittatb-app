@@ -14,8 +14,8 @@ export const useCancelPaymentMutation = ({
   useMutation({
     mutationFn: ({reserveOfferResponse, isUser}: Params) =>
       cancelPayment(
-        reserveOfferResponse.payment_id,
-        reserveOfferResponse.transaction_id,
+        reserveOfferResponse.paymentId,
+        reserveOfferResponse.transactionId,
         isUser,
       ),
     onSuccess,

@@ -9,7 +9,7 @@ import {
 } from '@atb/configuration';
 import {
   listRecentFareContracts,
-  RecentFareContractBackend,
+  RecentOrderDetails,
   useTicketingContext,
 } from '@atb/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
@@ -22,7 +22,7 @@ import {enumFromString} from '@atb/utils/enum-from-string';
 type State = {
   error: boolean;
   loading: boolean;
-  recentFareContracts: RecentFareContractBackend[];
+  recentFareContracts: RecentOrderDetails[];
 };
 
 const initialState: State = {
@@ -34,7 +34,7 @@ const initialState: State = {
 type Action =
   | {type: 'FETCH'}
   | {type: 'ERROR'}
-  | {type: 'SUCCESS'; data: RecentFareContractBackend[]};
+  | {type: 'SUCCESS'; data: RecentOrderDetails[]};
 
 type Reducer = (prevState: State, action: Action) => State;
 
@@ -63,7 +63,7 @@ const reducer: Reducer = (prevState, action): State => {
 };
 
 const mapUsers = (
-  users: {[user_profile: string]: string},
+  users: {[userProfile: string]: number},
   userProfiles: UserProfile[],
 ) =>
   Object.entries(users)
@@ -72,7 +72,7 @@ const mapUsers = (
       if (userProfile) {
         const userProfileWithCount = {
           ...userProfile,
-          count: parseInt(count),
+          count,
         };
         return foundUserProfiles.concat(userProfileWithCount);
       } else {
@@ -87,7 +87,7 @@ const mapUsers = (
     );
 
 const mapBackendRecentFareContracts = (
-  recentFareContract: RecentFareContractBackend,
+  recentFareContract: RecentOrderDetails,
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
@@ -128,15 +128,14 @@ const mapBackendRecentFareContracts = (
     recentFareContract.zones.slice(-1)[0],
   );
 
-  const pointToPointValidity = recentFareContract.point_to_point_validity;
-
   const direction: TravelRightDirection | undefined = enumFromString(
     TravelRightDirection,
     recentFareContract.direction,
   );
 
-  const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
+  const pointToPointValidity = recentFareContract.pointToPointValidity;
 
+  const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
   const toId = pointToPointValidity?.toPlace || toTariffZone?.id;
 
   const id =
@@ -170,14 +169,14 @@ const mapBackendRecentFareContracts = (
  *   recent fare contracts
  */
 const mapToLastThreeUniqueRecentFareContracts = (
-  recentFareContracts: RecentFareContractBackend[],
+  recentFareContracts: RecentOrderDetails[],
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
 ): RecentFareContractType[] => {
   return recentFareContracts
-    .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
+    .sort((fc1, fc2) => fc2.createdAt.localeCompare(fc1.createdAt))
     .reduce<RecentFareContractType[]>(
       (mappedFareContracts, recentFareContract) => {
         const maybeFareContract = mapBackendRecentFareContracts(

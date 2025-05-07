@@ -7,7 +7,7 @@ import {
   Offer,
   ReserveOfferResponse,
   PaymentType,
-  RecentFareContractBackend,
+  RecentOrderDetails,
   RecurringPayment,
   RefundOptions,
   ReserveOffer,
@@ -18,21 +18,19 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 
-export async function listRecentFareContracts(): Promise<
-  RecentFareContractBackend[]
-> {
-  const url = 'ticket/v3/recent';
-  const response = await client.get<RecentFareContractBackend[]>(url, {
+export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
+  const url = 'sales/v1/order/recent';
+  const response = await client.get<RecentOrderDetails[]>(url, {
     authWithIdToken: true,
   });
   return response.data;
 }
 
 export type OfferSearchParams = {
-  is_on_behalf_of: boolean;
+  isOnBehalfOf: boolean;
   travellers: Traveller[];
   products: string[];
-  travel_date?: string;
+  travelDate?: string;
   zones?: string[];
   from?: string;
   to?: string;
@@ -40,34 +38,41 @@ export type OfferSearchParams = {
 
 type Traveller = {
   id: string;
-  user_type: string;
+  userType: string;
   count: number;
 };
 
 export async function listRecurringPayments(): Promise<RecurringPayment[]> {
-  const url = 'ticket/v3/recurring-payments';
+  const url = 'sales/v1/recurring-payments';
+
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
+
   return response.data;
 }
 
-export async function addPaymentMethod(paymentRedirectUrl: string) {
-  const url = `ticket/v3/recurring-payments`;
-  return client.post<AddPaymentMethodResponse>(
+export async function addPaymentMethod(
+  paymentRedirectUrl: string,
+): Promise<AddPaymentMethodResponse> {
+  const url = `sales/v1/recurring-payments`;
+
+  const response = await client.post<AddPaymentMethodResponse>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
   );
+
+  return response.data;
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}`;
+  const url = `sales/v1/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
 }
 
 export async function cancelRecurringPayment(paymentId: number) {
-  const url = `ticket/v3/recurring-payments/${paymentId}/cancel`;
+  const url = `sales/v1/recurring-payments/${paymentId}/cancel`;
   const response = await client.post<void>(url, {}, {authWithIdToken: true});
   return response.data;
 }
@@ -114,7 +119,7 @@ export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  const url = `ticket/v3/search/${offerEndpoint}`;
+  const url = `sales/v1/search/${offerEndpoint}`;
 
   const response = await client.post<Offer[]>(url, params, opts);
 
@@ -122,15 +127,16 @@ export async function searchOffers(
 }
 
 export async function sendReceipt(
-  order_id: string,
-  order_version: number,
-  email: string,
+  orderId: string,
+  orderVersion: number,
+  emailAddress: string,
 ) {
-  const url = 'ticket/v3/receipt';
+  const url = 'sales/v1/receipt';
+
   const response = await client.post<SendReceiptResponse>(url, {
-    order_id,
-    order_version,
-    email_address: email,
+    orderId,
+    orderVersion,
+    emailAddress,
   });
 
   return response.data;
@@ -145,27 +151,31 @@ export async function reserveOffers({
   autoSale,
   phoneNumber,
   recipient,
-  ...rest
+  shouldSavePaymentMethod,
+  recurringPaymentId,
 }: ReserveOfferParams): Promise<ReserveOfferResponse> {
-  const url = 'ticket/v3/reserve';
+  const url = 'sales/v1/reserve';
+
   const body: ReserveOfferRequest = {
-    payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
+    paymentRedirectUrl: `${APP_SCHEME}://purchase-callback`,
     offers,
-    payment_type: paymentType,
-    store_payment: rest.shouldSavePaymentMethod,
-    recurring_payment_id: rest.recurringPaymentId,
-    sca_exemption: scaExemption,
-    customer_account_id: customerAccountId,
-    auto_sale: autoSale,
-    phone_number: phoneNumber,
-    store_alias: recipient?.name
-      ? {alias: recipient.name, phone_number: recipient.phoneNumber}
+    paymentType,
+    storePayment: shouldSavePaymentMethod,
+    recurringPaymentId,
+    scaExemption,
+    customerAccountId,
+    autoSale,
+    phoneNumber,
+    storeAlias: recipient?.name
+      ? {alias: recipient.name, phoneNumber: recipient.phoneNumber}
       : undefined,
   };
+
   const response = await client.post<ReserveOfferResponse>(url, body, {
     ...opts,
     authWithIdToken: true,
   });
+
   return response.data;
 }
 
@@ -174,7 +184,7 @@ export async function cancelPayment(
   transactionId: number,
   isUser: boolean,
 ): Promise<void> {
-  const url = `ticket/v3/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
+  const url = `sales/v1/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
   await client.put(url, undefined, {authWithIdToken: true});
 }
 

@@ -86,7 +86,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
-      (p) => p.id === userProfilesWithCountAndOffer[0]?.offer.fare_product,
+      (p) => p.id === userProfilesWithCountAndOffer[0]?.offer.fareProduct,
     ) ?? preassignedFareProductAlternatives[0];
 
   const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
