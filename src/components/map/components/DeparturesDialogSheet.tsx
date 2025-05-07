@@ -10,7 +10,7 @@ import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
-import type {DepartureSearchTime} from 'src/date-selection';
+import type {DepartureSearchTime} from '@atb/date-selection';
 import {
   StopPlacesView,
   useStopsDetailsDataQuery,

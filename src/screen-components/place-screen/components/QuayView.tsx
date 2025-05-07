@@ -13,7 +13,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import type {ContrastColor} from '@atb-as/theme';
-import type {DepartureSearchTime} from 'src/date-selection';
+import type {DepartureSearchTime} from '@atb/date-selection';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
