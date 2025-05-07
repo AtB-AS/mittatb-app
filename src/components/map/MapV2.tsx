@@ -303,9 +303,12 @@ export const MapV2 = (props: MapProps) => {
             onPress={async () => {
               const coordinates = await getCurrentCoordinates(true);
               if (coordinates) {
-                onMapClick({
-                  source: 'my-position',
-                  coords: coordinates,
+                flyToLocation({
+                  coordinates: coordinates,
+                  padding: getMapPadding(tabBarHeight),
+                  mapCameraRef,
+                  zoomLevel: 15,
+                  animationDuration: 200,
                 });
               }
             }}
