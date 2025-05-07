@@ -1,20 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {createContext, useContext, useMemo, useState} from 'react';
 import {AutoSelectableMapItem} from './components/map/hooks/use-auto-select-map-item';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from './api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from './api/types/mobility';
-import {
-  isCardPaymentMethod,
-  PaymentMethod,
-  usePreviousPaymentMethods,
-} from './modules/payment';
+import {PaymentMethod} from './modules/payment';
+import {useSelectedShmoPaymentMethod} from './modules/payment/hooks/use-selected-shmo-payment-method';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -27,8 +18,8 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
-  selectedPaymentMethod?: PaymentMethod;
-  setSelectedPaymentMethod: (paymentMethod: PaymentMethod) => void;
+  selectedShmoPaymentMethod?: PaymentMethod;
+  setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -56,37 +47,8 @@ export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
 
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
-    PaymentMethod | undefined
-  >(undefined);
-
-  const {previousPaymentMethod, recurringPaymentMethods} =
-    usePreviousPaymentMethods();
-
-  useEffect(() => {
-    // If we have a previous card payment method (previousPaymentMethod might be set later so we need to check it)
-    if (previousPaymentMethod !== undefined) {
-      const previousCardPaymentMethod = isCardPaymentMethod(
-        previousPaymentMethod,
-      )
-        ? previousPaymentMethod
-        : undefined;
-
-      // If we have a valid card payment method, use it
-      if (previousCardPaymentMethod) {
-        setSelectedPaymentMethod(previousCardPaymentMethod);
-        // This is bestcase scenario, we can return
-        return;
-      }
-    }
-
-    //use fallback
-    if (recurringPaymentMethods?.length) {
-      const fallbackPaymentMethod =
-        recurringPaymentMethods[recurringPaymentMethods.length - 1];
-      setSelectedPaymentMethod(fallbackPaymentMethod);
-    }
-  }, [previousPaymentMethod, recurringPaymentMethods]);
+  const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
+    useSelectedShmoPaymentMethod();
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -130,8 +92,8 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
-        selectedPaymentMethod,
-        setSelectedPaymentMethod,
+        selectedShmoPaymentMethod,
+        setSelectedShmoPaymentMethod,
       }}
     >
       {children}

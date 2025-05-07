@@ -32,7 +32,8 @@ export const SelectShmoPaymentMethodSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {selectedPaymentMethod, setSelectedPaymentMethod} = useMapContext();
+  const {selectedShmoPaymentMethod, setSelectedShmoPaymentMethod} =
+    useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
   return (
@@ -58,11 +59,11 @@ export const SelectShmoPaymentMethodSheet = ({
                   key={method.recurringCard?.id}
                   paymentMethod={method}
                   selected={
-                    selectedPaymentMethod?.recurringCard?.id ===
+                    selectedShmoPaymentMethod?.recurringCard?.id ===
                     method.recurringCard?.id
                   }
                   onSelect={(val: PaymentSelection) => {
-                    setSelectedPaymentMethod(val);
+                    setSelectedShmoPaymentMethod(val);
                   }}
                   index={index}
                 />
@@ -79,11 +80,11 @@ export const SelectShmoPaymentMethodSheet = ({
                 SelectPaymentMethodTexts.confirm_button.a11yhint,
               )}
               onPress={() => {
-                if (selectedPaymentMethod) {
+                if (selectedShmoPaymentMethod) {
                   onSelect();
                 }
               }}
-              disabled={!selectedPaymentMethod}
+              disabled={!selectedShmoPaymentMethod}
               rightIcon={{svg: Confirm}}
               testID="confirmButton"
             />

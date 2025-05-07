@@ -73,11 +73,11 @@ export const ScooterSheet = ({
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
   )?.isDeepIntegrationEnabled;
-  const {selectedPaymentMethod} = useMapContext();
+  const {selectedShmoPaymentMethod} = useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
 
   const defaultPaymentMethod =
-    selectedPaymentMethod ??
+    selectedShmoPaymentMethod ??
     recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
   const {isLoading: shmoReqIsLoading} = useShmoRequirements();
@@ -94,7 +94,7 @@ export const ScooterSheet = ({
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.6}
+      maxHeightValue={0.7}
       onClose={onClose}
     >
       <>
