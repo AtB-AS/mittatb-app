@@ -43,28 +43,29 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
-const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
-  prices.find((p) => p.currency === currency)?.amount_float ?? 0;
+const getCurrencyAsFloat = (price: OfferPrice, currency = 'NOK') =>
+  price.currency === currency ? price.amountFloat ?? 0 : 0;
 
-const getOriginalPriceAsFloat = (prices: OfferPrice[], currency: string) =>
-  prices.find((p) => p.currency === currency)?.original_amount_float ?? 0;
+const getOriginalPriceAsFloat = (price: OfferPrice, currency: string) =>
+  price.currency === currency ? price.originalAmountFloat ?? 0 : 0;
 
 const getValidDurationSeconds = (offer: Offer): number | undefined =>
-  offer.valid_from && offer.valid_to
-    ? secondsBetween(offer.valid_from, offer.valid_to)
+  offer.validFrom && offer.validTo
+    ? secondsBetween(offer.validFrom, offer.validTo)
     : undefined;
 
 const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
   const offersForTraveller = offers.filter(
-    (o) => o.traveller_id === userTypeString,
+    (o) => o.travellerId === userTypeString,
   );
 
   // If there are multiple offers for the same traveller, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
   const offersSortedByPrice = offersForTraveller.sort(
     (a, b) =>
-      getCurrencyAsFloat(a.prices, 'NOK') - getCurrencyAsFloat(b.prices, 'NOK'),
+      getCurrencyAsFloat(a.price, 'NOK') - getCurrencyAsFloat(b.price, 'NOK'),
   );
+
   return offersSortedByPrice[0];
 };
 
@@ -75,7 +76,7 @@ const calculateTotalPrice = (
   userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
     const price = offer
-      ? getCurrencyAsFloat(offer.prices, 'NOK') * traveller.count
+      ? getCurrencyAsFloat(offer.price, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -87,7 +88,7 @@ const calculateOriginalPrice = (
   userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
     const price = offer
-      ? getOriginalPriceAsFloat(offer.prices, 'NOK') * traveller.count
+      ? getOriginalPriceAsFloat(offer.price, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -180,7 +181,7 @@ export function useOfferState(
         .filter((t) => t.count)
         .map((t) => ({
           id: t.userTypeString,
-          user_type: t.userTypeString,
+          userType: t.userTypeString,
           count: t.count,
         }));
 
@@ -200,10 +201,10 @@ export function useOfferState(
             ],
             from: selection.stopPlaces?.from!.id,
             to: selection.stopPlaces?.to!.id,
-            is_on_behalf_of: isOnBehalfOf,
+            isOnBehalfOf,
             travellers: offerTravellers,
             products: preassignedFareProductAlternatives.map((p) => p.id),
-            travel_date: selection.travelDate,
+            travelDate: selection.travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
 
@@ -270,4 +271,5 @@ export function useOfferState(
 }
 
 const isNotAvailableError = (err: any) =>
-  err.response?.status === 400 && err.response?.data === 'NotAvailable';
+  err.response?.status === 400 &&
+  err.response?.data.kind === 'NoAvailableOffersDueToSchedule';

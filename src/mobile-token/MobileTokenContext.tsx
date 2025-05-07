@@ -37,7 +37,7 @@ import {
 } from './hooks/use-load-native-token-query';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
-import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
+import {useIntercomMetadata} from '@atb/chat';
 import {useValidateToken} from '@atb/mobile-token/hooks/use-validate-token';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
@@ -75,6 +75,8 @@ type MobileTokenContextState = {
     remoteTokenError: any;
     setSabotage: (attestationSabotage?: AttestationSabotage) => void;
     sabotage: AttestationSabotage | undefined;
+    setAllTokenInspectable: (inspectable?: boolean) => void;
+    allTokenInspectable: boolean | undefined;
   };
 };
 
@@ -97,6 +99,9 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const [allTokenInspectable, setAllTokenInspectable] = useState<
+    boolean | undefined
+  >();
   const [secureContainer, setSecureContainer] = useState<string>();
 
   const traceId = useRef<string>(uuid());
@@ -152,6 +157,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     enabled && nativeToken !== undefined && secureContainer !== undefined,
     nativeToken?.tokenId,
     secureContainer,
+    allTokenInspectable,
   );
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
@@ -279,6 +285,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
             }
           },
           sabotage: sabotage,
+          setAllTokenInspectable: (inspectable?: boolean) => {
+            setAllTokenInspectable(inspectable);
+          },
+          allTokenInspectable: allTokenInspectable,
         },
       }}
     >
@@ -369,11 +379,12 @@ const useMobileTokenStatus = (
 const deviceInspectable = (
   token?: ActivatedToken,
   remoteTokens?: RemoteToken[],
+  debugInspectable?: boolean,
 ): boolean => {
   if (!token || !remoteTokens) return false;
   const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
   if (!matchingRemoteToken) return false;
-  return isInspectable(matchingRemoteToken);
+  return debugInspectable ?? isInspectable(matchingRemoteToken);
 };
 
 export const getIsInspectableFromStatus = (

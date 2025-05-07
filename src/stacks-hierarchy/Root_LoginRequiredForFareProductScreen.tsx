@@ -1,29 +1,22 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {Psst} from '@atb/assets/svg/color/illustrations';
-import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
 import {ThemedTicket} from '@atb/theme/ThemedAssets';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {LogIn} from '@atb/assets/svg/mono-icons/profile';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginRequiredForFareProductScreen'>;
 
-export const Root_LoginRequiredForFareProductScreen = ({
-  navigation,
-  route,
-}: Props) => {
-  const {fareProductTypeConfig} = route.params.selection;
+export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
   const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useThemeStyles();
@@ -52,24 +45,17 @@ export const Root_LoginRequiredForFareProductScreen = ({
     }
   };
 
-  const productName = useTextForLanguage(fareProductTypeConfig.name);
-
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        leftButton={{type: 'cancel'}}
-        setFocusOnLoad={false}
-        color={themeColor}
-      />
-
-      <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.mainView}>
+        <ThemedTicket style={styles.illustration} width={100} height={87} />
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
             typography="body__primary--jumbo--bold"
             style={styles.title}
             color={themeColor}
           >
-            {productName + ' - ' + t(LoginTexts.onboarding.title)}
+            {t(LoginTexts.onboarding.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
@@ -81,46 +67,26 @@ export const Root_LoginRequiredForFareProductScreen = ({
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
-        <ThemedTicket style={styles.illustration} />
-        <View style={styles.buttonView}>
-          <Button
-            expanded={true}
-            interactiveColor={theme.color.interactive[0]}
-            onPress={onNext}
-            text={t(LoginTexts.onboarding.button)}
-            rightIcon={{svg: ArrowRight}}
-            testID="logInButton"
-          />
-        </View>
-        <PressableOpacity
-          style={styles.laterButton}
+      </View>
+      <View style={styles.buttonView}>
+        <Button
+          expanded={true}
+          interactiveColor={theme.color.interactive[0]}
+          onPress={onNext}
+          text={t(LoginTexts.onboarding.button)}
+          rightIcon={{svg: LogIn}}
+          testID="logInButton"
+        />
+        <Button
+          expanded={true}
+          mode="secondary"
+          backgroundColor={theme.color.background.neutral[2]}
           onPress={navigation.goBack}
-          accessibilityRole="button"
+          text={t(LoginTexts.onboarding.laterButton)}
           testID="logInLaterButton"
-        >
-          <ThemeText
-            style={styles.laterButtonText}
-            typography="body__primary"
-            color={themeColor}
-          >
-            {t(LoginTexts.onboarding.laterButton)}
-          </ThemeText>
-        </PressableOpacity>
-        <View style={styles.carrotInfo}>
-          <Psst />
-          <ThemeText
-            style={styles.carrotTitle}
-            typography="body__primary--bold"
-            color={themeColor}
-          >
-            {t(LoginTexts.onboarding.carrotTitle)}
-          </ThemeText>
-          <ThemeText typography="body__primary" color={themeColor}>
-            {t(LoginTexts.onboarding.carrotBody)}
-          </ThemeText>
-        </View>
-      </ScrollView>
-    </View>
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -130,7 +96,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    padding: theme.spacing.large,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   title: {
     textAlign: 'center',
@@ -145,6 +113,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   buttonView: {
     marginTop: theme.spacing.medium,
+    gap: theme.spacing.medium,
+    padding: theme.spacing.xLarge,
   },
   illustration: {
     alignSelf: 'center',

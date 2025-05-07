@@ -11,7 +11,7 @@ import {
   DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 export type FavouriteDepartureLine = {
   id: string;

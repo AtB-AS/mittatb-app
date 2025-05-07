@@ -27,9 +27,9 @@ export enum PaymentType {
 
 export type RecurringPayment = {
   id: number;
-  expires_at: string;
-  masked_pan: string;
-  payment_type: number;
+  expiresAt: string;
+  maskedPan: string;
+  paymentType: number;
 };
 
 export type PaymentStatus =
@@ -58,13 +58,13 @@ export type FlexDiscountLadder = {
 
 export type OfferPrice = {
   amount: string;
-  amount_float?: number;
+  amountFloat?: number;
   currency: string;
-  vat_group?: string;
-  tax_amount?: string;
-  original_amount: string;
-  original_amount_float?: number;
-  original_tax_amount?: string;
+  vatGroup?: string;
+  taxAmount?: string;
+  originalAmount: string;
+  originalAmountFloat?: number;
+  originalTaxAmount?: string;
 };
 
 enum RouteType {
@@ -80,39 +80,41 @@ type Route = {
 };
 
 export type Offer = {
-  offer_id: string;
-  traveller_id: string;
+  offerId: string;
+  travellerId: string;
   route?: Route;
-  user_profile_id?: string;
-  user_profile_ids: string[];
-  prices: OfferPrice[];
-  fare_product?: string;
-  flex_discount_ladder?: FlexDiscountLadder;
-  valid_from?: string;
-  valid_to?: string;
-  should_start_now: boolean;
+  userProfileId?: string;
+  userProfileIds: string[];
+  price: OfferPrice;
+  fareProduct?: string;
+  flexDiscountLadder?: FlexDiscountLadder;
+  validFrom?: string;
+  validTo?: string;
+  shouldStartNow: boolean;
 };
 
 export type OfferSearchResponse = Offer[];
 
-export type RecentFareContractBackend = {
+/**
+ * Defined by `OrderDetails` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/order.rs
+ */
+export type RecentOrderDetails = {
   direction?: string;
   products: string[];
   zones: string[];
-  users: {
-    [user_profile: string]: string;
-  };
-  payment_method: string;
-  total_amount: string;
-  created_at: string;
-  point_to_point_validity: {
+  users: {[userProfile: string]: number};
+  paymentMethod: string;
+  totalAmount: string;
+  createdAt: string;
+  pointToPointValidity?: {
     fromPlace: string;
     toPlace: string;
   };
 };
 
 export type ReserveOffer = {
-  offer_id: string;
+  offerId: string;
   count: number;
 };
 
@@ -126,33 +128,36 @@ export type ReserveOfferRequest = {
    * Recurring payment id should be provided if using a previously stored
    * payment card
    */
-  recurring_payment_id?: number;
+  recurringPaymentId?: number;
   /**
    * Payment type and the store payment flag should be provided if not using a
    * previously stored payment card
    */
-  payment_type?: PaymentType;
-  store_payment?: boolean;
+  paymentType?: PaymentType;
+  storePayment?: boolean;
   /**
    * Paying customer's phone number, with country prefix. The phone number and
    * redirect URL is only required for mobile payments types, e.g. Vipps.
    */
-  phone_number?: string;
-  payment_redirect_url?: string;
-  sca_exemption?: boolean;
+  phoneNumber?: string;
+  paymentRedirectUrl?: string;
+  scaExemption?: boolean;
   /** Only needed if fare contract should be created on a different account */
-  customer_account_id?: string;
+  customerAccountId?: string;
   /**
    * Only needed if fare contract should be created on a different account
    * which should be saved.
    */
-  store_alias?: {
+  storeAlias?: {
     alias: string;
     /** With country prefix */
-    phone_number: string;
+    phoneNumber: string;
   };
-  /** Experimental */
-  auto_sale?: boolean;
+  /**
+   * Uses auto sale for Nets. Defaults to false.
+   * https://developer.nexigroup.com/netaxept/en-EU/api/rest-v1/#netaxept-registeraspx-get-parameters-autosale
+   */
+  autoSale?: boolean;
 };
 
 export type TicketRecipientType = {
@@ -166,11 +171,11 @@ export type TicketRecipientType = {
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/reserve.rs
  */
 export type ReserveOfferResponse = {
-  order_id: string;
-  payment_id: number;
-  transaction_id: number;
+  orderId: string;
+  paymentId: number;
+  transactionId: number;
   url: string;
-  recurring_payment_id?: number;
+  recurringPaymentId?: number;
 };
 
 export type VippsRedirectParams = {
@@ -199,8 +204,8 @@ export type TravelCard = {
 };
 
 export type AddPaymentMethodResponse = {
-  recurring_payment_id: number;
-  terminal_url: string;
+  recurringPaymentId: number;
+  terminalUrl: string;
 };
 
 /**
@@ -208,5 +213,5 @@ export type AddPaymentMethodResponse = {
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs
  */
 export type RefundOptions = {
-  is_refundable: boolean;
+  isRefundable: boolean;
 };

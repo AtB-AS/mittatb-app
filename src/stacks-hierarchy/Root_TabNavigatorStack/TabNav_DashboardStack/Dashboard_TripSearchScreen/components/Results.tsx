@@ -15,8 +15,8 @@ import {View} from 'react-native';
 
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternWithKey} from '@atb/travel-details-screens/types';
-import {getIsTooLateToBookFlexLine} from '@atb/travel-details-screens/utils';
+import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
+import {getIsTooLateToBookFlexLine} from '@atb/screen-components/travel-details-screens';
 import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
@@ -93,12 +93,7 @@ export const Results: React.FC<Props> = ({
             anyFiltersApplied,
             t,
           )}
-          illustrationComponent={
-            <ThemedOnBehalfOf
-              height={90}
-              style={styles.emptySearchResultsIllustration}
-            />
-          }
+          illustrationComponent={<ThemedOnBehalfOf height={113} width={113} />}
           testID="searchResults"
         />
       </View>
@@ -162,8 +157,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyStateContainer: {
     marginTop: theme.spacing.medium,
-  },
-  emptySearchResultsIllustration: {
-    marginBottom: theme.spacing.medium,
   },
 }));

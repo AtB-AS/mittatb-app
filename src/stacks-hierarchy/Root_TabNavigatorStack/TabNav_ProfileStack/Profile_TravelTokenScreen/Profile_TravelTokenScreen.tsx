@@ -10,7 +10,7 @@ import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_Pr
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {Section, GenericSectionItem} from '@atb/components/sections';
-import {TokenToggleInfo} from '@atb/token-toggle-info';
+import {TokenToggleInfo} from '@atb/screen-components/select-travel-token-screen';
 
 export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();

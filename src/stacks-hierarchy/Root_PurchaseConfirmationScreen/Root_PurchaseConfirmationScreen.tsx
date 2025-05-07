@@ -100,9 +100,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
-    ({count, offer: {offer_id}}) => ({
+    ({count, offer: {offerId}}) => ({
       count,
-      offer_id,
+      offerId,
     }),
   );
 
@@ -145,7 +145,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     saveLastUsedRecurringPaymentOrType(
       userId,
       paymentMethod?.paymentType,
-      reserveMutation.data?.recurring_payment_id,
+      reserveMutation.data?.recurringPaymentId,
     );
     closeInAppBrowseriOS();
     navigation.navigate('Root_TabNavigatorStack', {
@@ -159,7 +159,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     navigation,
     userId,
     paymentMethod?.paymentType,
-    reserveMutation.data?.recurring_payment_id,
+    reserveMutation.data?.recurringPaymentId,
   ]);
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
@@ -169,7 +169,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   // In edge cases where the fare contract appears before the callback is
   // called, we can cancel the payment flow and navigate to active tickets.
   useOnFareContractReceived({
-    orderId: reserveMutation.data?.order_id,
+    orderId: reserveMutation.data?.orderId,
     callback: onPaymentCompleted,
   });
 
@@ -367,7 +367,7 @@ const PaymentButton = ({
 
   const {reservations} = useTicketingContext();
   const reservation = reservations.find(
-    (r) => r.orderId === reserveOfferResponse?.order_id,
+    (r) => r.orderId === reserveOfferResponse?.orderId,
   );
   const isReserving =
     !!reservation && getReservationStatus(reservation) === 'reserving';

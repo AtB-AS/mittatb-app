@@ -47,7 +47,7 @@ export function usePreviousPaymentMethods(): {
       // Card has expired
       const expired =
         paymentMethod.recurringCard &&
-        parseISO(paymentMethod.recurringCard.expires_at).getTime() < Date.now();
+        parseISO(paymentMethod.recurringCard.expiresAt).getTime() < Date.now();
       if (expired) return false;
 
       return true;
@@ -72,7 +72,7 @@ export function usePreviousPaymentMethods(): {
       recurringPayments?.map(
         (recurringPayment): PaymentMethod => ({
           savedType: SavedPaymentMethodType.Recurring,
-          paymentType: recurringPayment.payment_type,
+          paymentType: recurringPayment.paymentType,
           recurringCard: recurringPayment,
         }),
       ),
@@ -162,7 +162,7 @@ export const saveLastUsedRecurringPaymentOrType = async (
       if (card) {
         await savePreviousPaymentMethodByUser(userId, {
           savedType: SavedPaymentMethodType.Recurring,
-          paymentType: card.payment_type,
+          paymentType: card.paymentType,
           recurringCard: card,
         });
       }

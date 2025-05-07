@@ -104,7 +104,7 @@ const Card = (props: {
   removePaymentHandler: (card: RecurringPayment) => void;
 }) => {
   const {card, removePaymentHandler} = props;
-  const paymentName = humanizePaymentType(card.payment_type);
+  const paymentName = humanizePaymentType(card.paymentType);
   const style = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -113,16 +113,16 @@ const Card = (props: {
   return (
     <View style={style.card}>
       <View style={style.cardTop}>
-        <PaymentBrand paymentType={card.payment_type} />
+        <PaymentBrand paymentType={card.paymentType} />
         <View style={style.paymentMethod}>
           <ThemeText>{paymentName}</ThemeText>
           <ThemeText
             style={style.maskedPan}
             accessibilityLabel={t(
-              PaymentMethodsTexts.a11y.cardInfo(paymentName, card.masked_pan),
+              PaymentMethodsTexts.a11y.cardInfo(paymentName, card.maskedPan),
             )}
           >
-            **** {card.masked_pan}
+            **** {card.maskedPan}
           </ThemeText>
         </View>
 
@@ -131,7 +131,7 @@ const Card = (props: {
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
-                card.masked_pan,
+                card.maskedPan,
               ),
             )}
             style={style.actionButton}

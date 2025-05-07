@@ -24,7 +24,6 @@ import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {loginPhoneInputId} from '@atb/test-ids';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
@@ -195,7 +194,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                 onFocus={onFocusEvent}
                 onBlur={onBlurEvent}
                 maxFontSizeMultiplier={MAX_FONT_SCALE}
-                testID={loginPhoneInputId}
+                testID="loginPhoneInput"
                 keyboardType="number-pad"
                 {...props}
               />

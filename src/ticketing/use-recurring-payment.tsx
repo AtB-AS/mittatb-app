@@ -15,6 +15,7 @@ import Bugsnag from '@bugsnag/react-native';
 export const useRecurringPayment = () => {
   const [awaitingRecurringPaymentId, setAwaitingRecurringPaymentId] =
     useState<number>();
+
   const {
     data: recurringPayment,
     refetch: refetchRecurringPayment,
@@ -61,10 +62,14 @@ export const useRecurringPayment = () => {
 
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
-    const response = await addPaymentMethod(callbackUrl);
-    setAwaitingRecurringPaymentId(response.data.recurring_payment_id);
+    const {recurringPaymentId, terminalUrl} = await addPaymentMethod(
+      callbackUrl,
+    );
+
+    setAwaitingRecurringPaymentId(recurringPaymentId);
+
     await openInAppBrowser(
-      response.data.terminal_url,
+      terminalUrl,
       'cancel',
       callbackUrl,
       addPaymentMethodCallbackHandler,

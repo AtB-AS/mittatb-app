@@ -36,7 +36,7 @@ export const SinglePaymentMethod = ({
         label: t(
           PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
             paymentTypeName,
-            method.recurringCard!.masked_pan,
+            method.recurringCard.maskedPan,
           ),
         ),
         hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
@@ -87,7 +87,7 @@ export const SinglePaymentMethod = ({
                     style={styles.maskedPanPadding}
                     testID={getPaymentTestId(paymentMethod, index) + 'Number'}
                   >
-                    **** {`${paymentMethod.recurringCard.masked_pan}`}
+                    **** {paymentMethod.recurringCard.maskedPan}
                   </ThemeText>
                 )}
               </View>

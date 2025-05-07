@@ -1,5 +1,5 @@
 import React, {RefObject} from 'react';
-import {useChatIcon} from '@atb/chat/use-chat-icon';
+import {useChatIcon} from './chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
@@ -9,7 +9,7 @@ import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useThemeContext} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
+import {useServiceDisruptionIcon} from './service-disruptions/use-service-disruption-icon';
 import {AnalyticsEventContext, useAnalyticsContext} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
