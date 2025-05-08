@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {storage} from '@atb/modules/storage';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
@@ -100,7 +100,9 @@ type PreviousPaymentMethods = {
 
 async function getPreviousPaymentMethods(): Promise<PreviousPaymentMethods> {
   try {
-    const previousMethodsJson = await storage.get('@ATB_saved_payment_methods');
+    const previousMethodsJson = await storage.get(
+      StorageModelKeysEnum.PreviousPaymentMethods,
+    );
     if (previousMethodsJson) {
       const methods = JSON.parse(previousMethodsJson) as PreviousPaymentMethods;
       if (methods) {
@@ -128,7 +130,10 @@ export async function savePreviousPaymentMethodByUser(
   const methods = await getPreviousPaymentMethods();
   try {
     methods[userId] = method;
-    await storage.set('@ATB_saved_payment_methods', JSON.stringify(methods));
+    await storage.set(
+      StorageModelKeysEnum.PreviousPaymentMethods,
+      JSON.stringify(methods),
+    );
   } catch (err: any) {
     Bugsnag.notify(err);
   }
