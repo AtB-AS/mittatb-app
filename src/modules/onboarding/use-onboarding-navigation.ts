@@ -8,7 +8,7 @@ import {
   useOnboardingFlow,
   useOnboardingContext,
   OnboardingSectionId,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();

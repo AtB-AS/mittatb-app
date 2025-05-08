@@ -11,7 +11,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingFullScreenView} from '@atb/onboarding';
+import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';

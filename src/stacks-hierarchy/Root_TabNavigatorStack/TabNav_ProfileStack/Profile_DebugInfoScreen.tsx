@@ -34,7 +34,7 @@ import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
-import {useOnboardingContext} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {

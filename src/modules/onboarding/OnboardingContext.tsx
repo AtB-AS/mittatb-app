@@ -16,8 +16,8 @@ import {
   OnboardingSection,
   OnboardingSectionId,
   onboardingSectionsInPrioritizedOrder,
-} from '@atb/onboarding';
-import {ShouldShowArgsType} from '@atb/onboarding/types';
+} from '@atb/modules/onboarding';
+import {ShouldShowArgsType} from '@atb/modules/onboarding';
 import {useHasFareContractWithActivatedNotification} from '@atb/modules/notifications';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useGeolocationContext} from '@atb/GeolocationContext';

@@ -1,4 +1,4 @@
-import {useOnboardingContext} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import {
   OnboardingSectionId,
   OnboardingSection,

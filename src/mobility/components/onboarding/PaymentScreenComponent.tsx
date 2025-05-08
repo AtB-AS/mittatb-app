@@ -1,5 +1,5 @@
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/onboarding';
+import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';

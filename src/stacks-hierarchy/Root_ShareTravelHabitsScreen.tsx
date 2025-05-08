@@ -9,7 +9,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 import {useBeaconsContext, checkPermissionStatuses} from '@atb/modules/beacons';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';

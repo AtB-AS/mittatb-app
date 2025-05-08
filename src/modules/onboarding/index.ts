@@ -16,4 +16,5 @@ export type {
   OnboardingSection,
   LoadedOnboardingSection,
   OnboardingSectionConfig,
+  ShouldShowArgsType,
 } from './types';

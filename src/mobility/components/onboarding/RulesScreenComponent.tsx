@@ -15,7 +15,7 @@ import {
   useFirestoreConfigurationContext,
   ScooterConsentLineType,
 } from '@atb/modules/configuration';
-import {OnboardingScreenComponent} from '@atb/onboarding';
+import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';

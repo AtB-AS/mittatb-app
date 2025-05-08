@@ -4,7 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {OnboardingFullScreenView} from '@atb/onboarding';
+import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';

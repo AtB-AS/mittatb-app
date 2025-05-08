@@ -11,7 +11,7 @@ import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
 import {
   OnboardingFullScreenView,
   useOnboardingNavigation,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {LoadingScreen} from '@atb/screen-components/loading-screen';
 import {View} from 'react-native';

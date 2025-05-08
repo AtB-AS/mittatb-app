@@ -1,4 +1,4 @@
-import {OnboardingSectionConfig} from '@atb/onboarding';
+import {OnboardingSectionConfig} from '@atb/modules/onboarding';
 import {Platform} from 'react-native';
 
 export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [

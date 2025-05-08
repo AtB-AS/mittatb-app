@@ -5,7 +5,7 @@ import LocationWhenInUsePermissionTexts from '@atb/translations/screens/Location
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
 

@@ -8,7 +8,7 @@ import {
   useOnboardingContext,
   OnboardingSection,
   OnboardingSectionId,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 
 export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
   const {onboardingSections} = useOnboardingContext();

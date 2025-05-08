@@ -19,7 +19,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
-import {useOnboardingContext} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import {ContentHeading} from '@atb/components/heading';
 
 type Props = {onAfterSave: () => void};
