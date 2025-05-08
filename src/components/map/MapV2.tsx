@@ -308,7 +308,7 @@ export const MapV2 = (props: MapProps) => {
                   padding: getMapPadding(tabBarHeight),
                   mapCameraRef,
                   zoomLevel: 15,
-                  animationDuration: 200,
+                  animationMode: 'moveTo',
                 });
               }
             }}

@@ -69,6 +69,7 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
+  const {hasBlockers} = useShmoRequirements();
   const {mobilityOperators} = useOperators();
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
@@ -123,8 +124,14 @@ export const ScooterSheet = ({
               {defaultPaymentMethod &&
                 isShmoDeepIntegrationEnabled &&
                 isMapV2Enabled &&
+                !hasBlockers &&
                 operatorIsIntegrationEnabled && (
-                  <Section style={{paddingHorizontal: theme.spacing.medium}}>
+                  <Section
+                    style={{
+                      paddingHorizontal: theme.spacing.medium,
+                      marginBottom: theme.spacing.medium,
+                    }}
+                  >
                     <PaymentSelectionSectionItem
                       paymentMethod={defaultPaymentMethod}
                       onPress={selectPaymentMethod}
@@ -208,7 +215,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      marginBottom: theme.spacing.medium,
+      gap: theme.spacing.medium,
     },
     actionWrapper: {
       gap: theme.spacing.medium,
