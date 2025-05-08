@@ -25,10 +25,10 @@ export function usePreviousPaymentMethods(): {
 
       // Since the stored payment could have been deleted, we need to check if
       // it is still in the list of recurring payments.
-      if (paymentMethod.recurringCard) {
+      if (paymentMethod.recurringPayment) {
         const recurringPayment = recurringPayments?.find(
           (recurringPayment) =>
-            recurringPayment.id === paymentMethod.recurringCard?.id,
+            recurringPayment.id === paymentMethod.recurringPayment?.id,
         );
         if (!recurringPayment) return false;
       }
@@ -46,8 +46,9 @@ export function usePreviousPaymentMethods(): {
 
       // Card has expired
       const expired =
-        paymentMethod.recurringCard &&
-        parseISO(paymentMethod.recurringCard.expiresAt).getTime() < Date.now();
+        paymentMethod.recurringPayment &&
+        parseISO(paymentMethod.recurringPayment.expiresAt).getTime() <
+          Date.now();
       if (expired) return false;
 
       return true;
@@ -72,7 +73,7 @@ export function usePreviousPaymentMethods(): {
       recurringPayments?.map(
         (recurringPayment): PaymentMethod => ({
           paymentType: recurringPayment.paymentType,
-          recurringCard: recurringPayment,
+          recurringPayment: recurringPayment,
         }),
       ),
     [recurringPayments], // Only recalculate when recurringPayments changes
@@ -160,7 +161,7 @@ export const saveLastUsedRecurringPaymentOrType = async (
       if (card) {
         await savePreviousPaymentMethodByUser(userId, {
           paymentType: card.paymentType,
-          recurringCard: card,
+          recurringPayment: card,
         });
       }
     } catch {} // Just fail silently, as saving payment method is not critical

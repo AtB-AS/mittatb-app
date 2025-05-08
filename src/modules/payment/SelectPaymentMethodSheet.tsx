@@ -85,11 +85,11 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 )}
               {recurringPaymentMethods?.map((method, index) => (
                 <SinglePaymentMethod
-                  key={method.recurringCard?.id}
+                  key={method.recurringPayment?.id}
                   paymentMethod={method}
                   selected={
-                    selectedMethod?.recurringCard?.id ===
-                    method.recurringCard?.id
+                    selectedMethod?.recurringPayment?.id ===
+                    method.recurringPayment?.id
                   }
                   onSelect={(val: PaymentSelection) => {
                     setSelectedMethod(val);

@@ -48,7 +48,7 @@ export const ShmoActionButton = ({
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
-      recurringPaymentId: paymentMethod?.recurringCard?.id ?? 0,
+      recurringPaymentId: paymentMethod?.recurringPayment?.id ?? 0,
       coordinates: {
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
@@ -61,7 +61,7 @@ export const ShmoActionButton = ({
       saveLastUsedRecurringPaymentOrType(
         userId,
         paymentMethod?.paymentType,
-        paymentMethod?.recurringCard?.id,
+        paymentMethod?.recurringPayment?.id,
       );
     }
   }, [

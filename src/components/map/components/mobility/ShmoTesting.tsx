@@ -58,7 +58,7 @@ export const ShmoTesting = ({
       : undefined;
 
   const recurringPaymentId =
-    lastRecurringPaymentMethod?.recurringCard?.id ?? '';
+    lastRecurringPaymentMethod?.recurringPayment?.id ?? '';
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
   const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);

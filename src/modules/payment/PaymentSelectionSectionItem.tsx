@@ -25,7 +25,7 @@ export const PaymentSelectionSectionItem = forwardRef<
   const style = useStyles();
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
-    paymentMethod.recurringCard ||
+    paymentMethod.recurringPayment ||
     paymentMethod.paymentType === PaymentType.Vipps
   );
   const {topContainer} = useSectionItem(props);
@@ -33,11 +33,11 @@ export const PaymentSelectionSectionItem = forwardRef<
   const paymentName =
     humanizePaymentType(paymentMethod.paymentType) ||
     t(PaymentMethodsTexts.a11y.paymentCard); // TODO: Figure out a better fallback value than "payment card"
-  const a11yLabel = paymentMethod.recurringCard?.maskedPan
+  const a11yLabel = paymentMethod.recurringPayment?.maskedPan
     ? t(
         PaymentMethodsTexts.a11y.editCardWithMaskedPan(
           paymentName,
-          paymentMethod.recurringCard.maskedPan,
+          paymentMethod.recurringPayment.maskedPan,
         ),
       )
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
@@ -69,11 +69,11 @@ export const PaymentSelectionSectionItem = forwardRef<
                 accessibilityLabel={t(
                   PaymentMethodsTexts.a11y.cardInfo(
                     paymentName,
-                    paymentMethod.recurringCard?.maskedPan ?? '',
+                    paymentMethod.recurringPayment?.maskedPan ?? '',
                   ),
                 )}
               >
-                **** {paymentMethod.recurringCard?.maskedPan}
+                **** {paymentMethod.recurringPayment?.maskedPan}
               </ThemeText>
             )}
         </View>

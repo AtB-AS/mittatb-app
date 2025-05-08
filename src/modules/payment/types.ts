@@ -6,11 +6,11 @@ export type CardPaymentMethod = {
     | PaymentType.Visa
     | PaymentType.Amex
     | PaymentType.PaymentCard;
-  recurringCard?: RecurringPayment;
+  recurringPayment?: RecurringPayment;
 };
 export type VippsPaymentMethod = {
   paymentType: PaymentType.Vipps;
-  recurringCard?: undefined;
+  recurringPayment?: undefined;
 };
 export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
 
@@ -24,5 +24,5 @@ export type PaymentSelection =
     }
   | {
       paymentType: PaymentType.Mastercard | PaymentType.Visa | PaymentType.Amex;
-      recurringCard?: RecurringPayment;
+      recurringPayment?: RecurringPayment;
     };
