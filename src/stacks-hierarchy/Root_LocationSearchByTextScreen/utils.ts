@@ -3,7 +3,7 @@ import {
   StoredLocationFavorite,
   UserFavorites,
 } from '@atb/modules/favorites';
-import {useSearchHistoryContext} from '@atb/search-history';
+import {useSearchHistoryContext} from '@atb/modules/search-history';
 import {LocationSearchResultType} from './types';
 import {getLocationLayer} from '@atb/utils/location';
 

@@ -5,7 +5,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useSearchHistoryContext} from '@atb/search-history';
+import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';

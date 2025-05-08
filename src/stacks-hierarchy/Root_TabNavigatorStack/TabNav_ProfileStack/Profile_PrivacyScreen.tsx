@@ -17,7 +17,7 @@ import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useSearchHistoryContext} from '@atb/search-history';
+import {useSearchHistoryContext} from '@atb/modules/search-history';
 import {
   useBeaconsContext,
   allowedPermissionsForBeacons,

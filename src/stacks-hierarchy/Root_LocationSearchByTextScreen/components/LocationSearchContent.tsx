@@ -1,7 +1,7 @@
 import {
   useSearchHistoryContext,
   JourneySearchHistoryEntry,
-} from '@atb/search-history';
+} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/use-debounce';

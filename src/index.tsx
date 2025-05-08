@@ -13,7 +13,7 @@ import {
 } from '@atb/modules/diagnostics';
 import {ThemeContextProvider} from '@atb/theme/ThemeContext';
 import {FavoritesContextProvider} from '@atb/modules/favorites';
-import {SearchHistoryContextProvider} from '@atb/search-history';
+import {SearchHistoryContextProvider} from '@atb/modules/search-history';
 import {TicketingContextProvider} from '@atb/ticketing';
 import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
 import {AuthContextProvider} from '@atb/modules/auth';
