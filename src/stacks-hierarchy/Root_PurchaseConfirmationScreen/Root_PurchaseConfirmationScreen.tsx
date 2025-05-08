@@ -41,8 +41,10 @@ import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
-import {closeInAppBrowseriOS} from '@atb/in-app-browser';
-import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
+import {
+  closeInAppBrowseriOS,
+  openInAppBrowser,
+} from '@atb/modules/in-app-browser';
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/modules/auth';
 import {Section} from '@atb/components/sections';

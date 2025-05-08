@@ -1,6 +1,6 @@
 import {StatusBar} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
-import {notifyBugsnag} from '../utils/bugsnag-utils';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 /**
  * Wrapper around `react-native-inappbrowser-reborn`. See docs at:

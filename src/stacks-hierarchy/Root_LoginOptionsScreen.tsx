@@ -27,7 +27,10 @@ import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useOnboardingContext} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
-import {closeInAppBrowseriOS, openInAppBrowser} from '@atb/in-app-browser';
+import {
+  closeInAppBrowseriOS,
+  openInAppBrowser,
+} from '@atb/modules/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
