@@ -258,7 +258,7 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => storage.remove('@ATB_scooter_consent')}
+            onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
           />
         </Section>
         <Section style={styles.section}>
