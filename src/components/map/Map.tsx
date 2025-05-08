@@ -87,7 +87,7 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation);
+  useAutoSelectMapItem(mapCameraRef, mapViewRef, onReportParkingViolation);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -263,6 +263,7 @@ export const Map = (props: MapProps) => {
             <Stations
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
+              mapViewRef={mapViewRef}
               onClusterClick={(feature) => {
                 onMapClick({
                   source: 'cluster-click',

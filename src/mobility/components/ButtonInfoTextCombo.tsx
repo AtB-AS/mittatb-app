@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 import React from 'react';
 
 interface ButtonInfoTextComboProps {
@@ -14,15 +14,10 @@ export const ButtonInfoTextCombo = ({
   buttonText,
   onPress,
 }: ButtonInfoTextComboProps) => {
-  const styles = useStyles();
   const {theme} = useThemeContext();
   return (
     <>
-      <MessageInfoText
-        type="warning"
-        message={message}
-        style={styles.warning}
-      />
+      <MessageInfoText type="warning" message={message} />
       <Button
         mode="primary"
         active={false}
@@ -36,11 +31,3 @@ export const ButtonInfoTextCombo = ({
     </>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  return {
-    warning: {
-      paddingBottom: theme.spacing.medium,
-    },
-  };
-});

@@ -60,14 +60,14 @@ const TariffZonesSelectorMap = ({
   const {location} = useGeolocationContext();
   const initialCoordinates = useInitialCoordinates();
 
-  const selectFeature = (event: OnPressEvent) => {
-    const feature = event.features[0];
-    flyToLocation({coordinates: event.coordinates, mapCameraRef});
-    updateSelectedZones(feature.id as string);
-  };
-
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
+
+  const selectFeature = (event: OnPressEvent) => {
+    const feature = event.features[0];
+    flyToLocation({coordinates: event.coordinates, mapCameraRef, mapViewRef});
+    updateSelectedZones(feature.id as string);
+  };
 
   const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
@@ -212,6 +212,7 @@ const TariffZonesSelectorMap = ({
                       flyToLocation({
                         coordinates: location?.coordinates,
                         mapCameraRef,
+                        mapViewRef,
                       })
                     }
                   />

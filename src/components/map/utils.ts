@@ -153,6 +153,7 @@ type FlyToLocationArgs = {
   coordinates?: Coordinates;
   padding?: CameraPadding;
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
+  mapViewRef: RefObject<MapboxGL.MapView | null>;
   zoomLevel?: number;
   animationDuration?: number;
   animationMode?: CameraAnimationMode;
@@ -162,18 +163,43 @@ export function flyToLocation({
   coordinates,
   padding,
   mapCameraRef,
+  mapViewRef,
   zoomLevel,
   animationDuration,
   animationMode = 'flyTo',
 }: FlyToLocationArgs) {
-  coordinates &&
+  if (!coordinates) return;
+
+  mapViewRef.current?.getCenter().then((currentCenter) => {
+    if (!currentCenter) return;
+
+    const distanceToTarget = distance(
+      [currentCenter[0], currentCenter[1]],
+      [coordinates.longitude, coordinates.latitude],
+      {units: 'kilometers'},
+    );
+
+    if (distanceToTarget <= 2) {
+      animationMode = 'easeTo';
+    } else if (distanceToTarget <= 6) {
+      animationMode = 'flyTo';
+    } else {
+      animationMode = 'moveTo';
+    }
+
+    const dynamicDuration = Math.min(
+      Math.max(750, Math.round(distanceToTarget * 150)),
+      2000,
+    );
+
     mapCameraRef.current?.setCamera({
       centerCoordinate: [coordinates.longitude, coordinates.latitude],
       padding,
       zoomLevel,
-      animationMode,
-      animationDuration: animationDuration ?? 750,
+      animationMode: animationMode,
+      animationDuration: animationDuration ?? dynamicDuration,
     });
+  });
 }
 
 export function getMapPadding(tabBarHeight: number | undefined) {

@@ -33,6 +33,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   tabBarHeight?: number,
 ) => {
   const {height: bottomSheetHeight} = useBottomSheetContext();
@@ -40,11 +41,15 @@ export const useTriggerCameraMoveEffect = (
 
   useEffect(() => {
     if (cameraFocusMode?.mode === 'coordinates') {
-      moveCameraToCoordinates(cameraFocusMode.coordinates, mapCameraRef);
+      moveCameraToCoordinates(
+        cameraFocusMode.coordinates,
+        mapCameraRef,
+        mapViewRef,
+      );
     } else if (cameraFocusMode?.mode === 'my-position') {
       fitCameraWithinLocation(cameraFocusMode.coordinates, mapCameraRef);
     }
-  }, [cameraFocusMode, mapCameraRef]);
+  }, [cameraFocusMode, mapCameraRef, mapViewRef]);
 
   /*
    * Moving camera to stop place and map lines are also dependent on that the
@@ -60,6 +65,7 @@ export const useTriggerCameraMoveEffect = (
         cameraFocusMode.entityFeature,
         cameraFocusMode.zoomTo ? padding : undefined,
         mapCameraRef,
+        mapViewRef,
         tabBarHeight,
       );
     }
@@ -107,14 +113,16 @@ const getMapLinesBoundingBox = (data: MapLine[]): BoundingBox => {
 const moveCameraToCoordinates = (
   coordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
 ) => {
-  flyToLocation({coordinates, mapCameraRef});
+  flyToLocation({coordinates, mapCameraRef, mapViewRef});
 };
 
 const moveCameraToEntity = (
   entityFeature: Feature<Point>,
   padding: MapPadding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   tabBarHeight?: number,
 ) => {
   const coordinates = mapPositionToCoordinates(
@@ -125,6 +133,7 @@ const moveCameraToEntity = (
       coordinates,
       padding: getMapPadding(tabBarHeight),
       mapCameraRef,
+      mapViewRef,
       animationMode: 'easeTo',
     });
   } else {

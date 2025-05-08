@@ -6,7 +6,7 @@ import {
   isClusterFeature,
 } from '@atb/components/map';
 import {getAvailableVehicles} from '@atb/mobility/utils';
-import {Camera, ShapeSource} from '@rnmapbox/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';
 import React, {RefObject} from 'react';
@@ -17,7 +17,8 @@ import {CarStations} from './CarStations';
 
 type Props = {
   stations: StationFeatures;
-  mapCameraRef: RefObject<Camera | null>;
+  mapCameraRef: RefObject<MapboxGL.Camera | null>;
+  mapViewRef: RefObject<MapboxGL.MapView | null>;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
@@ -26,13 +27,18 @@ export type StationsWithCount = FeatureCollection<
   StationBasicFragment & {count: number}
 >;
 
-export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
+export const Stations = ({
+  stations,
+  onClusterClick,
+  mapCameraRef,
+  mapViewRef,
+}: Props) => {
   const bikeStations = stationsWithCount(stations.bicycles, FormFactor.Bicycle);
   const carStations = stationsWithCount(stations.cars, FormFactor.Car);
 
   const handleClusterClick = async (
     e: OnPressEvent,
-    clustersSource: RefObject<ShapeSource | null>,
+    clustersSource: RefObject<MapboxGL.ShapeSource | null>,
   ) => {
     const [feature] = e.features;
     if (isClusterFeature(feature)) {
@@ -41,8 +47,8 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
       flyToLocation({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
         mapCameraRef,
+        mapViewRef,
         zoomLevel: clusterExpansionZoom,
-        animationDuration: 200,
       });
       onClusterClick && onClusterClick(feature);
     }

@@ -69,6 +69,7 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
+
   const {mobilityOperators} = useOperators();
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
@@ -80,7 +81,7 @@ export const ScooterSheet = ({
     selectedShmoPaymentMethod ??
     recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
-  const {isLoading: shmoReqIsLoading} = useShmoRequirements();
+  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements();
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
@@ -123,8 +124,9 @@ export const ScooterSheet = ({
               {defaultPaymentMethod &&
                 isShmoDeepIntegrationEnabled &&
                 isMapV2Enabled &&
+                !hasBlockers &&
                 operatorIsIntegrationEnabled && (
-                  <Section style={{paddingHorizontal: theme.spacing.medium}}>
+                  <Section style={styles.paymentWrapper}>
                     <PaymentSelectionSectionItem
                       paymentMethod={defaultPaymentMethod}
                       onPress={selectPaymentMethod}
@@ -204,11 +206,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: theme.spacing.medium,
     },
+    paymentWrapper: {
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
+    },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      marginBottom: theme.spacing.medium,
+      gap: theme.spacing.medium,
     },
     actionWrapper: {
       gap: theme.spacing.medium,

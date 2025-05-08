@@ -131,6 +131,7 @@ export const TravelDetailsMapScreenComponent = ({
       flyToLocation({
         coordinates: location,
         mapCameraRef,
+        mapViewRef,
         animationDuration: FOLLOW_ANIMATION_DURATION,
         animationMode: 'easeTo',
       });
@@ -210,6 +211,7 @@ export const TravelDetailsMapScreenComponent = ({
             flyToLocation({
               coordinates: geolocation?.coordinates,
               mapCameraRef,
+              mapViewRef,
             });
           }}
         />

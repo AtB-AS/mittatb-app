@@ -2,7 +2,7 @@ import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
 import {ShmoRequirementEnum, ShmoRequirementType} from './types';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
-import {storage} from '@atb/modules/storage';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
 export const useShmoRequirements = () => {
   const {locationIsAvailable} = useGeolocationContext();
@@ -11,7 +11,7 @@ export const useShmoRequirements = () => {
 
   const [givenConsent, setGivenConsent] = usePersistedBoolState(
     storage,
-    '@ATB_scooter_consent',
+    StorageModelKeysEnum.ScooterConsent,
     false,
   );
 

@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   OneTimePopOver = '@ATB_one_time_popovers_seen',
+  ScooterConsent = '@ATB_scooter_consent',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

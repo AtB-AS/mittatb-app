@@ -9,8 +9,6 @@ import {
   ScooterSheet,
 } from '@atb/mobility';
 import {flyToLocation, getMapPadding} from '../utils';
-
-import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {
   BikeStationFragment,
@@ -26,6 +24,7 @@ import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScoo
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
 import {useEnterPaymentMethods} from './use-enter-payment-methods';
+import MapboxGL from '@rnmapbox/maps';
 
 export type AutoSelectableMapItem =
   | VehicleExtendedFragment
@@ -37,7 +36,8 @@ export type AutoSelectableMapItem =
  * this hook opens the bottom sheet for it and flies to the correct map location
  */
 export const useAutoSelectMapItem = (
-  mapCameraRef: React.RefObject<CameraRef | null>,
+  mapCameraRef: RefObject<MapboxGL.Camera | null>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   onReportParkingViolation: () => void,
   tabBarHeight?: number,
 ) => {
@@ -88,11 +88,12 @@ export const useAutoSelectMapItem = (
             },
             padding: getMapPadding(tabBarHeight),
             mapCameraRef,
+            mapViewRef,
             zoomLevel: 19, // no clustering at this zoom level
           });
       });
     },
-    [mapCameraRef, setAutoSelectedMapItem, tabBarHeight],
+    [mapCameraRef, mapViewRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
   const openScooterSheet = useCallback(

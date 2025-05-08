@@ -107,6 +107,7 @@ export const MapV2 = (props: MapProps) => {
 
   useShmoActiveBottomSheet(
     mapCameraRef,
+    mapViewRef,
     mapSelectionCloseCallback,
     tabBarHeight,
   );
@@ -124,7 +125,12 @@ export const MapV2 = (props: MapProps) => {
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle);
 
-  useAutoSelectMapItem(mapCameraRef, onReportParkingViolation, tabBarHeight);
+  useAutoSelectMapItem(
+    mapCameraRef,
+    mapViewRef,
+    onReportParkingViolation,
+    tabBarHeight,
+  );
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -229,10 +235,9 @@ export const MapV2 = (props: MapProps) => {
             featureToSelect.geometry.coordinates,
           ),
           padding: getMapPadding(tabBarHeight),
-
           mapCameraRef,
+          mapViewRef,
           zoomLevel: toZoomLevel,
-          animationDuration: 200,
         });
       } else if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
@@ -307,8 +312,8 @@ export const MapV2 = (props: MapProps) => {
                   coordinates: coordinates,
                   padding: getMapPadding(tabBarHeight),
                   mapCameraRef,
+                  mapViewRef,
                   zoomLevel: 15,
-                  animationDuration: 200,
                 });
               }
             }}

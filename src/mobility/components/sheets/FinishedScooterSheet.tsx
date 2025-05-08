@@ -116,7 +116,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      marginBottom: theme.spacing.medium,
+      gap: theme.spacing.medium,
     },
     footer: {
       marginBottom: theme.spacing.medium,
