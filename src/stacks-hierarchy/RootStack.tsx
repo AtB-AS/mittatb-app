@@ -1,4 +1,4 @@
-import {trackNavigation} from '@atb/diagnostics/trackNavigation';
+import {trackNavigation} from '@atb/modules/diagnostics';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
