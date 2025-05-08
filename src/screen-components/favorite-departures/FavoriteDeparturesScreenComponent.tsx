@@ -1,5 +1,5 @@
-import {useFavoritesContext} from '@atb/favorites';
-import {StoredFavoriteDeparture} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
+import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';

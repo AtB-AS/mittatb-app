@@ -1,7 +1,7 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, View} from 'react-native';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';

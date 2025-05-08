@@ -1,8 +1,8 @@
-import type {StoredType} from '@atb/favorites/storage';
-import type {FavoriteDeparture} from '@atb/favorites/types';
+import type {FavoriteDeparture} from './types';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
+import {StoredType} from './storage';
 
 export const getFavoriteIcon = (
   existingFavorite?: StoredType<FavoriteDeparture>,

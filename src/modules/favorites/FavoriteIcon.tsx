@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pin} from '../assets/svg/mono-icons/map';
+import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 

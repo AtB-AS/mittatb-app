@@ -4,6 +4,7 @@ export {
   FavoritesContextProvider,
 } from './FavoritesContext';
 export {useOnMarkFavouriteDepartures} from './use-on-mark-favourite-departures';
+export type {FavouriteDepartureLine} from './use-on-mark-favourite-departures';
 export {getFavoriteIcon} from './get-favorite-icon';
 export {FavoriteChips} from './FavoriteChips';
 export type {
@@ -16,7 +17,5 @@ export type {
   StoredLocationFavorite,
   StoredFavoriteDeparture,
   FavoriteDeparture,
-  FavoriteDepartureIdLegacy,
-  FavoriteDepartureId,
   ChipTypeGroup,
 } from './types';

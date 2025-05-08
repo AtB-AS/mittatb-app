@@ -7,7 +7,7 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {DepartureGroupMetadata} from '@atb/api/departures/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {getNearestStops} from '@atb/api/departures/stops-nearest';
 import {NearestStopPlaceNode} from '@atb/api/types/departures';
 

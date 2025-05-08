@@ -3,7 +3,7 @@ import {tripsSearch} from '@atb/api/trips';
 import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useSearchHistoryContext} from '@atb/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';

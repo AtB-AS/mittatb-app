@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,

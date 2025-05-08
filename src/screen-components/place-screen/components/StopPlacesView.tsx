@@ -1,5 +1,8 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
+import {
+  useFavoritesContext,
+  UserFavoriteDepartures,
+} from '@atb/modules/favorites';
 import {DepartureSearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';

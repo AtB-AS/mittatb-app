@@ -11,7 +11,7 @@ import {
   Location,
   useFavoritesContext,
   UserFavorites,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,

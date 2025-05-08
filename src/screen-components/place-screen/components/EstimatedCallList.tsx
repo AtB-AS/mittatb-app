@@ -8,7 +8,7 @@ import {EstimatedCallItem, EstimatedCallItemProps} from './EstimatedCallItem';
 import {
   StoredFavoriteDeparture,
   useOnMarkFavouriteDepartures,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
 

@@ -17,7 +17,7 @@ import {
   FavoriteChips,
   ChipTypeGroup,
   useFavoritesContext,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';

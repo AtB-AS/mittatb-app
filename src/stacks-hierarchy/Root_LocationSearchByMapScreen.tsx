@@ -4,7 +4,7 @@ import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {ExploreLocationMap} from '@atb/components/map';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 export type Props = RootStackScreenProps<'Root_LocationSearchByMapScreen'>;

@@ -1,5 +1,5 @@
 import {Feature} from '../sdk';
-import {SearchLocation} from '@atb/favorites';
+import {SearchLocation} from '@atb/modules/favorites';
 
 // IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
 export const mapFeatureToLocation = ({

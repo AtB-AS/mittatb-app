@@ -4,7 +4,7 @@ import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
 import {getAxiosErrorType} from '../api/utils';
-import {SearchLocation} from '@atb/favorites';
+import {SearchLocation} from '@atb/modules/favorites';
 import {useTimeoutRequest} from '@atb/api/client';
 
 type ReverseGeocoderState = GeocoderState & {

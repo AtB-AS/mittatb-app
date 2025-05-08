@@ -16,7 +16,7 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {SelectionLocationCallback} from './types';
 
 import {isFeaturePoint} from './utils';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {useMapViewConfig} from './hooks/use-map-view-config';

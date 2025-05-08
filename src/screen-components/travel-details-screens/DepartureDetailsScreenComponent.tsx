@@ -71,10 +71,12 @@ import {BookingInfoBox} from './components/BookingInfoBox';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {usePreferencesContext} from '@atb/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
-import {useOnMarkFavouriteDepartures} from '@atb/favorites';
-import {getFavoriteIcon} from '@atb/favorites';
+import {
+  FavouriteDepartureLine,
+  useOnMarkFavouriteDepartures,
+} from '@atb/modules/favorites';
+import {getFavoriteIcon} from '@atb/modules/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
-import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
 import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 

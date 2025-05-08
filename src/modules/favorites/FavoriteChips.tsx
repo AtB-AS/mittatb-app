@@ -16,7 +16,7 @@ import {
   GeoLocation,
   Location,
   useFavoritesContext,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 
 type Props = {
   onSelectLocation: (location: Location) => void;

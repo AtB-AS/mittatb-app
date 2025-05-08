@@ -1,5 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
+import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {
   Feature,
   FeatureCollection,

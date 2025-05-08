@@ -1,9 +1,10 @@
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
-
-import {UserFavoriteDepartures, UserFavoriteDeparturesLegacy} from './types';
-import {StoredFavoriteDeparture} from '@atb/favorites';
+import {
+  StoredFavoriteDeparture,
+  UserFavoriteDepartures,
+  UserFavoriteDeparturesLegacy,
+} from './types';
 import {uniqBy} from 'lodash';
-
 import {
   DepartureLineInfo,
   EstimatedCallWithLineName,

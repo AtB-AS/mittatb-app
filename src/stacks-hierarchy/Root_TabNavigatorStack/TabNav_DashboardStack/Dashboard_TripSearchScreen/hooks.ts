@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {CityZone} from '@atb/modules/configuration';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {useMemo} from 'react';

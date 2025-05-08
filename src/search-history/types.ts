@@ -1,4 +1,4 @@
-import {SearchLocation} from '@atb/favorites';
+import {SearchLocation} from '@atb/modules/favorites';
 
 export type SearchHistoryEntry = SearchLocation;
 export type SearchHistory = SearchHistoryEntry[];

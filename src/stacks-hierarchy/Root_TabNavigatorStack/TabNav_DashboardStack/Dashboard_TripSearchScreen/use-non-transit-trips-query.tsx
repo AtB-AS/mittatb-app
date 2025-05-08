@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
 import {SearchStateType} from '../types';
