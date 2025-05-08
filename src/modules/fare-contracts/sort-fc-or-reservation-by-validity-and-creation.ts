@@ -1,4 +1,4 @@
-import {Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/modules/ticketing';
 import type {ValidityStatus} from './utils';
 import {FareContractType} from '@atb-as/utils';
 

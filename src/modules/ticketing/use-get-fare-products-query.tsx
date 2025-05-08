@@ -1,5 +1,5 @@
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {getFareProducts} from '@atb/ticketing';
+import {getFareProducts} from '@atb/modules/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/modules/auth';
 import {ONE_HOUR_MS} from '@atb/utils/durations';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View} from 'react-native';
-import {PaymentType} from '@atb/ticketing';
+import {PaymentType} from '@atb/modules/ticketing';
 import {
   Amex,
   MasterCard,

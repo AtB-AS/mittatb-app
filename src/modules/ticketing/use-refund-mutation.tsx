@@ -1,5 +1,5 @@
 import {useMutation} from '@tanstack/react-query';
-import {refundFareContract} from '@atb/ticketing';
+import {refundFareContract} from '@atb/modules/ticketing';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import Bugsnag from '@bugsnag/react-native';
 

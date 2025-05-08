@@ -1,4 +1,4 @@
-import {getLastUsedAccess} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';

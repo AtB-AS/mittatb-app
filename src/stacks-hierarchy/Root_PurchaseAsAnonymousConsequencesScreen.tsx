@@ -2,7 +2,7 @@ import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import React from 'react';
 import {RootStackParamList, RootStackScreenProps} from './navigation-types';
 import {useCompleteUserCreationOnboardingAndEnterApp} from '@atb/utils/use-complete-user-creation-onboarding-and-enter-app';
-import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
+import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';

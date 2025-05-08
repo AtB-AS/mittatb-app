@@ -4,7 +4,7 @@ import {
   isOfFareProductRef,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 
 type TicketInfoParams = {

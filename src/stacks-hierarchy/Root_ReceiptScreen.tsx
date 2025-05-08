@@ -6,7 +6,7 @@ import {
 } from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {sendReceipt} from '@atb/ticketing';
+import {sendReceipt} from '@atb/modules/ticketing';
 import {
   FareContractTexts,
   TranslateFunction,

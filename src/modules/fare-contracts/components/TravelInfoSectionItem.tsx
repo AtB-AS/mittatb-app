@@ -6,7 +6,7 @@ import {
   useGetPhoneByAccountIdQuery,
   useFetchOnBehalfOfAccountsQuery,
 } from '@atb/modules/on-behalf-of';
-import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';

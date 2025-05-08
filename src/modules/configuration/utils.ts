@@ -6,7 +6,7 @@ import {
 } from '@atb/translations';
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
-import {CustomerProfile} from '@atb/ticketing';
+import {CustomerProfile} from '@atb/modules/ticketing';
 
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.

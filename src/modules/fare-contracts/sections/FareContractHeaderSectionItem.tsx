@@ -14,7 +14,7 @@ import {FareContractFromTo} from '../components/FareContractFromTo';
 import {Description} from '../components/FareContractDescription';
 import {ValidTo} from '../components/ValidTo';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import {WithValidityLine} from '../components/WithValidityLine';
 import {ProductName} from '../components/ProductName';
 import {ValidityTime} from '../components/ValidityTime';

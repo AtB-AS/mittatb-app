@@ -6,7 +6,7 @@ import {
   Offer,
   OfferPrice,
   searchOffers,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';

@@ -4,7 +4,7 @@ import {
   ReserveOffer,
   TicketRecipientType,
   reserveOffers,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';

@@ -1,7 +1,7 @@
-import {useTicketingContext} from '@atb/ticketing/TicketingContext';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {useTimeContext} from '@atb/modules/time';
 import {getReservationStatus} from '@atb/modules/fare-contracts';
-import {useFareContracts} from '@atb/ticketing/use-fare-contracts';
+import {useFareContracts} from '@atb/modules/ticketing';
 
 export const useHasReservationOrAvailableFareContract = () => {
   const {reservations} = useTicketingContext();

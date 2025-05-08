@@ -3,7 +3,7 @@ import {
   Reservation,
   useFareContracts,
   useTicketingContext,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';

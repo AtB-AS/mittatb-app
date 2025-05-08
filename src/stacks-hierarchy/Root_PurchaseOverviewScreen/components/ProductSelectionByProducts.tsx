@@ -17,7 +17,7 @@ import {
   RadioGroupSection,
   Section,
 } from '@atb/components/sections';
-import {useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {ContentHeading} from '@atb/components/heading';

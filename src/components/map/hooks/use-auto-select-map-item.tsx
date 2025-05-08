@@ -18,7 +18,7 @@ import {
 } from '@atb/api/types/generated/fragments/stations';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useHasReservationOrAvailableFareContract} from '@atb/ticketing';
+import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';

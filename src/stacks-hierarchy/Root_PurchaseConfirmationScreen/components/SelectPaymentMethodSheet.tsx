@@ -20,7 +20,7 @@ import {
   VippsPaymentMethod,
 } from '@atb/modules/payment';
 import {useAuthContext} from '@atb/modules/auth';
-import {PaymentType, humanizePaymentType} from '@atb/ticketing';
+import {PaymentType, humanizePaymentType} from '@atb/modules/ticketing';
 import {RadioIcon, getRadioA11y} from '@atb/components/radio';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';

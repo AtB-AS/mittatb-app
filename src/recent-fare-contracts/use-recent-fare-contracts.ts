@@ -11,7 +11,7 @@ import {
   listRecentFareContracts,
   RecentOrderDetails,
   useTicketingContext,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';

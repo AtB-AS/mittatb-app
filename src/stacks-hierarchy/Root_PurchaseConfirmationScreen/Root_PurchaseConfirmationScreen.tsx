@@ -18,7 +18,7 @@ import {
   PaymentType,
   ReserveOffer,
   useTicketingContext,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,

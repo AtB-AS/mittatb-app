@@ -12,7 +12,7 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {useTimeContext} from '@atb/modules/time';
 import {ContentHeading} from '@atb/components/heading';
-import {useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/modules/ticketing';
 
 type Props = {
   onPressDetails: (fareContractId: string) => void;

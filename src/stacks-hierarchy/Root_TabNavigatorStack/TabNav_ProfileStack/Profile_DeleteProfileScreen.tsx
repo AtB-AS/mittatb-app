@@ -2,7 +2,7 @@ import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React from 'react';

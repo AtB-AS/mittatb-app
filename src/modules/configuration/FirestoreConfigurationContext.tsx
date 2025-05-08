@@ -10,7 +10,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {PaymentType} from '@atb/ticketing';
+import {PaymentType} from '@atb/modules/ticketing';
 import {
   FareProductGroupType,
   FareProductTypeConfig,

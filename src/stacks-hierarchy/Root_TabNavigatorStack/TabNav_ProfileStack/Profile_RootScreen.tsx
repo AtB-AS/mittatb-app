@@ -12,7 +12,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingContext,
   useHasReservationOrAvailableFareContract,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   dictionary,
   getTextForLanguage,

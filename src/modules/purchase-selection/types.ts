@@ -7,7 +7,7 @@ import {
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
-import {CustomerProfile} from '@atb/ticketing';
+import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
 
 export type PurchaseSelectionType = {

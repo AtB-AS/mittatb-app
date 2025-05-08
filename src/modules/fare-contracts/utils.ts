@@ -2,7 +2,7 @@ import {
   Reservation,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   FareContractType,
   FareContractState,

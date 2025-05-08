@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteRecurringPayment} from '@atb/ticketing';
+import {deleteRecurringPayment} from '@atb/modules/ticketing';
 import {LIST_RECURRING_PAYMENTS_QUERY_KEY} from './use-list-recurring-payments-query';
 
 export const useDeleteRecurringPaymentMutation = () => {

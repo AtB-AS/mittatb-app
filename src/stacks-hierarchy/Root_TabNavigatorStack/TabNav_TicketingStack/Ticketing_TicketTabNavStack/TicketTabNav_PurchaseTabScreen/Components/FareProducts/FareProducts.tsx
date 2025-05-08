@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {FareProductGroup} from './FareProductGroup';
 import {
   useFirestoreConfigurationContext,

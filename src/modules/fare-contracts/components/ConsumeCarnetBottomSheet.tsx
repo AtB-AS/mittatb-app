@@ -10,7 +10,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {consumeCarnet} from '@atb/ticketing';
+import {consumeCarnet} from '@atb/modules/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';

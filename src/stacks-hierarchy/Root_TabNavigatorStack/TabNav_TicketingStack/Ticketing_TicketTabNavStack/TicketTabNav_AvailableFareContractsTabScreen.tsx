@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {useFareContracts, useTicketingContext} from '@atb/ticketing';
+import {useFareContracts, useTicketingContext} from '@atb/modules/ticketing';
 import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';

@@ -1,8 +1,8 @@
-import {useTicketingContext} from '@atb/ticketing/TicketingContext';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import type {FareContractType} from '@atb-as/utils';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
-import {getFareContracts} from '@atb/ticketing/api';
+import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 

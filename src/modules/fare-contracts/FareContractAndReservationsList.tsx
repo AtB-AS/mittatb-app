@@ -1,6 +1,6 @@
 import React from 'react';
 import {FareContractOrReservation} from './FareContractOrReservation';
-import {Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
 import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation-by-validity-and-creation';

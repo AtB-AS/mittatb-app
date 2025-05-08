@@ -12,7 +12,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';

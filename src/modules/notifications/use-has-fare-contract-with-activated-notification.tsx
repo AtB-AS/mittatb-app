@@ -2,7 +2,7 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {useNotificationsContext} from './use-push-notifications';
 import {useTimeContext} from '@atb/modules/time';
 

@@ -1,4 +1,4 @@
-import {cancelPayment, ReserveOfferResponse} from '@atb/ticketing';
+import {cancelPayment, ReserveOfferResponse} from '@atb/modules/ticketing';
 import {useMutation} from '@tanstack/react-query';
 
 type Params = {

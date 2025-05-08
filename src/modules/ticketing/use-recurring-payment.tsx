@@ -1,9 +1,11 @@
-import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
+import {
+  useListRecurringPaymentsQuery,
+  addPaymentMethod,
+} from '@atb/modules/ticketing';
 import {
   closeInAppBrowseriOS,
   openInAppBrowser,
 } from '@atb/modules/in-app-browser';
-import {addPaymentMethod} from '@atb/ticketing';
 import {APP_SCHEME} from '@env';
 import queryString from 'query-string';
 import {useCallback, useEffect, useState} from 'react';

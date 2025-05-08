@@ -6,7 +6,7 @@ import {
   UserProfile,
 } from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {getLastUsedAccess} from '@atb/ticketing';
+import {getLastUsedAccess} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
