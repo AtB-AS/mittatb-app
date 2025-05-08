@@ -5,7 +5,7 @@ import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overl
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';

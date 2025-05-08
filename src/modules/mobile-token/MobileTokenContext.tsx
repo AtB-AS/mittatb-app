@@ -29,8 +29,8 @@ import {useInterval} from '@atb/utils/use-interval';
 import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
-} from '@atb/mobile-token/hooks/use-list-remote-tokens-query';
-import {usePreemptiveRenewTokenMutation} from '@atb/mobile-token/hooks/use-preemptive-renew-token-mutation';
+} from './hooks/use-list-remote-tokens-query';
+import {usePreemptiveRenewTokenMutation} from './hooks/use-preemptive-renew-token-mutation';
 import {
   LOAD_NATIVE_TOKEN_QUERY_KEY,
   useLoadNativeTokenQuery,
@@ -38,7 +38,7 @@ import {
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {useIntercomMetadata} from '@atb/modules/chat';
-import {useValidateToken} from '@atb/mobile-token/hooks/use-validate-token';
+import {useValidateToken} from './hooks/use-validate-token';
 
 const SIX_HOURS_MS = ONE_HOUR_MS * 6;
 

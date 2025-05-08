@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/storage';
 import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
-import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
+import {mobileTokenClient} from '../mobileTokenClient';
 import {
   getMobileTokenErrorHandlingStrategy,
   getSdkErrorTokenIds,
@@ -87,7 +87,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     If token is undefined, then create a new one. We can end up here if:
     - No token previously created on this device.
     - There has been a user change and the existing token has been wiped.
-    - There was an error where the token resolution is `RESET` as 
+    - There was an error where the token resolution is `RESET` as
       suggested by the SDK.
      */
     logToBugsnag(`Creating new mobile token`);

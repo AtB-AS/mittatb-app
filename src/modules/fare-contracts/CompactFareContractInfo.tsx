@@ -12,7 +12,7 @@ import {
 } from './utils';
 import {fareContractValidityUnits} from './fare-contract-validity-units';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';

@@ -9,7 +9,7 @@ const DEFAULT_MOCK_STATE: LoadingParams = {
   remoteConfigIsLoaded: true,
 };
 
-jest.mock('@atb/mobile-token', () => {});
+jest.mock('@atb/modules/mobile-token', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
 jest.mock('@atb/modules/configuration', () => {});
 jest.mock('@atb/api', () => {});

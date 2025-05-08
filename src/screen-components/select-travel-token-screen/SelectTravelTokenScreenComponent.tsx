@@ -6,7 +6,7 @@ import {
   Token,
   useMobileTokenContext,
   useToggleTokenMutation,
-} from '@atb/mobile-token';
+} from '@atb/modules/mobile-token';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
@@ -18,7 +18,7 @@ import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from './TokenToggleInfo';
-import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
+import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/onboarding';
 import {ContentHeading} from '@atb/components/heading';
 

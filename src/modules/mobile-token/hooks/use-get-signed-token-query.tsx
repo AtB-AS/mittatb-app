@@ -1,6 +1,6 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {mobileTokenClient} from '../mobileTokenClient';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {
   getMobileTokenErrorHandlingStrategy,

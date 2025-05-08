@@ -7,7 +7,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthContext} from '@atb/modules/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
@@ -37,8 +37,10 @@ import {useBeaconsContext} from '@atb/modules/beacons';
 import {useOnboardingContext} from '@atb/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
-import {DebugTokenServerAddress} from '@atb/mobile-token/DebugTokenServerAddress';
+import {
+  DebugSabotage,
+  DebugTokenServerAddress,
+} from '@atb/modules/mobile-token';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);

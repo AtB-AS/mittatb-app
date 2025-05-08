@@ -4,7 +4,7 @@ import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useCallback} from 'react';
-import {IntercomTokenStatus} from '@atb/mobile-token/types';
+import {IntercomTokenStatus} from '@atb/modules/mobile-token';
 
 type Metadata = {
   'AtB-Firebase-Auth-Id': string;

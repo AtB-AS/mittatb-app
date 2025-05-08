@@ -6,7 +6,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
 import {
   OnboardingFullScreenView,

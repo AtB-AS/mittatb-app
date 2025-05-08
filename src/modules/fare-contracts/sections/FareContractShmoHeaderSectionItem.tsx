@@ -11,7 +11,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 
 type Props = {
   fareContract: FareContractType;

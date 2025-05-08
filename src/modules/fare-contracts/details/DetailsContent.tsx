@@ -12,7 +12,7 @@ import {
   hasShmoBookingId,
   mapToUserProfilesWithCount,
 } from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {OrderDetailsSectionItem} from '../sections/OrderDetailsSectionItem';
 import {
   GenericSectionItem,

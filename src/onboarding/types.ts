@@ -2,7 +2,7 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {PermissionStatus} from 'react-native-permissions';
 import {AuthenticationType} from '@atb/modules/auth';
 import {NotificationPermissionStatus} from '@atb/modules/notifications';
-import {MobileTokenStatus} from '@atb/mobile-token/types';
+import {MobileTokenStatus} from '@atb/modules/mobile-token';
 
 type IsOnboardedStoreKey =
   | '@ATB_extended_onboarding_onboarded'

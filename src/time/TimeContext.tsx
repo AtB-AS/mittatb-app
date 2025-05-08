@@ -1,5 +1,5 @@
 import {useInterval} from '@atb/utils/use-interval';
-import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
+import {mobileTokenClient} from '@atb/modules/mobile-token';
 import React, {createContext, useContext, useState} from 'react';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 

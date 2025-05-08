@@ -2,7 +2,7 @@ import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {RemoteToken} from '../types';
 import {useQueryClient} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
-import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
+import {mobileTokenClient} from '../mobileTokenClient';
 import {
   getMobileTokenErrorHandlingStrategy,
   MOBILE_TOKEN_QUERY_KEY,

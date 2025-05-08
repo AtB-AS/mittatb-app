@@ -1,12 +1,12 @@
 import {useQuery} from '@tanstack/react-query';
-import {tokenService} from '@atb/mobile-token/tokenService';
+import {tokenService} from '../tokenService';
 import {
   getTravelCardId,
   isInspectable,
   isTravelCardToken,
   MOBILE_TOKEN_QUERY_KEY,
-} from '@atb/mobile-token/utils';
-import {Token} from '@atb/mobile-token/types';
+} from '../utils';
+import {Token} from '../types';
 
 import {v4 as uuid} from 'uuid';
 import {useAuthContext} from '@atb/modules/auth';
