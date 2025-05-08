@@ -5,7 +5,10 @@ import {
 } from '@atb/api/departures/stops-nearest';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
+import {
+  useFavoritesContext,
+  UserFavoriteDepartures,
+} from '@atb/modules/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';

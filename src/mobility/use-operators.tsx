@@ -1,4 +1,4 @@
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useCallback} from 'react';
 

@@ -5,7 +5,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -18,7 +18,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
-import {useGetSignedTokenQuery} from '@atb/mobile-token/hooks/use-get-signed-token-query';
+import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
 
 type Props = {
   validityStatus: ValidityStatus;

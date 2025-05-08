@@ -25,7 +25,7 @@ import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   PayWithBonusPointsCheckbox,

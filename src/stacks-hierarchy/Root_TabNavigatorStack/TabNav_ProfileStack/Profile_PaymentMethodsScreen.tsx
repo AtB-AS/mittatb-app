@@ -10,7 +10,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {humanizePaymentType, RecurringPayment} from '@atb/ticketing';
+import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -20,7 +20,7 @@ import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {PaymentBrand} from '@atb/modules/payment';
-import {useRecurringPayment} from '@atb/ticketing/use-recurring-payment';
+import {useRecurringPayment} from '@atb/modules/ticketing';
 
 export const Profile_PaymentMethodsScreen = () => {
   const styles = useStyles();

@@ -1,4 +1,4 @@
-import {trackNavigation} from '@atb/diagnostics/trackNavigation';
+import {trackNavigation} from '@atb/modules/diagnostics';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
@@ -56,12 +56,12 @@ import {
 } from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
-import {useOnboardingFlow} from '@atb/onboarding';
-import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
+import {useOnboardingFlow} from '@atb/modules/onboarding';
+import {useRegisterIntercomUser} from '@atb/modules/chat';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
@@ -71,7 +71,7 @@ import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_Contact
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
-import {AnalyticsContextProvider} from '@atb/analytics';
+import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 
 type ResultState = PartialState<NavigationState> & {

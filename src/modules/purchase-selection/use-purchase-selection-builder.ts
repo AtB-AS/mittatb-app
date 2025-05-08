@@ -1,11 +1,11 @@
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {createEmptyBuilder} from './purchase-selection-builder';
 import type {PurchaseSelectionBuilderInput} from './types';
 import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
-import {usePreferencesContext} from '@atb/preferences';
-import {useTicketingContext} from '@atb/ticketing';
+import {usePreferencesContext} from '@atb/modules/preferences';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {APP_VERSION} from '@env';
-import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 /**
  * Returns a purchase selection builder for creating or modifying a

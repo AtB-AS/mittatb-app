@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {FareProductGroup} from './FareProductGroup';
 import {
   useFirestoreConfigurationContext,
@@ -8,7 +8,7 @@ import {
   ProductTypeTransportModes,
   isProductSellableInApp,
   PreassignedFareProduct,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {flatMap} from '@atb/utils/array';
 import {
   TicketingTexts,

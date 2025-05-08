@@ -4,7 +4,7 @@ import {
   useFeedbackQuestion,
 } from './FeedbackContext';
 import React, {useCallback, useEffect, useState} from 'react';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {APP_ORG, APP_VERSION} from '@env';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';

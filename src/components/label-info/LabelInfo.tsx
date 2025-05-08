@@ -1,7 +1,7 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '../text';
 import {View} from 'react-native';
-import {LabelType} from '@atb/configuration';
+import {LabelType} from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 

@@ -7,7 +7,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 
-import {OnboardingFullScreenView} from '@atb/onboarding';
+import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

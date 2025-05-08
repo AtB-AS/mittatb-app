@@ -2,7 +2,7 @@ import {PhotoFile} from '@atb/components/camera';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useParkingViolations} from '@atb/parking-violations-reporting';
+import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 
 export type PhotoScreenProps =

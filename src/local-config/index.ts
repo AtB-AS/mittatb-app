@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 
 export type LocalConfig = {
   installId: string;

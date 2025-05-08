@@ -1,4 +1,4 @@
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {
   setTestIdPrototypes,
   resetTestIdPrototypes,

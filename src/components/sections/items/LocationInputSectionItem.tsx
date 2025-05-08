@@ -1,6 +1,6 @@
 import React from 'react';
 import {AccessibilityProps, ActivityIndicator} from 'react-native';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {useThemeContext} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ButtonSectionItem, ButtonSectionItemProps} from './ButtonSectionItem';

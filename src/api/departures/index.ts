@@ -1,6 +1,9 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites';
+import {
+  FavoriteDeparture,
+  UserFavoriteDepartures,
+} from '@atb/modules/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';

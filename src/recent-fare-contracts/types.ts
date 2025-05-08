@@ -2,7 +2,7 @@ import {
   PointToPointValidity,
   PreassignedFareProduct,
   TariffZone,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TravelRightDirection} from '@atb-as/utils';
 

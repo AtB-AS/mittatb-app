@@ -3,7 +3,8 @@ import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
-} from '@atb/ticketing';
+  useRefundOptionsQuery,
+} from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
@@ -12,7 +13,7 @@ import {
   hasShmoBookingId,
   mapToUserProfilesWithCount,
 } from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {OrderDetailsSectionItem} from '../sections/OrderDetailsSectionItem';
 import {
   GenericSectionItem,
@@ -26,13 +27,13 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useAuthContext} from '@atb/auth';
+import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
+import {useAuthContext} from '@atb/modules/auth';
 import {
   CarnetFooter,
   MAX_ACCESSES_FOR_CARNET_FOOTER,
@@ -49,7 +50,6 @@ import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSecti
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
 import {RefundSectionItem} from '../components/RefundSectionItem';
-import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
 
 type Props = {
   fareContract: FareContractType;

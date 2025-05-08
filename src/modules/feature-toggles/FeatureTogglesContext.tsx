@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {FeatureTogglesContextState} from './types';
 import {useFeatureTogglesContextState} from './use-feature-toggle-context-state';

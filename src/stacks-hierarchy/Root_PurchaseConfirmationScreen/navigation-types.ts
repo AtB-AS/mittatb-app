@@ -1,4 +1,4 @@
-import {TicketRecipientType} from '@atb/ticketing';
+import {TicketRecipientType} from '@atb/modules/ticketing';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type Root_PurchaseConfirmationScreenParams = {

@@ -1,6 +1,6 @@
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getVenueIconTypes} from './utils';

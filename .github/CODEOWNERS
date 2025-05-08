@@ -21,7 +21,7 @@
 /tools/ @rosvik @jorelosorio @reidzeibel
 
 # Configuration
-/src/configuration/ @rosvik @reidzeibel @jorelosorio
+/src/modules/configuration/ @rosvik @reidzeibel @jorelosorio
 
 # Tests
 /e2e/ @rosvik @tormoseng @hanne-at-atb @reidzeibel

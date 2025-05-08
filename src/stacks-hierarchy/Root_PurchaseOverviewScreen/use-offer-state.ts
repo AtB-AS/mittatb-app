@@ -1,12 +1,12 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {PreassignedFareProduct} from '@atb/configuration';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {
   FlexDiscountLadder,
   Offer,
   OfferPrice,
   searchOffers,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';

@@ -1,4 +1,4 @@
-import {Location, SearchLocation} from '@atb/favorites';
+import {Location, SearchLocation} from '@atb/modules/favorites';
 import {getSearchPlace} from '../utils';
 import {FeatureCategory} from '@atb/sdk';
 

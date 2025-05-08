@@ -1,4 +1,4 @@
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {showAppMissingAlert} from '@atb/mobility/show-app-missing-alert';
 import React, {useCallback} from 'react';

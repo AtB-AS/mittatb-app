@@ -1,7 +1,7 @@
 import {useUserBenefitsQuery} from '@atb/mobility/queries/use-user-benefits-query';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {isDefined} from '@atb/utils/presence';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export const useIsEligibleForBenefit = (
   operatorBenefit?: OperatorBenefitType,

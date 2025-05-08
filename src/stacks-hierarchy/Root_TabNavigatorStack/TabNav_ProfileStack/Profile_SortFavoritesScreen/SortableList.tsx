@@ -7,7 +7,11 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {FavoriteIcon, LocationFavorite, UserFavorites} from '@atb/favorites';
+import {
+  FavoriteIcon,
+  LocationFavorite,
+  UserFavorites,
+} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';

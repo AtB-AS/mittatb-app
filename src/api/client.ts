@@ -16,7 +16,7 @@ import {
 } from './headers';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {Platform} from 'react-native';
-import {getCurrentUserIdGlobal, getIdTokenGlobal} from '@atb/auth/AuthContext';
+import {getCurrentUserIdGlobal, getIdTokenGlobal} from '@atb/modules/auth';
 
 type InternalUpstreamServerError = {
   errorCode: 602;

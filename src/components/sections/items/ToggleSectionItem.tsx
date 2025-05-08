@@ -7,7 +7,7 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
-import {LabelType} from '@atb/configuration';
+import {LabelType} from '@atb/modules/configuration';
 import {LabelInfo} from '@atb/components/label-info';
 import {SectionTexts, useTranslation} from '@atb/translations';
 

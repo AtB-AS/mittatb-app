@@ -7,7 +7,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {EmptyState} from '@atb/components/empty-state';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 
 export const StopPlaces = ({
   headerText,

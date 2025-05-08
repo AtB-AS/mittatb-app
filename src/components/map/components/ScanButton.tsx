@@ -2,7 +2,7 @@ import React from 'react';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useControlPositionsStyle} from '../hooks/use-control-styles';
 import {useNavigation} from '@react-navigation/native';

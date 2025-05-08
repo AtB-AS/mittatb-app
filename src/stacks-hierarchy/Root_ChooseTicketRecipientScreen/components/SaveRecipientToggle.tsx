@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {useFetchOnBehalfOfAccountsQuery} from '@atb/modules/on-behalf-of';
 
 const MAX_RECIPIENTS = 10;
 

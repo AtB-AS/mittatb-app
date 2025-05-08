@@ -19,7 +19,7 @@ import {
   SendSupportRequestBodySchema,
   SupportType,
 } from '@atb/api/types/mobility';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {getParsedPrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';

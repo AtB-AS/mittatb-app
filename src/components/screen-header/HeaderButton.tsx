@@ -10,7 +10,10 @@ import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useThemeContext} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useServiceDisruptionIcon} from './service-disruptions/use-service-disruption-icon';
-import {AnalyticsEventContext, useAnalyticsContext} from '@atb/analytics';
+import {
+  AnalyticsEventContext,
+  useAnalyticsContext,
+} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {ContrastColor} from '@atb/theme/colors';

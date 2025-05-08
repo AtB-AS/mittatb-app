@@ -1,5 +1,5 @@
 import {PreassignedFareProduct, UserProfile} from '@atb-as/config-specs';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {isSelectableProfile} from './utils';
 
 export function useSelectableUserProfiles(

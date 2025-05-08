@@ -20,9 +20,9 @@ import {
   request,
   requestMultiple,
 } from 'react-native-permissions';
-import {useIntercomMetadata} from '@atb/chat';
+import {useIntercomMetadata} from '@atb/modules/chat';
 import {useAppStateStatus} from './utils/use-app-state-status';
-import {GeoLocation} from '@atb/favorites';
+import {GeoLocation} from '@atb/modules/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
 import {tGlobal} from '@atb/LocaleProvider.tsx';

@@ -1,8 +1,8 @@
 import {screenReaderPause} from '@atb/components/text';
 import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
-import {SearchLocation} from '@atb/favorites';
-import {getReferenceDataName, TariffZone} from '@atb/configuration';
+import {SearchLocation} from '@atb/modules/favorites';
+import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';

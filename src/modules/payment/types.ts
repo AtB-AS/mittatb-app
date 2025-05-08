@@ -1,4 +1,4 @@
-import {PaymentType, RecurringPayment} from '@atb/ticketing';
+import {PaymentType, RecurringPayment} from '@atb/modules/ticketing';
 
 export enum SavedPaymentMethodType {
   /**

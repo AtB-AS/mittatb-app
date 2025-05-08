@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
 import {SearchStateType} from '../types';
@@ -9,8 +9,8 @@ import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import type {DateOptionAndValue} from '@atb/date-picker';

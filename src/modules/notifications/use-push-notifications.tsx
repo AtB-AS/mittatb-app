@@ -16,7 +16,7 @@ import {NotificationConfig} from './types';
 import {useNotificationConfig} from './use-notification-config';
 import {useRegister} from './use-register';
 import {getLanguageAndTextEnum} from '@atb/translations/utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type NotificationPermissionStatus =

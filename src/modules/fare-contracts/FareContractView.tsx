@@ -6,13 +6,13 @@ import {
 } from '@atb/components/sections';
 import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useAuthContext} from '@atb/auth';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useAuthContext} from '@atb/modules/auth';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
@@ -28,7 +28,7 @@ import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetai
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 
 type Props = {
   now: number;
