@@ -3,7 +3,7 @@ import {useMapContext} from '@atb/MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {flyToLocation, getMapPadding} from '../utils';
-import {CameraRef} from '@rnmapbox/maps/lib/typescript/src/components/Camera';
+import MapboxGL from '@rnmapbox/maps';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
@@ -14,7 +14,8 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const useShmoActiveBottomSheet = (
-  mapCameraRef: React.RefObject<CameraRef | null>,
+  mapCameraRef: React.RefObject<MapboxGL.Camera | null>,
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
   mapSelectionCloseCallback: () => void,
   tabBarHeight?: number,
 ) => {
@@ -46,9 +47,10 @@ export const useShmoActiveBottomSheet = (
         },
         padding: getMapPadding(tabBarHeight),
         mapCameraRef,
+        mapViewRef,
         zoomLevel: 15,
       });
-  }, [getCurrentCoordinates, mapCameraRef, tabBarHeight]);
+  }, [getCurrentCoordinates, mapCameraRef, mapViewRef, tabBarHeight]);
 
   useEffect(() => {
     if (!isFocused || !isShmoDeepIntegrationEnabled) return;

@@ -61,7 +61,12 @@ export const useMapSelectionChangeEffect = (
     setBottomSheetToAutoSelect,
   ]);
 
-  useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef, tabBarHeight);
+  useTriggerCameraMoveEffect(
+    cameraFocusMode,
+    mapCameraRef,
+    mapViewRef,
+    tabBarHeight,
+  );
   const {selectedFeature, onReportParkingViolation} =
     useUpdateBottomSheetWhenSelectedEntityChanges(
       mapProps,

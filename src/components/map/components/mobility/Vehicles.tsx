@@ -43,6 +43,7 @@ export const Vehicles = ({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
         padding: SLIGHTLY_RAISED_MAP_PADDING,
         mapCameraRef,
+        mapViewRef,
         zoomLevel: toZoomLevel,
         animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
       });
