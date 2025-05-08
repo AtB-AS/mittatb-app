@@ -1,5 +1,5 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {PaymentMethod, PaymentSelection, SavedPaymentMethodType} from './types';
+import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -55,7 +55,7 @@ export const SinglePaymentMethod = ({
   }
 
   function getPaymentTestId(method: PaymentMethod, index: number) {
-    if (method.savedType === 'normal') {
+    if (!method.recurringCard) {
       return humanizePaymentType(method.paymentType) + 'Button';
     } else {
       return 'recurringPayment' + index;
@@ -109,17 +109,14 @@ function getPaymentSelection(
       ? {
           paymentType: PaymentType.PaymentCard,
           shouldSavePaymentMethod: shouldSave,
-          savedType: SavedPaymentMethodType.Normal,
         }
       : paymentMethod.recurringCard
       ? {
           paymentType: paymentMethod.paymentType,
           recurringCard: paymentMethod.recurringCard,
-          savedType: SavedPaymentMethodType.Recurring,
         }
       : {
           paymentType: paymentMethod.paymentType,
-          savedType: SavedPaymentMethodType.Normal,
         };
   return paymentSelection;
 }

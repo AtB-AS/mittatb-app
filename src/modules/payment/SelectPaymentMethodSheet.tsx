@@ -18,7 +18,6 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   PaymentSelection,
-  SavedPaymentMethodType,
   VippsPaymentMethod,
 } from './types';
 import {SinglePaymentMethod} from './SinglePaymentMethod';
@@ -51,10 +50,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 
   const {paymentTypes} = useFirestoreConfigurationContext();
   const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
-    (paymentType) => ({
-      paymentType,
-      savedType: SavedPaymentMethodType.Normal,
-    }),
+    (paymentType) => ({paymentType}),
   );
   const singlePaymentMethods = defaultPaymentMethods.filter(
     (method): method is VippsPaymentMethod =>
@@ -138,7 +134,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
                 onSelect={() => {
                   setSelectedMethod({
                     paymentType: PaymentType.PaymentCard,
-                    savedType: SavedPaymentMethodType.Normal,
                   });
                 }}
                 paymentMethodsInGroup={multiplePaymentMethods}

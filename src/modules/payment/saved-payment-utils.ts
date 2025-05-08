@@ -3,7 +3,7 @@ import {storage} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
-import {PaymentMethod, SavedPaymentMethodType} from './types';
+import {PaymentMethod} from './types';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
@@ -71,7 +71,6 @@ export function usePreviousPaymentMethods(): {
     () =>
       recurringPayments?.map(
         (recurringPayment): PaymentMethod => ({
-          savedType: SavedPaymentMethodType.Recurring,
           paymentType: recurringPayment.paymentType,
           recurringCard: recurringPayment,
         }),
@@ -148,7 +147,6 @@ export const saveLastUsedRecurringPaymentOrType = async (
   if (!recurringPaymentId) {
     if (!paymentType) return;
     await savePreviousPaymentMethodByUser(userId, {
-      savedType: SavedPaymentMethodType.Normal,
       paymentType: paymentType,
     });
   } else {
@@ -161,7 +159,6 @@ export const saveLastUsedRecurringPaymentOrType = async (
       });
       if (card) {
         await savePreviousPaymentMethodByUser(userId, {
-          savedType: SavedPaymentMethodType.Recurring,
           paymentType: card.paymentType,
           recurringCard: card,
         });
