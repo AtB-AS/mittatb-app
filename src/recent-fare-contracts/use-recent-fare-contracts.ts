@@ -119,14 +119,12 @@ const mapBackendRecentFareContracts = (
     return null;
   }
 
-  const fromTariffZone = findReferenceDataById(
-    tariffZones,
-    recentFareContract.zones?.[0],
-  );
-  const toTariffZone = findReferenceDataById(
-    tariffZones,
-    recentFareContract.zones?.slice(-1)?.[0],
-  );
+  const fromTariffZone = recentFareContract.zones
+    ? findReferenceDataById(tariffZones, recentFareContract.zones[0])
+    : undefined;
+  const toTariffZone = recentFareContract.zones
+    ? findReferenceDataById(tariffZones, recentFareContract.zones.slice(-1)[0])
+    : undefined;
 
   const direction: TravelRightDirection | undefined = enumFromString(
     TravelRightDirection,
