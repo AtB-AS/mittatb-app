@@ -38,7 +38,7 @@ import {
 
 import {ClickableCopy} from './components/ClickableCopy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useStorybookContext} from '@atb/storybook/StorybookContext';
+import {useStorybookContext} from '@atb/modules/storybook';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';

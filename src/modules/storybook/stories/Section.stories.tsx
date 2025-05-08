@@ -28,7 +28,7 @@ import {
   ThemedStoryDecorator,
   themedStoryDefaultArgs,
   ThemedStoryProps,
-} from '@atb/storybook/ThemedStoryDecorator';
+} from '../ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
 import {Warning} from '@atb/assets/svg/mono-icons/status';
 import {ThemeIcon} from '@atb/components/theme-icon';

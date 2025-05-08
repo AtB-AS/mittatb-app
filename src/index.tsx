@@ -36,7 +36,7 @@ import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {PopOverContextProvider} from '@atb/modules/popover';
-import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
+import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';

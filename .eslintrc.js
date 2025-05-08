@@ -150,7 +150,7 @@ module.exports = {
         'src/assets/svg/**',
         'types/*',
         'src/translations/**',
-        'src/storybook/stories/**',
+        'src/modules/storybook/stories/**',
       ],
       rules: {
         'no-restricted-exports': [
