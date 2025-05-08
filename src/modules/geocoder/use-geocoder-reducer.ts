@@ -1,6 +1,6 @@
 import {SearchLocation} from '@atb/modules/favorites';
 import {useReducer} from 'react';
-import {ErrorType} from '../api/utils';
+import {ErrorType} from '@atb/api/utils';
 
 export type GeocoderState = {
   locations: SearchLocation[] | null;

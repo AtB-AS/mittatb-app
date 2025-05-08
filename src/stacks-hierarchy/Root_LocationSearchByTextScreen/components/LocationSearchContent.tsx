@@ -7,7 +7,7 @@ import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/use-debounce';
 import {filterPreviousLocations} from '../utils';
 import {useGeolocationContext} from '@atb/GeolocationContext';
-import {useGeocoder} from '@atb/geocoder';
+import {useGeocoder} from '@atb/modules/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';

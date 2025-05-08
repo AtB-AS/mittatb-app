@@ -1,9 +1,9 @@
 import {useEffect} from 'react';
-import {Coordinates} from '../sdk';
-import {reverse} from '../api';
+import {Coordinates} from '@atb/sdk';
+import {reverse} from '@atb/api';
 import {mapFeatureToLocation} from './utils';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
-import {getAxiosErrorType} from '../api/utils';
+import {getAxiosErrorType} from '@atb/api/utils';
 import {SearchLocation} from '@atb/modules/favorites';
 import {useTimeoutRequest} from '@atb/api/client';
 

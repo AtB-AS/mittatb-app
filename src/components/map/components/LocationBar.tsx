@@ -14,7 +14,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {useReverseGeocoder} from '@atb/modules/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';

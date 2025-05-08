@@ -3,7 +3,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {TariffZone} from '@atb/modules/configuration';
 import {SearchLocation} from '@atb/modules/favorites';
-import {useGeocoder} from '@atb/geocoder';
+import {useGeocoder} from '@atb/modules/geocoder';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {
