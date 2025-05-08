@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapFilterType} from '@atb/components/map';

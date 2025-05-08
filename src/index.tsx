@@ -33,7 +33,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {ReactQueryProvider} from '@atb/queries';
-import {TimeContextProvider} from '@atb/time';
+import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {PopOverContextProvider} from '@atb/modules/popover';
 import {StorybookContextProvider} from '@atb/modules/storybook';

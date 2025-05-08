@@ -9,7 +9,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useFareContracts, useTicketingContext} from '@atb/ticketing';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 

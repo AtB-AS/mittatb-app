@@ -10,7 +10,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {ContentHeading} from '@atb/components/heading';
 import {useFareContracts} from '@atb/ticketing';
 

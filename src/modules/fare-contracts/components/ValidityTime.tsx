@@ -13,7 +13,7 @@ import {View} from 'react-native';
 import {getFareContractInfo, ValidityStatus} from '../utils';
 import {fareContractValidityUnits} from '../fare-contract-validity-units';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
 import type {FareContractType} from '@atb-as/utils';
 

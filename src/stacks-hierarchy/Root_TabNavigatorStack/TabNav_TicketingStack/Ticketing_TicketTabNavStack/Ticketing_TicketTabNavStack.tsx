@@ -13,7 +13,7 @@ import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 

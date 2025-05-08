@@ -1,5 +1,5 @@
 import {useTicketingContext} from '@atb/ticketing/TicketingContext';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {getReservationStatus} from '@atb/modules/fare-contracts';
 import {useFareContracts} from '@atb/ticketing/use-fare-contracts';
 

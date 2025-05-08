@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/LocaleProvider.tsx';
 

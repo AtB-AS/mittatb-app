@@ -36,7 +36,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import Bugsnag from '@bugsnag/react-native';

@@ -23,7 +23,7 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {
   CarnetFooter,

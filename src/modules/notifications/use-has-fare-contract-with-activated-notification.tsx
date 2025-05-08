@@ -4,7 +4,7 @@ import {
 } from '@atb/modules/configuration';
 import {useFareContracts} from '@atb/ticketing';
 import {useNotificationsContext} from './use-push-notifications';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 
 export function useHasFareContractWithActivatedNotification(): boolean {
   const {config: notificationsConfig} = useNotificationsContext();
