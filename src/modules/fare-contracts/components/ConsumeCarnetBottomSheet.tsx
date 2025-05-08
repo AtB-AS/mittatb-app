@@ -30,7 +30,7 @@ export const ConsumeCarnetBottomSheet = ({
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setError] = useState<boolean>(false);
-  const [isSchoolError, setSchoolError] = useState<boolean>(true);
+  const [isSchoolError, setSchoolError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
 
