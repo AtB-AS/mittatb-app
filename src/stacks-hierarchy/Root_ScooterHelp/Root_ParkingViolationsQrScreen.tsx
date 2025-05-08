@@ -16,7 +16,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
   blobToBase64,
   useParkingViolations,
-} from '@atb/parking-violations-reporting';
+} from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
