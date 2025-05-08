@@ -6,7 +6,7 @@ import {
 } from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
+import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
 

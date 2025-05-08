@@ -3,7 +3,7 @@ import {
   ProductTypeTransportModes,
 } from '@atb/modules/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-overrides';
+import {useHarborConnectionOverrides} from './use-harbor-connection-overrides';
 import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';

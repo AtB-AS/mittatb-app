@@ -16,7 +16,7 @@ import {useGeolocationContext} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
+import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 
 type Props = {
   harbors: StopPlaceFragment[];
