@@ -6,7 +6,7 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
   TariffZone,
