@@ -1,5 +1,5 @@
 import React from 'react';
-import {AnnouncementType} from '@atb/announcements/types';
+import {AnnouncementType} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';

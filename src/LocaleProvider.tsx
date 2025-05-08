@@ -2,7 +2,7 @@ import {getLocales} from 'react-native-localize';
 import {TFunc} from '@leile/lobo-t';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Language} from '@atb/translations';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_REGION,

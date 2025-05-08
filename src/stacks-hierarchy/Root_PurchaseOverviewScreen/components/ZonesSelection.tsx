@@ -20,7 +20,7 @@ import {
   GenericSectionItem,
   Section,
 } from '@atb/components/sections';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';

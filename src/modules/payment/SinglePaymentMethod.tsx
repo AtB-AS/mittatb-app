@@ -1,6 +1,6 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod, PaymentSelection, SavedPaymentMethodType} from './types';
-import {humanizePaymentType, PaymentType} from '@atb/ticketing';
+import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {View} from 'react-native';

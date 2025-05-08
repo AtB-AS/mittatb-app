@@ -5,7 +5,7 @@ import {formatToClock} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {getTimeRepresentationType, TimeValues} from '../utils';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {RoundingMethod} from 'date-fns';
 
 export const Time: React.FC<{

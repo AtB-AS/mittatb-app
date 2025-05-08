@@ -1,6 +1,6 @@
 import {FormFactorFilterType} from '@atb/components/map';
 import {useEffect, useState} from 'react';
-import {MobilityOperatorType} from '@atb/configuration';
+import {MobilityOperatorType} from '@atb/modules/configuration';
 import {getNewFilterState} from '@atb/mobility/utils';
 
 export const useOperatorToggle = (

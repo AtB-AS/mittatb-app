@@ -15,7 +15,7 @@ import {TitleAndDescription} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipi
 import {useQueryClient} from '@tanstack/react-query';
 import {Theme} from '@atb/theme/colors';
 import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;

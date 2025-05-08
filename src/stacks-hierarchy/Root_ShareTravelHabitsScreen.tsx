@@ -5,14 +5,13 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {Linking} from 'react-native';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
-} from '@atb/onboarding';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
-import {useAnalyticsContext} from '@atb/analytics';
-import {checkPermissionStatuses} from '@atb/beacons/permissions';
+} from '@atb/modules/onboarding';
+import {useBeaconsContext, checkPermissionStatuses} from '@atb/modules/beacons';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 
 export const Root_ShareTravelHabitsScreen = () => {

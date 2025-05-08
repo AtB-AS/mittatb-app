@@ -3,7 +3,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
-import {useChatUnreadCount} from '@atb/chat';
+import {useChatUnreadCount} from '@atb/modules/chat';
 import {ContrastColor} from '@atb/theme/colors';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {ContactSheet} from './ContactSheet';

@@ -4,7 +4,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   useAuthContext,
-} from '@atb/auth';
+} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,
@@ -21,7 +21,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useOnboardingContext} from '@atb/onboarding';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 

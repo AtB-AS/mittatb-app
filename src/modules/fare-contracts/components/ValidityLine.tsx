@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {useThemeContext} from '@atb/theme';
 import {ValidityStatus} from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 import {useFareProductColor} from '../use-fare-product-color';
 

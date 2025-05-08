@@ -18,7 +18,7 @@ import React, {useRef} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {getReferenceDataName, TariffZone} from '@atb/configuration';
+import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

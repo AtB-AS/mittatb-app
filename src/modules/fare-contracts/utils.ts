@@ -2,7 +2,7 @@ import {
   Reservation,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   FareContractType,
   FareContractState,
@@ -16,7 +16,7 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
   UserProfile,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
@@ -25,9 +25,9 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getAccesses} from '@atb-as/utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';

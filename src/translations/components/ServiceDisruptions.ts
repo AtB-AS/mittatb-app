@@ -34,7 +34,7 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
   fram: {
     body: _(
       'Oversikt over endringer, forsinkelser og avvik finner du på frammr.no:',
-      'Get an overview of changes, delays and service disruptions at en.frammr.no:',
+      'Get an overview of changes, delays and service disruptions at frammr.no:',
       'Oversikt over endringar, forseinkingar og avvik finn du på frammr.no:',
     ),
     button: {

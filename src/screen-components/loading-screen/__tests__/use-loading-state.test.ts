@@ -15,7 +15,7 @@ let mockState = DEFAULT_MOCK_STATE;
 let mockRetryAuthInvoked = false;
 let mockRetryFirestoreConfigInvoked = false;
 
-jest.mock('@atb/auth', () => ({
+jest.mock('@atb/modules/auth', () => ({
   useAuthContext: () => ({
     userId: mockState.userId,
     authStatus: mockState.authStatus,
@@ -24,7 +24,7 @@ jest.mock('@atb/auth', () => ({
     },
   }),
 }));
-jest.mock('@atb/configuration', () => ({
+jest.mock('@atb/modules/configuration', () => ({
   useFirestoreConfigurationContext: () => ({
     firestoreConfigStatus: mockState.firestoreConfigStatus,
     resubscribeFirestoreConfig: () => {

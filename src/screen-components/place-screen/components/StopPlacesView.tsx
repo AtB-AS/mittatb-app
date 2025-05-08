@@ -1,5 +1,8 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
+import {
+  useFavoritesContext,
+  UserFavoriteDepartures,
+} from '@atb/modules/favorites';
 import {DepartureSearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
@@ -15,7 +18,7 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;

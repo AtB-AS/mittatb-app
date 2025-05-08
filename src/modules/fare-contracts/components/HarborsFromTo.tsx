@@ -1,7 +1,7 @@
 import {TravelRightDirection} from '@atb-as/utils';
 import {ContrastColor} from '@atb-as/theme';
 import {BorderedFromToBox} from './BorderedFromToBox';
-import {useHarbors} from '@atb/harbors';
+import {useHarbors} from '@atb/modules/harbors';
 
 type HarborsProps = {
   startPointRef: string;

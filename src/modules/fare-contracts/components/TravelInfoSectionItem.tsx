@@ -1,10 +1,12 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
-import {useAuthContext} from '@atb/auth';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {useAuthContext} from '@atb/modules/auth';
+import {
+  useGetPhoneByAccountIdQuery,
+  useFetchOnBehalfOfAccountsQuery,
+} from '@atb/modules/on-behalf-of';
+import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
@@ -20,8 +22,8 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import {useTimeContext} from '@atb/time';
+} from '@atb/modules/configuration';
+import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {
   CarnetFooter,

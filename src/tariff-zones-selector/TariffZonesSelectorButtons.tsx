@@ -8,7 +8,7 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {TariffZoneWithMetadata} from './types';
 import {ViewStyle} from 'react-native';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';

@@ -1,6 +1,6 @@
 import {EstimatedCall} from '@atb/api/types/departures';
 import {screenReaderPause} from '@atb/components/text';
-import {StoredFavoriteDeparture} from '@atb/favorites';
+import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {Statuses, StyleSheet} from '@atb/theme';
 import {
   bookingStatusToMsgType,
@@ -36,7 +36,7 @@ import {
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {DepartureTime, EstimatedCallInfo} from '@atb/components/estimated-call';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getFavoriteIcon} from '@atb/favorites';
+import {getFavoriteIcon} from '@atb/modules/favorites';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;

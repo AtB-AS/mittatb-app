@@ -9,7 +9,7 @@ import {View} from 'react-native';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import {LineItem} from './line';
 import {QuayHeaderItem} from './quay-header';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {StopPlace} from '@atb/api/types/trips';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';

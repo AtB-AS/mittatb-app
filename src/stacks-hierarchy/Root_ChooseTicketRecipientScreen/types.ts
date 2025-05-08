@@ -1,5 +1,7 @@
-import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
+import {
+  GetAccountByPhoneErrorCode,
+  OnBehalfOfAccountType,
+} from '@atb/modules/on-behalf-of';
 
 export type OnBehalfOfErrorCode =
   | GetAccountByPhoneErrorCode

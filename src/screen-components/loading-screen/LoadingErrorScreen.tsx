@@ -13,7 +13,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {spellOut} from '@atb/utils/accessibility';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

@@ -1,5 +1,5 @@
 import haversine from 'haversine-distance';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {Coordinates} from '@atb/sdk';
 import {dictionary, useTranslation} from '@atb/translations';
 

@@ -1,9 +1,9 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {TariffZone} from '@atb/configuration';
-import {SearchLocation} from '@atb/favorites';
-import {useGeocoder} from '@atb/geocoder';
+import {TariffZone} from '@atb/modules/configuration';
+import {SearchLocation} from '@atb/modules/favorites';
+import {useGeocoder} from '@atb/modules/geocoder';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {

@@ -1,13 +1,13 @@
 import {
   useSearchHistoryContext,
   JourneySearchHistoryEntry,
-} from '@atb/search-history';
+} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/use-debounce';
 import {filterPreviousLocations} from '../utils';
 import {useGeolocationContext} from '@atb/GeolocationContext';
-import {useGeocoder} from '@atb/geocoder';
+import {useGeocoder} from '@atb/modules/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';
@@ -17,7 +17,7 @@ import {
   FavoriteChips,
   ChipTypeGroup,
   useFavoritesContext,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
@@ -26,9 +26,9 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 
 type LocationSearchContentProps = {

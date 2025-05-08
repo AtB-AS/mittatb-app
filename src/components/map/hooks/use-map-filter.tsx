@@ -1,5 +1,5 @@
 import {MapFilter, MapFilterType} from '../types';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useCallback} from 'react';
 

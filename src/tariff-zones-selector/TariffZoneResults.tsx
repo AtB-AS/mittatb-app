@@ -3,7 +3,7 @@ import {Pin} from '@atb/assets/svg/mono-icons/map/';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getReferenceDataName, TariffZone} from '@atb/configuration';
+import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   getTextForLanguage,

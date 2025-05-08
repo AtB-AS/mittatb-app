@@ -20,7 +20,7 @@ import {getBookingStatus, getPublicCodeFromLeg} from '../utils';
 import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';

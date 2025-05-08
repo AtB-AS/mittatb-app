@@ -9,10 +9,10 @@ import {
   ProductTypeTransportModes,
   TariffZone,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ContrastColor} from '@atb/theme/colors';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
 import {useFareProductColor} from '../use-fare-product-color';

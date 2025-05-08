@@ -2,7 +2,7 @@ import React from 'react';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type MapFilterProps = {
   onPress: () => void;

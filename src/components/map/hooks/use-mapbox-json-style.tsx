@@ -2,7 +2,7 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {mapboxLightStyle} from '../mapbox-styles/mapbox-light-style';
 import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 

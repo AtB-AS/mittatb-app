@@ -3,7 +3,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {FavoriteChips, Location} from '@atb/favorites';
+import {FavoriteChips, Location} from '@atb/modules/favorites';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';

@@ -4,7 +4,7 @@ import {StyleSheet} from '@atb/theme';
 import {getVenueIconTypes, LocationIcon} from '@atb/components/location-icon';
 import {insets} from '@atb/utils/insets';
 import {LocationSearchResultType} from '../types';
-import {FavoriteIcon} from '@atb/favorites';
+import {FavoriteIcon} from '@atb/modules/favorites';
 import {ThemeText} from '@atb/components/text';
 import {screenReaderPause} from '@atb/components/text';
 import {
@@ -12,7 +12,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {SearchLocation} from '@atb/favorites';
+import {SearchLocation} from '@atb/modules/favorites';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {

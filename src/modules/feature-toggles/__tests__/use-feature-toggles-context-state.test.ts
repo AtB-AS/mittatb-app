@@ -1,6 +1,6 @@
 import {act, renderHook} from '@testing-library/react-hooks';
 import {useFeatureTogglesContextState} from '../use-feature-toggle-context-state.ts';
-import type {StorageService} from '@atb/storage';
+import type {StorageService} from '@atb/modules/storage';
 import type {RemoteConfig} from '@atb/remote-config';
 import {toggleSpecifications} from '../toggle-specifications.ts';
 import {toStorageKey} from '../utils.ts';

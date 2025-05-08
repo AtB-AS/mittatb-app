@@ -19,7 +19,7 @@ import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScre
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useHarbors} from '@atb/harbors';
+import {useHarbors} from '@atb/modules/harbors';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;

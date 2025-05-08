@@ -5,7 +5,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {useOnboardingNavigation} from '@atb/onboarding';
+import {useOnboardingNavigation} from '@atb/modules/onboarding';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 

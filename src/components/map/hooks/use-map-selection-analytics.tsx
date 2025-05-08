@@ -1,6 +1,6 @@
 import {Feature, Point} from 'geojson';
 import {useMemo} from 'react';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {isStopPlace} from '../utils';
 import {
   isBicycle,

@@ -16,8 +16,8 @@ import {
   DepartureGroupMetadata,
 } from '@atb/api/departures/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavoritesContext} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
+import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';
 import {useInterval} from '@atb/utils/use-interval';

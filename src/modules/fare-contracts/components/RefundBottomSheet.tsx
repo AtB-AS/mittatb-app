@@ -1,5 +1,5 @@
 import {FareContractState} from '@atb-as/utils';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import SvgExternalLink from '@atb/assets/svg/mono-icons/navigation/ExternalLink';
 import {
   BottomSheetContainer,
@@ -9,10 +9,10 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useRefundFareContractMutation} from '@atb/ticketing/use-refund-mutation';
-import {useRefundOptionsQuery} from '@atb/ticketing/use-refund-options-query';
+import {useRefundFareContractMutation} from '@atb/modules/ticketing';
+import {useRefundOptionsQuery} from '@atb/modules/ticketing';
 import {
   FareContractTexts,
   getTextForLanguage,

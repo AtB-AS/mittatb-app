@@ -1,7 +1,7 @@
 import React from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {StoredFavoriteDeparture} from '@atb/favorites';
+import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';

@@ -1,5 +1,5 @@
-import {useAnalyticsContext} from '@atb/analytics';
 import {getErrorResponse} from '@atb/api/utils';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
@@ -10,7 +10,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {consumeCarnet} from '@atb/ticketing';
+import {consumeCarnet} from '@atb/modules/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';
@@ -30,7 +30,7 @@ export const ConsumeCarnetBottomSheet = ({
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setError] = useState<boolean>(false);
-  const [isSchoolError, setSchoolError] = useState<boolean>(true);
+  const [isSchoolError, setSchoolError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
   const analytics = useAnalyticsContext();
 

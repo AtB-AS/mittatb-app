@@ -14,7 +14,7 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {Image} from 'react-native-compressor';
-import {blobToBase64} from '@atb/parking-violations-reporting';
+import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;

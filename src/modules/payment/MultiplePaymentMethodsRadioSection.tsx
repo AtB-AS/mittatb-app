@@ -1,8 +1,8 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod} from './types';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {humanizePaymentType} from '@atb/ticketing';
+import {humanizePaymentType} from '@atb/modules/ticketing';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';

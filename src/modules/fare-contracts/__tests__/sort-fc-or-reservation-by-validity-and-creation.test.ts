@@ -1,5 +1,5 @@
 import type {ValidityStatus} from '../utils';
-import {Reservation} from '@atb/ticketing/types';
+import {Reservation} from '@atb/modules/ticketing';
 
 import {addMinutes} from 'date-fns';
 import {sortFcOrReservationByValidityAndCreation} from '../sort-fc-or-reservation-by-validity-and-creation';

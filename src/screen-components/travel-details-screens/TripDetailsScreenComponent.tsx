@@ -6,12 +6,12 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
   TariffZone,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
@@ -28,7 +28,7 @@ import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
-import {useHarbors} from '@atb/harbors';
+import {useHarbors} from '@atb/modules/harbors';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,

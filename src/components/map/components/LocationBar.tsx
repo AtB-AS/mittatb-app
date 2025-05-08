@@ -7,14 +7,14 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
+import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {useReverseGeocoder} from '@atb/modules/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';

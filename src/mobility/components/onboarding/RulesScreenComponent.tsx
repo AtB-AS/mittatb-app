@@ -1,4 +1,4 @@
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   RuleAlcohol,
   RuleHelmet,
@@ -11,9 +11,11 @@ import {
 import {Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {ScooterConsentLineType} from '@atb/configuration/types';
-import {OnboardingScreenComponent} from '@atb/onboarding';
+import {
+  useFirestoreConfigurationContext,
+  ScooterConsentLineType,
+} from '@atb/modules/configuration';
+import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';

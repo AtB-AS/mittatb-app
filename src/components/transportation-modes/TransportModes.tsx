@@ -1,4 +1,7 @@
-import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
+import {
+  TransportModeType,
+  TransportSubmodeType,
+} from '@atb/modules/configuration';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {

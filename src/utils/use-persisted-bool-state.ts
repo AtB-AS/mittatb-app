@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {type StorageService} from '@atb/storage';
+import {type StorageService} from '@atb/modules/storage';
 
 export const usePersistedBoolState = (
   storage: StorageService,

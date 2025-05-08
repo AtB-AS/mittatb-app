@@ -6,7 +6,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';

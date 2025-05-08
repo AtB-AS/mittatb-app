@@ -1,12 +1,12 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
-import {useAuthContext} from '@atb/auth';
-import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
+import {useAuthContext} from '@atb/modules/auth';
+import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
 import {PaymentMethod, SavedPaymentMethodType} from './types';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
-import {PaymentType, listRecurringPayments} from '@atb/ticketing';
+import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
 import {onlyUniques} from '@atb/utils/only-uniques';
 
 export function usePreviousPaymentMethods(): {

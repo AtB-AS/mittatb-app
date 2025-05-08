@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {CompactFareContractInfo} from '@atb/modules/fare-contracts';
 import {getFareContractInfoDetails} from '@atb/modules/fare-contracts';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -10,9 +10,9 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 import {ContentHeading} from '@atb/components/heading';
-import {useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/modules/ticketing';
 
 type Props = {
   onPressDetails: (fareContractId: string) => void;
