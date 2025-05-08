@@ -2,8 +2,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {useAuthContext} from '@atb/modules/auth';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {
+  useGetPhoneByAccountIdQuery,
+  useFetchOnBehalfOfAccountsQuery,
+} from '@atb/modules/on-behalf-of';
 import {isSentOrReceivedFareContract} from '@atb/ticketing';
 import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';

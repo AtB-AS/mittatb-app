@@ -3,7 +3,7 @@ import {
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
+import {OnBehalfOfAccountType} from '@atb/modules/on-behalf-of';
 
 type RecipientSelectionAction =
   | {type: 'SELECT_RECIPIENT'; recipient?: OnBehalfOfAccountType}

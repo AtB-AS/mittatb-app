@@ -4,13 +4,15 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {
+  useGetPhoneByAccountIdQuery,
+  useFetchOnBehalfOfAccountsQuery,
+} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {FareContractFromTo} from '../components/FareContractFromTo';
 import {Description} from '../components/FareContractDescription';
 import {ValidTo} from '../components/ValidTo';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {isSentOrReceivedFareContract} from '@atb/ticketing';
 import {WithValidityLine} from '../components/WithValidityLine';

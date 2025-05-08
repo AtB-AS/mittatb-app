@@ -7,7 +7,7 @@ import {
 } from '@atb/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {PaymentMethod} from '@atb/modules/payment';
 
 type Args = {

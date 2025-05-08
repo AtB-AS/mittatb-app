@@ -31,7 +31,7 @@ import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
 import {
   CarnetFooter,

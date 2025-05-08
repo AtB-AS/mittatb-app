@@ -3,7 +3,7 @@ import {deleteOnBehalfOfAccount} from '@atb/api/profile';
 import {useAuthContext} from '@atb/modules/auth';
 import {OnBehalfOfAccountsResponse} from '@atb/api/types/profile';
 import {useState} from 'react';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 
 export const useDeleteRecipientMutation = () => {
   const {userId} = useAuthContext();

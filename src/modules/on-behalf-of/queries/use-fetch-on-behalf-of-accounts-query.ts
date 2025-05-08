@@ -2,7 +2,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useQuery} from '@tanstack/react-query';
 import {fetchOnBehalfOfAccounts} from '@atb/api/profile';
 import {HALF_DAY_MS} from '@atb/utils/durations';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
+import {OnBehalfOfAccountType} from '@atb/modules/on-behalf-of';
 
 export const FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY =
   'FETCH_ON_BEHALF_OF_ACCOUNTS';
