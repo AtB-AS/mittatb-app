@@ -1,8 +1,8 @@
 export {
   usePreviousPaymentMethods,
   savePreviousPaymentMethodByUser,
-  saveLastUsedRecurringPaymentOrType,
-} from './saved-payment-utils';
+  savePreviousPayment,
+} from './previous-payment-utils';
 export {
   type PaymentSelection,
   type PaymentMethod,
