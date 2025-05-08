@@ -31,7 +31,7 @@ import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
-import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
+import {FiltersContextProvider} from '@atb/modules/travel-search-filters';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';

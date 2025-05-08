@@ -3,4 +3,5 @@ export type {
   TravelSearchFiltersSelectionType,
   FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
+  TravelSearchPreferenceWithSelectionType,
 } from './types';

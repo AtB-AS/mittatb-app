@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {storedFilters} from './storage';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 
 type FiltersContextState = {
   filters: TravelSearchFiltersSelectionType | undefined;

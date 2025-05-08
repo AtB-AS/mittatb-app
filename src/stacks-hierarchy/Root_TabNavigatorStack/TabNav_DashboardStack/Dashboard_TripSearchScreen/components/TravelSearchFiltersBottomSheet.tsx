@@ -19,7 +19,7 @@ import {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
   useFiltersContext,
-} from '@atb/travel-search-filters';
+} from '@atb/modules/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
 import {
@@ -28,7 +28,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
