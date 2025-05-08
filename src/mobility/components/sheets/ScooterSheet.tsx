@@ -69,7 +69,7 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
-  const {hasBlockers} = useShmoRequirements();
+
   const {mobilityOperators} = useOperators();
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
@@ -81,7 +81,7 @@ export const ScooterSheet = ({
     selectedShmoPaymentMethod ??
     recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
-  const {isLoading: shmoReqIsLoading} = useShmoRequirements();
+  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements();
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
