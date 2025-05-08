@@ -126,12 +126,7 @@ export const ScooterSheet = ({
                 isMapV2Enabled &&
                 !hasBlockers &&
                 operatorIsIntegrationEnabled && (
-                  <Section
-                    style={{
-                      paddingHorizontal: theme.spacing.medium,
-                      marginBottom: theme.spacing.medium,
-                    }}
-                  >
+                  <Section style={styles.paymentWrapper}>
                     <PaymentSelectionSectionItem
                       paymentMethod={defaultPaymentMethod}
                       onPress={selectPaymentMethod}
@@ -209,6 +204,10 @@ export const ScooterSheet = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     activityIndicator: {
+      marginBottom: theme.spacing.medium,
+    },
+    paymentWrapper: {
+      paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
