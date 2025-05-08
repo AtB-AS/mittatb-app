@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
 import {

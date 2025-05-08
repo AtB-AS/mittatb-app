@@ -12,7 +12,7 @@ import {
 import {MapPin} from '../../assets/svg/mono-icons/tab-bar';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 

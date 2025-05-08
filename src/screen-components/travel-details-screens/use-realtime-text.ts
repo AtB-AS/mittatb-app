@@ -1,4 +1,4 @@
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {formatToClock} from '@atb/utils/date';
 import {ServiceJourneyEstimatedCall} from '@atb/api/types/trips';

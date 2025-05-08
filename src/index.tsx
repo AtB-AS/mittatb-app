@@ -18,7 +18,7 @@ import {TicketingContextProvider} from '@atb/ticketing';
 import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
 import {AuthContextProvider} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
-import {PreferencesContextProvider} from '@atb/preferences';
+import {PreferencesContextProvider} from '@atb/modules/preferences';
 import {AccessibilityContextProvider} from '@atb/AccessibilityContext';
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@rnmapbox/maps';

@@ -8,7 +8,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthContext} from '@atb/modules/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {usePreferencesContext, UserPreferences} from '@atb/preferences';
+import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
 import {

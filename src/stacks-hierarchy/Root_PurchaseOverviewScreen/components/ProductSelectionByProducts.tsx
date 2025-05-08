@@ -19,7 +19,7 @@ import {
 } from '@atb/components/sections';
 import {useTicketingContext} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {

@@ -1,5 +1,5 @@
 import {ColorSchemeName} from 'react-native';
-import {appLanguages} from '../translations';
+import {appLanguages} from '@atb/translations';
 
 export const preference_screenAlternatives = [
   'assistant',

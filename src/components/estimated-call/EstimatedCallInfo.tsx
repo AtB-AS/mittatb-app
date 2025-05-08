@@ -2,7 +2,7 @@ import {Statuses, StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {LineChip, LineChipServiceJourney} from './LineChip';
 import {ThemeIcon} from '../theme-icon';
 import {PinInvalid} from '@atb/assets/svg/mono-icons/map';

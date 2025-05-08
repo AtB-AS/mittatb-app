@@ -11,7 +11,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {Button} from '@atb/components/button';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';

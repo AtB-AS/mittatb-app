@@ -69,7 +69,7 @@ import {
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {
   FavouriteDepartureLine,
