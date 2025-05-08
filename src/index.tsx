@@ -2,27 +2,30 @@ import 'react-native-get-random-values';
 
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {OnboardingContextProvider} from './onboarding';
+import {OnboardingContextProvider} from '@atb/onboarding';
 import {GlobalMessagesContextProvider} from '@atb/modules/global-messages';
-import {MapContextProvider} from './MapContext';
-import {GeolocationContextProvider} from './GeolocationContext';
+import {MapContextProvider} from '@atb/MapContext';
+import {GeolocationContextProvider} from '@atb/GeolocationContext';
 import {RootStack} from '@atb/stacks-hierarchy';
-import {trackAppState, configureAndStartBugsnag} from './modules/diagnostics';
-import {ThemeContextProvider} from './theme/ThemeContext';
-import {FavoritesContextProvider} from './favorites';
-import {SearchHistoryContextProvider} from './search-history';
-import {TicketingContextProvider} from './ticketing';
-import {RemoteConfigContextProvider} from './RemoteConfigContext';
+import {
+  trackAppState,
+  configureAndStartBugsnag,
+} from '@atb/modules/diagnostics';
+import {ThemeContextProvider} from '@atb/theme/ThemeContext';
+import {FavoritesContextProvider} from '@atb/favorites';
+import {SearchHistoryContextProvider} from '@atb/search-history';
+import {TicketingContextProvider} from '@atb/ticketing';
+import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
 import {AuthContextProvider} from '@atb/modules/auth';
-import {ErrorBoundary} from './screen-components/error-boundary';
-import {PreferencesContextProvider} from './preferences';
+import {ErrorBoundary} from '@atb/screen-components/error-boundary';
+import {PreferencesContextProvider} from '@atb/preferences';
 import {AccessibilityContextProvider} from '@atb/AccessibilityContext';
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@rnmapbox/maps';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/LocaleProvider';
-import {setupConfig} from './setup';
+import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
