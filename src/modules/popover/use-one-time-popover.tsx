@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {storage, StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import {PopOverKey} from './types';
 
 export const useOneTimePopover = () => {

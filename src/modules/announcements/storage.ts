@@ -1,4 +1,4 @@
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {AnnouncementId} from './types';
 
 export const DISMISSED_ANNOUNCEMENTS_KEY = '@ATB_user_dismissed_announcements';

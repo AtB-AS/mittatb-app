@@ -1,5 +1,5 @@
 import {JourneySearchHistoryEntry, SearchHistoryEntry} from './types';
-import {storage, StorageModelTypes} from '@atb/storage';
+import {storage, StorageModelTypes} from '@atb/modules/storage';
 
 // @TODO Should be configurable. Also now used to limit store,
 // but in the future with external storage, this

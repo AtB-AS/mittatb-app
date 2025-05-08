@@ -3,7 +3,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useCallback} from 'react';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 
 const LAST_IN_APP_REVIEW_PROMPT_KEY = '@ATB_in_app_review_last_request';
 const IN_APP_REVIEW_PRESENTED_KEY = '@ATB_in_app_review_presented';

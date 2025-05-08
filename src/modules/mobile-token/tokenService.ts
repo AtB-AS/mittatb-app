@@ -27,7 +27,7 @@ import {
   TokenReattestationRemoteTokenStateError,
   TokenReattestationRequiredError,
 } from '@entur-private/abt-token-server-javascript-interface';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
 

@@ -28,7 +28,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import {CheckboxWithLabel} from '@atb/components/checkbox';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 
 type LocationSearchContentProps = {

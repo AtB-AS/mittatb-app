@@ -6,7 +6,7 @@ import {APP_GROUP_NAME} from '@env';
 
 import {setInstallId as setApiInstallId} from './api/client';
 import {loadLocalConfig} from './local-config';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 
 export async function setupConfig() {
   await storage.setAppGroupName(APP_GROUP_NAME);

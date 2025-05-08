@@ -1,5 +1,5 @@
 import {PreferenceItem, UserPreferences} from './types';
-import {storage, StorageModelTypes} from '@atb/storage';
+import {storage, StorageModelTypes} from '@atb/modules/storage';
 
 const STORAGE_KEY: StorageModelTypes = '@ATB_user_preferences';
 

@@ -16,7 +16,7 @@ import {
   requestAndroidBeaconPermissions,
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';

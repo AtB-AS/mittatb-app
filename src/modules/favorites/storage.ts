@@ -1,6 +1,6 @@
 import {v4 as uuid} from 'uuid';
 import {FavoriteDeparture, LocationFavorite} from './types';
-import {storage, StorageModelTypes} from '@atb/storage';
+import {storage, StorageModelTypes} from '@atb/modules/storage';
 
 export type StoredType<T> = {
   id: string;

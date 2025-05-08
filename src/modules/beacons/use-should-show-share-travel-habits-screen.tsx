@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';

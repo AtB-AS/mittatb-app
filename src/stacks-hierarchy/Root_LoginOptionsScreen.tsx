@@ -8,7 +8,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   getTextForLanguage,

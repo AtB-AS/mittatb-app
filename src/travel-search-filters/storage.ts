@@ -2,7 +2,7 @@ import {
   TravelSearchFiltersSelectionType,
   TransportModeFilterOptionWithSelectionType,
 } from './types';
-import {storage, StorageModelTypes} from '@atb/storage';
+import {storage, StorageModelTypes} from '@atb/modules/storage';
 
 class FilterStore<TravelSearchFiltersSelectionType> {
   key: StorageModelTypes;

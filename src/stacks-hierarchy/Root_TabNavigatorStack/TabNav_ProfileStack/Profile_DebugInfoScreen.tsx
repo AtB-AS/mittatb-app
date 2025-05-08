@@ -6,7 +6,11 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthContext} from '@atb/modules/auth';
-import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
+import {
+  KeyValuePair,
+  storage,
+  StorageModelKeysEnum,
+} from '@atb/modules/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';

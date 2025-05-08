@@ -1,4 +1,4 @@
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {client} from '@atb/api/client';
 import {VippsSignInErrorCode} from '@atb/modules/auth';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';

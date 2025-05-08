@@ -1,7 +1,7 @@
 import Intercom from '@intercom/intercom-react-native';
 import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {checkGeolocationPermission} from '@atb/GeolocationContext';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useEffect} from 'react';

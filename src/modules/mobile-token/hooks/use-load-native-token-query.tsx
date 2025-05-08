@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '../mobileTokenClient';
 import {

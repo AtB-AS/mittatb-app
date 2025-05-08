@@ -8,7 +8,7 @@ import React, {
   useReducer,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 
 import {
   getOnboardingSectionIsOnboarded,

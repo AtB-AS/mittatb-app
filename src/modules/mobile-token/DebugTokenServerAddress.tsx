@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {StyleSheet} from '@atb/theme';
 import {useEffect, useState} from 'react';
 import {TextInput, View} from 'react-native';
