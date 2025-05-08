@@ -50,7 +50,7 @@ import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePopOverContext} from '@atb/popover';
+import {usePopOverContext} from '@atb/modules/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {

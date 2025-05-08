@@ -35,7 +35,7 @@ import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext'
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
-import {PopOverContextProvider} from '@atb/popover';
+import {PopOverContextProvider} from '@atb/modules/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from '@atb/modules/beacons';

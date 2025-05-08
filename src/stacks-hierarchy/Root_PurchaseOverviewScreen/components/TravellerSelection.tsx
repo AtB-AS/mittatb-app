@@ -19,7 +19,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ContentHeading} from '@atb/components/heading';
-import {usePopOverContext} from '@atb/popover';
+import {usePopOverContext} from '@atb/modules/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthContext} from '@atb/modules/auth';
