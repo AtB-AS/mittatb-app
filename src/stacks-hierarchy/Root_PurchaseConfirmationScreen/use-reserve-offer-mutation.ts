@@ -37,7 +37,7 @@ export const useReserveOfferMutation = ({
       return reserveOffers({
         offers,
         paymentType: paymentMethod.paymentType,
-        recurringPaymentId: paymentMethod.recurringCard?.id,
+        recurringPaymentId: paymentMethod.recurringPayment?.id,
         shouldSavePaymentMethod,
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,

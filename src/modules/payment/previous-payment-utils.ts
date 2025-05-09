@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {storage} from '@atb/modules/storage';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
-import {PaymentMethod, SavedPaymentMethodType} from './types';
+import {PaymentMethod} from './types';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
@@ -23,12 +23,12 @@ export function usePreviousPaymentMethods(): {
     (paymentMethod: PaymentMethod | undefined) => {
       if (!paymentMethod) return false;
 
-      // Since the stored payment could have been deleted, we need to check if
+      // Since the payment method could have been deleted, we need to check if
       // it is still in the list of recurring payments.
-      if (paymentMethod.recurringCard) {
+      if (paymentMethod.recurringPayment) {
         const recurringPayment = recurringPayments?.find(
           (recurringPayment) =>
-            recurringPayment.id === paymentMethod.recurringCard?.id,
+            recurringPayment.id === paymentMethod.recurringPayment?.id,
         );
         if (!recurringPayment) return false;
       }
@@ -46,8 +46,9 @@ export function usePreviousPaymentMethods(): {
 
       // Card has expired
       const expired =
-        paymentMethod.recurringCard &&
-        parseISO(paymentMethod.recurringCard.expiresAt).getTime() < Date.now();
+        paymentMethod.recurringPayment &&
+        parseISO(paymentMethod.recurringPayment.expiresAt).getTime() <
+          Date.now();
       if (expired) return false;
 
       return true;
@@ -60,9 +61,9 @@ export function usePreviousPaymentMethods(): {
       setPreviousPaymentMethod(undefined);
       return;
     }
-    getPreviousPaymentMethodByUser(userId).then((storedMethod) => {
+    getPreviousPaymentMethodByUser(userId).then((previousMethod) => {
       setPreviousPaymentMethod(
-        isValidPaymentMethod(storedMethod) ? storedMethod : undefined,
+        isValidPaymentMethod(previousMethod) ? previousMethod : undefined,
       );
     });
   }, [userId, isValidPaymentMethod]);
@@ -71,9 +72,8 @@ export function usePreviousPaymentMethods(): {
     () =>
       recurringPayments?.map(
         (recurringPayment): PaymentMethod => ({
-          savedType: SavedPaymentMethodType.Recurring,
           paymentType: recurringPayment.paymentType,
-          recurringCard: recurringPayment,
+          recurringPayment: recurringPayment,
         }),
       ),
     [recurringPayments], // Only recalculate when recurringPayments changes
@@ -94,15 +94,17 @@ const hasPaymentCard = (paymentTypes: PaymentType[]): boolean => {
   return paymentTypes.some((type) => paymentCardTypes.includes(type));
 };
 
-type StoredPaymentMethods = {
+type PreviousPaymentMethods = {
   [key: string]: PaymentMethod | undefined;
 };
 
-async function getStoredPaymentMethods(): Promise<StoredPaymentMethods> {
+async function getPreviousPaymentMethods(): Promise<PreviousPaymentMethods> {
   try {
-    const storedMethodsJson = await storage.get('@ATB_saved_payment_methods');
-    if (storedMethodsJson) {
-      const methods = JSON.parse(storedMethodsJson) as StoredPaymentMethods;
+    const previousMethodsJson = await storage.get(
+      StorageModelKeysEnum.PreviousPaymentMethods,
+    );
+    if (previousMethodsJson) {
+      const methods = JSON.parse(previousMethodsJson) as PreviousPaymentMethods;
       if (methods) {
         return methods;
       }
@@ -117,7 +119,7 @@ async function getStoredPaymentMethods(): Promise<StoredPaymentMethods> {
 async function getPreviousPaymentMethodByUser(
   userId: string,
 ): Promise<PaymentMethod | undefined> {
-  const methods = await getStoredPaymentMethods();
+  const methods = await getPreviousPaymentMethods();
   return methods[userId];
 }
 
@@ -125,10 +127,13 @@ export async function savePreviousPaymentMethodByUser(
   userId: string,
   method: PaymentMethod,
 ): Promise<void> {
-  const methods = await getStoredPaymentMethods();
+  const methods = await getPreviousPaymentMethods();
   try {
     methods[userId] = method;
-    await storage.set('@ATB_saved_payment_methods', JSON.stringify(methods));
+    await storage.set(
+      StorageModelKeysEnum.PreviousPaymentMethods,
+      JSON.stringify(methods),
+    );
   } catch (err: any) {
     Bugsnag.notify(err);
   }
@@ -138,7 +143,7 @@ export async function savePreviousPaymentMethodByUser(
  * Fetches RecurringPayment data and saves it as the previous payment, or saves
  * the payment type if no recurring payment id is given.
  */
-export const saveLastUsedRecurringPaymentOrType = async (
+export const savePreviousPayment = async (
   userId: string | undefined,
   paymentType: PaymentType | undefined,
   recurringPaymentId?: number,
@@ -148,7 +153,6 @@ export const saveLastUsedRecurringPaymentOrType = async (
   if (!recurringPaymentId) {
     if (!paymentType) return;
     await savePreviousPaymentMethodByUser(userId, {
-      savedType: SavedPaymentMethodType.Normal,
       paymentType: paymentType,
     });
   } else {
@@ -161,9 +165,8 @@ export const saveLastUsedRecurringPaymentOrType = async (
       });
       if (card) {
         await savePreviousPaymentMethodByUser(userId, {
-          savedType: SavedPaymentMethodType.Recurring,
           paymentType: card.paymentType,
-          recurringCard: card,
+          recurringPayment: card,
         });
       }
     } catch {} // Just fail silently, as saving payment method is not critical

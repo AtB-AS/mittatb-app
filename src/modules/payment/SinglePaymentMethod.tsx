@@ -1,5 +1,5 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {PaymentMethod, PaymentSelection, SavedPaymentMethodType} from './types';
+import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -30,13 +30,13 @@ export const SinglePaymentMethod = ({
     hint: string;
   } {
     const paymentTypeName = humanizePaymentType(method.paymentType);
-    if (method.recurringCard) {
+    if (method.recurringPayment) {
       return {
         text: paymentTypeName,
         label: t(
           PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
             paymentTypeName,
-            method.recurringCard.maskedPan,
+            method.recurringPayment.maskedPan,
           ),
         ),
         hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
@@ -55,7 +55,7 @@ export const SinglePaymentMethod = ({
   }
 
   function getPaymentTestId(method: PaymentMethod, index: number) {
-    if (method.savedType === 'normal') {
+    if (!method.recurringPayment) {
       return humanizePaymentType(method.paymentType) + 'Button';
     } else {
       return 'recurringPayment' + index;
@@ -82,12 +82,12 @@ export const SinglePaymentMethod = ({
               <RadioIcon checked={selected} color={radioColor} />
               <View style={styles.reccuringCard}>
                 <ThemeText>{paymentTexts.text}</ThemeText>
-                {paymentMethod.recurringCard && (
+                {paymentMethod.recurringPayment && (
                   <ThemeText
                     style={styles.maskedPanPadding}
                     testID={getPaymentTestId(paymentMethod, index) + 'Number'}
                   >
-                    **** {paymentMethod.recurringCard.maskedPan}
+                    **** {paymentMethod.recurringPayment.maskedPan}
                   </ThemeText>
                 )}
               </View>
@@ -109,17 +109,14 @@ function getPaymentSelection(
       ? {
           paymentType: PaymentType.PaymentCard,
           shouldSavePaymentMethod: shouldSave,
-          savedType: SavedPaymentMethodType.Normal,
         }
-      : paymentMethod.recurringCard
+      : paymentMethod.recurringPayment
       ? {
           paymentType: paymentMethod.paymentType,
-          recurringCard: paymentMethod.recurringCard,
-          savedType: SavedPaymentMethodType.Recurring,
+          recurringPayment: paymentMethod.recurringPayment,
         }
       : {
           paymentType: paymentMethod.paymentType,
-          savedType: SavedPaymentMethodType.Normal,
         };
   return paymentSelection;
 }

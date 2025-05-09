@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   OneTimePopOver = '@ATB_one_time_popovers_seen',
+  PreviousPaymentMethods = '@ATB_previous_payment_methods',
   ScooterConsent = '@ATB_scooter_consent',
 }
 

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {PaymentMethod} from '../types';
-import {usePreviousPaymentMethods} from '../saved-payment-utils';
+import {usePreviousPaymentMethods} from '../previous-payment-utils';
 import {isCardPaymentMethod} from '../utils';
 
 export const useSelectedShmoPaymentMethod = (): [

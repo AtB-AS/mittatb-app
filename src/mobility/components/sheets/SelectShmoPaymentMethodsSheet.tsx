@@ -56,11 +56,11 @@ export const SelectShmoPaymentMethodSheet = ({
             <View>
               {recurringPaymentMethods?.map((method, index) => (
                 <SinglePaymentMethod
-                  key={method.recurringCard?.id}
+                  key={method.recurringPayment?.id}
                   paymentMethod={method}
                   selected={
-                    selectedShmoPaymentMethod?.recurringCard?.id ===
-                    method.recurringCard?.id
+                    selectedShmoPaymentMethod?.recurringPayment?.id ===
+                    method.recurringPayment?.id
                   }
                   onSelect={(val: PaymentSelection) => {
                     setSelectedShmoPaymentMethod(val);

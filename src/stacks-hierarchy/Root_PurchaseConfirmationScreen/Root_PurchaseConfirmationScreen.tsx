@@ -29,9 +29,9 @@ import React, {RefObject, useCallback, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
-  saveLastUsedRecurringPaymentOrType,
+  savePreviousPayment,
   usePreviousPaymentMethods,
-} from '../../modules/payment/saved-payment-utils';
+} from '../../modules/payment/previous-payment-utils';
 import {PaymentMethod} from '../../modules/payment/types';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from '../../modules/payment/SelectPaymentMethodSheet';
@@ -144,7 +144,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const onPaymentCompleted = useCallback(async () => {
-    saveLastUsedRecurringPaymentOrType(
+    savePreviousPayment(
       userId,
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,

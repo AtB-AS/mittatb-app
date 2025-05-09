@@ -102,7 +102,7 @@ export type OfferSearchResponse = Offer[];
 export type RecentOrderDetails = {
   direction?: string;
   products: string[];
-  zones: string[];
+  zones?: string[];
   users: {[userProfile: string]: number};
   paymentMethod: string;
   totalAmount: string;

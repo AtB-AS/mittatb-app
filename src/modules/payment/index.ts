@@ -1,14 +1,13 @@
 export {
   usePreviousPaymentMethods,
   savePreviousPaymentMethodByUser,
-  saveLastUsedRecurringPaymentOrType,
-} from './saved-payment-utils';
+  savePreviousPayment,
+} from './previous-payment-utils';
 export {
   type PaymentSelection,
   type PaymentMethod,
   type VippsPaymentMethod,
   type CardPaymentMethod,
-  SavedPaymentMethodType,
 } from './types';
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
 export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
