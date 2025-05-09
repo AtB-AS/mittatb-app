@@ -121,11 +121,11 @@ const mapBackendRecentFareContracts = (
 
   const fromTariffZone = findReferenceDataById(
     tariffZones,
-    recentFareContract.zones[0],
+    recentFareContract.zones?.[0],
   );
   const toTariffZone = findReferenceDataById(
     tariffZones,
-    recentFareContract.zones.slice(-1)[0],
+    recentFareContract.zones?.slice(-1)?.[0],
   );
 
   const direction: TravelRightDirection | undefined = enumFromString(
