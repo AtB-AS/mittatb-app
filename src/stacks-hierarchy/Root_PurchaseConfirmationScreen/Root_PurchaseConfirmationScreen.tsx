@@ -53,6 +53,7 @@ import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
 import {PaymentSelectionSectionItem} from '@atb/modules/payment';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -113,22 +114,27 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
-    onSuccess: (reserveOfferResponse) => {
-      if (paymentMethod?.paymentType !== PaymentType.Vipps) {
-        openInAppBrowser(
-          reserveOfferResponse.url,
-          'cancel',
-          `${APP_SCHEME}://purchase-callback`,
-          onPaymentCompleted,
-          () =>
-            cancelPaymentMutation.mutate({
-              reserveOfferResponse,
-              isUser: false,
-            }),
-        );
-      }
-    },
   });
+  useDoOnceWhen(
+    () => {
+      if (reserveMutation.status !== 'success') return;
+      if (paymentMethod?.paymentType === PaymentType.Vipps) return;
+      openInAppBrowser(
+        reserveMutation.data.url,
+        'cancel',
+        `${APP_SCHEME}://purchase-callback`,
+        onPaymentCompleted,
+        () =>
+          cancelPaymentMutation.mutate({
+            reserveOfferResponse: reserveMutation.data,
+            isUser: false,
+          }),
+      );
+    },
+    reserveMutation.status === 'success',
+    false,
+  );
+
   const cancelPaymentMutation = useCancelPaymentMutation({
     onSuccess: () => {
       cancelPaymentMutation.reset();
