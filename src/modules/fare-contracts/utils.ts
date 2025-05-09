@@ -21,7 +21,7 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
   Language,
-  TariffZonesTexts,
+  FareZonesTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -231,13 +231,13 @@ export function tariffZonesSummary(
 ): string {
   if (fromTariffZone.id === toTariffZone.id) {
     return t(
-      TariffZonesTexts.zoneSummary.text.singleZone(
+      FareZonesTexts.zoneSummary.text.singleZone(
         getReferenceDataName(fromTariffZone, language),
       ),
     );
   } else {
     return t(
-      TariffZonesTexts.zoneSummary.text.multipleZone(
+      FareZonesTexts.zoneSummary.text.multipleZone(
         getReferenceDataName(fromTariffZone, language),
         getReferenceDataName(toTariffZone, language),
       ),

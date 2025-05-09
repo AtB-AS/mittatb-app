@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 
-const TariffZonesTexts = {
+const FareZonesTexts = {
   header: {
     title: {
       singleZone: _(
@@ -103,4 +103,4 @@ const TariffZonesTexts = {
     ),
   },
 };
-export default TariffZonesTexts;
+export default FareZonesTexts;
