@@ -77,7 +77,10 @@ import {
 } from '@atb/modules/favorites';
 import {getFavoriteIcon} from '@atb/modules/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
-import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {
+  InAppReviewContext,
+  useInAppReviewFlow,
+} from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 
 export type DepartureDetailsScreenParams = {
@@ -246,8 +249,7 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive &&
-          requestReview('Departure details: Bus in map dismissed');
+        shouldShowLive && requestReview(InAppReviewContext.DepartureDetails);
         shouldShowRequestReview.current = false;
       }
     }, [requestReview, shouldShowLive]),
