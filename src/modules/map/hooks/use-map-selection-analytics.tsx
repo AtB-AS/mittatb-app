@@ -7,7 +7,7 @@ import {
   isBikeStation,
   isCarStation,
   isScooter,
-} from '@atb/mobility/utils';
+} from '@atb/modules/mobility';
 
 export const useMapSelectionAnalytics = () => {
   const analytics = useAnalyticsContext();

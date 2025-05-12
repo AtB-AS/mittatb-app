@@ -40,11 +40,11 @@ import {
   isCarStationV2,
   isStationV2,
   isVehiclesClusteredFeature,
-} from '@atb/mobility';
+} from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ScanButton} from './components/ScanButton';
-import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
+import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';

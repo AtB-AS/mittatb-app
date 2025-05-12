@@ -25,16 +25,16 @@ import {
   isBicycleV2,
   isBikeStationV2,
   isCarStationV2,
-} from '@atb/mobility';
+} from '@atb/modules/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
-import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
+import {BicycleSheet} from '@atb/modules/mobility';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
+import {MapFilterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
 import {useEnterPaymentMethods} from './use-enter-payment-methods';
 
 /**

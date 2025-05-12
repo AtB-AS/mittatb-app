@@ -6,7 +6,7 @@ import {Camera} from '@atb/components/camera';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useGetAssetFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
+import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 

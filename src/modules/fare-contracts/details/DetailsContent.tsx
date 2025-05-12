@@ -38,14 +38,14 @@ import {
   CarnetFooter,
   MAX_ACCESSES_FOR_CARNET_FOOTER,
 } from '../carnet/CarnetFooter';
-import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
+import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
-import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
+import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';

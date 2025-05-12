@@ -6,11 +6,11 @@ import {
 } from '@atb/api/types/mobility';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
-import {useGetAssetFromQrCodeMutation} from '@atb/mobility/queries/use-get-ids-from-qr-code-mutation';
-import {useInitShmoOneStopBookingMutation} from '@atb/mobility/queries/use-init-shmo-one-stop-booking-mutation';
-import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
-import {useShmoBookingQuery} from '@atb/mobility/queries/use-shmo-booking-query';
+import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
+import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
+import {useInitShmoOneStopBookingMutation} from '@atb/modules/mobility';
+import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
+import {useShmoBookingQuery} from '@atb/modules/mobility';
 // eslint-disable-next-line no-restricted-imports
 import {usePreviousPaymentMethods} from '@atb/modules/payment/previous-payment-utils';
 import {useCallback, useState} from 'react';
@@ -18,7 +18,7 @@ import {TextInput, useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useVehicle} from '@atb/mobility/use-vehicle';
+import {useVehicle} from '@atb/modules/mobility';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';

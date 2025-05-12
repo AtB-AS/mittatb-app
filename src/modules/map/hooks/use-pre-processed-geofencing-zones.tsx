@@ -7,7 +7,7 @@ import {
 
 import {useMemo} from 'react';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {useGeofencingZonesQuery} from '@atb/mobility/queries/use-geofencing-zones';
+import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
 
 export const usePreProcessedGeofencingZones = (

@@ -6,7 +6,7 @@ import {
   ShmoBookingEventType,
   ShmoBookingState,
 } from '@atb/api/types/mobility';
-import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
+import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';

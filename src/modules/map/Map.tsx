@@ -17,7 +17,6 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
-
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -32,14 +31,16 @@ import {
   useMapViewConfig,
 } from '@atb/modules/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
-
-import {isBicycle, isScooter} from '@atb/mobility';
-import {isCarStation, isStation} from '@atb/mobility/utils';
-
+import {
+  isBicycle,
+  isScooter,
+  isCarStation,
+  isStation,
+  MapFilter,
+} from '@atb/modules/mobility';
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {MapFilter} from '@atb/mobility/components/filter/MapFilter';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;

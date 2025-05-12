@@ -6,7 +6,7 @@ import {
   PreProcessedGeofencingZones,
   usePreProcessedGeofencingZones,
 } from '@atb/modules/map';
-import {useVehicleQuery} from '@atb/mobility/queries/use-vehicle-query';
+import {useVehicleQuery} from '@atb/modules/mobility';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';

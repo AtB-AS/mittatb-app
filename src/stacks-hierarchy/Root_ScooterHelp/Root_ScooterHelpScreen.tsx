@@ -14,7 +14,7 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useOperators} from '@atb/mobility/use-operators';
+import {useOperators} from '@atb/modules/mobility';
 
 export type ScooterHelpScreenProps =
   RootStackScreenProps<'Root_ScooterHelpScreen'>;

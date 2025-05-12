@@ -9,7 +9,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
-import {useStations, useVehicles} from '@atb/mobility';
+import {useStations, useVehicles} from '@atb/modules/mobility';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;

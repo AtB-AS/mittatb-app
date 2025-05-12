@@ -5,7 +5,7 @@ import {
   flyToLocation,
   isClusterFeature,
 } from '@atb/modules/map';
-import {getAvailableVehicles} from '@atb/mobility/utils';
+import {getAvailableVehicles} from '@atb/modules/mobility';
 import MapboxGL from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';

@@ -7,9 +7,9 @@ import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
   ScooterSheet,
-} from '@atb/mobility';
+} from '@atb/modules/mobility';
 import {flyToLocation, getMapPadding} from '../utils';
-import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
+import {BicycleSheet} from '@atb/modules/mobility';
 import {
   BikeStationFragment,
   CarStationFragment,
@@ -20,9 +20,9 @@ import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';
+import {FinishedScooterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';
+import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
 import {useEnterPaymentMethods} from './use-enter-payment-methods';
 import MapboxGL from '@rnmapbox/maps';
 

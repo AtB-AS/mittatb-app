@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {RulesScreenComponent} from '@atb/mobility/components/onboarding/RulesScreenComponent';
-import {LocationScreenComponent} from '@atb/mobility/components/onboarding/LocationScreenComponent';
-import {PaymentScreenComponent} from '@atb/mobility/components/onboarding/PaymentScreenComponent';
-import {ShmoRequirementEnum} from '@atb/mobility/types';
-import {useShmoRequirements} from '@atb/mobility/use-shmo-requirements';
+import {RulesScreenComponent} from '@atb/modules/mobility';
+import {LocationScreenComponent} from '@atb/modules/mobility';
+import {PaymentScreenComponent} from '@atb/modules/mobility';
+import {ShmoRequirementEnum} from '@atb/modules/mobility';
+import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
