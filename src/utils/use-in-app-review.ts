@@ -110,7 +110,7 @@ export function useInAppReviewFlow() {
         }
       })();
     },
-    [isInAppReviewEnabled, analytics],
+    [isInAppReviewForAnnouncementsEnabled, isInAppReviewEnabled, analytics],
   );
 
   return {requestReview};
