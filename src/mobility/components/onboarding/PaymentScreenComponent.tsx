@@ -3,7 +3,7 @@ import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useRecurringPayment} from '@atb/modules/ticketing';
-import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
+import {ThemedPaymentCard} from '@atb/theme/ThemedAssets';
 
 export type PaymentScreenComponentProps = {};
 
@@ -13,7 +13,7 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedMyLocation fontSize={220} />}
+      illustration={<ThemedPaymentCard fontSize={220} />}
       title={t(MobilityTexts.shmoRequirements.payment.title)}
       description={t(MobilityTexts.shmoRequirements.payment.description)}
       buttonText={t(MobilityTexts.shmoRequirements.payment.button)}
