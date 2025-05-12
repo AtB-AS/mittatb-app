@@ -16,7 +16,7 @@ import {
 } from '@atb/translations';
 import {useReverseGeocoder} from '@atb/modules/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 

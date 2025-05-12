@@ -5,7 +5,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {OnboardingContextProvider} from '@atb/modules/onboarding';
 import {GlobalMessagesContextProvider} from '@atb/modules/global-messages';
 import {MapContextProvider} from '@atb/MapContext';
-import {GeolocationContextProvider} from '@atb/GeolocationContext';
+import {GeolocationContextProvider} from '@atb/modules/geolocation';
 import {RootStack} from '@atb/stacks-hierarchy';
 import {
   trackAppState,

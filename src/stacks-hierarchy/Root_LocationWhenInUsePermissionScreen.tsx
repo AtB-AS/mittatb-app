@@ -6,7 +6,7 @@ import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
 
 export const Root_LocationWhenInUsePermissionScreen = () => {

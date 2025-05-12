@@ -11,7 +11,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
-import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext.tsx';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
 
 type ShmoActionButtonProps = {

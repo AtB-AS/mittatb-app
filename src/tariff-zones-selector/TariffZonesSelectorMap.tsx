@@ -16,7 +16,7 @@ import {
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
 import {FeatureCollection, Polygon} from 'geojson';

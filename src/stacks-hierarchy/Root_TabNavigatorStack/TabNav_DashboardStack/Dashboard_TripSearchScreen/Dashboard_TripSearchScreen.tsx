@@ -12,7 +12,7 @@ import {
   useFavoritesContext,
   UserFavorites,
 } from '@atb/modules/favorites';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   SelectableLocationType,
   useLocationSearchValue,

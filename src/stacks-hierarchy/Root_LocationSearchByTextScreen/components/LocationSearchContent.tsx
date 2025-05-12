@@ -6,7 +6,7 @@ import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/use-debounce';
 import {filterPreviousLocations} from '../utils';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useGeocoder} from '@atb/modules/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/modules/accessibility';

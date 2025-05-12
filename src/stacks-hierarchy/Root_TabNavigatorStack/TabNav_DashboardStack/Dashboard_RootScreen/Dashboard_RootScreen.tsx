@@ -1,4 +1,4 @@
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';

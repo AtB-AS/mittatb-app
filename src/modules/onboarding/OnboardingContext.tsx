@@ -20,7 +20,7 @@ import {
 import {ShouldShowArgsType} from '@atb/modules/onboarding';
 import {useHasFareContractWithActivatedNotification} from '@atb/modules/notifications';
 import {useNotificationsContext} from '@atb/modules/notifications';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   AuthStateChangeListenerCallback,
   useAuthContext,

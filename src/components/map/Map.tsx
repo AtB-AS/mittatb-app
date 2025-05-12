@@ -1,7 +1,7 @@
 import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
-} from '@atb/GeolocationContext';
+} from '@atb/modules/geolocation';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/screen-components/travel-details-map-screen';
