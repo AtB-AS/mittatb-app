@@ -12,7 +12,7 @@ import {
   NationalStopRegistryFeatures,
   PositionArrow,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';

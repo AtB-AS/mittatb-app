@@ -1,4 +1,4 @@
-import {MapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/modules/map';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';

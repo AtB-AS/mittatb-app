@@ -59,3 +59,4 @@ export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
+export type {AutoSelectableMapItem} from './hooks/use-auto-select-map-item';

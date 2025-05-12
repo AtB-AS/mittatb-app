@@ -4,7 +4,7 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
 import {StationsWithCount} from './Stations';
-import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {hitboxCoveringIconOnly} from '@atb/modules/map';
 
 type Props = {
   stations: StationsWithCount;

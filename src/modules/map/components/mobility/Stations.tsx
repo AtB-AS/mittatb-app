@@ -4,7 +4,7 @@ import {
   StationFeatures,
   flyToLocation,
   isClusterFeature,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {getAvailableVehicles} from '@atb/mobility/utils';
 import MapboxGL from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';

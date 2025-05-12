@@ -10,7 +10,7 @@ import {
   MapFilterType,
   MobilityMapFilterType,
   useUserMapFilters,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';

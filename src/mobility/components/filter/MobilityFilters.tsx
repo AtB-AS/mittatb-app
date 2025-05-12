@@ -6,7 +6,7 @@ import {
   Car,
   Scooter,
 } from '@atb/assets/svg/mono-icons/transportation-entur';
-import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
+import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';

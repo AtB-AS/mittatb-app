@@ -1,4 +1,4 @@
-import {FormFactorFilterType} from '@atb/components/map';
+import {FormFactorFilterType} from '@atb/modules/map';
 import {useEffect, useState} from 'react';
 import {MobilityOperatorType} from '@atb/modules/configuration';
 import {getNewFilterState} from '@atb/mobility/utils';

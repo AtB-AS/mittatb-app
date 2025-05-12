@@ -9,7 +9,7 @@ import {
   MapRegion,
   MobilityMapFilterType,
   toFeaturePoint,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import buffer from '@turf/buffer';
 import difference from '@turf/difference';
 import {featureCollection} from '@turf/helpers';

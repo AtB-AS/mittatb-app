@@ -8,7 +8,7 @@ import {
   flyToLocation,
   isClusterFeature,
   SLIGHTLY_RAISED_MAP_PADDING,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 

@@ -31,7 +31,7 @@ import {
   GeofencingZones,
   useGeofencingZoneTextContent,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
 import {
@@ -42,7 +42,7 @@ import {
   isVehiclesClusteredFeature,
 } from '@atb/mobility';
 
-import {Snackbar, useSnackbar} from '../snackbar';
+import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {useMapContext} from '@atb/MapContext';

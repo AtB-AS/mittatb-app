@@ -3,7 +3,7 @@ import {
   MapFilterType,
   MapV2,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';

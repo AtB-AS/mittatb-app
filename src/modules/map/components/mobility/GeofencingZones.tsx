@@ -5,10 +5,10 @@ import {FeatureCollection} from 'geojson';
 import {
   PreProcessedGeofencingZones,
   usePreProcessedGeofencingZones,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {useVehicleQuery} from '@atb/mobility/queries/use-vehicle-query';
 
-import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 type GeofencingZonesProps = {

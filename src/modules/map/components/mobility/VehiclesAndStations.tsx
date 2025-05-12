@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/components/map';
+import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
 import {SelectedFeatureIdProp} from '../../types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 

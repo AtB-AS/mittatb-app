@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useMemo, useState} from 'react';
-import {AutoSelectableMapItem} from './components/map/hooks/use-auto-select-map-item';
+import {AutoSelectableMapItem} from '@atb/modules/map';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from './api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;

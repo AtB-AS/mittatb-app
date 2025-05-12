@@ -12,7 +12,7 @@ import {
   MapFilterType,
   MobilityMapFilterType,
   useUserMapFilters,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {getNewFilterState} from '../utils';
 import {useOperators} from '../use-operators';

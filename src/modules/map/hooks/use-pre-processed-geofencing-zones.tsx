@@ -3,7 +3,7 @@ import {
   decodePolylineEncodedMultiPolygons,
   sortFeaturesByLayerIndexWeight,
   filterOutFeaturesNotApplicableForCurrentVehicle,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 
 import {useMemo} from 'react';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';

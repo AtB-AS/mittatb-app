@@ -10,7 +10,7 @@ import {
   NavigateToTripSearchCallback,
   ParkingType,
   ParkingVehicleTypes,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {Button} from '@atb/components/button';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {Feature, Point} from 'geojson';

@@ -8,7 +8,7 @@ import {
   toFeatureCollection,
   toFeaturePoints,
   useUserMapFilters,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {Point} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useIsFocused} from '@react-navigation/native';

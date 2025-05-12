@@ -9,7 +9,7 @@ import {
   useUserMapFilters,
   VehicleFeatures,
   VehiclesState,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {
   AreaState,
   getOperators,

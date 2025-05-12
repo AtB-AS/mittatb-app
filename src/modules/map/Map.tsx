@@ -30,13 +30,13 @@ import {
   GeofencingZones,
   useGeofencingZoneTextContent,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
-import {Snackbar, useSnackbar} from '../snackbar';
+import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {MapFilter} from '@atb/mobility/components/filter/MapFilter';

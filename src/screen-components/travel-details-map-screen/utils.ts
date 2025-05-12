@@ -6,7 +6,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {MapLeg} from '@atb/components/map';
+import {MapLeg} from '@atb/modules/map';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';

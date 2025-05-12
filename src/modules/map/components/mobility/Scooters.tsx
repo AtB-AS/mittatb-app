@@ -10,7 +10,7 @@ import {
   SCOOTERS_CLUSTER_RADIUS,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 
 type Props = {
   scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
