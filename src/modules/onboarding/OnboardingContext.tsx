@@ -25,7 +25,7 @@ import {
   AuthStateChangeListenerCallback,
   useAuthContext,
 } from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';

@@ -1,4 +1,4 @@
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import React from 'react';
 import {RootStackParamList, RootStackScreenProps} from './navigation-types';
 import {useCompleteUserCreationOnboardingAndEnterApp} from '@atb/utils/use-complete-user-creation-onboarding-and-enter-app';

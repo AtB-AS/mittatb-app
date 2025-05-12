@@ -7,7 +7,7 @@ import {
   HeaderSectionItem,
   Section,
 } from '@atb/components/sections';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
   const {t} = useTranslation();

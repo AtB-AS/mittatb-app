@@ -7,7 +7,7 @@ import {
   getEarliestBookingDate,
   getLatestBookingDate,
 } from '../utils';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingArrangement} from '@atb/api/types/generated/journey_planner_v3_types';
 import {RefObject} from 'react';

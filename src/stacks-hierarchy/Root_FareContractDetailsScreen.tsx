@@ -11,7 +11,7 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthContext} from '@atb/modules/auth';

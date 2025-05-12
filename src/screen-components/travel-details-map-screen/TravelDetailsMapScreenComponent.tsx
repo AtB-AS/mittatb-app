@@ -18,7 +18,7 @@ import {
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useThemeContext, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';

@@ -1,6 +1,6 @@
 import {MapFilter, MapFilterType} from '../types';
 import {storage} from '@atb/modules/storage';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useCallback} from 'react';
 
 const STORAGE_KEY = '@ATB_user_map_filters';

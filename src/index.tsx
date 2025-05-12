@@ -15,7 +15,7 @@ import {ThemeContextProvider} from '@atb/theme/ThemeContext';
 import {FavoritesContextProvider} from '@atb/modules/favorites';
 import {SearchHistoryContextProvider} from '@atb/modules/search-history';
 import {TicketingContextProvider} from '@atb/modules/ticketing';
-import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
+import {RemoteConfigContextProvider} from '@atb/modules/remote-config';
 import {AuthContextProvider} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';

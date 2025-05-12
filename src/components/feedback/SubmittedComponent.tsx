@@ -5,7 +5,7 @@ import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import Intercom from '@intercom/intercom-react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';

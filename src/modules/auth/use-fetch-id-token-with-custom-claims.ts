@@ -8,7 +8,7 @@ import {
   notifyBugsnag,
 } from '@atb/utils/bugsnag-utils';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext.tsx';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 /**
  * Variable signalling whether the next fetch id token request should be force

@@ -51,7 +51,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '../use-map-data';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {BookingOptions} from './BookingOptions';
 import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
 import {

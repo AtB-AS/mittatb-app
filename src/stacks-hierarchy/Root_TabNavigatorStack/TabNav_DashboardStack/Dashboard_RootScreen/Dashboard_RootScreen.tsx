@@ -1,5 +1,5 @@
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';

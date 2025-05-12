@@ -2,7 +2,7 @@ import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {useAuthContext} from '@atb/modules/auth';
 import {Reservation, PaymentStatus} from './types';
 import {FareContractType} from '@atb-as/utils';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';

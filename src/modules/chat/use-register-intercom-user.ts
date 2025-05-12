@@ -3,7 +3,7 @@ import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {storage} from '@atb/modules/storage';
 import {checkGeolocationPermission} from '@atb/modules/geolocation';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useEffect} from 'react';
 import {useIntercomMetadata} from './use-intercom-metadata';
 
