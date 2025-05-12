@@ -50,7 +50,6 @@ export const getDefaultZones = (
   typeConfig: FareProductTypeConfig,
   product: PreassignedFareProduct,
 ): PurchaseSelectionType['zones'] | undefined => {
-  console.log('INPUT', JSON.stringify(input));
   if (getPlaceSelectionMode(typeConfig) !== 'zones') return undefined;
 
   const selectableZones = input.fareZones.filter((zone) =>
