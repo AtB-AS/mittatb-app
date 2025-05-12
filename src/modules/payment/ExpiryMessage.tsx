@@ -12,8 +12,24 @@ export const ExpiryMessage = ({
 }: {
   recurringPayment?: RecurringPayment;
 }) => {
-  const {t, language} = useTranslation();
   const styles = useStyles();
+
+  const message: {type: Statuses; message: string} | null =
+    useMessage(recurringPayment);
+
+  if (!message) return null;
+
+  return (
+    <View style={styles.warningMessage}>
+      <MessageInfoText type={message.type} message={message.message} />
+    </View>
+  );
+};
+
+const useMessage = (
+  recurringPayment?: RecurringPayment,
+): {type: Statuses; message: string} | null => {
+  const {t, language} = useTranslation();
   const now = Date.now();
   const inThirtyDays = addDays(now, 30).getTime();
 
@@ -22,25 +38,24 @@ export const ExpiryMessage = ({
   const expiresAt = parseISO(recurringPayment.expiresAt).getTime();
   const cardExpiresAt = parseISO(recurringPayment.cardExpiresAt).getTime();
 
-  let message: {type: Statuses; message: string} | null = null;
-
   // Check expired states first (highest priority)
   if (cardExpiresAt < now) {
-    message = {
+    return {
       type: 'error',
       message: t(PaymentMethodsTexts.expiryMessages.cardExpired),
     };
   } else if (expiresAt < now) {
-    message = {
+    return {
       type: 'error',
       message: t(PaymentMethodsTexts.expiryMessages.cardRegistrationExpired),
     };
   }
+
   // Then check "expiring soon" states - show the one that expires first
   else if (cardExpiresAt < inThirtyDays || expiresAt < inThirtyDays) {
     // Compare which one expires first
     if (cardExpiresAt < expiresAt) {
-      message = {
+      return {
         type: 'warning',
         message: t(
           PaymentMethodsTexts.expiryMessages.cardExpiring(
@@ -49,7 +64,7 @@ export const ExpiryMessage = ({
         ),
       };
     } else {
-      message = {
+      return {
         type: 'warning',
         message: t(
           PaymentMethodsTexts.expiryMessages.cardRegistrationExpiring(
@@ -60,13 +75,7 @@ export const ExpiryMessage = ({
     }
   }
 
-  if (!message) return null;
-
-  return (
-    <View style={styles.warningMessage}>
-      <MessageInfoText type={message.type} message={message.message} />
-    </View>
-  );
+  return null;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
