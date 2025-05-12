@@ -1,4 +1,4 @@
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import React from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';

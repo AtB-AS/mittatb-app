@@ -9,7 +9,7 @@ import {
 } from '@atb/components/message-info-box';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {enrollIntoBetaGroups} from '@atb/api/enrollment';
 import analytics from '@react-native-firebase/analytics';
 import {FullScreenView} from '@atb/components/screen-view';

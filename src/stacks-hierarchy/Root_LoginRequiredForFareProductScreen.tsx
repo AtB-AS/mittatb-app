@@ -6,7 +6,7 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {ThemedTicket} from '@atb/theme/ThemedAssets';
 import {SafeAreaView} from 'react-native-safe-area-context';

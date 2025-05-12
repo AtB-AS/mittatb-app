@@ -57,7 +57,7 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';

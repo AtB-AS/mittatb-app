@@ -1,5 +1,5 @@
 import {TariffZone} from '@atb/modules/configuration';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useMemo} from 'react';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 

@@ -9,7 +9,7 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useActiveShmoBookingQuery} from '@atb/mobility/queries/use-active-shmo-booking-query';
 import {ActiveScooterSheet} from '@atb/mobility/components/sheets/ActiveScooterSheet';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 

@@ -1,6 +1,6 @@
 import {RefObject, useCallback, useState} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {MapProps, MapSelectionActionType} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';

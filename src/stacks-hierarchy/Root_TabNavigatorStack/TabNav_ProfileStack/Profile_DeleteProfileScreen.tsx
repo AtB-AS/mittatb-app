@@ -14,7 +14,7 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
-import {tGlobal} from '@atb/LocaleProvider.tsx';
+import {tGlobal} from '@atb/modules/locale';
 
 export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();

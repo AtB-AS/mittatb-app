@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {storage} from '@atb/modules/storage';
 
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 import {useBeaconsContext} from './BeaconsContext';

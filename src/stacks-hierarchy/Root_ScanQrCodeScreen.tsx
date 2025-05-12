@@ -12,8 +12,8 @@ import {Alert} from 'react-native';
 
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
 import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
-import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
-import {tGlobal} from '@atb/LocaleProvider';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
+import {tGlobal} from '@atb/modules/locale';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;

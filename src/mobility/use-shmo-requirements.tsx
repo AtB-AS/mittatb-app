@@ -1,4 +1,4 @@
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
 import {ShmoRequirementEnum, ShmoRequirementType} from './types';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';

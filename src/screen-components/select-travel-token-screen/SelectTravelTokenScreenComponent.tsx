@@ -15,7 +15,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection} from '@atb/components/sections';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';

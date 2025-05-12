@@ -8,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Section, GenericSectionItem} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/screen-components/select-travel-token-screen';
 

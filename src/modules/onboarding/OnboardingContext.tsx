@@ -20,12 +20,12 @@ import {
 import {ShouldShowArgsType} from '@atb/modules/onboarding';
 import {useHasFareContractWithActivatedNotification} from '@atb/modules/notifications';
 import {useNotificationsContext} from '@atb/modules/notifications';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   AuthStateChangeListenerCallback,
   useAuthContext,
 } from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';

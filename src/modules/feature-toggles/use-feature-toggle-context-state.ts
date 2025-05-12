@@ -1,4 +1,4 @@
-import type {RemoteConfig} from '@atb/remote-config';
+import type {RemoteConfig} from '@atb/modules/remote-config';
 import type {StorageService} from '@atb/modules/storage';
 import type {FeatureTogglesContextState, OverridesMap} from './types';
 import {useEffect, useState} from 'react';

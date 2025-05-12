@@ -4,7 +4,7 @@ import {TextInputSectionItem} from '@atb/components/sections';
 import {TariffZone} from '@atb/modules/configuration';
 import {SearchLocation} from '@atb/modules/favorites';
 import {useGeocoder} from '@atb/modules/geocoder';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StyleSheet} from '@atb/theme';
 import {
   TariffZoneSearchTexts,

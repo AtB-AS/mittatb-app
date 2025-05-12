@@ -15,7 +15,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;

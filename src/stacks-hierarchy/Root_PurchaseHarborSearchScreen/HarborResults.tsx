@@ -12,7 +12,7 @@ import sortBy from 'lodash.sortby';
 import {GeoLocation} from '@atb/modules/favorites';
 import haversine from 'haversine-distance';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
