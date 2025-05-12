@@ -36,7 +36,7 @@ jest.mock('@atb/screen-components/loading-screen', () => ({
   useIsLoadingAppState: () => mockState.isLoadingAppState,
 }));
 
-jest.mock('@atb/RemoteConfigContext', () => ({
+jest.mock('@atb/modules/remote-config', () => ({
   useRemoteConfigContext: () => ({
     isLoaded: mockState.remoteConfigIsLoaded,
   }),

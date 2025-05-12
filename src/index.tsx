@@ -5,7 +5,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {OnboardingContextProvider} from '@atb/modules/onboarding';
 import {GlobalMessagesContextProvider} from '@atb/modules/global-messages';
 import {MapContextProvider} from '@atb/MapContext';
-import {GeolocationContextProvider} from '@atb/GeolocationContext';
+import {GeolocationContextProvider} from '@atb/modules/geolocation';
 import {RootStack} from '@atb/stacks-hierarchy';
 import {
   trackAppState,
@@ -15,16 +15,16 @@ import {ThemeContextProvider} from '@atb/theme/ThemeContext';
 import {FavoritesContextProvider} from '@atb/modules/favorites';
 import {SearchHistoryContextProvider} from '@atb/modules/search-history';
 import {TicketingContextProvider} from '@atb/modules/ticketing';
-import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
+import {RemoteConfigContextProvider} from '@atb/modules/remote-config';
 import {AuthContextProvider} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
-import {AccessibilityContextProvider} from '@atb/AccessibilityContext';
+import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@rnmapbox/maps';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
-import {LocaleContextProvider} from '@atb/LocaleProvider';
+import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
 import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';

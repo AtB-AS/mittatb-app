@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {initViolationsReporting} from '@atb/api/mobility';
 import {
   ParkingViolationType,

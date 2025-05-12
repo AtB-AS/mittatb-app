@@ -1,4 +1,4 @@
-import type {RemoteConfig} from '@atb/remote-config';
+import type {RemoteConfig} from '@atb/modules/remote-config';
 
 /**
  * Add new feature toggles here! They will automatically be usable through

@@ -16,7 +16,7 @@ import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySe
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
 import {
   useBeaconsContext,

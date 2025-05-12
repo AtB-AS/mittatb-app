@@ -13,7 +13,7 @@ import {
 } from '@atb/modules/configuration';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
   ExpandableSectionItem,
   GenericSectionItem,

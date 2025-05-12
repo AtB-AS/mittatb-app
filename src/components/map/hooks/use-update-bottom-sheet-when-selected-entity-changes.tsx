@@ -31,7 +31,7 @@ import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {MapFilterSheet} from '@atb/mobility/components/filter/MapFilterSheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/mobility/components/sheets/SelectShmoPaymentMethodsSheet';

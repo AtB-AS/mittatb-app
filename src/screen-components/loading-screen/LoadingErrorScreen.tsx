@@ -11,7 +11,7 @@ import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {spellOut} from '@atb/utils/accessibility';

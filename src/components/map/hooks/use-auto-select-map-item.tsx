@@ -17,7 +17,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/mobility/components/sheets/FinishedScooterSheet';

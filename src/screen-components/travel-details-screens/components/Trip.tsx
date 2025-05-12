@@ -39,7 +39,7 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';

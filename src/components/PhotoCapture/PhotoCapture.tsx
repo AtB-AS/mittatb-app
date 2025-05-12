@@ -6,7 +6,7 @@ import {RefObject, useRef} from 'react';
 import {ScreenContainer} from './ScreenContainer';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/sdk';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;

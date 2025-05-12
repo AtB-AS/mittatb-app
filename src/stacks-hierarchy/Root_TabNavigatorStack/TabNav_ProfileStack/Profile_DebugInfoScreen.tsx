@@ -18,7 +18,7 @@ import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
   useRemoteConfigContext,
-} from '@atb/RemoteConfigContext';
+} from '@atb/modules/remote-config';
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';

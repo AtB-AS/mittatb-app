@@ -62,7 +62,7 @@ import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_Choos
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/modules/onboarding';
 import {useRegisterIntercomUser} from '@atb/modules/chat';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';

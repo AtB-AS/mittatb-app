@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useAuthContext} from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
   MobileTokenStatus,
   RemoteToken,

@@ -1,6 +1,6 @@
 import {Alert, AlertButton, Linking} from 'react-native';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {tGlobal} from '@atb/LocaleProvider.tsx';
+import {tGlobal} from '@atb/modules/locale';
 
 export const showAppMissingAlert = (
   operatorName: string,
