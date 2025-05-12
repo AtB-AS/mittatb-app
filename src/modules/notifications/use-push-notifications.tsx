@@ -1,4 +1,4 @@
-import {useLocaleContext} from '@atb/LocaleProvider';
+import {useLocaleContext} from '@atb/modules/locale';
 import Bugsnag from '@bugsnag/react-native';
 import messaging, {
   FirebaseMessagingTypes,

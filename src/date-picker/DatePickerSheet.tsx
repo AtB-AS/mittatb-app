@@ -21,7 +21,7 @@ import type {
 } from '@atb/date-picker/types';
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
-import {useLocaleContext} from '@atb/LocaleProvider';
+import {useLocaleContext} from '@atb/modules/locale';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props<T extends string> = {

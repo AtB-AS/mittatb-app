@@ -25,7 +25,7 @@ import {useAppStateStatus} from '../../utils/use-app-state-status';
 import {GeoLocation} from '@atb/modules/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
-import {tGlobal} from '@atb/LocaleProvider.tsx';
+import {tGlobal} from '@atb/modules/locale';
 
 const config: GeolocationOptions = {
   enableHighAccuracy: true,
