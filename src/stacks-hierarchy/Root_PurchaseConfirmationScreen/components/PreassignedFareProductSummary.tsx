@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {
   FareProductTypeConfig,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   getReferenceDataName,
 } from '@atb/modules/configuration';
 import {
@@ -31,8 +31,8 @@ type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   recipient?: TicketRecipientType;
   isSearchingOffer: boolean;
-  fromPlace: TariffZone | StopPlaceFragment | undefined;
-  toPlace: TariffZone | StopPlaceFragment | undefined;
+  fromPlace: FareZone | StopPlaceFragment | undefined;
+  toPlace: FareZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
   travelDate?: string;
 };
@@ -176,7 +176,7 @@ export const PreassignedFareContractSummary = ({
 };
 
 function getPlaceName(
-  place: TariffZone | StopPlaceFragment,
+  place: FareZone | StopPlaceFragment,
   language: Language,
 ) {
   return 'geometry' in place

@@ -1,8 +1,8 @@
-import {TariffZoneResultType, type TariffZoneWithMetadata} from './types';
-import {TariffZoneResults} from './TariffZoneResults';
+import {FareZoneResultType, type FareZoneWithMetadata} from './types';
+import {FareZoneResults} from './FareZoneResults';
 import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
+import {Language, FareZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 
 import {
@@ -18,7 +18,7 @@ import React, {useRef} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
+import {getReferenceDataName, FareZone} from '@atb/modules/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -27,7 +27,7 @@ import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
-  useSelectableTariffZones,
+  useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
@@ -39,14 +39,14 @@ type Props = {
   onSave?: () => void;
 };
 
-const TariffZonesSelectorMap = ({
+const FareZonesSelectorMap = ({
   selection,
   selectNext,
   isApplicableOnSingleZoneOnly,
   onSelect,
   onSave,
 }: Props) => {
-  const tariffZones = useSelectableTariffZones(
+  const fareZones = useSelectableFareZones(
     selection.preassignedFareProduct,
   );
   const styles = useMapStyles();
@@ -69,19 +69,19 @@ const TariffZonesSelectorMap = ({
     updateSelectedZones(feature.id as string);
   };
 
-  const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
+  const featureCollection = mapZonesToFeatureCollection(fareZones, language);
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const updateSelectedZones = (
-    tariffZoneId: string,
-    resultType: TariffZoneResultType = 'zone',
+    fareZoneId: string,
+    resultType: FareZoneResultType = 'zone',
   ) => {
-    const clickedTariffZone = tariffZones.find(
-      (tariffZone) => tariffZoneId === tariffZone.id,
+    const clickedFareZone = fareZones.find(
+      (fareZone) => fareZoneId === fareZone.id,
     )!;
-    const zone: TariffZoneWithMetadata = {
-      ...clickedTariffZone,
+    const zone: FareZoneWithMetadata = {
+      ...clickedFareZone,
       resultType: resultType,
     };
     const builder = selectionBuilder.fromSelection(selection);
@@ -99,8 +99,8 @@ const TariffZonesSelectorMap = ({
     <>
       {a11yContext.isScreenReaderEnabled ? (
         <>
-          <TariffZoneResults
-            tariffZones={tariffZones}
+          <FareZoneResults
+            fareZones={fareZones}
             onSelect={(t) => updateSelectedZones(t.id)}
           />
 
@@ -117,8 +117,8 @@ const TariffZonesSelectorMap = ({
                 expanded={true}
                 onPress={onSave}
                 interactiveColor={interactiveColor}
-                text={t(TariffZonesTexts.saveButton.text)}
-                accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+                text={t(FareZonesTexts.saveButton.text)}
+                accessibilityHint={t(FareZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
               />
             </View>
@@ -226,8 +226,8 @@ const TariffZonesSelectorMap = ({
                   expanded={true}
                   onPress={onSave}
                   interactiveColor={interactiveColor}
-                  text={t(TariffZonesTexts.saveButton.text)}
-                  accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+                  text={t(FareZonesTexts.saveButton.text)}
+                  accessibilityHint={t(FareZonesTexts.saveButton.a11yHint)}
                   testID="saveZonesButton"
                 />
               </View>
@@ -239,7 +239,7 @@ const TariffZonesSelectorMap = ({
   );
 };
 const mapZonesToFeatureCollection = (
-  zones: TariffZone[],
+  zones: FareZone[],
   language: Language,
 ): FeatureCollection<Polygon> => ({
   type: 'FeatureCollection',
@@ -256,7 +256,7 @@ const mapZonesToFeatureCollection = (
   })),
 });
 
-export {TariffZonesSelectorMap};
+export {FareZonesSelectorMap};
 
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   saveButton: {

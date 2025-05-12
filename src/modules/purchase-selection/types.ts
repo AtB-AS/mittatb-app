@@ -2,10 +2,10 @@ import {
   FareProductTypeConfig,
   PreassignedFareProduct,
   UserProfile,
-  TariffZone,
+  FareZone,
 } from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -22,8 +22,8 @@ export type PurchaseSelectionType = {
     | undefined;
   zones:
     | {
-        from: TariffZoneWithMetadata;
-        to: TariffZoneWithMetadata;
+        from: FareZoneWithMetadata;
+        to: FareZoneWithMetadata;
       }
     | undefined;
   travelDate: string | undefined;
@@ -36,7 +36,7 @@ export type PurchaseSelectionType = {
 export type PurchaseSelectionBuilderInput = {
   userProfiles: UserProfile[];
   preassignedFareProducts: PreassignedFareProduct[];
-  tariffZones: TariffZone[];
+  fareZones: FareZone[];
   fareProductTypeConfigs: FareProductTypeConfig[];
   customerProfile: CustomerProfile | undefined;
   appVersion: string;
@@ -72,13 +72,13 @@ export type PurchaseSelectionBuilder = {
    * Apply the given from zone to the purchase selection. If the given zone is
    * not applicable the purchase selection will stay unmodified.
    */
-  fromZone: (f: TariffZoneWithMetadata) => PurchaseSelectionBuilder;
+  fromZone: (f: FareZoneWithMetadata) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given to zone to the purchase selection. If the given zone is
    * not applicable the purchase selection will stay unmodified.
    */
-  toZone: (t: TariffZoneWithMetadata) => PurchaseSelectionBuilder;
+  toZone: (t: FareZoneWithMetadata) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given from stop place to the purchase selection. If the given

@@ -129,6 +129,7 @@ const createSelectionForType = (
   input: PurchaseSelectionBuilderInput,
   configType: string,
 ): PurchaseSelectionType => {
+  console.log('HALAH');
   const fareProductTypeConfig = input.fareProductTypeConfigs.find(
     (c) => c.type === configType,
   );
@@ -138,6 +139,9 @@ const createSelectionForType = (
     input,
     fareProductTypeConfig.type,
   );
+  console.log('input', JSON.stringify(input));
+  console.log('fptc', JSON.stringify(fareProductTypeConfig));
+  console.log('pFP', JSON.stringify(preassignedFareProduct));
   const zones = getDefaultZones(
     input,
     fareProductTypeConfig,

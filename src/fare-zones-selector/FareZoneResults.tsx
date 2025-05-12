@@ -3,69 +3,72 @@ import {Pin} from '@atb/assets/svg/mono-icons/map/';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
+import {getReferenceDataName, FareZone} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   getTextForLanguage,
-  TariffZoneSearchTexts,
+  FareZoneSearchTexts,
   useTranslation,
 } from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {useTariffZoneFromLocation} from '@atb/tariff-zones-selector/use-tariff-zone-from-location';
+import {useFareZoneFromLocation} from '@atb/fare-zones-selector/use-fare-zone-from-location';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
-  tariffZones: TariffZone[];
-  onSelect: (tariffZone: TariffZone) => void;
+  fareZones: FareZone[];
+  onSelect: (fareZone: FareZone) => void;
 };
 
-export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
+export const FareZoneResults: React.FC<Props> = ({
+  fareZones,
+  onSelect,
+}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
+  const fareZoneFromLocation = useFareZoneFromLocation(fareZones);
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
         <ThemeText typography="body__secondary" color="secondary">
-          {t(TariffZoneSearchTexts.zones.heading)}
+          {t(FareZoneSearchTexts.zones.heading)}
         </ThemeText>
       </View>
       <ScrollView>
-        {tariffZones.map((tariffZone) => (
-          <View style={styles.rowContainer} key={tariffZone.id}>
-            <View style={styles.tariffZoneButtonContainer}>
+        {fareZones.map((fareZone) => (
+          <View style={styles.rowContainer} key={fareZone.id}>
+            <View style={styles.fareZoneButtonContainer}>
               <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
-                    TariffZoneSearchTexts.zones.item.a11yLabel(
-                      getReferenceDataName(tariffZone, language),
+                    FareZoneSearchTexts.zones.item.a11yLabel(
+                      getReferenceDataName(fareZone, language),
                     ),
                   ) + screenReaderPause
                 }
-                accessibilityHint={t(TariffZoneSearchTexts.zones.item.a11yHint)}
+                accessibilityHint={t(FareZoneSearchTexts.zones.item.a11yHint)}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
-                onPress={() => onSelect(tariffZone)}
-                style={styles.tariffZoneButton}
-                testID={'tariffZone' + tariffZone.name.value + 'Button'}
+                onPress={() => onSelect(fareZone)}
+                style={styles.fareZoneButton}
+                testID={'fareZone' + fareZone.name.value + 'Button'}
               >
                 <View style={{flexDirection: 'column'}}>
                   <ThemeIcon svg={Pin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
                   <ThemeText typography="body__primary--bold">
-                    {getReferenceDataName(tariffZone, language)}
+                    {getReferenceDataName(fareZone, language)}
                   </ThemeText>
-                  {tariffZone.description && (
+                  {fareZone.description && (
                     <ThemeText typography="body__secondary">
-                      {getTextForLanguage(tariffZone.description, language)}
+                      {getTextForLanguage(fareZone.description, language)}
                     </ThemeText>
                   )}
                 </View>
-                {tariffZoneFromLocation?.id === tariffZone.id ? (
+                {fareZoneFromLocation?.id === fareZone.id ? (
                   <View style={styles.currentLocationIcon}>
                     <ThemeIcon svg={Location} />
                   </View>
@@ -89,11 +92,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
-  tariffZoneButtonContainer: {
+  fareZoneButtonContainer: {
     padding: 12,
     flex: 1,
   },
-  tariffZoneButton: {
+  fareZoneButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },

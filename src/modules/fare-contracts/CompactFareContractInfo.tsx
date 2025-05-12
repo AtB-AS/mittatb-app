@@ -8,7 +8,7 @@ import {
   isValidFareContract,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
-  useTariffZoneSummary,
+  useFareZoneSummary,
 } from './utils';
 import {fareContractValidityUnits} from './fare-contract-validity-units';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
@@ -24,7 +24,7 @@ type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
 
 type FareContractInfoTextsProps = {
   productName?: string;
-  tariffZoneSummary?: string;
+  fareZoneSummary?: string;
   timeUntilExpire?: string;
   accessibilityLabel?: string;
 };
@@ -73,7 +73,7 @@ const CompactFareContractInfoTexts = (
   const {
     userProfilesWithCount,
     productName,
-    tariffZoneSummary,
+    fareZoneSummary,
     timeUntilExpire,
   } = props;
   const {language} = useTranslation();
@@ -101,9 +101,9 @@ const CompactFareContractInfoTexts = (
           {productName}
         </ThemeText>
       )}
-      {tariffZoneSummary && (
+      {fareZoneSummary && (
         <ThemeText typography="body__secondary" color="secondary">
-          {tariffZoneSummary}
+          {fareZoneSummary}
         </ThemeText>
       )}
     </View>
@@ -135,8 +135,8 @@ export const useFareContractInfoTexts = (
   const {
     userProfilesWithCount,
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
     validTo,
     now,
   } = props;
@@ -148,10 +148,10 @@ export const useFareContractInfoTexts = (
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
 
-  const tariffZoneSummary = useTariffZoneSummary(
+  const fareZoneSummary = useFareZoneSummary(
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
   );
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
@@ -172,7 +172,7 @@ export const useFareContractInfoTexts = (
     (u) => userProfileCountAndName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
-  accessibilityLabel += tariffZoneSummary + screenReaderPause;
+  accessibilityLabel += fareZoneSummary + screenReaderPause;
 
   if (!isInspectable) {
     accessibilityLabel += t(
@@ -182,7 +182,7 @@ export const useFareContractInfoTexts = (
 
   return {
     productName,
-    tariffZoneSummary,
+    fareZoneSummary,
     timeUntilExpire: timeUntilExpireOrWarning,
     accessibilityLabel,
   };

@@ -10,19 +10,19 @@ import {BorderedFromToBox} from './BorderedFromToBox';
 import dictionary from '@atb/translations/dictionary';
 
 type ZonesFromToProps = {
-  tariffZoneRefs: string[];
+  fareZoneRefs: string[];
   mode: 'small' | 'large';
   backgroundColor: ContrastColor;
 };
 
 export const ZonesFromTo = ({
-  tariffZoneRefs,
+  fareZoneRefs,
   mode,
   backgroundColor,
 }: ZonesFromToProps) => {
   const {t} = useTranslation();
   const controllerData = useZonesFromToController({
-    tariffZoneRefs,
+    fareZoneRefs,
   });
   if (!controllerData) return null;
   const {fromZoneName, toZoneName} = controllerData;
@@ -43,24 +43,24 @@ export const ZonesFromTo = ({
   );
 };
 
-type ZonesFromToControllerProps = {tariffZoneRefs: string[]};
+type ZonesFromToControllerProps = {fareZoneRefs: string[]};
 
 function useZonesFromToController({
-  tariffZoneRefs,
+  fareZoneRefs,
 }: ZonesFromToControllerProps) {
-  const {tariffZones} = useFirestoreConfigurationContext();
+  const {fareZones} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
 
-  const fromZoneId = tariffZoneRefs[0];
-  const fromZone = findReferenceDataById(tariffZones, fromZoneId);
+  const fromZoneId = fareZoneRefs[0];
+  const fromZone = findReferenceDataById(fareZones, fromZoneId);
   if (!fromZone) return undefined;
 
   const fromZoneName = getReferenceDataName(fromZone, language);
 
-  const toZoneId = tariffZoneRefs[tariffZoneRefs.length - 1];
+  const toZoneId = fareZoneRefs[fareZoneRefs.length - 1];
   const toZone =
     fromZoneId !== toZoneId
-      ? findReferenceDataById(tariffZones, toZoneId)
+      ? findReferenceDataById(fareZones, toZoneId)
       : undefined;
   const toZoneName = toZone
     ? getReferenceDataName(toZone, language)

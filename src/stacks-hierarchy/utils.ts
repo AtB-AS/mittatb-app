@@ -1,11 +1,11 @@
 import {format, parseISO} from 'date-fns';
 import {ErrorType} from '@atb/api/utils';
 import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
-import {TariffZone} from '@atb/modules/configuration';
+import {FareZone} from '@atb/modules/configuration';
 import {
-  TariffZoneWithMetadata,
-  useTariffZoneFromLocation,
-} from '@atb/tariff-zones-selector';
+  FareZoneWithMetadata,
+  useFareZoneFromLocation,
+} from '@atb/fare-zones-selector';
 import {useMemo} from 'react';
 
 //Will be used for saved payment method notifications/card expiration messages after backend implementation
@@ -32,51 +32,51 @@ export function translateErrorType(
   }
 }
 /**
- * Get the default tariff zone, either based on current location, default tariff
- * zone set on tariff zone in reference data or else the first tariff zone in the
- * provided tariff zones list.
+ * Get the default fare zone, either based on current location, default fare
+ * zone set on fare zone in reference data or else the first fare zone in the
+ * provided fare zones list.
  */
-export const useDefaultTariffZone = (
-  tariffZones: TariffZone[],
-): TariffZoneWithMetadata => {
-  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(() => {
-    if (tariffZoneFromLocation) {
-      return {...tariffZoneFromLocation, resultType: 'geolocation'};
+export const useDefaultFareZone = (
+  fareZones: FareZone[],
+): FareZoneWithMetadata => {
+  const fareZoneFromLocation = useFareZoneFromLocation(fareZones);
+  return useMemo<FareZoneWithMetadata>(() => {
+    if (fareZoneFromLocation) {
+      return {...fareZoneFromLocation, resultType: 'geolocation'};
     }
 
-    const defaultTariffZone = tariffZones.find(
-      (tariffZone) => tariffZone.isDefault,
+    const defaultFareZone = fareZones.find(
+      (fareZone) => fareZone.isDefault,
     );
 
-    if (defaultTariffZone) {
-      return {...defaultTariffZone, resultType: 'zone'};
+    if (defaultFareZone) {
+      return {...defaultFareZone, resultType: 'zone'};
     }
 
-    return {...tariffZones[0], resultType: 'zone'};
-  }, [tariffZones, tariffZoneFromLocation]);
+    return {...fareZones[0], resultType: 'zone'};
+  }, [fareZones, fareZoneFromLocation]);
 };
 
 /**
- * Checks for whitelisting of tariff zones, if there is no whitelisting,
- * return the original tariff zones. If there is a whitelist, return the
+ * Checks for whitelisting of fare zones, if there is no whitelisting,
+ * return the original fare zones. If there is a whitelist, return the
  * filtered zones.
  */
-export const useFilterTariffZone = (
-  tariffZones: TariffZone[],
-  allowedTariffZoneRefs: string[],
-): TariffZone[] => {
-  return useMemo<TariffZone[]>(() => {
-    if (allowedTariffZoneRefs.length === 0) {
-      return tariffZones;
+export const useFilterFareZone = (
+  fareZones: FareZone[],
+  allowedFareZoneRefs: string[],
+): FareZone[] => {
+  return useMemo<FareZone[]>(() => {
+    if (allowedFareZoneRefs.length === 0) {
+      return fareZones;
     }
 
-    return tariffZones.filter((tariffZone) =>
-      allowedTariffZoneRefs.some(
-        (allowedZone) => tariffZone.id === allowedZone,
+    return fareZones.filter((fareZone) =>
+      allowedFareZoneRefs.some(
+        (allowedZone) => fareZone.id === allowedZone,
       ),
     );
-  }, [tariffZones, allowedTariffZoneRefs]);
+  }, [fareZones, allowedFareZoneRefs]);
 };
 
 /**

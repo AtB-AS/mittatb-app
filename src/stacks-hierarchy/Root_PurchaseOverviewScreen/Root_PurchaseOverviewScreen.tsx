@@ -247,7 +247,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
                   ? 'Root_PurchaseHarborSearchScreen'
-                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                  : 'Root_PurchaseFareZonesSearchByMapScreen',
                 {selection},
               );
             }}
@@ -287,8 +287,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
-                  fromTariffZone: selection.zones?.from.id || 'none',
-                  toTariffZone: selection.zones?.to.id || 'none',
+                  fromFareZone: selection.zones?.from.id || 'none',
+                  toFareZone: selection.zones?.to.id || 'none',
                   userTypes: userTypeStrings,
                 }}
               />
@@ -310,7 +310,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: selection.fareProductTypeConfig.name,
-                tariffZone: {
+                fareZone: {
                   from: selection.zones?.from.id,
                   to: selection.zones?.to.id,
                 },

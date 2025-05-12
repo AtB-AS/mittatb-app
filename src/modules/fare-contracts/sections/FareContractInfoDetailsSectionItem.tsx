@@ -1,7 +1,7 @@
 import {
   findReferenceDataById,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
@@ -16,7 +16,7 @@ import {
   isValidFareContract,
   mapToUserProfilesWithCount,
   userProfileCountAndName,
-  useTariffZoneSummary,
+  useFareZoneSummary,
   ValidityStatus,
 } from '../utils';
 import {FareContractDetailItem} from '../components/FareContractDetailItem';
@@ -37,8 +37,8 @@ export type FareContractInfoProps = {
 export type FareContractInfoDetailsProps = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
+  fromFareZone?: FareZone;
+  toFareZone?: FareZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
   testID?: string;
@@ -50,8 +50,8 @@ export type FareContractInfoDetailsProps = {
 export const FareContractInfoDetailsSectionItem = ({
   fareContract,
   preassignedFareProduct,
-  fromTariffZone,
-  toTariffZone,
+  fromFareZone,
+  toFareZone,
   userProfilesWithCount,
   status,
   ...props
@@ -61,10 +61,10 @@ export const FareContractInfoDetailsSectionItem = ({
 
   const {topContainer} = useSectionItem(props);
 
-  const tariffZoneSummary = useTariffZoneSummary(
+  const fareZoneSummary = useFareZoneSummary(
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
   );
 
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
@@ -103,10 +103,10 @@ export const FareContractInfoDetailsSectionItem = ({
               )}
             />
           )}
-          {tariffZoneSummary && (
+          {fareZoneSummary && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
-              content={[tariffZoneSummary]}
+              content={[fareZoneSummary]}
             />
           )}
         </View>
@@ -124,25 +124,25 @@ export const FareContractInfoDetailsSectionItem = ({
 export const getFareContractInfoDetails = (
   fareContract: FareContractType,
   now: number,
-  tariffZones: TariffZone[],
+  fareZones: FareZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
   const {
     endDateTime,
     fareProductRef: productRef,
-    tariffZoneRefs,
+    fareZoneRefs,
   } = fareContract.travelRights[0];
   let validTo = endDateTime.getTime();
   const validityStatus = getValidityStatus(now, fareContract);
 
-  const firstZone = tariffZoneRefs?.[0];
-  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
-  const fromTariffZone = firstZone
-    ? findReferenceDataById(tariffZones, firstZone)
+  const firstZone = fareZoneRefs?.[0];
+  const lastZone = fareZoneRefs?.slice(-1)?.[0];
+  const fromFareZone = firstZone
+    ? findReferenceDataById(fareZones, firstZone)
     : undefined;
-  const toTariffZone = lastZone
-    ? findReferenceDataById(tariffZones, lastZone)
+  const toFareZone = lastZone
+    ? findReferenceDataById(fareZones, lastZone)
     : undefined;
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -162,8 +162,8 @@ export const getFareContractInfoDetails = (
 
   return {
     preassignedFareProduct: preassignedFareProduct,
-    fromTariffZone: fromTariffZone,
-    toTariffZone: toTariffZone,
+    fromFareZone: fromFareZone,
+    toFareZone: toFareZone,
     userProfilesWithCount: userProfilesWithCount,
     status: validityStatus,
     now: now,

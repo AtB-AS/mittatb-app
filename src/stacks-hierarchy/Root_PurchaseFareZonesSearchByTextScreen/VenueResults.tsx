@@ -2,26 +2,26 @@ import {screenReaderPause} from '@atb/components/text';
 import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {SearchLocation} from '@atb/modules/favorites';
-import {getReferenceDataName, TariffZone} from '@atb/modules/configuration';
+import {getReferenceDataName, FareZone} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
+import {FareZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
-export type LocationAndTariffZone = {
+export type LocationAndFareZone = {
   location: SearchLocation;
-  tariffZone: TariffZone;
+  fareZone: FareZone;
 };
 
 type Props = {
-  locationsAndTariffZones: LocationAndTariffZone[];
+  locationsAndFareZones: LocationAndFareZone[];
   onSelect: (l: SearchLocation) => void;
 };
 
 export const VenueResults: React.FC<Props> = ({
-  locationsAndTariffZones,
+  locationsAndFareZones,
   onSelect,
 }) => {
   const styles = useThemeStyles();
@@ -30,30 +30,30 @@ export const VenueResults: React.FC<Props> = ({
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
         <ThemeText typography="body__secondary" color="secondary">
-          {t(TariffZoneSearchTexts.results.heading)}
+          {t(FareZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>
       <View>
-        {locationsAndTariffZones.map(({location, tariffZone}, index) => (
+        {locationsAndFareZones.map(({location, fareZone}, index) => (
           <View style={styles.rowContainer} key={location.id}>
-            <View style={styles.tariffZoneButtonContainer}>
+            <View style={styles.fareZoneButtonContainer}>
               <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
-                    TariffZoneSearchTexts.results.item.a11yLabel(
+                    FareZoneSearchTexts.results.item.a11yLabel(
                       location.name,
-                      getReferenceDataName(tariffZone, language),
+                      getReferenceDataName(fareZone, language),
                     ),
                   ) + screenReaderPause
                 }
                 accessibilityHint={t(
-                  TariffZoneSearchTexts.results.item.a11yHint,
+                  FareZoneSearchTexts.results.item.a11yHint,
                 )}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(location)}
-                style={styles.tariffZoneButton}
+                style={styles.fareZoneButton}
                 testID={'venueResult' + index}
               >
                 <View style={{flexDirection: 'column'}}>
@@ -69,8 +69,8 @@ export const VenueResults: React.FC<Props> = ({
                   </ThemeText>
                   <ThemeText typography="body__secondary">
                     {t(
-                      TariffZoneSearchTexts.results.item.zoneLabel(
-                        getReferenceDataName(tariffZone, language),
+                      FareZoneSearchTexts.results.item.zoneLabel(
+                        getReferenceDataName(fareZone, language),
                       ),
                     )}
                   </ThemeText>
@@ -94,11 +94,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
-  tariffZoneButtonContainer: {
+  fareZoneButtonContainer: {
     padding: 12,
     flex: 1,
   },
-  tariffZoneButton: {
+  fareZoneButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },

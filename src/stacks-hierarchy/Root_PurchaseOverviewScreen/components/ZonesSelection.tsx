@@ -14,7 +14,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -47,22 +47,22 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
 
     if (!selection.zones) return null;
 
-    const fromTariffZone = selection.zones.from;
-    const toTariffZone = selection.zones.to;
+    const fromFareZone = selection.zones.from;
+    const toFareZone = selection.zones.to;
 
     // Can select zone if there is no whitelisted zones, or there is more than 1 whitelisted zone
     const canSelectZone =
-      selection.preassignedFareProduct.limitations.tariffZoneRefs?.length !== 1;
+      selection.preassignedFareProduct.limitations.fareZoneRefs?.length !== 1;
 
     const accessibility: AccessibilityProps = {
       accessible: true,
       accessibilityRole: canSelectZone ? 'button' : 'none',
       accessibilityLabel: canSelectZone
-        ? a11yLabel(fromTariffZone, toTariffZone, language, t) +
+        ? a11yLabel(fromFareZone, toFareZone, language, t) +
           screenReaderPause
         : t(
             PurchaseOverviewTexts.zones.zoneName(
-              getReferenceDataName(fromTariffZone, language),
+              getReferenceDataName(fromFareZone, language),
             ),
           ),
       accessibilityHint: canSelectZone
@@ -71,14 +71,14 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     };
 
     const displayAsOneZone =
-      fromTariffZone.id === toTariffZone.id &&
-      fromTariffZone.venueName === toTariffZone.venueName;
+      fromFareZone.id === toFareZone.id &&
+      fromFareZone.venueName === toFareZone.venueName;
 
     const content = (
       <View style={styles.sectionContentContainer}>
         <View>
           {displayAsOneZone ? (
-            <ZoneLabel tariffZone={fromTariffZone} />
+            <ZoneLabel fareZone={fromFareZone} />
           ) : (
             <>
               <View style={styles.fromZone}>
@@ -89,7 +89,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.from)}
                 </ThemeText>
-                <ZoneLabel tariffZone={fromTariffZone} />
+                <ZoneLabel fareZone={fromFareZone} />
               </View>
               <View style={styles.toZone}>
                 <ThemeText
@@ -99,7 +99,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.to)}
                 </ThemeText>
-                <ZoneLabel tariffZone={toTariffZone} />
+                <ZoneLabel fareZone={toFareZone} />
               </View>
             </>
           )}
@@ -140,15 +140,15 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   },
 );
 
-const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
+const ZoneLabel = ({fareZone}: {fareZone: FareZoneWithMetadata}) => {
   const {t, language} = useTranslation();
-  const zoneName = getReferenceDataName(tariffZone, language);
+  const zoneName = getReferenceDataName(fareZone, language);
   const zoneLabel = t(PurchaseOverviewTexts.zones.zoneName(zoneName));
 
-  return tariffZone.venueName ? (
+  return fareZone.venueName ? (
     <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
       <ThemeText typography="body__primary--bold" testID="selectedStation">
-        {tariffZone.venueName + ' '}
+        {fareZone.venueName + ' '}
       </ThemeText>
       ({zoneLabel})
     </ThemeText>
@@ -160,14 +160,14 @@ const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
 };
 
 const a11yLabel = (
-  from: TariffZoneWithMetadata,
-  to: TariffZoneWithMetadata,
+  from: FareZoneWithMetadata,
+  to: FareZoneWithMetadata,
   language: Language,
   t: TranslateFunction,
 ): string => {
   const displayAsOneZone = from.id === to.id && from.venueName === to.venueName;
 
-  const getZoneText = (tz: TariffZoneWithMetadata) => {
+  const getZoneText = (tz: FareZoneWithMetadata) => {
     const venueName = tz.venueName ? `${tz.venueName}, ` : '';
     const zoneName = getReferenceDataName(tz, language);
     return venueName + t(PurchaseOverviewTexts.zones.zoneName(zoneName));

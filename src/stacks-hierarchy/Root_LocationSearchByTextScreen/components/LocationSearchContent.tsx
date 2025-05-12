@@ -38,7 +38,7 @@ type LocationSearchContentProps = {
   defaultText?: string;
   onSelect(location: SelectableLocationType): void;
   onMapSelection?(): void;
-  onlyLocalTariffZoneAuthority?: boolean;
+  onlyLocalFareZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
   onlyStopPlacesCheckboxInitialState: boolean;
@@ -54,7 +54,7 @@ export function LocationSearchContent({
   defaultText,
   onSelect,
   onMapSelection,
-  onlyLocalTariffZoneAuthority = false,
+  onlyLocalFareZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
   onlyStopPlacesCheckboxInitialState,
@@ -75,7 +75,7 @@ export function LocationSearchContent({
     debouncedText,
     history,
     favorites,
-    onlyLocalTariffZoneAuthority,
+    onlyLocalFareZoneAuthority,
   );
 
   const {isOnlyStopPlacesCheckboxEnabled} = useFeatureTogglesContext();
@@ -90,7 +90,7 @@ export function LocationSearchContent({
   const {locations, error, isSearching} = useGeocoder(
     debouncedText,
     geolocation?.coordinates ?? null,
-    onlyLocalTariffZoneAuthority,
+    onlyLocalFareZoneAuthority,
     onlyStopPlaces,
   );
 
