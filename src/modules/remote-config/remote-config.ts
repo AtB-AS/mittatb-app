@@ -292,7 +292,7 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_in_app_review;
   const enable_in_app_review_for_announcements =
     values['enable_in_app_review_for_announcements']?.asBoolean() ??
-    defaultRemoteConfig.enable_in_app_review;
+    defaultRemoteConfig.enable_in_app_review_for_announcements;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -404,8 +404,7 @@ export function getConfig(): RemoteConfig {
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_in_app_review,
-    enable_in_app_review_for_announcements:
-      enable_in_app_review_for_announcements,
+    enable_in_app_review_for_announcements,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
