@@ -19,7 +19,7 @@ import {RefreshControl, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {PaymentBrand} from '@atb/modules/payment';
+import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 
 export const Profile_PaymentMethodsScreen = () => {
@@ -160,6 +160,8 @@ const Card = (props: {
           </PressableOpacity>
         </View>
       </View>
+
+      <ExpiryMessage recurringPayment={card} />
     </View>
   );
 };
@@ -211,8 +213,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     columnGap: theme.spacing.xSmall,
-  },
-  warningMessage: {
-    paddingTop: theme.spacing.medium,
   },
 }));
