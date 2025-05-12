@@ -6,7 +6,7 @@ import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedEntityChanges} from './use-update-bottom-sheet-when-selected-entity-changes';
 import {Coordinates} from '@atb/utils/coordinates';
-import {useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/modules/map';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the

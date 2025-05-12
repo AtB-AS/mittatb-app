@@ -10,7 +10,7 @@ import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
 import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {tGlobal} from '@atb/modules/locale';

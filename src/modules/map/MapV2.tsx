@@ -45,7 +45,7 @@ import {
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
-import {useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';

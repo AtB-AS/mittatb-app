@@ -14,7 +14,7 @@ import {
   SinglePaymentMethod,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
-import {useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/modules/map';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = {

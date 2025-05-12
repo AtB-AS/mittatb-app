@@ -1,6 +1,6 @@
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '../MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {

@@ -39,7 +39,7 @@ import {
   MapFilter,
 } from '@atb/modules/mobility';
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from './MapContext';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const Map = (props: MapProps) => {

@@ -31,7 +31,7 @@ import {
   PaymentSelectionSectionItem,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
-import {useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   selectPaymentMethod: () => void;

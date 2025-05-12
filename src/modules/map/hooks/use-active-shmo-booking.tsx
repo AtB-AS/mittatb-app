@@ -1,5 +1,5 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {useMapContext} from '@atb/MapContext';
+import {useMapContext} from '@atb/modules/map';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {flyToLocation, getMapPadding} from '../utils';

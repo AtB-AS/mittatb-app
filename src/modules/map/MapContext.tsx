@@ -1,11 +1,11 @@
 import React, {createContext, useContext, useMemo, useState} from 'react';
 import {AutoSelectableMapItem} from '@atb/modules/map';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {FormFactor} from './api/types/generated/mobility-types_v2';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
-import {ShmoBookingState} from './api/types/mobility';
-import {PaymentMethod} from './modules/payment';
-import {useSelectedShmoPaymentMethod} from './modules/payment/hooks/use-selected-shmo-payment-method';
+import {ShmoBookingState} from '@atb/api/types/mobility';
+import {PaymentMethod} from '@atb/modules/payment';
+import {useSelectedShmoPaymentMethod} from '@atb/modules/payment';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
