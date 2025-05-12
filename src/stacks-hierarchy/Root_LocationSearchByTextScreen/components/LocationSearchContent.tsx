@@ -9,7 +9,7 @@ import {filterPreviousLocations} from '../utils';
 import {useGeolocationContext} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/modules/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {Section, TextInputSectionItem} from '@atb/components/sections';

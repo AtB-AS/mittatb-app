@@ -19,7 +19,7 @@ import {RemoteConfigContextProvider} from '@atb/RemoteConfigContext';
 import {AuthContextProvider} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
-import {AccessibilityContextProvider} from '@atb/AccessibilityContext';
+import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@rnmapbox/maps';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';

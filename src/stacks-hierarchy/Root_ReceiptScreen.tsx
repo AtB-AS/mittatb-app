@@ -1,4 +1,4 @@
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {Button} from '@atb/components/button';
 import {
   MessageInfoBox,
