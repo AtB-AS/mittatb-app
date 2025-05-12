@@ -404,7 +404,8 @@ export function getConfig(): RemoteConfig {
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_in_app_review,
-    enable_in_app_review_for_announcements: enable_in_app_review_for_announcements,
+    enable_in_app_review_for_announcements:
+      enable_in_app_review_for_announcements,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
