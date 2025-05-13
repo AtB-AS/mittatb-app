@@ -165,7 +165,7 @@ export const MobilityTexts = {
     'Aktiver for å sjå i kart',
   ),
   errorLoadingValueCode: {
-    title: _(
+    message: _(
       'Henting av verdikode feilet',
       'Fetching value code failed',
       'Henting av verdikode feila',
