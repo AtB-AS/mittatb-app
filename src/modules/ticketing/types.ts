@@ -28,6 +28,7 @@ export enum PaymentType {
 export type RecurringPayment = {
   id: number;
   expiresAt: string;
+  cardExpiresAt: string;
   maskedPan: string;
   paymentType: number;
 };

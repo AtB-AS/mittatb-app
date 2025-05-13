@@ -71,6 +71,30 @@ const PaymentMethodsTexts = {
     'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
   ),
   editPaymentMethod: _('Endre', 'Edit', 'Endre'),
+  expiryMessages: {
+    cardExpired: _(
+      'Kortet er utløpt',
+      'The card has expired',
+      'Kortet er utløpt',
+    ),
+    cardExpiring: (date: string) =>
+      _(
+        `Kortet utløper ${date}`,
+        `The card expires ${date}`,
+        `Kortet utløper ${date}`,
+      ),
+    cardRegistrationExpired: _(
+      'Du må legge til kortet på nytt for å betale',
+      'You need to re-add the card to pay',
+      'Du må legge til kortet på nytt for å betale',
+    ),
+    cardRegistrationExpiring: (date: string) =>
+      _(
+        `Du må legge til kortet på nytt ${date}`,
+        `You need to re-add the card ${date}`,
+        `Du må legge til kortet på nytt ${date}`,
+      ),
+  },
 };
 
 export default PaymentMethodsTexts;
