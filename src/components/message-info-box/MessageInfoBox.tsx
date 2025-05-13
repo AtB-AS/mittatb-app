@@ -34,7 +34,7 @@ export type OnPressConfig = {
 export type MessageInfoBoxProps = {
   type: Statuses;
   title?: string;
-  message: string;
+  message?: string;
   noStatusIcon?: boolean;
   onDismiss?: () => void;
   isMarkdown?: boolean;
@@ -118,13 +118,15 @@ export const MessageInfoBox = ({
             {title}
           </ThemeText>
         )}
-        <ThemeText
-          color={textColor}
-          typography="body__primary"
-          isMarkdown={isMarkdown}
-        >
-          {message}
-        </ThemeText>
+        {message && (
+          <ThemeText
+            color={textColor}
+            typography="body__primary"
+            isMarkdown={isMarkdown}
+          >
+            {message}
+          </ThemeText>
+        )}
         {onPressConfig?.text && (
           <ThemeText
             color={textColor}
