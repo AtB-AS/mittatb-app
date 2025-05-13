@@ -225,7 +225,11 @@ const ProfileTexts = {
           ),
         },
         departures: {
-          label: _('Favorittavganger', 'Favourite departures', 'Favorittavganger'),
+          label: _(
+            'Favorittavganger',
+            'Favourite departures',
+            'Favorittavganger',
+          ),
           a11yHint: _(
             'Aktivér for å endre favoritt-avganger',
             'Activate to edit favourite departures',
