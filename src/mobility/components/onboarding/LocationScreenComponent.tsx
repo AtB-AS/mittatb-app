@@ -10,7 +10,7 @@ export type LocationScreenComponentProps = {};
 export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
   const {t} = useTranslation();
 
-  const {requestLocationPermission} = useGeolocationContext();
+  const {requestPreciseLocationPermission} = useGeolocationContext();
 
   return (
     <OnboardingScreenComponent
@@ -18,7 +18,7 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
       title={t(MobilityTexts.shmoRequirements.location.title)}
       description={t(MobilityTexts.shmoRequirements.location.description)}
       buttonText={t(MobilityTexts.shmoRequirements.location.button)}
-      buttonOnPress={requestLocationPermission}
+      buttonOnPress={requestPreciseLocationPermission}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}

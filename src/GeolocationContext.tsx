@@ -42,6 +42,7 @@ type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
   locationIsAvailable: boolean;
+  preciseLocationIsAvailable: boolean;
   location: GeoLocation | null;
   locationError: GeolocationError | null;
   getCurrentCoordinates: (
@@ -63,7 +64,8 @@ type GeolocationReducerAction =
   | {
       locationError: GeolocationError | null;
       type: 'LOCATION_ERROR';
-    };
+    }
+  | {type: 'PRECISE_LOCATION_PERMISSION_CHANGED'; status: boolean};
 
 type GeolocationReducer = (
   prevState: GeolocationState,
@@ -95,6 +97,11 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
         ...prevState,
         locationError: action.locationError,
       };
+    case 'PRECISE_LOCATION_PERMISSION_CHANGED':
+      return {
+        ...prevState,
+        preciseLocationIsAvailable: action.status,
+      };
   }
 };
 
@@ -118,6 +125,7 @@ type RequestLocationPermissionFn = () => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
   requestLocationPermission: RequestLocationPermissionFn;
+  requestPreciseLocationPermission: RequestLocationPermissionFn;
 };
 
 const GeolocationContext = createContext<GeolocationContextState | undefined>(
@@ -128,6 +136,7 @@ const defaultState: GeolocationState = {
   status: null,
   locationEnabled: false,
   locationIsAvailable: false,
+  preciseLocationIsAvailable: false,
   location: null,
   locationError: null,
   getCurrentCoordinates: () => Promise.resolve(undefined),
@@ -159,6 +168,20 @@ export const GeolocationContextProvider = ({children}: Props) => {
     }
   }, []);
 
+  const requestPreciseLocationPermission = useCallback(async () => {
+    if (!(await isLocationEnabled())) {
+      openBlockedPreciseLocationAlert();
+    } else {
+      const status = await requestPreciseGeolocationPermission();
+      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
+      dispatch({
+        type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
+        status: status === 'granted',
+      });
+      return status;
+    }
+  }, []);
+
   async function handleLocationError(locationError: GeolocationError) {
     const status = await checkGeolocationPermission();
     const locationEnabled = await isLocationEnabled();
@@ -172,6 +195,9 @@ export const GeolocationContextProvider = ({children}: Props) => {
   const locationIsAvailable =
     state.status === 'granted' && state.locationEnabled;
 
+  const preciseLocationIsAvailable =
+    state.preciseLocationIsAvailable && state.locationEnabled;
+
   const updateLocation = (
     position: GeolocationResponse | null,
     locationName: string,
@@ -181,6 +207,20 @@ export const GeolocationContextProvider = ({children}: Props) => {
       position,
       locationName,
     });
+
+  useEffect(() => {
+    if (appStatus === 'active') {
+      const checkPreciseLocationPermission = async () => {
+        const status = await checkPreciseGeolocationPermission();
+
+        dispatch({
+          type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
+          status: status === 'granted' && state.locationEnabled,
+        });
+      };
+      checkPreciseLocationPermission();
+    }
+  }, [appStatus, state.locationEnabled]);
 
   useEffect(() => {
     if (appStatus === 'active') {
@@ -269,8 +309,10 @@ export const GeolocationContextProvider = ({children}: Props) => {
       value={{
         ...state,
         locationIsAvailable,
+        preciseLocationIsAvailable,
         requestLocationPermission,
         getCurrentCoordinates,
+        requestPreciseLocationPermission,
       }}
     >
       {children}
@@ -312,16 +354,65 @@ const requestGeolocationPermission = async (): Promise<PermissionStatus> => {
   }
 };
 
+const requestPreciseGeolocationPermission = async () => {
+  const permissionStatus = await checkPreciseGeolocationPermission();
+  if (Platform.OS === 'ios') {
+    if (permissionStatus === 'blocked') {
+      openSettingsAlert();
+      return permissionStatus;
+    } else {
+      return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+    }
+  } else {
+    // Android
+    if (permissionStatus === 'denied') {
+      const requestedStatus = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      );
+
+      if (requestedStatus === 'blocked') {
+        openPreciseSettingsAlert();
+        return permissionStatus;
+      }
+    }
+    return await checkPreciseGeolocationPermission();
+  }
+};
+
 const openBlockedLocationAlert = () =>
   Alert.alert(
     tGlobal(GeoLocationTexts.blockedLocation.title),
     tGlobal(GeoLocationTexts.blockedLocation.message),
   );
 
+const openBlockedPreciseLocationAlert = () =>
+  Alert.alert(
+    tGlobal(GeoLocationTexts.blockedLocation.title),
+    tGlobal(GeoLocationTexts.blockedLocation.preciseAndroidMessage),
+  );
+
 const openSettingsAlert = () =>
   Alert.alert(
     tGlobal(GeoLocationTexts.locationPermission.title),
     tGlobal(GeoLocationTexts.locationPermission.message),
+    [
+      {
+        text: tGlobal(GeoLocationTexts.locationPermission.goToSettings),
+        onPress: () => Linking.openSettings(),
+      },
+      {
+        text: tGlobal(GeoLocationTexts.locationPermission.cancel),
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ],
+    {cancelable: true},
+  );
+
+const openPreciseSettingsAlert = () =>
+  Alert.alert(
+    tGlobal(GeoLocationTexts.locationPermission.preciseAndroidTitle),
+    tGlobal(GeoLocationTexts.locationPermission.preciseAndroidMessage),
     [
       {
         text: tGlobal(GeoLocationTexts.locationPermission.goToSettings),
@@ -344,6 +435,15 @@ export function useGeolocationContext() {
     );
   }
   return context;
+}
+
+export async function checkPreciseGeolocationPermission(): Promise<PermissionStatus> {
+  if (Platform.OS === 'ios') {
+    return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+  } else {
+    const status = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    return status;
+  }
 }
 
 export async function checkGeolocationPermission(): Promise<PermissionStatus> {
