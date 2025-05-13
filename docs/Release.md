@@ -18,7 +18,7 @@ Now that a release branch is created, the version-number on master should be inc
 Version number can be updated by running the following command:
 
 ```bash
-./scripts/update-app-version.sh x.xx`
+./scripts/update-app-version.sh x.xx
 ```
 
 Then push your changes with commit message "chore: Bump to version x.xx".
