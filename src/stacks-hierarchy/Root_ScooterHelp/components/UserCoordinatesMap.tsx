@@ -4,7 +4,7 @@ import {
   MapCameraConfig,
   SelectionPin,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {useRef} from 'react';
 

@@ -3,7 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {ExploreLocationMap} from '@atb/components/map';
+import {ExploreLocationMap} from '@atb/modules/map';
 import {Location} from '@atb/modules/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 

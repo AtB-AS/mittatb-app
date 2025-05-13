@@ -14,8 +14,8 @@ import {ContentHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {MobilitySingleBenefitInfoSectionItem} from '@atb/mobility/components/MobilitySingleBenefitInfoSectionItem';
+import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
+import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;

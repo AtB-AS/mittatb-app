@@ -16,3 +16,4 @@ export {ExpiryMessage} from './ExpiryMessage';
 export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
 export {isCardPaymentMethod} from './utils';
+export {useSelectedShmoPaymentMethod} from './hooks/use-selected-shmo-payment-method';

@@ -13,7 +13,7 @@ import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {MapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
