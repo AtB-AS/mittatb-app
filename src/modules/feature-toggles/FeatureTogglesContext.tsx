@@ -1,6 +1,6 @@
 import React, {createContext, useContext} from 'react';
 import {storage} from '@atb/modules/storage';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FeatureTogglesContextState} from './types';
 import {useFeatureTogglesContextState} from './use-feature-toggle-context-state';
 

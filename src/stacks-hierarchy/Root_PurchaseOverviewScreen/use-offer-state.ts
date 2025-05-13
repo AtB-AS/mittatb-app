@@ -271,5 +271,5 @@ export function useOfferState(
 }
 
 const isNotAvailableError = (err: any) =>
-  err.response?.status === 400 &&
-  err.response?.data.kind === 'NoAvailableOffersDueToSchedule';
+  err.response?.status === 404 &&
+  err.response?.data.kind === 'NO_AVAILABLE_OFFERS_DUE_TO_SCHEDULE';

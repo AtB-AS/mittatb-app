@@ -3,7 +3,7 @@ import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';

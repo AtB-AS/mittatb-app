@@ -7,7 +7,10 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {
+  InAppReviewContext,
+  useInAppReviewFlow,
+} from '@atb/utils/use-in-app-review';
 
 type Props = {
   announcement: AnnouncementType;
@@ -22,7 +25,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
     <BottomSheetContainer
       title={getTextForLanguage(announcement.fullTitle, language)}
       onClose={() => {
-        requestReview('Announcements: Bottom sheet dismissed');
+        requestReview(InAppReviewContext.Announcement);
       }}
     >
       <ScrollView style={style.container}>

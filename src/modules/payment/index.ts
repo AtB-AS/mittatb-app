@@ -12,6 +12,7 @@ export {
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
 export {SelectPaymentMethodSheet} from './SelectPaymentMethodSheet';
 export {PaymentBrand} from './PaymentBrand';
+export {ExpiryMessage} from './ExpiryMessage';
 export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
 export {isCardPaymentMethod} from './utils';

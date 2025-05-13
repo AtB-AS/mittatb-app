@@ -4,7 +4,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteChips, Location} from '@atb/modules/favorites';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';

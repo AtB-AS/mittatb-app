@@ -44,12 +44,17 @@ export function usePreviousPaymentMethods(): {
       if (!enabledPaymentTypes.includes(paymentMethod.paymentType))
         return false;
 
-      // Card has expired
-      const expired =
-        paymentMethod.recurringPayment &&
-        parseISO(paymentMethod.recurringPayment.expiresAt).getTime() <
-          Date.now();
-      if (expired) return false;
+      if (paymentMethod.recurringPayment) {
+        const now = Date.now();
+        // Card registration has expired
+        if (parseISO(paymentMethod.recurringPayment.expiresAt).getTime() < now)
+          return false;
+        // Card has expired
+        if (
+          parseISO(paymentMethod.recurringPayment.cardExpiresAt).getTime() < now
+        )
+          return false;
+      }
 
       return true;
     },

@@ -21,11 +21,11 @@ import {
   requestMultiple,
 } from 'react-native-permissions';
 import {useIntercomMetadata} from '@atb/modules/chat';
-import {useAppStateStatus} from './utils/use-app-state-status';
+import {useAppStateStatus} from '../../utils/use-app-state-status';
 import {GeoLocation} from '@atb/modules/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
-import {tGlobal} from '@atb/LocaleProvider.tsx';
+import {tGlobal} from '@atb/modules/locale';
 
 const config: GeolocationOptions = {
   enableHighAccuracy: true,
@@ -463,17 +463,5 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
       return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
     }
     return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
-  }
-}
-
-export class LocationPermissionRequiredError extends Error {
-  constructor() {
-    super('Permission required');
-  }
-}
-
-export class NoLocationError extends Error {
-  constructor() {
-    super('Location missing');
   }
 }

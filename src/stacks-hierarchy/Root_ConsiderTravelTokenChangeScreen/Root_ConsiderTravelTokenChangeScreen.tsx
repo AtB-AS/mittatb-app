@@ -17,7 +17,7 @@ import {LoadingScreen} from '@atb/screen-components/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useCallback} from 'react';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const Root_ConsiderTravelTokenChangeScreen = () => {
   const styles = useStyle();

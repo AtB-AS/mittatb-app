@@ -9,14 +9,30 @@ const LAST_IN_APP_REVIEW_PROMPT_KEY = '@ATB_in_app_review_last_request';
 const IN_APP_REVIEW_PRESENTED_KEY = '@ATB_in_app_review_presented';
 const INTERVAL_BETWEEN_PROMPTS = 5 * 24 * 60 * 60 * 1000; // 5 days
 
+export enum InAppReviewContext {
+  DepartureDetails = 'Departure details: Bus in map dismissed',
+  TripDetails = 'Trip details: Bus in map dismissed',
+  Announcement = 'Announcements: Bottom sheet dismissed',
+}
+
 export function useInAppReviewFlow() {
   const analytics = useAnalyticsContext();
-  const {isInAppReviewEnabled} = useFeatureTogglesContext();
+  const {isInAppReviewEnabled, isInAppReviewForAnnouncementsEnabled} =
+    useFeatureTogglesContext();
 
   const requestReview = useCallback(
-    (context: string) => {
-      if (!isInAppReviewEnabled) {
-        return;
+    (context: InAppReviewContext) => {
+      switch (context) {
+        case InAppReviewContext.Announcement:
+          if (!isInAppReviewForAnnouncementsEnabled) {
+            return;
+          }
+          break;
+        default:
+          if (!isInAppReviewEnabled) {
+            return;
+          }
+          break;
       }
 
       // Check if in-app review functionality is available on this device.
@@ -94,7 +110,7 @@ export function useInAppReviewFlow() {
         }
       })();
     },
-    [isInAppReviewEnabled, analytics],
+    [isInAppReviewForAnnouncementsEnabled, isInAppReviewEnabled, analytics],
   );
 
   return {requestReview};

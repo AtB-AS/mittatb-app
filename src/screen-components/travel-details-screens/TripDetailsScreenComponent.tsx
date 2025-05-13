@@ -12,7 +12,7 @@ import {
   TariffZone,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';

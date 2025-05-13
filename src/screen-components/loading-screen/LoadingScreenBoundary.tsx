@@ -5,7 +5,7 @@ import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useLoadingState} from './use-loading-state';
 import {useNotifyBugsnagOnTimeoutStatus} from './use-notify-bugsnag-on-timeout-status';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const LOADING_TIMEOUT_MS = 10000;
 

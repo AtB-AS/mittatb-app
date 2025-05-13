@@ -7,7 +7,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingContext,

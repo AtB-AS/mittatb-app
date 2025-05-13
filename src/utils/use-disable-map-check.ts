@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 
 // There are currently issues with VoiceOver and MapBox on iOS.
 // A proper fix is in the works but seem non-trivial.

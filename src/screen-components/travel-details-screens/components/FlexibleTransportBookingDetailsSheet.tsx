@@ -19,7 +19,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {getBookingStatus, getPublicCodeFromLeg} from '../utils';
 import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';

@@ -1,7 +1,7 @@
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {createEmptyBuilder} from './purchase-selection-builder';
 import type {PurchaseSelectionBuilderInput} from './types';
-import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {APP_VERSION} from '@env';

@@ -5,7 +5,7 @@ import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/Mob
 
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {lobot} from './';
-import {useLocaleContext} from '@atb/LocaleProvider';
+import {useLocaleContext} from '@atb/modules/locale';
 
 type Props = {
   children: React.ReactNode;

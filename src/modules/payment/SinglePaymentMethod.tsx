@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
+import {ExpiryMessage} from './ExpiryMessage';
 
 type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
@@ -94,6 +95,8 @@ export const SinglePaymentMethod = ({
               <PaymentBrand paymentType={paymentMethod.paymentType} />
             </View>
           </View>
+
+          <ExpiryMessage recurringPayment={paymentMethod.recurringPayment} />
         </View>
       </PressableOpacity>
     </View>

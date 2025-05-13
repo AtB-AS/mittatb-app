@@ -9,7 +9,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import Intercom, {Space} from '@intercom/intercom-react-native';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';

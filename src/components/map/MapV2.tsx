@@ -1,7 +1,7 @@
 import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
-} from '@atb/GeolocationContext';
+} from '@atb/modules/geolocation';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';

@@ -6,7 +6,7 @@ import {
   reserveOffers,
 } from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {PaymentMethod} from '@atb/modules/payment';
 

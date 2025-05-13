@@ -2,7 +2,7 @@ import Intercom from '@intercom/intercom-react-native';
 import {PlatformOSType} from 'react-native';
 import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useCallback} from 'react';
 import {IntercomTokenStatus} from '@atb/modules/mobile-token';
 

@@ -1,6 +1,6 @@
 import Intercom, {IntercomEvents} from '@intercom/intercom-react-native';
 import {useEffect, useState} from 'react';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export function useChatUnreadCount() {
   const [count, setCount] = useState(0);

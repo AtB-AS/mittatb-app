@@ -1,4 +1,4 @@
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';

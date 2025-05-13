@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {SvgCssUri} from 'react-native-svg/css';
 import {StyleSheet} from '@atb/theme';
 
