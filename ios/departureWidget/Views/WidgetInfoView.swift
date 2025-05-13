@@ -11,6 +11,8 @@ private enum K {
 }
 
 struct WidgetInfoView: View {
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+
     let widgetFamily: WidgetFamily
     var viewModel: WidgetViewModel
 
@@ -67,13 +69,14 @@ struct WidgetInfoView: View {
                                         .foregroundColor(viewModel.transportModeIconForegroundColor)
                                         .padding(K.transportIconSize / 7)
                                         .frame(width: K.transportIconSize, height: K.transportIconSize)
-                                        .background(viewModel.transportModeIconBackgroundColor)
+                                        .background(viewModel.transportModeIconBackgroundColor?.opacity(widgetRenderingMode == .accented ? 0.2 : 1))
                                         .cornerRadius(K.transportIconCornerRadius)
+                                        .widgetAccentable()
                                 }
 
                                 Text(viewModel.lineDetails ?? noLineInfoText)
                                     .lineLimit(1)
-                                    .foregroundColor(K.lineInformationColor)
+                                    .foregroundColor(widgetRenderingMode == .accented ? .secondary : K.lineInformationColor)
 
                                 Spacer()
                             }
