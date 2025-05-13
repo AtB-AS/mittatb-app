@@ -47,9 +47,7 @@ export const VenueResults: React.FC<Props> = ({
                     ),
                   ) + screenReaderPause
                 }
-                accessibilityHint={t(
-                  FareZoneSearchTexts.results.item.a11yHint,
-                )}
+                accessibilityHint={t(FareZoneSearchTexts.results.item.a11yHint)}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(location)}

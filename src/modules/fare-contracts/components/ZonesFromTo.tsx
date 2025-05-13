@@ -45,9 +45,7 @@ export const ZonesFromTo = ({
 
 type ZonesFromToControllerProps = {fareZoneRefs: string[]};
 
-function useZonesFromToController({
-  fareZoneRefs,
-}: ZonesFromToControllerProps) {
+function useZonesFromToController({fareZoneRefs}: ZonesFromToControllerProps) {
   const {fareZones} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
 

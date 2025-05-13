@@ -175,10 +175,7 @@ export const PreassignedFareContractSummary = ({
   );
 };
 
-function getPlaceName(
-  place: FareZone | StopPlaceFragment,
-  language: Language,
-) {
+function getPlaceName(place: FareZone | StopPlaceFragment, language: Language) {
   return 'geometry' in place
     ? getReferenceDataName(place, language)
     : place.name;

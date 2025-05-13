@@ -21,10 +21,7 @@ type Props = {
   onSelect: (fareZone: FareZone) => void;
 };
 
-export const FareZoneResults: React.FC<Props> = ({
-  fareZones,
-  onSelect,
-}) => {
+export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const fareZoneFromLocation = useFareZoneFromLocation(fareZones);

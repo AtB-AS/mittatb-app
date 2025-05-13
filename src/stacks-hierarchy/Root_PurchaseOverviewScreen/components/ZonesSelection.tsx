@@ -58,8 +58,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
       accessible: true,
       accessibilityRole: canSelectZone ? 'button' : 'none',
       accessibilityLabel: canSelectZone
-        ? a11yLabel(fromFareZone, toFareZone, language, t) +
-          screenReaderPause
+        ? a11yLabel(fromFareZone, toFareZone, language, t) + screenReaderPause
         : t(
             PurchaseOverviewTexts.zones.zoneName(
               getReferenceDataName(fromFareZone, language),

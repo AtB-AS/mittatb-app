@@ -70,12 +70,8 @@ export const CompactFareContractInfo = (
 const CompactFareContractInfoTexts = (
   props: CompactFareContractInfoTextsProps,
 ) => {
-  const {
-    userProfilesWithCount,
-    productName,
-    fareZoneSummary,
-    timeUntilExpire,
-  } = props;
+  const {userProfilesWithCount, productName, fareZoneSummary, timeUntilExpire} =
+    props;
   const {language} = useTranslation();
   const styles = useStyles();
   const firstTravelRight = props.fareContract.travelRights[0];

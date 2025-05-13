@@ -45,9 +45,7 @@ export const useDefaultFareZone = (
       return {...fareZoneFromLocation, resultType: 'geolocation'};
     }
 
-    const defaultFareZone = fareZones.find(
-      (fareZone) => fareZone.isDefault,
-    );
+    const defaultFareZone = fareZones.find((fareZone) => fareZone.isDefault);
 
     if (defaultFareZone) {
       return {...defaultFareZone, resultType: 'zone'};
@@ -72,9 +70,7 @@ export const useFilterFareZone = (
     }
 
     return fareZones.filter((fareZone) =>
-      allowedFareZoneRefs.some(
-        (allowedZone) => fareZone.id === allowedZone,
-      ),
+      allowedFareZoneRefs.some((allowedZone) => fareZone.id === allowedZone),
     );
   }, [fareZones, allowedFareZoneRefs]);
 };

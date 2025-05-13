@@ -47,15 +47,11 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const fareZones = useSelectableFareZones(
-    selection.preassignedFareProduct,
-  );
+  const fareZones = useSelectableFareZones(selection.preassignedFareProduct);
 
   const getMatchingFareZone = useCallback(
     (location: SearchLocation) =>
-      fareZones.find((fareZone) =>
-        location.fare_zones?.includes(fareZone.id),
-      ),
+      fareZones.find((fareZone) => location.fare_zones?.includes(fareZone.id)),
     [fareZones],
   );
 
@@ -123,9 +119,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
           fareZone: getMatchingFareZone(location),
         }))
         .filter(
-          (
-            locationAndFareZone,
-          ): locationAndFareZone is LocationAndFareZone =>
+          (locationAndFareZone): locationAndFareZone is LocationAndFareZone =>
             locationAndFareZone.fareZone != null,
         ),
     [locations, getMatchingFareZone],
@@ -179,10 +173,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
         )}
         {showActivityIndicator && <ActivityIndicator />}
         {showFareZones && (
-          <FareZoneResults
-            fareZones={fareZones}
-            onSelect={onSelectZone}
-          />
+          <FareZoneResults fareZones={fareZones} onSelect={onSelectZone} />
         )}
         {showVenueResults && (
           <VenueResults

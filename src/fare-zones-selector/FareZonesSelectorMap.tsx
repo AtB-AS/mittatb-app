@@ -46,9 +46,7 @@ const FareZonesSelectorMap = ({
   onSelect,
   onSave,
 }: Props) => {
-  const fareZones = useSelectableFareZones(
-    selection.preassignedFareProduct,
-  );
+  const fareZones = useSelectableFareZones(selection.preassignedFareProduct);
   const styles = useMapStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
