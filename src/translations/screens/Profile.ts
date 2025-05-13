@@ -73,6 +73,14 @@ const ProfileTexts = {
     },
     settings: {
       heading: _('Innstillinger', 'Settings', 'Innstillingar'),
+      groups: {
+        appSettings: _('Appinnstillinger', 'App Settings', 'Appinnstillinger'),
+        profileSettings: _(
+          'Profilinnstillinger',
+          'Profile Settings',
+          'Profilinnstillinger',
+        ),
+      },
       linkSectionItems: {
         userProfile: {
           label: _(

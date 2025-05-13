@@ -81,16 +81,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
-  const {disable_travelcard} = useRemoteConfigContext();
-
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {
-    isPushNotificationsEnabled,
-    isTravelAidEnabled,
-    isBonusProgramEnabled,
-  } = useFeatureTogglesContext();
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
 
   const {logEvent} = useAnalyticsContext();
 
@@ -272,93 +266,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
 
-          <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
-            {isTravelAidEnabled ? (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.settings.linkSectionItems.travelAid
-                    .label,
-                )}
-                onPress={() => navigation.navigate('Profile_TravelAidScreen')}
-                testID="travelAidButton"
-              />
-            ) : null}
-
-            {enable_ticketing ? (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.settings.linkSectionItems.userProfile
-                    .label,
-                )}
-                onPress={() =>
-                  navigation.navigate('Profile_DefaultUserProfileScreen')
-                }
-                testID="defaultTravellerButton"
-              />
-            ) : null}
-
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={
-                  disable_travelcard
-                    ? t(
-                        ProfileTexts.sections.settings.linkSectionItems
-                          .travelToken.labelWithoutTravelcard,
-                      )
-                    : t(
-                        ProfileTexts.sections.settings.linkSectionItems
-                          .travelToken.label,
-                      )
-                }
-                onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
-                testID="travelTokenButton"
-              />
-            )}
             <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.appearance
-                  .label,
-              )}
-              onPress={() => navigation.navigate('Profile_AppearanceScreen')}
-              testID="appearanceButton"
+              text={t(ProfileTexts.sections.settings.heading)}
+              onPress={() => navigation.navigate('Profile_SettingsScreen')}
+              testID="settingsButton"
             />
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.startScreen
-                  .label,
-              )}
-              onPress={() =>
-                navigation.navigate('Profile_SelectStartScreenScreen')
-              }
-              testID="startScreenButton"
-            />
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.language.label,
-              )}
-              onPress={() => navigation.navigate('Profile_LanguageScreen')}
-              testID="languageButton"
-            />
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.privacy.label,
-              )}
-              onPress={() => navigation.navigate('Profile_PrivacyScreen')}
-              testID="privacyButton"
-            />
-            {isPushNotificationsEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .label,
-                )}
-                onPress={() =>
-                  navigation.navigate('Profile_NotificationsScreen')
-                }
-                testID="notificationsButton"
-              />
-            )}
           </Section>
 
           <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />

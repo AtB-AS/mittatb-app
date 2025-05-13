@@ -34,6 +34,7 @@ export type ProfileStackParams = StackParams<{
   Profile_PlaceScreen: PlaceScreenParams;
   Profile_TravelAidScreen: undefined;
   Profile_TravelAidInformationScreen: undefined;
+  Profile_SettingsScreen: undefined;
 }>;
 
 export type ProfileStackRootProps =
