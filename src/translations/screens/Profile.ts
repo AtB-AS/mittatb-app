@@ -4,7 +4,7 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ProfileTexts = {
   header: {
-    title: _('Min profil', 'My profile', 'Min profil'),
+    title: _('Profil', 'Profile', 'MProfil'),
   },
   sections: {
     account: {
@@ -91,9 +91,9 @@ const ProfileTexts = {
         },
         travelToken: {
           label: _(
-            'Bruk billett på t:kort / mobil',
-            'Use ticket on t:card / phone',
-            'Bruk billett på t:kort / mobil',
+            'Flytt billett mellom t:kort og mobil',
+            'Transfer ticket between t:kort and mobile',
+            'Flytt billett mellom t:kort og mobil',
           ),
           labelWithoutTravelcard: _(
             'Bruk billett på mobil',
@@ -206,7 +206,7 @@ const ProfileTexts = {
           },
         },
         enrollment: {
-          label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
+          label: _('Nye konsepter', 'New concepts', 'Nye konsepter'),
         },
         travelAid: {
           label: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
@@ -217,7 +217,7 @@ const ProfileTexts = {
       heading: _('Favoritter', 'Favourites', 'Favorittar'),
       linkSectionItems: {
         places: {
-          label: _('Steder', 'Locations', 'Stadar'),
+          label: _('Favorittsteder', 'Favourite locations', 'Favorittsteder'),
           a11yHint: _(
             'Aktivér for å endre favorittsteder',
             'Activate to edit locations',
@@ -225,7 +225,7 @@ const ProfileTexts = {
           ),
         },
         departures: {
-          label: _('Avganger', 'Departures', 'Avgangar'),
+          label: _('Favorittavganger', 'Favourite departures', 'Favorittavganger'),
           a11yHint: _(
             'Aktivér for å endre favoritt-avganger',
             'Activate to edit favourite departures',
