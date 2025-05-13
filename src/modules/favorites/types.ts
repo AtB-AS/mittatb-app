@@ -22,7 +22,7 @@ export type SearchLocation = {
   category: FeatureCategory[];
   label?: string;
   postalcode?: string;
-  fare_zones?: string[];
+  tariff_zones?: string[];
 } & (
   | {resultType: 'search'}
   | {

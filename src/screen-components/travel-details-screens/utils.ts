@@ -16,7 +16,7 @@ import {differenceInSeconds, parseISO} from 'date-fns';
 import {
   DestinationDisplay,
   Mode,
-  TariffZone as FareZone,
+  TariffZone as FareZone, // journey planner still uses TariffZone
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, Language, TranslateFunction} from '@atb/translations';
@@ -247,7 +247,7 @@ export function getFilteredLegsByWalkOrWaitTime(tripPattern: TripPattern) {
 export function canSellCollabTicket(tripPattern: TripPattern) {
   const someLegsByTrain = someLegsAreByTrain(tripPattern);
   const fareZonesHaveZoneA = (fareZones?: FareZone[]) =>
-    fareZones?.some((a) => a.id === 'ATB:FareZone:1');
+    fareZones?.some((a) => a.id === 'ATB:FareZone:10');
   const allLegsInZoneA = tripPattern.legs
     .filter((a) => a.mode !== Mode.Foot)
     .every(
