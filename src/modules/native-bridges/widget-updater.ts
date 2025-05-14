@@ -13,4 +13,4 @@ if (Platform.OS === 'ios' && !WidgetUpdaterBridge) {
   );
 }
 
-export const refreshWidgets = WidgetUpdaterBridge.refreshWidgets;
+export const refreshWidgets = Platform.OS === 'ios' && WidgetUpdaterBridge.refreshWidgets;
