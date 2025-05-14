@@ -15,7 +15,7 @@ import {
   PositionArrow,
   useControlPositionsStyle,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';

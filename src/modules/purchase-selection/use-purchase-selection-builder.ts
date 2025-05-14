@@ -20,7 +20,7 @@ import {useGetFareProductsQuery} from '@atb/modules/ticketing';
  * should be invoked by user actions and not as a side effect of state change.
  */
 export const usePurchaseSelectionBuilder = () => {
-  const {fareProductTypeConfigs, userProfiles, tariffZones} =
+  const {fareProductTypeConfigs, userProfiles, fareZones} =
     useFirestoreConfigurationContext();
   const {
     preferences: {defaultUserTypeString},
@@ -32,7 +32,7 @@ export const usePurchaseSelectionBuilder = () => {
     fareProductTypeConfigs,
     userProfiles,
     preassignedFareProducts,
-    tariffZones,
+    fareZones,
     currentCoordinates: getCurrentCoordinatesGlobal(),
     defaultUserTypeString,
     customerProfile,

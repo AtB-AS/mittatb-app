@@ -7,7 +7,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   PreassignedFareProduct,
   ProductTypeTransportModes,
-  TariffZone,
+  FareZone,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
@@ -60,8 +60,8 @@ const InspectableContent = ({
   themeColor,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
+  fromFareZone?: FareZone;
+  toFareZone?: FareZone;
   themeColor: ContrastColor;
 }) => {
   const styles = useStyles();

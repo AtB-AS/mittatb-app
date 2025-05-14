@@ -7,7 +7,7 @@ import {
 import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {formatNumberToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {

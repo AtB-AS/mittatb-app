@@ -1,4 +1,4 @@
-import {shadows} from '@atb/components/map';
+import {shadows} from '@atb/modules/map';
 import {ThemeText} from '@atb/components/text';
 import {Animated, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';

@@ -55,7 +55,7 @@ describe('purchaseSelectionBuilder - zones', () => {
         ...TEST_PRODUCT,
         limitations: {
           ...TEST_PRODUCT.limitations,
-          tariffZoneRefs: ['T1', 'T3'],
+          fareZoneRefs: ['T1', 'T3'],
         },
       },
     };
@@ -75,7 +75,7 @@ describe('purchaseSelectionBuilder - zones', () => {
         ...TEST_PRODUCT,
         limitations: {
           ...TEST_PRODUCT.limitations,
-          tariffZoneRefs: ['T1', 'T3'],
+          fareZoneRefs: ['T1', 'T3'],
         },
       },
     };

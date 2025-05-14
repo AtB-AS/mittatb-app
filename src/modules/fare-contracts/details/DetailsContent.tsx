@@ -30,7 +30,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
-import {MapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
@@ -38,14 +38,14 @@ import {
   CarnetFooter,
   MAX_ACCESSES_FOR_CARNET_FOOTER,
 } from '../carnet/CarnetFooter';
-import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
+import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
-import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
+import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
@@ -109,8 +109,8 @@ export const DetailsContent: React.FC<Props> = ({
   const globalMessageRuleVariables = {
     fareProductType: preassignedFareProduct?.type ?? 'unknown',
     validityStatus: validityStatus,
-    tariffZones: firstTravelRight.tariffZoneRefs ?? [],
-    numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
+    fareZones: firstTravelRight.fareZoneRefs ?? [],
+    numberOfZones: firstTravelRight.fareZoneRefs?.length ?? 0,
     numberOfTravelRights: fc.travelRights.length,
   };
   const globalMessageCount = findGlobalMessages(

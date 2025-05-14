@@ -19,7 +19,7 @@ import {
   TravelSearchFiltersType,
   CityZone,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   UserProfile,
   MobilityOperatorType,
   ScooterFaqType,
@@ -64,7 +64,7 @@ export type AppTexts = {
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   fareProductGroups: FareProductGroupType[];
-  tariffZones: TariffZone[];
+  fareZones: FareZone[];
   cityZones: CityZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
@@ -100,7 +100,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [preassignedFareProducts, setPreassignedFareProducts] = useState<
     PreassignedFareProduct[]
   >([]);
-  const [tariffZones, setTariffZones] = useState<TariffZone[]>([]);
+  const [fareZones, setFareZones] = useState<FareZone[]>([]);
   const [cityZones, setCityZones] = useState<CityZone[]>([]);
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState<string[]>(
@@ -156,9 +156,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setPreassignedFareProducts(preassignedFareProducts);
           }
 
-          const tariffZones = getTariffZonesFromSnapshot(snapshot);
-          if (tariffZones) {
-            setTariffZones(tariffZones);
+          const fareZones = getFareZonesFromSnapshot(snapshot);
+          if (fareZones) {
+            setFareZones(fareZones);
           }
 
           const cityZones = getCityZonesFromSnapshot(snapshot);
@@ -279,7 +279,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const clearState = () => {
     setFirestoreConfigStatus('loading');
     setPreassignedFareProducts([]);
-    setTariffZones([]);
+    setFareZones([]);
     setCityZones([]);
     setUserProfiles([]);
     setModesWeSellTicketsFor([]);
@@ -310,7 +310,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     return {
       preassignedFareProducts,
       fareProductGroups,
-      tariffZones,
+      fareZones,
       cityZones,
       userProfiles,
       modesWeSellTicketsFor,
@@ -335,7 +335,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   }, [
     preassignedFareProducts,
     fareProductGroups,
-    tariffZones,
+    fareZones,
     cityZones,
     userProfiles,
     modesWeSellTicketsFor,
@@ -399,16 +399,16 @@ function getPreassignedFareContractsFromSnapshot(
   return undefined;
 }
 
-function getTariffZonesFromSnapshot(
+function getFareZonesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): TariffZone[] | undefined {
-  const tariffZonesFromFirestore = snapshot.docs
+): FareZone[] | undefined {
+  const fareZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('tariffZones');
+    ?.get<string>('fareZones');
 
   try {
-    if (tariffZonesFromFirestore) {
-      return JSON.parse(tariffZonesFromFirestore) as TariffZone[];
+    if (fareZonesFromFirestore) {
+      return JSON.parse(fareZonesFromFirestore) as FareZone[];
     }
   } catch (error: any) {
     Bugsnag.notify(error);

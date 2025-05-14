@@ -40,6 +40,7 @@ struct DepartureTimesView: View {
                         .frame(width: K.iconWidth)
                         .padding(8)
                         .foregroundColor(K.lineInformationColor)
+                        .widgetAccentable()
                 }
             }
 

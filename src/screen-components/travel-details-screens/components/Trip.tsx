@@ -25,7 +25,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
-import {MapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/modules/map';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,

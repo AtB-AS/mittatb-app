@@ -1,4 +1,4 @@
-import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/components/map';
+import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/modules/map';
 
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';

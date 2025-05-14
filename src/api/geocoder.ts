@@ -13,7 +13,7 @@ export const FOCUS_ORIGIN: Coordinates = {
 export async function autocomplete(
   text: string,
   coordinates: Coordinates | null,
-  onlyLocalTariffZoneAuthority: boolean = false,
+  onlyLocalFareZoneAuthority: boolean = false,
   onlyStopPlaces: boolean = false,
   config?: AxiosRequestConfig,
 ) {
@@ -24,7 +24,7 @@ export async function autocomplete(
       lat: coordinates?.latitude ?? FOCUS_ORIGIN.latitude,
       lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
       limit: 10,
-      tariff_zone_authorities: onlyLocalTariffZoneAuthority
+      tariff_zone_authorities: onlyLocalFareZoneAuthority
         ? TARIFF_ZONE_AUTHORITY
         : null,
       layers: onlyStopPlaces ? ['venue'] : undefined,

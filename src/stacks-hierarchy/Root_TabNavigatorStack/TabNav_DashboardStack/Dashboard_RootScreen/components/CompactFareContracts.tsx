@@ -35,7 +35,7 @@ export const CompactFareContracts: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const {tariffZones, userProfiles, preassignedFareProducts} =
+  const {fareZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfigurationContext();
 
   return (
@@ -57,7 +57,7 @@ export const CompactFareContracts: React.FC<Props> = ({
             const fareContractInfoDetailsProps = getFareContractInfoDetails(
               fareContract,
               serverNow,
-              tariffZones,
+              fareZones,
               userProfiles,
               preassignedFareProducts,
             );
