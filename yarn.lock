@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.13.0.tgz#9a03983e246628742c6e49db72c10f9b47be3cb1"
-  integrity sha512-9kTCIpfeWy7Frb8CKo0SXKfQA0XIzcQ9Gl+J95XnaZ6q897kBf8ha6ygjpnl0458WKhZnukAy03Ng5r74wqxMQ==
+"@atb-as/config-specs@5.15.0":
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.15.0.tgz#6a69572dc5b38637cd307e3f008637a83670c7f1"
+  integrity sha512-WYLKAUrtyUsJ6MSv4JhRAuiPiPdIoy6WCbsJ1ltLXS8+y1VbpoFnF7lbihy5olOq4kZYueM+1V7tcFfs5TAODw==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -33,12 +33,12 @@
     zod "^3.24.1"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@17.1.0":
-  version "17.1.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.1.0.tgz#495b041c8a38b824891b7233a29673893313feea"
-  integrity sha512-fBJYRRagY4wCmsJ7WUSVh4vXXBM1/h13IUtW8iYQyC0eVXMLo7SFHyeP28jjVGC5u/hWhQ30Pw1kVnt026O1nw==
+"@atb-as/generate-assets@17.2.0":
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.2.0.tgz#6dbf5e1480ea2eaa1c8ebf9486d06e49bed7f86d"
+  integrity sha512-QBI9SlwQGwBJeqLPXDTF1so78ffV1d9+dlfNg0pj7rztbYzKz5R5WieXJBri7/xRWH5dOdWMgpaxsJyOcw0nIA==
   dependencies:
-    "@atb-as/theme" "^13.1.5"
+    "@atb-as/theme" "^14.0.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
@@ -49,6 +49,15 @@
   version "13.1.5"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.5.tgz#a83a6ebb7638612a23845d55f8a811e40d083deb"
   integrity sha512-ERKz3J0SxaObJK8GlWIw0f1yLds0I1gtSGx/29M9N2xQTzVcz2scXrRMnL4h2ztXz/zAM4vFQtWrUgnVDxn0Lw==
+  dependencies:
+    "@tfk-samf/figma-to-dtcg" "0.4.0"
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
+"@atb-as/theme@^14.0.0":
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-14.0.1.tgz#82f3d3cc179ee788a1b32d9d2c89948ea2d88dfb"
+  integrity sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"

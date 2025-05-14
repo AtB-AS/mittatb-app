@@ -31,8 +31,8 @@ import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
-import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchaseFareZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByMapScreen';
+import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
@@ -322,13 +322,13 @@ export const RootStack = () => {
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByMapScreen"
-                  component={Root_PurchaseTariffZonesSearchByMapScreen}
+                  name="Root_PurchaseFareZonesSearchByMapScreen"
+                  component={Root_PurchaseFareZonesSearchByMapScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByTextScreen"
-                  component={Root_PurchaseTariffZonesSearchByTextScreen}
+                  name="Root_PurchaseFareZonesSearchByTextScreen"
+                  component={Root_PurchaseFareZonesSearchByTextScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen

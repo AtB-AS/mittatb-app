@@ -4,12 +4,12 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from './types';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   type FareProductTypeConfig,
-  TariffZone,
+  FareZone,
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
@@ -52,11 +52,11 @@ export const getDefaultZones = (
 ): PurchaseSelectionType['zones'] | undefined => {
   if (getPlaceSelectionMode(typeConfig) !== 'zones') return undefined;
 
-  const selectableZones = input.tariffZones.filter((zone) =>
+  const selectableZones = input.fareZones.filter((zone) =>
     isSelectableZone(product, zone),
   );
 
-  let zoneWithMetadata: TariffZoneWithMetadata | undefined = undefined;
+  let zoneWithMetadata: FareZoneWithMetadata | undefined = undefined;
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
@@ -125,9 +125,9 @@ export const isSelectableProfile = (
 
 export const isSelectableZone = (
   product: PreassignedFareProduct,
-  zone: TariffZone,
+  zone: FareZone,
 ) => {
-  const zoneLimitations = product.limitations.tariffZoneRefs;
+  const zoneLimitations = product.limitations.fareZoneRefs;
   const emptyLimitations = !zoneLimitations?.length;
   return (
     emptyLimitations ||

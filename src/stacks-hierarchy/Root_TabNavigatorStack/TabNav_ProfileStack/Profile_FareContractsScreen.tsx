@@ -106,11 +106,7 @@ export const Profile_FareContractsScreen = () => {
         ...BASE.travelRights[0],
         fareProductRef: 'ATB:PreassignedFareProduct:6dd9beab',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
-        tariffZoneRefs: [
-          'ATB:TariffZone:1',
-          'ATB:TariffZone:2',
-          'ATB:TariffZone:3',
-        ],
+        fareZoneRefs: ['ATB:FareZone:1', 'ATB:FareZone:2', 'ATB:FareZone:3'],
       },
     ],
   };

@@ -36,7 +36,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
     case FareContractFromToMode.Zones:
       return (
         <ZonesFromTo
-          tariffZoneRefs={controllerData.tariffZoneRefs}
+          fareZoneRefs={controllerData.fareZoneRefs}
           mode={props.mode}
           backgroundColor={props.backgroundColor}
         />
@@ -76,7 +76,7 @@ type HarborsFromToData = {
 
 type ZonesFromToData = {
   mode: FareContractFromToMode.Zones;
-  tariffZoneRefs: string[];
+  fareZoneRefs: string[];
 };
 
 type SchoolFromToData = {
@@ -123,15 +123,15 @@ function useFareContractFromToController(
     return undefined;
   }
 
-  const tariffZoneRefs = (() => {
+  const fareZoneRefs = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
-      return travelRight.tariffZoneRefs ?? [];
+      return travelRight.fareZoneRefs ?? [];
     } else if (isRecentFareContract(fcOrRfc)) {
-      if (fcOrRfc.fromTariffZone) {
+      if (fcOrRfc.fromFareZone) {
         return [
-          fcOrRfc.fromTariffZone.id,
-          ...(fcOrRfc.toTariffZone ? [fcOrRfc.toTariffZone.id] : []),
+          fcOrRfc.fromFareZone.id,
+          ...(fcOrRfc.toFareZone ? [fcOrRfc.toFareZone.id] : []),
         ];
       }
     }
@@ -144,14 +144,14 @@ function useFareContractFromToController(
       if (!!travelRight.direction) {
         // A travelRight between quays (e.g. for boat)
         return travelRight.direction;
-      } else if (travelRight.tariffZoneRefs?.length ?? 0 > 1) {
+      } else if (travelRight.fareZoneRefs?.length ?? 0 > 1) {
         // A travelRight between several zones (e.g. for bus)
         return TravelRightDirection.Both;
       }
     } else if (isRecentFareContract(fcOrRfc)) {
       if (!!fcOrRfc.direction) {
         return fcOrRfc.direction;
-      } else if (fcOrRfc.fromTariffZone?.id !== fcOrRfc.toTariffZone?.id) {
+      } else if (fcOrRfc.fromFareZone?.id !== fcOrRfc.toFareZone?.id) {
         return TravelRightDirection.Both;
       }
     }
@@ -182,10 +182,10 @@ function useFareContractFromToController(
       endPointRef,
       direction,
     };
-  else if (!!tariffZoneRefs.length)
+  else if (!!fareZoneRefs.length)
     return {
       mode: FareContractFromToMode.Zones,
-      tariffZoneRefs,
+      fareZoneRefs: fareZoneRefs,
     };
 }
 
@@ -198,5 +198,5 @@ function isFareContract(
 function isRecentFareContract(
   fcOrRfc: FareContractType | RecentFareContractType,
 ): fcOrRfc is RecentFareContractType {
-  return 'fromTariffZone' in fcOrRfc;
+  return 'fromFareZone' in fcOrRfc;
 }

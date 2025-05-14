@@ -18,7 +18,7 @@ export type {
   PreassignedFareProduct,
   ProductTypeTransportModes,
   ScooterConsentLineType,
-  TariffZone,
+  FareZone,
   TimeSelectionMode,
   TransportModeFilterOptionType,
   TransportModeType,

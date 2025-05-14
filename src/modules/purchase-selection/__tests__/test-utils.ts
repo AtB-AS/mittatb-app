@@ -1,14 +1,14 @@
 import {
   FareProductTypeConfig,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   UserProfile,
 } from '@atb-as/config-specs';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
-import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -23,7 +23,6 @@ export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
     timeSelectionMode: 'datetime',
     requiresLogin: false,
     onBehalfOfEnabled: false,
-    requiresTokenOnMobile: false,
   },
 };
 
@@ -36,7 +35,7 @@ export const TEST_PRODUCT: PreassignedFareProduct = {
   distributionChannel: ['app'],
 };
 
-export const TEST_ZONE: TariffZone = {
+export const TEST_ZONE: FareZone = {
   id: 'T1',
   name: {lang: 'no', value: 'Sone 1'},
   version: 'v1',
@@ -54,7 +53,7 @@ export const TEST_ZONE: TariffZone = {
   },
 };
 
-export const TEST_ZONE_WITH_MD: TariffZoneWithMetadata = {
+export const TEST_ZONE_WITH_MD: FareZoneWithMetadata = {
   ...TEST_ZONE,
   resultType: 'zone',
 };
@@ -70,7 +69,7 @@ export const TEST_USER_PROFILE: UserProfile = {
 export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   fareProductTypeConfigs: [TEST_TYPE_CONFIG],
   preassignedFareProducts: [TEST_PRODUCT],
-  tariffZones: [TEST_ZONE],
+  fareZones: [TEST_ZONE],
   userProfiles: [TEST_USER_PROFILE],
   customerProfile: undefined,
   currentCoordinates: undefined,
