@@ -1,7 +1,7 @@
 import {ButtonSectionItem, Section} from '@atb/components/sections';
 import {
   Language,
-  TariffZonesTexts,
+  FareZonesTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -9,7 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
 import {getReferenceDataName} from '@atb/modules/configuration';
-import {TariffZoneWithMetadata} from './types';
+import {FareZoneWithMetadata} from './types';
 import {ViewStyle} from 'react-native';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
@@ -21,7 +21,7 @@ type Props = {
   style?: ViewStyle;
 };
 
-const TariffZonesSelectorButtons = ({
+const FareZonesSelectorButtons = ({
   selection,
   selectNext,
   onVenueSearchClick,
@@ -35,8 +35,8 @@ const TariffZonesSelectorButtons = ({
       <ButtonSectionItem
         label={
           isApplicableOnSingleZoneOnly
-            ? t(TariffZonesTexts.location.singleZone.label)
-            : t(TariffZonesTexts.location.zonePicker.labelFrom)
+            ? t(FareZonesTexts.location.singleZone.label)
+            : t(FareZonesTexts.location.zonePicker.labelFrom)
         }
         value={departurePickerValue(selection.zones?.from, language, t)}
         accessibilityLabel={departurePickerAccessibilityLabel(
@@ -44,7 +44,7 @@ const TariffZonesSelectorButtons = ({
           language,
           t,
         )}
-        accessibilityHint={t(TariffZonesTexts.location.zonePicker.a11yHintFrom)}
+        accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintFrom)}
         onPress={() => onVenueSearchClick('from')}
         icon={
           selection.zones?.from.resultType === 'geolocation' ? (
@@ -56,14 +56,14 @@ const TariffZonesSelectorButtons = ({
       />
       {!isApplicableOnSingleZoneOnly && (
         <ButtonSectionItem
-          label={t(TariffZonesTexts.location.zonePicker.labelTo)}
+          label={t(FareZonesTexts.location.zonePicker.labelTo)}
           value={destinationPickerValue(selection.zones?.to, language, t)}
           accessibilityLabel={destinationPickerAccessibilityLabel(
             selection.zones?.to,
             language,
             t,
           )}
-          accessibilityHint={t(TariffZonesTexts.location.zonePicker.a11yHintTo)}
+          accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintTo)}
           onPress={() => onVenueSearchClick('to')}
           icon={
             selection.zones?.to.resultType === 'geolocation' ? (
@@ -79,91 +79,91 @@ const TariffZonesSelectorButtons = ({
 };
 
 const departurePickerAccessibilityLabel = (
-  fromTariffZone: TariffZoneWithMetadata | undefined,
+  fromFareZone: FareZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
 ): string | undefined => {
-  if (!fromTariffZone) return undefined;
-  if (fromTariffZone.venueName)
+  if (!fromFareZone) return undefined;
+  if (fromFareZone.venueName)
     return t(
-      TariffZonesTexts.location.zonePicker.a11yLabelFrom.withVenue(
-        getReferenceDataName(fromTariffZone, language),
-        fromTariffZone.venueName,
+      FareZonesTexts.location.zonePicker.a11yLabelFrom.withVenue(
+        getReferenceDataName(fromFareZone, language),
+        fromFareZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.zonePicker.a11yLabelFrom.noVenue(
-        getReferenceDataName(fromTariffZone, language),
+      FareZonesTexts.location.zonePicker.a11yLabelFrom.noVenue(
+        getReferenceDataName(fromFareZone, language),
       ),
     );
   }
 };
 
 const destinationPickerAccessibilityLabel = (
-  toTariffZone: TariffZoneWithMetadata | undefined,
+  toFareZone: FareZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
 ): string | undefined => {
-  if (!toTariffZone) return undefined;
-  if (toTariffZone.venueName)
+  if (!toFareZone) return undefined;
+  if (toFareZone.venueName)
     return t(
-      TariffZonesTexts.location.zonePicker.a11yLabelTo.withVenue(
-        getReferenceDataName(toTariffZone, language),
-        toTariffZone.venueName,
+      FareZonesTexts.location.zonePicker.a11yLabelTo.withVenue(
+        getReferenceDataName(toFareZone, language),
+        toFareZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.zonePicker.a11yLabelTo.noVenue(
-        getReferenceDataName(toTariffZone, language),
+      FareZonesTexts.location.zonePicker.a11yLabelTo.noVenue(
+        getReferenceDataName(toFareZone, language),
       ),
     );
   }
 };
 
 const departurePickerValue = (
-  fromTariffZone: TariffZoneWithMetadata | undefined,
+  fromFareZone: FareZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
 ): string | undefined => {
-  if (!fromTariffZone) return undefined;
-  if (fromTariffZone.venueName)
+  if (!fromFareZone) return undefined;
+  if (fromFareZone.venueName)
     return t(
-      TariffZonesTexts.location.zonePicker.value.withVenue(
-        getReferenceDataName(fromTariffZone, language),
-        fromTariffZone.venueName,
+      FareZonesTexts.location.zonePicker.value.withVenue(
+        getReferenceDataName(fromFareZone, language),
+        fromFareZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.zonePicker.value.noVenue(
-        getReferenceDataName(fromTariffZone, language),
+      FareZonesTexts.location.zonePicker.value.noVenue(
+        getReferenceDataName(fromFareZone, language),
       ),
     );
   }
 };
 
 const destinationPickerValue = (
-  toTariffZone: TariffZoneWithMetadata | undefined,
+  toFareZone: FareZoneWithMetadata | undefined,
   language: Language,
   t: TranslateFunction,
 ): string | undefined => {
-  if (!toTariffZone) return undefined;
-  if (toTariffZone.venueName) {
+  if (!toFareZone) return undefined;
+  if (toFareZone.venueName) {
     return t(
-      TariffZonesTexts.location.zonePicker.value.withVenue(
-        getReferenceDataName(toTariffZone, language),
-        toTariffZone.venueName,
+      FareZonesTexts.location.zonePicker.value.withVenue(
+        getReferenceDataName(toFareZone, language),
+        toFareZone.venueName,
       ),
     );
   } else {
     return t(
-      TariffZonesTexts.location.zonePicker.value.noVenue(
-        getReferenceDataName(toTariffZone, language),
+      FareZonesTexts.location.zonePicker.value.noVenue(
+        getReferenceDataName(toFareZone, language),
       ),
     );
   }
 };
 
-export {TariffZonesSelectorButtons};
+export {FareZonesSelectorButtons};

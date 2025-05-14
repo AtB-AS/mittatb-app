@@ -170,7 +170,7 @@ describe('purchaseSelectionBuilder - product', () => {
   it('Should change both zones to default if one is not within limitations', () => {
     const input = {
       ...TEST_INPUT,
-      tariffZones: [
+      fareZones: [
         {...TEST_ZONE, id: 'T1'},
         {...TEST_ZONE, id: 'T2', isDefault: true},
         {...TEST_ZONE, id: 'T3'},
@@ -190,7 +190,7 @@ describe('purchaseSelectionBuilder - product', () => {
         id: 'P2',
         limitations: {
           ...TEST_PRODUCT.limitations,
-          tariffZoneRefs: ['T2', 'T3'],
+          fareZoneRefs: ['T2', 'T3'],
         },
       })
       .build();

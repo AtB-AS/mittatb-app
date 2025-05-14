@@ -1,18 +1,18 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {TariffZonesTexts, useTranslation} from '@atb/translations';
+import {FareZonesTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {
-  TariffZonesSelectorButtons,
-  TariffZonesSelectorMap,
-} from '@atb/tariff-zones-selector';
+  FareZonesSelectorButtons,
+  FareZonesSelectorMap,
+} from '@atb/fare-zones-selector';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 
-type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByMapScreen'>;
+type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByMapScreen'>;
 
-export const Root_PurchaseTariffZonesSearchByMapScreen = ({
+export const Root_PurchaseFareZonesSearchByMapScreen = ({
   navigation,
   route: {params},
 }: Props) => {
@@ -39,7 +39,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
     });
 
   const onVenueSearchClick = (fromOrTo: 'from' | 'to') =>
-    navigation.navigate('Root_PurchaseTariffZonesSearchByTextScreen', {
+    navigation.navigate('Root_PurchaseFareZonesSearchByTextScreen', {
       fromOrTo,
       selection,
     });
@@ -50,13 +50,13 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         <FullScreenHeader
           title={
             isApplicableOnSingleZoneOnly
-              ? t(TariffZonesTexts.header.title.singleZone)
-              : t(TariffZonesTexts.header.title.multipleZone)
+              ? t(FareZonesTexts.header.title.singleZone)
+              : t(FareZonesTexts.header.title.multipleZone)
           }
           leftButton={{type: 'back'}}
         />
 
-        <TariffZonesSelectorButtons
+        <FareZonesSelectorButtons
           selection={selection}
           selectNext={selectNext}
           onVenueSearchClick={onVenueSearchClick}
@@ -65,7 +65,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         />
       </View>
 
-      <TariffZonesSelectorMap
+      <FareZonesSelectorMap
         selection={selection}
         selectNext={selectNext}
         isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}

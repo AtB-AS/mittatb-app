@@ -1,14 +1,14 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {TariffZone} from '@atb/modules/configuration';
+import {FareZone} from '@atb/modules/configuration';
 import {SearchLocation} from '@atb/modules/favorites';
 import {useGeocoder} from '@atb/modules/geocoder';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StyleSheet} from '@atb/theme';
 import {
-  TariffZoneSearchTexts,
-  TariffZonesTexts,
+  FareZoneSearchTexts,
+  FareZonesTexts,
   useTranslation,
 } from '@atb/translations';
 import {useDebounce} from '@atb/utils/use-debounce';
@@ -21,19 +21,19 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TariffZoneResults} from '@atb/tariff-zones-selector/TariffZoneResults';
-import {LocationAndTariffZone, VenueResults} from './VenueResults';
+import {FareZoneResults} from '@atb/fare-zones-selector/FareZoneResults';
+import {LocationAndFareZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {
   usePurchaseSelectionBuilder,
-  useSelectableTariffZones,
+  useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import type {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 
-type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;
+type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByTextScreen'>;
 
-export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
+export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   navigation,
   route: {
     params: {selection, fromOrTo},
@@ -47,34 +47,32 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const tariffZones = useSelectableTariffZones(
-    selection.preassignedFareProduct,
-  );
+  const fareZones = useSelectableFareZones(selection.preassignedFareProduct);
 
-  const getMatchingTariffZone = useCallback(
+  const getMatchingFareZone = useCallback(
     (location: SearchLocation) =>
-      tariffZones.find((tariffZone) =>
-        location.tariff_zones?.includes(tariffZone.id),
+      fareZones.find((fareZone) =>
+        location.tariff_zones?.includes(fareZone.id),
       ),
-    [tariffZones],
+    [fareZones],
   );
 
-  const onSelectZone = (tariffZone: TariffZone) => {
-    const zone: TariffZoneWithMetadata = {...tariffZone, resultType: 'zone'};
+  const onSelectZone = (fareZone: FareZone) => {
+    const zone: FareZoneWithMetadata = {...fareZone, resultType: 'zone'};
     navigateToMapScreen(zone);
   };
 
   const onSelectVenue = (location: SearchLocation) => {
-    const tariffZone = getMatchingTariffZone(location);
-    const zone: TariffZoneWithMetadata | undefined = tariffZone && {
-      ...tariffZone,
+    const fareZone = getMatchingFareZone(location);
+    const zone: FareZoneWithMetadata | undefined = fareZone && {
+      ...fareZone,
       resultType: 'venue',
       venueName: location.name,
     };
     navigateToMapScreen(zone);
   };
 
-  const navigateToMapScreen = (zone?: TariffZoneWithMetadata) => {
+  const navigateToMapScreen = (zone?: FareZoneWithMetadata) => {
     const isApplicableOnSingleZoneOnly =
       selection.preassignedFareProduct.zoneSelectionMode?.includes('single') ||
       selection.fareProductTypeConfig.configuration.zoneSelectionMode.includes(
@@ -90,7 +88,7 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
     }
     const newSelection = builder.build();
 
-    navigation.navigate('Root_PurchaseTariffZonesSearchByMapScreen', {
+    navigation.navigate('Root_PurchaseFareZonesSearchByMapScreen', {
       selection: newSelection,
     });
   };
@@ -114,33 +112,31 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
 
   const errorMessage = error ? translateErrorType(error, t) : undefined;
 
-  const locationsAndTariffZones: LocationAndTariffZone[] = useMemo(
+  const locationsAndFareZones: LocationAndFareZone[] = useMemo(
     () =>
       (locations || [])
         ?.filter((l): l is SearchLocation => l.resultType === 'search')
         ?.map((location) => ({
           location,
-          tariffZone: getMatchingTariffZone(location),
+          fareZone: getMatchingFareZone(location),
         }))
         .filter(
-          (
-            locationAndTariffZone,
-          ): locationAndTariffZone is LocationAndTariffZone =>
-            locationAndTariffZone.tariffZone != null,
+          (locationAndFareZone): locationAndFareZone is LocationAndFareZone =>
+            locationAndFareZone.fareZone != null,
         ),
-    [locations, getMatchingTariffZone],
+    [locations, getMatchingFareZone],
   );
 
-  const showActivityIndicator = isSearching && !locationsAndTariffZones.length;
-  const showTariffZones = !debouncedText && !isSearching;
-  const showVenueResults = !!locationsAndTariffZones.length;
+  const showActivityIndicator = isSearching && !locationsAndFareZones.length;
+  const showFareZones = !debouncedText && !isSearching;
+  const showVenueResults = !!locationsAndFareZones.length;
   const showEmptyResultText =
-    !locationsAndTariffZones.length && !!debouncedText && !isSearching;
+    !locationsAndFareZones.length && !!debouncedText && !isSearching;
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TariffZoneSearchTexts.header.title)}
+        title={t(FareZoneSearchTexts.header.title)}
         leftButton={{type: 'back'}}
       />
 
@@ -151,14 +147,14 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
             radius="top-bottom"
             label={
               fromOrTo === 'from'
-                ? t(TariffZonesTexts.location.zonePicker.labelFrom)
-                : t(TariffZonesTexts.location.zonePicker.labelTo)
+                ? t(FareZonesTexts.location.zonePicker.labelFrom)
+                : t(FareZonesTexts.location.zonePicker.labelTo)
             }
             value={text}
             onChangeText={setText}
             showClear={Boolean(text?.length)}
             onClear={() => setText('')}
-            placeholder={t(TariffZoneSearchTexts.searchField.placeholder)}
+            placeholder={t(FareZoneSearchTexts.searchField.placeholder)}
             autoCorrect={false}
             autoComplete="off"
             testID="searchInput"
@@ -178,22 +174,19 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
           </View>
         )}
         {showActivityIndicator && <ActivityIndicator />}
-        {showTariffZones && (
-          <TariffZoneResults
-            tariffZones={tariffZones}
-            onSelect={onSelectZone}
-          />
+        {showFareZones && (
+          <FareZoneResults fareZones={fareZones} onSelect={onSelectZone} />
         )}
         {showVenueResults && (
           <VenueResults
-            locationsAndTariffZones={locationsAndTariffZones}
+            locationsAndFareZones={locationsAndFareZones}
             onSelect={onSelectVenue}
           />
         )}
         {showEmptyResultText && (
           <MessageInfoBox
             type="info"
-            message={t(TariffZoneSearchTexts.messages.emptyResult)}
+            message={t(FareZoneSearchTexts.messages.emptyResult)}
           />
         )}
       </ScrollView>

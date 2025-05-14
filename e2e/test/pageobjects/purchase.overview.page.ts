@@ -141,8 +141,8 @@ class PurchaseOverviewPage {
     const openZoneSelectorId = `//*[@resource-id="selectZonesButton"]`;
     const searchFromId = `//*[@resource-id="searchFromButton"]`;
     const searchToId = `//*[@resource-id="searchToButton"]`;
-    const zoneFromId = `//*[@resource-id="tariffZone${zoneFrom}Button"]`;
-    const zoneToId = `//*[@resource-id="tariffZone${zoneTo}Button"]`;
+    const zoneFromId = `//*[@resource-id="fareZone${zoneFrom}Button"]`;
+    const zoneToId = `//*[@resource-id="fareZone${zoneTo}Button"]`;
     const saveId = `//*[@resource-id="saveZonesButton"]`;
 
     // Open
@@ -155,7 +155,7 @@ class PurchaseOverviewPage {
     // Set from zone
     await ElementHelper.waitForElement('text', 'Select stops/zones');
     await $(searchFromId).click();
-    await ElementHelper.waitForElement('id', `tariffZone${zoneFrom}Button`);
+    await ElementHelper.waitForElement('id', `fareZone${zoneFrom}Button`);
     // One click to opt out of the search input field
     await $(zoneFromId).click();
     await $(zoneFromId).click();
@@ -163,7 +163,7 @@ class PurchaseOverviewPage {
 
     // Set to zone
     await $(searchToId).click();
-    await ElementHelper.waitForElement('id', `tariffZone${zoneTo}Button`);
+    await ElementHelper.waitForElement('id', `fareZone${zoneTo}Button`);
     // One click to opt out of the search input field
     await $(zoneToId).click();
     await $(zoneToId).click();

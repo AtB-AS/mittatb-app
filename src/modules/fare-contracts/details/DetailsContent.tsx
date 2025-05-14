@@ -109,8 +109,8 @@ export const DetailsContent: React.FC<Props> = ({
   const globalMessageRuleVariables = {
     fareProductType: preassignedFareProduct?.type ?? 'unknown',
     validityStatus: validityStatus,
-    tariffZones: firstTravelRight.tariffZoneRefs ?? [],
-    numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
+    fareZones: firstTravelRight.fareZoneRefs ?? [],
+    numberOfZones: firstTravelRight.fareZoneRefs?.length ?? 0,
     numberOfTravelRights: fc.travelRights.length,
   };
   const globalMessageCount = findGlobalMessages(

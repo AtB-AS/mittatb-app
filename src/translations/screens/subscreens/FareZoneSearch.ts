@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 
-const TariffZoneSearchTexts = {
+const FareZoneSearchTexts = {
   searchField: {
     placeholder: _(
       'Søk etter holdeplass',
@@ -63,4 +63,4 @@ const TariffZoneSearchTexts = {
     ),
   },
 };
-export default TariffZoneSearchTexts;
+export default FareZoneSearchTexts;

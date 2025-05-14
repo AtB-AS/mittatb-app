@@ -10,9 +10,9 @@ import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {TariffZone} from '@atb/modules/configuration';
+import {FareZone} from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
 import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
@@ -69,7 +69,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       type: fareProductTypeConfig.type,
     });
 
-    const mapZone = (zone: TariffZone): TariffZoneWithMetadata => {
+    const mapZone = (zone: FareZone): FareZoneWithMetadata => {
       return {...zone, resultType: 'zone'};
     };
 
@@ -92,8 +92,8 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .userProfiles(rfc.userProfilesWithCount)
       .fromStopPlace(mapPlace(rfc.pointToPointValidity?.fromPlace))
       .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
-    if (rfc.fromTariffZone) builder.fromZone(mapZone(rfc.fromTariffZone));
-    if (rfc.toTariffZone) builder.toZone(mapZone(rfc.toTariffZone));
+    if (rfc.fromFareZone) builder.fromZone(mapZone(rfc.fromFareZone));
+    if (rfc.toFareZone) builder.toZone(mapZone(rfc.toFareZone));
     const selection = builder.build();
 
     navigation.navigate('Root_PurchaseOverviewScreen', {

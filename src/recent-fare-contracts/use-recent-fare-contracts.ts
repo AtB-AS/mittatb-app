@@ -1,6 +1,6 @@
 import {
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   UserProfile,
   FareProductTypeConfig,
   useFirestoreConfigurationContext,
@@ -90,7 +90,7 @@ const mapBackendRecentFareContracts = (
   recentFareContract: RecentOrderDetails,
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
-  tariffZones: TariffZone[],
+  fareZones: FareZone[],
   userProfiles: UserProfile[],
 ): RecentFareContractType | null => {
   const preassignedFareProduct = findReferenceDataById(
@@ -119,11 +119,11 @@ const mapBackendRecentFareContracts = (
     return null;
   }
 
-  const fromTariffZone = recentFareContract.zones
-    ? findReferenceDataById(tariffZones, recentFareContract.zones[0])
+  const fromFareZone = recentFareContract.zones
+    ? findReferenceDataById(fareZones, recentFareContract.zones[0])
     : undefined;
-  const toTariffZone = recentFareContract.zones
-    ? findReferenceDataById(tariffZones, recentFareContract.zones.slice(-1)[0])
+  const toFareZone = recentFareContract.zones
+    ? findReferenceDataById(fareZones, recentFareContract.zones.slice(-1)[0])
     : undefined;
 
   const direction: TravelRightDirection | undefined = enumFromString(
@@ -133,8 +133,8 @@ const mapBackendRecentFareContracts = (
 
   const pointToPointValidity = recentFareContract.pointToPointValidity;
 
-  const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
-  const toId = pointToPointValidity?.toPlace || toTariffZone?.id;
+  const fromId = pointToPointValidity?.fromPlace || fromFareZone?.id;
+  const toId = pointToPointValidity?.toPlace || toFareZone?.id;
 
   const id =
     preassignedFareProduct?.id +
@@ -146,8 +146,8 @@ const mapBackendRecentFareContracts = (
     id,
     direction,
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone: fromFareZone,
+    toFareZone: toFareZone,
     pointToPointValidity,
     userProfilesWithCount,
   };
@@ -157,7 +157,7 @@ const mapBackendRecentFareContracts = (
  * This method:
  * - Maps from the api RecentFareContract format to the app RecentFareContract
  *   format
- * - Filter out recent fare contracts where the product or tariff zones were not
+ * - Filter out recent fare contracts where the product or fare zones were not
  *   found in our reference data, or none of the user profiles were found in our
  *   reference data
  * - Sort descending by created date
@@ -170,7 +170,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
   recentFareContracts: RecentOrderDetails[],
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
-  tariffZones: TariffZone[],
+  fareZones: FareZone[],
   userProfiles: UserProfile[],
 ): RecentFareContractType[] => {
   return recentFareContracts
@@ -181,7 +181,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
           recentFareContract,
           preassignedFareProducts,
           fareProductTypeConfigs,
-          tariffZones,
+          fareZones,
           userProfiles,
         );
         return maybeFareContract
@@ -200,7 +200,7 @@ export const useRecentFareContracts = () => {
   const {
     preassignedFareProducts,
     fareProductTypeConfigs,
-    tariffZones,
+    fareZones,
     userProfiles,
   } = useFirestoreConfigurationContext();
 
@@ -229,14 +229,14 @@ export const useRecentFareContracts = () => {
         state.recentFareContracts,
         preassignedFareProducts,
         fareProductTypeConfigs,
-        tariffZones,
+        fareZones,
         userProfiles,
       ),
     [
       state.recentFareContracts,
       preassignedFareProducts,
       fareProductTypeConfigs,
-      tariffZones,
+      fareZones,
       userProfiles,
     ],
   );
