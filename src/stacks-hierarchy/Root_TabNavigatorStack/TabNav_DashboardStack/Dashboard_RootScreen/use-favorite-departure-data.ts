@@ -26,11 +26,7 @@ import {animateNextChange} from '@atb/utils/animation';
 
 import {flatten} from 'lodash';
 import {DepartureLineInfo} from '@atb/api/departures/types';
-<<<<<<< HEAD
-import type {DateOptionAndValue} from 'src/components/date-selection';
-=======
-import type {DateOptionAndValue} from '@atb/date-selection';
->>>>>>> 3ae31bfef (refactor: Renamed src/* imports to @atb/* imports)
+import type {DateOptionAndValue} from '@atb/components/date-selection';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
