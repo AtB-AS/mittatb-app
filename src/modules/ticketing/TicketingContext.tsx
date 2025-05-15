@@ -4,9 +4,10 @@ import {Reservation, PaymentStatus} from './types';
 import {FareContractType} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {differenceInMinutes} from 'date-fns';
-import {CustomerProfile} from '.';
+import {CustomerProfile, useFareContracts} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {useGetFareContractsQuery} from './use-fare-contracts';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
@@ -48,6 +49,7 @@ const ticketingReducer: TicketingReducer = (
   prevState,
   action,
 ): TicketingReducerState => {
+  console.log('ticketingReducer', action.type);
   switch (action.type) {
     case 'UPDATE_FARE_CONTRACTS': {
       const currentFareContractOrderIds = action.fareContracts.map(
@@ -146,7 +148,16 @@ export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
 
   const {userId} = useAuthContext();
-  const {enable_ticketing} = useRemoteConfigContext();
+  const {enable_ticketing, enable_ticketing_event_stream} =
+    useRemoteConfigContext();
+
+  const {data: fareContracts} = useGetFareContractsQuery('available');
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_FARE_CONTRACTS',
+      fareContracts: fareContracts ?? [],
+    });
+  }, [fareContracts]);
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -155,8 +166,16 @@ export const TicketingContextProvider = ({children}: Props) => {
       );
       const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
-          onSnapshot: (fareContracts) =>
-            dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
+          onSnapshot: (fareContracts) => {
+            if (enable_ticketing_event_stream) {
+              console.log(
+                'Received fare contracts from firestore:',
+                fareContracts.map((fc) => fc.id),
+              );
+            } else {
+              dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
+            }
+          },
           onError: (err) =>
             notifyBugsnag(err, {
               metadata: {

@@ -45,6 +45,7 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
+  enable_ticketing_event_stream: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback_on_timeout: boolean;
   enable_token_fallback: boolean;
@@ -121,6 +122,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
+  enable_ticketing_event_stream: true,
   enable_tips_and_information: false,
   enable_token_fallback_on_timeout: true,
   enable_token_fallback: true,
@@ -263,6 +265,9 @@ export function getConfig(): RemoteConfig {
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
+  const enable_ticketing_event_stream =
+    values['enable_ticketing_event_stream']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticketing_event_stream;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
     defaultRemoteConfig.enable_tips_and_information;
@@ -395,6 +400,7 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_ticket_information,
     enable_ticketing,
+    enable_ticketing_event_stream,
     enable_tips_and_information,
     enable_token_fallback_on_timeout,
     enable_token_fallback,

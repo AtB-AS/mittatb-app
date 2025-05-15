@@ -55,13 +55,13 @@ export const useFareContracts = (
 
   return {fareContracts: filteredFareContracts, refetch};
 };
-
-const useGetFareContractsQuery = (
+export const fareContractsQueryKey = 'FETCH_FARE_CONTRACTS';
+export const useGetFareContractsQuery = (
   availability: AvailabilityStatusInput['availability'],
 ) => {
   const {userId} = useAuthContext();
   return useQuery({
-    queryKey: ['FETCH_FARE_CONTRACTS', availability, userId],
+    queryKey: [fareContractsQueryKey, availability, userId],
     queryFn: () => getFareContracts(availability),
     enabled: false,
     retry: 0,
