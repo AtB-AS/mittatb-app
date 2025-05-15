@@ -1,5 +1,5 @@
-import {Location} from '@atb/modules/favorites';
-import type {DateOptionAndValue} from '@atb/date-picker/types';
+import type {DateOptionAndValue} from '@atb/components/date-selection';
+import type {Location} from '@atb/modules/favorites';
 
 export type SearchForLocations = {
   from?: Location;

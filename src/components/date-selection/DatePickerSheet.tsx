@@ -18,7 +18,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import type {
   DateOptionAndText,
   DateOptionAndValue,
-} from '@atb/date-picker/types';
+} from '@atb/components/date-selection';
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
 import {useLocaleContext} from '@atb/modules/locale';

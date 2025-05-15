@@ -3,11 +3,6 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {
-  DepartureSearchTime,
-  StopPlacesView,
-  useStopsDetailsDataQuery,
-} from '@atb/screen-components/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
@@ -15,6 +10,11 @@ import {Location, SearchLocation} from '@atb/modules/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
+import {
+  StopPlacesView,
+  useStopsDetailsDataQuery,
+} from '@atb/screen-components/place-screen';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
