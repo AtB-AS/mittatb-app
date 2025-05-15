@@ -1,10 +1,11 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavoritesContext} from '@atb/modules/favorites';
-import {DepartureSearchTime} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import {DateSelection} from './DateSelection';
+import {
+  DateSelection,
+  type DepartureSearchTime,
+} from '@atb/components/date-selection';
 import {FavoriteToggle} from './FavoriteToggle';
 import {QuaySection} from './QuaySection';
 import {useDeparturesData} from '../hooks/use-departures-data';
@@ -14,6 +15,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import type {ContrastColor} from '@atb-as/theme';
+import {useFavoritesContext} from '@atb/modules/favorites';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 

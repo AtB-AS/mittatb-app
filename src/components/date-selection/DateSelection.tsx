@@ -18,9 +18,9 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {addDays, isToday, parseISO} from 'date-fns';
 import React, {RefObject, useRef} from 'react';
 import {View} from 'react-native';
-import {DepartureDateOptions, DepartureSearchTime} from '../types';
-import {DatePickerSheet} from '@atb/date-picker';
+import {DatePickerSheet} from './DatePickerSheet';
 import type {ContrastColor} from '@atb-as/theme';
+import {DepartureDateOptions, type DepartureSearchTime} from './types';
 
 type DateSelectionProps = {
   searchTime: DepartureSearchTime;

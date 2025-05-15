@@ -1,7 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {DepartureSearchTime} from './types';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
@@ -13,7 +12,8 @@ import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-scr
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
 import {StopPlacesView} from './components/StopPlacesView';
-import {useStopsDetailsDataQuery} from '@atb/screen-components/place-screen';
+import type {DepartureSearchTime} from 'src/components/date-selection';
+import {useStopsDetailsDataQuery} from './hooks/use-stops-details-data-query';
 
 export type PlaceScreenParams = {
   place: StopPlace;

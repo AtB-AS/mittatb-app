@@ -26,7 +26,7 @@ import {animateNextChange} from '@atb/utils/animation';
 
 import {flatten} from 'lodash';
 import {DepartureLineInfo} from '@atb/api/departures/types';
-import type {DateOptionAndValue} from '@atb/date-picker';
+import type {DateOptionAndValue} from '@atb/components/date-selection';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
