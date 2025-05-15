@@ -38,10 +38,8 @@ export const useLoadNativeTokenQuery = (
  *
  * - First check if there has been a user change. If there has, then a new
  *   token should always be created (skip to last step).
- * - If no user change retrieve the token from the client-sdk. If necessary,
+ * - If no user change, retrieve the token from the client-sdk. If necessary,
  *   the token will be renewed while getting it.
- * - If a token already exists it will be validated, and any exceptions thrown
- *   will be handled accordingly.
  * - A new token will be created if necessary.
  *
  * Note: This useEffect is large and complex. I tried simplifying it, but I
