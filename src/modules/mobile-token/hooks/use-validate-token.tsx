@@ -19,6 +19,9 @@ const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14';
 
 /**
  * This hook is used to check if the token needs renewal/reset.
+ * 
+ * It replaces the validate function which was called on earlier versions
+ * of the app. 
  *
  * After loading both local/native token and remote tokens list,
  * check if the local token has a counterpart remote token.
