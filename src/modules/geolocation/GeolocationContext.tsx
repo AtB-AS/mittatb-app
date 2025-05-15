@@ -121,11 +121,12 @@ const mapPositionToLocation = (
       }
     : null;
 
-type RequestLocationPermissionFn = () => Promise<PermissionStatus | undefined>;
+type RequestLocationPermissionFn = (
+  requestPercise: boolean,
+) => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
   requestLocationPermission: RequestLocationPermissionFn;
-  requestPreciseLocationPermission: RequestLocationPermissionFn;
 };
 
 const GeolocationContext = createContext<GeolocationContextState | undefined>(
@@ -158,32 +159,25 @@ export const GeolocationContextProvider = ({children}: Props) => {
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const {updateMetadata} = useIntercomMetadata();
 
-  const requestLocationPermission = useCallback(async () => {
-    if (!(await isLocationEnabled())) {
-      openBlockedLocationAlert();
-    } else {
-      const status = await requestGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
-      return status;
-    }
-  }, []);
-
-  const requestPreciseLocationPermission = useCallback(async () => {
-    if (!(await isLocationEnabled())) {
-      openBlockedPreciseLocationAlert();
-    } else {
-      const status = await requestPreciseGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
-      dispatch({
-        type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
-        status: status === 'granted',
-      });
-      return status;
-    }
-  }, []);
+  const requestLocationPermission = useCallback(
+    async (requestPercise = false) => {
+      if (!(await isLocationEnabled())) {
+        openBlockedLocationAlert(requestPercise);
+      } else {
+        const status = await requestGeolocationPermission(requestPercise);
+        dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
+        dispatch({
+          type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
+          status: status === 'granted' && requestPercise,
+        });
+        return status;
+      }
+    },
+    [],
+  );
 
   async function handleLocationError(locationError: GeolocationError) {
-    const status = await checkGeolocationPermission();
+    const status = await checkGeolocationPermission(false);
     const locationEnabled = await isLocationEnabled();
     if (status !== 'granted' || !locationEnabled) {
       dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
@@ -207,20 +201,6 @@ export const GeolocationContextProvider = ({children}: Props) => {
       position,
       locationName,
     });
-
-  useEffect(() => {
-    if (appStatus === 'active') {
-      const checkPreciseLocationPermission = async () => {
-        const status = await checkPreciseGeolocationPermission();
-
-        dispatch({
-          type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
-          status: status === 'granted' && state.locationEnabled,
-        });
-      };
-      checkPreciseLocationPermission();
-    }
-  }, [appStatus, state.locationEnabled]);
 
   useEffect(() => {
     if (appStatus === 'active') {
@@ -251,7 +231,13 @@ export const GeolocationContextProvider = ({children}: Props) => {
   useEffect(() => {
     async function checkPermission() {
       if (appStatus === 'active') {
-        const status = await checkGeolocationPermission();
+        const perciseStatus = await checkGeolocationPermission(true);
+        dispatch({
+          type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
+          status: perciseStatus === 'granted' && state.locationEnabled,
+        });
+
+        const status = await checkGeolocationPermission(false);
         const locationEnabled = await isLocationEnabled();
 
         if (state.status != status) {
@@ -261,7 +247,7 @@ export const GeolocationContextProvider = ({children}: Props) => {
     }
 
     checkPermission();
-  }, [appStatus, state.status]);
+  }, [appStatus, state.locationEnabled, state.status]);
 
   useEffect(() => {
     if (state.status !== null) {
@@ -312,7 +298,6 @@ export const GeolocationContextProvider = ({children}: Props) => {
         preciseLocationIsAvailable,
         requestLocationPermission,
         getCurrentCoordinates,
-        requestPreciseLocationPermission,
       }}
     >
       {children}
@@ -320,11 +305,13 @@ export const GeolocationContextProvider = ({children}: Props) => {
   );
 };
 
-const requestGeolocationPermission = async (): Promise<PermissionStatus> => {
-  const permissionStatus = await checkGeolocationPermission();
+const requestGeolocationPermission = async (
+  requestPercise: boolean,
+): Promise<PermissionStatus> => {
+  const permissionStatus = await checkGeolocationPermission(requestPercise);
   if (Platform.OS === 'ios') {
     if (permissionStatus === 'blocked') {
-      openSettingsAlert();
+      openSettingsAlert(requestPercise);
       return permissionStatus;
     } else {
       return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -333,86 +320,47 @@ const requestGeolocationPermission = async (): Promise<PermissionStatus> => {
     // Android
 
     if (permissionStatus === 'denied') {
-      // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
-      const requestedStatus = await requestMultiple([
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-      ]);
+      if (requestPercise) {
+        const requestedStatus = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        );
 
-      if (
-        requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-          'blocked' &&
-        requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
-          'blocked'
-      ) {
-        openSettingsAlert();
-        return permissionStatus;
+        if (requestedStatus === 'blocked') {
+          openSettingsAlert(requestPercise);
+          return permissionStatus;
+        }
+      } else {
+        // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
+        const requestedStatus = await requestMultiple([
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+        ]);
+
+        if (
+          requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+            'blocked' &&
+          requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
+            'blocked'
+        ) {
+          openSettingsAlert(requestPercise);
+          return permissionStatus;
+        }
       }
     }
-
-    return await checkGeolocationPermission();
+    return await checkGeolocationPermission(requestPercise);
   }
 };
 
-const requestPreciseGeolocationPermission = async () => {
-  const permissionStatus = await checkPreciseGeolocationPermission();
-  if (Platform.OS === 'ios') {
-    if (permissionStatus === 'blocked') {
-      openSettingsAlert();
-      return permissionStatus;
-    } else {
-      return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-    }
-  } else {
-    // Android
-    if (permissionStatus === 'denied') {
-      const requestedStatus = await request(
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      );
-
-      if (requestedStatus === 'blocked') {
-        openPreciseSettingsAlert();
-        return permissionStatus;
-      }
-    }
-    return await checkPreciseGeolocationPermission();
-  }
-};
-
-const openBlockedLocationAlert = () =>
+const openBlockedLocationAlert = (isPercise: boolean) =>
   Alert.alert(
     tGlobal(GeoLocationTexts.blockedLocation.title),
-    tGlobal(GeoLocationTexts.blockedLocation.message),
+    tGlobal(GeoLocationTexts.blockedLocation.message(isPercise)),
   );
 
-const openBlockedPreciseLocationAlert = () =>
+const openSettingsAlert = (isPercise: boolean) =>
   Alert.alert(
-    tGlobal(GeoLocationTexts.blockedLocation.title),
-    tGlobal(GeoLocationTexts.blockedLocation.preciseAndroidMessage),
-  );
-
-const openSettingsAlert = () =>
-  Alert.alert(
-    tGlobal(GeoLocationTexts.locationPermission.title),
-    tGlobal(GeoLocationTexts.locationPermission.message),
-    [
-      {
-        text: tGlobal(GeoLocationTexts.locationPermission.goToSettings),
-        onPress: () => Linking.openSettings(),
-      },
-      {
-        text: tGlobal(GeoLocationTexts.locationPermission.cancel),
-        onPress: () => {},
-        style: 'cancel',
-      },
-    ],
-    {cancelable: true},
-  );
-
-const openPreciseSettingsAlert = () =>
-  Alert.alert(
-    tGlobal(GeoLocationTexts.locationPermission.preciseAndroidTitle),
-    tGlobal(GeoLocationTexts.locationPermission.preciseAndroidMessage),
+    tGlobal(GeoLocationTexts.locationPermission.title(isPercise)),
+    tGlobal(GeoLocationTexts.locationPermission.message(isPercise)),
     [
       {
         text: tGlobal(GeoLocationTexts.locationPermission.goToSettings),
@@ -437,31 +385,29 @@ export function useGeolocationContext() {
   return context;
 }
 
-export async function checkPreciseGeolocationPermission(): Promise<PermissionStatus> {
+export async function checkGeolocationPermission(
+  checkPercise: boolean,
+): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {
-    const status = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    return status;
-  }
-}
-
-export async function checkGeolocationPermission(): Promise<PermissionStatus> {
-  if (Platform.OS === 'ios') {
-    return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-  } else {
-    const statuses = await checkMultiple([
-      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-    ]);
-    const androidFineLocationStatus =
-      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
-    if (
-      androidFineLocationStatus !== 'denied' &&
-      androidFineLocationStatus !== 'unavailable'
-    ) {
-      return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+    if (checkPercise) {
+      const status = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      return status;
+    } else {
+      const statuses = await checkMultiple([
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+      ]);
+      const androidFineLocationStatus =
+        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+      if (
+        androidFineLocationStatus !== 'denied' &&
+        androidFineLocationStatus !== 'unavailable'
+      ) {
+        return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+      }
+      return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
     }
-    return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
   }
 }
