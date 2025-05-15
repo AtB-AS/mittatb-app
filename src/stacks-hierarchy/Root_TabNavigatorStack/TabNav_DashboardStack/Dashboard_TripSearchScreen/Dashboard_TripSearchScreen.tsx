@@ -60,7 +60,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {DatePickerSheet} from 'src/components/date-selection';
+import {DatePickerSheet} from '@atb/components/date-selection';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
