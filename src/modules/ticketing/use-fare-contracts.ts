@@ -22,11 +22,14 @@ type AvailabilityStatusInput = {
 export const useFareContracts = (
   availabilityStatus: AvailabilityStatusInput,
   now: number,
-): {fareContracts: FareContractType[]; refetch: () => void} => {
+): {
+  fareContracts: FareContractType[];
+  refetch: () => void;
+  isRefetching: boolean;
+} => {
   const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
-  const {refetch: getFareContractsFromBackend} = useGetFareContractsQuery(
-    availabilityStatus.availability,
-  );
+  const {refetch: getFareContractsFromBackend, isRefetching} =
+    useGetFareContractsQuery(availabilityStatus.availability);
 
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
@@ -53,7 +56,7 @@ export const useFareContracts = (
     return false;
   });
 
-  return {fareContracts: filteredFareContracts, refetch};
+  return {fareContracts: filteredFareContracts, refetch, isRefetching};
 };
 
 const useGetFareContractsQuery = (

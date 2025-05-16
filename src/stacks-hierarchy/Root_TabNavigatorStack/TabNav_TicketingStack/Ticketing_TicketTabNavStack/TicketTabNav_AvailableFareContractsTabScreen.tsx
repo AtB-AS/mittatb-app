@@ -21,14 +21,14 @@ type Props =
 export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
 }: Props) => {
-  const {reservations, sentFareContracts, isRefreshingFareContracts} =
-    useTicketingContext();
+  const {reservations, sentFareContracts} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
 
   const {
     fareContracts: availableFareContracts,
     refetch: refetchAvailableFareContracts,
+    isRefetching: isRefetchingAvailableFareContracts,
   } = useFareContracts({availability: 'available'}, serverNow);
   const {fareContracts: historicalFareContracts} = useFareContracts(
     {availability: 'historical'},
@@ -89,7 +89,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshingFareContracts}
+            refreshing={isRefetchingAvailableFareContracts}
             onRefresh={() => {
               refetchAvailableFareContracts();
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
