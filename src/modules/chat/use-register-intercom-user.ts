@@ -26,7 +26,7 @@ export function useRegisterIntercomUser() {
       const buildNumber = DeviceInfo.getBuildNumber();
       const deviceId = DeviceInfo.getDeviceId();
       const isLocationEnabled = await DeviceInfo.isLocationEnabled();
-      const appLocationStatus = await checkGeolocationPermission();
+      const appLocationStatus = await checkGeolocationPermission(false);
       const {width, height} = Dimensions.get('window');
 
       updateMetadata({

@@ -81,7 +81,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.</string>
+	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

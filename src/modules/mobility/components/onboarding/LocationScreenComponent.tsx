@@ -18,7 +18,7 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
       title={t(MobilityTexts.shmoRequirements.location.title)}
       description={t(MobilityTexts.shmoRequirements.location.description)}
       buttonText={t(MobilityTexts.shmoRequirements.location.button)}
-      buttonOnPress={requestLocationPermission}
+      buttonOnPress={() => requestLocationPermission(true)}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}

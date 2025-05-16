@@ -5,7 +5,7 @@ import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
 export const useShmoRequirements = () => {
-  const {locationIsAvailable} = useGeolocationContext();
+  const {preciseLocationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
 
@@ -24,7 +24,7 @@ export const useShmoRequirements = () => {
     {
       requirementCode: ShmoRequirementEnum.LOCATION,
       isLoading: false,
-      isBlocking: !locationIsAvailable,
+      isBlocking: !preciseLocationIsAvailable,
     },
     {
       requirementCode: ShmoRequirementEnum.PAYMENT_CARD,

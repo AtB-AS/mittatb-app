@@ -2,7 +2,7 @@
 
 "NSLocationAlwaysUsageDescription" = "I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
 
-"NSLocationWhenInUseUsageDescription" = "Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.";
+"NSLocationWhenInUseUsageDescription" = "Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler.";
 
 "NSBluetoothAlwaysUsageDescription" = "Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
 
