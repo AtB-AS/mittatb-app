@@ -5,9 +5,9 @@ const SelectTravelTokenTexts = {
   travelToken: {
     header: {
       title: _(
-        'Bruk billett på t:kort / mobil',
-        'Use ticket on t:card / phone',
-        'Bruk billett på t:kort / mobil',
+        'Flytt billett mellom t:kort og mobil',
+        'Transfer ticket between t:kort and mobile',
+        'Flytt billett mellom t:kort og mobil',
       ),
       titleWithoutTravelcard: _(
         'Bruk billett på mobil',
