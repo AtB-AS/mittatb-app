@@ -2,8 +2,8 @@ import {translation as _} from './commons';
 
 const GeoLocationTexts = {
   locationPermission: {
-    title: (isPercise: boolean) =>
-      isPercise
+    title: (isPrecise: boolean) =>
+      isPrecise
         ? _(
             'Endre telefoninnstillinger for å bruke presis posisjon.',
             'Change phone settings to use precise location.',
@@ -14,8 +14,8 @@ const GeoLocationTexts = {
             'Change phone settings to use your location.',
             'Endra telefoninnstillingar for å bruka di posisjon.',
           ),
-    message: (isPercise: boolean) =>
-      isPercise
+    message: (isPrecise: boolean) =>
+      isPrecise
         ? _(
             'Vi bruker presis posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler. For å bruke presis posisjon må du endre innstillingene for appen.',
             'We use precise location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using scooters. To use precise location, you must change the app settings.',
@@ -40,8 +40,8 @@ const GeoLocationTexts = {
       'Location is blocked',
       'Du har blokkert posisjonsdeling',
     ),
-    message: (isPercise: boolean) =>
-      isPercise
+    message: (isPrecise: boolean) =>
+      isPrecise
         ? _(
             'For å kunne bruke posisjonen din må du aktivere presis lokasjonstjeneste på telefonen din.',
             'To use your location, you must enable precise location service on your phone.',

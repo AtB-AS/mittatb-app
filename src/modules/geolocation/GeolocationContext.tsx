@@ -122,7 +122,7 @@ const mapPositionToLocation = (
     : null;
 
 type RequestLocationPermissionFn = (
-  requestPercise: boolean,
+  requestPrecise: boolean,
 ) => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
@@ -160,15 +160,15 @@ export const GeolocationContextProvider = ({children}: Props) => {
   const {updateMetadata} = useIntercomMetadata();
 
   const requestLocationPermission = useCallback(
-    async (requestPercise = false) => {
+    async (requestPrecise = false) => {
       if (!(await isLocationEnabled())) {
-        openBlockedLocationAlert(requestPercise);
+        openBlockedLocationAlert(requestPrecise);
       } else {
-        const status = await requestGeolocationPermission(requestPercise);
+        const status = await requestGeolocationPermission(requestPrecise);
         dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
         dispatch({
           type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
-          status: status === 'granted' && requestPercise,
+          status: status === 'granted' && requestPrecise,
         });
         return status;
       }
@@ -231,10 +231,10 @@ export const GeolocationContextProvider = ({children}: Props) => {
   useEffect(() => {
     async function checkPermission() {
       if (appStatus === 'active') {
-        const perciseStatus = await checkGeolocationPermission(true);
+        const preciseStatus = await checkGeolocationPermission(true);
         dispatch({
           type: 'PRECISE_LOCATION_PERMISSION_CHANGED',
-          status: perciseStatus === 'granted' && state.locationEnabled,
+          status: preciseStatus === 'granted' && state.locationEnabled,
         });
 
         const status = await checkGeolocationPermission(false);
@@ -306,12 +306,12 @@ export const GeolocationContextProvider = ({children}: Props) => {
 };
 
 const requestGeolocationPermission = async (
-  requestPercise: boolean,
+  requestPrecise: boolean,
 ): Promise<PermissionStatus> => {
-  const permissionStatus = await checkGeolocationPermission(requestPercise);
+  const permissionStatus = await checkGeolocationPermission(requestPrecise);
   if (Platform.OS === 'ios') {
     if (permissionStatus === 'blocked') {
-      openSettingsAlert(requestPercise);
+      openSettingsAlert(requestPrecise);
       return permissionStatus;
     } else {
       return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -320,13 +320,13 @@ const requestGeolocationPermission = async (
     // Android
 
     if (permissionStatus === 'denied') {
-      if (requestPercise) {
+      if (requestPrecise) {
         const requestedStatus = await request(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         );
 
         if (requestedStatus === 'blocked') {
-          openSettingsAlert(requestPercise);
+          openSettingsAlert(requestPrecise);
           return permissionStatus;
         }
       } else {
@@ -342,25 +342,25 @@ const requestGeolocationPermission = async (
           requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
             'blocked'
         ) {
-          openSettingsAlert(requestPercise);
+          openSettingsAlert(requestPrecise);
           return permissionStatus;
         }
       }
     }
-    return await checkGeolocationPermission(requestPercise);
+    return await checkGeolocationPermission(requestPrecise);
   }
 };
 
-const openBlockedLocationAlert = (isPercise: boolean) =>
+const openBlockedLocationAlert = (isPrecise: boolean) =>
   Alert.alert(
     tGlobal(GeoLocationTexts.blockedLocation.title),
-    tGlobal(GeoLocationTexts.blockedLocation.message(isPercise)),
+    tGlobal(GeoLocationTexts.blockedLocation.message(isPrecise)),
   );
 
-const openSettingsAlert = (isPercise: boolean) =>
+const openSettingsAlert = (isPrecise: boolean) =>
   Alert.alert(
-    tGlobal(GeoLocationTexts.locationPermission.title(isPercise)),
-    tGlobal(GeoLocationTexts.locationPermission.message(isPercise)),
+    tGlobal(GeoLocationTexts.locationPermission.title(isPrecise)),
+    tGlobal(GeoLocationTexts.locationPermission.message(isPrecise)),
     [
       {
         text: tGlobal(GeoLocationTexts.locationPermission.goToSettings),
@@ -386,12 +386,12 @@ export function useGeolocationContext() {
 }
 
 export async function checkGeolocationPermission(
-  checkPercise: boolean,
+  checkPrecise: boolean,
 ): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {
-    if (checkPercise) {
+    if (checkPrecise) {
       const status = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       return status;
     } else {
