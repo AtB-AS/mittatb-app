@@ -11,8 +11,6 @@ import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useThemeContext} from '@atb/theme';
-import {DateSelection} from '@atb/place-screen/components/DateSelection';
-import type {DepartureSearchTime} from '@atb/place-screen';
 import {fetchOfferFromLegs} from '@atb/api/sales';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {formatToClock} from '@atb/utils/date';
@@ -20,6 +18,8 @@ import {Language} from '@atb/translations';
 import {endOfDay} from 'date-fns';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 import {Button} from '@atb/components/button';
+import type {DepartureSearchTime} from '@atb/screen-components/place-screen';
+import {DateSelection} from '@atb/screen-components/place-screen/components/DateSelection';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 

@@ -1,4 +1,5 @@
 import type {UserProfile} from '@atb-as/config-specs';
+import type {Offer} from '@atb/modules/ticketing';
 
 export type SalesTripPatternLeg = {
   expectedStartTime: string;
@@ -13,26 +14,7 @@ export type Traveller = {
   userType: UserProfile['userTypeString'];
 };
 
-export type SalesOffer = {
-  offerId: string;
-  travellerId: string;
-  price: {
-    amount: string;
-    currency: string;
-  };
-  fareProduct: string;
-  validFrom: string;
-  validTo: string;
-  route: {
-    type: 'Zonal' | 'PointToPoint' | 'NonGeographic';
-    from?: string;
-    to?: string;
-  };
-  shouldStartNow: boolean;
-  available: number | null;
-};
-
 export type OfferFromLegsResponse = {
-  offers: SalesOffer[];
+  offers: (Offer & {available: number | undefined})[];
   cheapestTotalPrice: number;
 };

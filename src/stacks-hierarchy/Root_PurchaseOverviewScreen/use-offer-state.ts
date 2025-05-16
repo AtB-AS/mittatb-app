@@ -12,6 +12,7 @@ import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {fetchOfferFromLegs} from '@atb/api/sales';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -206,24 +207,43 @@ export function useOfferState(
             products: preassignedFareProductAlternatives.map((p) => p.id),
             travelDate: selection.travelDate,
           };
+          console.log(
+            'Searching offer with params: ',
+            JSON.stringify(params, null, 2),
+          );
           dispatch({type: 'SEARCHING_OFFER'});
 
-          const offerEndpoint = selection.stopPlaces
-            ? 'stop-places'
-            : selection.zones
-            ? 'zones'
-            : 'authority';
+          let offers: Offer[];
+          if (selection.legs.length) {
+            console.log('NEW PATH');
+            const response = await fetchOfferFromLegs(
+              new Date(selection.legs[0].expectedStartTime),
+              selection.legs,
+              offerTravellers,
+              preassignedFareProductAlternatives.map((p) => p.id),
+            );
+            offers = response.offers;
+          } else {
+            console.log('OLD PATH');
+            const offerEndpoint = selection.stopPlaces
+              ? 'stop-places'
+              : selection.zones
+              ? 'zones'
+              : 'authority';
 
-          const response = await searchOffers(offerEndpoint, params, {
-            cancelToken,
-            authWithIdToken: true,
-            skipErrorLogging: isNotAvailableError,
-          });
+            offers = await searchOffers(offerEndpoint, params, {
+              cancelToken,
+              authWithIdToken: true,
+              skipErrorLogging: isNotAvailableError,
+            });
+          }
+
+          console.log('Got response: ' + JSON.stringify(offers, null, 2));
 
           cancelToken?.throwIfRequested();
 
-          if (response.length) {
-            dispatch({type: 'SET_OFFER', offers: response});
+          if (offers.length) {
+            dispatch({type: 'SET_OFFER', offers});
           } else {
             dispatch({
               type: 'SET_ERROR',

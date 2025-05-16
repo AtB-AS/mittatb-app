@@ -437,6 +437,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           </View>
           {from && to && (
             <View>
+              <ThemeText>Dashboard_TripSearchScreen</ThemeText>
               {filtersState.enabled && (
                 <SelectedFiltersButtons
                   filtersSelection={filtersState.filtersSelection}

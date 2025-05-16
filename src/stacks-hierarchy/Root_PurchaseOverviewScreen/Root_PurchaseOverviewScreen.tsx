@@ -38,9 +38,9 @@ import {
 } from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
-import {Button} from '@atb/components/button';
-import {ThemeText} from '@atb/components/text';
+import {TripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
 import {useAuthContext} from '@atb/modules/auth';
+import {Button} from '@atb/components/button';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -71,6 +71,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const fareProductOnBehalfOfEnabled =
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
+
+  useEffect(() => {
+    console.log(
+      'Selection legs changed',
+      JSON.stringify(selection.legs, null, 2),
+    );
+  }, [selection.legs]);
 
   const {
     isSearchingOffer,
@@ -255,14 +262,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
-          <GenericSectionItem>
-            <ThemeText>{JSON.stringify(selection.legs, null, 2)}</ThemeText>
+          <GenericSectionItem style={{width: '100%'}}>
+            <TripSelection selection={selection} setSelection={setSelection} />
             <Button
               onPress={() => {
                 navigation.push('Root_TripSelectionScreen', {selection});
               }}
-              expanded={false}
               text="Velg avganger"
+              expanded={true}
             />
           </GenericSectionItem>
 
