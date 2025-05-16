@@ -1,22 +1,20 @@
-import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips';
-import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
-import {CancelTokenSource} from 'axios';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
+import {useInfiniteQuery} from '@tanstack/react-query';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -29,8 +27,7 @@ export function useTripsQuery(
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: string;
-  loadMore: (() => {}) | undefined;
-  clear: () => void;
+  loadMore: (() => void) | undefined;
   searchState: SearchStateType;
   error?: ErrorType;
 } {
@@ -38,190 +35,152 @@ export function useTripsQuery(
     new Date().toISOString(),
   );
 
-  const [tripPatterns, setTripPatterns] = useState<TripPatternWithKey[]>([]);
-  const [pageCursor, setPageCursor] = useState<string>();
-  const [errorType, setErrorType] = useState<ErrorType>();
-  const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const cancelTokenRef = useRef<CancelTokenSource>(undefined);
+  const journeySearchModes = useJourneyModes();
   const {addJourneySearchEntry} = useSearchHistoryContext();
   const analytics = useAnalyticsContext();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
     tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
-    tripsSearch_target_number_of_page_hits: config_target_page_hits,
   } = useRemoteConfigContext();
 
-  const clearTrips = useCallback(() => {
-    setTripPatterns([]);
-  }, [setTripPatterns]);
+  const fetchTrips = async ({pageParam}: {pageParam?: string}) => {
+    if (
+      !fromLocation ||
+      !toLocation ||
+      !isValidTripLocations(fromLocation, toLocation)
+    ) {
+      throw new Error('Invalid trip locations');
+    }
 
-  const journeySearchModes = useJourneyModes();
+    const sanitizedSearchTime = sanitizeSearchTime(searchTime);
+    const searchInput: SearchInput = pageParam
+      ? {cursor: pageParam}
+      : {searchTime: sanitizedSearchTime};
 
-  const search = useCallback(
-    (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
-      cancelTokenRef.current?.cancel('New search starting');
-      const cancelTokenSource = CancelToken.source();
-      let allTripPatterns = existingTrips ?? [];
-      if (!cursor) setTripPatterns([]);
+    if (searchInput.searchTime?.date) {
+      setTimeOfSearch(searchInput.searchTime.date);
+    }
 
-      const targetNumberOfHits = cursor
-        ? config_target_page_hits
-        : config_target_initial_hits;
-      const sanitizedSearchTime = sanitizeSearchTime(searchTime);
+    const arriveBy = searchTime.option === 'arrival';
+    const query = createQuery(
+      fromLocation,
+      toLocation,
+      searchInput,
+      arriveBy,
+      filtersSelection,
+      journeySearchModes,
+    );
 
-      (async function () {
-        if (fromLocation && toLocation) {
-          try {
-            setSearchState('searching');
-            let performedSearchesCount = 0;
-            let tripsFoundCount = 0;
+    Bugsnag.leaveBreadcrumb('searching', {
+      fromLocation: query.from,
+      toLocation: query.to,
+      arriveBy: query.arriveBy,
+      when: query.when ?? '',
+      cursor: query.cursor ?? '',
+      transferSlack: query.transferSlack ?? '',
+      transferPenalty: query.transferPenalty ?? '',
+      waitReluctance: query.waitReluctance ?? '',
+      walkReluctance: query.walkReluctance ?? '',
+      walkSpeed: query.walkSpeed ?? '',
+    });
 
-            if (!isValidTripLocations(fromLocation, toLocation)) {
-              setSearchState('search-empty-result');
-              return;
-            }
+    const results = await tripsSearch(query);
+    const tripPatternsWithKeys = decorateTripPatternWithKey(
+      results.trip.tripPatterns,
+    );
 
-            try {
-              // Fire and forget add journey search entry if both locations are not from geo
-              if (
-                fromLocation.resultType !== 'geolocation' &&
-                toLocation.resultType !== 'geolocation'
-              )
-                await addJourneySearchEntry([fromLocation, toLocation]);
-            } catch (e) {}
+    return {
+      tripPatterns: tripPatternsWithKeys,
+      nextPageCursor:
+        searchTime.option === 'arrival'
+          ? results.trip.previousPageCursor
+          : results.trip.nextPageCursor,
+    };
+  };
 
-            let nextPageAvailable = true;
-            while (
-              tripsFoundCount < targetNumberOfHits &&
-              performedSearchesCount < config_max_performed_searches &&
-              nextPageAvailable
-            ) {
-              const searchInput: SearchInput = cursor
-                ? {cursor}
-                : {searchTime: sanitizedSearchTime};
+  const {data, error, fetchNextPage, hasNextPage, isFetching, status} =
+    useInfiniteQuery(
+      ['trips', fromLocation, toLocation, searchTime, filtersSelection],
+      fetchTrips,
+      {
+        getNextPageParam: (lastPage) => lastPage.nextPageCursor,
+        retry: 3,
+      },
+    );
 
-              if (searchInput.searchTime?.date) {
-                setTimeOfSearch(searchInput.searchTime.date);
-              }
-
-              const arriveBy = searchTime.option === 'arrival';
-
-              const results = await doSearch(
-                fromLocation,
-                toLocation,
-                arriveBy,
-                searchInput,
-                cancelTokenSource,
-                filtersSelection,
-                journeySearchModes,
-              );
-
-              const tripPatternsWithKeys = decorateTripPatternWithKey(
-                results.trip.tripPatterns,
-              );
-
-              const countBeforeConcat = allTripPatterns.length;
-              allTripPatterns = allTripPatterns.concat(tripPatternsWithKeys);
-              allTripPatterns = filterDuplicateTripPatterns(allTripPatterns);
-
-              setTripPatterns(allTripPatterns);
-              tripsFoundCount += allTripPatterns.length - countBeforeConcat;
-              performedSearchesCount++;
-
-              cursor =
-                searchTime.option === 'arrival'
-                  ? results.trip.previousPageCursor
-                  : results.trip.nextPageCursor;
-              nextPageAvailable = !!cursor;
-            }
-
-            setPageCursor(cursor);
-            setSearchState(
-              allTripPatterns.length === 0
-                ? 'search-empty-result'
-                : 'search-success',
-            );
-            analytics.logEvent('Trip search', 'Search performed', {
-              searchTime,
-              filtersSelection: toLoggableFiltersSelection(filtersSelection),
-              numberOfHits: allTripPatterns.length,
-            });
-          } catch (e) {
-            setTripPatterns([]);
-            setPageCursor(undefined);
-            if (!isCancel(e)) {
-              setSearchState('search-empty-result');
-              setErrorType(getAxiosErrorType(e));
-              console.warn(e);
-            }
-          }
-        }
-      })();
-
-      cancelTokenRef.current = cancelTokenSource;
-      setErrorType(undefined);
-      return () => {
-        cancelTokenSource.cancel('Unmounting use trips hook');
-      };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fromLocation, toLocation, searchTime, filtersSelection],
+  const tripPatterns = useMemo(
+    () =>
+      data
+        ? filterDuplicateTripPatterns(
+            data.pages.flatMap((page) => page.tripPatterns),
+          )
+        : [],
+    [data],
   );
 
+  // Automatically fetch more pages if the total results are below the target
   useEffect(() => {
-    search();
-  }, [search]);
+    if (data && hasNextPage) {
+      const totalResults = data.pages.flatMap(
+        (page) => page.tripPatterns,
+      ).length;
+      if (
+        totalResults < config_target_initial_hits &&
+        data.pages.length < config_max_performed_searches
+      ) {
+        fetchNextPage();
+      }
+    }
+  }, [
+    data,
+    hasNextPage,
+    fetchNextPage,
+    config_target_initial_hits,
+    config_max_performed_searches,
+  ]);
 
-  const loadMore = useCallback(() => {
-    return search(pageCursor, tripPatterns);
-  }, [search, pageCursor, tripPatterns]);
+  const addJourneySearchEntryStable = useCallback(addJourneySearchEntry, [
+    addJourneySearchEntry,
+  ]);
+
+  useEffect(() => {
+    if (!fromLocation || !toLocation) return;
+    try {
+      // Fire and forget add journey search entry if both locations are not from geo
+      if (
+        fromLocation.resultType !== 'geolocation' &&
+        toLocation.resultType !== 'geolocation'
+      ) {
+        (async () =>
+          await addJourneySearchEntryStable([fromLocation, toLocation]))();
+      }
+    } catch (e) {}
+  }, [fromLocation, toLocation, addJourneySearchEntryStable]);
+
+  useEffect(() => {
+    if (status === 'success' && tripPatterns.length > 0) {
+      analytics.logEvent('Trip search', 'Search performed', {
+        searchTime,
+        filtersSelection: toLoggableFiltersSelection(filtersSelection),
+        numberOfHits: tripPatterns.length,
+      });
+    }
+  }, [status, tripPatterns, analytics, searchTime, filtersSelection]);
 
   return {
     tripPatterns,
     timeOfLastSearch: timeOfSearch,
-    loadMore: !!pageCursor ? loadMore : undefined,
-    clear: clearTrips,
-    searchState: searchState,
-    error: errorType,
+    loadMore: hasNextPage ? fetchNextPage : undefined,
+    searchState: isFetching
+      ? 'searching'
+      : tripPatterns.length === 0
+      ? 'search-empty-result'
+      : 'search-success',
+    error: error ? getAxiosErrorType(error) : undefined,
   };
 }
 
-async function doSearch(
-  fromLocation: Location,
-  toLocation: Location,
-  arriveBy: boolean,
-  searchTime: SearchInput,
-  cancelToken: CancelTokenSource,
-  travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
-  journeySearchModes: Modes,
-) {
-  const query = createQuery(
-    fromLocation,
-    toLocation,
-    searchTime,
-    arriveBy,
-    travelSearchFiltersSelection,
-    journeySearchModes,
-  );
-
-  Bugsnag.leaveBreadcrumb('searching', {
-    fromLocation: query.from,
-    toLocation: query.to,
-    arriveBy: query.arriveBy,
-    when: query.when ?? '',
-    cursor: query.cursor ?? '',
-    transferSlack: query.transferSlack ?? '',
-    transferPenalty: query.transferPenalty ?? '',
-    waitReluctance: query.waitReluctance ?? '',
-    walkReluctance: query.walkReluctance ?? '',
-    walkSpeed: query.walkSpeed ?? '',
-  });
-
-  return tripsSearch(query, {
-    cancelToken: cancelToken.token,
-  });
-}
 function generateKeyFromTripPattern(tripPattern: TripPattern) {
   const firstServiceLeg = tripPattern.legs.find((leg) => leg.serviceJourney);
   const key =
