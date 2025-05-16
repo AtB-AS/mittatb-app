@@ -3,6 +3,7 @@ import {getShmoBooking} from '@atb/api/mobility';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const getShmoBookingQueryKey = (
   bookingId: ShmoBooking['bookingId'],
@@ -14,7 +15,7 @@ export const useShmoBookingQuery = (
   refetchInterval: number | false = false,
 ) => {
   const acceptLanguage = useAcceptLanguage();
-
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   const bookingIdString = bookingId || '';
   const isValidBookingId = !!bookingId && bookingIdString.trim() !== '';
 
@@ -24,7 +25,7 @@ export const useShmoBookingQuery = (
       getShmoBooking(bookingIdString, acceptLanguage, {signal}),
     staleTime: ONE_HOUR_MS,
     cacheTime: ONE_HOUR_MS,
-    enabled: isValidBookingId,
+    enabled: isValidBookingId && isShmoDeepIntegrationEnabled,
     refetchInterval,
   });
 };
