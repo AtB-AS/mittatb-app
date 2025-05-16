@@ -4,10 +4,11 @@ import {Reservation, PaymentStatus} from './types';
 import {FareContractType} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {differenceInMinutes} from 'date-fns';
-import {CustomerProfile, useFareContracts} from '.';
+import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {useGetFareContractsQuery} from './use-fare-contracts';
+import {useGetAllFareContractsQuery} from './use-fare-contracts';
+import Bugsnag from '@bugsnag/react-native';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
@@ -146,12 +147,13 @@ type Props = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
+  // const queryClient = useQueryClient();
 
   const {userId} = useAuthContext();
   const {enable_ticketing, enable_ticketing_event_stream} =
     useRemoteConfigContext();
 
-  const {data: fareContracts} = useGetFareContractsQuery('available');
+  const {data: fareContracts} = useGetAllFareContractsQuery();
   useEffect(() => {
     dispatch({
       type: 'UPDATE_FARE_CONTRACTS',
@@ -168,10 +170,10 @@ export const TicketingContextProvider = ({children}: Props) => {
         fareContracts: {
           onSnapshot: (fareContracts) => {
             if (enable_ticketing_event_stream) {
-              console.log(
-                'Received fare contracts from firestore:',
-                fareContracts.map((fc) => fc.id),
+              Bugsnag.leaveBreadcrumb(
+                `Received update with ${fareContracts.length} fare contracts from firestore, but not updating state since ticketing event stream is enabled.`,
               );
+              // refetchFareContracts();
             } else {
               dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
             }
@@ -246,7 +248,7 @@ export const TicketingContextProvider = ({children}: Props) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [userId, enable_ticketing]);
+  }, [userId, enable_ticketing, enable_ticketing_event_stream]);
 
   return (
     <TicketingContext.Provider

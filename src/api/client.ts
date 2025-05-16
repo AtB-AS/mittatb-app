@@ -72,6 +72,7 @@ function requestHandler(
   }
 
   const authId = getCurrentUserIdGlobal();
+  // console.log('authId', authId, config.url);
   if (authId) {
     config.headers[FirebaseAuthIdHeaderName] = authId;
   }
@@ -81,6 +82,11 @@ function requestHandler(
   config.headers[PlatformHeaderName] = Platform.OS;
   config.headers[PlatformVersionHeaderName] = Platform.Version;
   config.headers[AppIdentifierHeaderName] = IOS_BUNDLE_IDENTIFIER;
+
+  // if (config.url === 'ticket/v4/list?availability=Available') {
+  //   console.log('Requesting fare contracts');
+  //   console.log('Request headers', config.headers);
+  // }
 
   return config;
 }

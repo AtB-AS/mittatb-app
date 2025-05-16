@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
+import {useRemoteConfigContext} from '../remote-config';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -22,11 +23,14 @@ type AvailabilityStatusInput = {
 export const useFareContracts = (
   availabilityStatus: AvailabilityStatusInput,
   now: number,
-): {fareContracts: FareContractType[]; refetch: () => void} => {
+): {
+  fareContracts: FareContractType[];
+  refetch: () => void;
+  isRefetching: boolean;
+} => {
   const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
-  const {refetch: getFareContractsFromBackend} = useGetFareContractsQuery(
-    availabilityStatus.availability,
-  );
+  const {refetch: getFareContractsFromBackend, isRefetching} =
+    useGetFareContractsQuery(availabilityStatus.availability);
 
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
@@ -53,17 +57,44 @@ export const useFareContracts = (
     return false;
   });
 
-  return {fareContracts: filteredFareContracts, refetch};
+  return {fareContracts: filteredFareContracts, refetch, isRefetching};
 };
 export const fareContractsQueryKey = 'FETCH_FARE_CONTRACTS';
 export const useGetFareContractsQuery = (
-  availability: AvailabilityStatusInput['availability'],
+  availability?: AvailabilityStatusInput['availability'],
 ) => {
-  const {userId} = useAuthContext();
+  const {abtCustomerId} = useAuthContext();
+  useEffect(() => {
+    console.log('useGetFareContractsQuery', abtCustomerId, availability);
+  }, [abtCustomerId, availability]);
   return useQuery({
-    queryKey: [fareContractsQueryKey, availability, userId],
+    queryKey: [fareContractsQueryKey, availability, abtCustomerId],
     queryFn: () => getFareContracts(availability),
     enabled: false,
+    retry: 0,
+  });
+};
+
+export const useGetAllFareContractsQuery = () => {
+  const {abtCustomerId} = useAuthContext();
+  const {enable_ticketing, enable_ticketing_event_stream} =
+    useRemoteConfigContext();
+  useEffect(() => {
+    console.log(
+      'useGetAllFareContractsQuery',
+      enable_ticketing,
+      enable_ticketing_event_stream,
+      abtCustomerId,
+    );
+  }, [enable_ticketing, enable_ticketing_event_stream, abtCustomerId]);
+  return useQuery({
+    queryKey: [fareContractsQueryKey, abtCustomerId],
+    queryFn: () => getFareContracts(),
+    enabled:
+      enable_ticketing && enable_ticketing_event_stream && !!abtCustomerId,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: true,
     retry: 0,
   });
 };

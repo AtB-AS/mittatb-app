@@ -6,7 +6,7 @@ import {
 } from '@atb/modules/ticketing';
 import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {TicketHistoryMode, TicketHistoryScreenParams} from './types';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {useAuthContext} from '@atb/modules/auth';
@@ -32,10 +32,11 @@ export const TicketHistoryScreenComponent = ({
     useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
-  const {fareContracts: historicalFareContracts} = useFareContracts(
-    {availability: 'historical'},
-    serverNow,
-  );
+  const {
+    fareContracts: historicalFareContracts,
+    refetch,
+    isRefetching,
+  } = useFareContracts({availability: 'historical'}, serverNow);
   const {abtCustomerId: customerAccountId} = useAuthContext();
 
   const {t} = useTranslation();
@@ -67,6 +68,9 @@ export const TicketHistoryScreenComponent = ({
       />
       <FlatList
         data={sortedItems}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
         renderItem={({item, index}) => (
           <FareContractOrReservation
             now={serverNow}

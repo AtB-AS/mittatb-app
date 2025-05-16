@@ -98,6 +98,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         customerNumber,
         authStatus,
       });
+      // console.log('Setting id token', action.idTokenResult.token);
       idTokenGlobal = action.idTokenResult.token;
       return {
         ...prevState,

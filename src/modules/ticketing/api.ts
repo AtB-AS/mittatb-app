@@ -17,6 +17,7 @@ import {
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
+import qs from 'query-string';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -198,16 +199,22 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 }
 
 export async function getFareContracts(
-  availability: 'available' | 'historical',
+  availability?: 'available' | 'historical',
 ): Promise<FareContractType[]> {
-  const url = `ticket/v4/list?availability=${capitalize(availability)}`;
+  const url = qs.stringifyUrl({
+    url: 'ticket/v4/list',
+    query: {
+      availability: availability ? capitalize(availability) : undefined,
+    },
+  });
+  console.log(url);
   const response = await client.get(url, {
     authWithIdToken: true,
   });
   const fareContracts = response.data.fareContracts.map(
     convertIsoStringFieldsToDate,
   );
-  // TODO: Log errors during parsing
+  console.log(`fetched ${fareContracts.length} ${availability} fare contracts`);
   return fareContracts.filter(
     (fc: any) => FareContractType.safeParse(fc).success,
   );
