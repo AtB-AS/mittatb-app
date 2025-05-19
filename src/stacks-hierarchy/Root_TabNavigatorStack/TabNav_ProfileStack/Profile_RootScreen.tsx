@@ -250,8 +250,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
             <LinkSectionItem
               text={t(ProfileTexts.sections.favorites.heading)}
-              onPress={() => navigation.navigate('Profile_SettingsScreen')}
-              testID="settingsButton"
+              onPress={() => navigation.navigate('Profile_FavoriteScreen')}
+              testID="favoriteButton"
             />
           </Section>
 
