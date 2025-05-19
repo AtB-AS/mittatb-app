@@ -41,9 +41,9 @@ const ProfileTexts = {
         },
         editProfile: {
           label: _(
-            'Rediger Min profil',
-            'Edit My profile',
-            'Rediger Min profil',
+            'Rediger Profil',
+            'Edit Profile',
+            'Rediger Profil',
           ),
         },
       },
@@ -152,9 +152,9 @@ const ProfileTexts = {
           emailRequired: {
             title: _('E-post mangler', 'E-mail missing', 'E-post manglar'),
             message: _(
-              'Legg til e-post i min profil for å benytte e-postvarsel.',
-              'Add e-mail to my profile to use e-mail notifications.',
-              'Legg til e-post i min profil for å bruke e-postvarsel.',
+              'Legg til e-post i Profil for å benytte e-postvarsel.',
+              'Add e-mail to profile to use e-mail notifications.',
+              'Legg til e-post i Profil for å bruke e-postvarsel.',
             ),
             action: _(
               'Legg til e-post',

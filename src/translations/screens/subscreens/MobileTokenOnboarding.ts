@@ -34,9 +34,9 @@ const MobileTokenOnboardingTexts = {
       'Vi tek vare på billetten din',
     ),
     description: _(
-      'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister t:kortet eller bytter mobil.',
-      "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose your t:card or switch phones.",
-      'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du mistar t:kortet eller byter mobil.',
+      'Billetten din er trygt lagret på **Profil**. Dermed vil du aldri miste den — selv om du mister t:kortet eller bytter mobil.',
+      "Your ticket is safely stored on **Profile**. That way you won't lose your ticket even if you lose your t:card or switch phones.",
+      'Billetten din er trygt lagra på **Profil**. Difor vil du aldri miste han - sjølv om du mistar t:kortet eller byter mobil.',
     ),
   },
   tCard: {
@@ -47,9 +47,9 @@ const MobileTokenOnboardingTexts = {
       'Du brukar no **t:kort**',
     ),
     description: _(
-      'Du kan alltid bytte til en mobil ved å logge inn og gå til **Min profil**.',
-      'You can always switch to a phone by logging in, and heading over to **My profile**.',
-      'Du kan alltid byte til ein mobil ved å logge inn og gå til **Min profil**.',
+      'Du kan alltid bytte til en mobil ved å logge inn og gå til **Profil**.',
+      'You can always switch to a phone by logging in, and heading over to **Profile**.',
+      'Du kan alltid byte til ein mobil ved å logge inn og gå til **Profil**.',
     ),
     button: _('Bytt til mobil', 'Switch to phone', 'Byt til mobil'),
     reminder: _(
@@ -65,9 +65,9 @@ const MobileTokenOnboardingTexts = {
       'Du brukar no **mobil**',
     ),
     description: _(
-      'Du kan alltid bytte til t:kort eller en annen mobil ved logge inn og gå til **Min profil**.',
-      'You can always switch to a t:card or a different phone by logging in, and heading over to **My profile**.',
-      'Du kan alltid byte til t:kort eller ein annan mobil ved logge inn og gå til **Min profil**.',
+      'Du kan alltid bytte til t:kort eller en annen mobil ved logge inn og gå til **Profil**.',
+      'You can always switch to a t:card or a different phone by logging in, and heading over to **Profile**.',
+      'Du kan alltid byte til t:kort eller ein annan mobil ved logge inn og gå til **Profil**.',
     ),
     button: _(
       'Bytt til t:kort eller annen mobil',
@@ -111,16 +111,16 @@ const MobileTokenOnboardingTexts = {
     },
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
-        "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose or switch phones.",
-        'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du mistar eller byter mobil.',
+        'Billetten din er trygt lagret på **Profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+        "Your ticket is safely stored on **Profile**. That way you won't lose your ticket even if you lose or switch phones.",
+        'Billetten din er trygt lagra på **Profil**. Difor vil du aldri miste han - sjølv om du mistar eller byter mobil.',
       ),
     },
     phone: {
       description: _(
-        'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Min profil**.',
-        'You can always switch to a different phone by logging in, and heading over to **My profile**.',
-        'Du kan alltid bytte til ein annan mobil ved logge inn og gå til **Min profil**.',
+        'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Profil**.',
+        'You can always switch to a different phone by logging in, and heading over to **Profile**.',
+        'Du kan alltid bytte til ein annan mobil ved logge inn og gå til **Profil**.',
       ),
       button: _(
         'Bytt til en annen mobil',
@@ -153,9 +153,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
-        "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
-        'Billetten din er trygt lagra på **Min profil**. Då vil du aldri miste den - sjølv om du mistar reisekortet eller bytar mobil.',
+        'Billetten din er trygt lagret på **Profil**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
+        "Your ticket is safely stored on **Profile**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
+        'Billetten din er trygt lagra på **Profil**. Då vil du aldri miste den - sjølv om du mistar reisekortet eller bytar mobil.',
       ),
     },
     tCard: {
@@ -173,9 +173,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     phone: {
       description: _(
-        'Du kan alltid bytte til reisekort eller en annen mobil ved logge inn og gå til **Min profil**.',
-        'You can always switch to a travel card or a different phone by logging in, and heading over to **My profile**.',
-        'Du kan alltid byte til reisekort eller ein annan mobil ved å logga inn og gå til **Min profil**.',
+        'Du kan alltid bytte til reisekort eller en annen mobil ved logge inn og gå til **Profil**.',
+        'You can always switch to a travel card or a different phone by logging in, and heading over to **Profile**.',
+        'Du kan alltid byte til reisekort eller ein annan mobil ved å logga inn og gå til **Profil**.',
       ),
       button: _(
         'Bytt til reisekort eller annen mobil',
@@ -200,16 +200,16 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       ticketSafetyInfo: {
         description: _(
-          'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
-          "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose or switch phones.",
-          'Billetten din er trygt lagra på **Min profil**. Då vil du aldri mista den - sjølv om du mistar eller bytar mobil.',
+          'Billetten din er trygt lagret på **Profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+          "Your ticket is safely stored on **Profile**. That way you won't lose your ticket even if you lose or switch phones.",
+          'Billetten din er trygt lagra på **Profil**. Då vil du aldri mista den - sjølv om du mistar eller bytar mobil.',
         ),
       },
       phone: {
         description: _(
-          'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Min profil**.',
-          'You can always switch to a different phone by logging in, and heading over to **My profile**.',
-          'Du kan alltid byte til ein annan mobil ved å logga inn og gå til **Min profil**.',
+          'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Profil**.',
+          'You can always switch to a different phone by logging in, and heading over to **Profile**.',
+          'Du kan alltid byte til ein annan mobil ved å logga inn og gå til **Profil**.',
         ),
       },
       error: {
@@ -313,9 +313,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
   troms: {
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du bytter mobil.',
-        "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you switch phones.",
-        'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du byter mobil.',
+        'Billetten din er trygt lagret på **Profil**. Dermed vil du aldri miste den — selv om du bytter mobil.',
+        "Your ticket is safely stored on **Profile**. That way you won't lose your ticket even if you switch phones.",
+        'Billetten din er trygt lagra på **Profil**. Difor vil du aldri miste han - sjølv om du byter mobil.',
       ),
     },
     withoutTravelcard: {

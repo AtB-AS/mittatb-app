@@ -135,9 +135,9 @@ const FareContractTexts = {
         title: _('QR-kode', 'QR code', 'QR-kode'),
         wrongDevice: (deviceName: string) =>
           _(
-            `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til t:kort eller en annen mobil ved å gå til **Min profil**.`,
-            `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a t:card or a different phone by heading over to **My profile**.`,
-            `Du bruker billettar på mobilen din, "${deviceName}". Husk å ta den med deg når du reiser. Du kan alltid bytte til t:kort eller ein annan mobil ved å gå til **Min profil**.`,
+            `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til t:kort eller en annen mobil ved å gå til **Profil**.`,
+            `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a t:card or a different phone by heading over to **Profile**.`,
+            `Du bruker billettar på mobilen din, "${deviceName}". Husk å ta den med deg når du reiser. Du kan alltid bytte til t:kort eller ein annan mobil ved å gå til **Profil**.`,
           ),
         unnamedDevice: _(
           'Enhet uten navn',
@@ -145,9 +145,9 @@ const FareContractTexts = {
           'Eining utan namn',
         ),
         tCard: _(
-          'Du bruker billetten på ditt t:kort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
-          `Seems like you\'re using your ticket on your t:card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **My profile**.`,
-          'Du bruker billetten på t:kortet ditt. Husk å ta det med deg når du reiser. Du kan alltid bytte til ein mobil ved å gå til **Min profil**.',
+          'Du bruker billetten på ditt t:kort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Profil**.',
+          `Seems like you\'re using your ticket on your t:card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **Profile**.`,
+          'Du bruker billetten på t:kortet ditt. Husk å ta det med deg når du reiser. Du kan alltid bytte til ein mobil ved å gå til **Profil**.',
         ),
       },
       generic: {
@@ -352,14 +352,14 @@ const FareContractTexts = {
       ),
     anotherPhoneIsInspectableWarning: (deviceName: string) =>
       _(
-        `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
-        `This ticket will be connected to ${deviceName}. If you would rather use tickets on this phone, you can switch to this device from **My profile**.`,
-        `Merk at billettar du kjøper no vil være tilknytt ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Min profil**.`,
+        `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Profil**.`,
+        `This ticket will be connected to ${deviceName}. If you would rather use tickets on this phone, you can switch to this device from **Profile**.`,
+        `Merk at billettar du kjøper no vil være tilknytt ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Profil**.`,
       ),
     tcardIsInspectableWarning: _(
-      'Merk at billetter du kjøper nå vil være tilknyttet ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
-      'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
-      'Merk at billettar du kjøper no vil vere tilknytt ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Min profil**.',
+      'Merk at billetter du kjøper nå vil være tilknyttet ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Profil**.',
+      'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **Profile**.',
+      'Merk at billettar du kjøper no vil vere tilknytt ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Profil**.',
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Ukjent eining'),
   },
@@ -420,14 +420,14 @@ export default orgSpecificTranslations(FareContractTexts, {
         notInspectableDevice: {
           wrongDevice: (deviceName: string) =>
             _(
-              `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til reisekort eller en annen mobil ved å gå til **Min profil**.`,
-              `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a travel card or a different phone by heading over to **My profile**.`,
-              `Du brukar billettar på mobilen din, "${deviceName}". Husk å ha den med deg når du reiser.\nDu kan til ei kvar tid bytte til eit reisekort eller ein annan mobil ved å gå til **Min profil**.`,
+              `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til reisekort eller en annen mobil ved å gå til **Profil**.`,
+              `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a travel card or a different phone by heading over to **Profile**.`,
+              `Du brukar billettar på mobilen din, "${deviceName}". Husk å ha den med deg når du reiser.\nDu kan til ei kvar tid bytte til eit reisekort eller ein annan mobil ved å gå til **Profil**.`,
             ),
           tCard: _(
-            'Du bruker billetten på ditt reisekort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
-            `Seems like you\'re using your ticket on your travel card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **My profile**.`,
-            `Du brukar billetten på reisekortet ditt. Husk å ha det med deg når du reiser.\nDu kan til ei kvar tid bytte til mobil ved å gå til **Min profil**.`,
+            'Du bruker billetten på ditt reisekort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Profil**.',
+            `Seems like you\'re using your ticket on your travel card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **Profile**.`,
+            `Du brukar billetten på reisekortet ditt. Husk å ha det med deg når du reiser.\nDu kan til ei kvar tid bytte til mobil ved å gå til **Profil**.`,
           ),
         },
       },
@@ -444,9 +444,9 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Ta med deg reisekortet når du reiser',
       ),
       tcardIsInspectableWarning: _(
-        'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
-        'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
-        'Merk at billettar du kjøper no vil vere knytt til ditt reisekort. Om du heller vil bruke billettar på denne mobilen, kan du bytte til denne eininga frå **Min profil**.',
+        'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Profil**.',
+        'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **Profile**.',
+        'Merk at billettar du kjøper no vil vere knytt til ditt reisekort. Om du heller vil bruke billettar på denne mobilen, kan du bytte til denne eininga frå **Profil**.',
       ),
     },
   },
