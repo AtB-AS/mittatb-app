@@ -444,7 +444,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           ),
           answer: _(
             `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
-            `Contact FRAM Customer Service at en.frammr.no/contact-us or call 71 28 01 00`,
+            `Contact FRAM Customer Service at frammr.no/contact-us or call 71 28 01 00`,
             `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
           ),
         },
@@ -506,7 +506,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           ),
           answer: _(
             `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
-            `Contact FRAM Customer Service at en.frammr.no/contact-us or call 71 28 01 00`,
+            `Contact FRAM Customer Service at frammr.no/contact-us or call 71 28 01 00`,
             `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
           ),
         },

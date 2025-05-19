@@ -1,7 +1,11 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Reservation, PaymentType, useTicketingContext} from '@atb/ticketing';
+import {
+  Reservation,
+  PaymentType,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';

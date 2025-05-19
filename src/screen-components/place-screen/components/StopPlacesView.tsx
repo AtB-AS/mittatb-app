@@ -1,13 +1,9 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {useFavoritesContext, UserFavoriteDepartures} from '@atb/favorites';
-import {DepartureSearchTime, StopPlaceAndQuay} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
-import {DateSelection} from './DateSelection';
-import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
@@ -15,8 +11,18 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
+import {
+  DateSelection,
+  type DepartureSearchTime,
+} from '@atb/components/date-selection';
+import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+import {
+  useFavoritesContext,
+  type UserFavoriteDepartures,
+} from '@atb/modules/favorites';
+import type {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;

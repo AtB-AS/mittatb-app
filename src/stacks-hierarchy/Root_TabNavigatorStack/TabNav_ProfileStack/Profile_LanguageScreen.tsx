@@ -3,7 +3,10 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {Preference_Language, usePreferencesContext} from '@atb/preferences';
+import {
+  Preference_Language,
+  usePreferencesContext,
+} from '@atb/modules/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   appLanguages,

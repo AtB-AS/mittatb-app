@@ -2,7 +2,7 @@ import {
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
-import {TicketRecipientType} from '@atb/ticketing';
+import {TicketRecipientType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   OnBehalfOfTexts,
@@ -10,7 +10,10 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-account-id-by-phone-query';
+import {
+  useGetAccountIdByPhoneMutation,
+  useFetchOnBehalfOfAccountsQuery,
+} from '@atb/modules/on-behalf-of';
 import {useState} from 'react';
 import phoneValidator from 'phone';
 import {ActivityIndicator, View} from 'react-native';
@@ -18,7 +21,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ContrastColor} from '@atb/theme/colors';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
 
 export const SubmitButton = ({
   state: {settingPhone, settingName, recipient, phone, prefix, name, error},

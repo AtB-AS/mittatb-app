@@ -8,7 +8,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavoritesContext} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
 import {StyleSheet} from '@atb/theme';
 import {
   DeparturesTexts,

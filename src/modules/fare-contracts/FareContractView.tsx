@@ -4,15 +4,15 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
+import {MobilityBenefitsInfoSectionItem} from '@atb/modules/mobility';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useAuthContext} from '@atb/auth';
-import {useMobileTokenContext} from '@atb/mobile-token';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {useAuthContext} from '@atb/modules/auth';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
@@ -24,11 +24,11 @@ import {WithValidityLine} from './components/WithValidityLine';
 import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
-import {ShmoTripDetailsSectionItem} from '@atb/mobility/components/ShmoTripDetailsSectionItem';
+import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 
 type Props = {
   now: number;

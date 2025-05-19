@@ -1,6 +1,6 @@
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';

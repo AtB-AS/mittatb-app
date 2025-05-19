@@ -9,7 +9,7 @@ import {
   FareProductTypeConfig,
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
@@ -36,8 +36,8 @@ export const RecentFareContract = ({
 }: RecentFareContractProps) => {
   const {
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
     userProfilesWithCount,
     pointToPointValidity,
     direction,
@@ -46,8 +46,8 @@ export const RecentFareContract = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const fromZoneName = fromTariffZone?.name.value;
-  const toZoneName = toTariffZone?.name.value;
+  const fromZoneName = fromFareZone?.name.value;
+  const toZoneName = toFareZone?.name.value;
   const {width} = Dimensions.get('window');
   const interactiveColor = theme.color.interactive[2];
 
@@ -119,7 +119,7 @@ export const RecentFareContract = ({
       return '';
     };
     const zoneOrHarborInfo =
-      fromTariffZone !== undefined ? zoneInfo : harborInfo();
+      fromFareZone !== undefined ? zoneInfo : harborInfo();
 
     return `${t(
       RecentFareContractsTexts.repeatPurchase.label,

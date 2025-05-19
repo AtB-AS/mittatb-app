@@ -1,4 +1,4 @@
-import type {RemoteConfig} from '@atb/remote-config';
+import type {RemoteConfig} from '@atb/modules/remote-config';
 
 /**
  * Add new feature toggles here! They will automatically be usable through
@@ -144,6 +144,10 @@ export const toggleSpecifications = [
   {
     name: 'isInAppReviewEnabled',
     remoteConfigKey: 'enable_in_app_review',
+  },
+  {
+    name: 'isInAppReviewForAnnouncementsEnabled',
+    remoteConfigKey: 'enable_in_app_review_for_announcements',
   },
 ] as const satisfies readonly FeatureToggleSpecification[];
 

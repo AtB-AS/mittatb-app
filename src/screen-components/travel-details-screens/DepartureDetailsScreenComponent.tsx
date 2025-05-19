@@ -51,15 +51,15 @@ import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from './use-map-data';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
   getBookingStatus,
@@ -69,13 +69,18 @@ import {
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {usePreferencesContext} from '@atb/preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
-import {useOnMarkFavouriteDepartures} from '@atb/favorites';
-import {getFavoriteIcon} from '@atb/favorites';
+import {
+  FavouriteDepartureLine,
+  useOnMarkFavouriteDepartures,
+} from '@atb/modules/favorites';
+import {getFavoriteIcon} from '@atb/modules/favorites';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
-import type {FavouriteDepartureLine} from '@atb/favorites/use-on-mark-favourite-departures';
-import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {
+  InAppReviewContext,
+  useInAppReviewFlow,
+} from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 
 export type DepartureDetailsScreenParams = {
@@ -244,8 +249,7 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive &&
-          requestReview('Departure details: Bus in map dismissed');
+        shouldShowLive && requestReview(InAppReviewContext.DepartureDetails);
         shouldShowRequestReview.current = false;
       }
     }, [requestReview, shouldShowLive]),

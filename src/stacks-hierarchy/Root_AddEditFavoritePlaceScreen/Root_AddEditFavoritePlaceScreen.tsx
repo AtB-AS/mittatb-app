@@ -8,7 +8,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavoritesContext} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';

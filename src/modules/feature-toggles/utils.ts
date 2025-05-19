@@ -5,10 +5,10 @@ import {
   OverridesMap,
 } from './types';
 import {parseBoolean} from '@atb/utils/parse-boolean';
-import type {RemoteConfig} from '@atb/remote-config';
+import type {RemoteConfig} from '@atb/modules/remote-config';
 import {toggleSpecifications} from './toggle-specifications';
 import {isDefined} from '@atb/utils/presence';
-import {StorageService} from '@atb/storage';
+import {StorageService} from '@atb/modules/storage';
 
 /**
  * Get stored overrides from local storage for all entries in OverrideKeysEnum,

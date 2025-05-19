@@ -8,7 +8,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {DatePickerSheet} from '@atb/date-picker';
+import {DatePickerSheet} from '@atb/components/date-selection';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';

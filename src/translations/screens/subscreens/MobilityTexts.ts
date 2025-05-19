@@ -7,7 +7,7 @@ import {
 import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {formatNumberToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
@@ -165,15 +165,10 @@ export const MobilityTexts = {
     'Aktiver for å sjå i kart',
   ),
   errorLoadingValueCode: {
-    title: _(
+    message: _(
       'Henting av verdikode feilet',
       'Fetching value code failed',
       'Henting av verdikode feila',
-    ),
-    text: _(
-      'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
-      'A problem occured while fetching the value code. This is required to get the benefit in the other app.',
-      'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
     ),
     retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   },

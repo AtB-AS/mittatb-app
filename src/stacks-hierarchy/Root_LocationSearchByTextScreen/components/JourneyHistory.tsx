@@ -1,6 +1,6 @@
 import {GenericSectionItem, HeaderSectionItem} from '@atb/components/sections';
 import {Section} from '@atb/components/sections';
-import {JourneySearchHistoryEntry} from '@atb/search-history';
+import {JourneySearchHistoryEntry} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';

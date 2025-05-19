@@ -1,17 +1,16 @@
 import {StyleSheet} from '@atb/theme';
-import {useFareContracts, useTicketingContext} from '@atb/ticketing';
+import {useFareContracts, useTicketingContext} from '@atb/modules/ticketing';
 import React, {useCallback, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
-import {useAnalyticsContext} from '@atb/analytics';
-import {useTimeContext} from '@atb/time';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useTimeContext} from '@atb/modules/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
-import {usePopOverContext} from '@atb/popover';
-import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
+import {usePopOverContext, useOneTimePopover} from '@atb/modules/popover';
 import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
@@ -22,14 +21,14 @@ type Props =
 export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
 }: Props) => {
-  const {reservations, sentFareContracts, isRefreshingFareContracts} =
-    useTicketingContext();
+  const {reservations, sentFareContracts} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
 
   const {
     fareContracts: availableFareContracts,
     refetch: refetchAvailableFareContracts,
+    isRefetching: isRefetchingAvailableFareContracts,
   } = useFareContracts({availability: 'available'}, serverNow);
   const {fareContracts: historicalFareContracts} = useFareContracts(
     {availability: 'historical'},
@@ -90,7 +89,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshingFareContracts}
+            refreshing={isRefetchingAvailableFareContracts}
             onRefresh={() => {
               refetchAvailableFareContracts();
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {

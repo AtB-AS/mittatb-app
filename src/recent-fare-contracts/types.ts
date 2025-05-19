@@ -1,8 +1,8 @@
 import {
   PointToPointValidity,
   PreassignedFareProduct,
-  TariffZone,
-} from '@atb/configuration';
+  FareZone,
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TravelRightDirection} from '@atb-as/utils';
 
@@ -13,8 +13,8 @@ export type RecentFareContractType = {
    */
   id: string;
   preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
+  fromFareZone?: FareZone;
+  toFareZone?: FareZone;
   direction?: TravelRightDirection;
   pointToPointValidity?: PointToPointValidity;
   userProfilesWithCount: UserProfileWithCount[];

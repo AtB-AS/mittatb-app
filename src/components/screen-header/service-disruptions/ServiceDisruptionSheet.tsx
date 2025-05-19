@@ -11,7 +11,7 @@ import {
 } from '@atb/modules/global-messages';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 
 export const ServiceDisruptionSheet = () => {

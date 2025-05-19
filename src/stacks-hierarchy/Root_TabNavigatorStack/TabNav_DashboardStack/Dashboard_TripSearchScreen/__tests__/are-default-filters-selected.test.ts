@@ -1,4 +1,4 @@
-import {TransportModeFilterOptionWithSelectionType} from '@atb/travel-search-filters';
+import {TransportModeFilterOptionWithSelectionType} from '@atb/modules/travel-search-filters';
 import {areDefaultFiltersSelected} from '../utils';
 
 describe('areDefaultFiltersSelected', () => {

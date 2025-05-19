@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {getProfile} from '@atb/api';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useEffect} from 'react';
 

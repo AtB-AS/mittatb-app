@@ -3,18 +3,18 @@ import {
   Reservation,
   useFareContracts,
   useTicketingContext,
-} from '@atb/ticketing';
-import {useTimeContext} from '@atb/time';
+} from '@atb/modules/ticketing';
+import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {TicketHistoryMode, TicketHistoryScreenParams} from './types';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getFareContractInfo} from '@atb/modules/fare-contracts';
 import {sortFcOrReservationByValidityAndCreation} from '@atb/modules/fare-contracts';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';

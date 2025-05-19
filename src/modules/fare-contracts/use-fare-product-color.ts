@@ -1,4 +1,4 @@
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ContrastColor, useThemeContext} from '@atb/theme';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 

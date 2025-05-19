@@ -5,7 +5,7 @@ export enum AppOrgs {
   troms = 'troms',
 }
 
-export enum TariffZoneAuthorities {
+export enum FareZoneAuthorities {
   atb = 'ATB',
   nfk = 'NOR',
   fram = 'MOR',

@@ -10,7 +10,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '@atb/modules/rule-engine';
 import {ContrastColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;

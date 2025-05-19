@@ -7,7 +7,7 @@ import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfile
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -15,7 +15,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;

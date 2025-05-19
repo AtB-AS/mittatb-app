@@ -3,12 +3,12 @@ import {
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
-import {useAuthContext, VippsSignInErrorCode} from '@atb/auth';
+import {useAuthContext, VippsSignInErrorCode} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   getTextForLanguage,
@@ -24,10 +24,13 @@ import queryString from 'query-string';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {useOnboardingContext} from '@atb/onboarding';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
-import {closeInAppBrowseriOS, openInAppBrowser} from '@atb/in-app-browser';
+import {
+  closeInAppBrowseriOS,
+  openInAppBrowser,
+} from '@atb/modules/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 

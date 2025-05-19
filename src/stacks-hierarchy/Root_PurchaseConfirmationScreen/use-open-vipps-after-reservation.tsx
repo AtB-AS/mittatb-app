@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Linking} from 'react-native';
-import {PaymentType} from '@atb/ticketing';
+import {PaymentType} from '@atb/modules/ticketing';
 
 /**
  * Open Vipps after successful reservation if the payment type is Vipps.

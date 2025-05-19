@@ -1,7 +1,7 @@
 import {
   FareProductTypeConfig,
   ProductTypeTransportModes,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {View} from 'react-native';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareProductTile} from './FareProductTile';

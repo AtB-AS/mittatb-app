@@ -6,16 +6,16 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
-  TariffZone,
+  FareZone,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+} from '@atb/modules/configuration';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
@@ -28,7 +28,7 @@ import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
-import {useHarbors} from '@atb/harbors';
+import {useHarbors} from '@atb/modules/harbors';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
@@ -160,7 +160,7 @@ function usePurchaseSelectionFromTrip(
   } = useFeatureTogglesContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const {tariffZones} = useFirestoreConfigurationContext();
+  const {fareZones} = useFirestoreConfigurationContext();
   const {data: harbors} = useHarbors();
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
@@ -185,7 +185,7 @@ function usePurchaseSelectionFromTrip(
     tripPattern,
     nonFreeLegs,
     fareProductTypeConfigs,
-    tariffZones,
+    fareZones,
     ticketStartTime,
   );
   if (ticketInfoForBus) {
@@ -228,8 +228,8 @@ function calculateTicketStartTime(legs: Leg[]) {
 }
 
 type TicketInfoForBus = {
-  fromPlace: TariffZoneWithMetadata;
-  toPlace: TariffZoneWithMetadata;
+  fromPlace: FareZoneWithMetadata;
+  toPlace: FareZoneWithMetadata;
   ticketStartTime: string | undefined;
   fareProductTypeConfig: FareProductTypeConfig;
 };
@@ -238,7 +238,7 @@ function getTicketInfoForBus(
   tripPattern: TripPattern,
   nonFreeLegs: Leg[],
   fareProductTypeConfigs: FareProductTypeConfig[],
-  tariffZones: TariffZone[],
+  fareZones: FareZone[],
   ticketStartTime?: string,
 ): TicketInfoForBus | undefined {
   const canSellCollab = canSellCollabTicket(tripPattern);
@@ -253,16 +253,16 @@ function getTicketInfoForBus(
 
   if (!hasOnlyValidBusLegs && !canSellCollab) return;
 
-  const fromTariffZone = getTariffZoneWithMetadata(
+  const fromFareZone = getFareZoneWithMetadata(
     nonFreeLegs[0].fromPlace,
-    tariffZones,
+    fareZones,
   );
-  const toTariffZone = getTariffZoneWithMetadata(
+  const toFareZone = getFareZoneWithMetadata(
     nonFreeLegs[nonFreeLegs.length - 1].toPlace,
-    tariffZones,
+    fareZones,
   );
 
-  if (!fromTariffZone || !toTariffZone) return;
+  if (!fromFareZone || !toFareZone) return;
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (config) => config.type === 'single',
@@ -270,8 +270,8 @@ function getTicketInfoForBus(
   if (!fareProductTypeConfig) return;
 
   return {
-    fromPlace: fromTariffZone,
-    toPlace: toTariffZone,
+    fromPlace: fromFareZone,
+    toPlace: toFareZone,
     ticketStartTime,
     fareProductTypeConfig,
   };
@@ -322,21 +322,21 @@ function getTicketInfoForBoat(
   };
 }
 
-function getTariffZoneWithMetadata(place: Place, tariffZones: TariffZone[]) {
-  const firstTariffZoneWeSellTicketFor = getFirstTariffZoneWeSellTicketFor(
-    tariffZones,
+function getFareZoneWithMetadata(place: Place, fareZones: FareZone[]) {
+  const firstFareZoneWeSellTicketFor = getFirstFareZoneWeSellTicketFor(
+    fareZones,
     place.quay?.tariffZones,
   );
 
-  if (!firstTariffZoneWeSellTicketFor) return;
+  if (!firstFareZoneWeSellTicketFor) return;
 
-  const tariffZoneWithMetadata: TariffZoneWithMetadata = {
+  const fareZoneWithMetadata: FareZoneWithMetadata = {
     resultType: 'zone',
     venueName: place.name,
-    ...firstTariffZoneWeSellTicketFor,
+    ...firstFareZoneWeSellTicketFor,
   };
 
-  return tariffZoneWithMetadata;
+  return fareZoneWithMetadata;
 }
 
 function getFromToName(legs: Leg[]) {
@@ -373,15 +373,15 @@ function getWaitTime(leg: Leg, nextLeg: Leg) {
     : 0;
 }
 
-function getFirstTariffZoneWeSellTicketFor(
-  tariffZones: TariffZone[],
-  tripTariffZones?: {id: string; name?: string}[],
-): TariffZone | undefined {
-  if (!tripTariffZones) return;
+function getFirstFareZoneWeSellTicketFor(
+  fareZones: FareZone[],
+  tripFareZones?: {id: string; name?: string}[],
+): FareZone | undefined {
+  if (!tripFareZones) return;
 
-  // match tariff zone to zones in reference data to find zones we sell tickets for
-  const matchingZones = tariffZones.filter((referenceTariffZone) =>
-    tripTariffZones.find((z2) => referenceTariffZone.id === z2.id),
+  // match fare zone to zones in reference data to find zones we sell tickets for
+  const matchingZones = fareZones.filter((referenceFareZone) =>
+    tripFareZones.find((z2) => referenceFareZone.id === z2.id),
   );
 
   if (!matchingZones[0]) return;

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {Animated, Easing, LayoutChangeEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {shadows} from '@atb/components/map';
+import {shadows} from '@atb/modules/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useThemeContext} from '@atb/theme';

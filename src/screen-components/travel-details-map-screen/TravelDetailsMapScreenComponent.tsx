@@ -15,10 +15,10 @@ import {
   PositionArrow,
   useControlPositionsStyle,
   useMapViewConfig,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useGeolocationContext} from '@atb/GeolocationContext';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useThemeContext, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -131,6 +131,7 @@ export const TravelDetailsMapScreenComponent = ({
       flyToLocation({
         coordinates: location,
         mapCameraRef,
+        mapViewRef,
         animationDuration: FOLLOW_ANIMATION_DURATION,
         animationMode: 'easeTo',
       });
@@ -210,6 +211,7 @@ export const TravelDetailsMapScreenComponent = ({
             flyToLocation({
               coordinates: geolocation?.coordinates,
               mapCameraRef,
+              mapViewRef,
             });
           }}
         />

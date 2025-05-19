@@ -25,7 +25,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
-import {MapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/modules/map';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,
@@ -39,15 +39,18 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
-import {useInAppReviewFlow} from '@atb/utils/use-in-app-review';
+import {
+  InAppReviewContext,
+  useInAppReviewFlow,
+} from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
@@ -121,7 +124,7 @@ export const Trip: React.FC<TripProps> = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        requestReview('Trip details: Bus in map dismissed');
+        requestReview(InAppReviewContext.TripDetails);
         shouldShowRequestReview.current = false;
       }
     }, [requestReview]),

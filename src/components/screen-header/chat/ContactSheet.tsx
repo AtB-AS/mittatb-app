@@ -7,14 +7,14 @@ import {
   BottomSheetContainer,
   useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
-import {useChatUnreadCount} from '@atb/chat';
+import {useChatUnreadCount} from '@atb/modules/chat';
 import Intercom, {Space} from '@intercom/intercom-react-native';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Theme} from '@atb/theme/colors';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 

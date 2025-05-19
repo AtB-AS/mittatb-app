@@ -1,5 +1,5 @@
 import {TranslateFunction, TravelTokenTexts} from '@atb/translations';
-import {Token} from '@atb/mobile-token';
+import {Token} from '@atb/modules/mobile-token';
 
 export const getDeviceNameWithUnitInfo = (
   t: TranslateFunction,

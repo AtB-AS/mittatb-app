@@ -6,12 +6,12 @@ import {StyleSheet} from '@atb/theme';
 import {ProductName} from '../components/ProductName';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useTimeContext} from '@atb/time';
-import {useAuthContext} from '@atb/auth';
+import {useTimeContext} from '@atb/modules/time';
+import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 
 type Props = {
   fareContract: FareContractType;

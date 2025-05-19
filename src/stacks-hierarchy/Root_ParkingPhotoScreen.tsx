@@ -6,15 +6,15 @@ import {
   ShmoBookingEventType,
   ShmoBookingState,
 } from '@atb/api/types/mobility';
-import {useSendShmoBookingEventMutation} from '@atb/mobility/queries/use-send-shmo-booking-event-mutation';
+import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
 import {Image} from 'react-native-compressor';
-import {blobToBase64} from '@atb/parking-violations-reporting';
+import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;

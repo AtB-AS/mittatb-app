@@ -1,5 +1,5 @@
 import {TranslatedString, translation as _} from '../commons';
-import {PopOverKey} from '@atb/popover';
+import {PopOverKey} from '@atb/modules/popover';
 
 type PopOverText = {
   heading: TranslatedString;

@@ -1,5 +1,22 @@
 import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
+import {z} from 'zod';
+
+/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
+const HttpError = z.object({
+  code: z.number(),
+  message: z.string(),
+});
+type HttpError = z.infer<typeof HttpError>;
+
+/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
+export const ErrorResponse = z.object({
+  http: HttpError,
+  kind: z.string(),
+  message: z.string().optional(),
+  details: z.array(z.unknown()).optional(),
+});
+export type ErrorResponse = z.infer<typeof ErrorResponse>;
 
 export type ErrorType =
   | 'unknown'
@@ -59,5 +76,11 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
   responseStatusText: error?.response?.statusText,
   responseData: JSON.stringify(error?.response?.data || 'No response data'),
 });
+
+export const getErrorResponse = (
+  error: AxiosError,
+): ErrorResponse | undefined => {
+  return ErrorResponse.safeParse(error?.response?.data).data;
+};
 
 export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;

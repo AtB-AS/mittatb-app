@@ -1,10 +1,10 @@
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
-import {useFareContracts} from '@atb/ticketing';
+} from '@atb/modules/configuration';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {useNotificationsContext} from './use-push-notifications';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 
 export function useHasFareContractWithActivatedNotification(): boolean {
   const {config: notificationsConfig} = useNotificationsContext();

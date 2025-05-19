@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {shadows} from '@atb/components/map';
+import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';

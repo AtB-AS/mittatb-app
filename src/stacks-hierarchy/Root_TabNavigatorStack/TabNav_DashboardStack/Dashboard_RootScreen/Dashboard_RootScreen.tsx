@@ -1,6 +1,6 @@
-import {useGeolocationContext} from '@atb/GeolocationContext';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useGeolocationContext} from '@atb/modules/geolocation';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
@@ -14,7 +14,7 @@ import {
   Location,
   UserFavorites,
   useFavoritesContext,
-} from '@atb/favorites';
+} from '@atb/modules/favorites';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {
   SelectableLocationType,

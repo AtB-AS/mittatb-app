@@ -4,7 +4,7 @@ import {type FareContractType} from '@atb-as/utils';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 

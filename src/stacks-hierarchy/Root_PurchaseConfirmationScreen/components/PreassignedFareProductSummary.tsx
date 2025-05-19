@@ -5,9 +5,9 @@ import {ThemeText} from '@atb/components/text';
 import {
   FareProductTypeConfig,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   getReferenceDataName,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -23,7 +23,7 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
-import {TicketRecipientType} from '@atb/ticketing';
+import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
@@ -31,8 +31,8 @@ type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   recipient?: TicketRecipientType;
   isSearchingOffer: boolean;
-  fromPlace: TariffZone | StopPlaceFragment | undefined;
-  toPlace: TariffZone | StopPlaceFragment | undefined;
+  fromPlace: FareZone | StopPlaceFragment | undefined;
+  toPlace: FareZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
   travelDate?: string;
 };
@@ -175,10 +175,7 @@ export const PreassignedFareContractSummary = ({
   );
 };
 
-function getPlaceName(
-  place: TariffZone | StopPlaceFragment,
-  language: Language,
-) {
+function getPlaceName(place: FareZone | StopPlaceFragment, language: Language) {
   return 'geometry' in place
     ? getReferenceDataName(place, language)
     : place.name;

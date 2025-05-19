@@ -4,11 +4,11 @@ import {
   ReserveOffer,
   TicketRecipientType,
   reserveOffers,
-} from '@atb/ticketing';
-import {useAuthContext} from '@atb/auth';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
+} from '@atb/modules/ticketing';
+import {useAuthContext} from '@atb/modules/auth';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
+import {PaymentMethod} from '@atb/modules/payment';
 
 type Args = {
   offers: ReserveOffer[];
@@ -37,7 +37,7 @@ export const useReserveOfferMutation = ({
       return reserveOffers({
         offers,
         paymentType: paymentMethod.paymentType,
-        recurringPaymentId: paymentMethod.recurringCard?.id,
+        recurringPaymentId: paymentMethod.recurringPayment?.id,
         shouldSavePaymentMethod,
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,

@@ -2,7 +2,7 @@ import {
   Reservation,
   isSentOrReceivedFareContract,
   getLastUsedAccess,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   FareContractType,
   FareContractState,
@@ -13,21 +13,21 @@ import {
   findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
-  TariffZone,
+  FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
   Language,
-  TariffZonesTexts,
+  FareZonesTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getAccesses} from '@atb-as/utils';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
@@ -200,15 +200,15 @@ export const useOtherDeviceIsInspectableWarning = () => {
   }
 };
 
-export const useTariffZoneSummary = (
+export const useFareZoneSummary = (
   preassignedFareProduct?: PreassignedFareProduct,
-  fromTariffZone?: TariffZone,
-  toTariffZone?: TariffZone,
+  fromFareZone?: FareZone,
+  toFareZone?: FareZone,
 ) => {
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
 
-  if (!fromTariffZone || !toTariffZone) return undefined;
+  if (!fromFareZone || !toFareZone) return undefined;
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
@@ -217,29 +217,29 @@ export const useTariffZoneSummary = (
     fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
   if (zoneSelectionModeDisabledForProduct) return undefined;
 
-  return tariffZonesSummary(fromTariffZone, toTariffZone, language, t);
+  return fareZonesSummary(fromFareZone, toFareZone, language, t);
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>
   status === 'valid';
 
-export function tariffZonesSummary(
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
+export function fareZonesSummary(
+  fromFareZone: FareZone,
+  toFareZone: FareZone,
   language: Language,
   t: TranslateFunction,
 ): string {
-  if (fromTariffZone.id === toTariffZone.id) {
+  if (fromFareZone.id === toFareZone.id) {
     return t(
-      TariffZonesTexts.zoneSummary.text.singleZone(
-        getReferenceDataName(fromTariffZone, language),
+      FareZonesTexts.zoneSummary.text.singleZone(
+        getReferenceDataName(fromFareZone, language),
       ),
     );
   } else {
     return t(
-      TariffZonesTexts.zoneSummary.text.multipleZone(
-        getReferenceDataName(fromTariffZone, language),
-        getReferenceDataName(toTariffZone, language),
+      FareZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromFareZone, language),
+        getReferenceDataName(toFareZone, language),
       ),
     );
   }

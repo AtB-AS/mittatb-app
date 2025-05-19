@@ -1,10 +1,14 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
-import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
+import {
+  Location,
+  SearchLocation,
+  StoredLocationFavorite,
+} from '@atb/modules/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
+import {Root_PurchaseFareZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
@@ -16,7 +20,7 @@ export type Root_AddEditFavoritePlaceScreenParams = {
   searchLocation?: SearchLocation;
 };
 
-export type Root_PurchaseTariffZonesSearchByMapScreenParams = {
+export type Root_PurchaseFareZonesSearchByMapScreenParams = {
   selection: PurchaseSelectionType;
 };
 
@@ -112,8 +116,8 @@ export type RootStackParamList = StackParams<{
   Root_ShareTravelHabitsScreen: undefined;
   Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
-  Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
-  Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
+  Root_PurchaseFareZonesSearchByMapScreen: Root_PurchaseFareZonesSearchByMapScreenParams;
+  Root_PurchaseFareZonesSearchByTextScreen: Root_PurchaseFareZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;

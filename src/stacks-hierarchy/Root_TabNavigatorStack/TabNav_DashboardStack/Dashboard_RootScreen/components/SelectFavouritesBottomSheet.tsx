@@ -13,7 +13,10 @@ import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StoredFavoriteDeparture, useFavoritesContext} from '@atb/favorites';
+import {
+  StoredFavoriteDeparture,
+  useFavoritesContext,
+} from '@atb/modules/favorites';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';

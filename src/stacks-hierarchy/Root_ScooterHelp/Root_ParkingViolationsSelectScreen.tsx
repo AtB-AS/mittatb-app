@@ -12,8 +12,8 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {ScreenContainer} from '../../components/PhotoCapture/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
-import {useParkingViolations} from '@atb/parking-violations-reporting';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelectScreen'>;
