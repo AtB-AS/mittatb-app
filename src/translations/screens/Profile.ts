@@ -40,11 +40,7 @@ const ProfileTexts = {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
         editProfile: {
-          label: _(
-            'Rediger Profil',
-            'Edit Profile',
-            'Rediger Profil',
-          ),
+          label: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
         },
       },
       infoItems: {
