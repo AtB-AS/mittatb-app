@@ -40,6 +40,7 @@ import {
   isCarStationV2,
   isStationV2,
   isVehiclesClusteredFeature,
+  MapFilter,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
@@ -303,6 +304,11 @@ export const MapV2 = (props: MapProps) => {
           ]}
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
+          <MapFilter
+            onPress={() => onMapClick({source: 'filters-button'})}
+            isLoading={false}
+          />
 
           <PositionArrow
             onPress={async () => {
