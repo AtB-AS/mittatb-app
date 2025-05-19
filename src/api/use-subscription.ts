@@ -24,6 +24,7 @@ export function useSubscription({
 
     let retryTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
+      console.log('Connecting to: ', url);
       const ws = new WebSocket(url);
 
       ws.onmessage = (event) => {
@@ -39,6 +40,7 @@ export function useSubscription({
           event.code === undefined
         ) {
           Bugsnag.leaveBreadcrumb(`WebSocket closed with code ${event.code}`);
+          console.log('WebSocket closed with code: ', event.code);
           connect();
         } else {
           if (event.code === 1006 && retryCount.current <= 3) {
@@ -47,10 +49,16 @@ export function useSubscription({
             // where auto-reconnect can cause infinite loop. So instead try to leave
             // breadcrumb if it happens under 3 times, but treat as normal retry flow.
             Bugsnag.leaveBreadcrumb(
-              `WebSocket closed with code ${event.code} (retry: ${retryCount})`,
+              `WebSocket closed with code ${event.code} (retry: ${retryCount.current})`,
+            );
+            console.log(
+              `WebSocket closed with code ${event.code} (retry: ${retryCount.current})`,
             );
           } else {
             Bugsnag.notify(
+              `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
+            );
+            console.error(
               `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
             );
           }
@@ -61,6 +69,7 @@ export function useSubscription({
 
       ws.onopen = () => {
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
+        console.log('WebSocket opened with url: ', url);
         retryCount.current = 0;
       };
 
