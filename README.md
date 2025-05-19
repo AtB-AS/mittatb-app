@@ -165,7 +165,7 @@ For test devices and developer devices we do continuous distribution through dir
 
 ## Storybook
 
-Storybook for the app can be viewed in debug build of the app through the developer section in 'My profile'.
+Storybook for the app can be viewed in debug build of the app through the developer section in 'Profile'.
 
 When adding or removing stories, the command `yarn storybook-generate` must be used to update the references in the `storybook.requires.js` file.
 

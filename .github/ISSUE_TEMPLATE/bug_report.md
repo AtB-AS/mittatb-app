@@ -13,7 +13,7 @@ A clear and concise description of what the bug is.
 **Application version**
 Version number: [e.g. 1.2.3]
 
-<!-- See application version under "My profile" screen -->
+<!-- See application version under "Profile" screen -->
 
 **To Reproduce**
 Steps to reproduce the behavior:
