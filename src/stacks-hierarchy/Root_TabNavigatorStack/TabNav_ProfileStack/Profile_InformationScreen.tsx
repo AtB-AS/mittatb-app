@@ -11,7 +11,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export const Profile_InformationScreen = () => {
   const style = useStyle();
