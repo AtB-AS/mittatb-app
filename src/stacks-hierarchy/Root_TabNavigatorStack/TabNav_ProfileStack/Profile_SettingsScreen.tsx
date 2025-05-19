@@ -7,8 +7,8 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext.tsx';
-import {useAuthContext} from '@atb/auth';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useAuthContext} from '@atb/modules/auth';
 
 type ProfileProps = ProfileScreenProps<'Profile_SettingsScreen'>;
 
