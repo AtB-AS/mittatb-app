@@ -354,6 +354,19 @@ const ProfileTexts = {
         },
       },
     },
+    contact: {
+      heading: _('Kontakt', 'Contact', 'Kontakt'),
+      helpAndContact: _(
+        'Hjelp og kontakt',
+        'Help and contact',
+        'Hjelp og kontakt',
+      ),
+      feedback: _(
+        'Gi tilbakemelding om appen',
+        'Give feedback about the app',
+        'Gi tilbakemelding om appen',
+      ),
+    },
   },
   installId: {
     label: (id: string) => _(`ID: ${id}`, `ID: ${id}`, `ID: ${id}`),
