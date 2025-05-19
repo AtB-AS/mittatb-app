@@ -1,5 +1,9 @@
 import React, {createContext, useContext, useMemo, useState} from 'react';
-import {AutoSelectableMapItem} from '@atb/modules/map';
+import {
+  AutoSelectableMapItem,
+  MapFilterType,
+  useUserMapFilters,
+} from '@atb/modules/map';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
@@ -20,6 +24,8 @@ type MapContextState = {
   autoSelectedFeature?: AutoSelectedFeature;
   selectedShmoPaymentMethod?: PaymentMethod;
   setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
+  mapFilter?: MapFilterType;
+  setMapFilter: (mapFilter: MapFilterType) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -49,6 +55,8 @@ export const MapContextProvider = ({children}: Props) => {
 
   const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
     useSelectedShmoPaymentMethod();
+
+  const {mapFilter, setMapFilter} = useUserMapFilters();
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -94,6 +102,8 @@ export const MapContextProvider = ({children}: Props) => {
         autoSelectedFeature,
         selectedShmoPaymentMethod,
         setSelectedShmoPaymentMethod,
+        mapFilter,
+        setMapFilter,
       }}
     >
       {children}

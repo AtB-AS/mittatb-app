@@ -4,12 +4,12 @@ import {
 } from '@atb/components/bottom-sheet';
 import {MapTexts, TripSearchTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {
   MapFilterType,
   MobilityMapFilterType,
-  useUserMapFilters,
+  useMapContext,
 } from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -27,19 +27,12 @@ export const MapFilterSheet = ({
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
-  const {getMapFilter, setMapFilter} = useUserMapFilters();
-  const [initialFilter, setInitialFilter] = useState<MapFilterType>();
-  const [filter, setFilter] = useState<MapFilterType>();
+  const {mapFilter, setMapFilter} = useMapContext();
+  const initialFilterRef = useRef(mapFilter);
+  const [filter, setFilter] = useState<MapFilterType | undefined>(mapFilter);
   const {close: closeBottomSheet} = useBottomSheetContext();
 
-  useEffect(() => {
-    getMapFilter().then((f) => {
-      setInitialFilter(f);
-      setFilter(f);
-    });
-  }, [getMapFilter]);
-
-  if (!initialFilter || !filter) {
+  if (!initialFilterRef.current || !filter) {
     return (
       <View style={style.activityIndicator}>
         <ActivityIndicator size="large" />
@@ -62,7 +55,7 @@ export const MapFilterSheet = ({
     >
       <ScrollView style={style.container}>
         <MobilityFilters
-          filter={initialFilter.mobility}
+          filter={initialFilterRef.current.mobility}
           onFilterChanged={onMobilityFilterChanged}
         />
       </ScrollView>
