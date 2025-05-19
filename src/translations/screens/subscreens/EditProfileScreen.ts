@@ -74,11 +74,7 @@ export const EditProfileTexts = {
   },
   button: {
     save: _('Lagre', 'Save', 'Lagre'),
-    deleteProfile: _(
-      'Slett Profil',
-      'Delete Profile',
-      'Slett Profil',
-    ),
+    deleteProfile: _('Slett Profil', 'Delete Profile', 'Slett Profil'),
   },
   profileUpdate: {
     success: _('Profil oppdatert.', 'Profile updated.', 'Profil oppdatert.'),
