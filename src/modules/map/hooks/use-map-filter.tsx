@@ -9,6 +9,9 @@ const fallback: MapFilterType = {
   mobility: {},
 };
 
+/**
+ * This hook should only be used in MapContext.
+ */
 export const useUserMapFilters = () => {
   const {default_map_filter} = useRemoteConfigContext();
   const [mapFilter, setMapFilterInContext] = useState<MapFilterType>();
