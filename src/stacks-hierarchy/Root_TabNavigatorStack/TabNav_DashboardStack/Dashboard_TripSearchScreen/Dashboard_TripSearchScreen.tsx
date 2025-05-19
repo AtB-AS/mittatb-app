@@ -11,8 +11,8 @@ import {
   Location,
   useFavoritesContext,
   UserFavorites,
-} from '@atb/favorites';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+} from '@atb/modules/favorites';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   SelectableLocationType,
   useLocationSearchValue,
@@ -45,12 +45,12 @@ import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {TripPattern} from '@atb/api/types/trips';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePopOverContext} from '@atb/popover';
+import {usePopOverContext} from '@atb/modules/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
@@ -60,7 +60,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {DatePickerSheet} from '@atb/date-picker';
+import {DatePickerSheet} from '@atb/components/date-selection';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -539,6 +539,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     </View>
   );
 };
+
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {

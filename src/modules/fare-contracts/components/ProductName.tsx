@@ -5,7 +5,7 @@ import {
   findReferenceDataById,
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 

@@ -3,7 +3,7 @@ import React from 'react';
 import {
   FareProductTypeConfig,
   ProductTypeTransportModes,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';

@@ -1,9 +1,9 @@
-import {storage} from '@atb/storage';
+import {storage} from '@atb/modules/storage';
 import {client} from '@atb/api/client';
-import {VippsSignInErrorCode} from '@atb/auth';
+import {VippsSignInErrorCode} from '@atb/modules/auth';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
 import {APP_SCHEME} from '@env';
-import {openInAppBrowser} from '@atb/in-app-browser';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 

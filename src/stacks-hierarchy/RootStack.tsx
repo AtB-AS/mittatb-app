@@ -1,4 +1,4 @@
-import {trackNavigation} from '@atb/diagnostics/trackNavigation';
+import {trackNavigation} from '@atb/modules/diagnostics';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
@@ -31,8 +31,8 @@ import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
-import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchaseFareZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByMapScreen';
+import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen';
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
@@ -47,7 +47,7 @@ import {
   LoadingScreen,
   LoadingScreenBoundary,
   useIsLoadingAppState,
-} from '@atb/loading-screen';
+} from '@atb/screen-components/loading-screen';
 import {
   Root_ParkingViolationsConfirmationScreen,
   Root_ParkingViolationsPhotoScreen,
@@ -56,22 +56,22 @@ import {
 } from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
-import {useOnboardingFlow} from '@atb/onboarding';
-import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
-import {ForceUpdateScreen} from '@atb/force-update-screen';
+import {useOnboardingFlow} from '@atb/modules/onboarding';
+import {useRegisterIntercomUser} from '@atb/modules/chat';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
 import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
-import {AnalyticsContextProvider} from '@atb/analytics';
+import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 
 type ResultState = PartialState<NavigationState> & {
@@ -322,13 +322,13 @@ export const RootStack = () => {
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByMapScreen"
-                  component={Root_PurchaseTariffZonesSearchByMapScreen}
+                  name="Root_PurchaseFareZonesSearchByMapScreen"
+                  component={Root_PurchaseFareZonesSearchByMapScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByTextScreen"
-                  component={Root_PurchaseTariffZonesSearchByTextScreen}
+                  name="Root_PurchaseFareZonesSearchByTextScreen"
+                  component={Root_PurchaseFareZonesSearchByTextScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen

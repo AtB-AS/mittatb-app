@@ -1,0 +1,134 @@
+import {useAuthContext} from '@atb/modules/auth';
+import {useTranslation} from '@atb/translations';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import React, {useCallback} from 'react';
+import {useShmoRequirements} from '../use-shmo-requirements.tsx';
+import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
+import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
+import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
+import {View} from 'react-native';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {Button} from '@atb/components/button';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {formatFriendlyShmoErrorMessage} from '../utils.ts';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
+import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
+
+type ShmoActionButtonProps = {
+  onLogin: () => void;
+  onStartOnboarding: () => void;
+  vehicleId: string;
+  operatorId: string;
+  paymentMethod: PaymentMethod | undefined;
+};
+
+export const ShmoActionButton = ({
+  onLogin,
+  onStartOnboarding,
+  vehicleId,
+  operatorId,
+  paymentMethod,
+}: ShmoActionButtonProps) => {
+  const {authenticationType, userId} = useAuthContext();
+  const {hasBlockers, numberOfBlockers} = useShmoRequirements();
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const styles = useStyles();
+  const coordinates = getCurrentCoordinatesGlobal();
+
+  const {
+    mutateAsync: initShmoOneStopBooking,
+    isLoading: initShmoOneStopBookingIsLoading,
+    isError: initShmoOneStopBookingIsError,
+    error: initShmoOneStopBookingError,
+  } = useInitShmoOneStopBookingMutation();
+
+  const initShmoBooking = useCallback(async () => {
+    const initReqBody: InitShmoOneStopBookingRequestBody = {
+      recurringPaymentId: paymentMethod?.recurringPayment?.id ?? 0,
+      coordinates: {
+        latitude: coordinates?.latitude ?? 0,
+        longitude: coordinates?.longitude ?? 0,
+      },
+      assetId: vehicleId ?? '',
+      operatorId: operatorId,
+    };
+    const res = await initShmoOneStopBooking(initReqBody);
+    if (res.bookingId) {
+      savePreviousPayment(
+        userId,
+        paymentMethod?.paymentType,
+        paymentMethod?.recurringPayment?.id,
+      );
+    }
+  }, [
+    initShmoOneStopBooking,
+    vehicleId,
+    operatorId,
+    coordinates,
+    paymentMethod,
+    userId,
+  ]);
+
+  if (authenticationType != 'phone') {
+    return (
+      <ButtonInfoTextCombo
+        onPress={onLogin}
+        buttonText={t(MobilityTexts.shmoRequirements.loginBlocker)}
+        message={t(MobilityTexts.shmoRequirements.loginBlockerInfoMessage)}
+      />
+    );
+  }
+
+  if (hasBlockers) {
+    return (
+      <ButtonInfoTextCombo
+        onPress={onStartOnboarding}
+        buttonText={t(MobilityTexts.shmoRequirements.shmoBlockers)}
+        message={t(
+          MobilityTexts.shmoRequirements.shmoBlockersInfoMessage(
+            numberOfBlockers,
+          ),
+        )}
+      />
+    );
+  }
+
+  return (
+    <View style={styles.startTripWrapper}>
+      {initShmoOneStopBookingIsError && (
+        <MessageInfoBox
+          type="error"
+          message={formatFriendlyShmoErrorMessage(
+            initShmoOneStopBookingError,
+            t,
+          )}
+        />
+      )}
+      <Button
+        mode="primary"
+        active={false}
+        disabled={initShmoOneStopBookingIsLoading}
+        interactiveColor={theme.color.interactive[0]}
+        expanded={true}
+        type="large"
+        accessibilityRole="button"
+        onPress={initShmoBooking}
+        loading={initShmoOneStopBookingIsLoading}
+        text={
+          initShmoOneStopBookingIsLoading
+            ? t(MobilityTexts.trip.button.startLoading)
+            : t(MobilityTexts.trip.button.start)
+        }
+      />
+    </View>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  return {
+    startTripWrapper: {
+      gap: theme.spacing.medium,
+    },
+  };
+});

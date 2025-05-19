@@ -4,7 +4,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {RadioGroupSection} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import type {UserCountState} from './types';

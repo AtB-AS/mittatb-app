@@ -118,7 +118,7 @@ describe('purchaseSelectionBuilder - forType', () => {
   it('Selected place is the first zone if no zone specified as default', () => {
     const input = {
       ...TEST_INPUT,
-      tariffZones: [
+      fareZones: [
         {...TEST_ZONE, id: 'T1'},
         {...TEST_ZONE, id: 'T2'},
         {...TEST_ZONE, id: 'T3'},
@@ -134,7 +134,7 @@ describe('purchaseSelectionBuilder - forType', () => {
   it('Selected place is the zone specified as default', () => {
     const input = {
       ...TEST_INPUT,
-      tariffZones: [
+      fareZones: [
         {...TEST_ZONE, id: 'T1'},
         {...TEST_ZONE, id: 'T2', isDefault: true},
         {...TEST_ZONE, id: 'T3'},
@@ -151,7 +151,7 @@ describe('purchaseSelectionBuilder - forType', () => {
   it('Selected place is the zone within current coordinates', () => {
     const input: PurchaseSelectionBuilderInput = {
       ...TEST_INPUT,
-      tariffZones: [
+      fareZones: [
         {...TEST_ZONE, id: 'T1'},
         {...TEST_ZONE, id: 'T2', isDefault: true},
         {
@@ -229,10 +229,10 @@ describe('purchaseSelectionBuilder - forType', () => {
       preassignedFareProducts: [
         {
           ...TEST_PRODUCT,
-          limitations: {...TEST_PRODUCT.limitations, tariffZoneRefs: ['T3']},
+          limitations: {...TEST_PRODUCT.limitations, fareZoneRefs: ['T3']},
         },
       ],
-      tariffZones: [
+      fareZones: [
         {...TEST_ZONE, id: 'T1'},
         {...TEST_ZONE, id: 'T2', isDefault: true},
         {...TEST_ZONE, id: 'T3'},

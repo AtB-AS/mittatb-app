@@ -1,18 +1,18 @@
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useMobileTokenContext} from '@atb/mobile-token';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingContext,
   useHasReservationOrAvailableFareContract,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   dictionary,
   getTextForLanguage,
@@ -37,8 +37,8 @@ import {
 } from '@atb/components/sections';
 
 import {ClickableCopy} from './components/ClickableCopy';
-import {useAnalyticsContext} from '@atb/analytics';
-import {useStorybookContext} from '@atb/storybook/StorybookContext';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useStorybookContext} from '@atb/modules/storybook';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';

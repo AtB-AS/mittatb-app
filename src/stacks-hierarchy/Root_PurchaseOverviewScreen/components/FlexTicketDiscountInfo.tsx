@@ -10,10 +10,10 @@ import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseO
 import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
   ExpandableSectionItem,
   GenericSectionItem,

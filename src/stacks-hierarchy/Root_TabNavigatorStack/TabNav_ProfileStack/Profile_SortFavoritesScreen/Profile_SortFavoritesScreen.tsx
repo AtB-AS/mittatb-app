@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useFavoritesContext} from '@atb/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';

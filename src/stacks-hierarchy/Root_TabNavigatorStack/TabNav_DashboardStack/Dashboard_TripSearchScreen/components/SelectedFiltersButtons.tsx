@@ -3,7 +3,7 @@ import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {View} from 'react-native';
 import React from 'react';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {areDefaultFiltersSelected} from '../utils';

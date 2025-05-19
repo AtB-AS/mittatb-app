@@ -3,7 +3,7 @@ import {
   Preference_ScreenAlternatives,
   preference_screenAlternatives,
   usePreferencesContext,
-} from '@atb/preferences';
+} from '@atb/modules/preferences';
 import {
   SelectStartScreenTexts,
   TranslateFunction,

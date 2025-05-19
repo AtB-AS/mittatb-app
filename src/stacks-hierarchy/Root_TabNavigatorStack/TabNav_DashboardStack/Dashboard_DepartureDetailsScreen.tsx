@@ -1,4 +1,4 @@
-import {DepartureDetailsScreenComponent} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
+import {DepartureDetailsScreenComponent} from '@atb/screen-components/travel-details-screens';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 
 type Props = DashboardScreenProps<'Dashboard_DepartureDetailsScreen'>;

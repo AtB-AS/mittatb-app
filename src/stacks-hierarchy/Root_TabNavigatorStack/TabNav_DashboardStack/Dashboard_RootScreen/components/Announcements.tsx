@@ -1,15 +1,15 @@
 import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
-import {useAnnouncementsContext} from '@atb/announcements';
+import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
+import {useBeaconsContext} from '@atb/modules/beacons';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/heading';
-import {useOnboardingSectionIsOnboarded} from '@atb/onboarding';
+import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

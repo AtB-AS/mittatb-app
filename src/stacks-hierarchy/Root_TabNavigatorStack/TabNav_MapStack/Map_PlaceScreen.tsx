@@ -1,4 +1,4 @@
-import {PlaceScreenComponent} from '@atb/place-screen';
+import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
 import {MapScreenProps} from './navigation-types';
 
 type Props = MapScreenProps<'Map_PlaceScreen'>;

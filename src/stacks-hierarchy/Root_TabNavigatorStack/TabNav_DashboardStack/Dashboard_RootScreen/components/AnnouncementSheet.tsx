@@ -1,5 +1,5 @@
 import React from 'react';
-import {AnnouncementType} from '@atb/announcements/types';
+import {AnnouncementType} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -7,6 +7,10 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  InAppReviewContext,
+  useInAppReviewFlow,
+} from '@atb/utils/use-in-app-review';
 
 type Props = {
   announcement: AnnouncementType;
@@ -15,10 +19,14 @@ type Props = {
 export const AnnouncementSheet = ({announcement}: Props) => {
   const {language} = useTranslation();
   const style = useStyle();
+  const {requestReview} = useInAppReviewFlow();
 
   return (
     <BottomSheetContainer
       title={getTextForLanguage(announcement.fullTitle, language)}
+      onClose={() => {
+        requestReview(InAppReviewContext.Announcement);
+      }}
     >
       <ScrollView style={style.container}>
         {announcement.mainImage && (

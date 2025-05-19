@@ -11,8 +11,10 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation';
 import {animateNextChange} from '@atb/utils/animation';
 import {screenReaderPause} from '@atb/components/text';
-import {useFetchOnBehalfOfAccountsQuery} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query';
-import {OnBehalfOfAccountType} from '@atb/on-behalf-of/types';
+import {
+  useFetchOnBehalfOfAccountsQuery,
+  OnBehalfOfAccountType,
+} from '@atb/modules/on-behalf-of';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {spellOut} from '@atb/utils/accessibility';
 

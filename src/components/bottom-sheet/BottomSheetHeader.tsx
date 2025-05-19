@@ -31,10 +31,10 @@ export const BottomSheetHeader = ({
     useBottomSheetContext();
 
   const handleClose = () => {
+    closeBottomSheetDefault();
     if (onClose) {
       onClose();
     }
-    closeBottomSheetDefault();
   };
 
   const themeColor = theme.color.interactive[3];

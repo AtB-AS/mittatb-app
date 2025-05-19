@@ -1,4 +1,4 @@
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -18,7 +18,7 @@ import {
   PaymentType,
   ReserveOffer,
   useTicketingContext,
-} from '@atb/ticketing';
+} from '@atb/modules/ticketing';
 import {
   PurchaseConfirmationTexts,
   dictionary,
@@ -29,28 +29,31 @@ import React, {RefObject, useCallback, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
-  saveLastUsedRecurringPaymentOrType,
+  savePreviousPayment,
   usePreviousPaymentMethods,
-} from '../saved-payment-utils';
-import {PaymentMethod} from '../types';
+} from '../../modules/payment/previous-payment-utils';
+import {PaymentMethod} from '../../modules/payment/types';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
-import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
+import {SelectPaymentMethodSheet} from '../../modules/payment/SelectPaymentMethodSheet';
 import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
-import {closeInAppBrowseriOS} from '@atb/in-app-browser';
-import {openInAppBrowser} from '@atb/in-app-browser/in-app-browser';
+import {
+  closeInAppBrowseriOS,
+  openInAppBrowser,
+} from '@atb/modules/in-app-browser';
 import {APP_SCHEME} from '@env';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {Section} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
-import {PaymentSelectionSectionItem} from './components/PaymentSelectionSectionItem';
 import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
+import {PaymentSelectionSectionItem} from '@atb/modules/payment';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -111,22 +114,27 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
-    onSuccess: (reserveOfferResponse) => {
-      if (paymentMethod?.paymentType !== PaymentType.Vipps) {
-        openInAppBrowser(
-          reserveOfferResponse.url,
-          'cancel',
-          `${APP_SCHEME}://purchase-callback`,
-          onPaymentCompleted,
-          () =>
-            cancelPaymentMutation.mutate({
-              reserveOfferResponse,
-              isUser: false,
-            }),
-        );
-      }
-    },
   });
+  useDoOnceWhen(
+    () => {
+      if (reserveMutation.status !== 'success') return;
+      if (paymentMethod?.paymentType === PaymentType.Vipps) return;
+      openInAppBrowser(
+        reserveMutation.data.url,
+        'cancel',
+        `${APP_SCHEME}://purchase-callback`,
+        onPaymentCompleted,
+        () =>
+          cancelPaymentMutation.mutate({
+            reserveOfferResponse: reserveMutation.data,
+            isUser: false,
+          }),
+      );
+    },
+    reserveMutation.status === 'success',
+    false,
+  );
+
   const cancelPaymentMutation = useCancelPaymentMutation({
     onSuccess: () => {
       cancelPaymentMutation.reset();
@@ -142,7 +150,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const onPaymentCompleted = useCallback(async () => {
-    saveLastUsedRecurringPaymentOrType(
+    savePreviousPayment(
       userId,
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,

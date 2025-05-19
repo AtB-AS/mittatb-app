@@ -12,7 +12,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
-import {LabelType} from '@atb/configuration';
+import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTranslation} from '@atb/translations';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';

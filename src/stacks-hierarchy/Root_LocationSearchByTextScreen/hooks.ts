@@ -1,5 +1,5 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {SelectableLocationType} from './types';
 import React, {useRef} from 'react';
 

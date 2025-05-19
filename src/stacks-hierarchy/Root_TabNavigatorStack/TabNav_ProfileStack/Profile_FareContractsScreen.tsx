@@ -1,17 +1,17 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {DetailsContent} from '@atb/modules/fare-contracts';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
-import {findReferenceDataById} from '@atb/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
-import {Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/modules/ticketing';
 import {TravelRightDirection, FareContractType} from '@atb-as/utils';
 import {addDays} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 
 export const Profile_FareContractsScreen = () => {
   const styles = useStyles();
@@ -106,11 +106,7 @@ export const Profile_FareContractsScreen = () => {
         ...BASE.travelRights[0],
         fareProductRef: 'ATB:PreassignedFareProduct:6dd9beab',
         id: 'ATB:CustomerPurchasePackage:83HMVOBI',
-        tariffZoneRefs: [
-          'ATB:TariffZone:1',
-          'ATB:TariffZone:2',
-          'ATB:TariffZone:3',
-        ],
+        fareZoneRefs: ['ATB:FareZone:1', 'ATB:FareZone:2', 'ATB:FareZone:3'],
       },
     ],
   };

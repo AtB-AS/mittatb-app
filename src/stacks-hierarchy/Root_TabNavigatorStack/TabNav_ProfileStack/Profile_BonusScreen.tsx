@@ -21,10 +21,10 @@ import {
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
-import {BrandingImage, findOperatorBrandImageUrl} from '@atb/mobility';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
 
 export const Profile_BonusScreen = () => {

@@ -2,7 +2,7 @@ const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = 'eslint-rules/';
 
 const restrictedImportComponents = {
-  group: ['@atb/components/*/', '@atb/modules/*/'],
+  group: ['@atb/components/*/', '@atb/modules/*/', '@atb/screen-components/*/'],
   message: 'Not allowed to import without going through their index file',
 };
 const restrictedImportAuth = {
@@ -150,7 +150,7 @@ module.exports = {
         'src/assets/svg/**',
         'types/*',
         'src/translations/**',
-        'src/storybook/stories/**',
+        'src/modules/storybook/stories/**',
       ],
       rules: {
         'no-restricted-exports': [
@@ -168,7 +168,7 @@ module.exports = {
     },
     // Error on imports from stacks-hierarchy from paths outside of stacks-hierarchy
     {
-      files: ['src/auth/**', 'src/setup.ts'],
+      files: ['src/modules/auth/**', 'src/setup.ts'],
       rules: {
         'no-restricted-imports': [
           'error',

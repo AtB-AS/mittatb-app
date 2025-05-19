@@ -5,8 +5,8 @@ import LocationWhenInUsePermissionTexts from '@atb/translations/screens/Location
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
-} from '@atb/onboarding';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+} from '@atb/modules/onboarding';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
 
 export const Root_LocationWhenInUsePermissionScreen = () => {

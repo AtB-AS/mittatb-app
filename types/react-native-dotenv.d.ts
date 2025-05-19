@@ -15,7 +15,7 @@ declare module '@env' {
   export const APP_ORG_NUMBER: string;
   export const APP_GROUP_NAME: string;
   export const APP_SCHEME: string;
-  export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').TariffZoneAuthorities;
+  export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').FareZoneAuthorities;
   export const FOCUS_LATITUDE: string;
   export const FOCUS_LONGITUDE: string;
   export const IS_QA_ENV: string | undefined;

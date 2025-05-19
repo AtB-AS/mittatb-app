@@ -10,10 +10,10 @@ import {StyleSheet} from '@atb/theme';
 import {
   isProductSellableInApp,
   useFirestoreConfigurationContext,
-} from '@atb/configuration';
+} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
-import {useTicketingContext} from '@atb/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {

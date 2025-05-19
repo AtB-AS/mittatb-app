@@ -1,9 +1,9 @@
 import {PurchaseReservation} from './PurchaseReservation';
 import React from 'react';
-import {Reservation} from '@atb/ticketing';
+import {Reservation} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {ErrorBoundary} from '@atb/error-boundary';
+import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {FareContractView} from './FareContractView';
 
 export function FareContractOrReservation({

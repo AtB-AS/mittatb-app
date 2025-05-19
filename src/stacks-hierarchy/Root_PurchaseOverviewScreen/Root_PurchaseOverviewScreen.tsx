@@ -1,5 +1,5 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
@@ -16,7 +16,7 @@ import {TravellerSelection} from './components/TravellerSelection';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useAnalyticsContext} from '@atb/analytics';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {
   GlobalMessage,
@@ -28,7 +28,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
@@ -247,7 +247,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
                   ? 'Root_PurchaseHarborSearchScreen'
-                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                  : 'Root_PurchaseFareZonesSearchByMapScreen',
                 {selection},
               );
             }}
@@ -287,8 +287,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 textColor={theme.color.background.neutral[0]}
                 ruleVariables={{
                   preassignedFareProductType: preassignedFareProduct.type,
-                  fromTariffZone: selection.zones?.from.id || 'none',
-                  toTariffZone: selection.zones?.to.id || 'none',
+                  fromFareZone: selection.zones?.from.id || 'none',
+                  toFareZone: selection.zones?.to.id || 'none',
                   userTypes: userTypeStrings,
                 }}
               />
@@ -310,7 +310,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: selection.fareProductTypeConfig.name,
-                tariffZone: {
+                fareZone: {
                   from: selection.zones?.from.id,
                   to: selection.zones?.to.id,
                 },

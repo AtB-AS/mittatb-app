@@ -9,14 +9,14 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import sortBy from 'lodash.sortby';
-import {GeoLocation} from '@atb/favorites';
+import {GeoLocation} from '@atb/modules/favorites';
 import haversine from 'haversine-distance';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
+import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 
 type Props = {
   harbors: StopPlaceFragment[];

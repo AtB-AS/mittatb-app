@@ -7,8 +7,8 @@ import {
   QuaySection,
   QuaySectionProps,
 } from '@atb/departure-list/section-items/quay-section';
-import {useFavoritesContext} from '@atb/favorites';
-import {useGeolocationContext} from '@atb/GeolocationContext';
+import {useFavoritesContext} from '@atb/modules/favorites';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {

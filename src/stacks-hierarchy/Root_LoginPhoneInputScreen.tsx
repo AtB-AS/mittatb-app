@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {PhoneSignInErrorCode, useAuthContext} from '@atb/auth';
+import {PhoneSignInErrorCode, useAuthContext} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,

@@ -54,7 +54,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         preassignedFareProduct: {
           ...TEST_PRODUCT,
           id: 'P_X',
-          limitations: {...TEST_PRODUCT.limitations, tariffZoneRefs: ['T1']},
+          limitations: {...TEST_PRODUCT.limitations, fareZoneRefs: ['T1']},
         },
         zones: {
           from: {...TEST_ZONE_WITH_MD, id: 'T_X'},
@@ -76,7 +76,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         preassignedFareProduct: {
           ...TEST_PRODUCT,
           id: 'P_X',
-          limitations: {...TEST_PRODUCT.limitations, tariffZoneRefs: ['T1']},
+          limitations: {...TEST_PRODUCT.limitations, fareZoneRefs: ['T1']},
         },
         zones: {
           from: TEST_ZONE_WITH_MD,

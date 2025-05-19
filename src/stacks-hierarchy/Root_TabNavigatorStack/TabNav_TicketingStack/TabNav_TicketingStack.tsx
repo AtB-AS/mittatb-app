@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Ticketing_NotEnabledScreen} from './Ticketing_NotEnabledScreen';
 import {Ticketing_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_RootScreen';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Ticketing_TicketHistoryScreen} from './Ticketing_TicketHistoryScreen';
 import {TicketingStackParams} from './navigation-types';
 

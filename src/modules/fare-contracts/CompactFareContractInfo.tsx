@@ -1,5 +1,5 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {getReferenceDataName} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -8,11 +8,11 @@ import {
   isValidFareContract,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
-  useTariffZoneSummary,
+  useFareZoneSummary,
 } from './utils';
 import {fareContractValidityUnits} from './fare-contract-validity-units';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
-import {useMobileTokenContext} from '@atb/mobile-token';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';
@@ -24,7 +24,7 @@ type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
 
 type FareContractInfoTextsProps = {
   productName?: string;
-  tariffZoneSummary?: string;
+  fareZoneSummary?: string;
   timeUntilExpire?: string;
   accessibilityLabel?: string;
 };
@@ -70,12 +70,8 @@ export const CompactFareContractInfo = (
 const CompactFareContractInfoTexts = (
   props: CompactFareContractInfoTextsProps,
 ) => {
-  const {
-    userProfilesWithCount,
-    productName,
-    tariffZoneSummary,
-    timeUntilExpire,
-  } = props;
+  const {userProfilesWithCount, productName, fareZoneSummary, timeUntilExpire} =
+    props;
   const {language} = useTranslation();
   const styles = useStyles();
   const firstTravelRight = props.fareContract.travelRights[0];
@@ -101,9 +97,9 @@ const CompactFareContractInfoTexts = (
           {productName}
         </ThemeText>
       )}
-      {tariffZoneSummary && (
+      {fareZoneSummary && (
         <ThemeText typography="body__secondary" color="secondary">
-          {tariffZoneSummary}
+          {fareZoneSummary}
         </ThemeText>
       )}
     </View>
@@ -135,8 +131,8 @@ export const useFareContractInfoTexts = (
   const {
     userProfilesWithCount,
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
     validTo,
     now,
   } = props;
@@ -148,10 +144,10 @@ export const useFareContractInfoTexts = (
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
 
-  const tariffZoneSummary = useTariffZoneSummary(
+  const fareZoneSummary = useFareZoneSummary(
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromFareZone,
+    toFareZone,
   );
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
@@ -172,7 +168,7 @@ export const useFareContractInfoTexts = (
     (u) => userProfileCountAndName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
-  accessibilityLabel += tariffZoneSummary + screenReaderPause;
+  accessibilityLabel += fareZoneSummary + screenReaderPause;
 
   if (!isInspectable) {
     accessibilityLabel += t(
@@ -182,7 +178,7 @@ export const useFareContractInfoTexts = (
 
   return {
     productName,
-    tariffZoneSummary,
+    fareZoneSummary,
     timeUntilExpire: timeUntilExpireOrWarning,
     accessibilityLabel,
   };

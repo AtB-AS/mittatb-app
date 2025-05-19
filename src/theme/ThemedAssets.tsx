@@ -16,6 +16,7 @@ import {
   PushNotification as PushNotificationLight,
   MyLocation as MyLocationLight,
   Beacons as BeaconsLight,
+  PaymentCard as PaymentCardLight,
 } from '@atb/assets/svg/color/images/light';
 import {
   Map as MapDark,
@@ -30,6 +31,7 @@ import {
   PushNotification as PushNotificationDark,
   MyLocation as MyLocationDark,
   Beacons as BeaconsDark,
+  PaymentCard as PaymentCardDark,
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
@@ -174,6 +176,13 @@ export const ThemedMyLocation = ({...props}: SvgProps) => {
   const MyLocation = themeName === 'dark' ? MyLocationDark : MyLocationLight;
 
   return <MyLocation {...props} />;
+};
+
+export const ThemedPaymentCard = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const PaymentCard = themeName === 'dark' ? PaymentCardDark : PaymentCardLight;
+
+  return <PaymentCard {...props} />;
 };
 
 export const ThemedBeacons = ({...props}: SvgProps) => {

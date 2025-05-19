@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.67.0",
+  "version": "1.68.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "5.13.0",
-    "@atb-as/generate-assets": "17.1.0",
+    "@atb-as/config-specs": "5.16.0",
+    "@atb-as/generate-assets": "17.2.0",
     "@atb-as/theme": "^13.1.5",
     "@atb-as/utils": "^3.1.0",
     "@bugsnag/react-native": "^7.25.0",

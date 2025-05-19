@@ -7,13 +7,13 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TicketTabNav_AvailableFareContractsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_AvailableFareContractsTabScreen';
 import React from 'react';
 import {TicketTabNavStackParams} from './navigation-types';
-import {useFareContracts} from '@atb/ticketing';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContext} from '@atb/time';
+import {useTimeContext} from '@atb/modules/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 

@@ -6,7 +6,7 @@ import NotificationPermissionTexts from '@atb/translations/screens/NotificationP
 import {
   OnboardingScreenComponent,
   useOnboardingNavigation,
-} from '@atb/onboarding';
+} from '@atb/modules/onboarding';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
 

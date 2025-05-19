@@ -1,7 +1,7 @@
 import {changeAppearance} from '@atb/modules/native-bridges';
 import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
-import {usePreferencesContext} from '../preferences';
+import {usePreferencesContext} from '@atb/modules/preferences';
 import {Mode, Theme, Themes, themes} from './colors';
 
 interface ThemeContextValue {

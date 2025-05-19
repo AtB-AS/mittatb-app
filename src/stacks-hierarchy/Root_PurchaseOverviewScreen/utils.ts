@@ -1,5 +1,5 @@
 import {TravellerSelectionMode} from '@atb-as/config-specs';
-import {UserProfile} from '@atb/configuration';
+import {UserProfile} from '@atb/modules/configuration';
 
 export const isUserProfileSelectable = (
   travellerSelectionMode: TravellerSelectionMode,

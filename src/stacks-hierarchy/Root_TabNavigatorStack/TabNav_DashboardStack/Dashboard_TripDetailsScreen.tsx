@@ -1,6 +1,6 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
-import {TripDetailsScreenComponent} from '@atb/travel-details-screens/TripDetailsScreenComponent';
-import {useAnalyticsContext} from '@atb/analytics';
+import {TripDetailsScreenComponent} from '@atb/screen-components/travel-details-screens';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 

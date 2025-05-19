@@ -3,7 +3,7 @@ import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Preference_ScreenAlternatives} from '../preferences';
+import {Preference_ScreenAlternatives} from '@atb/modules/preferences';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or

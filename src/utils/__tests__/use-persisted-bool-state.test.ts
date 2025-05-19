@@ -1,6 +1,6 @@
 import {act, renderHook} from '@testing-library/react-hooks';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
-import type {StorageService} from '@atb/storage';
+import type {StorageService} from '@atb/modules/storage';
 
 const STORAGE_KEY = 'key1';
 

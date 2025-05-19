@@ -8,6 +8,23 @@ const SelectPaymentMethodTexts = {
       'Vel betalingsmetode',
     ),
   },
+  new_card_info: {
+    title: _(
+      'Bruke et annet kort?',
+      'Use another card?',
+      'Bruke eit anna kort?',
+    ),
+    text: _(
+      'Legg til nye betalingskort i Min Profil',
+      'Add new payment cards in My Profile',
+      'Legg til nye betalingskort i Min Profil',
+    ),
+    link_profile: _(
+      'Gå til Min Profil',
+      'Go to My Profile',
+      'Gå til Min Profil',
+    ),
+  },
   confirm_button: {
     text: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
     a11yhint: _(

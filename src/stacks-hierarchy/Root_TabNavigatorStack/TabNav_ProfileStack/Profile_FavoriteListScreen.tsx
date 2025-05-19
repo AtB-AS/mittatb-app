@@ -2,7 +2,10 @@ import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StoredLocationFavorite, useFavoritesContext} from '@atb/favorites';
+import {
+  StoredLocationFavorite,
+  useFavoritesContext,
+} from '@atb/modules/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React from 'react';

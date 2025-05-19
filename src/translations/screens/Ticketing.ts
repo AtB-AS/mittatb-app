@@ -1,5 +1,5 @@
 import {TranslatedString, translation as _} from '../commons';
-import {TicketHistoryMode} from '@atb/ticket-history';
+import {TicketHistoryMode} from '@atb/screen-components/ticket-history';
 
 const bulletPoint = '\u2022';
 

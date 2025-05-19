@@ -21,13 +21,13 @@ import {
   useNotificationsContext,
   isConfigEnabled,
 } from '@atb/modules/notifications';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {NotificationConfigGroup} from '@atb/modules/notifications';
 import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {useAuthContext} from '@atb/auth';
-import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
+import {useAuthContext} from '@atb/modules/auth';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 type NotificationsScreenProps =
   ProfileScreenProps<'Profile_NotificationsScreen'>;

@@ -1,4 +1,4 @@
-import {FavoriteDeparturesScreenComponent} from '@atb/favorite-departures/FavoriteDeparturesScreenComponent';
+import {FavoriteDeparturesScreenComponent} from '@atb/screen-components/favorite-departures';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 
 type Props = DashboardScreenProps<'Dashboard_FavoriteDeparturesScreen'>;

@@ -1,7 +1,7 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, View} from 'react-native';
-import {Location} from '@atb/favorites';
+import {Location} from '@atb/modules/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -13,11 +13,11 @@ import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
-import {useFirestoreConfigurationContext} from '@atb/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
-import {CityZone} from '@atb/configuration';
-import {useAnalyticsContext} from '@atb/analytics';
+import {CityZone} from '@atb/modules/configuration';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 

@@ -5,16 +5,20 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useAuthContext} from '@atb/auth';
-import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {useMobileTokenContext} from '@atb/mobile-token';
-import {usePreferencesContext, UserPreferences} from '@atb/preferences';
+import {useAuthContext} from '@atb/modules/auth';
+import {
+  KeyValuePair,
+  storage,
+  StorageModelKeysEnum,
+} from '@atb/modules/storage';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
   useRemoteConfigContext,
-} from '@atb/RemoteConfigContext';
+} from '@atb/modules/remote-config';
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -29,17 +33,18 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
-
-import {useAnnouncementsContext} from '@atb/announcements';
+import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
+import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
-import {useTimeContext} from '@atb/time';
-import {useBeaconsContext} from '@atb/beacons/BeaconsContext';
-import {useOnboardingContext} from '@atb/onboarding';
+import {useTimeContext} from '@atb/modules/time';
+import {useBeaconsContext} from '@atb/modules/beacons';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {DebugSabotage} from '@atb/mobile-token/DebugSabotage';
-import {DebugTokenServerAddress} from '@atb/mobile-token/DebugTokenServerAddress';
+import {
+  DebugSabotage,
+  DebugTokenServerAddress,
+} from '@atb/modules/mobile-token';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -255,6 +260,10 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Reset one time popovers"
             onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
+          />
+          <LinkSectionItem
+            text="Reset scooter consent"
+            onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
           />
         </Section>
         <Section style={styles.section}>

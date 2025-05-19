@@ -1,7 +1,7 @@
 import React from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {StoredFavoriteDeparture} from '@atb/favorites';
+import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -10,7 +10,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;

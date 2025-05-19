@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
-import {shadows} from '../map';
+import {shadows} from '@atb/modules/map';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 

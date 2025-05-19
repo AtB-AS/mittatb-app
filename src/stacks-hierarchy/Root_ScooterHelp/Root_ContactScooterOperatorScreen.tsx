@@ -19,17 +19,17 @@ import {
   SendSupportRequestBodySchema,
   SupportType,
 } from '@atb/api/types/mobility';
-import {useAuthContext} from '@atb/auth';
+import {useAuthContext} from '@atb/modules/auth';
 import {getParsedPrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSendSupportRequestMutation} from '@atb/mobility/queries/use-send-support-request-mutation';
-import {getCurrentCoordinatesGlobal} from '@atb/GeolocationContext';
+import {useSendSupportRequestMutation} from '@atb/modules/mobility';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
-import {useOperators} from '@atb/mobility/use-operators';
+import {useOperators} from '@atb/modules/mobility';
 
 export type Root_ContactScooterOperatorScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;

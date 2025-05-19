@@ -1,6 +1,6 @@
 import {ThemeText} from '@atb/components/text';
 import {useTranslation, TravelTokenTexts} from '@atb/translations';
-import {Token} from '@atb/mobile-token';
+import {Token} from '@atb/modules/mobile-token';
 import {View} from 'react-native';
 import {ContrastColor, Theme} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';

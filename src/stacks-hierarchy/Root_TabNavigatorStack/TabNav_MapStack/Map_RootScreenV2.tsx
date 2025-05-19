@@ -3,14 +3,13 @@ import {
   MapFilterType,
   MapV2,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
-} from '@atb/components/map';
+} from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useFocusEffect} from '@react-navigation/native';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -21,17 +20,14 @@ export const Map_RootScreenV2 = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {close} = useBottomSheetContext();
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   useFocusEffect(
     useCallback(() => {
-      if (isShmoDeepIntegrationEnabled) {
-        return () => {
-          // on screen blur (navigating away from map tab), close bottomsheet
-          close();
-        };
-      }
-    }, [close, isShmoDeepIntegrationEnabled]),
+      return () => {
+        // on screen blur (navigating away from map tab), close bottomsheet
+        close();
+      };
+    }, [close]),
   );
 
   const navigateToQuay = useCallback(
