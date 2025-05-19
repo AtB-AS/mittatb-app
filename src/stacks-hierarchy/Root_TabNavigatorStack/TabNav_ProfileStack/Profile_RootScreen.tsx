@@ -291,19 +291,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </Section>
             </>
           )}
-          <ContentHeading text={t(ProfileTexts.sections.contact.heading)} />
-          <Section>
-            <LinkSectionItem
-              text={t(ProfileTexts.sections.contact.helpAndContact)}
-              onPress={() => {}}
-              testID="contactHelpButton"
-            />
-            <LinkSectionItem
-              text={t(ProfileTexts.sections.contact.feedback)}
-              onPress={() => {}}
-              testID="contactFeedbackButton"
-            />
-          </Section>
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
