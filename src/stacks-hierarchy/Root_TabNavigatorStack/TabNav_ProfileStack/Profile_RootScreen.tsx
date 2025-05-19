@@ -362,7 +362,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
-    rowGap: theme.spacing.small,
+    rowGap: theme.spacing.medium,
     margin: theme.spacing.medium,
   },
   customerNumberHeading: {

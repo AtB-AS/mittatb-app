@@ -146,7 +146,7 @@ export const Profile_InformationScreen = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
-    rowGap: theme.spacing.small,
+    rowGap: theme.spacing.medium,
     margin: theme.spacing.medium,
   },
 }));

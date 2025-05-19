@@ -137,7 +137,7 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
-    rowGap: theme.spacing.small,
+    rowGap: theme.spacing.medium,
     margin: theme.spacing.medium,
   },
 }));
