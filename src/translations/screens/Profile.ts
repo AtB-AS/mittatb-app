@@ -53,8 +53,11 @@ const ProfileTexts = {
         ),
       },
     },
+    travelAndPurchases: {
+      heading: _('Reise og kjøp', 'Travel and purchases', 'Reise og kjøp'),
+    },
     newFeatures: {
-      heading: _('Ny funksjonalitet', 'New features', 'Ny funksjonalitet'),
+      heading: _('Oppdag', 'Discover', 'Oppdag'),
       departures: _(
         'Prøv ny avganger-visning',
         'Try the new departure view',
@@ -302,7 +305,8 @@ const ProfileTexts = {
       },
     },
     information: {
-      heading: _('Info og priser', 'Info and prices', 'Info og prisar'),
+      heading: _('Informasjon', 'Information', 'Informasjon'),
+      label: _('Info og vilkår', 'Info and terms', 'Info og vilkår'),
       linkSectionItems: {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing', 'Billettkjøp'),

@@ -1,4 +1,3 @@
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthContext} from '@atb/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
@@ -6,25 +5,19 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useMobileTokenContext} from '@atb/mobile-token';
-import {useFirestoreConfigurationContext} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfigContext} from '@atb/RemoteConfigContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   useTicketingContext,
   useHasReservationOrAvailableFareContract,
 } from '@atb/ticketing';
-import {
-  dictionary,
-  getTextForLanguage,
-  ProfileTexts,
-  useTranslation,
-} from '@atb/translations';
+import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
 import React from 'react';
-import {ActivityIndicator, Linking, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
@@ -53,7 +46,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
   const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const analytics = useAnalyticsContext();
   const {
     authenticationType,
@@ -68,18 +61,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const hasReservationOrAvailableFareContract =
     useHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
-
-  const {configurableLinks} = useFirestoreConfigurationContext();
-  const ticketingInfo = configurableLinks?.ticketingInfo;
-  const termsInfo = configurableLinks?.termsInfo;
-  const inspectionInfo = configurableLinks?.inspectionInfo;
-  const refundInfo = configurableLinks?.refundInfo;
-  const a11yStatement = configurableLinks?.appA11yStatement;
-  const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
-  const termsInfoUrl = getTextForLanguage(termsInfo, language);
-  const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
-  const refundInfoUrl = getTextForLanguage(refundInfo, language);
-  const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
@@ -149,38 +130,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   },
                   text: t(dictionary.retry),
                 }}
-              />
-            )}
-
-            {authenticationType == 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.paymentMethods
-                    .label,
-                )}
-                onPress={() =>
-                  navigation.navigate('Profile_PaymentMethodsScreen')
-                }
-              />
-            )}
-
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.ticketHistory
-                  .label,
-              )}
-              onPress={() =>
-                navigation.navigate('Profile_TicketHistorySelectionScreen')
-              }
-              testID="ticketHistoryButton"
-            />
-            {isBonusProgramEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                )}
-                onPress={() => navigation.navigate('Profile_BonusScreen')}
-                testID="BonusButton"
               />
             )}
             {authenticationType !== 'phone' && (
@@ -274,6 +223,38 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           </Section>
 
+          <ContentHeading
+            text={t(ProfileTexts.sections.travelAndPurchases.heading)}
+          />
+          <Section>
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                  .label,
+              )}
+              onPress={() =>
+                navigation.navigate('Profile_TicketHistorySelectionScreen')
+              }
+              testID="ticketHistoryButton"
+            />
+            {authenticationType == 'phone' && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.paymentMethods
+                    .label,
+                )}
+                onPress={() =>
+                  navigation.navigate('Profile_PaymentMethodsScreen')
+                }
+              />
+            )}
+            <LinkSectionItem
+              text={t(ProfileTexts.sections.favorites.heading)}
+              onPress={() => navigation.navigate('Profile_SettingsScreen')}
+              testID="settingsButton"
+            />
+          </Section>
+
           <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
           <Section>
             <LinkSectionItem
@@ -284,39 +265,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
               testID="invitationCodeButton"
             />
-          </Section>
-
-          <ContentHeading text={t(ProfileTexts.sections.favorites.heading)} />
-          <Section>
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.favorites.linkSectionItems.places.label,
-              )}
-              accessibility={{
-                accessibilityHint: t(
-                  ProfileTexts.sections.favorites.linkSectionItems.places
-                    .a11yHint,
-                ),
-              }}
-              testID="favoriteLocationsButton"
-              onPress={() => navigation.navigate('Profile_FavoriteListScreen')}
-            />
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.favorites.linkSectionItems.departures
-                  .label,
-              )}
-              accessibility={{
-                accessibilityHint: t(
-                  ProfileTexts.sections.favorites.linkSectionItems.departures
-                    .a11yHint,
-                ),
-              }}
-              testID="favoriteDeparturesButton"
-              onPress={() =>
-                navigation.navigate('Profile_FavoriteDeparturesScreen')
-              }
-            />
+            {isBonusProgramEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+              />
+            )}
           </Section>
           {enable_ticketing && (
             <>
@@ -324,98 +281,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 text={t(ProfileTexts.sections.information.heading)}
               />
               <Section>
-                {ticketingInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
-                      ProfileTexts.sections.information.linkSectionItems
-                        .ticketing.label,
-                    )}
-                    testID="ticketingInfoButton"
-                    onPress={() => Linking.openURL(ticketingInfoUrl)}
-                    accessibility={{
-                      accessibilityHint: t(
-                        ProfileTexts.sections.information.linkSectionItems
-                          .ticketing.a11yLabel,
-                      ),
-                      accessibilityRole: 'link',
-                    }}
-                  />
-                )}
-                {termsInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
-                      ProfileTexts.sections.information.linkSectionItems.terms
-                        .label,
-                    )}
-                    testID="termsInfoButton"
-                    onPress={() => Linking.openURL(termsInfoUrl)}
-                    accessibility={{
-                      accessibilityHint: t(
-                        ProfileTexts.sections.information.linkSectionItems.terms
-                          .a11yLabel,
-                      ),
-                      accessibilityRole: 'link',
-                    }}
-                  />
-                )}
-
-                {inspectionInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
-                      ProfileTexts.sections.information.linkSectionItems
-                        .inspection.label,
-                    )}
-                    testID="inspectionInfoButton"
-                    onPress={() => Linking.openURL(inspectionInfoUrl)}
-                    accessibility={{
-                      accessibilityHint: t(
-                        ProfileTexts.sections.information.linkSectionItems
-                          .inspection.a11yLabel,
-                      ),
-                      accessibilityRole: 'link',
-                    }}
-                  />
-                )}
-
-                {refundInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
-                      ProfileTexts.sections.information.linkSectionItems.refund
-                        .label,
-                    )}
-                    testID="refundInfoButton"
-                    onPress={() => Linking.openURL(refundInfoUrl)}
-                    accessibility={{
-                      accessibilityHint: t(
-                        ProfileTexts.sections.information.linkSectionItems
-                          .refund.a11yLabel,
-                      ),
-                      accessibilityRole: 'link',
-                    }}
-                  />
-                )}
-                {a11yStatementUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
-                      ProfileTexts.sections.information.linkSectionItems
-                        .accessibilityStatement.label,
-                    )}
-                    testID="a11yStatementButton"
-                    onPress={() => Linking.openURL(a11yStatementUrl)}
-                    accessibility={{
-                      accessibilityHint: t(
-                        ProfileTexts.sections.information.linkSectionItems
-                          .accessibilityStatement.a11yLabel,
-                      ),
-                      accessibilityRole: 'link',
-                    }}
-                  />
-                )}
+                <LinkSectionItem
+                  text={t(ProfileTexts.sections.information.label)}
+                  onPress={() =>
+                    navigation.navigate('Profile_InformationScreen')
+                  }
+                  testID="informationButton"
+                />
               </Section>
             </>
           )}
