@@ -20,6 +20,7 @@ export type RemoteConfig = {
   enable_bonus_program: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
+  enable_event_stream: boolean;
   enable_extended_onboarding: boolean;
   enable_flexible_transport: boolean;
   enable_from_travel_search_to_ticket_boat: boolean;
@@ -121,6 +122,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
+  enable_event_stream: false,
   enable_tips_and_information: false,
   enable_token_fallback_on_timeout: true,
   enable_token_fallback: true,
@@ -196,6 +198,9 @@ export function getConfig(): RemoteConfig {
   const enable_city_bikes_in_map =
     values['enable_city_bikes_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_city_bikes_in_map;
+  const enable_event_stream =
+    values['enable_event_stream']?.asBoolean() ??
+    defaultRemoteConfig.enable_event_stream;
   const enable_extended_onboarding =
     values['enable_extended_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_extended_onboarding;
@@ -370,6 +375,7 @@ export function getConfig(): RemoteConfig {
     enable_bonus_program,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
+    enable_event_stream,
     enable_extended_onboarding,
     enable_flexible_transport,
     enable_from_travel_search_to_ticket_boat,
