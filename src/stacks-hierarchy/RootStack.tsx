@@ -73,6 +73,7 @@ import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-scr
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
+import {useSetupEventStream} from '@atb/modules/event-stream';
 import {useSetupReactQueryWindowFocus} from '@atb/queries';
 
 type ResultState = PartialState<NavigationState> & {
@@ -91,6 +92,7 @@ export const RootStack = () => {
   useBeaconsContext();
   useTestIds();
   useSetupReactQueryWindowFocus();
+  useSetupEventStream();
 
   // init Intercom user
   useRegisterIntercomUser();
