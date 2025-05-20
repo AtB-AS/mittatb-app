@@ -82,138 +82,144 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           importantForAccessibility="no"
           style={style.contentContainer}
         >
-          <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
-          <Section>
-            {authenticationType === 'phone' && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-                </ThemeText>
-                {phoneNumber && (
-                  <ThemeText typography="body__secondary" color="secondary">
-                    {phoneNumber}
+          <View style={style.mediumGap}>
+            <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
+            <Section>
+              {authenticationType === 'phone' && (
+                <GenericSectionItem>
+                  <ThemeText style={style.customerNumberHeading}>
+                    {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                   </ThemeText>
-                )}
-              </GenericSectionItem>
-            )}
-            {!!customerNumber && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-                </ThemeText>
-                <ThemeText
-                  typography="body__secondary"
-                  color="secondary"
-                  accessibilityLabel={numberToAccessibilityString(
-                    customerNumber,
+                  {phoneNumber && (
+                    <ThemeText typography="body__secondary" color="secondary">
+                      {phoneNumber}
+                    </ThemeText>
                   )}
+                </GenericSectionItem>
+              )}
+              {!!customerNumber && (
+                <GenericSectionItem>
+                  <ThemeText style={style.customerNumberHeading}>
+                    {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+                  </ThemeText>
+                  <ThemeText
+                    typography="body__secondary"
+                    color="secondary"
+                    accessibilityLabel={numberToAccessibilityString(
+                      customerNumber,
+                    )}
+                  >
+                    {customerNumber}
+                  </ThemeText>
+                </GenericSectionItem>
+              )}
+              {authStatus === 'fetching-id-token' && (
+                <GenericSectionItem
+                  style={{justifyContent: 'center', flexDirection: 'row'}}
                 >
-                  {customerNumber}
-                </ThemeText>
-              </GenericSectionItem>
-            )}
-            {authStatus === 'fetching-id-token' && (
-              <GenericSectionItem
-                style={{justifyContent: 'center', flexDirection: 'row'}}
-              >
-                <ActivityIndicator />
-              </GenericSectionItem>
-            )}
-            {authStatus !== 'authenticated' && (
-              <MessageSectionItem
-                message={t(ProfileTexts.sections.account.infoItems.claimsError)}
-                messageType="error"
-                onPressConfig={{
-                  action: () => {
-                    logEvent('Profile', 'Retry auth');
-                    retryAuth();
-                  },
-                  text: t(dictionary.retry),
-                }}
-              />
-            )}
-            {authenticationType !== 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.login.label,
-                )}
-                onPress={() => {
-                  if (hasReservationOrAvailableFareContract) {
-                    navigation.navigate(
-                      'Root_LoginAvailableFareContractWarningScreen',
-                      {},
-                    );
-                  } else if (enable_vipps_login) {
-                    navigation.navigate('Root_LoginOptionsScreen', {
-                      showGoBack: true,
-                      transitionOverride: 'slide-from-bottom',
-                    });
-                  } else {
-                    navigation.navigate('Root_LoginPhoneInputScreen', {});
-                  }
-                }}
-                icon={<ThemeIcon svg={LogIn} />}
-                testID="loginButton"
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.editProfile
-                    .label,
-                )}
-                onPress={() => navigation.navigate('Profile_EditProfileScreen')}
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.logout.label,
-                )}
-                icon={<ThemeIcon svg={LogOut} />}
-                onPress={() =>
-                  destructiveAlert({
-                    alertTitleString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmTitle,
-                    ),
-                    alertMessageString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmMessage,
-                    ),
-                    cancelAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.cancel,
-                    ),
-                    confirmAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.confirm,
-                    ),
-                    destructiveArrowFunction: async () => {
-                      Bugsnag.leaveBreadcrumb('User logging out');
-                      analytics.logEvent('Profile', 'User logging out');
-                      setIsLoading(true);
-                      try {
-                        // On logout we delete the user's token
-                        await clearTokenAtLogout();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      }
-
-                      try {
-                        await signOut();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      } finally {
-                        setIsLoading(false);
-                      }
+                  <ActivityIndicator />
+                </GenericSectionItem>
+              )}
+              {authStatus !== 'authenticated' && (
+                <MessageSectionItem
+                  message={t(
+                    ProfileTexts.sections.account.infoItems.claimsError,
+                  )}
+                  messageType="error"
+                  onPressConfig={{
+                    action: () => {
+                      logEvent('Profile', 'Retry auth');
+                      retryAuth();
                     },
-                  })
-                }
-                testID="logoutButton"
-              />
-            )}
-          </Section>
+                    text: t(dictionary.retry),
+                  }}
+                />
+              )}
+              {authenticationType !== 'phone' && (
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.account.linkSectionItems.login.label,
+                  )}
+                  onPress={() => {
+                    if (hasReservationOrAvailableFareContract) {
+                      navigation.navigate(
+                        'Root_LoginAvailableFareContractWarningScreen',
+                        {},
+                      );
+                    } else if (enable_vipps_login) {
+                      navigation.navigate('Root_LoginOptionsScreen', {
+                        showGoBack: true,
+                        transitionOverride: 'slide-from-bottom',
+                      });
+                    } else {
+                      navigation.navigate('Root_LoginPhoneInputScreen', {});
+                    }
+                  }}
+                  icon={<ThemeIcon svg={LogIn} />}
+                  testID="loginButton"
+                />
+              )}
+              {authenticationType === 'phone' && (
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.account.linkSectionItems.editProfile
+                      .label,
+                  )}
+                  onPress={() =>
+                    navigation.navigate('Profile_EditProfileScreen')
+                  }
+                />
+              )}
+              {authenticationType === 'phone' && (
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.label,
+                  )}
+                  icon={<ThemeIcon svg={LogOut} />}
+                  onPress={() =>
+                    destructiveAlert({
+                      alertTitleString: t(
+                        ProfileTexts.sections.account.linkSectionItems.logout
+                          .confirmTitle,
+                      ),
+                      alertMessageString: t(
+                        ProfileTexts.sections.account.linkSectionItems.logout
+                          .confirmMessage,
+                      ),
+                      cancelAlertString: t(
+                        ProfileTexts.sections.account.linkSectionItems.logout
+                          .alert.cancel,
+                      ),
+                      confirmAlertString: t(
+                        ProfileTexts.sections.account.linkSectionItems.logout
+                          .alert.confirm,
+                      ),
+                      destructiveArrowFunction: async () => {
+                        Bugsnag.leaveBreadcrumb('User logging out');
+                        analytics.logEvent('Profile', 'User logging out');
+                        setIsLoading(true);
+                        try {
+                          // On logout we delete the user's token
+                          await clearTokenAtLogout();
+                        } catch (err: any) {
+                          Bugsnag.notify(err);
+                        }
+
+                        try {
+                          await signOut();
+                        } catch (err: any) {
+                          Bugsnag.notify(err);
+                        } finally {
+                          setIsLoading(false);
+                        }
+                      },
+                    })
+                  }
+                  testID="logoutButton"
+                />
+              )}
+            </Section>
+          </View>
 
           <Section>
             <LinkSectionItem
@@ -364,6 +370,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
+  },
+  mediumGap: {
+    rowGap: theme.spacing.medium,
   },
   customerNumberHeading: {
     marginBottom: theme.spacing.xSmall,
