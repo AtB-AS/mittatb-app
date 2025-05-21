@@ -168,8 +168,7 @@ const OperatorActionButtonWithValueCode = ({
     return (
       <MessageInfoBox
         type="error"
-        title={t(MobilityTexts.errorLoadingValueCode.title)}
-        message={t(MobilityTexts.errorLoadingValueCode.text)}
+        message={t(MobilityTexts.errorLoadingValueCode.message)}
         onPressConfig={{
           action: appSwitchButtonOnPress,
           text: t(MobilityTexts.errorLoadingValueCode.retry),

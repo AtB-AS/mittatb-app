@@ -12,13 +12,12 @@ import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {getFareContractInfo} from '@atb/modules/fare-contracts';
-import {sortFcOrReservationByValidityAndCreation} from '@atb/modules/fare-contracts';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedHoldingHands, ThemedTicketTilted} from '@atb/theme/ThemedAssets';
+import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 
 type Props = TicketHistoryScreenParams & {
   onPressFareContract: (fareContractId: string) => void;
@@ -50,14 +49,10 @@ export const TicketHistoryScreenComponent = ({
     customerAccountId,
   );
 
-  const sortedItems = sortFcOrReservationByValidityAndCreation(
-    customerAccountId,
-    serverNow,
-    [...fareContractsToShow, ...reservationsToShow],
-    (currentTime, fareContract, currentUserId) =>
-      getFareContractInfo(currentTime, fareContract, currentUserId)
-        .validityStatus,
-  );
+  const sortedItems = sortFcOrReservationByCreation([
+    ...fareContractsToShow,
+    ...reservationsToShow,
+  ]);
 
   return (
     <View style={styles.container}>

@@ -13,7 +13,6 @@ type TicketingReducerState = {
   sentFareContracts: FareContractType[];
   reservations: Reservation[];
   rejectedReservations: Reservation[];
-  isRefreshingFareContracts: boolean;
   customerProfile: CustomerProfile | undefined;
 };
 
@@ -62,7 +61,6 @@ const ticketingReducer: TicketingReducer = (
         reservations: prevState.reservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
-        isRefreshingFareContracts: false,
       };
     }
     case 'UPDATE_SENT_FARE_CONTRACTS': {
@@ -75,7 +73,6 @@ const ticketingReducer: TicketingReducer = (
         reservations: prevState.reservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
-        isRefreshingFareContracts: false,
       };
     }
     case 'UPDATE_RESERVATIONS': {
@@ -122,10 +119,7 @@ type TicketingState = {
   findFareContractById: (id: string) => FareContractType | undefined;
 } & Pick<
   TicketingReducerState,
-  | 'reservations'
-  | 'isRefreshingFareContracts'
-  | 'customerProfile'
-  | 'rejectedReservations'
+  'reservations' | 'customerProfile' | 'rejectedReservations'
 >;
 
 const initialReducerState: TicketingReducerState = {
@@ -133,7 +127,6 @@ const initialReducerState: TicketingReducerState = {
   sentFareContracts: [],
   reservations: [],
   rejectedReservations: [],
-  isRefreshingFareContracts: false,
   customerProfile: undefined,
 };
 

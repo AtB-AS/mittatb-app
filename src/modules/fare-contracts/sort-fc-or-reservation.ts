@@ -32,3 +32,12 @@ export const sortFcOrReservationByValidityAndCreation = (
     return b.created.getTime() - a.created.getTime();
   });
 };
+
+export const sortFcOrReservationByCreation = (
+  fcOrReservations: (Reservation | FareContractType)[],
+): (FareContractType | Reservation)[] => {
+  return fcOrReservations.sort((a, b) => {
+    // Make sure most recent dates comes first
+    return b.created.getTime() - a.created.getTime();
+  });
+};

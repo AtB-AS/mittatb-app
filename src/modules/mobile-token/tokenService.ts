@@ -1,9 +1,6 @@
 import {
-  ActivatedToken,
   isEmulator,
   RemoteTokenService,
-  TokenAction,
-  TokenEncodingRequest,
 } from '@entur-private/abt-mobile-client-sdk';
 
 import {client} from '@atb/api/client';
@@ -22,11 +19,6 @@ import {
 } from './types';
 import {getDeviceName} from 'react-native-device-info';
 import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
-import {abtClient} from './mobileTokenClient';
-import {
-  TokenReattestationRemoteTokenStateError,
-  TokenReattestationRequiredError,
-} from '@entur-private/abt-token-server-javascript-interface';
 import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
@@ -48,7 +40,6 @@ export type TokenService = RemoteTokenService & {
     traceId: string,
     bypassRestrictions: boolean,
   ) => Promise<RemoteToken[]>;
-  validate: (token: ActivatedToken, traceId: string) => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
   postTokenStatus: (
     tokenId: string | undefined,
@@ -86,7 +77,7 @@ export const tokenService: TokenService = {
       deviceInfoType: deviceInfo.type,
     };
     return await client
-      .post<InitiateTokenResponse>('/tokens/v4/init', data, {
+      .post<InitiateTokenResponse>('/token/v1/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [IsEmulatorHeaderName]: String(await isEmulator()),
@@ -102,7 +93,7 @@ export const tokenService: TokenService = {
   activateNewMobileToken: async (pendingToken, correlationId) =>
     client
       .post<CompleteTokenInitializationResponse>(
-        '/tokens/v4/activate',
+        '/token/v1/activate',
         pendingToken.toJSON(),
         {
           headers: {
@@ -118,7 +109,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   initiateMobileTokenRenewal: async (token, secureContainer, correlationId) =>
     client
-      .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', undefined, {
+      .post<InitiateTokenRenewalResponse>('/token/v1/renew', undefined, {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
           [SignedTokenHeaderName]: secureContainer,
@@ -138,7 +129,7 @@ export const tokenService: TokenService = {
   ) =>
     client
       .post<CompleteTokenRenawalResponse>(
-        '/tokens/v4/complete',
+        '/token/v1/complete',
         pendingToken.toJSON(),
         {
           headers: {
@@ -160,7 +151,7 @@ export const tokenService: TokenService = {
     correlationId,
   ) =>
     client
-      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
+      .get<GetTokenDetailsResponse>('/token/v1/details', {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
           [SignedTokenHeaderName]: secureContainer,
@@ -176,7 +167,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   getMobileTokenDetails: async (token, secureContainer, traceId) =>
     client
-      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
+      .get<GetTokenDetailsResponse>('/token/v1/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -191,7 +182,7 @@ export const tokenService: TokenService = {
   removeToken: async (tokenId: string, traceId: string): Promise<boolean> =>
     client
       .post<RemoveTokenResponse>(
-        '/tokens/v4/remove',
+        '/token/v1/remove',
         {tokenId},
         {
           headers: {
@@ -207,7 +198,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   listTokens: async (secureContainer, traceId) =>
     client
-      .get<ListResponse>('/tokens/v4/list', {
+      .get<ListResponse>('/token/v1/list', {
         headers: {
           [SignedTokenHeaderName]: secureContainer,
           [CorrelationIdHeaderName]: traceId,
@@ -226,7 +217,7 @@ export const tokenService: TokenService = {
   ) =>
     client
       .post<ToggleResponse>(
-        '/tokens/v4/toggle',
+        '/token/v1/toggle',
         {tokenId, bypassRestrictions},
         {
           headers: {
@@ -243,7 +234,7 @@ export const tokenService: TokenService = {
 
   getTokenToggleDetails: async () =>
     client
-      .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
+      .get<TokenLimitResponse>('/token/v1/toggle/details', {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
@@ -251,49 +242,6 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data)
       .catch(handleError),
-  validate: async (token, traceId) => {
-    const tokenEncodingRequest: TokenEncodingRequest = {
-      challenges: [],
-      tokenActions: [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS],
-      includeCertificate: false,
-    };
-
-    await abtClient
-      .remoteClientCallHandler(
-        token.getContextId(),
-        tokenEncodingRequest,
-        traceId,
-        async (secureContainerToken, attestation) =>
-          client
-            .get('/tokens/v4/validate', {
-              headers: {
-                [CorrelationIdHeaderName]: traceId,
-                [SignedTokenHeaderName]: secureContainerToken,
-                [AttestationHeaderName]: attestation?.data,
-                [AttestationTypeHeaderName]: attestation?.type,
-              },
-              baseURL: await getBaseUrl(),
-              authWithIdToken: true,
-              timeout: 15000,
-              skipErrorLogging: isRemoteTokenStateError,
-            })
-            .catch((err) => {
-              // for some reason, Reattestation must be handled here,
-              // otherwise it will cause a reset, and we don't want that to happen
-              // if we handle token Renewal here using `handleError`, the renewed
-              // token will be invalid to use on inspection.
-              const parsedError = parseBffCallErrors(err.response?.data);
-              if (
-                parsedError instanceof
-                  TokenReattestationRemoteTokenStateError ||
-                parsedError instanceof TokenReattestationRequiredError
-              ) {
-                throw parsedError;
-              } else throw err;
-            }),
-      )
-      .catch(handleError);
-  },
   postTokenStatus: async (tokenId, tokenStatus, traceId) => {
     await client.post(
       '/token/v1/status',

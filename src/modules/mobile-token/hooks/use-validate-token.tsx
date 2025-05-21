@@ -20,6 +20,9 @@ const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14';
 /**
  * This hook is used to check if the token needs renewal/reset.
  *
+ * It replaces the validate function which was called on earlier versions
+ * of the app.
+ *
  * After loading both local/native token and remote tokens list,
  * check if the local token has a counterpart remote token.
  *
@@ -175,7 +178,7 @@ export const useValidateToken = (
 
       if (token && token.type === 'mobile') {
         checkShouldRenew(token).then((shouldRenew) => {
-          if (shouldRenew) {
+          if (shouldRenew && retryCount < RETRY_MAX_COUNT) {
             logToBugsnag(
               'Token should be renewed because there are difference between details on the token and the device',
             );

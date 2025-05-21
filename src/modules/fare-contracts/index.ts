@@ -9,7 +9,10 @@ export {
 } from './utils';
 export type {UserProfileWithCount} from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
-export {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation-by-validity-and-creation';
+export {
+  sortFcOrReservationByValidityAndCreation,
+  sortFcOrReservationByCreation,
+} from './sort-fc-or-reservation';
 export {getFareContractInfoDetails} from './sections/FareContractInfoDetailsSectionItem';
 export {CompactFareContractInfo} from './CompactFareContractInfo';
 export {FareContractDetailItem} from './components/FareContractDetailItem';

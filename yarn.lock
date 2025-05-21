@@ -20,18 +20,18 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@5.15.0":
-  version "5.15.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.15.0.tgz#6a69572dc5b38637cd307e3f008637a83670c7f1"
-  integrity sha512-WYLKAUrtyUsJ6MSv4JhRAuiPiPdIoy6WCbsJ1ltLXS8+y1VbpoFnF7lbihy5olOq4kZYueM+1V7tcFfs5TAODw==
+"@atb-as/config-specs@5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.16.0.tgz#804a704dd9e089ae58fe492f0c511f521d08dd78"
+  integrity sha512-q5HOxj+EXDha318C52jqHqPHsCmxUMmdUvSRd+xunn330oOhjPbzk4o+Q077WJGI2wjfBZ8QzwBZtRgEG1TeNQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
     glob "^9.3.2"
     js-yaml "^4.1.0"
     yargs "^17.7.1"
-    zod "^3.24.1"
-    zod-to-json-schema "^3.20.4"
+    zod "^3.24.4"
+    zod-to-json-schema "^3.24.5"
 
 "@atb-as/generate-assets@17.2.0":
   version "17.2.0"
@@ -11907,12 +11907,17 @@ yocto-queue@^1.0.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-1.1.1.tgz#fef65ce3ac9f8a32ceac5a634f74e17e5b232110"
   integrity sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==
 
-zod-to-json-schema@^3.20.4:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.1.tgz#f08c6725091aadabffa820ba8d50c7ab527f227a"
-  integrity sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==
+zod-to-json-schema@^3.24.5:
+  version "3.24.5"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.5.tgz#d1095440b147fb7c2093812a53c54df8d5df50a3"
+  integrity sha512-/AuWwMP+YqiPbsJx5D6TfgRTc4kTLjsh5SOcd4bLsfUg2RcEXrFMJl1DGgdHy2aCfsIA/cr/1JM0xcB2GZji8g==
 
 zod@^3.24.1:
   version "3.24.1"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
   integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
+
+zod@^3.24.4:
+  version "3.24.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.4.tgz#e2e2cca5faaa012d76e527d0d36622e0a90c315f"
+  integrity sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==
