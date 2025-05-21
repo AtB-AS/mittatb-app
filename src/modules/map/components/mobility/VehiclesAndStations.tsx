@@ -13,6 +13,7 @@ import {
   Expression,
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {minimizedZoomRange} from '../../hooks/use-map-symbol-styles';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
@@ -20,10 +21,12 @@ const vehiclesAndStationsVectorSourceId =
 export const VehiclesWithClusters = ({
   selectedFeatureId,
 }: SelectedFeatureIdProp) => {
-  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeatureId,
-    'vehicle',
-  );
+  const minZoomLevel = 14;
+  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
+    selectedFeaturePropertyId: selectedFeatureId,
+    pinType: 'vehicle',
+    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.5, // show 0.5 after stations
+  });
 
   const filter: FilterExpression = useMemo(
     () => ['all', ['!', isSelected]],
@@ -43,7 +46,8 @@ export const VehiclesWithClusters = ({
       id="vehicles-clustered-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
-      minZoomLevel={14}
+      minZoomLevel={minZoomLevel}
+      aboveLayerID="carparking.nsr.api"
       filter={filter}
       style={style}
     />
@@ -57,10 +61,12 @@ export const Stations = ({
   showNonVirtualStations: boolean;
 }) => {
   const showVirtualStations = false; // not supported yet. Also – consider using a virtualStationsFilter prop instead
-  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeatureId,
-    'station',
-  );
+  const minZoomLevel = 14;
+  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
+    selectedFeaturePropertyId: selectedFeatureId,
+    pinType: 'station',
+    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange,
+  });
 
   const filter: FilterExpression = useMemo(() => {
     const isVirtualStation: Expression = ['get', 'is_virtual_station'];
@@ -89,7 +95,8 @@ export const Stations = ({
       id="stations-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="stations"
-      minZoomLevel={14}
+      minZoomLevel={minZoomLevel}
+      aboveLayerID="carparking.nsr.api"
       filter={filter}
       style={style}
     />

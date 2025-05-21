@@ -266,7 +266,7 @@ export const MapV2 = (props: MapProps) => {
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={15}
+            zoomLevel={14.75}
             centerCoordinate={[
               startingCoordinates.longitude,
               startingCoordinates.latitude,

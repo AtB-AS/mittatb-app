@@ -30,8 +30,8 @@ export const getFilterWhichAlsoHidesSelectedFeature = (
   ['!=', ['get', 'id'], selectedFeaturePropertyId ?? ''],
 ];
 
-const minimizedZoomRange = 3; // show icon as minimized version for this number of zoom levels before switching to default
-const opacityTransitionZoomRange = 0.8;
+const minimizedZoomRange = 3.5; // show icon as minimized version for this number of zoom levels before switching to default
+const opacityTransitionZoomRange = minimizedZoomRange / 4;
 
 type IconImageProps = {
   iconCode: NsrPinIconCode;
