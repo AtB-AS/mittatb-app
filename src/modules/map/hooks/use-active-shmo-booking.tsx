@@ -64,6 +64,7 @@ export const useShmoActiveBottomSheet = (
             openBottomSheet(
               () => (
                 <ActiveScooterSheet
+                  onForceClose={mapSelectionCloseCallback}
                   onActiveBookingReceived={flyToUserLocation}
                   navigateSupportCallback={() => {
                     closeBottomSheet();
