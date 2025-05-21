@@ -117,9 +117,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
   useEffect(() => {
+    setSecureContainer(undefined);
+
     const loadSecureContainer = async () => {
       if (nativeToken) {
-        setSecureContainer(undefined);
         await mobileTokenClient.encode(nativeToken).then((secureContainer) => {
           setSecureContainer(secureContainer);
         });
