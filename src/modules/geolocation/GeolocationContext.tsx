@@ -320,31 +320,17 @@ const requestGeolocationPermission = async (
     // Android
 
     if (permissionStatus === 'denied') {
-      if (requestPrecise) {
-        const requestedStatus = await request(
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        );
-
-        if (requestedStatus === 'blocked') {
-          openSettingsAlert(requestPrecise);
-          return permissionStatus;
-        }
-      } else {
-        // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
-        const requestedStatus = await requestMultiple([
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-        ]);
-
-        if (
-          requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-            'blocked' &&
-          requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
-            'blocked'
-        ) {
-          openSettingsAlert(requestPrecise);
-          return permissionStatus;
-        }
+      const permissions = [
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        ...(requestPrecise ? [] : [PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION]),
+      ];
+      const requestedStatus = await requestMultiple(permissions);
+      const permissionBlocked = permissions.every(
+        (permission) => requestedStatus[permission] === 'blocked',
+      );
+      if (permissionBlocked) {
+        openSettingsAlert(requestPrecise);
+        return permissionStatus;
       }
     }
     return await checkGeolocationPermission(requestPrecise);
