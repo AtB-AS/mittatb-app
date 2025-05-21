@@ -131,7 +131,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestLocationPermission();
+      const status = await requestLocationPermission(false);
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }
