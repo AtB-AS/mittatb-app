@@ -219,15 +219,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 />
               )}
             </Section>
-          </View>
 
-          <Section>
-            <LinkSectionItem
-              text={t(ProfileTexts.sections.settings.heading)}
-              onPress={() => navigation.navigate('Profile_SettingsScreen')}
-              testID="settingsButton"
-            />
-          </Section>
+            <Section>
+              <LinkSectionItem
+                text={t(ProfileTexts.sections.settings.heading)}
+                onPress={() => navigation.navigate('Profile_SettingsScreen')}
+                testID="settingsButton"
+              />
+            </Section>
+          </View>
 
           <ContentHeading
             text={t(ProfileTexts.sections.travelAndPurchases.heading)}
