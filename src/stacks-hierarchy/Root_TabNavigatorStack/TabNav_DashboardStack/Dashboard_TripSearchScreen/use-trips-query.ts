@@ -26,13 +26,15 @@ export function useTripsQuery(
     date: new Date().toISOString(),
   },
   filtersSelection: TravelSearchFiltersSelectionType | undefined,
+  enabled: boolean = true,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: string;
-  loadMore: (() => {}) | undefined;
+  loadMore: (() => void) | undefined;
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
+  enabled?: boolean;
 } {
   const [timeOfSearch, setTimeOfSearch] = useState<string>(
     new Date().toISOString(),
@@ -170,8 +172,9 @@ export function useTripsQuery(
   );
 
   useEffect(() => {
+    if (!enabled) return;
     search();
-  }, [search]);
+  }, [search, enabled]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);

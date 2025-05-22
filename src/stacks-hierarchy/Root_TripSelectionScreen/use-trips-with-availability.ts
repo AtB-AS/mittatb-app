@@ -21,6 +21,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 export function useTripsWithAvailability(props: {
   selection: PurchaseSelectionType;
   searchTime: TripSearchTime;
+  enabled: boolean;
 }) {
   const [tripPatternsWithAvailability, setTripPatternsWithAvailability] =
     useState<TripPatternFragmentWithAvailability[]>([]);
@@ -62,7 +63,13 @@ export function useTripsWithAvailability(props: {
     }),
     [],
   );
-  const {tripPatterns} = useTripsQuery(from, to, props.searchTime, filter);
+  const {tripPatterns} = useTripsQuery(
+    from,
+    to,
+    props.searchTime,
+    filter,
+    props.enabled,
+  );
 
   useEffect(() => {
     setOffersSearchState('searching');

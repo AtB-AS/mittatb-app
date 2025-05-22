@@ -51,6 +51,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const {isBookingEnabled} = useFeatureTogglesContext();
 
   const [selection, setSelection] = useParamAsState(params.selection);
 
@@ -146,8 +147,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
   const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
 
-  const tripsWithAvailabitityProps = useMemo(() => {
-    return {
+  const tripsWithAvailabitityProps = useMemo(
+    () => ({
       selection,
       searchTime: {
         date: selection.travelDate ?? new Date().toISOString(),
@@ -155,14 +156,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ? ('departure' as const)
           : ('now' as const),
       },
-    };
-  }, [selection]);
-
+      enabled: isBookingEnabled,
+    }),
+    [selection, isBookingEnabled],
+  );
   const {tripPatterns} = useTripsWithAvailability(tripsWithAvailabitityProps);
-
-  useEffect(() => {
-    console.log('tripPatterns', tripPatterns.length);
-  }, [tripPatterns]);
 
   const onPressBuy = () => {
     if (isOnBehalfOfToggle) {
@@ -172,7 +170,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       );
       return;
     }
-    if (tripPatterns.length > 0) {
+    if (isBookingEnabled && tripPatterns.length > 0) {
       navigation.push('Root_TripSelectionScreen', {selection});
       return;
     }
@@ -180,6 +178,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       'Root_PurchaseConfirmationScreen',
       rootPurchaseConfirmationScreenParams,
     );
+  };
+  const summaryButtonText = () => {
+    if (isOnBehalfOfToggle) {
+      return t(PurchaseOverviewTexts.summary.button.sendToOthers);
+    }
+    if (isBookingEnabled && tripPatterns.length > 0) {
+      return t(PurchaseOverviewTexts.summary.button.selectDeparture);
+    }
+    return t(PurchaseOverviewTexts.summary.button.payment);
   };
 
   return (
@@ -338,12 +345,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isError={!!error || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            shouldForwardToBooking={tripPatterns.length > 0}
-            summaryButtonText={
-              isOnBehalfOfToggle
-                ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
-                : t(PurchaseOverviewTexts.summary.button.payment)
-            }
+            shouldForwardToBooking={isBookingEnabled && tripPatterns.length > 0}
+            summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: selection.fareProductTypeConfig.name,
