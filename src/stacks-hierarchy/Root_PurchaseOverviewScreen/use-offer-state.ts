@@ -1,3 +1,4 @@
+import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {
@@ -6,12 +7,12 @@ import {
   OfferPrice,
   searchOffers,
 } from '@atb/modules/ticketing';
-import {useCallback} from 'react';
+import {CancelToken} from 'axios';
+import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
-import {useMutation} from '@tanstack/react-query';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -31,6 +32,17 @@ type OfferState = {
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
   flexDiscountLadder?: FlexDiscountLadder;
 };
+
+type OfferReducerAction =
+  | {type: 'SEARCHING_OFFER'}
+  | {type: 'SET_OFFER'; offers: Offer[]}
+  | {type: 'CLEAR_OFFER'}
+  | {type: 'SET_ERROR'; error: OfferError};
+
+type OfferReducer = (
+  prevState: OfferState,
+  action: OfferReducerAction,
+) => OfferState;
 
 const getCurrencyAsFloat = (price: OfferPrice, currency = 'NOK') =>
   price.currency === currency ? price.amountFloat ?? 0 : 0;
@@ -93,6 +105,55 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
+const getOfferReducer =
+  (userProfilesWithCounts: UserProfileWithCount[]): OfferReducer =>
+  (prevState, action): OfferState => {
+    switch (action.type) {
+      case 'SEARCHING_OFFER':
+        return {
+          ...prevState,
+          isSearchingOffer: true,
+        };
+      case 'CLEAR_OFFER':
+        return {
+          ...prevState,
+          offerSearchTime: undefined,
+          isSearchingOffer: false,
+          totalPrice: 0,
+          originalPrice: 0,
+          error: undefined,
+          userProfilesWithCountAndOffer: [],
+        };
+      case 'SET_OFFER':
+        return {
+          ...prevState,
+          offerSearchTime: Date.now(),
+          isSearchingOffer: false,
+          validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
+          originalPrice: calculateOriginalPrice(
+            userProfilesWithCounts,
+            action.offers,
+          ),
+          totalPrice: calculateTotalPrice(
+            userProfilesWithCounts,
+            action.offers,
+          ),
+          userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
+            userProfilesWithCounts,
+            action.offers,
+          ),
+          error: undefined,
+        };
+      case 'SET_ERROR': {
+        return {
+          ...prevState,
+          error: action.error,
+          isSearchingOffer: false,
+        };
+      }
+    }
+  };
+
 const initialState: OfferState = {
   isSearchingOffer: false,
   offerSearchTime: undefined,
@@ -107,28 +168,14 @@ export function useOfferState(
   preassignedFareProductAlternatives: PreassignedFareProduct[],
   isOnBehalfOf: boolean = false,
 ) {
-  const mapParamsForSearchOffers = () => ({
-    zones: selection.zones && [
-      ...new Set([selection.zones.from.id, selection.zones.to.id]),
-    ],
-    from: selection.stopPlaces?.from!.id,
-    to: selection.stopPlaces?.to!.id,
-    isOnBehalfOf,
-    travellers: selection.userProfilesWithCount
-      .filter((t) => t.count)
-      .map((t) => ({
-        id: t.userTypeString,
-        userType: t.userTypeString,
-        count: t.count,
-      })),
-    products: preassignedFareProductAlternatives.map((p) => p.id),
-    travelDate: selection.travelDate,
-  });
+  const offerReducer = getOfferReducer(selection.userProfilesWithCount);
+  const [state, dispatch] = useReducer(offerReducer, initialState);
 
-  const mutation = useMutation({
-    mutationFn: async () => {
+  const updateOffer = useCallback(
+    async function (cancelToken?: CancelToken) {
       if (selection.stopPlaces?.to?.isFree) {
-        return {offers: [], error: undefined};
+        dispatch({type: 'CLEAR_OFFER'});
+        return;
       }
 
       const offerTravellers = selection.userProfilesWithCount
@@ -146,86 +193,89 @@ export function useOfferState(
       const isSelectionValid = isTravellersValid && isStopPlacesValid;
 
       if (!isSelectionValid) {
-        return {offers: [], error: undefined};
-      }
+        dispatch({type: 'CLEAR_OFFER'});
+      } else {
+        try {
+          dispatch({type: 'SEARCHING_OFFER'});
+          let offers: Offer[];
 
-      try {
-        let offers: Offer[];
-        if (selection.legs.length) {
-          const response = await fetchOfferFromLegs(
-            new Date(selection.legs[0].expectedStartTime),
-            selection.legs,
-            offerTravellers,
-            preassignedFareProductAlternatives.map((p) => p.id),
-          );
-          offers = response.offers;
-        } else {
-          const offerEndpoint = selection.stopPlaces
-            ? 'stop-places'
-            : selection.zones
-            ? 'zones'
-            : 'authority';
+          if (selection.legs.length) {
+            const response = await fetchOfferFromLegs(
+              new Date(selection.legs[0].expectedStartTime),
+              selection.legs,
+              offerTravellers,
+              preassignedFareProductAlternatives.map((p) => p.id),
+            );
+            offers = response.offers;
+          } else {
+            const params = {
+              zones: selection.zones && [
+                ...new Set([selection.zones.from.id, selection.zones.to.id]),
+              ],
+              from: selection.stopPlaces?.from!.id,
+              to: selection.stopPlaces?.to!.id,
+              isOnBehalfOf,
+              travellers: offerTravellers,
+              products: preassignedFareProductAlternatives.map((p) => p.id),
+              travelDate: selection.travelDate,
+            };
 
-          offers = await searchOffers(
-            offerEndpoint,
-            mapParamsForSearchOffers(),
-            {
+            const offerEndpoint = selection.stopPlaces
+              ? 'stop-places'
+              : selection.zones
+              ? 'zones'
+              : 'authority';
+
+            offers = await searchOffers(offerEndpoint, params, {
+              cancelToken,
               authWithIdToken: true,
               skipErrorLogging: isNotAvailableError,
-            },
-          );
-        }
+            });
 
-        if (offers.length) {
-          return {offers, error: undefined};
-        } else {
-          return {offers: [], error: {type: 'empty-offers'}};
+            cancelToken?.throwIfRequested();
+          }
+
+          if (offers.length) {
+            dispatch({type: 'SET_OFFER', offers});
+          } else {
+            dispatch({
+              type: 'SET_ERROR',
+              error: {
+                type: 'empty-offers',
+              },
+            });
+          }
+        } catch (err: any) {
+          const errorType = isNotAvailableError(err)
+            ? 'not-available'
+            : getAxiosErrorType(err);
+          if (errorType !== 'cancel') {
+            console.warn(err);
+            dispatch({
+              type: 'SET_ERROR',
+              error: {
+                type: errorType,
+              },
+            });
+          }
         }
-      } catch (err: any) {
-        const errorType = isNotAvailableError(err)
-          ? 'not-available'
-          : getAxiosErrorType(err);
-        if (errorType !== 'cancel') {
-          console.warn(err);
-          return {offers: [], error: {type: errorType}};
-        }
-        throw err;
       }
     },
-  });
+    [selection, preassignedFareProductAlternatives, isOnBehalfOf],
+  );
 
-  const refreshOffer = useCallback(async () => {
-    await mutation.mutateAsync();
-  }, [mutation]);
+  useEffect(() => {
+    const source = CancelTokenStatic.source();
+    updateOffer(source.token);
+    return () => source.cancel('Cancelling previous offer search');
+  }, [dispatch, updateOffer, selection]);
 
-  const state = mutation.isLoading
-    ? {
-        ...initialState,
-        isSearchingOffer: true,
-      }
-    : mutation.data
-    ? {
-        ...initialState,
-        offerSearchTime: Date.now(),
-        isSearchingOffer: false,
-        validDurationSeconds: getValidDurationSeconds(
-          mutation.data.offers?.[0],
-        ),
-        originalPrice: calculateOriginalPrice(
-          selection.userProfilesWithCount,
-          mutation.data.offers,
-        ),
-        totalPrice: calculateTotalPrice(
-          selection.userProfilesWithCount,
-          mutation.data.offers,
-        ),
-        userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
-          selection.userProfilesWithCount,
-          mutation.data.offers,
-        ),
-        error: mutation.data.error,
-      }
-    : initialState;
+  const refreshOffer = useCallback(
+    async function () {
+      await updateOffer(undefined);
+    },
+    [updateOffer],
+  );
 
   return {
     ...state,
