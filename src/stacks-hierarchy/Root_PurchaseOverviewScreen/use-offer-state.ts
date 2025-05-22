@@ -192,9 +192,6 @@ export function useOfferState(
         throw err;
       }
     },
-    onSuccess: (data) => {
-      console.log('Offers successfully fetched:', data.offers);
-    },
   });
 
   const refreshOffer = useCallback(async () => {

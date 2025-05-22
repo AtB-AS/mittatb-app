@@ -57,7 +57,6 @@ export async function tripsSearch(
   query: TripsQueryVariables,
   opts?: AxiosRequestConfig,
 ): Promise<TripsQuery> {
-  console.log('Doing search with query: ' + JSON.stringify(query, null, 2));
   const url = 'bff/v2/trips';
 
   const results = await post<TripsQuery>(url, cleanQuery(query), opts);

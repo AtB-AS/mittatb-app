@@ -38,7 +38,6 @@ import {
 } from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
-import {TripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
 import {useAuthContext} from '@atb/modules/auth';
 import {Button} from '@atb/components/button';
 
@@ -71,13 +70,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const fareProductOnBehalfOfEnabled =
     selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-
-  useEffect(() => {
-    console.log(
-      'Selection legs changed',
-      JSON.stringify(selection.legs, null, 2),
-    );
-  }, [selection.legs]);
 
   const {
     isSearchingOffer,
@@ -272,7 +264,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 expanded={true}
               />
             </View>
-            <TripSelection selection={selection} setSelection={setSelection} />
           </GenericSectionItem>
 
           <StartTimeSelection

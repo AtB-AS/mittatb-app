@@ -29,7 +29,6 @@ export async function fetchOfferFromLegs(
     })),
     isOnBehalfOf: false,
   };
-  console.log('Request body: ' + JSON.stringify(requestBody, null, 2));
   const response = await client.post<OfferFromLegsResponse>(
     tripPatternEndpoint,
     requestBody,
@@ -38,9 +37,8 @@ export async function fetchOfferFromLegs(
 
   if (response.status !== 200) {
     console.log('An error occured while fetching the offer');
-    throw new Error('Network response was not ok');
+    throw new Error(response.statusText);
   }
 
-  console.log('Returning data: ' + JSON.stringify(response.data, null, 2));
   return response.data;
 }
