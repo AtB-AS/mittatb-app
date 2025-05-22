@@ -7,6 +7,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {handleStreamEvent} from './handle-stream-event';
 import {StreamEvent} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {jsonStringToObject} from '@atb/utils/object';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
@@ -17,7 +18,7 @@ export const useSetupEventStream = () => {
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
-      const message = StreamEvent.safeParse(JSON.parse(event.data));
+      const message = StreamEvent.safeParse(jsonStringToObject(event.data));
       if (!message.success) {
         Bugsnag.leaveBreadcrumb('Received unknown message from stream', {
           data: event.data,

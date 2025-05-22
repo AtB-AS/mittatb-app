@@ -66,3 +66,21 @@ export function hasProp<K extends PropertyKey>(
 ): obj is Record<K, unknown> {
   return obj != null && typeof obj === 'object' && key in obj;
 }
+
+/**
+ * Attempts to parse any data as a JSON string into an object. If the result is
+ * not a valid object, it returns undefined.
+ */
+export function jsonStringToObject(data?: any): object | undefined {
+  try {
+    const result = JSON.parse(data);
+
+    // If the result is null, return undefined
+    if (!result) return undefined;
+
+    // If the result is not an object, return undefined
+    if (typeof result !== 'object') return undefined;
+
+    return result;
+  } catch (e) {}
+}
