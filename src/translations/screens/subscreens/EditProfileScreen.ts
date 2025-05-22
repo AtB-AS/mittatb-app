@@ -2,7 +2,7 @@ import {translation as _} from '@atb/translations';
 
 export const EditProfileTexts = {
   header: {
-    title: _('Rediger Min profil', 'Edit My profile', 'Rediger Min profil'),
+    title: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
   },
   noProfile: _(
     'Det virker ikke som du er logget inn. Vennligst opprett en profil og logg inn.',
@@ -74,11 +74,7 @@ export const EditProfileTexts = {
   },
   button: {
     save: _('Lagre', 'Save', 'Lagre'),
-    deleteProfile: _(
-      'Slett Min profil',
-      'Delete My profile',
-      'Slett Min profil',
-    ),
+    deleteProfile: _('Slett Profil', 'Delete Profile', 'Slett Profil'),
   },
   profileUpdate: {
     success: _('Profil oppdatert.', 'Profile updated.', 'Profil oppdatert.'),

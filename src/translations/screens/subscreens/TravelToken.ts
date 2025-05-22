@@ -5,9 +5,9 @@ const SelectTravelTokenTexts = {
   travelToken: {
     header: {
       title: _(
-        'Bruk billett på t:kort / mobil',
-        'Use ticket on t:card / phone',
-        'Bruk billett på t:kort / mobil',
+        'Flytt billett mellom t:kort og mobil',
+        'Transfer ticket between t:kort and mobile',
+        'Flytt billett mellom t:kort og mobil',
       ),
       titleWithoutTravelcard: _(
         'Bruk billett på mobil',
@@ -61,9 +61,9 @@ const SelectTravelTokenTexts = {
           'Kva skjer om eg mistar t:kortet eller mobilen?',
         ),
         answer: _(
-          'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil eller t:kort.',
-          'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone or t:card.',
-          'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan mobiltelefon eller t:kort.',
+          'Billetten din ligger trygt lagret i Profil. Velg å bruke billetten på en annen mobil eller t:kort.',
+          'Your ticket is safely stored in Profile. Switch to use the ticket on another mobile phone or t:card.',
+          'Billetten din ligg trygt lagra i Profil. Vel å bruke billetten på ein annan mobiltelefon eller t:kort.',
         ),
       },
       {
@@ -123,9 +123,9 @@ const SelectTravelTokenTexts = {
           'Kva skjer om eg mistar mobilen?',
         ),
         answer: _(
-          'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil.',
-          'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone.',
-          'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan mobiltelefon.',
+          'Billetten din ligger trygt lagret i Profil. Velg å bruke billetten på en annen mobil.',
+          'Your ticket is safely stored in Profile. Switch to use the ticket on another mobile phone.',
+          'Billetten din ligg trygt lagra i Profil. Vel å bruke billetten på ein annan mobiltelefon.',
         ),
       },
       {
@@ -285,9 +285,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             'Kva skjer om eg mistar reisekortet eller mobilen?',
           ),
           answer: _(
-            'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil eller reisekort.',
-            'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone or travel card.',
-            'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan mobil eller reisekort.',
+            'Billetten din ligger trygt lagret i Profil. Velg å bruke billetten på en annen mobil eller reisekort.',
+            'Your ticket is safely stored in Profile. Switch to use the ticket on another mobile phone or travel card.',
+            'Billetten din ligg trygt lagra i Profil. Vel å bruke billetten på ein annan mobil eller reisekort.',
           ),
         },
         {
@@ -457,9 +457,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             'Kva skjer om eg mistar mobilen?',
           ),
           answer: _(
-            'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil.',
-            'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone.',
-            'Billetten din blir trygt lagra i Min profil. Vel å bruke billetten på ein annan mobil.',
+            'Billetten din ligger trygt lagret i Profil. Velg å bruke billetten på en annen mobil.',
+            'Your ticket is safely stored in Profile. Switch to use the ticket on another mobile phone.',
+            'Billetten din blir trygt lagra i Profil. Vel å bruke billetten på ein annan mobil.',
           ),
         },
         {
@@ -577,9 +577,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             'Kva skjer om eg mistar reisekortet eller telefonen?',
           ),
           answer: _(
-            'Billetten din ligger trygt lagret i Min profile. Velg å bruke billetten på en annen telefon eller reisekort.',
-            'Your ticket is safely stored in My profile. Switch to use the ticket on another phone or travel card.',
-            'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan telefon eller eit anna reisekort.',
+            'Billetten din ligger trygt lagret i Profile. Velg å bruke billetten på en annen telefon eller reisekort.',
+            'Your ticket is safely stored in Profile. Switch to use the ticket on another phone or travel card.',
+            'Billetten din ligg trygt lagra i Profil. Vel å bruke billetten på ein annan telefon eller eit anna reisekort.',
           ),
         },
         {
