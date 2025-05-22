@@ -7,7 +7,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -27,7 +27,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {GenericSectionItem, ToggleSectionItem} from '@atb/components/sections';
+import {ToggleSectionItem} from '@atb/components/sections';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
@@ -39,7 +39,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/modules/auth';
-import {Button} from '@atb/components/button';
+import {useTripsWithAvailability} from '../Root_TripSelectionScreen/use-trips-with-availability';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -145,6 +145,42 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
   const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
+
+  const tripsWithAvailabitityProps = useMemo(() => {
+    return {
+      selection,
+      searchTime: {
+        date: selection.travelDate ?? new Date().toISOString(),
+        option: selection.travelDate
+          ? ('departure' as const)
+          : ('now' as const),
+      },
+    };
+  }, [selection]);
+
+  const {tripPatterns} = useTripsWithAvailability(tripsWithAvailabitityProps);
+
+  useEffect(() => {
+    console.log('tripPatterns', tripPatterns.length);
+  }, [tripPatterns]);
+
+  const onPressBuy = () => {
+    if (isOnBehalfOfToggle) {
+      navigation.navigate(
+        'Root_ChooseTicketRecipientScreen',
+        rootPurchaseConfirmationScreenParams,
+      );
+      return;
+    }
+    if (tripPatterns.length > 0) {
+      navigation.push('Root_TripSelectionScreen', {selection});
+      return;
+    }
+    navigation.navigate(
+      'Root_PurchaseConfirmationScreen',
+      rootPurchaseConfirmationScreenParams,
+    );
+  };
 
   return (
     <FullScreenView
@@ -254,18 +290,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
-          <GenericSectionItem style={{width: '100%'}}>
-            <View style={{width: '100%'}}>
-              <Button
-                text="Velg reise"
-                onPress={() =>
-                  navigation.push('Root_TripSelectionScreen', {selection})
-                }
-                expanded={true}
-              />
-            </View>
-          </GenericSectionItem>
-
           <StartTimeSelection
             selection={selection}
             setSelection={setSelection}
@@ -314,6 +338,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isError={!!error || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
+            shouldForwardToBooking={tripPatterns.length > 0}
             summaryButtonText={
               isOnBehalfOfToggle
                 ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
@@ -343,15 +368,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate: selection.travelDate,
                 mode: params.mode,
               });
-              isOnBehalfOfToggle
-                ? navigation.navigate(
-                    'Root_ChooseTicketRecipientScreen',
-                    rootPurchaseConfirmationScreenParams,
-                  )
-                : navigation.navigate(
-                    'Root_PurchaseConfirmationScreen',
-                    rootPurchaseConfirmationScreenParams,
-                  );
+              onPressBuy();
             }}
           />
         </View>

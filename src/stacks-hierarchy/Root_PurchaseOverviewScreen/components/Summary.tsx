@@ -16,6 +16,7 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   summaryButtonText: string;
+  shouldForwardToBooking: boolean;
   onPressBuy: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -28,6 +29,7 @@ export function Summary({
   isLoading,
   isError,
   summaryButtonText,
+  shouldForwardToBooking,
   onPressBuy,
   style,
 }: Props) {
@@ -70,16 +72,28 @@ export function Summary({
           {t(PurchaseOverviewTexts.summary.price(formattedOriginalPrice))}
         </ThemeText>
       )}
-      <Button
-        expanded={true}
-        interactiveColor={theme.color.interactive[0]}
-        text={summaryButtonText}
-        disabled={isLoading || !hasSelection || isFree || isError}
-        onPress={toPaymentFunction}
-        rightIcon={{svg: ArrowRight}}
-        testID="goToPaymentButton"
-        style={styles.button}
-      />
+      {shouldForwardToBooking ? (
+        <Button
+          expanded={true}
+          interactiveColor={theme.color.interactive[0]}
+          text={summaryButtonText}
+          onPress={toPaymentFunction}
+          rightIcon={{svg: ArrowRight}}
+          testID="goToPaymentButton"
+          style={styles.button}
+        />
+      ) : (
+        <Button
+          expanded={true}
+          interactiveColor={theme.color.interactive[0]}
+          text={summaryButtonText}
+          disabled={isLoading || !hasSelection || isFree || isError}
+          onPress={toPaymentFunction}
+          rightIcon={{svg: ArrowRight}}
+          testID="goToPaymentButton"
+          style={styles.button}
+        />
+      )}
     </View>
   );
 }
