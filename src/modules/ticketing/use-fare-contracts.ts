@@ -29,7 +29,10 @@ export const useFareContracts = (
 } => {
   const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
   const {refetch: getFareContractsFromBackend, isRefetching} =
-    useGetFareContractsQuery(availabilityStatus.availability);
+    useGetFareContractsQuery({
+      enabled: false,
+      availability: availabilityStatus.availability,
+    });
 
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
@@ -58,15 +61,19 @@ export const useFareContracts = (
 
   return {fareContracts: filteredFareContracts, refetch, isRefetching};
 };
-
-const useGetFareContractsQuery = (
-  availability: AvailabilityStatusInput['availability'],
-) => {
-  const {userId} = useAuthContext();
+export const fareContractsQueryKey = 'FETCH_FARE_CONTRACTS';
+export const useGetFareContractsQuery = (props: {
+  enabled: boolean;
+  availability: AvailabilityStatusInput['availability'] | undefined;
+}) => {
+  const {abtCustomerId} = useAuthContext();
   return useQuery({
-    queryKey: ['FETCH_FARE_CONTRACTS', availability, userId],
-    queryFn: () => getFareContracts(availability),
-    enabled: false,
+    queryKey: [fareContractsQueryKey, abtCustomerId, props.availability],
+    queryFn: () => getFareContracts(props.availability),
+    enabled: props.enabled && !!abtCustomerId,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: false,
     retry: 0,
   });
 };

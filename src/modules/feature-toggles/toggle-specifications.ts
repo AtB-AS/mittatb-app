@@ -30,6 +30,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_city_bikes_in_map',
   },
   {
+    name: 'isEventStreamEnabled',
+    remoteConfigKey: 'enable_event_stream',
+  },
+  {
     name: 'isFlexibleTransportEnabled',
     remoteConfigKey: 'enable_flexible_transport',
   },
