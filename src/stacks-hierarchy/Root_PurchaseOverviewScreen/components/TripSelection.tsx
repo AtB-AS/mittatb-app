@@ -21,7 +21,11 @@ export function TripSelection({selection, setSelection}: Props) {
     date: new Date().toISOString(),
     option: 'now',
   });
-  const {tripPatterns} = useTripsWithAvailability({selection, searchTime});
+  const {tripPatterns} = useTripsWithAvailability({
+    selection,
+    searchTime,
+    enabled: true,
+  });
   const selectionBuilder = usePurchaseSelectionBuilder();
   return (
     <View
