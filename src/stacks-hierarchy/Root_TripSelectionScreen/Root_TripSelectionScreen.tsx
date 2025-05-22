@@ -8,10 +8,12 @@ import {useThemeContext} from '@atb/theme';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 import {Button} from '@atb/components/button';
-import type {DepartureSearchTime} from '@atb/screen-components/place-screen';
-import {DateSelection} from '@atb/screen-components/place-screen/components/DateSelection';
 import {useTripsWithAvailability} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-trips-with-availability';
 import {TripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
+import {
+  DateSelection,
+  DepartureSearchTime,
+} from '@atb/components/date-selection';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
