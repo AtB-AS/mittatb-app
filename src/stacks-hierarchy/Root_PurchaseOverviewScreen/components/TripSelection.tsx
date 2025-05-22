@@ -23,14 +23,10 @@ export function TripSelection({selection, setSelection}: Props) {
   });
   const {tripPatterns} = useTripsWithAvailability({selection, searchTime});
   const selectionBuilder = usePurchaseSelectionBuilder();
-  //const tripPatterns: TripPatternFragment[] = [];
   return (
     <View
       style={{
         width: '100%',
-        borderWidth: 1,
-        borderColor: 'red',
-        borderStyle: 'solid',
       }}
     >
       {tripPatterns.map((tp, i) => (

@@ -2,14 +2,21 @@ import type {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-pl
 import {FeatureCategory} from '@atb/sdk';
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
 import type {SearchLocation} from '@atb/modules/favorites';
-import {fetchOfferFromLegs} from '@atb/api/sales';
 import {useEffect, useMemo, useState} from 'react';
 import type {TripPatternFragmentWithAvailability} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import type {
+  SearchStateType,
+  TripSearchTime,
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
-import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {type TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
+import {fetchOfferFromLegs} from '@atb/api/sales';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export function useTripsWithAvailability(props: {
   selection: PurchaseSelectionType;
@@ -17,6 +24,8 @@ export function useTripsWithAvailability(props: {
 }) {
   const [tripPatternsWithAvailability, setTripPatternsWithAvailability] =
     useState<TripPatternFragmentWithAvailability[]>([]);
+  const [offersSearchState, setOffersSearchState] =
+    useState<SearchStateType>('idle');
   // useMemo to prevent unecessary rerenders
   const [from, to] = useMemo(
     () => [
@@ -25,14 +34,14 @@ export function useTripsWithAvailability(props: {
     ],
     [props.selection],
   );
+  const analytics = useAnalyticsContext();
   const filter = useMemo(
     (): TravelSearchFiltersSelectionType => ({
       transportModes: [
         {
           id: '',
           icon: {
-            transportMode: TransportMode.Bus,
-            //transportSubMode: TransportSubmode.HighSpeedPassengerService,
+            transportMode: TransportMode.Water,
           },
           text: [
             {
@@ -44,6 +53,7 @@ export function useTripsWithAvailability(props: {
           modes: [
             {
               transportMode: TransportMode.Water,
+              transportSubModes: [TransportSubmode.HighSpeedPassengerService],
             },
           ],
           selected: true,
@@ -52,43 +62,61 @@ export function useTripsWithAvailability(props: {
     }),
     [],
   );
-  const {tripPatterns, searchState} = useTripsQuery(
-    from,
-    to,
-    props.searchTime,
-    filter,
-  );
+  const {tripPatterns} = useTripsQuery(from, to, props.searchTime, filter);
 
   useEffect(() => {
-    Promise.all(
-      tripPatterns
-        //.filter((tp) => !tp.legs.some((l) => l.mode === Mode.Water))
-        .map(async (tp) => {
-          const offers = await fetchOfferFromLegs(
-            props.selection.travelDate
-              ? new Date(props.selection.travelDate)
-              : new Date(),
-            mapToSalesTripPatternLegs(tp.legs),
-            props.selection.userProfilesWithCount.map((up) => ({
-              id: up.id,
-              userType: up.userTypeString,
-            })),
-            [props.selection.preassignedFareProduct.id],
-          );
-          const bestOffer = offers.offers.find(
-            (o) => o.price.amountFloat === offers.cheapestTotalPrice,
-          );
-          return {
-            ...tp,
-            available: bestOffer?.available,
-          };
-        }),
-    ).then((result) => setTripPatternsWithAvailability(result));
+    setOffersSearchState('searching');
+    Promise.allSettled(
+      tripPatterns.map(async (tp) => {
+        const offers = await fetchOfferFromLegs(
+          props.selection.travelDate
+            ? new Date(props.selection.travelDate)
+            : new Date(),
+          mapToSalesTripPatternLegs(tp.legs),
+          props.selection.userProfilesWithCount.map((up) => ({
+            id: up.id,
+            userType: up.userTypeString,
+          })),
+          [props.selection.preassignedFareProduct.id],
+        );
+        const bestOffer = offers.offers.find(
+          (o) => o.price.amountFloat === offers.cheapestTotalPrice,
+        );
+        return {
+          ...tp,
+          available: bestOffer?.available,
+        };
+      }),
+    ).then((results) => {
+      const fulfilledResults = results.filter(isFulfilled).map((r) => r.value);
+      const rejectedResults = results.filter(isRejected);
+
+      setTripPatternsWithAvailability(fulfilledResults);
+      setOffersSearchState(
+        fulfilledResults.length ? 'search-success' : 'search-empty-result',
+      );
+
+      rejectedResults.forEach((rejected) => {
+        analytics.logEvent(
+          'Ticketing',
+          'Failed to fetch offer for trip pattern',
+          rejected.reason,
+        );
+      });
+    });
+    // We disable exhaustive deps here because we want to run this effect only when the tripPatterns or selection changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tripPatterns, props.selection]);
 
   return {
     tripPatterns: tripPatternsWithAvailability,
-    searchState,
+    /*
+    Since a tripPattern without availability is not a tripPatternWithAvailability,
+    it is not necessary to export the searchState of the tripPatterns query here.
+
+    The only search state that is relevant is the offers-query searchState.
+     */
+    searchState: offersSearchState,
   };
 }
 
@@ -118,4 +146,16 @@ function mapToSearchLocation(
       longitude: stopPlace.longitude ?? 0,
     },
   };
+}
+
+function isFulfilled<T>(
+  result: PromiseSettledResult<T>,
+): result is PromiseFulfilledResult<T> {
+  return result.status === 'fulfilled';
+}
+
+function isRejected(
+  result: PromiseSettledResult<any>,
+): result is PromiseRejectedResult {
+  return result.status === 'rejected';
 }

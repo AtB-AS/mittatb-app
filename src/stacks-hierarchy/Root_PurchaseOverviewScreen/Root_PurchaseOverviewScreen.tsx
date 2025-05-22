@@ -263,14 +263,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           <GenericSectionItem style={{width: '100%'}}>
+            <View style={{width: '100%'}}>
+              <Button
+                text="Velg reise"
+                onPress={() =>
+                  navigation.push('Root_TripSelectionScreen', {selection})
+                }
+                expanded={true}
+              />
+            </View>
             <TripSelection selection={selection} setSelection={setSelection} />
-            <Button
-              onPress={() => {
-                navigation.push('Root_TripSelectionScreen', {selection});
-              }}
-              text="Velg avganger"
-              expanded={true}
-            />
           </GenericSectionItem>
 
           <StartTimeSelection
