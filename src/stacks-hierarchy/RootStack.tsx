@@ -73,6 +73,7 @@ import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-scr
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
+import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
 import {useSetupEventStream} from '@atb/modules/event-stream';
 import {useSetupReactQueryWindowFocus} from '@atb/queries';
 
@@ -338,6 +339,11 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_PurchaseHarborSearchScreen"
                   component={Root_PurchaseHarborSearchScreen}
+                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+                />
+                <Stack.Screen
+                  name="Root_TripSelectionScreen"
+                  component={Root_TripSelectionScreen}
                   options={screenOptions(TransitionPresets.SlideFromRightIOS)}
                 />
                 <Stack.Screen
