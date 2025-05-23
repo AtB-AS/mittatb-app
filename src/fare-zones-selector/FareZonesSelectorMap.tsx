@@ -63,7 +63,7 @@ const FareZonesSelectorMap = ({
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    flyToLocation({coordinates: event.coordinates, mapCameraRef, mapViewRef});
+    flyToLocation({coordinates: event.coordinates, mapCameraRef});
     updateSelectedZones(feature.id as string);
   };
 
@@ -210,7 +210,6 @@ const FareZonesSelectorMap = ({
                       flyToLocation({
                         coordinates: location?.coordinates,
                         mapCameraRef,
-                        mapViewRef,
                       })
                     }
                   />
