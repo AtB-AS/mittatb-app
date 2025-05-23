@@ -1,20 +1,21 @@
-import {tripsSearch} from '@atb/api/trips';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
-import type {SearchStateType, TripSearchTime} from '../types';
 
-import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useJourneyModes} from './hooks';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
-import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
+import {isValidTripLocations} from '@atb/utils/location';
+import {createQuery, sanitizeSearchTime} from './utils';
+import type {SearchInput, SearchStateType, TripSearchTime} from './types';
+import {tripsSearch} from '@atb/api/trips';
+import {useJourneyModes} from '@atb/modules/trip-search';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -38,11 +39,6 @@ export function useTripsQuery(
   const journeySearchModes = useJourneyModes();
   const {addJourneySearchEntry} = useSearchHistoryContext();
   const analytics = useAnalyticsContext();
-
-  const {
-    tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
-    tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
-  } = useRemoteConfigContext();
 
   const fetchTrips = async ({pageParam}: {pageParam?: string}) => {
     if (
@@ -99,13 +95,18 @@ export function useTripsQuery(
     };
   };
 
+  const {
+    tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
+    tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
+  } = useRemoteConfigContext();
+
   const {data, error, fetchNextPage, hasNextPage, isFetching, status} =
     useInfiniteQuery(
       ['trips', fromLocation, toLocation, searchTime, filtersSelection],
       fetchTrips,
       {
         getNextPageParam: (lastPage) => lastPage.nextPageCursor,
-        retry: 3,
+        retry: false,
       },
     );
 
@@ -158,15 +159,25 @@ export function useTripsQuery(
     } catch (e) {}
   }, [fromLocation, toLocation, addJourneySearchEntryStable]);
 
-  useEffect(() => {
-    if (status === 'success' && tripPatterns.length > 0) {
+  useDoOnceWhen(
+    () => {
       analytics.logEvent('Trip search', 'Search performed', {
         searchTime,
         filtersSelection: toLoggableFiltersSelection(filtersSelection),
         numberOfHits: tripPatterns.length,
       });
-    }
-  }, [status, tripPatterns, analytics, searchTime, filtersSelection]);
+    },
+    status === 'success' && tripPatterns.length > 0,
+    true,
+  );
+
+  useEffect(() => {}, [
+    status,
+    tripPatterns,
+    analytics,
+    searchTime,
+    filtersSelection,
+  ]);
 
   return {
     tripPatterns,

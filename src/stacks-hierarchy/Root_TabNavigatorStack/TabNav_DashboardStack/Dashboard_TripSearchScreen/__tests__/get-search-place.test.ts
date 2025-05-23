@@ -1,6 +1,6 @@
 import {Location, SearchLocation} from '@atb/modules/favorites';
-import {getSearchPlace} from '../utils';
 import {FeatureCategory} from '@atb/sdk';
+import {getSearchPlace} from '@atb/modules/trip-search';
 
 const ID = 'TEST_ID';
 

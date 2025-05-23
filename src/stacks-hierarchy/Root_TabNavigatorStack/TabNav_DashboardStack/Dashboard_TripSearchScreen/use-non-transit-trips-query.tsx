@@ -1,10 +1,8 @@
 import {Location} from '@atb/modules/favorites';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
-import {SearchStateType} from '../types';
 import {CancelTokenSource} from 'axios';
 import {nonTransitTripSearch} from '@atb/api/trips';
-import {sanitizeSearchTime, SearchInput} from './utils';
 import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
@@ -14,6 +12,11 @@ import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-searc
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import type {DateOptionAndValue} from '@atb/components/date-selection';
+import {
+  sanitizeSearchTime,
+  type SearchInput,
+  type SearchStateType,
+} from '@atb/modules/trip-search';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,

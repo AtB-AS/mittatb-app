@@ -21,7 +21,7 @@ import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import type {TripSearchTime} from '../../types';
+import type {TripSearchTime} from '@atb/modules/trip-search';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
