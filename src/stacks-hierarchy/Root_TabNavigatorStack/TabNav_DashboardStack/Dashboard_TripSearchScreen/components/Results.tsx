@@ -13,7 +13,6 @@ import {
 import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
-import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {getIsTooLateToBookFlexLine} from '@atb/screen-components/travel-details-screens';
@@ -22,6 +21,7 @@ import {useNow} from '@atb/utils/use-now';
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import type {TripSearchTime} from '../../types';
+import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -110,7 +110,7 @@ export const Results: React.FC<Props> = ({
               departureTime={tripPattern.expectedStartTime}
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-            <MemoizedResultItem
+            <ResultRow
               tripPattern={tripPattern}
               onDetailsPressed={onDetailsPressed}
               resultIndex={i}

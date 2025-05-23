@@ -10,6 +10,8 @@ import {
   mapToSalesTripPatternLegs,
   useTripsWithAvailability,
 } from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-trips-with-availability';
+import {ThemeText} from '@atb/components/text';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -34,9 +36,8 @@ export function TripSelection({selection, setSelection}: Props) {
       }}
     >
       {tripPatterns.map((tp, i) => (
-        <MemoizedResultItem
-          tripPattern={tp}
-          onDetailsPressed={() =>
+        <PressableOpacity
+          onPress={() =>
             setSelection(
               selectionBuilder
                 .fromSelection(selection)
@@ -44,10 +45,14 @@ export function TripSelection({selection, setSelection}: Props) {
                 .build(),
             )
           }
-          resultIndex={i}
-          searchTime={searchTime}
-          key={i}
-        />
+        >
+          <ThemeText>{new Date(tp.expectedStartTime).toDateString()}</ThemeText>
+          <MemoizedResultItem
+            tripPattern={tp}
+            searchTime={searchTime}
+            key={i}
+          />
+        </PressableOpacity>
       ))}
     </View>
   );
