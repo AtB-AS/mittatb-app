@@ -28,7 +28,7 @@ export const VehiclesWithClusters = ({
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'vehicle',
-    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.5, // show 0.5 after stations
+    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.3,
   });
 
   const filter: FilterExpression = useMemo(
@@ -68,7 +68,7 @@ export const Stations = ({
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'station',
-    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange,
+    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.2,
   });
 
   const filter: FilterExpression = useMemo(() => {

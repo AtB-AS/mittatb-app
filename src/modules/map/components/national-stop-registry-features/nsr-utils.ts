@@ -30,8 +30,8 @@ export const getFilterWhichAlsoHidesSelectedFeature = (
   ['!=', ['get', 'id'], selectedFeaturePropertyId ?? ''],
 ];
 
-const minimizedZoomRange = 3.5; // show icon as minimized version for this number of zoom levels before switching to default
-const opacityTransitionZoomRange = minimizedZoomRange / 4;
+const minimizedZoomRange = 1.5; // show icon as minimized version for this number of zoom levels before switching to default
+const opacityTransitionZoomRange = minimizedZoomRange / 8;
 
 type IconImageProps = {
   iconCode: NsrPinIconCode;
@@ -81,7 +81,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
   showAsDefaultAtZoomLevel,
   selectedFeaturePropertyId,
   iconImageProps,
-  opacityTransitionZoomRangeDelay = 0.7,
+  opacityTransitionZoomRangeDelay = 0.5,
   showTextWhileAFeatureIsSelected = false,
   iconFullSize = 1,
   textSizeFactor = 1,
@@ -89,33 +89,35 @@ export const getLayerPropsDeterminedByZoomLevel: (
   const aFeatureIsSelected =
     !!selectedFeaturePropertyId && selectedFeaturePropertyId !== '';
 
+  const iconImage = !iconImageProps
+    ? ''
+    : getExpressionForNsrIconImage(
+        'default',
+        iconImageProps,
+        aFeatureIsSelected,
+      );
+
+  // mapbox breaks unless iconImage is either a string literal directly, or in a zoom step or interpolate function,
+  // so here it is wrapped with a step function that always returns the same
+  const iconImageWrapped: Expression = [
+    'step',
+    ['zoom'],
+    iconImage,
+    showAsDefaultAtZoomLevel,
+    iconImage,
+  ];
+
   // Icons and labels start small and invisible, then grow and become more visible and prominent as you zoom in.
   return {
     minZoomLevel: showAsDefaultAtZoomLevel - minimizedZoomRange,
     style: {
-      iconImage: !iconImageProps
-        ? ''
-        : [
-            'step',
-            ['zoom'],
-            getExpressionForNsrIconImage(
-              'minimized',
-              iconImageProps,
-              aFeatureIsSelected,
-            ),
-            showAsDefaultAtZoomLevel,
-            getExpressionForNsrIconImage(
-              'default',
-              iconImageProps,
-              aFeatureIsSelected,
-            ),
-          ],
+      iconImage: iconImageWrapped,
       iconSize: [
         'interpolate',
         ['linear'],
         ['zoom'],
         showAsDefaultAtZoomLevel - minimizedZoomRange,
-        0,
+        0.3,
         showAsDefaultAtZoomLevel,
         iconFullSize,
       ],

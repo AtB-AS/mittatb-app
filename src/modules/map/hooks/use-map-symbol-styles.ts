@@ -9,12 +9,9 @@ import {
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 
-type IconExpressionFunction = (
-  defaultIconState: 'default' | 'minimized',
-) => Expression;
-
-export const minimizedZoomRange = 0.5;
-const opacityTransitionZoomRange = minimizedZoomRange / 4;
+export const minimizedZoomRange = 0.4;
+const opacityTransitionZoomRange = minimizedZoomRange / 8;
+const smallestAllowedSizeFactor = 0.3;
 
 type MapSymbolStylesProps = {
   selectedFeaturePropertyId: SelectedMapItemProperties['id'];
@@ -46,19 +43,17 @@ export const useMapSymbolStyles = ({
     ['!=', count, 1],
   ];
 
-  const getMapItemIconNonClusterState: IconExpressionFunction = (
-    defaultIconState,
-  ) => [
+  const mapItemIconNonClusterState: Expression = [
     'case',
     isSelected,
     'selected',
-    ['case', ['==', selectedFeatureId, ''], defaultIconState, 'minimized'],
+    ['case', ['==', selectedFeatureId, ''], 'default', 'minimized'],
   ];
-  const getMapItemIconState: IconExpressionFunction = (defaultIconState) => [
+  const mapItemIconState: Expression = [
     'case',
     isCluster,
     'cluster',
-    getMapItemIconNonClusterState(defaultIconState),
+    mapItemIconNonClusterState,
   ];
 
   const iconFullSize: Expression = [
@@ -73,7 +68,7 @@ export const useMapSymbolStyles = ({
     ['linear'],
     ['zoom'],
     showAsDefaultAtZoomLevel - minimizedZoomRange,
-    0,
+    smallestAllowedSizeFactor,
     showAsDefaultAtZoomLevel,
     iconFullSize,
   ];
@@ -124,13 +119,13 @@ export const useMapSymbolStyles = ({
     ],
   ];
 
-  const getSuffix: IconExpressionFunction = (defaultIconState) =>
+  const suffix: Expression =
     pinType === 'vehicle'
       ? ['case', ['==', iconCode, 'scooter'], transportOperator, '']
-      : getMapItemIconNonClusterState(defaultIconState);
+      : mapItemIconNonClusterState;
 
   // should make this easier to understand, perhaps rename images to achieve it
-  const getIconImage: IconExpressionFunction = (defaultIconState) => [
+  const iconImage: Expression = [
     'concat',
     pinType,
     'pin_',
@@ -139,7 +134,7 @@ export const useMapSymbolStyles = ({
     pinType === 'stop'
       ? ''
       : pinType !== 'station'
-      ? getMapItemIconState(defaultIconState)
+      ? mapItemIconState
       : [
           'case',
           ['==', iconCode, 'citybike'],
@@ -148,8 +143,8 @@ export const useMapSymbolStyles = ({
           'cars',
           'bikes',
         ],
-    ['case', ['==', getSuffix(defaultIconState), ''], '', '_'],
-    getSuffix(defaultIconState),
+    ['case', ['==', suffix, ''], '', '_'],
+    suffix,
     '_',
     themeName,
   ];
@@ -165,14 +160,7 @@ export const useMapSymbolStyles = ({
   ];
 
   const iconStyle: SymbolLayerStyleProps = {
-    iconImage: [
-      // zoom props need to be used at the top level
-      'step',
-      ['zoom'],
-      getIconImage('minimized'),
-      showAsDefaultAtZoomLevel,
-      getIconImage('default'),
-    ],
+    iconImage,
     iconSize,
     iconOpacity: fadeInOpacity,
     iconOffset: [0, 0],
@@ -188,11 +176,11 @@ export const useMapSymbolStyles = ({
     numberOfUnits,
   ];
 
-  const getTextField: IconExpressionFunction = (defaultIconImage) =>
+  const textField: Expression =
     pinType == 'station'
       ? [
           'case',
-          ['!=', getMapItemIconNonClusterState(defaultIconImage), 'minimized'],
+          ['!=', mapItemIconNonClusterState, 'minimized'],
           numberOfUnitsLimitedAt99Plus,
           '',
         ]
@@ -206,23 +194,28 @@ export const useMapSymbolStyles = ({
     [1.0 * textOffsetXFactor, -0.15],
   ];
 
-  const textSize: Expression = [
+  const getCountAdjustedTextSize: (baseSize: number) => Expression = (
+    baseSize,
+  ) => [
     'step',
     numberOfUnits,
-    textSizeFactor * 12.6,
+    baseSize * textSizeFactor * 12.6,
     100,
-    textSizeFactor * 10.8,
+    baseSize * textSizeFactor * 10.8,
+  ];
+
+  const textSize: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    showAsDefaultAtZoomLevel - minimizedZoomRange,
+    getCountAdjustedTextSize(1 * smallestAllowedSizeFactor),
+    showAsDefaultAtZoomLevel,
+    getCountAdjustedTextSize(1),
   ];
 
   const textStyle: SymbolLayerStyleProps = {
-    textField: [
-      // zoom props need to be used at the top level
-      'step',
-      ['zoom'],
-      getTextField('minimized'),
-      showAsDefaultAtZoomLevel,
-      getTextField('default'),
-    ],
+    textField,
     textOpacity: fadeInOpacity,
     textColor: isDarkMode ? '#ffffff' : '#000000',
     textSize,
