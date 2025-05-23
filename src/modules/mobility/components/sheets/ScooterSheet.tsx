@@ -29,9 +29,8 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Section} from '@atb/components/sections';
 import {
   PaymentSelectionSectionItem,
-  usePreviousPaymentMethods,
+  useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -74,15 +73,10 @@ export const ScooterSheet = ({
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
     (e) => e.id === operatorId,
   )?.isDeepIntegrationEnabled;
-  const {selectedShmoPaymentMethod} = useMapContext();
-  const {recurringPaymentMethods} = usePreviousPaymentMethods();
-
-  const defaultPaymentMethod =
-    selectedShmoPaymentMethod ??
-    recurringPaymentMethods?.[recurringPaymentMethods.length - 1];
 
   const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements();
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -121,14 +115,14 @@ export const ScooterSheet = ({
                 operatorName={operatorName}
                 brandLogoUrl={brandLogoUrl}
               />
-              {defaultPaymentMethod &&
+              {selectedPaymentMethod &&
                 isShmoDeepIntegrationEnabled &&
                 isMapV2Enabled &&
                 !hasBlockers &&
                 operatorIsIntegrationEnabled && (
                   <Section style={styles.paymentWrapper}>
                     <PaymentSelectionSectionItem
-                      paymentMethod={defaultPaymentMethod}
+                      paymentMethod={selectedPaymentMethod}
                       onPress={selectPaymentMethod}
                     />
                   </Section>
@@ -145,7 +139,7 @@ export const ScooterSheet = ({
                     onStartOnboarding={startOnboardingCallback}
                     vehicleId={id}
                     operatorId={operatorId}
-                    paymentMethod={defaultPaymentMethod}
+                    paymentMethod={selectedPaymentMethod}
                   />
                   <Button
                     expanded={true}

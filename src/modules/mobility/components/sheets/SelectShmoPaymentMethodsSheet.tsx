@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -10,12 +10,13 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   PaymentMethod,
-  PaymentSelection,
+  savePreviousPaymentMethodByUser,
   SinglePaymentMethod,
   usePreviousPaymentMethods,
+  useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {useMapContext} from '@atb/modules/map';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAuthContext} from '@atb/modules/auth';
 
 type Props = {
   onSelect: () => void;
@@ -32,9 +33,19 @@ export const SelectShmoPaymentMethodSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {selectedShmoPaymentMethod, setSelectedShmoPaymentMethod} =
-    useMapContext();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
+  const {userId} = useAuthContext();
+  const defaultPaymentMethod = useSelectedShmoPaymentMethod();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    PaymentMethod | undefined
+  >();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (defaultPaymentMethod) {
+      setSelectedPaymentMethod(defaultPaymentMethod);
+    }
+  }, [defaultPaymentMethod]);
 
   return (
     <BottomSheetContainer
@@ -59,11 +70,12 @@ export const SelectShmoPaymentMethodSheet = ({
                   key={method.recurringPayment?.id}
                   paymentMethod={method}
                   selected={
-                    selectedShmoPaymentMethod?.recurringPayment?.id ===
+                    selectedPaymentMethod?.recurringPayment?.id ===
                     method.recurringPayment?.id
                   }
-                  onSelect={(val: PaymentSelection) => {
-                    setSelectedShmoPaymentMethod(val);
+                  onSelect={(val: PaymentMethod) => {
+                    if (!val?.recurringPayment) return;
+                    setSelectedPaymentMethod(val);
                   }}
                   index={index}
                 />
@@ -79,12 +91,23 @@ export const SelectShmoPaymentMethodSheet = ({
               accessibilityHint={t(
                 SelectPaymentMethodTexts.confirm_button.a11yhint,
               )}
-              onPress={() => {
-                if (selectedShmoPaymentMethod) {
+              onPress={async () => {
+                if (
+                  selectedPaymentMethod &&
+                  selectedPaymentMethod.recurringPayment &&
+                  userId
+                ) {
+                  setIsLoading(true);
+                  await savePreviousPaymentMethodByUser(userId, {
+                    paymentType: selectedPaymentMethod?.paymentType,
+                    recurringPayment: selectedPaymentMethod.recurringPayment,
+                  });
+                  setIsLoading(false);
                   onSelect();
                 }
               }}
-              disabled={!selectedShmoPaymentMethod}
+              disabled={!selectedPaymentMethod}
+              loading={isLoading}
               rightIcon={{svg: Confirm}}
               testID="confirmButton"
             />
