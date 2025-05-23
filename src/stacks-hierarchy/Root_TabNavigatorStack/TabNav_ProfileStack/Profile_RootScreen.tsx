@@ -162,17 +162,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               {authenticationType === 'phone' && (
                 <LinkSectionItem
                   text={t(
-                    ProfileTexts.sections.account.linkSectionItems.editProfile
-                      .label,
-                  )}
-                  onPress={() =>
-                    navigation.navigate('Profile_EditProfileScreen')
-                  }
-                />
-              )}
-              {authenticationType === 'phone' && (
-                <LinkSectionItem
-                  text={t(
                     ProfileTexts.sections.account.linkSectionItems.logout.label,
                   )}
                   icon={<ThemeIcon svg={LogOut} />}
