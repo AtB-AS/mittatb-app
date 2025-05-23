@@ -8,7 +8,10 @@ import {
   TileLayerName,
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
-import {StyleJsonVectorSource} from '../../hooks/use-mapbox-json-style';
+import {
+  MapSlotLayerId,
+  StyleJsonVectorSource,
+} from '../../hooks/use-mapbox-json-style';
 import {
   Expression,
   FilterExpression,
@@ -44,6 +47,7 @@ export const VehiclesWithClusters = ({
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
       minZoomLevel={14}
+      aboveLayerID={MapSlotLayerId.Vehicles}
       filter={filter}
       style={style}
     />
@@ -90,6 +94,7 @@ export const Stations = ({
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="stations"
       minZoomLevel={14}
+      aboveLayerID={MapSlotLayerId.Stations}
       filter={filter}
       style={style}
     />
