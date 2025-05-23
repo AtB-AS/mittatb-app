@@ -153,7 +153,7 @@ type FlyToLocationArgs = {
   coordinates?: Coordinates;
   padding?: CameraPadding;
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
-  mapViewRef: RefObject<MapboxGL.MapView | null>;
+  mapViewRef?: RefObject<MapboxGL.MapView | null>;
   zoomLevel?: number;
   animationDuration?: number;
   animationMode?: CameraAnimationMode;
@@ -170,36 +170,46 @@ export function flyToLocation({
 }: FlyToLocationArgs) {
   if (!coordinates) return;
 
-  mapViewRef.current?.getCenter().then((currentCenter) => {
-    if (!currentCenter) return;
+  if (mapViewRef?.current) {
+    mapViewRef.current?.getCenter().then((currentCenter) => {
+      if (!currentCenter) return;
 
-    const distanceToTarget = distance(
-      [currentCenter[0], currentCenter[1]],
-      [coordinates.longitude, coordinates.latitude],
-      {units: 'kilometers'},
-    );
+      const distanceToTarget = distance(
+        [currentCenter[0], currentCenter[1]],
+        [coordinates.longitude, coordinates.latitude],
+        {units: 'kilometers'},
+      );
 
-    if (distanceToTarget <= 2) {
-      animationMode = 'easeTo';
-    } else if (distanceToTarget <= 6) {
-      animationMode = 'flyTo';
-    } else {
-      animationMode = 'moveTo';
-    }
+      if (distanceToTarget <= 2) {
+        animationMode = 'easeTo';
+      } else if (distanceToTarget <= 6) {
+        animationMode = 'flyTo';
+      } else {
+        animationMode = 'moveTo';
+      }
 
-    const dynamicDuration = Math.min(
-      Math.max(750, Math.round(distanceToTarget * 150)),
-      2000,
-    );
+      const dynamicDuration = Math.min(
+        Math.max(750, Math.round(distanceToTarget * 150)),
+        2000,
+      );
 
+      mapCameraRef.current?.setCamera({
+        centerCoordinate: [coordinates.longitude, coordinates.latitude],
+        padding,
+        zoomLevel,
+        animationMode,
+        animationDuration: animationDuration ?? dynamicDuration,
+      });
+    });
+  } else {
     mapCameraRef.current?.setCamera({
       centerCoordinate: [coordinates.longitude, coordinates.latitude],
       padding,
       zoomLevel,
-      animationMode: animationMode,
-      animationDuration: animationDuration ?? dynamicDuration,
+      animationMode,
+      animationDuration: animationDuration ?? 750,
     });
-  });
+  }
 }
 
 export function getMapPadding(tabBarHeight: number | undefined) {
