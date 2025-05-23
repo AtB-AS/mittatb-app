@@ -6,7 +6,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 
-// since zIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
+// since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
   GeofencingZones = 'geofencingZones',
   Vehicles = 'vehicles',
