@@ -10,6 +10,7 @@ import {useVehicleQuery} from '@atb/modules/mobility';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 type GeofencingZonesProps = {
   selectedVehicleId: string;
@@ -77,7 +78,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillColor: bgColor,
           fillOpacity,
         }}
-        aboveLayerID="country-label"
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
       <MapboxGL.LineLayer
         id="tariffZonesLine"
@@ -86,7 +87,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           lineColor: bgColor,
           lineOpacity,
         }}
-        aboveLayerID="country-label"
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
     </MapboxGL.ShapeSource>
   );
