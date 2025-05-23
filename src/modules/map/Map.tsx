@@ -264,7 +264,6 @@ export const Map = (props: MapProps) => {
             <Stations
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
-              mapViewRef={mapViewRef}
               onClusterClick={(feature) => {
                 onMapClick({
                   source: 'cluster-click',
