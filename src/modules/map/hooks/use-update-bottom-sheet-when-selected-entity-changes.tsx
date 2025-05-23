@@ -192,7 +192,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           onCloseFocusRef,
           true,
-          tabBarHeight,
+          0,
         );
         return;
       }

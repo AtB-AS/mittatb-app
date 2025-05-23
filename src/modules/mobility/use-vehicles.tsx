@@ -6,7 +6,7 @@ import {
   MobilityMapFilterType,
   toFeatureCollection,
   toFeaturePoints,
-  useUserMapFilters,
+  useMapContext,
   VehicleFeatures,
   VehiclesState,
 } from '@atb/modules/map';
@@ -32,7 +32,7 @@ export const useVehicles: (
 ) => VehiclesState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
   const {isVehiclesInMapEnabled} = useFeatureTogglesContext();
-  const {getMapFilter} = useUserMapFilters();
+  const {mapFilter} = useMapContext();
   const [filter, setFilter] = useState<MobilityMapFilterType>(
     initialFilter ?? {},
   );
@@ -40,9 +40,7 @@ export const useVehicles: (
   const pollInterval = useVehiclesPollInterval();
 
   useEffect(() => {
-    getMapFilter().then((userFilter) => {
-      setFilter(userFilter.mobility);
-    });
+    setFilter(mapFilter?.mobility ?? {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVehiclesInMapEnabled]);
 

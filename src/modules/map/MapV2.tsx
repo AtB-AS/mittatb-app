@@ -40,6 +40,7 @@ import {
   isCarStationV2,
   isStationV2,
   isVehiclesClusteredFeature,
+  MapFilter,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
@@ -64,8 +65,6 @@ export const MapV2 = (props: MapProps) => {
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
-  const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const startingCoordinates = useMemo(
     () =>
@@ -90,7 +89,17 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
-  const {autoSelectedFeature} = useMapContext();
+  const {autoSelectedFeature, mapFilter} = useMapContext();
+
+  const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
+  const showStations =
+    (mapFilter?.mobility.BICYCLE?.showAll ||
+      mapFilter?.mobility.CAR?.showAll) ??
+    false;
+  const shouldShowVehiclesAndStations =
+    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
+
   const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
@@ -291,8 +300,8 @@ export const MapV2 = (props: MapProps) => {
             <VehiclesAndStations
               selectedFeatureId={selectedFeature?.properties?.id}
               onPress={onMapItemClick}
-              showVehicles={true}
-              showStations={true}
+              showVehicles={showVehicles}
+              showStations={showStations}
             />
           )}
         </MapboxGL.MapView>
@@ -303,6 +312,11 @@ export const MapV2 = (props: MapProps) => {
           ]}
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
+          <MapFilter
+            onPress={() => onMapClick({source: 'filters-button'})}
+            isLoading={false}
+          />
 
           <PositionArrow
             onPress={async () => {
