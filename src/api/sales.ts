@@ -9,16 +9,15 @@ import type {
 export const client = createClient(API_BASE_URL);
 const tripPatternEndpoint = `/sales/v1/search/trip-pattern`;
 
-// TODO: Should this be a combined function for multiple offers?
 export async function fetchOfferFromLegs(
-  travel_date: Date,
+  travelDate: Date,
   legs: SalesTripPatternLeg[],
   travellers: Traveller[],
   products: string[],
 ) {
   const requestBody = {
     travellers,
-    travelDate: travel_date.toISOString(),
+    travelDate: travelDate.toISOString(),
     products,
     legs: legs.map((leg) => ({
       fromStopPlaceId: leg.fromStopPlaceId,
@@ -36,7 +35,6 @@ export async function fetchOfferFromLegs(
   );
 
   if (response.status !== 200) {
-    console.log('An error occured while fetching the offer');
     throw new Error(response.statusText);
   }
 
