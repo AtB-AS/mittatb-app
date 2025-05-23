@@ -89,9 +89,7 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.account.linkSectionItems.editProfile
                   .label,
               )}
-              onPress={() =>
-                navigation.navigate('Profile_EditProfileScreen')
-              }
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
             />
           )}
         </Section>

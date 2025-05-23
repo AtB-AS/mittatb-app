@@ -4,19 +4,18 @@ import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/modules/time';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import {useShmoBookingQuery} from '../queries/use-shmo-booking-query';
+
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 
 type ShmoTripCardProps = {
-  bookingId: ShmoBooking['bookingId'];
+  shmoBooking: ShmoBooking;
 };
 
-export const ShmoTripCard = ({bookingId}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({shmoBooking}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext();
   const backgroundColor = useTransportColor('scooter', 'escooter');
-  const {data: shmoBooking} = useShmoBookingQuery(bookingId, 15000);
 
   return (
     <Section style={styles.container}>

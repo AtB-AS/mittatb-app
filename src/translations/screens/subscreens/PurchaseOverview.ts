@@ -211,6 +211,7 @@ const PurchaseOverviewTexts = {
     button: {
       payment: _('Til betaling', 'To payment', 'Til betaling'),
       sendToOthers: _('Velg mottaker', 'Select recipient', 'Vel mottakar'),
+      selectDeparture: _('Velg avgang', 'Select departure', 'Vel avgang'),
     },
     ordinaryPriceA11yLabel: (priceString: string) =>
       _(

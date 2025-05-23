@@ -106,7 +106,7 @@ export const NearbyStopPlacesScreenComponent = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestLocationPermission();
+      const status = await requestLocationPermission(false);
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }
@@ -203,7 +203,7 @@ export const NearbyStopPlacesScreenComponent = ({
             />
           }
           buttonProps={{
-            onPress: requestLocationPermission,
+            onPress: () => requestLocationPermission(false),
             text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
           }}
           testID="noAccessToLocation"

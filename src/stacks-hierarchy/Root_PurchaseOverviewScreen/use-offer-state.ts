@@ -12,6 +12,7 @@ import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {fetchOfferFromLegs} from '@atb/api/sales';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -195,35 +196,47 @@ export function useOfferState(
         dispatch({type: 'CLEAR_OFFER'});
       } else {
         try {
-          const params = {
-            zones: selection.zones && [
-              ...new Set([selection.zones.from.id, selection.zones.to.id]),
-            ],
-            from: selection.stopPlaces?.from!.id,
-            to: selection.stopPlaces?.to!.id,
-            isOnBehalfOf,
-            travellers: offerTravellers,
-            products: preassignedFareProductAlternatives.map((p) => p.id),
-            travelDate: selection.travelDate,
-          };
           dispatch({type: 'SEARCHING_OFFER'});
+          let offers: Offer[];
 
-          const offerEndpoint = selection.stopPlaces
-            ? 'stop-places'
-            : selection.zones
-            ? 'zones'
-            : 'authority';
+          if (selection.legs.length) {
+            const response = await fetchOfferFromLegs(
+              new Date(selection.legs[0].expectedStartTime),
+              selection.legs,
+              offerTravellers,
+              preassignedFareProductAlternatives.map((p) => p.id),
+            );
+            offers = response.offers;
+          } else {
+            const params = {
+              zones: selection.zones && [
+                ...new Set([selection.zones.from.id, selection.zones.to.id]),
+              ],
+              from: selection.stopPlaces?.from!.id,
+              to: selection.stopPlaces?.to!.id,
+              isOnBehalfOf,
+              travellers: offerTravellers,
+              products: preassignedFareProductAlternatives.map((p) => p.id),
+              travelDate: selection.travelDate,
+            };
 
-          const response = await searchOffers(offerEndpoint, params, {
-            cancelToken,
-            authWithIdToken: true,
-            skipErrorLogging: isNotAvailableError,
-          });
+            const offerEndpoint = selection.stopPlaces
+              ? 'stop-places'
+              : selection.zones
+              ? 'zones'
+              : 'authority';
 
-          cancelToken?.throwIfRequested();
+            offers = await searchOffers(offerEndpoint, params, {
+              cancelToken,
+              authWithIdToken: true,
+              skipErrorLogging: isNotAvailableError,
+            });
 
-          if (response.length) {
-            dispatch({type: 'SET_OFFER', offers: response});
+            cancelToken?.throwIfRequested();
+          }
+
+          if (offers.length) {
+            dispatch({type: 'SET_OFFER', offers});
           } else {
             dispatch({
               type: 'SET_ERROR',

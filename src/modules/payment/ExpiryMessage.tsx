@@ -1,6 +1,6 @@
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {Statuses, StyleSheet, Theme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {Language, TranslateFunction, useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithYear} from '@atb/utils/date';
 import {addDays, parseISO} from 'date-fns';
@@ -30,11 +30,19 @@ const useMessage = (
   recurringPayment?: RecurringPayment,
 ): {type: Statuses; message: string} | null => {
   const {t, language} = useTranslation();
-  const now = Date.now();
-  const inThirtyDays = addDays(now, 30).getTime();
 
+  return getExpiryMessageInfo(recurringPayment, t, language);
+};
+
+const getExpiryMessageInfo = (
+  recurringPayment: RecurringPayment | undefined,
+  t: TranslateFunction,
+  language: Language,
+): {type: Statuses; message: string} | null => {
   if (!recurringPayment) return null;
 
+  const now = Date.now();
+  const inThirtyDays = addDays(now, 30).getTime();
   const expiresAt = parseISO(recurringPayment.expiresAt).getTime();
   const cardExpiresAt = parseISO(recurringPayment.cardExpiresAt).getTime();
 
@@ -76,6 +84,15 @@ const useMessage = (
   }
 
   return null;
+};
+
+export const getExpiryMessageText = (
+  recurringPayment: RecurringPayment | undefined,
+  t: TranslateFunction,
+  language: Language,
+): string | null => {
+  const messageInfo = getExpiryMessageInfo(recurringPayment, t, language);
+  return messageInfo ? messageInfo.message : null;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({

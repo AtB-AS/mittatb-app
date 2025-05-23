@@ -22,12 +22,20 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_bonus_program',
   },
   {
+    name: 'isBookingEnabled',
+    remoteConfigKey: 'enable_booking',
+  },
+  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
   {
     name: 'isCityBikesInMapEnabled',
     remoteConfigKey: 'enable_city_bikes_in_map',
+  },
+  {
+    name: 'isEventStreamEnabled',
+    remoteConfigKey: 'enable_event_stream',
   },
   {
     name: 'isFlexibleTransportEnabled',

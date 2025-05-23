@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
-import {ExpiryMessage} from './ExpiryMessage';
+import {ExpiryMessage, getExpiryMessageText} from './ExpiryMessage';
 
 type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
@@ -22,7 +22,7 @@ export const SinglePaymentMethod = ({
   onSelect,
   index,
 }: SinglePaymentMethodProps) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
 
   function getPaymentTexts(method: PaymentMethod): {
@@ -34,12 +34,12 @@ export const SinglePaymentMethod = ({
     if (method.recurringPayment) {
       return {
         text: paymentTypeName,
-        label: t(
+        label: `${t(
           PurchaseConfirmationTexts.paymentWithStoredCard.a11yLabel(
             paymentTypeName,
             method.recurringPayment.maskedPan,
           ),
-        ),
+        )} ${getExpiryMessageText(method.recurringPayment, t, language)}`,
         hint: t(PurchaseConfirmationTexts.paymentWithStoredCard.a11yHint),
       };
     } else {
@@ -50,7 +50,7 @@ export const SinglePaymentMethod = ({
             paymentTypeName,
           ),
         ),
-        hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11Hint),
+        hint: t(PurchaseConfirmationTexts.paymentWithDefaultServices.a11yHint),
       };
     }
   }
