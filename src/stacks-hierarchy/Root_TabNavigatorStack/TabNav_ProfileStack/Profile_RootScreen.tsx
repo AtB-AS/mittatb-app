@@ -162,17 +162,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               {authenticationType === 'phone' && (
                 <LinkSectionItem
                   text={t(
-                    ProfileTexts.sections.account.linkSectionItems.editProfile
-                      .label,
-                  )}
-                  onPress={() =>
-                    navigation.navigate('Profile_EditProfileScreen')
-                  }
-                />
-              )}
-              {authenticationType === 'phone' && (
-                <LinkSectionItem
-                  text={t(
                     ProfileTexts.sections.account.linkSectionItems.logout.label,
                   )}
                   icon={<ThemeIcon svg={LogOut} />}
@@ -219,15 +208,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 />
               )}
             </Section>
-
-            <Section>
-              <LinkSectionItem
-                text={t(ProfileTexts.sections.settings.heading)}
-                onPress={() => navigation.navigate('Profile_SettingsScreen')}
-                testID="settingsButton"
-              />
-            </Section>
           </View>
+
+          <Section>
+            <LinkSectionItem
+              text={t(ProfileTexts.sections.settings.heading)}
+              onPress={() => navigation.navigate('Profile_SettingsScreen')}
+              testID="settingsButton"
+            />
+          </Section>
 
           <ContentHeading
             text={t(ProfileTexts.sections.travelAndPurchases.heading)}
