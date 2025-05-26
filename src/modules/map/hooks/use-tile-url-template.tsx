@@ -20,8 +20,7 @@ export const useTileUrlTemplate = (
   const {configurableLinks} = useFirestoreConfigurationContext();
   const {userId} = useAuthContext();
   const userIdParam = !userId ? '' : '?userId=' + userId;
-  const tileServerBaseUrl = 'http://10.100.0.111:8080/map/v1/tiles/';
-  const _tileServerBaseUrl = getTextForLanguage(
+  const tileServerBaseUrl = getTextForLanguage(
     configurableLinks?.tileServerBaseUrl,
     language,
   );
