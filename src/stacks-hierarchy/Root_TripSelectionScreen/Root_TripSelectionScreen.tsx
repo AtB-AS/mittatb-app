@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {TripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
 import {
@@ -13,6 +13,7 @@ import {
 import {ScreenHeading} from '@atb/components/heading';
 import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
 import {useTranslation} from '@atb/translations';
+import {View} from 'react-native';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
@@ -27,6 +28,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
   });
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const styles = useStyles();
 
   const screenHeaderTitle =
     selection.stopPlaces?.from && selection.stopPlaces?.to
@@ -47,11 +49,13 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           : undefined
       }
     >
-      <DateSelection
-        searchTime={searchTime}
-        setSearchTime={setSearchTime}
-        backgroundColor={theme.color.background.neutral[1]}
-      />
+      <View style={styles.dateSelection}>
+        <DateSelection
+          searchTime={searchTime}
+          setSearchTime={setSearchTime}
+          backgroundColor={theme.color.background.neutral[1]}
+        />
+      </View>
       <GenericSectionItem
         style={{
           borderRadius: theme.border.radius.regular,
@@ -77,3 +81,10 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
     </FullScreenView>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  dateSelection: {
+    marginVertical: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
+  },
+}));
