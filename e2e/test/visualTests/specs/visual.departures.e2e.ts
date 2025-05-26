@@ -77,7 +77,7 @@ describe('Visual tests', () => {
       // Enable journey aid
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'My profile');
+      await ElementHelper.waitForElement('text', 'Profile');
       await MyProfilePage.openSetting('travelAid');
       await ElementHelper.waitForElement('text', 'Journey Aid');
       await AccessibilityPage.toggleJourneyAid();
@@ -166,7 +166,7 @@ describe('Visual tests', () => {
       // Enable journey aid
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'My profile');
+      await ElementHelper.waitForElement('text', 'Profile');
       await MyProfilePage.openSetting('travelAid');
       await ElementHelper.waitForElement('text', 'Journey Aid');
       await AccessibilityPage.toggleJourneyAid();

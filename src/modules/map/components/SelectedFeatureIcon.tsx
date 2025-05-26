@@ -4,6 +4,7 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
 import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
+import {MapSlotLayerId} from '../hooks/use-mapbox-json-style';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
@@ -67,6 +68,7 @@ export const SelectedFeatureIcon = ({
     >
       <MapboxGL.SymbolLayer
         id="selected-vehicle-symbol-layer"
+        aboveLayerID={MapSlotLayerId.SelectedFeature}
         style={{
           ...customTextStyle,
           iconImage,

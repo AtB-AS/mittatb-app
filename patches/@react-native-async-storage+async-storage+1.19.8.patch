@@ -51,11 +51,7 @@ index 4bfa945..62872e3 100644
 +// clang-format on
 +{
 +    [self _setGroupName: NULL];
-+    NSString *oldDirectory = RCTCreateStorageDirectoryPath(RCTStorageDirectory);
 +    [self _setGroupName: groupName];
-+    NSString *newDirectory = RCTCreateStorageDirectoryPath(RCTStorageDirectory);
-+    // Move files from previous location to a new one in the group
-+    RCTStorageDirectoryMigrationCheck(oldDirectory, newDirectory, YES);
 +    callback(@[RCTNullIfNil(nil)]);
 +}
 +

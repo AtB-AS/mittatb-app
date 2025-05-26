@@ -6,11 +6,13 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 
-// since zIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
+// since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
+  GeofencingZones = 'geofencingZones',
   Vehicles = 'vehicles',
   Stations = 'stations',
-  NSRItems = 'NSRItems',
+  NSRItems = 'nsrItems',
+  SelectedFeature = 'selectedFeature',
 }
 
 const slotSourceKey = 'slotSource';
@@ -21,9 +23,11 @@ const slotSource: StyleJsonVectorSourcesObj = {
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
+  MapSlotLayerId.GeofencingZones,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
+  MapSlotLayerId.SelectedFeature,
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,

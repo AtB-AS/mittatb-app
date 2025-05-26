@@ -7,7 +7,7 @@ import AlertHelper from '../utils/alert.helper.ts';
 import PrivacyPage from '../pageobjects/privacy.page.ts';
 import NotificationsPage from '../pageobjects/notifications.page.ts';
 
-describe('My profile', () => {
+describe('Profile', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('myProfile');
@@ -16,7 +16,7 @@ describe('My profile', () => {
   beforeEach(async () => {
     await NavigationHelper.tapMenu('profile');
     await NavigationHelper.tapMenu('profile');
-    await ElementHelper.waitForElement('text', 'My profile');
+    await ElementHelper.waitForElement('text', 'Profile');
   });
 
   // Check the default options for notifications

@@ -176,9 +176,9 @@ const LoginTexts = {
   skipLoginWarning: {
     title: _('Er du sikker?', 'Are you sure?', 'Er du sikker?'),
     description: _(
-      'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Min profil"',
-      'If you switch or lose your phone your tickets will be lost.\n\nYou can also log in at a later time under "My profile"',
-      'Viss du bytter eller mister telefonen vil vi ikkje kunne finne billettane dine att. \n\nDu kan også logge inn seinare under "Min profil"',
+      'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Profil"',
+      'If you switch or lose your phone your tickets will be lost.\n\nYou can also log in at a later time under "Profile"',
+      'Viss du bytter eller mister telefonen vil vi ikkje kunne finne billettane dine att. \n\nDu kan også logge inn seinare under "Profil"',
     ),
     mainButton: _(
       'Godta og gå videre',

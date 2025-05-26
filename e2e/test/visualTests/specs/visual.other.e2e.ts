@@ -46,11 +46,11 @@ describe('Visual tests', () => {
     }
   });
 
-  it('my profile should be equal to baseline', async () => {
+  it('profile should be equal to baseline', async () => {
     try {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'My profile');
+      await ElementHelper.waitForElement('text', 'Profile');
 
       // Notifications
       await MyProfilePage.openSetting('notifications');
