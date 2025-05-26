@@ -6,7 +6,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
