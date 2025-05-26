@@ -199,6 +199,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const shouldShowMapButton =
     mapData &&
+    mapData.mapLegs.length > 0 &&
     !screenReaderEnabled &&
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
