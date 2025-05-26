@@ -10,6 +10,9 @@ import {
   DateSelection,
   DepartureSearchTime,
 } from '@atb/components/date-selection';
+import {ScreenHeading} from '@atb/components/heading';
+import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
+import {useTranslation} from '@atb/translations';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
@@ -22,17 +25,27 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
     date: new Date().toISOString(),
     option: 'now',
   });
+  const {t} = useTranslation();
   const {theme} = useThemeContext();
+
+  const screenHeaderTitle =
+    selection.stopPlaces?.from && selection.stopPlaces?.to
+      ? `${selection.stopPlaces.from.name} - ${selection.stopPlaces.to.name}`
+      : undefined;
 
   return (
     <FullScreenView
       headerProps={{
-        title: 'Velg avgang',
-        leftButton: {
-          type: 'back',
-          onPress: () => navigation.pop(),
-        },
+        title: t(TripSelectionTexts.header),
+        leftButton: {type: 'back', withIcon: true},
       }}
+      parallaxContent={
+        screenHeaderTitle
+          ? (focusRef) => (
+              <ScreenHeading ref={focusRef} text={screenHeaderTitle} />
+            )
+          : undefined
+      }
     >
       <DateSelection
         searchTime={searchTime}
