@@ -1,5 +1,5 @@
 diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
-index 4bfa945..62872e3 100644
+index 4bfa945..7452200 100644
 --- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 +++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 @@ -19,6 +19,7 @@
@@ -35,7 +35,7 @@ index 4bfa945..62872e3 100644
      });
      return manifestFilePath;
  }
-@@ -662,8 +668,26 @@ - (BOOL)_passthroughDelegate
+@@ -662,8 +668,22 @@ - (BOOL)_passthroughDelegate
          [self.delegate respondsToSelector:@selector(isPassthrough)] && self.delegate.isPassthrough;
  }
  
@@ -51,11 +51,7 @@ index 4bfa945..62872e3 100644
 +// clang-format on
 +{
 +    [self _setGroupName: NULL];
-+    NSString *oldDirectory = RCTCreateStorageDirectoryPath(RCTStorageDirectory);
 +    [self _setGroupName: groupName];
-+    NSString *newDirectory = RCTCreateStorageDirectoryPath(RCTStorageDirectory);
-+    // Move files from previous location to a new one in the group
-+    RCTStorageDirectoryMigrationCheck(oldDirectory, newDirectory, YES);
 +    callback(@[RCTNullIfNil(nil)]);
 +}
 +
