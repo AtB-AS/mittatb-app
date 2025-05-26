@@ -24,7 +24,7 @@ export const SelectedFeatureIcon = ({
   const {iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureWithId?.properties?.id,
     pinType: pinType,
-    showAsDefaultAtZoomLevel: 0, // -> always show the selected icon in full, no size reduction or icon minimization
+    reachFullScaleAtZoomLevel: 0,
     textSizeFactor: 1.61, // increased text size since the icon is larger
   });
   const {iconImage} = iconStyle;

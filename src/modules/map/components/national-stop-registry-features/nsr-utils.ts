@@ -30,8 +30,8 @@ export const getFilterWhichAlsoHidesSelectedFeature = (
   ['!=', ['get', 'id'], selectedFeaturePropertyId ?? ''],
 ];
 
-const minimizedZoomRange = 1.5; // show icon as minimized version for this number of zoom levels before switching to default
-const opacityTransitionZoomRange = minimizedZoomRange / 8;
+const scaleTransitionZoomRange = 1.5; // icon starts very small and then reaches full size across this zoom range
+const opacityTransitionZoomRange = scaleTransitionZoomRange / 8;
 
 type IconImageProps = {
   iconCode: NsrPinIconCode;
@@ -56,7 +56,7 @@ const getExpressionForNsrIconImage = (
 ];
 
 export type LayerPropsDeterminedByZoomLevelParams = {
-  showAsDefaultAtZoomLevel: NsrLayer['showAsDefaultAtZoomLevel'];
+  reachFullScaleAtZoomLevel: NsrLayer['reachFullScaleAtZoomLevel'];
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'];
   iconImageProps?: IconImageProps;
   opacityTransitionZoomRangeDelay?: number;
@@ -78,7 +78,7 @@ type LayerPropsDeterminedByZoomLevel = {
 export const getLayerPropsDeterminedByZoomLevel: (
   layerPropsDeterminedByZoomLevelProps: LayerPropsDeterminedByZoomLevelParams,
 ) => LayerPropsDeterminedByZoomLevel = ({
-  showAsDefaultAtZoomLevel,
+  reachFullScaleAtZoomLevel,
   selectedFeaturePropertyId,
   iconImageProps,
   opacityTransitionZoomRangeDelay = 0.8,
@@ -103,32 +103,32 @@ export const getLayerPropsDeterminedByZoomLevel: (
     'step',
     ['zoom'],
     iconImage,
-    showAsDefaultAtZoomLevel,
+    reachFullScaleAtZoomLevel,
     iconImage,
   ];
 
   // Icons and labels start small and invisible, then grow and become more visible and prominent as you zoom in.
   return {
-    minZoomLevel: showAsDefaultAtZoomLevel - minimizedZoomRange,
+    minZoomLevel: reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     style: {
       iconImage: iconImageWrapped,
       iconSize: [
         'interpolate',
         ['linear'],
         ['zoom'],
-        showAsDefaultAtZoomLevel - minimizedZoomRange,
+        reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
         0.3,
-        showAsDefaultAtZoomLevel,
+        reachFullScaleAtZoomLevel,
         iconFullSize,
       ],
       iconOpacity: [
         'interpolate',
         ['linear'],
         ['zoom'],
-        showAsDefaultAtZoomLevel - minimizedZoomRange,
+        reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
         0,
-        showAsDefaultAtZoomLevel -
-          minimizedZoomRange +
+        reachFullScaleAtZoomLevel -
+          scaleTransitionZoomRange +
           opacityTransitionZoomRange,
         1,
       ],
@@ -149,12 +149,12 @@ export const getLayerPropsDeterminedByZoomLevel: (
               ['linear'],
               ['zoom'],
               Math.max(
-                showAsDefaultAtZoomLevel + opacityTransitionZoomRangeDelay,
+                reachFullScaleAtZoomLevel + opacityTransitionZoomRangeDelay,
                 13.75,
               ) - opacityTransitionZoomRange,
               0,
               Math.max(
-                showAsDefaultAtZoomLevel + opacityTransitionZoomRangeDelay,
+                reachFullScaleAtZoomLevel + opacityTransitionZoomRangeDelay,
                 13.75,
               ),
               1,

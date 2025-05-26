@@ -16,7 +16,7 @@ import {
   Expression,
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {minimizedZoomRange} from '../../hooks/use-map-symbol-styles';
+import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
@@ -28,7 +28,7 @@ export const VehiclesWithClusters = ({
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'vehicle',
-    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.3,
+    reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.3,
   });
 
   const filter: FilterExpression = useMemo(
@@ -68,7 +68,7 @@ export const Stations = ({
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'station',
-    showAsDefaultAtZoomLevel: minZoomLevel + minimizedZoomRange + 0.2,
+    reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.2,
   });
 
   const filter: FilterExpression = useMemo(() => {

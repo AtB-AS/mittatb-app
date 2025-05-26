@@ -9,21 +9,21 @@ import {
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 
-export const minimizedZoomRange = 0.4;
-const opacityTransitionZoomRange = minimizedZoomRange / 8;
+export const scaleTransitionZoomRange = 0.4;
+const opacityTransitionZoomRange = scaleTransitionZoomRange / 8;
 const smallestAllowedSizeFactor = 0.3;
 
 type MapSymbolStylesProps = {
   selectedFeaturePropertyId: SelectedMapItemProperties['id'];
   pinType: PinType;
-  showAsDefaultAtZoomLevel: number;
+  reachFullScaleAtZoomLevel: number;
   textSizeFactor?: number;
 };
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = ({
   selectedFeaturePropertyId,
   pinType,
-  showAsDefaultAtZoomLevel,
+  reachFullScaleAtZoomLevel,
   textSizeFactor = 1.0,
 }: MapSymbolStylesProps) => {
   const {themeName} = useThemeContext();
@@ -67,9 +67,9 @@ export const useMapSymbolStyles = ({
     'interpolate',
     ['linear'],
     ['zoom'],
-    showAsDefaultAtZoomLevel - minimizedZoomRange,
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     smallestAllowedSizeFactor,
-    showAsDefaultAtZoomLevel,
+    reachFullScaleAtZoomLevel,
     iconFullSize,
   ];
 
@@ -153,9 +153,11 @@ export const useMapSymbolStyles = ({
     'interpolate',
     ['linear'],
     ['zoom'],
-    showAsDefaultAtZoomLevel - minimizedZoomRange,
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     0,
-    showAsDefaultAtZoomLevel - minimizedZoomRange + opacityTransitionZoomRange,
+    reachFullScaleAtZoomLevel -
+      scaleTransitionZoomRange +
+      opacityTransitionZoomRange,
     1,
   ];
 
@@ -208,9 +210,9 @@ export const useMapSymbolStyles = ({
     'interpolate',
     ['linear'],
     ['zoom'],
-    showAsDefaultAtZoomLevel - minimizedZoomRange,
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     getCountAdjustedTextSize(1 * smallestAllowedSizeFactor),
-    showAsDefaultAtZoomLevel,
+    reachFullScaleAtZoomLevel,
     getCountAdjustedTextSize(1),
   ];
 
