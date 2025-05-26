@@ -9,6 +9,7 @@ import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/modules/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {initPosthogClient} from './PosthogClient';
 
 const AUTO_CAPTURE_OPTIONS: PostHogAutocaptureOptions = {
   captureScreens: true,
@@ -29,7 +30,7 @@ export const AnalyticsContextProvider = ({children}: Props) => {
   const client = useMemo(
     () =>
       isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY
-        ? new PostHog(POSTHOG_API_KEY, {host: POSTHOG_HOST})
+        ? initPosthogClient(POSTHOG_API_KEY, POSTHOG_HOST, isPosthogEnabled)
         : undefined,
     [isPosthogEnabled],
   );

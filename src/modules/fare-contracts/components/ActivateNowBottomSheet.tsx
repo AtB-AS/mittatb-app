@@ -1,4 +1,3 @@
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
@@ -31,15 +30,20 @@ export const ActivateNowBottomSheet = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
-  const analytics = useAnalyticsContext();
+
+  const {trackBottomSheetEvent} = useBottomSheetContext();
 
   const onActivate = async () => {
     setIsLoading(true);
     try {
       await activateFareContractNow(fareContractId);
-      analytics.logEvent('Ticketing', 'Activated fare contract ahead of time', {
-        fareProductType,
-      });
+      trackBottomSheetEvent(
+        'Ticketing',
+        'Activated fare contract ahead of time',
+        {
+          fareProductType,
+        },
+      );
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);

@@ -21,6 +21,8 @@ import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Backdrop} from './Backdrop';
 import {ClickableBackground} from './ClickableBackground';
 import {AnimatedBottomSheet} from './AnimatedBottomSheet';
+import {AnalyticsEventContext, getPosthogClient} from '@atb/modules/analytics';
+import Bugsnag from '@bugsnag/react-native';
 
 type BottomSheetContentFunction = () => ReactNode;
 
@@ -41,6 +43,11 @@ type BottomSheetState = {
   height: number;
   /** Use onOpenFocusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
   onOpenFocusRef: Ref<any>;
+  trackBottomSheetEvent: (
+    context: AnalyticsEventContext,
+    event: string,
+    properties?: {[key: string]: any},
+  ) => void;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -61,6 +68,25 @@ export const BottomSheetContextProvider = ({children}: Props) => {
 
   const onOpenFocusRef = useFocusOnLoad();
   const refToFocusOnClose = useRef<RefObject<any>>(undefined);
+
+  const trackBottomSheetEvent = useCallback(
+    (
+      context: AnalyticsEventContext,
+      event: string,
+      properties?: {[key: string]: any},
+    ) => {
+      const client = getPosthogClient();
+      if (!client) {
+        Bugsnag.leaveBreadcrumb(
+          `Event '${event}' could not be logged in PostHog. PostHog is undefined.`,
+        );
+        return;
+      }
+
+      client.capture(`${context}: ${event}`, properties);
+    },
+    [],
+  );
 
   const close = useCallback(() => {
     setContentFunction(() => () => null);
@@ -109,6 +135,7 @@ export const BottomSheetContextProvider = ({children}: Props) => {
     isOpen: useCallback(() => isOpen, [isOpen]),
     height,
     onOpenFocusRef,
+    trackBottomSheetEvent,
   };
 
   return (
