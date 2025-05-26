@@ -10,7 +10,7 @@ import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 
 export const scaleTransitionZoomRange = 0.4;
-const opacityTransitionZoomRange = scaleTransitionZoomRange / 8;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
 const smallestAllowedSizeFactor = 0.3;
 
 type MapSymbolStylesProps = {
@@ -157,7 +157,7 @@ export const useMapSymbolStyles = ({
     0,
     reachFullScaleAtZoomLevel -
       scaleTransitionZoomRange +
-      opacityTransitionZoomRange,
+      opacityTransitionExtraZoomRange,
     1,
   ];
 

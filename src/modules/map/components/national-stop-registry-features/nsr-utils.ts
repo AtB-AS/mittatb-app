@@ -31,7 +31,7 @@ export const getFilterWhichAlsoHidesSelectedFeature = (
 ];
 
 const scaleTransitionZoomRange = 1.5; // icon starts very small and then reaches full size across this zoom range
-const opacityTransitionZoomRange = scaleTransitionZoomRange / 8;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
 
 type IconImageProps = {
   iconCode: NsrPinIconCode;
@@ -129,7 +129,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
         0,
         reachFullScaleAtZoomLevel -
           scaleTransitionZoomRange +
-          opacityTransitionZoomRange,
+          opacityTransitionExtraZoomRange,
         1,
       ],
       textSize: [
@@ -151,7 +151,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
               Math.max(
                 reachFullScaleAtZoomLevel + opacityTransitionZoomRangeDelay,
                 13.75,
-              ) - opacityTransitionZoomRange,
+              ) - opacityTransitionExtraZoomRange,
               0,
               Math.max(
                 reachFullScaleAtZoomLevel + opacityTransitionZoomRangeDelay,
