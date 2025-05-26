@@ -70,7 +70,7 @@ const isStopPlaceEntityType: Expression = [
 const stopPlaceType: Expression = ['get', 'stopPlaceType'];
 const hasAdjacentSites: Expression = ['has', 'adjacentSites'];
 const nameTextField: NsrLayer['textField'] = ['get', 'name'];
-const busMetroTramStopZoomLevel = 13.5;
+const busMetroTramStopZoomLevel = 13;
 
 export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {

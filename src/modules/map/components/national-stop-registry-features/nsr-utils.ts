@@ -81,7 +81,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
   showAsDefaultAtZoomLevel,
   selectedFeaturePropertyId,
   iconImageProps,
-  opacityTransitionZoomRangeDelay = 0.5,
+  opacityTransitionZoomRangeDelay = 0.8,
   showTextWhileAFeatureIsSelected = false,
   iconFullSize = 1,
   textSizeFactor = 1,
