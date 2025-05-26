@@ -53,6 +53,7 @@ describe('Visual tests', () => {
       await ElementHelper.waitForElement('text', 'Profile');
 
       // Notifications
+      await MyProfilePage.openSetting('settings');
       await MyProfilePage.openSetting('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');

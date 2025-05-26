@@ -8,18 +8,10 @@ class PurchasePaymentPage {
   }
 
   /**
-   * Get the Visa button
+   * Get the new payment card button
    */
-  get visa() {
-    const reqId = `//*[@resource-id="VisaButton"]`;
-    return $(reqId);
-  }
-
-  /**
-   * Get the MasterCard button
-   */
-  get mastercard() {
-    const reqId = `//*[@resource-id="MasterCardButton"]`;
+  get newPaymentCard() {
+    const reqId = `//*[@resource-id="newPaymentCardButton"]`;
     return $(reqId);
   }
 
