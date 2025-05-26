@@ -24,11 +24,9 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import type {DateOptionAndValue} from '@atb/components/date-selection';
-import {
-  getTimeRepresentationType,
-  type TripPatternBookingStatus,
-} from '@atb/screen-components/travel-details-screens';
+import {type TripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
 import type {Leg} from '@atb/api/types/trips';
+import {getRealtimeState} from '@atb/utils/realtime';
 
 export type TimeSearch = {
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>;
@@ -187,8 +185,8 @@ export const getTripPatternBookingText = (
 
 export function isSignificantDifference(leg: Leg) {
   return (
-    getTimeRepresentationType({
-      missingRealTime: !leg.realtime,
+    getRealtimeState({
+      isRealtime: leg.realtime,
       aimedTime: leg.aimedStartTime,
       expectedTime: leg.expectedStartTime,
     }) === 'significant-difference'

@@ -4,9 +4,9 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {formatToClock} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {getTimeRepresentationType, TimeValues} from '../utils';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {RoundingMethod} from 'date-fns';
+import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
 
 export const Time: React.FC<{
   timeValues: TimeValues;
@@ -23,7 +23,7 @@ export const Time: React.FC<{
     : '';
 
   const {aimedTime, expectedTime} = timeValues;
-  const representationType = getTimeRepresentationType(timeValues);
+  const representationType = getRealtimeState(timeValues);
   const scheduled =
     circaPrefix +
     formatToClock(aimedTime, language, roundingMethod, debugShowSeconds);
