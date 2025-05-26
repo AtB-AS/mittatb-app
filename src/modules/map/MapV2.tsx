@@ -6,7 +6,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -55,6 +55,8 @@ import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+
+const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -266,7 +268,7 @@ export const MapV2 = (props: MapProps) => {
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={14.5}
+            zoomLevel={DEFAULT_ZOOM_LEVEL}
             centerCoordinate={[
               startingCoordinates.longitude,
               startingCoordinates.latitude,
@@ -310,10 +312,12 @@ export const MapV2 = (props: MapProps) => {
               if (coordinates) {
                 flyToLocation({
                   coordinates: coordinates,
-                  padding: getMapPadding(tabBarHeight),
+                  padding: !selectedFeature
+                    ? undefined
+                    : getMapPadding(tabBarHeight),
                   mapCameraRef,
                   mapViewRef,
-                  zoomLevel: 15,
+                  zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
                 });
               }
             }}
