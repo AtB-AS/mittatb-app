@@ -44,9 +44,7 @@ export const SelectShmoPaymentMethodSheet = ({
   const {mutate: savePrevPaymentMethod, isLoading} = useMutation({
     mutationFn: (params: {userId: string; paymentMethod: PaymentMethod}) =>
       savePreviousPaymentMethodByUser(params.userId, params.paymentMethod),
-    onSuccess() {
-      onSelect();
-    },
+    onSuccess: onSelect,
   });
 
   useEffect(() => {
