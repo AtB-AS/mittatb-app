@@ -6,9 +6,14 @@ class Config {
     LOADING_SCREEN_ENABLED: true,
     LOADING_ERROR_SCREEN_ENABLED: false,
     ONBOARDING_LOGIN_ENABLED: true,
-    TRAVEL_SEARCH_DATE: '2025-03-06',
-    DEPARTURE_DATE: '2025-03-06',
+    TRAVEL_SEARCH_DATE: '2025-09-14',
+    DEPARTURE_DATE: '2025-09-14',
     RECORD_BASELINE: false,
+    APP_ENV: 'debug',
+  };
+
+  appEnvironment = (): string => {
+    return <string>(process.env.APP_ENV || this.config.APP_ENV);
   };
 
   loadingScreenEnabled = (): boolean => {
@@ -43,7 +48,9 @@ class Config {
 
   // Generate new baseline images (true) or test (false)
   recordBaseline = (): boolean => {
-    return <boolean>(process.env.RECORD_BASELINE || this.config.RECORD_BASELINE);
+    return <boolean>(
+      (process.env.RECORD_BASELINE || this.config.RECORD_BASELINE)
+    );
   };
 }
 

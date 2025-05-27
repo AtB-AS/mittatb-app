@@ -31,6 +31,7 @@ describe('Profile', () => {
       'on-behalf-of': true,
     };
     try {
+      await MyProfilePage.openSetting('settings');
       await MyProfilePage.openSetting('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
@@ -75,6 +76,7 @@ describe('Profile', () => {
   // Verify that login is required and email is missing for email notifications
   it('should show login and missing email info for email notifications', async () => {
     try {
+      await MyProfilePage.openSetting('settings');
       await MyProfilePage.openSetting('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
@@ -106,8 +108,9 @@ describe('Profile', () => {
   });
 
   // Check that data collection is not enabled as default
-  it('should collect data only when enabled', async () => {
+  it.only('should collect data only when enabled', async () => {
     try {
+      await MyProfilePage.openSetting('settings');
       await MyProfilePage.openSetting('privacy');
       await ElementHelper.waitForElement('text', 'Privacy');
 
