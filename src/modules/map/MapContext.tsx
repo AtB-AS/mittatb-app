@@ -20,6 +20,8 @@ type MapContextState = {
   autoSelectedFeature?: AutoSelectedFeature;
   selectedShmoPaymentMethod?: PaymentMethod;
   setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
+  followUser: boolean;
+  setFollowUser: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -49,6 +51,8 @@ export const MapContextProvider = ({children}: Props) => {
 
   const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
     useSelectedShmoPaymentMethod();
+
+  const [followUser, setFollowUser] = useState(false);
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -94,6 +98,8 @@ export const MapContextProvider = ({children}: Props) => {
         autoSelectedFeature,
         selectedShmoPaymentMethod,
         setSelectedShmoPaymentMethod,
+        followUser,
+        setFollowUser,
       }}
     >
       {children}

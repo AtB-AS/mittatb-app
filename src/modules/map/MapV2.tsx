@@ -3,7 +3,13 @@ import {
   useGeolocationContext,
 } from '@atb/modules/geolocation';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
+import {
+  LocationPuck,
+  UserTrackingMode,
+  Viewport,
+  Camera,
+  MapView,
+} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
@@ -59,8 +65,8 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewRef = useRef<MapboxGL.MapView>(null);
+  const mapCameraRef = useRef<Camera>(null);
+  const mapViewRef = useRef<MapView>(null);
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
@@ -90,7 +96,7 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
-  const {autoSelectedFeature} = useMapContext();
+  const {autoSelectedFeature, followUser, setFollowUser} = useMapContext();
   const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
@@ -254,7 +260,7 @@ export const MapV2 = (props: MapProps) => {
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <MapboxGL.MapView
+        <MapView
           ref={mapViewRef}
           style={{
             flex: 1,
@@ -264,7 +270,14 @@ export const MapV2 = (props: MapProps) => {
           testID="mapView"
           {...mapViewConfig}
         >
-          <MapboxGL.Camera
+          <Viewport
+            onStatusChanged={(status) => {
+              if (status.to.kind === 'idle') {
+                setFollowUser(false);
+              }
+            }}
+          />
+          <Camera
             ref={mapCameraRef}
             zoomLevel={15}
             centerCoordinate={[
@@ -272,6 +285,9 @@ export const MapV2 = (props: MapProps) => {
               startingCoordinates.latitude,
             ]}
             {...MapCameraConfig}
+            followUserLocation={followUser}
+            followUserMode={UserTrackingMode.FollowWithHeading}
+            followPadding={getMapPadding(tabBarHeight)}
           />
           {showGeofencingZones && (
             <GeofencingZones
@@ -295,7 +311,7 @@ export const MapV2 = (props: MapProps) => {
               showStations={true}
             />
           )}
-        </MapboxGL.MapView>
+        </MapView>
         <View
           style={[
             controlStyles.mapButtonsContainer,
@@ -307,14 +323,21 @@ export const MapV2 = (props: MapProps) => {
           <PositionArrow
             onPress={async () => {
               const coordinates = await getCurrentCoordinates(true);
-              if (coordinates) {
-                flyToLocation({
-                  coordinates: coordinates,
-                  padding: getMapPadding(tabBarHeight),
-                  mapCameraRef,
-                  mapViewRef,
-                  zoomLevel: 15,
-                });
+              if (
+                activeShmoBooking &&
+                activeShmoBooking.state === ShmoBookingState.IN_USE
+              ) {
+                setFollowUser(true);
+              } else {
+                if (coordinates) {
+                  flyToLocation({
+                    coordinates: coordinates,
+                    padding: getMapPadding(tabBarHeight),
+                    mapCameraRef,
+                    mapViewRef,
+                    zoomLevel: 15,
+                  });
+                }
               }
             }}
           />
