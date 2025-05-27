@@ -41,7 +41,7 @@ const MapTexts = {
   },
   filters: {
     bottomSheet: {
-      heading: _('Filter', 'Filter', 'Filter'),
+      heading: _('Kartfilter', 'Map Filter', 'Kartfilter'),
     },
   },
   externalRealtimeMap: {

@@ -11,7 +11,7 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {
   MapFilterType,
   MobilityMapFilterType,
-  useUserMapFilters,
+  useMapContext,
 } from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {getNewFilterState} from '../utils';
@@ -37,19 +37,18 @@ export const BenefitTile = ({
   );
   const description = getTextForLanguage(benefit.ticketDescription, language);
 
-  const {getMapFilter, setMapFilter} = useUserMapFilters();
+  const {mapFilter, setMapFilter} = useMapContext();
   const operators = useOperators();
 
   const onPress = async () => {
-    const storedFilters = await getMapFilter();
-
-    let mobilityFilters: MobilityMapFilterType = storedFilters.mobility;
+    if (!mapFilter?.mobility) return;
+    let mobilityFilters: MobilityMapFilterType = mapFilter.mobility;
     benefit.formFactors.forEach((formFactor) => {
       const allOperators = operators.byFormFactor(formFactor as FormFactor);
       const formFactorFilter = getNewFilterState(
         true,
         benefit.operatorId,
-        storedFilters.mobility[formFactor],
+        mapFilter.mobility[formFactor],
         allOperators,
       );
       mobilityFilters = {
@@ -59,9 +58,9 @@ export const BenefitTile = ({
     });
 
     // Update stored filters (for persistence, and the filters bottom sheet)
-    await setMapFilter({...storedFilters, mobility: mobilityFilters});
+    setMapFilter({...mapFilter, mobility: mobilityFilters});
     // Provide the same filters as intital filter state for the map screen
-    onNavigateToMap({...storedFilters, mobility: mobilityFilters});
+    onNavigateToMap({...mapFilter, mobility: mobilityFilters});
   };
   return (
     <View style={[styles.container, style]}>

@@ -20,7 +20,7 @@ export const MobilityTexts = {
       case FormFactor.Car:
         return _('Bildeling', 'Car sharing', 'Bildeling');
       default:
-        return _('Annet', 'Other', 'Annet');
+        return _('Annet', 'Other', 'Anna');
     }
   },
   photo: {
@@ -141,6 +141,25 @@ export const MobilityTexts = {
   },
   filter: {
     selectAll: _('Alle', 'All', 'Alle'),
+    sectionTitle: {
+      sharedMobility: _(
+        'Delingsmobilitet',
+        'Shared Mobility',
+        'Delingsmobilitet',
+      ),
+    },
+    toggleTitle: (formFactor: FormFactor) => {
+      switch (formFactor) {
+        case FormFactor.Scooter:
+          return _('El-sparkesykler', 'E-scooters', 'El-sparkesyklar');
+        case FormFactor.Bicycle:
+          return _('Bysykler', 'City Bikes', 'Bysyklar'); // hmm what if e bikes become normalized
+        case FormFactor.Car:
+          return _('Delebiler', 'Shared Cars', 'Delebilar');
+        default:
+          return _('Annet', 'Other', 'Anna');
+      }
+    },
   },
   reportParkingViolation: _(
     'Rapporter som feilparkert',
