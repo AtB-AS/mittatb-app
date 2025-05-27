@@ -17,6 +17,7 @@ import {
 } from '@atb/modules/payment';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
+import {useMutation} from '@tanstack/react-query';
 
 type Props = {
   onSelect: () => void;
@@ -39,7 +40,14 @@ export const SelectShmoPaymentMethodSheet = ({
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     PaymentMethod | undefined
   >();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const {mutate: savePrevPaymentMethod, isLoading} = useMutation({
+    mutationFn: (params: {userId: string; paymentMethod: PaymentMethod}) =>
+      savePreviousPaymentMethodByUser(params.userId, params.paymentMethod),
+    onSuccess() {
+      onSelect();
+    },
+  });
 
   useEffect(() => {
     if (defaultPaymentMethod) {
@@ -97,13 +105,13 @@ export const SelectShmoPaymentMethodSheet = ({
                   selectedPaymentMethod.recurringPayment &&
                   userId
                 ) {
-                  setIsLoading(true);
-                  await savePreviousPaymentMethodByUser(userId, {
-                    paymentType: selectedPaymentMethod?.paymentType,
-                    recurringPayment: selectedPaymentMethod.recurringPayment,
+                  savePrevPaymentMethod({
+                    userId,
+                    paymentMethod: {
+                      paymentType: selectedPaymentMethod?.paymentType,
+                      recurringPayment: selectedPaymentMethod.recurringPayment,
+                    },
                   });
-                  setIsLoading(false);
-                  onSelect();
                 }
               }}
               disabled={!selectedPaymentMethod}
