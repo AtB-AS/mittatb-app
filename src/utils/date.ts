@@ -45,6 +45,7 @@ import {
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 const CET = 'Europe/Oslo';
+
 /**
  * Wrapped default formatting to take CET timezone into account
  * should be used instead of normal format function from date-fns
@@ -91,6 +92,7 @@ export function secondsToDurationShort(
     conjunction: ' ',
   });
 }
+
 // Translates seconds to minutes without postfix. Returns minimum 1
 export function secondsToMinutes(seconds: number): string {
   return Math.max(Math.round(seconds / 60), 1).toString();
@@ -488,6 +490,7 @@ export function daysBetween(base: string | Date, target: string | Date) {
     toZonedTime(parseIfNeeded(base), CET),
   );
 }
+
 export function isSameDay(base: string | Date, target: string | Date) {
   return isSameDayInternal(
     toZonedTime(parseIfNeeded(target), CET),
