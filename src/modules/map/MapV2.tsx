@@ -76,7 +76,7 @@ export const MapV2 = (props: MapProps) => {
   const isFocused = useIsFocused();
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
-  const {isMutating: initShmoOneStopBookingIsLoading} =
+  const {isMutating: initShmoOneStopBookingIsMutating} =
     useShmoBookingMutationStatus();
 
   const startingCoordinates = useMemo(
@@ -136,7 +136,7 @@ export const MapV2 = (props: MapProps) => {
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
-    !initShmoOneStopBookingIsLoading;
+    !initShmoOneStopBookingIsMutating;
 
   useAutoSelectMapItem(
     mapCameraRef,
