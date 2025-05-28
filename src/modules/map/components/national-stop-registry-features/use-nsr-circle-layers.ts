@@ -17,7 +17,7 @@ export const useNsrCircleLayers = (
   return useMemo(
     () =>
       nsrCircleLayers.map((nsrCircleLayer) => {
-        const {id, showAsDefaultAtZoomLevel} = nsrCircleLayer;
+        const {id, reachFullScaleAtZoomLevel} = nsrCircleLayer;
         const nsrLayerSourceProps = getNsrLayerSourceProps(id);
 
         const filter = getFilterWhichAlsoHidesSelectedFeature(
@@ -26,7 +26,7 @@ export const useNsrCircleLayers = (
         );
 
         const {minZoomLevel, style} = getLayerPropsDeterminedByZoomLevel({
-          showAsDefaultAtZoomLevel,
+          reachFullScaleAtZoomLevel,
           selectedFeaturePropertyId,
           iconFullSize: 11,
         });

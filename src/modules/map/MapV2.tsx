@@ -3,10 +3,16 @@ import {
   useGeolocationContext,
 } from '@atb/modules/geolocation';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
+import {
+  LocationPuck,
+  UserTrackingMode,
+  Viewport,
+  Camera,
+  MapView,
+} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -43,7 +49,7 @@ import {
   useShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
 
-import {Snackbar, useSnackbar} from '@atb/components/snackbar';
+import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
@@ -56,12 +62,15 @@ import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+
+const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewRef = useRef<MapboxGL.MapView>(null);
+  const mapCameraRef = useRef<Camera>(null);
+  const mapViewRef = useRef<MapView>(null);
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
@@ -135,6 +144,16 @@ export const MapV2 = (props: MapProps) => {
     onReportParkingViolation,
     tabBarHeight,
   );
+
+  const [followUserLocation, setFollowUserLocation] = useState(false);
+  const stablePreviousActiveShmoBooking =
+    useStablePreviousValue(activeShmoBooking);
+  const stableActiveShmoBooking = useStableValue(activeShmoBooking);
+  useEffect(() => {
+    if (!stablePreviousActiveShmoBooking && stableActiveShmoBooking) {
+      setFollowUserLocation(true);
+    }
+  }, [stableActiveShmoBooking, stablePreviousActiveShmoBooking]);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -258,7 +277,7 @@ export const MapV2 = (props: MapProps) => {
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <MapboxGL.MapView
+        <MapView
           ref={mapViewRef}
           style={{
             flex: 1,
@@ -268,14 +287,24 @@ export const MapV2 = (props: MapProps) => {
           testID="mapView"
           {...mapViewConfig}
         >
-          <MapboxGL.Camera
+          <Viewport
+            onStatusChanged={(status) => {
+              if (status.to.kind === 'idle') {
+                setFollowUserLocation(false);
+              }
+            }}
+          />
+          <Camera
             ref={mapCameraRef}
-            zoomLevel={15}
+            zoomLevel={DEFAULT_ZOOM_LEVEL}
             centerCoordinate={[
               startingCoordinates.longitude,
               startingCoordinates.latitude,
             ]}
             {...MapCameraConfig}
+            followUserLocation={!!activeShmoBooking && followUserLocation}
+            followUserMode={UserTrackingMode.FollowWithHeading}
+            followPadding={getMapPadding(tabBarHeight)}
           />
           {showGeofencingZones && (
             <GeofencingZones
@@ -301,7 +330,7 @@ export const MapV2 = (props: MapProps) => {
               showStations={true}
             />
           )}
-        </MapboxGL.MapView>
+        </MapView>
         <View
           style={[
             controlStyles.mapButtonsContainer,
@@ -313,14 +342,23 @@ export const MapV2 = (props: MapProps) => {
           <PositionArrow
             onPress={async () => {
               const coordinates = await getCurrentCoordinates(true);
-              if (coordinates) {
-                flyToLocation({
-                  coordinates: coordinates,
-                  padding: getMapPadding(tabBarHeight),
-                  mapCameraRef,
-                  mapViewRef,
-                  zoomLevel: 15,
-                });
+              if (
+                activeShmoBooking &&
+                activeShmoBooking.state === ShmoBookingState.IN_USE
+              ) {
+                setFollowUserLocation(true);
+              } else {
+                if (coordinates) {
+                  flyToLocation({
+                    coordinates,
+                    padding: !selectedFeature
+                      ? undefined
+                      : getMapPadding(tabBarHeight),
+                    mapCameraRef,
+                    mapViewRef,
+                    zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
+                  });
+                }
               }
             }}
           />

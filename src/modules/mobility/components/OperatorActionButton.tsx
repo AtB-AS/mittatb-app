@@ -1,4 +1,3 @@
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {showAppMissingAlert} from '../show-app-missing-alert';
 import React, {useCallback} from 'react';
@@ -12,6 +11,7 @@ import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
 import {useBuyValueCodeWithBonusPointsMutation} from '@atb/modules/bonus';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -31,7 +31,7 @@ export const OperatorActionButton = ({
   isBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
-  const analytics = useAnalyticsContext();
+  const {logEvent} = useBottomSheetContext();
   const {t, language} = useTranslation();
   const {
     isUserEligibleForBenefit,
@@ -46,7 +46,7 @@ export const OperatorActionButton = ({
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const openAppURL = async (url: string, valueCode?: string) => {
-    analytics.logEvent('Mobility', 'Open operator app', {
+    logEvent('Mobility', 'Open operator app', {
       operatorName,
       benefit,
       isUserEligibleForBenefit,

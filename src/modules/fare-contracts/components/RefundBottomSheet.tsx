@@ -1,5 +1,4 @@
 import {FareContractState} from '@atb-as/utils';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import SvgExternalLink from '@atb/assets/svg/mono-icons/navigation/ExternalLink';
 import {
   BottomSheetContainer,
@@ -39,21 +38,21 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
     language,
   );
   const {close} = useBottomSheetContext();
-  const analytics = useAnalyticsContext();
   const {data: refundOptions, status: refundOptionsStatus} =
     useRefundOptionsQuery(orderId, state);
+  const {logEvent} = useBottomSheetContext();
 
   const {mutate: refund, status: refundStatus} =
     useRefundFareContractMutation();
 
   useEffect(() => {
     if (refundStatus === 'success') {
-      analytics.logEvent('Ticketing', 'Ticket refunded', {
+      logEvent('Ticketing', 'Ticket refunded', {
         fareProductType,
       });
       close();
     }
-  }, [refundStatus, fareProductType, analytics, close]);
+  }, [refundStatus, fareProductType, close, logEvent]);
 
   return (
     <BottomSheetContainer

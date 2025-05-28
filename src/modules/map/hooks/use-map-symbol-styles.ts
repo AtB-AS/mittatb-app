@@ -9,12 +9,23 @@ import {
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 
+export const scaleTransitionZoomRange = 0.4;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+const smallestAllowedSizeFactor = 0.3;
+
+type MapSymbolStylesProps = {
+  selectedFeaturePropertyId: SelectedMapItemProperties['id'];
+  pinType: PinType;
+  reachFullScaleAtZoomLevel: number;
+  textSizeFactor?: number;
+};
 // Returns Mapbox Style Expressions to determine map symbol styles.
-export const useMapSymbolStyles = (
-  selectedFeaturePropertyId: SelectedMapItemProperties['id'],
-  pinType: PinType,
-  textSizeFactor: number = 1.0,
-) => {
+export const useMapSymbolStyles = ({
+  selectedFeaturePropertyId,
+  pinType,
+  reachFullScaleAtZoomLevel,
+  textSizeFactor = 1.0,
+}: MapSymbolStylesProps) => {
   const {themeName} = useThemeContext();
   const isDarkMode = themeName === 'dark';
 
@@ -45,11 +56,21 @@ export const useMapSymbolStyles = (
     mapItemIconNonClusterState,
   ];
 
-  const iconSize: Expression = [
+  const iconFullSize: Expression = [
     'case',
     pinType === 'station' ? true : isCluster,
     0.855,
     1,
+  ];
+
+  const iconSize: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    smallestAllowedSizeFactor,
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
   ];
 
   const stopPlacesExpression: (Expression | ExpressionField)[] = nsrSymbolLayers
@@ -128,9 +149,22 @@ export const useMapSymbolStyles = (
     themeName,
   ];
 
+  const fadeInOpacity: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    0,
+    reachFullScaleAtZoomLevel -
+      scaleTransitionZoomRange +
+      opacityTransitionExtraZoomRange,
+    1,
+  ];
+
   const iconStyle: SymbolLayerStyleProps = {
     iconImage,
     iconSize,
+    iconOpacity: fadeInOpacity,
     iconOffset: [0, 0],
     iconAllowOverlap: true,
   };
@@ -162,16 +196,29 @@ export const useMapSymbolStyles = (
     [1.0 * textOffsetXFactor, -0.15],
   ];
 
-  const textSize: Expression = [
+  const getCountAdjustedTextSize: (baseSize: number) => Expression = (
+    baseSize,
+  ) => [
     'step',
     numberOfUnits,
-    textSizeFactor * 12.6,
+    baseSize * textSizeFactor * 12.6,
     100,
-    textSizeFactor * 10.8,
+    baseSize * textSizeFactor * 10.8,
+  ];
+
+  const textSize: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    getCountAdjustedTextSize(1 * smallestAllowedSizeFactor),
+    reachFullScaleAtZoomLevel,
+    getCountAdjustedTextSize(1),
   ];
 
   const textStyle: SymbolLayerStyleProps = {
     textField,
+    textOpacity: fadeInOpacity,
     textColor: isDarkMode ? '#ffffff' : '#000000',
     textSize,
     textOffset,

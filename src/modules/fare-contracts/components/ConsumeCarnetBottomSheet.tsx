@@ -1,5 +1,4 @@
 import {getErrorResponse} from '@atb/api/utils';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
@@ -32,7 +31,7 @@ export const ConsumeCarnetBottomSheet = ({
   const [isError, setError] = useState<boolean>(false);
   const [isSchoolError, setSchoolError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
-  const analytics = useAnalyticsContext();
+  const {logEvent} = useBottomSheetContext();
 
   const onConsume = async () => {
     setIsLoading(true);
@@ -40,7 +39,7 @@ export const ConsumeCarnetBottomSheet = ({
     setSchoolError(false);
     try {
       await consumeCarnet(fareContractId);
-      analytics.logEvent('Ticketing', 'Consumed carnet', {
+      logEvent('Ticketing', 'Consumed carnet', {
         fareProductType,
       });
       close();
