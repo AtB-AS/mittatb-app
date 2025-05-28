@@ -32,7 +32,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
     useRemoteConfigContext();
-  const {trackBottomSheetEvent} = useBottomSheetContext();
+  const {logEvent} = useBottomSheetContext();
   const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const showWebsiteFeedback = !!customer_feedback_url;
@@ -56,10 +56,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               rightIcon={{svg: ExternalLink}}
               onPress={() => {
                 Linking.openURL(customer_feedback_url);
-                trackBottomSheetEvent(
-                  'Contact',
-                  'Send customer feedback clicked',
-                );
+                logEvent('Contact', 'Send customer feedback clicked');
                 close();
               }}
             />
@@ -77,10 +74,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
                 unreadCount
                   ? Intercom.presentSpace(Space.messages)
                   : Intercom.presentSpace(Space.home);
-                trackBottomSheetEvent(
-                  'Contact',
-                  'Send Intercom message clicked',
-                );
+                logEvent('Contact', 'Send Intercom message clicked');
                 close();
               }}
               rightIcon={{
@@ -101,10 +95,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             accessibilityRole="link"
             onPress={() => {
               Linking.openURL(customer_service_url);
-              trackBottomSheetEvent(
-                'Contact',
-                'Contact customer service clicked',
-              );
+              logEvent('Contact', 'Contact customer service clicked');
               close();
             }}
           />
@@ -120,10 +111,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               rightIcon={{svg: ArrowRight}}
               onPress={() => {
                 onReportParkingViolation();
-                trackBottomSheetEvent(
-                  'Contact',
-                  'Report parking violation clicked',
-                );
+                logEvent('Contact', 'Report parking violation clicked');
                 close();
               }}
             />

@@ -9,7 +9,24 @@ import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/modules/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {initPosthogClient} from './PosthogClient';
+
+let client: PostHog | undefined;
+
+const initPosthogClient = (
+  apiKey: string,
+  host: string,
+  isPosthogEnabled: boolean,
+): PostHog | undefined => {
+  if (!isPosthogEnabled || !apiKey || !host || client) return client;
+
+  client = new PostHog(apiKey, {
+    host,
+  });
+
+  return client;
+};
+
+export const getPosthogClientGlobal = () => client;
 
 const AUTO_CAPTURE_OPTIONS: PostHogAutocaptureOptions = {
   captureScreens: true,

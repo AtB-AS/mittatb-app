@@ -31,7 +31,7 @@ export const OperatorActionButton = ({
   isBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
-  const {trackBottomSheetEvent} = useBottomSheetContext();
+  const {logEvent} = useBottomSheetContext();
   const {t, language} = useTranslation();
   const {
     isUserEligibleForBenefit,
@@ -46,7 +46,7 @@ export const OperatorActionButton = ({
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const openAppURL = async (url: string, valueCode?: string) => {
-    trackBottomSheetEvent('Mobility', 'Open operator app', {
+    logEvent('Mobility', 'Open operator app', {
       operatorName,
       benefit,
       isUserEligibleForBenefit,

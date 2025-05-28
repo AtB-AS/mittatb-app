@@ -40,19 +40,19 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
   const {close} = useBottomSheetContext();
   const {data: refundOptions, status: refundOptionsStatus} =
     useRefundOptionsQuery(orderId, state);
-  const {trackBottomSheetEvent} = useBottomSheetContext();
+  const {logEvent} = useBottomSheetContext();
 
   const {mutate: refund, status: refundStatus} =
     useRefundFareContractMutation();
 
   useEffect(() => {
     if (refundStatus === 'success') {
-      trackBottomSheetEvent('Ticketing', 'Ticket refunded', {
+      logEvent('Ticketing', 'Ticket refunded', {
         fareProductType,
       });
       close();
     }
-  }, [refundStatus, fareProductType, close, trackBottomSheetEvent]);
+  }, [refundStatus, fareProductType, close, logEvent]);
 
   return (
     <BottomSheetContainer

@@ -1,6 +1,6 @@
 export {
   AnalyticsContextProvider,
   useAnalyticsContext,
+  getPosthogClientGlobal,
 } from './AnalyticsContext';
 export type {AnalyticsEventContext} from './types';
-export {getPosthogClient, initPosthogClient} from './PosthogClient.ts';

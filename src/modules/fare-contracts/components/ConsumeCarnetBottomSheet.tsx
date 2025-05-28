@@ -31,7 +31,7 @@ export const ConsumeCarnetBottomSheet = ({
   const [isError, setError] = useState<boolean>(false);
   const [isSchoolError, setSchoolError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
-  const {trackBottomSheetEvent} = useBottomSheetContext();
+  const {logEvent} = useBottomSheetContext();
 
   const onConsume = async () => {
     setIsLoading(true);
@@ -39,7 +39,7 @@ export const ConsumeCarnetBottomSheet = ({
     setSchoolError(false);
     try {
       await consumeCarnet(fareContractId);
-      trackBottomSheetEvent('Ticketing', 'Consumed carnet', {
+      logEvent('Ticketing', 'Consumed carnet', {
         fareProductType,
       });
       close();

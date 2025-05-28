@@ -31,19 +31,15 @@ export const ActivateNowBottomSheet = ({
   const [error, setError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
 
-  const {trackBottomSheetEvent} = useBottomSheetContext();
+  const {logEvent} = useBottomSheetContext();
 
   const onActivate = async () => {
     setIsLoading(true);
     try {
       await activateFareContractNow(fareContractId);
-      trackBottomSheetEvent(
-        'Ticketing',
-        'Activated fare contract ahead of time',
-        {
-          fareProductType,
-        },
-      );
+      logEvent('Ticketing', 'Activated fare contract ahead of time', {
+        fareProductType,
+      });
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);
