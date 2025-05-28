@@ -4,8 +4,6 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {PaymentMethod} from '@atb/modules/payment';
-import {useSelectedShmoPaymentMethod} from '@atb/modules/payment';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -18,8 +16,6 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
-  selectedShmoPaymentMethod?: PaymentMethod;
-  setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
   followUser: boolean;
   setFollowUser: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -48,9 +44,6 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
-
-  const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
-    useSelectedShmoPaymentMethod();
 
   const [followUser, setFollowUser] = useState(false);
 
@@ -96,8 +89,6 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
-        selectedShmoPaymentMethod,
-        setSelectedShmoPaymentMethod,
         followUser,
         setFollowUser,
       }}

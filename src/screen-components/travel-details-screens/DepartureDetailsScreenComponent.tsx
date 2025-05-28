@@ -595,7 +595,7 @@ function EstimatedCallRow({
             timeValues={{
               aimedTime: call.aimedDepartureTime,
               expectedTime: call.expectedDepartureTime,
-              missingRealTime: !call.realtime && isStartOfServiceJourney,
+              isRealtime: call.realtime || !isStartOfServiceJourney,
             }}
             roundingMethod="floor"
           />
