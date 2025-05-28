@@ -12,7 +12,7 @@ import {
 } from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -48,7 +48,7 @@ import {
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
 
-import {Snackbar, useSnackbar} from '@atb/components/snackbar';
+import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
 import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
@@ -61,6 +61,7 @@ import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -98,7 +99,7 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
-  const {autoSelectedFeature, followUser, setFollowUser} = useMapContext();
+  const {autoSelectedFeature} = useMapContext();
   const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
@@ -139,6 +140,16 @@ export const MapV2 = (props: MapProps) => {
     onReportParkingViolation,
     tabBarHeight,
   );
+
+  const [followUserLocation, setFollowUserLocation] = useState(false);
+  const stablePreviousActiveShmoBooking =
+    useStablePreviousValue(activeShmoBooking);
+  const stableActiveShmoBooking = useStableValue(activeShmoBooking);
+  useEffect(() => {
+    if (!stablePreviousActiveShmoBooking && stableActiveShmoBooking) {
+      setFollowUserLocation(true);
+    }
+  }, [stableActiveShmoBooking, stablePreviousActiveShmoBooking]);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -275,7 +286,7 @@ export const MapV2 = (props: MapProps) => {
           <Viewport
             onStatusChanged={(status) => {
               if (status.to.kind === 'idle') {
-                setFollowUser(false);
+                setFollowUserLocation(false);
               }
             }}
           />
@@ -287,7 +298,7 @@ export const MapV2 = (props: MapProps) => {
               startingCoordinates.latitude,
             ]}
             {...MapCameraConfig}
-            followUserLocation={followUser}
+            followUserLocation={!!activeShmoBooking && followUserLocation}
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getMapPadding(tabBarHeight)}
           />
@@ -329,7 +340,7 @@ export const MapV2 = (props: MapProps) => {
                 activeShmoBooking &&
                 activeShmoBooking.state === ShmoBookingState.IN_USE
               ) {
-                setFollowUser(true);
+                setFollowUserLocation(true);
               } else {
                 if (coordinates) {
                   flyToLocation({

@@ -16,8 +16,6 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
-  followUser: boolean;
-  setFollowUser: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -44,8 +42,6 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
-
-  const [followUser, setFollowUser] = useState(false);
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -89,8 +85,6 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
-        followUser,
-        setFollowUser,
       }}
     >
       {children}

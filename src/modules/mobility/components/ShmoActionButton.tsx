@@ -13,7 +13,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
-import {useMapContext} from '@atb/modules/map';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
@@ -36,7 +35,6 @@ export const ShmoActionButton = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
-  const {setFollowUser} = useMapContext();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -62,7 +60,6 @@ export const ShmoActionButton = ({
         paymentMethod?.paymentType,
         paymentMethod?.recurringPayment?.id,
       );
-      setFollowUser(true);
     }
   }, [
     paymentMethod?.recurringPayment?.id,
@@ -73,7 +70,6 @@ export const ShmoActionButton = ({
     operatorId,
     initShmoOneStopBooking,
     userId,
-    setFollowUser,
   ]);
 
   if (authenticationType != 'phone') {

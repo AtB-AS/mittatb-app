@@ -22,7 +22,6 @@ import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booki
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
-import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -46,7 +45,6 @@ export const ActiveScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {setFollowUser} = useMapContext();
 
   useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
@@ -54,10 +52,9 @@ export const ActiveScooterSheet = ({
 
   useEffect(() => {
     if (activeBooking === null) {
-      setFollowUser(false);
       onForceClose();
     }
-  }, [activeBooking, onForceClose, setFollowUser]);
+  }, [activeBooking, onForceClose]);
 
   const {
     mutateAsync: sendShmoBookingEvent,
@@ -77,16 +74,10 @@ export const ActiveScooterSheet = ({
       });
 
       if (res?.state === ShmoBookingState.FINISHING) {
-        setFollowUser(false);
         photoNavigation(activeBooking?.bookingId);
       }
     }
-  }, [
-    activeBooking?.bookingId,
-    photoNavigation,
-    sendShmoBookingEvent,
-    setFollowUser,
-  ]);
+  }, [activeBooking?.bookingId, photoNavigation, sendShmoBookingEvent]);
 
   const showEndAlert = async () => {
     Alert.alert(
