@@ -62,13 +62,11 @@ export const ShmoActionButton = ({
       );
     }
   }, [
-    paymentMethod?.recurringPayment?.id,
-    paymentMethod?.paymentType,
-    coordinates?.latitude,
-    coordinates?.longitude,
+    initShmoOneStopBooking,
     vehicleId,
     operatorId,
-    initShmoOneStopBooking,
+    coordinates,
+    paymentMethod,
     userId,
   ]);
 
