@@ -1,4 +1,8 @@
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {
+  useIsMutating,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {initShmoOneStopBooking} from '@atb/api/mobility';
 import {getActiveShmoBookingQueryKey} from './use-active-shmo-booking-query';
 import {
@@ -7,11 +11,17 @@ import {
 } from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
 
+export const getInitShmoBookingQueryKey = (acceptLanguage: string) => [
+  'GET_INIT_SHMO_BOOKING_QUERY_KEY',
+  acceptLanguage,
+];
+
 export const useInitShmoOneStopBookingMutation = () => {
   const queryClient = useQueryClient();
   const acceptLanguage = useAcceptLanguage();
 
   return useMutation({
+    mutationKey: getInitShmoBookingQueryKey(acceptLanguage),
     mutationFn: (reqBody: InitShmoOneStopBookingRequestBody) =>
       initShmoOneStopBooking(reqBody, acceptLanguage),
     onSuccess: (data: ShmoBooking) => {
@@ -23,4 +33,12 @@ export const useInitShmoOneStopBookingMutation = () => {
       );
     },
   });
+};
+
+export const useInitShmoBookingMutationStatus = () => {
+  const acceptLanguage = useAcceptLanguage();
+  const mutating = useIsMutating({
+    mutationKey: getInitShmoBookingQueryKey(acceptLanguage),
+  });
+  return {isMutating: mutating > 0};
 };

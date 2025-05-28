@@ -19,7 +19,10 @@ export {ShmoTripDetailsSectionItem} from './components/ShmoTripDetailsSectionIte
 export {useActiveShmoBookingQuery} from './queries/use-active-shmo-booking-query';
 export {useGeofencingZonesQuery} from './queries/use-geofencing-zones';
 export {useGetAssetFromQrCodeMutation} from './queries/use-get-ids-from-qr-code-mutation';
-export {useInitShmoOneStopBookingMutation} from './queries/use-init-shmo-one-stop-booking-mutation';
+export {
+  useInitShmoOneStopBookingMutation,
+  useInitShmoBookingMutationStatus,
+} from './queries/use-init-shmo-one-stop-booking-mutation';
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
