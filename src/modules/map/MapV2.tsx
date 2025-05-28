@@ -56,6 +56,8 @@ import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
+const DEFAULT_ZOOM_LEVEL = 14.5;
+
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
@@ -266,7 +268,7 @@ export const MapV2 = (props: MapProps) => {
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={15}
+            zoomLevel={DEFAULT_ZOOM_LEVEL}
             centerCoordinate={[
               startingCoordinates.longitude,
               startingCoordinates.latitude,
@@ -310,10 +312,12 @@ export const MapV2 = (props: MapProps) => {
               if (coordinates) {
                 flyToLocation({
                   coordinates: coordinates,
-                  padding: getMapPadding(tabBarHeight),
+                  padding: !selectedFeature
+                    ? undefined
+                    : getMapPadding(tabBarHeight),
                   mapCameraRef,
                   mapViewRef,
-                  zoomLevel: 15,
+                  zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
                 });
               }
             }}
