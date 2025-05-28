@@ -8,9 +8,7 @@ import {
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {
-  TransportationIconBox,
-} from '@atb/components/icon-box';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {
   BottomSheetContainer,
   useBottomSheetContext,
@@ -72,7 +70,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
-
   return (
     <BottomSheetContainer
       maxHeightValue={0.9}
@@ -100,8 +97,11 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             }}
             testID="allModesToggle"
           />
-            {filtersSelection.transportModes
-            ?.filter(({id}) => id !== 'flexibleTransport' || isFlexibleTransportEnabled)
+          {filtersSelection.transportModes
+            ?.filter(
+              ({id}) =>
+                id !== 'flexibleTransport' || isFlexibleTransportEnabled,
+            )
             .map((option) => {
               const text = getTextForLanguage(option.text, language);
               const description = getTextForLanguage(
