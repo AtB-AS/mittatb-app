@@ -14,7 +14,6 @@ import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Theme} from '@atb/theme/colors';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
@@ -33,7 +32,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
     useRemoteConfigContext();
-  const analytics = useAnalyticsContext();
+  const {logEvent} = useBottomSheetContext();
   const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const showWebsiteFeedback = !!customer_feedback_url;
@@ -57,7 +56,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               rightIcon={{svg: ExternalLink}}
               onPress={() => {
                 Linking.openURL(customer_feedback_url);
-                analytics.logEvent('Contact', 'Send customer feedback clicked');
+                logEvent('Contact', 'Send customer feedback clicked');
                 close();
               }}
             />
@@ -75,7 +74,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
                 unreadCount
                   ? Intercom.presentSpace(Space.messages)
                   : Intercom.presentSpace(Space.home);
-                analytics.logEvent('Contact', 'Send Intercom message clicked');
+                logEvent('Contact', 'Send Intercom message clicked');
                 close();
               }}
               rightIcon={{
@@ -96,7 +95,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             accessibilityRole="link"
             onPress={() => {
               Linking.openURL(customer_service_url);
-              analytics.logEvent('Contact', 'Contact customer service clicked');
+              logEvent('Contact', 'Contact customer service clicked');
               close();
             }}
           />
@@ -112,10 +111,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               rightIcon={{svg: ArrowRight}}
               onPress={() => {
                 onReportParkingViolation();
-                analytics.logEvent(
-                  'Contact',
-                  'Report parking violation clicked',
-                );
+                logEvent('Contact', 'Report parking violation clicked');
                 close();
               }}
             />
