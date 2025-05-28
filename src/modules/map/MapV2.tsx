@@ -150,7 +150,11 @@ export const MapV2 = (props: MapProps) => {
     useStablePreviousValue(activeShmoBooking);
   const stableActiveShmoBooking = useStableValue(activeShmoBooking);
   useEffect(() => {
-    if (!stablePreviousActiveShmoBooking && stableActiveShmoBooking) {
+    if (
+      !stablePreviousActiveShmoBooking &&
+      stableActiveShmoBooking &&
+      stableActiveShmoBooking.state === ShmoBookingState.IN_USE
+    ) {
       setFollowUserLocation(true);
     }
   }, [stableActiveShmoBooking, stablePreviousActiveShmoBooking]);
@@ -302,7 +306,11 @@ export const MapV2 = (props: MapProps) => {
               startingCoordinates.latitude,
             ]}
             {...MapCameraConfig}
-            followUserLocation={!!activeShmoBooking && followUserLocation}
+            followUserLocation={
+              !!activeShmoBooking &&
+              activeShmoBooking.state === ShmoBookingState.IN_USE &&
+              followUserLocation
+            }
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getMapPadding(tabBarHeight)}
           />
