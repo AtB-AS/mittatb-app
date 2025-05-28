@@ -21,7 +21,7 @@ export {useGeofencingZonesQuery} from './queries/use-geofencing-zones';
 export {useGetAssetFromQrCodeMutation} from './queries/use-get-ids-from-qr-code-mutation';
 export {
   useInitShmoOneStopBookingMutation,
-  useShmoBookingMutationStatus,
+  useInitShmoBookingMutationStatus,
 } from './queries/use-init-shmo-one-stop-booking-mutation';
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';

@@ -35,7 +35,7 @@ export const useInitShmoOneStopBookingMutation = () => {
   });
 };
 
-export const useShmoBookingMutationStatus = () => {
+export const useInitShmoBookingMutationStatus = () => {
   const acceptLanguage = useAcceptLanguage();
   const mutating = useIsMutating({
     mutationKey: getInitShmoBookingQueryKey(acceptLanguage),

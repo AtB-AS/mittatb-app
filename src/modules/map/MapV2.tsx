@@ -46,7 +46,7 @@ import {
   isCarStationV2,
   isStationV2,
   isVehiclesClusteredFeature,
-  useShmoBookingMutationStatus,
+  useInitShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -77,7 +77,7 @@ export const MapV2 = (props: MapProps) => {
   const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
   const {isMutating: initShmoOneStopBookingIsMutating} =
-    useShmoBookingMutationStatus();
+    useInitShmoBookingMutationStatus();
 
   const startingCoordinates = useMemo(
     () =>
