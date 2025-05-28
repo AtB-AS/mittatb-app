@@ -21,11 +21,12 @@ export const SelectedFeatureIcon = ({
 
   const pinType = getPinType(selectedFeatureWithId?.properties);
 
-  const {iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeatureWithId?.properties?.id,
-    pinType,
-    1.61, // increased text size since the icon is larger
-  );
+  const {iconStyle, textStyle} = useMapSymbolStyles({
+    selectedFeaturePropertyId: selectedFeatureWithId?.properties?.id,
+    pinType: pinType,
+    reachFullScaleAtZoomLevel: 0,
+    textSizeFactor: 1.61, // increased text size since the icon is larger
+  });
   const {iconImage} = iconStyle;
   if (!selectedFeatureWithId) {
     return null;
