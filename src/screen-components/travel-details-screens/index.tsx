@@ -12,7 +12,6 @@ export {
   getNoticesForEstimatedCall,
   getNoticesForLeg,
   getNoticesForServiceJourney,
-  getTimeRepresentationType,
   getTripPatternBookingStatus,
   isFreeLeg,
   isLineFlexibleTransport,

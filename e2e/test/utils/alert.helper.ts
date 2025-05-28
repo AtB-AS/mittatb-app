@@ -1,3 +1,5 @@
+import Config from '../conf/config.js';
+
 /**
  * Different helper methods related to alerts
  */
@@ -14,7 +16,7 @@ class AlertHelper {
    * Title of the pop-up alert
    */
   get alertTitle() {
-    const id = `//*[@resource-id="android:id/alertTitle"]`;
+    const id = `//*[@resource-id="no.mittatb.${Config.appEnvironment()}:id/alertTitle"]`;
     return $(id).getText();
   }
 

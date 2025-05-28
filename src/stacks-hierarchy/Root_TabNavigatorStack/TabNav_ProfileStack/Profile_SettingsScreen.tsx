@@ -83,6 +83,15 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
               testID="travelTokenButton"
             />
           )}
+          {authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.editProfile
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
+            />
+          )}
         </Section>
 
         <ContentHeading

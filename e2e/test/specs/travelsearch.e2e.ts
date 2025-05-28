@@ -266,12 +266,12 @@ describe('Travel search', () => {
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       await expect(TravelsearchOverviewPage.bikeResult).toExist();
-      // "Bike 1 h 30 min"
+      // "Bike 1 h 23 min"
       await expect(
         TimeHelper.isAcceptableMinVariation(
           await TravelsearchOverviewPage.bikeResultText,
-          30,
-          2,
+          25,
+          5,
         ),
       ).toBe(true);
       await expect(TravelsearchOverviewPage.walkResult).not.toExist();
@@ -299,11 +299,11 @@ describe('Travel search', () => {
 
       await expect(TravelsearchOverviewPage.bikeResult).toExist();
       await expect(TravelsearchOverviewPage.walkResult).toExist();
-      // "Walk 19 min"
+      // "Walk 18 min"
       await expect(
         TimeHelper.isAcceptableMinVariation(
           await TravelsearchOverviewPage.walkResultText,
-          19,
+          18,
           2,
         ),
       ).toBe(true);

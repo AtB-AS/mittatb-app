@@ -104,7 +104,7 @@ describe('Visual tests', () => {
           newBaseline,
         );
         await PurchaseSummaryPage.choosePayment.click();
-        await PurchasePaymentPage.mastercard.click();
+        await PurchasePaymentPage.newPaymentCard.click();
         await PurchasePaymentPage.confirmPayment.click();
         await ElementHelper.waitForElement('text', 'Ticket summary');
         await VisualHelper.visualTestScreen(
@@ -122,8 +122,7 @@ describe('Visual tests', () => {
     }
   });
 
-  // DISABLED until after the WSC (since there's no element to scroll on the ticket tab)
-  xit('night ticket should be equal to baseline', async () => {
+  it('night ticket should be equal to baseline', async () => {
     try {
       await NavigationHelper.tapMenu('tickets');
       await NavigationHelper.tapMenu('tickets');
