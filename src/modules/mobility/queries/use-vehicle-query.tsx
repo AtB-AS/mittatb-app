@@ -8,4 +8,5 @@ export const useVehicleQuery = (id: string) =>
     queryFn: ({signal}) => getVehicle(id, {signal}),
     staleTime: ONE_MINUTE_MS,
     cacheTime: ONE_MINUTE_MS,
+    refetchOnMount: 'always',
   });
