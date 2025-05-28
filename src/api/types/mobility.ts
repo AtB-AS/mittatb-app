@@ -66,8 +66,7 @@ const ShmoPricingSegmentSchema = z.object({
   end: z
     .number()
     .int()
-    .optional()
-    .nullable()
+    .nullish()
     .describe(
       'The minute at which the rate will no longer apply (exclusive). If not provided, the rate applies until the trip ends.',
     ),
@@ -89,8 +88,7 @@ const ShmoPricingPlanSchema = z.object({
   price: z.number().describe('Fare price in the specified currency'),
   perMinPricing: z
     .array(ShmoPricingSegmentSchema)
-    .optional()
-    .nullable()
+    .nullish()
     .describe('Array of pricing segments, optional'),
 });
 
@@ -120,7 +118,7 @@ const ShmoBookingStateSchema = z.enum(
 
 const ShmoPricingSchema = z.object({
   currentAmount: z.number(),
-  finalAmount: z.number().optional().nullable(),
+  finalAmount: z.number().nullish(),
 });
 
 const ShmoOperatorSchema = z.object({
@@ -129,13 +127,13 @@ const ShmoOperatorSchema = z.object({
 });
 
 export const AssetSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().nullish(),
   operator: ShmoOperatorSchema,
-  stationId: z.string().optional().nullable(),
-  licensePlate: z.string().optional().nullable(),
-  stateOfCharge: z.number().int().optional().nullable(),
-  currentRangeKm: z.number().int().optional().nullable(),
-  formFactor: FormFactorSchema.nullable().optional(),
+  stationId: z.string().nullish(),
+  licensePlate: z.string().nullish(),
+  stateOfCharge: z.number().int().nullish(),
+  currentRangeKm: z.number().int().nullish(),
+  formFactor: FormFactorSchema.nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -143,11 +141,11 @@ export const ShmoBookingSchema = z.object({
   state: ShmoBookingStateSchema,
   orderId: z.string(),
   pricingPlan: ShmoPricingPlanSchema,
-  departureTime: z.coerce.date().optional().nullable(),
-  arrivalTime: z.coerce.date().optional().nullable(),
+  departureTime: z.coerce.date().nullish(),
+  arrivalTime: z.coerce.date().nullish(),
   pricing: ShmoPricingSchema,
   asset: AssetSchema,
-  comment: z.string().optional().nullable(),
+  comment: z.string().nullish(),
 });
 
 export type ShmoBooking = z.infer<typeof ShmoBookingSchema>;
@@ -164,7 +162,7 @@ const latitude = z
 const ShmoCoordinatesSchema = z.object({
   longitude,
   latitude,
-  altitude: z.number().optional().nullable(),
+  altitude: z.number().nullish(),
 });
 
 const InitShmoOneStopBookingRequestBodySchema = z.object({
@@ -172,7 +170,7 @@ const InitShmoOneStopBookingRequestBodySchema = z.object({
   coordinates: ShmoCoordinatesSchema,
   assetId: z
     .string()
-    .optional()
+    .nullish()
     .describe('This is the same id as vehicleId from the mobility API'),
   operatorId: z.string(),
 });
@@ -203,8 +201,8 @@ export enum SupportType {
 export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
 
 export const SendSupportRequestBodySchema = z.object({
-  bookingId: z.string().uuid().optional().nullable(),
-  assetId: z.string().optional().nullable(),
+  bookingId: z.string().uuid().nullish(),
+  assetId: z.string().nullish(),
   supportType: z.nativeEnum(SupportType),
   contactInformationEndUser: z
     .object({
@@ -243,13 +241,13 @@ export const SendSupportRequestBodySchema = z.object({
         });
       }
     }),
-  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).optional().nullable(),
+  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).nullish(),
   place: z
     .object({
       coordinates: ShmoCoordinatesSchema,
-      name: z.string().optional(),
+      name: z.string().nullish(),
     })
-    .optional(),
+    .nullish(),
 });
 
 export type SendSupportRequestBodyInput = z.input<

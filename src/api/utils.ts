@@ -13,8 +13,8 @@ type HttpError = z.infer<typeof HttpError>;
 export const ErrorResponse = z.object({
   http: HttpError,
   kind: z.string(),
-  message: z.string().optional(),
-  details: z.array(z.unknown()).optional(),
+  message: z.string().nullish(),
+  details: z.array(z.unknown()).nullish(),
 });
 export type ErrorResponse = z.infer<typeof ErrorResponse>;
 
