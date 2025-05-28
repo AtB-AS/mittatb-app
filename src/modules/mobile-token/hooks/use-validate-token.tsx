@@ -178,7 +178,7 @@ export const useValidateToken = (
 
       if (token && token.type === 'mobile') {
         checkShouldRenew(token).then((shouldRenew) => {
-          if (shouldRenew && retryCount < RETRY_MAX_COUNT) {
+          if (shouldRenew) {
             logToBugsnag(
               'Token should be renewed because there are difference between details on the token and the device',
             );
