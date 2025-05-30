@@ -38,7 +38,7 @@ export type TripPatternWithBooking = TripPattern & {
 };
 
 export type BookingTripsResult = {
-  trip: Trip & {
+  trip: {
     tripPatterns: TripPatternWithBooking[];
   };
 };
