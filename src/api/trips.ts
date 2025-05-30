@@ -1,6 +1,11 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
-import {TripPattern, TripsQuery} from '@atb/api/types/trips';
+import {
+  type BookingAvailabilityQueryVariables,
+  type BookingTripsResult,
+  TripPattern,
+  TripsQuery,
+} from '@atb/api/types/trips';
 import {
   NonTransitTripsQueryVariables,
   TripsQueryVariables,
@@ -63,6 +68,31 @@ export async function tripsSearch(
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.trip?.tripPatterns ?? 'none',
+  });
+
+  return results;
+}
+
+export async function bookingAvailabilitySearch(
+  query: BookingAvailabilityQueryVariables,
+) {
+  const url = 'bff/v2/trips/booking';
+
+  const {searchTime, fromStopPlaceId, toStopPlaceId, ...body} = query;
+  const queryParams = new URLSearchParams({
+    ...(searchTime && {searchTime}),
+    ...(fromStopPlaceId && {fromStopPlaceId}),
+    ...(toStopPlaceId && {toStopPlaceId}),
+  }).toString();
+
+  const results = await post<BookingTripsResult>(
+    `${url}?${queryParams}`,
+    body,
+    {authWithIdToken: true},
+  );
+
+  Bugsnag.leaveBreadcrumb('bookingAvailabilitySearch', {
+    bookingAvailability: results,
   });
 
   return results;

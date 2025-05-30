@@ -22,10 +22,17 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const [selection, setSelection] = useParamAsState(params.selection);
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
-    date: new Date().toISOString(),
-    option: 'now',
-  });
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>(
+    selection.travelDate
+      ? {
+          date: selection.travelDate,
+          option: 'departure',
+        }
+      : {
+          date: new Date().toISOString(),
+          option: 'now',
+        },
+  );
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -52,7 +59,13 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
       <View style={styles.dateSelection}>
         <DateSelection
           searchTime={searchTime}
-          setSearchTime={setSearchTime}
+          setSearchTime={(searchTime) => {
+            setSearchTime(searchTime);
+            setSelection((prev) => ({
+              ...prev,
+              travelDate: searchTime.date,
+            }));
+          }}
           backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
