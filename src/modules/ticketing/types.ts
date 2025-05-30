@@ -43,12 +43,6 @@ export type PaymentStatus =
   | 'INITIATE'
   | 'REJECT';
 
-export type PaymentResponse = {
-  order_id: string;
-  payment_type: string;
-  status: PaymentStatus;
-};
-
 export type FlexDiscountLadder = {
   current: number;
   steps: {
@@ -56,45 +50,6 @@ export type FlexDiscountLadder = {
     discount: number; // The discount percentage
   }[];
 };
-
-export type OfferPrice = {
-  amount: string;
-  amountFloat?: number;
-  currency: string;
-  vatGroup?: string;
-  taxAmount?: string;
-  originalAmount: string;
-  originalAmountFloat?: number;
-  originalTaxAmount?: string;
-};
-
-enum RouteType {
-  Zones,
-  StopPlaces,
-  Authority,
-}
-
-type Route = {
-  type: RouteType;
-  from?: string;
-  to?: string;
-};
-
-export type Offer = {
-  offerId: string;
-  travellerId: string;
-  route?: Route;
-  userProfileId?: string;
-  userProfileIds: string[];
-  price: OfferPrice;
-  fareProduct?: string;
-  flexDiscountLadder?: FlexDiscountLadder;
-  validFrom?: string;
-  validTo?: string;
-  shouldStartNow: boolean;
-};
-
-export type OfferSearchResponse = Offer[];
 
 /**
  * Defined by `OrderDetails` in
@@ -179,12 +134,6 @@ export type ReserveOfferResponse = {
   recurringPaymentId?: number;
 };
 
-export type VippsRedirectParams = {
-  payment_id: string;
-  transaction_id: string;
-  status: string;
-};
-
 export type SendReceiptResponse = {
   reference: string;
 };
@@ -196,12 +145,6 @@ export type CustomerProfile = {
   surname?: string;
   debug?: boolean;
   subAccounts?: string[];
-};
-
-export type TravelCard = {
-  expires: Date;
-  id: number;
-  token_id?: string;
 };
 
 export type AddPaymentMethodResponse = {

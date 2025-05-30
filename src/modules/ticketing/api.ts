@@ -1,10 +1,9 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {AddPaymentMethodResponse, ReserveOfferRequest} from '.';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
-  Offer,
   ReserveOfferResponse,
   PaymentType,
   RecentOrderDetails,
@@ -119,10 +118,10 @@ export async function searchOffers(
   offerEndpoint: string,
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
-): Promise<Offer[]> {
+): Promise<TicketOffer[]> {
   const url = `sales/v1/search/${offerEndpoint}`;
 
-  const response = await client.post<Offer[]>(url, params, opts);
+  const response = await client.post<TicketOffer[]>(url, params, opts);
 
   return response.data;
 }
