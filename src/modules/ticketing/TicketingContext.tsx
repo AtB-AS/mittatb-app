@@ -142,10 +142,14 @@ export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
   const {userId} = useAuthContext();
   const {enable_ticketing} = useRemoteConfigContext();
-  const {isEventStreamEnabled} = useFeatureTogglesContext();
+  const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
+    useFeatureTogglesContext();
 
   const {data: fareContracts} = useGetFareContractsQuery({
-    enabled: enable_ticketing && isEventStreamEnabled,
+    enabled:
+      enable_ticketing &&
+      isEventStreamEnabled &&
+      isEventStreamFareContractsEnabled,
     availability: undefined,
   });
   useEffect(() => {
@@ -163,7 +167,7 @@ export const TicketingContextProvider = ({children}: Props) => {
       const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
           onSnapshot: (fareContracts) => {
-            if (isEventStreamEnabled) {
+            if (isEventStreamEnabled && isEventStreamFareContractsEnabled) {
               Bugsnag.leaveBreadcrumb(
                 `Got Firestore snapshot with ${fareContracts.length} fare contracts, but not updating state since event stream is enabled.`,
               );
@@ -241,7 +245,12 @@ export const TicketingContextProvider = ({children}: Props) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [userId, enable_ticketing, isEventStreamEnabled]);
+  }, [
+    userId,
+    enable_ticketing,
+    isEventStreamEnabled,
+    isEventStreamFareContractsEnabled,
+  ]);
 
   return (
     <TicketingContext.Provider
