@@ -1,5 +1,5 @@
 import {useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useState} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
@@ -25,6 +25,12 @@ import {CarPreviews} from './CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  findRelevantBonusProduct,
+  PayWithBonusPointsCheckbox,
+} from '@atb/modules/bonus';
 
 type Props = {
   stationId: string;
@@ -54,6 +60,17 @@ export const CarSharingStationBottomSheet = ({
     stationName,
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const {bonusProducts} = useFirestoreConfigurationContext();
+  const bonusProduct = findRelevantBonusProduct(
+    bonusProducts,
+    operatorId,
+    FormFactor.Car,
+  );
+
+  const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
+  useDoOnceOnItemReceived(onStationReceived, station);
 
   useDoOnceOnItemReceived(onStationReceived, station);
 
@@ -116,6 +133,18 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
+              {isBonusProgramEnabled && bonusProduct && (
+                <PayWithBonusPointsCheckbox
+                  bonusProduct={bonusProduct}
+                  isChecked={payWithBonusPoints}
+                  onPress={() =>
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
+                  }
+                  style={styles.payWithBonusPointsSection}
+                />
+              )}
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
@@ -125,6 +154,8 @@ export const CarSharingStationBottomSheet = ({
                   operatorName={operatorName}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
+                  isBonusPayment={payWithBonusPoints}
+                  bonusProductId={bonusProduct?.id}
                 />
               </View>
             )}
@@ -176,6 +207,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       display: 'flex',
       flexDirection: 'row',
       marginTop: theme.spacing.small,
+    },
+    payWithBonusPointsSection: {
+      marginTop: theme.spacing.medium,
     },
   };
 });
