@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useAuthContext} from '@atb/modules/auth';
+import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
 import {
   KeyValuePair,
   storage,
@@ -132,6 +132,10 @@ export const Profile_DebugInfoScreen = () => {
         `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
+  function copyIdToken() {
+    const idToken = getIdTokenGlobal();
+    if (idToken) setClipboard(idToken);
+  }
 
   const {setPreference, preferences} = usePreferencesContext();
   const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
@@ -225,7 +229,11 @@ export const Profile_DebugInfoScreen = () => {
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
-
+          <LinkSectionItem
+            text="Copy ID token"
+            icon="arrow-upleft"
+            onPress={() => copyIdToken()}
+          />
           <LinkSectionItem
             text="Force refresh auth state"
             onPress={retryAuth}
