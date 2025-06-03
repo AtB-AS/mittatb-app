@@ -3,20 +3,23 @@ import {
   ClientNetworkError,
   mapTokenErrorResolution,
   TokenAction,
+  TokenEncodingClockSkewError,
   TokenEncodingInvalidError,
   TokenErrorResolution,
   TokenFactoryError,
+  TokenHasBeenRenewedError,
+  TokenMustBeReplacedError,
+  TokenNotFoundError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {isDefined} from '@atb/utils/presence';
 import {
-  parseRemoteError,
   RemoteTokenStateError,
+  TokenDeviceAttestationVerificationFailedRemoteTokenError,
   TokenMustBeRenewedRemoteTokenStateError,
   TokenReattestationRemoteTokenStateError,
-  TokenReattestationRequiredError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
-import {getAxiosErrorType} from '@atb/api/utils';
+import {ErrorResponse, getAxiosErrorType} from '@atb/api/utils';
 import {tokenService} from './tokenService';
 import {mobileTokenClient} from './mobileTokenClient';
 import {
@@ -88,8 +91,7 @@ export const getMobileTokenErrorHandlingStrategy = (
   } else if (err instanceof RemoteTokenStateError) {
     if (
       err instanceof TokenMustBeRenewedRemoteTokenStateError ||
-      err instanceof TokenReattestationRemoteTokenStateError ||
-      err instanceof TokenReattestationRequiredError
+      err instanceof TokenReattestationRemoteTokenStateError
     ) {
       // only require renewal or reattestation, do nothing
       return 'unspecified';
@@ -135,24 +137,95 @@ export const getSdkErrorTokenIds = (err: any): string[] =>
       )
     : [];
 
-/**
- * from https://github.com/entur/abt-mobile-client-sdk/pull/368
- */
-export const parseBffCallErrors = (error: any) => {
-  if (getAxiosErrorType(error) === 'network-error') {
-    return new ClientNetworkError(error.message);
+const parseErrorKind = (errorResponse: ErrorResponse) => {
+  const message = errorResponse.message ?? '';
+  switch (errorResponse.kind) {
+    case 'TOKEN_NOT_FOUND':
+      return new TokenNotFoundError(
+        message,
+        TokenErrorResolution.RESET,
+        undefined,
+        undefined,
+      );
+    case 'TOKEN_MUST_BE_REPLACED':
+      return new TokenMustBeReplacedError(
+        message,
+        TokenErrorResolution.RESET,
+        undefined,
+        undefined,
+      );
+    case 'TOKEN_DEVICE_ATTESTATION_VERIFICATION_FAILED':
+      return new TokenDeviceAttestationVerificationFailedRemoteTokenError(
+        message,
+        '',
+      );
+    case 'TOKEN_HAS_BEEN_RENEWED':
+      return new TokenHasBeenRenewedError(
+        message,
+        TokenErrorResolution.RESET,
+        undefined,
+        undefined,
+      );
+    case 'TOKEN_ENCODING_CLOCK_SKEW':
+      return new TokenEncodingClockSkewError(
+        message,
+        TokenErrorResolution.GIVE_UP,
+        undefined,
+        undefined,
+      );
+    case 'TOKEN_ENCODING_INVALID':
+      return new TokenEncodingInvalidError(
+        message,
+        TokenErrorResolution.RESET,
+        undefined,
+        undefined,
+      );
+    case 'TOKEN_MUST_BE_RENEWED':
+      return new TokenMustBeRenewedRemoteTokenStateError(message);
+    default:
+      return new TokenFactoryError(
+        message,
+        TokenErrorResolution.UNKNOWN,
+        undefined,
+        undefined,
+      );
   }
-
-  if (error instanceof TokenFactoryError) {
-    Bugsnag.leaveBreadcrumb(
-      `Received Token Factory Error when calling BFF: ${error.name}, ${
-        error.message
-      }, should be resolved using ${TokenErrorResolution[error.resolution]}`,
-    );
-  }
-
-  return parseRemoteError(error) ?? error;
 };
 
-export const isRemoteTokenStateError = (err: any) =>
-  parseBffCallErrors(err.response?.data) instanceof RemoteTokenStateError;
+export const parseTokenServerErrors = (rawError: any) => {
+  if (getAxiosErrorType(rawError) === 'network-error') {
+    return new ClientNetworkError(rawError.message);
+  }
+
+  const errorResponse = ErrorResponse.safeParse(rawError);
+
+  let errorKind: TokenFactoryError | RemoteTokenStateError | undefined;
+
+  if (errorResponse.data?.kind) {
+    errorKind = parseErrorKind(errorResponse.data);
+
+    if (errorKind instanceof TokenFactoryError) {
+      Bugsnag.leaveBreadcrumb(
+        `Received Token Factory Error when calling server: ${errorKind.name}, ${
+          errorKind.message
+        }, should be resolved using ${
+          TokenErrorResolution[errorKind.resolution]
+        }`,
+      );
+    }
+
+    return errorKind;
+  }
+};
+
+export const isRemoteTokenStateError = (err: any) => {
+  const {success, data} = ErrorResponse.safeParse(err.response?.data);
+  if (!success) return false;
+  const kind = parseErrorKind(data);
+  return (
+    kind instanceof TokenMustBeRenewedRemoteTokenStateError ||
+    kind instanceof TokenMustBeReplacedError ||
+    kind instanceof TokenHasBeenRenewedError ||
+    kind instanceof TokenNotFoundError
+  );
+};
