@@ -7,7 +7,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -32,14 +32,11 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {
-  PurchaseSelectionType,
-  useSelectableUserProfiles,
-} from '@atb/modules/purchase-selection';
+import {useSelectableUserProfiles} from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
-import {useAuthContext} from '@atb/modules/auth';
-import {useBookingTrips} from '../Root_TripSelectionScreen/use-booking-trips';
+import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
+import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -50,7 +47,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const {authenticationType} = useAuthContext();
   const {isBookingEnabled} = useFeatureTogglesContext();
 
   const [selection, setSelection] = useParamAsState(params.selection);
@@ -63,14 +59,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
-  const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
   const {travellerSelectionMode, zoneSelectionMode} =
     selection.fareProductTypeConfig.configuration;
-
-  const fareProductOnBehalfOfEnabled =
-    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const {
     isSearchingOffer,
@@ -79,11 +71,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(
-    selection,
-    preassignedFareProductAlternatives,
-    isOnBehalfOfToggle,
-  );
+  } = useOfferState(selection, preassignedFareProductAlternatives);
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
@@ -103,14 +91,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travellerSelectionMode,
     selectableUserProfiles,
   );
-
-  const isOnBehalfOfEnabled =
-    useFeatureTogglesContext().isOnBehalfOfEnabled &&
-    fareProductOnBehalfOfEnabled;
-
-  const isLoggedIn = authenticationType === 'phone';
-
-  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const hasSelection =
     selection.userProfilesWithCount.some((u) => u.count) &&
@@ -144,8 +124,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     .filter((u) => u.count > 0)
     .map((u) => u.userTypeString);
 
-  const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
-  const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
+  const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
 
   const {
     tripPatterns: tripPatternsThatRequireBooking,
@@ -157,7 +136,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   });
 
   const onPressBuy = () => {
-    if (isOnBehalfOfToggle) {
+    if (selection.isOnBehalfOf) {
       navigation.navigate(
         'Root_ChooseTicketRecipientScreen',
         rootPurchaseConfirmationScreenParams,
@@ -174,7 +153,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     );
   };
   const summaryButtonText = () => {
-    if (isOnBehalfOfToggle) {
+    if (selection.isOnBehalfOf) {
       return t(PurchaseOverviewTexts.summary.button.sendToOthers);
     }
     if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
@@ -257,7 +236,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             style={styles.selectionComponent}
           />
 
-          {shouldShowOnBehalfOf && (
+          {isOnBehalfOfAllowed && (
             <View style={styles.selectionComponent}>
               {isOnBehalfOfAllowed && !canSelectUserProfile && (
                 <ContentHeading
@@ -266,8 +245,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               )}
               <ToggleSectionItem
                 text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-                value={isTravelerOnBehalfOfToggle}
-                onValueChange={setIsOnBehalfOfToggle}
+                value={selection.isOnBehalfOf}
+                onValueChange={(newValue) =>
+                  setSelection({...selection, isOnBehalfOf: newValue})
+                }
                 testID="onBehalfOfToggle"
                 type="slim"
                 radiusSize="regular"
@@ -371,14 +352,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       </ScrollView>
     </FullScreenView>
   );
-};
-
-const useShouldShowOnBehalfOf = (selection: PurchaseSelectionType) => {
-  const isOnBehalfOfEnabled =
-    useFeatureTogglesContext().isOnBehalfOfEnabled &&
-    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-  const isLoggedIn = useAuthContext().authenticationType === 'phone';
-  return isOnBehalfOfEnabled && isLoggedIn;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
