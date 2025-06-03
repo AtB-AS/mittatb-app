@@ -32,7 +32,10 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {useSelectableUserProfiles} from '@atb/modules/purchase-selection';
+import {
+  usePurchaseSelectionBuilder,
+  useSelectableUserProfiles,
+} from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
@@ -49,6 +52,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {theme} = useThemeContext();
   const {isBookingEnabled} = useFeatureTogglesContext();
 
+  const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
@@ -238,7 +242,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           {isOnBehalfOfAllowed && (
             <View style={styles.selectionComponent}>
-              {isOnBehalfOfAllowed && !canSelectUserProfile && (
+              {!canSelectUserProfile && (
                 <ContentHeading
                   text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
                 />
@@ -246,9 +250,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               <ToggleSectionItem
                 text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
                 value={selection.isOnBehalfOf}
-                onValueChange={(newValue) =>
-                  setSelection({...selection, isOnBehalfOf: newValue})
-                }
+                onValueChange={(newValue) => {
+                  const newSelection = builder
+                    .fromSelection(selection)
+                    .isOnBehalfOf(newValue)
+                    .build();
+                  setSelection(newSelection);
+                }}
                 testID="onBehalfOfToggle"
                 type="slim"
                 radiusSize="regular"
