@@ -6,12 +6,11 @@ import {View} from 'react-native';
 import React, {useState} from 'react';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {
-  mapToSalesTripPatternLegs,
-  useTripsWithAvailability,
-} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-trips-with-availability';
+import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -23,12 +22,15 @@ export function TripSelection({selection, setSelection}: Props) {
     date: new Date().toISOString(),
     option: 'now',
   });
-  const {tripPatterns} = useTripsWithAvailability({
+  const {tripPatterns, reload} = useBookingTrips({
     selection,
-    searchTime,
     enabled: true,
   });
+  // Refetch in case the availability has changed
+  useDoOnceWhen(reload, true, true);
+
   const selectionBuilder = usePurchaseSelectionBuilder();
+
   return (
     <View
       style={{
@@ -47,6 +49,7 @@ export function TripSelection({selection, setSelection}: Props) {
           }
         >
           <ThemeText>{new Date(tp.expectedStartTime).toDateString()}</ThemeText>
+          <ThemeText>{tp.booking.availability}</ThemeText>
           <MemoizedResultItem
             tripPattern={tp}
             searchTime={searchTime}
@@ -56,4 +59,14 @@ export function TripSelection({selection, setSelection}: Props) {
       ))}
     </View>
   );
+}
+
+export function mapToSalesTripPatternLegs(legs: TripPatternFragment['legs']) {
+  return legs.map((l) => ({
+    fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
+    toStopPlaceId: l.toPlace.quay?.stopPlace?.id ?? '',
+    expectedStartTime: l.expectedStartTime,
+    mode: l.mode,
+    serviceJourneyId: l.serviceJourney?.id ?? '',
+  }));
 }

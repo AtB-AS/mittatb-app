@@ -1,5 +1,5 @@
 import * as Types from './generated/TripsQuery';
-import {TripsQueryVariables} from './generated/TripsQuery';
+import {BookingAvailabilityType, type TicketOffer} from '@atb-as/utils';
 
 export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
@@ -22,7 +22,23 @@ export type Place =
 export type Quay = Place['quay'];
 export type StopPlace = Required<Required<Place>['quay']>['stopPlace'];
 
-export type TripsQueryWithJourneyIds = {
-  query: TripsQueryVariables;
-  journeyIds: string[];
+export type BookingAvailabilityQueryVariables = {
+  searchTime: string;
+  fromStopPlaceId: string;
+  toStopPlaceId: string;
+  travellers: {id: string; userType: string}[];
+  products: string[];
+};
+
+export type TripPatternWithBooking = TripPattern & {
+  booking: {
+    availability: BookingAvailabilityType;
+    offer: TicketOffer;
+  };
+};
+
+export type BookingTripsResult = {
+  trip: {
+    tripPatterns: TripPatternWithBooking[];
+  };
 };
