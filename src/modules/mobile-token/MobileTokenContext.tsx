@@ -467,7 +467,7 @@ const deviceInspectable = (
  * Determines if a mobile token status is inspectable.
  *
  * Inspectable means that the token has the `TICKET_INSPECTION` right on the backoffice.
- * 
+ *
  * @param mobileTokenStatus - The current status of the mobile token.
  *   - `'success-and-inspectable'`: The token is successfully generated and can be inspected.
  *   - `'fallback'`: The token is in a fallback state and can be inspected.
