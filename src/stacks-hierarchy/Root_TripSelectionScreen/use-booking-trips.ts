@@ -6,6 +6,7 @@ import type {TripPatternWithBooking} from '@atb/api/types/trips';
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
   isLoadingBooking: boolean;
+  isError: boolean;
   reload: () => void;
 };
 
@@ -32,7 +33,7 @@ export function useBookingTrips({
     preassignedFareProduct.id,
   ];
 
-  const {data, isFetching, isSuccess, refetch} = useQuery({
+  const {data, isFetching, isSuccess, isError, refetch} = useQuery({
     queryKey,
     queryFn: () =>
       bookingAvailabilitySearch({
@@ -45,7 +46,7 @@ export function useBookingTrips({
           userType: p.userTypeString,
         })),
       }),
-    enabled: enabled && isValid(selection),
+    enabled: enabled && isValidSelection(selection),
     retry: 3,
   });
 
@@ -53,9 +54,16 @@ export function useBookingTrips({
     isLoadingBooking: isFetching,
     tripPatterns: isSuccess ? data?.trip.tripPatterns : [],
     reload: refetch,
+    isError: isError || !isValidResult(data?.trip.tripPatterns),
   };
 }
 
-function isValid(selection: PurchaseSelectionType) {
+function isValidSelection(selection: PurchaseSelectionType) {
   return !!selection.stopPlaces?.from && !!selection.stopPlaces?.to;
+}
+
+function isValidResult(result: TripPatternWithBooking[] | undefined): boolean {
+  return !result?.some(
+    (tp) => !tp.booking.availability || tp.booking.availability === 'unknown',
+  );
 }

@@ -74,7 +74,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const {
     isSearchingOffer,
-    error,
+    error: offerError,
     originalPrice,
     totalPrice,
     refreshOffer,
@@ -147,11 +147,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
   const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
 
-  const {tripPatterns: tripPatternsThatRequireBooking, isLoadingBooking} =
-    useBookingTrips({
-      selection,
-      enabled: isBookingEnabled,
-    });
+  const {
+    tripPatterns: tripPatternsThatRequireBooking,
+    isLoadingBooking,
+    isError: isBookingError,
+  } = useBookingTrips({
+    selection,
+    enabled: isBookingEnabled,
+  });
 
   const onPressBuy = () => {
     if (isOnBehalfOfToggle) {
@@ -212,8 +215,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
-          {error &&
-            (error.type === 'not-available' ? (
+          {(offerError || isBookingError) &&
+            (offerError?.type === 'not-available' ? (
               <MessageInfoBox
                 type="warning"
                 title={t(
@@ -333,12 +336,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             isLoading={isSearchingOffer || isLoadingBooking}
             isFree={isFree}
-            isError={!!error || !hasSelection}
+            isError={isBookingError || !!offerError || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            shouldForwardToBooking={
-              isBookingEnabled && tripPatternsThatRequireBooking.length > 0
-            }
             summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {

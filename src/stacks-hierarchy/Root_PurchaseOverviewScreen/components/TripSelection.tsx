@@ -28,7 +28,7 @@ export function TripSelection({selection, setSelection}: Props) {
   });
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
-  
+
   const selectionBuilder = usePurchaseSelectionBuilder();
 
   return (
