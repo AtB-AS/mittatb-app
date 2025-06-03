@@ -16,12 +16,6 @@ export enum MapSlotLayerId {
   SelectedFeature = 'selectedFeature',
 }
 
-const slotSourceKey = 'slotSource';
-// This source only exists for slots layers, no data is fetched.
-const slotSource: StyleJsonVectorSourcesObj = {
-  [slotSourceKey]: {type: 'vector'}, // type is required, but otherwise doesn't matter here.
-};
-
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
@@ -32,8 +26,7 @@ const slotLayerIds: MapSlotLayerId[] = [
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
-  type: 'slot', // type is required, but otherwise doesn't matter here.
-  // source: slotSourceKey,
+  type: 'slot',
 }));
 
 export const useMapboxJsonStyle: (
@@ -68,7 +61,6 @@ export const useMapboxJsonStyle: (
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
-      ...slotSource,
       ...(includeVehiclesAndStationsVectorSource
         ? {
             [vehiclesAndStationsVectorSourceId]:
