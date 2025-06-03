@@ -135,6 +135,13 @@ const createBuilder = (
       };
       return builder;
     },
+    isOnBehalfOf(isOnBehalfOf) {
+      currentSelection = {
+        ...currentSelection,
+        isOnBehalfOf,
+      };
+      return builder;
+    },
 
     build: () => currentSelection,
   };
@@ -174,5 +181,6 @@ const createSelectionForType = (
     userProfilesWithCount,
     travelDate: undefined,
     legs: [],
+    isOnBehalfOf: false,
   };
 };

@@ -348,4 +348,14 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     expect(selection.travelDate).toBeUndefined();
   });
+
+  it('OnBehalfOf should be false', () => {
+    const input = {
+      ...TEST_INPUT,
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.isOnBehalfOf).toBe(false);
+  });
 });

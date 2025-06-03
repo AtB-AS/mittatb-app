@@ -88,4 +88,5 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
   travelDate: undefined,
   legs: [],
+  isOnBehalfOf: false,
 };
