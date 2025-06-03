@@ -7,6 +7,35 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
 
+// since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
+export enum MapSlotLayerId {
+  GeofencingZones = 'geofencingZones',
+  Vehicles = 'vehicles',
+  Stations = 'stations',
+  NSRItems = 'nsrItems',
+  SelectedFeature = 'selectedFeature',
+}
+
+const slotSourceKey = 'slotSource';
+// This source only exists for slots layers, no data is fetched.
+const slotSource: StyleJsonVectorSourcesObj = {
+  [slotSourceKey]: {type: 'vector'}, // type is required, but otherwise doesn't matter here.
+};
+
+// the order of this list, determines which layers render on top. Last is on top.
+const slotLayerIds: MapSlotLayerId[] = [
+  MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.Vehicles,
+  MapSlotLayerId.Stations,
+  MapSlotLayerId.NSRItems,
+  MapSlotLayerId.SelectedFeature,
+];
+const slotLayers = slotLayerIds.map((slotLayerId) => ({
+  id: slotLayerId,
+  type: 'symbol', // type is required, but otherwise doesn't matter here.
+  source: slotSourceKey,
+}));
+
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
 ) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
@@ -22,7 +51,7 @@ export const useMapboxJsonStyle: (
     source: vehiclesAndStationsVectorSource,
   } = useVehiclesAndStationsVectorSource();
 
-  const themedStyleWithExtendedSources = useMemo(() => {
+  const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
       themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
     const themedLayers = themedStyle.layers.map((layer) => ({
@@ -37,8 +66,9 @@ export const useMapboxJsonStyle: (
       },
     }));
 
-    const extendedSources: Record<string, StyleJsonVectorSource> = {
+    const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
+      ...slotSource,
       ...(includeVehiclesAndStationsVectorSource
         ? {
             [vehiclesAndStationsVectorSourceId]:
@@ -47,10 +77,12 @@ export const useMapboxJsonStyle: (
         : undefined),
     };
 
+    const themedLayersWithSlots = [...themedLayers, ...slotLayers];
+
     return {
       ...themedStyle,
       sources: extendedSources,
-      layers: themedLayers,
+      layers: themedLayersWithSlots,
     };
   }, [
     includeVehiclesAndStationsVectorSource,
@@ -62,7 +94,7 @@ export const useMapboxJsonStyle: (
   const mapboxJsonStyle = useMemo(
     () =>
       JSON.stringify({
-        ...themedStyleWithExtendedSources,
+        ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: mapboxSpriteUrl + themeName,
         projection: {name: 'globe'},
         imports: [
@@ -81,7 +113,7 @@ export const useMapboxJsonStyle: (
           },
         ],
       }),
-    [themedStyleWithExtendedSources, mapboxSpriteUrl, themeName],
+    [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
   );
 
   return mapboxJsonStyle;
@@ -108,3 +140,4 @@ export type StyleJsonVectorSource = {
   url?: string;
   volatile?: boolean;
 };
+type StyleJsonVectorSourcesObj = Record<string, StyleJsonVectorSource>;

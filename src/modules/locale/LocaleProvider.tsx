@@ -43,7 +43,7 @@ type Props = {
 };
 
 /**
- * We'll create a locale as a mix of system locale and language preferences set in 'My profile'
+ * We'll create a locale as a mix of system locale and language preferences set in 'Profile'
  * where we always use region from system locale
  * and language from settings or from system locale.
  * if system locale language is not supported by the app we fallback to FALLBACK_LANGUAGE

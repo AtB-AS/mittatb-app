@@ -2,7 +2,7 @@ import AppHelper from '../utils/app.helper.ts';
 
 class MyProfilePage {
   /**
-   * Open a setting from my profile
+   * Open a setting from profile
    * @param setting the setting to open
    */
   async openSetting(setting: string) {

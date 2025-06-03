@@ -15,7 +15,7 @@ import TicketPage from '../pageobjects/ticket.page.ts';
  * - Open the map
  * - Find departures
  * - Open the ticket page
- * - Open my profile
+ * - Open profile
  */
 describe('Flashlight performance measure', () => {
   // Waiting time between actions in ms
@@ -131,9 +131,9 @@ describe('Flashlight performance measure', () => {
   });
 
   /**
-   * My profile: open my profile
+   * Profile: open profile
    */
-  it('should show my profile', async () => {
+  it('should show profile', async () => {
     try {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');

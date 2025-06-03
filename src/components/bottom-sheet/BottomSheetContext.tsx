@@ -21,6 +21,11 @@ import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Backdrop} from './Backdrop';
 import {ClickableBackground} from './ClickableBackground';
 import {AnimatedBottomSheet} from './AnimatedBottomSheet';
+import {
+  AnalyticsEventContext,
+  getPosthogClientGlobal,
+} from '@atb/modules/analytics';
+import Bugsnag from '@bugsnag/react-native';
 
 type BottomSheetContentFunction = () => ReactNode;
 
@@ -41,6 +46,14 @@ type BottomSheetState = {
   height: number;
   /** Use onOpenFocusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
   onOpenFocusRef: Ref<any>;
+  /** This is implemented here aditionally to the useAnalyticsContext becuase the analytics context is wrapped around the
+   * NavigationContainer at the lowest levet to be able to use auto-capture on navigation events. This prevents us from using the
+   * analytics context in bottomsheets because the bottomsheet context it wrapped at a higher level in the stack and out of scope of the analytics context */
+  logEvent: (
+    context: AnalyticsEventContext,
+    event: string,
+    properties?: {[key: string]: any},
+  ) => void;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -61,6 +74,29 @@ export const BottomSheetContextProvider = ({children}: Props) => {
 
   const onOpenFocusRef = useFocusOnLoad();
   const refToFocusOnClose = useRef<RefObject<any>>(undefined);
+
+  const logEvent = useCallback(
+    (
+      context: AnalyticsEventContext,
+      event: string,
+      properties?: {[key: string]: any},
+    ) => {
+      const client = getPosthogClientGlobal();
+      if (!client) {
+        Bugsnag.leaveBreadcrumb(
+          `Event '${event}' could not be logged in PostHog. PostHog is undefined.`,
+        );
+        console.warn(
+          `Event '${event}' could not be logged in PostHog. PostHog is undefined.`,
+        );
+
+        return;
+      }
+
+      client.capture(`${context}: ${event}`, properties);
+    },
+    [],
+  );
 
   const close = useCallback(() => {
     setContentFunction(() => () => null);
@@ -109,6 +145,7 @@ export const BottomSheetContextProvider = ({children}: Props) => {
     isOpen: useCallback(() => isOpen, [isOpen]),
     height,
     onOpenFocusRef,
+    logEvent,
   };
 
   return (

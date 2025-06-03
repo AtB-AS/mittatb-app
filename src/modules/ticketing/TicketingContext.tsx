@@ -7,13 +7,15 @@ import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {useGetFareContractsQuery} from './use-fare-contracts';
+import Bugsnag from '@bugsnag/react-native';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
   sentFareContracts: FareContractType[];
   reservations: Reservation[];
   rejectedReservations: Reservation[];
-  isRefreshingFareContracts: boolean;
   customerProfile: CustomerProfile | undefined;
 };
 
@@ -62,7 +64,6 @@ const ticketingReducer: TicketingReducer = (
         reservations: prevState.reservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
-        isRefreshingFareContracts: false,
       };
     }
     case 'UPDATE_SENT_FARE_CONTRACTS': {
@@ -75,7 +76,6 @@ const ticketingReducer: TicketingReducer = (
         reservations: prevState.reservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
-        isRefreshingFareContracts: false,
       };
     }
     case 'UPDATE_RESERVATIONS': {
@@ -122,10 +122,7 @@ type TicketingState = {
   findFareContractById: (id: string) => FareContractType | undefined;
 } & Pick<
   TicketingReducerState,
-  | 'reservations'
-  | 'isRefreshingFareContracts'
-  | 'customerProfile'
-  | 'rejectedReservations'
+  'reservations' | 'customerProfile' | 'rejectedReservations'
 >;
 
 const initialReducerState: TicketingReducerState = {
@@ -133,7 +130,6 @@ const initialReducerState: TicketingReducerState = {
   sentFareContracts: [],
   reservations: [],
   rejectedReservations: [],
-  isRefreshingFareContracts: false,
   customerProfile: undefined,
 };
 
@@ -144,9 +140,20 @@ type Props = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
-
   const {userId} = useAuthContext();
   const {enable_ticketing} = useRemoteConfigContext();
+  const {isEventStreamEnabled} = useFeatureTogglesContext();
+
+  const {data: fareContracts} = useGetFareContractsQuery({
+    enabled: enable_ticketing && isEventStreamEnabled,
+    availability: undefined,
+  });
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_FARE_CONTRACTS',
+      fareContracts: fareContracts ?? [],
+    });
+  }, [fareContracts]);
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -155,8 +162,15 @@ export const TicketingContextProvider = ({children}: Props) => {
       );
       const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
-          onSnapshot: (fareContracts) =>
-            dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
+          onSnapshot: (fareContracts) => {
+            if (isEventStreamEnabled) {
+              Bugsnag.leaveBreadcrumb(
+                `Got Firestore snapshot with ${fareContracts.length} fare contracts, but not updating state since event stream is enabled.`,
+              );
+            } else {
+              dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
+            }
+          },
           onError: (err) =>
             notifyBugsnag(err, {
               metadata: {
@@ -227,7 +241,7 @@ export const TicketingContextProvider = ({children}: Props) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [userId, enable_ticketing]);
+  }, [userId, enable_ticketing, isEventStreamEnabled]);
 
   return (
     <TicketingContext.Provider

@@ -48,6 +48,7 @@ export const HarborSelection = forwardRef<
                 .fromSelection(selection)
                 .fromStopPlace(undefined)
                 .toStopPlace(undefined)
+                .legs([])
                 .build(),
             )
           }

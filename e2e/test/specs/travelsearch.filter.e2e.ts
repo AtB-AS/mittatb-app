@@ -55,7 +55,7 @@ describe('Travel search filter', () => {
         'tripSearchContentView',
         'selectedFilterButton',
       );
-      await TravelsearchFilterPage.shouldShowSelectedFilter('6 of 7');
+      await TravelsearchFilterPage.shouldShowSelectedFilter('5 of 7');
 
       // Remove the selected filters
       await TravelsearchFilterPage.removeSelectedFilter();

@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.68.0",
+  "version": "1.69.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -32,7 +32,7 @@
     "@atb-as/config-specs": "5.16.0",
     "@atb-as/generate-assets": "17.2.0",
     "@atb-as/theme": "^13.1.5",
-    "@atb-as/utils": "^3.1.0",
+    "@atb-as/utils": "^3.4.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "3.3.14",
@@ -199,6 +199,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }

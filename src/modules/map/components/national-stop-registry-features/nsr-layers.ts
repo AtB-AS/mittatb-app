@@ -9,12 +9,12 @@ import {NsrPinIconCode} from '../../mapbox-styles/pin-types';
  * An NsrLayer represents core static data for a layer, specific for National Stop Registry (NSR) data.
  * Further dynamic props are added with hooks to get all props needed for a layer.
  * @property {string} id - A unique identifier for the layer.
- * @property {number} showAsDefaultAtZoomLevel - The zoom level at which the icon switches to default when zooming in.
+ * @property {number} reachFullScaleAtZoomLevel - The zoom level at which the icon reaches full size (and opacity 1) when zooming in.
  * @property {FilterExpression} filter - Filter to select specific NSR items relevant to the layer.
  */
 export type NsrLayer = {
   id: string;
-  showAsDefaultAtZoomLevel: number;
+  reachFullScaleAtZoomLevel: number;
   filter: FilterExpression;
   textField?: SymbolLayerStyleProps['textField'];
 };
@@ -51,7 +51,7 @@ type NsrSymbolLayer = NsrLayer &
 const quaysBaseLayer: NsrLayer = {
   // Note: Quays from mapbox geojson via the asag repo do not contain info to know which stopPlaceType it belongs to. As a Martin Tile Vector Source though, we can add add this. E.g. then we can select boat instead of city for boat harbour quays.
   id: 'quays.nsr.api',
-  showAsDefaultAtZoomLevel: 17.5,
+  reachFullScaleAtZoomLevel: 17.5,
   filter: ['all', ['match', ['get', 'entityType'], ['Quay'], true, false]],
   textField: ['get', 'publicCode'],
 };
@@ -70,6 +70,7 @@ const isStopPlaceEntityType: Expression = [
 const stopPlaceType: Expression = ['get', 'stopPlaceType'];
 const hasAdjacentSites: Expression = ['has', 'adjacentSites'];
 const nameTextField: NsrLayer['textField'] = ['get', 'name'];
+const busMetroTramStopZoomLevel = 13;
 
 export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {
@@ -81,7 +82,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {
     id: 'carparking.nsr.api',
     iconCode: 'commuterparking',
-    showAsDefaultAtZoomLevel: 12,
+    reachFullScaleAtZoomLevel: 13,
     filter: [
       'all',
       ['match', ['get', 'entityType'], ['Parking'], true, false],
@@ -91,21 +92,9 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
   {
-    id: 'boat.nsr.api',
-    iconCode: 'boat',
-    showAsDefaultAtZoomLevel: 10,
-    filter: [
-      'all',
-      isStopPlaceEntityType,
-      ['match', stopPlaceType, ['ferryStop'], true, false],
-    ],
-    textField: nameTextField,
-    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
-  },
-  {
     id: 'tram.nsr.api',
     iconCode: 'tram',
-    showAsDefaultAtZoomLevel: 13,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
@@ -118,7 +107,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {
     id: 'metro.tram.nsr.api',
     iconCode: 'metroandtram', // Bekkestua seems to be the only one matching this
-    showAsDefaultAtZoomLevel: 14,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
@@ -137,7 +126,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   },
   {
     id: 'metro.nsr.api',
-    showAsDefaultAtZoomLevel: 14,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
@@ -148,61 +137,11 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
-  {
-    id: 'ferjekai.nsr.api',
-    iconCode: 'ferry',
-    showAsDefaultAtZoomLevel: 10,
-    filter: [
-      'all',
-      isStopPlaceEntityType,
-      ['match', stopPlaceType, ['harbourPort'], true, false],
-    ],
-    textField: nameTextField,
-    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
-  },
-  {
-    id: 'airport.nsr.api',
-    iconCode: 'plane',
-    showAsDefaultAtZoomLevel: 6,
-    filter: [
-      'all',
-      isStopPlaceEntityType,
-      ['match', stopPlaceType, ['airport'], true, false],
-      ['match', ['get', 'submode'], ['helicopterService'], false, true],
-    ],
-    textField: nameTextField,
-    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
-  },
-  {
-    id: 'helicopter.nsr.api',
-    iconCode: 'helicopter',
-    showAsDefaultAtZoomLevel: 11,
-    filter: [
-      'all',
-      isStopPlaceEntityType,
-      ['match', stopPlaceType, ['airport'], true, false],
-      ['match', ['get', 'submode'], ['helicopterService'], true, false],
-    ],
-    textField: nameTextField,
-    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
-  },
-  {
-    id: 'railway.nsr.api',
-    iconCode: 'train',
-    showAsDefaultAtZoomLevel: 11,
-    filter: [
-      'all',
-      isStopPlaceEntityType,
-      ['match', stopPlaceType, ['railStation'], true, false],
-      ['match', ['get', 'submode'], ['touristRailway'], false, true],
-    ],
-    textField: nameTextField,
-    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
-  },
+
   {
     id: 'bus.tram.nsr.api',
     iconCode: 'busandtram',
-    showAsDefaultAtZoomLevel: 13,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
@@ -222,7 +161,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {
     id: 'bussterminal.nsr.api',
     iconCode: 'bus',
-    showAsDefaultAtZoomLevel: 10,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
@@ -234,13 +173,76 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
   {
     id: 'bus.nsr.api',
     iconCode: 'bus',
-    showAsDefaultAtZoomLevel: 13,
+    reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
     filter: [
       'all',
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['onstreetBus'], true, false],
       ['match', ['get', 'submode'], ['railReplacementBus'], false, true],
       ['!', hasAdjacentSites],
+    ],
+    textField: nameTextField,
+    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
+  },
+  {
+    id: 'ferjekai.nsr.api',
+    iconCode: 'ferry',
+    reachFullScaleAtZoomLevel: 12,
+    filter: [
+      'all',
+      isStopPlaceEntityType,
+      ['match', stopPlaceType, ['harbourPort'], true, false],
+    ],
+    textField: nameTextField,
+    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
+  },
+  {
+    id: 'boat.nsr.api',
+    iconCode: 'boat',
+    reachFullScaleAtZoomLevel: 12,
+    filter: [
+      'all',
+      isStopPlaceEntityType,
+      ['match', stopPlaceType, ['ferryStop'], true, false],
+    ],
+    textField: nameTextField,
+    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
+  },
+  {
+    id: 'railway.nsr.api',
+    iconCode: 'train',
+    reachFullScaleAtZoomLevel: 12,
+    filter: [
+      'all',
+      isStopPlaceEntityType,
+      ['match', stopPlaceType, ['railStation'], true, false],
+      ['match', ['get', 'submode'], ['touristRailway'], false, true],
+    ],
+    textField: nameTextField,
+    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
+  },
+  {
+    id: 'helicopter.nsr.api',
+    iconCode: 'helicopter',
+    reachFullScaleAtZoomLevel: 10,
+    filter: [
+      'all',
+      isStopPlaceEntityType,
+      ['match', stopPlaceType, ['airport'], true, false],
+      ['match', ['get', 'submode'], ['helicopterService'], true, false],
+    ],
+    textField: nameTextField,
+    textLocation: NsrSymbolLayerTextLocation.BelowIcon,
+  },
+  {
+    id: 'airport.nsr.api',
+    iconCode: 'plane',
+    reachFullScaleAtZoomLevel: 9,
+    filter: [
+      'all',
+      isStopPlaceEntityType,
+      ['match', stopPlaceType, ['airport'], true, false],
+      ['match', ['get', 'submode'], ['helicopterService'], false, true],
     ],
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,

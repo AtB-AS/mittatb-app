@@ -24,7 +24,7 @@ export const useNsrSymbolLayers = (
           iconCode,
           textLocation,
           textField,
-          showAsDefaultAtZoomLevel,
+          reachFullScaleAtZoomLevel,
         } = nsrSymbolLayer;
         const nsrSymbolLayerSourceProps = getNsrLayerSourceProps(id);
 
@@ -45,7 +45,7 @@ export const useNsrSymbolLayers = (
 
         let layerPropsDeterminedByZoomLevelParams: LayerPropsDeterminedByZoomLevelParams =
           {
-            showAsDefaultAtZoomLevel,
+            reachFullScaleAtZoomLevel,
             selectedFeaturePropertyId,
             opacityTransitionZoomRangeDelay: 0,
             showTextWhileAFeatureIsSelected: true,
@@ -60,7 +60,7 @@ export const useNsrSymbolLayers = (
           textVariableAnchor = ['top'];
 
           layerPropsDeterminedByZoomLevelParams = {
-            showAsDefaultAtZoomLevel,
+            reachFullScaleAtZoomLevel,
             selectedFeaturePropertyId,
             iconImageProps: {
               iconCode,

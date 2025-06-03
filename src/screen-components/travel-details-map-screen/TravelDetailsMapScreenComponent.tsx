@@ -72,6 +72,7 @@ export const TravelDetailsMapScreenComponent = ({
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+  const [loadedMap, setLoadedMap] = useState(false);
 
   const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapViewConfig = useMapViewConfig();
@@ -127,7 +128,7 @@ export const TravelDetailsMapScreenComponent = ({
   useEffect(() => {
     const location = liveVehicle?.location;
     if (!location) return;
-    if (shouldTrack) {
+    if (shouldTrack && loadedMap) {
       flyToLocation({
         coordinates: location,
         mapCameraRef,
@@ -136,7 +137,7 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
-  }, [liveVehicle, shouldTrack]);
+  }, [liveVehicle, loadedMap, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
@@ -147,6 +148,7 @@ export const TravelDetailsMapScreenComponent = ({
         {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onMapIdle={onMapIdle}
+        onDidFinishLoadingMap={() => setLoadedMap(true)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}

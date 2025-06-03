@@ -141,7 +141,7 @@ function useCurrentLocationChip(
       if (location) {
         onSelectLocation(location);
       } else {
-        const status = await requestLocationPermission();
+        const status = await requestLocationPermission(false);
         if (status === 'granted') {
           setRecentlyAllowedGeo(true);
         }

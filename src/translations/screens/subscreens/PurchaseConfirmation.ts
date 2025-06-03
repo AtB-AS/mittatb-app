@@ -112,7 +112,7 @@ const PurchaseConfirmationTexts = {
   paymentWithDefaultServices: {
     a11yLabel: (brand: string) =>
       _(`Betal med ${brand}`, `Pay with ${brand}`, `Betal med ${brand}`),
-    a11Hint: _(
+    a11yHint: _(
       'Aktivér for velge denne betalingsmåten',
       'Activate to select this payment method',
       'Aktivér for å velje denne betalingsmetoden',

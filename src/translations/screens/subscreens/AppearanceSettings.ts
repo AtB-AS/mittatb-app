@@ -9,7 +9,7 @@ const AppearanceSettingsTexts = {
       "Use my phone's colour theme",
       'Nytt fargetema frå mobilen min',
     ),
-    darkMode: _('Nattmodus', 'Dark mode', 'Nattmodus'),
+    darkMode: _('Mørk modus', 'Dark mode', 'Mørk modus'),
     useSystemFont: _(
       'Bruk telefonens skrifttype',
       "Use my phone's font",

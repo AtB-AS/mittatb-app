@@ -12,11 +12,11 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useJourneyModes} from './hooks';
-import {useAnalyticsContext} from '@atb/modules/analytics';
-import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
-import {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
+import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
+import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -26,13 +26,15 @@ export function useTripsQuery(
     date: new Date().toISOString(),
   },
   filtersSelection: TravelSearchFiltersSelectionType | undefined,
+  enabled: boolean = true,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: string;
-  loadMore: (() => {}) | undefined;
+  loadMore: (() => void) | undefined;
   clear: () => void;
   searchState: SearchStateType;
   error?: ErrorType;
+  enabled?: boolean;
 } {
   const [timeOfSearch, setTimeOfSearch] = useState<string>(
     new Date().toISOString(),
@@ -170,8 +172,9 @@ export function useTripsQuery(
   );
 
   useEffect(() => {
+    if (!enabled) return;
     search();
-  }, [search]);
+  }, [search, enabled]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);
@@ -222,6 +225,7 @@ async function doSearch(
     cancelToken: cancelToken.token,
   });
 }
+
 function generateKeyFromTripPattern(tripPattern: TripPattern) {
   const firstServiceLeg = tripPattern.legs.find((leg) => leg.serviceJourney);
   const key =

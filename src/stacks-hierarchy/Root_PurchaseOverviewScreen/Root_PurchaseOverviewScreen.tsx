@@ -28,7 +28,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useAuthContext} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
@@ -39,6 +38,8 @@ import {
 } from '@atb/modules/purchase-selection';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
+import {useAuthContext} from '@atb/modules/auth';
+import {useBookingTrips} from '../Root_TripSelectionScreen/use-booking-trips';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -50,6 +51,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const {isBookingEnabled} = useFeatureTogglesContext();
 
   const [selection, setSelection] = useParamAsState(params.selection);
 
@@ -62,7 +64,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
-
   const analytics = useAnalyticsContext();
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -73,7 +74,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const {
     isSearchingOffer,
-    error,
+    error: offerError,
     originalPrice,
     totalPrice,
     refreshOffer,
@@ -146,6 +147,42 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
   const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
 
+  const {
+    tripPatterns: tripPatternsThatRequireBooking,
+    isLoadingBooking,
+    isError: isBookingError,
+  } = useBookingTrips({
+    selection,
+    enabled: isBookingEnabled,
+  });
+
+  const onPressBuy = () => {
+    if (isOnBehalfOfToggle) {
+      navigation.navigate(
+        'Root_ChooseTicketRecipientScreen',
+        rootPurchaseConfirmationScreenParams,
+      );
+      return;
+    }
+    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
+      navigation.push('Root_TripSelectionScreen', {selection});
+      return;
+    }
+    navigation.navigate(
+      'Root_PurchaseConfirmationScreen',
+      rootPurchaseConfirmationScreenParams,
+    );
+  };
+  const summaryButtonText = () => {
+    if (isOnBehalfOfToggle) {
+      return t(PurchaseOverviewTexts.summary.button.sendToOthers);
+    }
+    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
+      return t(PurchaseOverviewTexts.summary.button.selectDeparture);
+    }
+    return t(PurchaseOverviewTexts.summary.button.payment);
+  };
+
   return (
     <FullScreenView
       headerProps={{
@@ -178,8 +215,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
-          {error &&
-            (error.type === 'not-available' ? (
+          {(offerError || isBookingError) &&
+            (offerError?.type === 'not-available' ? (
               <MessageInfoBox
                 type="warning"
                 title={t(
@@ -297,16 +334,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <Summary
             selection={selection}
-            isLoading={isSearchingOffer}
+            isLoading={isSearchingOffer || isLoadingBooking}
             isFree={isFree}
-            isError={!!error || !hasSelection}
+            isError={isBookingError || !!offerError || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            summaryButtonText={
-              isOnBehalfOfToggle
-                ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
-                : t(PurchaseOverviewTexts.summary.button.payment)
-            }
+            summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: selection.fareProductTypeConfig.name,
@@ -331,15 +364,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate: selection.travelDate,
                 mode: params.mode,
               });
-              isOnBehalfOfToggle
-                ? navigation.navigate(
-                    'Root_ChooseTicketRecipientScreen',
-                    rootPurchaseConfirmationScreenParams,
-                  )
-                : navigation.navigate(
-                    'Root_PurchaseConfirmationScreen',
-                    rootPurchaseConfirmationScreenParams,
-                  );
+              onPressBuy();
             }}
           />
         </View>

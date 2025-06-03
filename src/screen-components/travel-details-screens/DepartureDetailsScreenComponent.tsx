@@ -199,6 +199,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const shouldShowMapButton =
     mapData &&
+    mapData.mapLegs.length > 0 &&
     !screenReaderEnabled &&
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
@@ -594,7 +595,7 @@ function EstimatedCallRow({
             timeValues={{
               aimedTime: call.aimedDepartureTime,
               expectedTime: call.expectedDepartureTime,
-              missingRealTime: !call.realtime && isStartOfServiceJourney,
+              isRealtime: call.realtime || !isStartOfServiceJourney,
             }}
             roundingMethod="floor"
           />
