@@ -143,7 +143,7 @@ export const TravelDetailsMapScreenComponent = ({
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
-        pitchEnabled={false}
+        pitchEnabled={true}
         {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onMapIdle={onMapIdle}

@@ -259,7 +259,7 @@ export const MapV2 = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          pitchEnabled={false}
+          pitchEnabled={true}
           onPress={onFeatureClick}
           testID="mapView"
           {...mapViewConfig}

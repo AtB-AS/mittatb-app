@@ -5,6 +5,7 @@ import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
+import {MAPBOX_API_TOKEN} from '@env';
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
@@ -24,6 +25,17 @@ export const useMapboxJsonStyle: (
   const themedStyleWithExtendedSources = useMemo(() => {
     const themedStyle =
       themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
+    const themedLayers = themedStyle.layers.map((layer) => ({
+      ...layer,
+      slot: 'middle', // above mapbox ground style, but below 3d buildings/items
+      paint: {
+        ...layer.paint,
+        // add emissive strength in order to be unaffected by lightPreset
+        'background-emissive-strength': 1,
+        'fill-emissive-strength': 1,
+        'line-emissive-strength': 1,
+      },
+    }));
 
     const extendedSources: Record<string, StyleJsonVectorSource> = {
       ...themedStyle.sources,
@@ -38,6 +50,7 @@ export const useMapboxJsonStyle: (
     return {
       ...themedStyle,
       sources: extendedSources,
+      layers: themedLayers,
     };
   }, [
     includeVehiclesAndStationsVectorSource,
@@ -51,8 +64,24 @@ export const useMapboxJsonStyle: (
       JSON.stringify({
         ...themedStyleWithExtendedSources,
         sprite: mapboxSpriteUrl + themeName,
+        projection: {name: 'globe'},
+        imports: [
+          {
+            id: 'basemap',
+            // url must be absolute for this to work
+            url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+            config: {
+              lightPreset: themeName === 'dark' ? 'night' : 'day',
+              showPlaceLabels: true,
+              showPointOfInterestLabels: false,
+              showTransitLabels: false,
+              showPedestrianRoads: true,
+              showRoadLabels: false,
+            },
+          },
+        ],
       }),
-    [themeName, mapboxSpriteUrl, themedStyleWithExtendedSources],
+    [themedStyleWithExtendedSources, mapboxSpriteUrl, themeName],
   );
 
   return mapboxJsonStyle;
