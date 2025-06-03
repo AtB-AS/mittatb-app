@@ -32,8 +32,8 @@ const slotLayerIds: MapSlotLayerId[] = [
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
-  type: 'symbol', // type is required, but otherwise doesn't matter here.
-  source: slotSourceKey,
+  type: 'slot', // type is required, but otherwise doesn't matter here.
+  // source: slotSourceKey,
 }));
 
 export const useMapboxJsonStyle: (
@@ -96,7 +96,7 @@ export const useMapboxJsonStyle: (
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: mapboxSpriteUrl + themeName,
-        projection: {name: 'globe'},
+        projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
         imports: [
           {
             id: 'basemap',
