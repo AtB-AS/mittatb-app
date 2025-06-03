@@ -1,14 +1,8 @@
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {mobileTokenClient} from '../mobileTokenClient';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {
-  getMobileTokenErrorHandlingStrategy,
-  getSdkErrorTokenIds,
-  MOBILE_TOKEN_QUERY_KEY,
-  wipeToken,
-} from '../utils';
-import {v4 as uuid} from 'uuid';
+import {MOBILE_TOKEN_QUERY_KEY} from '../utils';
 
 const TEN_SECONDS_MS = 1000 * 10;
 
@@ -21,7 +15,6 @@ const GET_SIGNED_TOKEN_QUERY_KEY = 'getSignedToken';
  */
 export const useGetSignedTokenQuery = () => {
   const {nativeToken} = useMobileTokenContext();
-  const queryClient = useQueryClient();
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_SIGNED_TOKEN_QUERY_KEY, nativeToken],
     queryFn: async () => {
@@ -36,16 +29,7 @@ export const useGetSignedTokenQuery = () => {
             description: 'Error encoding signed token',
           },
         });
-        const errHandling = getMobileTokenErrorHandlingStrategy(err);
-        switch (errHandling) {
-          case 'reset':
-            await wipeToken(getSdkErrorTokenIds(err), uuid());
-            queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
-            break;
-          case 'unspecified':
-            throw err;
-        }
-        throw err;
+        return undefined;
       }
     },
     refetchInterval: TEN_SECONDS_MS,
