@@ -14,7 +14,7 @@ const PurchaseOverviewTexts = {
       'Det oppstod ein feil',
     ),
     message: _(
-      'Oops - det skjedde en feil når vi søkte etter en billett til deg. Supert om du prøver igjen 🤞',
+      'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
       'Oops - vi klarte ikkje å finne prisinformasjonen. Prøv igjen 🤞',
     ),
