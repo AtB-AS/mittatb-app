@@ -23,8 +23,16 @@ import {
   ClusterOfVehiclesPropertiesSchema,
 } from '@atb/api/types/mobility';
 import distance from '@turf/distance';
-import {isStation} from '@atb/modules/mobility';
+import {
+  isBicycleV2,
+  isCarStationV2,
+  isScooterV2,
+  isStation,
+  isStationV2,
+  isVehiclesClusteredFeature,
+} from '@atb/modules/mobility';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -256,3 +264,41 @@ export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
 
 export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
   isStation(entityFeature) || isStopPlace(entityFeature);
+
+export function getFeatureToSelect(
+  featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
+  positionClicked: Position, // [lon, lat]
+) {
+  const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
+    getFeatureWeight(currentFeature, positionClicked) >
+    getFeatureWeight(selected, positionClicked)
+      ? currentFeature
+      : selected,
+  );
+  return featureToSelect;
+}
+
+export function getFeatureWeight(
+  feature: Feature,
+  positionClicked: Position,
+): number {
+  if (isFeaturePoint(feature)) {
+    return isStopPlace(feature) ||
+      isVehiclesClusteredFeature(feature) ||
+      isScooterV2(feature) ||
+      isBicycleV2(feature) ||
+      isStationV2(feature) ||
+      isCarStationV2(feature) ||
+      isParkAndRide(feature)
+      ? 3
+      : 1;
+  } else if (isFeatureGeofencingZone(feature)) {
+    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
+      positionClicked,
+      feature.geometry,
+    );
+    return positionClickedIsInsideGeofencingZone ? 2 : 0;
+  } else {
+    return 0;
+  }
+}

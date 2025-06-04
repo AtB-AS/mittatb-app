@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {RefObject, useCallback, useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -22,12 +22,16 @@ import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booki
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {MapView} from '@rnmapbox/maps';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {useShmoWarnings} from '@atb/modules/map';
 
 type Props = {
   onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
+  mapViewRef: RefObject<MapView | null>;
 };
 
 export const ActiveScooterSheet = ({
@@ -35,6 +39,7 @@ export const ActiveScooterSheet = ({
   navigateSupportCallback,
   photoNavigation,
   onForceClose,
+  mapViewRef,
 }: Props) => {
   const {
     data: activeBooking,
@@ -45,6 +50,7 @@ export const ActiveScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const {geofencingZoneMessage} = useShmoWarnings(mapViewRef);
 
   useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
@@ -124,6 +130,12 @@ export const ActiveScooterSheet = ({
               </ScrollView>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
+                  {geofencingZoneMessage && (
+                    <MessageInfoText
+                      type="warning"
+                      message={geofencingZoneMessage}
+                    />
+                  )}
                   {sendShmoBookingEventIsError && (
                     <MessageInfoBox
                       type="error"
