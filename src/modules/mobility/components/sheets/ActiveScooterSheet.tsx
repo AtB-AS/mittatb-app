@@ -22,6 +22,7 @@ import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booki
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -36,6 +37,7 @@ export const ActiveScooterSheet = ({
   photoNavigation,
   onForceClose,
 }: Props) => {
+  useKeepAwake();
   const {
     data: activeBooking,
     isLoading,
