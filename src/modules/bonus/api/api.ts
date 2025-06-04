@@ -40,6 +40,9 @@ export const getBonusAmountEarned = (isLoggedIn: boolean, isBonusProgramEnabled:
     .then((response) => {
       const value =
         response.data.amount === null ? 0 : Number(response.data.amount);
+      if (value == 0){
+        throw new Error()
+      }
       return value;
     });
 };

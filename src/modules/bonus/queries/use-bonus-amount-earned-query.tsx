@@ -24,7 +24,6 @@ export const useBonusAmountEarnedQuery = (
   fareContractId: string | undefined,
   disabled: boolean,
 ) => {
-  console.log(disabled);
   const {userId, authStatus} = useAuthContext();
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
@@ -45,6 +44,8 @@ export const useBonusAmountEarnedQuery = (
         fareContractId,
         disabled,
       ),
+    retry: 3,
+    retryDelay: 500,
     enabled: authStatus === 'authenticated' && isBonusProgramEnabled,
   });
 };

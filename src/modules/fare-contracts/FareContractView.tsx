@@ -82,7 +82,6 @@ export const FareContractView: React.FC<Props> = ({
     fareContract.id,
     !shouldShowEarnedBonusPoints,
   );
-  console.log(earnedBonusPoints);
 
   return (
     <Section testID={testID}>
