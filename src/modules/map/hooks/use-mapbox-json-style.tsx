@@ -5,6 +5,7 @@ import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
+import {MAPBOX_API_TOKEN} from '@env';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -14,12 +15,6 @@ export enum MapSlotLayerId {
   NSRItems = 'nsrItems',
   SelectedFeature = 'selectedFeature',
 }
-
-const slotSourceKey = 'slotSource';
-// This source only exists for slots layers, no data is fetched.
-const slotSource: StyleJsonVectorSourcesObj = {
-  [slotSourceKey]: {type: 'vector'}, // type is required, but otherwise doesn't matter here.
-};
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
@@ -31,8 +26,7 @@ const slotLayerIds: MapSlotLayerId[] = [
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
-  type: 'symbol', // type is required, but otherwise doesn't matter here.
-  source: slotSourceKey,
+  type: 'slot',
 }));
 
 export const useMapboxJsonStyle: (
@@ -53,10 +47,20 @@ export const useMapboxJsonStyle: (
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
       themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
+    const themedLayers = themedStyle.layers.map((layer) => ({
+      ...layer,
+      slot: 'middle', // above mapbox ground style, but below 3d buildings/items
+      paint: {
+        ...layer.paint,
+        // add emissive strength in order to be unaffected by lightPreset
+        'background-emissive-strength': 1,
+        'fill-emissive-strength': 1,
+        'line-emissive-strength': 1,
+      },
+    }));
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
-      ...slotSource,
       ...(includeVehiclesAndStationsVectorSource
         ? {
             [vehiclesAndStationsVectorSourceId]:
@@ -65,12 +69,12 @@ export const useMapboxJsonStyle: (
         : undefined),
     };
 
-    const layersWithSlots = [...themedStyle.layers, ...slotLayers];
+    const themedLayersWithSlots = [...themedLayers, ...slotLayers];
 
     return {
       ...themedStyle,
       sources: extendedSources,
-      layers: layersWithSlots,
+      layers: themedLayersWithSlots,
     };
   }, [
     includeVehiclesAndStationsVectorSource,
@@ -84,6 +88,22 @@ export const useMapboxJsonStyle: (
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: mapboxSpriteUrl + themeName,
+        projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
+        imports: [
+          {
+            id: 'basemap',
+            // url must be absolute for this to work
+            url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+            config: {
+              lightPreset: themeName === 'dark' ? 'night' : 'day',
+              showPlaceLabels: true,
+              showPointOfInterestLabels: false,
+              showTransitLabels: false,
+              showPedestrianRoads: true,
+              showRoadLabels: false,
+            },
+          },
+        ],
       }),
     [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
   );
