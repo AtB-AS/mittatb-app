@@ -122,4 +122,15 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.travelDate).toBeUndefined();
   });
+
+  it('Should correctly handle selection.isOnBehalfOf', () => {
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection({
+        ...TEST_SELECTION,
+        isOnBehalfOf: true,
+      })
+      .build();
+
+    expect(selection.isOnBehalfOf).toBe(true);
+  });
 });

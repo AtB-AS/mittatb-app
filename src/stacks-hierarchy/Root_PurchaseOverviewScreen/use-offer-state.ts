@@ -165,7 +165,6 @@ const initialState: OfferState = {
 export function useOfferState(
   selection: PurchaseSelectionType,
   preassignedFareProductAlternatives: PreassignedFareProduct[],
-  isOnBehalfOf: boolean = false,
 ) {
   const offerReducer = getOfferReducer(selection.userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
@@ -213,7 +212,7 @@ export function useOfferState(
               ],
               from: selection.stopPlaces?.from!.id,
               to: selection.stopPlaces?.to!.id,
-              isOnBehalfOf,
+              isOnBehalfOf: selection.isOnBehalfOf,
               travellers: offerTravellers,
               products: preassignedFareProductAlternatives.map((p) => p.id),
               travelDate: selection.travelDate,
@@ -260,7 +259,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives, isOnBehalfOf],
+    [selection, preassignedFareProductAlternatives],
   );
 
   useEffect(() => {
