@@ -16,7 +16,6 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   summaryButtonText: string;
-  shouldForwardToBooking: boolean;
   onPressBuy: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -29,7 +28,6 @@ export function Summary({
   isLoading,
   isError,
   summaryButtonText,
-  shouldForwardToBooking,
   onPressBuy,
   style,
 }: Props) {
@@ -76,10 +74,7 @@ export function Summary({
         expanded={true}
         interactiveColor={theme.color.interactive[0]}
         text={summaryButtonText}
-        disabled={
-          (isLoading || !hasSelection || isFree || isError) &&
-          !shouldForwardToBooking
-        }
+        disabled={isLoading || !hasSelection || isFree || isError}
         onPress={toPaymentFunction}
         rightIcon={{svg: ArrowRight}}
         testID="goToPaymentButton"

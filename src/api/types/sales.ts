@@ -1,5 +1,5 @@
 import type {UserProfile} from '@atb-as/config-specs';
-import type {Offer} from '@atb/modules/ticketing';
+import type {TicketOffer} from '@atb-as/utils';
 
 export type SalesTripPatternLeg = {
   expectedStartTime: string;
@@ -15,6 +15,6 @@ export type Traveller = {
 };
 
 export type OfferFromLegsResponse = {
-  offers: (Offer & {available: number | undefined})[];
+  offers: (TicketOffer & {available: number | undefined})[];
   cheapestTotalPrice: number;
 };

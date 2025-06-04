@@ -7,7 +7,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -39,7 +39,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useAuthContext} from '@atb/modules/auth';
-import {useTripsWithAvailability} from '../Root_TripSelectionScreen/use-trips-with-availability';
+import {useBookingTrips} from '../Root_TripSelectionScreen/use-booking-trips';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -74,7 +74,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const {
     isSearchingOffer,
-    error,
+    error: offerError,
     originalPrice,
     totalPrice,
     refreshOffer,
@@ -147,20 +147,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const shouldShowOnBehalfOf = useShouldShowOnBehalfOf(selection);
   const [isTravelerOnBehalfOfToggle] = useState<boolean>(isOnBehalfOfToggle);
 
-  const tripsWithAvailabitityProps = useMemo(
-    () => ({
-      selection,
-      searchTime: {
-        date: selection.travelDate ?? new Date().toISOString(),
-        option: selection.travelDate
-          ? ('departure' as const)
-          : ('now' as const),
-      },
-      enabled: isBookingEnabled,
-    }),
-    [selection, isBookingEnabled],
-  );
-  const {tripPatterns} = useTripsWithAvailability(tripsWithAvailabitityProps);
+  const {
+    tripPatterns: tripPatternsThatRequireBooking,
+    isLoadingBooking,
+    isError: isBookingError,
+  } = useBookingTrips({
+    selection,
+    enabled: isBookingEnabled,
+  });
 
   const onPressBuy = () => {
     if (isOnBehalfOfToggle) {
@@ -170,7 +164,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       );
       return;
     }
-    if (isBookingEnabled && tripPatterns.length > 0) {
+    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
       navigation.push('Root_TripSelectionScreen', {selection});
       return;
     }
@@ -183,7 +177,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (isOnBehalfOfToggle) {
       return t(PurchaseOverviewTexts.summary.button.sendToOthers);
     }
-    if (isBookingEnabled && tripPatterns.length > 0) {
+    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
     }
     return t(PurchaseOverviewTexts.summary.button.payment);
@@ -221,8 +215,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
-          {error &&
-            (error.type === 'not-available' ? (
+          {(offerError || isBookingError) &&
+            (offerError?.type === 'not-available' ? (
               <MessageInfoBox
                 type="warning"
                 title={t(
@@ -340,12 +334,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <Summary
             selection={selection}
-            isLoading={isSearchingOffer}
+            isLoading={isSearchingOffer || isLoadingBooking}
             isFree={isFree}
-            isError={!!error || !hasSelection}
+            isError={isBookingError || !!offerError || !hasSelection}
             originalPrice={originalPrice}
             price={totalPrice}
-            shouldForwardToBooking={isBookingEnabled && tripPatterns.length > 0}
             summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
