@@ -11,8 +11,6 @@ import {useSectionStyle} from '../use-section-style';
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {LabelType} from '@atb-as/config-specs';
-import {LabelInfo} from '@atb/components/label-info';
 import {insets} from '@atb/utils/insets';
 
 type Props = SectionItemProps<
