@@ -28,8 +28,18 @@ export const buyValueCodeWithBonusPoints = (
     .then((response) => String(response.data.code));
 };
 
-export const getBonusAmountEarned = (isLoggedIn: boolean, isBonusProgramEnabled: boolean, fareContractId: string | undefined, disabled: boolean): Promise<number> => {
-  if (!isLoggedIn || !isBonusProgramEnabled || fareContractId === undefined || disabled) {
+export const getBonusAmountEarned = (
+  isLoggedIn: boolean,
+  isBonusProgramEnabled: boolean,
+  fareContractId: string | undefined,
+  disabled: boolean,
+): Promise<number> => {
+  if (
+    !isLoggedIn ||
+    !isBonusProgramEnabled ||
+    fareContractId === undefined ||
+    disabled
+  ) {
     return Promise.resolve(0);
   }
 
@@ -40,8 +50,8 @@ export const getBonusAmountEarned = (isLoggedIn: boolean, isBonusProgramEnabled:
     .then((response) => {
       const value =
         response.data.amount === null ? 0 : Number(response.data.amount);
-      if (value == 0){
-        throw new Error()
+      if (value == 0) {
+        throw new Error();
       }
       return value;
     });
