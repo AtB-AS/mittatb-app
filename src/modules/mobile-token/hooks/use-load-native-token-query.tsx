@@ -2,12 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {storage} from '@atb/modules/storage';
 import {ActivatedToken} from '@entur-private/abt-mobile-client-sdk';
 import {mobileTokenClient} from '../mobileTokenClient';
-import {
-  getMobileTokenErrorHandlingStrategy,
-  getSdkErrorTokenIds,
-  MOBILE_TOKEN_QUERY_KEY,
-  wipeToken,
-} from '../utils';
+import {MOBILE_TOKEN_QUERY_KEY} from '../utils';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import Bugsnag from '@bugsnag/react-native';
 
@@ -62,21 +57,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
       logToBugsnag(`Get token error ${err}`, errorToMetadata(err));
-      const errHandling = getMobileTokenErrorHandlingStrategy(err);
-      switch (errHandling) {
-        case 'reset':
-          logToBugsnag(`Get token needs to reset token`, errorToMetadata(err));
-          await wipeToken(getSdkErrorTokenIds(err), traceId);
-          logError(err, traceId);
-          break;
-        case 'unspecified':
-          logToBugsnag(
-            `Get token error unspecified resolution`,
-            errorToMetadata(err),
-          );
-          logError(err, traceId);
-          throw err;
-      }
+      logError(err, traceId);
     }
   }
 

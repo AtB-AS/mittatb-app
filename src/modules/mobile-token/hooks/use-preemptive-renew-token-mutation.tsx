@@ -11,6 +11,20 @@ import {
 } from '../utils';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
+/**
+ * Custom React hook for preemptively renewing a mobile token if it is about to expire.
+ *
+ * - Checks if the provided token should be renewed using `mobileTokenClient.shouldRenew`,
+ *   which calls `shouldRenewPreemptively` from the SDK
+ * - If renewal is needed, calls `mobileTokenClient.renew` and updates the query cache with the new token.
+ * - On success, updates the cached token data for the current user.
+ * - On error, reports the error to Bugsnag and applies an error handling strategy:
+ *   - If the strategy is 'reset', wipes the affected tokens and resets the query cache.
+ *   - If the strategy is 'unspecified', no further action is taken.
+ *
+ * @param userId The current user's ID (optional).
+ * @returns A mutation object for triggering token renewal.
+ */
 export const usePreemptiveRenewTokenMutation = (userId?: string) => {
   const queryClient = useQueryClient();
   return useMutation({
