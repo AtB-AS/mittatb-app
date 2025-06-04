@@ -27,3 +27,19 @@ export const buyValueCodeWithBonusPoints = (
     })
     .then((response) => String(response.data.code));
 };
+
+export const getBonusAmountEarned = (isLoggedIn: boolean, isBonusProgramEnabled: boolean, fareContractId: string | undefined, disabled: boolean): Promise<number> => {
+  if (!isLoggedIn || !isBonusProgramEnabled || fareContractId === undefined || disabled) {
+    return Promise.resolve(0);
+  }
+
+  return client
+    .get(`/bonus/v1/fare-contract/${fareContractId}/amount`, {
+      authWithIdToken: true,
+    })
+    .then((response) => {
+      const value =
+        response.data.amount === null ? 0 : Number(response.data.amount);
+      return value;
+    });
+};

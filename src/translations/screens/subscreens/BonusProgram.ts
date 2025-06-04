@@ -18,6 +18,16 @@ const BonusProgramTexts = {
     );
   },
 
+  fareContract: {
+    youEarned: (bonusPointsEarned: number) => {
+      return _(
+        `Du tjente **${bonusPointsEarned} poeng** på dette kjøpet!`,
+        `You earned **${bonusPointsEarned} points** on this purchase!`,
+        `Du tente **${bonusPointsEarned} poeng** på dette kjøpet!`,
+      )
+    }
+  },
+
   bonusProfile: {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),
