@@ -30,6 +30,5 @@ export type {
 export {
   findReferenceDataById,
   getReferenceDataName,
-  isOfFareProductRef,
   isProductSellableInApp,
 } from './utils';
