@@ -72,8 +72,6 @@ export const CarSharingStationBottomSheet = ({
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
-  useDoOnceOnItemReceived(onStationReceived, station);
-
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Car))}
