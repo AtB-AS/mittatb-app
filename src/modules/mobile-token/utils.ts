@@ -174,7 +174,8 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
     case 'TOKEN_ENCODING_CLOCK_SKEW':
       const details = errorResponse.details?.[0];
       if (details && typeof details === 'object' && 'timestamp' in details) {
-        const tokenClockSkewErrorDetails = details as TokenClockSkewErrorDetails;
+        const tokenClockSkewErrorDetails =
+          details as TokenClockSkewErrorDetails;
         const timestamp = tokenClockSkewErrorDetails.timestamp;
         const duration = Date.now() - timestamp;
         return new TokenEncodingClockSkewRemoteTokenStateError(
@@ -186,8 +187,8 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
           'Received TokenClockSkewError but missing details from server',
           TokenErrorResolution.UNKNOWN,
           undefined,
-          undefined
-        )
+          undefined,
+        );
       }
     case 'TOKEN_ENCODING_INVALID':
       return new TokenEncodingInvalidError(
