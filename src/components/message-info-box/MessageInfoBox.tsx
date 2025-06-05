@@ -6,7 +6,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
@@ -91,7 +91,7 @@ export const MessageInfoBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, true, themeName)}
+          svg={statusTypeToIcon(type, true, themeName)}
           {...iconColorProps}
         />
       )}

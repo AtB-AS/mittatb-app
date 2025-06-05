@@ -43,7 +43,7 @@ import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
 } from '@atb/modules/situations';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import type {Mode, Statuses} from '@atb/theme';
 
 export type LineItemProps = SectionItemProps<{
@@ -356,5 +356,5 @@ export const getSvgForDeparture = (
   const msgType = [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
     Statuses | undefined
   >(toMostCriticalStatus, undefined);
-  return msgType && messageTypeToIcon(msgType, true, themeName);
+  return msgType && statusTypeToIcon(msgType, true, themeName);
 };
