@@ -36,7 +36,12 @@ export const findReferenceDataById = <
 ) => elements.find((p) => p.id === id);
 
 export function isOfFareProductRef(a: any): a is {fareProductRef: string} {
-  return 'fareProductRef' in a;
+  return (
+    a != null &&                            // checks a not null
+    typeof a === 'object' &&                // checks if a is an object
+    'fareProductRef' in a &&                // checks if `fareProductRef` is in a
+    typeof a.fareProductRef === 'string'    // checks if `a.fareProductRef` is string
+  );
 }
 
 export const isProductSellableInApp = (
