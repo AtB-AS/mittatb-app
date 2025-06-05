@@ -45,7 +45,6 @@ export const useBonusAmountEarnedQuery = (
         disabled,
       ),
     retry: 3,
-    retryDelay: 500,
     enabled: authStatus === 'authenticated' && isBonusProgramEnabled,
   });
 };
