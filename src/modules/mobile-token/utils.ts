@@ -140,7 +140,7 @@ export const getSdkErrorTokenIds = (err: any): string[] =>
 type TokenClockSkewErrorDetails = {
   timestamp: number;
   duration: number;
-}
+};
 
 const parseErrorKind = (errorResponse: ErrorResponse) => {
   const message = errorResponse.message ?? '';
@@ -177,7 +177,7 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
       const duration = Date.now() - timestamp;
       return new TokenEncodingClockSkewRemoteTokenStateError(
         timestamp,
-        duration
+        duration,
       );
     case 'TOKEN_ENCODING_INVALID':
       return new TokenEncodingInvalidError(
@@ -229,7 +229,7 @@ export const isRemoteTokenStateError = (err: any) => {
   if (!success) return false;
   const kind = parseErrorKind(data);
   return (
-    kind instanceof TokenEncodingClockSkewRemoteTokenStateError || 
+    kind instanceof TokenEncodingClockSkewRemoteTokenStateError ||
     kind instanceof TokenMustBeRenewedRemoteTokenStateError ||
     kind instanceof TokenMustBeReplacedError ||
     kind instanceof TokenHasBeenRenewedError ||
