@@ -3,7 +3,6 @@ import {
   ClientNetworkError,
   mapTokenErrorResolution,
   TokenAction,
-  TokenEncodingClockSkewError,
   TokenEncodingInvalidError,
   TokenErrorResolution,
   TokenFactoryError,
@@ -15,6 +14,7 @@ import {isDefined} from '@atb/utils/presence';
 import {
   RemoteTokenStateError,
   TokenDeviceAttestationVerificationFailedRemoteTokenError,
+  TokenEncodingClockSkewRemoteTokenStateError,
   TokenMustBeRenewedRemoteTokenStateError,
   TokenReattestationRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
@@ -137,6 +137,11 @@ export const getSdkErrorTokenIds = (err: any): string[] =>
       )
     : [];
 
+type TokenClockSkewErrorDetails = {
+  timestamp: number;
+  duration: number;
+};
+
 const parseErrorKind = (errorResponse: ErrorResponse) => {
   const message = errorResponse.message ?? '';
   switch (errorResponse.kind) {
@@ -167,12 +172,24 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
         undefined,
       );
     case 'TOKEN_ENCODING_CLOCK_SKEW':
-      return new TokenEncodingClockSkewError(
-        message,
-        TokenErrorResolution.GIVE_UP,
-        undefined,
-        undefined,
-      );
+      const details = errorResponse.details?.[0];
+      if (details && typeof details === 'object' && 'timestamp' in details) {
+        const tokenClockSkewErrorDetails =
+          details as TokenClockSkewErrorDetails;
+        const timestamp = tokenClockSkewErrorDetails.timestamp;
+        const duration = Date.now() - timestamp;
+        return new TokenEncodingClockSkewRemoteTokenStateError(
+          timestamp,
+          duration,
+        );
+      } else {
+        return new TokenFactoryError(
+          'Received TokenClockSkewError but missing details from server',
+          TokenErrorResolution.UNKNOWN,
+          undefined,
+          undefined,
+        );
+      }
     case 'TOKEN_ENCODING_INVALID':
       return new TokenEncodingInvalidError(
         message,
@@ -223,6 +240,7 @@ export const isRemoteTokenStateError = (err: any) => {
   if (!success) return false;
   const kind = parseErrorKind(data);
   return (
+    kind instanceof TokenEncodingClockSkewRemoteTokenStateError ||
     kind instanceof TokenMustBeRenewedRemoteTokenStateError ||
     kind instanceof TokenMustBeReplacedError ||
     kind instanceof TokenHasBeenRenewedError ||
