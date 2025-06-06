@@ -1,90 +1,58 @@
-import {RefObject, useEffect, useState} from 'react';
-import {Feature, Point} from 'geojson';
+import {RefObject, useEffect, useRef, useState} from 'react';
 import {MapView} from '@rnmapbox/maps';
-import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
-  getFeaturesAtClick,
+  getCurrentCoordinatesGlobal,
+  useGeolocationContext,
+} from '@atb/modules/geolocation';
+import {
+  getFeaturesAtPoint,
   getFeatureToSelect,
   isFeatureGeofencingZone,
 } from '../utils';
 import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
+import {useVehicle} from '@atb/modules/mobility';
+import {throttle} from '@atb/utils/throttle';
 
-export const useShmoWarnings = (mapViewRef: RefObject<MapView | null>) => {
+export const useShmoWarnings = (
+  vehicleId: string,
+  mapViewRef?: RefObject<MapView | null>,
+) => {
   const {t} = useTranslation();
   const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
     string | null
   >(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
-  const {location, locationIsAvailable} = useGeolocationContext();
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const coordinates = getCurrentCoordinatesGlobal();
 
-  const isScooterAvailable = true;
-  const isOpeningHours = true;
-  const isNearScooter = true;
-  const error = false;
-  const hasNetworkConnection = true;
+  const {locationIsAvailable} = useGeolocationContext();
+  const {vehicle} = useVehicle(vehicleId);
 
   useEffect(() => {
-    if (!isScooterAvailable) {
-      //Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå
+    if (vehicle?.isDisabled) {
       setWarningMessage(t(ShmoWarnings.scooterDisabled));
-      // -Mulig denne bare håndteres via gbfs og feilmelding i bottomsheet om den ikke finner assetIDen, slik det er i dag
-    } else if (!isOpeningHours) {
-      //El-sparkesyklene er kun tilgjengelige mellom {time} og {time}
-      // -Må få oppdatert med åpningstider i gbfs
-    } else if (!isNearScooter) {
-      //Du må være i nærheten av el-sparkesykkelen for å starte en tur
-      // -Skal vi ha en sjekk på dette i appen?
-    } else if (!locationIsAvailable) {
-      //Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.
-    } else if (error) {
-      //Noe gikk galt. Prøv igjen eller kontakt operatøren.
-    } else if (!hasNetworkConnection) {
-      //Du har ingen internettforbindelse
+    } else if (warningMessage !== null) {
+      setWarningMessage(null);
     }
-  }, [
-    error,
-    hasNetworkConnection,
-    isNearScooter,
-    isOpeningHours,
-    isScooterAvailable,
-    locationIsAvailable,
-    t,
-  ]);
+  }, [locationIsAvailable, t, vehicle?.isDisabled, warningMessage]);
 
-  //
+  const throttledCallback = useRef(
+    throttle(async (loc: {latitude: number; longitude: number}) => {
+      if (!mapViewRef?.current) return null;
 
-  //
-
-  useEffect(() => {
-    const getGeoText = async () => {
-      const currentCoordinates = [
-        location?.coordinates.longitude ?? 0,
-        location?.coordinates.latitude ?? 0,
-      ];
-
-      if (!mapViewRef.current) return null;
-      const pointFeature: Feature<Point> = {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: currentCoordinates,
-        },
-        properties: {},
-      };
-
-      const featuresAtLocation = await getFeaturesAtClick(
-        pointFeature,
+      const featuresAtLocation = await getFeaturesAtPoint(
+        [loc.longitude, loc.latitude],
         mapViewRef,
       );
+
       if (!featuresAtLocation || featuresAtLocation.length === 0) return;
 
-      const featureToSelect = getFeatureToSelect(
-        featuresAtLocation,
-        currentCoordinates,
-      );
+      const featureToSelect = getFeatureToSelect(featuresAtLocation, [
+        loc.longitude,
+        loc.latitude,
+      ]);
 
       if (isFeatureGeofencingZone(featureToSelect)) {
         const textContent = getGeofencingZoneTextContent(
@@ -99,9 +67,14 @@ export const useShmoWarnings = (mapViewRef: RefObject<MapView | null>) => {
       } else {
         setGeofencingZoneMessage(null);
       }
-    };
-    getGeoText();
-  }, [location, getGeofencingZoneTextContent, mapViewRef]);
+    }, 1000),
+  ).current;
+
+  useEffect(() => {
+    if (coordinates) {
+      throttledCallback(coordinates);
+    }
+  }, [coordinates, throttledCallback]);
 
   return {geofencingZoneMessage, warningMessage};
 };

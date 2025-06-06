@@ -136,25 +136,41 @@ export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   latitude: p[1],
 });
 
+export const getFeaturesAtPoint = async (
+  point: [number, number],
+  mapViewRef: RefObject<MapboxGL.MapView | null>,
+  filter?: Expression,
+  layerIds?: string[],
+) => {
+  if (!mapViewRef.current) return undefined;
+
+  const screenPoint = await mapViewRef.current?.getPointInView(point);
+
+  const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
+    screenPoint,
+    filter,
+    layerIds,
+  );
+
+  return featuresAtPoint?.features;
+};
+
+/**
+ * Gets features at a clicked location
+ */
 export const getFeaturesAtClick = async (
   clickedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView | null>,
   filter?: Expression,
   layerIds?: string[],
 ) => {
-  if (!mapViewRef.current) return undefined;
   const coords = mapPositionToCoordinates(clickedFeature.geometry.coordinates);
-  const point = await mapViewRef.current?.getPointInView([
-    coords.longitude,
-    coords.latitude,
-  ]);
-
-  const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
-    point,
+  return getFeaturesAtPoint(
+    [coords.longitude, coords.latitude],
+    mapViewRef,
     filter,
     layerIds,
   );
-  return featuresAtPoint?.features;
 };
 
 type FlyToLocationArgs = {

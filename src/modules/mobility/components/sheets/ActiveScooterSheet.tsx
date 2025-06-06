@@ -50,7 +50,10 @@ export const ActiveScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {geofencingZoneMessage} = useShmoWarnings(mapViewRef);
+  const {geofencingZoneMessage, warningMessage} = useShmoWarnings(
+    activeBooking?.asset.id ?? '',
+    mapViewRef,
+  );
 
   useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
@@ -135,6 +138,9 @@ export const ActiveScooterSheet = ({
                       type="warning"
                       message={geofencingZoneMessage}
                     />
+                  )}
+                  {warningMessage && (
+                    <MessageInfoText type="warning" message={warningMessage} />
                   )}
                   {sendShmoBookingEventIsError && (
                     <MessageInfoBox
