@@ -7,12 +7,12 @@ import {NavigationIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {LabelType} from '@atb-as/config-specs';
-import {LabelInfo} from '@atb/components/label-info';
+import {Tag} from '@atb/components/tag';
+import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 
 type Props = SectionItemProps<
   {
@@ -100,7 +100,13 @@ export function ExpandableSectionItem({
           {text}
         </ThemeText>
         {suffixNode}
-        {label && <LabelInfo label={label} />}
+        {label && (
+          <Tag
+            label={[t(TagInfoTexts.labels[label])]}
+            tagType="primary"
+            customStyle={styles.labelContainer}
+          />
+        )}
         <ExpandIcon expanded={expanded} showText={showIconText} />
       </PressableOpacity>
       {expanded && 'expandContent' in props && (
@@ -149,5 +155,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   expandContent: {
     marginTop: theme.spacing.medium,
+  },
+  labelContainer: {
+    alignSelf: 'center',
   },
 }));
