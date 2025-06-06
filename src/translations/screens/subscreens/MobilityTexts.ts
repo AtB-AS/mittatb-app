@@ -324,19 +324,19 @@ export const ParkAndRideTexts = {
 
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   allowed: {
-    title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
+    title: _('Parkeringssone', 'Parking Zone', 'Parkeringssone'),
     description: _(
-      'Her kan du både kjøre og parkere',
-      'Here you can both drive and park',
-      'Her kan du både køyre og parkere',
+      'Du kan parker her',
+      'You can park here',
+      'Du kan parkere her',
     ),
   },
   slow: {
     title: _('Saktesone', 'Slow Zone', 'Saktesone'),
     description: _(
-      'Farten blir redusert i dette området',
-      'The speed will be reduced in this area',
-      'Farta vert redusert i dette området',
+      'Farten blir redusert her',
+      'The speed will be reduced here',
+      'Farten blir redusert her',
     ),
   },
 
@@ -364,23 +364,19 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   // },
 
   noParking: {
-    title: _(
-      'Parkering forbudt-sone',
-      'No Parking Zone',
-      'Parkering forboden-sone',
-    ),
+    title: _('Parkering forbudt', 'No Parking Zone', 'Parkering forboden'),
     description: _(
-      'Du kan ikke parkere i dette området',
-      'You cannot park in this area',
-      'Du kan ikkje parkere i dette området',
+      'Du kan ikke parkere her',
+      'You cannot park here',
+      'Du kan ikkje parkere her',
     ),
   },
   noEntry: {
-    title: _('Kjøring forbudt-sone', 'No Riding Zone', 'Kjøring forboden-sone'),
+    title: _('Kjøring forbudt', 'No Riding', 'Kjøring forboden'),
     description: _(
-      'Du kan ikke kjøre inn i dette området',
-      'You cannot ride in this area',
-      'Du kan ikkje køyre inn i dette området',
+      'Du kan ikke kjøre eller parkere her',
+      'You cannot ride or park here',
+      'Du kan ikkje køyre eller parkere her',
     ),
   },
   unspecified: {
@@ -398,5 +394,39 @@ export const GeofencingZoneExtraExplanations = {
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
     'Se etter parkeringssoner i kartet.',
+  ),
+};
+
+export const ShmoWarnings = {
+  scooterDisabled: _(
+    'Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå ',
+    'This e-scooter is not available right now',
+    'Denne el-sparkesykkelen er ikkje tilgjengeleg akkurat no',
+  ),
+  scooterNotAvailable: (start: string, end: string) =>
+    _(
+      `El-sparkesyklene er kun tilgjengelige mellom ${start} og ${end}`,
+      `E-scooters are only available between ${start} and ${end}`,
+      `El-sparkesyklane er berre tilgjengelege mellom ${start} og ${end}`,
+    ),
+  scooterNotNear: _(
+    'Du må være i nærheten av el-sparkesykkelen for å starte en tur',
+    'You need to be near the e-scooter to start a ride.',
+    'Du må vere i nærleiken av el-sparkesykkelen for å starte ein tur',
+  ),
+  positionUnavailable: _(
+    'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
+    'Position unavailable. There may be issues ending the trip.',
+    'Posisjon utilgjengeleg. Det kan oppstå problem med å avslutte turen.',
+  ),
+  somethingWentWrong: _(
+    'Noe gikk galt. Prøv igjen eller kontakt operatøren.',
+    'Something went wrong. Try again or contact the operator.',
+    'Noko gjekk gale. Prøv igjen eller kontakt operatøren.',
+  ),
+  noInternetConnection: _(
+    'Du har ingen internettforbindelse',
+    'You have no internet connection',
+    'Du har ingen internettilkopling',
   ),
 };
