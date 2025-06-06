@@ -6,7 +6,8 @@ import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {LabelInfo} from '@atb/components/label-info';
+import {Tag} from '@atb/components/tag';
+import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 
 type Props = SectionItemProps<{
   amount: number;
@@ -33,7 +34,7 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
             </ThemeText>
           </View>
         </View>
-        <LabelInfo label="new" />
+        <Tag label={[t(TagInfoTexts.labels.new)]} tagType="primary" />
       </BorderedInfoBox>
     </View>
   );

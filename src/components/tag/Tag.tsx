@@ -119,7 +119,6 @@ const useStyles = (fillColor: string) =>
       flexDirection: 'row',
       gap: theme.spacing.xSmall,
       alignItems: 'center',
-      marginRight: theme.spacing.medium,
       alignSelf: 'flex-start',
     },
   }));
