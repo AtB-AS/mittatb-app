@@ -5,7 +5,7 @@ ruby '3.1.0'
 
 gem 'bundler', '~> 2.6.5'
 
-gem "fastlane"
+gem 'fastlane', github: 'ramakser/fastlane', branch: 'fix/unknown_attribute_templateName'
 gem "dotenv"
 # Exclude problematic versions of cocoapods and active support that causes build failures.
 gem 'cocoapods', '>= 1.13', '!= 1.15.0', '!= 1.15.1'
