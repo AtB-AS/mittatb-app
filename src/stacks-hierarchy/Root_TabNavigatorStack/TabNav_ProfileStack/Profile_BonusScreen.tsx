@@ -26,6 +26,8 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -68,10 +70,11 @@ export const Profile_BonusScreen = () => {
           </View>
         ) : (
           <View style={styles.bonusProductsContainer}>
-            {activeBonusProducts?.map((bonusProduct, index) => (
-              <Section key={bonusProduct.id}>
+            <Section>
+              {activeBonusProducts?.map((bonusProduct, index) => (
                 <ExpandableSectionItem
                   expanded={currentlyOpenBonusProduct === index}
+                  key={bonusProduct.id}
                   onPress={() => {
                     setCurrentlyOpenBonusProduct(index);
                   }}
@@ -111,8 +114,8 @@ export const Profile_BonusScreen = () => {
                     </ThemeText>
                   }
                 />
-              </Section>
-            ))}
+              ))}
+            </Section>
           </View>
         )}
         <ContentHeading
@@ -208,8 +211,13 @@ function UserBonusBalanceSection(): JSX.Element {
           >
             <View style={styles.currentBalanceDisplay}>
               <UserBonusBalance
-                size="large"
+                typography="body__primary--jumbo--bold"
                 color={theme.color.foreground.dynamic.primary}
+              />
+              <ThemeIcon
+                color={theme.color.foreground.dynamic.primary}
+                svg={StarFill}
+                size="large"
               />
             </View>
 
