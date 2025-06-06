@@ -29,20 +29,8 @@ export const buyValueCodeWithBonusPoints = (
 };
 
 export const getBonusAmountEarned = (
-  isLoggedIn: boolean,
-  isBonusProgramEnabled: boolean,
   fareContractId: string | undefined,
-  disabled: boolean,
 ): Promise<number> => {
-  if (
-    !isLoggedIn ||
-    !isBonusProgramEnabled ||
-    fareContractId === undefined ||
-    disabled
-  ) {
-    return Promise.resolve(0);
-  }
-
   return client
     .get(`/bonus/v1/fare-contract/${fareContractId}/amount`, {
       authWithIdToken: true,

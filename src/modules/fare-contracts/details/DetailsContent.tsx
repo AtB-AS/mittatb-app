@@ -130,7 +130,7 @@ export const DetailsContent: React.FC<Props> = ({
     accesses &&
     accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id, false);
+  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
 
   return (
     <Section style={styles.section}>
