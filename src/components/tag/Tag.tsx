@@ -4,7 +4,6 @@ import {View, StyleProp, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {SvgProps} from 'react-native-svg';
-import {useMemo} from 'react';
 import {addOpacity} from '@atb/utils/add-opacity';
 
 type TagStatuses =
@@ -15,13 +14,23 @@ type TagStatuses =
   | 'warning'
   | 'info';
 
-export type TagProps = {
+type BaseTagProps = {
   label: string[];
-  tagType: TagStatuses;
   size?: 'small' | 'regular';
-  icon?: (props: SvgProps) => JSX.Element;
   customStyle?: StyleProp<ViewStyle>;
 };
+
+type SecondaryTagProps = BaseTagProps & {
+  tagType: 'secondary';
+  icon?: (props: SvgProps) => JSX.Element;
+};
+
+type OtherTagProps = BaseTagProps & {
+  tagType: Exclude<TagStatuses, 'secondary'>;
+  icon?: never;
+};
+
+export type TagProps = SecondaryTagProps | OtherTagProps;
 
 export const Tag = ({
   label,
@@ -43,22 +52,24 @@ export const Tag = ({
     }
   };
 
-  const iconComponent = useMemo(() => {
-    if (tagType === 'secondary' && icon) return icon;
-    if (tagType !== 'primary' && tagType !== 'secondary') {
-      return statusTypeToIcon(tagType, true, themeName);
-    }
-    return undefined;
-  }, [tagType, icon, themeName]);
-
-  const hasIcon = Boolean(iconComponent);
   const isPrimary = tagType === 'primary';
   const fillColor = getTagColor();
   const iconSize = size === 'regular' ? 'small' : 'xSmall';
 
   const getPaddingLeft = () => {
     if (size === 'small') return theme.spacing.xSmall;
-    return hasIcon ? theme.spacing.xSmall : theme.spacing.small;
+    if (tagType === 'primary') return theme.spacing.small;
+    return icon ? theme.spacing.xSmall : theme.spacing.small;
+  };
+
+  const getIcon = () => {
+    if (tagType === 'secondary') {
+      return icon || null;
+    }
+    if (tagType === 'primary') {
+      return null;
+    }
+    return statusTypeToIcon(tagType, true, themeName);
   };
 
   const containerStyles: StyleProp<ViewStyle> = {
@@ -79,12 +90,11 @@ export const Tag = ({
   };
 
   const styles = useStyles(fillColor)();
+  const iconToShow = getIcon();
 
   return (
     <View style={[styles.flag, containerStyles, customStyle]}>
-      {hasIcon && iconComponent && (
-        <ThemeIcon svg={iconComponent} size={iconSize} />
-      )}
+      {iconToShow && <ThemeIcon svg={iconToShow} size={iconSize} />}
       <View>
         {label.map((content) => (
           <ThemeText
