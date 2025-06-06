@@ -59,7 +59,11 @@ export const useShmoWarnings = (
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
 
-        if (featureToSelect?.properties?.geofencingZoneCustomProps?.code) {
+        if (
+          featureToSelect?.properties?.geofencingZoneCustomProps?.code &&
+          featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
+            'allowed'
+        ) {
           setGeofencingZoneMessage(textContent.description);
         } else {
           setGeofencingZoneMessage(null);
