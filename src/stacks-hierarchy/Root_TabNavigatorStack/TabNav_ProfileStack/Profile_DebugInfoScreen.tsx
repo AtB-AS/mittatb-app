@@ -279,17 +279,17 @@ export const Profile_DebugInfoScreen = () => {
             text="Feature toggle overrides"
             showIconText={true}
             expandContent={
-              <View>
+              <Section>
                 {overrides.map((o) => (
                   <GenericSectionItem key={o.name}>
                     <DebugOverride
-                      description={`Override for '${o.name}'`}
+                      name={o.name}
                       overrideVal={o.value}
                       setOverride={(v) => setOverride(o.name, v)}
                     />
                   </GenericSectionItem>
                 ))}
-              </View>
+              </Section>
             }
           />
         </Section>

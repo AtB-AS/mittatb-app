@@ -18,7 +18,7 @@ import {
   TokenLimitResponse,
 } from './types';
 import {getDeviceName} from 'react-native-device-info';
-import {isRemoteTokenStateError, parseBffCallErrors} from './utils';
+import {isRemoteTokenStateError, parseTokenServerErrors} from './utils';
 import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
@@ -49,7 +49,7 @@ export type TokenService = RemoteTokenService & {
 };
 
 const handleError = (err: any) => {
-  throw parseBffCallErrors(err.response?.data);
+  throw parseTokenServerErrors(err.response?.data);
 };
 
 const getBaseUrl = async () => {

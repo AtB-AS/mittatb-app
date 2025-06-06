@@ -23,8 +23,9 @@ describe('Travel search filter', () => {
    * Note! One danger is if the search is unlucky and only get bus options in the initial search
    */
   it('should filter transport modes correctly', async () => {
-    const departure = 'Marienborg stasjon';
+    const departure = 'Cecilienborg';
     const arrival = 'Melhus skysstasjon';
+    const numResultsToCheck = 8;
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
@@ -38,7 +39,9 @@ describe('Travel search filter', () => {
 
       // Check number of transport modes
       const numberOfModesInitial =
-        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(6);
+        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(
+          numResultsToCheck,
+        );
 
       // Filter out buses
       await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
@@ -49,7 +52,9 @@ describe('Travel search filter', () => {
 
       // Verify
       const numberOfModesWithFilter =
-        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(6);
+        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(
+          numResultsToCheck,
+        );
       expect(numberOfModesWithFilter).toBeLessThan(numberOfModesInitial);
       await AppHelper.scrollUpUntilId(
         'tripSearchContentView',
@@ -63,7 +68,9 @@ describe('Travel search filter', () => {
 
       // Verify
       const numberOfModes =
-        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(6);
+        await TravelsearchOverviewPage.getNumberOfTransportModesInSearch(
+          numResultsToCheck,
+        );
       expect(numberOfModes).toEqual(numberOfModesInitial);
       await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
       await expect(TravelsearchFilterPage.selectedFilterButton).not.toExist();

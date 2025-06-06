@@ -25,6 +25,7 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -41,6 +42,7 @@ export const ActiveScooterSheet = ({
   onForceClose,
   mapViewRef,
 }: Props) => {
+  useKeepAwake();
   const {
     data: activeBooking,
     isLoading,

@@ -285,6 +285,7 @@ const LiveVehicleMarker = ({
   return (
     <MapboxGL.MarkerView
       coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+      allowOverlapWithPuck={true}
     >
       <View
         style={{
