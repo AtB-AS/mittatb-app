@@ -116,9 +116,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
+  const isFlexibleTransportSelected =
+    filtersState.filtersSelection?.transportModes?.find(
+      (mode) => mode.id === 'flexibleTransport',
+    )?.selected;
   const isFlexibleTransportEnabled =
-    isFlexibleTransportEnabledInRemoteConfig &&
-    filtersState?.filtersSelection?.flexibleTransport?.enabled;
+    isFlexibleTransportEnabledInRemoteConfig && isFlexibleTransportSelected;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined

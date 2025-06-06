@@ -23,7 +23,6 @@ import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,
-  HeaderSectionItem,
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
@@ -81,11 +80,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         testID="filterView"
       >
         <Section>
-          <HeaderSectionItem
-            text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
-          />
           <ToggleSectionItem
-            text={t(TripSearchTexts.filters.bottomSheet.modes.all)}
+            text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
             value={allModesSelected}
             onValueChange={(checked) => {
               setSelectedModes(

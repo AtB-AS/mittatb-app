@@ -71,6 +71,7 @@ export function ToggleSectionItem({
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
+      accessibilityLabel={text}
       {...accessibility}
     >
       <View style={{flexDirection: 'row'}}>
