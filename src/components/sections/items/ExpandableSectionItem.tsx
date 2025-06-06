@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, View} from 'react-native';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {NavigationIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {insets} from '@atb/utils/insets';
+import {Tag} from '@atb/components/tag';
+import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 
 type Props = SectionItemProps<
   {
@@ -52,7 +52,6 @@ export function ExpandableSectionItem({
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -79,7 +78,6 @@ export function ExpandableSectionItem({
   return (
     <View style={topContainer}>
       <PressableOpacity
-        hitSlop={insets.all(theme.spacing.medium)}
         accessibilityHint={
           expanded
             ? t(SectionTexts.expandableSectionItem.a11yHint.contract)
@@ -90,7 +88,7 @@ export function ExpandableSectionItem({
           expanded: expanded,
         }}
         onPress={onPress}
-        style={[sectionStyle.spaceBetween, {gap: theme.spacing.small}]}
+        style={sectionStyle.spaceBetween}
         testID={testID}
         {...accessibility}
       >
@@ -147,5 +145,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   expandContent: {
     marginTop: theme.spacing.medium,
+  },
+  labelContainer: {
+    alignSelf: 'center',
   },
 }));

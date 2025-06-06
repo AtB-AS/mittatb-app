@@ -8,4 +8,6 @@ export const useBikeStationQuery = (id: string) =>
     queryFn: ({signal}) => getBikeStation(id, {signal}),
     staleTime: ONE_MINUTE_MS,
     cacheTime: ONE_MINUTE_MS,
+    refetchOnMount: 'always',
+    retry: 5,
   });

@@ -12,7 +12,8 @@ import {jsonStringToObject} from '@atb/utils/object';
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
   const {abtCustomerId} = useAuthContext();
-  const {isEventStreamEnabled} = useFeatureTogglesContext();
+  const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
+    useFeatureTogglesContext();
 
   const url = `${WS_API_BASE_URL}stream/v1`;
 
@@ -29,9 +30,11 @@ export const useSetupEventStream = () => {
       Bugsnag.leaveBreadcrumb('Received event from stream', {
         data: event.data,
       });
-      handleStreamEvent(streamEvent, queryClient);
+      handleStreamEvent(streamEvent, queryClient, {
+        isEventStreamFareContractsEnabled,
+      });
     },
-    [queryClient],
+    [queryClient, isEventStreamFareContractsEnabled],
   );
 
   const authenticate = useCallback((ws: WebSocket) => {

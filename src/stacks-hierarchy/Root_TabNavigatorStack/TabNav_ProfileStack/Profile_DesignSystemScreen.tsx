@@ -37,7 +37,8 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {LabelInfo} from '@atb/components/label-info';
+import {Tag} from '@atb/components/tag';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -433,20 +434,58 @@ export const Profile_DesignSystemScreen = ({
 
         <Section style={styles.section}>
           <ExpandableSectionItem
-            text="LabelInfo"
+            text="Tag"
             showIconText={false}
             textType="heading__title"
             expandContent={
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  marginTop: -theme.spacing.small,
-                }}
-              >
-                <LabelInfo label="new" />
-                <LabelInfo label="beta" />
-              </View>
+              <>
+                <ThemeText>Regular:</ThemeText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: theme.spacing.small,
+                    gap: theme.spacing.small,
+                  }}
+                >
+                  <Tag label={[`primary`]} tagType="primary" />
+                  <Tag label={[`secondary`]} tagType="secondary" />
+                  <Tag
+                    label={[`secondary with icon`]}
+                    tagType="secondary"
+                    icon={Swap}
+                  />
+                  <Tag label={[`valid`]} tagType="valid" />
+                  <Tag label={[`error`]} tagType="error" />
+                  <Tag label={[`warning`]} tagType="warning" />
+                  <Tag label={[`info`]} tagType="info" />
+                </View>
+
+                <ThemeText style={{marginTop: theme.spacing.small}}>
+                  Small:
+                </ThemeText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: theme.spacing.small,
+                    gap: theme.spacing.small,
+                  }}
+                >
+                  <Tag label={[`primary`]} tagType="primary" size="small" />
+                  <Tag label={[`secondary`]} tagType="secondary" size="small" />
+                  <Tag
+                    label={[`secondary with icon`]}
+                    tagType="secondary"
+                    icon={Swap}
+                    size="small"
+                  />
+                  <Tag label={[`valid`]} tagType="valid" size="small" />
+                  <Tag label={[`error`]} tagType="error" size="small" />
+                  <Tag label={[`warning`]} tagType="warning" size="small" />
+                  <Tag label={[`info`]} tagType="info" size="small" />
+                </View>
+              </>
             }
           />
         </Section>

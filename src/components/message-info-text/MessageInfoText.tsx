@@ -3,7 +3,7 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {ContrastColor, TextColor} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
@@ -41,7 +41,7 @@ export const MessageInfoText = ({
     >
       {iconPosition === 'left' && (
         <ThemeIcon
-          svg={messageTypeToIcon(type, true, themeName)}
+          svg={statusTypeToIcon(type, true, themeName)}
           {...iconColorProps}
         />
       )}
@@ -58,7 +58,7 @@ export const MessageInfoText = ({
 
       {iconPosition === 'right' && (
         <ThemeIcon
-          svg={messageTypeToIcon(type, true, themeName)}
+          svg={statusTypeToIcon(type, true, themeName)}
           {...iconColorProps}
         />
       )}

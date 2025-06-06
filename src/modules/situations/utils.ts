@@ -9,7 +9,7 @@ import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
 import {statusComparator} from '@atb/utils/status-comparator';
 import {Statuses} from '@atb/theme';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {Mode} from '@atb-as/theme';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
@@ -90,7 +90,7 @@ export const getSvgForMostCriticalSituationOrNotice = (
     notices,
     cancellation,
   );
-  return msgType && messageTypeToIcon(msgType, true, themeName);
+  return msgType && statusTypeToIcon(msgType, true, themeName);
 };
 
 export const getSituationOrNoticeA11yLabel = (
