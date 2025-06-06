@@ -8,13 +8,14 @@ import {
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {TransportationIconBox} from '@atb/components/icon-box';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {
   BottomSheetContainer,
   useBottomSheetContext,
 } from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import {
+  FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
   useFiltersContext,
@@ -29,6 +30,7 @@ import {
 } from '@atb/components/sections';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
@@ -51,6 +53,11 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
 
+  const [selectedFlexibleTransportOption, setSelectedFlexibleTransportOption] =
+    useState<FlexibleTransportOptionTypeWithSelectionType | undefined>(
+      filtersSelection.flexibleTransport,
+    );
+
   const [selectedTravelSearchPreferences, setSelectedTravelSearchPreferences] =
     useState<TravelSearchPreferenceWithSelectionType[]>(
       filtersSelection.travelSearchPreferences ?? [],
@@ -59,6 +66,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const save = () => {
     const selectedFilters = {
       transportModes: selectedModeOptions,
+      flexibleTransport: selectedFlexibleTransportOption,
       travelSearchPreferences: selectedTravelSearchPreferences,
     };
     onSave(selectedFilters);
@@ -69,6 +77,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   };
 
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
+
+  const showFlexibleTransportFilterOption =
+    isFlexibleTransportEnabled && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer
@@ -97,48 +108,68 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             }}
             testID="allModesToggle"
           />
-          {filtersSelection.transportModes
-            ?.filter(
-              ({id}) =>
-                id !== 'flexibleTransport' || isFlexibleTransportEnabled,
-            )
-            .map((option) => {
-              const text = getTextForLanguage(option.text, language);
-              const description = getTextForLanguage(
-                option.description,
-                language,
-              );
-              return text ? (
-                <ToggleSectionItem
-                  key={option.id}
-                  text={text}
-                  leftImage={
-                    <TransportationIconBox
-                      mode={option.icon?.transportMode}
-                      subMode={option.icon?.transportSubMode}
-                      isFlexible={
-                        isFlexibleTransportEnabled &&
-                        option.id === 'flexibleTransport'
-                      }
-                    />
-                  }
-                  subtext={description}
-                  value={
-                    selectedModeOptions?.find(({id}) => id === option.id)
-                      ?.selected
-                  }
-                  onValueChange={(checked) => {
-                    setSelectedModes(
-                      selectedModeOptions?.map((m) =>
-                        m.id === option.id ? {...m, selected: checked} : m,
-                      ),
-                    );
-                  }}
-                  testID={`${option.id}Toggle`}
-                />
-              ) : null;
-            })}
+          {filtersSelection.transportModes?.map((option) => {
+            const text = getTextForLanguage(option.text, language);
+            const description = getTextForLanguage(
+              option.description,
+              language,
+            );
+            return text ? (
+              <ToggleSectionItem
+                key={option.id}
+                text={text}
+                leftImage={
+                  <ThemeIcon
+                    svg={
+                      getTransportModeSvg(
+                        option.icon?.transportMode,
+                        option.icon?.transportSubMode,
+                      ).svg
+                    }
+                  />
+                }
+                subtext={description}
+                value={
+                  selectedModeOptions?.find(({id}) => id === option.id)
+                    ?.selected
+                }
+                onValueChange={(checked) => {
+                  setSelectedModes(
+                    selectedModeOptions?.map((m) =>
+                      m.id === option.id ? {...m, selected: checked} : m,
+                    ),
+                  );
+                }}
+                testID={`${option.id}Toggle`}
+              />
+            ) : null;
+          })}
         </Section>
+
+        {showFlexibleTransportFilterOption && (
+          <Section style={styles.sectionContainer}>
+            <ToggleSectionItem
+              text={
+                getTextForLanguage(
+                  selectedFlexibleTransportOption.title,
+                  language,
+                ) ?? ''
+              }
+              subtext={getTextForLanguage(
+                selectedFlexibleTransportOption.description,
+                language,
+              )}
+              label={selectedFlexibleTransportOption.label}
+              value={selectedFlexibleTransportOption?.enabled}
+              onValueChange={(checked) => {
+                setSelectedFlexibleTransportOption({
+                  ...selectedFlexibleTransportOption,
+                  enabled: checked,
+                });
+              }}
+            />
+          </Section>
+        )}
 
         {selectedTravelSearchPreferences.map((preference) => (
           <TravelSearchPreference
