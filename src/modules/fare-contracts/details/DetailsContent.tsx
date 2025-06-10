@@ -50,6 +50,10 @@ import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSecti
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
 import {RefundSectionItem} from '../components/RefundSectionItem';
+import {
+  EarnedBonusPointsSectionItem,
+  useBonusAmountEarnedQuery,
+} from '@atb/modules/bonus';
 
 type Props = {
   fareContract: FareContractType;
@@ -126,6 +130,8 @@ export const DetailsContent: React.FC<Props> = ({
     accesses &&
     accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
+  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
+
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
@@ -201,6 +207,9 @@ export const DetailsContent: React.FC<Props> = ({
           benefits={benefits}
           onNavigateToMap={onNavigateToMap}
         />
+      )}
+      {earnedBonusPoints != undefined && earnedBonusPoints > 0 && (
+        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
