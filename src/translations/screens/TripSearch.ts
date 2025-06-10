@@ -389,7 +389,8 @@ const TripSearchTexts = {
   },
   filters: {
     bottomSheet: {
-      heading: _('Filter', 'Filter', 'Filter'),
+      title: _('Filter', 'Filter', 'Filter'),
+      heading: _('Transportmidler', 'Transport modes', 'Transportmiddel'),
       modesAll: _(
         'Alle transportmidler',
         'All transport modes',

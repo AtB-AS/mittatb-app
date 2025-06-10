@@ -72,13 +72,16 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   return (
     <BottomSheetContainer
       maxHeightValue={0.9}
-      title={t(TripSearchTexts.filters.bottomSheet.heading)}
+      title={t(TripSearchTexts.filters.bottomSheet.title)}
     >
       <ScrollView
         style={styles.filtersContainer}
         ref={focusRef}
         testID="filterView"
       >
+      <ThemeText style={styles.headingText} typography="body__secondary">
+        {t(TripSearchTexts.filters.bottomSheet.heading)}
+      </ThemeText>
         <Section>
           <ToggleSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
@@ -215,4 +218,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveOptionSectionCheckbox: {
     marginRight: theme.spacing.small,
   },
+  headingText: {
+    marginBottom: theme.spacing.medium
+  }
 }));
