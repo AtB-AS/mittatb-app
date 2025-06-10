@@ -38,27 +38,30 @@ export const useShmoWarnings = (
         mapViewRef,
       );
 
-      if (!featuresAtLocation || featuresAtLocation.length === 0) return;
+      const geofencingZoneFeatures = featuresAtLocation?.filter(
+        (feature) =>
+          isFeatureGeofencingZone(feature) &&
+          feature?.properties?.geofencingZoneCustomProps?.code,
+      );
 
-      const featureToSelect = getFeatureToSelect(featuresAtLocation, [
+      if (!geofencingZoneFeatures || geofencingZoneFeatures.length === 0) {
+        setGeofencingZoneMessage(null);
+        return;
+      }
+
+      const featureToSelect = getFeatureToSelect(geofencingZoneFeatures, [
         coordinates.longitude,
         coordinates.latitude,
       ]);
 
-      if (isFeatureGeofencingZone(featureToSelect)) {
+      if (
+        featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
+        'allowed'
+      ) {
         const textContent = getGeofencingZoneTextContent(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-
-        if (
-          featureToSelect?.properties?.geofencingZoneCustomProps?.code &&
-          featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
-            'allowed'
-        ) {
-          setGeofencingZoneMessage(textContent.description);
-        } else {
-          setGeofencingZoneMessage(null);
-        }
+        setGeofencingZoneMessage(textContent.description);
       } else {
         setGeofencingZoneMessage(null);
       }

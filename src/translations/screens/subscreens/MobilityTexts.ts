@@ -324,7 +324,7 @@ export const ParkAndRideTexts = {
 
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   allowed: {
-    title: _('Parkeringssone', 'Parking Zone', 'Parkeringssone'),
+    title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
     description: _(
       'Her kan du både kjøre og parkere',
       'Here you can both drive and park',
@@ -364,7 +364,11 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   // },
 
   noParking: {
-    title: _('Parkering forbudt', 'No Parking Zone', 'Parkering forboden'),
+    title: _(
+      'Parkering forbudt-sone',
+      'No Parking Zone',
+      'Parkering forboden-sone',
+    ),
     description: _(
       'Du kan ikke parkere i dette området',
       'You cannot park in this area',
@@ -372,7 +376,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
     ),
   },
   noEntry: {
-    title: _('Kjøring forbudt', 'No Riding', 'Kjøring forboden'),
+    title: _('Kjøring forbudt', 'No Riding', 'Køyring forboden'),
     description: _(
       'Du kan ikke kjøre inn i dette området',
       'You cannot ride in this area',
