@@ -59,10 +59,14 @@ export function useBookingTrips({
 }
 
 function isValidSelection(selection: PurchaseSelectionType) {
+  const isBoatSingleFareProduct =
+    selection.fareProductTypeConfig.direction === 'one-way' &&
+    selection.fareProductTypeConfig.configuration.zoneSelectionMode ===
+      'multiple-stop-harbor';
   return (
     !!selection.stopPlaces?.from &&
     !!selection.stopPlaces?.to &&
-    selection.preassignedFareProduct.type === 'boat-single'
+    isBoatSingleFareProduct
   );
 }
 

@@ -150,7 +150,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (!isBookingEnabled) {
       return offerError;
     }
-    // From this point we know booking is enabled
     if (offerError && isLoadingBooking) {
       return undefined; // It's not possible to know if we should display this error until the booking request has completed
     }
@@ -159,7 +158,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       !isBookingError &&
       tripPatternsThatRequireBooking.length > 0
     ) {
-      return undefined; //
+      return undefined; // Do not display the error from the offer if we have trips that require booking
     }
     if (isBookingError) return {type: 'booking-error'};
     return offerError;
