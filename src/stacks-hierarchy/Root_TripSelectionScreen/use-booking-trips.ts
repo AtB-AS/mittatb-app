@@ -60,7 +60,15 @@ export function useBookingTrips({
 }
 
 function isValidSelection(selection: PurchaseSelectionType) {
-  return !!selection.stopPlaces?.from && !!selection.stopPlaces?.to;
+  const isBoatSingleFareProduct =
+    selection.fareProductTypeConfig.direction === 'one-way' &&
+    selection.fareProductTypeConfig.configuration.zoneSelectionMode ===
+      'multiple-stop-harbor';
+  return (
+    !!selection.stopPlaces?.from &&
+    !!selection.stopPlaces?.to &&
+    isBoatSingleFareProduct
+  );
 }
 
 function isValidResult(result: TripPatternWithBooking[] | undefined): boolean {
