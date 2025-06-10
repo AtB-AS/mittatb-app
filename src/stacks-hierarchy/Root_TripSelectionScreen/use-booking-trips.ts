@@ -44,6 +44,7 @@ export function useBookingTrips({
         travellers: userProfilesWithCount.map((p) => ({
           id: p.id,
           userType: p.userTypeString,
+          count: p.count,
         })),
       }),
     enabled: enabled && isValidSelection(selection),
