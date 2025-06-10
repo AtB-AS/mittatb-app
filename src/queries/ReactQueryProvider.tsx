@@ -1,6 +1,9 @@
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {QueryClient} from '@tanstack/react-query';
 import {ReactNode} from 'react';
 import {isAxiosError} from 'axios';
+import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
+import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +19,15 @@ const queryClient = new QueryClient({
   },
 });
 
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+});
+
 export const ReactQueryProvider = ({children}: {children: ReactNode}) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  <PersistQueryClientProvider
+    client={queryClient}
+    persistOptions={{persister: asyncStoragePersister}}
+  >
+    {children}
+  </PersistQueryClientProvider>
 );
