@@ -59,7 +59,11 @@ export function useBookingTrips({
 }
 
 function isValidSelection(selection: PurchaseSelectionType) {
-  return !!selection.stopPlaces?.from && !!selection.stopPlaces?.to;
+  return (
+    !!selection.stopPlaces?.from &&
+    !!selection.stopPlaces?.to &&
+    selection.preassignedFareProduct.type === 'boat-single'
+  );
 }
 
 function isValidResult(result: TripPatternWithBooking[] | undefined): boolean {

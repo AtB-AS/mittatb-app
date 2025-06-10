@@ -13,7 +13,7 @@ import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {useOfferState} from './use-offer-state';
+import {type OfferError, useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -41,6 +41,7 @@ import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
 import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
 
+type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
 export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
@@ -96,10 +97,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selectableUserProfiles,
   );
 
-  const hasSelection =
-    selection.userProfilesWithCount.some((u) => u.count) &&
-    userProfilesWithCountAndOffer.some((u) => u.count);
-
   const handleTicketInfoButtonPress = () => {
     const parameters = {
       fareProductTypeConfigType: selection.fareProductTypeConfig.type,
@@ -138,6 +135,35 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selection,
     enabled: isBookingEnabled,
   });
+
+  const canProceed = (() => {
+    const hasOffer =
+      selection.userProfilesWithCount.some((u) => u.count) &&
+      userProfilesWithCountAndOffer.some((u) => u.count);
+
+    return (
+      hasOffer || (!isBookingError && tripPatternsThatRequireBooking.length > 0)
+    );
+  })();
+
+  const error: PurchaseOverviewError | undefined = (() => {
+    if (!isBookingEnabled) {
+      return offerError;
+    }
+    // From this point we know booking is enabled
+    if (offerError && isLoadingBooking) {
+      return undefined; // It's not possible to know if we should display this error until the booking request has completed
+    }
+    if (
+      offerError &&
+      !isBookingError &&
+      tripPatternsThatRequireBooking.length > 0
+    ) {
+      return undefined; //
+    }
+    if (isBookingError) return {type: 'booking-error'};
+    return offerError;
+  })();
 
   const onPressBuy = () => {
     if (selection.isOnBehalfOf) {
@@ -198,8 +224,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
           )}
-          {(offerError || isBookingError) &&
-            (offerError?.type === 'not-available' ? (
+          {!!error &&
+            (error?.type === 'not-available' ? (
               <MessageInfoBox
                 type="warning"
                 title={t(
@@ -325,7 +351,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             isLoading={isSearchingOffer || isLoadingBooking}
             isFree={isFree}
-            isError={isBookingError || !!offerError || !hasSelection}
+            isError={!!error || !canProceed}
             originalPrice={originalPrice}
             price={totalPrice}
             summaryButtonText={summaryButtonText()}
