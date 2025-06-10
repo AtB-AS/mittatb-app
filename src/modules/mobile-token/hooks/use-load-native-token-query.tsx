@@ -34,7 +34,7 @@ export const useLoadNativeTokenQuery = (
  * Tokens are always created remotely, and then saved into device.
  * Remote tokens can be viewed through the backoffice, and they are the actual tokens.
  * Local tokens are just representations of these remote tokens.
- * 
+ *
  * - First check if there has been a user change. If there has, then a new
  *   token should always be created (skip to last step).
  * - If no user change, retrieve the token from the client-sdk. If necessary,
@@ -60,7 +60,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
-      // issue in fetching, report the error, and pretend there are 
+      // issue in fetching, report the error, and pretend there are
       // no tokens to be fetched.
       logToBugsnag(`Get token error ${err}`, errorToMetadata(err));
       logError(err, traceId);
