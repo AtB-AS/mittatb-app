@@ -137,7 +137,7 @@ export const mapPositionToCoordinates = (p: Position): Coordinates => ({
 });
 
 export const getFeaturesAtPoint = async (
-  point: [number, number],
+  point: Position, // [lon, lat]
   mapViewRef: RefObject<MapboxGL.MapView | null>,
   filter?: Expression,
   layerIds?: string[],

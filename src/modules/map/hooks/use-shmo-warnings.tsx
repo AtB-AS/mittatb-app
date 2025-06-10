@@ -1,9 +1,6 @@
 import {RefObject, useEffect, useRef, useState} from 'react';
 import {MapView} from '@rnmapbox/maps';
-import {
-  getCurrentCoordinatesGlobal,
-  useGeolocationContext,
-} from '@atb/modules/geolocation';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   getFeaturesAtPoint,
   getFeatureToSelect,
@@ -14,6 +11,7 @@ import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
+import {Coordinates} from '@atb/utils/coordinates';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -23,35 +21,29 @@ export const useShmoWarnings = (
   const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
     string | null
   >(null);
-  const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
-  const coordinates = getCurrentCoordinatesGlobal();
+  const {location} = useGeolocationContext();
 
-  const {locationIsAvailable} = useGeolocationContext();
   const {vehicle} = useVehicle(vehicleId);
-
-  useEffect(() => {
-    if (vehicle?.isDisabled) {
-      setWarningMessage(t(ShmoWarnings.scooterDisabled));
-    } else if (warningMessage !== null) {
-      setWarningMessage(null);
-    }
-  }, [locationIsAvailable, t, vehicle?.isDisabled, warningMessage]);
+  const warningMessage = vehicle?.isDisabled
+    ? t(ShmoWarnings.scooterDisabled)
+    : null;
 
   const throttledCallback = useRef(
-    throttle(async (loc: {latitude: number; longitude: number}) => {
+    throttle(async (coordinates: Coordinates) => {
+      console.log('CALLING:', coordinates);
       if (!mapViewRef?.current) return null;
 
       const featuresAtLocation = await getFeaturesAtPoint(
-        [loc.longitude, loc.latitude],
+        [coordinates.longitude, coordinates.latitude],
         mapViewRef,
       );
 
       if (!featuresAtLocation || featuresAtLocation.length === 0) return;
 
       const featureToSelect = getFeatureToSelect(featuresAtLocation, [
-        loc.longitude,
-        loc.latitude,
+        coordinates.longitude,
+        coordinates.latitude,
       ]);
 
       if (isFeatureGeofencingZone(featureToSelect)) {
@@ -75,10 +67,10 @@ export const useShmoWarnings = (
   ).current;
 
   useEffect(() => {
-    if (coordinates) {
-      throttledCallback(coordinates);
+    if (location) {
+      throttledCallback(location.coordinates);
     }
-  }, [coordinates, throttledCallback]);
+  }, [location, throttledCallback, vehicleId, mapViewRef]);
 
   return {geofencingZoneMessage, warningMessage};
 };
