@@ -79,14 +79,21 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
       </GenericSectionItem>
       <Button
         onPress={() => {
-          navigation.navigate({
-            name: 'Root_PurchaseConfirmationScreen',
-            params: {
-              mode: 'Ticket',
-              selection: selection,
-            },
-            merge: true,
-          });
+          if (selection.isOnBehalfOf) {
+            navigation.navigate('Root_ChooseTicketRecipientScreen', {
+              selection,
+              mode: params.mode,
+            });
+          } else {
+            navigation.navigate({
+              name: 'Root_PurchaseConfirmationScreen',
+              params: {
+                mode: params.mode,
+                selection: selection,
+              },
+              merge: true,
+            });
+          }
         }}
         expanded={false}
         text="Bekreft"
