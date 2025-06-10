@@ -96,6 +96,7 @@ type Root_ConfirmationScreenParams = {
 
 type Root_TripSearchScreenParams = {
   selection: PurchaseSelectionType;
+  mode?: 'Ticket' | 'TravelSearch';
 };
 
 export type NextScreenParams<

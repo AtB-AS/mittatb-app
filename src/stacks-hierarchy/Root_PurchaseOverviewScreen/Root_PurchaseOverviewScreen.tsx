@@ -140,15 +140,18 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   });
 
   const onPressBuy = () => {
+    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
+      navigation.push(
+        'Root_TripSelectionScreen',
+        rootPurchaseConfirmationScreenParams,
+      );
+      return;
+    }
     if (selection.isOnBehalfOf) {
       navigation.navigate(
         'Root_ChooseTicketRecipientScreen',
         rootPurchaseConfirmationScreenParams,
       );
-      return;
-    }
-    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
-      navigation.push('Root_TripSelectionScreen', {selection});
       return;
     }
     navigation.navigate(
@@ -157,11 +160,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     );
   };
   const summaryButtonText = () => {
-    if (selection.isOnBehalfOf) {
-      return t(PurchaseOverviewTexts.summary.button.sendToOthers);
-    }
     if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
+    }
+    if (selection.isOnBehalfOf) {
+      return t(PurchaseOverviewTexts.summary.button.sendToOthers);
     }
     return t(PurchaseOverviewTexts.summary.button.payment);
   };
