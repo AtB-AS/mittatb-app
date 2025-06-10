@@ -29,7 +29,11 @@ export const useLoadNativeTokenQuery = (
 };
 
 /**
- * Load/create native token and handle the situations that can arise.
+ * Load/create native token
+ *
+ * Tokens are always created remotely, and then saved into device.
+ * Remote tokens can be viewed through the backoffice, and they are the actual tokens.
+ * Local tokens are just representations of these remote tokens.
  *
  * - First check if there has been a user change. If there has, then a new
  *   token should always be created (skip to last step).
@@ -56,6 +60,8 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     try {
       token = await mobileTokenClient.get(traceId);
     } catch (err: any) {
+      // issue in fetching, report the error, and pretend there are
+      // no tokens to be fetched.
       logToBugsnag(`Get token error ${err}`, errorToMetadata(err));
       logError(err, traceId);
     }
@@ -63,17 +69,18 @@ const loadNativeToken = async (userId: string, traceId: string) => {
 
   if (!token) {
     /*
-    If token is undefined, then create a new one. We can end up here if:
+    If token is not fetched from native layer, then create a new one. We can end up here if:
     - No token previously created on this device.
     - There has been a user change and the existing token has been wiped.
-    - There was an error where the token resolution is `RESET` as
-      suggested by the SDK.
+    - There is an issue while fetching the token from native layer.
      */
     logToBugsnag(`Creating new mobile token`);
     try {
       token = await mobileTokenClient.create(traceId);
       logToBugsnag(`Created new token ${token.getTokenId()}`);
     } catch (err: any) {
+      // token creation can also result in an error, log the issue and throw error
+      // when we receive error here, we use the fallback token (static qr codes)
       logToBugsnag(
         `Got error while creating new mobile token `,
         errorToMetadata(err),
