@@ -31,7 +31,6 @@ export const useShmoWarnings = (
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
-      console.log('CALLING:', coordinates);
       if (!mapViewRef?.current) return null;
 
       const featuresAtLocation = await getFeaturesAtPoint(
@@ -67,10 +66,10 @@ export const useShmoWarnings = (
   ).current;
 
   useEffect(() => {
-    if (location) {
+    if (location?.coordinates) {
       throttledCallback(location.coordinates);
     }
-  }, [location, throttledCallback, vehicleId, mapViewRef]);
+  }, [location?.coordinates, throttledCallback, vehicleId, mapViewRef]);
 
   return {geofencingZoneMessage, warningMessage};
 };
