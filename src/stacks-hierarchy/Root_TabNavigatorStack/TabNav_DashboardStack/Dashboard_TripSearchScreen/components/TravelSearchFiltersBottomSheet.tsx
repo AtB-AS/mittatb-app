@@ -79,9 +79,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         ref={focusRef}
         testID="filterView"
       >
-      <ThemeText style={styles.headingText} typography="body__secondary">
-        {t(TripSearchTexts.filters.bottomSheet.heading)}
-      </ThemeText>
+        <ThemeText style={styles.headingText} typography="body__secondary">
+          {t(TripSearchTexts.filters.bottomSheet.heading)}
+        </ThemeText>
         <Section>
           <ToggleSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
@@ -219,6 +219,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacing.small,
   },
   headingText: {
-    marginBottom: theme.spacing.medium
-  }
+    marginBottom: theme.spacing.medium,
+  },
 }));
