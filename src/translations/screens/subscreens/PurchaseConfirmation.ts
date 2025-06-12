@@ -134,9 +134,9 @@ const PurchaseConfirmationTexts = {
 
   confirmations: {
     onlyValidDeparture: _(
-      'Kun gyldig for avgang',
-      'Only valid for departure',
-      'Kun gyldig for avgang',
+      'Kun gyldig for avgang:',
+      'Only valid for departure:',
+      'Kun gyldig for avgang:',
     ),
   },
 
