@@ -27,7 +27,7 @@ export const Departures_NearbyStopPlacesScreen = ({
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
-          label: t(NearbyTexts.search.label),
+          label: t(SharedTexts),
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,

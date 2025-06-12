@@ -8,6 +8,7 @@ import {
 } from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import SharedTexts from '@atb/translations/shared.ts';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
@@ -28,7 +29,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
-          label: t(NearbyTexts.search.label),
+          label: t(SharedTexts.from),
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,

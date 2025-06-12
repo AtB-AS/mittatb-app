@@ -1,12 +1,8 @@
 import {translation as _} from '../commons';
 
 const NearbyTexts = {
-  search: {
-    label: _('Fra', 'From', 'Frå'),
-  },
   location: {
     departurePicker: {
-      label: _('Fra', 'From', 'Frå'),
       a11yLabel: _(
         'Velg avreisested',
         'Choose place of departure',
