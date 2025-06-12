@@ -31,7 +31,7 @@ import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
 import {SalesTripPatternLeg} from '@atb/api/types/sales';
-import SharedTexts from '@atb/translations/shared.ts';
+import SharedTexts from '@atb/translations/shared';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -123,7 +123,7 @@ export const PreassignedFareContractSummary = ({
   const LegSection = () => (
     <GenericSectionItem>
       <ThemeText typography="body__primary" color="secondary">
-        Kun gyldig for avgang:
+        {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
       </ThemeText>
       {legs &&
         legs.map(
