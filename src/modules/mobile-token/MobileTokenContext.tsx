@@ -248,7 +248,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
    * checks token to see if we need to renew/reset, returns
    * for the users
    */
-  const {isRenewingOrResetting} = useValidateToken(
+  const {isRenewingOrResetting, shouldFallback} = useValidateToken(
     nativeToken,
     remoteTokens,
     traceId.current,
@@ -273,6 +273,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     nativeToken,
     remoteTokens,
     isRenewingOrResetting,
+    shouldFallback,
     isTimeout,
   );
 
@@ -410,6 +411,7 @@ const useMobileTokenStatus = (
   nativeToken: ActivatedToken | undefined,
   remoteTokens: RemoteToken[] | undefined,
   isRenewingOrResetting: boolean,
+  shouldFallback: boolean,
   isTimeout: boolean,
 ): MobileTokenStatus => {
   const {
@@ -420,7 +422,7 @@ const useMobileTokenStatus = (
 
   const fallbackStatus = use_trygg_overgang_qr_code ? 'staticQr' : 'fallback';
 
-  if (isTimeout)
+  if (isTimeout || shouldFallback)
     return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';
 
   if (isRenewingOrResetting) return 'loading';
