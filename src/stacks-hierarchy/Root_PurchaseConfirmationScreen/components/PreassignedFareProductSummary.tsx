@@ -31,6 +31,7 @@ import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
 import {SalesTripPatternLeg} from '@atb/api/types/sales';
+import SharedTexts from '@atb/translations/shared.ts';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -161,7 +162,7 @@ export const PreassignedFareContractSummary = ({
                     color="secondary"
                     style={styles.legLabel}
                   >
-                    Fra:
+                    {t(SharedTexts.from)}:
                   </ThemeText>
                   <ThemeText typography="body__secondary" color="secondary">
                     {fromStopPlaceName}
@@ -180,7 +181,7 @@ export const PreassignedFareContractSummary = ({
                     color="secondary"
                     style={styles.legLabel}
                   >
-                    Til:
+                    {t(SharedTexts.to)}:
                   </ThemeText>
                   <ThemeText typography="body__secondary" color="secondary">
                     {toStopPlaceName}
