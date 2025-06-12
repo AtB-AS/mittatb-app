@@ -133,7 +133,11 @@ const PurchaseConfirmationTexts = {
   },
 
   confirmations: {
-    onlyValidDeparture: _('Kun gyldig for avgang', 'Only valid for departure', 'Kun gyldig for avgang'),
+    onlyValidDeparture: _(
+      'Kun gyldig for avgang',
+      'Only valid for departure',
+      'Kun gyldig for avgang',
+    ),
   },
 
   paymentWithMultiplePaymentMethods: {
