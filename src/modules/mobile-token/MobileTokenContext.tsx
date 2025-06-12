@@ -248,7 +248,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
    * checks token to see if we need to renew/reset, returns
    * for the users
    */
-  const {isRenewingOrResetting, shouldFallback} = useValidateToken(
+  const {isRenewingOrResetting, isRenewOrResetError} = useValidateToken(
     nativeToken,
     remoteTokens,
     traceId.current,
@@ -273,7 +273,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     nativeToken,
     remoteTokens,
     isRenewingOrResetting,
-    shouldFallback,
+    isRenewOrResetError,
     isTimeout,
   );
 
