@@ -13,6 +13,7 @@ export type SalesTripPatternLeg = {
   mode: string;
   subMode?: TransportSubmode;
   lineNumber?: string;
+  lineName?: string;
 };
 
 export type Traveller = {
