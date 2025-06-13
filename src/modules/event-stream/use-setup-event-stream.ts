@@ -11,7 +11,7 @@ import {jsonStringToObject} from '@atb/utils/object';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
-  const {abtCustomerId} = useAuthContext();
+  const {isValidIdToken} = useAuthContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
 
@@ -43,9 +43,8 @@ export const useSetupEventStream = () => {
 
   useSubscription({
     url,
-    // When abtCustomerId is set, we also have the id token which is needed to
-    // authenticate.
-    enabled: isEventStreamEnabled && abtCustomerId !== undefined,
+    // When id token is valid, we connect to the stream
+    enabled: isEventStreamEnabled && isValidIdToken,
     onMessage,
     onOpen: authenticate,
   });
