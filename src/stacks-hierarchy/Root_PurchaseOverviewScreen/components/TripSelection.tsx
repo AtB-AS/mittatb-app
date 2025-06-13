@@ -73,5 +73,6 @@ export function mapToSalesTripPatternLegs(legs: TripPatternFragment['legs']) {
     subMode: l.transportSubmode,
     serviceJourneyId: l.serviceJourney?.id ?? '',
     lineNumber: l.line?.publicCode ?? '',
+    lineName: l.line?.name ?? '',
   }));
 }

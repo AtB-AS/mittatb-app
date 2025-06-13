@@ -135,6 +135,7 @@ export const PreassignedFareContractSummary = ({
             expectedStartTime,
             expectedEndTime,
             lineNumber,
+            lineName,
             mode,
             subMode,
           }) => (
@@ -148,7 +149,7 @@ export const PreassignedFareContractSummary = ({
                   lineNumber={lineNumber}
                 />
                 <ThemeText typography="body__primary">
-                  {fromPlaceName}
+                  {lineName}
                 </ThemeText>
                 <ThemeText
                   typography="body__primary--bold"
