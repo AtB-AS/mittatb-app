@@ -1,6 +1,7 @@
 import {createEmptyBuilder} from '../purchase-selection-builder';
 import {TEST_INPUT, TEST_SELECTION} from './test-utils';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types.ts';
 
 describe('purchaseSelectionBuilder - legs', () => {
   it('Should apply valid legs when travel date matches', () => {
@@ -16,6 +17,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
       {
         expectedStartTime: '2023-10-01T10:00:00Z',
@@ -23,6 +25,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP4',
         serviceJourneyId: 'SJ2',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -49,6 +52,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -68,6 +72,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -110,6 +115,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
       {
         expectedStartTime: '2023-01-01T10:00:00Z', // Valid ISO string
@@ -117,6 +123,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP4',
         serviceJourneyId: 'SJ2',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
