@@ -340,7 +340,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 accessibilityLabel={t(
                   TripSearchTexts.location.destinationPicker.a11yLabel,
                 )}
-                label={t(TripSearchTexts.location.destinationPicker.label)}
+                label={t(SharedTexts.to)}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
                 icon={<ThemeIcon svg={Swap} />}

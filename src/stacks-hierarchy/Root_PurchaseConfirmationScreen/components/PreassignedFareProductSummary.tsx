@@ -120,13 +120,15 @@ export const PreassignedFareContractSummary = ({
     }
   };
 
-  const LegSection = () => (
-    <GenericSectionItem>
-      <ThemeText typography="body__primary" color="secondary">
-        {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
-      </ThemeText>
-      {legs &&
-        legs.map(
+  const LegSection = () => {
+    if (!legs || legs.length === 0) return null;
+
+    return (
+      <GenericSectionItem>
+        <ThemeText typography="body__primary" color="secondary">
+          {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
+        </ThemeText>
+        {legs.map(
           ({
             fromStopPlaceName,
             toStopPlaceName,
@@ -172,7 +174,8 @@ export const PreassignedFareContractSummary = ({
                     color="secondary"
                     style={styles.legSectionItemTime}
                   >
-                    {formatLocaleTime(expectedStartTime, language)}
+                    {expectedStartTime &&
+                      formatLocaleTime(expectedStartTime, language)}
                   </ThemeText>
                 </View>
                 <View style={styles.legSectionItem}>
@@ -191,15 +194,17 @@ export const PreassignedFareContractSummary = ({
                     color="secondary"
                     style={styles.legSectionItemTime}
                   >
-                    {formatLocaleTime(expectedEndTime, language)}
+                    {expectedEndTime &&
+                      formatLocaleTime(expectedEndTime, language)}
                   </ThemeText>
                 </View>
               </View>
             </View>
           ),
         )}
-    </GenericSectionItem>
-  );
+      </GenericSectionItem>
+    );
+  };
 
   return (
     <Section>
