@@ -7,7 +7,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Statuses} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {MessageInfoBoxProps} from '@atb/components/message-info-box';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
@@ -59,7 +59,7 @@ export function MessageSectionItem({
       <ThemeIcon
         style={styles.icon}
         color={themeColor.foreground.primary}
-        svg={messageTypeToIcon(messageType, true, themeName)}
+        svg={statusTypeToIcon(messageType, true, themeName)}
       />
       <View style={styles.textContent}>
         {title && (

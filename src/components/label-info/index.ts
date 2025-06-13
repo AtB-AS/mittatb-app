@@ -1,1 +1,0 @@
-export {LabelInfo} from './LabelInfo';

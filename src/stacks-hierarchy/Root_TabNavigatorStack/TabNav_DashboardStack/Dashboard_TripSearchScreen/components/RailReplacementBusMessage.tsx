@@ -5,7 +5,7 @@ import RailReplacementBusTexts from '@atb/translations/components/RailReplacemen
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 
 export const RailReplacementBusMessage: React.FC<{
   tripPattern: TripPattern;
@@ -16,7 +16,7 @@ export const RailReplacementBusMessage: React.FC<{
     (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
   ) ? (
     <ThemeIcon
-      svg={messageTypeToIcon('warning', true, themeName)}
+      svg={statusTypeToIcon('warning', true, themeName)}
       accessibilityLabel={t(
         RailReplacementBusTexts.tripIncludesRailReplacementBus,
       )}

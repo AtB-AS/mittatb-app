@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.69.0",
+  "version": "1.70.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -30,9 +30,9 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "5.16.0",
-    "@atb-as/generate-assets": "17.2.0",
-    "@atb-as/theme": "^13.1.5",
-    "@atb-as/utils": "^3.1.0",
+    "@atb-as/generate-assets": "17.2.2",
+    "@atb-as/theme": "^14.0.1",
+    "@atb-as/utils": "^3.4.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "3.3.14",
@@ -61,6 +61,7 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "@rnmapbox/maps": "^10.1.37",
+    "@sayem314/react-native-keep-awake": "^1.3.1",
     "@seznam/compose-react-refs": "^1.0.6",
     "@tanstack/react-query": "^4.32.0",
     "@turf/bbox-polygon": "^7.1.0",

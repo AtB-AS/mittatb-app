@@ -1,21 +1,17 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
-import {
-  FlexDiscountLadder,
-  Offer,
-  OfferPrice,
-  searchOffers,
-} from '@atb/modules/ticketing';
+import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
+import type {SearchOfferPrice, TicketOffer} from '@atb-as/utils';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
-  offer: Offer;
+  offer: TicketOffer;
 };
 
 export type OfferError = {
@@ -35,7 +31,7 @@ type OfferState = {
 
 type OfferReducerAction =
   | {type: 'SEARCHING_OFFER'}
-  | {type: 'SET_OFFER'; offers: Offer[]}
+  | {type: 'SET_OFFER'; offers: TicketOffer[]}
   | {type: 'CLEAR_OFFER'}
   | {type: 'SET_ERROR'; error: OfferError};
 
@@ -44,18 +40,21 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
-const getCurrencyAsFloat = (price: OfferPrice, currency = 'NOK') =>
+const getCurrencyAsFloat = (price: SearchOfferPrice, currency = 'NOK') =>
   price.currency === currency ? price.amountFloat ?? 0 : 0;
 
-const getOriginalPriceAsFloat = (price: OfferPrice, currency: string) =>
+const getOriginalPriceAsFloat = (price: SearchOfferPrice, currency: string) =>
   price.currency === currency ? price.originalAmountFloat ?? 0 : 0;
 
-const getValidDurationSeconds = (offer: Offer): number | undefined =>
+const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
   offer.validFrom && offer.validTo
     ? secondsBetween(offer.validFrom, offer.validTo)
     : undefined;
 
-const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
+const getOfferForTraveller = (
+  offers: TicketOffer[],
+  userTypeString: string,
+) => {
   const offersForTraveller = offers.filter(
     (o) => o.travellerId === userTypeString,
   );
@@ -72,7 +71,7 @@ const getOfferForTraveller = (offers: Offer[], userTypeString: string) => {
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
-  offers: Offer[],
+  offers: TicketOffer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
@@ -84,7 +83,7 @@ const calculateTotalPrice = (
 
 const calculateOriginalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
-  offers: Offer[],
+  offers: TicketOffer[],
 ) =>
   userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
@@ -96,7 +95,7 @@ const calculateOriginalPrice = (
 
 const mapToUserProfilesWithCountAndOffer = (
   userProfileWithCounts: UserProfileWithCount[],
-  offers: Offer[],
+  offers: TicketOffer[],
 ): UserProfileWithCountAndOffer[] =>
   userProfileWithCounts
     .map((u) => ({
@@ -166,7 +165,6 @@ const initialState: OfferState = {
 export function useOfferState(
   selection: PurchaseSelectionType,
   preassignedFareProductAlternatives: PreassignedFareProduct[],
-  isOnBehalfOf: boolean = false,
 ) {
   const offerReducer = getOfferReducer(selection.userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
@@ -197,7 +195,7 @@ export function useOfferState(
       } else {
         try {
           dispatch({type: 'SEARCHING_OFFER'});
-          let offers: Offer[];
+          let offers: TicketOffer[];
 
           if (selection.legs.length) {
             const response = await fetchOfferFromLegs(
@@ -214,7 +212,7 @@ export function useOfferState(
               ],
               from: selection.stopPlaces?.from!.id,
               to: selection.stopPlaces?.to!.id,
-              isOnBehalfOf,
+              isOnBehalfOf: selection.isOnBehalfOf,
               travellers: offerTravellers,
               products: preassignedFareProductAlternatives.map((p) => p.id),
               travelDate: selection.travelDate,
@@ -261,7 +259,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives, isOnBehalfOf],
+    [selection, preassignedFareProductAlternatives],
   );
 
   useEffect(() => {

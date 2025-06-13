@@ -105,6 +105,7 @@ function isInternalUpstreamServerError(
 ): e is InternalUpstreamServerError {
   return 'errorCode' in e && 'shortNorwegian' in e;
 }
+
 function responseErrorHandler(error: AxiosError) {
   if (shouldSkipLogging(error)) {
     return Promise.reject(error);

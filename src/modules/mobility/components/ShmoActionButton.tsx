@@ -13,6 +13,8 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
+import {useShmoWarnings} from '@atb/modules/map';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
@@ -35,6 +37,7 @@ export const ShmoActionButton = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
+  const {warningMessage} = useShmoWarnings(vehicleId);
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -96,6 +99,9 @@ export const ShmoActionButton = ({
 
   return (
     <View style={styles.startTripWrapper}>
+      {warningMessage && (
+        <MessageInfoText type="warning" message={warningMessage} />
+      )}
       {initShmoOneStopBookingIsError && (
         <MessageInfoBox
           type="error"

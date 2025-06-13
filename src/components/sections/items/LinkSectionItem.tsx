@@ -11,11 +11,11 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {TextNames} from '@atb/theme/colors';
-import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTranslation} from '@atb/translations';
-import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
+import {TagInfoTexts} from '@atb/translations/components/TagInfo';
+import {Tag} from '@atb/components/tag';
 
 type Props = SectionItemProps<{
   text: string;
@@ -73,7 +73,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         disabled={disabled}
         accessibilityLabel={
           label
-            ? `${accessibilityLabel} ${t(LabelInfoTexts.labels[label])}`
+            ? `${accessibilityLabel} ${t(TagInfoTexts.labels[label])}`
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
@@ -93,7 +93,13 @@ export const LinkSectionItem = forwardRef<any, Props>(
           >
             {text}
           </ThemeText>
-          {label && <LabelInfo label={label} />}
+          {label && (
+            <Tag
+              label={[t(TagInfoTexts.labels[label])]}
+              tagType="primary"
+              customStyle={{alignSelf: 'center'}}
+            />
+          )}
           {iconEl}
         </View>
         {subtitle && (

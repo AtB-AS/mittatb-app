@@ -387,15 +387,13 @@ const TripSearchTexts = {
   },
   filters: {
     bottomSheet: {
-      heading: _('Filter', 'Filter', 'Filter'),
-      modes: {
-        heading: _(
-          'Hva vil du reise med?',
-          'What do you want to travel with?',
-          'Kva vil du reise med?',
-        ),
-        all: _('Alle', 'All', 'Alle'),
-      },
+      title: _('Filter', 'Filter', 'Filter'),
+      heading: _('Transportmidler', 'Transport modes', 'Transportmiddel'),
+      modesAll: _(
+        'Alle transportmidler',
+        'All transport modes',
+        'Alle transportmiddel',
+      ),
       use: _('Bruk', 'Use', 'Bruk'),
       saveFilters: {
         text: _(

@@ -2507,6 +2507,8 @@ PODS:
     - React-Core
   - react-native-in-app-review (4.3.3):
     - React-Core
+  - react-native-keep-awake (1.3.1):
+    - React-Core
   - react-native-kettle-module (1.2.0):
     - DoubleConversion
     - glog
@@ -3105,6 +3107,7 @@ DEPENDENCIES:
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
+  - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
   - react-native-kettle-module (from `../node_modules/react-native-kettle-module`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -3304,6 +3307,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
     :path: "../node_modules/react-native-in-app-review"
+  react-native-keep-awake:
+    :path: "../node_modules/@sayem314/react-native-keep-awake"
   react-native-kettle-module:
     :path: "../node_modules/react-native-kettle-module"
   react-native-pager-view:
@@ -3504,6 +3509,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: 27e2ec1ac037c5209c57716ad8cb0b4e61d145e7
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
+  react-native-keep-awake: f242130d32a8e312b53c4b422534fd73ff35885a
   react-native-kettle-module: 8cff9eddef0d70da7f647ca997f5ff99d3588a20
   react-native-pager-view: 87334b0013bb6ba27a491ddc499e2c1cb9058e3f
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a

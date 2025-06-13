@@ -10,8 +10,7 @@ import {
   Camera,
   MapView,
 } from '@rnmapbox/maps';
-import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
@@ -25,13 +24,12 @@ import {
   isFeaturePoint,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
-  isStopPlace,
-  isParkAndRide,
   isClusterFeatureV2,
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
   getMapPadding,
+  getFeatureToSelect,
 } from './utils';
 import {
   GeofencingZones,
@@ -43,9 +41,6 @@ import {ExternalRealtimeMapButton} from './components/external-realtime-map/Exte
 import {
   isBicycleV2,
   isScooterV2,
-  isCarStationV2,
-  isStationV2,
-  isVehiclesClusteredFeature,
   useInitShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
 
@@ -382,38 +377,3 @@ export const MapV2 = (props: MapProps) => {
     </View>
   );
 };
-
-function getFeatureToSelect(
-  featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
-  positionClicked: Position, // [lon, lat]
-) {
-  const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
-    getFeatureWeight(currentFeature, positionClicked) >
-    getFeatureWeight(selected, positionClicked)
-      ? currentFeature
-      : selected,
-  );
-  return featureToSelect;
-}
-
-function getFeatureWeight(feature: Feature, positionClicked: Position): number {
-  if (isFeaturePoint(feature)) {
-    return isStopPlace(feature) ||
-      isVehiclesClusteredFeature(feature) ||
-      isScooterV2(feature) ||
-      isBicycleV2(feature) ||
-      isStationV2(feature) ||
-      isCarStationV2(feature) ||
-      isParkAndRide(feature)
-      ? 3
-      : 1;
-  } else if (isFeatureGeofencingZone(feature)) {
-    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
-      positionClicked,
-      feature.geometry,
-    );
-    return positionClickedIsInsideGeofencingZone ? 2 : 0;
-  } else {
-    return 0;
-  }
-}

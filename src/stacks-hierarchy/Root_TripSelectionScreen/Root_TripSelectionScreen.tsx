@@ -22,10 +22,17 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const [selection, setSelection] = useParamAsState(params.selection);
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
-    date: new Date().toISOString(),
-    option: 'now',
-  });
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>(
+    selection.travelDate
+      ? {
+          date: selection.travelDate,
+          option: 'departure',
+        }
+      : {
+          date: new Date().toISOString(),
+          option: 'now',
+        },
+  );
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -52,7 +59,13 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
       <View style={styles.dateSelection}>
         <DateSelection
           searchTime={searchTime}
-          setSearchTime={setSearchTime}
+          setSearchTime={(searchTime) => {
+            setSearchTime(searchTime);
+            setSelection((prev) => ({
+              ...prev,
+              travelDate: searchTime.date,
+            }));
+          }}
           backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
@@ -66,14 +79,21 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
       </GenericSectionItem>
       <Button
         onPress={() => {
-          navigation.navigate({
-            name: 'Root_PurchaseConfirmationScreen',
-            params: {
-              mode: 'Ticket',
-              selection: selection,
-            },
-            merge: true,
-          });
+          if (selection.isOnBehalfOf) {
+            navigation.navigate('Root_ChooseTicketRecipientScreen', {
+              selection,
+              mode: params.mode,
+            });
+          } else {
+            navigation.navigate({
+              name: 'Root_PurchaseConfirmationScreen',
+              params: {
+                mode: params.mode,
+                selection: selection,
+              },
+              merge: true,
+            });
+          }
         }}
         expanded={false}
         text="Bekreft"
