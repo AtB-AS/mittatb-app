@@ -191,5 +191,6 @@ export const useValidateToken = (
 
   return {
     isRenewingOrResetting,
+    isRenewOrResetError: retryCount === RETRY_MAX_COUNT,
   };
 };
