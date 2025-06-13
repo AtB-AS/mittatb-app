@@ -1,7 +1,6 @@
 import {createEmptyBuilder} from '../purchase-selection-builder';
 import {TEST_INPUT, TEST_SELECTION} from './test-utils';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
-import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types.ts';
 
 describe('purchaseSelectionBuilder - legs', () => {
   it('Should apply valid legs when travel date matches', () => {
