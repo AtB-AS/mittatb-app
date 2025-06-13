@@ -1,5 +1,4 @@
 import type {UserProfile} from '@atb-as/config-specs';
-import type {Offer} from '@atb/modules/ticketing';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import type {TicketOffer} from '@atb-as/utils';
 
