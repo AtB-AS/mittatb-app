@@ -148,9 +148,7 @@ export const PreassignedFareContractSummary = ({
                   subMode={subMode}
                   lineNumber={lineNumber}
                 />
-                <ThemeText typography="body__primary">
-                  {lineName}
-                </ThemeText>
+                <ThemeText typography="body__primary">{lineName}</ThemeText>
                 <ThemeText
                   typography="body__primary--bold"
                   style={styles.legSectionItemTime}
