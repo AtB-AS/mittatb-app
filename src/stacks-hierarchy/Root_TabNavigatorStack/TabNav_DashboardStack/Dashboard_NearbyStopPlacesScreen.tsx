@@ -1,14 +1,10 @@
 import React, {useCallback} from 'react';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
-import {
-  FavoriteDeparturesTexts,
-  NearbyTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import SharedTexts from '@atb/translations/shared.ts';
+import SharedTexts from '@atb/translations/shared';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
