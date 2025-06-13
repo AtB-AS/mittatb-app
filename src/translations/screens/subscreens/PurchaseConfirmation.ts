@@ -132,6 +132,14 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
+  confirmations: {
+    onlyValidDeparture: _(
+      'Kun gyldig for avgang:',
+      'Only valid for departure:',
+      'Kun gyldig for avgang:',
+    ),
+  },
+
   paymentWithMultiplePaymentMethods: {
     a11yLabel: (brands: string) =>
       _(`Betal med ${brands}`, `Pay with ${brands}`, `Betal med $${brands}`),

@@ -38,6 +38,7 @@ import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
+import SharedTexts from '@atb/translations/shared';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -77,6 +78,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     }
     setCurrentLocationAsFrom();
   }
+
   const {from, to} = useLocations(currentLocation);
   useEffect(() => {
     if (!!to && !!from) {
@@ -118,8 +120,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     navigation.navigate('Root_LocationSearchByTextScreen', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
+          ? t(SharedTexts.from)
+          : t(SharedTexts.to),
       callerRouteName: DashboardRouteNameStatic,
       callerRouteParam,
       initialLocation,
@@ -195,7 +197,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               }
               updatingLocation={updatingLocation && !to}
               location={from}
-              label={t(TripSearchTexts.location.departurePicker.label)}
+              label={t(SharedTexts.from)}
               onPress={() => openLocationSearch('fromLocation', from)}
               icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
@@ -217,7 +219,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               accessibilityLabel={t(
                 TripSearchTexts.location.destinationPicker.a11yLabel,
               )}
-              label={t(TripSearchTexts.location.destinationPicker.label)}
+              label={t(SharedTexts.to)}
               location={to}
               onPress={() => openLocationSearch('toLocation', to)}
               icon={<ThemeIcon svg={Swap} />}

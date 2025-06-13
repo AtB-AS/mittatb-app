@@ -53,7 +53,6 @@ const TripSearchTexts = {
   },
   location: {
     departurePicker: {
-      label: _('Fra', 'From', 'Frå'),
       a11yLabel: _(
         'Velg avreisested',
         'Select place of departure',
@@ -66,7 +65,6 @@ const TripSearchTexts = {
       ),
     },
     destinationPicker: {
-      label: _('Til', 'To', 'Til'),
       a11yLabel: _(
         'Velg ankomststed',
         'Select place of arrival',

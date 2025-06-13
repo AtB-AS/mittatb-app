@@ -64,9 +64,14 @@ export function TripSelection({selection, setSelection}: Props) {
 export function mapToSalesTripPatternLegs(legs: TripPatternFragment['legs']) {
   return legs.map((l) => ({
     fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
+    fromStopPlaceName: l.fromPlace.quay?.stopPlace?.name ?? '',
     toStopPlaceId: l.toPlace.quay?.stopPlace?.id ?? '',
+    toStopPlaceName: l.toPlace.quay?.stopPlace?.name ?? '',
     expectedStartTime: l.expectedStartTime,
+    expectedEndTime: l.expectedEndTime,
     mode: l.mode,
+    subMode: l.transportSubmode,
     serviceJourneyId: l.serviceJourney?.id ?? '',
+    lineNumber: l.line?.publicCode ?? '',
   }));
 }

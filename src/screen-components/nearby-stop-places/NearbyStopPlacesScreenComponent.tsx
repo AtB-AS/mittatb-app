@@ -19,6 +19,7 @@ import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {EmptyState} from '@atb/components/empty-state';
+import SharedTexts from '@atb/translations/shared';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -239,7 +240,7 @@ const Header = React.memo(function Header({
     <View style={styles.header}>
       <Section style={styles.locationInputSection}>
         <LocationInputSectionItem
-          label={t(NearbyTexts.location.departurePicker.label)}
+          label={t(SharedTexts.from)}
           updatingLocation={updatingLocation}
           location={fromLocation}
           onPress={openLocationSearch}

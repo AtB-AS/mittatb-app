@@ -2,12 +2,9 @@ import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchBy
 import React, {useCallback} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
-import {
-  FavoriteDeparturesTexts,
-  NearbyTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
+import SharedTexts from '@atb/translations/shared';
 
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 
@@ -26,7 +23,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
-          label: t(NearbyTexts.search.label),
+          label: t(SharedTexts.from),
           callerRouteName: route.name,
           callerRouteParam: 'location',
           initialLocation: location,

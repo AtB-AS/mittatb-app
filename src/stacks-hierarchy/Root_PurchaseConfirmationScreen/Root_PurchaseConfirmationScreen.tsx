@@ -260,6 +260,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           recipient={recipient}
           travelDate={selection.travelDate}
           validDurationSeconds={validDurationSeconds}
+          legs={selection.legs}
         />
         <PriceSummary
           fareProductTypeConfig={selection.fareProductTypeConfig}
