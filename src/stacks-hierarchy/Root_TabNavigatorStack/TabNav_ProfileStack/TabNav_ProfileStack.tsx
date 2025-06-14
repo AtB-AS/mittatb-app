@@ -27,6 +27,7 @@ import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelec
 import {Profile_TravelAidScreen} from './Profile_TravelAidScreen';
 import {Profile_TravelAidInformationScreen} from './Profile_TravelAidInformationScreen.tsx';
 import {Profile_BonusScreen} from './Profile_BonusScreen.tsx';
+import {Profile_SmartParkAndRideScreen} from './Profile_SmartParkAndRideScreen.tsx';
 import {Profile_SettingsScreen} from './Profile_SettingsScreen';
 import {Profile_FavoriteScreen} from './Profile_FavoriteScreen';
 import {Profile_InformationScreen} from './Profile_InformationScreen';
@@ -53,6 +54,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_BonusScreen"
         component={Profile_BonusScreen}
+      />
+      <Stack.Screen
+        name="Profile_SmartParkAndRideScreen"
+        component={Profile_SmartParkAndRideScreen}
       />
       <Stack.Screen
         name="Profile_PaymentMethodsScreen"

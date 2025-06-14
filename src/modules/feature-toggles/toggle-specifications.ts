@@ -161,6 +161,10 @@ export const toggleSpecifications = [
     name: 'isInAppReviewForAnnouncementsEnabled',
     remoteConfigKey: 'enable_in_app_review_for_announcements',
   },
+  {
+    name: 'isSmartParkAndRideEnabled',
+    remoteConfigKey: 'enable_smart_park_and_ride',
+  },
 ] as const satisfies readonly FeatureToggleSpecification[];
 
 /**

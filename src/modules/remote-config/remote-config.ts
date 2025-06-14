@@ -58,6 +58,7 @@ export type RemoteConfig = {
   enable_vipps_login: boolean;
   enable_in_app_review: boolean;
   enable_in_app_review_for_announcements: boolean;
+  enable_smart_park_and_ride: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
@@ -137,6 +138,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vipps_login: false,
   enable_in_app_review: false,
   enable_in_app_review_for_announcements: false,
+  enable_smart_park_and_ride: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
@@ -307,6 +309,9 @@ export function getConfig(): RemoteConfig {
   const enable_in_app_review_for_announcements =
     values['enable_in_app_review_for_announcements']?.asBoolean() ??
     defaultRemoteConfig.enable_in_app_review_for_announcements;
+  const enable_smart_park_and_ride =
+    values['enable_smart_park_and_ride']?.asBoolean() ??
+    defaultRemoteConfig.enable_smart_park_and_ride;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -422,6 +427,7 @@ export function getConfig(): RemoteConfig {
     enable_vipps_login,
     enable_in_app_review,
     enable_in_app_review_for_announcements,
+    enable_smart_park_and_ride,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,

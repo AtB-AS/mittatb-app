@@ -36,6 +36,13 @@ const ProfileTexts = {
         bonus: {
           label: _('Bonus', 'Bonus', 'Bonus'),
         },
+        smartParkAndRide: {
+          label: _(
+            'Smart Park & Ride',
+            'Smart Park & Ride',
+            'Smart Park & Ride',
+          ),
+        },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
