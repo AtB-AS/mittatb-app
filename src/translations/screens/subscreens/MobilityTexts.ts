@@ -14,7 +14,7 @@ export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('El-sparkesykkel', 'E-scooter', 'El-sparkesykkel');
+        return _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       case FormFactor.Bicycle:
         return _('Sykkel', 'Bicycle', 'Sykkel');
       case FormFactor.Car:
