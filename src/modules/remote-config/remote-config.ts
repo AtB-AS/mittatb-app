@@ -86,8 +86,10 @@ export const defaultRemoteConfig: RemoteConfig = {
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
-    vehicles: {
-      showVehicles: false,
+    mobility: {
+      CAR: {showAll: true},
+      SCOOTER: {showAll: true},
+      BICYCLE: {showAll: true},
     },
   }),
   delay_share_travel_habits_screen_by_sessions_count: 0,

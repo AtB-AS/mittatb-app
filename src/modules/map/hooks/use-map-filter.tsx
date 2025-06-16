@@ -3,7 +3,7 @@ import {storage} from '@atb/modules/storage';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useCallback, useEffect, useState} from 'react';
 
-const STORAGE_KEY = '@ATB_user_map_filters';
+const STORAGE_KEY = '@ATB_user_map_filters_v2';
 
 const fallback: MapFilterType = {
   mobility: {},
