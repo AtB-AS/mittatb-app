@@ -124,97 +124,99 @@ export const PreassignedFareContractSummary = ({
     if (!legs || legs.length === 0) return null;
 
     return (
-      <GenericSectionItem>
-        <ThemeText typography="body__primary" color="secondary">
-          {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
-        </ThemeText>
-        {legs.map(
-          ({
-            fromStopPlaceName,
-            toStopPlaceName,
-            expectedStartTime,
-            expectedEndTime,
-            lineNumber,
-            lineName,
-            mode,
-            subMode,
-          }) => (
-            <View accessible={true} style={styles.legSection} id={lineNumber}>
-              <View style={[styles.legSectionItem, styles.mediumTopMargin]}>
-                <TransportationIconBox
-                  style={styles.sectionItemSpacing}
-                  type="standard"
-                  mode={mode as AnyMode}
-                  subMode={subMode}
-                  lineNumber={lineNumber}
-                />
-                <ThemeText
-                  typography="body__primary"
-                  style={[styles.legName, styles.centered]}
-                >
-                  {lineName}
-                </ThemeText>
-                <ThemeText
-                  typography="body__primary--bold"
-                  style={[styles.legSectionItemTime, styles.centered]}
-                >
-                  {expectedStartTime &&
-                    formatLocaleTime(expectedStartTime, language)}
-                </ThemeText>
-              </View>
-              <View style={styles.mediumTopMargin}>
-                <View style={styles.legSectionItem}>
+      <GenericSectionItem radius="bottom">
+        <View style={styles.legSection}>
+          <ThemeText typography="body__primary" color="secondary">
+            {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
+          </ThemeText>
+          {legs.map(
+            ({
+              fromStopPlaceName,
+              toStopPlaceName,
+              expectedStartTime,
+              expectedEndTime,
+              lineNumber,
+              lineName,
+              mode,
+              subMode,
+            }) => (
+              <View accessible={true} style={styles.legSection} id={lineNumber}>
+                <View style={[styles.legSectionItem, styles.mediumTopMargin]}>
+                  <TransportationIconBox
+                    style={[styles.sectionItemSpacing, styles.centered]}
+                    type="standard"
+                    mode={mode as AnyMode}
+                    subMode={subMode}
+                    lineNumber={lineNumber}
+                  />
                   <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legLabel}
+                    typography="body__primary"
+                    style={[styles.legName, styles.centered]}
                   >
-                    {t(SharedTexts.from)}:
+                    {lineName}
                   </ThemeText>
                   <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legName}
-                  >
-                    {fromStopPlaceName}
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legSectionItemTime}
+                    typography="body__primary--bold"
+                    style={[styles.legSectionItemTime, styles.centered]}
                   >
                     {expectedStartTime &&
                       formatLocaleTime(expectedStartTime, language)}
                   </ThemeText>
                 </View>
-                <View style={styles.legSectionItem}>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legLabel}
-                  >
-                    {t(SharedTexts.to)}:
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legName}
-                  >
-                    {toStopPlaceName}
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legSectionItemTime}
-                  >
-                    {expectedEndTime &&
-                      formatLocaleTime(expectedEndTime, language)}
-                  </ThemeText>
+                <View style={styles.mediumTopMargin}>
+                  <View style={styles.legSectionItem}>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legLabel}
+                    >
+                      {t(SharedTexts.from)}:
+                    </ThemeText>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legName}
+                    >
+                      {fromStopPlaceName}
+                    </ThemeText>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legSectionItemTime}
+                    >
+                      {expectedStartTime &&
+                        formatLocaleTime(expectedStartTime, language)}
+                    </ThemeText>
+                  </View>
+                  <View style={styles.legSectionItem}>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legLabel}
+                    >
+                      {t(SharedTexts.to)}:
+                    </ThemeText>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legName}
+                    >
+                      {toStopPlaceName}
+                    </ThemeText>
+                    <ThemeText
+                      typography="body__secondary"
+                      color="secondary"
+                      style={styles.legSectionItemTime}
+                    >
+                      {expectedEndTime &&
+                        formatLocaleTime(expectedEndTime, language)}
+                    </ThemeText>
+                  </View>
                 </View>
               </View>
-            </View>
-          ),
-        )}
+            ),
+          )}
+        </View>
       </GenericSectionItem>
     );
   };
