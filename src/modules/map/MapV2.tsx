@@ -59,6 +59,7 @@ import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -69,6 +70,8 @@ export const MapV2 = (props: MapProps) => {
   const mapViewRef = useRef<MapView>(null);
 
   const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
+  const showMapFilterButton = bottomSheetHeight === 0; // hide filter button when a bottom sheet is open
 
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
@@ -354,10 +357,12 @@ export const MapV2 = (props: MapProps) => {
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
 
-          <MapFilter
-            onPress={() => onMapClick({source: 'filters-button'})}
-            isLoading={false}
-          />
+          {showMapFilterButton && (
+            <MapFilter
+              onPress={() => onMapClick({source: 'filters-button'})}
+              isLoading={false}
+            />
+          )}
 
           <PositionArrow
             onPress={async () => {
