@@ -8,8 +8,9 @@ import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
-import {LabelInfo} from '@atb/components/label-info';
 import {SectionTexts, useTranslation} from '@atb/translations';
+import {Tag} from '@atb/components/tag';
+import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 
 type Props = SectionItemProps<{
   text: string;
@@ -71,6 +72,7 @@ export function ToggleSectionItem({
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
+      accessibilityLabel={text}
       {...accessibility}
     >
       <View style={{flexDirection: 'row'}}>
@@ -82,7 +84,13 @@ export function ToggleSectionItem({
             <View style={styles.textContainer}>
               <ThemeText typography={textType}>{text}</ThemeText>
             </View>
-            {label && <LabelInfo label={label} />}
+            {label && (
+              <Tag
+                label={[t(TagInfoTexts.labels[label])]}
+                tagType="primary"
+                customStyle={styles.labelContainer}
+              />
+            )}
             <Toggle
               importantForAccessibility="no-hide-descendants"
               accessible={false}
@@ -119,4 +127,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     gap: theme.spacing.small,
   },
   textContainer: {flex: 1, marginRight: theme.spacing.small},
+  labelContainer: {
+    alignSelf: 'center',
+  },
 }));

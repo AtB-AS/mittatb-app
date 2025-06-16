@@ -9,6 +9,7 @@ import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
+import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -27,6 +28,8 @@ export type PurchaseSelectionType = {
       }
     | undefined;
   travelDate: string | undefined;
+  legs: SalesTripPatternLeg[];
+  isOnBehalfOf: boolean;
 };
 
 /**
@@ -104,6 +107,19 @@ export type PurchaseSelectionBuilder = {
    * invalid the purchase selection will stay unmodified.
    */
   date: (d?: string) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply the given legs to the purchase selection. If the given legs are not
+   * on the same date as the travel date, the purchase selection will stay
+   * unmodified.
+   */
+  legs: (l: SalesTripPatternLeg[]) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply isOnBehalfOf flag to the purchase selection.
+   * @param isOnBehalfOf
+   */
+  isOnBehalfOf: (isOnBehalfOf: boolean) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

@@ -93,10 +93,7 @@ export const Profile_BonusScreen = () => {
                     />
                   }
                   suffixNode={
-                    <BonusPriceTag
-                      amount={bonusProduct.price.amount}
-                      style={styles.bonusPriceTag}
-                    />
+                    <BonusPriceTag amount={bonusProduct.price.amount} />
                   }
                   expandContent={
                     <ThemeText
@@ -166,11 +163,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   bonusProductsContainer: {
     gap: theme.spacing.medium,
   },
-  bonusPriceTag: {
-    marginHorizontal: theme.spacing.small,
-  },
   logo: {
-    marginRight: theme.spacing.small,
     borderRadius: theme.border.radius.small,
     overflow: 'hidden',
   },

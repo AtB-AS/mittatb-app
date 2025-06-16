@@ -1,21 +1,10 @@
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
-import {
-  AccessibleText,
-  screenReaderPause,
-  ThemeText,
-} from '@atb/components/text';
+import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  dictionary,
-  Language,
-  TranslateFunction,
-  TripSearchTexts,
-  useTranslation,
-} from '@atb/translations';
+import {dictionary, TripSearchTexts, useTranslation} from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {flatMap} from '@atb/utils/array';
 import {
@@ -45,27 +34,18 @@ import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getFilteredLegsByWalkOrWaitTime,
   getNoticesForLeg,
-  getTimeRepresentationType,
-  getTripPatternBookingStatus,
   isLineFlexibleTransport,
   significantWaitTime,
   significantWalkTime,
 } from '@atb/screen-components/travel-details-screens';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNow} from '@atb/utils/use-now';
-import {TripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
-import {MessageInfoText} from '@atb/components/message-info-text';
 import type {TripSearchTime} from '../../types';
+import {isSignificantDifference} from '../utils';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  resultIndex: number;
   searchTime: TripSearchTime;
-  testID?: string;
 };
 
 const ResultItemHeader: React.FC<{
@@ -136,9 +116,6 @@ const ResultItemHeader: React.FC<{
 
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
-  onDetailsPressed,
-  resultIndex,
-  testID,
   searchTime,
   ...props
 }) => {
@@ -150,7 +127,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
-  const resultNumber = resultIndex + 1;
 
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     filteredLegs.length,
@@ -212,185 +188,124 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     idx < expandedLegs.length - 1 && !staySeated(idx + 1);
 
   return (
-    <PressableOpacity
-      accessibilityLabel={tripSummary(
-        tripPattern,
-        t,
-        language,
-        isInPast,
-        resultNumber,
-      )}
-      accessibilityHint={t(
-        TripSearchTexts.results.resultItem.footer.detailsHint,
-      )}
-      accessibilityRole="button"
-      style={styles.pressableOpacity}
-      onPress={() => onDetailsPressed(tripPattern, resultIndex)}
-      accessible={true}
-      testID={testID}
+    <Animated.View
+      style={[
+        styles.result,
+        isInPast && styles.resultInPast,
+        {opacity: fadeInValueRef.current},
+      ]}
+      {...props}
+      accessible={false}
     >
-      <Animated.View
-        style={[
-          styles.result,
-          isInPast && styles.resultInPast,
-          {opacity: fadeInValueRef.current},
-        ]}
-        {...props}
-        accessible={false}
-      >
-        <ResultItemHeader tripPattern={tripPattern} />
-        <View style={styles.detailsContainer} {...screenReaderHidden}>
+      <ResultItemHeader tripPattern={tripPattern} />
+      <View style={styles.detailsContainer} {...screenReaderHidden}>
+        <View
+          style={styles.flexRow}
+          onLayout={(ev) => {
+            setLegIconsParentWidth(ev.nativeEvent.layout.width);
+          }}
+        >
           <View
-            style={styles.flexRow}
+            style={styles.row}
             onLayout={(ev) => {
-              setLegIconsParentWidth(ev.nativeEvent.layout.width);
+              setLegIconsContentWidth(ev.nativeEvent.layout.width);
             }}
           >
-            <View
-              style={styles.row}
-              onLayout={(ev) => {
-                setLegIconsContentWidth(ev.nativeEvent.layout.width);
-              }}
-            >
-              <View style={styles.legOutput}>
-                {expandedLegs.map((leg, i) => (
-                  <View
-                    key={tripPattern.compressedQuery + leg.aimedStartTime}
-                    style={styles.legAndDash}
-                  >
-                    <View testID="tripLeg">
-                      {leg.mode === 'foot' ? (
-                        <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
-                      ) : staySeated(i) ? null : (
-                        <TransportationLeg
-                          leg={leg}
-                          style={
-                            isSignificantDifference(leg)
-                              ? styles.transportationIcon_wide
-                              : undefined
-                          }
-                        />
-                      )}
-                      <View style={styles.departureTimes}>
-                        {staySeated(i) ? null : (
-                          <ThemeText
-                            typography="body__tertiary"
-                            color="primary"
-                            testID={'schTime' + i}
-                          >
-                            {(isLineFlexibleTransport(leg.line)
-                              ? t(dictionary.missingRealTimePrefix)
-                              : '') +
-                              formatToClock(
-                                leg.expectedStartTime,
-                                language,
-                                'floor',
-                              )}
-                          </ThemeText>
-                        )}
-                        {isSignificantDifference(leg) && (
-                          <ThemeText
-                            style={styles.scheduledTime}
-                            typography="body__tertiary--strike"
-                            color="secondary"
-                            testID={'aimTime' + i}
-                          >
-                            {formatToClock(
-                              leg.aimedStartTime,
+            <View style={styles.legOutput}>
+              {expandedLegs.map((leg, i) => (
+                <View
+                  key={tripPattern.compressedQuery + leg.aimedStartTime}
+                  style={styles.legAndDash}
+                >
+                  <View testID="tripLeg">
+                    {leg.mode === 'foot' ? (
+                      <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
+                    ) : staySeated(i) ? null : (
+                      <TransportationLeg
+                        leg={leg}
+                        style={
+                          isSignificantDifference(leg)
+                            ? styles.transportationIcon_wide
+                            : undefined
+                        }
+                      />
+                    )}
+                    <View style={styles.departureTimes}>
+                      {staySeated(i) ? null : (
+                        <ThemeText
+                          typography="body__tertiary"
+                          color="primary"
+                          testID={'schTime' + i}
+                        >
+                          {(isLineFlexibleTransport(leg.line)
+                            ? t(dictionary.missingRealTimePrefix)
+                            : '') +
+                            formatToClock(
+                              leg.expectedStartTime,
                               language,
                               'floor',
                             )}
-                          </ThemeText>
-                        )}
-                      </View>
+                        </ThemeText>
+                      )}
+                      {isSignificantDifference(leg) && (
+                        <ThemeText
+                          style={styles.scheduledTime}
+                          typography="body__tertiary--strike"
+                          color="secondary"
+                          testID={'aimTime' + i}
+                        >
+                          {formatToClock(leg.aimedStartTime, language, 'floor')}
+                        </ThemeText>
+                      )}
                     </View>
-                    {displayLegDash(i) ? (
-                      <View style={[styles.dashContainer, iconHeight]}>
-                        <LegDash />
-                      </View>
-                    ) : null}
                   </View>
-                ))}
-              </View>
-              {collapsedLegs.length ? (
-                <View style={[styles.dashContainer, iconHeight]}>
-                  <LegDash />
+                  {displayLegDash(i) ? (
+                    <View style={[styles.dashContainer, iconHeight]}>
+                      <LegDash />
+                    </View>
+                  ) : null}
                 </View>
-              ) : null}
-              <CounterIconBox
-                count={collapsedLegs.length}
-                spacing="standard"
-                textType="body__primary--bold"
-              />
+              ))}
             </View>
-            <View style={[styles.destinationLineContainer_grow, iconHeight]}>
-              <View style={[styles.destinationLine_grow, lineHeight]} />
-            </View>
+            {collapsedLegs.length ? (
+              <View style={[styles.dashContainer, iconHeight]}>
+                <LegDash />
+              </View>
+            ) : null}
+            <CounterIconBox
+              count={collapsedLegs.length}
+              spacing="standard"
+              textType="body__primary--bold"
+            />
           </View>
-          <View style={[styles.destinationLineContainer, iconHeight]}>
-            <View style={[styles.destinationLine, lineHeight]} />
-          </View>
-          <View>
-            <DestinationIcon style={styles.iconContainer} />
-            <View style={styles.departureTimes}>
-              <ThemeText
-                typography="body__tertiary"
-                color="primary"
-                testID="endTime"
-              >
-                {(lastLegIsFlexible
-                  ? t(dictionary.missingRealTimePrefix)
-                  : '') +
-                  formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
-              </ThemeText>
-            </View>
+          <View style={[styles.destinationLineContainer_grow, iconHeight]}>
+            <View style={[styles.destinationLine_grow, lineHeight]} />
           </View>
         </View>
-        <ResultItemFooter tripPattern={tripPattern} />
-      </Animated.View>
-    </PressableOpacity>
+        <View style={[styles.destinationLineContainer, iconHeight]}>
+          <View style={[styles.destinationLine, lineHeight]} />
+        </View>
+        <View>
+          <DestinationIcon style={styles.iconContainer} />
+          <View style={styles.departureTimes}>
+            <ThemeText
+              typography="body__tertiary"
+              color="primary"
+              testID="endTime"
+            >
+              {(lastLegIsFlexible ? t(dictionary.missingRealTimePrefix) : '') +
+                formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
+            </ThemeText>
+          </View>
+        </View>
+      </View>
+    </Animated.View>
   );
 };
 
 export const MemoizedResultItem = React.memo(ResultItem);
 
-const ResultItemFooter: React.FC<{
-  tripPattern: TripPattern;
-}> = ({tripPattern}) => {
-  const styles = useThemeStyles();
-  const {t} = useTranslation();
-
-  const now = useNow(30000);
-  const tripPatternBookingStatus = getTripPatternBookingStatus(
-    tripPattern,
-    now,
-  );
-  const bookingText = getTripPatternBookingText(tripPatternBookingStatus, t);
-
-  return (
-    <View style={styles.resultFooter}>
-      <View style={styles.footerNotice}>
-        {bookingText && (
-          <MessageInfoText
-            message={bookingText}
-            type={tripPatternBookingStatus === 'late' ? 'error' : 'warning'}
-          />
-        )}
-      </View>
-      <View style={styles.detailsTextWrapper}>
-        <ThemeText typography="body__secondary">
-          {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
-        </ThemeText>
-        <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
-      </View>
-    </View>
-  );
-};
-
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  pressableOpacity: {
-    marginTop: theme.spacing.small,
-  },
   result: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
@@ -596,181 +511,6 @@ const TransportationLeg = ({
   );
 };
 
-const tripSummary = (
-  tripPattern: TripPattern,
-  t: TranslateFunction,
-  language: Language,
-  isInPast: boolean,
-  listPosition: number,
-) => {
-  const distance = Math.round(tripPattern.legs[0].distance);
-  let humanizedDistance;
-  if (distance >= 1000) {
-    humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
-  } else {
-    humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
-  }
-
-  let startText = '';
-
-  if (tripPattern.legs[0]?.mode === 'foot' && tripPattern.legs[1]) {
-    const quayName = getQuayName(tripPattern.legs[1]?.fromPlace.quay);
-
-    {
-      quayName
-        ? (startText = t(
-            TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
-              humanizedDistance,
-              quayName,
-            ),
-          ))
-        : undefined;
-    }
-  } else {
-    const quayName = getQuayName(tripPattern.legs[0]?.fromPlace.quay);
-    if (quayName) {
-      startText = t(
-        TripSearchTexts.results.resultItem.header.title(
-          t(getTranslatedModeName(tripPattern.legs[0].mode)),
-          quayName,
-        ),
-      );
-    }
-  }
-
-  const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
-
-  const resultNumberText =
-    t(
-      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
-        listPosition,
-      ),
-    ) + screenReaderPause;
-  const passedTripText = isInPast
-    ? t(TripSearchTexts.results.resultItem.passedTrip)
-    : undefined;
-
-  const modeAndNumberText = firstLeg
-    ? t(getTranslatedModeName(firstLeg.mode)) +
-      (firstLeg.line?.publicCode
-        ? t(
-            TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-              firstLeg.line.publicCode,
-            ),
-          )
-        : '')
-    : undefined;
-
-  const realTimeText = firstLeg
-    ? isSignificantDifference(firstLeg)
-      ? t(
-          TripSearchTexts.results.resultItem.journeySummary.realtime(
-            firstLeg.fromPlace?.name ?? '',
-            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-            formatToClock(firstLeg.aimedStartTime, language, 'floor'),
-          ),
-        )
-      : (isLineFlexibleTransport(firstLeg.line)
-          ? t(dictionary.missingRealTimePrefix)
-          : '') +
-        t(
-          TripSearchTexts.results.resultItem.journeySummary.noRealTime(
-            firstLeg.fromPlace?.name ?? '',
-            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-          ),
-        )
-    : undefined;
-
-  const numberOfFootLegsText = !nonFootLegs.length
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription
-          .footLegsOnly,
-      )
-    : nonFootLegs.length === 1
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription
-          .noSwitching,
-      )
-    : nonFootLegs.length === 2
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription
-          .oneSwitch,
-      )
-    : t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-          nonFootLegs.length - 1,
-        ),
-      );
-
-  const walkDistance = tripPattern.legs
-    .filter((l) => l.mode === Mode.Foot)
-    .reduce((tot, {distance}) => tot + distance, 0);
-  const walkDistanceText = t(
-    TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
-      walkDistance.toFixed(),
-    ),
-  );
-
-  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
-  const startTimeIsApproximation =
-    filteredLegs.length > 0 && isLineFlexibleTransport(filteredLegs[0].line);
-  const endTimeIsApproximation =
-    filteredLegs.length > 0 &&
-    isLineFlexibleTransport(filteredLegs[filteredLegs.length - 1].line);
-
-  const traveltimesText = t(
-    TripSearchTexts.results.resultItem.journeySummary.travelTimes(
-      formatToClock(tripPattern.expectedStartTime, language, 'floor'),
-      formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
-      secondsToDuration(tripPattern.duration, language),
-      startTimeIsApproximation,
-      endTimeIsApproximation,
-    ),
-  );
-
-  const tripPatternBookingStatus = getTripPatternBookingStatus(tripPattern);
-  const bookingText = getTripPatternBookingText(tripPatternBookingStatus, t);
-
-  const texts = [
-    resultNumberText,
-    bookingText,
-    passedTripText,
-    startText,
-    modeAndNumberText,
-    realTimeText,
-    numberOfFootLegsText,
-    walkDistanceText,
-    traveltimesText,
-  ].filter((text) => text !== undefined);
-
-  return texts.join(screenReaderPause);
-};
-
-function isSignificantDifference(leg: Leg) {
-  return (
-    getTimeRepresentationType({
-      missingRealTime: !leg.realtime,
-      aimedTime: leg.aimedStartTime,
-      expectedTime: leg.expectedStartTime,
-    }) === 'significant-difference'
-  );
-}
-
 const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
   return <ThemeIcon style={style} svg={Destination} />;
-};
-
-const getTripPatternBookingText = (
-  tripPatternBookingStatus: TripPatternBookingStatus,
-  t: TranslateFunction,
-) => {
-  switch (tripPatternBookingStatus) {
-    case 'none':
-      return undefined;
-    case 'bookable':
-      return t(TripSearchTexts.results.resultItem.footer.requiresBooking);
-    case 'late':
-      return t(TripSearchTexts.results.resultItem.footer.toLateForBooking);
-  }
 };

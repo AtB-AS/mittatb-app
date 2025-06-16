@@ -61,6 +61,7 @@ import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DatePickerSheet} from '@atb/components/date-selection';
+import SharedTexts from '@atb/translations/shared';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -116,9 +117,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
+  const isFlexibleTransportSelected =
+    filtersState.filtersSelection?.transportModes?.find(
+      (mode) => mode.id === 'flexibleTransport',
+    )?.selected;
   const isFlexibleTransportEnabled =
-    isFlexibleTransportEnabledInRemoteConfig &&
-    filtersState?.filtersSelection?.flexibleTransport?.enabled;
+    isFlexibleTransportEnabledInRemoteConfig && isFlexibleTransportSelected;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -166,8 +170,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     navigation.navigate('Root_LocationSearchByTextScreen', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
+          ? t(SharedTexts.from)
+          : t(SharedTexts.to),
       callerRouteName: route.name,
       callerRouteParam,
       initialLocation,
@@ -180,7 +184,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       if (currentLocation) {
         setCurrentLocationAsFrom();
       } else {
-        const status = await requestLocationPermission();
+        const status = await requestLocationPermission(false);
         if (status === 'granted') {
           setCurrentLocationAsFrom();
         }
@@ -312,7 +316,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 }
                 updatingLocation={updatingLocation && !to}
                 location={from}
-                label={t(TripSearchTexts.location.departurePicker.label)}
+                label={t(SharedTexts.from)}
                 onPress={() => openLocationSearch('fromLocation', from)}
                 icon={<ThemeIcon svg={LocationIcon} />}
                 onIconPress={setCurrentLocationOrRequest}
@@ -336,7 +340,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 accessibilityLabel={t(
                   TripSearchTexts.location.destinationPicker.a11yLabel,
                 )}
-                label={t(TripSearchTexts.location.destinationPicker.label)}
+                label={t(SharedTexts.to)}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
                 icon={<ThemeIcon svg={Swap} />}

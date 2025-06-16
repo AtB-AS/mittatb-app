@@ -70,7 +70,7 @@ Created a test script that can be run along with Flashlight (`./test/flashlight/
 - open the map
 - open departures and open the first departure
 - open the ticket overview
-- open my profile
+- open profile
 - put the app in the background for x seconds and activate it again
 
 ### Commands

@@ -112,7 +112,7 @@ const PurchaseConfirmationTexts = {
   paymentWithDefaultServices: {
     a11yLabel: (brand: string) =>
       _(`Betal med ${brand}`, `Pay with ${brand}`, `Betal med ${brand}`),
-    a11Hint: _(
+    a11yHint: _(
       'Aktivér for velge denne betalingsmåten',
       'Activate to select this payment method',
       'Aktivér for å velje denne betalingsmetoden',
@@ -129,6 +129,14 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velge dette kortet',
       'Activate to select this card',
       'Aktivér for å velje dette kortet',
+    ),
+  },
+
+  confirmations: {
+    onlyValidDeparture: _(
+      'Gyldig for avgang:',
+      'Valid for departure:',
+      'Gyldig for avgang:',
     ),
   },
 

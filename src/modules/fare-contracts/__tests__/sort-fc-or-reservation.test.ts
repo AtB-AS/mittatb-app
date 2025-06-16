@@ -2,7 +2,10 @@ import type {ValidityStatus} from '../utils';
 import {Reservation} from '@atb/modules/ticketing';
 
 import {addMinutes} from 'date-fns';
-import {sortFcOrReservationByValidityAndCreation} from '../sort-fc-or-reservation-by-validity-and-creation';
+import {
+  sortFcOrReservationByCreation,
+  sortFcOrReservationByValidityAndCreation,
+} from '../sort-fc-or-reservation';
 import {FareContractType, TravelRightType} from '@atb-as/utils';
 
 type MockedFareContract = FareContractType & {
@@ -128,5 +131,29 @@ describe('Sort by Validity', () => {
     });
 
     expect(ids).toEqual(['2', '1', '4', '3']);
+  });
+});
+
+describe('Sort by creation', () => {
+  it('sortFcOrReservationByCreation sorts by created', () => {
+    const fareContracts = [
+      mockupReservation('1', 'valid', -10),
+      mockupFareContract('3', 'valid', -30),
+      mockupFareContract('2', 'valid', -20),
+      mockupReservation('5', 'valid', -50),
+      mockupFareContract('4', 'valid', -40),
+    ];
+    const sorted = sortFcOrReservationByCreation(fareContracts);
+
+    const ids: string[] = sorted.map((fcOrReservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      if (isFareContract) {
+        return fcOrReservation.id;
+      } else {
+        return fcOrReservation.orderId;
+      }
+    });
+
+    expect(ids).toEqual(['1', '2', '3', '4', '5']);
   });
 });

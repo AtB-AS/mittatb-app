@@ -45,10 +45,7 @@ describe('Ticket', () => {
 
       // Period
       await TicketPage.chooseFareProduct('period');
-      await ElementHelper.waitForElement(
-        'text',
-        'Periodic ticket, bus and tram - Log in to purchase!',
-      );
+      await ElementHelper.waitForElement('text', 'Log in to purchase');
       expect(await OnboardingPage.logInPurchaseDescription).toContain(
         'requires that you are logged in',
       );
@@ -102,17 +99,13 @@ describe('Ticket', () => {
         await PurchaseSummaryPage.choosePayment.click();
 
         // Payment
-        await ElementHelper.waitForElement('text', 'Select payment option');
         expect(await PurchasePaymentPage.vipps).toExist();
-        expect(await PurchasePaymentPage.visa).toExist();
-        expect(await PurchasePaymentPage.mastercard).toExist();
+        expect(await PurchasePaymentPage.newPaymentCard).toExist();
         expect(await PurchasePaymentPage.confirmPayment).toBeDisabled();
 
         await PurchasePaymentPage.vipps.click();
         expect(await PurchasePaymentPage.confirmPayment).toBeEnabled();
-        await PurchasePaymentPage.visa.click();
-        expect(await PurchasePaymentPage.confirmPayment).toBeEnabled();
-        await PurchasePaymentPage.mastercard.click();
+        await PurchasePaymentPage.newPaymentCard.click();
         expect(await PurchasePaymentPage.confirmPayment).toBeEnabled();
         // NOTE! Only for logged-in users
         /*

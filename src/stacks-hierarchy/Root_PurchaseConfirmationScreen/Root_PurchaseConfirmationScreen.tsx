@@ -31,10 +31,10 @@ import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   savePreviousPayment,
   usePreviousPaymentMethods,
-} from '../../modules/payment/previous-payment-utils';
-import {PaymentMethod} from '../../modules/payment/types';
+} from '@atb/modules/payment';
+import {PaymentMethod} from '@atb/modules/payment';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
-import {SelectPaymentMethodSheet} from '../../modules/payment/SelectPaymentMethodSheet';
+import {SelectPaymentMethodSheet} from '@atb/modules/payment';
 import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
@@ -81,8 +81,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const {selection, recipient} = params;
 
-  const isOnBehalfOf = !!recipient;
-
   const preassignedFareProductAlternatives = useMemo(
     () => [selection.preassignedFareProduct],
     [selection.preassignedFareProduct],
@@ -96,11 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(
-    selection,
-    preassignedFareProductAlternatives,
-    isOnBehalfOf,
-  );
+  } = useOfferState(selection, preassignedFareProductAlternatives);
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
@@ -266,6 +260,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           recipient={recipient}
           travelDate={selection.travelDate}
           validDurationSeconds={validDurationSeconds}
+          legs={selection.legs}
         />
         <PriceSummary
           fareProductTypeConfig={selection.fareProductTypeConfig}

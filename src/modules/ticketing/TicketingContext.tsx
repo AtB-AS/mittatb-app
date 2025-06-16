@@ -7,6 +7,9 @@ import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {useGetFareContractsQuery} from './use-fare-contracts';
+import Bugsnag from '@bugsnag/react-native';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
@@ -137,9 +140,24 @@ type Props = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider = ({children}: Props) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
-
   const {userId} = useAuthContext();
   const {enable_ticketing} = useRemoteConfigContext();
+  const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
+    useFeatureTogglesContext();
+
+  const {data: fareContracts} = useGetFareContractsQuery({
+    enabled:
+      enable_ticketing &&
+      isEventStreamEnabled &&
+      isEventStreamFareContractsEnabled,
+    availability: undefined,
+  });
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_FARE_CONTRACTS',
+      fareContracts: fareContracts ?? [],
+    });
+  }, [fareContracts]);
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -148,8 +166,15 @@ export const TicketingContextProvider = ({children}: Props) => {
       );
       const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
-          onSnapshot: (fareContracts) =>
-            dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
+          onSnapshot: (fareContracts) => {
+            if (isEventStreamEnabled && isEventStreamFareContractsEnabled) {
+              Bugsnag.leaveBreadcrumb(
+                `Got Firestore snapshot with ${fareContracts.length} fare contracts, but not updating state since event stream is enabled.`,
+              );
+            } else {
+              dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
+            }
+          },
           onError: (err) =>
             notifyBugsnag(err, {
               metadata: {
@@ -220,7 +245,12 @@ export const TicketingContextProvider = ({children}: Props) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [userId, enable_ticketing]);
+  }, [
+    userId,
+    enable_ticketing,
+    isEventStreamEnabled,
+    isEventStreamFareContractsEnabled,
+  ]);
 
   return (
     <TicketingContext.Provider

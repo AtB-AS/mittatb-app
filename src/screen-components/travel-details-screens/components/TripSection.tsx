@@ -29,12 +29,10 @@ import {
   getLineName,
   getNoticesForLeg,
   getPublicCodeFromLeg,
-  getTimeRepresentationType,
   isLineFlexibleTransport,
   getBookingStatus,
   significantWaitTime,
   significantWalkTime,
-  TimeValues,
 } from '../utils';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
@@ -61,6 +59,7 @@ import {
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
+import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -609,17 +608,16 @@ export function getPlaceName(place: Place): string {
 }
 
 export function mapLegToTimeValues(leg: Leg) {
-  const legIsMissingRealTime = !leg.realtime;
   return {
     startTimes: {
       expectedTime: leg.expectedStartTime,
       aimedTime: leg.aimedStartTime,
-      missingRealTime: legIsMissingRealTime,
+      isRealtime: leg.realtime,
     },
     endTimes: {
       expectedTime: leg.expectedEndTime,
       aimedTime: leg.aimedEndTime,
-      missingRealTime: legIsMissingRealTime,
+      isRealtime: leg.realtime,
     },
   };
 }
@@ -632,7 +630,7 @@ function getStopRowA11yTranslated(
   language: Language,
   t: TranslateFunction,
 ): string {
-  const timeType = getTimeRepresentationType(values);
+  const timeType = getRealtimeState(values);
   const time = formatToClock(
     values.expectedTime ?? values.aimedTime,
     language,

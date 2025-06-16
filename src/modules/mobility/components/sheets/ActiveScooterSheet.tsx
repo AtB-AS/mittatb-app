@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {RefObject, useCallback, useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -21,26 +21,51 @@ import {
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {MapView} from '@rnmapbox/maps';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {useShmoWarnings} from '@atb/modules/map';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 type Props = {
   onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
+  onForceClose: () => void;
+  mapViewRef: RefObject<MapView | null>;
 };
 
 export const ActiveScooterSheet = ({
   onActiveBookingReceived,
   navigateSupportCallback,
   photoNavigation,
+  onForceClose,
+  mapViewRef,
 }: Props) => {
-  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
+  useKeepAwake();
+  const {
+    data: activeBooking,
+    isLoading,
+    isError,
+  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const {geofencingZoneMessage, warningMessage} = useShmoWarnings(
+    activeBooking?.asset.id ?? '',
+    mapViewRef,
+  );
 
   useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+
+  useEffect(() => {
+    if (activeBooking === null) {
+      onForceClose();
+    }
+  }, [activeBooking, onForceClose]);
 
   const {
     mutateAsync: sendShmoBookingEvent,
@@ -96,7 +121,7 @@ export const ActiveScooterSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <ScrollView style={styles.container}>
-                <ShmoTripCard bookingId={activeBooking.bookingId} />
+                <ShmoTripCard shmoBooking={activeBooking} />
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
@@ -110,6 +135,15 @@ export const ActiveScooterSheet = ({
               </ScrollView>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
+                  {geofencingZoneMessage && (
+                    <MessageInfoText
+                      type="warning"
+                      message={geofencingZoneMessage}
+                    />
+                  )}
+                  {warningMessage && (
+                    <MessageInfoText type="warning" message={warningMessage} />
+                  )}
                   {sendShmoBookingEventIsError && (
                     <MessageInfoBox
                       type="error"

@@ -17,7 +17,7 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 
   const buttonOnPress = useCallback(async () => {
-    await requestLocationPermission();
+    await requestLocationPermission(false);
     continueFromOnboardingSection('locationWhenInUsePermission');
   }, [requestLocationPermission, continueFromOnboardingSection]);
 

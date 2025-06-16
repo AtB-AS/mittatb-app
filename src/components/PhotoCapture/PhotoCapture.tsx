@@ -62,6 +62,7 @@ export const PhotoCapture = ({
           style={style.camera}
           onCapture={handlePhotoCapture}
           focusRef={onCloseFocusRef}
+          zoom={0.75}
         />
       )}
     </ScreenContainer>

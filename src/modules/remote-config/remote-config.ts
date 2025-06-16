@@ -18,8 +18,11 @@ export type RemoteConfig = {
   enable_backend_sms_auth: boolean;
   enable_beacons: boolean;
   enable_bonus_program: boolean;
+  enable_booking: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
+  enable_event_stream: boolean;
+  enable_event_stream_fare_contracts: boolean;
   enable_extended_onboarding: boolean;
   enable_flexible_transport: boolean;
   enable_from_travel_search_to_ticket_boat: boolean;
@@ -55,6 +58,7 @@ export type RemoteConfig = {
   enable_vipps_login: boolean;
   enable_in_app_review: boolean;
   enable_in_app_review_for_announcements: boolean;
+  enable_smart_park_and_ride: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
@@ -94,6 +98,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_backend_sms_auth: false,
   enable_beacons: false,
   enable_bonus_program: false,
+  enable_booking: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
@@ -121,6 +126,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
+  enable_event_stream: false,
+  enable_event_stream_fare_contracts: false,
   enable_tips_and_information: false,
   enable_token_fallback_on_timeout: true,
   enable_token_fallback: true,
@@ -131,6 +138,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vipps_login: false,
   enable_in_app_review: false,
   enable_in_app_review_for_announcements: false,
+  enable_smart_park_and_ride: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
@@ -190,12 +198,20 @@ export function getConfig(): RemoteConfig {
   const enable_bonus_program =
     values['enable_bonus_program']?.asBoolean() ??
     defaultRemoteConfig.enable_bonus_program;
+  const enable_booking =
+    values['enable_booking']?.asBoolean() ?? defaultRemoteConfig.enable_booking;
   const enable_car_sharing_in_map =
     values['enable_car_sharing_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_car_sharing_in_map;
   const enable_city_bikes_in_map =
     values['enable_city_bikes_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_city_bikes_in_map;
+  const enable_event_stream =
+    values['enable_event_stream']?.asBoolean() ??
+    defaultRemoteConfig.enable_event_stream;
+  const enable_event_stream_fare_contracts =
+    values['enable_event_stream_fare_contracts']?.asBoolean() ??
+    defaultRemoteConfig.enable_event_stream_fare_contracts;
   const enable_extended_onboarding =
     values['enable_extended_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_extended_onboarding;
@@ -293,6 +309,9 @@ export function getConfig(): RemoteConfig {
   const enable_in_app_review_for_announcements =
     values['enable_in_app_review_for_announcements']?.asBoolean() ??
     defaultRemoteConfig.enable_in_app_review_for_announcements;
+  const enable_smart_park_and_ride =
+    values['enable_smart_park_and_ride']?.asBoolean() ??
+    defaultRemoteConfig.enable_smart_park_and_ride;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -368,8 +387,11 @@ export function getConfig(): RemoteConfig {
     enable_backend_sms_auth,
     enable_beacons,
     enable_bonus_program,
+    enable_booking,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
+    enable_event_stream,
+    enable_event_stream_fare_contracts,
     enable_extended_onboarding,
     enable_flexible_transport,
     enable_from_travel_search_to_ticket_boat,
@@ -405,6 +427,7 @@ export function getConfig(): RemoteConfig {
     enable_vipps_login,
     enable_in_app_review,
     enable_in_app_review_for_announcements,
+    enable_smart_park_and_ride,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,

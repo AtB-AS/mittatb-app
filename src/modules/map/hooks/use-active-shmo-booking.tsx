@@ -64,6 +64,8 @@ export const useShmoActiveBottomSheet = (
             openBottomSheet(
               () => (
                 <ActiveScooterSheet
+                  mapViewRef={mapViewRef}
+                  onForceClose={mapSelectionCloseCallback}
                   onActiveBookingReceived={flyToUserLocation}
                   navigateSupportCallback={() => {
                     closeBottomSheet();
@@ -106,5 +108,6 @@ export const useShmoActiveBottomSheet = (
     isShmoDeepIntegrationEnabled,
     mapSelectionCloseCallback,
     tabBarHeight,
+    mapViewRef,
   ]);
 };

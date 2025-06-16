@@ -19,8 +19,6 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
-  selectedShmoPaymentMethod?: PaymentMethod;
-  setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
   mapFilterIsOpen: boolean;
@@ -100,8 +98,6 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
-        selectedShmoPaymentMethod,
-        setSelectedShmoPaymentMethod,
         mapFilter,
         setMapFilter,
         mapFilterIsOpen,

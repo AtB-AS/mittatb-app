@@ -12,11 +12,15 @@ import {
   TileLayerName,
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
-import {StyleJsonVectorSource} from '../../hooks/use-mapbox-json-style';
+import {
+  MapSlotLayerId,
+  StyleJsonVectorSource,
+} from '../../hooks/use-mapbox-json-style';
 import {
   Expression,
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
@@ -24,10 +28,12 @@ const vehiclesAndStationsVectorSourceId =
 export const VehiclesWithClusters = ({
   selectedFeatureId,
 }: SelectedFeatureIdProp) => {
-  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeatureId,
-    'vehicle',
-  );
+  const minZoomLevel = 14;
+  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
+    selectedFeaturePropertyId: selectedFeatureId,
+    pinType: 'vehicle',
+    reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.3,
+  });
 
   const filter: FilterExpression = useMemo(
     () => ['all', ['!', isSelected]],
@@ -47,7 +53,8 @@ export const VehiclesWithClusters = ({
       id="vehicles-clustered-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
-      minZoomLevel={14}
+      minZoomLevel={minZoomLevel}
+      aboveLayerID={MapSlotLayerId.Vehicles}
       filter={filter}
       style={style}
     />
@@ -61,10 +68,12 @@ export const Stations = ({
   showNonVirtualStations: boolean;
 }) => {
   const showVirtualStations = false; // not supported yet. Also – consider using a virtualStationsFilter prop instead
-  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles(
-    selectedFeatureId,
-    'station',
-  );
+  const minZoomLevel = 14;
+  const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
+    selectedFeaturePropertyId: selectedFeatureId,
+    pinType: 'station',
+    reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.2,
+  });
 
   const {mapFilter} = useMapContext();
   const showCityBikes = mapFilter?.mobility.BICYCLE?.showAll ?? false;
@@ -120,7 +129,8 @@ export const Stations = ({
       id="stations-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="stations"
-      minZoomLevel={14}
+      minZoomLevel={minZoomLevel}
+      aboveLayerID={MapSlotLayerId.Stations}
       filter={filter}
       style={style}
     />

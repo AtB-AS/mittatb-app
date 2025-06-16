@@ -25,7 +25,7 @@ export const TravelSearchPreference = ({
 
   return (
     <View style={containerStyle}>
-      <ThemeText style={styles.heading} typography="body__primary--bold">
+      <ThemeText style={styles.heading} typography="body__secondary">
         {getTextForLanguage(preference.title, language)}
       </ThemeText>
       <RadioSegments

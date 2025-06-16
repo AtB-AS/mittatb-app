@@ -14,13 +14,13 @@ import {
 import {Check, Error, Info, Warning} from '@atb/assets/svg/mono-icons/status';
 import {Statuses} from '@atb/theme';
 
-export const messageTypeToIcon = (
-  messageType: Statuses,
+export const statusTypeToIcon = (
+  statusType: Statuses,
   colored: boolean,
   themeName: Mode,
 ) => {
   if (colored) {
-    switch (messageType) {
+    switch (statusType) {
       case 'warning':
         return themeName === 'dark' ? WarningDark : WarningLight;
       case 'error':
@@ -31,7 +31,7 @@ export const messageTypeToIcon = (
         return themeName === 'dark' ? InfoDark : InfoLight;
     }
   }
-  switch (messageType) {
+  switch (statusType) {
     case 'warning':
       return Warning;
     case 'error':

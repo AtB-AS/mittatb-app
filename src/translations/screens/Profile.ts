@@ -4,7 +4,7 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ProfileTexts = {
   header: {
-    title: _('Min profil', 'My profile', 'Min profil'),
+    title: _('Profil', 'Profile', 'MProfil'),
   },
   sections: {
     account: {
@@ -36,15 +36,18 @@ const ProfileTexts = {
         bonus: {
           label: _('Bonus', 'Bonus', 'Bonus'),
         },
+        smartParkAndRide: {
+          label: _(
+            'Smart Park & Ride',
+            'Smart Park & Ride',
+            'Smart Park & Ride',
+          ),
+        },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
         editProfile: {
-          label: _(
-            'Rediger Min profil',
-            'Edit My profile',
-            'Rediger Min profil',
-          ),
+          label: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
         },
       },
       infoItems: {
@@ -57,8 +60,11 @@ const ProfileTexts = {
         ),
       },
     },
+    travelAndPurchases: {
+      heading: _('Reise og kjøp', 'Travel and purchases', 'Reise og kjøp'),
+    },
     newFeatures: {
-      heading: _('Ny funksjonalitet', 'New features', 'Ny funksjonalitet'),
+      heading: _('Oppdag', 'Discover', 'Oppdag'),
       departures: _(
         'Prøv ny avganger-visning',
         'Try the new departure view',
@@ -73,6 +79,14 @@ const ProfileTexts = {
     },
     settings: {
       heading: _('Innstillinger', 'Settings', 'Innstillingar'),
+      groups: {
+        appSettings: _('Appinnstillinger', 'App Settings', 'Appinnstillinger'),
+        profileSettings: _(
+          'Profilinnstillinger',
+          'Profile Settings',
+          'Profilinnstillinger',
+        ),
+      },
       linkSectionItems: {
         userProfile: {
           label: _(
@@ -83,9 +97,9 @@ const ProfileTexts = {
         },
         travelToken: {
           label: _(
-            'Bruk billett på t:kort / mobil',
-            'Use ticket on t:card / phone',
-            'Bruk billett på t:kort / mobil',
+            'Flytt billett mellom t:kort og mobil',
+            'Transfer ticket between t:kort and mobile',
+            'Flytt billett mellom t:kort og mobil',
           ),
           labelWithoutTravelcard: _(
             'Bruk billett på mobil',
@@ -144,9 +158,9 @@ const ProfileTexts = {
           emailRequired: {
             title: _('E-post mangler', 'E-mail missing', 'E-post manglar'),
             message: _(
-              'Legg til e-post i min profil for å benytte e-postvarsel.',
-              'Add e-mail to my profile to use e-mail notifications.',
-              'Legg til e-post i min profil for å bruke e-postvarsel.',
+              'Legg til e-post i Profil for å benytte e-postvarsel.',
+              'Add e-mail to profile to use e-mail notifications.',
+              'Legg til e-post i Profil for å bruke e-postvarsel.',
             ),
             action: _(
               'Legg til e-post',
@@ -198,7 +212,7 @@ const ProfileTexts = {
           },
         },
         enrollment: {
-          label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
+          label: _('Nye konsepter', 'New concepts', 'Nye konsepter'),
         },
         travelAid: {
           label: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
@@ -209,7 +223,7 @@ const ProfileTexts = {
       heading: _('Favoritter', 'Favourites', 'Favorittar'),
       linkSectionItems: {
         places: {
-          label: _('Steder', 'Locations', 'Stadar'),
+          label: _('Favorittsteder', 'Favourite locations', 'Favorittsteder'),
           a11yHint: _(
             'Aktivér for å endre favorittsteder',
             'Activate to edit locations',
@@ -217,7 +231,11 @@ const ProfileTexts = {
           ),
         },
         departures: {
-          label: _('Avganger', 'Departures', 'Avgangar'),
+          label: _(
+            'Favorittavganger',
+            'Favourite departures',
+            'Favorittavganger',
+          ),
           a11yHint: _(
             'Aktivér for å endre favoritt-avganger',
             'Activate to edit favourite departures',
@@ -294,7 +312,8 @@ const ProfileTexts = {
       },
     },
     information: {
-      heading: _('Info og priser', 'Info and prices', 'Info og prisar'),
+      heading: _('Informasjon', 'Information', 'Informasjon'),
+      label: _('Info og vilkår', 'Info and terms', 'Info og vilkår'),
       linkSectionItems: {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing', 'Billettkjøp'),
@@ -341,6 +360,19 @@ const ProfileTexts = {
           ),
         },
       },
+    },
+    contact: {
+      heading: _('Kontakt', 'Contact', 'Kontakt'),
+      helpAndContact: _(
+        'Hjelp og kontakt',
+        'Help and contact',
+        'Hjelp og kontakt',
+      ),
+      feedback: _(
+        'Gi tilbakemelding om appen',
+        'Give feedback about the app',
+        'Gi tilbakemelding om appen',
+      ),
     },
   },
   installId: {

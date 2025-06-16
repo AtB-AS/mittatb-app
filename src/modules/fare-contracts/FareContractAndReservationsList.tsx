@@ -3,7 +3,7 @@ import {FareContractOrReservation} from './FareContractOrReservation';
 import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
-import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation-by-validity-and-creation';
+import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation';
 import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';

@@ -1,7 +1,7 @@
 import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '../theme-icon';
 import {ThemeText} from '../text';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {getTransportModeSvg} from '../icon-box';
 import {View} from 'react-native';
@@ -37,7 +37,7 @@ export function LineChip({
     transportSubmode,
   ).primary;
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
-  const icon = messageType && messageTypeToIcon(messageType, true, themeName);
+  const icon = messageType && statusTypeToIcon(messageType, true, themeName);
 
   if (!publicCode && !transportMode) return null;
 

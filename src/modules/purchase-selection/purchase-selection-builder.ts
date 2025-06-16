@@ -16,6 +16,7 @@ import {
   isValidSelection,
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
+import {isSameDay} from 'date-fns';
 
 export const createEmptyBuilder = (
   input: PurchaseSelectionBuilderInput,
@@ -119,6 +120,29 @@ const createBuilder = (
       }
       return builder;
     },
+    legs: (legs) => {
+      if (
+        currentSelection.travelDate &&
+        !legs.find((l) =>
+          isSameDay(l.expectedStartTime, currentSelection.travelDate!),
+        )
+      ) {
+        return builder;
+      }
+      currentSelection = {
+        ...currentSelection,
+        legs,
+      };
+      return builder;
+    },
+    isOnBehalfOf(isOnBehalfOf) {
+      currentSelection = {
+        ...currentSelection,
+        isOnBehalfOf,
+      };
+      return builder;
+    },
+
     build: () => currentSelection,
   };
 
@@ -156,5 +180,7 @@ const createSelectionForType = (
     stopPlaces,
     userProfilesWithCount,
     travelDate: undefined,
+    legs: [],
+    isOnBehalfOf: false,
   };
 };

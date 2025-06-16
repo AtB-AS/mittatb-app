@@ -33,40 +33,31 @@
     zod "^3.24.4"
     zod-to-json-schema "^3.24.5"
 
-"@atb-as/generate-assets@17.2.0":
-  version "17.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.2.0.tgz#6dbf5e1480ea2eaa1c8ebf9486d06e49bed7f86d"
-  integrity sha512-QBI9SlwQGwBJeqLPXDTF1so78ffV1d9+dlfNg0pj7rztbYzKz5R5WieXJBri7/xRWH5dOdWMgpaxsJyOcw0nIA==
+"@atb-as/generate-assets@17.2.2":
+  version "17.2.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.2.2.tgz#e0372ac78a2e68ba3e23f03b40b81ad17b6d8f5b"
+  integrity sha512-tA1nwpwjoM4oOGnU4T/wg77NsGPnh4OgwEJpT9lpLapMjVAeeiwkny7iQlMH5TVszigPKAwDpQpeNiIDpKO+5Q==
   dependencies:
-    "@atb-as/theme" "^14.0.0"
+    "@atb-as/theme" "^14.0.1"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^13.1.5":
-  version "13.1.5"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-13.1.5.tgz#a83a6ebb7638612a23845d55f8a811e40d083deb"
-  integrity sha512-ERKz3J0SxaObJK8GlWIw0f1yLds0I1gtSGx/29M9N2xQTzVcz2scXrRMnL4h2ztXz/zAM4vFQtWrUgnVDxn0Lw==
+"@atb-as/theme@^14.0.1":
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-14.0.1.tgz#82f3d3cc179ee788a1b32d9d2c89948ea2d88dfb"
+  integrity sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==
   dependencies:
     "@tfk-samf/figma-to-dtcg" "0.4.0"
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/theme@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-14.0.0.tgz#5a76c62bd4743cc0786ac25525b0bc01781c7eae"
-  integrity sha512-FeBYXixUbNHjqRHCqtyVsRRNs1N8kIogISnbPlyqXSTOH67OOGqPA1W589HGJL4Qxuodfxh61TQBIkpekDCiqw==
-  dependencies:
-    "@tfk-samf/figma-to-dtcg" "0.4.0"
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
-
-"@atb-as/utils@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.1.0.tgz#490a206b3822cd98ecccc22877095c091905b15e"
-  integrity sha512-CvORoOelhe83yoxP1Tp7ApBOefH2oBsnXQRAvJ8Q/C/iW0kxfcLBom8AQeEcI4wWTcm72vCO6tZZkaXU2Snd9g==
+"@atb-as/utils@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.4.0.tgz#a7370c9ba9d64bf352754cab9ef86e501c710b6d"
+  integrity sha512-Vyi3xFc7aAMKntly23WqFfqsUx8JVvlT1/GzIwipma0H1Qx+8OOtRQaxY91xaa7lWm09gqDJc4dAGcIhVhcu+A==
   dependencies:
     lodash "^4.17.21"
     zod "^3.24.1"
@@ -3132,6 +3123,11 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
+
+"@sayem314/react-native-keep-awake@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@sayem314/react-native-keep-awake/-/react-native-keep-awake-1.3.1.tgz#59cd52923ba3000adfec6918a3a935ae335575a7"
+  integrity sha512-gAqLCVQ2SgrMki9MZJzQiYn9EjOGDYze+dYKs7s7T4qfRrUxCK8Pe50mE0Y/WQqzaYY6uzdjTHzmWhACiEy5Zw==
 
 "@seznam/compose-react-refs@^1.0.6":
   version "1.0.6"

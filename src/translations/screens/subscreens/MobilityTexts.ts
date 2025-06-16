@@ -395,7 +395,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
     ),
   },
   noEntry: {
-    title: _('Kjøring forbudt-sone', 'No Riding Zone', 'Kjøring forboden-sone'),
+    title: _('Kjøring forbudt', 'No Riding', 'Køyring forboden'),
     description: _(
       'Du kan ikke kjøre inn i dette området',
       'You cannot ride in this area',
@@ -417,5 +417,39 @@ export const GeofencingZoneExtraExplanations = {
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
     'Se etter parkeringssoner i kartet.',
+  ),
+};
+
+export const ShmoWarnings = {
+  scooterDisabled: _(
+    'Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå ',
+    'This e-scooter is not available right now',
+    'Denne el-sparkesykkelen er ikkje tilgjengeleg akkurat no',
+  ),
+  scooterNotAvailable: (start: string, end: string) =>
+    _(
+      `El-sparkesyklene er kun tilgjengelige mellom ${start} og ${end}`,
+      `E-scooters are only available between ${start} and ${end}`,
+      `El-sparkesyklane er berre tilgjengelege mellom ${start} og ${end}`,
+    ),
+  scooterNotNear: _(
+    'Du må være i nærheten av el-sparkesykkelen for å starte en tur',
+    'You need to be near the e-scooter to start a ride.',
+    'Du må vere i nærleiken av el-sparkesykkelen for å starte ein tur',
+  ),
+  positionUnavailable: _(
+    'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
+    'Position unavailable. There may be issues ending the trip.',
+    'Posisjon utilgjengeleg. Det kan oppstå problem med å avslutte turen.',
+  ),
+  somethingWentWrong: _(
+    'Noe gikk galt. Prøv igjen eller kontakt operatøren.',
+    'Something went wrong. Try again or contact the operator.',
+    'Noko gjekk gale. Prøv igjen eller kontakt operatøren.',
+  ),
+  noInternetConnection: _(
+    'Du har ingen internettforbindelse',
+    'You have no internet connection',
+    'Du har ingen internettilkopling',
   ),
 };

@@ -1,10 +1,9 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {AddPaymentMethodResponse, ReserveOfferRequest} from '.';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
-  Offer,
   ReserveOfferResponse,
   PaymentType,
   RecentOrderDetails,
@@ -17,6 +16,7 @@ import {
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
+import qs from 'query-string';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -118,10 +118,10 @@ export async function searchOffers(
   offerEndpoint: string,
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
-): Promise<Offer[]> {
+): Promise<TicketOffer[]> {
   const url = `sales/v1/search/${offerEndpoint}`;
 
-  const response = await client.post<Offer[]>(url, params, opts);
+  const response = await client.post<TicketOffer[]>(url, params, opts);
 
   return response.data;
 }
@@ -198,16 +198,20 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 }
 
 export async function getFareContracts(
-  availability: 'available' | 'historical',
+  availability: 'available' | 'historical' | undefined,
 ): Promise<FareContractType[]> {
-  const url = `ticket/v4/list?availability=${capitalize(availability)}`;
+  const url = qs.stringifyUrl({
+    url: 'ticket/v4/list',
+    query: {
+      availability: availability ? capitalize(availability) : undefined,
+    },
+  });
   const response = await client.get(url, {
     authWithIdToken: true,
   });
   const fareContracts = response.data.fareContracts.map(
     convertIsoStringFieldsToDate,
   );
-  // TODO: Log errors during parsing
   return fareContracts.filter(
     (fc: any) => FareContractType.safeParse(fc).success,
   );

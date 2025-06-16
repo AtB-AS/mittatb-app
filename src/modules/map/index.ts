@@ -19,6 +19,7 @@ export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
 export {Map} from './Map';
+export {useShmoWarnings} from './hooks/use-shmo-warnings.tsx';
 export {
   MapCameraConfig,
   SCOOTERS_CLUSTER_RADIUS,
@@ -63,4 +64,8 @@ export {
   toFeaturePoints,
   zoomIn,
   zoomOut,
+  getFeatureWeight,
+  getFeatureToSelect,
+  getFeaturesAtClick,
+  isFeatureGeofencingZone,
 } from './utils';

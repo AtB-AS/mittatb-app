@@ -63,7 +63,7 @@ export const MultiplePaymentMethodsRadioSection = ({
         onPress={onSelect}
         accessibilityHint={paymentTexts.hint}
         {...getRadioA11y(paymentTexts.label, selected, t)}
-        testID="multiple payment methods"
+        testID="newPaymentCardButton"
       >
         <View style={styles.column}>
           <View style={styles.row}>
