@@ -279,7 +279,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() =>
                   navigation.navigate('Profile_SmartParkAndRideScreen')
                 }
-                label="beta"
+                label="new"
                 testID="smartParkAndRideButton"
               />
             )}
