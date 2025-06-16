@@ -1,11 +1,6 @@
 import {FormFactorFilter} from './FormFactorFilter';
 import React, {useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  Bicycle,
-  Car,
-  Scooter,
-} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
@@ -14,7 +9,6 @@ import {Section} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {Unknown} from '@atb/assets/svg/mono-icons/transportation';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -67,7 +61,6 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
       isFirstSectionItem={i === 0}
       isLastSectionItem={i === listedFormFactors.length - 1}
       formFactor={formFactor}
-      icon={getFormFactorIcon(formFactor)}
       initialFilter={filter[formFactor]}
       onFilterChange={onFormFactorFilterChanged(formFactor)}
     />
@@ -91,16 +84,3 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
   },
 }));
-
-const getFormFactorIcon = (formFactor: FormFactor) => {
-  switch (formFactor) {
-    case FormFactor.Scooter:
-      return Scooter;
-    case FormFactor.Bicycle:
-      return Bicycle;
-    case FormFactor.Car:
-      return Car;
-    default:
-      return Unknown;
-  }
-};

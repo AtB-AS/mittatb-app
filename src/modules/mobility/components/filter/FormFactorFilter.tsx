@@ -6,16 +6,20 @@ import {useOperatorToggle} from './use-operator-toggle';
 import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View, ViewStyle} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {FormFactorFilterType} from '@atb/modules/map';
 import {ContentHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {
+  AnyMode,
+  AnySubMode,
+  getTransportModeSvg,
+  TransportationIconBox,
+} from '@atb/components/icon-box';
 
 type Props = {
   formFactor: FormFactor;
-  icon: (props: SvgProps) => JSX.Element;
   initialFilter: FormFactorFilterType | undefined;
   onFilterChange: (filter: FormFactorFilterType) => void;
   style?: ViewStyle;
@@ -24,7 +28,6 @@ type Props = {
 };
 
 export const FormFactorFilter = ({
-  icon,
   formFactor,
   initialFilter,
   onFilterChange,
@@ -51,6 +54,12 @@ export const FormFactorFilter = ({
           value={showAll()}
           onValueChange={onAllToggle}
           testID={`${formFactor.toLowerCase()}ToggleAll`}
+          leftImage={
+            <TransportationIconBox
+              mode={getModeAndSubModeFromFormFactor(formFactor).mode}
+              subMode={getModeAndSubModeFromFormFactor(formFactor)?.subMode}
+            />
+          }
           radius={
             isFirstSectionItem && isLastSectionItem
               ? 'top-bottom'
@@ -80,7 +89,16 @@ export const FormFactorFilter = ({
             <ToggleSectionItem
               key={operator.id}
               text={operator.name}
-              leftImage={<ThemeIcon svg={icon} />}
+              leftImage={
+                <ThemeIcon
+                  svg={
+                    getTransportModeSvg(
+                      getModeAndSubModeFromFormFactor(formFactor).mode,
+                      getModeAndSubModeFromFormFactor(formFactor)?.subMode,
+                    ).svg
+                  }
+                />
+              }
               value={isChecked(operator.id)}
               onValueChange={onOperatorToggle(operator.id)}
               testID={`${operator.name.toLowerCase().replace(' ', '')}Toggle`}
@@ -97,3 +115,21 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
   },
 }));
+
+export const getModeAndSubModeFromFormFactor = (
+  formFactor: FormFactor,
+): {
+  mode: AnyMode;
+  subMode?: AnySubMode;
+} => {
+  switch (formFactor) {
+    case FormFactor.Scooter:
+      return {mode: 'scooter', subMode: 'escooter'};
+    case FormFactor.Bicycle:
+      return {mode: 'bicycle'};
+    case FormFactor.Car:
+      return {mode: 'car'};
+    default:
+      return {mode: 'unknown'};
+  }
+};
