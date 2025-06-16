@@ -139,7 +139,7 @@ export const PreassignedFareContractSummary = ({
             mode,
             subMode,
           }) => (
-            <View accessible={true} style={styles.legSection}>
+            <View accessible={true} style={styles.legSection} id={lineNumber}>
               <View style={[styles.legSectionItem, styles.mediumTopMargin]}>
                 <TransportationIconBox
                   style={styles.sectionItemSpacing}
@@ -148,12 +148,18 @@ export const PreassignedFareContractSummary = ({
                   subMode={subMode}
                   lineNumber={lineNumber}
                 />
-                <ThemeText typography="body__primary">{lineName}</ThemeText>
+                <ThemeText
+                  typography="body__primary"
+                  style={[styles.legName, styles.centered]}
+                >
+                  {lineName}
+                </ThemeText>
                 <ThemeText
                   typography="body__primary--bold"
-                  style={styles.legSectionItemTime}
+                  style={[styles.legSectionItemTime, styles.centered]}
                 >
-                  {travelDate && formatLocaleTime(travelDate, language)}
+                  {expectedStartTime &&
+                    formatLocaleTime(expectedStartTime, language)}
                 </ThemeText>
               </View>
               <View style={styles.mediumTopMargin}>
@@ -165,7 +171,11 @@ export const PreassignedFareContractSummary = ({
                   >
                     {t(SharedTexts.from)}:
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText
+                    typography="body__secondary"
+                    color="secondary"
+                    style={styles.legName}
+                  >
                     {fromStopPlaceName}
                   </ThemeText>
                   <ThemeText
@@ -185,7 +195,11 @@ export const PreassignedFareContractSummary = ({
                   >
                     {t(SharedTexts.to)}:
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText
+                    typography="body__secondary"
+                    color="secondary"
+                    style={styles.legName}
+                  >
                     {toStopPlaceName}
                   </ThemeText>
                   <ThemeText
@@ -299,16 +313,27 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacing.medium,
   },
   legLabel: {
-    minWidth: 30,
     marginRight: theme.spacing.xSmall,
+    minWidth: 40,
+    textAlign: 'left',
+    alignSelf: 'flex-start',
+  },
+  legName: {
+    flex: 1,
+    marginRight: theme.spacing.xSmall,
+    flexWrap: 'wrap',
+  },
+  centered: {
+    alignSelf: 'center',
   },
   legSectionItem: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexGrow: 1,
   },
   legSectionItemTime: {
     textAlign: 'right',
-    flexGrow: 1,
+    alignSelf: 'flex-start',
+    marginLeft: theme.spacing.xSmall,
   },
 }));

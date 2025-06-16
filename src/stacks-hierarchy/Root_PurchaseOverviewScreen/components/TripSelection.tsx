@@ -11,6 +11,8 @@ import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -26,6 +28,8 @@ export function TripSelection({selection, setSelection}: Props) {
     selection,
     enabled: true,
   });
+  const {t} = useTranslation();
+
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
 
@@ -43,7 +47,7 @@ export function TripSelection({selection, setSelection}: Props) {
             setSelection(
               selectionBuilder
                 .fromSelection(selection)
-                .legs(mapToSalesTripPatternLegs(tp.legs))
+                .legs(mapToSalesTripPatternLegs(t, tp.legs))
                 .build(),
             )
           }
@@ -61,7 +65,10 @@ export function TripSelection({selection, setSelection}: Props) {
   );
 }
 
-export function mapToSalesTripPatternLegs(legs: TripPatternFragment['legs']) {
+export function mapToSalesTripPatternLegs(
+  t: TranslateFunction,
+  legs: TripPatternFragment['legs'],
+) {
   return legs.map((l) => ({
     fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
     fromStopPlaceName: l.fromPlace.quay?.stopPlace?.name ?? '',
@@ -73,6 +80,9 @@ export function mapToSalesTripPatternLegs(legs: TripPatternFragment['legs']) {
     subMode: l.transportSubmode,
     serviceJourneyId: l.serviceJourney?.id ?? '',
     lineNumber: l.line?.publicCode ?? '',
-    lineName: l.line?.name ?? '',
+    lineName: formatDestinationDisplay(
+      t,
+      l.fromEstimatedCall?.destinationDisplay,
+    ),
   }));
 }
