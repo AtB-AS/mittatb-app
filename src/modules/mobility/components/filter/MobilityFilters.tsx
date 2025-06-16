@@ -1,6 +1,6 @@
 import {FormFactorFilter} from './FormFactorFilter';
 import React, {useState} from 'react';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
@@ -17,7 +17,6 @@ type Props = {
 
 export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   const styles = useStyle();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {
     isCarSharingInMapEnabled,
@@ -70,7 +69,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     <Section>
       <ContentHeading
         text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
-        style={{marginBottom: theme.spacing.small, marginHorizontal: 0}}
+        style={styles.contentHeading}
       />
       {FormFactors}
     </Section>
@@ -82,5 +81,9 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
+  },
+  contentHeading: {
+    marginBottom: theme.spacing.small,
+    marginHorizontal: 0,
   },
 }));
