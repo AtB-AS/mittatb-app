@@ -25,6 +25,7 @@ type Props = SectionItemProps<{
   textType?: TextNames;
   disabled?: boolean;
 }>;
+
 export function ToggleSectionItem({
   text,
   subtext,
@@ -86,7 +87,7 @@ export function ToggleSectionItem({
             </View>
             {label && (
               <Tag
-                label={[t(TagInfoTexts.labels[label])]}
+                labels={[t(TagInfoTexts.labels[label])]}
                 tagType="primary"
                 customStyle={styles.labelContainer}
               />

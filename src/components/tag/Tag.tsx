@@ -15,7 +15,7 @@ type TagStatuses =
   | 'info';
 
 type BaseTagProps = {
-  label: string[];
+  labels: string[];
   size?: 'small' | 'regular';
   customStyle?: StyleProp<ViewStyle>;
 };
@@ -33,7 +33,7 @@ type OtherTagProps = BaseTagProps & {
 export type TagProps = SecondaryTagProps | OtherTagProps;
 
 export const Tag = ({
-  label,
+  labels,
   tagType,
   size = 'regular',
   icon,
@@ -96,7 +96,7 @@ export const Tag = ({
     <View style={[styles.flag, containerStyles, customStyle]}>
       {iconToShow && <ThemeIcon svg={iconToShow} size={iconSize} />}
       <View>
-        {label.map((content) => (
+        {labels.map((content) => (
           <ThemeText
             color={
               theme.color.foreground[isPrimary ? 'inverse' : 'dynamic'].primary

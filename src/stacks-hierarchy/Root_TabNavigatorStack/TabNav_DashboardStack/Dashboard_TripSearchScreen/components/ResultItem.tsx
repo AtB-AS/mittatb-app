@@ -39,12 +39,13 @@ import {
 } from '@atb/screen-components/travel-details-screens';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import type {TripSearchTime} from '../../types';
 import {isSignificantDifference} from '../utils';
+
+type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  searchTime: TripSearchTime;
+  state: ResultItemState;
 };
 
 const ResultItemHeader: React.FC<{
@@ -184,7 +185,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <Animated.View
-      style={[styles.itemContainer, {opacity: fadeInValueRef.current}]}
+      style={{opacity: fadeInValueRef.current}}
       {...props}
       accessible={false}
     >
@@ -297,10 +298,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 export const MemoizedResultItem = React.memo(ResultItem);
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  itemContainer: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
-  },
   detailsContainer: {
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',

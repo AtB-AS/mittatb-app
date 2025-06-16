@@ -1,30 +1,38 @@
-import {
-  type PurchaseSelectionType,
-  usePurchaseSelectionBuilder,
-} from '@atb/modules/purchase-selection';
-import {View} from 'react-native';
-import React, {useState} from 'react';
+import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {ActivityIndicator, View} from 'react-native';
+import React from 'react';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
+import type {TripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/types';
+import {Button} from '@atb/components/button';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {SectionSeparator} from '@atb/components/sections';
+import {TripPatternWithBooking} from '@atb/api/types/trips';
+import {Tag} from '@atb/components/tag';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
-import {TranslateFunction, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
+import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 
-type Props = {
+type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
-  setSelection: (s: PurchaseSelectionType) => void;
+  onSelect: (legs: TripPatternLegs) => void;
 };
 
-export function TripSelection({selection, setSelection}: Props) {
-  const [searchTime] = useState<TripSearchTime>({
-    date: new Date().toISOString(),
-    option: 'now',
-  });
-  const {tripPatterns, reload} = useBookingTrips({
+const SEAT_TAG_LIMIT = 15;
+
+export function BookingTripSelection({
+  selection,
+  onSelect,
+}: BookingTripSelectionProps) {
+  const styles = useBookingTripSelectionStyles();
+  const {
+    tripPatterns,
+    isEmpty,
+    isLoadingBooking: isLoading,
+    reload,
+  } = useBookingTrips({
     selection,
     enabled: true,
   });
@@ -33,56 +41,172 @@ export function TripSelection({selection, setSelection}: Props) {
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
 
-  const selectionBuilder = usePurchaseSelectionBuilder();
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
-    <View
-      style={{
-        width: '100%',
-      }}
-    >
-      {tripPatterns.map((tp, i) => (
-        <PressableOpacity
-          onPress={() =>
-            setSelection(
-              selectionBuilder
-                .fromSelection(selection)
-                .legs(mapToSalesTripPatternLegs(t, tp.legs))
-                .build(),
-            )
-          }
-        >
-          <ThemeText>{new Date(tp.expectedStartTime).toDateString()}</ThemeText>
-          <ThemeText>{tp.booking.availability}</ThemeText>
-          <MemoizedResultItem
+    <View style={styles.container}>
+      {!isEmpty ? (
+        tripPatterns.map((tp, i) => (
+          <BookingTrip
+            key={`booking-trip-${i}`}
+            onSelect={onSelect}
             tripPattern={tp}
-            searchTime={searchTime}
-            key={i}
           />
-        </PressableOpacity>
-      ))}
+        ))
+      ) : (
+        <EmptyState />
+      )}
     </View>
   );
 }
 
-export function mapToSalesTripPatternLegs(
-  t: TranslateFunction,
-  legs: TripPatternFragment['legs'],
-) {
-  return legs.map((l) => ({
-    fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
-    fromStopPlaceName: l.fromPlace.quay?.stopPlace?.name ?? '',
-    toStopPlaceId: l.toPlace.quay?.stopPlace?.id ?? '',
-    toStopPlaceName: l.toPlace.quay?.stopPlace?.name ?? '',
-    expectedStartTime: l.expectedStartTime,
-    expectedEndTime: l.expectedEndTime,
-    mode: l.mode,
-    subMode: l.transportSubmode,
-    serviceJourneyId: l.serviceJourney?.id ?? '',
-    lineNumber: l.line?.publicCode ?? '',
-    lineName: formatDestinationDisplay(
-      t,
-      l.fromEstimatedCall?.destinationDisplay,
-    ),
-  }));
+type BookingTripProps = {
+  tripPattern: TripPatternWithBooking;
+  onSelect: (legs: TripPatternLegs) => void;
+};
+
+export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
+  const {theme} = useThemeContext();
+  const styles = useBookingTripStyles();
+  const {t} = useTranslation();
+
+  const availableSeats = tripPattern.booking?.offer?.available ?? 0;
+
+  const onPress = () => {
+    onSelect(tripPattern.legs);
+  };
+
+  return (
+    <PressableOpacity
+      disabled={tripPattern.booking.availability !== 'available'}
+      onPress={onPress}
+      style={[
+        styles.container,
+        styles.containerAvailable,
+        tripPattern.booking.availability === 'closed' &&
+          styles.containerDisabled,
+      ]}
+    >
+      <View style={styles.mainContent}>
+        {tripPattern.booking.availability === 'closed' && (
+          <Tag
+            labels={[t(TicketingTexts.booking.closed)]}
+            tagType="secondary"
+          />
+        )}
+        {tripPattern.booking.availability === 'sold_out' && (
+          <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
+        )}
+        <MemoizedResultItem
+          tripPattern={tripPattern}
+          key={tripPattern.compressedQuery}
+          state={
+            tripPattern.booking.availability === 'closed'
+              ? 'disabled'
+              : 'enabled'
+          }
+        />
+      </View>
+      {tripPattern.booking.availability === 'available' && (
+        <>
+          <SectionSeparator />
+          <View
+            style={[
+              styles.footer,
+              styles.footerDisabled,
+              tripPattern.booking.availability === 'available' &&
+                styles.footerAvailable,
+            ]}
+          >
+            {!!availableSeats && availableSeats <= SEAT_TAG_LIMIT && (
+              <Tag
+                labels={[
+                  t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
+                ]}
+                tagType="info"
+              />
+            )}
+            <Button
+              text="Velg"
+              expanded={false}
+              type="small"
+              mode="secondary"
+              onPress={onPress}
+              backgroundColor={theme.color.interactive[2].default}
+              style={{marginLeft: 'auto'}}
+            />
+          </View>
+        </>
+      )}
+    </PressableOpacity>
+  );
 }
+
+function EmptyState() {
+  const {theme} = useThemeContext();
+  const {t} = useTranslation();
+  return (
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <ThemedOnBehalfOf />
+      <ThemeText
+        typography="body__primary--bold"
+        color={theme.color.foreground.dynamic.secondary}
+      >
+        {t(TicketingTexts.booking.cannotFindDepartures)}
+      </ThemeText>
+      <ThemeText
+        typography="body__secondary"
+        color={theme.color.foreground.dynamic.secondary}
+      >
+        {t(TicketingTexts.booking.adjustTime)}
+      </ThemeText>
+    </View>
+  );
+}
+
+const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
+  return {
+    container: {
+      borderRadius: theme.border.radius.regular,
+    },
+    containerAvailable: {
+      backgroundColor: theme.color.interactive[2].default.background,
+    },
+    containerDisabled: {
+      backgroundColor: theme.color.background.neutral[2].background,
+    },
+    mainContent: {
+      padding: theme.spacing.medium,
+      rowGap: theme.spacing.medium,
+    },
+    footer: {
+      flexDirection: 'row',
+      paddingVertical: theme.spacing.small,
+      paddingHorizontal: theme.spacing.medium,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    footerAvailable: {
+      backgroundColor: theme.color.interactive[2].default.background,
+    },
+    footerDisabled: {
+      backgroundColor: theme.color.background.neutral[2].background,
+    },
+  };
+});
+
+const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
+  return {
+    container: {
+      width: '100%',
+      rowGap: theme.spacing.medium,
+      paddingVertical: theme.spacing.medium,
+    },
+  };
+});

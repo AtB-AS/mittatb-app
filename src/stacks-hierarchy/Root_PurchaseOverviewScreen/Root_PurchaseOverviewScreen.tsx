@@ -297,6 +297,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             style={styles.selectionComponent}
             onSelect={(selection) => {
+              const newSelection = builder
+                .fromSelection(selection)
+                .fromStopPlace(selection.stopPlaces?.from)
+                .toStopPlace(selection.stopPlaces?.to)
+                .build();
+              setSelection(newSelection);
               navigation.setParams({onFocusElement: undefined});
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
