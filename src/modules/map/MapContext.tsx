@@ -23,6 +23,8 @@ type MapContextState = {
   setSelectedShmoPaymentMethod: (paymentMethod: PaymentMethod) => void;
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
+  mapFilterIsOpen: boolean;
+  setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -54,6 +56,7 @@ export const MapContextProvider = ({children}: Props) => {
     useSelectedShmoPaymentMethod();
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
+  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false); // todo: refactor bottom sheet state to be declarative
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -101,6 +104,8 @@ export const MapContextProvider = ({children}: Props) => {
         setSelectedShmoPaymentMethod,
         mapFilter,
         setMapFilter,
+        mapFilterIsOpen,
+        setMapFilterIsOpen,
       }}
     >
       {children}

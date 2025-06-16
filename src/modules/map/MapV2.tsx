@@ -6,7 +6,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import MapboxGL, {LocationPuck} from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Geometry, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -62,7 +62,11 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const tabBarHeight = useBottomTabBarHeight();
+
+  const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
+
+  const bottomTabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = mapFilterIsOpen ? 0 : bottomTabBarHeight; // not great, state management refactor incoming
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
 
@@ -88,8 +92,6 @@ export const MapV2 = (props: MapProps) => {
     true,
     tabBarHeight,
   );
-
-  const {autoSelectedFeature, mapFilter} = useMapContext();
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
   const showStations =
