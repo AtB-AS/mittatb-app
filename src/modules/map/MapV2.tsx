@@ -70,8 +70,7 @@ export const MapV2 = (props: MapProps) => {
 
   const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
 
-  const bottomTabBarHeight = useBottomTabBarHeight();
-  const tabBarHeight = mapFilterIsOpen ? 0 : bottomTabBarHeight; // not great, state management refactor incoming
+  const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
   const {isMutating: initShmoOneStopBookingIsMutating} =
@@ -142,7 +141,8 @@ export const MapV2 = (props: MapProps) => {
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
-    !initShmoOneStopBookingIsMutating;
+    !initShmoOneStopBookingIsMutating &&
+    !mapFilterIsOpen;
 
   useAutoSelectMapItem(
     mapCameraRef,
@@ -349,6 +349,7 @@ export const MapV2 = (props: MapProps) => {
           style={[
             controlStyles.mapButtonsContainer,
             controlStyles.mapButtonsContainerRight,
+            mapFilterIsOpen && {bottom: 0},
           ]}
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
