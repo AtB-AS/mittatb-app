@@ -84,6 +84,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));
 
