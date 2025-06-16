@@ -1,14 +1,21 @@
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
-import {useAuthContext} from '@atb/modules/auth';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  MessageSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme} from '@atb/theme';
-import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
+import {ProfileTexts, dictionary, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
+import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
@@ -17,25 +24,18 @@ import {ActivityIndicator, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import {useIsLoading} from '@atb/utils/use-is-loading';
-import {
-  GenericSectionItem,
-  LinkSectionItem,
-  MessageSectionItem,
-  Section,
-} from '@atb/components/sections';
 
-import {ClickableCopy} from './components/ClickableCopy';
-import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useStorybookContext} from '@atb/modules/storybook';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useStorybookContext} from '@atb/modules/storybook';
 import {
   useHasReservationOrAvailableFareContract,
   useTicketingContext,
 } from '@atb/modules/ticketing';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {ClickableCopy} from './components/ClickableCopy';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -65,7 +65,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
-  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
+    useFeatureTogglesContext();
 
   const {logEvent} = useAnalyticsContext();
 
@@ -267,6 +268,19 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 onPress={() => navigation.navigate('Profile_BonusScreen')}
                 testID="BonusButton"
+              />
+            )}
+            {isSmartParkAndRideEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems
+                    .smartParkAndRide.label,
+                )}
+                onPress={() =>
+                  navigation.navigate('Profile_SmartParkAndRideScreen')
+                }
+                label="new"
+                testID="smartParkAndRideButton"
               />
             )}
           </Section>
