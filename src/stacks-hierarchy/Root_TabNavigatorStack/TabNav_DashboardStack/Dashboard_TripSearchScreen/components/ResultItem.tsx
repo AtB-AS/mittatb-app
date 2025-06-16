@@ -314,9 +314,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[2].background,
   },
   detailsContainer: {
-    paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
-    paddingBottom: theme.spacing.small,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -381,8 +379,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
   },
   row: {
     flexDirection: 'row',
