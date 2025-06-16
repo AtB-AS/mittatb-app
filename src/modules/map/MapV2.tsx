@@ -65,8 +65,8 @@ const DEFAULT_ZOOM_LEVEL = 14.5;
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewRef = useRef<MapboxGL.MapView>(null);
+  const mapCameraRef = useRef<Camera>(null);
+  const mapViewRef = useRef<MapView>(null);
 
   const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
 

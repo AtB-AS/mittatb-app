@@ -4,8 +4,6 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {PaymentMethod} from '@atb/modules/payment';
-import {useSelectedShmoPaymentMethod} from '@atb/modules/payment';
 import {useUserMapFilters} from './hooks/use-map-filter';
 
 type MapContextState = {
@@ -49,9 +47,6 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
-
-  const [selectedShmoPaymentMethod, setSelectedShmoPaymentMethod] =
-    useSelectedShmoPaymentMethod();
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
   const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false); // todo: refactor bottom sheet state to be declarative
