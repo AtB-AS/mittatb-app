@@ -70,7 +70,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     <Section>
       <ContentHeading
         text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
-        style={{marginBottom: theme.spacing.small}}
+        style={{marginBottom: theme.spacing.small, marginHorizontal: 0}}
       />
       {FormFactors}
     </Section>
