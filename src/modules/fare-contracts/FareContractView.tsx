@@ -112,7 +112,7 @@ export const FareContractView: React.FC<Props> = ({
       )}
 
       {shouldShowEarnedBonusPoints &&
-        earnedBonusPoints != undefined &&
+        !!earnedBonusPoints &&
         earnedBonusPoints > 0 && (
           <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
         )}
