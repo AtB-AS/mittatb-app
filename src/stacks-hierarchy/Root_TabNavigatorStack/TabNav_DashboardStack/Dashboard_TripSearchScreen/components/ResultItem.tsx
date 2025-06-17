@@ -9,7 +9,6 @@ import {screenReaderHidden} from '@atb/utils/accessibility';
 import {flatMap} from '@atb/utils/array';
 import {
   formatToClock,
-  isInThePast,
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
@@ -116,7 +115,6 @@ const ResultItemHeader: React.FC<{
 
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
-  searchTime,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -171,9 +169,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     filteredLegs.length,
   );
 
-  const isInPast =
-    isInThePast(tripPattern.legs[0].expectedStartTime) &&
-    searchTime?.option !== 'now';
   const iconHeight = {
     height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
   };
@@ -189,11 +184,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <Animated.View
-      style={[
-        styles.result,
-        isInPast && styles.resultInPast,
-        {opacity: fadeInValueRef.current},
-      ]}
+      style={[styles.itemContainer, {opacity: fadeInValueRef.current}]}
       {...props}
       accessible={false}
     >
@@ -306,12 +297,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 export const MemoizedResultItem = React.memo(ResultItem);
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  result: {
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-  },
-  resultInPast: {
-    backgroundColor: theme.color.background.neutral[2].background,
+  itemContainer: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
   detailsContainer: {
     paddingTop: theme.spacing.medium,
