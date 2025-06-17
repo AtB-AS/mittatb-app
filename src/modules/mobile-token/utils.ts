@@ -177,7 +177,7 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
         const tokenClockSkewErrorDetails =
           details as TokenClockSkewErrorDetails;
         const timestamp = tokenClockSkewErrorDetails.timestamp;
-        const duration = Date.now() - timestamp;
+        const duration = tokenClockSkewErrorDetails.duration;
         return new TokenEncodingClockSkewRemoteTokenStateError(
           timestamp,
           duration,
