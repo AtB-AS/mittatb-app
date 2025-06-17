@@ -29,8 +29,12 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
         <View style={styles.leftContainer}>
           <View style={styles.illustrationContainer} />
           <View style={styles.textContainer}>
-            <ThemeText typography="body__tertiary" isMarkdown>
-              {t(BonusProgramTexts.fareContract.youEarned(amount))}
+            <ThemeText typography="body__tertiary">
+              {t(BonusProgramTexts.fareContract.youEarned.intro)}
+              <ThemeText typography="body__tertiary--bold">
+                {t(BonusProgramTexts.fareContract.youEarned.earned(amount))}
+              </ThemeText>
+              {t(BonusProgramTexts.fareContract.youEarned.ending)}
             </ThemeText>
           </View>
         </View>
