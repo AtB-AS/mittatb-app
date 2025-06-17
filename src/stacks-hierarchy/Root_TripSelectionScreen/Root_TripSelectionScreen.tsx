@@ -89,7 +89,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
 
             if (selection.isOnBehalfOf) {
               navigation.navigate('Root_ChooseTicketRecipientScreen', {
-                selection,
+                selection: newSelection,
                 mode: params.mode,
               });
             } else {
@@ -97,7 +97,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
                 name: 'Root_PurchaseConfirmationScreen',
                 params: {
                   mode: params.mode,
-                  selection: selection,
+                  selection: newSelection,
                 },
                 merge: true,
               });
