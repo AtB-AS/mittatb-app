@@ -316,6 +316,12 @@ const TicketingTexts = {
       'Choose another day or adjust time',
       'Velg ein annan dag eller juster tidspunkt',
     ),
+    multipleTravellers: _(
+      'Flere reisende',
+      'Multiple travellers',
+      'Fleire reisande',
+    ),
+    select: _('Velg', 'Select', 'Velg'),
   },
 };
 

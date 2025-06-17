@@ -130,17 +130,25 @@ export const PreassignedFareContractSummary = ({
             {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
           </ThemeText>
           {legs.map(
-            ({
-              fromStopPlaceName,
-              toStopPlaceName,
-              expectedStartTime,
-              expectedEndTime,
-              lineNumber,
-              lineName,
-              mode,
-              subMode,
-            }) => (
-              <View accessible={true} style={styles.legSection} id={lineNumber}>
+            (
+              {
+                fromStopPlaceName,
+                toStopPlaceName,
+                expectedStartTime,
+                expectedEndTime,
+                lineNumber,
+                lineName,
+                mode,
+                subMode,
+              },
+              i,
+            ) => (
+              <View
+                accessible={true}
+                style={styles.legSection}
+                id={lineNumber}
+                key={`leg-${i}`}
+              >
                 <View style={[styles.legSectionItem, styles.mediumTopMargin]}>
                   <TransportationIconBox
                     style={[styles.sectionItemSpacing, styles.centered]}

@@ -14,6 +14,8 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
+import {PriceTravellerSummary} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/PriceTravellerSummary';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -54,6 +56,7 @@ export function BookingTripSelection({
         tripPatterns.map((tp, i) => (
           <BookingTrip
             key={`booking-trip-${i}`}
+            selection={selection}
             onSelect={onSelect}
             tripPattern={tp}
           />
@@ -67,10 +70,15 @@ export function BookingTripSelection({
 
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
+  selection: PurchaseSelectionType;
   onSelect: (legs: TripPatternLegs) => void;
 };
 
-export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
+export function BookingTrip({
+  tripPattern,
+  selection,
+  onSelect,
+}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t} = useTranslation();
@@ -81,6 +89,10 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
     onSelect(tripPattern.legs);
   };
 
+  const isDisabled =
+    tripPattern.booking.availability === 'closed' ||
+    tripPattern.booking.availability === 'sold_out';
+
   return (
     <PressableOpacity
       disabled={tripPattern.booking.availability !== 'available'}
@@ -88,8 +100,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
       style={[
         styles.container,
         styles.containerAvailable,
-        tripPattern.booking.availability === 'closed' &&
-          styles.containerDisabled,
+        isDisabled && styles.containerDisabled,
       ]}
     >
       <View style={styles.mainContent}>
@@ -105,11 +116,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
         <MemoizedResultItem
           tripPattern={tripPattern}
           key={tripPattern.compressedQuery}
-          state={
-            tripPattern.booking.availability === 'closed'
-              ? 'disabled'
-              : 'enabled'
-          }
+          state={isDisabled ? 'disabled' : 'enabled'}
         />
       </View>
       {tripPattern.booking.availability === 'available' && (
@@ -131,14 +138,21 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
                 tagType="info"
               />
             )}
+            {!!tripPattern.booking.offer.price.amountFloat && (
+              <PriceTravellerSummary
+                travellers={selection.userProfilesWithCount}
+                price={tripPattern.booking.offer.price.amountFloat}
+              />
+            )}
             <Button
-              text="Velg"
+              text={t(TicketingTexts.booking.select)}
               expanded={false}
               type="small"
-              mode="secondary"
+              mode="tertiary"
               onPress={onPress}
               backgroundColor={theme.color.interactive[2].default}
               style={{marginLeft: 'auto'}}
+              rightIcon={{svg: ArrowRight}}
             />
           </View>
         </>
