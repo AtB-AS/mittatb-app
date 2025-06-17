@@ -111,11 +111,9 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowEarnedBonusPoints &&
-        !!earnedBonusPoints &&
-        earnedBonusPoints > 0 && (
-          <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
-        )}
+      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
+        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
           <ActivateNowSectionItem
