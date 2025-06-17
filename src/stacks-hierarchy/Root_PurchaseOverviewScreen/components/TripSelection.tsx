@@ -36,7 +36,6 @@ export function BookingTripSelection({
     selection,
     enabled: true,
   });
-  const {t} = useTranslation();
 
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
