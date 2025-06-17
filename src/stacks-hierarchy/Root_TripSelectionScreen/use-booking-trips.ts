@@ -34,7 +34,7 @@ export function useBookingTrips({
     preassignedFareProduct.id,
   ];
 
-  const {data, isFetching, isLoading, isSuccess, isError, refetch} = useQuery({
+  const {data, isFetching, isSuccess, isError, isLoading, refetch} = useQuery({
     queryKey,
     queryFn: () =>
       bookingAvailabilitySearch({
