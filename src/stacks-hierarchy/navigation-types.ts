@@ -147,6 +147,7 @@ export type RootStackParamList = StackParams<{
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
   Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
+  Root_SmartParkAndRideAddScreen: undefined;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
