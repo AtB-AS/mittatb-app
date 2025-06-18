@@ -125,10 +125,15 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           <SituationOrNoticeSummary
             statusType={getMessageTypeForSituation(situation)}
             text={getTextForLanguage(situation.summary, language)}
+            key={situation.id}
           />
         ))}
         {notices.map((notice) => (
-          <SituationOrNoticeSummary statusType="info" text={notice.text} />
+          <SituationOrNoticeSummary
+            statusType="info"
+            text={notice.text}
+            key={notice.id}
+          />
         ))}
       </View>
       {tripPattern.booking.availability === 'available' && (
