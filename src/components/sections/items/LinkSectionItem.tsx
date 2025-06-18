@@ -85,11 +85,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         {...accessibilityWithOverrides}
       >
         <View
-          style={[
-            style.spaceBetween,
-            disabledStyle,
-            {gap: theme.spacing.small},
-          ]}
+          style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
         >
           <ThemeText
             style={[
@@ -121,6 +117,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
   },
 );
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},
+  gap: {gap: theme.spacing.small},
 }));
