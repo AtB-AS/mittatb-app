@@ -9,7 +9,7 @@ import {
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
