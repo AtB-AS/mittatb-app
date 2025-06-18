@@ -55,7 +55,6 @@ export function BookingTripSelection({
         tripPatterns.map((tp, i) => (
           <BookingTrip
             key={`booking-trip-${i}`}
-            selection={selection}
             onSelect={onSelect}
             tripPattern={tp}
           />
@@ -69,15 +68,10 @@ export function BookingTripSelection({
 
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
-  selection: PurchaseSelectionType;
   onSelect: (legs: TripPatternLegs) => void;
 };
 
-export function BookingTrip({
-  tripPattern,
-  selection,
-  onSelect,
-}: BookingTripProps) {
+export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t} = useTranslation();
