@@ -14,7 +14,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {PriceTravellerSummary} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/PriceTravellerSummary';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type BookingTripSelectionProps = {
@@ -56,7 +55,6 @@ export function BookingTripSelection({
         tripPatterns.map((tp, i) => (
           <BookingTrip
             key={`booking-trip-${i}`}
-            selection={selection}
             onSelect={onSelect}
             tripPattern={tp}
           />
@@ -70,15 +68,10 @@ export function BookingTripSelection({
 
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
-  selection: PurchaseSelectionType;
   onSelect: (legs: TripPatternLegs) => void;
 };
 
-export function BookingTrip({
-  tripPattern,
-  selection,
-  onSelect,
-}: BookingTripProps) {
+export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t} = useTranslation();
@@ -136,12 +129,6 @@ export function BookingTrip({
                   t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
                 ]}
                 tagType="info"
-              />
-            )}
-            {!!tripPattern.booking.offer.price.amountFloat && (
-              <PriceTravellerSummary
-                travellers={selection.userProfilesWithCount}
-                price={tripPattern.booking.offer.price.amountFloat}
               />
             )}
             <Button

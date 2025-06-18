@@ -258,7 +258,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           preassignedFareProduct={selection.preassignedFareProduct}
           recipient={recipient}
-          travelDate={selection.travelDate}
+          travelDate={
+            selection.legs.length // Is booking
+              ? selection.legs[0].expectedStartTime
+              : selection.travelDate
+          }
           validDurationSeconds={validDurationSeconds}
           legs={selection.legs}
         />
