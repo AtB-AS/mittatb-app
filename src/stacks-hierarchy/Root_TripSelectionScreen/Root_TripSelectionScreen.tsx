@@ -19,11 +19,6 @@ import {formatDestinationDisplay} from '@atb/screen-components/travel-details-sc
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
-/**
- *
- *
- */
-
 export const Root_TripSelectionScreen: React.FC<Props> = ({
   navigation,
   route: {params},
