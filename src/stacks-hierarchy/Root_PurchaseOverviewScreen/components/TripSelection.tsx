@@ -14,7 +14,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {PriceTravellerSummary} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/PriceTravellerSummary';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type BookingTripSelectionProps = {
@@ -136,12 +135,6 @@ export function BookingTrip({
                   t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
                 ]}
                 tagType="info"
-              />
-            )}
-            {!!tripPattern.booking.offer.price.amountFloat && (
-              <PriceTravellerSummary
-                travellers={selection.userProfilesWithCount}
-                price={tripPattern.booking.offer.price.amountFloat}
               />
             )}
             <Button
