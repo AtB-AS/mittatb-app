@@ -10,7 +10,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   selection: PurchaseSelectionType;
-  price: number;
+  price?: number;
   originalPrice: number;
   isFree: boolean;
   isLoading: boolean;
@@ -35,7 +35,9 @@ export function Summary({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const formattedPrice = formatNumberToString(price, language);
+  const formattedPrice = !!price
+    ? formatNumberToString(price, language)
+    : undefined;
   const formattedOriginalPrice = formatNumberToString(originalPrice, language);
   const hasSelection = selection.userProfilesWithCount.some((u) => u.count);
 
@@ -45,9 +47,7 @@ export function Summary({
 
   return (
     <View style={style}>
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
+      {!!formattedPrice ? (
         <ThemeText
           typography="body__primary--bold"
           style={styles.price}
@@ -55,8 +55,10 @@ export function Summary({
         >
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
-      )}
-      {!isLoading && originalPrice !== price && (
+      ) : isLoading ? (
+        <ActivityIndicator size="large" />
+      ) : null}
+      {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText
           typography="body__tertiary--strike"
           style={styles.originalPrice}
