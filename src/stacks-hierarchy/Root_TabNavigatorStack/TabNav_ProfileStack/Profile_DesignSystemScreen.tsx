@@ -448,17 +448,17 @@ export const Profile_DesignSystemScreen = ({
                     gap: theme.spacing.small,
                   }}
                 >
-                  <Tag label={[`primary`]} tagType="primary" />
-                  <Tag label={[`secondary`]} tagType="secondary" />
+                  <Tag labels={[`primary`]} tagType="primary" />
+                  <Tag labels={[`secondary`]} tagType="secondary" />
                   <Tag
-                    label={[`secondary with icon`]}
+                    labels={[`secondary with icon`]}
                     tagType="secondary"
                     icon={Swap}
                   />
-                  <Tag label={[`valid`]} tagType="valid" />
-                  <Tag label={[`error`]} tagType="error" />
-                  <Tag label={[`warning`]} tagType="warning" />
-                  <Tag label={[`info`]} tagType="info" />
+                  <Tag labels={[`valid`]} tagType="valid" />
+                  <Tag labels={[`error`]} tagType="error" />
+                  <Tag labels={[`warning`]} tagType="warning" />
+                  <Tag labels={[`info`]} tagType="info" />
                 </View>
 
                 <ThemeText style={{marginTop: theme.spacing.small}}>
@@ -472,18 +472,22 @@ export const Profile_DesignSystemScreen = ({
                     gap: theme.spacing.small,
                   }}
                 >
-                  <Tag label={[`primary`]} tagType="primary" size="small" />
-                  <Tag label={[`secondary`]} tagType="secondary" size="small" />
+                  <Tag labels={[`primary`]} tagType="primary" size="small" />
                   <Tag
-                    label={[`secondary with icon`]}
+                    labels={[`secondary`]}
+                    tagType="secondary"
+                    size="small"
+                  />
+                  <Tag
+                    labels={[`secondary with icon`]}
                     tagType="secondary"
                     icon={Swap}
                     size="small"
                   />
-                  <Tag label={[`valid`]} tagType="valid" size="small" />
-                  <Tag label={[`error`]} tagType="error" size="small" />
-                  <Tag label={[`warning`]} tagType="warning" size="small" />
-                  <Tag label={[`info`]} tagType="info" size="small" />
+                  <Tag labels={[`valid`]} tagType="valid" size="small" />
+                  <Tag labels={[`error`]} tagType="error" size="small" />
+                  <Tag labels={[`warning`]} tagType="warning" size="small" />
+                  <Tag labels={[`info`]} tagType="info" size="small" />
                 </View>
               </>
             }

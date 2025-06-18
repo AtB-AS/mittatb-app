@@ -7,6 +7,7 @@ type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
   isLoadingBooking: boolean;
   isError: boolean;
+  isEmpty: boolean;
   reload: () => void;
 };
 
@@ -33,7 +34,7 @@ export function useBookingTrips({
     preassignedFareProduct.id,
   ];
 
-  const {data, isFetching, isSuccess, isError, refetch} = useQuery({
+  const {data, isFetching, isLoading, isSuccess, isError, refetch} = useQuery({
     queryKey,
     queryFn: () =>
       bookingAvailabilitySearch({
@@ -51,11 +52,24 @@ export function useBookingTrips({
     retry: 3,
   });
 
+  const tripPatterns = isSuccess
+    ? data?.trip.tripPatterns.filter(tripPatternFilter)
+    : [];
+
   return {
-    isLoadingBooking: isFetching,
-    tripPatterns: isSuccess ? data?.trip.tripPatterns : [],
+    /**
+     * We want the truth table to be like this, for smooth user experience:
+     *
+     * Before initial load (isLoading === true && isFetching === false):              The query is not loading
+     * During initial load (isLoading === true && isFetching === true):               The query is loading
+     * After initial load, no refetch (isLoading === false && isFetching === false):  The query is not loading
+     * At refetch (isLoading === false && isFetching === true):                       The query is not loading
+     */
+    isLoadingBooking: isLoading && isFetching,
+    tripPatterns,
     reload: refetch,
-    isError: isError || !isValidResult(data?.trip.tripPatterns),
+    isError: isError,
+    isEmpty: !isFetching && tripPatterns.length === 0,
   };
 }
 
@@ -71,8 +85,9 @@ function isValidSelection(selection: PurchaseSelectionType) {
   );
 }
 
-function isValidResult(result: TripPatternWithBooking[] | undefined): boolean {
-  return !result?.some(
-    (tp) => !tp.booking.availability || tp.booking.availability === 'unknown',
+function tripPatternFilter(tp: TripPatternWithBooking): boolean {
+  return (
+    tp.booking.availability !== 'unknown' &&
+    tp.booking.availability !== 'booking_not_supported'
   );
 }

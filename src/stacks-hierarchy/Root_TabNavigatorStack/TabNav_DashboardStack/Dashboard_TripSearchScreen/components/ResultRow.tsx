@@ -69,7 +69,10 @@ export const ResultRow: React.FC<ResultRowProps> = ({
       testID={testID}
     >
       <View style={[styles.resultRow, isInPast && styles.resultInPast]}>
-        <MemoizedResultItem tripPattern={tripPattern} searchTime={searchTime} />
+        <MemoizedResultItem
+          tripPattern={tripPattern}
+          state={isInPast ? 'dimmed' : 'enabled'}
+        />
         <MemoizedResultItemFooter
           tripPattern={tripPattern}
           isInPast={isInPast}
@@ -87,6 +90,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
     rowGap: theme.spacing.small,
+    paddingTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
   resultInPast: {
     backgroundColor: theme.color.background.neutral[2].background,

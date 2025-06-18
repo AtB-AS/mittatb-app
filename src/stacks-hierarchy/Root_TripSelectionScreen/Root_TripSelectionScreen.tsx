@@ -4,16 +4,18 @@ import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Button} from '@atb/components/button';
-import {TripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
+import {BookingTripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
 import {
   DateSelection,
   DepartureSearchTime,
 } from '@atb/components/date-selection';
 import {ScreenHeading} from '@atb/components/heading';
 import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
-import {useTranslation} from '@atb/translations';
+import {type TranslateFunction, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
@@ -36,6 +38,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const builder = usePurchaseSelectionBuilder();
 
   const screenHeaderTitle =
     selection.stopPlaces?.from && selection.stopPlaces?.to
@@ -56,7 +59,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           : undefined
       }
     >
-      <View style={styles.dateSelection}>
+      <View style={styles.header}>
         <DateSelection
           searchTime={searchTime}
           setSearchTime={(searchTime) => {
@@ -69,42 +72,66 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
-      <GenericSectionItem
-        style={{
-          borderRadius: theme.border.radius.regular,
-          margin: theme.spacing.small,
-        }}
-      >
-        <TripSelection selection={selection} setSelection={setSelection} />
-      </GenericSectionItem>
-      <Button
-        onPress={() => {
-          if (selection.isOnBehalfOf) {
-            navigation.navigate('Root_ChooseTicketRecipientScreen', {
-              selection,
-              mode: params.mode,
-            });
-          } else {
-            navigation.navigate({
-              name: 'Root_PurchaseConfirmationScreen',
-              params: {
+      <GenericSectionItem style={styles.content}>
+        <BookingTripSelection
+          selection={selection}
+          onSelect={(legs) => {
+            const newSelection = builder
+              .fromSelection(selection)
+              .legs(mapToSalesTripPatternLegs(t, legs))
+              .build();
+            setSelection(newSelection);
+
+            if (selection.isOnBehalfOf) {
+              navigation.navigate('Root_ChooseTicketRecipientScreen', {
+                selection: newSelection,
                 mode: params.mode,
-                selection: selection,
-              },
-              merge: true,
-            });
-          }
-        }}
-        expanded={false}
-        text="Bekreft"
-      />
+              });
+            } else {
+              navigation.navigate({
+                name: 'Root_PurchaseConfirmationScreen',
+                params: {
+                  mode: params.mode,
+                  selection: newSelection,
+                },
+                merge: true,
+              });
+            }
+          }}
+        />
+      </GenericSectionItem>
     </FullScreenView>
   );
 };
 
+export function mapToSalesTripPatternLegs(
+  t: TranslateFunction,
+  legs: TripPatternFragment['legs'],
+) {
+  return legs.map((l) => ({
+    fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
+    fromStopPlaceName: l.fromPlace.quay?.stopPlace?.name ?? '',
+    toStopPlaceId: l.toPlace.quay?.stopPlace?.id ?? '',
+    toStopPlaceName: l.toPlace.quay?.stopPlace?.name ?? '',
+    expectedStartTime: l.expectedStartTime,
+    expectedEndTime: l.expectedEndTime,
+    mode: l.mode,
+    subMode: l.transportSubmode,
+    serviceJourneyId: l.serviceJourney?.id ?? '',
+    lineNumber: l.line?.publicCode ?? '',
+    lineName: formatDestinationDisplay(
+      t,
+      l.fromEstimatedCall?.destinationDisplay,
+    ),
+  }));
+}
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  dateSelection: {
-    marginVertical: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
+  header: {
+    marginTop: theme.spacing.medium,
+  },
+  content: {
+    backgroundColor: theme.color.background.neutral[1].background,
+    borderWidth: 0,
   },
 }));
