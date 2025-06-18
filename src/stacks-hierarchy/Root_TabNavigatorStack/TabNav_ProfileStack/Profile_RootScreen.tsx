@@ -218,6 +218,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="settingsButton"
             />
           </Section>
+          {isBonusProgramEnabled && (
+            <Section>
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+                label="new"
+              />
+            </Section>
+          )}
 
           <ContentHeading
             text={t(ProfileTexts.sections.travelAndPurchases.heading)}
@@ -261,15 +273,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
               testID="invitationCodeButton"
             />
-            {isBonusProgramEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                )}
-                onPress={() => navigation.navigate('Profile_BonusScreen')}
-                testID="BonusButton"
-              />
-            )}
             {isSmartParkAndRideEnabled && (
               <LinkSectionItem
                 text={t(

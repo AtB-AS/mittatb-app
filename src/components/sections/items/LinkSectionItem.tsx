@@ -9,7 +9,7 @@ import {
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -49,6 +49,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
     const {contentContainer, topContainer, interactiveColor} =
       useSectionItem(props);
     const style = useSectionStyle();
+    const {theme} = useThemeContext();
     const linkSectionItemStyle = useStyles();
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
@@ -83,7 +84,13 @@ export const LinkSectionItem = forwardRef<any, Props>(
         collapsable={false}
         {...accessibilityWithOverrides}
       >
-        <View style={[style.spaceBetween, disabledStyle]}>
+        <View
+          style={[
+            style.spaceBetween,
+            disabledStyle,
+            {gap: theme.spacing.small},
+          ]}
+        >
           <ThemeText
             style={[
               contentContainer,
