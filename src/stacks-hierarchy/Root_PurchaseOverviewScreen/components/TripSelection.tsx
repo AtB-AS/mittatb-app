@@ -2,7 +2,7 @@ import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {ActivityIndicator, View} from 'react-native';
 import React from 'react';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
+import {useBookingTrips} from '@atb/modules/booking';
 import type {TripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/types';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';

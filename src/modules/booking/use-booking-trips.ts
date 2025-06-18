@@ -2,12 +2,17 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {bookingAvailabilitySearch} from '@atb/api/trips';
 import {useQuery} from '@tanstack/react-query';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
-import {isBefore} from '@atb/utils/date';
-import {endOfDay} from 'date-fns';
+import {startOfDay} from 'date-fns';
 import {useMemo} from 'react';
+import {
+  isValidSelection,
+  tripPatternAvailabilityFilter,
+  tripPatternDisplayTimeFilter,
+} from './utils';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
+  isBookingRequired: boolean;
   isLoadingBooking: boolean;
   isError: boolean;
   isEmpty: boolean;
@@ -28,8 +33,10 @@ export function useBookingTrips({
     userProfilesWithCount,
   } = selection;
 
+  // We always search from the start of the day to ensure we get all trips for that day
+  // The trip search in BFF searches 24 hours from searchTime
   const searchTime = useMemo(
-    () => travelDate ?? new Date().toISOString(),
+    () => (!!travelDate ? startOfDay(travelDate) : startOfDay(new Date())),
     [travelDate],
   );
 
@@ -37,7 +44,7 @@ export function useBookingTrips({
     'tripsWithAvailability',
     stopPlaces?.from?.id,
     stopPlaces?.to?.id,
-    searchTime,
+    searchTime.toISOString(),
     userProfilesWithCount.map((up) => up.id),
     preassignedFareProduct.id,
   ];
@@ -48,7 +55,7 @@ export function useBookingTrips({
       bookingAvailabilitySearch({
         fromStopPlaceId: stopPlaces?.from?.id!,
         toStopPlaceId: stopPlaces?.to?.id!,
-        searchTime: searchTime,
+        searchTime: searchTime.toISOString(),
         products: [preassignedFareProduct.id],
         travellers: userProfilesWithCount.map((p) => ({
           id: p.id,
@@ -63,7 +70,12 @@ export function useBookingTrips({
   const tripPatterns = isSuccess
     ? data?.trip.tripPatterns
         .filter(tripPatternAvailabilityFilter)
-        .filter((tp) => tripPatternTimeFilter(tp, searchTime))
+        .filter((tp) =>
+          tripPatternDisplayTimeFilter(
+            tp,
+            travelDate ?? new Date().toISOString(),
+          ),
+        )
     : [];
 
   return {
@@ -76,35 +88,12 @@ export function useBookingTrips({
      * At refetch (isLoading === false && isFetching === true):                       The query is not loading
      */
     isLoadingBooking: isLoading && isFetching,
+    isBookingRequired:
+      isSuccess &&
+      data.trip.tripPatterns.filter(tripPatternAvailabilityFilter).length > 0,
     tripPatterns,
     reload: refetch,
     isError: isError,
     isEmpty: !isFetching && tripPatterns.length === 0,
   };
-}
-
-function isValidSelection(selection: PurchaseSelectionType) {
-  const isBoatSingleFareProduct =
-    selection.fareProductTypeConfig.direction === 'one-way' &&
-    selection.fareProductTypeConfig.configuration.zoneSelectionMode ===
-      'multiple-stop-harbor';
-  return (
-    !!selection.stopPlaces?.from &&
-    !!selection.stopPlaces?.to &&
-    isBoatSingleFareProduct
-  );
-}
-
-function tripPatternAvailabilityFilter(tp: TripPatternWithBooking): boolean {
-  return (
-    tp.booking.availability !== 'unknown' &&
-    tp.booking.availability !== 'booking_not_supported'
-  );
-}
-
-function tripPatternTimeFilter(
-  tp: TripPatternWithBooking,
-  searchTime: string,
-): boolean {
-  return isBefore(tp.expectedStartTime, endOfDay(searchTime));
 }
