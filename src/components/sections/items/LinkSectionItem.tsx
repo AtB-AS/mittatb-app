@@ -49,7 +49,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
     const {contentContainer, topContainer, interactiveColor} =
       useSectionItem(props);
     const style = useSectionStyle();
-    const {theme} = useThemeContext();
     const linkSectionItemStyle = useStyles();
     const iconEl =
       isNavigationIcon(icon) || !icon ? (
