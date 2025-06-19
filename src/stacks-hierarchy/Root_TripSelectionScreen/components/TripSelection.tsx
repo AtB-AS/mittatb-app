@@ -19,12 +19,12 @@ import {
 } from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {findAllNotices, findAllSituations} from '../utils';
 import {
   getMessageTypeForSituation,
   getSituationOrNoticeA11yLabel,
 } from '@atb/modules/situations';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
