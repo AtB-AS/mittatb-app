@@ -111,13 +111,18 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
     >
       <View style={styles.mainContent}>
         {tripPattern.booking.availability === 'closed' && (
-          <Tag
-            labels={[t(TicketingTexts.booking.closed)]}
-            tagType="secondary"
-          />
+          <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />
         )}
         {tripPattern.booking.availability === 'sold_out' && (
           <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
+        )}
+        {!!availableSeats && availableSeats <= SEAT_TAG_LIMIT && (
+          <Tag
+            labels={[
+              t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
+            ]}
+            tagType="info"
+          />
         )}
         <MemoizedResultItem
           tripPattern={tripPattern}
@@ -160,14 +165,6 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
                 styles.footerAvailable,
             ]}
           >
-            {!!availableSeats && availableSeats <= SEAT_TAG_LIMIT && (
-              <Tag
-                labels={[
-                  t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
-                ]}
-                tagType="info"
-              />
-            )}
             <Button
               text={t(TicketingTexts.booking.select)}
               expanded={false}
