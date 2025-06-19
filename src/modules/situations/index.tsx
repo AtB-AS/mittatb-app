@@ -7,4 +7,7 @@ export {
   isSituationValidAtDate,
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
+  getMessageTypeForSituation,
+  findAllNotices,
+  findAllSituations,
 } from './utils';

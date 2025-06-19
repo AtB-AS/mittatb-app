@@ -4,7 +4,7 @@ import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {BookingTripSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TripSelection';
+import {BookingTripSelection} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/TripSelection';
 import {
   DateSelection,
   DepartureSearchTime,

@@ -12,9 +12,19 @@ import {Tag} from '@atb/components/tag';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  getMessageTypeForSituation,
+  getSituationOrNoticeA11yLabel,
+} from '@atb/modules/situations';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -74,7 +84,7 @@ type BookingTripProps = {
 export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const availableSeats = tripPattern.booking?.offer?.available ?? 0;
 
@@ -85,6 +95,9 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const isDisabled =
     tripPattern.booking.availability === 'closed' ||
     tripPattern.booking.availability === 'sold_out';
+
+  const notices = findAllNotices(tripPattern);
+  const situations = findAllSituations(tripPattern);
 
   return (
     <PressableOpacity
@@ -111,6 +124,30 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           key={tripPattern.compressedQuery}
           state={isDisabled ? 'disabled' : 'enabled'}
         />
+        <View
+          accessibilityLabel={getSituationOrNoticeA11yLabel(
+            situations,
+            notices,
+            false,
+            t,
+          )}
+        >
+          {situations.map((situation) => (
+            <MessageInfoText
+              type={getMessageTypeForSituation(situation)}
+              message={
+                getTextForLanguage(situation.description, language) ?? ''
+              }
+            />
+          ))}
+          {notices.map((notice) => (
+            <MessageInfoText
+              type="info"
+              message={notice.text ?? ''}
+              key={notice.id}
+            />
+          ))}
+        </View>
       </View>
       {tripPattern.booking.availability === 'available' && (
         <>
