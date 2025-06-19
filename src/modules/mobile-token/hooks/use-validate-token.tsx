@@ -15,7 +15,7 @@ import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
 import {useAuthContext} from '@atb/modules/auth';
 
 const RETRY_MAX_COUNT = 3;
-const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14';
+const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14-hotfix1';
 
 /**
  * This hook is used to check if the token needs renewal/reset.
