@@ -20,11 +20,11 @@ import {
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {findAllNotices, findAllSituations} from '../utils';
-import {SituationOrNoticeSummary} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/SituationOrNoticeSummary';
 import {
   getMessageTypeForSituation,
   getSituationOrNoticeA11yLabel,
 } from '@atb/modules/situations';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -133,16 +133,17 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           )}
         >
           {situations.map((situation) => (
-            <SituationOrNoticeSummary
-              statusType={getMessageTypeForSituation(situation)}
-              text={getTextForLanguage(situation.summary, language)}
-              key={situation.id}
+            <MessageInfoText
+              type={getMessageTypeForSituation(situation)}
+              message={
+                getTextForLanguage(situation.description, language) ?? ''
+              }
             />
           ))}
           {notices.map((notice) => (
-            <SituationOrNoticeSummary
-              statusType="info"
-              text={notice.text}
+            <MessageInfoText
+              type="info"
+              message={notice.text ?? ''}
               key={notice.id}
             />
           ))}
