@@ -355,9 +355,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isFree={isFree}
             isError={!!error || !canProceed}
             originalPrice={originalPrice}
-            price={
-              tripPatternsThatRequireBooking.length > 0 ? undefined : totalPrice
-            }
+            price={isBookingRequired ? undefined : totalPrice}
             summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
