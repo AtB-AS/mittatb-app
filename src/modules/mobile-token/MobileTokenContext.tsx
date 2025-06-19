@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -115,10 +116,33 @@ export const MobileTokenContextProvider = ({children}: Props) => {
    * we request a new token from remote in here as well.
    */
   const {
-    data: nativeToken,
+    data: nt,
     status: nativeTokenStatus,
     error: nativeTokenError,
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
+
+  const nativeToken = useMemo(
+    () =>
+      nativeTokenStatus === 'success'
+        ? new ActivatedToken(
+            nt.tokenId,
+            nt.validityStart,
+            nt.validityEnd,
+            'primary',
+            nt.attested,
+            nt.attestRequired,
+            nt.attestationCreationErrorClassName,
+            nt.attestationCreationErrorMessage,
+            nt.attestationVerificationErrorReason,
+            nt.attestationVerificationErrorCode,
+            0,
+            undefined,
+            0,
+            nt.renewToken,
+          )
+        : undefined,
+    [nt, nativeTokenStatus],
+  );
 
   /**
    * Send the token statistics (success/error) to backend to update
@@ -137,7 +161,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
     loadSecureContainer();
 
-    if (nativeTokenStatus === 'success') {
+    if (nativeToken) {
       const tokenStatus = nativeToken.isAttested()
         ? 'attested'
         : 'non-attested';

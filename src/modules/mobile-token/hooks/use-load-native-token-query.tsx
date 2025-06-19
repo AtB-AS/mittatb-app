@@ -90,7 +90,8 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     }
   }
   await storage.set('@ATB_last_mobile_token_user', userId!);
-  return token;
+
+  return token.toJSON();
 };
 
 const logError = (err: Error, traceId: string) => {
