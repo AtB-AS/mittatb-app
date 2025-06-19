@@ -1,10 +1,10 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '../text';
-import {View, StyleProp, ViewStyle} from 'react-native';
+import {type StyleProp, View, type ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {SvgProps} from 'react-native-svg';
-import {addOpacity} from '@atb/utils/add-opacity';
+import React from 'react';
 
 type TagStatuses =
   | 'primary'
@@ -14,111 +14,143 @@ type TagStatuses =
   | 'warning'
   | 'info';
 
+type TagSize = 'small' | 'regular';
+
 type BaseTagProps = {
   labels: string[];
-  size?: 'small' | 'regular';
+  size?: TagSize;
   customStyle?: StyleProp<ViewStyle>;
 };
 
-type SecondaryTagProps = BaseTagProps & {
-  tagType: 'secondary';
+type TagProps = BaseTagProps & {
+  tagType: TagStatuses;
   icon?: (props: SvgProps) => JSX.Element;
 };
 
-type OtherTagProps = BaseTagProps & {
-  tagType: Exclude<TagStatuses, 'secondary'>;
-  icon?: never;
+export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
+  switch (tagType) {
+    case 'primary':
+      return (
+        <PrimaryTag labels={labels} size={size} customStyle={customStyle} />
+      );
+    case 'secondary':
+      return (
+        <SecondaryTag
+          labels={labels}
+          size={size}
+          icon={icon}
+          customStyle={customStyle}
+        />
+      );
+    default:
+      return (
+        <GenericTag
+          labels={labels}
+          size={size}
+          tagType={tagType}
+          customStyle={customStyle}
+        />
+      );
+  }
 };
 
-export type TagProps = SecondaryTagProps | OtherTagProps;
-
-export const Tag = ({
+const PrimaryTag: React.FC<BaseTagProps> = ({
   labels,
-  tagType,
   size = 'regular',
-  icon,
   customStyle,
-}: TagProps) => {
-  const {theme, themeName} = useThemeContext();
-
-  const getTagColor = () => {
-    switch (tagType) {
-      case 'primary':
-        return theme.color.status.info.primary.background;
-      case 'secondary':
-        return theme.color.background.neutral[0].background;
-      default:
-        return theme.color.status[tagType].secondary.background;
-    }
-  };
-
-  const isPrimary = tagType === 'primary';
-  const fillColor = getTagColor();
-  const iconSize = size === 'regular' ? 'small' : 'xSmall';
-
-  const getPaddingLeft = () => {
-    if (size === 'small') return theme.spacing.xSmall;
-    if (tagType === 'primary') return theme.spacing.small;
-    return icon ? theme.spacing.xSmall : theme.spacing.small;
-  };
-
-  const getIcon = () => {
-    if (tagType === 'secondary') {
-      return icon || null;
-    }
-    if (tagType === 'primary') {
-      return null;
-    }
-    return statusTypeToIcon(tagType, true, themeName);
-  };
-
-  const containerStyles: StyleProp<ViewStyle> = {
-    borderColor:
-      tagType === 'secondary'
-        ? themeName == 'light'
-          ? theme.color.background.neutral[2].background
-          : addOpacity(theme.color.foreground.dynamic.primary, 0.2)
-        : undefined,
-    borderWidth: tagType === 'secondary' ? theme.border.width.slim : undefined,
-    borderRadius:
-      size === 'small'
-        ? theme.border.radius.small
-        : theme.border.radius.regular,
-    paddingVertical: theme.spacing.xSmall,
-    paddingRight: theme.spacing[size === 'regular' ? 'small' : 'xSmall'],
-    paddingLeft: getPaddingLeft(),
-  };
-
-  const styles = useStyles(fillColor)();
-  const iconToShow = getIcon();
+}) => {
+  const {theme} = useThemeContext();
+  const styles = useStyles(theme.color.status.info.primary.background, size)();
 
   return (
-    <View style={[styles.flag, containerStyles, customStyle]}>
-      {iconToShow && <ThemeIcon svg={iconToShow} size={iconSize} />}
-      <View>
-        {labels.map((content) => (
-          <ThemeText
-            color={
-              theme.color.foreground[isPrimary ? 'inverse' : 'dynamic'].primary
-            }
-            typography="body__tertiary"
-            key={content}
-          >
-            {content}
-          </ThemeText>
-        ))}
-      </View>
+    <View style={[styles.container, customStyle]}>
+      {labels.map((content) => (
+        <ThemeText
+          color={theme.color.foreground.light.primary}
+          typography="body__tertiary"
+          key={content}
+        >
+          {content}
+        </ThemeText>
+      ))}
     </View>
   );
 };
 
-const useStyles = (fillColor: string) =>
+const SecondaryTag: React.FC<
+  BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
+> = ({labels, size = 'regular', icon, customStyle}) => {
+  const {theme} = useThemeContext();
+  const styles = useStyles(
+    theme.color.background.neutral[0].background,
+    size,
+  )();
+
+  return (
+    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
+      {icon && (
+        <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
+      )}
+      {labels.map((content) => (
+        <ThemeText
+          color={theme.color.foreground.dynamic.primary}
+          typography="body__tertiary"
+          key={content}
+        >
+          {content}
+        </ThemeText>
+      ))}
+    </View>
+  );
+};
+
+const GenericTag: React.FC<
+  BaseTagProps & {tagType: Exclude<TagStatuses, 'primary' | 'secondary'>}
+> = ({labels, tagType, size = 'regular', customStyle}) => {
+  const {theme, themeName} = useThemeContext();
+  const styles = useStyles(
+    theme.color.status[tagType].secondary.background,
+    size,
+  )();
+  const icon = statusTypeToIcon(tagType, true, themeName);
+
+  return (
+    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
+      {icon && (
+        <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
+      )}
+      {labels.map((content) => (
+        <ThemeText
+          color={theme.color.foreground.dynamic.primary}
+          typography="body__tertiary"
+          key={content}
+        >
+          {content}
+        </ThemeText>
+      ))}
+    </View>
+  );
+};
+
+const useStyles = (fillColor: string, size: TagSize) =>
   StyleSheet.createThemeHook((theme) => ({
-    flag: {
+    container: {
       backgroundColor: fillColor,
       flexDirection: 'row',
       gap: theme.spacing.xSmall,
       alignItems: 'center',
       alignSelf: 'flex-start',
+      borderRadius:
+        size === 'small'
+          ? theme.border.radius.small
+          : theme.border.radius.regular,
+      paddingVertical: theme.spacing.xSmall,
+      paddingRight: theme.spacing[size === 'regular' ? 'small' : 'xSmall'],
+      paddingLeft:
+        size === 'small' ? theme.spacing.xSmall : theme.spacing.small,
+    },
+    nonPrimaryContainer: {
+      borderWidth: theme.border.width.slim,
+      borderColor: theme.color.foreground.inverse.disabled,
     },
   }));
