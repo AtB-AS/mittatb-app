@@ -13,7 +13,10 @@ import {
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
+import {
+  ThemedBonusBagHug,
+  ThemedBonusTransaction,
+} from '@atb/theme/ThemedAssets';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
@@ -121,7 +124,7 @@ export const Profile_BonusScreen = () => {
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
-              <ThemedCityBike />
+              <ThemedBonusTransaction height={61} width={61} />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
                   {getTextForLanguage(
@@ -154,7 +157,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.small,
+    gap: theme.spacing.medium,
   },
   currentBalanceDisplay: {
     flexDirection: 'row',
@@ -218,7 +221,7 @@ function UserBonusBalanceSection(): JSX.Element {
               {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
             </ThemeText>
           </View>
-          <ThemedCityBike />
+          <ThemedBonusBagHug height={61} width={61} />
         </GenericSectionItem>
       </Section>
       {isError && (
