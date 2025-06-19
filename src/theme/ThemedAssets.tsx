@@ -47,6 +47,22 @@ import {
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
 } from '@atb/assets/svg/color/images/mobility/light';
+import {
+  BonusBag as BonusBagLight,
+  BonusBagCarry as BonusBagCarryLight,
+  BonusBagHug as BonusBagHugLight,
+  BonusMap as BonusMapLight,
+  BonusTransaction as BonusTransactionLight,
+  BonusTrashCan as BonusTrashCanLight,
+} from '@atb/assets/svg/color/images/bonus/light';
+import {
+  BonusBag as BonusBagDark,
+  BonusBagCarry as BonusBagCarryDark,
+  BonusBagHug as BonusBagHugDark,
+  BonusMap as BonusMapDark,
+  BonusTransaction as BonusTransactionDark,
+  BonusTrashCan as BonusTrashCanDark,
+} from '@atb/assets/svg/color/images/bonus/dark';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {SvgProps} from 'react-native-svg';
 
@@ -190,4 +206,49 @@ export const ThemedBeacons = ({...props}: SvgProps) => {
   const Beacons = themeName === 'dark' ? BeaconsDark : BeaconsLight;
 
   return <Beacons {...props} />;
+};
+
+export const ThemedBonusBag = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusBag = themeName === 'dark' ? BonusBagDark : BonusBagLight;
+
+  return <BonusBag {...props} />;
+};
+
+export const ThemedBonusBagCarry = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusBagCarry =
+    themeName === 'dark' ? BonusBagCarryDark : BonusBagCarryLight;
+
+  return <BonusBagCarry {...props} />;
+};
+
+export const ThemedBonusBagHug = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusBagHug = themeName === 'dark' ? BonusBagHugDark : BonusBagHugLight;
+
+  return <BonusBagHug {...props} />;
+};
+
+export const ThemedBonusMap = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusMap = themeName === 'dark' ? BonusMapDark : BonusMapLight;
+
+  return <BonusMap {...props} />;
+};
+
+export const ThemedBonusTransaction = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusTransaction =
+    themeName === 'dark' ? BonusTransactionDark : BonusTransactionLight;
+
+  return <BonusTransaction {...props} />;
+};
+
+export const ThemedBonusTrashCan = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const BonusTrashCan =
+    themeName === 'dark' ? BonusTrashCanDark : BonusTrashCanLight;
+
+  return <BonusTrashCan {...props} />;
 };
