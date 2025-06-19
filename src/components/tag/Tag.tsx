@@ -66,7 +66,7 @@ const SecondaryTag: React.FC<
   )();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.nonPrimaryContainer]}>
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
@@ -94,7 +94,7 @@ const GenericTag: React.FC<
   const icon = statusTypeToIcon(tagType, true, themeName);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.nonPrimaryContainer]}>
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
@@ -123,11 +123,13 @@ const useStyles = (fillColor: string, size: TagSize) =>
         size === 'small'
           ? theme.border.radius.small
           : theme.border.radius.regular,
-      borderWidth: theme.border.width.slim,
-      borderColor: theme.color.foreground.inverse.disabled,
       paddingVertical: theme.spacing.xSmall,
       paddingRight: theme.spacing[size === 'regular' ? 'small' : 'xSmall'],
       paddingLeft:
         size === 'small' ? theme.spacing.xSmall : theme.spacing.small,
+    },
+    nonPrimaryContainer: {
+      borderWidth: theme.border.width.slim,
+      borderColor: theme.color.foreground.inverse.disabled,
     },
   }));
