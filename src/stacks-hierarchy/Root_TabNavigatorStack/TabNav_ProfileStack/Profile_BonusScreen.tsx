@@ -31,6 +31,7 @@ import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -124,7 +125,13 @@ export const Profile_BonusScreen = () => {
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
-              <ThemedBonusTransaction height={61} width={61} />
+              <ThemedBonusTransaction
+                height={61}
+                width={61}
+                style={{
+                  alignSelf: 'flex-start',
+                }}
+              />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
                   {getTextForLanguage(
@@ -183,6 +190,7 @@ function UserBonusBalanceSection(): JSX.Element {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
+  const fontScale = useFontScale();
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -221,7 +229,7 @@ function UserBonusBalanceSection(): JSX.Element {
               {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
             </ThemeText>
           </View>
-          <ThemedBonusBagHug height={61} width={61} />
+          <ThemedBonusBagHug height={fontScale * 61} width={fontScale * 61} />
         </GenericSectionItem>
       </Section>
       {isError && (
