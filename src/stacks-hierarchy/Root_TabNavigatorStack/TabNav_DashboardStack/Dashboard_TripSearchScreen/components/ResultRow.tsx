@@ -90,6 +90,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
     rowGap: theme.spacing.small,
+    marginTop: theme.spacing.small,
     paddingTop: theme.spacing.medium,
     paddingHorizontal: theme.spacing.medium,
   },
