@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '../text';
-import {View} from 'react-native';
+import {type StyleProp, View, type ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {SvgProps} from 'react-native-svg';
@@ -19,6 +19,7 @@ type TagSize = 'small' | 'regular';
 type BaseTagProps = {
   labels: string[];
   size?: TagSize;
+  customStyle?: StyleProp<ViewStyle>;
 };
 
 type TagProps = BaseTagProps & {
@@ -26,23 +27,43 @@ type TagProps = BaseTagProps & {
   icon?: (props: SvgProps) => JSX.Element;
 };
 
-export const Tag = ({labels, size, tagType, icon}: TagProps) => {
+export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
   switch (tagType) {
     case 'primary':
-      return <PrimaryTag labels={labels} size={size} />;
+      return (
+        <PrimaryTag labels={labels} size={size} customStyle={customStyle} />
+      );
     case 'secondary':
-      return <SecondaryTag labels={labels} size={size} icon={icon} />;
+      return (
+        <SecondaryTag
+          labels={labels}
+          size={size}
+          icon={icon}
+          customStyle={customStyle}
+        />
+      );
     default:
-      return <GenericTag labels={labels} size={size} tagType={tagType} />;
+      return (
+        <GenericTag
+          labels={labels}
+          size={size}
+          tagType={tagType}
+          customStyle={customStyle}
+        />
+      );
   }
 };
 
-const PrimaryTag: React.FC<BaseTagProps> = ({labels, size = 'regular'}) => {
+const PrimaryTag: React.FC<BaseTagProps> = ({
+  labels,
+  size = 'regular',
+  customStyle,
+}) => {
   const {theme} = useThemeContext();
   const styles = useStyles(theme.color.status.info.primary.background, size)();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, customStyle]}>
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.light.primary}
@@ -58,7 +79,7 @@ const PrimaryTag: React.FC<BaseTagProps> = ({labels, size = 'regular'}) => {
 
 const SecondaryTag: React.FC<
   BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
-> = ({labels, size = 'regular', icon}) => {
+> = ({labels, size = 'regular', icon, customStyle}) => {
   const {theme} = useThemeContext();
   const styles = useStyles(
     theme.color.background.neutral[0].background,
@@ -66,7 +87,7 @@ const SecondaryTag: React.FC<
   )();
 
   return (
-    <View style={[styles.container, styles.nonPrimaryContainer]}>
+    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
@@ -85,7 +106,7 @@ const SecondaryTag: React.FC<
 
 const GenericTag: React.FC<
   BaseTagProps & {tagType: Exclude<TagStatuses, 'primary' | 'secondary'>}
-> = ({labels, tagType, size = 'regular'}) => {
+> = ({labels, tagType, size = 'regular', customStyle}) => {
   const {theme, themeName} = useThemeContext();
   const styles = useStyles(
     theme.color.status[tagType].secondary.background,
@@ -94,7 +115,7 @@ const GenericTag: React.FC<
   const icon = statusTypeToIcon(tagType, true, themeName);
 
   return (
-    <View style={[styles.container, styles.nonPrimaryContainer]}>
+    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
