@@ -7,15 +7,14 @@ import {ThemeText} from '@atb/components/text';
 type Props = {
   statusType: Statuses;
   text?: string;
-  key?: string;
 };
 
-export function SituationOrNoticeSummary({statusType, text, key}: Props) {
+export function SituationOrNoticeSummary({statusType, text}: Props) {
   const {themeName} = useThemeContext();
   const styles = useStyles();
   if (!text) return null;
   return (
-    <View style={styles.container} key={key}>
+    <View style={styles.container} key={`${statusType}-${text}`}>
       <ThemeIcon svg={statusTypeToIcon(statusType, true, themeName)} />
       <ThemeText typography="body__secondary">{text}</ThemeText>
     </View>

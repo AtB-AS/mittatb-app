@@ -21,7 +21,10 @@ import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {findAllNotices, findAllSituations} from '../utils';
 import {SituationOrNoticeSummary} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/SituationOrNoticeSummary';
-import {getMessageTypeForSituation} from '@atb/modules/situations';
+import {
+  getMessageTypeForSituation,
+  getSituationOrNoticeA11yLabel,
+} from '@atb/modules/situations';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -121,20 +124,29 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           key={tripPattern.compressedQuery}
           state={isDisabled ? 'disabled' : 'enabled'}
         />
-        {situations.map((situation) => (
-          <SituationOrNoticeSummary
-            statusType={getMessageTypeForSituation(situation)}
-            text={getTextForLanguage(situation.summary, language)}
-            key={situation.id}
-          />
-        ))}
-        {notices.map((notice) => (
-          <SituationOrNoticeSummary
-            statusType="info"
-            text={notice.text}
-            key={notice.id}
-          />
-        ))}
+        <View
+          accessibilityLabel={getSituationOrNoticeA11yLabel(
+            situations,
+            notices,
+            false,
+            t,
+          )}
+        >
+          {situations.map((situation) => (
+            <SituationOrNoticeSummary
+              statusType={getMessageTypeForSituation(situation)}
+              text={getTextForLanguage(situation.summary, language)}
+              key={situation.id}
+            />
+          ))}
+          {notices.map((notice) => (
+            <SituationOrNoticeSummary
+              statusType="info"
+              text={notice.text}
+              key={notice.id}
+            />
+          ))}
+        </View>
       </View>
       {tripPattern.booking.availability === 'available' && (
         <>
