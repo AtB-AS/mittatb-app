@@ -9,6 +9,7 @@ import {Section} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {FormFactorFilterSectionItem} from './FormFactorFilterSectionItem';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -54,27 +55,34 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     .filter((f) => f.shouldShow)
     .map((f) => f.formFactor);
 
-  const FormFactors = listedFormFactors.map((formFactor, i) => (
-    <FormFactorFilter
-      key={formFactor}
-      isFirstSectionItem={i === 0}
-      isLastSectionItem={i === listedFormFactors.length - 1}
-      formFactor={formFactor}
-      initialFilter={filter[formFactor]}
-      onFilterChange={onFormFactorFilterChanged(formFactor)}
-    />
-  ));
-
   return isMapV2Enabled ? (
     <>
       <ContentHeading
         text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
         style={styles.contentHeading}
       />
-      <Section>{FormFactors}</Section>
+      <Section>
+        {listedFormFactors.map((formFactor) => (
+          <FormFactorFilterSectionItem
+            key={formFactor}
+            formFactor={formFactor}
+            initialFilter={filter[formFactor]}
+            onFilterChange={onFormFactorFilterChanged(formFactor)}
+          />
+        ))}
+      </Section>
     </>
   ) : (
-    <View style={styles.container}>{FormFactors}</View>
+    <View style={styles.container}>
+      {listedFormFactors.map((formFactor) => (
+        <FormFactorFilter
+          key={formFactor}
+          formFactor={formFactor}
+          initialFilter={filter[formFactor]}
+          onFilterChange={onFormFactorFilterChanged(formFactor)}
+        />
+      ))}
+    </View>
   );
 };
 

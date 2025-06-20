@@ -12,11 +12,10 @@ import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
-  AnyMode,
-  AnySubMode,
   getTransportModeSvg,
   TransportationIconBox,
 } from '@atb/components/icon-box';
+import {getModeAndSubModeFromFormFactor} from '../../utils';
 
 type Props = {
   formFactor: FormFactor;
@@ -115,21 +114,3 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
   },
 }));
-
-export const getModeAndSubModeFromFormFactor = (
-  formFactor: FormFactor,
-): {
-  mode: AnyMode;
-  subMode?: AnySubMode;
-} => {
-  switch (formFactor) {
-    case FormFactor.Scooter:
-      return {mode: 'scooter', subMode: 'escooter'};
-    case FormFactor.Bicycle:
-      return {mode: 'bicycle'};
-    case FormFactor.Car:
-      return {mode: 'car'};
-    default:
-      return {mode: 'unknown'};
-  }
-};
