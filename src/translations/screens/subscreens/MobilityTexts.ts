@@ -11,16 +11,22 @@ import {
 import {formatNumberToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
-  formFactor: (formFactor: FormFactor) => {
+  formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('El-sparkesykkel', 'E-scooter', 'El-sparkesykkel');
+        return isPlural
+          ? _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar')
+          : _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       case FormFactor.Bicycle:
-        return _('Sykkel', 'Bicycle', 'Sykkel');
+        return isPlural
+          ? _('Bysykler', 'City Bikes', 'Bysyklar')
+          : _('Bysykkel', 'City Bike', 'Bysykkel');
       case FormFactor.Car:
-        return _('Bildeling', 'Car sharing', 'Bildeling');
+        return isPlural
+          ? _('Delebiler', 'Shared Cars', 'Delebilar')
+          : _('Delebil', 'Car sharing', 'Delebil');
       default:
-        return _('Annet', 'Other', 'Annet');
+        return _('Annet', 'Other', 'Anna');
     }
   },
   photo: {
@@ -141,6 +147,13 @@ export const MobilityTexts = {
   },
   filter: {
     selectAll: _('Alle', 'All', 'Alle'),
+    sectionTitle: {
+      sharedMobility: _(
+        'Delingsmobilitet',
+        'Shared Mobility',
+        'Delingsmobilitet',
+      ),
+    },
   },
   reportParkingViolation: _(
     'Rapporter som feilparkert',

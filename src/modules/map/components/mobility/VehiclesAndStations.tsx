@@ -1,6 +1,10 @@
 import React, {useMemo} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
+import {
+  hitboxCoveringIconOnly,
+  useMapContext,
+  useMapSymbolStyles,
+} from '@atb/modules/map';
 import {SelectedFeatureIdProp} from '../../types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
@@ -71,8 +75,16 @@ export const Stations = ({
     reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.2,
   });
 
+  const {mapFilter} = useMapContext();
+  const showCityBikes = mapFilter?.mobility.BICYCLE?.showAll ?? false;
+  const showSharedCars = mapFilter?.mobility.CAR?.showAll ?? false;
+
   const filter: FilterExpression = useMemo(() => {
     const isVirtualStation: Expression = ['get', 'is_virtual_station'];
+    const vehicle_type_form_factor: Expression = [
+      'get',
+      'vehicle_type_form_factor',
+    ];
     return [
       'all',
       ['!', isSelected],
@@ -81,8 +93,27 @@ export const Stations = ({
         ['==', isVirtualStation, showVirtualStations],
         ['!=', isVirtualStation, showNonVirtualStations],
       ],
+      [
+        'any',
+        [
+          'all',
+          ['==', vehicle_type_form_factor, 'BICYCLE'],
+          ['!', !showCityBikes],
+        ],
+        [
+          'all',
+          ['==', vehicle_type_form_factor, 'CAR'],
+          ['!', !showSharedCars],
+        ],
+      ],
     ];
-  }, [isSelected, showVirtualStations, showNonVirtualStations]);
+  }, [
+    isSelected,
+    showVirtualStations,
+    showNonVirtualStations,
+    showCityBikes,
+    showSharedCars,
+  ]);
 
   const style = useMemo(
     () => ({

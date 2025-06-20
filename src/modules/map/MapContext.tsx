@@ -1,9 +1,10 @@
 import React, {createContext, useContext, useMemo, useState} from 'react';
-import {AutoSelectableMapItem} from '@atb/modules/map';
+import {AutoSelectableMapItem, MapFilterType} from '@atb/modules/map';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useUserMapFilters} from './hooks/use-map-filter';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -16,6 +17,10 @@ type MapContextState = {
   ) => void;
   setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
   autoSelectedFeature?: AutoSelectedFeature;
+  mapFilter?: MapFilterType;
+  setMapFilter: (mapFilter: MapFilterType) => void;
+  mapFilterIsOpen: boolean;
+  setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -42,6 +47,9 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
+
+  const {mapFilter, setMapFilter} = useUserMapFilters();
+  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
   const [
     bottomSheetCurrentlyAutoSelected,
@@ -85,6 +93,10 @@ export const MapContextProvider = ({children}: Props) => {
         setBottomSheetCurrentlyAutoSelected,
         setAutoSelectedMapItem,
         autoSelectedFeature,
+        mapFilter,
+        setMapFilter,
+        mapFilterIsOpen,
+        setMapFilterIsOpen,
       }}
     >
       {children}

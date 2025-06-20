@@ -16,6 +16,7 @@ import {featureCollection} from '@turf/helpers';
 
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
@@ -355,3 +356,21 @@ export const findOperatorBrandImageUrl = (
 ) =>
   mobilityOperators?.find((op) => op.id === operatorId)?.brandAssets
     ?.brandImageUrl;
+
+export const getModeAndSubModeFromFormFactor = (
+  formFactor: FormFactor,
+): {
+  mode: AnyMode;
+  subMode?: AnySubMode;
+} => {
+  switch (formFactor) {
+    case FormFactor.Scooter:
+      return {mode: 'scooter', subMode: 'escooter'};
+    case FormFactor.Bicycle:
+      return {mode: 'bicycle'};
+    case FormFactor.Car:
+      return {mode: 'car'};
+    default:
+      return {mode: 'unknown'};
+  }
+};

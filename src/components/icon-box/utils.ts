@@ -2,6 +2,7 @@ import {AnyMode, AnySubMode} from './types';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   Bus,
+  Car,
   Tram,
   Train,
   Boat,
@@ -47,6 +48,8 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
       return {svg: Walk, name: 'Walk'};
     case 'metro':
       return {svg: Subway, name: 'Subway'};
+    case 'car':
+      return {svg: Car, name: 'Car'};
     case 'bicycle':
       return {svg: Bicycle, name: 'Bicycle'};
     case 'scooter':

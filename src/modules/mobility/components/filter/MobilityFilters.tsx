@@ -1,15 +1,15 @@
 import {FormFactorFilter} from './FormFactorFilter';
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {
-  Bicycle,
-  Car,
-  Scooter,
-} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View} from 'react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {Section} from '@atb/components/sections';
+import {ContentHeading} from '@atb/components/heading';
+import {useTranslation} from '@atb/translations';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {FormFactorFilterSectionItem} from './FormFactorFilterSectionItem';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -18,10 +18,12 @@ type Props = {
 
 export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   const styles = useStyle();
+  const {t} = useTranslation();
   const {
     isCarSharingInMapEnabled,
     isCityBikesInMapEnabled,
     isVehiclesInMapEnabled,
+    isMapV2Enabled,
   } = useFeatureTogglesContext();
   const [mobilityFilter, setMobilityFilter] =
     useState<MobilityMapFilterType>(filter);
@@ -36,32 +38,50 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
       onFilterChanged(newFilter);
     };
 
-  return (
+  const listedFormFactors: FormFactor[] = [
+    {
+      shouldShow: isVehiclesInMapEnabled,
+      formFactor: FormFactor.Scooter,
+    },
+    {
+      shouldShow: isCityBikesInMapEnabled,
+      formFactor: FormFactor.Bicycle,
+    },
+    {
+      shouldShow: isCarSharingInMapEnabled,
+      formFactor: FormFactor.Car,
+    },
+  ]
+    .filter((f) => f.shouldShow)
+    .map((f) => f.formFactor);
+
+  return isMapV2Enabled ? (
+    <>
+      <ContentHeading
+        text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
+        style={styles.contentHeading}
+      />
+      <Section>
+        {listedFormFactors.map((formFactor) => (
+          <FormFactorFilterSectionItem
+            key={formFactor}
+            formFactor={formFactor}
+            initialFilter={filter[formFactor]}
+            onFilterChange={onFormFactorFilterChanged(formFactor)}
+          />
+        ))}
+      </Section>
+    </>
+  ) : (
     <View style={styles.container}>
-      {isVehiclesInMapEnabled && (
+      {listedFormFactors.map((formFactor) => (
         <FormFactorFilter
-          formFactor={FormFactor.Scooter}
-          icon={Scooter}
-          initialFilter={filter[FormFactor.Scooter]}
-          onFilterChange={onFormFactorFilterChanged(FormFactor.Scooter)}
+          key={formFactor}
+          formFactor={formFactor}
+          initialFilter={filter[formFactor]}
+          onFilterChange={onFormFactorFilterChanged(formFactor)}
         />
-      )}
-      {isCityBikesInMapEnabled && (
-        <FormFactorFilter
-          formFactor={FormFactor.Bicycle}
-          icon={Bicycle}
-          initialFilter={filter[FormFactor.Bicycle]}
-          onFilterChange={onFormFactorFilterChanged(FormFactor.Bicycle)}
-        />
-      )}
-      {isCarSharingInMapEnabled && (
-        <FormFactorFilter
-          formFactor={FormFactor.Car}
-          icon={Car}
-          initialFilter={filter[FormFactor.Car]}
-          onFilterChange={onFormFactorFilterChanged(FormFactor.Car)}
-        />
-      )}
+      ))}
     </View>
   );
 };
@@ -69,5 +89,9 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
+  },
+  contentHeading: {
+    marginBottom: theme.spacing.small,
+    marginHorizontal: 0,
   },
 }));
