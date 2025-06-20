@@ -209,27 +209,27 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 />
               )}
             </Section>
-          </View>
 
-          <Section>
-            <LinkSectionItem
-              text={t(ProfileTexts.sections.settings.heading)}
-              onPress={() => navigation.navigate('Profile_SettingsScreen')}
-              testID="settingsButton"
-            />
-          </Section>
-          {isBonusProgramEnabled && (
             <Section>
               <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                )}
-                onPress={() => navigation.navigate('Profile_BonusScreen')}
-                testID="BonusButton"
-                label="new"
+                text={t(ProfileTexts.sections.settings.heading)}
+                onPress={() => navigation.navigate('Profile_SettingsScreen')}
+                testID="settingsButton"
               />
             </Section>
-          )}
+            {isBonusProgramEnabled && (
+              <Section>
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                  )}
+                  onPress={() => navigation.navigate('Profile_BonusScreen')}
+                  testID="BonusButton"
+                  label="new"
+                />
+              </Section>
+            )}
+          </View>
 
           <ContentHeading
             text={t(ProfileTexts.sections.travelAndPurchases.heading)}
