@@ -66,13 +66,13 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   ));
 
   return isMapV2Enabled ? (
-    <Section>
+    <>
       <ContentHeading
         text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
         style={styles.contentHeading}
       />
-      {FormFactors}
-    </Section>
+      <Section>{FormFactors}</Section>
+    </>
   ) : (
     <View style={styles.container}>{FormFactors}</View>
   );
