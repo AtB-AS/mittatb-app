@@ -10,11 +10,7 @@ import {FormFactorFilterType} from '@atb/modules/map';
 import {ContentHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {
-  getTransportModeSvg,
-  TransportationIconBox,
-} from '@atb/components/icon-box';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {getModeAndSubModeFromFormFactor} from '../../utils';
 
 type Props = {
@@ -22,8 +18,6 @@ type Props = {
   initialFilter: FormFactorFilterType | undefined;
   onFilterChange: (filter: FormFactorFilterType) => void;
   style?: ViewStyle;
-  isFirstSectionItem?: boolean;
-  isLastSectionItem?: boolean;
 };
 
 export const FormFactorFilter = ({
@@ -31,8 +25,6 @@ export const FormFactorFilter = ({
   initialFilter,
   onFilterChange,
   style,
-  isFirstSectionItem,
-  isLastSectionItem,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyle();
@@ -43,70 +35,40 @@ export const FormFactorFilter = ({
     onFilterChange,
   );
 
-  const {isMapV2Enabled} = useFeatureTogglesContext();
-
-  if (isMapV2Enabled) {
-    return (
-      <View style={style}>
-        <ToggleSectionItem
-          text={t(MobilityTexts.formFactor(formFactor, true))}
-          value={showAll()}
-          onValueChange={onAllToggle}
-          testID={`${formFactor.toLowerCase()}ToggleAll`}
-          leftImage={
-            <TransportationIconBox
-              mode={getModeAndSubModeFromFormFactor(formFactor).mode}
-              subMode={getModeAndSubModeFromFormFactor(formFactor)?.subMode}
-            />
-          }
-          radius={
-            isFirstSectionItem && isLastSectionItem
-              ? 'top-bottom'
-              : isFirstSectionItem
-              ? 'top'
-              : isLastSectionItem
-              ? 'bottom'
-              : undefined
-          }
-        />
-      </View>
-    );
-  } else {
-    return (
-      <View style={[style, styles.container]}>
-        <ContentHeading text={t(MobilityTexts.formFactor(formFactor))} />
-        <Section>
-          {operators.length !== 1 && (
-            <ToggleSectionItem
-              text={t(MobilityTexts.filter.selectAll)}
-              value={showAll()}
-              onValueChange={onAllToggle}
-              testID={`${formFactor.toLowerCase()}ToggleAll`}
-            />
-          )}
-          {operators.map((operator) => (
-            <ToggleSectionItem
-              key={operator.id}
-              text={operator.name}
-              leftImage={
-                <ThemeIcon
-                  svg={
-                    getTransportModeSvg(
-                      getModeAndSubModeFromFormFactor(formFactor).mode,
-                      getModeAndSubModeFromFormFactor(formFactor)?.subMode,
-                    ).svg
-                  }
-                />
-              }
-              value={isChecked(operator.id)}
-              onValueChange={onOperatorToggle(operator.id)}
-              testID={`${operator.name.toLowerCase().replace(' ', '')}Toggle`}
-            />
-          ))}
-        </Section>
-      </View>
-    );
-  }
+  return (
+    <View style={[style, styles.container]}>
+      <ContentHeading text={t(MobilityTexts.formFactor(formFactor))} />
+      <Section>
+        {operators.length !== 1 && (
+          <ToggleSectionItem
+            text={t(MobilityTexts.filter.selectAll)}
+            value={showAll()}
+            onValueChange={onAllToggle}
+            testID={`${formFactor.toLowerCase()}ToggleAll`}
+          />
+        )}
+        {operators.map((operator) => (
+          <ToggleSectionItem
+            key={operator.id}
+            text={operator.name}
+            leftImage={
+              <ThemeIcon
+                svg={
+                  getTransportModeSvg(
+                    getModeAndSubModeFromFormFactor(formFactor).mode,
+                    getModeAndSubModeFromFormFactor(formFactor)?.subMode,
+                  ).svg
+                }
+              />
+            }
+            value={isChecked(operator.id)}
+            onValueChange={onOperatorToggle(operator.id)}
+            testID={`${operator.name.toLowerCase().replace(' ', '')}Toggle`}
+          />
+        ))}
+      </Section>
+    </View>
+  );
 };
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
