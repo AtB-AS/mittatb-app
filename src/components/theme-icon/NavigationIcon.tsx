@@ -1,5 +1,5 @@
 import React from 'react';
-import {ThemeIcon} from './ThemeIcon';
+import {ThemeIcon, ThemeIconProps} from './ThemeIcon';
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,7 +12,6 @@ import {
   UnfoldLess,
   UnfoldMore,
 } from '@atb/assets/svg/mono-icons/navigation';
-import {SvgProps} from 'react-native-svg';
 
 const navigationTypes = [
   'arrow-left',
@@ -31,7 +30,7 @@ export type NavigationIconTypes = (typeof navigationTypes)[number];
 
 type NavigationIconProps = {
   mode?: NavigationIconTypes;
-} & SvgProps;
+} & Omit<ThemeIconProps, 'svg'>;
 export function NavigationIcon({
   mode = 'arrow-right',
   ...props

@@ -54,7 +54,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       isNavigationIcon(icon) || !icon ? (
         <NavigationIcon
           mode={icon}
-          fill={interactiveColor.default.foreground.primary}
+          color={interactiveColor.default.foreground.primary}
         />
       ) : (
         icon
