@@ -49,7 +49,7 @@ export const MapContextProvider = ({children}: Props) => {
     useState<AutoSelectableBottomSheet>();
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
-  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false); // todo: refactor bottom sheet state to be declarative
+  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
   const [
     bottomSheetCurrentlyAutoSelected,
