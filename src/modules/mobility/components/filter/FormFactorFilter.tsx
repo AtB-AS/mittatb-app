@@ -50,7 +50,7 @@ export const FormFactorFilter = ({
     return (
       <View style={style}>
         <ToggleSectionItem
-          text={t(MobilityTexts.filter.toggleTitle(formFactor))}
+          text={t(MobilityTexts.formFactor(formFactor, true))}
           value={showAll()}
           onValueChange={onAllToggle}
           testID={`${formFactor.toLowerCase()}ToggleAll`}

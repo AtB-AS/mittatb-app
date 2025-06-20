@@ -11,14 +11,20 @@ import {
 import {formatNumberToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
-  formFactor: (formFactor: FormFactor) => {
+  formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
+        return isPlural
+          ? _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar')
+          : _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       case FormFactor.Bicycle:
-        return _('Sykkel', 'Bicycle', 'Sykkel');
+        return isPlural
+          ? _('Bysykler', 'City Bikes', 'Bysyklar')
+          : _('Bysykkel', 'City Bike', 'Bysykkel');
       case FormFactor.Car:
-        return _('Bildeling', 'Car sharing', 'Bildeling');
+        return isPlural
+          ? _('Delebiler', 'Shared Cars', 'Delebilar')
+          : _('Delebil', 'Car sharing', 'Delebil');
       default:
         return _('Annet', 'Other', 'Anna');
     }
@@ -147,18 +153,6 @@ export const MobilityTexts = {
         'Shared Mobility',
         'Delingsmobilitet',
       ),
-    },
-    toggleTitle: (formFactor: FormFactor) => {
-      switch (formFactor) {
-        case FormFactor.Scooter:
-          return _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar');
-        case FormFactor.Bicycle:
-          return _('Bysykler', 'City Bikes', 'Bysyklar'); // hmm what if e bikes become normalized
-        case FormFactor.Car:
-          return _('Delebiler', 'Shared Cars', 'Delebilar');
-        default:
-          return _('Annet', 'Other', 'Anna');
-      }
     },
   },
   reportParkingViolation: _(
