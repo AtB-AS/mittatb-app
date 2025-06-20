@@ -3,13 +3,10 @@ import {FareContractOrReservation} from './FareContractOrReservation';
 import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
-import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation';
-import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
-import {useAuthContext} from '@atb/modules/auth';
 
 type Props = {
   reservations: Reservation[];
@@ -31,18 +28,17 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-  const {abtCustomerId} = useAuthContext();
 
   const fcOrReservations = [...fareContracts, ...reservations];
 
-  const fareContractsAndReservationsSorted =
-    sortFcOrReservationByValidityAndCreation(
-      abtCustomerId,
-      now,
-      fcOrReservations,
-      (currentTime, fareContract, currentUserId) =>
-        getFareContractInfo(currentTime, fareContract, currentUserId)
-          .validityStatus,
+  let keepFailed = true;
+  const fareContractsAndReservationsSorted = fcOrReservations
+    .sort((a, b) => b.created.getTime() - a.created.getTime())
+    .filter(
+      (item) =>
+        'travelRights' in item ||
+        (item.paymentStatus !== 'CANCEL' && item.paymentStatus !== 'REJECT') ||
+        (keepFailed && (keepFailed = false)),
     );
 
   return (
