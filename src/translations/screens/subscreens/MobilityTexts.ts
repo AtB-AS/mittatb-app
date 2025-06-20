@@ -151,7 +151,7 @@ export const MobilityTexts = {
     toggleTitle: (formFactor: FormFactor) => {
       switch (formFactor) {
         case FormFactor.Scooter:
-          return _('El-sparkesykler', 'E-scooters', 'El-sparkesyklar');
+          return _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar');
         case FormFactor.Bicycle:
           return _('Bysykler', 'City Bikes', 'Bysyklar'); // hmm what if e bikes become normalized
         case FormFactor.Car:
