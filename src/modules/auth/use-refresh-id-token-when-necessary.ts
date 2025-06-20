@@ -18,7 +18,9 @@ export const useRefreshIdTokenWhenNecessary = (
   useInterval(
     async () => {
       if (state.user && state.idTokenResult) {
-        const secondsToExpiry = secondsToTokenExpiry(state.idTokenResult);
+        const secondsToExpiry = secondsToTokenExpiry(
+          state.idTokenResult.expirationTime,
+        );
         if (secondsToExpiry < 300) {
           try {
             const idTokenResult = await state.user.getIdTokenResult(true);
