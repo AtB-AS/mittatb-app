@@ -436,6 +436,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   .map((leg) => leg.authority?.id)
                   .filter(isDefined)
                   .filter(onlyUniques),
+                publicCodes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.line?.publicCode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
               }}
             />
           </View>
