@@ -230,7 +230,6 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
     footer: {
       flexDirection: 'row',
       paddingVertical: theme.spacing.small,
-      paddingHorizontal: theme.spacing.medium,
       justifyContent: 'space-between',
       alignItems: 'center',
     },
