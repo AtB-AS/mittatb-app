@@ -48,7 +48,9 @@ export function findAllNotices(tp: TripPatternFragment): NoticeFragment[] {
       });
     }
   });
-  return notices.filter(onlyUniquesBasedOnField('id'));
+  return notices
+    .filter(onlyUniquesBasedOnField('id'))
+    .filter((n) => !!n.id && (n.text?.length ?? 0) > 0);
 }
 
 export function findAllSituations(
