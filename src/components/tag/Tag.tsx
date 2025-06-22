@@ -63,14 +63,17 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
   const commonStyles = useCommonTagStyles();
   const {theme} = useThemeContext();
 
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
+
   return (
     <View
       style={[
         commonStyles.commonContainer,
-        size === 'small'
-          ? commonStyles.smallContainer
-          : commonStyles.regularContainer,
         styles.container,
+        sizeDependentStyle,
         customStyle,
       ]}
     >
@@ -100,14 +103,17 @@ const SecondaryTag: React.FC<
   const styles = useSecondaryTagStyles();
   const {theme} = useThemeContext();
 
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
+
   return (
     <View
       style={[
         commonStyles.commonContainer,
-        size === 'small'
-          ? commonStyles.smallContainer
-          : commonStyles.regularContainer,
         styles.container,
+        sizeDependentStyle,
         customStyle,
       ]}
     >
@@ -141,16 +147,19 @@ const SemanticTag: React.FC<
   const {theme, themeName} = useThemeContext();
   const commonStyles = useCommonTagStyles();
   const styles = useSemanticTagStyles();
+
   const icon = statusTypeToIcon(tagType, true, themeName);
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
 
   return (
     <View
       style={[
         styles[tagType],
         commonStyles.commonContainer,
-        size === 'small'
-          ? commonStyles.smallContainer
-          : commonStyles.regularContainer,
+        sizeDependentStyle,
         customStyle,
       ]}
     >
