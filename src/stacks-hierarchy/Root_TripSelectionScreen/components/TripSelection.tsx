@@ -79,55 +79,39 @@ export function BookingTripSelection({
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
   onSelect: (legs: TripPatternLegs) => void;
+  key?: string | number;
 };
 
-export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
+export function BookingTrip({tripPattern, onSelect, key}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t, language} = useTranslation();
-
-  const availableSeats = tripPattern.booking?.offer?.available ?? 0;
 
   const onPress = () => {
     onSelect(tripPattern.legs);
   };
 
-  const isDisabled =
-    tripPattern.booking.availability === 'closed' ||
-    tripPattern.booking.availability === 'sold_out';
+  const isAvailable = tripPattern.booking.availability === 'available';
 
   const notices = findAllNotices(tripPattern);
   const situations = findAllSituations(tripPattern);
 
   return (
     <PressableOpacity
+      key={key}
       disabled={tripPattern.booking.availability !== 'available'}
       onPress={onPress}
       style={[
         styles.container,
-        styles.containerAvailable,
-        isDisabled && styles.containerDisabled,
+        isAvailable ? styles.containerAvailable : styles.containerDisabled,
       ]}
     >
       <View style={styles.mainContent}>
-        {tripPattern.booking.availability === 'closed' && (
-          <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />
-        )}
-        {tripPattern.booking.availability === 'sold_out' && (
-          <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
-        )}
-        {!!availableSeats && availableSeats <= SEAT_TAG_LIMIT && (
-          <Tag
-            labels={[
-              t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
-            ]}
-            tagType="info"
-          />
-        )}
+        <TripSelectionTag bookingInfo={tripPattern.booking} />
         <MemoizedResultItem
           tripPattern={tripPattern}
           key={tripPattern.compressedQuery}
-          state={isDisabled ? 'disabled' : 'enabled'}
+          state={isAvailable ? 'enabled' : 'disabled'}
         />
         <View
           accessibilityLabel={getSituationOrNoticeA11yLabel(
@@ -154,15 +138,13 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           ))}
         </View>
       </View>
-      {tripPattern.booking.availability === 'available' && (
+      {isAvailable && (
         <>
           <SectionSeparator />
           <View
             style={[
               styles.footer,
-              styles.footerDisabled,
-              tripPattern.booking.availability === 'available' &&
-                styles.footerAvailable,
+              isAvailable ? styles.footerAvailable : styles.footerDisabled,
             ]}
           >
             <Button
@@ -204,10 +186,38 @@ function EmptyState() {
   );
 }
 
+/**
+ * We only want to show one tag at a time
+ */
+function TripSelectionTag({
+  bookingInfo,
+}: {
+  bookingInfo: TripPatternWithBooking['booking'];
+}) {
+  const {t} = useTranslation();
+  const availableSeats = bookingInfo?.offer?.available ?? 0;
+  if (bookingInfo.availability === 'closed')
+    return (
+      <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />
+    );
+  if (bookingInfo.availability === 'sold_out')
+    return (
+      <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
+    );
+  if (!!availableSeats && availableSeats <= SEAT_TAG_LIMIT)
+    return (
+      <Tag
+        labels={[t(TicketingTexts.booking.numAvailableTickets(availableSeats))]}
+        tagType="info"
+      />
+    );
+}
+
 const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       borderRadius: theme.border.radius.regular,
+      overflow: 'hidden',
     },
     containerAvailable: {
       backgroundColor: theme.color.interactive[2].default.background,
@@ -222,7 +232,6 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
     footer: {
       flexDirection: 'row',
       paddingVertical: theme.spacing.small,
-      paddingHorizontal: theme.spacing.medium,
       justifyContent: 'space-between',
       alignItems: 'center',
     },
@@ -240,7 +249,6 @@ const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       width: '100%',
       rowGap: theme.spacing.medium,
-      paddingVertical: theme.spacing.medium,
     },
   };
 });

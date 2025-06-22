@@ -44,7 +44,7 @@ export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
       );
     default:
       return (
-        <GenericTag
+        <SemanticTag
           labels={labels}
           size={size}
           tagType={tagType}
@@ -59,11 +59,24 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
   size = 'regular',
   customStyle,
 }) => {
+  const styles = usePrimaryTagStyles();
+  const commonStyles = useCommonTagStyles();
   const {theme} = useThemeContext();
-  const styles = useStyles(theme.color.status.info.primary.background, size)();
+
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
 
   return (
-    <View style={[styles.container, customStyle]}>
+    <View
+      style={[
+        commonStyles.commonContainer,
+        styles.container,
+        sizeDependentStyle,
+        customStyle,
+      ]}
+    >
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.light.primary}
@@ -77,17 +90,33 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
   );
 };
 
+const usePrimaryTagStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.color.status.info.primary.background,
+  },
+}));
+
 const SecondaryTag: React.FC<
   BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
 > = ({labels, size = 'regular', icon, customStyle}) => {
+  const commonStyles = useCommonTagStyles();
+  const styles = useSecondaryTagStyles();
   const {theme} = useThemeContext();
-  const styles = useStyles(
-    theme.color.background.neutral[0].background,
-    size,
-  )();
+
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
 
   return (
-    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
+    <View
+      style={[
+        commonStyles.commonContainer,
+        styles.container,
+        sizeDependentStyle,
+        customStyle,
+      ]}
+    >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
@@ -104,18 +133,36 @@ const SecondaryTag: React.FC<
   );
 };
 
-const GenericTag: React.FC<
+const useSecondaryTagStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.foreground.inverse.disabled,
+  },
+}));
+
+const SemanticTag: React.FC<
   BaseTagProps & {tagType: Exclude<TagStatuses, 'primary' | 'secondary'>}
 > = ({labels, tagType, size = 'regular', customStyle}) => {
   const {theme, themeName} = useThemeContext();
-  const styles = useStyles(
-    theme.color.status[tagType].secondary.background,
-    size,
-  )();
+  const commonStyles = useCommonTagStyles();
+  const styles = useSemanticTagStyles();
+
   const icon = statusTypeToIcon(tagType, true, themeName);
+  const sizeDependentStyle =
+    size === 'small'
+      ? commonStyles.smallContainer
+      : commonStyles.regularContainer;
 
   return (
-    <View style={[styles.container, styles.nonPrimaryContainer, customStyle]}>
+    <View
+      style={[
+        styles[tagType],
+        commonStyles.commonContainer,
+        sizeDependentStyle,
+        customStyle,
+      ]}
+    >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
       )}
@@ -132,25 +179,40 @@ const GenericTag: React.FC<
   );
 };
 
-const useStyles = (fillColor: string, size: TagSize) =>
-  StyleSheet.createThemeHook((theme) => ({
-    container: {
-      backgroundColor: fillColor,
-      flexDirection: 'row',
-      gap: theme.spacing.xSmall,
-      alignItems: 'center',
-      alignSelf: 'flex-start',
-      borderRadius:
-        size === 'small'
-          ? theme.border.radius.small
-          : theme.border.radius.regular,
-      paddingVertical: theme.spacing.xSmall,
-      paddingRight: theme.spacing[size === 'regular' ? 'small' : 'xSmall'],
-      paddingLeft:
-        size === 'small' ? theme.spacing.xSmall : theme.spacing.small,
-    },
-    nonPrimaryContainer: {
-      borderWidth: theme.border.width.slim,
-      borderColor: theme.color.foreground.inverse.disabled,
-    },
-  }));
+const useSemanticTagStyles = StyleSheet.createThemeHook((theme) => ({
+  info: {
+    backgroundColor: theme.color.status.info.secondary.background,
+    borderColor: theme.color.status.info.primary.background,
+  },
+  valid: {
+    backgroundColor: theme.color.status.valid.secondary.background,
+    borderColor: theme.color.status.valid.primary.background,
+  },
+  error: {
+    backgroundColor: theme.color.status.error.secondary.background,
+    borderColor: theme.color.status.error.primary.background,
+  },
+  warning: {
+    backgroundColor: theme.color.status.warning.secondary.background,
+    borderColor: theme.color.status.warning.primary.background,
+  },
+}));
+
+const useCommonTagStyles = StyleSheet.createThemeHook((theme) => ({
+  commonContainer: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    borderWidth: theme.border.width.slim,
+    paddingVertical: theme.spacing.xSmall,
+  },
+  smallContainer: {
+    borderRadius: theme.border.radius.small,
+    paddingHorizontal: theme.spacing.xSmall,
+  },
+  regularContainer: {
+    borderRadius: theme.border.radius.regular,
+    paddingHorizontal: theme.spacing.small,
+  },
+}));
