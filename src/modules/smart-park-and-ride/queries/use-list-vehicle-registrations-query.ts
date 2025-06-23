@@ -3,7 +3,9 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useQuery} from '@tanstack/react-query';
 import {listVehicleRegistrations} from '../api/api';
 
-export const getListVehicleRegistrationsQueryKey = (userId: string | undefined) => {
+export const getListVehicleRegistrationsQueryKey = (
+  userId: string | undefined,
+) => {
   return ['smartParkAndRideVehicleRegistrations', userId];
 };
 
