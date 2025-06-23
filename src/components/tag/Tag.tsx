@@ -93,6 +93,7 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
 const usePrimaryTagStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.color.status.info.primary.background,
+    borderColor: theme.color.status.info.primary.background,
   },
 }));
 
