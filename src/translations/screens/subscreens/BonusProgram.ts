@@ -36,11 +36,7 @@ const BonusProgramTexts = {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),
     },
-    yourBonusPoints: _(
-      'Dine bonuspoeng',
-      'Your bonus points',
-      'Bonuspoenga dine',
-    ),
+    yourBonusPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
     spendPoints: {
       heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),

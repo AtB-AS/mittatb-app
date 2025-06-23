@@ -8,6 +8,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Tag} from '@atb/components/tag';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
+import {ThemedBonusBagHug} from '@atb/theme/ThemedAssets';
 
 type Props = SectionItemProps<{
   amount: number;
@@ -18,6 +19,7 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const fontScale = useFontScale();
 
   return (
     <View style={topContainer} accessible={true}>
@@ -27,7 +29,8 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
         style={styles.borderedInfoBox}
       >
         <View style={styles.leftContainer}>
-          <View style={styles.illustrationContainer} />
+          <ThemedBonusBagHug height={fontScale * 24} width={fontScale * 24} />
+
           <View style={styles.textContainer}>
             <ThemeText typography="body__tertiary">
               {t(BonusProgramTexts.fareContract.youEarned.intro)}
@@ -45,7 +48,6 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const fontScale = useFontScale();
   return {
     borderedInfoBox: {
       flexDirection: 'row',
@@ -56,11 +58,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
+      gap: theme.spacing.small,
     },
     textContainer: {flex: 1},
-    illustrationContainer: {
-      height: 18 * fontScale,
-      width: 28 * fontScale,
-    },
   };
 });
