@@ -26,7 +26,19 @@ const asyncStoragePersister = createAsyncStoragePersister({
 export const ReactQueryProvider = ({children}: {children: ReactNode}) => (
   <PersistQueryClientProvider
     client={queryClient}
-    persistOptions={{persister: asyncStoragePersister}}
+    persistOptions={{
+      persister: asyncStoragePersister,
+      dehydrateOptions: {
+        shouldDehydrateQuery: (query) => {
+          // Makes storage opt-in for queries with meta.persistInAsyncStorage
+          // set to true. When setting this for a query, be aware that when the
+          // data contains non-serializable data, it may cause issues when
+          // rehydrating. It's equivalent to `JSON.parse(JSON.stringify(data))`.
+          return query.meta?.persistInAsyncStorage === true;
+        },
+        dehydrateMutations: false, // Do not persist mutations
+      },
+    }}
   >
     {children}
   </PersistQueryClientProvider>

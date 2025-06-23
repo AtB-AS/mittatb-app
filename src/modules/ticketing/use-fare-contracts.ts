@@ -75,5 +75,8 @@ export const useGetFareContractsQuery = (props: {
     refetchOnReconnect: true,
     refetchOnMount: false,
     retry: 0,
+    meta: {
+      persistInAsyncStorage: true,
+    },
   });
 };
