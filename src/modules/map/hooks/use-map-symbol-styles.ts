@@ -31,12 +31,12 @@ export const useMapSymbolStyles = ({
 
   const featureId: Expression = ['get', 'id'];
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
-  const noFeatureIsSelected: Expression = ['==', selectedFeatureId, ''];
+  const nothingIsSelected: Expression = ['==', selectedFeatureId, ''];
   const isSelected: Expression = ['==', featureId, selectedFeatureId];
   const isMinimized: Expression = [
     'all',
     ['!', isSelected],
-    ['!', noFeatureIsSelected],
+    ['!', nothingIsSelected],
   ];
 
   const countPropName = 'count';
