@@ -7,6 +7,7 @@ import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
+import {useFareContractsAndReservationsSorted} from '@atb/modules/fare-contracts';
 
 type Props = {
   reservations: Reservation[];
@@ -28,18 +29,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-
-  const fcOrReservations = [...fareContracts, ...reservations];
-
-  let keepFailed = true;
-  const fareContractsAndReservationsSorted = fcOrReservations
-    .sort((a, b) => b.created.getTime() - a.created.getTime())
-    .filter(
-      (item) =>
-        'travelRights' in item ||
-        (item.paymentStatus !== 'CANCEL' && item.paymentStatus !== 'REJECT') ||
-        (keepFailed && (keepFailed = false)),
-    );
+  const fareContractsAndReservationsSorted =
+    useFareContractsAndReservationsSorted([...fareContracts, ...reservations]);
 
   return (
     <View style={styles.container}>

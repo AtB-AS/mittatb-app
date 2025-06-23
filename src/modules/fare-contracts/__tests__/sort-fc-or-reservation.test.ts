@@ -4,7 +4,7 @@ import {Reservation} from '@atb/modules/ticketing';
 import {addMinutes} from 'date-fns';
 import {
   sortFcOrReservationByCreation,
-  sortFcOrReservationByValidityAndCreation,
+  useFareContractsAndReservationsSorted,
 } from '../sort-fc-or-reservation';
 import {FareContractType, TravelRightType} from '@atb-as/utils';
 
@@ -55,8 +55,6 @@ function mockupReservation(
 }
 
 describe('Sort by Validity', () => {
-  const now = Date.now();
-
   it('Should sort fc or reservation by validity first', async () => {
     const fcOrReservations: (FareContractType | Reservation)[] = [
       mockupFareContract('1', 'valid', -1),
@@ -64,12 +62,7 @@ describe('Sort by Validity', () => {
       mockupReservation('3', 'valid', 0),
     ];
 
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
-      now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
+    const result = useFareContractsAndReservationsSorted(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -89,12 +82,7 @@ describe('Sort by Validity', () => {
       mockupFareContract('2', 'valid', 0),
     ];
 
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
-      now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
+    const result = useFareContractsAndReservationsSorted(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -115,12 +103,7 @@ describe('Sort by Validity', () => {
       mockupFareContract('4', 'valid', 0.11),
     ];
 
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
-      now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
+    const result = useFareContractsAndReservationsSorted(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -130,7 +113,7 @@ describe('Sort by Validity', () => {
       }
     });
 
-    expect(ids).toEqual(['2', '1', '4', '3']);
+    expect(ids).toEqual(['4', '2', '3', '1']);
   });
 });
 
