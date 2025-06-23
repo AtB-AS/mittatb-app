@@ -200,7 +200,7 @@ export const useMapSymbolStyles = ({
   const textOffset: Expression = [
     'case',
     isMinimized,
-    [0.44, -0.15],
+    [0.44, -0.175],
     [
       'step',
       numberOfUnits,
@@ -213,11 +213,16 @@ export const useMapSymbolStyles = ({
   const getCountAdjustedTextSize: (baseSize: number) => Expression = (
     baseSize,
   ) => [
-    'step',
-    numberOfUnits,
+    'case',
+    isMinimized,
     baseSize * textSizeFactor * 12.6,
-    100,
-    baseSize * textSizeFactor * 10.8,
+    [
+      'step',
+      numberOfUnits,
+      baseSize * textSizeFactor * 12.6,
+      100,
+      baseSize * textSizeFactor * 10.8,
+    ],
   ];
 
   const textSize: Expression = [
