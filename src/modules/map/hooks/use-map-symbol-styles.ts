@@ -32,6 +32,12 @@ export const useMapSymbolStyles = ({
   const featureId: Expression = ['get', 'id'];
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
   const isSelected: Expression = ['==', featureId, selectedFeatureId];
+  const noFeatureSelected: Expression = ['==', selectedFeatureId, ''];
+  const isMinimized: Expression = [
+    'all',
+    ['!', isSelected],
+    ['!', noFeatureSelected],
+  ];
 
   const countPropName = 'count';
   const count: Expression = ['get', countPropName];
@@ -47,12 +53,12 @@ export const useMapSymbolStyles = ({
     'case',
     isSelected,
     'selected',
-    ['case', ['==', selectedFeatureId, ''], 'default', 'minimized'],
+    ['case', isMinimized, 'minimized', 'default'],
   ];
   const mapItemIconState: Expression = [
     'case',
     isCluster,
-    'cluster',
+    ['case', isMinimized, 'cluster_minimized', 'cluster'],
     mapItemIconNonClusterState,
   ];
 
@@ -173,6 +179,8 @@ export const useMapSymbolStyles = ({
   const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
   const numberOfUnitsLimitedAt99Plus: Expression = [
     'case',
+    isMinimized,
+    '+',
     ['>', numberOfUnits, 99],
     '99+',
     numberOfUnits,
@@ -189,11 +197,16 @@ export const useMapSymbolStyles = ({
       : ['case', isCluster, numberOfUnitsLimitedAt99Plus, ''];
 
   const textOffset: Expression = [
-    'step',
-    numberOfUnits,
-    [0.82 * textOffsetXFactor, -0.15],
-    100,
-    [1.0 * textOffsetXFactor, -0.15],
+    'case',
+    isMinimized,
+    [0.4, -0.15],
+    [
+      'step',
+      numberOfUnits,
+      [0.82 * textOffsetXFactor, -0.15],
+      100,
+      [1.0 * textOffsetXFactor, -0.15],
+    ],
   ];
 
   const getCountAdjustedTextSize: (baseSize: number) => Expression = (
