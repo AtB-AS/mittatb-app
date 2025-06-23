@@ -10,6 +10,7 @@ import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {useGetFareContractsQuery} from './use-fare-contracts';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '../feature-toggles';
+import {isDefined} from '@atb/utils/presence';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
@@ -55,9 +56,9 @@ const ticketingReducer: TicketingReducer = (
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );
-      const fareContracts = action.fareContracts.filter(
-        (fc) => FareContractType.safeParse(fc).success,
-      );
+      const fareContracts = action.fareContracts
+        .map((fc) => FareContractType.safeParse(fc).data)
+        .filter(isDefined);
       return {
         ...prevState,
         fareContracts,
