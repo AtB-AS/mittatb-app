@@ -62,12 +62,13 @@ export const useMapSymbolStyles = ({
     mapItemIconNonClusterState,
   ];
 
-  const iconFullSize: Expression = [
-    'case',
-    pinType === 'station' ? true : isCluster,
-    0.855,
-    1,
+  const reduceIconSize: Expression = [
+    'all',
+    ['any', pinType === 'station', isCluster],
+    ['!', isMinimized],
   ];
+
+  const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
 
   const iconSize: Expression = [
     'interpolate',
@@ -199,7 +200,7 @@ export const useMapSymbolStyles = ({
   const textOffset: Expression = [
     'case',
     isMinimized,
-    [0.4, -0.15],
+    [0.44, -0.15],
     [
       'step',
       numberOfUnits,
