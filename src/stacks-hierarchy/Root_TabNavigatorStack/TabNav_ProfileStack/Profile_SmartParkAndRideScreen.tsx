@@ -1,19 +1,26 @@
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
-import {LinkSectionItem, Section} from '@atb/components/sections';
+import {
+  LinkSectionItem,
+  Section,
+  SelectionInlineSectionItem,
+} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Add} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {useListVehicleRegistrationsQuery} from '@atb/modules/smart-park-and-ride';
 
 export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
+  const {data: vehicleRegistrations} = useListVehicleRegistrationsQuery();
 
   return (
     <FullScreenView
@@ -25,6 +32,19 @@ export const Profile_SmartParkAndRideScreen = () => {
       <View style={styles.container}>
         <ContentHeading text={t(SmartParkAndRideTexts.content.heading)} />
         <Section>
+          {vehicleRegistrations?.map(({licensePlate}) => (
+            <SelectionInlineSectionItem
+              key={licensePlate}
+              label={licensePlate}
+              icon={Car}
+              accessibility={{
+                accessibilityLabel: getAccessibilityLabel(licensePlate, t),
+              }}
+              onPress={() => {}}
+              onPressIcon={Edit}
+            />
+          ))}
+
           <LinkSectionItem
             text={t(SmartParkAndRideTexts.content.addVehicle)}
             onPress={() =>
@@ -38,6 +58,12 @@ export const Profile_SmartParkAndRideScreen = () => {
       </View>
     </FullScreenView>
   );
+};
+
+const getAccessibilityLabel = (licensePlate: string, t: TranslateFunction) => {
+  return `${t(SmartParkAndRideTexts.a11y.carIcon)}. ${licensePlate
+    .split('')
+    .join('. ')}. ${t(SmartParkAndRideTexts.a11y.button)}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

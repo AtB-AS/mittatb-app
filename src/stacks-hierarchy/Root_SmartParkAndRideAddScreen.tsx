@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useAddVehicle} from '@atb/modules/smart-park-and-ride';
+import {useAddVehicleRegistration} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
@@ -22,7 +22,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const interactiveColor = theme.color.interactive[0];
 
   const onSuccess = () => navigation.goBack();
-  const {mutateAsync: handleAddVehicle} = useAddVehicle(
+  const {mutateAsync: handleAddVehicleRegistration} = useAddVehicleRegistration(
     licensePlate,
     onSuccess,
   );
@@ -58,7 +58,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
 
         <Button
           expanded={true}
-          onPress={() => handleAddVehicle()}
+          onPress={() => handleAddVehicleRegistration()}
           text={t(SmartParkAndRideTexts.add.button)}
           rightIcon={{svg: Confirm}}
           interactiveColor={interactiveColor}

@@ -30,6 +30,14 @@ const SmartParkAndRideTexts = {
     },
     button: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
+  a11y: {
+    carIcon: _('Bilikon', 'Car icon', 'Bilikon'),
+    button: _(
+      'Trykk for å redigere eller fjerne kjøretøy',
+      'Press to edit or remove vehicle',
+      'Trykk for å redigere eller fjerne køyretøy',
+    ),
+  },
 };
 
 export default SmartParkAndRideTexts;
