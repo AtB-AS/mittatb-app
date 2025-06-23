@@ -20,6 +20,7 @@ import {
   InternalLabeledSectionItem,
   RadioGroupSection,
   ContainerSizingType,
+  SelectionInlineSectionItem,
 } from '@atb/components/sections';
 import {Meta} from '@storybook/react';
 import {ScrollView, View} from 'react-native';
@@ -32,6 +33,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {Warning} from '@atb/assets/svg/mono-icons/status';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
 
 type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
@@ -164,6 +166,25 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   isSubtextMarkdown={true}
                   subtext={`1. This is a list \n 2. made with markdown`}
                   onValueChange={() => {}}
+                />
+                <SelectionInlineSectionItem
+                  label="SelectionInlineSectionItem"
+                  value="Text"
+                  icon={Warning}
+                  accessibility={{
+                    accessibilityLabel: 'SelectionInlineSectionItem',
+                  }}
+                  onPress={() => {}}
+                  onPressLabel="Label"
+                  onPressIcon={Edit}
+                />
+                <SelectionInlineSectionItem
+                  label="SelectionInlineSectionItem"
+                  accessibility={{
+                    accessibilityLabel: 'SelectionInlineSectionItem',
+                  }}
+                  onPress={() => {}}
+                  onPressIcon={Edit}
                 />
               </Section>
             ),
