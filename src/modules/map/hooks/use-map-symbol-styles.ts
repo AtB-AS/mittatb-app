@@ -31,15 +31,11 @@ export const useMapSymbolStyles = ({
 
   const featureId: Expression = ['get', 'id'];
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
-  const thisFeatureIsSelected: Expression = [
-    '==',
-    featureId,
-    selectedFeatureId,
-  ];
   const noFeatureIsSelected: Expression = ['==', selectedFeatureId, ''];
+  const isSelected: Expression = ['==', featureId, selectedFeatureId];
   const isMinimized: Expression = [
     'all',
-    ['!', thisFeatureIsSelected],
+    ['!', isSelected],
     ['!', noFeatureIsSelected],
   ];
 
@@ -55,7 +51,7 @@ export const useMapSymbolStyles = ({
 
   const mapItemIconNonClusterState: Expression = [
     'case',
-    thisFeatureIsSelected,
+    isSelected,
     'selected',
     ['case', isMinimized, 'minimized', 'default'],
   ];
@@ -250,7 +246,7 @@ export const useMapSymbolStyles = ({
     textAllowOverlap: true,
   };
   return {
-    isSelected: thisFeatureIsSelected,
+    isSelected,
     iconStyle,
     textStyle,
   };
