@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {addVehicleRegistration} from '../api/api';
 import {useAuthContext} from '@atb/modules/auth';
-import {getListVehicleRegistrationsQueryKey} from './use-list-vehicle-registrations-query';
+import {getVehicleRegistrationsQueryKey} from './use-get-vehicle-registrations-query';
 
 export const useAddVehicleRegistration = (
   licensePlate: string,
@@ -11,13 +11,11 @@ export const useAddVehicleRegistration = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['addSmartParkAndRideVehicle', userId, licensePlate],
+    mutationKey: ['addVehicleRegistration', userId, licensePlate],
     mutationFn: () => addVehicleRegistration(licensePlate),
     onSuccess: () => {
       onSuccess();
-      queryClient.invalidateQueries(
-        getListVehicleRegistrationsQueryKey(userId),
-      );
+      queryClient.invalidateQueries(getVehicleRegistrationsQueryKey(userId));
     },
   });
 };

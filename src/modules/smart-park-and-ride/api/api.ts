@@ -3,15 +3,15 @@ import {VehicleRegistration} from '../types';
 
 export const addVehicleRegistration = (licensePlate: string): Promise<void> => {
   return client.post(
-    `/spar/v1/vehicle-registration`,
+    `/spar/v1/vehicle-registrations`,
     {licensePlate},
     {authWithIdToken: true},
   );
 };
 
-export const listVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
+export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
   return client
-    .get(`/spar/v1/vehicle-registration`, {
+    .get(`/spar/v1/vehicle-registrations`, {
       authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 404,
     })
