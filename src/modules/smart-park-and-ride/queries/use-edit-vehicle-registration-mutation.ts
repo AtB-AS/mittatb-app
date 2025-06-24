@@ -1,9 +1,10 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {addVehicleRegistration} from '../api/api';
+import {editVehicleRegistration} from '../api/api';
 import {useAuthContext} from '@atb/modules/auth';
 import {getVehicleRegistrationsQueryKey} from './use-get-vehicle-registrations-query';
 
-export const useAddVehicleRegistrationMutation = (
+export const useEditVehicleRegistrationMutation = (
+  id: string,
   licensePlate: string,
   onSuccess: () => void,
 ) => {
@@ -11,8 +12,8 @@ export const useAddVehicleRegistrationMutation = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['addVehicleRegistration', userId, licensePlate],
-    mutationFn: () => addVehicleRegistration(licensePlate),
+    mutationKey: ['editVehicleRegistration', userId, licensePlate],
+    mutationFn: () => editVehicleRegistration(id, licensePlate),
     onSuccess: () => {
       onSuccess();
       queryClient.invalidateQueries(getVehicleRegistrationsQueryKey(userId));

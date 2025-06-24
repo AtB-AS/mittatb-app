@@ -32,15 +32,23 @@ export const Profile_SmartParkAndRideScreen = () => {
       <View style={styles.container}>
         <ContentHeading text={t(SmartParkAndRideTexts.content.heading)} />
         <Section>
-          {vehicleRegistrations?.map(({licensePlate}) => (
+          {vehicleRegistrations?.map((vehicleRegistration) => (
             <SelectionInlineSectionItem
-              key={licensePlate}
-              label={licensePlate}
+              key={vehicleRegistration.id}
+              label={vehicleRegistration.licensePlate}
               icon={Car}
               accessibility={{
-                accessibilityLabel: getAccessibilityLabel(licensePlate, t),
+                accessibilityLabel: getAccessibilityLabel(
+                  vehicleRegistration.licensePlate,
+                  t,
+                ),
               }}
-              onPress={() => {}}
+              onPress={() =>
+                navigation.navigate('Root_SmartParkAndRideEditScreen', {
+                  transitionOverride: 'slide-from-right',
+                  vehicleRegistration,
+                })
+              }
               onPressIcon={Edit}
             />
           ))}

@@ -3,14 +3,15 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useAddVehicleRegistration} from '@atb/modules/smart-park-and-ride';
+import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {View} from 'react-native';
-import {RootStackScreenProps} from '.';
+import {RootStackScreenProps} from '..';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 
@@ -22,10 +23,8 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const interactiveColor = theme.color.interactive[0];
 
   const onSuccess = () => navigation.goBack();
-  const {mutateAsync: handleAddVehicleRegistration} = useAddVehicleRegistration(
-    licensePlate,
-    onSuccess,
-  );
+  const {mutateAsync: handleAddVehicleRegistration} =
+    useAddVehicleRegistrationMutation(licensePlate, onSuccess);
 
   return (
     <FullScreenView
@@ -33,6 +32,17 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
         title: t(SmartParkAndRideTexts.add.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
+      footer={
+        <FullScreenFooter>
+          <Button
+            expanded={true}
+            onPress={() => handleAddVehicleRegistration()}
+            text={t(SmartParkAndRideTexts.add.button)}
+            rightIcon={{svg: Confirm}}
+            interactiveColor={interactiveColor}
+          />
+        </FullScreenFooter>
+      }
     >
       <View style={styles.container}>
         <View style={styles.content}>
@@ -55,15 +65,6 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             autoFocus={true}
           />
         </Section>
-
-        <Button
-          expanded={true}
-          onPress={() => handleAddVehicleRegistration()}
-          text={t(SmartParkAndRideTexts.add.button)}
-          rightIcon={{svg: Confirm}}
-          interactiveColor={interactiveColor}
-          style={styles.button}
-        />
       </View>
     </FullScreenView>
   );
@@ -74,7 +75,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
     margin: theme.spacing.large,
     display: 'flex',
-    flexGrow: 1,
   },
   content: {
     display: 'flex',
@@ -86,8 +86,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   illustration: {
     marginBottom: theme.spacing.xLarge,
-  },
-  button: {
-    marginTop: 'auto',
   },
 }));
