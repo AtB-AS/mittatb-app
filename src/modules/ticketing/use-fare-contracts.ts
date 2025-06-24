@@ -81,6 +81,7 @@ export const useGetFareContractsQuery = (props: {
     refetchOnReconnect: true,
     refetchOnMount: false,
     retry: 0,
+    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
     meta: {
       persistInAsyncStorage: true,
     },
