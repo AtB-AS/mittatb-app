@@ -261,18 +261,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_FavoriteScreen')}
               testID="favoriteButton"
             />
-          </Section>
-
-          <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
-          <Section>
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.enrollment
-                  .label,
-              )}
-              onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
-              testID="invitationCodeButton"
-            />
             {isSmartParkAndRideEnabled && (
               <LinkSectionItem
                 text={t(
@@ -286,6 +274,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
+          </Section>
+
+          <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
+          <Section>
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.enrollment
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
+              testID="invitationCodeButton"
+            />
           </Section>
           {enable_ticketing && (
             <>
