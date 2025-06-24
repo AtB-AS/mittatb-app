@@ -54,10 +54,10 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/utils@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.4.0.tgz#a7370c9ba9d64bf352754cab9ef86e501c710b6d"
-  integrity sha512-Vyi3xFc7aAMKntly23WqFfqsUx8JVvlT1/GzIwipma0H1Qx+8OOtRQaxY91xaa7lWm09gqDJc4dAGcIhVhcu+A==
+"@atb-as/utils@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.5.0.tgz#11d90f966195f54e6693b111bc06034193a6ea4f"
+  integrity sha512-+xpV0SxYq2Ex7TactaC8Eqr8pI6qWys9+n+vGNAsfaMYknYqYJWPWJOR1QnOK4/yEW+Js2GJN4YMPOGqx+V8Nw==
   dependencies:
     lodash "^4.17.21"
     zod "^3.24.1"
@@ -1344,20 +1344,7 @@
     "@babel/parser" "^7.26.9"
     "@babel/types" "^7.26.9"
 
-"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3":
-  version "7.26.9"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
-  integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==
-  dependencies:
-    "@babel/code-frame" "^7.26.2"
-    "@babel/generator" "^7.26.9"
-    "@babel/parser" "^7.26.9"
-    "@babel/template" "^7.26.9"
-    "@babel/types" "^7.26.9"
-    debug "^4.3.1"
-    globals "^11.1.0"
-
-"@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
+"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3", "@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
   version "7.26.9"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
   integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==
@@ -3446,12 +3433,33 @@
   resolved "https://registry.yarnpkg.com/@tanstack/eslint-plugin-query/-/eslint-plugin-query-4.32.5.tgz#ace2098e9b37267ecc61172cd60a058641cba521"
   integrity sha512-lXgOi5jWsCx8szS4bgKPEBZiCnsxIeVlW5VpJo9JwlEhq7fiUWcTR8IJ+66sAFFfV7dpLj3R6MQjjnDGjlU9xg==
 
+"@tanstack/query-async-storage-persister@4.32.0":
+  version "4.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-async-storage-persister/-/query-async-storage-persister-4.32.0.tgz#af350ada6fa68b8a7622c1e34fcd69e05219cf57"
+  integrity sha512-9ihTqODroVOBW1AwJF8AgJpnmlDri9aVDW2kx8kCNdT67mLJaHxq3LA8+k8veTU1+zcRUp1pDOlxXv+kmy6q/g==
+  dependencies:
+    "@tanstack/query-persist-client-core" "4.32.0"
+
 "@tanstack/query-core@4.32.0":
   version "4.32.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.32.0.tgz#e0f4a830283612430450c13badd353766423f523"
   integrity sha512-ei4IYwL2kmlKSlCw9WgvV7PpXi0MiswVwfQRxawhJA690zWO3dU49igaQ/UMTl+Jy9jj9dK5IKAYvbX7kUvviQ==
 
-"@tanstack/react-query@^4.32.0":
+"@tanstack/query-persist-client-core@4.32.0":
+  version "4.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.32.0.tgz#8ab8670555b777fcc7cfde0581b42d28b6164933"
+  integrity sha512-TUIArpiZJqLsYEPmg2LsZD+uJknrAHXWSaoCROFniDS0TqExe4KkjQ2gt+XTBwzxlOEN52R+l98k+oS/u94ogg==
+  dependencies:
+    "@tanstack/query-core" "4.32.0"
+
+"@tanstack/react-query-persist-client@4.32.0":
+  version "4.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.32.0.tgz#6840a73042ca7708e793e6ec0acb1f49bc275d9a"
+  integrity sha512-2H1Fuw02uoW2U4kAexV3rmSjyOWunaWAoMgRybULu/TbEGh00c6p4yon/nQM81TAbf4M66Aa7nU0vqipY0VJXQ==
+  dependencies:
+    "@tanstack/query-persist-client-core" "4.32.0"
+
+"@tanstack/react-query@4.32.0":
   version "4.32.0"
   resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.32.0.tgz#701b45b149cfd4b54a68705f9100973db3ba5d5d"
   integrity sha512-B8WUMcByYAH9500ENejDCATOmEZhqjtS9wsfiQ3BNa+s+yAynY8SESI8WWHhSqUmjd0pmCSFRP6BOUGSda3QXA==

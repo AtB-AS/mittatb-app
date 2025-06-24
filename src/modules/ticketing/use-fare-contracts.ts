@@ -1,10 +1,11 @@
 import {useTicketingContext} from '@atb/modules/ticketing';
-import type {FareContractType} from '@atb-as/utils';
+import {FareContractType} from '@atb-as/utils';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -44,7 +45,12 @@ export const useFareContracts = (
 
   const refetch = () => {
     getFareContractsFromBackend().then(({data, isSuccess}) => {
-      if (isSuccess) setFareContracts(data);
+      if (isSuccess) {
+        const parsedFareContracts = data
+          ?.map((fc) => FareContractType.safeParse(fc).data)
+          .filter(isDefined);
+        setFareContracts(parsedFareContracts);
+      }
     });
   };
 
@@ -75,5 +81,9 @@ export const useGetFareContractsQuery = (props: {
     refetchOnReconnect: true,
     refetchOnMount: false,
     retry: 0,
+    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    meta: {
+      persistInAsyncStorage: true,
+    },
   });
 };
