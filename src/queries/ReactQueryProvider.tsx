@@ -4,6 +4,7 @@ import {isAxiosError} from 'axios';
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
 import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {APP_VERSION} from '@env';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,7 @@ export const ReactQueryProvider = ({children}: {children: ReactNode}) => (
     client={queryClient}
     persistOptions={{
       persister: asyncStoragePersister,
+      buster: APP_VERSION, // Discards the cache on app updates
       dehydrateOptions: {
         shouldDehydrateQuery: (query) => {
           // Makes storage opt-in for queries with meta.persistInAsyncStorage
