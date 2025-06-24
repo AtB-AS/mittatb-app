@@ -58,31 +58,26 @@ export const Profile_EnrollmentScreen = () => {
           </GenericSectionItem>
         </Section>
 
-        {isEnrolled ? (
+        <TextInputSectionItem
+          radius="top-bottom"
+          inlineLabel={false}
+          label={t(EnrollmentTexts.label)}
+          placeholder={t(EnrollmentTexts.placeholder)}
+          value={inviteCode}
+          onChangeText={setInviteCode}
+          autoCapitalize="none"
+          errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
+        />
+        {isEnrolled && (
           <MessageInfoBox type="valid" message={t(EnrollmentTexts.success)} />
-        ) : isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <TextInputSectionItem
-              radius="top-bottom"
-              inlineLabel={false}
-              label={t(EnrollmentTexts.label)}
-              placeholder={t(EnrollmentTexts.placeholder)}
-              value={inviteCode}
-              onChangeText={setInviteCode}
-              autoCapitalize="none"
-              errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
-            />
-            <Button
-              expanded={true}
-              onPress={() => onEnroll(inviteCode)}
-              text={t(EnrollmentTexts.button)}
-              disabled={isLoading}
-              interactiveColor={interactiveColor}
-            />
-          </>
         )}
+        <Button
+          expanded={true}
+          onPress={() => onEnroll(inviteCode)}
+          text={t(EnrollmentTexts.button)}
+          interactiveColor={interactiveColor}
+          loading={isLoading}
+        />
       </View>
     </FullScreenView>
   );
@@ -114,6 +109,7 @@ const useEnroll = () => {
       } catch (err) {
         console.warn(err);
         setHasError(true);
+        setIsEnrolled(false);
       } finally {
         setIsLoading(false);
       }
