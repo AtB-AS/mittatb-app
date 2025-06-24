@@ -1,2 +1,2 @@
-export {useAddVehicleRegistration} from './queries/use-add-vehicle-registration-query';
-export {useListVehicleRegistrationsQuery} from './queries/use-list-vehicle-registrations-query';
+export {useAddVehicleRegistration} from './queries/use-add-vehicle-registration-mutation';
+export {useVehicleRegistrationsQuery as useListVehicleRegistrationsQuery} from './queries/use-get-vehicle-registrations-query';

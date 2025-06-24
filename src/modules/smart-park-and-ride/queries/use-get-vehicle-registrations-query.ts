@@ -1,23 +1,21 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useQuery} from '@tanstack/react-query';
-import {listVehicleRegistrations} from '../api/api';
+import {getVehicleRegistrations} from '../api/api';
 
-export const getListVehicleRegistrationsQueryKey = (
-  userId: string | undefined,
-) => {
-  return ['smartParkAndRideVehicleRegistrations', userId];
+export const getVehicleRegistrationsQueryKey = (userId: string | undefined) => {
+  return ['getVehicleRegistrations', userId];
 };
 
-export const useListVehicleRegistrationsQuery = (disabled: boolean = false) => {
+export const useVehicleRegistrationsQuery = (disabled: boolean = false) => {
   const {userId, authStatus} = useAuthContext();
   const {isSmartParkAndRideEnabled} = useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
-    queryKey: getListVehicleRegistrationsQueryKey(userId),
-    queryFn: listVehicleRegistrations,
+    queryKey: getVehicleRegistrationsQueryKey(userId),
+    queryFn: getVehicleRegistrations,
     retry: 3,
     enabled:
       authStatus === 'authenticated' &&
