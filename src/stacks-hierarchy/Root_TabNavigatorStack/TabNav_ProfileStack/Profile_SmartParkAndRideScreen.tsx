@@ -14,13 +14,13 @@ import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
-import {useListVehicleRegistrationsQuery} from '@atb/modules/smart-park-and-ride';
+import {useVehicleRegistrationsQuery} from '@atb/modules/smart-park-and-ride';
 
 export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations} = useListVehicleRegistrationsQuery();
+  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
 
   return (
     <FullScreenView
