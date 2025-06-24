@@ -40,25 +40,24 @@ export const Profile_EnrollmentScreen = () => {
     >
       <View style={styles.contentContainer}>
         <Section>
-          <Section>
-            <GenericSectionItem>
-              <View style={styles.horizontalContainer}>
-                <ThemedBeacons
-                  height={61 * fontScale}
-                  width={61 * fontScale}
-                  style={{
-                    alignSelf: 'flex-start',
-                  }}
-                />
-                <View style={styles.headerTextContainer}>
-                  <ThemeText typography="body__secondary" color="secondary">
-                    {t(EnrollmentTexts.info)}
-                  </ThemeText>
-                </View>
+          <GenericSectionItem>
+            <View style={styles.horizontalContainer}>
+              <ThemedBeacons
+                height={61 * fontScale}
+                width={61 * fontScale}
+                style={{
+                  alignSelf: 'flex-start',
+                }}
+              />
+              <View style={styles.headerTextContainer}>
+                <ThemeText typography="body__secondary" color="secondary">
+                  {t(EnrollmentTexts.info)}
+                </ThemeText>
               </View>
-            </GenericSectionItem>
-          </Section>
+            </View>
+          </GenericSectionItem>
         </Section>
+
         {isEnrolled ? (
           <MessageInfoBox type="valid" message={t(EnrollmentTexts.success)} />
         ) : isLoading ? (
