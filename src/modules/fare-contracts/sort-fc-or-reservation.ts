@@ -1,7 +1,7 @@
 import {Reservation} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 
-export const useFareContractsAndReservationsSorted = (
+export const getSortedFareContractsAndReservations = (
   fcOrReservations: (Reservation | FareContractType)[],
 ): (FareContractType | Reservation)[] => {
   let keepFailed = true;

@@ -11,7 +11,7 @@ export type {UserProfileWithCount} from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
 export {
   sortFcOrReservationByCreation,
-  useFareContractsAndReservationsSorted,
+  getSortedFareContractsAndReservations,
 } from './sort-fc-or-reservation';
 export {getFareContractInfoDetails} from './sections/FareContractInfoDetailsSectionItem';
 export {CompactFareContractInfo} from './CompactFareContractInfo';

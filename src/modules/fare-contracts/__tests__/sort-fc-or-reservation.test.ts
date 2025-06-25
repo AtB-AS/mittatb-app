@@ -4,7 +4,7 @@ import {Reservation} from '@atb/modules/ticketing';
 import {addMinutes} from 'date-fns';
 import {
   sortFcOrReservationByCreation,
-  useFareContractsAndReservationsSorted,
+  getSortedFareContractsAndReservations,
 } from '../sort-fc-or-reservation';
 import {FareContractType, TravelRightType} from '@atb-as/utils';
 
@@ -62,7 +62,7 @@ describe('Sort by Validity', () => {
       mockupReservation('3', 'valid', 0),
     ];
 
-    const result = useFareContractsAndReservationsSorted(fcOrReservations);
+    const result = getSortedFareContractsAndReservations(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -82,7 +82,7 @@ describe('Sort by Validity', () => {
       mockupFareContract('2', 'valid', 0),
     ];
 
-    const result = useFareContractsAndReservationsSorted(fcOrReservations);
+    const result = getSortedFareContractsAndReservations(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {
@@ -103,7 +103,7 @@ describe('Sort by Validity', () => {
       mockupFareContract('4', 'valid', 0.11),
     ];
 
-    const result = useFareContractsAndReservationsSorted(fcOrReservations);
+    const result = getSortedFareContractsAndReservations(fcOrReservations);
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       if (isFareContract) {

@@ -7,7 +7,7 @@ import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
-import {useFareContractsAndReservationsSorted} from '@atb/modules/fare-contracts';
+import {getSortedFareContractsAndReservations} from '@atb/modules/fare-contracts';
 
 type Props = {
   reservations: Reservation[];
@@ -30,7 +30,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const styles = useStyles();
   const analytics = useAnalyticsContext();
   const fareContractsAndReservationsSorted =
-    useFareContractsAndReservationsSorted([...fareContracts, ...reservations]);
+    getSortedFareContractsAndReservations([...fareContracts, ...reservations]);
 
   return (
     <View style={styles.container}>
