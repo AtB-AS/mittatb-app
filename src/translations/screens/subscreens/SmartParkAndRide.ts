@@ -2,7 +2,11 @@ import {translation as _} from '../../commons';
 
 const SmartParkAndRideTexts = {
   header: {
-    title: _('Smart Park & Ride', 'Smart Park & Ride', 'Smart Park & Ride'),
+    title: _(
+      'Parkering på Ranheim',
+      'Parking at Ranheim',
+      'Parkering på Ranheim',
+    ),
   },
   content: {
     heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
