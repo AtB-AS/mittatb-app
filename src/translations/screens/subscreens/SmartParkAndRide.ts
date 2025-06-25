@@ -30,6 +30,22 @@ const SmartParkAndRideTexts = {
     },
     button: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
+  edit: {
+    header: {
+      title: _('Endre kjøretøy', 'Edit vehicle', 'Endre køyretøy'),
+    },
+    inputs: {
+      licensePlate: {
+        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        placeholder: _(
+          'Skriv inn skiltnummer',
+          'Enter license plate',
+          'Skriv inn skiltnummer',
+        ),
+      },
+    },
+    button: _('Lagre', 'Save', 'Lagre'),
+  },
   a11y: {
     carIcon: _('Bilikon', 'Car icon', 'Bilikon'),
     button: _(

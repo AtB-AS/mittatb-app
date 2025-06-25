@@ -17,3 +17,14 @@ export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
     })
     .then((response) => response.data.vehicles);
 };
+
+export const editVehicleRegistration = (
+  id: string,
+  licensePlate: string,
+): Promise<void> => {
+  return client.put(
+    `/spar/v1/vehicle-registrations/${id}`,
+    {licensePlate},
+    {authWithIdToken: true},
+  );
+};
