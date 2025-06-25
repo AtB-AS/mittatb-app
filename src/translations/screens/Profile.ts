@@ -38,9 +38,9 @@ const ProfileTexts = {
         },
         smartParkAndRide: {
           label: _(
-            'Smart Park & Ride',
-            'Smart Park & Ride',
-            'Smart Park & Ride',
+            'Parkering på Ranheim',
+            'Parking at Ranheim',
+            'Parkering på Ranheim',
           ),
         },
         paymentMethods: {

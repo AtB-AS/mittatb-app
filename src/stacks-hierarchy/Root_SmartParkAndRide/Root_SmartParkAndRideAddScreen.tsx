@@ -31,6 +31,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
       headerProps={{
         title: t(SmartParkAndRideTexts.add.header.title),
         leftButton: {type: 'back', withIcon: true},
+        color: theme.color.background.neutral[1],
       }}
       footer={
         <FullScreenFooter>
