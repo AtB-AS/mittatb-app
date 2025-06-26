@@ -42,6 +42,12 @@ export const MobilityTexts = {
       'You need to log in and go through some steps to start the trip',
       'Du må logge inn og gå igjennom nokre steg for å starte turen',
     ),
+    underAgeWarning: (legalAge: number) =>
+      _(
+        `Du må være ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+        `You must be ${legalAge} years or older to use this e-scooter`,
+        `Du må vere ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+      ),
     shmoBlockers: _('Fullfør steg', 'Complete steps', 'Fullfør steg'),
     shmoBlockersInfoMessage: (numberOfBlockers: number) =>
       _(
@@ -61,6 +67,23 @@ export const MobilityTexts = {
         'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
       ),
       button: _('Del posisjon', 'Share location', 'Del posisjon'),
+    },
+    ageVerificatoin: {
+      title: _(
+        'Vi må sjekke alderen din',
+        'We need to verify your age',
+        'Vi må sjekke alderen din',
+      ),
+      description: _(
+        'El-sparkesykler har en aldersgrense. Bekreft alderen din med Vipps.',
+        'E-scooters have an age limit. Verify your age with Vipps.',
+        'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
+      ),
+      button: _(
+        'Fortsett med vipps',
+        'Continue with Vipps',
+        'Fortsett med Vipps',
+      ),
     },
     payment: {
       title: _(

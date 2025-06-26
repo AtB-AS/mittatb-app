@@ -22,12 +22,13 @@ type OnboardingScreenComponentParams = {
   description?: string;
   descriptionLink?: DescriptionLink;
   footerDescription?: string;
-  buttonText: string;
   secondaryFooterButton?: ButtonProps;
-  buttonOnPress: () => void;
+  vippsButton?: ButtonProps;
+  footerButton?: ButtonProps;
   testID?: string;
   headerProps?: ScreenHeaderProps;
   contentNode?: JSX.Element;
+  isVippsButton?: boolean;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -38,9 +39,9 @@ export const OnboardingScreenComponent = ({
   description,
   descriptionLink,
   footerDescription,
-  buttonText,
   secondaryFooterButton,
-  buttonOnPress,
+  footerButton,
+  vippsButton,
   testID,
   headerProps,
   contentNode,
@@ -52,12 +53,9 @@ export const OnboardingScreenComponent = ({
 
   return (
     <OnboardingFullScreenView
-      footerButton={{
-        onPress: buttonOnPress,
-        text: buttonText,
-        expanded: false,
-      }}
+      footerButton={footerButton}
       secondaryFooterButton={secondaryFooterButton}
+      vippsButton={vippsButton}
       footerDescription={footerDescription}
       fullScreenHeaderProps={headerProps}
       testID={testID ? `${testID}` : 'next'}

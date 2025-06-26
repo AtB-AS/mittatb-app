@@ -8,6 +8,7 @@ export {MobilityBenefitsActionSectionItem} from './components/MobilityBenefitsAc
 export {MobilityBenefitsInfoSectionItem} from './components/MobilityBenefitsInfoSectionItem';
 export {MobilitySingleBenefitInfoSectionItem} from './components/MobilitySingleBenefitInfoSectionItem';
 export {LocationScreenComponent} from './components/onboarding/LocationScreenComponent';
+export {AgeVerificationScreenComponent} from './components/onboarding/AgeVerificationScreenComponent';
 export {PaymentScreenComponent} from './components/onboarding/PaymentScreenComponent';
 export {RulesScreenComponent} from './components/onboarding/RulesScreenComponent';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
@@ -50,3 +51,7 @@ export {
   isVehicleFeature,
   isVehiclesClusteredFeature,
 } from './utils';
+export {
+  type AgeVerificationEnum,
+  useGetAgeVerificationQuery,
+} from './queries/use-get-age-verification-query';
