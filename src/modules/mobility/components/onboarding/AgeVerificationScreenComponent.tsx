@@ -43,7 +43,6 @@ export const AgeVerificationScreenComponent = ({
   useEffect(() => {
     const handleUrl = async ({url}: {url: string}) => {
       if (url.includes(VIPPS_CALLBACK_URL)) {
-        console.log('CLOSES');
         closeInAppBrowseriOS();
         setIsLoading(true);
         const parsed = new URL(url);
