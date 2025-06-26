@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {useVehicleRegistrationsQuery} from '@atb/modules/smart-park-and-ride';
+import {spellOut} from '@atb/utils/accessibility';
 
 export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
@@ -69,9 +70,9 @@ export const Profile_SmartParkAndRideScreen = () => {
 };
 
 const getAccessibilityLabel = (licensePlate: string, t: TranslateFunction) => {
-  return `${t(SmartParkAndRideTexts.a11y.carIcon)}. ${licensePlate
-    .split('')
-    .join('. ')}. ${t(SmartParkAndRideTexts.a11y.button)}`;
+  return `${t(SmartParkAndRideTexts.a11y.carIcon)}. ${spellOut(
+    licensePlate,
+  )}. ${t(SmartParkAndRideTexts.a11y.button)}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
