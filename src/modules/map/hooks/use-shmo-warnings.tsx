@@ -12,6 +12,7 @@ import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
+import opening_hours from 'opening_hours';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -21,13 +22,60 @@ export const useShmoWarnings = (
   const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
     string | null
   >(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {location} = useGeolocationContext();
 
   const {vehicle} = useVehicle(vehicleId);
-  const warningMessage = vehicle?.isDisabled
-    ? t(ShmoWarnings.scooterDisabled)
-    : null;
+
+  useEffect(() => {
+    const oh = new opening_hours(vehicle?.system?.openingHours ?? '');
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const openIntervalsToday = oh?.getOpenIntervals(today, tomorrow);
+
+    if (
+      !openIntervalsToday ||
+      openIntervalsToday.length === 0 ||
+      !openIntervalsToday[0]?.[0] ||
+      !openIntervalsToday[0]?.[1]
+    ) {
+      return;
+    }
+
+    const openingHour = openIntervalsToday[0][0];
+    const closingHour = openIntervalsToday[0][1];
+
+    const warnings = [
+      {
+        condition: vehicle?.isDisabled,
+        message: t(ShmoWarnings.scooterDisabled),
+      },
+      {
+        condition: oh && !oh.getState(new Date()),
+        message: t(
+          ShmoWarnings.scooterNotAvailable(
+            openingHour.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            closingHour.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          ),
+        ),
+      },
+    ];
+
+    const activeWarning = warnings.find((warning) => warning.condition);
+    setWarningMessage(activeWarning ? activeWarning.message : null);
+  }, [t, vehicle]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {

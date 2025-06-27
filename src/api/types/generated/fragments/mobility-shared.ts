@@ -42,6 +42,7 @@ export type SystemFragment = {
   name: TranslatedStringFragment;
   brandAssets?: BrandAssetsFragment;
   rentalApps?: RentalAppsFragment;
+  openingHours?: string;
 };
 
 export type VehicleTypeBasicFragment = {
