@@ -16,8 +16,11 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
       illustration={<ThemedPaymentCard fontSize={220} />}
       title={t(MobilityTexts.shmoRequirements.payment.title)}
       description={t(MobilityTexts.shmoRequirements.payment.description)}
-      buttonText={t(MobilityTexts.shmoRequirements.payment.button)}
-      buttonOnPress={onAddRecurringPayment}
+      footerButton={{
+        onPress: onAddRecurringPayment,
+        text: t(MobilityTexts.shmoRequirements.payment.button),
+        expanded: false,
+      }}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}

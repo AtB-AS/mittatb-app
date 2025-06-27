@@ -3,8 +3,14 @@ import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
 import {ShmoRequirementEnum, ShmoRequirementType} from './types';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
+import {
+  AgeVerificationEnum,
+  useGetAgeVerificationQuery,
+} from './queries/use-get-age-verification-query';
 
 export const useShmoRequirements = () => {
+  const USER_AGE_LIMIT = 18; // Define the age limit for verification
+
   const {preciseLocationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
@@ -15,7 +21,15 @@ export const useShmoRequirements = () => {
     false,
   );
 
+  const {data: ageVerified, isLoading: ageVerifiedLoading} =
+    useGetAgeVerificationQuery(USER_AGE_LIMIT);
+
   const requirements: ShmoRequirementType[] = [
+    {
+      requirementCode: ShmoRequirementEnum.AGE_VERIFICATION,
+      isLoading: ageVerifiedLoading,
+      isBlocking: ageVerified === AgeVerificationEnum.NotVerified,
+    },
     {
       requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
       isLoading: false,
@@ -43,5 +57,7 @@ export const useShmoRequirements = () => {
     numberOfBlockers,
     setGivenConsent,
     isLoading,
+    legalAge: USER_AGE_LIMIT,
+    ageStatus: ageVerified,
   };
 };

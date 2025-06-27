@@ -14,7 +14,7 @@ export const VippsLoginButton = ({
   disabled,
   style,
 }: {
-  onPress: () => {};
+  onPress: () => void;
   disabled: boolean;
   style?: ViewStyle;
 }) => {
@@ -45,11 +45,11 @@ export const VippsLoginButton = ({
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
     borderRadius: theme.border.radius.circle,
     justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: theme.border.width.medium,
     borderColor: VIPPS_BACKGROUND_COLOR,
   },
