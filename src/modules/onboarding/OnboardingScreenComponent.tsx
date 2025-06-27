@@ -9,6 +9,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ButtonProps} from '@atb/components/button';
+import {ButtonIconProps} from '@atb/components/button';
 
 type DescriptionLink = {
   text: string;
@@ -23,8 +24,9 @@ type OnboardingScreenComponentParams = {
   descriptionLink?: DescriptionLink;
   footerDescription?: string;
   buttonText: string;
-  secondaryFooterButton?: ButtonProps;
   buttonOnPress: () => void;
+  buttonRightIcon?: ButtonIconProps;
+  secondaryFooterButton?: ButtonProps;
   testID?: string;
   headerProps?: ScreenHeaderProps;
   contentNode?: JSX.Element;
@@ -39,8 +41,9 @@ export const OnboardingScreenComponent = ({
   descriptionLink,
   footerDescription,
   buttonText,
-  secondaryFooterButton,
   buttonOnPress,
+  buttonRightIcon,
+  secondaryFooterButton,
   testID,
   headerProps,
   contentNode,
@@ -56,6 +59,7 @@ export const OnboardingScreenComponent = ({
         onPress: buttonOnPress,
         text: buttonText,
         expanded: false,
+        rightIcon: buttonRightIcon,
       }}
       secondaryFooterButton={secondaryFooterButton}
       footerDescription={footerDescription}
