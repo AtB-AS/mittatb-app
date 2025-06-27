@@ -5,7 +5,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type TimeContextState = {
   /**
-   * The current time in milliseconds, updated every 2.5 seconds. This is based
+   * The current time in milliseconds, updated every second. This is based
    * on server time when possible, and can be safely used for checking the
    * validity of fare contracts.
    */
@@ -18,7 +18,7 @@ const TimeContext = createContext<TimeContextState | undefined>(undefined);
 let serverDiff = 0;
 
 /**
- * Returns the current time in milliseconds.
+ * Returns the current UNIX time in milliseconds.
  */
 export const getServerNow = () => Date.now() - serverDiff;
 
