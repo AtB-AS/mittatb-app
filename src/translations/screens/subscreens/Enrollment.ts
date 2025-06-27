@@ -13,7 +13,7 @@ const EnrollmentTexts = {
   ),
   success: _(
     'Du ble innrullert i den lukkede gruppen!',
-    'You were enrolled in the closed  group!',
+    'You were enrolled in the closed group!',
     'Du vart lagt til i den lukka gruppa!',
   ),
   label: _('Kode', 'Code', 'Kode'),

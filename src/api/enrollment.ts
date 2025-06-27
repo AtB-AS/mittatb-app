@@ -6,7 +6,7 @@ type EnrollmentResponse =
   | {
       status: 'expired';
     }
-  | {status: 'ok'; groups: string[]};
+  | {status: 'ok'; groups: string[]; enrollmentId: string};
 
 export async function enrollIntoBetaGroups(inviteKey: string) {
   const url = 'bff/v1/enrollment/group';

@@ -17,6 +17,7 @@ import {
   MyLocation as MyLocationLight,
   Beacons as BeaconsLight,
   PaymentCard as PaymentCardLight,
+  Contact as ContactLight,
 } from '@atb/assets/svg/color/images/light';
 import {
   Map as MapDark,
@@ -32,6 +33,7 @@ import {
   MyLocation as MyLocationDark,
   Beacons as BeaconsDark,
   PaymentCard as PaymentCardDark,
+  Contact as ContactDark,
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
@@ -206,6 +208,13 @@ export const ThemedBeacons = ({...props}: SvgProps) => {
   const Beacons = themeName === 'dark' ? BeaconsDark : BeaconsLight;
 
   return <Beacons {...props} />;
+};
+
+export const ThemedContact = ({...props}: SvgProps) => {
+  const {themeName} = useThemeContext();
+  const Contact = themeName === 'dark' ? ContactDark : ContactLight;
+
+  return <Contact {...props} />;
 };
 
 export const ThemedBonusBag = ({...props}: SvgProps) => {

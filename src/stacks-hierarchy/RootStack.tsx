@@ -80,6 +80,7 @@ import {
   Root_SmartParkAndRideAddScreen,
   Root_SmartParkAndRideEditScreen,
 } from './Root_SmartParkAndRide';
+import {Root_BonusOnboardingStack} from './Root_BonusOnboardingStack';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -461,6 +462,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_SmartParkAndRideEditScreen"
                   component={Root_SmartParkAndRideEditScreen}
+                />
+                <Stack.Screen
+                  name="Root_BonusOnboardingStack"
+                  component={Root_BonusOnboardingStack}
                 />
               </Stack.Navigator>
             </AnalyticsContextProvider>
