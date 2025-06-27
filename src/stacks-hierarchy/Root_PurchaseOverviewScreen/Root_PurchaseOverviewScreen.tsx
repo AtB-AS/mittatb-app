@@ -39,7 +39,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
-import {useBookingTrips} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/use-booking-trips';
+import {useBookingTrips} from '@atb/modules/booking';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -128,7 +128,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
 
   const {
-    tripPatterns: tripPatternsThatRequireBooking,
+    isBookingRequired,
     isLoadingBooking,
     isError: isBookingError,
   } = useBookingTrips({
@@ -141,9 +141,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       selection.userProfilesWithCount.some((u) => u.count) &&
       userProfilesWithCountAndOffer.some((u) => u.count);
 
-    return (
-      hasOffer || (!isBookingError && tripPatternsThatRequireBooking.length > 0)
-    );
+    return hasOffer || (isBookingRequired && !isBookingError);
   })();
 
   const error: PurchaseOverviewError | undefined = (() => {
@@ -153,11 +151,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (offerError && isLoadingBooking) {
       return undefined; // It's not possible to know if we should display this error until the booking request has completed
     }
-    if (
-      offerError &&
-      !isBookingError &&
-      tripPatternsThatRequireBooking.length > 0
-    ) {
+    if (offerError && isBookingRequired && !isBookingError) {
       return undefined; // Do not display the error from the offer if we have trips that require booking
     }
     if (isBookingError) return {type: 'booking-error'};
@@ -165,7 +159,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   })();
 
   const onPressBuy = () => {
-    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
+    if (isBookingEnabled && isBookingRequired) {
       navigation.push(
         'Root_TripSelectionScreen',
         rootPurchaseConfirmationScreenParams,
@@ -185,7 +179,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     );
   };
   const summaryButtonText = () => {
-    if (isBookingEnabled && tripPatternsThatRequireBooking.length > 0) {
+    if (isBookingEnabled && isBookingRequired) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
     }
     if (selection.isOnBehalfOf) {
@@ -297,6 +291,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             style={styles.selectionComponent}
             onSelect={(selection) => {
+              const newSelection = builder
+                .fromSelection(selection)
+                .fromStopPlace(selection.stopPlaces?.from)
+                .toStopPlace(selection.stopPlaces?.to)
+                .build();
+              setSelection(newSelection);
               navigation.setParams({onFocusElement: undefined});
               navigation.push(
                 zoneSelectionMode === 'multiple-stop-harbor'
@@ -355,7 +355,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isFree={isFree}
             isError={!!error || !canProceed}
             originalPrice={originalPrice}
-            price={totalPrice}
+            price={isBookingRequired ? undefined : totalPrice}
             summaryButtonText={summaryButtonText()}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {

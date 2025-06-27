@@ -6,22 +6,21 @@ import {useOperatorToggle} from './use-operator-toggle';
 import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View, ViewStyle} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {FormFactorFilterType} from '@atb/modules/map';
 import {ContentHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {getModeAndSubModeFromFormFactor} from '../../utils';
 
 type Props = {
   formFactor: FormFactor;
-  icon: (props: SvgProps) => JSX.Element;
   initialFilter: FormFactorFilterType | undefined;
   onFilterChange: (filter: FormFactorFilterType) => void;
   style?: ViewStyle;
 };
 
 export const FormFactorFilter = ({
-  icon,
   formFactor,
   initialFilter,
   onFilterChange,
@@ -52,7 +51,16 @@ export const FormFactorFilter = ({
           <ToggleSectionItem
             key={operator.id}
             text={operator.name}
-            leftImage={<ThemeIcon svg={icon} />}
+            leftImage={
+              <ThemeIcon
+                svg={
+                  getTransportModeSvg(
+                    getModeAndSubModeFromFormFactor(formFactor).mode,
+                    getModeAndSubModeFromFormFactor(formFactor)?.subMode,
+                  ).svg
+                }
+              />
+            }
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
             testID={`${operator.name.toLowerCase().replace(' ', '')}Toggle`}

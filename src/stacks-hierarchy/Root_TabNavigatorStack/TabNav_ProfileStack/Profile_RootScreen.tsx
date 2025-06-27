@@ -209,15 +209,27 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 />
               )}
             </Section>
-          </View>
 
-          <Section>
-            <LinkSectionItem
-              text={t(ProfileTexts.sections.settings.heading)}
-              onPress={() => navigation.navigate('Profile_SettingsScreen')}
-              testID="settingsButton"
-            />
-          </Section>
+            <Section>
+              <LinkSectionItem
+                text={t(ProfileTexts.sections.settings.heading)}
+                onPress={() => navigation.navigate('Profile_SettingsScreen')}
+                testID="settingsButton"
+              />
+            </Section>
+            {isBonusProgramEnabled && (
+              <Section>
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                  )}
+                  onPress={() => navigation.navigate('Profile_BonusScreen')}
+                  testID="BonusButton"
+                  label="new"
+                />
+              </Section>
+            )}
+          </View>
 
           <ContentHeading
             text={t(ProfileTexts.sections.travelAndPurchases.heading)}
@@ -249,27 +261,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_FavoriteScreen')}
               testID="favoriteButton"
             />
-          </Section>
-
-          <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
-          <Section>
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.enrollment
-                  .label,
-              )}
-              onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
-              testID="invitationCodeButton"
-            />
-            {isBonusProgramEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                )}
-                onPress={() => navigation.navigate('Profile_BonusScreen')}
-                testID="BonusButton"
-              />
-            )}
             {isSmartParkAndRideEnabled && (
               <LinkSectionItem
                 text={t(
@@ -283,6 +274,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
+          </Section>
+
+          <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
+          <Section>
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.enrollment
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
+              testID="invitationCodeButton"
+            />
           </Section>
           {enable_ticketing && (
             <>

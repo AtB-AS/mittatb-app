@@ -946,12 +946,12 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240116.2)
-  - AbtCommoniOSLib (3.3.14):
+  - AbtCommoniOSLib (3.3.14-hotfix1):
     - DevicePpi (~> 1.2.20)
   - AbtProtobufTokenIosStubs (2.913.0):
     - SwiftProtobuf (~> 1.28.2)
-  - ApiLogiOSLib (3.3.14)
-  - BarcodeiOSLib (3.3.14):
+  - ApiLogiOSLib (3.3.14-hotfix1)
+  - BarcodeiOSLib (3.3.14-hotfix1):
     - AbtCommoniOSLib
   - boost (1.84.0)
   - BoringSSL-GRPC (0.0.32):
@@ -3031,13 +3031,13 @@ PODS:
     - React-Core
   - SocketRocket (0.7.1)
   - SwiftProtobuf (1.28.2)
-  - TimeApiiOSLib (3.3.14)
-  - TokenCore (3.3.14):
+  - TimeApiiOSLib (3.3.14-hotfix1)
+  - TokenCore (3.3.14-hotfix1):
     - AbtProtobufTokenIosStubs
     - ApiLogiOSLib
     - SwiftProtobuf (~> 1.28.2)
     - TimeApiiOSLib
-  - TokenStateReactNativeLib (3.3.14):
+  - TokenStateReactNativeLib (3.3.14-hotfix1):
     - AbtCommoniOSLib
     - AbtProtobufTokenIosStubs
     - ApiLogiOSLib
@@ -3048,9 +3048,9 @@ PODS:
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (4.0.0)
-  - VisualCodeModeliOSLib (3.3.14):
+  - VisualCodeModeliOSLib (3.3.14-hotfix1):
     - AbtCommoniOSLib
-  - VisualCodeViewiOSLib (3.3.14):
+  - VisualCodeViewiOSLib (3.3.14-hotfix1):
     - AbtCommoniOSLib
     - VisualCodeModeliOSLib
   - Yoga (0.0.0)
@@ -3430,14 +3430,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
-  AbtCommoniOSLib: 34b2bf92a0bb86aa307dd225d1bbd69d7659b2f2
+  AbtCommoniOSLib: b56a629cddf3564835e89b969e3ad1e3f8eea895
   AbtProtobufTokenIosStubs: 86af181460c7b57fff72374506c4b96f18965e3b
-  ApiLogiOSLib: c67223068e44b11cb4dfd5ba3e713913ab7b7887
-  BarcodeiOSLib: 31998df6cc0f519695c4133379119c51c7e0b310
+  ApiLogiOSLib: bfb1f1ff6fcb32b2fc9490e34a605b0ccf2facc0
+  BarcodeiOSLib: 4bfec9495f803e8255f69aa7e7a74a9dd5ff9405
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
-  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
+  BugsnagReactNative: eac6d0dcb89db79f796b71b6be8489c8c4a9d9a5
+  BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DevicePpi: 7f5b711e0a482584edbc1c0cdd24c7cfb46056e5
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: ca8044c9df513671c85167838b4188791b6f37e1
@@ -3564,12 +3564,12 @@ SPEC CHECKSUMS:
   RNSVG: 76d7cafaaa603fbbcb05aff928653e720251f483
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
-  TimeApiiOSLib: b645afc52b6aa56aa7bbc96e72e980fa92600700
-  TokenCore: a54bd19342c81f6aa736ecd66b1e5b194dc54cdf
-  TokenStateReactNativeLib: 37ed0a490b394065184ef353d7be7b15b59730ae
+  TimeApiiOSLib: 59b914855fe3abc93d34670061450422aee2ea7b
+  TokenCore: 10f20eb282693b9b6ee15e38dae3b9f1a64b372b
+  TokenStateReactNativeLib: 0bb0ca8f9116785e5e0f3e651fc82ba97772919b
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
-  VisualCodeModeliOSLib: aa3bfe547357e317528571128a80b871ec5bf920
-  VisualCodeViewiOSLib: 317471d97f46ca19e6ddcf64d7c57c4e2ac4f6ca
+  VisualCodeModeliOSLib: fde1749faebf9266352736a1260bdbed1c9a06b1
+  VisualCodeViewiOSLib: 2c79d22b46584eea81e7638ac19817e9a9e6abac
   Yoga: d213adae4f2c5518e9b19f919afa25a73848ecfb
 
 PODFILE CHECKSUM: 83953c0975b744bbaae14e23786ba97c3b778969

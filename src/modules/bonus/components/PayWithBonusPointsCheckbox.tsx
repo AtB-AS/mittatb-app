@@ -17,17 +17,18 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {UserBonusBalance} from './UserBonusBalance';
 import {isDefined} from '@atb/utils/presence';
+import {useEffect} from 'react';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
   isChecked: boolean;
-  onPress: () => void;
+  setIsChecked: (checked: boolean) => void;
 };
 
 export const PayWithBonusPointsCheckbox = ({
   bonusProduct,
   isChecked,
-  onPress,
+  setIsChecked,
   ...props
 }: Props) => {
   const styles = useStyles();
@@ -43,6 +44,12 @@ export const PayWithBonusPointsCheckbox = ({
     userBonusBalanceStatus === 'error';
 
   const isDisabled = isError || userBonusBalance < bonusProduct.price.amount;
+
+  useEffect(() => {
+    if (isDisabled && isChecked) {
+      setIsChecked(false);
+    }
+  }, [isDisabled, isChecked, setIsChecked]);
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
@@ -62,7 +69,7 @@ export const PayWithBonusPointsCheckbox = ({
       <Section {...props}>
         <GenericClickableSectionItem
           active={isChecked}
-          onPress={onPress}
+          onPress={() => setIsChecked(!isChecked)}
           disabled={isDisabled}
           accessibilityRole="checkbox"
           accessibilityState={{checked: isChecked}}
@@ -82,9 +89,12 @@ export const PayWithBonusPointsCheckbox = ({
                   {t(BonusProgramTexts.youHave)}
                 </ThemeText>
                 <UserBonusBalance
-                  size="small"
+                  typography="body__secondary"
                   color={theme.color.foreground.dynamic.secondary}
                 />
+                <ThemeText typography="body__secondary" color="secondary">
+                  {t(BonusProgramTexts.points)}
+                </ThemeText>
               </View>
             </View>
             <BonusPriceTag

@@ -16,7 +16,12 @@ import {
 } from './headers';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {Platform} from 'react-native';
-import {getCurrentUserIdGlobal, getIdTokenGlobal} from '@atb/modules/auth';
+import {
+  getCurrentUserIdGlobal,
+  getIdTokenExpirationTimeGlobal,
+  getIdTokenGlobal,
+  getIdTokenValidityStatus,
+} from '@atb/modules/auth';
 
 type InternalUpstreamServerError = {
   errorCode: 602;
@@ -112,11 +117,24 @@ function responseErrorHandler(error: AxiosError) {
   }
 
   const errorType = getAxiosErrorType(error);
+
+  const idTokenMetadata = {
+    idToken: getIdTokenGlobal(),
+    idTokenValidityStatus: getIdTokenValidityStatus(
+      getIdTokenExpirationTimeGlobal(),
+    ),
+  };
+
+  // ID token breadcrumb logging on API error
+  Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
+
   switch (errorType) {
     case 'default':
       const errorMetadata = getAxiosErrorMetadata(error);
       Bugsnag.notify(error, (event) => {
         event.addMetadata('api', {...errorMetadata});
+        // ID token metadata on API error
+        event.addMetadata('ID Token', idTokenMetadata);
       });
       break;
     case 'unknown':

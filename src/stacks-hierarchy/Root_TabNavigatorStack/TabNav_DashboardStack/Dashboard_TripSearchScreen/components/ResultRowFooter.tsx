@@ -13,7 +13,8 @@ import {getTripPatternBookingText} from '../utils';
 
 const ResultItemFooter: React.FC<{
   tripPattern: TripPattern;
-}> = ({tripPattern}) => {
+  isInPast: boolean;
+}> = ({tripPattern, isInPast}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -25,7 +26,7 @@ const ResultItemFooter: React.FC<{
   const bookingText = getTripPatternBookingText(tripPatternBookingStatus, t);
 
   return (
-    <View style={styles.resultFooter}>
+    <View style={[styles.resultFooter, isInPast && styles.resultInPast]}>
       <View style={styles.footerNotice}>
         {bookingText && (
           <MessageInfoText
@@ -55,6 +56,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderTopWidth: theme.border.width.slim,
     paddingHorizontal: theme.spacing.medium,
     paddingVertical: theme.spacing.small,
+  },
+  resultInPast: {
+    borderTopColor: theme.color.background.neutral['0'].background,
   },
   footerNotice: {flex: 1},
   detailsTextWrapper: {

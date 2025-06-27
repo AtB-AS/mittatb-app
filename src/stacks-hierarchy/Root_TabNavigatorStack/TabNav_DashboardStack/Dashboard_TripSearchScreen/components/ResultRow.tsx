@@ -68,9 +68,15 @@ export const ResultRow: React.FC<ResultRowProps> = ({
       accessible={true}
       testID={testID}
     >
-      <View style={styles.resultRow}>
-        <MemoizedResultItem tripPattern={tripPattern} searchTime={searchTime} />
-        <MemoizedResultItemFooter tripPattern={tripPattern} />
+      <View style={[styles.resultRow, isInPast && styles.resultInPast]}>
+        <MemoizedResultItem
+          tripPattern={tripPattern}
+          state={isInPast ? 'dimmed' : 'enabled'}
+        />
+        <MemoizedResultItemFooter
+          tripPattern={tripPattern}
+          isInPast={isInPast}
+        />
       </View>
     </PressableOpacity>
   );
@@ -83,10 +89,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   resultRow: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacing.small,
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
     rowGap: theme.spacing.small,
+    marginTop: theme.spacing.small,
+    paddingTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
+  },
+  resultInPast: {
+    backgroundColor: theme.color.background.neutral[2].background,
   },
 }));
 

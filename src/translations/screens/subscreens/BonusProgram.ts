@@ -1,6 +1,7 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
   bonusPoints: _('bonuspoeng', 'bonus points', 'bonuspoeng'),
+  points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
     _(
       `Koster ${amount} bonuspoeng`,
@@ -8,7 +9,7 @@ const BonusProgramTexts = {
       `Kostar ${amount} bonuspoeng`,
     ),
 
-  youHave: _('Du har ', 'You have ', 'Du har '),
+  youHave: _('Du har', 'You have', 'Du har'),
 
   yourBonusBalanceA11yLabel: (bonusBalance: number | null) => {
     return _(
@@ -19,14 +20,15 @@ const BonusProgramTexts = {
   },
 
   fareContract: {
-    youEarned: (bonusPointsEarned: number) => {
-      return _(
-        `Du tjente **${bonusPointsEarned} poeng** på dette kjøpet!`,
-        `You earned **${bonusPointsEarned} point${
-          bonusPointsEarned == 1 ? '' : 's'
-        }** on this purchase!`,
-        `Du tente **${bonusPointsEarned} poeng** på dette kjøpet!`,
-      );
+    youEarned: {
+      intro: _('Du tjente ', 'You earned ', 'Du tente '),
+      earned: (bonusPointsEarned: number) =>
+        _(
+          `${bonusPointsEarned} poeng`,
+          `${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}`,
+          `${bonusPointsEarned} poeng`,
+        ),
+      ending: _(' på dette kjøpet!', ' on this purchase!', ' på dette kjøpet!'),
     },
   },
 
@@ -34,11 +36,7 @@ const BonusProgramTexts = {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),
     },
-    yourBonusPoints: _(
-      'Dine bonuspoeng',
-      'Your bonus points',
-      'Bonuspoenga dine',
-    ),
+    yourBonusPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
     spendPoints: {
       heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),

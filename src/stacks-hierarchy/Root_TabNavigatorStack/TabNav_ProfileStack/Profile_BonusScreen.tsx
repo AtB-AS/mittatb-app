@@ -13,7 +13,10 @@ import {
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
+import {
+  ThemedBonusBagHug,
+  ThemedBonusTransaction,
+} from '@atb/theme/ThemedAssets';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
@@ -26,6 +29,9 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -68,10 +74,11 @@ export const Profile_BonusScreen = () => {
           </View>
         ) : (
           <View style={styles.bonusProductsContainer}>
-            {activeBonusProducts?.map((bonusProduct, index) => (
-              <Section key={bonusProduct.id}>
+            <Section>
+              {activeBonusProducts?.map((bonusProduct, index) => (
                 <ExpandableSectionItem
                   expanded={currentlyOpenBonusProduct === index}
+                  key={bonusProduct.id}
                   onPress={() => {
                     setCurrentlyOpenBonusProduct(index);
                   }}
@@ -108,8 +115,8 @@ export const Profile_BonusScreen = () => {
                     </ThemeText>
                   }
                 />
-              </Section>
-            ))}
+              ))}
+            </Section>
           </View>
         )}
         <ContentHeading
@@ -118,7 +125,13 @@ export const Profile_BonusScreen = () => {
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
-              <ThemedCityBike />
+              <ThemedBonusTransaction
+                height={61}
+                width={61}
+                style={{
+                  alignSelf: 'flex-start',
+                }}
+              />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
                   {getTextForLanguage(
@@ -151,7 +164,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.small,
+    gap: theme.spacing.medium,
   },
   currentBalanceDisplay: {
     flexDirection: 'row',
@@ -177,6 +190,7 @@ function UserBonusBalanceSection(): JSX.Element {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
+  const fontScale = useFontScale();
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -201,8 +215,13 @@ function UserBonusBalanceSection(): JSX.Element {
           >
             <View style={styles.currentBalanceDisplay}>
               <UserBonusBalance
-                size="large"
+                typography="body__primary--jumbo--bold"
                 color={theme.color.foreground.dynamic.primary}
+              />
+              <ThemeIcon
+                color={theme.color.foreground.dynamic.primary}
+                svg={StarFill}
+                size="large"
               />
             </View>
 
@@ -210,7 +229,7 @@ function UserBonusBalanceSection(): JSX.Element {
               {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
             </ThemeText>
           </View>
-          <ThemedCityBike />
+          <ThemedBonusBagHug height={fontScale * 61} width={fontScale * 61} />
         </GenericSectionItem>
       </Section>
       {isError && (

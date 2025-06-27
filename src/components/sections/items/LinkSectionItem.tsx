@@ -54,7 +54,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       isNavigationIcon(icon) || !icon ? (
         <NavigationIcon
           mode={icon}
-          fill={interactiveColor.default.foreground.primary}
+          color={interactiveColor.default.foreground.primary}
         />
       ) : (
         icon
@@ -83,7 +83,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
         collapsable={false}
         {...accessibilityWithOverrides}
       >
-        <View style={[style.spaceBetween, disabledStyle]}>
+        <View
+          style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
+        >
           <ThemeText
             style={[
               contentContainer,
@@ -95,7 +97,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
           </ThemeText>
           {label && (
             <Tag
-              label={[t(TagInfoTexts.labels[label])]}
+              labels={[t(TagInfoTexts.labels[label])]}
               tagType="primary"
               customStyle={{alignSelf: 'center'}}
             />
@@ -114,6 +116,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
   },
 );
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},
+  gap: {gap: theme.spacing.small},
 }));

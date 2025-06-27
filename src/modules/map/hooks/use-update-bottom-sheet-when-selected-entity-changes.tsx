@@ -36,6 +36,7 @@ import {MapFilterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
 import {useEnterPaymentMethods} from './use-enter-payment-methods';
+import {useMapContext} from '../MapContext';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -64,6 +65,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
   const navigateToPaymentMethods = useEnterPaymentMethods();
+  const {setMapFilterIsOpen} = useMapContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -179,6 +181,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       if (!isFocused) return;
 
       if (mapSelectionAction?.source === 'filters-button') {
+        setMapFilterIsOpen(true);
         openBottomSheet(
           () => (
             <MapFilterSheet
@@ -187,12 +190,15 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                 mapProps.vehicles?.onFilterChange(filter.mobility);
                 mapProps.stations?.onFilterChange(filter.mobility);
               }}
-              onClose={closeCallback}
+              onClose={() => {
+                closeCallback();
+                setMapFilterIsOpen(false);
+              }}
             />
           ),
           onCloseFocusRef,
           true,
-          tabBarHeight,
+          0,
         );
         return;
       }

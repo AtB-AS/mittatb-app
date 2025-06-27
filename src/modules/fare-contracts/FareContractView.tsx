@@ -111,7 +111,7 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {earnedBonusPoints != undefined && earnedBonusPoints > 0 && (
+      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
         <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
       {isActivateTicketNowEnabled &&

@@ -42,6 +42,7 @@ import {
   isBicycleV2,
   isScooterV2,
   useInitShmoBookingMutationStatus,
+  MapFilter,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -58,6 +59,7 @@ import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -66,11 +68,14 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
+
+  const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
+  const {height: bottomSheetHeight} = useBottomSheetContext();
+  const showMapFilterButton = bottomSheetHeight === 0; // hide filter button when a bottom sheet is open
+
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
-  const shouldShowVehiclesAndStations = isFocused; // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
@@ -97,7 +102,15 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
-  const {autoSelectedFeature} = useMapContext();
+  const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
+  const showStations =
+    (mapFilter?.mobility.BICYCLE?.showAll ||
+      mapFilter?.mobility.CAR?.showAll) ??
+    false;
+  const shouldShowVehiclesAndStations =
+    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
+
   const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
@@ -131,7 +144,8 @@ export const MapV2 = (props: MapProps) => {
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
-    !initShmoOneStopBookingIsMutating;
+    !initShmoOneStopBookingIsMutating &&
+    !mapFilterIsOpen;
 
   useAutoSelectMapItem(
     mapCameraRef,
@@ -329,8 +343,8 @@ export const MapV2 = (props: MapProps) => {
             <VehiclesAndStations
               selectedFeatureId={selectedFeature?.properties?.id}
               onPress={onMapItemClick}
-              showVehicles={true}
-              showStations={true}
+              showVehicles={showVehicles}
+              showStations={showStations}
             />
           )}
         </MapView>
@@ -338,9 +352,17 @@ export const MapV2 = (props: MapProps) => {
           style={[
             controlStyles.mapButtonsContainer,
             controlStyles.mapButtonsContainerRight,
+            mapFilterIsOpen && {bottom: 0},
           ]}
         >
           <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
+          {showMapFilterButton && (
+            <MapFilter
+              onPress={() => onMapClick({source: 'filters-button'})}
+              isLoading={false}
+            />
+          )}
 
           <PositionArrow
             onPress={async () => {
