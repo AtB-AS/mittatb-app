@@ -4,15 +4,16 @@ import {FareContractType} from '@atb-as/utils';
 export const getSortedFareContractsAndReservations = (
   fcOrReservations: (Reservation | FareContractType)[],
 ): (FareContractType | Reservation)[] => {
-  let keepFailed = true;
-  return fcOrReservations
-    .sort((a, b) => b.created.getTime() - a.created.getTime())
-    .filter(
-      (item) =>
-        'travelRights' in item ||
-        (item.paymentStatus !== 'CANCEL' && item.paymentStatus !== 'REJECT') ||
-        (keepFailed && (keepFailed = false)),
-    );
+  let fcFound = false;
+  return sortFcOrReservationByCreation(fcOrReservations).filter((item) =>
+    'travelRights' in item
+      ? (fcFound = true)
+      : !(
+          (item.paymentStatus === 'CANCEL' ||
+            item.paymentStatus === 'REJECT') &&
+          fcFound
+        ),
+  );
 };
 
 export const sortFcOrReservationByCreation = (
