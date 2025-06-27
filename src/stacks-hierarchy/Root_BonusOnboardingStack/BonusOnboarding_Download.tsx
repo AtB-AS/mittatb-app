@@ -12,7 +12,6 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {showAppMissingAlert} from '@atb/modules/mobility/show-app-missing-alert';
 
 export type DownloadScreenProps =
   BonusOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
