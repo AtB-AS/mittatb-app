@@ -8,14 +8,23 @@ import {handleStreamEvent} from './handle-stream-event';
 import {StreamEvent} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
-  const {isValidIdToken} = useAuthContext();
+  const {authStatus} = useAuthContext();
+  const appState = useAppStateStatus();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
 
   const url = `${WS_API_BASE_URL}stream/v1`;
+
+  // Similar to what's done in `useRefreshIdTokenWhenNecessary`, to ensure the id
+  // token is kept up to date.
+  const enabled =
+    isEventStreamEnabled &&
+    appState === 'active' &&
+    authStatus === 'authenticated';
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
@@ -43,8 +52,7 @@ export const useSetupEventStream = () => {
 
   useSubscription({
     url,
-    // When id token is valid, we connect to the stream
-    enabled: isEventStreamEnabled && isValidIdToken,
+    enabled,
     onMessage,
     onOpen: authenticate,
   });
