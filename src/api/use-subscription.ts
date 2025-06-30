@@ -41,7 +41,8 @@ export function useSubscription({
         // 1001: "going away", such as a server going down or a browser having
         //       navigated away from a page.
         // 1006: The connection was closed abnormally, but not by the server.
-        //       Can be caused by the Android websocket implementation.
+        //       Can be returned by the Android or iOS websocket implementations
+        //       on issues like network errors.
         const expectedCodes = [1000, 1001, 1006];
 
         if (event.code && !expectedCodes.includes(event.code)) {
