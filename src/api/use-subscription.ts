@@ -25,6 +25,7 @@ export function useSubscription({
     if (!url || !enabled) return;
 
     let retryTimeout: NodeJS.Timeout | null = null;
+    let resetRetryCountTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
       const ws = new WebSocket(url);
 
@@ -33,38 +34,40 @@ export function useSubscription({
       };
 
       ws.onclose = (event) => {
-        // Reconnect immediately if close event is expected, otherwise use
-        // exponetial backoff to retry.
-        if (
-          event.code === 1000 ||
-          event.code === 1001 ||
-          event.code === undefined
-        ) {
-          Bugsnag.leaveBreadcrumb(`WebSocket closed with code ${event.code}`);
-          connect();
+        if (resetRetryCountTimeout) clearTimeout(resetRetryCountTimeout);
+
+        // 1000: normal closure. The purpose for the connection has been
+        //       fulfilled.
+        // 1001: "going away", such as a server going down or a browser having
+        //       navigated away from a page.
+        // 1006: The connection was closed abnormally, but not by the server.
+        //       Can be returned by the Android or iOS websocket implementations
+        //       on issues like network errors.
+        const expectedCodes = [1000, 1001, 1006];
+
+        if (event.code && !expectedCodes.includes(event.code)) {
+          Bugsnag.notify(
+            `WebSocket closed with code ${event.code} "${event.message}" (${event.reason})`,
+          );
         } else {
-          if (event.code === 1006 && retryCount.current <= 3) {
-            // Might be caused by Android WS implementation closing connection.
-            // Should retry immediately, but this might also be an real issue
-            // where auto-reconnect can cause infinite loop. So instead try to leave
-            // breadcrumb if it happens under 3 times, but treat as normal retry flow.
-            Bugsnag.leaveBreadcrumb(
-              `WebSocket closed with code ${event.code} (retry: ${retryCount.current})`,
-            );
-          } else {
-            Bugsnag.notify(
-              `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
-            );
-          }
-          retryTimeout = retryWithCappedBackoff(retryCount, connect);
-          onError?.(event);
+          Bugsnag.leaveBreadcrumb(
+            `WebSocket closed with code ${event.code} (retry: ${retryCount.current})`,
+          );
         }
+        retryTimeout = retryWithCappedBackoff(retryCount, connect);
+        onError?.(event);
       };
 
       ws.onopen = () => {
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
-        retryCount.current = 0;
         if (onOpen) onOpen(ws);
+
+        // If setup or authentication fails, the connection might be closed
+        // after a slight delay, so we reset the retry count only when we can
+        // assume the connection is stable.
+        resetRetryCountTimeout = setTimeout(() => {
+          retryCount.current = 0;
+        }, 1000);
       };
 
       webSocket.current = ws;
@@ -74,6 +77,7 @@ export function useSubscription({
     // Cleanup
     return () => {
       if (retryTimeout) clearTimeout(retryTimeout);
+      if (resetRetryCountTimeout) clearTimeout(resetRetryCountTimeout);
       if (webSocket.current) {
         webSocket.current.onclose = null;
         webSocket.current.close();
