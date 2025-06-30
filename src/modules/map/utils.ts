@@ -33,6 +33,7 @@ import {
 } from '@atb/modules/mobility';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import opening_hours from 'opening_hours';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -317,4 +318,28 @@ export function getFeatureWeight(
   } else {
     return 0;
   }
+}
+
+export function getOpeningHoursInterval(
+  openingHours: opening_hours,
+  timeNow: Date,
+) {
+  const today = new Date(timeNow);
+  today.setHours(0, 0, 0, 0);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const openIntervalsToday = openingHours?.getOpenIntervals(today, tomorrow);
+
+  if (
+    !openIntervalsToday ||
+    openIntervalsToday.length === 0 ||
+    !openIntervalsToday[0]?.[0] ||
+    !openIntervalsToday[0]?.[1]
+  ) {
+    return;
+  }
+
+  return {open: openIntervalsToday[0][0], closing: openIntervalsToday[0][1]};
 }

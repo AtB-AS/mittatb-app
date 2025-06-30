@@ -1,9 +1,10 @@
-import {RefObject, useEffect, useRef, useState} from 'react';
+import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {MapView} from '@rnmapbox/maps';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   getFeaturesAtPoint,
   getFeatureToSelect,
+  getOpeningHoursInterval,
   isFeatureGeofencingZone,
 } from '../utils';
 import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
@@ -13,6 +14,7 @@ import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import opening_hours from 'opening_hours';
+import {useNow} from '@atb/utils/use-now';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -22,60 +24,38 @@ export const useShmoWarnings = (
   const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
     string | null
   >(null);
-  const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {location} = useGeolocationContext();
-
+  const now = useNow(30000);
   const {vehicle} = useVehicle(vehicleId);
 
-  useEffect(() => {
+  const warningMessage = useMemo(() => {
+    if (!vehicle || !vehicle?.system?.openingHours) return null;
+    const dateNow = new Date(now);
+
     const oh = new opening_hours(vehicle?.system?.openingHours ?? '');
+    const timeFormatOptions = {
+      hour: '2-digit' as const,
+      minute: '2-digit' as const,
+    };
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const openIntervalsToday = oh?.getOpenIntervals(today, tomorrow);
-
-    if (
-      !openIntervalsToday ||
-      openIntervalsToday.length === 0 ||
-      !openIntervalsToday[0]?.[0] ||
-      !openIntervalsToday[0]?.[1]
-    ) {
-      return;
+    if (vehicle?.isDisabled) {
+      return t(ShmoWarnings.scooterDisabled);
     }
 
-    const openingHour = openIntervalsToday[0][0];
-    const closingHour = openIntervalsToday[0][1];
-
-    const warnings = [
-      {
-        condition: vehicle?.isDisabled,
-        message: t(ShmoWarnings.scooterDisabled),
-      },
-      {
-        condition: oh && !oh.getState(new Date()),
-        message: t(
-          ShmoWarnings.scooterNotAvailable(
-            openingHour.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            closingHour.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          ),
+    if (!oh || !oh.getState(dateNow)) {
+      const res = getOpeningHoursInterval(oh, dateNow);
+      if (!res) return null;
+      return t(
+        ShmoWarnings.scooterNotAvailable(
+          res.open.toLocaleTimeString([], timeFormatOptions),
+          res.closing.toLocaleTimeString([], timeFormatOptions),
         ),
-      },
-    ];
+      );
+    }
 
-    const activeWarning = warnings.find((warning) => warning.condition);
-    setWarningMessage(activeWarning ? activeWarning.message : null);
-  }, [t, vehicle]);
+    return null;
+  }, [vehicle, now, t]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {

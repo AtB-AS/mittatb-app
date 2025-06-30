@@ -422,14 +422,14 @@ export const ShmoWarnings = {
   ),
   scooterNotAvailable: (start: string, end: string) =>
     _(
-      `El-sparkesykkelen er kun tilgjengelig mellom ${start} og ${end}`,
+      `Elsparkesykkelen er kun tilgjengelig mellom ${start} og ${end}`,
       `The E-scooter is only available between ${start} and ${end}`,
-      `El-sparkesykkelen er berre tilgjengeleg mellom ${start} og ${end}`,
+      `Elsparkesykkelen er berre tilgjengeleg mellom ${start} og ${end}`,
     ),
   scooterNotNear: _(
-    'Du må være i nærheten av el-sparkesykkelen for å starte en tur',
+    'Du må være i nærheten av elsparkesykkelen for å starte en tur',
     'You need to be near the e-scooter to start a ride.',
-    'Du må vere i nærleiken av el-sparkesykkelen for å starte ein tur',
+    'Du må vere i nærleiken av elsparkesykkelen for å starte ein tur',
   ),
   positionUnavailable: _(
     'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
