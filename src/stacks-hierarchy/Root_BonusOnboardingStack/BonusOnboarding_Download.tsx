@@ -22,7 +22,7 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedPushNotification height={170} />}
+      illustration={<ThemedPushNotification height={140} />}
       title={t(BonusProgramTexts.onBoarding.download.title)}
       description={t(BonusProgramTexts.onBoarding.download.description)}
       buttonText={t(BonusProgramTexts.onBoarding.download.buttonText)}
@@ -71,7 +71,10 @@ export const DownloadButtons = () => {
               logoSize={50}
               style={styles.logo}
             />
-            <ThemeText style={styles.operatorText}>
+            <ThemeText
+              style={styles.operatorText}
+              typography="body__secondary--bold"
+            >
               {mobilityOperators?.find((op) => op.id === operatorId)?.name}
             </ThemeText>
           </PressableOpacity>
@@ -95,10 +98,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   operatorText: {
     textAlign: 'center',
-    maxWidth: 135,
+    maxWidth: 130,
   },
   logo: {
-    borderRadius: theme.border.radius.small,
+    marginTop: theme.spacing.xLarge,
+    borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
 }));

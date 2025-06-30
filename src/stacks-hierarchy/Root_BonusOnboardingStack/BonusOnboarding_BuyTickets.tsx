@@ -18,7 +18,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedBonusTransaction height={170} />}
+      illustration={<ThemedBonusTransaction height={150} />}
       title={t(BonusProgramTexts.onBoarding.buyTickets.title)}
       description={t(BonusProgramTexts.onBoarding.buyTickets.description)}
       buttonText={t(BonusProgramTexts.onBoarding.buyTickets.buttonText)}

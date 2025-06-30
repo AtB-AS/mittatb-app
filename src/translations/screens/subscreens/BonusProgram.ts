@@ -75,10 +75,10 @@ const BonusProgramTexts = {
       ),
       description: _(
         'Takk for at du deltar i prøveprosjektet! Vi er i testfasen av Bonus og lærer underveis. Del gjerne tilbakemeldinger via Bonus-siden under Profil.',
-        'Thank you for participating in the pilot project! We are in the testing phase of Bonus and learning along the way. Please share your feedback via the Bonus page under Profile.',
+        "Thank you for taking part in the pilot! We're currently testing Bonus and learning as we go. Feel free to share your feedback via the Bonus page under Profile.",
         'Takk for at du deltek i prøveprosjektet! Me er i testfasen av Bonus og lærer undervegs. Del gjerne tilbakemeldingar via Bonus-sida under Profil.',
       ),
-      buttonText: _('Få poeng', 'Get points', 'Få poeng'),
+      buttonText: _('Få poeng', 'Earn points', 'Få poeng'),
     },
     buyTickets: {
       title: _(
@@ -88,12 +88,12 @@ const BonusProgramTexts = {
       ),
       description: _(
         'Med Bonus får du poeng når du kjøper enkeltbillett for buss eller trikk i sone A - som voksen eller student.\n\nDu må være logget inn for å få tilgang til Bonus.',
-        'With Bonus you get points when you buy a single ticket for a bus or tram in zone A - as an adult or student.\n\nYou must be logged in to access Bonus.',
+        'With Bonus, you earn points when you buy a single ticket for bus or tram in Zone A - whether you travel as an adult or a student.\n\nYou need to be logged in to access Bonus.',
         'Med Bonus får du poeng når du kjøper enkeltbillett for buss eller trikk i sone A - som vaksen eller student.\n\nDu må vera logga inn for å få tilgang til Bonus.',
       ),
       buttonText: _(
         'Flere reisemåter',
-        'More ways to travel',
+        'More ways to ride',
         'Fleire reisemåtar',
       ),
     },
@@ -118,7 +118,7 @@ const BonusProgramTexts = {
       ),
       description: _(
         'For at Bonus skal fungere med Hyre og Trondheim Bysykkel, må du først laste ned og logge inn i appene deres.\n\nLast ned og logg inn:',
-        'To use Bonus, you need to download the AtB app. There you can buy tickets and view your bonus points.\n\nDownload and log in:',
+        'To use Bonus with Hyre and Trondheim City Bike, you need to download and log in to their apps.\n\nDownload and log in:',
         'For at Bonus skal fungera med Hyre og Trondheim Bysykkel, må du først lasta ned og logga inn i appane deira.\n\n Last ned og logg inn:',
       ),
       buttonText: _('Skjønner', 'Got it!', 'SKjønner'),

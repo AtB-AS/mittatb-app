@@ -19,7 +19,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
 
     return (
       <OnboardingScreenComponent
-        illustration={<ThemedBundlingCityBikeActive height={170} />}
+        illustration={<ThemedBundlingCityBikeActive height={160} />}
         title={t(BonusProgramTexts.onBoarding.moreTravelMethods.title)}
         description={t(
           BonusProgramTexts.onBoarding.moreTravelMethods.description,
