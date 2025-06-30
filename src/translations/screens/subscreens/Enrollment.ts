@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 const EnrollmentTexts = {
-  header: _('Nye konsepter', 'New concepts', 'Ny konsepter'),
+  header: _('Nye konsepter', 'New concepts', 'Nye konsept'),
   info: _(
     'Vi tester nye konsepter i appen, på et mindre antall brukere. Har du fått en kode for å bli med? Skriv den inn her!',
     'We are trying out new concepts in the app with small groups of users. Got a code to join? Enter it here!',
