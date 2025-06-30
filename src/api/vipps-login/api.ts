@@ -61,12 +61,17 @@ export const getAgeVerification = (
     .then((res) => res.data);
 };
 
-export const authorizeAgeUser = async (): Promise<void> => {
+export const authorizeUserAge = async (
+  opts?: AxiosRequestConfig,
+): Promise<void> => {
   const state = await generateState();
   const nonce = await generateNonce();
   return client
     .get(
       `/identity/v1/vipps/age-verification/init?callbackUrl=${VIPPS_CALLBACK_URL}`,
+      {
+        ...opts,
+      },
     )
     .then(async (response) => {
       const authorisationUrl = response.data;

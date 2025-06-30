@@ -15,7 +15,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
 import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {AgeVerificationEnum} from '../queries/use-get-age-verification-query.tsx';
+import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
@@ -125,7 +125,7 @@ export const ShmoActionButton = ({
         active={false}
         disabled={
           initShmoOneStopBookingIsLoading ||
-          ageStatus === AgeVerificationEnum.UnderAge
+          ageStatus !== AgeVerificationEnum.LegalAge
         }
         interactiveColor={theme.color.interactive[0]}
         expanded={true}

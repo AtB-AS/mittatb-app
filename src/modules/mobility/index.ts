@@ -27,6 +27,7 @@ export {
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
+export {useAuthorizeUserAgeMutation} from './queries/use-authorize-user-age-mutation';
 export {useVehicleQuery} from './queries/use-vehicle-query';
 export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';

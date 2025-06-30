@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {LoginTexts, useTranslation} from '@atb/translations';
+import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
 import {ThemedTokenPhone} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {authorizeAgeUser, VIPPS_CALLBACK_URL} from '@atb/api/vipps-login/api';
+import {VIPPS_CALLBACK_URL} from '@atb/api/vipps-login/api';
 import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
 import {storage} from '@atb/modules/storage';
 import {VippsSignInErrorCode} from '@atb/modules/auth';
 import {useCompleteAgeVerificationMutation} from '../../queries/use-get-age-verification-mutation';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
+import {useAuthorizeUserAgeMutation} from '../../index';
 
 export type AgeVerificationScreenComponentProps = {
   legalAge: number;
@@ -22,29 +23,25 @@ export const AgeVerificationScreenComponent = ({
 }: AgeVerificationScreenComponentProps) => {
   const {t} = useTranslation();
   const appStatus = useAppStateStatus();
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<VippsSignInErrorCode>();
   const styles = useStyles();
 
-  const {mutateAsync: completeAgeVerification} =
-    useCompleteAgeVerificationMutation(legalAge);
+  const {
+    mutateAsync: completeAgeVerification,
+    isLoading: isCompleting,
+    error: completeError,
+  } = useCompleteAgeVerificationMutation(legalAge);
 
-  const verifyAge = async () => {
-    setIsLoading(true);
-    try {
-      await authorizeAgeUser();
-    } catch (err) {
-      setError('unknown_error');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    mutateAsync: authorizeUserAge,
+    isLoading: isAuthorizing,
+    error: authorizeError,
+  } = useAuthorizeUserAgeMutation();
 
   useEffect(() => {
     const handleUrl = async ({url}: {url: string}) => {
       if (url.includes(VIPPS_CALLBACK_URL)) {
         closeInAppBrowseriOS();
-        setIsLoading(true);
         const parsed = new URL(url);
         const code = parsed.searchParams.get('code');
         const state = parsed.searchParams.get('state');
@@ -53,7 +50,6 @@ export const AgeVerificationScreenComponent = ({
         if (code && state && state === initialState) {
           if (initialState?.toString() !== state?.toString()) {
             setError('unknown_error');
-            setIsLoading(false);
           } else {
             try {
               completeAgeVerification(code);
@@ -61,7 +57,6 @@ export const AgeVerificationScreenComponent = ({
               await storage.set('vipps_nonce', '');
             } catch (err) {
               setError('unknown_error');
-              setIsLoading(false);
             }
           }
         } else {
@@ -73,7 +68,6 @@ export const AgeVerificationScreenComponent = ({
             } else {
               setError('unknown_error');
             }
-            setIsLoading(false);
           }
         }
       }
@@ -86,12 +80,21 @@ export const AgeVerificationScreenComponent = ({
     };
   }, [appStatus, completeAgeVerification]);
 
-  const errorComp =
+  const ErrorComp =
     error && error !== 'access_denied' ? (
       <MessageInfoBox
         style={styles.errorMessage}
         type="error"
         message={t(LoginTexts.vipps.errors[error])}
+      />
+    ) : undefined;
+
+  const GenericError =
+    completeError || authorizeError ? (
+      <MessageInfoBox
+        style={styles.errorMessage}
+        type="error"
+        message={t(dictionary.genericErrorMsg)}
       />
     ) : undefined;
 
@@ -103,12 +106,12 @@ export const AgeVerificationScreenComponent = ({
         MobilityTexts.shmoRequirements.ageVerificatoin.description,
       )}
       vippsButton={{
-        onPress: verifyAge,
+        onPress: () => authorizeUserAge(),
         expanded: false,
-        loading: isLoading,
-        disabled: isLoading,
+        loading: isAuthorizing || isCompleting,
+        disabled: isAuthorizing || isCompleting,
       }}
-      contentNode={errorComp}
+      contentNode={ErrorComp ?? GenericError}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}
