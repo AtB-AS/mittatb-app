@@ -1,5 +1,8 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheetContext,
+} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -48,6 +51,7 @@ export const ActiveScooterSheet = ({
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  const {logEvent} = useBottomSheetContext();
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -84,11 +88,23 @@ export const ActiveScooterSheet = ({
         shmoBookingEvent: startFinishingEvent,
       });
 
+      logEvent('Mobility', 'Shmo booking start finishing', {
+        operatorId: activeBooking.asset.operator.id,
+        bookingId: activeBooking.bookingId,
+        finalAmount: res?.pricing?.finalAmount,
+      });
+
       if (res?.state === ShmoBookingState.FINISHING) {
         photoNavigation(activeBooking?.bookingId);
       }
     }
-  }, [activeBooking?.bookingId, photoNavigation, sendShmoBookingEvent]);
+  }, [
+    activeBooking?.asset.operator.id,
+    activeBooking?.bookingId,
+    logEvent,
+    photoNavigation,
+    sendShmoBookingEvent,
+  ]);
 
   const showEndAlert = async () => {
     Alert.alert(
