@@ -1,15 +1,10 @@
 import {translation as _} from '../../commons';
 const EnrollmentTexts = {
-  header: _('Ny funksjonalitet', 'New features', 'Ny funksjonalitet'),
+  header: _('Nye konsepter', 'New concepts', 'Ny konsepter'),
   info: _(
     'Vi tester nye konsepter i appen, på et mindre antall brukere. Har du fått en kode for å bli med? Skriv den inn her!',
     'We are trying out new concepts in the app with small groups of users. Got a code to join? Enter it here!',
     'Me testar nye konsept i appen, på nokre få brukarar. Har du fått ein kode for å bli med? Skriv den inn her!',
-  ),
-  betaButtonLabel: _(
-    'Jeg har kode til ny funkjonalitet',
-    'I have a code for new features',
-    'Eg har kode til ny funksjonalitet',
   ),
   success: _(
     'Du ble innrullert i den lukkede gruppen!',
