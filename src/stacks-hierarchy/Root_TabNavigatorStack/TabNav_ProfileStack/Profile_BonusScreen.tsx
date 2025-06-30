@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
+  LinkSectionItem,
   Section,
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -32,6 +33,8 @@ import {isDefined} from '@atb/utils/presence';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import Intercom, {Space} from '@intercom/intercom-react-native';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -148,6 +151,20 @@ export const Profile_BonusScreen = () => {
               </View>
             </View>
           </GenericSectionItem>
+        </Section>
+        <ContentHeading
+          text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
+        />
+        <Section>
+          <LinkSectionItem
+            text={t(BonusProgramTexts.bonusProfile.feedback.button)}
+            icon={
+              <ThemeIcon color={theme.color.background.accent[0]} svg={Chat} />
+            }
+            onPress={() => {
+              Intercom.presentSpace(Space.home);
+            }}
+          />
         </Section>
       </View>
     </FullScreenView>
