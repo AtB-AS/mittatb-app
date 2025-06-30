@@ -33,7 +33,7 @@ import {useLocaleContext} from '@atb/modules/locale';
 import {useRefreshIdTokenWhenNecessary} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {decodeIdToken, isIdTokenValid} from './id-token';
-import {getServerNow} from '@atb/modules/time';
+import {getServerNowGlobal} from '@atb/modules/time';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -52,7 +52,7 @@ type AuthReducer = (
 let idTokenGlobal: string | undefined = undefined;
 export const getIdTokenGlobal = () => {
   const idToken = idTokenGlobal ? decodeIdToken(idTokenGlobal) : undefined;
-  const serverNow = new Date(getServerNow());
+  const serverNow = new Date(getServerNowGlobal());
   const isValid = isIdTokenValid(idToken, serverNow);
   return isValid ? idTokenGlobal : undefined;
 };

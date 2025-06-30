@@ -138,3 +138,12 @@ async function generateNonce() {
   await storage.set('vipps_nonce', nonce);
   return nonce;
 }
+
+export const getServerTimeOffset = async () => {
+  const result = await client.get('/bff/health');
+  const dateHeader = result?.headers['date'];
+  const serverTimeMs = new Date(dateHeader).valueOf();
+  if (serverTimeMs) {
+    return Date.now() - serverTimeMs;
+  }
+};
