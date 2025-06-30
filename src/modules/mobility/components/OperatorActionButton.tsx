@@ -20,6 +20,7 @@ type OperatorActionButtonProps = {
   appStoreUri: string | undefined;
   rentalAppUri: string;
   isBonusPayment?: boolean;
+  setIsBonusPayment?: (isBonusPayment: boolean) => void;
   bonusProductId?: string;
 };
 export const OperatorActionButton = ({
@@ -29,6 +30,7 @@ export const OperatorActionButton = ({
   appStoreUri,
   rentalAppUri,
   isBonusPayment,
+  setIsBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
   const {logEvent} = useBottomSheetContext();
@@ -84,7 +86,8 @@ export const OperatorActionButton = ({
         operatorId={operatorId}
         buttonOnPress={buttonOnPress}
         buttonText={buttonText}
-        buyValueCodeWithBonusPoints={isBonusPayment}
+        isBonusPayment={isBonusPayment}
+        setIsBonusPayment={setIsBonusPayment}
         bonusProductId={bonusProductId}
       />
     );
@@ -122,14 +125,16 @@ const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
 
 type OperatorActionButtonWithValueCodeProps = AppSwitchButtonProps & {
   operatorId: string | undefined;
-  buyValueCodeWithBonusPoints: boolean | undefined;
+  isBonusPayment: boolean | undefined;
+  setIsBonusPayment?: (isBonusPayment: boolean) => void;
   bonusProductId?: string;
 };
 const OperatorActionButtonWithValueCode = ({
   operatorId,
   buttonOnPress,
   buttonText,
-  buyValueCodeWithBonusPoints,
+  isBonusPayment,
+  setIsBonusPayment,
   bonusProductId,
 }: OperatorActionButtonWithValueCodeProps) => {
   const {t} = useTranslation();
@@ -146,19 +151,18 @@ const OperatorActionButtonWithValueCode = ({
     isError: isBuyingValueCodeError,
   } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
 
-  const getValueCode = buyValueCodeWithBonusPoints
-    ? buyBonusProduct
-    : fetchValueCode;
+  const getValueCode = isBonusPayment ? buyBonusProduct : fetchValueCode;
 
   const appSwitchButtonOnPress = useCallback(async () => {
     const valueCode = await getValueCode();
     valueCode && buttonOnPress(valueCode);
-  }, [buttonOnPress, getValueCode]);
+    if (setIsBonusPayment) {
+      setIsBonusPayment(false);
+    }
+  }, [buttonOnPress, getValueCode, setIsBonusPayment]);
 
-  const isLoading = buyValueCodeWithBonusPoints
-    ? isBuyingValueCode
-    : isFetchingValueCode;
-  const isError = buyValueCodeWithBonusPoints
+  const isLoading = isBonusPayment ? isBuyingValueCode : isFetchingValueCode;
+  const isError = isBonusPayment
     ? isBuyingValueCodeError
     : isFetchingValueCodeError;
 
