@@ -68,7 +68,6 @@ describe('Sort by Validity', () => {
       '',
       now,
       fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
     );
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
@@ -93,7 +92,6 @@ describe('Sort by Validity', () => {
       '',
       now,
       fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
     );
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
@@ -119,7 +117,6 @@ describe('Sort by Validity', () => {
       '',
       now,
       fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
     );
     const ids: string[] = result.map((fcOrReservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;

@@ -4,7 +4,6 @@ import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
 import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation';
-import {getFareContractInfo} from './utils';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
@@ -40,9 +39,6 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       abtCustomerId,
       now,
       fcOrReservations,
-      (currentTime, fareContract, currentUserId) =>
-        getFareContractInfo(currentTime, fareContract, currentUserId)
-          .validityStatus,
     );
 
   return (

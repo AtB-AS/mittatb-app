@@ -1,16 +1,11 @@
 import {Reservation} from '@atb/modules/ticketing';
-import type {ValidityStatus} from './utils';
+import {getFareContractInfo} from './utils';
 import {FareContractType} from '@atb-as/utils';
 
 export const sortFcOrReservationByValidityAndCreation = (
   userId: string | undefined,
   now: number,
   fcOrReservations: (Reservation | FareContractType)[],
-  getFareContractStatus: (
-    now: number,
-    fc: FareContractType,
-    currentUserId?: string,
-  ) => ValidityStatus | undefined,
 ): (FareContractType | Reservation)[] => {
   const getFcOrReservationOrder = (
     fcOrReservation: FareContractType | Reservation,
@@ -19,7 +14,11 @@ export const sortFcOrReservationByValidityAndCreation = (
     // Make reservations go first, then fare contracts
     if (!isFareContract) return -1;
 
-    const validityStatus = getFareContractStatus(now, fcOrReservation, userId);
+    const validityStatus = getFareContractInfo(
+      now,
+      fcOrReservation,
+      userId,
+    ).validityStatus;
     return validityStatus === 'valid' ? 0 : 1;
   };
 
