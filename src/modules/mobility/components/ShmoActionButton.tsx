@@ -47,7 +47,7 @@ export const ShmoActionButton = ({
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
 
-  const {ageStatus, legalAge} = useShmoRequirements();
+  const {ageVerification, legalAge} = useShmoRequirements();
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
@@ -114,7 +114,7 @@ export const ShmoActionButton = ({
           )}
         />
       )}
-      {ageStatus === AgeVerificationEnum.UnderAge && (
+      {ageVerification === AgeVerificationEnum.UnderAge && (
         <MessageInfoBox
           type="warning"
           message={t(MobilityTexts.shmoRequirements.underAgeWarning(legalAge))}
@@ -125,7 +125,7 @@ export const ShmoActionButton = ({
         active={false}
         disabled={
           initShmoOneStopBookingIsLoading ||
-          ageStatus !== AgeVerificationEnum.LegalAge
+          ageVerification !== AgeVerificationEnum.LegalAge
         }
         interactiveColor={theme.color.interactive[0]}
         expanded={true}

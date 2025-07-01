@@ -74,7 +74,7 @@ export const MobilityTexts = {
       ),
       button: _('Del posisjon', 'Share location', 'Del posisjon'),
     },
-    ageVerificatoin: {
+    ageVerification: {
       title: _(
         'Vi må sjekke alderen din',
         'We need to verify your age',
@@ -86,7 +86,7 @@ export const MobilityTexts = {
         'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
       ),
       button: _(
-        'Fortsett med vipps',
+        'Fortsett med Vipps',
         'Continue with Vipps',
         'Fortsett med Vipps',
       ),

@@ -9,7 +9,7 @@ import {VIPPS_CALLBACK_URL} from '@atb/api/vipps-login/api';
 import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
 import {storage} from '@atb/modules/storage';
 import {VippsSignInErrorCode} from '@atb/modules/auth';
-import {useCompleteAgeVerificationMutation} from '../../queries/use-get-age-verification-mutation';
+import {useCompleteAgeVerificationMutation} from '../../queries/use-complete-age-verification-mutation';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useAuthorizeUserAgeMutation} from '../../index';
@@ -80,30 +80,24 @@ export const AgeVerificationScreenComponent = ({
     };
   }, [appStatus, completeAgeVerification]);
 
-  const ErrorComp =
-    error && error !== 'access_denied' ? (
-      <MessageInfoBox
-        style={styles.errorMessage}
-        type="error"
-        message={t(LoginTexts.vipps.errors[error])}
-      />
-    ) : undefined;
+  const getErrorMessage = () => {
+    if (error && error !== 'access_denied') {
+      return t(LoginTexts.vipps.errors[error]);
+    }
 
-  const GenericError =
-    completeError || authorizeError ? (
-      <MessageInfoBox
-        style={styles.errorMessage}
-        type="error"
-        message={t(dictionary.genericErrorMsg)}
-      />
-    ) : undefined;
+    if (completeError || authorizeError) {
+      return t(dictionary.genericErrorMsg);
+    }
+
+    return null;
+  };
 
   return (
     <OnboardingScreenComponent
       illustration={<ThemedTokenPhone height={220} />}
-      title={t(MobilityTexts.shmoRequirements.ageVerificatoin.title)}
+      title={t(MobilityTexts.shmoRequirements.ageVerification.title)}
       description={t(
-        MobilityTexts.shmoRequirements.ageVerificatoin.description,
+        MobilityTexts.shmoRequirements.ageVerification.description,
       )}
       vippsButton={{
         onPress: () => authorizeUserAge(),
@@ -111,7 +105,15 @@ export const AgeVerificationScreenComponent = ({
         loading: isAuthorizing || isCompleting,
         disabled: isAuthorizing || isCompleting,
       }}
-      contentNode={ErrorComp ?? GenericError}
+      contentNode={
+        getErrorMessage() ? (
+          <MessageInfoBox
+            style={styles.errorMessage}
+            type="error"
+            message={getErrorMessage() ?? ''}
+          />
+        ) : undefined
+      }
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}

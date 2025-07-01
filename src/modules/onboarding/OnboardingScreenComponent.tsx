@@ -28,7 +28,6 @@ type OnboardingScreenComponentParams = {
   testID?: string;
   headerProps?: ScreenHeaderProps;
   contentNode?: JSX.Element;
-  isVippsButton?: boolean;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

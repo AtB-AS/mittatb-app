@@ -21,14 +21,14 @@ export const useShmoRequirements = () => {
     false,
   );
 
-  const {data: ageVerified, isLoading: ageVerifiedLoading} =
+  const {data: ageVerification, isLoading: ageVerifiedLoading} =
     useGetAgeVerificationQuery(USER_AGE_LIMIT);
 
   const requirements: ShmoRequirementType[] = [
     {
       requirementCode: ShmoRequirementEnum.AGE_VERIFICATION,
       isLoading: ageVerifiedLoading,
-      isBlocking: ageVerified === AgeVerificationEnum.NotVerified,
+      isBlocking: ageVerification === AgeVerificationEnum.NotVerified,
     },
     {
       requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
@@ -58,6 +58,6 @@ export const useShmoRequirements = () => {
     setGivenConsent,
     isLoading,
     legalAge: USER_AGE_LIMIT,
-    ageStatus: ageVerified,
+    ageVerification,
   };
 };
