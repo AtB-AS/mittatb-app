@@ -15,6 +15,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
 import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type ShmoActionButtonProps = {
   onLogin: () => void;
@@ -38,6 +39,7 @@ export const ShmoActionButton = ({
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
+  const {logEvent} = useBottomSheetContext();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -57,6 +59,10 @@ export const ShmoActionButton = ({
       operatorId: operatorId,
     };
     const res = await initShmoOneStopBooking(initReqBody);
+    logEvent('Mobility', 'Shmo booking started', {
+      operatorId,
+      bookingId: res.bookingId,
+    });
     if (res.bookingId) {
       savePreviousPayment(
         userId,
@@ -65,11 +71,14 @@ export const ShmoActionButton = ({
       );
     }
   }, [
-    initShmoOneStopBooking,
+    paymentMethod?.recurringPayment?.id,
+    paymentMethod?.paymentType,
+    coordinates?.latitude,
+    coordinates?.longitude,
     vehicleId,
     operatorId,
-    coordinates,
-    paymentMethod,
+    initShmoOneStopBooking,
+    logEvent,
     userId,
   ]);
 
