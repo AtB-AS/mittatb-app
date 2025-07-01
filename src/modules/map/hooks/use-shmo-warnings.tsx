@@ -6,6 +6,7 @@ import {
   getFeatureToSelect,
   getOpeningHoursInterval,
   isFeatureGeofencingZone,
+  isScooterOpen,
 } from '../utils';
 import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
@@ -43,13 +44,12 @@ export const useShmoWarnings = (
       return t(ShmoWarnings.scooterDisabled);
     }
 
-    if (!oh || !oh.getState(dateNow)) {
-      const res = getOpeningHoursInterval(oh, dateNow);
-      if (!res) return null;
+    if (!isScooterOpen(oh, dateNow)) {
+      const {open, closing} = getOpeningHoursInterval(oh, dateNow);
       return t(
-        ShmoWarnings.scooterNotAvailable(
-          res.open.toLocaleTimeString([], timeFormatOptions),
-          res.closing.toLocaleTimeString([], timeFormatOptions),
+        ShmoWarnings.scooterClosed(
+          open?.toLocaleTimeString([], timeFormatOptions),
+          closing?.toLocaleTimeString([], timeFormatOptions),
         ),
       );
     }

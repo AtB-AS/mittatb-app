@@ -320,17 +320,14 @@ export function getFeatureWeight(
   }
 }
 
-export function getOpeningHoursInterval(
-  openingHours: opening_hours,
-  timeNow: Date,
-) {
+export function getOpeningHoursInterval(oh: opening_hours, timeNow: Date) {
   const today = new Date(timeNow);
   today.setHours(0, 0, 0, 0);
 
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
 
-  const openIntervalsToday = openingHours?.getOpenIntervals(today, tomorrow);
+  const openIntervalsToday = oh?.getOpenIntervals(today, tomorrow);
 
   if (
     !openIntervalsToday ||
@@ -338,8 +335,14 @@ export function getOpeningHoursInterval(
     !openIntervalsToday[0]?.[0] ||
     !openIntervalsToday[0]?.[1]
   ) {
-    return;
+    return {open: null, closing: null};
   }
 
   return {open: openIntervalsToday[0][0], closing: openIntervalsToday[0][1]};
+}
+
+export function isScooterOpen(oh: opening_hours, dateNow: Date) {
+  if (!oh) return false;
+
+  return oh?.getState(dateNow);
 }
