@@ -1,4 +1,4 @@
-import {RefObject, useEffect, useRef, useState} from 'react';
+import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {MapView} from '@rnmapbox/maps';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
@@ -12,6 +12,7 @@ import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
+import {useOpeningHours} from './use-opening-hours';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -25,9 +26,31 @@ export const useShmoWarnings = (
   const {location} = useGeolocationContext();
 
   const {vehicle} = useVehicle(vehicleId);
-  const warningMessage = vehicle?.isDisabled
-    ? t(ShmoWarnings.scooterDisabled)
-    : null;
+  const {isOpen, openingTime, closingTime} = useOpeningHours(
+    vehicle?.system?.openingHours,
+  );
+
+  const warningMessage = useMemo(() => {
+    const timeFormatOptions = {
+      hour: '2-digit' as const,
+      minute: '2-digit' as const,
+    };
+
+    if (vehicle?.isDisabled) {
+      return t(ShmoWarnings.scooterDisabled);
+    }
+
+    if (!isOpen) {
+      return t(
+        ShmoWarnings.scooterClosed(
+          openingTime?.toLocaleTimeString([], timeFormatOptions),
+          closingTime?.toLocaleTimeString([], timeFormatOptions),
+        ),
+      );
+    }
+
+    return null;
+  }, [vehicle?.isDisabled, isOpen, t, openingTime, closingTime]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
