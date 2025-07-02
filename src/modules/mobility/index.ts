@@ -8,6 +8,7 @@ export {MobilityBenefitsActionSectionItem} from './components/MobilityBenefitsAc
 export {MobilityBenefitsInfoSectionItem} from './components/MobilityBenefitsInfoSectionItem';
 export {MobilitySingleBenefitInfoSectionItem} from './components/MobilitySingleBenefitInfoSectionItem';
 export {LocationScreenComponent} from './components/onboarding/LocationScreenComponent';
+export {AgeVerificationScreenComponent} from './components/onboarding/AgeVerificationScreenComponent';
 export {PaymentScreenComponent} from './components/onboarding/PaymentScreenComponent';
 export {RulesScreenComponent} from './components/onboarding/RulesScreenComponent';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
@@ -26,6 +27,7 @@ export {
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
+export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
 export {useVehicleQuery} from './queries/use-vehicle-query';
 export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
@@ -50,3 +52,7 @@ export {
   isVehicleFeature,
   isVehiclesClusteredFeature,
 } from './utils';
+export {
+  type AgeVerificationEnum,
+  useGetAgeVerificationQuery,
+} from './queries/use-get-age-verification-query';

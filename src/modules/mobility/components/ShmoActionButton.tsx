@@ -15,6 +15,7 @@ import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
 import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type ShmoActionButtonProps = {
@@ -47,6 +48,8 @@ export const ShmoActionButton = ({
     isError: initShmoOneStopBookingIsError,
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
+
+  const {ageVerification, legalAge} = useShmoRequirements();
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
@@ -120,10 +123,19 @@ export const ShmoActionButton = ({
           )}
         />
       )}
+      {ageVerification === AgeVerificationEnum.UnderAge && (
+        <MessageInfoBox
+          type="warning"
+          message={t(MobilityTexts.shmoRequirements.underAgeWarning(legalAge))}
+        />
+      )}
       <Button
         mode="primary"
         active={false}
-        disabled={initShmoOneStopBookingIsLoading}
+        disabled={
+          initShmoOneStopBookingIsLoading ||
+          ageVerification !== AgeVerificationEnum.LegalAge
+        }
         interactiveColor={theme.color.interactive[0]}
         expanded={true}
         type="large"

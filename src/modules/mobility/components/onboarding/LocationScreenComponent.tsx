@@ -17,8 +17,11 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
       illustration={<ThemedMyLocation height={220} />}
       title={t(MobilityTexts.shmoRequirements.location.title)}
       description={t(MobilityTexts.shmoRequirements.location.description)}
-      buttonText={t(MobilityTexts.shmoRequirements.location.button)}
-      buttonOnPress={() => requestLocationPermission(true)}
+      footerButton={{
+        onPress: () => requestLocationPermission(false),
+        text: t(MobilityTexts.shmoRequirements.location.button),
+        expanded: true,
+      }}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},
       }}
