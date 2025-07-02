@@ -212,7 +212,7 @@ const ProfileTexts = {
           },
         },
         enrollment: {
-          label: _('Nye konsepter', 'New concepts', 'Nye konsepter'),
+          label: _('Nye konsepter', 'New concepts', 'Nye konsept'),
         },
         travelAid: {
           label: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
