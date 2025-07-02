@@ -50,7 +50,7 @@ export const RulesScreenComponent = ({
       footerButton={{
         onPress: () => onGiveConsent(true),
         text: t(MobilityTexts.shmoRequirements.terms.buttonOne),
-        expanded: false,
+        expanded: true,
       }}
       secondaryFooterButton={{
         text: t(MobilityTexts.shmoRequirements.terms.buttonTwo),

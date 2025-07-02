@@ -61,7 +61,7 @@ export const getAgeVerification = (
     .then((res) => res.data);
 };
 
-export const authorizeUserAge = async (
+export const initAgeVerification = async (
   opts?: AxiosRequestConfig,
 ): Promise<void> => {
   const state = await generateState();

@@ -19,7 +19,7 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
       footerButton={{
         onPress: onAddRecurringPayment,
         text: t(MobilityTexts.shmoRequirements.payment.button),
-        expanded: false,
+        expanded: true,
       }}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},

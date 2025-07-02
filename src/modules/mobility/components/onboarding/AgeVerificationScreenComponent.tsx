@@ -12,7 +12,7 @@ import {VippsSignInErrorCode} from '@atb/modules/auth';
 import {useCompleteAgeVerificationMutation} from '../../queries/use-complete-age-verification-mutation';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
-import {useAuthorizeUserAgeMutation} from '../../index';
+import {useInitAgeVerificationMutation} from '../../index';
 
 export type AgeVerificationScreenComponentProps = {
   legalAge: number;
@@ -33,10 +33,10 @@ export const AgeVerificationScreenComponent = ({
   } = useCompleteAgeVerificationMutation(legalAge);
 
   const {
-    mutateAsync: authorizeUserAge,
+    mutateAsync: initAgeVerification,
     isLoading: isAuthorizing,
     error: authorizeError,
-  } = useAuthorizeUserAgeMutation();
+  } = useInitAgeVerificationMutation();
 
   useEffect(() => {
     const handleUrl = async ({url}: {url: string}) => {
@@ -100,8 +100,8 @@ export const AgeVerificationScreenComponent = ({
         MobilityTexts.shmoRequirements.ageVerification.description,
       )}
       vippsButton={{
-        onPress: () => authorizeUserAge(),
-        expanded: false,
+        onPress: () => initAgeVerification(),
+        expanded: true,
         loading: isAuthorizing || isCompleting,
         disabled: isAuthorizing || isCompleting,
       }}

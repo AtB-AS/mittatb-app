@@ -20,7 +20,7 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
       footerButton={{
         onPress: () => requestLocationPermission(false),
         text: t(MobilityTexts.shmoRequirements.location.button),
-        expanded: false,
+        expanded: true,
       }}
       headerProps={{
         rightButton: {type: 'close', withIcon: true},

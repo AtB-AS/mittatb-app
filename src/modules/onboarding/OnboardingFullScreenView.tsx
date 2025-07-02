@@ -61,26 +61,22 @@ export const OnboardingFullScreenView = ({
           {isError && <GenericError />}
           {footerButton && (
             <Button
-              expanded={true}
+              {...footerButton}
               interactiveColor={interactiveColor}
               mode="primary"
-              onPress={footerButton.onPress}
               style={styles.footerButton}
               text={footerButton.text || ''}
-              rightIcon={footerButton.rightIcon}
               testID={testID ? `${testID}Button` : 'nextButton'}
             />
           )}
 
           {secondaryFooterButton && (
             <Button
-              expanded={true}
+              {...secondaryFooterButton}
               backgroundColor={themeColor}
               mode="secondary"
-              onPress={secondaryFooterButton.onPress}
               style={styles.footerButton}
               text={secondaryFooterButton.text || ''}
-              rightIcon={secondaryFooterButton.rightIcon}
               testID={
                 secondaryTestID ? `${secondaryTestID}Button` : 'nextButton'
               }

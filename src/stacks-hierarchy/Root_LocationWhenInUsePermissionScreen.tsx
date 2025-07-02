@@ -29,7 +29,7 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
       footerButton={{
         onPress: buttonOnPress,
         text: t(LocationWhenInUsePermissionTexts.button),
-        expanded: false,
+        expanded: true,
       }}
       testID="locationWhenInUsePermission"
     />

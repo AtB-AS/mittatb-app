@@ -62,7 +62,7 @@ export const Root_ShareTravelHabitsScreen = () => {
       footerButton={{
         text: t(ShareTravelHabitsTexts.choosePermissions),
         onPress: choosePermissions,
-        expanded: false,
+        expanded: true,
       }}
       testID="shareTravelHabits"
     />

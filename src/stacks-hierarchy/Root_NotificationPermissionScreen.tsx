@@ -29,7 +29,7 @@ export const Root_NotificationPermissionScreen = () => {
       footerButton={{
         onPress: buttonOnPress,
         text: t(NotificationPermissionTexts.button),
-        expanded: false,
+        expanded: true,
       }}
       testID="notificationPermission"
     />
