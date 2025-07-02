@@ -1,7 +1,7 @@
 import {useNow} from '@atb/utils/use-now';
 import opening_hours from 'opening_hours';
 
-type OpeningHoursType = {
+type OpeningHours = {
   isOpen: boolean | null;
   openingTime: Date | null;
   closingTime: Date | null;
@@ -9,7 +9,7 @@ type OpeningHoursType = {
 
 export const useOpeningHours = (
   openingHours: string | undefined,
-): OpeningHoursType => {
+): OpeningHours => {
   const now = useNow(30000);
   if (!openingHours) {
     return {isOpen: null, openingTime: null, closingTime: null};
