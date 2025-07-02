@@ -34,9 +34,19 @@ export const AgeVerificationScreenComponent = ({
 
   const {
     mutateAsync: initAgeVerification,
-    isLoading: isAuthorizing,
-    error: authorizeError,
+    isLoading: isInitting,
+    error: initError,
   } = useInitAgeVerificationMutation();
+
+  let errorMessage = null;
+
+  if (error && error !== 'access_denied') {
+    errorMessage = t(LoginTexts.vipps.errors[error]);
+  }
+
+  if (completeError || initError) {
+    errorMessage = t(dictionary.genericErrorMsg);
+  }
 
   useEffect(() => {
     const handleUrl = async ({url}: {url: string}) => {
@@ -80,18 +90,6 @@ export const AgeVerificationScreenComponent = ({
     };
   }, [appStatus, completeAgeVerification]);
 
-  const getErrorMessage = () => {
-    if (error && error !== 'access_denied') {
-      return t(LoginTexts.vipps.errors[error]);
-    }
-
-    if (completeError || authorizeError) {
-      return t(dictionary.genericErrorMsg);
-    }
-
-    return null;
-  };
-
   return (
     <OnboardingScreenComponent
       illustration={<ThemedTokenPhone height={220} />}
@@ -102,15 +100,15 @@ export const AgeVerificationScreenComponent = ({
       vippsButton={{
         onPress: () => initAgeVerification(),
         expanded: true,
-        loading: isAuthorizing || isCompleting,
-        disabled: isAuthorizing || isCompleting,
+        loading: isInitting || isCompleting,
+        disabled: isInitting || isCompleting,
       }}
       contentNode={
-        getErrorMessage() ? (
+        errorMessage ? (
           <MessageInfoBox
             style={styles.errorMessage}
             type="error"
-            message={getErrorMessage() ?? ''}
+            message={errorMessage ?? ''}
           />
         ) : undefined
       }
