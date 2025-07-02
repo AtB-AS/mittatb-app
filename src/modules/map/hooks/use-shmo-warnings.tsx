@@ -4,9 +4,7 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   getFeaturesAtPoint,
   getFeatureToSelect,
-  getOpeningHoursInterval,
   isFeatureGeofencingZone,
-  isScooterOpen,
 } from '../utils';
 import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
@@ -14,8 +12,7 @@ import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
-import opening_hours from 'opening_hours';
-import {useNow} from '@atb/utils/use-now';
+import {useOpeningHours} from './use-opening-hours';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -27,14 +24,13 @@ export const useShmoWarnings = (
   >(null);
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {location} = useGeolocationContext();
-  const now = useNow(30000);
+
   const {vehicle} = useVehicle(vehicleId);
+  const {isOpen, openingTime, closingTime} = useOpeningHours(
+    vehicle?.system?.openingHours,
+  );
 
   const warningMessage = useMemo(() => {
-    if (!vehicle || !vehicle?.system?.openingHours) return null;
-    const dateNow = new Date(now);
-
-    const oh = new opening_hours(vehicle?.system?.openingHours ?? '');
     const timeFormatOptions = {
       hour: '2-digit' as const,
       minute: '2-digit' as const,
@@ -44,18 +40,17 @@ export const useShmoWarnings = (
       return t(ShmoWarnings.scooterDisabled);
     }
 
-    if (!isScooterOpen(oh, dateNow)) {
-      const {open, closing} = getOpeningHoursInterval(oh, dateNow);
+    if (!isOpen) {
       return t(
         ShmoWarnings.scooterClosed(
-          open?.toLocaleTimeString([], timeFormatOptions),
-          closing?.toLocaleTimeString([], timeFormatOptions),
+          openingTime?.toLocaleTimeString([], timeFormatOptions),
+          closingTime?.toLocaleTimeString([], timeFormatOptions),
         ),
       );
     }
 
     return null;
-  }, [vehicle, now, t]);
+  }, [vehicle?.isDisabled, isOpen, t, openingTime, closingTime]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
