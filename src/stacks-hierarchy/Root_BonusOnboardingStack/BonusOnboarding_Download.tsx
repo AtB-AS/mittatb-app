@@ -54,7 +54,6 @@ export const DownloadButtons = () => {
     const appUrl = mobilityOperators?.find(
       (op) => op.id === operatorId,
     )?.appUrl;
-    console.log(appUrl?.android, appUrl?.ios);
     return (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? '';
   };
 
