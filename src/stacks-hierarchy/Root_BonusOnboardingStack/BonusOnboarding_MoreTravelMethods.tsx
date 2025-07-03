@@ -24,13 +24,12 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
         description={t(
           BonusProgramTexts.onBoarding.moreTravelMethods.description,
         )}
-        buttonText={t(
-          BonusProgramTexts.onBoarding.moreTravelMethods.buttonText,
-        )}
-        buttonOnPress={() =>
-          navigation.navigate('BonusOnboarding_DownloadScreen')
-        }
-        buttonRightIcon={{svg: ArrowRight}}
+        footerButton={{
+          onPress: () => navigation.navigate('BonusOnboarding_DownloadScreen'),
+          text: t(BonusProgramTexts.onBoarding.moreTravelMethods.buttonText),
+          expanded: true,
+          rightIcon: {svg: ArrowRight},
+        }}
         testID="buyTicketBonusOnboarding"
       />
     );

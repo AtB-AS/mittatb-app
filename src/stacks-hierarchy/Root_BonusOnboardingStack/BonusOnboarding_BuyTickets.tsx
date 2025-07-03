@@ -21,11 +21,13 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
       illustration={<ThemedBonusTransaction height={150} />}
       title={t(BonusProgramTexts.onBoarding.buyTickets.title)}
       description={t(BonusProgramTexts.onBoarding.buyTickets.description)}
-      buttonText={t(BonusProgramTexts.onBoarding.buyTickets.buttonText)}
-      buttonOnPress={() =>
-        navigation.navigate('BonusOnboarding_MoreTravelMethodsScreen')
-      }
-      buttonRightIcon={{svg: ArrowRight}}
+      footerButton={{
+        onPress: () =>
+          navigation.navigate('BonusOnboarding_MoreTravelMethodsScreen'),
+        text: t(BonusProgramTexts.onBoarding.buyTickets.buttonText),
+        expanded: true,
+        rightIcon: {svg: ArrowRight},
+      }}
       testID="buyTicketBonusOnboarding"
     />
   );

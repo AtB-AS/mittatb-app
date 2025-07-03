@@ -26,8 +26,11 @@ export const Root_NotificationPermissionScreen = () => {
       illustration={<ThemedPushNotification height={214} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}
-      buttonText={t(NotificationPermissionTexts.button)}
-      buttonOnPress={buttonOnPress}
+      footerButton={{
+        onPress: buttonOnPress,
+        text: t(NotificationPermissionTexts.button),
+        expanded: true,
+      }}
       testID="notificationPermission"
     />
   );

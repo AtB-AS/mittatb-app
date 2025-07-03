@@ -65,6 +65,14 @@ const BonusProgramTexts = {
     readMore: {
       heading: _('Les mer', 'Read more', 'Les meir'),
     },
+    feedback: {
+      heading: _('Chat', 'Chat', 'Chat'),
+      button: _(
+        'Har du tilbakemelding?',
+        'Do you have feedback?',
+        'Har du tilbakemelding?',
+      ),
+    },
   },
   onBoarding: {
     welcome: {

@@ -21,7 +21,7 @@ import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 type ButtonType = 'large' | 'small';
 
-export type ButtonIconProps = {
+type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   notificationColor?: ContrastColor;
 };

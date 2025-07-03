@@ -59,8 +59,11 @@ export const Root_ShareTravelHabitsScreen = () => {
         },
       }}
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}
-      buttonText={t(ShareTravelHabitsTexts.choosePermissions)}
-      buttonOnPress={choosePermissions}
+      footerButton={{
+        text: t(ShareTravelHabitsTexts.choosePermissions),
+        onPress: choosePermissions,
+        expanded: true,
+      }}
       testID="shareTravelHabits"
     />
   );

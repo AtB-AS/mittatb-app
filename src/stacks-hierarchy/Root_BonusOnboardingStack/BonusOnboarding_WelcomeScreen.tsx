@@ -21,11 +21,12 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
       illustration={<ThemedContact height={170} />}
       title={t(BonusProgramTexts.onBoarding.welcome.title)}
       description={t(BonusProgramTexts.onBoarding.welcome.description)}
-      buttonText={t(BonusProgramTexts.onBoarding.welcome.buttonText)}
-      buttonOnPress={() =>
-        navigation.navigate('BonusOnboarding_BuyTicketsScreen')
-      }
-      buttonRightIcon={{svg: ArrowRight}}
+      footerButton={{
+        onPress: () => navigation.navigate('BonusOnboarding_BuyTicketsScreen'),
+        text: t(BonusProgramTexts.onBoarding.welcome.buttonText),
+        expanded: true,
+        rightIcon: {svg: ArrowRight},
+      }}
       testID="welcomeBonusOnboarding"
     />
   );

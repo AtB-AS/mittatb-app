@@ -25,9 +25,12 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
       illustration={<ThemedPushNotification height={140} />}
       title={t(BonusProgramTexts.onBoarding.download.title)}
       description={t(BonusProgramTexts.onBoarding.download.description)}
-      buttonText={t(BonusProgramTexts.onBoarding.download.buttonText)}
-      buttonOnPress={() => navigation.getParent()?.goBack()}
-      buttonRightIcon={{svg: Confirm}}
+      footerButton={{
+        onPress: () => navigation.getParent()?.goBack(),
+        text: t(BonusProgramTexts.onBoarding.download.buttonText),
+        expanded: true,
+        rightIcon: {svg: Confirm},
+      }}
       contentNode={<DownloadButtons />}
       testID="downloadBonusOnboarding"
     />
@@ -51,6 +54,7 @@ export const DownloadButtons = () => {
     const appUrl = mobilityOperators?.find(
       (op) => op.id === operatorId,
     )?.appUrl;
+    console.log(appUrl?.android, appUrl?.ios);
     return (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? '';
   };
 

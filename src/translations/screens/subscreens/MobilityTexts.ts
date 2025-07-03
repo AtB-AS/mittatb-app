@@ -48,6 +48,12 @@ export const MobilityTexts = {
       'You need to log in and go through some steps to start the trip',
       'Du må logge inn og gå igjennom nokre steg for å starte turen',
     ),
+    underAgeWarning: (legalAge: number) =>
+      _(
+        `Du må være ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+        `You must be ${legalAge} years or older to use this e-scooter`,
+        `Du må vere ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+      ),
     shmoBlockers: _('Fullfør steg', 'Complete steps', 'Fullfør steg'),
     shmoBlockersInfoMessage: (numberOfBlockers: number) =>
       _(
@@ -67,6 +73,23 @@ export const MobilityTexts = {
         'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
       ),
       button: _('Del posisjon', 'Share location', 'Del posisjon'),
+    },
+    ageVerification: {
+      title: _(
+        'Vi må sjekke alderen din',
+        'We need to verify your age',
+        'Vi må sjekke alderen din',
+      ),
+      description: _(
+        'El-sparkesykler har en aldersgrense. Bekreft alderen din med Vipps.',
+        'E-scooters have an age limit. Verify your age with Vipps.',
+        'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
+      ),
+      button: _(
+        'Fortsett med Vipps',
+        'Continue with Vipps',
+        'Fortsett med Vipps',
+      ),
     },
     payment: {
       title: _(
@@ -420,16 +443,22 @@ export const ShmoWarnings = {
     'This e-scooter is not available right now',
     'Denne el-sparkesykkelen er ikkje tilgjengeleg akkurat no',
   ),
-  scooterNotAvailable: (start: string, end: string) =>
-    _(
-      `El-sparkesyklene er kun tilgjengelige mellom ${start} og ${end}`,
-      `E-scooters are only available between ${start} and ${end}`,
-      `El-sparkesyklane er berre tilgjengelege mellom ${start} og ${end}`,
-    ),
+  scooterClosed: (start: string | undefined, end: string | undefined) =>
+    start && end
+      ? _(
+          `Elsparkesykkelen er kun tilgjengelig mellom ${start} og ${end}`,
+          `The E-scooter is only available between ${start} and ${end}`,
+          `Elsparkesykkelen er berre tilgjengeleg mellom ${start} og ${end}`,
+        )
+      : _(
+          'Elsparkesykkelen er utenfor åpningstiden',
+          'The E-scooter is outside opening hours',
+          'Elsparkesykkelen er utanfor opningstiden',
+        ),
   scooterNotNear: _(
-    'Du må være i nærheten av el-sparkesykkelen for å starte en tur',
+    'Du må være i nærheten av elsparkesykkelen for å starte en tur',
     'You need to be near the e-scooter to start a ride.',
-    'Du må vere i nærleiken av el-sparkesykkelen for å starte ein tur',
+    'Du må vere i nærleiken av elsparkesykkelen for å starte ein tur',
   ),
   positionUnavailable: _(
     'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
