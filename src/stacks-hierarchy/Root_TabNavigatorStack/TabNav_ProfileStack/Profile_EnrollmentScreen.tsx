@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
@@ -29,57 +29,59 @@ export const Profile_EnrollmentScreen = () => {
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
   return (
-    <FullScreenView
-      headerProps={{
-        title: t(EnrollmentTexts.header),
-        leftButton: {type: 'back', withIcon: true},
-      }}
-      parallaxContent={(focusRef) => (
-        <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
-      )}
-    >
-      <View style={styles.contentContainer}>
-        <Section>
-          <GenericSectionItem>
-            <View style={styles.horizontalContainer}>
-              <ThemedBeacons
-                height={61 * fontScale}
-                width={61 * fontScale}
-                style={{
-                  alignSelf: 'flex-start',
-                }}
-              />
-              <View style={styles.headerTextContainer}>
-                <ThemeText typography="body__secondary" color="secondary">
-                  {t(EnrollmentTexts.info)}
-                </ThemeText>
-              </View>
-            </View>
-          </GenericSectionItem>
-        </Section>
-
-        <TextInputSectionItem
-          radius="top-bottom"
-          inlineLabel={false}
-          label={t(EnrollmentTexts.label)}
-          placeholder={t(EnrollmentTexts.placeholder)}
-          value={inviteCode}
-          onChangeText={setInviteCode}
-          autoCapitalize="none"
-          errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
-        />
-        {isEnrolled && (
-          <MessageInfoBox type="valid" message={t(EnrollmentTexts.success)} />
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <FullScreenView
+        headerProps={{
+          title: t(EnrollmentTexts.header),
+          leftButton: {type: 'back', withIcon: true},
+        }}
+        parallaxContent={(focusRef) => (
+          <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
         )}
-        <Button
-          expanded={true}
-          onPress={() => onEnroll(inviteCode)}
-          text={t(EnrollmentTexts.button)}
-          interactiveColor={interactiveColor}
-          loading={isLoading}
-        />
-      </View>
-    </FullScreenView>
+      >
+        <View style={styles.contentContainer}>
+          <Section>
+            <GenericSectionItem>
+              <View style={styles.horizontalContainer}>
+                <ThemedBeacons
+                  height={61 * fontScale}
+                  width={61 * fontScale}
+                  style={{
+                    alignSelf: 'flex-start',
+                  }}
+                />
+                <View style={styles.headerTextContainer}>
+                  <ThemeText typography="body__secondary" color="secondary">
+                    {t(EnrollmentTexts.info)}
+                  </ThemeText>
+                </View>
+              </View>
+            </GenericSectionItem>
+          </Section>
+
+          <TextInputSectionItem
+            radius="top-bottom"
+            inlineLabel={false}
+            label={t(EnrollmentTexts.label)}
+            placeholder={t(EnrollmentTexts.placeholder)}
+            value={inviteCode}
+            onChangeText={setInviteCode}
+            autoCapitalize="none"
+            errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
+          />
+          {isEnrolled && (
+            <MessageInfoBox type="valid" message={t(EnrollmentTexts.success)} />
+          )}
+          <Button
+            expanded={true}
+            onPress={() => onEnroll(inviteCode)}
+            text={t(EnrollmentTexts.button)}
+            interactiveColor={interactiveColor}
+            loading={isLoading}
+          />
+        </View>
+      </FullScreenView>
+    </KeyboardAvoidingView>
   );
 };
 
