@@ -80,6 +80,8 @@ export const OperatorActionButton = ({
         url = replaceAllButFirstOccurrence(url, /\?/, '&');
       }
       openAppURL(url, valueCode);
+
+      setIsBonusPayment && setIsBonusPayment(false);
     };
     return (
       <OperatorActionButtonWithValueCode
@@ -87,7 +89,6 @@ export const OperatorActionButton = ({
         buttonOnPress={buttonOnPress}
         buttonText={buttonText}
         isBonusPayment={isBonusPayment}
-        setIsBonusPayment={setIsBonusPayment}
         bonusProductId={bonusProductId}
       />
     );
@@ -134,7 +135,6 @@ const OperatorActionButtonWithValueCode = ({
   buttonOnPress,
   buttonText,
   isBonusPayment,
-  setIsBonusPayment,
   bonusProductId,
 }: OperatorActionButtonWithValueCodeProps) => {
   const {t} = useTranslation();
@@ -156,10 +156,7 @@ const OperatorActionButtonWithValueCode = ({
   const appSwitchButtonOnPress = useCallback(async () => {
     const valueCode = await getValueCode();
     valueCode && buttonOnPress(valueCode);
-    if (setIsBonusPayment) {
-      setIsBonusPayment(false);
-    }
-  }, [buttonOnPress, getValueCode, setIsBonusPayment]);
+  }, [buttonOnPress, getValueCode]);
 
   const isLoading = isBonusPayment ? isBuyingValueCode : isFetchingValueCode;
   const isError = isBonusPayment

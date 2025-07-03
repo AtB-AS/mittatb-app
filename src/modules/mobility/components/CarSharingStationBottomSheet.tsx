@@ -135,7 +135,11 @@ export const CarSharingStationBottomSheet = ({
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   isChecked={payWithBonusPoints}
-                  onPress={() => setPayWithBonusPoints(!payWithBonusPoints)}
+                  onPress={() =>
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
+                  }
                   style={styles.payWithBonusPointsSection}
                 />
               )}
