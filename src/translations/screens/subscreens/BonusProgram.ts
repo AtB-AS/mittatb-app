@@ -129,7 +129,7 @@ const BonusProgramTexts = {
         'To use Bonus with Hyre and Trondheim City Bike, you need to download and log in to their apps.\n\nDownload and log in:',
         'For at Bonus skal fungera med Hyre og Trondheim Bysykkel, må du først lasta ned og logga inn i appane deira.\n\n Last ned og logg inn:',
       ),
-      buttonText: _('Skjønner', 'Got it!', 'SKjønner'),
+      buttonText: _('Skjønner', 'Got it!', 'Skjønner'),
     },
   },
 };

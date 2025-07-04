@@ -116,9 +116,6 @@ const useEnroll = () => {
           setIsEnrolled(true);
 
           if (enrollment.enrollmentId) {
-            console.log(
-              `User enrolled in beta group: ${enrollment.enrollmentId}`,
-            );
             const onboarding_stack =
               PILOT_ONBOARDING_STACK_MAP[
                 enrollment.enrollmentId as keyof typeof PILOT_ONBOARDING_STACK_MAP

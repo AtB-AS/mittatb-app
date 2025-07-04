@@ -29,24 +29,22 @@ export const Root_BonusOnboardingStack = () => {
           tabBarPosition="bottom"
           initialRouteName="BonusOnboarding_WelcomeScreen"
         >
-          <>
-            <Tab.Screen
-              name="BonusOnboarding_WelcomeScreen"
-              component={BonusOnboarding_WelcomeScreen}
-            />
-            <Tab.Screen
-              name="BonusOnboarding_BuyTicketsScreen"
-              component={BonusOnboarding_BuyTicketsScreen}
-            />
-            <Tab.Screen
-              name="BonusOnboarding_MoreTravelMethodsScreen"
-              component={BonusOnboarding_MoreTravelMethodsScreen}
-            />
-            <Tab.Screen
-              name="BonusOnboarding_DownloadScreen"
-              component={BonusOnboarding_DownloadScreen}
-            />
-          </>
+          <Tab.Screen
+            name="BonusOnboarding_WelcomeScreen"
+            component={BonusOnboarding_WelcomeScreen}
+          />
+          <Tab.Screen
+            name="BonusOnboarding_BuyTicketsScreen"
+            component={BonusOnboarding_BuyTicketsScreen}
+          />
+          <Tab.Screen
+            name="BonusOnboarding_MoreTravelMethodsScreen"
+            component={BonusOnboarding_MoreTravelMethodsScreen}
+          />
+          <Tab.Screen
+            name="BonusOnboarding_DownloadScreen"
+            component={BonusOnboarding_DownloadScreen}
+          />
         </Tab.Navigator>
       </SafeAreaView>
     </>
