@@ -20,7 +20,7 @@ class AppDelegate: RCTAppDelegate {
   }
   
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    self.moduleName = "no.mittatb"
+    self.moduleName = "atb"
     self.launchOptions = launchOptions
     
     // Initialize Intercom
