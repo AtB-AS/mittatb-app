@@ -395,25 +395,6 @@ const TripSearchTexts = {
         'Alle transportmiddel',
       ),
       use: _('Bruk', 'Use', 'Bruk'),
-      saveFilters: {
-        text: _(
-          'Lagre valg for fremtidige reisesøk',
-          'Save selection for future travel searches',
-          'Lagre val for framtidige reisesøk',
-        ),
-        a11yHint: {
-          save: _(
-            'Aktiver for å lagre valg for fremtidige reisesøk',
-            'Activate to save selection for future travel searches',
-            'Aktiver for å lagre val for framtidige reisesøk',
-          ),
-          notSave: _(
-            'Aktiver for å ikke lagre valg for fremtidige reisesøk',
-            'Activate to not save selection for future travel searches',
-            'Aktiver for å ikkje lagre val for framtidige reisesøk',
-          ),
-        },
-      },
     },
     selection: {
       transportModes: (selected: number, total: number) =>
