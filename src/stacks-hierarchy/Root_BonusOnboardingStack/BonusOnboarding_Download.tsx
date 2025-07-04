@@ -23,11 +23,11 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   return (
     <OnboardingScreenComponent
       illustration={<ThemedPushNotification height={140} />}
-      title={t(BonusProgramTexts.onBoarding.download.title)}
-      description={t(BonusProgramTexts.onBoarding.download.description)}
+      title={t(BonusProgramTexts.onboarding.download.title)}
+      description={t(BonusProgramTexts.onboarding.download.description)}
       footerButton={{
         onPress: () => navigation.getParent()?.goBack(),
-        text: t(BonusProgramTexts.onBoarding.download.buttonText),
+        text: t(BonusProgramTexts.onboarding.download.buttonText),
         expanded: true,
         rightIcon: {svg: Confirm},
       }}
@@ -37,7 +37,7 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   );
 };
 
-const downloadOperators = [
+const downloadOperatorIds = [
   'HYR:Operator:Hyre',
   'YTR:Operator:trondheimbysykkel',
 ];
@@ -59,7 +59,7 @@ export const DownloadButtons = () => {
 
   return (
     <View style={styles.container}>
-      {downloadOperators.map((operatorId) => {
+      {downloadOperatorIds.map((operatorId) => {
         const appUrl = getPlatformAppUrl(operatorId);
 
         return (

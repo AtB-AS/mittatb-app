@@ -19,12 +19,12 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   return (
     <OnboardingScreenComponent
       illustration={<ThemedBonusTransaction height={150} />}
-      title={t(BonusProgramTexts.onBoarding.buyTickets.title)}
-      description={t(BonusProgramTexts.onBoarding.buyTickets.description)}
+      title={t(BonusProgramTexts.onboarding.buyTickets.title)}
+      description={t(BonusProgramTexts.onboarding.buyTickets.description)}
       footerButton={{
         onPress: () =>
           navigation.navigate('BonusOnboarding_MoreTravelMethodsScreen'),
-        text: t(BonusProgramTexts.onBoarding.buyTickets.buttonText),
+        text: t(BonusProgramTexts.onboarding.buyTickets.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},
       }}

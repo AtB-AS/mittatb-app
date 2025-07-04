@@ -19,11 +19,11 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
   return (
     <OnboardingScreenComponent
       illustration={<ThemedContact height={170} />}
-      title={t(BonusProgramTexts.onBoarding.welcome.title)}
-      description={t(BonusProgramTexts.onBoarding.welcome.description)}
+      title={t(BonusProgramTexts.onboarding.welcome.title)}
+      description={t(BonusProgramTexts.onboarding.welcome.description)}
       footerButton={{
         onPress: () => navigation.navigate('BonusOnboarding_BuyTicketsScreen'),
-        text: t(BonusProgramTexts.onBoarding.welcome.buttonText),
+        text: t(BonusProgramTexts.onboarding.welcome.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},
       }}

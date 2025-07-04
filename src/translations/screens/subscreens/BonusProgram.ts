@@ -74,7 +74,7 @@ const BonusProgramTexts = {
       ),
     },
   },
-  onBoarding: {
+  onboarding: {
     welcome: {
       title: _(
         'Velkommen til Bonus!',

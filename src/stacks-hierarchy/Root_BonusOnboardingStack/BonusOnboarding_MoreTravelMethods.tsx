@@ -20,13 +20,13 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
     return (
       <OnboardingScreenComponent
         illustration={<ThemedBundlingCityBikeActive height={160} />}
-        title={t(BonusProgramTexts.onBoarding.moreTravelMethods.title)}
+        title={t(BonusProgramTexts.onboarding.moreTravelMethods.title)}
         description={t(
-          BonusProgramTexts.onBoarding.moreTravelMethods.description,
+          BonusProgramTexts.onboarding.moreTravelMethods.description,
         )}
         footerButton={{
           onPress: () => navigation.navigate('BonusOnboarding_DownloadScreen'),
-          text: t(BonusProgramTexts.onBoarding.moreTravelMethods.buttonText),
+          text: t(BonusProgramTexts.onboarding.moreTravelMethods.buttonText),
           expanded: true,
           rightIcon: {svg: ArrowRight},
         }}
