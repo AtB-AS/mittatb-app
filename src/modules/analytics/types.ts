@@ -17,4 +17,5 @@ export type AnalyticsEventContext =
   | 'Ticketing'
   | 'Trip details'
   | 'Trip search'
-  | 'In App Review';
+  | 'In App Review'
+  | 'Bonus';
