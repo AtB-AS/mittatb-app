@@ -17,6 +17,13 @@ import {ScreenHeading} from '@atb/components/heading';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+
+const PILOT_ONBOARDING_STACK_MAP = {
+  'bonus-pilot-a': 'Root_BonusOnboardingStack',
+  'bonus-pilot-b': 'Root_BonusOnboardingStack',
+} as const;
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -89,10 +96,12 @@ type UserProperties = {[key: string]: string | null};
 
 const useEnroll = () => {
   const {refresh} = useRemoteConfigContext();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
+
   const onEnroll = useCallback(
     async function onEnroll(key: string) {
       setHasError(false);
@@ -107,6 +116,16 @@ const useEnroll = () => {
           await analytics().setUserProperties(userProperties);
           refresh();
           setIsEnrolled(true);
+
+          if (enrollment.enrollmentId) {
+            const onboarding_stack =
+              PILOT_ONBOARDING_STACK_MAP[
+                enrollment.enrollmentId as keyof typeof PILOT_ONBOARDING_STACK_MAP
+              ];
+            if (onboarding_stack) {
+              navigation.navigate(onboarding_stack);
+            }
+          }
         }
       } catch (err) {
         console.warn(err);
@@ -116,7 +135,7 @@ const useEnroll = () => {
         setIsLoading(false);
       }
     },
-    [setHasError, setIsLoading, setIsEnrolled, refresh],
+    [setHasError, setIsLoading, setIsEnrolled, refresh, navigation],
   );
 
   return {
