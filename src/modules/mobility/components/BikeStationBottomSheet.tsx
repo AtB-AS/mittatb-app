@@ -147,7 +147,11 @@ export const BikeStationBottomSheet = ({
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   isChecked={payWithBonusPoints}
-                  setIsChecked={setPayWithBonusPoints}
+                  onPress={() =>
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
+                  }
                   style={styles.payWithBonusPointsSection}
                 />
               )}
@@ -161,6 +165,7 @@ export const BikeStationBottomSheet = ({
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}
+                  setIsBonusPayment={setPayWithBonusPoints}
                   bonusProductId={bonusProduct?.id}
                 />
               </View>
