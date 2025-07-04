@@ -1,5 +1,5 @@
 import {client} from '@atb/api';
-import {VehicleRegistration} from '../types';
+import {VehicleInformation, VehicleRegistration} from '../types';
 
 export const addVehicleRegistration = (licensePlate: string): Promise<void> => {
   return client.post(
@@ -27,4 +27,12 @@ export const editVehicleRegistration = (
     {licensePlate},
     {authWithIdToken: true},
   );
+};
+
+export const searchVehicleInformation = (
+  licensePlate: string,
+): Promise<{vehicleInformation: VehicleInformation}> => {
+  return client.get(`/spar/v1/search-vehicle/${licensePlate}`, {
+    authWithIdToken: true,
+  });
 };

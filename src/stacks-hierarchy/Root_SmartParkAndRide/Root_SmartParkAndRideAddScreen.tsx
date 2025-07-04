@@ -1,9 +1,10 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
-import {Section, TextInputSectionItem} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
+import {LicensePlateInputSectionItem} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
@@ -56,13 +57,9 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           </ThemeText>
         </View>
         <Section>
-          <TextInputSectionItem
-            label={t(SmartParkAndRideTexts.add.input.label)}
-            placeholder={t(SmartParkAndRideTexts.add.input.placeholder)}
-            onChangeText={setLicensePlate}
-            autoCapitalize="characters"
+          <LicensePlateInputSectionItem
             value={licensePlate}
-            inlineLabel={false}
+            onChange={setLicensePlate}
             autoFocus={true}
           />
         </Section>
