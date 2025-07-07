@@ -24,6 +24,9 @@ export const Root_SmartParkAndRideEditScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const [nickname, setNickname] = useState(
+    params.vehicleRegistration.nickname || '',
+  );
   const [licensePlate, setLicensePlate] = useState(
     params.vehicleRegistration.licensePlate,
   );
@@ -37,6 +40,7 @@ export const Root_SmartParkAndRideEditScreen = ({
   } = useEditVehicleRegistrationMutation(
     params.vehicleRegistration.id,
     licensePlate,
+    nickname,
     onSuccess,
   );
 
@@ -103,17 +107,27 @@ export const Root_SmartParkAndRideEditScreen = ({
       <View style={styles.container}>
         <Section>
           <TextInputSectionItem
-            label={t(SmartParkAndRideTexts.edit.inputs.licensePlate.label)}
+            label={t(SmartParkAndRideTexts.edit.inputs.nickname.label)}
             placeholder={t(
-              SmartParkAndRideTexts.edit.inputs.licensePlate.placeholder,
+              SmartParkAndRideTexts.edit.inputs.nickname.placeholder,
             )}
-            onChangeText={setLicensePlate}
-            autoCapitalize="characters"
-            value={licensePlate}
+            onChangeText={setNickname}
+            value={nickname}
             inlineLabel={false}
             autoFocus={true}
           />
         </Section>
+
+        <TextInputSectionItem
+          label={t(SmartParkAndRideTexts.edit.inputs.licensePlate.label)}
+          placeholder={t(
+            SmartParkAndRideTexts.edit.inputs.licensePlate.placeholder,
+          )}
+          onChangeText={setLicensePlate}
+          autoCapitalize="characters"
+          value={licensePlate}
+          inlineLabel={false}
+        />
 
         {editVehicleRegistrationIsError && (
           <MessageInfoBox

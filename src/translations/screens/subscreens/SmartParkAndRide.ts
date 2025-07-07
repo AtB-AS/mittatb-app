@@ -19,19 +19,28 @@ const SmartParkAndRideTexts = {
     content: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
       text: _(
-        'Du kan legge til to kjøretøy.',
-        'You can add two vehicles.',
-        'Du kan leggje til to køyretøy.',
+        'Skriv inn skiltnummer og valgfritt navn. Du kan legge til maks to kjøretøy.',
+        'Enter license plate and optional name. You can add a maximum of two vehicles.',
+        'Skriv inn skiltnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
       ),
     },
-    input: {
-      label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
-      placeholder: _(
-        'Skriv inn skiltnummer',
-        'Enter license plate',
-        'Skriv inn skiltnummer',
-      ),
-      vehicleNotFound: {
+    inputs: {
+      nickname: {
+        label: _('Navn', 'Name', 'Namn'),
+        placeholder: _(
+          'Skriv inn valgfritt navn',
+          'Enter optional name',
+          'Skriv inn valfritt namn',
+        ),
+      },
+      licensePlate: {
+        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        placeholder: _(
+          'Skriv inn skiltnummer',
+          'Enter license plate',
+          'Skriv inn skiltnummer',
+        ),
+        vehicleNotFound: {
         title: _(
           'Vi finner ikke skiltnummeret',
           'We cannot find the license plate',
@@ -44,13 +53,25 @@ const SmartParkAndRideTexts = {
         ),
       },
     },
-    button: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
+    },
+    footer: {
+      add: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
+      later: _('Gjør det senere', 'Do it later', 'Gjer det seinare'),
+    },
   },
   edit: {
     header: {
       title: _('Endre kjøretøy', 'Edit vehicle', 'Endre køyretøy'),
     },
     inputs: {
+      nickname: {
+        label: _('Navn', 'Name', 'Namn'),
+        placeholder: _(
+          'Skriv inn valgfritt navn',
+          'Enter optional name',
+          'Skriv inn valfritt namn',
+        ),
+      },
       licensePlate: {
         label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
         placeholder: _(

@@ -3,6 +3,7 @@ import {z} from 'zod';
 export type VehicleRegistration = {
   id: string;
   licensePlate: string;
+  nickname?: string;
 };
 
 export const SvvVehicleInfoSchema = z.object({
