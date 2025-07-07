@@ -7,18 +7,6 @@ type PopOverText = {
 };
 
 const OneTimePopOverTexts: {[key in PopOverKey]: PopOverText} = {
-  'trip-search-flexible-transport-dismissed': {
-    heading: _(
-      'Filter er slått av',
-      'Filter is turned off',
-      'Filter er slått av',
-    ),
-    text: _(
-      'Tips om bestillingstransport kan skrus på igjen i filter.',
-      'Flexible transport travel suggestions can be turned on again in filters.',
-      'Tips om bestillingstransport kan skruast på igjen i filter.',
-    ),
-  },
   'on-behalf-of-new-feature-introduction': {
     heading: _('Nyhet!', 'New!', 'Nyhet!'),
     text: _(
