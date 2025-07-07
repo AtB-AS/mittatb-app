@@ -50,7 +50,6 @@ import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePopOverContext} from '@atb/modules/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
@@ -88,7 +87,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
   const isFocused = useIsFocusedAndActive();
-  const {addPopOver} = usePopOverContext();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
 
@@ -117,12 +115,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
-  const isFlexibleTransportSelected =
-    filtersState.filtersSelection?.transportModes?.find(
-      (mode) => mode.id === 'flexibleTransport',
-    )?.selected;
-  const isFlexibleTransportEnabled =
-    isFlexibleTransportEnabledInRemoteConfig && isFlexibleTransportSelected;
+  const [flexibleTransportInfoDismissed, setFlexibleTransportInfoDismissed] =
+    useState(false);
+  const isFlexibleTransportEnabled = isFlexibleTransportEnabledInRemoteConfig;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -453,6 +448,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 />
               )}
               {isFlexibleTransportEnabled &&
+                !flexibleTransportInfoDismissed &&
                 (tripPatterns.length > 0 ||
                   searchState === 'search-empty-result') &&
                 !error && (
@@ -460,12 +456,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     from={from}
                     to={to}
                     onDismiss={() => {
-                      filtersState.enabled &&
-                        filtersState.disableFlexibleTransport();
-                      addPopOver({
-                        oneTimeKey: 'trip-search-flexible-transport-dismissed',
-                        target: filterButtonWrapperRef,
-                      });
+                      setFlexibleTransportInfoDismissed(true);
                       analytics.logEvent(
                         'Flexible transport',
                         'Message box dismissed',
