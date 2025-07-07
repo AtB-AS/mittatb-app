@@ -1,5 +1,9 @@
 import {client} from '@atb/api';
-import {VehicleInformation, VehicleRegistration} from '../types';
+import {
+  SvvVehicleInfo,
+  SvvVehicleInfoSchema,
+  VehicleRegistration,
+} from '../types';
 
 export const addVehicleRegistration = (licensePlate: string): Promise<void> => {
   return client.post(
@@ -37,8 +41,10 @@ export const deleteVehicleRegistration = (id: string): Promise<void> => {
 
 export const searchVehicleInformation = (
   licensePlate: string,
-): Promise<{vehicleInformation: VehicleInformation}> => {
-  return client.get(`/spar/v1/search-vehicle/${licensePlate}`, {
-    authWithIdToken: true,
-  });
+): Promise<SvvVehicleInfo> => {
+  return client
+    .get(`/spar/v1/search-vehicle/${licensePlate}`, {
+      authWithIdToken: true,
+    })
+    .then((response) => SvvVehicleInfoSchema.parse(response.data));
 };

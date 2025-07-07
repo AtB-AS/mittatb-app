@@ -12,13 +12,13 @@ import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 
-interface LicensePlateInputSectionItemProps {
+type LicensePlateInputSectionItemProps = {
   value: string;
   onChange: (val: string) => void;
   autoFocus?: boolean;
   placeholder?: string;
   label?: string;
-}
+};
 
 export const LicensePlateInputSectionItem = ({
   value,
@@ -36,11 +36,18 @@ export const LicensePlateInputSectionItem = ({
   const shouldSearch = debouncedValue.length >= 2;
 
   // Query for vehicle info (always call the hook, but pass empty string if not searching)
-  const {isLoading, isFetching, isError, data} =
-    useSearchVehicleInformationQuery(shouldSearch ? debouncedValue : '');
+  const {
+    isLoading: isLoadingSvvVehicleInfo,
+    isFetching: isFetchingSvvVehicleInfo,
+    isError: isErrorSvvVehicleInfo,
+    data: svvVehicleInfo,
+  } = useSearchVehicleInformationQuery(shouldSearch, debouncedValue);
 
   // Use custom hook for loading indicator logic (always call the hook, but only show if shouldSearch)
-  const showLoadingRaw = useDelayedLoadingIndicator(isLoading, isFetching);
+  const showLoadingRaw = useDelayedLoadingIndicator(
+    isLoadingSvvVehicleInfo,
+    isFetchingSvvVehicleInfo,
+  );
   const showLoading = shouldSearch && showLoadingRaw;
 
   return (
@@ -59,23 +66,28 @@ export const LicensePlateInputSectionItem = ({
           maxLength={9}
         />
       </Section>
-      {shouldSearch && data?.vehicleInformation && !showLoading && !isError && (
-        <View style={styles.successRow}>
-          <ThemeIcon svg={statusTypeToIcon('valid', true, themeName)} />
-          <ThemeText typography="body__secondary">
-            {data.vehicleInformation.color} {data.vehicleInformation.make}{' '}
-            {data.vehicleInformation.model}
-          </ThemeText>
-        </View>
-      )}
-      {shouldSearch && isError && debouncedValue && !showLoading && (
-        <MessageInfoBox
-          type="warning"
-          title={t(SmartParkAndRideTexts.add.input.vehicleNotFound.title)}
-          message={t(SmartParkAndRideTexts.add.input.vehicleNotFound.message)}
-          style={styles.errorBox}
-        />
-      )}
+      {shouldSearch &&
+        svvVehicleInfo &&
+        !showLoading &&
+        !isErrorSvvVehicleInfo && (
+          <View style={styles.successRow}>
+            <ThemeIcon svg={statusTypeToIcon('valid', true, themeName)} />
+            <ThemeText typography="body__secondary">
+              {`${svvVehicleInfo.color} ${svvVehicleInfo.make} ${svvVehicleInfo.model}`}
+            </ThemeText>
+          </View>
+        )}
+      {shouldSearch &&
+        isErrorSvvVehicleInfo &&
+        debouncedValue &&
+        !showLoading && (
+          <MessageInfoBox
+            type="warning"
+            title={t(SmartParkAndRideTexts.add.input.vehicleNotFound.title)}
+            message={t(SmartParkAndRideTexts.add.input.vehicleNotFound.message)}
+            style={styles.errorBox}
+          />
+        )}
       {showLoading && (
         <View style={styles.loadingBox}>
           <ActivityIndicator />
