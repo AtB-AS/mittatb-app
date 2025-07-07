@@ -59,7 +59,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           <ThemeText typography="body__primary--big--bold">
             {t(SmartParkAndRideTexts.add.content.title)}
           </ThemeText>
-          <ThemeText typography="body__primary">
+          <ThemeText typography="body__primary" style={styles.descriptionText}>
             {t(SmartParkAndRideTexts.add.content.text)}
           </ThemeText>
         </View>
@@ -100,5 +100,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   laterButton: {
     marginTop: theme.spacing.medium,
+  },
+  descriptionText: {
+    textAlign: 'center',
   },
 }));
