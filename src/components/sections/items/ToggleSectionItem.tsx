@@ -75,6 +75,7 @@ export function ToggleSectionItem({
       }
       accessibilityLabel={text}
       {...accessibility}
+      testID="toggleItem"
     >
       <View style={{flexDirection: 'row'}}>
         {leftImage && (
