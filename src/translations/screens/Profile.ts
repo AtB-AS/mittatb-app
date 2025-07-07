@@ -4,14 +4,18 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ProfileTexts = {
   header: {
-    title: _('Profil', 'Profile', 'MProfil'),
+    title: _('Profil', 'Profile', 'Profil'),
   },
   sections: {
     account: {
       heading: _('Min konto', 'My account', 'Min konto'),
       linkSectionItems: {
         login: {
-          label: _('Logg inn', 'Log in', 'Logg inn'),
+          label: _(
+            'Logg inn eller opprett profil',
+            'Log in or create profile',
+            'Logg inn eller opprett profil',
+          ),
         },
         logout: {
           label: _('Logg ut', 'Log out', 'Logg ut'),
@@ -46,13 +50,26 @@ const ProfileTexts = {
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
-        editProfile: {
-          label: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
-        },
       },
       infoItems: {
-        customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
-        phoneNumber: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
+        heading: _('Din informasjon', 'Your information', 'Din informasjon'),
+        notLoggedInHeading: _(
+          'Du er ikke logget inn',
+          'You are not logged in',
+          'Du er ikkje logga inn',
+        ),
+        loggedInWith: (mode: string) =>
+          _(
+            `Logget inn med: ${mode}`,
+            `Logged in with: ${mode}`,
+            `Logga inn med: ${mode}`,
+          ),
+        customerNumber: (number: string | number) =>
+          _(
+            `Kundenummer: ${number}`,
+            `Customer number: ${number}`,
+            `Kundenummer: ${number}`,
+          ),
         claimsError: _(
           'Det oppstod et problem ved lasting av kontoen din.',
           'There was a problem loading your account.',

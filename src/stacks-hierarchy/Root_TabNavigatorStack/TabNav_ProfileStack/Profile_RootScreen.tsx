@@ -1,26 +1,34 @@
+import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAuthContext} from '@atb/modules/auth';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
+import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
 import React from 'react';
 import {View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
-
+import {destructiveAlert} from './utils';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useStorybookContext} from '@atb/modules/storybook';
-import {useTicketingContext} from '@atb/modules/ticketing';
+import {
+  useHasReservationOrAvailableFareContract,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
 import {ClickableCopy} from './components/ClickableCopy';
 import {UserInfo} from './components/UserInfo';
+import {Button} from '@atb/components/button';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -28,28 +36,20 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_ticketing} = useRemoteConfigContext();
+  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
+  const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
   const {t} = useTranslation();
-  const {authenticationType} = useAuthContext();
+  const analytics = useAnalyticsContext();
+  const {authenticationType, signOut} = useAuthContext();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingContext();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
-
   const [isLoading, setIsLoading] = useIsLoading(false);
-
   const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
     useFeatureTogglesContext();
-
-  const navigateToLoginavailableFareContractWarningScreen = () =>
-    navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
-  const navigateToLoginOptionsScreen = () =>
-    navigation.navigate('Root_LoginOptionsScreen', {
-      showGoBack: true,
-      transitionOverride: 'slide-from-bottom',
-    });
-  const navigateToLoginPhoneInputScreen = () =>
-    navigation.navigate('Root_LoginPhoneInputScreen', {});
 
   return (
     <>
@@ -66,15 +66,37 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         >
           <View style={style.mediumGap}>
             <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
-
             <UserInfo
-              setShowLoadingOverlay={setIsLoading}
-              navigateToLoginavailableFareContractWarningScreen={
-                navigateToLoginavailableFareContractWarningScreen
+              navigateToEditProfileScreen={() =>
+                navigation.navigate('Profile_EditProfileScreen')
               }
-              navigateToLoginOptionsScreen={navigateToLoginOptionsScreen}
-              navigateToLoginPhoneInputScreen={navigateToLoginPhoneInputScreen}
             />
+            {authenticationType === 'anonymous' && (
+              <Button
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.login.label,
+                )}
+                mode="primary"
+                expanded={true}
+                onPress={() => {
+                  if (hasReservationOrAvailableFareContract) {
+                    navigation.navigate(
+                      'Root_LoginAvailableFareContractWarningScreen',
+                      {},
+                    );
+                  } else if (enable_vipps_login) {
+                    navigation.navigate('Root_LoginOptionsScreen', {
+                      showGoBack: true,
+                      transitionOverride: 'slide-from-bottom',
+                    });
+                  } else {
+                    navigation.navigate('Root_LoginPhoneInputScreen', {});
+                  }
+                }}
+                rightIcon={{svg: LogIn}}
+                testID="loginButton"
+              />
+            )}
 
             <Section>
               <LinkSectionItem
@@ -194,6 +216,56 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </Section>
             </>
           )}
+          {authenticationType === 'phone' && (
+            <Button
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.logout.label,
+              )}
+              rightIcon={{svg: LogOut}}
+              expanded={true}
+              style={style.logoutButton}
+              onPress={() =>
+                destructiveAlert({
+                  alertTitleString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmTitle,
+                  ),
+                  alertMessageString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmMessage,
+                  ),
+                  cancelAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .cancel,
+                  ),
+                  confirmAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .confirm,
+                  ),
+                  destructiveArrowFunction: async () => {
+                    Bugsnag.leaveBreadcrumb('User logging out');
+                    analytics.logEvent('Profile', 'User logging out');
+                    setIsLoading(true);
+                    try {
+                      // On logout we delete the user's token
+                      await clearTokenAtLogout();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    }
+
+                    try {
+                      await signOut();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  },
+                })
+              }
+              testID="logoutButton"
+            />
+          )}
           <View style={style.debugInfoContainer}>
             <ThemeText typography="body__secondary" color="secondary">
               v{version} ({buildNumber})
@@ -255,5 +327,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   betaSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  logoutButton: {
+    marginVertical: theme.spacing.large,
   },
 }));

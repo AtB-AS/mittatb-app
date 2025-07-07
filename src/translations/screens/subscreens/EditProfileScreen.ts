@@ -2,7 +2,7 @@ import {translation as _} from '@atb/translations';
 
 export const EditProfileTexts = {
   header: {
-    title: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
+    title: _('Rediger informasjon', 'Edit information', 'Rediger informasjon'),
   },
   noProfile: _(
     'Det virker ikke som du er logget inn. Vennligst opprett en profil og logg inn.',
