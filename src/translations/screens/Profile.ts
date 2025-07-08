@@ -49,6 +49,9 @@ const ProfileTexts = {
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
+        editProfile: {
+          label: _('Rediger profil', 'Edit profile', 'Rediger profil'),
+        },
       },
       infoItems: {
         heading: _('Din informasjon', 'Your information', 'Din informasjon'),
