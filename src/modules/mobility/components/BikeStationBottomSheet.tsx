@@ -146,6 +146,7 @@ export const BikeStationBottomSheet = ({
               {isBonusProgramEnabled && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
+                  operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() =>
                     setPayWithBonusPoints(

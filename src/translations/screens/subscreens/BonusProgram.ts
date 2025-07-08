@@ -32,6 +32,13 @@ const BonusProgramTexts = {
     },
   },
 
+  download_app_warning: (operatorName: string) =>
+    _(
+      `Du må være logget inn i ${operatorName}-appen før du bruker bonusen.`,
+      `You must be logged in to the ${operatorName} app before using the bonus.`,
+      `Du må vera logga inn i ${operatorName}-appen før du brukar bonusen.`,
+    ),
+
   bonusProfile: {
     header: {
       title: _('Bonus', 'Bonus', 'Bonus'),

@@ -134,6 +134,7 @@ export const CarSharingStationBottomSheet = ({
               {isBonusProgramEnabled && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
+                  operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() =>
                     setPayWithBonusPoints(
