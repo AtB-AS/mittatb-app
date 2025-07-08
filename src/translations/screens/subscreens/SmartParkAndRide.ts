@@ -49,6 +49,19 @@ const SmartParkAndRideTexts = {
       },
     },
     button: _('Lagre', 'Save', 'Lagre'),
+    delete: {
+      button: _('Fjern kjøretøy', 'Remove vehicle', 'Fjern køyretøy'),
+      confirmation: {
+        title: _('Fjern kjøretøy', 'Remove vehicle', 'Fjern køyretøy'),
+        message: _(
+          'Ønsker du å fjerne dette kjøretøyet?',
+          'Do you wish to remove this vehicle?',
+          'Ønsker du å fjerne dette køyretøyet?',
+        ),
+        cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+        confirm: _('Fjern', 'Remove', 'Fjern'),
+      },
+    },
   },
   a11y: {
     carIcon: _('Bilikon', 'Car icon', 'Bilikon'),

@@ -1,4 +1,4 @@
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm, Delete} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -7,9 +7,13 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
+import {Alert} from 'react-native';
 import {RootStackScreenProps} from '..';
 import {ScreenHeading} from '@atb/components/heading';
-import {useEditVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
+import {
+  useEditVehicleRegistrationMutation,
+  useDeleteVehicleRegistrationMutation,
+} from '@atb/modules/smart-park-and-ride';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideEditScreen'>;
 
@@ -32,6 +36,30 @@ export const Root_SmartParkAndRideEditScreen = ({
       onSuccess,
     );
 
+  const {mutateAsync: handleDeleteVehicleRegistration} =
+    useDeleteVehicleRegistrationMutation(
+      params.vehicleRegistration.id,
+      onSuccess,
+    );
+
+  const showDeleteConfirmation = () => {
+    Alert.alert(
+      t(SmartParkAndRideTexts.edit.delete.confirmation.title),
+      t(SmartParkAndRideTexts.edit.delete.confirmation.message),
+      [
+        {
+          text: t(SmartParkAndRideTexts.edit.delete.confirmation.cancel),
+          style: 'cancel',
+        },
+        {
+          text: t(SmartParkAndRideTexts.edit.delete.confirmation.confirm),
+          style: 'destructive',
+          onPress: () => handleDeleteVehicleRegistration(),
+        },
+      ],
+    );
+  };
+
   return (
     <FullScreenView
       headerProps={{
@@ -53,6 +81,15 @@ export const Root_SmartParkAndRideEditScreen = ({
             text={t(SmartParkAndRideTexts.edit.button)}
             rightIcon={{svg: Confirm}}
             mode="primary"
+          />
+          <Button
+            expanded={true}
+            onPress={showDeleteConfirmation}
+            text={t(SmartParkAndRideTexts.edit.delete.button)}
+            rightIcon={{svg: Delete}}
+            mode="secondary"
+            backgroundColor={theme.color.background.neutral[1]}
+            style={styles.deleteButton}
           />
         </FullScreenFooter>
       }
@@ -77,5 +114,8 @@ export const Root_SmartParkAndRideEditScreen = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     margin: theme.spacing.medium,
+  },
+  deleteButton: {
+    marginTop: theme.spacing.medium,
   },
 }));
