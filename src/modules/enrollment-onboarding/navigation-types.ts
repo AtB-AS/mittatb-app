@@ -1,9 +1,7 @@
 import {CompositeScreenProps, NavigationProp} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-
-// eslint-disable-next-line no-restricted-imports
-import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
+import {StackParams} from '@atb/stacks-hierarchy';
 
 export type EnrollmentOnboardingStackParams = StackParams<{
   BonusOnboarding_WelcomeScreen: undefined;
