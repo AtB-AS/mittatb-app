@@ -1,7 +1,4 @@
-import {
-  FlexibleTransportOptionType,
-  TransportModeFilterOptionType,
-} from '@atb/modules/configuration';
+import {TransportModeFilterOptionType} from '@atb/modules/configuration';
 import {
   TravelSearchPreferenceOptionIdType,
   TravelSearchPreferenceType,
@@ -10,9 +7,6 @@ import {
 export type TransportModeFilterOptionWithSelectionType =
   TransportModeFilterOptionType & {selected: boolean};
 
-export type FlexibleTransportOptionTypeWithSelectionType =
-  FlexibleTransportOptionType & {enabled: boolean};
-
 export type TravelSearchPreferenceWithSelectionType =
   TravelSearchPreferenceType & {
     selectedOption: TravelSearchPreferenceOptionIdType;
@@ -20,6 +14,5 @@ export type TravelSearchPreferenceWithSelectionType =
 
 export type TravelSearchFiltersSelectionType = {
   transportModes?: TransportModeFilterOptionWithSelectionType[];
-  flexibleTransport?: FlexibleTransportOptionTypeWithSelectionType;
   travelSearchPreferences?: TravelSearchPreferenceWithSelectionType[];
 };
