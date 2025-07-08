@@ -28,3 +28,9 @@ export const editVehicleRegistration = (
     {authWithIdToken: true},
   );
 };
+
+export const deleteVehicleRegistration = (id: string): Promise<void> => {
+  return client.delete(`/spar/v1/vehicle-registrations/${id}`, {
+    authWithIdToken: true,
+  });
+};
