@@ -10,7 +10,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, Theme} from '@atb/theme';
 import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
-import {numberToAccessibilityString, spellOut} from '@atb/utils/accessibility';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -78,7 +78,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
           formattedPhoneNumber
             ? t(
                 ProfileTexts.sections.account.infoItems.loggedInWith(
-                  spellOut(formattedPhoneNumber),
+                  formattedPhoneNumber,
                 ),
               )
             : '',
