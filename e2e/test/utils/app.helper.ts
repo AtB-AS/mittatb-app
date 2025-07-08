@@ -47,17 +47,6 @@ class AppHelper {
   }
 
   /**
-   * Remove the popover if it exists
-   */
-  async removePopover() {
-    const closePopoverId = `//*[@resource-id="closePopover"]`;
-    const exists = await ElementHelper.isElementExisting('closePopover', 2);
-    if (exists) {
-      await $(closePopoverId).click();
-    }
-  }
-
-  /**
    * Remove dismissible global messages
    */
   async removeGlobalMessages() {

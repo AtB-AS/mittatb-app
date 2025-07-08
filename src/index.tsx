@@ -35,7 +35,6 @@ import {FiltersContextProvider} from '@atb/modules/travel-search-filters';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
-import {PopOverContextProvider} from '@atb/modules/popover';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from '@atb/modules/beacons';
@@ -105,17 +104,15 @@ export const App = () => {
                                                 <GlobalMessagesContextProvider>
                                                   <AnnouncementsContextProvider>
                                                     <NotificationContextProvider>
-                                                      <PopOverContextProvider>
-                                                        <BottomSheetContextProvider>
-                                                          <FeedbackQuestionsContextProvider>
-                                                            <BeaconsContextProvider>
-                                                              <OnboardingContextProvider>
-                                                                <RootStack />
-                                                              </OnboardingContextProvider>
-                                                            </BeaconsContextProvider>
-                                                          </FeedbackQuestionsContextProvider>
-                                                        </BottomSheetContextProvider>
-                                                      </PopOverContextProvider>
+                                                      <BottomSheetContextProvider>
+                                                        <FeedbackQuestionsContextProvider>
+                                                          <BeaconsContextProvider>
+                                                            <OnboardingContextProvider>
+                                                              <RootStack />
+                                                            </OnboardingContextProvider>
+                                                          </BeaconsContextProvider>
+                                                        </FeedbackQuestionsContextProvider>
+                                                      </BottomSheetContextProvider>
                                                     </NotificationContextProvider>
                                                   </AnnouncementsContextProvider>
                                                 </GlobalMessagesContextProvider>
