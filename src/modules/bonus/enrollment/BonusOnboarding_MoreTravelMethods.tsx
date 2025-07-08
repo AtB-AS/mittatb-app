@@ -1,21 +1,23 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {
-  BonusOnboardingNavigationProps,
-  BonusOnboardingScreenProps,
-} from './navigation-types';
+import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {bonusPilotEnrollmentId} from './config';
 
 export type MoreTravelMethodsScreenProps =
-  BonusOnboardingScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
+  EnrollmentOnboardingScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
 
 export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
-    const navigation = useNavigation<BonusOnboardingNavigationProps>();
+
+    const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
+      bonusPilotEnrollmentId,
+      BonusOnboarding_MoreTravelMethodsScreen.name,
+    );
 
     return (
       <OnboardingScreenComponent
@@ -25,7 +27,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
           BonusProgramTexts.onboarding.moreTravelMethods.description,
         )}
         footerButton={{
-          onPress: () => navigation.navigate('BonusOnboarding_DownloadScreen'),
+          onPress: navigateToNext,
           text: t(BonusProgramTexts.onboarding.moreTravelMethods.buttonText),
           expanded: true,
           rightIcon: {svg: ArrowRight},

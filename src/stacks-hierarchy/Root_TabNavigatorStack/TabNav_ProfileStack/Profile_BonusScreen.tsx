@@ -22,6 +22,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
   UserBonusBalance,
+  bonusPilotEnrollmentId,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
@@ -35,6 +36,8 @@ import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import Intercom, {Space} from '@intercom/intercom-react-native';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -45,6 +48,8 @@ export const Profile_BonusScreen = () => {
     useFirestoreConfigurationContext();
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
     useState<number>();
+
+  const navigation = useNavigation<RootNavigationProps>();
 
   const activeBonusProducts = bonusProducts?.filter(isActive);
 
@@ -151,6 +156,14 @@ export const Profile_BonusScreen = () => {
               </View>
             </View>
           </GenericSectionItem>
+          <LinkSectionItem
+            text={t(BonusProgramTexts.bonusProfile.readMore.button)}
+            onPress={() => {
+              navigation.navigate('Root_EnrollmentOnboardingStack', {
+                configId: bonusPilotEnrollmentId,
+              });
+            }}
+          />
         </Section>
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}

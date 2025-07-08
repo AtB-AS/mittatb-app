@@ -19,11 +19,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-
-const PILOT_ONBOARDING_STACK_MAP = {
-  'bonus-pilot-a': 'Root_BonusOnboardingStack',
-  'bonus-pilot-b': 'Root_BonusOnboardingStack',
-} as const;
+import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -116,12 +112,14 @@ const useEnroll = () => {
           setIsEnrolled(true);
 
           if (enrollment.enrollmentId) {
-            const onboarding_stack =
-              PILOT_ONBOARDING_STACK_MAP[
-                enrollment.enrollmentId as keyof typeof PILOT_ONBOARDING_STACK_MAP
-              ];
-            if (onboarding_stack) {
-              navigation.navigate(onboarding_stack);
+            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
+              config.enrollmentIds.includes(enrollment.enrollmentId),
+            );
+
+            if (onboardingConfig) {
+              navigation.navigate('Root_EnrollmentOnboardingStack', {
+                configId: onboardingConfig.id,
+              });
             }
           }
         }

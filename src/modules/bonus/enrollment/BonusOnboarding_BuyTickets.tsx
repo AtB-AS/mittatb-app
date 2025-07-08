@@ -1,20 +1,21 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {
-  BonusOnboardingNavigationProps,
-  BonusOnboardingScreenProps,
-} from './navigation-types';
+import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {bonusPilotEnrollmentId} from './config';
 
 export type BuyTicketsScreenProps =
-  BonusOnboardingScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
+  EnrollmentOnboardingScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
 
 export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<BonusOnboardingNavigationProps>();
+  const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
+    bonusPilotEnrollmentId,
+    BonusOnboarding_BuyTicketsScreen.name,
+  );
 
   return (
     <OnboardingScreenComponent
@@ -22,8 +23,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
       title={t(BonusProgramTexts.onboarding.buyTickets.title)}
       description={t(BonusProgramTexts.onboarding.buyTickets.description)}
       footerButton={{
-        onPress: () =>
-          navigation.navigate('BonusOnboarding_MoreTravelMethodsScreen'),
+        onPress: navigateToNext,
         text: t(BonusProgramTexts.onboarding.buyTickets.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},

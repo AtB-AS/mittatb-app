@@ -64,6 +64,7 @@ const BonusProgramTexts = {
     ),
     readMore: {
       heading: _('Les mer', 'Read more', 'Les meir'),
+      button: _('Sånn funker bonus', 'How Bonus works', 'Slik fungerer bonus'),
     },
     feedback: {
       heading: _('Chat', 'Chat', 'Chat'),

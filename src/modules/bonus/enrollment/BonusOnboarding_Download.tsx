@@ -1,24 +1,27 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {BonusOnboardingScreenProps} from './navigation-types';
+import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
-import {useNavigation} from '@react-navigation/native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {RootNavigationProps} from '../navigation-types';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {bonusPilotEnrollmentId} from './config';
 
 export type DownloadScreenProps =
-  BonusOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
+  EnrollmentOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<RootNavigationProps>();
+  const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
+    bonusPilotEnrollmentId,
+    BonusOnboarding_DownloadScreen.name,
+  );
 
   return (
     <OnboardingScreenComponent
@@ -26,7 +29,7 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
       title={t(BonusProgramTexts.onboarding.download.title)}
       description={t(BonusProgramTexts.onboarding.download.description)}
       footerButton={{
-        onPress: () => navigation.getParent()?.goBack(),
+        onPress: navigateToNext,
         text: t(BonusProgramTexts.onboarding.download.buttonText),
         expanded: true,
         rightIcon: {svg: Confirm},
