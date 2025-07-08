@@ -65,7 +65,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           style={style.contentContainer}
         >
           <View style={style.mediumGap}>
-            <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
             <UserInfo
               navigateToEditProfileScreen={() =>
                 navigation.navigate('Profile_EditProfileScreen')

@@ -8,7 +8,6 @@ const ProfileTexts = {
   },
   sections: {
     account: {
-      heading: _('Min konto', 'My account', 'Min konto'),
       linkSectionItems: {
         login: {
           label: _(
