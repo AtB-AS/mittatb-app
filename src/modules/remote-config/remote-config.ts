@@ -4,6 +4,10 @@ import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 export type RemoteConfig = {
   customer_feedback_url: string;
   customer_service_url: string;
+  contact_form_url: string;
+  lost_and_found_url: string;
+  refound_url: string;
+  frequently_asked_questions: string;
   default_map_filter: string;
   delay_share_travel_habits_screen_by_sessions_count: number;
   disable_email_field_in_profile_page: boolean;
@@ -84,6 +88,10 @@ export type RemoteConfig = {
 
 export const defaultRemoteConfig: RemoteConfig = {
   customer_feedback_url: '',
+  contact_form_url: '',
+  lost_and_found_url: '',
+  refound_url: '',
+  frequently_asked_questions: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
     mobility: {
@@ -172,6 +180,17 @@ export function getConfig(): RemoteConfig {
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??
     defaultRemoteConfig.customer_feedback_url;
+  const contact_form_url =
+    values['contact_form_url']?.asString() ??
+    defaultRemoteConfig.contact_form_url;
+  const lost_and_found_url =
+    values['lost_and_found_url']?.asString() ??
+    defaultRemoteConfig.lost_and_found_url;
+  const refound_url =
+    values['refound_url']?.asString() ?? defaultRemoteConfig.refound_url;
+  const frequently_asked_questions =
+    values['frequently_asked_questions']?.asString() ??
+    defaultRemoteConfig.frequently_asked_questions;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -380,6 +399,10 @@ export function getConfig(): RemoteConfig {
   return {
     customer_feedback_url,
     customer_service_url,
+    contact_form_url,
+    lost_and_found_url,
+    refound_url,
+    frequently_asked_questions,
     default_map_filter,
     delay_share_travel_habits_screen_by_sessions_count,
     disable_email_field_in_profile_page,

@@ -16,6 +16,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
@@ -72,10 +73,8 @@ export const Profile_TravelAidScreen = () => {
                   expanded={true}
                   mode="secondary"
                   backgroundColor={backgroundColor}
-                  text={t(TravelAidSettingsTexts.button.contact.title)}
-                  accessibilityHint={t(
-                    TravelAidSettingsTexts.button.contact.a11yHint,
-                  )}
+                  text={t(CustomerServiceText.contact.title)}
+                  accessibilityHint={t(CustomerServiceText.contact.a11yHint)}
                   accessibilityRole="button"
                   testID="travelAidContactCustomerServiceButton"
                   onPress={async () => {

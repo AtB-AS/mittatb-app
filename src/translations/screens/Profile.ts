@@ -373,6 +373,14 @@ const ProfileTexts = {
         'Give feedback about the app',
         'Gi tilbakemelding om appen',
       ),
+      contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
+      lostAndFound: _('Hittegods', 'Lost and found', 'Hittegods'),
+      refound: _('Refusjon', 'Refound', 'Refusjon'),
+      frequentlyAskedQuestions: _(
+        'Ofte stilte spørsmål',
+        'Frequently asked questions',
+        'Ofte stilte spørsmål',
+      ),
     },
   },
   installId: {
