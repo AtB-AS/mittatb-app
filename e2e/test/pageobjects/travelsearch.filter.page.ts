@@ -12,6 +12,14 @@ class TravelSearchFilterPage {
   }
 
   /**
+   * Return number of filters available (including the 'all' option)
+   */
+  get numberOfFilters() {
+    const reqId = `//*[@resource-id="toggleItem"]`;
+    return $$(reqId).length;
+  }
+
+  /**
    * Open the time picker on the travel search results
    */
   async openTravelSearchTimePicker() {

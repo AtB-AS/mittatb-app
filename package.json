@@ -31,7 +31,7 @@
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^7.0.0",
     "@atb-as/generate-assets": "^17.4.0",
-    "@atb-as/theme": "^14.0.1",
+    "@atb-as/theme": "^14.1.0",
     "@atb-as/utils": "^3.5.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",

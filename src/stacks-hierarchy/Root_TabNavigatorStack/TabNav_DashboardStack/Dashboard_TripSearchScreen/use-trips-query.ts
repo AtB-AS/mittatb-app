@@ -278,6 +278,5 @@ function toLoggableFiltersSelection(
     transportModes: filterSelection.transportModes?.map((t) => ({
       [t.id]: t.selected,
     })),
-    flexibleTransportEnabled: filterSelection.flexibleTransport?.enabled,
   };
 }

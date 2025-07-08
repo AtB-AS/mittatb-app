@@ -46,7 +46,11 @@ describe('Travel search filter', () => {
       // Filter out buses
       await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
       await TravelsearchFilterPage.openFilter();
+      // Not considering the 'all' option
+      const filtersAvailable =
+        (await TravelsearchFilterPage.numberOfFilters) - 1;
       await TravelsearchFilterPage.toggleFilter('bus');
+      const filtersInUse = filtersAvailable - 1;
       await TravelsearchFilterPage.confirmFilter();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
@@ -60,7 +64,9 @@ describe('Travel search filter', () => {
         'tripSearchContentView',
         'selectedFilterButton',
       );
-      await TravelsearchFilterPage.shouldShowSelectedFilter('5 of 7');
+      await TravelsearchFilterPage.shouldShowSelectedFilter(
+        `${filtersInUse} of ${filtersAvailable}`,
+      );
 
       // Remove the selected filters
       await TravelsearchFilterPage.removeSelectedFilter();

@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
@@ -20,12 +20,7 @@ import {
   useFiltersContext,
 } from '@atb/modules/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
-import {Checkbox} from '@atb/components/checkbox';
-import {
-  GenericClickableSectionItem,
-  Section,
-  ToggleSectionItem,
-} from '@atb/components/sections';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -42,7 +37,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {close} = useBottomSheetContext();
 
   const {setFilters} = useFiltersContext();
-  const [saveFilters, setSaveFilters] = useState(false);
 
   const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
 
@@ -61,9 +55,13 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       travelSearchPreferences: selectedTravelSearchPreferences,
     };
     onSave(selectedFilters);
-    if (saveFilters) {
-      setFilters(selectedFilters);
-    }
+
+    // Saves only the travel search preferences in storage, while other filters
+    // are reset on the next search.
+    setFilters({
+      travelSearchPreferences: selectedTravelSearchPreferences,
+    });
+
     close();
   };
 
@@ -155,34 +153,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             }
           />
         ))}
-
-        <Section style={styles.sectionContainer}>
-          <GenericClickableSectionItem
-            onPress={() => {
-              setSaveFilters(!saveFilters);
-            }}
-          >
-            <View style={styles.saveOptionSection}>
-              <Checkbox
-                style={styles.saveOptionSectionCheckbox}
-                checked={saveFilters}
-                accessibility={{
-                  accessibilityLabel: t(
-                    saveFilters
-                      ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
-                          .notSave
-                      : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
-                          .save,
-                  ),
-                }}
-                testID="saveFilter"
-              />
-              <ThemeText typography="body__secondary" color="secondary">
-                {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
-              </ThemeText>
-            </View>
-          </GenericClickableSectionItem>
-        </Section>
       </ScrollView>
 
       <FullScreenFooter>
@@ -203,20 +173,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.medium,
   },
-  sectionContainer: {
-    marginTop: theme.spacing.medium,
-  },
   travelSearchPreference: {
     marginTop: theme.spacing.medium,
-  },
-  saveOptionSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.xSmall,
-    paddingVertical: theme.spacing.xSmall,
-  },
-  saveOptionSectionCheckbox: {
-    marginRight: theme.spacing.small,
   },
   headingText: {
     marginBottom: theme.spacing.medium,
