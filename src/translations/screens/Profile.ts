@@ -375,7 +375,7 @@ const ProfileTexts = {
       ),
       contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
       lostAndFound: _('Hittegods', 'Lost and found', 'Hittegods'),
-      refound: _('Refusjon', 'Refound', 'Refusjon'),
+      refund: _('Refusjon', 'Refund', 'Refusjon'),
       frequentlyAskedQuestions: _(
         'Ofte stilte spørsmål',
         'Frequently asked questions',

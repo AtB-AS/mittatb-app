@@ -1,4 +1,8 @@
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  ProfileTexts,
+  useTranslation,
+} from '@atb/translations';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -11,19 +15,30 @@ import {Button} from '@atb/components/button';
 import Bugsnag from '@bugsnag/react-native';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const {contactPhoneNumber} = useFirestoreConfigurationContext();
-  const {
-    contact_form_url,
-    lost_and_found_url,
-    refound_url,
-    frequently_asked_questions,
-  } = useRemoteConfigContext();
+  const {configurableLinks} = useFirestoreConfigurationContext();
+
+  const contactFormUrl = getTextForLanguage(
+    configurableLinks?.contactFormUrl,
+    language,
+  );
+  const lostAndFoundUrl = getTextForLanguage(
+    configurableLinks?.lostAndFoundUrl,
+    language,
+  );
+  const frequentlyAskedQuestionsUrl = getTextForLanguage(
+    configurableLinks?.frequentlyAskedQuestionsUrl,
+    language,
+  );
+  const refundInfoUrl = getTextForLanguage(
+    configurableLinks?.refundInfo,
+    language,
+  );
 
   const hasContactPhoneNumber = !!contactPhoneNumber;
   const backgroundColor = theme.color.background.neutral[1];
@@ -48,38 +63,38 @@ export const Profile_HelpAndContactScreen = () => {
           style={style.contentContainer}
         >
           <Section>
-            {contact_form_url && contact_form_url !== '' && (
+            {contactFormUrl && contactFormUrl !== '' && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.contactForm)}
                 icon={<ThemeIcon svg={ExternalLink} />}
-                onPress={() => openLink(contact_form_url)}
+                onPress={() => openLink(contactFormUrl)}
                 testID="contactInformationButton"
               />
             )}
-            {lost_and_found_url && lost_and_found_url !== '' && (
+            {lostAndFoundUrl && lostAndFoundUrl !== '' && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.lostAndFound)}
                 icon={<ThemeIcon svg={ExternalLink} />}
-                onPress={undefined}
+                onPress={() => openLink(lostAndFoundUrl)}
                 testID="lostAndFoundButton"
               />
             )}
-            {refound_url && refound_url !== '' && (
+            {refundInfoUrl && refundInfoUrl !== '' && (
               <LinkSectionItem
-                text={t(ProfileTexts.sections.contact.refound)}
+                text={t(ProfileTexts.sections.contact.refund)}
                 icon={<ThemeIcon svg={ExternalLink} />}
-                onPress={() => openLink(refound_url)}
-                testID="refoundButton"
+                onPress={() => openLink(refundInfoUrl)}
+                testID="refundButton"
               />
             )}
-            {frequently_asked_questions &&
-              frequently_asked_questions !== '' && (
+            {frequentlyAskedQuestionsUrl &&
+              frequentlyAskedQuestionsUrl !== '' && (
                 <LinkSectionItem
                   text={t(
                     ProfileTexts.sections.contact.frequentlyAskedQuestions,
                   )}
                   icon={<ThemeIcon svg={ExternalLink} />}
-                  onPress={() => openLink(frequently_asked_questions)}
+                  onPress={() => openLink(frequentlyAskedQuestionsUrl)}
                   testID="frequentlyAskedQuestionsButton"
                 />
               )}
