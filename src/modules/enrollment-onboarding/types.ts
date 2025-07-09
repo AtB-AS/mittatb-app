@@ -1,10 +1,9 @@
-import {bonusPilotEnrollmentId} from '../bonus';
+import {
+  bonusPilotEnrollmentId,
+  bonusPilotEnrollmentScreenNames,
+} from '../bonus';
 
-export type EnrollmentOnboardingScreenName =
-  | 'BonusOnboarding_WelcomeScreen'
-  | 'BonusOnboarding_BuyTicketsScreen'
-  | 'BonusOnboarding_MoreTravelMethodsScreen'
-  | 'BonusOnboarding_DownloadScreen';
+export type EnrollmentOnboardingScreenName = bonusPilotEnrollmentScreenNames;
 
 export type EnrollmentOnboardingConfigId = typeof bonusPilotEnrollmentId;
 

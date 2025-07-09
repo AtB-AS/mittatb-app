@@ -1,1 +1,5 @@
-export {bonusEnrollmentConfig, bonusPilotEnrollmentId} from './config';
+export {
+  bonusEnrollmentConfig,
+  bonusPilotEnrollmentId,
+  type bonusPilotEnrollmentScreenNames,
+} from './config';

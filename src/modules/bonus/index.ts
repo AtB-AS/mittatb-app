@@ -10,4 +10,8 @@ export {
   useBuyValueCodeWithBonusPointsMutation,
   useBonusAmountEarnedQuery,
 } from './queries';
-export {bonusEnrollmentConfig, bonusPilotEnrollmentId} from './enrollment';
+export {
+  bonusEnrollmentConfig,
+  bonusPilotEnrollmentId,
+  type bonusPilotEnrollmentScreenNames,
+} from './enrollment';

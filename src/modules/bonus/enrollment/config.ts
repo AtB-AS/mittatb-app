@@ -6,6 +6,12 @@ import {BonusOnboarding_WelcomeScreen} from './BonusOnboarding_WelcomeScreen';
 
 export const bonusPilotEnrollmentId = 'bonus-pilot';
 
+export type bonusPilotEnrollmentScreenNames =
+  | 'BonusOnboarding_WelcomeScreen'
+  | 'BonusOnboarding_BuyTicketsScreen'
+  | 'BonusOnboarding_MoreTravelMethodsScreen'
+  | 'BonusOnboarding_DownloadScreen';
+
 export const bonusEnrollmentConfig: EnrollmentOnboardingConfig = {
   id: bonusPilotEnrollmentId,
   enrollmentIds: ['bonus-pilot-a', 'bonus-pilot-b'],
