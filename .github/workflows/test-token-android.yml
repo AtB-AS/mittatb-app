@@ -129,8 +129,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          pre-emulator-launch-script: ./scripts/proxy_start.sh
-          script: yarn test:android --spec test/specs/auth.e2e.ts
+          script: ./scripts/proxy_start.sh && yarn test:android --spec test/specs/auth.e2e.ts
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
