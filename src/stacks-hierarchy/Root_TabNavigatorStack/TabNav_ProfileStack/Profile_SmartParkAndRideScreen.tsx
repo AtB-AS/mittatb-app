@@ -61,7 +61,7 @@ export const Profile_SmartParkAndRideScreen = () => {
                 transitionOverride: 'slide-from-right',
               })
             }
-            icon={{svg: Add}}
+            rightIcon={{svg: Add}}
           />
         </Section>
       </View>

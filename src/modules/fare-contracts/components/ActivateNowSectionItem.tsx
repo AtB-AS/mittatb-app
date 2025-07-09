@@ -36,7 +36,7 @@ export function ActivateNowSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.activateNow.startNow)}
       onPress={onPress}
-      icon={{svg: TicketValid}}
+      rightIcon={{svg: TicketValid}}
       ref={onCloseFocusRef}
       {...sectionProps}
     />

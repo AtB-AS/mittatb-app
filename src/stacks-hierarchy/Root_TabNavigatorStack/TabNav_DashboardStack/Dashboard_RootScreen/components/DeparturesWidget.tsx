@@ -100,7 +100,7 @@ export const DeparturesWidget = ({
             textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
-            icon={{svg: Add}}
+            rightIcon={{svg: Add}}
             testID="addFavoriteDeparture"
           />
         </Section>
