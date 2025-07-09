@@ -3,7 +3,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
-  OneTimePopOver = '@ATB_one_time_popovers_seen',
   PreviousPaymentMethods = '@ATB_previous_payment_methods',
   ScooterConsent = '@ATB_scooter_consent',
 }
@@ -18,7 +17,6 @@ export type StorageModel = {
   '@ATB_journey_search-history': string;
   '@ATB_last_mobile_token_user': string;
   '@ATB_onboarded': string;
-  '@ATB_one_time_popovers_seen': string;
   '@ATB_saved_payment_methods': string;
   '@ATB_search-history': string;
   '@ATB_user_departures': string;
