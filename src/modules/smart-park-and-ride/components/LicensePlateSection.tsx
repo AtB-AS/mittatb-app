@@ -12,14 +12,14 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 
 type LicensePlateInputSectionItemProps = {
-  label?: string;
-} & Omit<React.ComponentProps<typeof TextInputSectionItem>, 'label'>;
+  inputProps: {label?: string} & Omit<
+    React.ComponentProps<typeof TextInputSectionItem>,
+    'label'
+  >;
+};
 
-export const LicensePlateInputSection = ({
-  value,
-  placeholder,
-  label,
-  ...textInputSectionItemProps
+export const LicensePlateSection = ({
+  inputProps: {label, placeholder, value, ...textInputSectionItemProps},
 }: LicensePlateInputSectionItemProps) => {
   const {themeName} = useThemeContext();
   const {t} = useTranslation();

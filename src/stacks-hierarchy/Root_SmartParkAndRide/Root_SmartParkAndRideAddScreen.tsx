@@ -4,7 +4,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
-import {LicensePlateInputSection} from '@atb/modules/smart-park-and-ride';
+import {LicensePlateSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
@@ -82,9 +82,11 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           />
         </Section>
 
-        <LicensePlateInputSection
-          value={licensePlate}
-          onChangeText={setLicensePlate}
+        <LicensePlateSection
+          inputProps={{
+            value: licensePlate,
+            onChangeText: setLicensePlate,
+          }}
         />
       </KeyboardAvoidingView>
     </FullScreenView>

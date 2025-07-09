@@ -12,7 +12,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {
   useEditVehicleRegistrationMutation,
   useDeleteVehicleRegistrationMutation,
-  LicensePlateInputSection,
+  LicensePlateSection,
 } from '@atb/modules/smart-park-and-ride';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
@@ -117,9 +117,11 @@ export const Root_SmartParkAndRideEditScreen = ({
           />
         </Section>
 
-        <LicensePlateInputSection
-          value={licensePlate}
-          onChangeText={setLicensePlate}
+        <LicensePlateSection
+          inputProps={{
+            value: licensePlate,
+            onChangeText: setLicensePlate,
+          }}
         />
 
         {editVehicleRegistrationIsError && (

@@ -4,5 +4,5 @@ export {useEditVehicleRegistrationMutation} from './queries/use-edit-vehicle-reg
 export {useDeleteVehicleRegistrationMutation} from './queries/use-delete-vehicle-registration-mutation';
 export type {VehicleRegistration, SvvVehicleInfo} from './types';
 export {searchVehicleInformation} from './api/api';
-export {LicensePlateInputSection} from './components/LicensePlateInputSection';
+export {LicensePlateSection} from './components/LicensePlateSection';
 export {useSearchVehicleInformationQuery} from './queries/use-search-vehicle-information-query';
