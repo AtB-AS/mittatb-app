@@ -19,6 +19,7 @@ import {
   MyLocation as MyLocationLight,
   Beacons as BeaconsLight,
   PaymentCard as PaymentCardLight,
+  Contact as ContactLight,
 } from '@atb/assets/svg/color/images/light';
 import {
   Map as MapDark,
@@ -34,6 +35,7 @@ import {
   MyLocation as MyLocationDark,
   Beacons as BeaconsDark,
   PaymentCard as PaymentCardDark,
+  Contact as ContactDark,
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
@@ -135,6 +137,7 @@ export const ThemedPaymentCard = getThemedAsset(
   PaymentCardDark,
 );
 export const ThemedBeacons = getThemedAsset(BeaconsLight, BeaconsDark);
+export const ThemedContact = getThemedAsset(ContactLight, ContactDark);
 export const ThemedBonusBag = getThemedAsset(BonusBagLight, BonusBagDark);
 export const ThemedBonusBagCarry = getThemedAsset(
   BonusBagCarryLight,
