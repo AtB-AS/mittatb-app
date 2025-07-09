@@ -22,7 +22,11 @@ import {
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ArrowUpLeft,
+  ExpandLess,
+  ExpandMore,
+} from '@atb/assets/svg/mono-icons/navigation';
 import {DebugOverride} from './components/DebugOverride';
 import {
   ButtonSectionItem,
@@ -226,12 +230,12 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
-            icon="arrow-upleft"
+            icon={{svg: ArrowUpLeft}}
             onPress={() => copyFirestoreLink()}
           />
           <LinkSectionItem
             text="Copy ID token"
-            icon="arrow-upleft"
+            icon={{svg: ArrowUpLeft}}
             onPress={() => copyIdToken()}
           />
           <LinkSectionItem

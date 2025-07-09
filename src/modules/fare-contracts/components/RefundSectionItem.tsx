@@ -40,7 +40,7 @@ export function RefundSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.refund.refund)}
       onPress={onPress}
-      icon={<ThemeIcon svg={TicketInvalid} />}
+      icon={{svg: TicketInvalid}}
       ref={onCloseFocusRef}
       {...sectionProps}
     />

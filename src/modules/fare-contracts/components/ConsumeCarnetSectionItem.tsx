@@ -39,7 +39,7 @@ export function ConsumeCarnetSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.carnet.activateCarnet)}
       onPress={onPress}
-      icon={<ThemeIcon svg={TicketValid} color={interactiveColor.default} />}
+      icon={{svg: TicketValid, color: interactiveColor.default}}
       interactiveColor={interactiveColor}
       ref={onCloseFocusRef}
       {...sectionProps}
