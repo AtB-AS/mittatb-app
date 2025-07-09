@@ -30,7 +30,7 @@ describe('Auth', () => {
       await $(input).setValue('92222222');
       const confirm = `//*[@resource-id="sendCodeButton"]`;
       await $(confirm).click();
-      await AppHelper.pause(1000);
+      await AppHelper.pause(5000);
       await ElementHelper.waitForElement('id', 'loginConfirmCodeInput');
 
       const input2 = `//*[@resource-id="loginConfirmCodeInput"]`;
@@ -38,9 +38,9 @@ describe('Auth', () => {
       await $(input2).setValue('123456');
       const confirm2 = `//*[@resource-id="submitButton"]`;
       await $(confirm2).click();
-      await AppHelper.pause(1000);
+      await AppHelper.pause(5000);
       await ElementHelper.waitForElement('text', 'Travel search');
-      await AppHelper.pause(10000);
+      await AppHelper.pause(5000);
 
     } catch (errMsg) {
       await AppHelper.screenshot(

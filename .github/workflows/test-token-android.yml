@@ -137,8 +137,10 @@ jobs:
 
       - name: Close mitmproxy
         if: always()
-        run: |
-          ./e2e/scripts/proxy_cleanup.sh
+        #working-directory: e2e/scripts
+        #run: |
+        #  ./proxy_cleanup.sh
+        run: pkill mitmdump
 
       - name: List folders
         if: always()
@@ -164,7 +166,21 @@ jobs:
           cat e2e/scripts/requests.log
           cat e2e/scripts/requests_token.log
 
+      - name: Print log file
+        #if: ${{ hashFiles('e2e/scripts/requests.log') != '' }}
+        if: always()
+        run: |
+          cat e2e/scripts/mitm_temp.log          
+
       # Results
+      - name: Upload log file
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mitm-log
+          path: ./e2e/scripts/mitm_temp.log
+          retention-days: 1
+
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4
