@@ -59,20 +59,18 @@ export const PayWithBonusPointsCheckbox = ({
       ),
     );
 
-  const onPressWithLogging = () => {
-    onPress();
-    logEvent('Bonus', 'bonus points checkbox toggled', {
-      bonusProductId: bonusProduct.id,
-      newState: isChecked,
-    });
-  };
-
   return (
     <>
       <Section {...props}>
         <GenericClickableSectionItem
           active={isChecked}
-          onPress={onPressWithLogging}
+          onPress={() => {
+            onPress();
+            logEvent('Bonus', 'bonus points checkbox toggled', {
+              bonusProductId: bonusProduct.id,
+              newState: isChecked,
+            });
+          }}
           disabled={isDisabled}
           accessibilityRole="checkbox"
           accessibilityState={{checked: isChecked}}

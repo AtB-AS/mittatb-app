@@ -79,7 +79,7 @@ export const OperatorActionButton = ({
         benefit,
         isUserEligibleForBenefit,
         valueCode,
-        isBonusPayment: isBonusPayment,
+        isBonusPayment,
       });
 
       await Linking.openURL(url).catch(() =>
