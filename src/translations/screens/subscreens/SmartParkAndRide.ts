@@ -31,6 +31,18 @@ const SmartParkAndRideTexts = {
         'Enter license plate',
         'Skriv inn skiltnummer',
       ),
+      vehicleNotFound: {
+        title: _(
+          'Vi finner ikke skiltnummeret',
+          'We cannot find the license plate',
+          'Vi finn ikkje skiltnummeret',
+        ),
+        message: _(
+          'Hvis du har utenlandske skilter kan du legge det til likevel.',
+          'If you have foreign license plates, you can add it anyway.',
+          'Om du har utanlandske skilt kan du leggje det til likevel.',
+        ),
+      },
     },
     button: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
