@@ -50,7 +50,7 @@ export const Profile_InformationScreen = () => {
         <Section>
           {ticketingInfoUrl && (
             <LinkSectionItem
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.ticketing
                   .label,
@@ -68,7 +68,7 @@ export const Profile_InformationScreen = () => {
           )}
           {termsInfoUrl && (
             <LinkSectionItem
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.terms.label,
               )}
@@ -86,7 +86,7 @@ export const Profile_InformationScreen = () => {
 
           {inspectionInfoUrl && (
             <LinkSectionItem
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.inspection
                   .label,
@@ -105,7 +105,7 @@ export const Profile_InformationScreen = () => {
 
           {refundInfoUrl && (
             <LinkSectionItem
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.refund.label,
               )}
@@ -122,7 +122,7 @@ export const Profile_InformationScreen = () => {
           )}
           {a11yStatementUrl && (
             <LinkSectionItem
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems
                   .accessibilityStatement.label,

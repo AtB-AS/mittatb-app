@@ -130,7 +130,7 @@ export const Profile_PrivacyScreen = () => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
-            icon={{svg: ExternalLink}}
+            rightIcon={{svg: ExternalLink}}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
@@ -151,7 +151,7 @@ export const Profile_PrivacyScreen = () => {
               subtitle={t(
                 PrivacySettingsTexts.sections.items.controlPanel.subTitle,
               )}
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               accessibility={{
                 accessibilityHint: t(
                   PrivacySettingsTexts.sections.items.controlPanel.a11yHint,
@@ -181,7 +181,7 @@ export const Profile_PrivacyScreen = () => {
                 ),
                 accessibilityRole: 'link',
               }}
-              icon={{svg: ExternalLink}}
+              rightIcon={{svg: ExternalLink}}
               testID="dataSharingInfoButton"
               onPress={async () => {
                 Linking.openURL(dataSharingInfoUrl);

@@ -107,7 +107,7 @@ export const Announcement = ({announcement, style}: Props) => {
             )
           }
           textType="body__secondary"
-          icon={
+          rightIcon={
             announcement.actionButton?.actionType === ActionType.external
               ? {svg: ExternalLink}
               : {svg: ArrowRight}

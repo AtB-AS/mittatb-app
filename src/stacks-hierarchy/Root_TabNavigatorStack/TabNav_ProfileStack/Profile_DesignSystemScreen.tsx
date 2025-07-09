@@ -1092,25 +1092,25 @@ export const Profile_DesignSystemScreen = ({
             text="Disabled link"
             onPress={() => {}}
             disabled
-            icon={{svg: Edit}}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
-            icon={{svg: Edit}}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
-            icon={{svg: Delete, color: 'error'}}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
             onPress={() => {}}
-            icon={{svg: Delete, color: 'error'}}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Link with interactiveColor"

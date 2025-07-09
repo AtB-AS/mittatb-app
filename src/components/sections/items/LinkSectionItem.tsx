@@ -6,7 +6,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
-import {ContrastColor, TextNames} from '@atb/theme/colors';
+import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTranslation} from '@atb/translations';
@@ -27,7 +27,8 @@ type Props = SectionItemProps<{
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
   onPress?(event: GestureResponderEvent): void;
-  icon?: IconProps;
+  leftIcon?: IconProps;
+  rightIcon?: IconProps;
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
@@ -40,7 +41,8 @@ export const LinkSectionItem = forwardRef<any, Props>(
       onPress,
       subtitle,
       label,
-      icon = {svg: ArrowRight},
+      leftIcon,
+      rightIcon = {svg: ArrowRight},
       accessibility,
       disabled,
       textType,
@@ -81,6 +83,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
         <View
           style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
         >
+          {leftIcon && (
+            <Icon icon={leftIcon} interactiveColor={interactiveColor} />
+          )}
           <ThemeText
             style={[
               contentContainer,
@@ -97,19 +102,8 @@ export const LinkSectionItem = forwardRef<any, Props>(
               customStyle={{alignSelf: 'center'}}
             />
           )}
-          {icon && (
-            <ThemeIcon
-              svg={icon.svg}
-              color={icon.color}
-              notification={
-                icon.notificationColor
-                  ? {
-                      color: icon.notificationColor,
-                      backgroundColor: interactiveColor.default,
-                    }
-                  : undefined
-              }
-            />
+          {rightIcon && (
+            <Icon icon={rightIcon} interactiveColor={interactiveColor} />
           )}
         </View>
         {subtitle && (
@@ -123,6 +117,29 @@ export const LinkSectionItem = forwardRef<any, Props>(
     );
   },
 );
+
+const Icon = ({
+  icon,
+  interactiveColor,
+}: {
+  icon: IconProps;
+  interactiveColor: InteractiveColor;
+}) => {
+  return (
+    <ThemeIcon
+      svg={icon.svg}
+      color={icon.color}
+      notification={
+        icon.notificationColor
+          ? {
+              color: icon.notificationColor,
+              backgroundColor: interactiveColor.default,
+            }
+          : undefined
+      }
+    />
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},

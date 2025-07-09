@@ -87,7 +87,7 @@ export const Profile_PaymentMethodsScreen = () => {
           <LinkSectionItem
             text={t(PaymentMethodsTexts.addPaymentMethod)}
             onPress={onAddRecurringPayment}
-            icon={{svg: Add}}
+            rightIcon={{svg: Add}}
           />
         </Section>
         <MessageInfoBox

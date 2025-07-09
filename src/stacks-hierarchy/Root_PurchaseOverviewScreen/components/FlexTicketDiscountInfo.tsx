@@ -122,7 +122,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         {expanded && (
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
-            icon={{svg: ExternalLink}}
+            rightIcon={{svg: ExternalLink}}
             onPress={() => Linking.openURL(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),

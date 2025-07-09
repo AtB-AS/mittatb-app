@@ -76,14 +76,14 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
             <LinkSectionItem
               text={t(FavoriteListTexts.buttons.changeOrder)}
               onPress={onSortClick}
-              icon={{svg: SvgReorder}}
+              rightIcon={{svg: SvgReorder}}
               testID="changeOrderButton"
             />
           )}
           <LinkSectionItem
             text={t(FavoriteListTexts.buttons.addFavorite)}
             onPress={onAddButtonClick}
-            icon={{svg: Add}}
+            rightIcon={{svg: Add}}
             testID="addFavoriteButton"
           />
         </Section>

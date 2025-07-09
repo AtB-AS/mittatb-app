@@ -230,12 +230,12 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
-            icon={{svg: ArrowUpLeft}}
+            rightIcon={{svg: ArrowUpLeft}}
             onPress={() => copyFirestoreLink()}
           />
           <LinkSectionItem
             text="Copy ID token"
-            icon={{svg: ArrowUpLeft}}
+            rightIcon={{svg: ArrowUpLeft}}
             onPress={() => copyIdToken()}
           />
           <LinkSectionItem
