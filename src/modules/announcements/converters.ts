@@ -1,4 +1,5 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {Timestamp} from '@react-native-firebase/firestore';
 import {
   AnnouncementRaw,
   AnnouncementType,
@@ -28,8 +29,7 @@ export const mapToAnnouncement = (
 ): AnnouncementType | undefined => {
   if (!result) return;
   if (!result.active) return;
-
-  const parseResult = AnnouncementRawSchema.safeParse(result);
+  const parseResult = AnnouncementRawSchema.safeParse({...result, id});
   if (!parseResult.success) return;
 
   const summaryTitle = mapToLanguageAndTexts(result.summaryTitle);
@@ -72,9 +72,7 @@ export const mapToAnnouncement = (
   };
 };
 
-export const mapToMillis = (
-  timestamp?: FirebaseFirestoreTypes.Timestamp,
-): number | undefined => {
+export const mapToMillis = (timestamp?: Timestamp): number | undefined => {
   if (!timestamp) return;
   if (typeof timestamp !== 'object') return;
   if (!timestamp.toMillis) return;
