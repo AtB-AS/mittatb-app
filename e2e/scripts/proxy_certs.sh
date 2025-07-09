@@ -3,7 +3,7 @@
 # openssl x509 -inform PEM -in ~/.mitmproxy/mitmproxy-ca-cert.pem -outform DER -out mitmproxy-ca-cert.der
 adb wait-for-device
 echo "=== Step 1 ==="
-adb push mitmproxy-ca-cert.der /sdcard/
+adb push mitmproxy-ca-cert.der /sdcard/mitmproxy-ca-cert.der
 echo "=== Step 2 ==="
 adb root
 echo "=== Step 3 ==="

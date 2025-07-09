@@ -112,8 +112,8 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           working-directory: e2e/scripts
-          script: |
-            ./proxy_certs.sh
+          # script: ./proxy_certs.sh
+          script: echo "Generated AVD snapshot for caching."
 
       # E2E run
       - name: Run tests on Android emulator
