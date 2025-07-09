@@ -36,6 +36,7 @@ import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import Intercom, {Space} from '@intercom/intercom-react-native';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
@@ -52,6 +53,7 @@ export const Profile_BonusScreen = () => {
   const navigation = useNavigation<RootNavigationProps>();
 
   const activeBonusProducts = bonusProducts?.filter(isActive);
+  const analytics = useAnalyticsContext();
 
   return (
     <FullScreenView
@@ -88,6 +90,10 @@ export const Profile_BonusScreen = () => {
                   expanded={currentlyOpenBonusProduct === index}
                   key={bonusProduct.id}
                   onPress={() => {
+                    analytics.logEvent('Bonus', 'Bonus product clicked', {
+                      bonusProductId: bonusProduct.id,
+                      expanded: currentlyOpenBonusProduct != index,
+                    });
                     setCurrentlyOpenBonusProduct(index);
                   }}
                   text={
@@ -175,6 +181,7 @@ export const Profile_BonusScreen = () => {
               <ThemeIcon color={theme.color.background.accent[0]} svg={Chat} />
             }
             onPress={() => {
+              analytics.logEvent('Bonus', 'Feedback button clicked');
               Intercom.presentSpace(Space.home);
             }}
           />
