@@ -15,6 +15,7 @@ import {Button} from '@atb/components/button';
 import Bugsnag from '@bugsnag/react-native';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
+import {ThemedContact} from '@atb/theme/ThemedAssets';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
@@ -62,6 +63,7 @@ export const Profile_HelpAndContactScreen = () => {
           importantForAccessibility="no"
           style={style.contentContainer}
         >
+          <ThemedContact style={style.contactIllustration} />
           <Section>
             {contactFormUrl && contactFormUrl !== '' && (
               <LinkSectionItem
@@ -136,5 +138,9 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   buttonContainer: {
     marginTop: theme.spacing.medium,
     flex: 1,
+  },
+  contactIllustration: {
+    alignSelf: 'center',
+    marginBottom: theme.spacing.medium,
   },
 }));
