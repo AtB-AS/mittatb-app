@@ -141,7 +141,10 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <InternalLabeledSectionItem label="InternalLabeledSectionItem">
                   <ThemeText>Content</ThemeText>
                 </InternalLabeledSectionItem>
-                <LinkSectionItem text="LinkSectionItem" />
+                <LinkSectionItem
+                  text="LinkSectionItem"
+                  leftIcon={{svg: Warning, color: 'info'}}
+                />
                 <LocationInputSectionItem
                   label="LocationInputSectionItem"
                   onPress={() => {}}
