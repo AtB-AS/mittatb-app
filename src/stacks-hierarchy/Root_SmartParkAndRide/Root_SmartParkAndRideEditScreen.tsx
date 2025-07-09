@@ -114,7 +114,7 @@ export const Root_SmartParkAndRideEditScreen = ({
             onChangeText={setNickname}
             value={nickname}
             inlineLabel={false}
-            autoFocus={true}
+            maxLength={20}
           />
         </Section>
 

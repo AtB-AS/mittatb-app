@@ -72,6 +72,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             onChangeText={setNickname}
             value={nickname}
             inlineLabel={false}
+            maxLength={20}
           />
           <LicensePlateInputSectionItem
             value={licensePlate}
