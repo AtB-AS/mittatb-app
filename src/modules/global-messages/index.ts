@@ -4,5 +4,5 @@ export {
 } from './GlobalMessagesContext';
 
 export {GlobalMessage} from './GlobalMessage';
-export type {GlobalMessageType, AppPlatformType} from './types';
-export {GlobalMessageContextEnum} from './types';
+export type {GlobalMessageType, AppPlatform} from './types';
+export {GlobalMessageContextEnum, AppPlatformSchema} from './types';

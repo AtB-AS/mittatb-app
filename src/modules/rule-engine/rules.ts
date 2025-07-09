@@ -1,14 +1,15 @@
-type RuleValue = string | number | boolean | null;
+import {z} from 'zod';
+
+const RuleValueSchema = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+  z.null(),
+]);
+type RuleValue = z.infer<typeof RuleValueSchema>;
 
 export type RuleVariables = {
   [key: string]: RuleValue | RuleValue[];
-};
-
-export type Rule = {
-  variable: string; // key of RuleVariables
-  operator: RuleOperator;
-  value: RuleValue;
-  groupId?: string;
 };
 
 export enum RuleOperator {
@@ -22,6 +23,19 @@ export enum RuleOperator {
   notContains = 'notContains',
   onlyContains = 'onlyContains',
 }
+
+const RuleOperatorSchema = z.enum(
+  Object.values(RuleOperator) as [RuleOperator, ...RuleOperator[]],
+);
+
+export const RuleSchema = z.object({
+  variable: z.string().describe('key of RuleVariables'), // if passing down ruleVariables to the zod parsing, this can be enforced runtime with refine
+  operator: RuleOperatorSchema,
+  value: RuleValueSchema,
+  groupId: z.string().optional(),
+});
+
+export type Rule = z.infer<typeof RuleSchema>;
 
 export const checkRules = (
   rules: Rule[],
