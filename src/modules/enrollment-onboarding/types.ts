@@ -1,9 +1,9 @@
 import {
   bonusPilotEnrollmentId,
-  bonusPilotEnrollmentScreenNames,
+  BonusPilotEnrollmentScreenNames,
 } from '../bonus';
 
-export type EnrollmentOnboardingScreenName = bonusPilotEnrollmentScreenNames;
+export type EnrollmentOnboardingScreenName = BonusPilotEnrollmentScreenNames;
 
 export type EnrollmentOnboardingConfigId = typeof bonusPilotEnrollmentId;
 

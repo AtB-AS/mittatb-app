@@ -1,5 +1,5 @@
 export {
   bonusEnrollmentConfig,
   bonusPilotEnrollmentId,
-  type bonusPilotEnrollmentScreenNames,
+  type BonusPilotEnrollmentScreenNames,
 } from './config';
