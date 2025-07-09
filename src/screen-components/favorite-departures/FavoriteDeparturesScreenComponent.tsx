@@ -78,7 +78,7 @@ export const FavoriteDeparturesScreenComponent = ({
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onPressAddFavorite}
             testID="addFavoriteDeparture"
-            icon={<ThemeIcon svg={Add} />}
+            icon={{svg: Add}}
           />
         </Section>
       </View>

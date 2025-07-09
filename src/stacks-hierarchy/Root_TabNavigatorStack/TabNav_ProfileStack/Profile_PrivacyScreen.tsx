@@ -25,6 +25,7 @@ import {
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 export const Profile_PrivacyScreen = () => {
   const {t, language} = useTranslation();
@@ -129,7 +130,7 @@ export const Profile_PrivacyScreen = () => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
-            icon="external-link"
+            icon={{svg: ExternalLink}}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
@@ -150,7 +151,7 @@ export const Profile_PrivacyScreen = () => {
               subtitle={t(
                 PrivacySettingsTexts.sections.items.controlPanel.subTitle,
               )}
-              icon="external-link"
+              icon={{svg: ExternalLink}}
               accessibility={{
                 accessibilityHint: t(
                   PrivacySettingsTexts.sections.items.controlPanel.a11yHint,
@@ -180,7 +181,7 @@ export const Profile_PrivacyScreen = () => {
                 ),
                 accessibilityRole: 'link',
               }}
-              icon="external-link"
+              icon={{svg: ExternalLink}}
               testID="dataSharingInfoButton"
               onPress={async () => {
                 Linking.openURL(dataSharingInfoUrl);

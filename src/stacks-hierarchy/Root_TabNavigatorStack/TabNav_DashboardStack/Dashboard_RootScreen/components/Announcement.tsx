@@ -26,6 +26,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import Bugsnag from '@bugsnag/react-native';
 import {RefObject, useRef} from 'react';
+import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   announcement: AnnouncementType;
@@ -108,8 +109,8 @@ export const Announcement = ({announcement, style}: Props) => {
           textType="body__secondary"
           icon={
             announcement.actionButton?.actionType === ActionType.external
-              ? 'external-link'
-              : 'arrow-right'
+              ? {svg: ExternalLink}
+              : {svg: ArrowRight}
           }
           accessibility={{
             accessibilityHint: t(

@@ -110,7 +110,7 @@ export const Profile_DeleteProfileScreen = () => {
           }}
           onPress={() => showDeleteAlert()}
           disabled={hasAvailableFareContracts}
-          icon={<ThemeIcon svg={Delete} color="error" />}
+          icon={{svg: Delete, color: 'error'}}
         />
       </Section>
     </FullScreenView>
