@@ -4,10 +4,11 @@ import {
   AnnouncementType,
   ActionButton,
   ActionType,
+  AnnouncementRawSchema,
 } from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
-import {AppPlatformType} from '@atb/modules/global-messages';
+import {AppPlatform} from '@atb/modules/global-messages';
 import {Platform} from 'react-native';
 import {mapToRules} from '@atb/modules/rule-engine';
 
@@ -27,6 +28,9 @@ export const mapToAnnouncement = (
 ): AnnouncementType | undefined => {
   if (!result) return;
   if (!result.active) return;
+
+  const parseResult = AnnouncementRawSchema.safeParse(result);
+  if (!parseResult.success) return;
 
   const summaryTitle = mapToLanguageAndTexts(result.summaryTitle);
   const summary = mapToLanguageAndTexts(result.summary);
@@ -77,7 +81,7 @@ export const mapToMillis = (
   return timestamp.toMillis();
 };
 
-function isAppPlatformValid(platforms: AppPlatformType[]) {
+function isAppPlatformValid(platforms: AppPlatform[]) {
   if (!platforms) return true;
   return !!platforms.find(
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),

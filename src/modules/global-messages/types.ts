@@ -3,7 +3,10 @@ import {LanguageAndTextType} from '@atb/translations';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
 
-export type AppPlatformType = 'ios' | 'android';
+import {z} from 'zod';
+
+export const AppPlatformSchema = z.enum(['ios', 'android']);
+export type AppPlatform = z.infer<typeof AppPlatformSchema>;
 
 export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
@@ -32,7 +35,7 @@ export type GlobalMessageRaw = {
   subtle?: boolean;
   context: GlobalMessageContextEnum[];
   isDismissable?: boolean;
-  appPlatforms: AppPlatformType[];
+  appPlatforms: AppPlatform[];
   appVersionMin: string;
   appVersionMax: string;
   startDate?: FirebaseFirestoreTypes.Timestamp;
