@@ -1,11 +1,12 @@
 import {z} from 'zod';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatformSchema} from '@atb/modules/global-messages';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {Timestamp} from '@react-native-firebase/firestore';
+
 import {RuleSchema} from '@atb/modules/rule-engine';
 
-const TimestampSchema = z.custom<FirebaseFirestoreTypes.Timestamp>(
-  (value) => value instanceof FirebaseFirestoreTypes.Timestamp,
+const TimestampSchema = z.custom<Timestamp>(
+  (value) => value instanceof Timestamp,
 );
 
 export enum ActionType {
