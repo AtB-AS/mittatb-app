@@ -1,0 +1,171 @@
+name: TESTING yml
+on:
+  push:
+    branches:
+      - tor/e2e-test-proxy
+  workflow_dispatch:
+    inputs:
+      api_level:
+        description: 'Define API level'
+        required: true
+        default: 30
+      system_image:
+        description: 'Define system image'
+        type: choice
+        required: true
+        default: 'default'
+        options:
+          - 'google_apis'
+          - 'default'
+      branch:
+        description: 'Define branch to test'
+        required: true
+        default: 'tor/e2e-test-proxy'
+  schedule:
+    - cron: '0 6 * * 1-5'
+
+jobs:
+  run_tests:
+    name: Token test Android
+    runs-on: ubuntu-24.04
+    environment: atb
+    timeout-minutes: 90
+    env:
+      ENV_BRANCH: ${{ github.event.inputs.branch || 'tor/e2e-test-proxy' }}
+      ENV_API_LEVEL: ${{ github.event.inputs.api_level || '30' }}
+      ENV_SYSTEM_IMAGE: ${{ github.event.inputs.system_image || 'google_apis' }}
+    steps:
+      - name: Set env variables
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.ENV_BRANCH }}
+
+      - name: Install mitmproxy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mitmproxy
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+
+      # Download APK
+      - name: Get Firebase AppDistribution APK
+        id: get-appdistribution-apk
+        run: python get-appdistribution-apk.py
+        working-directory: e2e/firestore
+        env:
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: "True"
+
+      # E2E init
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      #  run: npm install -g appium
+      #  run: appium driver install uiautomator2
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install E2E tests
+        working-directory: e2e
+        run: yarn install
+
+      # Emulator cache
+      - name: Gradle cache
+        if: env.ENV_SYSTEM_IMAGE == 'default'
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        if: env.ENV_SYSTEM_IMAGE == 'default'
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-pixel_5-${{ env.ENV_SYSTEM_IMAGE }}-${{ env.ENV_API_LEVEL }}-proxy
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.ENV_SYSTEM_IMAGE != 'default'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-${{ env.ENV_SYSTEM_IMAGE }}-api${{ env.ENV_API_LEVEL }}-proxy
+          api-level: ${{ env.ENV_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          working-directory: e2e/scripts
+          script: |
+            ./proxy_certs.sh
+
+      # E2E run
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: emulator-${{ env.ENV_SYSTEM_IMAGE }}-api${{ env.ENV_API_LEVEL }}-proxy
+          api-level: ${{ env.ENV_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          pre-emulator-launch-script: ./scripts/proxy_start.sh
+          script: yarn test:android --spec test/specs/auth.e2e.ts
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
+
+      - name: Close mitmproxy
+        run: |
+          ./e2e/scripts/proxy_cleanup.sh
+
+      - name: List folders
+        run: |
+          echo "*** List master"
+          ls -la .
+          echo "*** List e2e"
+          ls -la e2e
+          echo "*** List e2e/scripts"
+          ls -la e2e/scripts
+
+      - name: Print request log 1 (if exists)
+        if: ${{ hashFiles('e2e/requests.log') != '' }}
+        run: |
+          cat e2e/requests.log
+          cat e2e/requests_token.log
+
+      - name: Print request log 2 (if exists)
+        if: ${{ hashFiles('e2e/scripts/requests.log') != '' }}
+        run: |
+          cat e2e/scripts/requests.log
+          cat e2e/scripts/requests_token.log
+
+      # Results
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: ./e2e/screenshots/*.png
+          retention-days: 1
