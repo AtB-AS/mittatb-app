@@ -266,10 +266,6 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
           <LinkSectionItem
-            text="Reset one time popovers"
-            onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
-          />
-          <LinkSectionItem
             text="Reset scooter consent"
             onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
           />
