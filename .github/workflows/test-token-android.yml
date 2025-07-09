@@ -136,10 +136,12 @@ jobs:
           IS_CI: "true"
 
       - name: Close mitmproxy
+        if: always()
         run: |
           ./e2e/scripts/proxy_cleanup.sh
 
       - name: List folders
+        if: always()
         run: |
           echo "*** List master"
           ls -la .
@@ -149,13 +151,15 @@ jobs:
           ls -la e2e/scripts
 
       - name: Print request log 1 (if exists)
-        if: ${{ hashFiles('e2e/requests.log') != '' }}
+        #if: ${{ hashFiles('e2e/requests.log') != '' }}
+        if: always()
         run: |
           cat e2e/requests.log
           cat e2e/requests_token.log
 
       - name: Print request log 2 (if exists)
-        if: ${{ hashFiles('e2e/scripts/requests.log') != '' }}
+        #if: ${{ hashFiles('e2e/scripts/requests.log') != '' }}
+        if: always()
         run: |
           cat e2e/scripts/requests.log
           cat e2e/scripts/requests_token.log
