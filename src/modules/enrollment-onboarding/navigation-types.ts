@@ -2,12 +2,10 @@ import {CompositeScreenProps, NavigationProp} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {StackParams} from '@atb/stacks-hierarchy';
+import {EnrollmentOnboardingScreenName} from './types';
 
 export type EnrollmentOnboardingStackParams = StackParams<{
-  BonusOnboarding_WelcomeScreen: undefined;
-  BonusOnboarding_BuyTicketsScreen: undefined;
-  BonusOnboarding_MoreTravelMethodsScreen: undefined;
-  BonusOnboarding_DownloadScreen: undefined;
+  [K in EnrollmentOnboardingScreenName]: undefined;
 }>;
 
 export type EnrollmentOnboardingNavigationProps =
