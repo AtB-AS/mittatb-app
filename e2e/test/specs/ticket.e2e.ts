@@ -63,7 +63,6 @@ describe('Ticket', () => {
   it('should have a correct purchase flow', async () => {
     try {
       await TicketPage.chooseFareProduct('single');
-      await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 
@@ -137,7 +136,6 @@ describe('Ticket', () => {
     try {
       // Single ticket
       await TicketPage.chooseFareProduct('single');
-      await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 
@@ -165,7 +163,6 @@ describe('Ticket', () => {
 
     try {
       await TicketPage.chooseFareProduct('single');
-      await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 

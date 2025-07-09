@@ -1,4 +1,4 @@
-import React, {RefObject, useCallback, useRef} from 'react';
+import React, {RefObject, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
@@ -19,11 +19,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ContentHeading} from '@atb/components/heading';
-import {usePopOverContext} from '@atb/modules/popover';
-import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
-import {useAuthContext} from '@atb/modules/auth';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
@@ -42,23 +38,13 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {authenticationType} = useAuthContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
 
-  const isOnBehalfOfEnabled =
-    useFeatureTogglesContext().isOnBehalfOfEnabled &&
-    selection.fareProductTypeConfig.configuration.onBehalfOfEnabled;
-
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
-  const isOnBehalfOfAllowed =
-    isOnBehalfOfEnabled && authenticationType === 'phone';
-
-  const {addPopOver} = usePopOverContext();
-  const onBehalfOfIndicatorRef = useRef(null);
 
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
@@ -67,17 +53,6 @@ export function TravellerSelection({
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
     selectableUserProfiles,
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (isOnBehalfOfAllowed && canSelectUserProfile) {
-        addPopOver({
-          oneTimeKey: 'on-behalf-of-new-feature-introduction',
-          target: onBehalfOfIndicatorRef,
-        });
-      }
-    }, [isOnBehalfOfAllowed, addPopOver, canSelectUserProfile]),
   );
 
   if (selectionMode === 'none') {

@@ -1,0 +1,34 @@
+import {BonusProgramTexts, useTranslation} from '@atb/translations';
+import React from 'react';
+import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
+import {OnboardingScreenComponent} from '@atb/modules/onboarding';
+import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {bonusPilotEnrollmentId} from './config';
+
+export type BuyTicketsScreenProps =
+  EnrollmentOnboardingScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
+
+export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
+  const {t} = useTranslation();
+  const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
+    bonusPilotEnrollmentId,
+    BonusOnboarding_BuyTicketsScreen.name,
+  );
+
+  return (
+    <OnboardingScreenComponent
+      illustration={<ThemedBonusTransaction height={150} />}
+      title={t(BonusProgramTexts.onboarding.buyTickets.title)}
+      description={t(BonusProgramTexts.onboarding.buyTickets.description)}
+      footerButton={{
+        onPress: navigateToNext,
+        text: t(BonusProgramTexts.onboarding.buyTickets.buttonText),
+        expanded: true,
+        rightIcon: {svg: ArrowRight},
+      }}
+      testID="buyTicketBonusOnboarding"
+    />
+  );
+};
