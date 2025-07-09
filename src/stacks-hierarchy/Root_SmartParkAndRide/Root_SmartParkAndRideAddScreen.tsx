@@ -4,15 +4,15 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
-import {LicensePlateInputSectionItem} from '@atb/modules/smart-park-and-ride';
+import {LicensePlateInputSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {RootStackScreenProps} from '..';
-import {FullScreenFooter} from '@atb/components/screen-footer';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 
@@ -22,6 +22,9 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const [nickname, setNickname] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
+  const insets = useSafeAreaInsets();
+
+  const keyboardVerticalOffset = insets.top + 44; // 44 is the height of the header
 
   const onSuccess = () => navigation.goBack();
   const {mutateAsync: handleAddVehicleRegistration} =
@@ -35,7 +38,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
         color: theme.color.background.neutral[1],
       }}
       footer={
-        <FullScreenFooter>
+        <View style={styles.footer}>
           <Button
             expanded={true}
             onPress={() => handleAddVehicleRegistration()}
@@ -46,14 +49,17 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             expanded={true}
             onPress={() => navigation.goBack()}
             text={t(SmartParkAndRideTexts.add.footer.later)}
-            style={styles.laterButton}
             mode="secondary"
             backgroundColor={theme.color.background.neutral[1]}
           />
-        </FullScreenFooter>
+        </View>
       }
     >
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        contentContainerStyle={styles.container}
+        behavior="position"
+        keyboardVerticalOffset={keyboardVerticalOffset}
+      >
         <View style={styles.content}>
           <ThemedBundlingCarSharing style={styles.illustration} width={150} />
           <ThemeText typography="body__primary--big--bold">
@@ -63,6 +69,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             {t(SmartParkAndRideTexts.add.content.text)}
           </ThemeText>
         </View>
+
         <Section>
           <TextInputSectionItem
             label={t(SmartParkAndRideTexts.add.inputs.nickname.label)}
@@ -72,14 +79,14 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             onChangeText={setNickname}
             value={nickname}
             inlineLabel={false}
-            maxLength={20}
-          />
-          <LicensePlateInputSectionItem
-            value={licensePlate}
-            onChange={setLicensePlate}
           />
         </Section>
-      </View>
+
+        <LicensePlateInputSection
+          value={licensePlate}
+          onChangeText={setLicensePlate}
+        />
+      </KeyboardAvoidingView>
     </FullScreenView>
   );
 };
@@ -93,16 +100,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     gap: theme.spacing.medium,
-    marginTop: theme.spacing.xLarge * 3,
+    marginTop: theme.spacing.xLarge * 2,
     marginBottom: theme.spacing.xLarge,
   },
   illustration: {
-    marginBottom: theme.spacing.xLarge,
-  },
-  laterButton: {
-    marginTop: theme.spacing.medium,
+    marginBottom: theme.spacing.large,
   },
   descriptionText: {
     textAlign: 'center',
+  },
+  footer: {
+    display: 'flex',
+    gap: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
 }));

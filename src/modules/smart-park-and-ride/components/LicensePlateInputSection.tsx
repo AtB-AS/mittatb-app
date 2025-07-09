@@ -12,24 +12,19 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 
 type LicensePlateInputSectionItemProps = {
-  value: string;
-  onChange: (val: string) => void;
-  autoFocus?: boolean;
-  placeholder?: string;
   label?: string;
-};
+} & Omit<React.ComponentProps<typeof TextInputSectionItem>, 'label'>;
 
-export const LicensePlateInputSectionItem = ({
+export const LicensePlateInputSection = ({
   value,
-  onChange,
-  autoFocus = false,
   placeholder,
   label,
+  ...textInputSectionItemProps
 }: LicensePlateInputSectionItemProps) => {
   const {themeName} = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
-  const debouncedValue = useDebounce(value, 400);
+  const debouncedValue = useDebounce(value, 400) ?? '';
 
   // Only perform search if input is at least 2 characters
   const shouldSearch = debouncedValue.length >= 2;
@@ -53,18 +48,21 @@ export const LicensePlateInputSectionItem = ({
     <>
       <Section>
         <TextInputSectionItem
-          label={label || t(SmartParkAndRideTexts.add.input.label)}
-          placeholder={
-            placeholder || t(SmartParkAndRideTexts.add.input.placeholder)
+          label={
+            label || t(SmartParkAndRideTexts.add.inputs.licensePlate.label)
           }
-          onChangeText={onChange}
-          autoCapitalize="characters"
+          placeholder={
+            placeholder ||
+            t(SmartParkAndRideTexts.add.inputs.licensePlate.placeholder)
+          }
           value={value}
+          autoCapitalize="characters"
           inlineLabel={false}
-          autoFocus={autoFocus}
           maxLength={9}
+          {...textInputSectionItemProps}
         />
       </Section>
+
       {!!showSuccessMessage && (
         <View style={styles.successRow}>
           <ThemeIcon svg={statusTypeToIcon('valid', true, themeName)} />
@@ -76,9 +74,13 @@ export const LicensePlateInputSectionItem = ({
       {!!showErrorMessage && (
         <MessageInfoBox
           type="warning"
-          title={t(SmartParkAndRideTexts.add.input.vehicleNotFound.title)}
-          message={t(SmartParkAndRideTexts.add.input.vehicleNotFound.message)}
-          style={styles.errorBox}
+          title={t(
+            SmartParkAndRideTexts.add.inputs.licensePlate.vehicleNotFound.title,
+          )}
+          message={t(
+            SmartParkAndRideTexts.add.inputs.licensePlate.vehicleNotFound
+              .message,
+          )}
         />
       )}
       {!!showLoading && (
@@ -93,14 +95,9 @@ export const LicensePlateInputSectionItem = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   successRow: {
     flexDirection: 'row',
-    marginTop: theme.spacing.medium,
     gap: theme.spacing.small,
   },
-  errorBox: {
-    marginTop: theme.spacing.medium,
-  },
   loadingBox: {
-    marginTop: theme.spacing.medium,
     alignItems: 'flex-start',
   },
 }));
