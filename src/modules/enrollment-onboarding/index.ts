@@ -1,5 +1,5 @@
 export {enrollmentOnboardingConfig} from './enrollment-onboarding-config';
 export type {
-  EnrollmentOnboardingConfigType,
+  EnrollmentOnboardingConfig,
   EnrollmentOnboardingConfigId,
 } from './types';

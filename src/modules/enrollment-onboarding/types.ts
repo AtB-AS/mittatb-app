@@ -6,7 +6,7 @@ export type EnrollmentOnboardingScreenName =
 
 export type EnrollmentOnboardingConfigId = 'bonus-pilot';
 
-export type EnrollmentOnboardingConfigType = {
+export type EnrollmentOnboardingConfig = {
   id: EnrollmentOnboardingConfigId;
   enrollmentIds: string[];
   onboardingScreens: {

@@ -11,7 +11,10 @@ export function useNavigateToNextEnrollmentOnboardingScreen(
   const navigation = useNavigation<EnrollmentOnboardingNavigationProps>();
 
   return useCallback(() => {
-    const nextScreenName = getNextOnboardingScreen(configId, currentScreenName);
+    const nextScreenName = getNextOnboardingScreenName(
+      configId,
+      currentScreenName,
+    );
     if (nextScreenName) {
       navigation.navigate(nextScreenName);
     } else {
@@ -20,7 +23,7 @@ export function useNavigateToNextEnrollmentOnboardingScreen(
   }, [configId, currentScreenName, navigation]);
 }
 
-export function getNextOnboardingScreen(
+export function getNextOnboardingScreenName(
   configId: string,
   currentScreenName: string,
 ): EnrollmentOnboardingScreenName | undefined {

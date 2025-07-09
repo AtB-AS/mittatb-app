@@ -1,6 +1,6 @@
 import {bonusEnrollmentConfig} from '../bonus';
-import {EnrollmentOnboardingConfigType} from './types';
+import {EnrollmentOnboardingConfig} from './types';
 
-export const enrollmentOnboardingConfig: EnrollmentOnboardingConfigType[] = [
+export const enrollmentOnboardingConfig: EnrollmentOnboardingConfig[] = [
   bonusEnrollmentConfig,
 ];
