@@ -19,6 +19,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ExternalLinksTexts} from '@atb/translations/ExternalLinks';
 
 type ActionButton = {
   id: string;
@@ -148,7 +149,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       text: t(CityBoxMessageTexts.actionButtons.bookOnline),
       icon: ExternalLink,
       interactiveColor: interactiveColor,
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      accessibilityHint: t(ExternalLinksTexts.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book online url opened', {
           name: 'book_online_action',
@@ -184,7 +185,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       icon: ExternalLink,
       text: t(CityBoxMessageTexts.actionButtons.moreInfo),
       interactiveColor: interactiveAccentColor,
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      accessibilityHint: t(ExternalLinksTexts.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'More info url opened', {
           name: 'more_info_action',

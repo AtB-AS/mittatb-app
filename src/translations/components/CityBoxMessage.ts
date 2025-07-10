@@ -16,11 +16,6 @@ const CityBoxMessageTexts = {
     bookOnline: _('Bestill på nett', 'Book online', 'Bestill på nettet'),
     moreInfo: _('Mer info', 'More info', 'Meir info'),
   },
-  a11yHintForExternalContent: _(
-    'Aktivér for å åpne ekstern side',
-    'Activate to open external content',
-    'Aktiver for å opne ekstern side',
-  ),
   a11yHintForPhone: _(
     'Aktiver for å ringe',
     'Activate to call',

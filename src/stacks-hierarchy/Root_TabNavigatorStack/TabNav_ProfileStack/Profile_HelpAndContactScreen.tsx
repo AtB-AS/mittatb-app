@@ -8,14 +8,13 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {Linking, View} from 'react-native';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {Button} from '@atb/components/button';
 import Bugsnag from '@bugsnag/react-native';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
+import {ExternalLinksTexts} from '@atb/translations/ExternalLinks';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
@@ -68,32 +67,56 @@ export const Profile_HelpAndContactScreen = () => {
             {!!contactFormUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.contactForm)}
-                icon={<ThemeIcon svg={ExternalLink} />}
+                icon="external-link"
                 onPress={() => openLink(contactFormUrl)}
+                accessibility={{
+                  accessibilityHint: t(
+                    ExternalLinksTexts.a11yHintForExternalContent,
+                  ),
+                  accessibilityRole: 'link',
+                }}
                 testID="contactInformationButton"
               />
             )}
             {!!lostAndFoundUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.lostAndFound)}
-                icon={<ThemeIcon svg={ExternalLink} />}
+                icon="external-link"
                 onPress={() => openLink(lostAndFoundUrl)}
+                accessibility={{
+                  accessibilityHint: t(
+                    ExternalLinksTexts.a11yHintForExternalContent,
+                  ),
+                  accessibilityRole: 'link',
+                }}
                 testID="lostAndFoundButton"
               />
             )}
             {!!refundInfoUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.refund)}
-                icon={<ThemeIcon svg={ExternalLink} />}
+                icon="external-link"
                 onPress={() => openLink(refundInfoUrl)}
+                accessibility={{
+                  accessibilityHint: t(
+                    ExternalLinksTexts.a11yHintForExternalContent,
+                  ),
+                  accessibilityRole: 'link',
+                }}
                 testID="refundButton"
               />
             )}
             {!!frequentlyAskedQuestionsUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.frequentlyAskedQuestions)}
-                icon={<ThemeIcon svg={ExternalLink} />}
+                icon="external-link"
                 onPress={() => openLink(frequentlyAskedQuestionsUrl)}
+                accessibility={{
+                  accessibilityHint: t(
+                    ExternalLinksTexts.a11yHintForExternalContent,
+                  ),
+                  accessibilityRole: 'link',
+                }}
                 testID="frequentlyAskedQuestionsButton"
               />
             )}
