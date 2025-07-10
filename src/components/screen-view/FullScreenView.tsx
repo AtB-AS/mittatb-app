@@ -1,5 +1,10 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {RefreshControlProps, ScrollView, View} from 'react-native';
+import {
+  RefreshControlProps,
+  ScrollView,
+  View,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
@@ -21,6 +26,7 @@ type Props = {
   footer?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
   contentColor?: ContrastColor;
+  avoidKeyboard?: boolean;
 };
 
 type PropsWithParallaxContent = Props &
@@ -42,6 +48,16 @@ export function FullScreenView(props: Props) {
     }
   };
 
+  const contentComponent = hasParallaxContent(props) ? (
+    <ChildrenWithParallaxScrollContent
+      {...props}
+      handleScroll={handleScroll}
+      headerColor={backgroundColor}
+    />
+  ) : (
+    <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
+  );
+
   return (
     <>
       <View
@@ -59,17 +75,12 @@ export function FullScreenView(props: Props) {
         />
       </View>
 
-      {hasParallaxContent(props) ? (
-        <ChildrenWithParallaxScrollContent
-          {...props}
-          handleScroll={handleScroll}
-          headerColor={backgroundColor}
-        />
+      {props.avoidKeyboard ? (
+        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+          {contentComponent}
+        </KeyboardAvoidingView>
       ) : (
-        <ChildrenInNormalScrollView
-          {...props}
-          contentColor={props.contentColor}
-        />
+        contentComponent
       )}
       {!!props.footer && (
         <FullScreenFooter footerColor={backgroundColor}>
@@ -138,5 +149,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   childrenContainer: {
     paddingBottom: theme.spacing.medium,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
 }));

@@ -10,7 +10,7 @@ import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {View} from 'react-native';
 import {RootStackScreenProps} from '..';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -24,8 +24,6 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
 
-  const keyboardVerticalOffset = insets.top + 44; // 44 is the height of the header
-
   const onSuccess = () => navigation.goBack();
   const {mutateAsync: handleAddVehicleRegistration} =
     useAddVehicleRegistrationMutation(licensePlate, nickname, onSuccess);
@@ -37,6 +35,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
         leftButton: {type: 'back', withIcon: true},
         color: theme.color.background.neutral[1],
       }}
+      avoidKeyboard={true}
       footer={
         <View style={styles.footer}>
           <Button
@@ -55,11 +54,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
         </View>
       }
     >
-      <KeyboardAvoidingView
-        contentContainerStyle={styles.container}
-        behavior="position"
-        keyboardVerticalOffset={keyboardVerticalOffset}
-      >
+      <View style={styles.container}>
         <View style={styles.content}>
           <ThemedBundlingCarSharing style={styles.illustration} width={150} />
           <ThemeText typography="body__primary--big--bold">
@@ -88,7 +83,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
             onChangeText: setLicensePlate,
           }}
         />
-      </KeyboardAvoidingView>
+      </View>
     </FullScreenView>
   );
 };
