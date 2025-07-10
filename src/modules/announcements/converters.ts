@@ -61,4 +61,5 @@ const appliesToAppVersion = (
 ) => {
   if (appVersionMin && appVersionMin > APP_VERSION) return false;
   if (appVersionMax && appVersionMax < APP_VERSION) return false;
+  return true;
 };
