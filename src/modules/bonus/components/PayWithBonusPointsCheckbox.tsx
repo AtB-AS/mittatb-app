@@ -21,12 +21,14 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
+  operatorName: string;
   isChecked: boolean;
   onPress: () => void;
 };
 
 export const PayWithBonusPointsCheckbox = ({
   bonusProduct,
+  operatorName,
   isChecked,
   onPress,
   ...props
@@ -107,9 +109,18 @@ export const PayWithBonusPointsCheckbox = ({
       </Section>
       {isError && (
         <MessageInfoBox
-          style={styles.errorMessage}
+          style={styles.infoMessage}
           type="error"
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+        />
+      )}
+      {isChecked && (
+        <MessageInfoBox
+          style={styles.infoMessage}
+          type="warning"
+          message={t(
+            BonusProgramTexts.log_in_operator_app_warning(operatorName),
+          )}
         />
       )}
     </>
@@ -130,7 +141,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
   textContainer: {flex: 1},
-  errorMessage: {
+  infoMessage: {
     marginTop: theme.spacing.medium,
   },
 }));
