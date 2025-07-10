@@ -135,7 +135,6 @@ export const Root_SmartParkAndRideEditScreen = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacing.medium,
-    display: 'flex',
     gap: theme.spacing.medium,
   },
   deleteButton: {
