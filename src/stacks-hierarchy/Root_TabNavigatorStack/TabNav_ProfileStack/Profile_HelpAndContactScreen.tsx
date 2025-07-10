@@ -1,4 +1,5 @@
 import {
+  dictionary,
   getTextForLanguage,
   ProfileTexts,
   useTranslation,
@@ -14,7 +15,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
-import {ExternalLinksTexts} from '@atb/translations/ExternalLinks';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
@@ -71,7 +71,7 @@ export const Profile_HelpAndContactScreen = () => {
                 onPress={() => openLink(contactFormUrl)}
                 accessibility={{
                   accessibilityHint: t(
-                    ExternalLinksTexts.a11yHintForExternalContent,
+                    dictionary.appNavigation.a11yHintForExternalContent,
                   ),
                   accessibilityRole: 'link',
                 }}
@@ -85,7 +85,7 @@ export const Profile_HelpAndContactScreen = () => {
                 onPress={() => openLink(lostAndFoundUrl)}
                 accessibility={{
                   accessibilityHint: t(
-                    ExternalLinksTexts.a11yHintForExternalContent,
+                    dictionary.appNavigation.a11yHintForExternalContent,
                   ),
                   accessibilityRole: 'link',
                 }}
@@ -99,7 +99,7 @@ export const Profile_HelpAndContactScreen = () => {
                 onPress={() => openLink(refundInfoUrl)}
                 accessibility={{
                   accessibilityHint: t(
-                    ExternalLinksTexts.a11yHintForExternalContent,
+                    dictionary.appNavigation.a11yHintForExternalContent,
                   ),
                   accessibilityRole: 'link',
                 }}
@@ -113,7 +113,7 @@ export const Profile_HelpAndContactScreen = () => {
                 onPress={() => openLink(frequentlyAskedQuestionsUrl)}
                 accessibility={{
                   accessibilityHint: t(
-                    ExternalLinksTexts.a11yHintForExternalContent,
+                    dictionary.appNavigation.a11yHintForExternalContent,
                   ),
                   accessibilityRole: 'link',
                 }}
