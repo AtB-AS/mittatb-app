@@ -28,18 +28,6 @@ const TravelAidSettingsTexts = {
         'Aktivér for å vise informasjonsside',
       ),
     },
-    contact: {
-      title: _(
-        'Ring kundeservice',
-        'Call Customer Service',
-        'Ring kundeservice',
-      ),
-      a11yHint: _(
-        'Aktivér for å ringe kundeservice',
-        'Activate to call customer service',
-        'Trykk for å ringe kundeservice',
-      ),
-    },
   },
 
   information: {

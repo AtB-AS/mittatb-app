@@ -303,6 +303,16 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </Section>
             </>
           )}
+          <ContentHeading text={t(ProfileTexts.sections.contact.heading)} />
+          <Section>
+            <LinkSectionItem
+              text={t(ProfileTexts.sections.contact.helpAndContact)}
+              onPress={() =>
+                navigation.navigate('Profile_HelpAndContactScreen')
+              }
+              testID="contactButton"
+            />
+          </Section>
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (

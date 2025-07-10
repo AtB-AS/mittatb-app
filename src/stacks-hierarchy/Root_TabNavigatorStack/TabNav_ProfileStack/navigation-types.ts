@@ -38,6 +38,7 @@ export type ProfileStackParams = StackParams<{
   Profile_SettingsScreen: undefined;
   Profile_FavoriteScreen: undefined;
   Profile_InformationScreen: undefined;
+  Profile_HelpAndContactScreen: undefined;
 }>;
 
 export type ProfileStackRootProps =

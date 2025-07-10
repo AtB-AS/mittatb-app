@@ -3,6 +3,8 @@ import {Travelcard as TravelCardDark} from '@atb/assets/svg/color/illustrations/
 import {Travelcard as TravelCardLight} from '@atb/assets/svg/color/illustrations/token/travelcard/light/';
 import {Phone as PhoneDark} from '@atb/assets/svg/color/illustrations/token/mobile/dark/';
 import {Phone as PhoneLight} from '@atb/assets/svg/color/illustrations/token/mobile/light/';
+import {Contact as ContactIllustrationDark} from '@atb/assets/svg/color/illustrations/contact/dark/';
+import {Contact as ContactIllustrationLight} from '@atb/assets/svg/color/illustrations/contact/light/';
 import {
   Map as MapLight,
   NoFavouriteDeparture as NoFavouriteDepartureLight,
@@ -153,4 +155,8 @@ export const ThemedBonusTransaction = getThemedAsset(
 export const ThemedBonusTrashCan = getThemedAsset(
   BonusTrashCanLight,
   BonusTrashCanDark,
+);
+export const ThemedContactIllustration = getThemedAsset(
+  ContactIllustrationLight,
+  ContactIllustrationDark,
 );

@@ -610,6 +610,11 @@ function getConfigurableLinksFromSnapshot(
   const mobilityTermsUrl = mapLanguageAndTextType(
     urls?.get('mobilityTermsUrl'),
   );
+  const contactFormUrl = mapLanguageAndTextType(urls?.get('contactFormUrl'));
+  const lostAndFoundUrl = mapLanguageAndTextType(urls?.get('lostAndFoundUrl'));
+  const frequentlyAskedQuestionsUrl = mapLanguageAndTextType(
+    urls?.get('frequentlyAskedQuestionsUrl'),
+  );
 
   return {
     ticketingInfo,
@@ -625,6 +630,9 @@ function getConfigurableLinksFromSnapshot(
     tileServerBaseUrl,
     mapboxSpriteUrl,
     mobilityTermsUrl,
+    contactFormUrl,
+    lostAndFoundUrl,
+    frequentlyAskedQuestionsUrl,
   };
 }
 
