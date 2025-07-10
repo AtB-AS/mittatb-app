@@ -24,6 +24,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
+import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -99,7 +100,11 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
           </View>
           <View>
             <ThemeText style={styles.description} color={themeColor}>
-              {t(LoginTexts.confirmCode.description(phoneNumber))}
+              {t(
+                LoginTexts.confirmCode.description(
+                  formatPhoneNumber(phoneNumber),
+                ),
+              )}
             </ThemeText>
           </View>
           <Section>
