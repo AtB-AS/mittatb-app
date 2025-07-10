@@ -72,10 +72,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.large,
-    display: 'flex',
   },
   content: {
-    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: theme.spacing.medium,

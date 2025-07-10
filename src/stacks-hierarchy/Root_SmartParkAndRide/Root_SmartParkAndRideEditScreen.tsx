@@ -7,13 +7,14 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
-import {Alert} from 'react-native';
+import {Alert, View} from 'react-native';
 import {RootStackScreenProps} from '..';
 import {ScreenHeading} from '@atb/components/heading';
 import {
   useEditVehicleRegistrationMutation,
   useDeleteVehicleRegistrationMutation,
 } from '@atb/modules/smart-park-and-ride';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideEditScreen'>;
 
@@ -29,18 +30,23 @@ export const Root_SmartParkAndRideEditScreen = ({
   const {theme} = useThemeContext();
 
   const onSuccess = () => navigation.goBack();
-  const {mutateAsync: handleEditVehicleRegistration} =
-    useEditVehicleRegistrationMutation(
-      params.vehicleRegistration.id,
-      licensePlate,
-      onSuccess,
-    );
 
-  const {mutateAsync: handleDeleteVehicleRegistration} =
-    useDeleteVehicleRegistrationMutation(
-      params.vehicleRegistration.id,
-      onSuccess,
-    );
+  const {
+    mutate: editVehicleRegistrationMutate,
+    isError: editVehicleRegistrationIsError,
+  } = useEditVehicleRegistrationMutation(
+    params.vehicleRegistration.id,
+    licensePlate,
+    onSuccess,
+  );
+
+  const {
+    mutate: deleteVehicleRegistrationMutate,
+    isError: deleteVehicleRegistrationIsError,
+  } = useDeleteVehicleRegistrationMutation(
+    params.vehicleRegistration.id,
+    onSuccess,
+  );
 
   const showDeleteConfirmation = () => {
     Alert.alert(
@@ -54,7 +60,7 @@ export const Root_SmartParkAndRideEditScreen = ({
         {
           text: t(SmartParkAndRideTexts.edit.delete.confirmation.confirm),
           style: 'destructive',
-          onPress: () => handleDeleteVehicleRegistration(),
+          onPress: () => deleteVehicleRegistrationMutate(),
         },
       ],
     );
@@ -77,7 +83,7 @@ export const Root_SmartParkAndRideEditScreen = ({
         <FullScreenFooter>
           <Button
             expanded={true}
-            onPress={() => handleEditVehicleRegistration()}
+            onPress={() => editVehicleRegistrationMutate()}
             text={t(SmartParkAndRideTexts.edit.button)}
             rightIcon={{svg: Confirm}}
             mode="primary"
@@ -94,26 +100,42 @@ export const Root_SmartParkAndRideEditScreen = ({
         </FullScreenFooter>
       }
     >
-      <Section style={styles.content}>
-        <TextInputSectionItem
-          label={t(SmartParkAndRideTexts.edit.inputs.licensePlate.label)}
-          placeholder={t(
-            SmartParkAndRideTexts.edit.inputs.licensePlate.placeholder,
-          )}
-          onChangeText={setLicensePlate}
-          autoCapitalize="characters"
-          value={licensePlate}
-          inlineLabel={false}
-          autoFocus={true}
-        />
-      </Section>
+      <View style={styles.container}>
+        <Section>
+          <TextInputSectionItem
+            label={t(SmartParkAndRideTexts.edit.inputs.licensePlate.label)}
+            placeholder={t(
+              SmartParkAndRideTexts.edit.inputs.licensePlate.placeholder,
+            )}
+            onChangeText={setLicensePlate}
+            autoCapitalize="characters"
+            value={licensePlate}
+            inlineLabel={false}
+            autoFocus={true}
+          />
+        </Section>
+
+        {editVehicleRegistrationIsError && (
+          <MessageInfoBox
+            type="error"
+            message={t(SmartParkAndRideTexts.edit.error)}
+          />
+        )}
+        {deleteVehicleRegistrationIsError && (
+          <MessageInfoBox
+            type="error"
+            message={t(SmartParkAndRideTexts.edit.delete.error)}
+          />
+        )}
+      </View>
     </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  content: {
-    margin: theme.spacing.medium,
+  container: {
+    padding: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   deleteButton: {
     marginTop: theme.spacing.medium,

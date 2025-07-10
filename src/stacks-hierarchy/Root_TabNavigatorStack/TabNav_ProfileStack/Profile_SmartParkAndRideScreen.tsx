@@ -80,7 +80,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     rowGap: theme.spacing.small,
     marginTop: theme.spacing.large,
     margin: theme.spacing.medium,
-    display: 'flex',
   },
   text: {
     textAlign: 'center',
