@@ -54,19 +54,14 @@ export const AnnouncementRawSchema = z.object({
   actionButton: ActionButtonSchema.optional(),
 });
 
+export const AnnouncementTypeSchema = AnnouncementRawSchema.transform(
+  (data) => ({
+    ...data,
+    startDate: data.startDate?.toMillis(),
+    endDate: data.endDate?.toMillis(),
+  }),
+);
+
 export type AnnouncementRaw = z.infer<typeof AnnouncementRawSchema>;
-export type AnnouncementId = AnnouncementRaw['id'];
-
-const AnnouncementTypeSchema = AnnouncementRawSchema.omit({
-  appPlatforms: true,
-  appVersionMin: true,
-  appVersionMax: true,
-  startDate: true,
-  endDate: true,
-}).extend({
-  startDate: z.number().optional(),
-  endDate: z.number().optional(),
-  actionButton: ActionButtonSchema,
-});
-
 export type AnnouncementType = z.infer<typeof AnnouncementTypeSchema>;
+export type AnnouncementId = AnnouncementType['id'];

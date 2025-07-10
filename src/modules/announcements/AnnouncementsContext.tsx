@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import {AnnouncementRaw, AnnouncementType} from './types';
+import {AnnouncementType, AnnouncementRaw} from './types';
 import {mapToAnnouncements} from './converters';
 import {
   addDismissedAnnouncementInStore,

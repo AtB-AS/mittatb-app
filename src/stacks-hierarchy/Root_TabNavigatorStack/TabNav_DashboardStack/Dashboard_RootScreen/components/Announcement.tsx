@@ -129,14 +129,14 @@ export const Announcement = ({announcement, style}: Props) => {
               id: announcement.id,
             });
             if (
-              announcement.actionButton.actionType === ActionType.bottom_sheet
+              announcement.actionButton?.actionType === ActionType.bottom_sheet
             ) {
               openBottomSheet(
                 () => <AnnouncementSheet announcement={announcement} />,
                 onCloseFocusRef,
               );
             } else {
-              const actionButtonURL = announcement.actionButton.url;
+              const actionButtonURL = announcement.actionButton?.url;
               try {
                 actionButtonURL && (await Linking.openURL(actionButtonURL));
               } catch (err: any) {
