@@ -110,7 +110,9 @@ export const PayWithBonusPointsCheckbox = ({
         <MessageInfoBox
           style={styles.infoMessage}
           type="warning"
-          message={t(BonusProgramTexts.download_app_warning(operatorName))}
+          message={t(
+            BonusProgramTexts.log_in_operator_app_warning(operatorName),
+          )}
         />
       )}
     </>

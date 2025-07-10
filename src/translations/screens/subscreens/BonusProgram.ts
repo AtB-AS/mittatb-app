@@ -32,7 +32,7 @@ const BonusProgramTexts = {
     },
   },
 
-  download_app_warning: (operatorName: string) =>
+  log_in_operator_app_warning: (operatorName: string) =>
     _(
       `Du må være logget inn i ${operatorName}-appen før du bruker bonusen.`,
       `You must be logged in to the ${operatorName} app before using the bonus.`,
