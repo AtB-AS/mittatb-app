@@ -37,14 +37,11 @@ const AnnouncementsContextProvider = ({children}: Props) => {
   useEffect(() => {
     const unsubscribe = firestore()
       .collection<AnnouncementRaw>('announcementsV2')
-      // .where('active', '==', true)
+      .where('active', '==', true)
       .onSnapshot(
         async (snapshot) => {
-          console.log('snapshot', snapshot);
           const dismissedIds = await getDismissedAnnouncementsFromStore();
-          console.log('dismissedIds', dismissedIds);
           const allAnnouncements = mapToAnnouncements(snapshot.docs);
-          console.log('allAnnouncements', allAnnouncements);
           setAnnouncements(
             allAnnouncements.filter((a) => !dismissedIds.includes(a.id)),
           );
@@ -72,15 +69,14 @@ const AnnouncementsContextProvider = ({children}: Props) => {
 
   const findAnnouncements = useCallback(
     (ruleVariables: RuleVariables = {}) => {
-      return announcements;
-      // return announcements.filter((announcement) => {
-      //   if (announcement.rules?.length) {
-      //     const passRules = checkRules(announcement.rules, ruleVariables);
-      //     if (!passRules) return false;
-      //   }
+      return announcements.filter((announcement) => {
+        if (announcement.rules?.length) {
+          const passRules = checkRules(announcement.rules, ruleVariables);
+          if (!passRules) return false;
+        }
 
-      //   return true;
-      // });
+        return true;
+      });
     },
     [announcements],
   );
