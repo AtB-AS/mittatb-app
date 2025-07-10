@@ -21,8 +21,8 @@ export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const {contactPhoneNumber} = useFirestoreConfigurationContext();
-  const {configurableLinks} = useFirestoreConfigurationContext();
+  const {contactPhoneNumber, configurableLinks} =
+    useFirestoreConfigurationContext();
 
   const contactFormUrl = getTextForLanguage(
     configurableLinks?.contactFormUrl,
@@ -65,7 +65,7 @@ export const Profile_HelpAndContactScreen = () => {
         >
           <ThemedContactIllustration style={style.contactIllustration} />
           <Section>
-            {contactFormUrl && contactFormUrl !== '' && (
+            {contactFormUrl?.length && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.contactForm)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -73,7 +73,7 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="contactInformationButton"
               />
             )}
-            {lostAndFoundUrl && lostAndFoundUrl !== '' && (
+            {lostAndFoundUrl?.length && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.lostAndFound)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -81,7 +81,7 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="lostAndFoundButton"
               />
             )}
-            {refundInfoUrl && refundInfoUrl !== '' && (
+            {refundInfoUrl?.length && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.refund)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -89,17 +89,14 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="refundButton"
               />
             )}
-            {frequentlyAskedQuestionsUrl &&
-              frequentlyAskedQuestionsUrl !== '' && (
-                <LinkSectionItem
-                  text={t(
-                    ProfileTexts.sections.contact.frequentlyAskedQuestions,
-                  )}
-                  icon={<ThemeIcon svg={ExternalLink} />}
-                  onPress={() => openLink(frequentlyAskedQuestionsUrl)}
-                  testID="frequentlyAskedQuestionsButton"
-                />
-              )}
+            {frequentlyAskedQuestionsUrl?.length && (
+              <LinkSectionItem
+                text={t(ProfileTexts.sections.contact.frequentlyAskedQuestions)}
+                icon={<ThemeIcon svg={ExternalLink} />}
+                onPress={() => openLink(frequentlyAskedQuestionsUrl)}
+                testID="frequentlyAskedQuestionsButton"
+              />
+            )}
           </Section>
           {hasContactPhoneNumber && (
             <View style={style.buttonContainer}>
