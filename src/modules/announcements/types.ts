@@ -2,7 +2,6 @@ import {z} from 'zod';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatformSchema} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
-
 import {RuleSchema} from '@atb/modules/rule-engine';
 
 const TimestampSchema = z.custom<Timestamp>(
@@ -15,12 +14,12 @@ export enum ActionType {
   bottom_sheet = 'bottom_sheet',
 }
 
-export const BottomSheetActionButtonSchema = z.object({
+const BottomSheetActionButtonSchema = z.object({
   label: LanguageAndTextTypeArray.optional(),
   actionType: z.literal(ActionType.bottom_sheet),
 });
 
-export const UrlActionButtonSchema = z.object({
+const UrlActionButtonSchema = z.object({
   label: LanguageAndTextTypeArray.optional(),
   url: z.string().url(),
   actionType: z.union([
@@ -29,7 +28,7 @@ export const UrlActionButtonSchema = z.object({
   ]),
 });
 
-export const ActionButtonSchema = z.union([
+const ActionButtonSchema = z.union([
   BottomSheetActionButtonSchema,
   UrlActionButtonSchema,
 ]);
@@ -58,7 +57,7 @@ export const AnnouncementRawSchema = z.object({
 export type AnnouncementRaw = z.infer<typeof AnnouncementRawSchema>;
 export type AnnouncementId = AnnouncementRaw['id'];
 
-export const AnnouncementTypeSchema = AnnouncementRawSchema.omit({
+const AnnouncementTypeSchema = AnnouncementRawSchema.omit({
   appPlatforms: true,
   appVersionMin: true,
   appVersionMax: true,
