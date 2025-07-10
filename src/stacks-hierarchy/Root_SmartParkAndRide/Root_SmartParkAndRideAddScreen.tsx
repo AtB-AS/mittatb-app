@@ -12,7 +12,6 @@ import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartPar
 import {useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '..';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 
@@ -22,7 +21,6 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const [nickname, setNickname] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
-  const insets = useSafeAreaInsets();
 
   const onSuccess = () => navigation.goBack();
   const {mutateAsync: handleAddVehicleRegistration} =
