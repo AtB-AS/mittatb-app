@@ -150,7 +150,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   childrenContainer: {
     paddingBottom: theme.spacing.medium,
   },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
 }));
