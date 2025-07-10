@@ -1,5 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';

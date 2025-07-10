@@ -1,7 +1,7 @@
 import {Image, ImageStyle, View} from 'react-native';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {StyleSheet} from '@atb/theme';
 
 type Props = {

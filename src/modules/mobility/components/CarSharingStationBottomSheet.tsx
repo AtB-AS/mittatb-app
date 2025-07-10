@@ -20,7 +20,7 @@ import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {CarPreviews} from './CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';

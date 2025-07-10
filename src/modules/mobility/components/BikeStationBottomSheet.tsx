@@ -16,7 +16,7 @@ import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeText} from '@atb/components/text';
-import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
