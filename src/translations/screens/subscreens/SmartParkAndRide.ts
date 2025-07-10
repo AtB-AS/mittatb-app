@@ -61,6 +61,11 @@ const SmartParkAndRideTexts = {
       },
     },
     button: _('Lagre', 'Save', 'Lagre'),
+    error: _(
+      'Vi klarte ikke lagre endringer. Prøv igjen.',
+      'We could not save changes. Please try again.',
+      'Vi klarte ikkje lagre endringar. Prøv igjen.',
+    ),
     delete: {
       button: _('Fjern kjøretøy', 'Remove vehicle', 'Fjern køyretøy'),
       confirmation: {
@@ -73,6 +78,11 @@ const SmartParkAndRideTexts = {
         cancel: _('Avbryt', 'Cancel', 'Avbryt'),
         confirm: _('Fjern', 'Remove', 'Fjern'),
       },
+      error: _(
+        'Vi klarte ikke fjerne kjøretøyet. Prøv igjen.',
+        'We could not remove the vehicle. Please try again.',
+        'Vi klarte ikkje fjerne køyretøyet. Prøv igjen.',
+      ),
     },
   },
   a11y: {
