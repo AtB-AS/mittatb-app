@@ -65,7 +65,7 @@ export const Profile_HelpAndContactScreen = () => {
         >
           <ThemedContactIllustration style={style.contactIllustration} />
           <Section>
-            {contactFormUrl?.length && (
+            {!!contactFormUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.contactForm)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -73,7 +73,7 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="contactInformationButton"
               />
             )}
-            {lostAndFoundUrl?.length && (
+            {!!lostAndFoundUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.lostAndFound)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -81,7 +81,7 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="lostAndFoundButton"
               />
             )}
-            {refundInfoUrl?.length && (
+            {!!refundInfoUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.refund)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -89,7 +89,7 @@ export const Profile_HelpAndContactScreen = () => {
                 testID="refundButton"
               />
             )}
-            {frequentlyAskedQuestionsUrl?.length && (
+            {!!frequentlyAskedQuestionsUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.frequentlyAskedQuestions)}
                 icon={<ThemeIcon svg={ExternalLink} />}
@@ -138,6 +138,5 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   contactIllustration: {
     alignSelf: 'center',
-    marginBottom: theme.spacing.medium,
   },
 }));
