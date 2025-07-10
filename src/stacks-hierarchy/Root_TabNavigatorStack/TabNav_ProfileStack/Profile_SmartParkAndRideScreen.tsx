@@ -14,7 +14,10 @@ import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
-import {useVehicleRegistrationsQuery} from '@atb/modules/smart-park-and-ride';
+import {
+  useVehicleRegistrationsQuery,
+  VehicleRegistration,
+} from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 
 export const Profile_SmartParkAndRideScreen = () => {
@@ -36,11 +39,18 @@ export const Profile_SmartParkAndRideScreen = () => {
           {vehicleRegistrations?.map((vehicleRegistration) => (
             <SelectionInlineSectionItem
               key={vehicleRegistration.id}
-              label={vehicleRegistration.licensePlate}
+              label={
+                vehicleRegistration.nickname || vehicleRegistration.licensePlate
+              }
+              value={
+                vehicleRegistration.nickname
+                  ? vehicleRegistration.licensePlate
+                  : undefined
+              }
               icon={Car}
               accessibility={{
                 accessibilityLabel: getAccessibilityLabel(
-                  vehicleRegistration.licensePlate,
+                  vehicleRegistration,
                   t,
                 ),
               }}
@@ -69,10 +79,24 @@ export const Profile_SmartParkAndRideScreen = () => {
   );
 };
 
-const getAccessibilityLabel = (licensePlate: string, t: TranslateFunction) => {
-  return `${t(SmartParkAndRideTexts.a11y.carIcon)}. ${spellOut(
-    licensePlate,
-  )}. ${t(SmartParkAndRideTexts.a11y.button)}`;
+const getAccessibilityLabel = (
+  vehicleRegistration: VehicleRegistration,
+  t: TranslateFunction,
+) => {
+  const carIcon = t(SmartParkAndRideTexts.a11y.carIcon);
+  const button = t(SmartParkAndRideTexts.a11y.button);
+
+  if (vehicleRegistration.nickname) {
+    // If there's a nickname, announce both nickname and license plate
+    return `${carIcon}. ${vehicleRegistration.nickname}, ${spellOut(
+      vehicleRegistration.licensePlate,
+    )}. ${button}`;
+  } else {
+    // If no nickname, announce only license plate
+    return `${carIcon}. ${spellOut(
+      vehicleRegistration.licensePlate,
+    )}. ${button}`;
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

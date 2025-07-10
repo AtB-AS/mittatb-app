@@ -1,7 +1,6 @@
 import {Confirm, Delete} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -13,6 +12,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {
   useEditVehicleRegistrationMutation,
   useDeleteVehicleRegistrationMutation,
+  LicensePlateSection,
 } from '@atb/modules/smart-park-and-ride';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
@@ -24,6 +24,9 @@ export const Root_SmartParkAndRideEditScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const [nickname, setNickname] = useState(
+    params.vehicleRegistration.nickname || '',
+  );
   const [licensePlate, setLicensePlate] = useState(
     params.vehicleRegistration.licensePlate,
   );
@@ -37,6 +40,7 @@ export const Root_SmartParkAndRideEditScreen = ({
   } = useEditVehicleRegistrationMutation(
     params.vehicleRegistration.id,
     licensePlate,
+    nickname,
     onSuccess,
   );
 
@@ -80,7 +84,7 @@ export const Root_SmartParkAndRideEditScreen = ({
         />
       )}
       footer={
-        <FullScreenFooter>
+        <View style={styles.footer}>
           <Button
             expanded={true}
             onPress={() => editVehicleRegistrationMutate()}
@@ -95,25 +99,30 @@ export const Root_SmartParkAndRideEditScreen = ({
             rightIcon={{svg: Delete}}
             mode="secondary"
             backgroundColor={theme.color.background.neutral[1]}
-            style={styles.deleteButton}
           />
-        </FullScreenFooter>
+        </View>
       }
     >
       <View style={styles.container}>
         <Section>
           <TextInputSectionItem
-            label={t(SmartParkAndRideTexts.edit.inputs.licensePlate.label)}
+            label={t(SmartParkAndRideTexts.edit.inputs.nickname.label)}
             placeholder={t(
-              SmartParkAndRideTexts.edit.inputs.licensePlate.placeholder,
+              SmartParkAndRideTexts.edit.inputs.nickname.placeholder,
             )}
-            onChangeText={setLicensePlate}
-            autoCapitalize="characters"
-            value={licensePlate}
+            onChangeText={setNickname}
+            value={nickname}
             inlineLabel={false}
-            autoFocus={true}
+            maxLength={20}
           />
         </Section>
+
+        <LicensePlateSection
+          inputProps={{
+            value: licensePlate,
+            onChangeText: setLicensePlate,
+          }}
+        />
 
         {editVehicleRegistrationIsError && (
           <MessageInfoBox
@@ -134,10 +143,13 @@ export const Root_SmartParkAndRideEditScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    flex: 1,
     padding: theme.spacing.medium,
     gap: theme.spacing.medium,
   },
-  deleteButton: {
-    marginTop: theme.spacing.medium,
+  footer: {
+    paddingTop: theme.spacing.medium,
+    display: 'flex',
+    gap: theme.spacing.medium,
   },
 }));

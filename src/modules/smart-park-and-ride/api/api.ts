@@ -5,10 +5,13 @@ import {
   VehicleRegistration,
 } from '../types';
 
-export const addVehicleRegistration = (licensePlate: string): Promise<void> => {
+export const addVehicleRegistration = (
+  licensePlate: string,
+  nickname?: string,
+): Promise<void> => {
   return client.post(
     `/spar/v1/vehicle-registrations`,
-    {licensePlate},
+    {licensePlate, nickname},
     {authWithIdToken: true},
   );
 };
@@ -25,10 +28,11 @@ export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
 export const editVehicleRegistration = (
   id: string,
   licensePlate: string,
+  nickname?: string,
 ): Promise<void> => {
   return client.put(
     `/spar/v1/vehicle-registrations/${id}`,
-    {licensePlate},
+    {licensePlate, nickname},
     {authWithIdToken: true},
   );
 };
