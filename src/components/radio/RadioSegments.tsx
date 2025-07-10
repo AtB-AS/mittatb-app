@@ -78,6 +78,7 @@ export function RadioSegments({
                 padding: theme.spacing.medium - borderWidth,
               },
             ]}
+            testID={`${option.text.toLowerCase().replace(' ', '')}Button`}
           >
             <ThemeText
               typography={

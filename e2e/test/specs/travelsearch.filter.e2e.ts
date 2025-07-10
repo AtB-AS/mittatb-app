@@ -49,7 +49,7 @@ describe('Travel search filter', () => {
       // Not considering the 'all' option
       const filtersAvailable =
         (await TravelsearchFilterPage.numberOfFilters) - 1;
-      await TravelsearchFilterPage.toggleFilter('bus');
+      await TravelsearchFilterPage.toggleTransportModeFilter('bus');
       const filtersInUse = filtersAvailable - 1;
       await TravelsearchFilterPage.confirmFilter();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
@@ -87,7 +87,7 @@ describe('Travel search filter', () => {
   });
 
   /**
-   * Saving the filter choice should use the saved filter for new searches
+   * Changing the filter choice 'walkSpeed' should be saved for new searches
    */
   it('should save filter choices', async () => {
     const departure = 'Prinsens gate';
@@ -104,14 +104,9 @@ describe('Travel search filter', () => {
 
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
-      await TravelsearchFilterPage.toggleFilter('bus');
-      await TravelsearchFilterPage.confirmFilter(true);
+      await TravelsearchFilterPage.setWalkSpeed('slow');
+      await TravelsearchFilterPage.confirmFilter();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
-
-      // Filters are enabled
-      await expect(
-        await TravelsearchFilterPage.selectedFilterButton.isExisting(),
-      ).toBe(true);
 
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
@@ -126,14 +121,10 @@ describe('Travel search filter', () => {
       await SearchPage.setSearchLocation(arrival);
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
-      // Filters are enabled
-      await expect(
-        await TravelsearchFilterPage.selectedFilterButton.isExisting(),
-      ).toBe(true);
-
-      // Remove filter
-      await TravelsearchFilterPage.removeSelectedFilter();
-      await TravelsearchOverviewPage.waitForTravelSearchResults();
+      // Walk speed is still changed
+      await TravelsearchFilterPage.openFilter();
+      await TravelsearchFilterPage.walkSpeedIsEnabled('slow');
+      await TravelsearchFilterPage.confirmFilter();
     } catch (errMsg) {
       await AppHelper.screenshot('error_travelsearch_save_filter');
       throw errMsg;
@@ -141,7 +132,7 @@ describe('Travel search filter', () => {
   });
 
   /**
-   * Not saving the filter choice should NOT use the last filter for new searches
+   * Changing the filter choice 'transport mode' should NOT be saved for new searches
    */
   it('should not save filter choices', async () => {
     const departure = 'Prinsens gate';
@@ -161,8 +152,8 @@ describe('Travel search filter', () => {
 
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
-      await TravelsearchFilterPage.toggleFilter('bus');
-      await TravelsearchFilterPage.confirmFilter(false);
+      await TravelsearchFilterPage.toggleTransportModeFilter('bus');
+      await TravelsearchFilterPage.confirmFilter();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // Filters are enabled

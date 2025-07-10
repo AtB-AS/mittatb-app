@@ -15,6 +15,7 @@ import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
+import {Root_EnrollemntStackParams} from './Root_EntrollmentOnboradingStack';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -150,6 +151,7 @@ export type RootStackParamList = StackParams<{
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
   Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;
+  Root_EnrollmentOnboardingStack: Root_EnrollemntStackParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
