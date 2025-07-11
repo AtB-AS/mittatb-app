@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getCarStation} from '@atb/api/mobility';
+import {getCarStation} from '@atb/api/bff/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export const useCarStationQuery = (id: string) =>

@@ -5,8 +5,11 @@ import {WS_API_BASE_URL} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import qs from 'query-string';
 import {useCallback, useState} from 'react';
-import {GetServiceJourneyVehicles, VehicleWithPosition} from './types/vehicles';
-import {useSubscription} from './use-subscription';
+import {
+  GetServiceJourneyVehicles,
+  VehicleWithPosition,
+} from '../types/vehicles';
+import {useSubscription} from '../use-subscription';
 
 const WEBSOCKET_BASE_URL = WS_API_BASE_URL;
 

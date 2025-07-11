@@ -1,5 +1,5 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
-import {StopPlaceInfo} from '@atb/api/departures/types';
+import {StopPlaceInfo} from '@atb/api/bff/types';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
@@ -16,7 +16,7 @@ import {
   FavoriteDeparturesTexts,
   useTranslation,
 } from '@atb/translations';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';

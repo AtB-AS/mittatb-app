@@ -5,10 +5,10 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {DepartureGroupMetadata} from '@atb/api/departures/types';
+import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
-import {getNearestStops} from '@atb/api/departures/stops-nearest';
+import {getNearestStops} from '@atb/api/bff/departures';
 import {NearestStopPlaceNode} from '@atb/api/types/departures';
 
 type LoadType = 'initial' | 'more';

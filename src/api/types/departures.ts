@@ -7,7 +7,7 @@ import {
   TransportSubmode,
   DestinationDisplay,
 } from './generated/journey_planner_v3_types';
-import {DepartureTime} from '@atb/api/departures/types';
+import {DepartureTime} from '@atb/api/bff/types';
 
 type QuayWithEstimatedCalls = Required<Types.DeparturesQuery>['quays'][0];
 

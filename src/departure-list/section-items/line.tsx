@@ -1,4 +1,4 @@
-import {DepartureGroup, DepartureTime} from '@atb/api/departures/types';
+import {DepartureGroup, DepartureTime} from '@atb/api/bff/types';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
   SectionItemProps,

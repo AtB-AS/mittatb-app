@@ -1,6 +1,6 @@
 import haversine from 'haversine-distance';
 import {Location} from '@atb/modules/favorites';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {dictionary, useTranslation} from '@atb/translations';
 
 type SortedLocation = {

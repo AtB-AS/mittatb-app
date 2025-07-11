@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {QuayInfo} from '@atb/api/departures/types';
+import {QuayInfo} from '@atb/api/bff/types';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {screenReaderPause} from '@atb/components/text';
 import {

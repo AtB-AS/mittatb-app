@@ -11,7 +11,7 @@ import {
   VehiclesState,
 } from '@atb/modules/map';
 import {AreaState, getOperators, isShowAll, updateAreaState} from './utils';
-import {getVehicles} from '@atb/api/mobility';
+import {getVehicles} from '@atb/api/bff/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from './use-vehicles-poll-interval';

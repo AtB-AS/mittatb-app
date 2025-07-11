@@ -1,4 +1,4 @@
-import {QuayGroup} from '@atb/api/departures/types';
+import {QuayGroup} from '@atb/api/bff/types';
 import {Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';

@@ -7,7 +7,6 @@ import type {
 } from './types/sales';
 
 export const client = createClient(API_BASE_URL);
-const tripPatternEndpoint = `/sales/v1/search/trip-pattern`;
 
 export async function fetchOfferFromLegs(
   travelDate: Date,
@@ -29,7 +28,7 @@ export async function fetchOfferFromLegs(
     isOnBehalfOf: false,
   };
   const response = await client.post<OfferFromLegsResponse>(
-    tripPatternEndpoint,
+    '/sales/v1/search/trip-pattern',
     requestBody,
     {authWithIdToken: true},
   );
