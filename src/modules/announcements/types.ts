@@ -4,22 +4,20 @@ import {AppPlatformSchema} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
 import {RuleSchema} from '@atb/modules/rule-engine';
 
-const TimestampSchema = z.custom<Timestamp>(
-  (value) => value instanceof Timestamp,
-);
+const TimestampSchema = z
+  .custom<Timestamp>((value) => value instanceof Timestamp)
+  .transform((ts) => new Date(ts.toMillis()));
 
 export enum ActionType {
   external = 'external',
   deeplink = 'deeplink',
   bottom_sheet = 'bottom_sheet',
 }
-
-const BottomSheetActionButtonSchema = z.object({
+const BottomSheetActionButton = z.object({
   label: LanguageAndTextTypeArray.optional(),
   actionType: z.literal(ActionType.bottom_sheet),
 });
-
-const UrlActionButtonSchema = z.object({
+const UrlActionButton = z.object({
   label: LanguageAndTextTypeArray.optional(),
   url: z.string().url(),
   actionType: z.union([
@@ -27,15 +25,9 @@ const UrlActionButtonSchema = z.object({
     z.literal(ActionType.deeplink),
   ]),
 });
+const ActionButton = z.union([BottomSheetActionButton, UrlActionButton]);
 
-const ActionButtonSchema = z.union([
-  BottomSheetActionButtonSchema,
-  UrlActionButtonSchema,
-]);
-
-export type ActionButton = z.infer<typeof ActionButtonSchema>;
-
-export const AnnouncementRawSchema = z.object({
+export const Announcement = z.object({
   id: z.string(),
   active: z.boolean(),
   summaryTitle: LanguageAndTextTypeArray.optional(),
@@ -51,17 +43,6 @@ export const AnnouncementRawSchema = z.object({
   startDate: TimestampSchema.optional(),
   endDate: TimestampSchema.optional(),
   rules: z.array(RuleSchema).optional(),
-  actionButton: ActionButtonSchema.optional(),
+  actionButton: ActionButton.optional(),
 });
-
-export const AnnouncementTypeSchema = AnnouncementRawSchema.transform(
-  (data) => ({
-    ...data,
-    startDate: data.startDate?.toMillis(),
-    endDate: data.endDate?.toMillis(),
-  }),
-);
-
-export type AnnouncementRaw = z.infer<typeof AnnouncementRawSchema>;
-export type AnnouncementType = z.infer<typeof AnnouncementTypeSchema>;
-export type AnnouncementId = AnnouncementType['id'];
+export type Announcement = z.infer<typeof Announcement>;

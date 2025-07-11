@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import {AnnouncementType, AnnouncementRaw} from './types';
+import {Announcement} from './types';
 import {mapToAnnouncements} from './converters';
 import {
   addDismissedAnnouncementInStore,
@@ -16,14 +16,14 @@ import {
 import {RuleVariables, checkRules} from '@atb/modules/rule-engine';
 
 type AnnouncementsContextState = {
-  findAnnouncements: (ruleVariables?: RuleVariables) => AnnouncementType[];
-  dismissAnnouncement: (announcement: AnnouncementType) => void;
+  findAnnouncements: (ruleVariables?: RuleVariables) => Announcement[];
+  dismissAnnouncement: (announcement: Announcement) => void;
   resetDismissedAnnouncements: () => void;
 };
 
 const AnnouncementsContext = createContext<AnnouncementsContextState>({
   findAnnouncements: () => [],
-  dismissAnnouncement: (_: AnnouncementType) => {},
+  dismissAnnouncement: (_: Announcement) => {},
   resetDismissedAnnouncements: () => {},
 });
 
@@ -32,11 +32,11 @@ type Props = {
 };
 
 const AnnouncementsContextProvider = ({children}: Props) => {
-  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection<AnnouncementRaw>('announcementsV2')
+      .collection('announcementsV2')
       .where('active', '==', true)
       .onSnapshot(
         async (snapshot) => {
@@ -54,7 +54,7 @@ const AnnouncementsContextProvider = ({children}: Props) => {
   }, []);
 
   const dismissAnnouncement = useCallback(
-    (dismissedAnnouncement: AnnouncementType) => {
+    (dismissedAnnouncement: Announcement) => {
       addDismissedAnnouncementInStore(dismissedAnnouncement.id);
       setAnnouncements((announcements) =>
         announcements.filter((a) => a.id !== dismissedAnnouncement.id),
