@@ -42,7 +42,7 @@ export const mapToAnnouncement = (
   }
 };
 
-const appliesToAppPlaform = (platforms: AppPlatform[]) => {
+const appliesToAppPlaform = (platforms?: AppPlatform[]) => {
   if (!platforms) return true;
   return !!platforms.find(
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
