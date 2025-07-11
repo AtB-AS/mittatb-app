@@ -1,5 +1,5 @@
 import {useMutation} from '@tanstack/react-query';
-import {initAgeVerification} from '@atb/api/vipps-login/api';
+import {initAgeVerification} from '@atb/api/identity';
 
 export const useInitAgeVerificationMutation = () => {
   return useMutation({

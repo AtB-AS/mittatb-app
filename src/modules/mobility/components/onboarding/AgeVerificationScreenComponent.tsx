@@ -5,7 +5,7 @@ import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
 import {ThemedTokenPhone} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {VIPPS_CALLBACK_URL} from '@atb/api/vipps-login/api';
+import {VIPPS_CALLBACK_URL} from '@atb/api/identity';
 import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
 import {storage} from '@atb/modules/storage';
 import {VippsSignInErrorCode} from '@atb/modules/auth';

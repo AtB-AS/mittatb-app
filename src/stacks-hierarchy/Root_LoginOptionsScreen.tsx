@@ -2,7 +2,7 @@ import {
   authorizeUser,
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
-} from '@atb/api/vipps-login/api';
+} from '@atb/api/identity';
 import {useAuthContext, VippsSignInErrorCode} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
