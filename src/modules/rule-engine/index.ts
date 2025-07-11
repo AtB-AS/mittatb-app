@@ -1,3 +1,3 @@
-export {RuleOperator, checkRules} from './rules';
-export type {RuleVariables, Rule} from './rules';
+export {RuleOperator, checkRules, Rule} from './rules';
+export type {RuleVariables} from './rules';
 export {mapToRules} from './converters';
