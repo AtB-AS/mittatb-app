@@ -34,7 +34,10 @@ export const Announcements = ({style}: Props) => {
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
-    isWithinTimeRange(a, now),
+    isWithinTimeRange(
+      {startDate: a.startDate?.valueOf(), endDate: a.endDate?.valueOf()},
+      now,
+    ),
   );
 
   if (filteredAnnouncements.length === 0) return null;
