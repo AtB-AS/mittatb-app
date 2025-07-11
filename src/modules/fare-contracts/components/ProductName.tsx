@@ -11,10 +11,9 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 
 type Props = {
   fc: FareContractType;
-  testID?: string;
 };
 
-export const ProductName = ({fc, testID}: Props) => {
+export const ProductName = ({fc}: Props) => {
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
