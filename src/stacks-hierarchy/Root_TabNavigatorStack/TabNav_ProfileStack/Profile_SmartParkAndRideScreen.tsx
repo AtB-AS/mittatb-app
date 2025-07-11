@@ -13,7 +13,7 @@ import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
   useVehicleRegistrationsQuery,
   VehicleRegistration,
@@ -47,7 +47,7 @@ export const Profile_SmartParkAndRideScreen = () => {
                   ? vehicleRegistration.licensePlate
                   : undefined
               }
-              icon={Car}
+              icon={CarFill}
               accessibility={{
                 accessibilityLabel: getAccessibilityLabel(
                   vehicleRegistration,

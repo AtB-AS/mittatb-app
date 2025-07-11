@@ -1,22 +1,20 @@
 import {AnyMode, AnySubMode} from './types';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
-  Bus,
-  Car,
-  Tram,
-  Train,
-  Boat,
-  Ferry,
-  Walk,
-  Night,
-  Unknown,
-  Bicycle,
+  BusFill,
+  CarFill,
+  TramFill,
+  TrainFill,
+  BoatFill,
+  FerryFill,
+  WalkFill,
+  NightFill,
+  UnknownFill,
+  BicycleFill,
+  PlaneFill,
+  ScooterFill,
+  MetroFill,
 } from '@atb/assets/svg/mono-icons/transportation';
-import {
-  Plane,
-  Scooter,
-  Subway,
-} from '@atb/assets/svg/mono-icons/transportation-entur';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
@@ -31,31 +29,31 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
     case 'bus':
     case 'coach':
       if (subMode === TransportSubmode.NightBus) {
-        return {svg: Night, name: 'Night Bus'};
+        return {svg: NightFill, name: 'Night Bus'};
       }
-      return {svg: Bus, name: 'Bus'};
+      return {svg: BusFill, name: 'Bus'};
     case 'tram':
-      return {svg: Tram, name: 'Tram'};
+      return {svg: TramFill, name: 'Tram'};
     case 'rail':
-      return {svg: Train, name: 'Train'};
+      return {svg: TrainFill, name: 'Train'};
     case 'air':
-      return {svg: Plane, name: 'Plane'};
+      return {svg: PlaneFill, name: 'Plane'};
     case 'water':
       return subMode && TRANSPORT_SUB_MODES_BOAT.includes(subMode)
-        ? {svg: Boat, name: 'Boat'}
-        : {svg: Ferry, name: 'Ferry'};
+        ? {svg: BoatFill, name: 'Boat'}
+        : {svg: FerryFill, name: 'Ferry'};
     case 'foot':
-      return {svg: Walk, name: 'Walk'};
+      return {svg: WalkFill, name: 'Walk'};
     case 'metro':
-      return {svg: Subway, name: 'Subway'};
+      return {svg: MetroFill, name: 'Metro'};
     case 'car':
-      return {svg: Car, name: 'Car'};
+      return {svg: CarFill, name: 'Car'};
     case 'bicycle':
-      return {svg: Bicycle, name: 'Bicycle'};
+      return {svg: BicycleFill, name: 'Bicycle'};
     case 'scooter':
-      return {svg: Scooter, name: 'Scooter'};
+      return {svg: ScooterFill, name: 'Scooter'};
     case 'unknown':
     default:
-      return {svg: Unknown, name: 'Unknown'};
+      return {svg: UnknownFill, name: 'Unknown'};
   }
 }

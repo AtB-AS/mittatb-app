@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-enable no-restricted-syntax, no-param-reassign */
 import {SvgProps} from 'react-native-svg';
 
-import {Boat} from '@atb/assets/svg/mono-icons/transportation/';
+import {BoatFill} from '@atb/assets/svg/mono-icons/transportation/';
 import {Klippekort} from '@atb/assets/svg/color/icons/ticketing/';
 import {Date} from '@atb/assets/svg/mono-icons/time/';
 
@@ -26,7 +26,7 @@ const ticketingTileIllustrations = {
   Summer: Sun,
   Youth,
   Carnet: Klippekort,
-  Boat,
+  Boat: BoatFill,
   TicketMultiple,
   City,
 };

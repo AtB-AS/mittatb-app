@@ -5,12 +5,12 @@ import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getVenueIconTypes} from './utils';
 import {
-  Bus,
-  Ferry,
-  Train,
-  Tram,
+  BusFill,
+  FerryFill,
+  PlaneFill,
+  TrainFill,
+  TramFill,
 } from '@atb/assets/svg/mono-icons/transportation';
-import {Plane} from '@atb/assets/svg/mono-icons/transportation-entur';
 
 export const LocationIcon = ({
   location,
@@ -48,27 +48,35 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
   switch (iconType) {
     case 'bus':
       return (
-        <ThemeIcon svg={Bus} accessibilityLabel="Bussholdeplass" key="bus" />
+        <ThemeIcon
+          svg={BusFill}
+          accessibilityLabel="Bussholdeplass"
+          key="bus"
+        />
       );
     case 'tram':
       return (
         <ThemeIcon
-          svg={Tram}
+          svg={TramFill}
           accessibilityLabel="Trikkeholdeplass"
           key="tram"
         />
       );
     case 'rail':
       return (
-        <ThemeIcon svg={Train} accessibilityLabel="Togstasjon" key="rail" />
+        <ThemeIcon svg={TrainFill} accessibilityLabel="Togstasjon" key="rail" />
       );
     case 'airport':
       return (
-        <ThemeIcon svg={Plane} accessibilityLabel="Flyplass" key="airport" />
+        <ThemeIcon
+          svg={PlaneFill}
+          accessibilityLabel="Flyplass"
+          key="airport"
+        />
       );
     case 'boat':
       return (
-        <ThemeIcon svg={Ferry} accessibilityLabel="Fergeleie" key="boat" />
+        <ThemeIcon svg={FerryFill} accessibilityLabel="Fergeleie" key="boat" />
       );
     case 'unknown':
     default:

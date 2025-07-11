@@ -33,10 +33,10 @@
     zod "^3.24.4"
     zod-to-json-schema "^3.24.5"
 
-"@atb-as/generate-assets@^17.5.2":
-  version "17.5.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.5.2.tgz#cd64cb4af0d4af14bc622fb362ac03f6dea1ab69"
-  integrity sha512-RHXB6EP5yxnD/nJW9yDHK8TBlsuKJTSCYHmgo+6duiMBMGGxoFJSL9DwlJIt8jgv7zyD8m1AJKxf7+a5M/iS/w==
+"@atb-as/generate-assets@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.1.0.tgz#d15e0b9c6167c277dcddc6a30d196d414676321e"
+  integrity sha512-DKarGy20JKcKY5z1lofFWvNOSoKSH6wLiUctqoQf0WsQxtXXMwE1qh9Ec0ZOqc3xVEjK/69Ata7ZxklETiE+Uw==
   dependencies:
     "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
@@ -1358,20 +1358,7 @@
     "@babel/parser" "^7.26.9"
     "@babel/types" "^7.26.9"
 
-"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3":
-  version "7.26.9"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
-  integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==
-  dependencies:
-    "@babel/code-frame" "^7.26.2"
-    "@babel/generator" "^7.26.9"
-    "@babel/parser" "^7.26.9"
-    "@babel/template" "^7.26.9"
-    "@babel/types" "^7.26.9"
-    debug "^4.3.1"
-    globals "^11.1.0"
-
-"@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
+"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3", "@babel/traverse@^7.25.3", "@babel/traverse@^7.26.8", "@babel/traverse@^7.26.9":
   version "7.26.9"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.26.9.tgz#4398f2394ba66d05d988b2ad13c219a2c857461a"
   integrity sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==

@@ -15,7 +15,7 @@ import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {
   RadioSectionItem,
@@ -1026,7 +1026,7 @@ export const Profile_DesignSystemScreen = ({
         <Section style={styles.section}>
           <ToggleSectionItem
             text="Some short text"
-            leftImage={<ThemeIcon svg={Bus} />}
+            leftImage={<ThemeIcon svg={BusFill} />}
             onValueChange={() => {}}
           />
           <RadioSectionItem
@@ -1037,7 +1037,7 @@ export const Profile_DesignSystemScreen = ({
           <RadioSectionItem
             text="Some very long text over here which goes over multiple lines"
             subtext="With a subtext and icon, no interactive color"
-            leftIcon={Bus}
+            leftIcon={BusFill}
             selected={selected}
             onPress={() => setSelected(!selected)}
           />
