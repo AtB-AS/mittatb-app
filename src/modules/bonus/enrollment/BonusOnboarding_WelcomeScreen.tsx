@@ -4,8 +4,7 @@ import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navig
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
-import {bonusPilotEnrollmentId} from './config';
+import {useEnrollmentOnboarding} from '@atb/modules/enrollment-onboarding';
 
 export type WelcomeScreenProps =
   EnrollmentOnboardingScreenProps<'BonusOnboarding_WelcomeScreen'>;
@@ -13,8 +12,7 @@ export type WelcomeScreenProps =
 export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
   const {t} = useTranslation();
 
-  const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
-    bonusPilotEnrollmentId,
+  const {navigateToNextScreen} = useEnrollmentOnboarding(
     BonusOnboarding_WelcomeScreen.name,
   );
 
@@ -24,7 +22,7 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
       title={t(BonusProgramTexts.onboarding.welcome.title)}
       description={t(BonusProgramTexts.onboarding.welcome.description)}
       footerButton={{
-        onPress: navigateToNext,
+        onPress: navigateToNextScreen,
         text: t(BonusProgramTexts.onboarding.welcome.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},
