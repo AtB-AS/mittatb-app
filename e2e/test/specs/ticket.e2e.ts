@@ -2,7 +2,7 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import TicketPage from '../pageobjects/ticket.page.ts';
+import TicketBuyPage from '../pageobjects/ticket.buy.page.ts';
 import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.ts';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.ts';
 import PurchasePaymentPage from '../pageobjects/purchase.payment.page.ts';
@@ -23,12 +23,12 @@ describe('Ticket', () => {
   it('should have restrictions for anonymous users', async () => {
     try {
       // Anonymous warning
-      expect(await TicketPage.anonymousWarning).toBeDisplayed();
-      expect(await TicketPage.getAnonymousWarningTitle).toContain(
+      expect(await TicketBuyPage.anonymousWarning).toBeDisplayed();
+      expect(await TicketBuyPage.getAnonymousWarningTitle).toContain(
         'Anonymous ticket purchases',
       );
 
-      await TicketPage.anonymousWarning.click();
+      await TicketBuyPage.anonymousWarning.click();
       await ElementHelper.waitForElement(
         'text',
         'Restrictions on anonymous ticket purchases',
@@ -41,10 +41,10 @@ describe('Ticket', () => {
 
       await ElementHelper.waitForElement('text', 'Travel search');
       await NavigationHelper.tapMenu('tickets');
-      expect(await TicketPage.anonymousWarning).toBeDisplayed();
+      expect(await TicketBuyPage.anonymousWarning).toBeDisplayed();
 
       // Period
-      await TicketPage.chooseFareProduct('period');
+      await TicketBuyPage.chooseFareProduct('period');
       await ElementHelper.waitForElement('text', 'Log in to purchase');
       expect(await OnboardingPage.logInPurchaseDescription).toContain(
         'requires that you are logged in',
@@ -62,7 +62,7 @@ describe('Ticket', () => {
   // Walk through the purchase flow for a single ticket - without the actual purchase
   it('should have a correct purchase flow', async () => {
     try {
-      await TicketPage.chooseFareProduct('single');
+      await TicketBuyPage.chooseFareProduct('single');
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 
@@ -135,7 +135,7 @@ describe('Ticket', () => {
   it('should not be able to buy on behalf of others when anonymous', async () => {
     try {
       // Single ticket
-      await TicketPage.chooseFareProduct('single');
+      await TicketBuyPage.chooseFareProduct('single');
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 
@@ -146,7 +146,7 @@ describe('Ticket', () => {
       await NavigationHelper.back();
 
       // Night ticket
-      await TicketPage.chooseFareProduct('night_v2');
+      await TicketBuyPage.chooseFareProduct('night_v2');
       await ElementHelper.waitForElement('text', 'Night ticket, bus and tram');
       expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
       await NavigationHelper.back();
@@ -162,7 +162,7 @@ describe('Ticket', () => {
     const onBehalfOfPhoneNumber: number = 91111111;
 
     try {
-      await TicketPage.chooseFareProduct('single');
+      await TicketBuyPage.chooseFareProduct('single');
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.removeGlobalMessages();
 
