@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getGeofencingZones} from '@atb/api/mobility';
+import {getGeofencingZones} from '@atb/api/bff/mobility';
 import {HALF_DAY_MS} from '@atb/utils/durations';
 
 export const useGeofencingZonesQuery = (systemId: string) => {
