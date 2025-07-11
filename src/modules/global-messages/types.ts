@@ -5,8 +5,8 @@ import {Rule} from '@atb/modules/rule-engine';
 
 import {z} from 'zod';
 
-export const AppPlatformSchema = z.enum(['ios', 'android']);
-export type AppPlatform = z.infer<typeof AppPlatformSchema>;
+export const AppPlatform = z.enum(['ios', 'android']);
+export type AppPlatform = z.infer<typeof AppPlatform>;
 
 export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
