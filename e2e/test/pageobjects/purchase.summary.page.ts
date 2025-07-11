@@ -1,3 +1,5 @@
+import {$} from '@wdio/globals';
+
 class PurchaseSummaryPage {
   /**
    * Get the summary text - including zone information
@@ -29,6 +31,22 @@ class PurchaseSummaryPage {
   get choosePayment() {
     const reqId = `//*[@resource-id="choosePaymentMethodButton"]`;
     return $(reqId);
+  }
+
+  /**
+   * Get the recurring payment card
+   */
+  get recurringPaymentCard() {
+    const reqId = `//*[@resource-id="paymentSelectionItem"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Get the confirm payment button
+   */
+  get confirmPayment() {
+    const confirm = `//*[@resource-id="confirmPaymentButton"]`;
+    return $(confirm);
   }
 
   /**

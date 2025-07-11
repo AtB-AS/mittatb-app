@@ -27,7 +27,10 @@ export const WithValidityLine = (props: Props) => {
 
   if ('reservation' in props) {
     return (
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+        testID={`${getReservationStatus(props.reservation)}Ticket`}
+      >
         {!!props.enabledLine && (
           <ValidityLine status={getReservationStatus(props.reservation)} />
         )}
@@ -49,7 +52,7 @@ export const WithValidityLine = (props: Props) => {
       currentUserId,
     );
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID={`${validityStatus}Ticket`}>
         <ValidityLine
           status={validityStatus}
           fareProductType={preassignedFareProduct?.type}

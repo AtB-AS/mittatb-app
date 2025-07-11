@@ -30,6 +30,15 @@ class PurchasePaymentPage {
     const reqId = `//*[@resource-id="confirmButton"]`;
     return $(reqId);
   }
+
+  /**
+   * Get a recurring payment card (only for logged-in users)
+   * @param cardIndex which card (default: 0, i.e. first card)
+   */
+  async chooseRecurringPaymentCard(cardIndex: number = 0) {
+    const reqId = `//*[@resource-id="recurringPayment${cardIndex}"]`;
+    await $(reqId).click();
+  }
 }
 
 export default new PurchasePaymentPage();

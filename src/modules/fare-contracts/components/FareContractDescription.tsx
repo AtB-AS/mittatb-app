@@ -10,10 +10,9 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 
 type Props = {
   fc: FareContractType;
-  testID?: string;
 };
 
-export const Description = ({fc, testID}: Props) => {
+export const Description = ({fc}: Props) => {
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
@@ -32,7 +31,6 @@ export const Description = ({fc, testID}: Props) => {
     <ThemeText
       typography="body__secondary"
       accessibilityLabel={description + screenReaderPause}
-      testID={testID + 'Product'}
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}
     >

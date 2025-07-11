@@ -100,7 +100,11 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
             </ThemeText>
             <View>
               {formattedPhoneNumber && (
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  testID="loggedInWith"
+                >
                   {t(
                     ProfileTexts.sections.account.infoItems.loggedInWith(
                       formattedPhoneNumber,
