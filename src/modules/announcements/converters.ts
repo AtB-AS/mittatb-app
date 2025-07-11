@@ -8,6 +8,7 @@ import {
   AnnouncementType,
 } from './types';
 import {isDefined} from '@atb/utils/presence';
+import {compareVersion} from '@atb/utils/compare-version';
 
 type FirestoreAnnouncementDocument =
   FirebaseFirestoreTypes.QueryDocumentSnapshot<AnnouncementRaw>;
@@ -59,7 +60,9 @@ const appliesToAppVersion = (
   appVersionMin?: string,
   appVersionMax?: string,
 ) => {
-  if (appVersionMin && appVersionMin > APP_VERSION) return false;
-  if (appVersionMax && appVersionMax < APP_VERSION) return false;
+  if (appVersionMin && compareVersion(appVersionMin, APP_VERSION) > 0)
+    return false;
+  if (appVersionMax && compareVersion(appVersionMax, APP_VERSION) < 0)
+    return false;
   return true;
 };
