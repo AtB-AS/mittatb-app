@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
-import {AppPlatformSchema} from '@atb/modules/global-messages';
+import {AppPlatform} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
 
@@ -37,7 +37,7 @@ export const Announcement = z.object({
   body: LanguageAndTextTypeArray,
   mainImage: z.string().startsWith('data:image/').optional(),
   isDismissable: z.boolean().optional(),
-  appPlatforms: z.array(AppPlatformSchema).optional(),
+  appPlatforms: z.array(AppPlatform).optional(),
   appVersionMin: z.string().optional(),
   appVersionMax: z.string().optional(),
   startDate: TimestampSchema.optional(),
