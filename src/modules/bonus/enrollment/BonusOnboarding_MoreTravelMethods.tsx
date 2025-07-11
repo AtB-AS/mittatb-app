@@ -13,7 +13,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
     const {navigateToNextScreen} = useEnrollmentOnboarding(
-      BonusOnboarding_MoreTravelMethodsScreen.name,
+      'BonusOnboarding_MoreTravelMethodsScreen',
     );
 
     return (

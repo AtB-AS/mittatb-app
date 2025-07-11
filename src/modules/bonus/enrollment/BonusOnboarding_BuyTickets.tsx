@@ -13,7 +13,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
 
   const {navigateToNextScreen} = useEnrollmentOnboarding(
-    BonusOnboarding_BuyTicketsScreen.name,
+    'BonusOnboarding_BuyTicketsScreen',
   );
 
   return (

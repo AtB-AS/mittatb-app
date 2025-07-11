@@ -13,7 +13,7 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
   const {t} = useTranslation();
 
   const {navigateToNextScreen} = useEnrollmentOnboarding(
-    BonusOnboarding_WelcomeScreen.name,
+    'BonusOnboarding_WelcomeScreen',
   );
 
   return (
