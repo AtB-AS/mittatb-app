@@ -73,6 +73,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
         {...props}
         ref={focusRef}
         onPress={onPress}
+        accessibilityRole="button"
         accessibilityLabel={[
           t(ProfileTexts.sections.account.infoItems.heading),
           formattedPhoneNumber
