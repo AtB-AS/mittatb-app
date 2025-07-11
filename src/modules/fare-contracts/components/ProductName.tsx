@@ -32,7 +32,7 @@ export const ProductName = ({fc, testID}: Props) => {
     <ThemeText
       typography="body__secondary--bold"
       accessibilityLabel={productName + screenReaderPause}
-      testID={testID + 'Product'}
+      testID="productName"
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}
     >
