@@ -13,7 +13,7 @@ import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
-import {DeparturesRealtimeData} from '@atb/sdk';
+import {DeparturesRealtimeData} from '@atb/api/bff/departures';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';
 import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';

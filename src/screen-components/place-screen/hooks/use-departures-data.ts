@@ -9,7 +9,7 @@ import {
   useFavoritesContext,
   UserFavoriteDepartures,
 } from '@atb/modules/favorites';
-import {DeparturesRealtimeData} from '@atb/sdk';
+import {DeparturesRealtimeData} from '@atb/api/bff/departures';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';

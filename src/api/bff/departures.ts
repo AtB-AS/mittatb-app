@@ -1,7 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
-import {DeparturesRealtimeData} from '@atb/sdk';
 import {CursoredQuery} from './types';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
@@ -14,6 +13,22 @@ import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 import {DeparturesWithLineName} from './types';
+
+export type RealtimeData = {
+  serviceJourneyId: string;
+  timeData: {
+    realtime: boolean;
+    expectedDepartureTime: string;
+    aimedDepartureTime: string;
+  };
+};
+export type DepartureRealtimeData = {
+  quayId: string;
+  departures: {[serviceJourneyId: string]: RealtimeData};
+};
+export type DeparturesRealtimeData = {
+  [quayId: string]: DepartureRealtimeData;
+};
 
 type StopPlaceGroupRealtimeParams = {
   startTime: string;

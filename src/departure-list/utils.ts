@@ -6,7 +6,10 @@ import {
   StopPlaceGroup,
 } from '@atb/api/bff/types';
 import {EstimatedCall} from '@atb/api/types/departures';
-import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
+import {
+  DepartureRealtimeData,
+  DeparturesRealtimeData,
+} from '@atb/api/bff/departures';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
 export const HIDE_AFTER_NUM_MINUTES = 1;
