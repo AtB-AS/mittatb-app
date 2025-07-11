@@ -4,7 +4,7 @@ import {
   FavoriteDeparture,
   UserFavoriteDepartures,
 } from '@atb/modules/favorites';
-import {CursoredQuery} from '@atb/sdk';
+import {CursoredQuery} from './types';
 import {client} from '../client';
 import {DepartureGroupMetadata} from './types';
 

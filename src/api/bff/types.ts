@@ -6,10 +6,25 @@ import {
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
-import {CursoredData} from '@atb/sdk';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 type Notice = {text?: string};
+
+type CursoredData<T> = {
+  data: T;
+  metadata:
+    | {hasNextPage: false}
+    | {
+        hasNextPage: true;
+        nextCursor: string;
+        nextUrlParams: string;
+      };
+};
+
+export type CursoredQuery<T> = {
+  cursor?: string;
+  pageSize?: number;
+} & T;
 
 export type DepartureLineInfo = {
   /** @deprecated Use destinationDisplay instead */

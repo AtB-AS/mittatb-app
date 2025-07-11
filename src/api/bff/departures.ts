@@ -1,7 +1,8 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
-import {CursoredQuery, DeparturesRealtimeData} from '@atb/sdk';
+import {DeparturesRealtimeData} from '@atb/sdk';
+import {CursoredQuery} from './types';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {client} from '../client';
