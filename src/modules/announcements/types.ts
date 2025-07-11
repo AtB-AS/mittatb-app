@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatformSchema} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
-import {RuleSchema} from '@atb/modules/rule-engine';
+import {Rule} from '@atb/modules/rule-engine';
 
 const TimestampSchema = z
   .custom<Timestamp>((value) => value instanceof Timestamp)
@@ -42,7 +42,7 @@ export const Announcement = z.object({
   appVersionMax: z.string().optional(),
   startDate: TimestampSchema.optional(),
   endDate: TimestampSchema.optional(),
-  rules: z.array(RuleSchema).optional(),
+  rules: z.array(Rule).optional(),
   actionButton: ActionButton.optional(),
 });
 export type Announcement = z.infer<typeof Announcement>;
