@@ -8,13 +8,11 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {
+  DepartureFavoritesQuery,
   getFavouriteDepartures,
   getStopPlaceGroupRealtime,
 } from '@atb/api/departures';
-import {
-  DepartureFavoritesQuery,
-  DepartureGroupMetadata,
-} from '@atb/api/departures/types';
+import {DepartureGroupMetadata} from '@atb/api/departures/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';

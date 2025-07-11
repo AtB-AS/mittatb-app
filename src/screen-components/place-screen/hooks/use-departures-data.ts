@@ -1,4 +1,7 @@
-import {getRealtimeDepartures} from '@atb/api/departures';
+import {
+  DepartureRealtimeQuery,
+  getRealtimeDepartures,
+} from '@atb/api/departures';
 import {
   DeparturesVariables,
   getDepartures,
@@ -33,7 +36,6 @@ import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
 import {flatMap} from '@atb/utils/array';
-import {DepartureRealtimeQuery} from '@atb/api/departures/types';
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.

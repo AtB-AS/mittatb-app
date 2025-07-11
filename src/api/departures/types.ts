@@ -6,7 +6,7 @@ import {
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
-import {CursoredData, CursoredQuery} from '@atb/sdk';
+import {CursoredData} from '@atb/sdk';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 type Notice = {text?: string};
@@ -79,20 +79,5 @@ export type StopPlaceGroup = {
   stopPlace: StopPlaceInfo;
   quays: QuayGroup[];
 };
-
-export type DepartureRealtimeQuery = {
-  quayIds: string[];
-  startTime: string;
-  limit: number;
-  limitPerLine?: number;
-  lineIds?: string[];
-  timeRange?: number;
-};
-
-export type DepartureFavoritesQuery = CursoredQuery<{
-  startTime: string;
-  limitPerLine: number;
-  includeCancelledTrips?: boolean;
-}>;
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;

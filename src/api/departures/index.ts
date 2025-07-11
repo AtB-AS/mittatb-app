@@ -4,16 +4,11 @@ import {
   FavoriteDeparture,
   UserFavoriteDepartures,
 } from '@atb/modules/favorites';
-import {DeparturesRealtimeData} from '@atb/sdk';
+import {CursoredQuery, DeparturesRealtimeData} from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {client} from '../client';
-import {
-  DepartureFavoritesQuery,
-  DepartureGroupMetadata,
-  DepartureRealtimeQuery,
-  StopPlaceGroup,
-} from './types';
+import {DepartureGroupMetadata, StopPlaceGroup} from './types';
 import {isDefined} from '@atb/utils/presence';
 
 type StopPlaceGroupRealtimeParams = {
@@ -46,6 +41,14 @@ export async function getStopPlaceGroupRealtime(
   return response.data;
 }
 
+export type DepartureRealtimeQuery = {
+  quayIds: string[];
+  startTime: string;
+  limit: number;
+  limitPerLine?: number;
+  lineIds?: string[];
+  timeRange?: number;
+};
 export async function getRealtimeDepartures(
   query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
@@ -63,6 +66,11 @@ export async function getRealtimeDepartures(
   return response.data;
 }
 
+export type DepartureFavoritesQuery = CursoredQuery<{
+  startTime: string;
+  limitPerLine: number;
+  includeCancelledTrips?: boolean;
+}>;
 export async function getFavouriteDepartures(
   favourites: UserFavoriteDepartures,
   query: DepartureFavoritesQuery,
