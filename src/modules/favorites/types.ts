@@ -1,4 +1,5 @@
-import {Coordinates, FeatureCategory} from '@atb/sdk';
+import {Coordinates} from '@atb/sdk';
+import {FeatureCategory} from '@atb/api/bff/types';
 import {StoredType} from './storage';
 import {
   DestinationDisplay,

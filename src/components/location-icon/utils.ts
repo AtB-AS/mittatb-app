@@ -1,4 +1,4 @@
-import {FeatureCategory} from '@atb/sdk';
+import {FeatureCategory} from '@atb/api/bff/types';
 
 export const getVenueIconTypes = (category: FeatureCategory[]) => {
   return category

@@ -1,9 +1,10 @@
 import {FOCUS_LATITUDE, FOCUS_LONGITUDE, TARIFF_ZONE_AUTHORITY} from '@env';
-import {Feature, Coordinates} from '../../sdk';
+import {Coordinates} from '../../sdk';
 import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {AxiosRequestConfig} from 'axios';
+import {Feature} from './types';
 
 export const FOCUS_ORIGIN: Coordinates = {
   latitude: parseFloat(FOCUS_LATITUDE),
