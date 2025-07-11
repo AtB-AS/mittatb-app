@@ -1,4 +1,4 @@
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
@@ -466,7 +466,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={Walk} />
+      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );

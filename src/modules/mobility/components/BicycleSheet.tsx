@@ -7,7 +7,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
-import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
   BicycleTexts,
   MobilityTexts,
@@ -108,7 +108,7 @@ export const BicycleSheet = ({
                           />
                         ) : (
                           <MobilityStat
-                            svg={Bicycle}
+                            svg={BicycleFill}
                             primaryStat=""
                             secondaryStat={t(BicycleTexts.humanPoweredBike)}
                           />

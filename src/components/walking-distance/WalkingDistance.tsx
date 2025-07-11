@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {ThemeText} from '@atb/components/text';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {StyleSheet} from '@atb/theme';
@@ -19,7 +19,7 @@ export const WalkingDistance = ({style, distance}: Props) => {
 
   return (
     <View style={[style, sheetStyles.distanceLabel]}>
-      <ThemeIcon svg={Walk} color="secondary" style={sheetStyles.icon} />
+      <ThemeIcon svg={WalkFill} color="secondary" style={sheetStyles.icon} />
       <ThemeText typography="body__secondary" color="secondary">
         {humanizedDistance}
       </ThemeText>
