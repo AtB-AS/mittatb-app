@@ -10,16 +10,14 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
-import {bonusPilotEnrollmentId} from './config';
+import {useEnrollmentOnboarding} from '@atb/modules/enrollment-onboarding';
 
 export type DownloadScreenProps =
   EnrollmentOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
-    bonusPilotEnrollmentId,
+  const {navigateToNextScreen} = useEnrollmentOnboarding(
     BonusOnboarding_DownloadScreen.name,
   );
 
@@ -29,7 +27,7 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
       title={t(BonusProgramTexts.onboarding.download.title)}
       description={t(BonusProgramTexts.onboarding.download.description)}
       footerButton={{
-        onPress: navigateToNext,
+        onPress: navigateToNextScreen,
         text: t(BonusProgramTexts.onboarding.download.buttonText),
         expanded: true,
         rightIcon: {svg: Confirm},

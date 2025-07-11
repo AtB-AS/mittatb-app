@@ -4,8 +4,7 @@ import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navig
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
-import {bonusPilotEnrollmentId} from './config';
+import {useEnrollmentOnboarding} from '@atb/modules/enrollment-onboarding';
 
 export type MoreTravelMethodsScreenProps =
   EnrollmentOnboardingScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
@@ -13,9 +12,7 @@ export type MoreTravelMethodsScreenProps =
 export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
-
-    const navigateToNext = useNavigateToNextEnrollmentOnboardingScreen(
-      bonusPilotEnrollmentId,
+    const {navigateToNextScreen} = useEnrollmentOnboarding(
       BonusOnboarding_MoreTravelMethodsScreen.name,
     );
 
@@ -27,7 +24,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
           BonusProgramTexts.onboarding.moreTravelMethods.description,
         )}
         footerButton={{
-          onPress: navigateToNext,
+          onPress: navigateToNextScreen,
           text: t(BonusProgramTexts.onboarding.moreTravelMethods.buttonText),
           expanded: true,
           rightIcon: {svg: ArrowRight},

@@ -9,7 +9,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {Theme} from '@atb/theme/colors';
 import {EnrollmentOnboardingStackParams} from '../../modules/enrollment-onboarding/navigation-types';
-import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {
+  enrollmentOnboardingConfig,
+  EnrollmentOnboardingContextProvider,
+} from '@atb/modules/enrollment-onboarding';
 import {RootStackScreenProps} from '../navigation-types';
 
 const Tab = createMaterialTopTabNavigator<EnrollmentOnboardingStackParams>();
@@ -24,25 +27,27 @@ export const Root_EnrollmentOnboardingStack = ({route}: Props) => {
     (onboardingConfig) => onboardingConfig.id === configId,
   );
   return (
-    <SafeAreaView style={styles.container}>
-      <Tab.Navigator
-        tabBar={(props: MaterialTopTabBarProps) => {
-          return <PageIndicator {...props} />;
-        }}
-        tabBarPosition="bottom"
-        initialRouteName={config?.onboardingScreens[0].name}
-      >
-        {config?.onboardingScreens.map((screen) => {
-          return (
-            <Tab.Screen
-              key={screen.name}
-              name={screen.name}
-              component={screen.component}
-            />
-          );
-        })}
-      </Tab.Navigator>
-    </SafeAreaView>
+    <EnrollmentOnboardingContextProvider configId={configId}>
+      <SafeAreaView style={styles.container}>
+        <Tab.Navigator
+          tabBar={(props: MaterialTopTabBarProps) => {
+            return <PageIndicator {...props} />;
+          }}
+          tabBarPosition="bottom"
+          initialRouteName={config?.onboardingScreens[0].name}
+        >
+          {config?.onboardingScreens.map((screen) => {
+            return (
+              <Tab.Screen
+                key={screen.name}
+                name={screen.name}
+                component={screen.component}
+              />
+            );
+          })}
+        </Tab.Navigator>
+      </SafeAreaView>
+    </EnrollmentOnboardingContextProvider>
   );
 };
 
