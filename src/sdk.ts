@@ -1,8 +1,3 @@
-export interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
 export type RealtimeData = {
   serviceJourneyId: string;
   timeData: {

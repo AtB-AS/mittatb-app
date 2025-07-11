@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {CancelToken, isCancel} from '@atb/api';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {autocomplete} from '@atb/api';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
 import {mapFeatureToLocation} from './utils';

@@ -5,7 +5,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {RefObject, useRef} from 'react';
 import {ScreenContainer} from './ScreenContainer';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 
 type PhotoCaptureProps = {

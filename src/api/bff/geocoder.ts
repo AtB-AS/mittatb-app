@@ -1,5 +1,5 @@
 import {FOCUS_LATITUDE, FOCUS_LONGITUDE, TARIFF_ZONE_AUTHORITY} from '@env';
-import {Coordinates} from '../../sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';

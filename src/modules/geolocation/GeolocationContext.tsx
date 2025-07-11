@@ -24,7 +24,7 @@ import {useIntercomMetadata} from '@atb/modules/chat';
 import {useAppStateStatus} from '../../utils/use-app-state-status';
 import {GeoLocation} from '@atb/modules/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {tGlobal} from '@atb/modules/locale';
 
 const config: GeolocationOptions = {

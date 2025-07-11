@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 import {reverse} from '@atb/api';
 import {mapFeatureToLocation} from './utils';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';

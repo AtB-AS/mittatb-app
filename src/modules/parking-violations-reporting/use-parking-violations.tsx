@@ -5,7 +5,7 @@ import {
   ParkingViolationType,
   ViolationsReportingProvider,
 } from '@atb/api/types/mobility';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 
 type ParkingViolationsState =
   | 'loading'
