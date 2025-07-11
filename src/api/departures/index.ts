@@ -14,6 +14,7 @@ import {
   DepartureRealtimeQuery,
   StopPlaceGroup,
 } from './types';
+import {isDefined} from '@atb/utils/presence';
 
 type StopPlaceGroupRealtimeParams = {
   startTime: string;
@@ -30,15 +31,19 @@ export async function getStopPlaceGroupRealtime(
     flatMap(stopPlaceGroup.quays, (quayGroup) =>
       quayGroup.group.map((y) => y.lineInfo?.quayId),
     ),
-  ).filter(Boolean) as string[];
-  return getRealtimeDepartures(
-    {
-      ...query,
-      quayIds,
-      limit: query.limit ?? 100,
-    },
-    opts,
-  );
+  ).filter(isDefined);
+  if (quayIds.length === 0) return {};
+
+  const params = build({
+    ...query,
+    limit: query.limit ?? 100,
+    quayIds: quayIds.filter(onlyUniques),
+    lineIds: query.lineIds?.filter(onlyUniques),
+  });
+  const url = `bff/v2/departures/realtime?${params}`;
+
+  const response = await client.get<DeparturesRealtimeData>(url, opts);
+  return response.data;
 }
 
 export async function getRealtimeDepartures(
@@ -63,11 +68,10 @@ export async function getFavouriteDepartures(
   query: DepartureFavoritesQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DepartureGroupMetadata | null> {
-  if (!favourites || favourites.length === 0) {
-    return null;
-  }
+  if (!favourites || favourites.length === 0) return null;
 
   const params = build(query);
+  const url = `/bff/v2/departure-favorites?${params}`;
 
   const favorites: FavoriteDeparture[] = favourites.map((f) => ({
     lineId: f.lineId,
@@ -80,22 +84,10 @@ export async function getFavouriteDepartures(
     quayPublicCode: f.quayPublicCode,
   }));
 
-  const url = `/bff/v2/departure-favorites?${params}`;
-  return await post<DepartureGroupMetadata>(
+  const response = await client.post<DepartureGroupMetadata>(
     url,
-    {favorites: favorites},
-    {...opts},
+    {favorites},
+    opts,
   );
-}
-
-async function post<T>(
-  url: string,
-  query: any,
-  opts?: AxiosRequestConfig<any>,
-) {
-  const response = await client.post<T>(url, query, {
-    ...opts,
-  });
-
   return response.data;
 }
