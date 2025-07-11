@@ -2,7 +2,7 @@ import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
 } from '@atb/modules/geolocation';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/screen-components/travel-details-map-screen';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';

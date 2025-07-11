@@ -1,5 +1,5 @@
 import {CancelToken, isCancel} from '@atb/api';
-import {tripsSearch} from '@atb/api/trips';
+import {tripsSearch} from '@atb/api/bff/trips';
 import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';

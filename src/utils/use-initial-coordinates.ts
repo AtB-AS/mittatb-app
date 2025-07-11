@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
 import {Coordinates} from '@atb/sdk';
 
 /**

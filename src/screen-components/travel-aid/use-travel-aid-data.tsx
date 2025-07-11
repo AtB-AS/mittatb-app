@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getServiceJourneyWithEstimatedCalls} from '@atb/api/serviceJourney';
+import {getServiceJourneyWithEstimatedCalls} from '@atb/api/bff/servicejourney';
 
 export const useTravelAidDataQuery = (id: string, serviceDate: string) =>
   useQuery({

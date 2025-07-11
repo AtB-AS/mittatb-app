@@ -10,7 +10,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {enrollIntoBetaGroups} from '@atb/api/enrollment';
+import {enrollIntoBetaGroups} from '@atb/api/bff/enrollment';
 import analytics from '@react-native-firebase/analytics';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';

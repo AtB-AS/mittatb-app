@@ -1,4 +1,4 @@
-import {getServiceJourneyWithEstimatedCalls} from '@atb/api/serviceJourney';
+import {getServiceJourneyWithEstimatedCalls} from '@atb/api/bff/servicejourney';
 import {
   TransportMode,
   TransportSubmode,

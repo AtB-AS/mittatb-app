@@ -1,4 +1,4 @@
-import {getStopsDetails} from '@atb/api/departures/stops-nearest';
+import {getStopsDetails} from '@atb/api/bff/departures';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 

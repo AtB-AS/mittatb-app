@@ -1,5 +1,5 @@
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {bookingAvailabilitySearch} from '@atb/api/trips';
+import {bookingAvailabilitySearch} from '@atb/api/bff/trips';
 import {useQuery} from '@tanstack/react-query';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
 import {startOfDay} from 'date-fns';

@@ -1,10 +1,10 @@
-import {DepartureGroupMetadata} from '@atb/api/departures/types';
+import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {
   DepartureGroup,
   DepartureTime,
   QuayGroup,
   StopPlaceGroup,
-} from '@atb/api/departures/types';
+} from '@atb/api/bff/types';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';

@@ -7,12 +7,9 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {
-  DepartureFavoritesQuery,
-  getFavouriteDepartures,
-  getStopPlaceGroupRealtime,
-} from '@atb/api/departures';
-import {DepartureGroupMetadata} from '@atb/api/departures/types';
+import {getStopPlaceGroupRealtime} from '@atb/api/bff/departures';
+
+import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
@@ -23,8 +20,12 @@ import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {animateNextChange} from '@atb/utils/animation';
 
 import {flatten} from 'lodash';
-import {DepartureLineInfo} from '@atb/api/departures/types';
+import {DepartureLineInfo} from '@atb/api/bff/types';
 import type {DateOptionAndValue} from '@atb/components/date-selection';
+import {
+  DepartureFavoritesQuery,
+  getFavouriteDepartures,
+} from '@atb/api/bff/departure-favorites';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 

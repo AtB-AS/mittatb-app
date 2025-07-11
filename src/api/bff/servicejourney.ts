@@ -1,6 +1,6 @@
-import {client} from './client';
+import {client} from '../client';
 import qs from 'query-string';
-import {stringifyUrl} from './utils';
+import {stringifyUrl} from '../utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 

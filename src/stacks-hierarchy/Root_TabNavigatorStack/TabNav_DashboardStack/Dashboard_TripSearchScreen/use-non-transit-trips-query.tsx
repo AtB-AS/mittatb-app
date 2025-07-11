@@ -3,7 +3,7 @@ import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
 import {SearchStateType} from '../types';
 import {CancelTokenSource} from 'axios';
-import {nonTransitTripSearch} from '@atb/api/trips';
+import {nonTransitTripSearch} from '@atb/api/bff/trips';
 import {sanitizeSearchTime, SearchInput} from './utils';
 import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';

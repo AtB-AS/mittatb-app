@@ -1,15 +1,18 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {
-  FavoriteDeparture,
-  UserFavoriteDepartures,
-} from '@atb/modules/favorites';
+import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {CursoredQuery, DeparturesRealtimeData} from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {client} from '../client';
-import {DepartureGroupMetadata, StopPlaceGroup} from './types';
+import {StopPlaceGroup} from './types';
 import {isDefined} from '@atb/utils/presence';
+import {stringifyWithDate} from '@atb/utils/querystring';
+import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
+import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
+import queryString from 'query-string';
+import {DeparturesQuery} from '../types/generated/DeparturesQuery';
+import {DeparturesWithLineName} from './types';
 
 type StopPlaceGroupRealtimeParams = {
   startTime: string;
@@ -66,36 +69,50 @@ export async function getRealtimeDepartures(
   return response.data;
 }
 
-export type DepartureFavoritesQuery = CursoredQuery<{
-  startTime: string;
-  limitPerLine: number;
-  includeCancelledTrips?: boolean;
+type StopsNearestQuery = CursoredQuery<{
+  latitude: number;
+  longitude: number;
+  count?: number;
+  distance?: number;
+  after?: string;
 }>;
-export async function getFavouriteDepartures(
-  favourites: UserFavoriteDepartures,
-  query: DepartureFavoritesQuery,
+export async function getNearestStops(
+  query: StopsNearestQuery,
   opts?: AxiosRequestConfig,
-): Promise<DepartureGroupMetadata | null> {
-  if (!favourites || favourites.length === 0) return null;
+): Promise<NearestStopPlacesQuery> {
+  const queryString = stringifyWithDate(query);
+  const url = `bff/v2/departures/stops-nearest?${queryString}`;
+  const response = await client.get<NearestStopPlacesQuery>(url, opts);
+  return response.data;
+}
 
-  const params = build(query);
-  const url = `/bff/v2/departure-favorites?${params}`;
+type StopsDetailsVariables = CursoredQuery<{
+  ids: string[];
+}>;
+export async function getStopsDetails(
+  query: StopsDetailsVariables,
+  opts?: AxiosRequestConfig,
+): Promise<StopsDetailsQuery> {
+  const url = `bff/v2/departures/stops-details`;
+  const urlWithQuery = queryString.stringifyUrl({url, query});
+  const response = await client.get<StopsDetailsQuery>(urlWithQuery, opts);
+  return response.data;
+}
 
-  const favorites: FavoriteDeparture[] = favourites.map((f) => ({
-    lineId: f.lineId,
-    quayId: f.quayId,
-    quayName: f.quayName,
-    lineLineNumber: f.lineLineNumber,
-    destinationDisplay: f.destinationDisplay,
-    lineTransportationMode: f.lineTransportationMode,
-    lineTransportationSubMode: f.lineTransportationSubMode,
-    quayPublicCode: f.quayPublicCode,
-  }));
-
-  const response = await client.post<DepartureGroupMetadata>(
-    url,
-    {favorites},
-    opts,
-  );
+export type DeparturesVariables = {
+  ids: string[];
+  numberOfDepartures: number;
+  startTime: string;
+  timeRange?: number;
+  limitPerLine?: number;
+};
+export async function getDepartures(
+  query: DeparturesVariables,
+  favorites?: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
+): Promise<DeparturesWithLineName> {
+  const queryString = stringifyWithDate(query);
+  const url = `bff/v2/departures/departures?${queryString}`;
+  const response = await client.post<DeparturesQuery>(url, {favorites}, opts);
   return response.data;
 }

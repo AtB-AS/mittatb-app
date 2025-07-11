@@ -1,11 +1,8 @@
 import {
   DepartureRealtimeQuery,
   getRealtimeDepartures,
-} from '@atb/api/departures';
-import {
-  DeparturesVariables,
-  getDepartures,
-} from '@atb/api/departures/stops-nearest';
+} from '@atb/api/bff/departures';
+import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
