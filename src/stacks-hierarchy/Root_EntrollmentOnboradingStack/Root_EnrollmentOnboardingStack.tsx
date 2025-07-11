@@ -30,21 +30,19 @@ export const Root_EnrollmentOnboardingStack = ({route}: Props) => {
     <EnrollmentOnboardingContextProvider configId={configId}>
       <SafeAreaView style={styles.container}>
         <Tab.Navigator
-          tabBar={(props: MaterialTopTabBarProps) => {
-            return <PageIndicator {...props} />;
-          }}
+          tabBar={(props: MaterialTopTabBarProps) => (
+            <PageIndicator {...props} />
+          )}
           tabBarPosition="bottom"
           initialRouteName={config?.onboardingScreens[0].name}
         >
-          {config?.onboardingScreens.map((screen) => {
-            return (
-              <Tab.Screen
-                key={screen.name}
-                name={screen.name}
-                component={screen.component}
-              />
-            );
-          })}
+          {config?.onboardingScreens.map((screen) => (
+            <Tab.Screen
+              key={screen.name}
+              name={screen.name}
+              component={screen.component}
+            />
+          ))}
         </Tab.Navigator>
       </SafeAreaView>
     </EnrollmentOnboardingContextProvider>
