@@ -290,8 +290,11 @@ const useShouldShowArgs = (
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
 
-  const {isPushNotificationsEnabled, isOnboardingLoginEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isPushNotificationsEnabled,
+    isOnboardingLoginEnabled,
+    isSmartParkAndRideEnabled,
+  } = useFeatureTogglesContext();
   const {permissionStatus: pushNotificationPermissionStatus} =
     useNotificationsContext();
 
@@ -326,6 +329,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      isSmartParkAndRideEnabled,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -339,6 +343,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      isSmartParkAndRideEnabled,
     ],
   );
 };

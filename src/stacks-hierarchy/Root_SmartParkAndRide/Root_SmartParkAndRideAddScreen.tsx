@@ -22,17 +22,22 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
 
-  const onSuccess = () => navigation.goBack();
+  const navigateBack = () => {
+    navigation.getParent()?.goBack() ?? navigation.goBack();
+  };
+
   const {mutateAsync: handleAddVehicleRegistration} =
-    useAddVehicleRegistrationMutation(licensePlate, nickname, onSuccess);
+    useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
+
+  const themeColor = theme.color.background.accent[0];
 
   return (
     <FullScreenView
       headerProps={{
         title: t(SmartParkAndRideTexts.add.header.title),
         leftButton: {type: 'back', withIcon: true},
-        color: theme.color.background.neutral[1],
       }}
+      contentColor={themeColor}
       avoidKeyboard={true}
       footer={
         <View style={styles.footer}>
@@ -44,7 +49,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           />
           <Button
             expanded={true}
-            onPress={() => navigation.goBack()}
+            onPress={navigateBack}
             text={t(SmartParkAndRideTexts.add.footer.later)}
             mode="secondary"
             backgroundColor={theme.color.background.neutral[1]}

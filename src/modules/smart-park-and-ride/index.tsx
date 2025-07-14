@@ -6,3 +6,5 @@ export type {VehicleRegistration, SvvVehicleInfo} from './types';
 export {searchVehicleInformation} from './api/api';
 export {LicensePlateSection} from './components/LicensePlateSection';
 export {useSearchVehicleInformationQuery} from './queries/use-search-vehicle-information-query';
+export {SmartParkAndRideOnboarding_InformationScreen} from './onboarding/SmartParkAndRideOnboarding_InformationScreen';
+export {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './onboarding/SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
