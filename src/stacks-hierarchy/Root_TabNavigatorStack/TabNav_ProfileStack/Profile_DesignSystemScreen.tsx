@@ -437,6 +437,7 @@ export const Profile_DesignSystemScreen = ({
             text="Tag"
             showIconText={false}
             textType="heading__title"
+            label="new"
             expandContent={
               <>
                 <ThemeText>Regular:</ThemeText>
@@ -1028,6 +1029,11 @@ export const Profile_DesignSystemScreen = ({
             text="Some short text"
             leftImage={<ThemeIcon svg={BusFill} />}
             onValueChange={() => {}}
+          />
+          <ToggleSectionItem
+            text="Toggle with label"
+            onValueChange={() => {}}
+            label="new"
           />
           <RadioSectionItem
             text="Some short text and interactive color"

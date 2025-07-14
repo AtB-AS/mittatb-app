@@ -41,7 +41,11 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
             </ThemeText>
           </View>
         </View>
-        <Tag labels={[t(TagInfoTexts.labels.new)]} tagType="primary" />
+        <Tag
+          a11yLabel={t(TagInfoTexts.labels.new.a11y)}
+          labels={[t(TagInfoTexts.labels.new.text)]}
+          tagType="primary"
+        />
       </BorderedInfoBox>
     </View>
   );

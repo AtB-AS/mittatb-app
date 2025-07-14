@@ -73,7 +73,9 @@ export function ToggleSectionItem({
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
-      accessibilityLabel={text}
+      accessibilityLabel={
+        text + (label && ` ${t(TagInfoTexts.labels[label].a11y)}`)
+      }
       {...accessibility}
       testID="toggleItem"
     >
@@ -88,7 +90,8 @@ export function ToggleSectionItem({
             </View>
             {label && (
               <Tag
-                labels={[t(TagInfoTexts.labels[label])]}
+                labels={[t(TagInfoTexts.labels[label].text)]}
+                a11yLabel={t(TagInfoTexts.labels[label].a11y)}
                 tagType="primary"
                 customStyle={styles.labelContainer}
               />
