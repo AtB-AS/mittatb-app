@@ -14,7 +14,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
-		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		500752DC29855BD100AC5A7F /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500752DB29855BD100AC5A7F /* Intents.framework */; };
 		500752DF29855BD100AC5A7F /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500752DE29855BD100AC5A7F /* IntentHandler.swift */; };
 		500752E329855BD100AC5A7F /* AtbAppIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 500752DA29855BD100AC5A7F /* AtbAppIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -50,6 +49,7 @@
 		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
+		86E7828A2E253D8900EECA61 /* AtBRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E782892E253D8900EECA61 /* AtBRootView.swift */; };
 		A1B2EBBAED425D9A597C8294 /* Pods_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4189C266DDC08015840EBAA /* Pods_app.framework */; };
 		BA5093862E16A46400BF749B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5093852E16A45800BF749B /* AppDelegate.swift */; };
 		C18256D729E9412DA315E055 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBD2ACDD97450583702DEF /* Colors.xcassets */; };
@@ -128,8 +128,6 @@
 		298D194A2AEBC45F00065733 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		298D194B2AEBC55C00065733 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
-		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
-		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
 		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		500752DA29855BD100AC5A7F /* AtbAppIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AtbAppIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +154,7 @@
 		6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassPresentationBridge.m; sourceTree = "<group>"; };
 		6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPresentation.swift; sourceTree = "<group>"; };
 		80CBD2ACDD97450583702DEF /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = atb/Colors.xcassets; sourceTree = "<group>"; };
+		86E782892E253D8900EECA61 /* AtBRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtBRootView.swift; sourceTree = "<group>"; };
 		B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		BA5093852E16A45800BF749B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -241,9 +240,7 @@
 				0F1FBC3125CBDED600484CA4 /* AtB.entitlements */,
 				FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */,
 				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
-				38CD3275254B616300C6B978 /* AtBRootView.h */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				38CD326F254B612600C6B978 /* AtBRootView.m */,
 				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
@@ -257,6 +254,7 @@
 				FE8186AC297593DA000D2195 /* Configs */,
 				298D19492AEBC45E00065733 /* InfoPlist.strings */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
+				86E782892E253D8900EECA61 /* AtBRootView.swift */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -659,11 +657,11 @@
 			files = (
 				FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */,
 				FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */,
-				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
 				BA5093862E16A46400BF749B /* AppDelegate.swift in Sources */,
 				FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
+				86E7828A2E253D8900EECA61 /* AtBRootView.swift in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
