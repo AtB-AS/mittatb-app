@@ -18,6 +18,7 @@ type TagSize = 'small' | 'regular';
 
 type BaseTagProps = {
   labels: string[];
+  a11yLabel?: string;
   size?: TagSize;
   customStyle?: StyleProp<ViewStyle>;
 };
@@ -27,16 +28,29 @@ type TagProps = BaseTagProps & {
   icon?: (props: SvgProps) => JSX.Element;
 };
 
-export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
+export const Tag = ({
+  labels,
+  a11yLabel,
+  size,
+  tagType,
+  icon,
+  customStyle,
+}: TagProps) => {
   switch (tagType) {
     case 'primary':
       return (
-        <PrimaryTag labels={labels} size={size} customStyle={customStyle} />
+        <PrimaryTag
+          labels={labels}
+          a11yLabel={a11yLabel}
+          size={size}
+          customStyle={customStyle}
+        />
       );
     case 'secondary':
       return (
         <SecondaryTag
           labels={labels}
+          a11yLabel={a11yLabel}
           size={size}
           icon={icon}
           customStyle={customStyle}
@@ -46,6 +60,7 @@ export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
       return (
         <SemanticTag
           labels={labels}
+          a11yLabel={a11yLabel}
           size={size}
           tagType={tagType}
           customStyle={customStyle}
@@ -56,6 +71,7 @@ export const Tag = ({labels, size, tagType, icon, customStyle}: TagProps) => {
 
 const PrimaryTag: React.FC<BaseTagProps> = ({
   labels,
+  a11yLabel,
   size = 'regular',
   customStyle,
 }) => {
@@ -76,6 +92,8 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
         sizeDependentStyle,
         customStyle,
       ]}
+      accessibilityLabel={a11yLabel || labels.join(', ')}
+      accessibilityRole="button"
     >
       {labels.map((content) => (
         <ThemeText
@@ -99,7 +117,7 @@ const usePrimaryTagStyles = StyleSheet.createThemeHook((theme) => ({
 
 const SecondaryTag: React.FC<
   BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
-> = ({labels, size = 'regular', icon, customStyle}) => {
+> = ({labels, a11yLabel, size = 'regular', icon, customStyle}) => {
   const commonStyles = useCommonTagStyles();
   const styles = useSecondaryTagStyles();
   const {theme} = useThemeContext();
@@ -117,6 +135,8 @@ const SecondaryTag: React.FC<
         sizeDependentStyle,
         customStyle,
       ]}
+      accessibilityLabel={a11yLabel || labels.join(', ')}
+      accessibilityRole="button"
     >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
@@ -144,7 +164,7 @@ const useSecondaryTagStyles = StyleSheet.createThemeHook((theme) => ({
 
 const SemanticTag: React.FC<
   BaseTagProps & {tagType: Exclude<TagStatuses, 'primary' | 'secondary'>}
-> = ({labels, tagType, size = 'regular', customStyle}) => {
+> = ({labels, a11yLabel, tagType, size = 'regular', customStyle}) => {
   const {theme, themeName} = useThemeContext();
   const commonStyles = useCommonTagStyles();
   const styles = useSemanticTagStyles();
@@ -163,6 +183,8 @@ const SemanticTag: React.FC<
         sizeDependentStyle,
         customStyle,
       ]}
+      accessibilityLabel={a11yLabel || `${tagType}: ${labels.join(', ')}`}
+      accessibilityRole="button"
     >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />

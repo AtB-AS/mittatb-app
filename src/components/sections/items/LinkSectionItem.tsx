@@ -73,7 +73,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         disabled={disabled}
         accessibilityLabel={
           label
-            ? `${accessibilityLabel} ${t(TagInfoTexts.labels[label])}`
+            ? `${accessibilityLabel} ${t(TagInfoTexts.labels[label].a11y)}`
             : accessibilityLabel
         }
         accessibilityState={{disabled}}
@@ -97,7 +97,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
           </ThemeText>
           {label && (
             <Tag
-              labels={[t(TagInfoTexts.labels[label])]}
+              labels={[t(TagInfoTexts.labels[label].text)]}
               tagType="primary"
               customStyle={{alignSelf: 'center'}}
             />
