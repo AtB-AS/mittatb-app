@@ -16,6 +16,7 @@ class AppDelegate: RCTAppDelegate {
   }
   
   override func customize(_ rootView: RCTRootView) {
+    super.customize(rootView)
     RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
   }
   
