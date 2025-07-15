@@ -17,7 +17,6 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
   SmartParkAndRideOnboardingProvider,
-  useSmartParkAndRideOnboarding,
   useShouldShowSmartParkAndRideOnboarding,
   useVehicleRegistrationsQuery,
   VehicleRegistration,
@@ -34,8 +33,6 @@ const Profile_SmartParkAndRideScreenContent = () => {
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
-
-  const {resetOnboarding} = useSmartParkAndRideOnboarding();
 
   const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
@@ -97,12 +94,6 @@ const Profile_SmartParkAndRideScreenContent = () => {
               rightIcon={{svg: Add}}
             />
           )}
-
-          <LinkSectionItem
-            text={t(SmartParkAndRideTexts.content.addVehicle)}
-            onPress={() => resetOnboarding()}
-            icon={<ThemeIcon svg={Add} />}
-          />
         </Section>
 
         {!canAddVehicleRegistrations && (
