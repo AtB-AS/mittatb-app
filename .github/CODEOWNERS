@@ -2,10 +2,10 @@
 # https://github.com/AtB-AS/docs-private/blob/main/kundevendt-development-guidelines.md#systemdomain-captains
 
 # App
-* @marius-at-atb @jorelosorio @rosvik @strandlie
+* @marius-at-atb @rosvik @strandlie
 
 # Mobile token
-/src/mobile-token/ @rosvik @reidzeibel @jorelosorio
+/src/mobile-token/ @rosvik @reidzeibel
 
 # Mobility
 /src/mobility/ @rosvik @marius-at-atb @Dahly96
@@ -14,18 +14,18 @@
 /src/modules/bonus/ @rosvik @marius-at-atb @jorunnl
 
 # Builds and CI
-/.github/workflows/ @rosvik @jorelosorio @reidzeibel
-/env/ @rosvik @jorelosorio @reidzeibel
-/fastlane/ @rosvik @jorelosorio @reidzeibel
-/scripts/ @rosvik @jorelosorio @reidzeibel
-/tools/ @rosvik @jorelosorio @reidzeibel
+/.github/workflows/ @rosvik @reidzeibel
+/env/ @rosvik @reidzeibel
+/fastlane/ @rosvik @reidzeibel
+/scripts/ @rosvik @reidzeibel
+/tools/ @rosvik @reidzeibel
 
 # Configuration
-/src/modules/configuration/ @rosvik @reidzeibel @jorelosorio
+/src/modules/configuration/ @rosvik @reidzeibel
 
 # Tests
 /e2e/ @rosvik @tormoseng @hanne-at-atb @reidzeibel
 
 # Native code
-/android/ @rosvik @reidzeibel @jorelosorio
-/ios/ @rosvik @jorelosorio @reidzeibel
+/android/ @rosvik @reidzeibel
+/ios/ @rosvik @reidzeibel
