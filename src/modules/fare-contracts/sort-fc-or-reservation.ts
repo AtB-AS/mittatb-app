@@ -7,8 +7,9 @@ export const getSortedFareContractsAndReservations = (
   reservations: Reservation[],
   now: number,
 ): (FareContractType | Reservation)[] => {
-  // Should show at most one "failed" reservation.
-  const mostRecentFailedReservation = reservations.find(
+  // Should show only the most recent "failed" reservation.
+  const sortedReservations = sortFcOrReservationByCreation(reservations);
+  const mostRecentFailedReservation = sortedReservations.find(
     (reservation) =>
       !('travelRights' in reservation) &&
       (reservation.paymentStatus === 'CANCEL' ||

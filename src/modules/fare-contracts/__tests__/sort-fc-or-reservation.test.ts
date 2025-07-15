@@ -81,6 +81,22 @@ describe('Sort by Validity', () => {
     expect(result.map((r) => (r as any).testRef)).toEqual(['1', '2', '3']);
   });
 
+  it('Should show only the most recent failed reservation', () => {
+    const fareContracts: FareContractType[] = [];
+    const reservations: Reservation[] = [
+      mockupReservation('2', new Date(now - ONE_MINUTE_MS * 2), 'REJECT'),
+      mockupReservation('1', new Date(now - ONE_MINUTE_MS * 1), 'CANCEL'),
+      mockupReservation('3', new Date(now - ONE_MINUTE_MS * 3), 'CANCEL'),
+    ];
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
+      now,
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
+
+    expect(result.map((r) => (r as any).testRef)).toEqual(['1']);
+  });
+
   it('Should sort fc and reservation by validity', async () => {
     const fareContracts: FareContractType[] = [
       mockupFareContract('3', new Date(now - ONE_MINUTE_MS * 3)),
