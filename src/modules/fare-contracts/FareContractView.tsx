@@ -145,5 +145,6 @@ export const FareContractView: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook(() => ({
   header: {
     paddingVertical: 0,
+    borderWidth: 0,
   },
 }));
