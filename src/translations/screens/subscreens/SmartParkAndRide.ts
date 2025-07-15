@@ -127,7 +127,7 @@ const SmartParkAndRideTexts = {
         'Billett gir gratis parkering',
       ),
       description: _(
-        'Stå gratis på Ranheim Fabrikker i 48 timer, uansett hvilket AtB-billett du har. Billetten må være aktiv senest 30 minutter etter innkjøring.',
+        'Stå gratis på Ranheim Fabrikker i 48 timer, uansett hvilken AtB-billett du har. Billetten må være aktiv senest 30 minutter etter innkjøring.',
         'Park for free at Ranheim Fabrikker for 48 hours, regardless of which AtB ticket you have. The ticket must be active at least 30 minutes after entering.',
         'Stå gratis på Ranheim Fabrikker i 48 timar, uansett kva AtB-billett du har. Billetten må vere aktiv seinast 30 minutt etter innkjøring.',
       ),
