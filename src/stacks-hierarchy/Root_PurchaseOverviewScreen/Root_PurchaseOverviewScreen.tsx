@@ -125,11 +125,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
 
-  const {
-    isBookingRequired,
-    isLoadingBooking,
-    isError: isBookingError,
-  } = useBookingTrips({selection});
+  const {isBookingRequired, isError: isBookingError} = useBookingTrips({
+    selection,
+  });
 
   const canProceed = (() => {
     const hasOffer =
@@ -142,9 +140,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const error: PurchaseOverviewError | undefined = (() => {
     if (!isBookingRequired) {
       return offerError;
-    }
-    if (offerError && isLoadingBooking) {
-      return undefined; // It's not possible to know if we should display this error until the booking request has completed
     }
     if (offerError && isBookingRequired && !isBookingError) {
       return undefined; // Do not display the error from the offer if we have trips that require booking
@@ -346,7 +341,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <Summary
             selection={selection}
-            isLoading={isSearchingOffer || isLoadingBooking}
+            isLoading={isBookingRequired ? false : isSearchingOffer}
             isFree={isFree}
             isError={!!error || !canProceed}
             originalPrice={originalPrice}
