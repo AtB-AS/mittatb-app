@@ -8,7 +8,6 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';

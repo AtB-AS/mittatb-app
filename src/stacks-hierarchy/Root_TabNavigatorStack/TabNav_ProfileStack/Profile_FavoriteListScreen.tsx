@@ -1,7 +1,6 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   StoredLocationFavorite,
   useFavoritesContext,

@@ -13,7 +13,7 @@ import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {IconColor} from '@atb/components/theme-icon/ThemeIcon';
+import {IconColor} from '@atb/components/theme-icon';
 
 type IconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;

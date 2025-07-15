@@ -8,7 +8,6 @@ import {
   Section,
   SelectionInlineSectionItem,
 } from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ContentHeading} from '@atb/components/heading';
 import {useNavigation} from '@react-navigation/native';
