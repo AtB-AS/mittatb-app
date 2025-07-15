@@ -50,7 +50,7 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
-import {useFareContractInfo} from '@atb/modules/fare-contracts/useFareContractInfo';
+import {useFareContractInfo} from '@atb/modules/fare-contracts';
 
 type Props = {
   fareContract: FareContractType;
