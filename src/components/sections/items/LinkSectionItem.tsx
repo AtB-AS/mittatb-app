@@ -1,21 +1,25 @@
 import React, {forwardRef} from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
-import {
-  NavigationIcon,
-  isNavigationIcon,
-  NavigationIconTypes,
-} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
-import {TextNames} from '@atb/theme/colors';
+import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {IconColor} from '@atb/components/theme-icon';
+
+type IconProps = {
+  svg: ({fill}: {fill: string}) => JSX.Element;
+  color?: IconColor;
+  notificationColor?: ContrastColor;
+};
 
 type Props = SectionItemProps<{
   text: string;
@@ -23,7 +27,8 @@ type Props = SectionItemProps<{
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
   onPress?(event: GestureResponderEvent): void;
-  icon?: NavigationIconTypes | JSX.Element;
+  leftIcon?: IconProps;
+  rightIcon?: IconProps;
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
@@ -36,7 +41,8 @@ export const LinkSectionItem = forwardRef<any, Props>(
       onPress,
       subtitle,
       label,
-      icon,
+      leftIcon,
+      rightIcon = {svg: ArrowRight},
       accessibility,
       disabled,
       textType,
@@ -50,15 +56,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
       useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const iconEl =
-      isNavigationIcon(icon) || !icon ? (
-        <NavigationIcon
-          mode={icon}
-          color={interactiveColor.default.foreground.primary}
-        />
-      ) : (
-        icon
-      );
     const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
     const accessibilityWithOverrides = disabled
       ? {...accessibility, accessibilityHint: undefined}
@@ -86,6 +83,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
         <View
           style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
         >
+          {leftIcon && (
+            <Icon icon={leftIcon} interactiveColor={interactiveColor} />
+          )}
           <ThemeText
             style={[
               contentContainer,
@@ -102,7 +102,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
               customStyle={{alignSelf: 'center'}}
             />
           )}
-          {iconEl}
+          {rightIcon && (
+            <Icon icon={rightIcon} interactiveColor={interactiveColor} />
+          )}
         </View>
         {subtitle && (
           <View style={disabledStyle}>
@@ -115,6 +117,29 @@ export const LinkSectionItem = forwardRef<any, Props>(
     );
   },
 );
+
+const Icon = ({
+  icon,
+  interactiveColor,
+}: {
+  icon: IconProps;
+  interactiveColor: InteractiveColor;
+}) => {
+  return (
+    <ThemeIcon
+      svg={icon.svg}
+      color={icon.color}
+      notification={
+        icon.notificationColor
+          ? {
+              color: icon.notificationColor,
+              backgroundColor: interactiveColor.default,
+            }
+          : undefined
+      }
+    />
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},

@@ -11,7 +11,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
@@ -110,7 +109,7 @@ export const Profile_DeleteProfileScreen = () => {
           }}
           onPress={() => showDeleteAlert()}
           disabled={hasAvailableFareContracts}
-          icon={<ThemeIcon svg={Delete} color="error" />}
+          rightIcon={{svg: Delete, color: 'error'}}
         />
       </Section>
     </FullScreenView>

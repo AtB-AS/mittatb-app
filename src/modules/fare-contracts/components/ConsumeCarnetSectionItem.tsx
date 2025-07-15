@@ -1,7 +1,6 @@
 import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject, useRef} from 'react';
@@ -39,7 +38,7 @@ export function ConsumeCarnetSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.carnet.activateCarnet)}
       onPress={onPress}
-      icon={<ThemeIcon svg={TicketValid} color={interactiveColor.default} />}
+      rightIcon={{svg: TicketValid, color: interactiveColor.default}}
       interactiveColor={interactiveColor}
       ref={onCloseFocusRef}
       {...sectionProps}
