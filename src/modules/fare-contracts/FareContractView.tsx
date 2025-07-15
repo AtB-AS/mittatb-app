@@ -1,4 +1,4 @@
-import {getFareContractInfo, hasShmoBookingId} from './utils';
+import {hasShmoBookingId} from './utils';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -33,6 +33,7 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useFareContractInfo} from './useFareContractInfo';
 
 type Props = {
   now: number;
@@ -56,11 +57,10 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelRights, validityStatus} = getFareContractInfo(
+  const {travelRights, validityStatus} = useFareContractInfo({
     now,
-    fareContract,
-    currentUserId,
-  );
+    fc: fareContract,
+  });
 
   const firstTravelRight = travelRights[0];
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
@@ -88,7 +88,7 @@ export const FareContractView: React.FC<Props> = ({
       {hasShmoBookingId(fareContract) ? (
         <FareContractShmoHeaderSectionItem fareContract={fareContract} />
       ) : (
-        <GenericSectionItem style={styles.header}>
+        <GenericSectionItem style={styles.genericSectionItemOverrides}>
           <WithValidityLine fc={fareContract}>
             <ProductName fc={fareContract} />
             <ValidityTime fc={fareContract} />
@@ -143,7 +143,7 @@ export const FareContractView: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
-  header: {
+  genericSectionItemOverrides: {
     paddingVertical: 0,
     borderWidth: 0,
   },

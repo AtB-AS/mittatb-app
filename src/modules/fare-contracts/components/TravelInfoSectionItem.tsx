@@ -12,11 +12,7 @@ import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
-import {
-  getFareContractInfo,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
-} from '../utils';
+import {mapToUserProfilesWithCount, userProfileCountAndName} from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -30,20 +26,20 @@ import {
   MAX_ACCESSES_FOR_CARNET_FOOTER,
 } from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
+import {useFareContractInfo} from '../useFareContractInfo';
 
 type Props = {fc: FareContractType};
 
 export const TravelInfoSectionItem = ({fc}: Props) => {
   const {t, language} = useTranslation();
   const {serverNow} = useTimeContext();
-  const {abtCustomerId: currentUserId} = useAuthContext();
-
   const {
     travelRights,
     validityStatus,
     numberOfUsedAccesses,
     maximumNumberOfAccesses,
-  } = getFareContractInfo(serverNow, fc, currentUserId);
+  } = useFareContractInfo({now: serverNow, fc});
+
   const firstTravelRight = travelRights[0];
   const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();

@@ -7,11 +7,10 @@ import {ProductName} from '../components/ProductName';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useTimeContext} from '@atb/modules/time';
-import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
-import {getFareContractInfo} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {useFareContractInfo} from '../useFareContractInfo';
 
 type Props = {
   fareContract: FareContractType;
@@ -26,10 +25,9 @@ export const FareContractShmoHeaderSectionItem = ({
 
   const {t, language} = useTranslation();
   const {serverNow} = useTimeContext();
-  const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
+  const {validTo} = useFareContractInfo({now: serverNow, fc});
 
-  const {validTo} = getFareContractInfo(serverNow, fc, currentUserId);
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
 

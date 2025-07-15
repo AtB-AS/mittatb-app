@@ -8,11 +8,7 @@ import {
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
-import {
-  getFareContractInfo,
-  hasShmoBookingId,
-  mapToUserProfilesWithCount,
-} from '../utils';
+import {hasShmoBookingId, mapToUserProfilesWithCount} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {OrderDetailsSectionItem} from '../sections/OrderDetailsSectionItem';
 import {
@@ -54,6 +50,7 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
+import {useFareContractInfo} from '@atb/modules/fare-contracts/useFareContractInfo';
 
 type Props = {
   fareContract: FareContractType;
@@ -87,7 +84,7 @@ export const DetailsContent: React.FC<Props> = ({
     usedAccesses,
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
-  } = getFareContractInfo(now, fc, currentUserId);
+  } = useFareContractInfo({now, fc});
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;

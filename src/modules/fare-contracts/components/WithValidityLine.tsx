@@ -4,64 +4,83 @@ import {View} from 'react-native';
 import React, {type PropsWithChildren} from 'react';
 import type {Reservation} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
-import {getFareContractInfo, getReservationStatus} from '../utils';
 import {useTimeContext} from '@atb/modules/time';
-import {useAuthContext} from '@atb/modules/auth';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
+import {useFareContractInfo} from '../useFareContractInfo';
+import {getReservationStatus} from '@atb/modules/fare-contracts';
 
-type Props = PropsWithChildren<
-  | {
-      fc: FareContractType;
-    }
-  | ({reservation: Reservation} & {enabledLine?: boolean})
+type FcProps = PropsWithChildren<{
+  fc: FareContractType;
+}>;
+
+type ReservationProps = PropsWithChildren<
+  {reservation: Reservation} & {enabledLine?: boolean}
 >;
 
-export const WithValidityLine = (props: Props) => {
-  const styles = useStyles();
-  const {serverNow} = useTimeContext();
-  const {abtCustomerId: currentUserId} = useAuthContext();
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+type Props = FcProps | ReservationProps;
 
+export const WithValidityLine = (props: Props) => {
   if ('reservation' in props) {
     return (
-      <View style={styles.container}>
-        {!!props.enabledLine && (
-          <ValidityLine status={getReservationStatus(props.reservation)} />
-        )}
-        {!!props.children ? (
-          <View style={styles.content}>{props.children}</View>
-        ) : null}
-      </View>
+      <WithReservationValidityLine
+        reservation={props.reservation}
+        enabledLine={props.enabledLine}
+      >
+        {props.children}
+      </WithReservationValidityLine>
     );
   } else if ('fc' in props) {
-    const firstTravelRight = getFareContractInfo(serverNow, props.fc)
-      .travelRights?.[0];
-    const preassignedFareProduct = findReferenceDataById(
-      preassignedFareProducts,
-      firstTravelRight.fareProductRef,
-    );
-    const {validityStatus} = getFareContractInfo(
-      serverNow,
-      props.fc,
-      currentUserId,
-    );
     return (
-      <View style={styles.container}>
-        <ValidityLine
-          status={validityStatus}
-          fareProductType={preassignedFareProduct?.type}
-        />
-        {!!props.children ? (
-          <View style={styles.content}>{props.children}</View>
-        ) : null}
-      </View>
+      <WithFcValiditityLine fc={props.fc}>
+        {props.children}
+      </WithFcValiditityLine>
     );
   }
   return null;
 };
+
+export function WithReservationValidityLine(props: ReservationProps) {
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      {!!props.enabledLine && (
+        <ValidityLine status={getReservationStatus(props.reservation)} />
+      )}
+      {!!props.children ? (
+        <View style={styles.content}>{props.children}</View>
+      ) : null}
+    </View>
+  );
+}
+
+export function WithFcValiditityLine(props: FcProps) {
+  const {serverNow} = useTimeContext();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {travelRights, validityStatus} = useFareContractInfo({
+    now: serverNow,
+    fc: props.fc,
+  });
+  const firstTravelRight = travelRights?.[0];
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    firstTravelRight.fareProductRef,
+  );
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <ValidityLine
+        status={validityStatus}
+        fareProductType={preassignedFareProduct?.type}
+      />
+      {!!props.children ? (
+        <View style={styles.content}>{props.children}</View>
+      ) : null}
+    </View>
+  );
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

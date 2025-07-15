@@ -3,7 +3,6 @@ export {DetailsContent} from './details/DetailsContent';
 export {
   getValidityStatus,
   getReservationStatus,
-  getFareContractInfo,
   useOtherDeviceIsInspectableWarning,
   hasShmoBookingId,
 } from './utils';
