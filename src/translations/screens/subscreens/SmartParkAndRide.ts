@@ -154,8 +154,16 @@ const SmartParkAndRideTexts = {
         'Køyretøyet registrer seg automatisk ved inn- og utkjøring, og vi sjekker i appen om du har billett. Legg til køyretøyet ditt for å knytte billetten til parkeringen.',
       ),
       descriptionLink: {
-        text: _('Les mer på atb.no/RanheimFabrikker', 'Read more at atb.no/RanheimFabrikker', 'Les meir på atb.no/RanheimFabrikker'),
-        a11yHint: _('Les mer på atb.no/RanheimFabrikker', 'Read more at atb.no/RanheimFabrikker', 'Les meir på atb.no/RanheimFabrikker'),
+        text: _(
+          'Les mer på atb.no/RanheimFabrikker',
+          'Read more at atb.no/RanheimFabrikker',
+          'Les meir på atb.no/RanheimFabrikker',
+        ),
+        a11yHint: _(
+          'Les mer på atb.no/RanheimFabrikker',
+          'Read more at atb.no/RanheimFabrikker',
+          'Les meir på atb.no/RanheimFabrikker',
+        ),
       },
       buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
     },
