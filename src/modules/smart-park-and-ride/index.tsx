@@ -8,3 +8,10 @@ export {LicensePlateSection} from './components/LicensePlateSection';
 export {useSearchVehicleInformationQuery} from './queries/use-search-vehicle-information-query';
 export {SmartParkAndRideOnboarding_InformationScreen} from './onboarding/SmartParkAndRideOnboarding_InformationScreen';
 export {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './onboarding/SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
+export {
+  SmartParkAndRideOnboardingProvider,
+  useSmartParkAndRideOnboarding,
+  useShouldShowSmartParkAndRideOnboarding,
+  type SmartParkAndRideOnboardingState,
+} from './onboarding/SmartParkAndRideOnboardingContext';
+export {getSmartParkAndRideOnboardingCompleted} from './onboarding/utils';

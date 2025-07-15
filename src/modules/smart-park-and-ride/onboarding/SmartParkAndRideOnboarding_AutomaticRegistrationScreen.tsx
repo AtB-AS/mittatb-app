@@ -4,19 +4,18 @@ import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useOnboardingContext} from '@atb/modules/onboarding';
+import {useSmartParkAndRideOnboarding} from './SmartParkAndRideOnboardingContext';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Linking} from 'react-native';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t} = useTranslation();
-  const {completeOnboardingSection} = useOnboardingContext();
+  const {completeOnboarding} = useSmartParkAndRideOnboarding();
   const navigation = useNavigation<RootNavigationProps>();
 
   const handleComplete = () => {
-    completeOnboardingSection('smartParkAndRide');
-
+    completeOnboarding();
     navigation.navigate('Root_SmartParkAndRideAddScreen');
   };
 
@@ -37,7 +36,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
             .a11yHint,
         ),
         onPress: () => {
-          Linking.openURL('https://www.atb.no/RanheimFabrikker');
+          Linking.openURL('https://www.atb.no/RanheimFabrikker'); // TODO: This link should be configurable, and updated.
         },
       }}
       footerButton={{

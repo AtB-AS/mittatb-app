@@ -11,6 +11,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   SmartParkAndRideOnboarding_AutomaticRegistrationScreen,
   SmartParkAndRideOnboarding_InformationScreen,
+  SmartParkAndRideOnboardingProvider,
 } from '@atb/modules/smart-park-and-ride';
 import {Root_SmartParkAndRideAddScreen} from '..';
 
@@ -23,28 +24,30 @@ export const Root_SmartParkAndRideOnboardingStack = ({}: Props) => {
   const styles = useStyles();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Tab.Navigator
-        tabBar={(props: MaterialTopTabBarProps) => {
-          return <PageIndicator {...props} />;
-        }}
-        tabBarPosition="bottom"
-        initialRouteName="SmartParkAndRideOnboarding_WelcomeScreen"
-      >
-        <Tab.Screen
-          name="SmartParkAndRideOnboarding_InformationScreen"
-          component={SmartParkAndRideOnboarding_InformationScreen}
-        />
-        <Tab.Screen
-          name="SmartParkAndRideOnboarding_AutomaticRegistrationScreen"
-          component={SmartParkAndRideOnboarding_AutomaticRegistrationScreen}
-        />
-        <Tab.Screen
-          name="Root_SmartParkAndRideAddScreen"
-          component={Root_SmartParkAndRideAddScreen}
-        />
-      </Tab.Navigator>
-    </SafeAreaView>
+    <SmartParkAndRideOnboardingProvider>
+      <SafeAreaView style={styles.container}>
+        <Tab.Navigator
+          tabBar={(props: MaterialTopTabBarProps) => {
+            return <PageIndicator {...props} />;
+          }}
+          tabBarPosition="bottom"
+          initialRouteName="SmartParkAndRideOnboarding_WelcomeScreen"
+        >
+          <Tab.Screen
+            name="SmartParkAndRideOnboarding_InformationScreen"
+            component={SmartParkAndRideOnboarding_InformationScreen}
+          />
+          <Tab.Screen
+            name="SmartParkAndRideOnboarding_AutomaticRegistrationScreen"
+            component={SmartParkAndRideOnboarding_AutomaticRegistrationScreen}
+          />
+          <Tab.Screen
+            name="Root_SmartParkAndRideAddScreen"
+            component={Root_SmartParkAndRideAddScreen}
+          />
+        </Tab.Navigator>
+      </SafeAreaView>
+    </SmartParkAndRideOnboardingProvider>
   );
 };
 

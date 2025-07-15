@@ -16,34 +16,37 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
+  SmartParkAndRideOnboardingProvider,
+  useSmartParkAndRideOnboarding,
+  useShouldShowSmartParkAndRideOnboarding,
   useVehicleRegistrationsQuery,
   VehicleRegistration,
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 import {useEffect} from 'react';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
-export const Profile_SmartParkAndRideScreen = () => {
+const Profile_SmartParkAndRideScreenContent = () => {
   const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
 
-  const smartParkAndRideIsOnboarded =
-    useOnboardingSectionIsOnboarded('smartParkAndRide');
+  const {resetOnboarding} = useSmartParkAndRideOnboarding();
+
+  const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
 
   // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
   useEffect(() => {
-    if (!smartParkAndRideIsOnboarded && !vehicleRegistrations?.length) {
+    if (!shouldShowOnboarding && !vehicleRegistrations?.length) {
       navigation.navigate('Root_SmartParkAndRideOnboardingStack');
     }
-  }, [smartParkAndRideIsOnboarded, vehicleRegistrations, navigation]);
+  }, [shouldShowOnboarding, vehicleRegistrations, navigation]);
 
   return (
     <FullScreenView
@@ -94,6 +97,12 @@ export const Profile_SmartParkAndRideScreen = () => {
               rightIcon={{svg: Add}}
             />
           )}
+
+          <LinkSectionItem
+            text={t(SmartParkAndRideTexts.content.addVehicle)}
+            onPress={() => resetOnboarding()}
+            icon={<ThemeIcon svg={Add} />}
+          />
         </Section>
 
         {!canAddVehicleRegistrations && (
@@ -143,3 +152,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.xSmall,
   },
 }));
+
+const Profile_SmartParkAndRideScreen = () => {
+  return (
+    <SmartParkAndRideOnboardingProvider>
+      <Profile_SmartParkAndRideScreenContent />
+    </SmartParkAndRideOnboardingProvider>
+  );
+};
+
+export {Profile_SmartParkAndRideScreen};
