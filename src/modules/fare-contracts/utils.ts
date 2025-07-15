@@ -1,9 +1,5 @@
 import {getLastUsedAccess, Reservation} from '@atb/modules/ticketing';
-import {
-  FareContractState,
-  FareContractType,
-  getAccesses,
-} from '@atb-as/utils';
+import {FareContractState, FareContractType, getAccesses} from '@atb-as/utils';
 import {
   FareZone,
   findReferenceDataById,
