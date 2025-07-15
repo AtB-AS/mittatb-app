@@ -17,4 +17,3 @@ export {getFareContractInfoDetails} from './sections/FareContractInfoDetailsSect
 export {CompactFareContractInfo} from './CompactFareContractInfo';
 export {FareContractDetailItem} from './components/FareContractDetailItem';
 export {FareContractFromTo} from './components/FareContractFromTo';
-export {useFareContractInfo} from './useFareContractInfo';
