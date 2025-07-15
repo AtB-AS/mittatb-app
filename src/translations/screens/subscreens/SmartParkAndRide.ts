@@ -12,6 +12,16 @@ const SmartParkAndRideTexts = {
     heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
     addVehicle: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
+  howItWorks: {
+    heading: _('Les mer', 'Read more', 'Les meir'),
+    title: _('Hvordan funker det?', 'How does it work?', 'Korleis funkar det?'),
+    description: _(
+      'Med gyldig billett fra AtB kan du stå gratis på Ranheim Fabrikker i 48 timer.',
+      'With a valid ticket from AtB, you can park for free at Ranheim Fabrikker for 48 hours.',
+      'Med gyldig billett frå AtB kan du stå gratis på Ranheim Fabrikker i 48 timar.',
+    ),
+    link: _('Sånn funker det', 'How it works', 'Slik fungerer det'),
+  },
   add: {
     header: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),

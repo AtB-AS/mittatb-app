@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {
+  GenericSectionItem,
   LinkSectionItem,
   Section,
   SelectionInlineSectionItem,
@@ -24,6 +25,7 @@ import {
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {useEffect} from 'react';
+import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -105,8 +107,49 @@ const Profile_SmartParkAndRideScreenContent = () => {
             <ThemeText>{t(SmartParkAndRideTexts.add.max)}</ThemeText>
           </View>
         )}
+
+        <HowItWorksSection />
       </View>
     </FullScreenView>
+  );
+};
+
+const HowItWorksSection = () => {
+  const {t} = useTranslation();
+  const navigation = useNavigation<RootNavigationProps>();
+  const styles = useStyles();
+
+  return (
+    <>
+      <ContentHeading text={t(SmartParkAndRideTexts.howItWorks.heading)} />
+      <Section>
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <ThemedBundlingCarSharing
+              height={61}
+              width={61}
+              style={{
+                alignSelf: 'flex-start',
+              }}
+            />
+            <View style={styles.howItWorks}>
+              <ThemeText typography="body__primary--bold">
+                {t(SmartParkAndRideTexts.howItWorks.title)}
+              </ThemeText>
+              <ThemeText typography="body__secondary" color="secondary">
+                {t(SmartParkAndRideTexts.howItWorks.description)}
+              </ThemeText>
+            </View>
+          </View>
+        </GenericSectionItem>
+        <LinkSectionItem
+          text={t(SmartParkAndRideTexts.howItWorks.link)}
+          onPress={() => {
+            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+          }}
+        />
+      </Section>
+    </>
   );
 };
 
@@ -144,6 +187,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.small,
     marginTop: theme.spacing.xSmall,
+  },
+  horizontalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+  },
+  howItWorks: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
 }));
 
