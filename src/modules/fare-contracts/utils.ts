@@ -7,8 +7,8 @@ import {
   FareContractState,
   FareContractType,
   getAccesses,
-  TravelRightType,
-  UsedAccessType,
+  type TravelRightType,
+  type UsedAccessType,
 } from '@atb-as/utils';
 import {
   FareZone,
