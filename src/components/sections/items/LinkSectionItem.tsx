@@ -99,7 +99,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             <Tag
               labels={[t(TagInfoTexts.labels[label].text)]}
               tagType="primary"
-              customStyle={{alignSelf: 'center'}}
+              customStyle={linkSectionItemStyle.tag}
             />
           )}
           {rightIcon && (
@@ -144,4 +144,10 @@ const Icon = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},
   gap: {gap: theme.spacing.small},
+  tag: {
+    alignSelf: 'center',
+    // Slight hack to prevent the section item from growing beyond normal size
+    // to fit the tag.
+    marginVertical: -theme.spacing.xSmall,
+  },
 }));
