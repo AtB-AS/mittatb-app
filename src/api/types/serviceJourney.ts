@@ -1,4 +1,5 @@
 import * as Types_v3 from './generated/journey_planner_v3_types';
+import type {DatedServiceJourneyQuery} from '@atb/api/types/generated/DatedServiceJourneyQuery';
 
 export type ServiceJourneyMapInfoData_v3 = {
   mapLegs: MapLeg_v3[];
@@ -12,3 +13,6 @@ export type MapLeg_v3 = {
   transportSubmode?: Types_v3.TransportSubmode;
   pointsOnLink: Types_v3.PointsOnLink;
 };
+
+export type DatedServiceJourney =
+  DatedServiceJourneyQuery['datedServiceJourney'];
