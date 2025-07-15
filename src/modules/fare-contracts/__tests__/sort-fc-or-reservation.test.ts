@@ -114,6 +114,21 @@ describe('Sort by Validity', () => {
 
     expect(result.map((i) => (i as any).testRef)).toEqual(['2', '1']);
   });
+
+  it('Should sort inactive fare contracts by created date', () => {
+    const fareContracts: FareContractType[] = [
+      mockupFareContract('2', new Date(now - ONE_MINUTE_MS * 2)),
+      mockupFareContract('1', new Date(now - ONE_MINUTE_MS * 1)),
+    ];
+    const reservations: Reservation[] = [];
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
+      now,
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
+
+    expect(result.map((i) => (i as any).testRef)).toEqual(['1', '2']);
+  });
 });
 
 describe('Sort by creation', () => {

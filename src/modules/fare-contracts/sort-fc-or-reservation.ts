@@ -23,9 +23,12 @@ export const getSortedFareContractsAndReservations = (
     return getAvailabilityStatus(fc, now).status === 'valid';
   });
 
-  // Not valid fare contracts (e.g. inactive carnets) should come last
-  const otherFareContracts = fareContracts.filter(
-    (fc) => getAvailabilityStatus(fc, now).status !== 'valid',
+  // Not valid fare contracts (e.g. inactive carnets) should come last, and be
+  // sorted by creation date.
+  const otherFareContracts = sortFcOrReservationByCreation(
+    fareContracts.filter(
+      (fc) => getAvailabilityStatus(fc, now).status !== 'valid',
+    ),
   );
 
   // Sort everything but the non-active fare contracts by creation date.
