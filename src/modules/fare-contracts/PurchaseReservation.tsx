@@ -50,7 +50,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   return (
     <PressableOpacity accessible={false} importantForAccessibility="no">
       <Section>
-        <GenericSectionItem style={{paddingVertical: 0}}>
+        <GenericSectionItem style={styles.genericSectionItemOverrides}>
           <WithValidityLine
             reservation={reservation}
             enabledLine={status !== 'rejected'}
@@ -103,6 +103,10 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  genericSectionItemOverrides: {
+    paddingVertical: 0,
+    borderWidth: 0,
+  },
   detail: {
     paddingVertical: theme.spacing.xSmall,
   },
