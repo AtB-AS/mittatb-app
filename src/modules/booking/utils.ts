@@ -4,11 +4,7 @@ import {isAfter, isBefore} from '@atb/utils/date';
 import {endOfDay} from 'date-fns';
 
 export function isValidSelection(selection: PurchaseSelectionType) {
-  return (
-    !!selection.stopPlaces?.from &&
-    !!selection.stopPlaces?.to &&
-    selection.preassignedFareProduct.isBookingEnabled
-  );
+  return !!selection.stopPlaces?.from && !!selection.stopPlaces?.to;
 }
 
 export function tripPatternAvailabilityFilter(
