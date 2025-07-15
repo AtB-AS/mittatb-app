@@ -40,7 +40,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
 
   // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
   useEffect(() => {
-    if (!shouldShowOnboarding && !vehicleRegistrations?.length) {
+    if (shouldShowOnboarding && !vehicleRegistrations?.length) {
       navigation.navigate('Root_SmartParkAndRideOnboardingStack');
     }
   }, [shouldShowOnboarding, vehicleRegistrations, navigation]);
