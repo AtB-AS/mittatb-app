@@ -16,6 +16,16 @@ import {
 import {Root_SmartParkAndRideAddScreen} from '..';
 
 const Tab = createMaterialTopTabNavigator();
+
+// Wrapper component to pass hideHeader prop
+const SmartParkAndRideAddScreenWithoutHeader = (props: any) => {
+  return (
+    <Root_SmartParkAndRideAddScreen
+      {...props}
+      route={{...props.route, params: {hideHeader: true}}}
+    />
+  );
+};
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideOnboardingStack'>;
@@ -43,7 +53,7 @@ export const Root_SmartParkAndRideOnboardingStack = ({}: Props) => {
           />
           <Tab.Screen
             name="Root_SmartParkAndRideAddScreen"
-            component={Root_SmartParkAndRideAddScreen}
+            component={SmartParkAndRideAddScreenWithoutHeader}
           />
         </Tab.Navigator>
       </SafeAreaView>

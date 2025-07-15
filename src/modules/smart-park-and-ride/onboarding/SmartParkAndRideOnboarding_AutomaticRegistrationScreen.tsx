@@ -16,7 +16,9 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
 
   const handleComplete = () => {
     completeOnboarding();
-    navigation.navigate('Root_SmartParkAndRideAddScreen');
+    navigation.navigate('Root_SmartParkAndRideAddScreen', {
+      hideHeader: true,
+    });
   };
 
   return (
