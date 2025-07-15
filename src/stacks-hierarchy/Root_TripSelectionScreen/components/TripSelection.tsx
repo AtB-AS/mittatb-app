@@ -45,7 +45,6 @@ export function BookingTripSelection({
     reload,
   } = useBookingTrips({
     selection,
-    enabled: true,
   });
 
   // Refetch in case the availability has changed
