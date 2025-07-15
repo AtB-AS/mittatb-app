@@ -5,7 +5,11 @@ class AtBRootView: RCTRootView {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+     
+        print("traitCollectionDidChange");
+        print(traitCollection.displayScale);
+        print(traitCollection.userInterfaceStyle);
+      
         if #available(iOS 13.0, *) {
             if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
                 setBackgroundByTrait()
