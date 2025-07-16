@@ -77,7 +77,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
-  const statusColor = theme.color.status.valid.primary;
+  const statusColor = theme.color.status.info.primary;
   const [searchTime, setSearchTime] = useState<TripSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
