@@ -229,7 +229,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 leftIcon={{
                   svg: Chat,
                   notificationColor: unreadCount
-                    ? theme.color.status.valid.primary
+                    ? theme.color.status.error.primary
                     : undefined,
                 }}
                 text={t(ProfileTexts.sections.contact.chat)}

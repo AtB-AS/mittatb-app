@@ -74,7 +74,7 @@ export const Root_TabNavigatorStack = () => {
     }
     if (unreadCount) {
       return {
-        color: theme.color.status.valid.primary,
+        color: theme.color.status.error.primary,
         backgroundColor: interactiveColor.default,
       };
     }
