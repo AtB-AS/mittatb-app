@@ -12,6 +12,13 @@ import {v4 as uuid} from 'uuid';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 
+export const getServerTime = async () => {
+  const response = await client.get('/identity/v1/time', {
+    authWithIdToken: false,
+  });
+  return response.data;
+};
+
 export const authenticateWithSms = async (
   phoneNumber: string,
   language: Language,
