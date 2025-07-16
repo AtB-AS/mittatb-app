@@ -13,25 +13,23 @@ import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useOnboardingNavigation} from '@atb/modules/onboarding';
 
-type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
+type Props = {
+  showHeader?: boolean;
+};
 
 export const Root_SmartParkAndRideAddScreenComponent = ({
-  navigation,
-  route,
+  showHeader,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const [nickname, setNickname] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
 
-  const showHeader = route.params?.showHeader || false; // not really needed as param, can just be a prop instead
-
-  const navigateBack = () => {
-    navigation.getParent()?.goBack() ?? navigation.goBack();
-  };
+  const navigateBack = () => continueFromOnboardingSection('smartParkAndRide');
 
   const {mutateAsync: handleAddVehicleRegistration} =
     useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);

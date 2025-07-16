@@ -92,7 +92,6 @@ export const Profile_SmartParkAndRideScreen = () => {
               onPress={() =>
                 navigation.navigate('Root_SmartParkAndRideAddScreen', {
                   transitionOverride: 'slide-from-right',
-                  showHeader: true,
                 })
               }
               rightIcon={{svg: Add}}

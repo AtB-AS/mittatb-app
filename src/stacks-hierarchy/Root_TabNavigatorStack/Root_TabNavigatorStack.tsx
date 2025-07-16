@@ -31,7 +31,7 @@ import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useOnPushNotificationOpened} from '@atb/modules/notifications';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {
   useOnboardingFlow,
@@ -55,13 +55,31 @@ export const Root_TabNavigatorStack = () => {
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
+  const {name: currentRouteName} = useRoute();
 
   useEffect(() => {
-    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
-
     const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
-    nextOnboardingScreen?.name && goToScreen(false, nextOnboardingScreen);
-  }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
+
+    // normally only show onboarding screens from Root_TabNavigatorStack path
+    // but with some exception(s)
+    const sparIsFocusedException =
+      currentRouteName === 'Profile_SmartParkAndRideScreen' &&
+      nextOnboardingScreen?.name === 'Root_EnrollmentOnboardingStack' &&
+      nextOnboardingScreen?.params?.configId === 'spar-pilot';
+
+    const isFocusedExceptions = [sparIsFocusedException];
+    if (
+      nextOnboardingScreen?.name &&
+      (navigation.isFocused() || isFocusedExceptions.includes(true))
+    ) {
+      goToScreen(false, nextOnboardingScreen);
+    }
+  }, [
+    nextOnboardingSection?.initialScreen,
+    goToScreen,
+    navigation,
+    currentRouteName,
+  ]);
 
   return (
     <Tab.Navigator

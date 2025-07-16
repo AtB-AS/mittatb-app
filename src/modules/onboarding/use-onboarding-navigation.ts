@@ -39,7 +39,7 @@ export const useOnboardingNavigation = () => {
       if (nextOnboardingSection?.initialScreen?.name) {
         goToScreen(true, nextOnboardingSection?.initialScreen);
       } else {
-        navigation.goBack();
+        navigation.getParent()?.goBack() ?? navigation.goBack(); // get parent in case of stack. If problematic, accept param to determine which.
       }
     },
     [

@@ -1,8 +1,5 @@
 import {Root_SmartParkAndRideAddScreenComponent} from '@atb/screen-components/smart-park-and-ride';
-import {RootStackScreenProps} from '..';
 
-type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
-
-export const Root_SmartParkAndRideAddScreen = (props: Props) => (
-  <Root_SmartParkAndRideAddScreenComponent {...props} />
+export const Root_SmartParkAndRideAddScreen = () => (
+  <Root_SmartParkAndRideAddScreenComponent showHeader={true} />
 );

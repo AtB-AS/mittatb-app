@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
+  useState,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {storage} from '@atb/modules/storage';
@@ -44,6 +45,7 @@ type OnboardingContextState = Omit<
   completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartAllOnboardingSections: () => void;
+  setCurrentRouteName: (currentRouteName: string) => void;
 };
 
 type OnboardingReducerAction =
@@ -201,7 +203,12 @@ export const OnboardingContextProvider = ({children}: Props) => {
     [loadedOnboardingSections, restartOnboardingSection],
   );
 
-  const shouldShowArgs = useShouldShowArgs(loadedOnboardingSections);
+  const [currentRouteName, setCurrentRouteName] = useState('');
+
+  const shouldShowArgs = useShouldShowArgs(
+    loadedOnboardingSections,
+    currentRouteName,
+  );
 
   const onboardingSections = useMemo(
     () =>
@@ -220,6 +227,7 @@ export const OnboardingContextProvider = ({children}: Props) => {
         completeOnboardingSection,
         restartOnboardingSection,
         restartAllOnboardingSections,
+        setCurrentRouteName,
       }}
     >
       <OnboardingDispatch.Provider value={dispatch}>
@@ -286,6 +294,7 @@ const storeOnboardingSectionIsOnboarded = async (
 
 const useShouldShowArgs = (
   loadedOnboardingSections: LoadedOnboardingSection[],
+  currentRouteName: string,
 ): ShouldShowArgsType => {
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
@@ -313,6 +322,9 @@ const useShouldShowArgs = (
 
   const {mobileTokenStatus} = useMobileTokenContext();
 
+  const isSmartParkAndRideScreen =
+    currentRouteName === 'Profile_SmartParkAndRideScreen';
+
   return useMemo(
     () => ({
       hasFareContractWithActivatedNotification,
@@ -326,6 +338,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      isSmartParkAndRideScreen,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -339,6 +352,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      isSmartParkAndRideScreen,
     ],
   );
 };
