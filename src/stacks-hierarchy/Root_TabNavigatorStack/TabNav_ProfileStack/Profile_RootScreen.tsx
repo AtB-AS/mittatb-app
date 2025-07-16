@@ -72,7 +72,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
-          rightButton: {type: 'chat'},
         }}
       >
         <View

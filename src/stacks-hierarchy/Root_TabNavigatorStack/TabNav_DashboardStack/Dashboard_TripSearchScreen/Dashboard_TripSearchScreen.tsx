@@ -265,7 +265,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       <FullScreenView
         headerProps={{
           title: t(TripSearchTexts.header.title),
-          rightButton: {type: 'chat'},
           leftButton: {
             type: 'back',
             onPress: () => {

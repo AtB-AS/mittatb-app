@@ -148,11 +148,7 @@ export const Profile_DebugInfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title="Debug info"
-        leftButton={{type: 'back'}}
-        rightButton={{type: 'chat'}}
-      />
+      <FullScreenHeader title="Debug info" leftButton={{type: 'back'}} />
       <ScrollView testID="debugInfoScrollView">
         <Section style={styles.section}>
           <ButtonSectionItem
