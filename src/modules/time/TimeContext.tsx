@@ -1,9 +1,7 @@
-import {useInterval} from '@atb/utils/use-interval';
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {client} from '@atb/api';
-import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {z} from 'zod';
+import {useServerTimeQuery} from './use-server-time-query';
 
 type TimeContextState = {
   /**
@@ -28,7 +26,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-const TimeResponse = z.object({
+/** https://github.com/AtB-AS/identity/blob/main/identity-service/src/handlers/identity/mod.rs#L53 */
+const TimeResult = z.object({
   timestamp: z.string(),
   timestampMs: z.number(),
 });
@@ -37,29 +36,17 @@ export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());
   const {isServerTimeEnabled} = useFeatureTogglesContext();
 
-  useInterval(
-    async () => {
-      if (isServerTimeEnabled) {
-        try {
-          const response = await client.get('/identity/v1/time');
-          const timeResponse = TimeResponse.safeParse(response?.data).data;
-          if (timeResponse?.timestampMs) {
-            serverDiff = Date.now() - timeResponse.timestampMs;
-            setServerNow(timeResponse.timestampMs);
-          }
-        } catch (error) {
-          logToBugsnag('Error fetching server time: ', {error});
-        }
-      } else {
-        serverDiff = 0;
-        setServerNow(Date.now());
-      }
-    },
-    [isServerTimeEnabled],
-    60 * 1000,
-    false,
-    true,
-  );
+  const {data} = useServerTimeQuery(isServerTimeEnabled);
+  useEffect(() => {
+    const timeData = TimeResult.safeParse(data).data;
+    if (timeData?.timestampMs) {
+      serverDiff = Date.now() - timeData.timestampMs;
+      setServerNow(timeData.timestampMs);
+    } else {
+      serverDiff = 0;
+      setServerNow(Date.now());
+    }
+  }, [data]);
 
   return (
     <TimeContext.Provider
