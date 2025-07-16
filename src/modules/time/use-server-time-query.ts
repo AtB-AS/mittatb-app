@@ -6,7 +6,7 @@ export const useServerTimeQuery = (enabled: boolean) =>
   useQuery({
     queryKey: ['getServerTime'],
     queryFn: () => getServerTime(),
-    staleTime: ONE_MINUTE_MS,
+    refetchInterval: ONE_MINUTE_MS,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
     enabled,
