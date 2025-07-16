@@ -49,7 +49,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
         expanded: true,
         rightIcon: {svg: Confirm},
       }}
-      testID="benefitsSmartParkAndRideOnboarding"
+      testID="smartParkAndRideOnboardingAutomaticRegistration"
     />
   );
 };

@@ -29,7 +29,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
         expanded: true,
         rightIcon: {svg: ArrowRight},
       }}
-      testID="welcomeSmartParkAndRideOnboarding"
+      testID="smartParkAndRideOnboardingInformation"
     />
   );
 };
