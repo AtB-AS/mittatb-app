@@ -66,8 +66,8 @@ const getIndicatorSize = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   indicator: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    right: -4,
+    top: -2,
     borderRadius: theme.border.radius.large,
     zIndex: 10,
     overflow: 'hidden',
