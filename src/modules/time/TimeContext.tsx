@@ -1,7 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
-import {useServerTimeOffsetQuery} from './use-server-time-offset-query';
+import {useServerTimeQuery} from './use-server-time-query';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type TimeContextState = {
   /**
@@ -36,24 +37,15 @@ const TimeResult = z.object({
 
 export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());
-  const {data: serverTimeOffset} = useServerTimeOffsetQuery();
-  useEffect(() => {
-    if (serverTimeOffset !== undefined) {
-      serverTimeOffsetGlobal = serverTimeOffset;
-    }
-  }, [serverTimeOffset]);
+  const {isServerTimeEnabled} = useFeatureTogglesContext();
 
-  // const {data} = useServerTimeQuery(isServerTimeEnabled);
-  // useEffect(() => {
-  //   const timeData = TimeResult.safeParse(data).data;
-  //   if (timeData?.timestampMs) {
-  //     serverDiff = Date.now() - timeData.timestampMs;
-  //     setServerNow(timeData.timestampMs);
-  //   } else {
-  //     serverDiff = 0;
-  //     setServerNow(Date.now());
-  //   }
-  // }, [data]);
+  const {data} = useServerTimeQuery(isServerTimeEnabled);
+  useEffect(() => {
+    const timeData = TimeResult.safeParse(data).data;
+    if (timeData?.timestampMs) {
+      serverTimeOffsetGlobal = timeData.timestampMs - Date.now();
+    }
+  }, [data]);
 
   useInterval(
     () => setServerNow(Date.now() - serverTimeOffsetGlobal),
