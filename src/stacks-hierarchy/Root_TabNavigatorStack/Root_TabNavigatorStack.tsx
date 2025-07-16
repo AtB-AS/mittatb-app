@@ -38,6 +38,7 @@ import {
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
 import {useAuthContext} from '@atb/modules/auth';
+import {useChatUnreadCount} from '@atb/modules/chat';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -55,6 +56,7 @@ export const Root_TabNavigatorStack = () => {
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
+  const unreadCount = useChatUnreadCount();
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
@@ -62,6 +64,21 @@ export const Root_TabNavigatorStack = () => {
     const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
     nextOnboardingScreen?.name && goToScreen(false, nextOnboardingScreen);
   }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
+
+  const getProfileNotification = (): ThemeIconProps['notification'] => {
+    if (customerNumber === undefined) {
+      return {
+        color: theme.color.status.error.primary,
+        backgroundColor: interactiveColor.default,
+      };
+    }
+    if (unreadCount) {
+      return {
+        color: theme.color.status.valid.primary,
+        backgroundColor: interactiveColor.default,
+      };
+    }
+  };
 
   return (
     <Tab.Navigator
@@ -140,12 +157,7 @@ export const Root_TabNavigatorStack = () => {
           ProfileFill,
           lineHeight,
           'profileTab',
-          customerNumber === undefined
-            ? {
-                color: theme.color.status.error.primary,
-                backgroundColor: interactiveColor.default,
-              }
-            : undefined,
+          getProfileNotification(),
         )}
       />
     </Tab.Navigator>
