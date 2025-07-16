@@ -18,7 +18,6 @@ export type RemoteConfig = {
   enable_backend_sms_auth: boolean;
   enable_beacons: boolean;
   enable_bonus_program: boolean;
-  enable_booking: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
   enable_event_stream: boolean;
@@ -100,7 +99,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_backend_sms_auth: false,
   enable_beacons: false,
   enable_bonus_program: false,
-  enable_booking: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
@@ -200,8 +198,6 @@ export function getConfig(): RemoteConfig {
   const enable_bonus_program =
     values['enable_bonus_program']?.asBoolean() ??
     defaultRemoteConfig.enable_bonus_program;
-  const enable_booking =
-    values['enable_booking']?.asBoolean() ?? defaultRemoteConfig.enable_booking;
   const enable_car_sharing_in_map =
     values['enable_car_sharing_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_car_sharing_in_map;
@@ -389,7 +385,6 @@ export function getConfig(): RemoteConfig {
     enable_backend_sms_auth,
     enable_beacons,
     enable_bonus_program,
-    enable_booking,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
     enable_event_stream,

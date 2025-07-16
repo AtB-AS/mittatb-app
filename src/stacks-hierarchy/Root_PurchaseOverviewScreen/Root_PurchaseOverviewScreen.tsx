@@ -28,7 +28,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
@@ -51,7 +50,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const {isBookingEnabled} = useFeatureTogglesContext();
 
   const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
@@ -127,13 +125,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
 
-  const {
-    isBookingRequired,
-    isLoadingBooking,
-    isError: isBookingError,
-  } = useBookingTrips({
+  const {isBookingRequired, isError: isBookingError} = useBookingTrips({
     selection,
-    enabled: isBookingEnabled,
   });
 
   const canProceed = (() => {
@@ -145,11 +138,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   })();
 
   const error: PurchaseOverviewError | undefined = (() => {
-    if (!isBookingEnabled) {
+    if (!isBookingRequired) {
       return offerError;
-    }
-    if (offerError && isLoadingBooking) {
-      return undefined; // It's not possible to know if we should display this error until the booking request has completed
     }
     if (offerError && isBookingRequired && !isBookingError) {
       return undefined; // Do not display the error from the offer if we have trips that require booking
@@ -159,7 +149,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   })();
 
   const onPressBuy = () => {
-    if (isBookingEnabled && isBookingRequired) {
+    if (isBookingRequired) {
       navigation.push(
         'Root_TripSelectionScreen',
         rootPurchaseConfirmationScreenParams,
@@ -179,7 +169,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     );
   };
   const summaryButtonText = () => {
-    if (isBookingEnabled && isBookingRequired) {
+    if (isBookingRequired) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
     }
     if (selection.isOnBehalfOf) {
@@ -351,7 +341,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <Summary
             selection={selection}
-            isLoading={isSearchingOffer || isLoadingBooking}
+            isLoading={isBookingRequired ? false : isSearchingOffer}
             isFree={isFree}
             isError={!!error || !canProceed}
             originalPrice={originalPrice}
