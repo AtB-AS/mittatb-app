@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TranslateFunction, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -10,6 +10,8 @@ import {
 } from '@atb/components/sections';
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ContentHeading} from '@atb/components/heading';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeText} from '@atb/components/text';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -18,12 +20,19 @@ import {
   VehicleRegistration,
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
+
+const MAX_VEHICLE_REGISTRATIONS = 2;
 
 export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
+  const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
+
+  const canAddVehicleRegistrations =
+    (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
 
   return (
     <FullScreenView
@@ -63,16 +72,25 @@ export const Profile_SmartParkAndRideScreen = () => {
             />
           ))}
 
-          <LinkSectionItem
-            text={t(SmartParkAndRideTexts.content.addVehicle)}
-            onPress={() =>
-              navigation.navigate('Root_SmartParkAndRideAddScreen', {
-                transitionOverride: 'slide-from-right',
-              })
-            }
-            rightIcon={{svg: Add}}
-          />
+          {canAddVehicleRegistrations && (
+            <LinkSectionItem
+              text={t(SmartParkAndRideTexts.content.addVehicle)}
+              onPress={() =>
+                navigation.navigate('Root_SmartParkAndRideAddScreen', {
+                  transitionOverride: 'slide-from-right',
+                })
+              }
+              rightIcon={{svg: Add}}
+            />
+          )}
         </Section>
+
+        {!canAddVehicleRegistrations && (
+          <View style={styles.maxVehiclesInfo}>
+            <ThemeIcon svg={statusTypeToIcon('info', true, themeName)} />
+            <ThemeText>{t(SmartParkAndRideTexts.add.max)}</ThemeText>
+          </View>
+        )}
       </View>
     </FullScreenView>
   );
@@ -106,5 +124,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     textAlign: 'center',
+  },
+  maxVehiclesInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
+    marginTop: theme.spacing.xSmall,
   },
 }));

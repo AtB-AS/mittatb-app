@@ -24,6 +24,11 @@ const SmartParkAndRideTexts = {
         'Skriv inn skiltnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
       ),
     },
+    max: _(
+      'Du kan legge til maks to kjøretøy',
+      'You can add a maximum of two vehicles',
+      'Du kan leggje til maks to køyretøy',
+    ),
     inputs: {
       nickname: {
         label: _('Navn', 'Name', 'Namn'),
