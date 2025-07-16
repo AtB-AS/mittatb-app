@@ -87,6 +87,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   labelValueContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     gap: theme.spacing.small,
   },
   onPressContainer: {

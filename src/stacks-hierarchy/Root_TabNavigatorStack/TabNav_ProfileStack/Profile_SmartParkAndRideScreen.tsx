@@ -32,18 +32,21 @@ const Profile_SmartParkAndRideScreenContent = () => {
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
+  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
+    useVehicleRegistrationsQuery();
 
   const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
+  const hasVehicleRegistrations =
+    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
 
   // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
   useEffect(() => {
-    if (shouldShowOnboarding && !vehicleRegistrations?.length) {
+    if (shouldShowOnboarding && !hasVehicleRegistrations) {
       navigation.navigate('Root_SmartParkAndRideOnboardingStack');
     }
-  }, [shouldShowOnboarding, vehicleRegistrations, navigation]);
+  }, [shouldShowOnboarding, hasVehicleRegistrations, navigation]);
 
   return (
     <FullScreenView
