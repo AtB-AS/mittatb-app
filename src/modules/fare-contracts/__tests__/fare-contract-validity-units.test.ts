@@ -1,35 +1,4 @@
 import {fareContractValidityUnits} from '../fare-contract-validity-units';
-import {LoadingParams} from '@atb/screen-components/loading-screen';
-import React from 'react';
-
-const DEFAULT_MOCK_STATE: LoadingParams = {
-  isLoadingAppState: false,
-  authStatus: 'authenticated',
-  firestoreConfigStatus: 'success',
-  remoteConfigIsLoaded: true,
-};
-
-jest.mock('@atb/modules/mobile-token', () => {});
-jest.mock('@atb/modules/ticketing', () => {});
-jest.mock('@atb/modules/configuration', () => {});
-jest.mock('@atb/api', () => {});
-jest.mock('@atb/modules/time', () => {});
-jest.mock('@react-native-firebase/remote-config', () => {});
-jest.mock('@entur-private/abt-mobile-client-sdk', () => {});
-jest.mock('@bugsnag/react-native', () => {});
-jest.mock('@react-native-firebase/auth', () => {});
-jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
-jest.mock('react-native-device-info', () => {});
-jest.mock('react-native-inappbrowser-reborn', () => {});
-jest.mock('@atb/modules/auth', () => ({
-  useAuthContext: () => ({
-    authStatus: DEFAULT_MOCK_STATE,
-    abtCustomerId: '1',
-    retryAuth: () => {},
-  }),
-}));
-jest.spyOn(React, 'useCallback').mockImplementation((f) => f);
-jest.spyOn(React, 'useMemo').mockImplementation((f) => f());
 
 describe('fareContractValidityUnits', () => {
   // Constants for readability and maintainability
