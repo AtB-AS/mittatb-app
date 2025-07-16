@@ -16,8 +16,6 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
-  SmartParkAndRideOnboardingProvider,
-  useShouldShowSmartParkAndRideOnboarding,
   useVehicleRegistrationsQuery,
   VehicleRegistration,
 } from '@atb/modules/smart-park-and-ride';
@@ -27,7 +25,7 @@ import {useEffect} from 'react';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
-const Profile_SmartParkAndRideScreenContent = () => {
+export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const styles = useStyles();
@@ -35,7 +33,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
   const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
     useVehicleRegistrationsQuery();
 
-  const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
+  const shouldShowOnboarding = false; // useShouldShowSmartParkAndRideOnboarding(); // todo - use actual onboarding instead
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
   const hasVehicleRegistrations =
@@ -44,7 +42,9 @@ const Profile_SmartParkAndRideScreenContent = () => {
   // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
   useEffect(() => {
     if (shouldShowOnboarding && !hasVehicleRegistrations) {
-      navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+      navigation.navigate('Root_EnrollmentOnboardingStack', {
+        configId: 'spar-pilot',
+      });
     }
   }, [shouldShowOnboarding, hasVehicleRegistrations, navigation]);
 
@@ -92,6 +92,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
               onPress={() =>
                 navigation.navigate('Root_SmartParkAndRideAddScreen', {
                   transitionOverride: 'slide-from-right',
+                  showHeader: true,
                 })
               }
               rightIcon={{svg: Add}}
@@ -146,13 +147,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.xSmall,
   },
 }));
-
-const Profile_SmartParkAndRideScreen = () => {
-  return (
-    <SmartParkAndRideOnboardingProvider>
-      <Profile_SmartParkAndRideScreenContent />
-    </SmartParkAndRideOnboardingProvider>
-  );
-};
-
-export {Profile_SmartParkAndRideScreen};

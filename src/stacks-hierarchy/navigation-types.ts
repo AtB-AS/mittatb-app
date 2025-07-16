@@ -154,7 +154,6 @@ export type RootStackParamList = StackParams<{
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
   Root_SmartParkAndRideAddScreen: Root_SmartParkAndRideAddScreenParams;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;
-  Root_SmartParkAndRideOnboardingStack: undefined;
   Root_EnrollmentOnboardingStack: Root_EnrollemntStackParams;
 }>;
 

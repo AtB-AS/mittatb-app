@@ -5,5 +5,5 @@ export type Root_SmartParkAndRideEditScreenParams = {
 };
 
 export type Root_SmartParkAndRideAddScreenParams = {
-  hideHeader?: boolean;
+  showHeader?: boolean;
 };
