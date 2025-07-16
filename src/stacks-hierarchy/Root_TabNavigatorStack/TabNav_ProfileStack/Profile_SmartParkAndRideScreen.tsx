@@ -16,23 +16,37 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
+  SmartParkAndRideOnboardingProvider,
+  useShouldShowSmartParkAndRideOnboarding,
   useVehicleRegistrationsQuery,
   VehicleRegistration,
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
+import {useEffect} from 'react';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
-export const Profile_SmartParkAndRideScreen = () => {
+const Profile_SmartParkAndRideScreenContent = () => {
   const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
+  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
+    useVehicleRegistrationsQuery();
 
+  const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
+  const hasVehicleRegistrations =
+    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
+
+  // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
+  useEffect(() => {
+    if (shouldShowOnboarding && !hasVehicleRegistrations) {
+      navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+    }
+  }, [shouldShowOnboarding, hasVehicleRegistrations, navigation]);
 
   return (
     <FullScreenView
@@ -132,3 +146,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.xSmall,
   },
 }));
+
+const Profile_SmartParkAndRideScreen = () => {
+  return (
+    <SmartParkAndRideOnboardingProvider>
+      <Profile_SmartParkAndRideScreenContent />
+    </SmartParkAndRideOnboardingProvider>
+  );
+};
+
+export {Profile_SmartParkAndRideScreen};
