@@ -10,14 +10,16 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useEnrollmentOnboarding} from '@atb/modules/enrollment-onboarding';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {bonusPilotEnrollmentId} from './config';
 
 export type DownloadScreenProps =
   EnrollmentOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const {navigateToNextScreen} = useEnrollmentOnboarding(
+  const navigateToNextScreen = useNavigateToNextEnrollmentOnboardingScreen(
+    bonusPilotEnrollmentId,
     'BonusOnboarding_DownloadScreen',
   );
 
