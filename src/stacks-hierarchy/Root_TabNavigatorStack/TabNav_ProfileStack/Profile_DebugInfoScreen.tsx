@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -111,6 +111,7 @@ export const Profile_DebugInfoScreen = () => {
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
+  const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
 
   const {
     fcmToken,
@@ -179,6 +180,9 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
         <Section style={styles.section}>
+          <GenericSectionItem>
+            <ThemeText>{`Device is ${serverTimeOffset}ms ahead of server time`}</ThemeText>
+          </GenericSectionItem>
           <LinkSectionItem
             text="Reset shareTravelHabits session counter"
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
