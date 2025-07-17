@@ -99,6 +99,7 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
         <ThemeText
           color={theme.color.foreground.light.primary}
           typography="body__tertiary"
+          style={commonStyles.text}
           key={content}
         >
           {content}
@@ -146,6 +147,7 @@ const SecondaryTag: React.FC<
           color={theme.color.foreground.dynamic.primary}
           typography="body__tertiary"
           key={content}
+          style={commonStyles.text}
         >
           {content}
         </ThemeText>
@@ -194,6 +196,7 @@ const SemanticTag: React.FC<
           color={theme.color.foreground.dynamic.primary}
           typography="body__tertiary"
           key={content}
+          style={commonStyles.text}
         >
           {content}
         </ThemeText>
@@ -222,7 +225,11 @@ const useSemanticTagStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const useCommonTagStyles = StyleSheet.createThemeHook((theme) => ({
+  text: {
+    flexShrink: 1,
+  },
   commonContainer: {
+    flexShrink: 1,
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     alignItems: 'center',
