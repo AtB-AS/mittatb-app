@@ -151,7 +151,7 @@ const tripSummary = (
       ),
     ) + screenReaderPause;
   const passedTripText = isInPast
-    ? t(TripSearchTexts.results.resultItem.passedTrip)
+    ? t(TripSearchTexts.results.resultItem.passedTrip) + ', '
     : undefined;
 
   const modeAndNumberText = firstLeg
