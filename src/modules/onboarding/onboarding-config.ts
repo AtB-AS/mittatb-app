@@ -103,7 +103,8 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       name: 'Root_EnrollmentOnboardingStack',
       params: {configId: 'spar-pilot'},
     },
-    shouldShowPredicate: ({isSmartParkAndRideScreen}) =>
-      isSmartParkAndRideScreen,
+    customAllowEntryFromRouteName: 'Profile_SmartParkAndRideScreen',
+    shouldShowPredicate: ({currentRouteName}) =>
+      currentRouteName === 'Profile_SmartParkAndRideScreen',
   },
 ];

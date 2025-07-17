@@ -322,9 +322,6 @@ const useShouldShowArgs = (
 
   const {mobileTokenStatus} = useMobileTokenContext();
 
-  const isSmartParkAndRideScreen =
-    currentRouteName === 'Profile_SmartParkAndRideScreen';
-
   return useMemo(
     () => ({
       hasFareContractWithActivatedNotification,
@@ -338,7 +335,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
-      isSmartParkAndRideScreen,
+      currentRouteName,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -352,7 +349,7 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
-      isSmartParkAndRideScreen,
+      currentRouteName,
     ],
   );
 };

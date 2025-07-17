@@ -16,7 +16,7 @@ export const useOnboardingNavigation = () => {
   const {completeOnboardingSection} = useOnboardingContext();
 
   const goToScreen = useCallback(
-    (replace: any, screen: {name?: any; params?: any}) => {
+    (replace: any, screen?: {name?: any; params?: any}) => {
       InteractionManager.runAfterInteractions(() => {
         if (!screen?.name) return;
         if (replace) {

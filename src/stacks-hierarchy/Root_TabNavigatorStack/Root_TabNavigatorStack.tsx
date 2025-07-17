@@ -58,24 +58,15 @@ export const Root_TabNavigatorStack = () => {
   const {name: currentRouteName} = useRoute();
 
   useEffect(() => {
-    const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
-
-    // normally only show onboarding screens from Root_TabNavigatorStack path
-    // but with some exception(s)
-    const sparIsFocusedException =
-      currentRouteName === 'Profile_SmartParkAndRideScreen' &&
-      nextOnboardingScreen?.name === 'Root_EnrollmentOnboardingStack' &&
-      nextOnboardingScreen?.params?.configId === 'spar-pilot';
-
-    const isFocusedExceptions = [sparIsFocusedException];
     if (
-      nextOnboardingScreen?.name &&
-      (navigation.isFocused() || isFocusedExceptions.includes(true))
+      navigation.isFocused() ||
+      currentRouteName === nextOnboardingSection?.customAllowEntryFromRouteName
     ) {
-      goToScreen(false, nextOnboardingScreen);
+      goToScreen(false, nextOnboardingSection?.initialScreen);
     }
   }, [
     nextOnboardingSection?.initialScreen,
+    nextOnboardingSection?.customAllowEntryFromRouteName,
     goToScreen,
     navigation,
     currentRouteName,
