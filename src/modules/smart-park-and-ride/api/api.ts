@@ -49,6 +49,7 @@ export const searchVehicleInformation = (
   return client
     .get(`/spar/v1/search-vehicle/${licensePlate}`, {
       authWithIdToken: true,
+      skipErrorLogging: (error) => error.response?.status === 400,
     })
     .then((response) => SvvVehicleInfoSchema.parse(response.data));
 };
