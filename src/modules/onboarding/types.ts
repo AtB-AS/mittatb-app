@@ -48,9 +48,9 @@ export type OnboardingSectionConfig = {
   };
   /**
    * Once a user has been created, by default, onboarding screens are only navigated to from Root_TabNavigatorStack (=> when in the "main menu part of the app").
-   * Specifying customAllowEntryFromRouteName also allows this navigation when the user goes to a different screen - the one specified.
+   * Specifying customEntryPointRouteName allows entry from the specified screen, and only that one.
    */
-  customAllowEntryFromRouteName?: string;
+  customEntryPointRouteName?: string;
   shouldShowBeforeUserCreated?: boolean;
   shouldShowPredicate: (args: ShouldShowArgsType) => boolean;
 };

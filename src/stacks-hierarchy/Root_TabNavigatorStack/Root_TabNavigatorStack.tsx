@@ -38,6 +38,7 @@ import {
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
 import {useAuthContext} from '@atb/modules/auth';
+import {isDefined} from '@atb/utils/presence';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -59,14 +60,15 @@ export const Root_TabNavigatorStack = () => {
 
   useEffect(() => {
     if (
-      navigation.isFocused() ||
-      currentRouteName === nextOnboardingSection?.customAllowEntryFromRouteName
+      isDefined(nextOnboardingSection?.customEntryPointRouteName)
+        ? currentRouteName === nextOnboardingSection?.customEntryPointRouteName
+        : navigation.isFocused()
     ) {
       goToScreen(false, nextOnboardingSection?.initialScreen);
     }
   }, [
     nextOnboardingSection?.initialScreen,
-    nextOnboardingSection?.customAllowEntryFromRouteName,
+    nextOnboardingSection?.customEntryPointRouteName,
     goToScreen,
     navigation,
     currentRouteName,
