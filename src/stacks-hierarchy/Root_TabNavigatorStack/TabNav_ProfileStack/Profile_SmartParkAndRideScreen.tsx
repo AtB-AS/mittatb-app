@@ -108,15 +108,22 @@ const Profile_SmartParkAndRideScreenContent = () => {
           </View>
         )}
 
-        <HowItWorksSection />
+        <HowItWorksSection
+          onPress={() => {
+            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+          }}
+        />
       </View>
     </FullScreenView>
   );
 };
 
-const HowItWorksSection = () => {
+type HowItWorksSectionProps = {
+  onPress: () => void;
+};
+
+const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<RootNavigationProps>();
   const styles = useStyles();
 
   return (
@@ -144,9 +151,7 @@ const HowItWorksSection = () => {
         </GenericSectionItem>
         <LinkSectionItem
           text={t(SmartParkAndRideTexts.howItWorks.link)}
-          onPress={() => {
-            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
-          }}
+          onPress={onPress}
         />
       </Section>
     </>
