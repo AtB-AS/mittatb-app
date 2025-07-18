@@ -66,7 +66,7 @@ export const WithValidityLine = (props: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'column',
-    marginHorizontal: -theme.spacing.medium,
+    marginHorizontal: -theme.spacing.medium + theme.border.width.slim,
     borderTopRightRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     overflow: 'hidden',
