@@ -1,14 +1,14 @@
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {
-  findReferenceDataById,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
-import {useFareContracts} from '@atb/modules/ticketing';
+  useFareContracts,
+  useGetFareProductsQuery,
+} from '@atb/modules/ticketing';
 import {useNotificationsContext} from './use-push-notifications';
 import {useTimeContext} from '@atb/modules/time';
 
 export function useHasFareContractWithActivatedNotification(): boolean {
   const {config: notificationsConfig} = useNotificationsContext();
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {serverNow} = useTimeContext();
   const {fareContracts: validFareContracts} = useFareContracts(
     {availability: 'available', status: 'valid'},
