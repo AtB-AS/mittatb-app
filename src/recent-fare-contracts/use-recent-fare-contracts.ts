@@ -21,14 +21,14 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
 
 type State = {
-  error: boolean;
-  loading: boolean;
+  isError: boolean;
+  isLoading: boolean;
   recentFareContracts: RecentOrderDetails[];
 };
 
 const initialState: State = {
-  error: false,
-  loading: true,
+  isError: false,
+  isLoading: true,
   recentFareContracts: [],
 };
 
@@ -44,20 +44,20 @@ const reducer: Reducer = (prevState, action): State => {
     case 'FETCH':
       return {
         ...prevState,
-        loading: true,
-        error: false,
+        isLoading: true,
+        isError: false,
       };
     case 'ERROR':
       return {
         ...prevState,
-        loading: false,
-        error: true,
+        isLoading: false,
+        isError: true,
       };
     case 'SUCCESS':
       return {
         ...prevState,
-        loading: false,
-        error: false,
+        isLoading: false,
+        isError: false,
         recentFareContracts: action.data,
       };
   }
@@ -240,8 +240,8 @@ export const useRecentFareContracts = () => {
   );
 
   return {
-    loading: state.loading,
-    error: state.error,
+    isLoading: state.isLoading,
+    isError: state.isError,
     recentFareContracts,
     refresh: fetchRecentFareContracts,
   };
