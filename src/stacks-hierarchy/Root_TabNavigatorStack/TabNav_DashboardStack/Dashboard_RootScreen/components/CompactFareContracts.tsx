@@ -12,7 +12,10 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {useTimeContext} from '@atb/modules/time';
 import {ContentHeading} from '@atb/components/heading';
-import {useFareContracts} from '@atb/modules/ticketing';
+import {
+  useFareContracts,
+  useGetFareProductsQuery,
+} from '@atb/modules/ticketing';
 
 type Props = {
   onPressDetails: (fareContractId: string) => void;
@@ -35,8 +38,8 @@ export const CompactFareContracts: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const {fareZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfigurationContext();
+  const {fareZones, userProfiles} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   return (
     <View style={[style, itemStyle.container]}>
