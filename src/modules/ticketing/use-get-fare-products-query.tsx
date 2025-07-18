@@ -2,7 +2,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getFareProducts} from '@atb/modules/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/modules/auth';
-import {ONE_HOUR_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS, ONE_WEEK_MS} from '@atb/utils/durations';
 
 export const useGetFareProductsQuery = () => {
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
@@ -12,7 +12,7 @@ export const useGetFareProductsQuery = () => {
     initialDataUpdatedAt: 0,
     queryKey: ['getProducts', userId],
     queryFn: getFareProducts,
-    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    cacheTime: ONE_WEEK_MS,
     staleTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
     meta: {
