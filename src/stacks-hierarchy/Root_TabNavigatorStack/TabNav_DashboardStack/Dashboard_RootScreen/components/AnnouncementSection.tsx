@@ -1,6 +1,6 @@
 import {
   ActionType,
-  AnnouncementType,
+  Announcement,
   useAnnouncementsContext,
 } from '@atb/modules/announcements';
 import {ThemeText} from '@atb/components/text';
@@ -29,11 +29,11 @@ import {RefObject, useRef} from 'react';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
-  announcement: AnnouncementType;
+  announcement: Announcement;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Announcement = ({announcement, style}: Props) => {
+export const AnnouncementSection = ({announcement, style}: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {language} = useTranslation();
@@ -129,14 +129,14 @@ export const Announcement = ({announcement, style}: Props) => {
               id: announcement.id,
             });
             if (
-              announcement.actionButton.actionType === ActionType.bottom_sheet
+              announcement.actionButton?.actionType === ActionType.bottom_sheet
             ) {
               openBottomSheet(
                 () => <AnnouncementSheet announcement={announcement} />,
                 onCloseFocusRef,
               );
             } else {
-              const actionButtonURL = announcement.actionButton.url;
+              const actionButtonURL = announcement.actionButton?.url;
               try {
                 actionButtonURL && (await Linking.openURL(actionButtonURL));
               } catch (err: any) {
