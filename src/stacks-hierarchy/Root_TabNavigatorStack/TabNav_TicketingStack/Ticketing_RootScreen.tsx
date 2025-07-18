@@ -14,7 +14,6 @@ export const Ticketing_RootScreen = () => {
     <View style={styles.container}>
       <FullScreenHeader
         title={t(TicketingTexts.header.title)}
-        rightButton={{type: 'chat'}}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <Ticketing_TicketTabNavStack />
