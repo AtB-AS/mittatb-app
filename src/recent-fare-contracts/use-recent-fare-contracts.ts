@@ -10,6 +10,7 @@ import {
 import {
   listRecentFareContracts,
   RecentOrderDetails,
+  useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
@@ -197,12 +198,9 @@ const mapToLastThreeUniqueRecentFareContracts = (
 export const useRecentFareContracts = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {fareContracts} = useTicketingContext();
-  const {
-    preassignedFareProducts,
-    fareProductTypeConfigs,
-    fareZones,
-    userProfiles,
-  } = useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs, fareZones, userProfiles} =
+    useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
