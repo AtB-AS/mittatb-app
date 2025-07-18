@@ -3,7 +3,7 @@ import OnboardingPage from '../../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../../utils/navigation.helper.ts';
 import VisualHelper from '../../utils/visual.helper.js';
 import ElementHelper from '../../utils/element.helper.js';
-import TicketPage from '../../pageobjects/ticket.page.js';
+import TicketPage from '../../pageobjects/ticket.buy.page.js';
 import PurchaseOverviewPage from '../../pageobjects/purchase.overview.page.js';
 import PurchaseSummaryPage from '../../pageobjects/purchase.summary.page.js';
 import PurchasePaymentPage from '../../pageobjects/purchase.payment.page.js';
