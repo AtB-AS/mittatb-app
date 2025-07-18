@@ -12,8 +12,11 @@ export const useGetFareProductsQuery = () => {
     initialDataUpdatedAt: 0,
     queryKey: ['getProducts', userId],
     queryFn: getFareProducts,
-    cacheTime: ONE_HOUR_MS,
+    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
     staleTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
+    meta: {
+      persistInAsyncStorage: true,
+    },
   });
 };
