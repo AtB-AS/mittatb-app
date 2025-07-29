@@ -39,7 +39,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
 import {useBookingTrips} from '@atb/modules/booking';
-import {isValidSelection} from '@atb/modules/booking/utils';
+import {isValidSelection} from '@atb/modules/booking';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
