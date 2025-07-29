@@ -49,7 +49,7 @@ export const FareContractHeaderSectionItem = ({
     onBehalfOfAccounts?.find((a) => a.phoneNumber === phoneNumber)?.name;
 
   return (
-    <View style={[topContainer, {paddingVertical: 0}]}>
+    <View style={[topContainer, styles.sectionItemOverrides]}>
       <WithValidityLine fc={fc}>
         <ProductName fc={fc} />
         <ValidityTime fc={fc} />
@@ -78,6 +78,10 @@ export const FareContractHeaderSectionItem = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  sectionItemOverrides: {
+    borderWidth: 0,
+    paddingVertical: 0,
+  },
   fareContractDetails: {
     flex: 1,
     paddingBottom: theme.spacing.large,
