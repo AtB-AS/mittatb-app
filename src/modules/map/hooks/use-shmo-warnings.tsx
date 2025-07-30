@@ -40,7 +40,7 @@ export const useShmoWarnings = (
       return t(ShmoWarnings.scooterDisabled);
     }
 
-    if (!isOpen && vehicle) {
+    if (!isOpen && openingTime && closingTime) {
       return t(
         ShmoWarnings.scooterClosed(
           openingTime?.toLocaleTimeString([], timeFormatOptions),
