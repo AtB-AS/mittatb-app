@@ -43,6 +43,7 @@ import {
   isScooterV2,
   useInitShmoBookingMutationStatus,
   MapFilter,
+  useVehicleQuery,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -122,9 +123,6 @@ export const MapV2 = (props: MapProps) => {
     isMapV2Enabled,
   } = useFeatureTogglesContext();
 
-  const showGeofencingZones =
-    isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
-
   useShmoActiveBottomSheet(
     mapCameraRef,
     mapViewRef,
@@ -138,6 +136,10 @@ export const MapV2 = (props: MapProps) => {
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
 
+  const showGeofencingZones =
+    isGeofencingZonesEnabled &&
+    (selectedFeatureIsAVehicle || activeShmoBooking?.bookingId !== undefined);
+
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
     isMapV2Enabled &&
@@ -146,6 +148,12 @@ export const MapV2 = (props: MapProps) => {
     (!selectedFeature || selectedFeatureIsAVehicle) &&
     !initShmoOneStopBookingIsMutating &&
     !mapFilterIsOpen;
+
+  const {
+    data: vehicle,
+    isLoading: vehicleIsLoading,
+    isError: vehicleError,
+  } = useVehicleQuery(selectedFeature?.properties?.id);
 
   useAutoSelectMapItem(
     mapCameraRef,
@@ -323,9 +331,16 @@ export const MapV2 = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getMapPadding(tabBarHeight)}
           />
-          {showGeofencingZones && (
+          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              selectedVehicleId={selectedFeature?.properties?.id}
+              systemId={
+                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
+              }
+              vehicleTypeId={
+                vehicle?.vehicleType.id ??
+                activeShmoBooking?.asset.vehicleTypeId ??
+                null
+              }
             />
           )}
 

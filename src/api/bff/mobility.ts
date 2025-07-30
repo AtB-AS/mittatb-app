@@ -67,6 +67,7 @@ export const getVehicle = (
   id: string,
   opts?: VehicleRequestOpts,
 ): Promise<VehicleExtendedFragment | null> => {
+  if (!id || id === '') return Promise.resolve(null);
   const url = '/bff/v2/mobility/vehicle';
   const query = qs.stringify({ids: id});
   return client

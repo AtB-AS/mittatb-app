@@ -40,7 +40,7 @@ export const useShmoWarnings = (
       return t(ShmoWarnings.scooterDisabled);
     }
 
-    if (!isOpen) {
+    if (!isOpen && openingTime && closingTime) {
       return t(
         ShmoWarnings.scooterClosed(
           openingTime?.toLocaleTimeString([], timeFormatOptions),
@@ -50,7 +50,7 @@ export const useShmoWarnings = (
     }
 
     return null;
-  }, [vehicle?.isDisabled, isOpen, t, openingTime, closingTime]);
+  }, [vehicle, isOpen, t, openingTime, closingTime]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
