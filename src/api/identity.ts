@@ -127,6 +127,15 @@ export const completeAgeVerification = async (
   );
 };
 
+export const deleteAgeVerification = async (
+  opts?: AxiosRequestConfig,
+): Promise<void> => {
+  return client.delete('/identity/v1/vipps/age-verification', {
+    authWithIdToken: true,
+    ...opts,
+  });
+};
+
 async function generateState() {
   const state = uuid();
   await storage.set('vipps_state', state);
