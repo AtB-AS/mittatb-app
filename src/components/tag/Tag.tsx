@@ -93,7 +93,6 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
         customStyle,
       ]}
       accessibilityLabel={a11yLabel || labels.join(', ')}
-      accessibilityRole="button"
     >
       {labels.map((content) => (
         <ThemeText
@@ -137,7 +136,6 @@ const SecondaryTag: React.FC<
         customStyle,
       ]}
       accessibilityLabel={a11yLabel || labels.join(', ')}
-      accessibilityRole="button"
     >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
@@ -186,7 +184,6 @@ const SemanticTag: React.FC<
         customStyle,
       ]}
       accessibilityLabel={a11yLabel || `${tagType}: ${labels.join(', ')}`}
-      accessibilityRole="button"
     >
       {icon && (
         <ThemeIcon svg={icon} size={size === 'regular' ? 'small' : 'xSmall'} />
