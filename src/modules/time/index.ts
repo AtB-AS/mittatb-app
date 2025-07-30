@@ -1,5 +1,1 @@
-export {
-  TimeContextProvider,
-  useTimeContext,
-  getServerNowGlobal,
-} from './TimeContext';
+export {TimeContextProvider, useTimeContext, getServerNow} from './TimeContext';
