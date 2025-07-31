@@ -20,6 +20,8 @@ import {
   Beacons as BeaconsLight,
   PaymentCard as PaymentCardLight,
   Contact as ContactLight,
+  ProfileCardLoggedIn as ProfileCardLoggedInLight,
+  ProfileCardLoggedOut as ProfileCardLoggedOutLight,
 } from '@atb/assets/svg/color/images/light';
 import {
   Map as MapDark,
@@ -36,6 +38,8 @@ import {
   Beacons as BeaconsDark,
   PaymentCard as PaymentCardDark,
   Contact as ContactDark,
+  ProfileCardLoggedIn as ProfileCardLoggedInDark,
+  ProfileCardLoggedOut as ProfileCardLoggedOutDark,
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
@@ -159,4 +163,12 @@ export const ThemedBonusTrashCan = getThemedAsset(
 export const ThemedContactIllustration = getThemedAsset(
   ContactIllustrationLight,
   ContactIllustrationDark,
+);
+export const ThemedProfileCardLoggedIn = getThemedAsset(
+  ProfileCardLoggedInDark,
+  ProfileCardLoggedInLight,
+);
+export const ThemedProfileCardLoggedOut = getThemedAsset(
+  ProfileCardLoggedOutDark,
+  ProfileCardLoggedOutLight,
 );
