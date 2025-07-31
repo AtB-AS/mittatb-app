@@ -198,7 +198,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
     container: {
       backgroundColor: theme.color.background.accent[0].background,
       flex: 1,
-      marginBottom: safeAreaBottomInset,
+      paddingBottom: safeAreaBottomInset,
     },
     scrollView: {
       padding: theme.spacing.medium,
