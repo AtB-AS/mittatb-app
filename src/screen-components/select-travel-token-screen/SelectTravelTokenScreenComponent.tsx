@@ -21,6 +21,7 @@ import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {ContentHeading} from '@atb/components/heading';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {onAfterSave: () => void};
 
@@ -191,17 +192,21 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.color.background.accent[0].background,
-    flex: 1,
-  },
-  scrollView: {
-    padding: theme.spacing.medium,
-    gap: theme.spacing.medium,
-  },
-  radioArea: {
-    flexDirection: 'row',
-    gap: theme.spacing.medium,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
+  const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
+  return {
+    container: {
+      backgroundColor: theme.color.background.accent[0].background,
+      flex: 1,
+      marginBottom: safeAreaBottomInset,
+    },
+    scrollView: {
+      padding: theme.spacing.medium,
+      gap: theme.spacing.medium,
+    },
+    radioArea: {
+      flexDirection: 'row',
+      gap: theme.spacing.medium,
+    },
+  };
+});
