@@ -36,6 +36,7 @@ export {useShmoRequirements} from './use-shmo-requirements';
 export {useStations} from './use-stations';
 export {useVehicle} from './use-vehicle';
 export {useVehicles} from './use-vehicles';
+export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
