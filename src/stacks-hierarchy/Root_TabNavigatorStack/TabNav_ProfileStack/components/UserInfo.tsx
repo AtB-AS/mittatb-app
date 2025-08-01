@@ -16,7 +16,10 @@ import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {forwardRef} from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {ThemedCrashSmall, ThemedHoldingHands} from '@atb/theme/ThemedAssets';
+import {
+  ThemedProfileCardLoggedIn,
+  ThemedProfileCardLoggedOut,
+} from '@atb/theme/ThemedAssets';
 
 type UserInfoProps = {
   navigateToEditProfileScreen: () => void;
@@ -93,7 +96,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
         ].join(', ')}
       >
         <View style={[styles.sectionItemContainer, topContainer]}>
-          <ThemedHoldingHands width={66} height={52} />
+          <ThemedProfileCardLoggedIn width={66} height={52} />
           <View style={styles.infoContainer}>
             <ThemeText typography="body__primary--bold">
               {t(ProfileTexts.sections.account.infoItems.heading)}
@@ -148,7 +151,7 @@ const LoggedOutInfoSectionItem = ({...props}) => {
           </ThemeText>
         )}
       </View>
-      <ThemedCrashSmall width={47} height={64} />
+      <ThemedProfileCardLoggedOut width={47} height={64} />
     </View>
   );
 };
