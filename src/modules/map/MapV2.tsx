@@ -138,7 +138,9 @@ export const MapV2 = (props: MapProps) => {
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
-    (selectedFeatureIsAVehicle || activeShmoBooking?.bookingId !== undefined);
+    (selectedFeatureIsAVehicle ||
+      (activeShmoBooking?.bookingId !== undefined &&
+        activeShmoBooking.state === ShmoBookingState.IN_USE));
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
