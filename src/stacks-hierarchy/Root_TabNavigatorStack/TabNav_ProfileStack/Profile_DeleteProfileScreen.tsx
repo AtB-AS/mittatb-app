@@ -33,9 +33,9 @@ export const Profile_DeleteProfileScreen = () => {
     useDeleteAgeVerificationMutation();
 
   const handleDeleteProfile = async () => {
+    await deleteAgeVerification();
     const isProfileDeleted = await deleteProfile();
     if (isProfileDeleted) {
-      await deleteAgeVerification();
       await deleteCollectedData();
       await signOut();
     } else {
