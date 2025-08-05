@@ -11,6 +11,7 @@ type BrandingImageProps = {
   fallback?: JSX.Element;
   style?: StyleProp<ViewStyle>;
   logoSize?: number;
+  alwaysVisibleEnabled?: boolean;
 };
 
 export const BrandingImage = ({
@@ -18,6 +19,7 @@ export const BrandingImage = ({
   fallback,
   style,
   logoSize = DEFAULT_LOGO_SIZE,
+  alwaysVisibleEnabled = false,
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
   const {enable_vehicle_operator_logo} = useRemoteConfigContext();
@@ -25,7 +27,7 @@ export const BrandingImage = ({
 
   return (
     <View style={style}>
-      {logoUrl && enable_vehicle_operator_logo ? (
+      {logoUrl && (enable_vehicle_operator_logo || alwaysVisibleEnabled) ? (
         isSvg(logoUrl) ? (
           <SvgCssUri
             style={styles.logo}

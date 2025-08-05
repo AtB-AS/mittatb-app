@@ -110,6 +110,7 @@ export const Profile_BonusScreen = () => {
                         mobilityOperators,
                       )}
                       logoSize={theme.typography['heading--big'].fontSize}
+                      alwaysVisibleEnabled={true}
                       style={styles.logo}
                     />
                   }

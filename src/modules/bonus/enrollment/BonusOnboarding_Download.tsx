@@ -74,6 +74,7 @@ export const DownloadButtons = () => {
               logoUrl={findOperatorBrandImageUrl(operatorId, mobilityOperators)}
               logoSize={50}
               style={styles.logo}
+              alwaysVisibleEnabled={true}
             />
             <ThemeText
               style={styles.operatorText}
