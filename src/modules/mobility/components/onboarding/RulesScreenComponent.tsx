@@ -47,8 +47,11 @@ export const RulesScreenComponent = ({
   return (
     <OnboardingScreenComponent
       title={t(MobilityTexts.shmoRequirements.terms.title)}
-      buttonText={t(MobilityTexts.shmoRequirements.terms.buttonOne)}
-      buttonOnPress={() => onGiveConsent(true)}
+      footerButton={{
+        onPress: () => onGiveConsent(true),
+        text: t(MobilityTexts.shmoRequirements.terms.buttonOne),
+        expanded: true,
+      }}
       secondaryFooterButton={{
         text: t(MobilityTexts.shmoRequirements.terms.buttonTwo),
         onPress: onOpenTerms,

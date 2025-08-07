@@ -11,16 +11,22 @@ import {
 import {formatNumberToString} from '@atb/utils/numbers';
 
 export const MobilityTexts = {
-  formFactor: (formFactor: FormFactor) => {
+  formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
     switch (formFactor) {
       case FormFactor.Scooter:
-        return _('El-sparkesykkel', 'E-scooter', 'El-sparkesykkel');
+        return isPlural
+          ? _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar')
+          : _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       case FormFactor.Bicycle:
-        return _('Sykkel', 'Bicycle', 'Sykkel');
+        return isPlural
+          ? _('Bysykler', 'City Bikes', 'Bysyklar')
+          : _('Bysykkel', 'City Bike', 'Bysykkel');
       case FormFactor.Car:
-        return _('Bildeling', 'Car sharing', 'Bildeling');
+        return isPlural
+          ? _('Delebiler', 'Shared Cars', 'Delebilar')
+          : _('Delebil', 'Car sharing', 'Delebil');
       default:
-        return _('Annet', 'Other', 'Annet');
+        return _('Annet', 'Other', 'Anna');
     }
   },
   photo: {
@@ -42,6 +48,12 @@ export const MobilityTexts = {
       'You need to log in and go through some steps to start the trip',
       'Du må logge inn og gå igjennom nokre steg for å starte turen',
     ),
+    underAgeWarning: (legalAge: number) =>
+      _(
+        `Du må være ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+        `You must be ${legalAge} years or older to use this e-scooter`,
+        `Du må vere ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+      ),
     shmoBlockers: _('Fullfør steg', 'Complete steps', 'Fullfør steg'),
     shmoBlockersInfoMessage: (numberOfBlockers: number) =>
       _(
@@ -61,6 +73,23 @@ export const MobilityTexts = {
         'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
       ),
       button: _('Del posisjon', 'Share location', 'Del posisjon'),
+    },
+    ageVerification: {
+      title: _(
+        'Vi må sjekke alderen din',
+        'We need to verify your age',
+        'Vi må sjekke alderen din',
+      ),
+      description: _(
+        'El-sparkesykler har en aldersgrense. Bekreft alderen din med Vipps.',
+        'E-scooters have an age limit. Verify your age with Vipps.',
+        'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
+      ),
+      button: _(
+        'Fortsett med Vipps',
+        'Continue with Vipps',
+        'Fortsett med Vipps',
+      ),
     },
     payment: {
       title: _(
@@ -141,6 +170,13 @@ export const MobilityTexts = {
   },
   filter: {
     selectAll: _('Alle', 'All', 'Alle'),
+    sectionTitle: {
+      sharedMobility: _(
+        'Delingsmobilitet',
+        'Shared Mobility',
+        'Delingsmobilitet',
+      ),
+    },
   },
   reportParkingViolation: _(
     'Rapporter som feilparkert',
@@ -376,7 +412,7 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
     ),
   },
   noEntry: {
-    title: _('Kjøring forbudt-sone', 'No Riding Zone', 'Kjøring forboden-sone'),
+    title: _('Kjøring forbudt', 'No Riding', 'Køyring forboden'),
     description: _(
       'Du kan ikke kjøre inn i dette området',
       'You cannot ride in this area',
@@ -398,5 +434,45 @@ export const GeofencingZoneExtraExplanations = {
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
     'Se etter parkeringssoner i kartet.',
+  ),
+};
+
+export const ShmoWarnings = {
+  scooterDisabled: _(
+    'Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå ',
+    'This e-scooter is not available right now',
+    'Denne el-sparkesykkelen er ikkje tilgjengeleg akkurat no',
+  ),
+  scooterClosed: (start: string | undefined, end: string | undefined) =>
+    start && end
+      ? _(
+          `Elsparkesykkelen er kun tilgjengelig mellom ${start} og ${end}`,
+          `The E-scooter is only available between ${start} and ${end}`,
+          `Elsparkesykkelen er berre tilgjengeleg mellom ${start} og ${end}`,
+        )
+      : _(
+          'Elsparkesykkelen er utenfor åpningstiden',
+          'The E-scooter is outside opening hours',
+          'Elsparkesykkelen er utanfor opningstiden',
+        ),
+  scooterNotNear: _(
+    'Du må være i nærheten av elsparkesykkelen for å starte en tur',
+    'You need to be near the e-scooter to start a ride.',
+    'Du må vere i nærleiken av elsparkesykkelen for å starte ein tur',
+  ),
+  positionUnavailable: _(
+    'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
+    'Position unavailable. There may be issues ending the trip.',
+    'Posisjon utilgjengeleg. Det kan oppstå problem med å avslutte turen.',
+  ),
+  somethingWentWrong: _(
+    'Noe gikk galt. Prøv igjen eller kontakt operatøren.',
+    'Something went wrong. Try again or contact the operator.',
+    'Noko gjekk gale. Prøv igjen eller kontakt operatøren.',
+  ),
+  noInternetConnection: _(
+    'Du har ingen internettforbindelse',
+    'You have no internet connection',
+    'Du har ingen internettilkopling',
   ),
 };

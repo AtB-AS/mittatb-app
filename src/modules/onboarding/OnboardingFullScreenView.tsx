@@ -9,10 +9,12 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {useTranslation} from '@atb/translations';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
+import {VippsLoginButton} from '@atb/components/vipps-login-button';
 
 export type OnboardingFullScreenViewProps = PropsWithChildren<{
-  footerButton: ButtonProps;
+  footerButton?: ButtonProps;
   secondaryFooterButton?: ButtonProps;
+  vippsButton?: ButtonProps;
   fullScreenHeaderProps?: ScreenHeaderProps;
   footerDescription?: string;
   testID?: string;
@@ -24,6 +26,7 @@ export const OnboardingFullScreenView = ({
   children,
   footerButton,
   secondaryFooterButton,
+  vippsButton,
   fullScreenHeaderProps,
   footerDescription,
   testID,
@@ -56,28 +59,34 @@ export const OnboardingFullScreenView = ({
             </ScrollView>
           )}
           {isError && <GenericError />}
-          <Button
-            expanded={true}
-            interactiveColor={interactiveColor}
-            mode="primary"
-            onPress={footerButton.onPress}
-            style={styles.footerButton}
-            text={footerButton.text || ''}
-            rightIcon={footerButton.rightIcon}
-            testID={testID ? `${testID}Button` : 'nextButton'}
-          />
+          {footerButton && (
+            <Button
+              {...footerButton}
+              interactiveColor={interactiveColor}
+              mode="primary"
+              style={styles.footerButton}
+              text={footerButton.text || ''}
+              testID={testID ? `${testID}Button` : 'nextButton'}
+            />
+          )}
+
           {secondaryFooterButton && (
             <Button
-              expanded={true}
+              {...secondaryFooterButton}
               backgroundColor={themeColor}
               mode="secondary"
-              onPress={secondaryFooterButton.onPress}
               style={styles.footerButton}
               text={secondaryFooterButton.text || ''}
-              rightIcon={secondaryFooterButton.rightIcon}
               testID={
                 secondaryTestID ? `${secondaryTestID}Button` : 'nextButton'
               }
+            />
+          )}
+          {vippsButton && (
+            <VippsLoginButton
+              onPress={vippsButton.onPress}
+              disabled={vippsButton?.loading ?? false}
+              style={styles.footerButton}
             />
           )}
         </View>

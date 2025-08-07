@@ -1,4 +1,4 @@
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
@@ -9,7 +9,6 @@ import {screenReaderHidden} from '@atb/utils/accessibility';
 import {flatMap} from '@atb/utils/array';
 import {
   formatToClock,
-  isInThePast,
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
@@ -40,12 +39,13 @@ import {
 } from '@atb/screen-components/travel-details-screens';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import type {TripSearchTime} from '../../types';
 import {isSignificantDifference} from '../utils';
+
+type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  searchTime: TripSearchTime;
+  state: ResultItemState;
 };
 
 const ResultItemHeader: React.FC<{
@@ -116,7 +116,6 @@ const ResultItemHeader: React.FC<{
 
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
-  searchTime,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -171,9 +170,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     filteredLegs.length,
   );
 
-  const isInPast =
-    isInThePast(tripPattern.legs[0].expectedStartTime) &&
-    searchTime?.option !== 'now';
   const iconHeight = {
     height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
   };
@@ -189,11 +185,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <Animated.View
-      style={[
-        styles.result,
-        isInPast && styles.resultInPast,
-        {opacity: fadeInValueRef.current},
-      ]}
+      style={[{opacity: fadeInValueRef.current}, styles.container]}
       {...props}
       accessible={false}
     >
@@ -306,17 +298,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 export const MemoizedResultItem = React.memo(ResultItem);
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  result: {
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-  },
-  resultInPast: {
-    backgroundColor: theme.color.background.neutral[2].background,
+  container: {
+    flex: 1,
+    gap: theme.spacing.medium,
   },
   detailsContainer: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
-    paddingBottom: theme.spacing.small,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -381,8 +367,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
   },
   row: {
     flexDirection: 'row',
@@ -407,7 +391,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginVertical: theme.spacing.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   scheduledTime: {
     marginLeft: theme.spacing.xSmall,
@@ -485,7 +469,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={Walk} />
+      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );

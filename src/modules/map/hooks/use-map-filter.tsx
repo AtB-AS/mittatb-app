@@ -1,20 +1,25 @@
 import {MapFilter, MapFilterType} from '../types';
 import {storage} from '@atb/modules/storage';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useCallback} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
-const STORAGE_KEY = '@ATB_user_map_filters';
+const MAP_FILTER_STORAGE_KEY = '@ATB_user_map_filters_v2';
 
 const fallback: MapFilterType = {
   mobility: {},
 };
 
+/**
+ * This hook should only be used in MapContext.
+ */
 export const useUserMapFilters = () => {
   const {default_map_filter} = useRemoteConfigContext();
-  const getMapFilter = useCallback(
+  const [mapFilter, setMapFilter] = useState<MapFilterType>();
+
+  const getStoredMapFilter = useCallback(
     () =>
       storage
-        .get(STORAGE_KEY)
+        .get(MAP_FILTER_STORAGE_KEY)
         .then((storedFilters) =>
           storedFilters
             ? parse(storedFilters) ?? fallback
@@ -23,15 +28,24 @@ export const useUserMapFilters = () => {
     [default_map_filter],
   );
 
-  const setMapFilter = useCallback(
-    (filters: MapFilterType) =>
-      storage.set(STORAGE_KEY, JSON.stringify(filters)),
-    [],
+  const setAndStoreMapFilter = useCallback(
+    (filters: MapFilterType) => {
+      storage.set(MAP_FILTER_STORAGE_KEY, JSON.stringify(filters));
+      setMapFilter(filters);
+    },
+    [setMapFilter],
   );
 
+  useEffect(() => {
+    // inital load locally stored filter
+    getStoredMapFilter().then((mapFilterFromStorage) =>
+      setAndStoreMapFilter(mapFilterFromStorage),
+    );
+  }, [getStoredMapFilter, setAndStoreMapFilter]);
+
   return {
-    getMapFilter,
-    setMapFilter,
+    mapFilter,
+    setMapFilter: setAndStoreMapFilter,
   };
 };
 

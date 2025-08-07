@@ -11,7 +11,7 @@ import {
 } from '../../components/PhotoCapture/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
-import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
+import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
   blobToBase64,

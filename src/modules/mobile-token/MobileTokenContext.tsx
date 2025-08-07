@@ -110,16 +110,25 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const enabled = !!userId && authStatus === 'authenticated' && !isLoggingOut;
 
+  /**
+   * Fetch the local token (if available), if there are no local token,
+   * we request a new token from remote in here as well.
+   */
   const {
     data: nativeToken,
     status: nativeTokenStatus,
     error: nativeTokenError,
   } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
 
+  /**
+   * Send the token statistics (success/error) to backend to update
+   * also process the secure container so we can fetch the token list.
+   */
   useEffect(() => {
+    setSecureContainer(undefined);
+
     const loadSecureContainer = async () => {
       if (nativeToken) {
-        setSecureContainer(undefined);
         await mobileTokenClient.encode(nativeToken).then((secureContainer) => {
           setSecureContainer(secureContainer);
         });
@@ -149,6 +158,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     }
   }, [nativeToken, nativeTokenStatus, updateMetadata]);
 
+  /**
+   * fetch the list of remote token, this is the list of tokens you see
+   * in the token toggle screen.
+   */
   const {
     data: remoteTokens,
     status: remoteTokensStatus,
@@ -159,8 +172,25 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     secureContainer,
     allTokenInspectable,
   );
+
+  /**
+   * Try to pre-emptively renew the token if it is about to expire
+   */
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
+  /**
+   * Invalidates the list of mobile tokens in the query cache whenever relevant dependencies change.
+   *
+   * - Logs a breadcrumb to Bugsnag for traceability.
+   * - Calls `invalidateQueries` on the query client to refresh the token list.
+   * - Ensures that the UI and data remain in sync after changes to the native token, user, or secure container.
+   *
+   * Dependencies:
+   * - `queryClient`: The React Query client instance.
+   * - `userId`: The current user's ID.
+   * - `nativeToken?.tokenId`: The ID of the loaded native token.
+   * - `secureContainer`: The encoded secure container string.
+   */
   useEffect(() => {
     logToBugsnag('Invalidating list tokens query after token change', {
       tokenId: nativeToken?.tokenId,
@@ -174,6 +204,19 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     ]);
   }, [queryClient, userId, nativeToken?.tokenId, secureContainer]);
 
+  /**
+   * Handles timeout logic for loading the native token.
+   *
+   * - When the native token status is 'loading', starts a timeout using `timeoutHandler`.
+   *   If the timeout elapses before the token loads, sets the `isTimeout` state to true
+   *   and reports the timeout error to Bugsnag.
+   * - If the native token status changes to anything other than 'loading', cancels any
+   *   existing timeout and resets the `isTimeout` state to false.
+   *
+   * Dependencies:
+   * - `nativeTokenStatus`: Triggers effect when the loading status changes.
+   * - `token_timeout_in_seconds`: Timeout duration from remote config.
+   */
   useEffect(() => {
     if (nativeTokenStatus === 'loading') {
       cancelTimeoutHandler = timeoutHandler(() => {
@@ -200,12 +243,22 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     }
   }, [nativeTokenStatus, token_timeout_in_seconds]);
 
-  const {isRenewingOrResetting} = useValidateToken(
+  /**
+   * `isRenewingOrResetting` to show/hide the loading status
+   * checks token to see if we need to renew/reset, returns
+   * for the users
+   */
+  const {isRenewingOrResetting, isRenewOrResetError} = useValidateToken(
     nativeToken,
     remoteTokens,
     traceId.current,
   );
 
+  /**
+   * Periodically checks if the native token should be preemptively renewed.
+   * Ensures that the token remains valid and up-to-date without user intervention.
+   *
+   */
   useInterval(
     () => checkRenewMutate({token: nativeToken, traceId: uuid()}),
     [checkRenewMutate, nativeToken],
@@ -220,6 +273,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     nativeToken,
     remoteTokens,
     isRenewingOrResetting,
+    isRenewOrResetError,
     isTimeout,
   );
 
@@ -328,12 +382,36 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
   };
 }
 
+/**
+ * Determines the overall status of the mobile token process based on various factors.
+ *
+ * Considers the loading and error status of both the native token and remote tokens.
+ * Takes into account whether the token is currently being renewed or reset, or if a timeout has occurred.
+ * Supports fallback modes based on remote config flags, including static QR code fallback.
+ *
+ * Logic:
+ * - If a timeout has occurred, returns a fallback status or 'loading' based on config.
+ * - If a renewal or reset is in progress, returns 'loading'.
+ * - If the native token is loading or has errored, returns 'loading' or a fallback/error status.
+ * - If the native token is loaded successfully, checks the remote tokens status:
+ *   - If remote tokens are loading or errored, returns 'loading' or a fallback/error status.
+ *   - If both are successful, determines if the device is inspectable and returns the appropriate status.
+ *
+ * @param loadNativeTokenStatus Status of loading the native token (React Query).
+ * @param remoteTokensStatus Status of loading the remote tokens (React Query).
+ * @param nativeToken The loaded native token, if available.
+ * @param remoteTokens The list of remote tokens, if available.
+ * @param isRenewingOrResetting Whether a renewal or reset operation is in progress. (from `useValidateToken`)
+ * @param isTimeout Whether a timeout has occurred while loading tokens.
+ * @returns The computed MobileTokenStatus string.
+ */
 const useMobileTokenStatus = (
   loadNativeTokenStatus: QueryStatus,
   remoteTokensStatus: QueryStatus,
   nativeToken: ActivatedToken | undefined,
   remoteTokens: RemoteToken[] | undefined,
   isRenewingOrResetting: boolean,
+  shouldFallback: boolean,
   isTimeout: boolean,
 ): MobileTokenStatus => {
   const {
@@ -344,7 +422,7 @@ const useMobileTokenStatus = (
 
   const fallbackStatus = use_trygg_overgang_qr_code ? 'staticQr' : 'fallback';
 
-  if (isTimeout)
+  if (isTimeout || shouldFallback)
     return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';
 
   if (isRenewingOrResetting) return 'loading';
@@ -387,6 +465,20 @@ const deviceInspectable = (
   return debugInspectable ?? isInspectable(matchingRemoteToken);
 };
 
+/**
+ * Determines if a mobile token status is inspectable.
+ *
+ * Inspectable means that the token has the `TICKET_INSPECTION` right on the backoffice.
+ *
+ * @param mobileTokenStatus - The current status of the mobile token.
+ *   - `'success-and-inspectable'`: The token is successfully generated and can be inspected.
+ *   - `'fallback'`: The token is in a fallback state and can be inspected.
+ *   - `'staticQr'`: The token is represented as a static QR and can be inspected.
+ *   - `'error'`: The token generation failed and is not inspectable.
+ *   - `'success-not-inspectable'`: The token is generated but cannot be inspected.
+ *   - `'loading'`: The token is in the process of being generated and is not inspectable.
+ * @returns `true` if the status is inspectable, otherwise `false`.
+ */
 export const getIsInspectableFromStatus = (
   mobileTokenStatus: MobileTokenStatus,
 ): boolean => {

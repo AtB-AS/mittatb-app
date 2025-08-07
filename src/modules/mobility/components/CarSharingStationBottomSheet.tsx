@@ -1,5 +1,5 @@
 import {useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useState} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
@@ -20,11 +20,17 @@ import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {CarPreviews} from './CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  findRelevantBonusProduct,
+  PayWithBonusPointsCheckbox,
+} from '@atb/modules/bonus';
 
 type Props = {
   stationId: string;
@@ -55,6 +61,15 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const {bonusProducts} = useFirestoreConfigurationContext();
+  const bonusProduct = findRelevantBonusProduct(
+    bonusProducts,
+    operatorId,
+    FormFactor.Car,
+  );
+
+  const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
@@ -96,7 +111,7 @@ export const CarSharingStationBottomSheet = ({
                 <GenericSectionItem>
                   <View style={styles.carSection}>
                     <MobilityStat
-                      svg={Car}
+                      svg={CarFill}
                       primaryStat={t(
                         CarSharingTexts.stations.carsAvailable(
                           totalAvailableCars(station.vehicleTypesAvailable),
@@ -116,6 +131,19 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
+              {isBonusProgramEnabled && bonusProduct && (
+                <PayWithBonusPointsCheckbox
+                  bonusProduct={bonusProduct}
+                  operatorName={operatorName}
+                  isChecked={payWithBonusPoints}
+                  onPress={() =>
+                    setPayWithBonusPoints(
+                      (payWithBonusPoints) => !payWithBonusPoints,
+                    )
+                  }
+                  style={styles.payWithBonusPointsSection}
+                />
+              )}
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
@@ -125,6 +153,9 @@ export const CarSharingStationBottomSheet = ({
                   operatorName={operatorName}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
+                  isBonusPayment={payWithBonusPoints}
+                  setIsBonusPayment={setPayWithBonusPoints}
+                  bonusProductId={bonusProduct?.id}
                 />
               </View>
             )}
@@ -176,6 +207,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       display: 'flex',
       flexDirection: 'row',
       marginTop: theme.spacing.small,
+    },
+    payWithBonusPointsSection: {
+      marginTop: theme.spacing.medium,
     },
   };
 });

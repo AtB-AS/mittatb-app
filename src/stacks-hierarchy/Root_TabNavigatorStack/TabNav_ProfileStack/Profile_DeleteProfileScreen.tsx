@@ -11,10 +11,10 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
+import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
 
 export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();
@@ -29,7 +29,11 @@ export const Profile_DeleteProfileScreen = () => {
 
   const {deleteCollectedData} = useBeaconsContext();
 
+  const {mutateAsync: deleteAgeVerification} =
+    useDeleteAgeVerificationMutation();
+
   const handleDeleteProfile = async () => {
+    await deleteAgeVerification();
     const isProfileDeleted = await deleteProfile();
     if (isProfileDeleted) {
       await deleteCollectedData();
@@ -110,7 +114,7 @@ export const Profile_DeleteProfileScreen = () => {
           }}
           onPress={() => showDeleteAlert()}
           disabled={hasAvailableFareContracts}
-          icon={<ThemeIcon svg={Delete} color="error" />}
+          rightIcon={{svg: Delete, color: 'error'}}
         />
       </Section>
     </FullScreenView>

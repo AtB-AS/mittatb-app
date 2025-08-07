@@ -1,5 +1,5 @@
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useLiveVehicleSubscription} from '@atb/api/vehicles';
+import {useLiveVehicleSubscription} from '@atb/api/bff/vehicles';
 import {
   AnyMode,
   AnySubMode,
@@ -285,6 +285,7 @@ const LiveVehicleMarker = ({
   return (
     <MapboxGL.MarkerView
       coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+      allowOverlapWithPuck={true}
     >
       <View
         style={{

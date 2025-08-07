@@ -6,35 +6,40 @@ import {
   PreProcessedGeofencingZones,
   usePreProcessedGeofencingZones,
 } from '@atb/modules/map';
-import {useVehicleQuery} from '@atb/modules/mobility';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 type GeofencingZonesProps = {
-  selectedVehicleId: string;
+  systemId: string | null;
+  vehicleTypeId: string | null;
 };
-export const GeofencingZones = ({selectedVehicleId}: GeofencingZonesProps) => {
-  const {
-    data: vehicle,
-    isLoading,
-    isError,
-  } = useVehicleQuery(selectedVehicleId);
-
-  if (!vehicle || !selectedVehicleId || isLoading || isError) {
+export const GeofencingZones = ({
+  systemId,
+  vehicleTypeId,
+}: GeofencingZonesProps) => {
+  if (!systemId || !vehicleTypeId) {
     return <></>;
   }
-  return <GeofencingZonesForVehicle vehicle={vehicle} />;
+  return (
+    <GeofencingZonesForVehicle
+      systemId={systemId}
+      vehicleTypeId={vehicleTypeId}
+    />
+  );
 };
 
-type GeofencingZonesForVehicleProps = {
-  vehicle: VehicleExtendedFragment;
-};
 const GeofencingZonesForVehicle = ({
-  vehicle,
-}: GeofencingZonesForVehicleProps) => {
-  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(vehicle);
+  systemId,
+  vehicleTypeId,
+}: {
+  systemId: string;
+  vehicleTypeId: string;
+}) => {
+  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(
+    systemId,
+    vehicleTypeId,
+  );
 
   return (
     <>
@@ -53,18 +58,24 @@ type GeofencingZoneProps = {
 };
 const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
   const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
+
   const bgColor = [
     'get',
     'background',
     ['get', 'color', getGeofencingZoneCustomProps],
   ];
   const fillOpacity = ['get', 'fillOpacity', getGeofencingZoneCustomProps];
-  const lineOpacity = [
-    'get',
-    'background',
+  const lineOpacity = ['get', 'strokeOpacity', getGeofencingZoneCustomProps];
+  const lineStyle = ['get', 'lineStyle', getGeofencingZoneCustomProps];
 
-    ['get', 'strokeOpacity', getGeofencingZoneCustomProps],
-  ];
+  const lineLayerStyle = {
+    lineWidth: ['interpolate', ['exponential', 1.5], ['zoom'], 12, 2, 18, 4],
+    lineColor: bgColor,
+    lineOpacity,
+    lineCap: 'round',
+    lineJoin: 'round',
+  };
+
   return (
     <MapboxGL.ShapeSource
       id={'geofencingZonesShapeSource_' + geofencingZone?.renderKey}
@@ -72,7 +83,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
       hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
     >
       <MapboxGL.FillLayer
-        id="parkingFill"
+        id="geofencingZoneFill"
         style={{
           fillAntialias: true,
           fillColor: bgColor,
@@ -80,13 +91,22 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
+
+      {/*
+        Unfortunately since there is a bug in mapbox not supporting
+        lineDasharray: ['get', 'lineDasharray'],
+        a hard coded style must be used for that style prop.
+      */}
       <MapboxGL.LineLayer
-        id="tariffZonesLine"
-        style={{
-          lineWidth: 3,
-          lineColor: bgColor,
-          lineOpacity,
-        }}
+        id="geofencingZoneLine"
+        filter={['!=', lineStyle, 'dashed']}
+        style={lineLayerStyle}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+      />
+      <MapboxGL.LineLayer
+        id="geofencingZoneDashedLine"
+        filter={['==', lineStyle, 'dashed']}
+        style={{...lineLayerStyle, lineDasharray: [2, 2]}}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
     </MapboxGL.ShapeSource>

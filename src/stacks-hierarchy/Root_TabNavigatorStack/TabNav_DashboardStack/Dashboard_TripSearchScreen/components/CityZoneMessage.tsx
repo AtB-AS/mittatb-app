@@ -1,5 +1,9 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {Linking, View} from 'react-native';
 import {Location} from '@atb/modules/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
@@ -19,7 +23,6 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 
 type ActionButton = {
   id: string;
@@ -62,7 +65,6 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
       <Section style={style.cityZoneMessage}>
         <CityZoneBox
           message={t(CityBoxMessageTexts.message(fromCityZone.name))}
-          icon={() => <ThemedBestillMaxi width={60} height={54} />}
           onDismiss={onDismiss}
           actionButtons={actionButtons}
         />
@@ -74,18 +76,12 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
 };
 
 type CityZoneBoxProps = {
-  icon: (props: SvgProps) => JSX.Element;
   message: string;
   onDismiss?: () => void;
   actionButtons?: ActionButton[];
 };
 
-const CityZoneBox = ({
-  icon,
-  message,
-  actionButtons,
-  onDismiss,
-}: CityZoneBoxProps) => {
+const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
   const {theme} = useThemeContext();
   const styles = useStyle();
   const {t} = useTranslation();
@@ -96,9 +92,6 @@ const CityZoneBox = ({
   } = generalColor;
   return (
     <View style={[styles.container, {backgroundColor}]} accessible={false}>
-      <View style={styles.icon}>
-        <ThemeIcon svg={icon} />
-      </View>
       <View style={styles.content}>
         <ThemeText style={styles.message} color={generalColor}>
           {message}
@@ -159,7 +152,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       text: t(CityBoxMessageTexts.actionButtons.bookOnline),
       icon: ExternalLink,
       interactiveColor: interactiveColor,
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      accessibilityHint: t(dictionary.appNavigation.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book online url opened', {
           name: 'book_online_action',
@@ -195,7 +188,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       icon: ExternalLink,
       text: t(CityBoxMessageTexts.actionButtons.moreInfo),
       interactiveColor: interactiveAccentColor,
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      accessibilityHint: t(dictionary.appNavigation.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'More info url opened', {
           name: 'more_info_action',

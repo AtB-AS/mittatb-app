@@ -3,7 +3,9 @@ export {
   getCurrentUserIdGlobal,
   getIdTokenGlobal,
   useAuthContext,
+  getIdTokenExpirationTimeGlobal,
 } from './AuthContext';
+export {getIdTokenValidityStatus} from './utils';
 export type {
   AuthStateChangeListenerCallback,
   AuthStatus,

@@ -3,6 +3,8 @@ import {Travelcard as TravelCardDark} from '@atb/assets/svg/color/illustrations/
 import {Travelcard as TravelCardLight} from '@atb/assets/svg/color/illustrations/token/travelcard/light/';
 import {Phone as PhoneDark} from '@atb/assets/svg/color/illustrations/token/mobile/dark/';
 import {Phone as PhoneLight} from '@atb/assets/svg/color/illustrations/token/mobile/light/';
+import {Contact as ContactIllustrationDark} from '@atb/assets/svg/color/illustrations/contact/dark/';
+import {Contact as ContactIllustrationLight} from '@atb/assets/svg/color/illustrations/contact/light/';
 import {
   Map as MapLight,
   NoFavouriteDeparture as NoFavouriteDepartureLight,
@@ -17,6 +19,9 @@ import {
   MyLocation as MyLocationLight,
   Beacons as BeaconsLight,
   PaymentCard as PaymentCardLight,
+  Contact as ContactLight,
+  ProfileCardLoggedIn as ProfileCardLoggedInLight,
+  ProfileCardLoggedOut as ProfileCardLoggedOutLight,
 } from '@atb/assets/svg/color/images/light';
 import {
   Map as MapDark,
@@ -32,6 +37,9 @@ import {
   MyLocation as MyLocationDark,
   Beacons as BeaconsDark,
   PaymentCard as PaymentCardDark,
+  Contact as ContactDark,
+  ProfileCardLoggedIn as ProfileCardLoggedInDark,
+  ProfileCardLoggedOut as ProfileCardLoggedOutDark,
 } from '@atb/assets/svg/color/images/dark';
 import {
   BundlingCarSharing as BundlingCarSharingDark,
@@ -47,147 +55,120 @@ import {
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
 } from '@atb/assets/svg/color/images/mobility/light';
+import {
+  BonusBag as BonusBagLight,
+  BonusBagCarry as BonusBagCarryLight,
+  BonusBagHug as BonusBagHugLight,
+  BonusMap as BonusMapLight,
+  BonusTransaction as BonusTransactionLight,
+  BonusTrashCan as BonusTrashCanLight,
+} from '@atb/assets/svg/color/images/bonus/light';
+import {
+  BonusBag as BonusBagDark,
+  BonusBagCarry as BonusBagCarryDark,
+  BonusBagHug as BonusBagHugDark,
+  BonusMap as BonusMapDark,
+  BonusTransaction as BonusTransactionDark,
+  BonusTrashCan as BonusTrashCanDark,
+} from '@atb/assets/svg/color/images/bonus/dark';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {SvgProps} from 'react-native-svg';
 
-export const ThemedTokenTravelCard = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const TravelCard = themeName === 'dark' ? TravelCardDark : TravelCardLight;
-  return <TravelCard {...props} />;
+const getThemedAsset = (
+  LightAsset: React.FC<SvgProps>,
+  DarkAsset: React.FC<SvgProps>,
+) => {
+  return (props: SvgProps) => {
+    const {themeName} = useThemeContext();
+    const ThemedAsset = themeName === 'dark' ? DarkAsset : LightAsset;
+    return <ThemedAsset {...props} />;
+  };
 };
 
-export const ThemedTokenPhone = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const Phone = themeName === 'dark' ? PhoneDark : PhoneLight;
-  return <Phone {...props} />;
-};
-
-export const ThemedMapImage = () => {
-  const {themeName} = useThemeContext();
-  const Map = themeName === 'dark' ? MapDark : MapLight;
-  return <Map />;
-};
-
-export const ThemedNoFavouriteDepartureImage = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const NoFavouriteDeparture =
-    themeName === 'dark' ? NoFavouriteDepartureDark : NoFavouriteDepartureLight;
-  return <NoFavouriteDeparture {...props} />;
-};
-
-export const ThemedOnBehalfOf = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const OnBehalfOf = themeName === 'dark' ? OnBehalfOfDark : OnBehalfOfLight;
-  return <OnBehalfOf {...props} />;
-};
-
-export const ThemedCityBike = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
-  return <CityBike {...props} />;
-};
-
-export const ThemedParkAndRide = () => {
-  const {themeName} = useThemeContext();
-  const ParkAndRide = themeName === 'dark' ? ParkAndRideDark : ParkAndRideLight;
-  return <ParkAndRide />;
-};
-
-export const ThemedBundlingCarSharing = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const BundlingCarSharing =
-    themeName === 'dark' ? BundlingCarSharingDark : BundlingCarSharingLight;
-  return <BundlingCarSharing {...props} />;
-};
-
-export const ThemedBundlingCarSharingActive = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const BundlingCarSharingActive =
-    themeName === 'dark'
-      ? BundlingCarSharingActiveDark
-      : BundlingCarSharingActiveLight;
-  return <BundlingCarSharingActive {...props} />;
-};
-
-export const ThemedBundlingCityBikeActive = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const BundlingCityBikeActive =
-    themeName === 'dark'
-      ? BundlingCityBikeActiveDark
-      : BundlingCityBikeActiveLight;
-  return <BundlingCityBikeActive {...props} />;
-};
-
-export const ThemedFlexibleTransport = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const FlexibleTransport =
-    themeName === 'dark' ? FlexibleTransportDark : FlexibleTransportLight;
-
-  return <FlexibleTransport {...props} />;
-};
-
-export const ThemedBestillMaxi = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const BestillMaxi = themeName === 'dark' ? BestillMaxiDark : BestillMaxiLight;
-
-  return <BestillMaxi {...props} />;
-};
-
-export const ThemedCrashSmall = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const CrashSmall = themeName === 'dark' ? CrashSmallDark : CrashSmallLight;
-
-  return <CrashSmall {...props} />;
-};
-
-export const ThemedTicketTilted = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const TicketTilted =
-    themeName === 'dark' ? TicketTiltedDark : TicketTiltedLight;
-
-  return <TicketTilted {...props} />;
-};
-
-export const ThemedTicket = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const Ticket = themeName === 'dark' ? TicketDark : TicketLight;
-
-  return <Ticket {...props} />;
-};
-
-export const ThemedHoldingHands = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const HoldingHands =
-    themeName === 'dark' ? HoldingHandsDark : HoldingHandsLight;
-
-  return <HoldingHands {...props} />;
-};
-
-export const ThemedPushNotification = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const PushNotification =
-    themeName === 'dark' ? PushNotificationDark : PushNotificationLight;
-
-  return <PushNotification {...props} />;
-};
-
-export const ThemedMyLocation = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const MyLocation = themeName === 'dark' ? MyLocationDark : MyLocationLight;
-
-  return <MyLocation {...props} />;
-};
-
-export const ThemedPaymentCard = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const PaymentCard = themeName === 'dark' ? PaymentCardDark : PaymentCardLight;
-
-  return <PaymentCard {...props} />;
-};
-
-export const ThemedBeacons = ({...props}: SvgProps) => {
-  const {themeName} = useThemeContext();
-  const Beacons = themeName === 'dark' ? BeaconsDark : BeaconsLight;
-
-  return <Beacons {...props} />;
-};
+export const ThemedTokenTravelCard = getThemedAsset(
+  TravelCardLight,
+  TravelCardDark,
+);
+export const ThemedTokenPhone = getThemedAsset(PhoneLight, PhoneDark);
+export const ThemedMapImage = getThemedAsset(MapLight, MapDark);
+export const ThemedNoFavouriteDepartureImage = getThemedAsset(
+  NoFavouriteDepartureLight,
+  NoFavouriteDepartureDark,
+);
+export const ThemedOnBehalfOf = getThemedAsset(OnBehalfOfLight, OnBehalfOfDark);
+export const ThemedCityBike = getThemedAsset(CityBikeLight, CityBikeDark);
+export const ThemedParkAndRide = getThemedAsset(
+  ParkAndRideLight,
+  ParkAndRideDark,
+);
+export const ThemedBundlingCarSharing = getThemedAsset(
+  BundlingCarSharingLight,
+  BundlingCarSharingDark,
+);
+export const ThemedBundlingCarSharingActive = getThemedAsset(
+  BundlingCarSharingActiveLight,
+  BundlingCarSharingActiveDark,
+);
+export const ThemedBundlingCityBikeActive = getThemedAsset(
+  BundlingCityBikeActiveLight,
+  BundlingCityBikeActiveDark,
+);
+export const ThemedFlexibleTransport = getThemedAsset(
+  FlexibleTransportLight,
+  FlexibleTransportDark,
+);
+export const ThemedBestillMaxi = getThemedAsset(
+  BestillMaxiLight,
+  BestillMaxiDark,
+);
+export const ThemedCrashSmall = getThemedAsset(CrashSmallLight, CrashSmallDark);
+export const ThemedTicketTilted = getThemedAsset(
+  TicketTiltedLight,
+  TicketTiltedDark,
+);
+export const ThemedTicket = getThemedAsset(TicketLight, TicketDark);
+export const ThemedHoldingHands = getThemedAsset(
+  HoldingHandsLight,
+  HoldingHandsDark,
+);
+export const ThemedPushNotification = getThemedAsset(
+  PushNotificationLight,
+  PushNotificationDark,
+);
+export const ThemedMyLocation = getThemedAsset(MyLocationLight, MyLocationDark);
+export const ThemedPaymentCard = getThemedAsset(
+  PaymentCardLight,
+  PaymentCardDark,
+);
+export const ThemedBeacons = getThemedAsset(BeaconsLight, BeaconsDark);
+export const ThemedContact = getThemedAsset(ContactLight, ContactDark);
+export const ThemedBonusBag = getThemedAsset(BonusBagLight, BonusBagDark);
+export const ThemedBonusBagCarry = getThemedAsset(
+  BonusBagCarryLight,
+  BonusBagCarryDark,
+);
+export const ThemedBonusBagHug = getThemedAsset(
+  BonusBagHugLight,
+  BonusBagHugDark,
+);
+export const ThemedBonusMap = getThemedAsset(BonusMapLight, BonusMapDark);
+export const ThemedBonusTransaction = getThemedAsset(
+  BonusTransactionLight,
+  BonusTransactionDark,
+);
+export const ThemedBonusTrashCan = getThemedAsset(
+  BonusTrashCanLight,
+  BonusTrashCanDark,
+);
+export const ThemedContactIllustration = getThemedAsset(
+  ContactIllustrationLight,
+  ContactIllustrationDark,
+);
+export const ThemedProfileCardLoggedIn = getThemedAsset(
+  ProfileCardLoggedInDark,
+  ProfileCardLoggedInLight,
+);
+export const ThemedProfileCardLoggedOut = getThemedAsset(
+  ProfileCardLoggedOutDark,
+  ProfileCardLoggedOutLight,
+);

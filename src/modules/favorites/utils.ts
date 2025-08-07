@@ -5,10 +5,7 @@ import {
   UserFavoriteDeparturesLegacy,
 } from './types';
 import {uniqBy} from 'lodash';
-import {
-  DepartureLineInfo,
-  EstimatedCallWithLineName,
-} from '@atb/api/departures/types';
+import {DepartureLineInfo, EstimatedCallWithLineName} from '@atb/api/bff/types';
 
 function mapLegacyLineNameToDestinationDisplay(
   legacyLineName: string | undefined,

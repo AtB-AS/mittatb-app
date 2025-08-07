@@ -3,10 +3,7 @@ import React, {RefObject, useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useFiltersContext} from '@atb/modules/travel-search-filters';
-import {
-  FlexibleTransportOptionTypeWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '@atb/modules/travel-search-filters';
+import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 
 type TravelSearchFiltersState =
@@ -16,7 +13,6 @@ type TravelSearchFiltersState =
       filtersSelection: TravelSearchFiltersSelectionType;
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
-      disableFlexibleTransport: () => void;
     }
   | {enabled: false; filtersSelection?: undefined};
 
@@ -35,8 +31,6 @@ export const useTravelSearchFiltersState = ({
 
   const transportModeFilterOptionsFromFirestore =
     travelSearchFilters?.transportModes;
-  const flexibleTransportFilterOptionFromFirestore =
-    travelSearchFilters?.flexibleTransport;
   const travelSearchPreferencesFromFirestore =
     travelSearchFilters?.travelSearchPreferences;
 
@@ -45,12 +39,6 @@ export const useTravelSearchFiltersState = ({
       ...option,
       selected: option.selectedAsDefault,
     }));
-  const defaultFlexibleTransportFilterOption =
-    flexibleTransportFilterOptionFromFirestore &&
-    ({
-      ...flexibleTransportFilterOptionFromFirestore,
-      enabled: true,
-    } as FlexibleTransportOptionTypeWithSelectionType);
 
   const defaultTravelSearchPreferences: TravelSearchPreferenceWithSelectionType[] =
     travelSearchPreferencesFromFirestore?.map((preference) => ({
@@ -61,16 +49,12 @@ export const useTravelSearchFiltersState = ({
   const initialTransportModeSelection =
     filters?.transportModes ?? defaultTransportModeFilterOptions;
 
-  const initialFlexibleTransportFilterOption =
-    filters?.flexibleTransport ?? defaultFlexibleTransportFilterOption;
-
   const initialTravelSearchPreferences =
     filters?.travelSearchPreferences ?? defaultTravelSearchPreferences;
 
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModeSelection,
-      flexibleTransport: initialFlexibleTransportFilterOption,
       travelSearchPreferences: initialTravelSearchPreferences,
     });
 
@@ -93,10 +77,9 @@ export const useTravelSearchFiltersState = ({
     enabled: true,
     openBottomSheet,
     filtersSelection,
-    anyFiltersApplied:
-      filtersSelection.transportModes?.some((m) => !m.selected) ||
-      !filtersSelection.flexibleTransport?.enabled ||
-      false,
+    anyFiltersApplied: !!filtersSelection.transportModes?.some(
+      (m) => !m.selected,
+    ),
     resetTransportModes: () => {
       const filtersWithInitialTransportModes = {
         ...filtersSelection,
@@ -104,17 +87,6 @@ export const useTravelSearchFiltersState = ({
       };
       setFilters(filtersWithInitialTransportModes);
       setFiltersSelection(filtersWithInitialTransportModes);
-    },
-    disableFlexibleTransport: () => {
-      const filtersWithFlexibleTransportDisabled = {
-        ...filtersSelection,
-        flexibleTransport: {
-          ...filtersSelection.flexibleTransport,
-          enabled: false,
-        } as FlexibleTransportOptionTypeWithSelectionType,
-      };
-      setFilters(filtersWithFlexibleTransportDisabled);
-      setFiltersSelection(filtersWithFlexibleTransportDisabled);
     },
   };
 };

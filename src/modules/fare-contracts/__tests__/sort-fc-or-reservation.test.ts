@@ -1,159 +1,169 @@
-import type {ValidityStatus} from '../utils';
-import {Reservation} from '@atb/modules/ticketing';
-
-import {addMinutes} from 'date-fns';
+import {PaymentStatus, Reservation} from '@atb/modules/ticketing';
 import {
+  getSortedFareContractsAndReservations,
   sortFcOrReservationByCreation,
-  sortFcOrReservationByValidityAndCreation,
 } from '../sort-fc-or-reservation';
-import {FareContractType, TravelRightType} from '@atb-as/utils';
+import {
+  FareContractState,
+  FareContractType,
+  TravelRightType,
+} from '@atb-as/utils';
+import {ONE_HOUR_MS, ONE_MINUTE_MS} from '@atb/utils/durations';
 
-type MockedFareContract = FareContractType & {
-  validityStatus: ValidityStatus;
-};
-
-type MockedReservation = Reservation & {
-  validityStatus: ValidityStatus;
-};
+const now = new Date('2000-01-01T12:00:00Z').valueOf();
 
 function mockupFareContract(
-  id: string,
-  validityStatus: ValidityStatus,
-  minutes: number,
-): MockedFareContract {
+  testRef: string,
+  startDate: Date,
+): FareContractType & {testRef: string} {
   return {
-    id: id,
-    created: addMinutes(new Date(), minutes),
-    version: '1',
-    customerAccountId: '1',
-    purchasedBy: '1',
-    orderId: '1',
-    state: 0,
-    totalAmount: '0',
-    travelRights: [{} as any as TravelRightType],
-    qrCode: '',
-    validityStatus: validityStatus,
-    paymentType: ['VISA'],
-    totalTaxAmount: '0',
-  };
+    testRef,
+    state: FareContractState.Activated,
+    created: startDate,
+    travelRights: [
+      {
+        startDateTime: startDate,
+        endDateTime: new Date(now + ONE_HOUR_MS),
+      } as unknown as TravelRightType,
+    ],
+  } as unknown as FareContractType & {testRef: string};
+}
+
+function mockupCarnet(
+  testRef: string,
+  startDate: Date,
+): FareContractType & {testRef: string} {
+  const base = mockupFareContract(testRef, new Date(now - ONE_HOUR_MS));
+  return {
+    ...base,
+    travelRights: [
+      {
+        ...base.travelRights[0],
+        maximumNumberOfAccesses: 1,
+        numberOfUsedAccesses: 1,
+        usedAccesses: [
+          {
+            startDateTime: startDate,
+            endDateTime: new Date(now + ONE_HOUR_MS),
+          },
+        ],
+      },
+    ],
+  } as FareContractType & {testRef: string};
 }
 
 function mockupReservation(
-  id: string,
-  validityStatus: ValidityStatus,
-  minutes: number,
-): MockedReservation {
+  testRef: string,
+  createdDate: Date,
+  paymentStatus: PaymentStatus,
+): Reservation {
   return {
-    orderId: id,
-    created: addMinutes(new Date(), minutes),
-    paymentId: 1,
-    transactionId: 1,
-    paymentType: 2,
-    url: 'http://example.com',
-    validityStatus: validityStatus,
-  };
+    testRef,
+    created: createdDate,
+    paymentStatus,
+  } as unknown as Reservation & {testRef: string};
 }
 
 describe('Sort by Validity', () => {
-  const now = Date.now();
-
-  it('Should sort fc or reservation by validity first', async () => {
-    const fcOrReservations: (FareContractType | Reservation)[] = [
-      mockupFareContract('1', 'valid', -1),
-      mockupFareContract('2', 'valid', -2),
-      mockupReservation('3', 'valid', 0),
+  it('Should sort reservation by created date', () => {
+    const fareContracts: FareContractType[] = [];
+    const reservations: Reservation[] = [
+      mockupReservation('2', new Date(now - ONE_MINUTE_MS * 2), 'INITIATE'),
+      mockupReservation('1', new Date(now - ONE_MINUTE_MS * 1), 'INITIATE'),
+      mockupReservation('3', new Date(now - ONE_MINUTE_MS * 3), 'INITIATE'),
     ];
-
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
       now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
-    const ids: string[] = result.map((fcOrReservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      if (isFareContract) {
-        return fcOrReservation.id;
-      } else {
-        return fcOrReservation.orderId;
-      }
-    });
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
 
-    expect(ids).toEqual(['3', '1', '2']);
+    expect(result.map((r) => (r as any).testRef)).toEqual(['1', '2', '3']);
   });
 
-  it('Reservation should be first if reservation is being processing', async () => {
-    const fcOrReservations: (FareContractType | Reservation)[] = [
-      mockupFareContract('1', 'valid', -1),
-      mockupReservation('3', 'reserving', 0),
-      mockupFareContract('2', 'valid', 0),
+  it('Should show only the most recent failed reservation', () => {
+    const fareContracts: FareContractType[] = [];
+    const reservations: Reservation[] = [
+      mockupReservation('2', new Date(now - ONE_MINUTE_MS * 2), 'REJECT'),
+      mockupReservation('1', new Date(now - ONE_MINUTE_MS * 1), 'CANCEL'),
+      mockupReservation('3', new Date(now - ONE_MINUTE_MS * 3), 'CANCEL'),
     ];
-
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
       now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
-    const ids: string[] = result.map((fcOrReservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      if (isFareContract) {
-        return fcOrReservation.id;
-      } else {
-        return fcOrReservation.orderId;
-      }
-    });
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
 
-    expect(ids).toEqual(['3', '2', '1']);
+    expect(result.map((r) => (r as any).testRef)).toEqual(['1']);
   });
 
-  it('Multiple reservations and valid fare contracts', async () => {
-    const fcOrReservations: (FareContractType | Reservation)[] = [
-      mockupReservation('1', 'reserving', 0),
-      mockupReservation('2', 'reserving', 0.1),
-      mockupFareContract('3', 'valid', 0.1),
-      mockupFareContract('4', 'valid', 0.11),
+  it('Should sort fc and reservation by validity', async () => {
+    const fareContracts: FareContractType[] = [
+      mockupFareContract('3', new Date(now - ONE_MINUTE_MS * 3)),
+      mockupFareContract('1', new Date(now - ONE_MINUTE_MS * 1)),
+      mockupFareContract('4', new Date(now + ONE_MINUTE_MS * 1)),
     ];
 
-    const result = sortFcOrReservationByValidityAndCreation(
-      '',
-      now,
-      fcOrReservations,
-      (_, fareContract) => (fareContract as MockedFareContract).validityStatus,
-    );
-    const ids: string[] = result.map((fcOrReservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      if (isFareContract) {
-        return fcOrReservation.id;
-      } else {
-        return fcOrReservation.orderId;
-      }
-    });
+    const reservations: Reservation[] = [
+      mockupReservation('2', new Date(now - ONE_MINUTE_MS * 2), 'INITIATE'),
+    ];
 
-    expect(ids).toEqual(['2', '1', '4', '3']);
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
+      now,
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
+    expect(result.map((i) => (i as any).testRef)).toEqual(['1', '2', '3', '4']);
+  });
+
+  it('Should place inactive carnet behind active fare contracts', () => {
+    const fareContracts: FareContractType[] = [
+      mockupCarnet('1', new Date(now + ONE_MINUTE_MS)),
+      mockupFareContract('2', new Date(now - ONE_MINUTE_MS)),
+    ];
+    const reservations: Reservation[] = [];
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
+      now,
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
+
+    expect(result.map((i) => (i as any).testRef)).toEqual(['2', '1']);
+  });
+
+  it('Should sort inactive fare contracts by created date', () => {
+    const fareContracts: FareContractType[] = [
+      mockupFareContract('2', new Date(now - ONE_MINUTE_MS * 2)),
+      mockupFareContract('1', new Date(now - ONE_MINUTE_MS * 1)),
+    ];
+    const reservations: Reservation[] = [];
+    const result = getSortedFareContractsAndReservations(
+      fareContracts,
+      reservations,
+      now,
+    ) as (FareContractType | (Reservation & {testRef: string}))[];
+
+    expect(result.map((i) => (i as any).testRef)).toEqual(['1', '2']);
   });
 });
 
 describe('Sort by creation', () => {
   it('sortFcOrReservationByCreation sorts by created', () => {
-    const fareContracts = [
-      mockupReservation('1', 'valid', -10),
-      mockupFareContract('3', 'valid', -30),
-      mockupFareContract('2', 'valid', -20),
-      mockupReservation('5', 'valid', -50),
-      mockupFareContract('4', 'valid', -40),
+    const fcAndReservations = [
+      mockupReservation('1', new Date(-10), 'INITIATE'),
+      mockupFareContract('3', new Date(-30)),
+      mockupFareContract('2', new Date(-20)),
+      mockupReservation('5', new Date(-50), 'INITIATE'),
+      mockupFareContract('4', new Date(-40)),
     ];
-    const sorted = sortFcOrReservationByCreation(fareContracts);
+    const sorted = sortFcOrReservationByCreation(fcAndReservations);
 
-    const ids: string[] = sorted.map((fcOrReservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      if (isFareContract) {
-        return fcOrReservation.id;
-      } else {
-        return fcOrReservation.orderId;
-      }
-    });
-
-    expect(ids).toEqual(['1', '2', '3', '4', '5']);
+    expect(sorted.map((item) => (item as any).testRef)).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+    ]);
   });
 });

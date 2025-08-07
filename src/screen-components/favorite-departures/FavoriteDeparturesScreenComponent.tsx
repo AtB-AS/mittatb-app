@@ -6,7 +6,6 @@ import React from 'react';
 import {Alert, View} from 'react-native';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   FavoriteDepartureSectionItem,
   LinkSectionItem,
@@ -78,7 +77,7 @@ export const FavoriteDeparturesScreenComponent = ({
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onPressAddFavorite}
             testID="addFavoriteDeparture"
-            icon={<ThemeIcon svg={Add} />}
+            rightIcon={{svg: Add}}
           />
         </Section>
       </View>

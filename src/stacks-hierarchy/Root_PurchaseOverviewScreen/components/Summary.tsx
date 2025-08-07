@@ -6,27 +6,24 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
-  selection: PurchaseSelectionType;
-  price: number;
+  price?: number;
   originalPrice: number;
   isFree: boolean;
   isLoading: boolean;
-  isError: boolean;
+  isDisabled: boolean;
   summaryButtonText: string;
   onPressBuy: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function Summary({
-  selection,
   price,
   originalPrice,
   isFree,
   isLoading,
-  isError,
+  isDisabled,
   summaryButtonText,
   onPressBuy,
   style,
@@ -35,9 +32,10 @@ export function Summary({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  const formattedPrice = formatNumberToString(price, language);
+  const formattedPrice = !!price
+    ? formatNumberToString(price, language)
+    : undefined;
   const formattedOriginalPrice = formatNumberToString(originalPrice, language);
-  const hasSelection = selection.userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
     onPressBuy();
@@ -45,9 +43,7 @@ export function Summary({
 
   return (
     <View style={style}>
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
+      {!!formattedPrice ? (
         <ThemeText
           typography="body__primary--bold"
           style={styles.price}
@@ -55,8 +51,10 @@ export function Summary({
         >
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
-      )}
-      {!isLoading && originalPrice !== price && (
+      ) : isLoading ? (
+        <ActivityIndicator size="large" />
+      ) : null}
+      {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText
           typography="body__tertiary--strike"
           style={styles.originalPrice}
@@ -74,7 +72,7 @@ export function Summary({
         expanded={true}
         interactiveColor={theme.color.interactive[0]}
         text={summaryButtonText}
-        disabled={isLoading || !hasSelection || isFree || isError}
+        disabled={isDisabled || isLoading || isFree}
         onPress={toPaymentFunction}
         rightIcon={{svg: ArrowRight}}
         testID="goToPaymentButton"

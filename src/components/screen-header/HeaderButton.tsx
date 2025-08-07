@@ -1,5 +1,4 @@
 import React, {RefObject} from 'react';
-import {useChatIcon} from './chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
@@ -9,7 +8,6 @@ import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useThemeContext} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {useServiceDisruptionIcon} from './service-disruptions/use-service-disruption-icon';
 import {
   AnalyticsEventContext,
   useAnalyticsContext,
@@ -22,9 +20,7 @@ export type ButtonModes =
   | 'back'
   | 'cancel'
   | 'close'
-  | 'chat'
   | 'skip'
-  | 'status-disruption'
   | 'info'
   | 'custom';
 export type HeaderButtonProps = {
@@ -82,11 +78,6 @@ const useHeaderButton = (
   buttonProps: HeaderButtonProps,
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
-  const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
-  const serviceDisruptionIcon = useServiceDisruptionIcon(
-    buttonProps.color,
-    buttonProps.testID,
-  );
 
   const {t} = useTranslation();
   switch (buttonProps.type) {
@@ -110,11 +101,6 @@ const useHeaderButton = (
         ...accessibilityProps,
       };
     }
-    case 'status-disruption': {
-      return serviceDisruptionIcon;
-    }
-    case 'chat':
-      return chatIcon;
     case 'info':
       const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {

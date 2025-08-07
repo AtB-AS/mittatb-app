@@ -18,7 +18,6 @@ export {default as SectionTexts} from './components/Section';
 export {default as MapTexts} from './components/Map';
 export {default as ScreenHeaderTexts} from './components/ScreenHeader';
 export {default as BottomSheetTexts} from './components/BottomSheet';
-export {default as ServiceDisruptionsTexts} from './components/ServiceDisruptions';
 export {default as CancelledDepartureTexts} from './components/CancelledDeparture';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as FareZonesTexts} from './screens/subscreens/FareZones';
@@ -45,7 +44,6 @@ export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSet
 export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProfileSettingsTexts';
 export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
-export {default as ContactSheetTexts} from './screens/subscreens/ContactSheet';
 export {default as FeedbackTexts} from './screens/Feedback';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
 export {default as ConsiderTravelTokenChangeTexts} from './screens/ConsiderTravelTokenChangeScreen';

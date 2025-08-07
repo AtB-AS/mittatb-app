@@ -29,6 +29,7 @@ export type PurchaseSelectionType = {
     | undefined;
   travelDate: string | undefined;
   legs: SalesTripPatternLeg[];
+  isOnBehalfOf: boolean;
 };
 
 /**
@@ -113,6 +114,12 @@ export type PurchaseSelectionBuilder = {
    * unmodified.
    */
   legs: (l: SalesTripPatternLeg[]) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply isOnBehalfOf flag to the purchase selection.
+   * @param isOnBehalfOf
+   */
+  isOnBehalfOf: (isOnBehalfOf: boolean) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

@@ -1,3 +1,3 @@
 export {CancelToken, isCancel, client} from './client';
-export {autocomplete, reverse} from './geocoder';
+export {autocomplete, reverse} from './bff/geocoder';
 export {getProfile, updateProfile, deleteProfile} from './profile';

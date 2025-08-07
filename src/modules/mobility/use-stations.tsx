@@ -7,12 +7,12 @@ import {
   StationsState,
   toFeatureCollection,
   toFeaturePoints,
-  useUserMapFilters,
+  useMapContext,
 } from '@atb/modules/map';
 import {Point} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useIsFocused} from '@react-navigation/native';
-import {getStations} from '@atb/api/mobility';
+import {getStations} from '@atb/api/bff/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
@@ -35,7 +35,7 @@ export const useStations: (
     initialFilter ?? {},
   );
   const [isLoading, setIsLoading] = useState(false);
-  const {getMapFilter} = useUserMapFilters();
+  const {mapFilter} = useMapContext();
   const isFocused = useIsFocused();
 
   const [stations, setStations] = useState<StationFeatures>(emptyStations);
@@ -45,13 +45,11 @@ export const useStations: (
   useEffect(() => {
     if (!initialFilter) {
       // Initial filter === undefined, use user's filter from store.
-      getMapFilter().then((userFilter) => {
-        setFilter(userFilter.mobility ?? {});
-      });
+      setFilter(mapFilter?.mobility ?? {});
     } else {
       setFilter(initialFilter);
     }
-  }, [getMapFilter, initialFilter]);
+  }, [mapFilter, initialFilter]);
 
   useEffect(() => {
     if (enableStations && isFocused && area) {

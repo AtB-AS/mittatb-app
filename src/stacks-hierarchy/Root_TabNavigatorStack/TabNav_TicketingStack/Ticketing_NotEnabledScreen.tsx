@@ -20,7 +20,6 @@ export const Ticketing_NotEnabledScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScreenHeader
         title={t(TicketingSplashTexts.header.title)}
-        rightButton={{type: 'chat'}}
         color={bgColor}
       />
       <View style={styles.bannerContainer}>

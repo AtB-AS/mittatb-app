@@ -169,7 +169,6 @@ export function QuaySection({
         )}
         {shouldShowMoreItemsLink && (
           <LinkSectionItem
-            icon="arrow-right"
             text={t(DeparturesTexts.quaySection.moreDepartures)}
             textType="body__primary--bold"
             onPress={() => navigateToQuay(quay)}

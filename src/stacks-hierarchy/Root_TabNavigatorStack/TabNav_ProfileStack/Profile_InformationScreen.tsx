@@ -9,7 +9,6 @@ import React from 'react';
 import {Linking, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
@@ -50,7 +49,7 @@ export const Profile_InformationScreen = () => {
         <Section>
           {ticketingInfoUrl && (
             <LinkSectionItem
-              icon={<ThemeIcon svg={ExternalLink} />}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.ticketing
                   .label,
@@ -68,7 +67,7 @@ export const Profile_InformationScreen = () => {
           )}
           {termsInfoUrl && (
             <LinkSectionItem
-              icon={<ThemeIcon svg={ExternalLink} />}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.terms.label,
               )}
@@ -86,7 +85,7 @@ export const Profile_InformationScreen = () => {
 
           {inspectionInfoUrl && (
             <LinkSectionItem
-              icon={<ThemeIcon svg={ExternalLink} />}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.inspection
                   .label,
@@ -105,7 +104,7 @@ export const Profile_InformationScreen = () => {
 
           {refundInfoUrl && (
             <LinkSectionItem
-              icon={<ThemeIcon svg={ExternalLink} />}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems.refund.label,
               )}
@@ -122,7 +121,7 @@ export const Profile_InformationScreen = () => {
           )}
           {a11yStatementUrl && (
             <LinkSectionItem
-              icon={<ThemeIcon svg={ExternalLink} />}
+              rightIcon={{svg: ExternalLink}}
               text={t(
                 ProfileTexts.sections.information.linkSectionItems
                   .accessibilityStatement.label,

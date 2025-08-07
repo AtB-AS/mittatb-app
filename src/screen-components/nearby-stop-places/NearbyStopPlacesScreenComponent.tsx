@@ -12,13 +12,16 @@ import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Platform, RefreshControl, View} from 'react-native';
+import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
-import {FullScreenView} from '@atb/components/screen-view';
-import {ScreenHeaderProps} from '@atb/components/screen-header';
+import {
+  FullScreenHeader,
+  ScreenHeaderProps,
+} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {EmptyState} from '@atb/components/empty-state';
+import SharedTexts from '@atb/translations/shared';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -155,61 +158,61 @@ export const NearbyStopPlacesScreenComponent = ({
   const isFocused = useIsFocusedAndActive();
 
   return (
-    <FullScreenView
-      refreshControl={
-        // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-        isFocused || Platform.OS === 'android' ? (
-          <RefreshControl
-            refreshing={Platform.OS === 'ios' ? false : isLoading}
-            onRefresh={refresh}
-          />
-        ) : undefined
-      }
-      headerProps={headerProps}
-      parallaxContent={() => (
-        <Header
-          fromLocation={location}
-          updatingLocation={updatingLocation}
-          openLocationSearch={openLocationSearch}
-          setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          setLocation={(location: Location) => {
-            location.resultType === 'search' && location.layer === 'venue'
-              ? onSelectStopPlace(location)
-              : onUpdateLocation(location);
-          }}
-          mode={mode}
-          onAddFavoritePlace={onAddFavoritePlace}
-        />
-      )}
-    >
-      <ScreenReaderAnnouncement message={loadAnnouncement} />
-      {locationIsAvailable || !!location ? (
-        <StopPlaces
-          headerText={getListDescription()}
-          stopPlaces={orderedStopPlaces}
-          navigateToPlace={onSelectStopPlace}
-          testID="nearbyStopsContainerView"
-          location={location}
-          isLoading={isLoading}
-        />
-      ) : (
-        <EmptyState
-          title={t(NearbyTexts.stateAnnouncements.noAccessToLocationTitle)}
-          details={t(NearbyTexts.stateAnnouncements.noAccessToLocation)}
-          illustrationComponent={
-            <ThemedOnBehalfOf
-              height={90}
-              style={styles.emptyStopPlacesIllustration}
+    <>
+      <FullScreenHeader {...headerProps} />
+      <Header
+        fromLocation={location}
+        updatingLocation={updatingLocation}
+        openLocationSearch={openLocationSearch}
+        setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+        setLocation={(location: Location) => {
+          location.resultType === 'search' && location.layer === 'venue'
+            ? onSelectStopPlace(location)
+            : onUpdateLocation(location);
+        }}
+        mode={mode}
+        onAddFavoritePlace={onAddFavoritePlace}
+      />
+      <ScrollView
+        refreshControl={
+          // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+          isFocused || Platform.OS === 'android' ? (
+            <RefreshControl
+              refreshing={Platform.OS === 'ios' ? false : isLoading}
+              onRefresh={refresh}
             />
-          }
-          buttonProps={{
-            onPress: () => requestLocationPermission(false),
-            text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
-          }}
-          testID="noAccessToLocation"
-        />
-      )}
-    </FullScreenView>
+          ) : undefined
+        }
+      >
+        <ScreenReaderAnnouncement message={loadAnnouncement} />
+        {locationIsAvailable || !!location ? (
+          <StopPlaces
+            headerText={getListDescription()}
+            stopPlaces={orderedStopPlaces}
+            navigateToPlace={onSelectStopPlace}
+            testID="nearbyStopsContainerView"
+            location={location}
+            isLoading={isLoading}
+          />
+        ) : (
+          <EmptyState
+            title={t(NearbyTexts.stateAnnouncements.noAccessToLocationTitle)}
+            details={t(NearbyTexts.stateAnnouncements.noAccessToLocation)}
+            illustrationComponent={
+              <ThemedOnBehalfOf
+                height={90}
+                style={styles.emptyStopPlacesIllustration}
+              />
+            }
+            buttonProps={{
+              onPress: () => requestLocationPermission(false),
+              text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
+            }}
+            testID="noAccessToLocation"
+          />
+        )}
+      </ScrollView>
+    </>
   );
 };
 
@@ -239,7 +242,7 @@ const Header = React.memo(function Header({
     <View style={styles.header}>
       <Section style={styles.locationInputSection}>
         <LocationInputSectionItem
-          label={t(NearbyTexts.location.departurePicker.label)}
+          label={t(SharedTexts.from)}
           updatingLocation={updatingLocation}
           location={fromLocation}
           onPress={openLocationSearch}
@@ -288,6 +291,7 @@ function sortAndFilterStopPlaces(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.color.background.accent[0].background,
+    paddingBottom: theme.spacing.medium,
   },
   locationInputSection: {
     marginHorizontal: theme.spacing.medium,

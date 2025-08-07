@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
+  LinkSectionItem,
   Section,
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -13,11 +14,15 @@ import {
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets'; // TODO: update with new illustration when available
+import {
+  ThemedBonusBagHug,
+  ThemedBonusTransaction,
+} from '@atb/theme/ThemedAssets';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
   UserBonusBalance,
+  bonusPilotEnrollmentId,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
@@ -26,6 +31,14 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import Intercom, {Space} from '@intercom/intercom-react-native';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -37,7 +50,10 @@ export const Profile_BonusScreen = () => {
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
     useState<number>();
 
+  const navigation = useNavigation<RootNavigationProps>();
+
   const activeBonusProducts = bonusProducts?.filter(isActive);
+  const analytics = useAnalyticsContext();
 
   return (
     <FullScreenView
@@ -68,11 +84,16 @@ export const Profile_BonusScreen = () => {
           </View>
         ) : (
           <View style={styles.bonusProductsContainer}>
-            {activeBonusProducts?.map((bonusProduct, index) => (
-              <Section key={bonusProduct.id}>
+            <Section>
+              {activeBonusProducts?.map((bonusProduct, index) => (
                 <ExpandableSectionItem
                   expanded={currentlyOpenBonusProduct === index}
+                  key={bonusProduct.id}
                   onPress={() => {
+                    analytics.logEvent('Bonus', 'Bonus product clicked', {
+                      bonusProductId: bonusProduct.id,
+                      expanded: currentlyOpenBonusProduct != index,
+                    });
                     setCurrentlyOpenBonusProduct(index);
                   }}
                   text={
@@ -93,10 +114,7 @@ export const Profile_BonusScreen = () => {
                     />
                   }
                   suffixNode={
-                    <BonusPriceTag
-                      amount={bonusProduct.price.amount}
-                      style={styles.bonusPriceTag}
-                    />
+                    <BonusPriceTag amount={bonusProduct.price.amount} />
                   }
                   expandContent={
                     <ThemeText
@@ -111,8 +129,8 @@ export const Profile_BonusScreen = () => {
                     </ThemeText>
                   }
                 />
-              </Section>
-            ))}
+              ))}
+            </Section>
           </View>
         )}
         <ContentHeading
@@ -121,7 +139,13 @@ export const Profile_BonusScreen = () => {
         <Section>
           <GenericSectionItem>
             <View style={styles.horizontalContainer}>
-              <ThemedCityBike />
+              <ThemedBonusTransaction
+                height={61}
+                width={61}
+                style={{
+                  alignSelf: 'flex-start',
+                }}
+              />
               <View style={styles.bonusProgramDescription}>
                 <ThemeText typography="body__primary--bold">
                   {getTextForLanguage(
@@ -138,6 +162,27 @@ export const Profile_BonusScreen = () => {
               </View>
             </View>
           </GenericSectionItem>
+          <LinkSectionItem
+            text={t(BonusProgramTexts.bonusProfile.readMore.button)}
+            onPress={() => {
+              navigation.navigate('Root_EnrollmentOnboardingStack', {
+                configId: bonusPilotEnrollmentId,
+              });
+            }}
+          />
+        </Section>
+        <ContentHeading
+          text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
+        />
+        <Section>
+          <LinkSectionItem
+            text={t(BonusProgramTexts.bonusProfile.feedback.button)}
+            rightIcon={{svg: Chat}}
+            onPress={() => {
+              analytics.logEvent('Bonus', 'Feedback button clicked');
+              Intercom.presentSpace(Space.home);
+            }}
+          />
         </Section>
       </View>
     </FullScreenView>
@@ -154,7 +199,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.small,
+    gap: theme.spacing.medium,
   },
   currentBalanceDisplay: {
     flexDirection: 'row',
@@ -166,11 +211,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   bonusProductsContainer: {
     gap: theme.spacing.medium,
   },
-  bonusPriceTag: {
-    marginHorizontal: theme.spacing.small,
-  },
   logo: {
-    marginRight: theme.spacing.small,
     borderRadius: theme.border.radius.small,
     overflow: 'hidden',
   },
@@ -184,6 +225,7 @@ function UserBonusBalanceSection(): JSX.Element {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
+  const fontScale = useFontScale();
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -208,8 +250,13 @@ function UserBonusBalanceSection(): JSX.Element {
           >
             <View style={styles.currentBalanceDisplay}>
               <UserBonusBalance
-                size="large"
+                typography="body__primary--jumbo--bold"
                 color={theme.color.foreground.dynamic.primary}
+              />
+              <ThemeIcon
+                color={theme.color.foreground.dynamic.primary}
+                svg={StarFill}
+                size="large"
               />
             </View>
 
@@ -217,7 +264,7 @@ function UserBonusBalanceSection(): JSX.Element {
               {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
             </ThemeText>
           </View>
-          <ThemedCityBike />
+          <ThemedBonusBagHug height={fontScale * 61} width={fontScale * 61} />
         </GenericSectionItem>
       </Section>
       {isError && (

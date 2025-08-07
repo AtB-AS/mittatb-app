@@ -22,10 +22,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_bonus_program',
   },
   {
-    name: 'isBookingEnabled',
-    remoteConfigKey: 'enable_booking',
-  },
-  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
@@ -36,6 +32,10 @@ export const toggleSpecifications = [
   {
     name: 'isEventStreamEnabled',
     remoteConfigKey: 'enable_event_stream',
+  },
+  {
+    name: 'isEventStreamFareContractsEnabled',
+    remoteConfigKey: 'enable_event_stream_fare_contracts',
   },
   {
     name: 'isFlexibleTransportEnabled',
@@ -156,6 +156,10 @@ export const toggleSpecifications = [
   {
     name: 'isInAppReviewForAnnouncementsEnabled',
     remoteConfigKey: 'enable_in_app_review_for_announcements',
+  },
+  {
+    name: 'isSmartParkAndRideEnabled',
+    remoteConfigKey: 'enable_smart_park_and_ride',
   },
 ] as const satisfies readonly FeatureToggleSpecification[];
 

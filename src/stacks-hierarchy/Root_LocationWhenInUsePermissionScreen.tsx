@@ -26,8 +26,11 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
       illustration={<ThemedMyLocation height={220} />}
       title={t(LocationWhenInUsePermissionTexts.title)}
       description={t(LocationWhenInUsePermissionTexts.description)}
-      buttonText={t(LocationWhenInUsePermissionTexts.button)}
-      buttonOnPress={buttonOnPress}
+      footerButton={{
+        onPress: buttonOnPress,
+        text: t(LocationWhenInUsePermissionTexts.button),
+        expanded: true,
+      }}
       testID="locationWhenInUsePermission"
     />
   );

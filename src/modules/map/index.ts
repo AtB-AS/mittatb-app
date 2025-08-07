@@ -15,11 +15,11 @@ export {
 export type {AutoSelectableMapItem} from './hooks/use-auto-select-map-item';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
-export {useUserMapFilters} from './hooks/use-map-filter';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
 export {Map} from './Map';
+export {useShmoWarnings} from './hooks/use-shmo-warnings.tsx';
 export {
   MapCameraConfig,
   SCOOTERS_CLUSTER_RADIUS,
@@ -64,4 +64,8 @@ export {
   toFeaturePoints,
   zoomIn,
   zoomOut,
+  getFeatureWeight,
+  getFeatureToSelect,
+  getFeaturesAtClick,
+  isFeatureGeofencingZone,
 } from './utils';

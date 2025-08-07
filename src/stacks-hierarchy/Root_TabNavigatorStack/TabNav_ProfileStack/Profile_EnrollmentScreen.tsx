@@ -1,19 +1,25 @@
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
-  MessageInfoBox,
-  MessageInfoBoxProps,
-} from '@atb/components/message-info-box';
-import {TextInputSectionItem} from '@atb/components/sections';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+  GenericSectionItem,
+  Section,
+  TextInputSectionItem,
+} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {enrollIntoBetaGroups} from '@atb/api/enrollment';
+import {enrollIntoBetaGroups} from '@atb/api/bff/enrollment';
 import analytics from '@react-native-firebase/analytics';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {ThemeText} from '@atb/components/text';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -21,51 +27,64 @@ export const Profile_EnrollmentScreen = () => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
   const [inviteCode, setInviteCode] = useState<string>('');
+  const fontScale = useFontScale();
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
-  const messageType: MessageInfoBoxProps['type'] = isEnrolled
-    ? 'valid'
-    : hasError
-    ? 'warning'
-    : 'info';
-  const messageText = useMessageText(messageType);
-
   return (
-    <FullScreenView
-      headerProps={{
-        title: t(EnrollmentTexts.header),
-        leftButton: {type: 'back', withIcon: true},
-      }}
-      parallaxContent={(focusRef) => (
-        <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
-      )}
-    >
-      <View style={styles.contentContainer}>
-        <MessageInfoBox type={messageType} message={messageText} />
-        {isEnrolled ? null : isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <TextInputSectionItem
-              radius="top-bottom"
-              label={t(EnrollmentTexts.label)}
-              value={inviteCode}
-              onChangeText={setInviteCode}
-              autoCapitalize="none"
-            />
-            <Button
-              expanded={true}
-              onPress={() => onEnroll(inviteCode)}
-              text={t(EnrollmentTexts.button)}
-              leftIcon={{svg: Confirm}}
-              disabled={isLoading || !inviteCode}
-              interactiveColor={interactiveColor}
-            />
-          </>
+    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <FullScreenView
+        headerProps={{
+          title: t(EnrollmentTexts.header),
+          leftButton: {type: 'back', withIcon: true},
+        }}
+        parallaxContent={(focusRef) => (
+          <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
         )}
-      </View>
-    </FullScreenView>
+      >
+        <View style={styles.contentContainer}>
+          <Section>
+            <GenericSectionItem>
+              <View style={styles.horizontalContainer}>
+                <ThemedBeacons
+                  height={61 * fontScale}
+                  width={61 * fontScale}
+                  style={{
+                    alignSelf: 'flex-start',
+                  }}
+                />
+                <View style={styles.headerTextContainer}>
+                  <ThemeText typography="body__secondary" color="secondary">
+                    {t(EnrollmentTexts.info)}
+                  </ThemeText>
+                </View>
+              </View>
+            </GenericSectionItem>
+          </Section>
+
+          <TextInputSectionItem
+            radius="top-bottom"
+            inlineLabel={false}
+            label={t(EnrollmentTexts.label)}
+            placeholder={t(EnrollmentTexts.placeholder)}
+            value={inviteCode}
+            onChangeText={setInviteCode}
+            autoCapitalize="none"
+            errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
+          />
+          {isEnrolled && (
+            <MessageInfoBox type="valid" message={t(EnrollmentTexts.success)} />
+          )}
+          <Button
+            expanded={true}
+            onPress={() => onEnroll(inviteCode)}
+            text={t(EnrollmentTexts.button)}
+            interactiveColor={interactiveColor}
+            loading={isLoading}
+          />
+        </View>
+      </FullScreenView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -73,10 +92,12 @@ type UserProperties = {[key: string]: string | null};
 
 const useEnroll = () => {
   const {refresh} = useRemoteConfigContext();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
+
   const onEnroll = useCallback(
     async function onEnroll(key: string) {
       setHasError(false);
@@ -91,15 +112,28 @@ const useEnroll = () => {
           await analytics().setUserProperties(userProperties);
           refresh();
           setIsEnrolled(true);
+
+          if (enrollment.enrollmentId) {
+            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
+              config.enrollmentIds.includes(enrollment.enrollmentId),
+            );
+
+            if (onboardingConfig) {
+              navigation.navigate('Root_EnrollmentOnboardingStack', {
+                configId: onboardingConfig.id,
+              });
+            }
+          }
         }
       } catch (err) {
         console.warn(err);
         setHasError(true);
+        setIsEnrolled(false);
       } finally {
         setIsLoading(false);
       }
     },
-    [setHasError, setIsLoading, setIsEnrolled, refresh],
+    [setHasError, setIsLoading, setIsEnrolled, refresh, navigation],
   );
 
   return {
@@ -110,22 +144,19 @@ const useEnroll = () => {
   };
 };
 
-function useMessageText(type: MessageInfoBoxProps['type']) {
-  const {t} = useTranslation();
-  switch (type) {
-    case 'valid':
-      return t(EnrollmentTexts.success);
-    case 'warning':
-      return t(EnrollmentTexts.warning);
-    case 'info':
-    default:
-      return t(EnrollmentTexts.info);
-  }
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
+  },
+  horizontalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: theme.spacing.medium,
+  },
+  headerTextContainer: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
 }));

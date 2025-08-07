@@ -9,7 +9,7 @@ import {
   shouldShowMapLines,
   shouldZoomToFeature,
 } from '../utils';
-import {tripsSearch} from '@atb/api/trips';
+import {tripsSearch} from '@atb/api/bff/trips';
 import MapboxGL from '@rnmapbox/maps';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 

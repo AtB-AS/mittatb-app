@@ -76,6 +76,12 @@ import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
 import {useSetupEventStream} from '@atb/modules/event-stream';
 import {useSetupReactQueryWindowFocus} from '@atb/queries';
+import {
+  Root_SmartParkAndRideAddScreen,
+  Root_SmartParkAndRideEditScreen,
+} from './Root_SmartParkAndRide';
+import {Root_EnrollmentOnboardingStack} from './Root_EntrollmentOnboradingStack';
+import {Root_SmartParkAndRideOnboardingStack} from './Root_SmartParkAndRide/onboarding';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -449,6 +455,22 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_ParkingPhotoScreen"
                   component={Root_ParkingPhotoScreen}
+                />
+                <Stack.Screen
+                  name="Root_SmartParkAndRideAddScreen"
+                  component={Root_SmartParkAndRideAddScreen}
+                />
+                <Stack.Screen
+                  name="Root_SmartParkAndRideEditScreen"
+                  component={Root_SmartParkAndRideEditScreen}
+                />
+                <Stack.Screen
+                  name="Root_SmartParkAndRideOnboardingStack"
+                  component={Root_SmartParkAndRideOnboardingStack}
+                />
+                <Stack.Screen
+                  name="Root_EnrollmentOnboardingStack"
+                  component={Root_EnrollmentOnboardingStack}
                 />
               </Stack.Navigator>
             </AnalyticsContextProvider>

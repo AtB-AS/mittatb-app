@@ -1,15 +1,15 @@
-import {getRealtimeDepartures} from '@atb/api/departures';
 import {
-  DeparturesVariables,
-  getDepartures,
-} from '@atb/api/departures/stops-nearest';
+  DepartureRealtimeQuery,
+  getRealtimeDepartures,
+} from '@atb/api/bff/departures';
+import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
   useFavoritesContext,
   UserFavoriteDepartures,
 } from '@atb/modules/favorites';
-import {DeparturesRealtimeData} from '@atb/sdk';
+import {DeparturesRealtimeData} from '@atb/api/bff/departures';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';
 import {differenceInMinutes, differenceInSeconds} from 'date-fns';
@@ -33,7 +33,6 @@ import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
 import {flatMap} from '@atb/utils/array';
-import {DepartureRealtimeQuery} from '@atb/api/departures/types';
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.

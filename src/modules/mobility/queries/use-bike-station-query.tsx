@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getBikeStation} from '@atb/api/mobility';
+import {getBikeStation} from '@atb/api/bff/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export const useBikeStationQuery = (id: string) =>
@@ -8,4 +8,6 @@ export const useBikeStationQuery = (id: string) =>
     queryFn: ({signal}) => getBikeStation(id, {signal}),
     staleTime: ONE_MINUTE_MS,
     cacheTime: ONE_MINUTE_MS,
+    refetchOnMount: 'always',
+    retry: 5,
   });

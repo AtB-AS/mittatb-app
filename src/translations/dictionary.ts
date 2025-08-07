@@ -58,6 +58,11 @@ const dictionary = {
         'Aktivér for å lukke',
       ),
     },
+    a11yHintForExternalContent: _(
+      'Aktivér for å åpne ekstern side',
+      'Activate to open external content',
+      'Aktiver for å opne ekstern side',
+    ),
   },
   date: {
     units: {

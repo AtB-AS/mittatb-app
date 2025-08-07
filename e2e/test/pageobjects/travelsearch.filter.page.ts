@@ -1,6 +1,7 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.ts';
 import TravelsearchOverviewPage from './travelsearch.overview.page.js';
+import {$} from '@wdio/globals';
 
 class TravelSearchFilterPage {
   /**
@@ -9,6 +10,14 @@ class TravelSearchFilterPage {
   get selectedFilterButton() {
     const reqId = `//*[@resource-id="selectedFilterButton"]`;
     return $(reqId);
+  }
+
+  /**
+   * Return number of filters available (including the 'all' option)
+   */
+  get numberOfFilters() {
+    const reqId = `//*[@resource-id="toggleItem"]`;
+    return $$(reqId).length;
   }
 
   /**
@@ -46,24 +55,37 @@ class TravelSearchFilterPage {
    * Toggle on of the filters (or the 'all' option)
    * @param type type of filter to toggle (default: allModes)
    */
-  async toggleFilter(type: string = 'allModes') {
+  async toggleTransportModeFilter(type: string = 'allModes') {
     const reqId = `//*[@resource-id="${type}Toggle"]`;
     await $(reqId).click();
     await AppHelper.pause();
   }
 
   /**
-   * Confirm the chosen filter options
-   * @param saveFilter possibility to save the filter (default: false)
+   * Set the walk speed
+   * @param speed type of walk speed to use in search
    */
-  async confirmFilter(saveFilter: boolean = false) {
+  async setWalkSpeed(speed: 'slow' | 'normal' | 'fast') {
+    const reqId = `//*[@resource-id="${speed}Button"]`;
+    await $(reqId).click();
+    await AppHelper.pause();
+  }
+
+  /**
+   * Check that the given walk speed is enabled
+   * @param speed type of walk speed
+   */
+  async walkSpeedIsEnabled(speed: 'slow' | 'normal' | 'fast') {
+    const reqId = `//*[@resource-id="${speed}Button"]`;
+    await ElementHelper.waitForElement('id', `${speed}Button`);
+    expect(await $(reqId).isEnabled()).toBe(true);
+  }
+
+  /**
+   * Confirm the chosen filter options
+   */
+  async confirmFilter() {
     const reqId = `//*[@resource-id="confirmButton"]`;
-    const saveId = `//*[@resource-id="saveFilterCheckbox"]`;
-    // Save filter or not
-    if (saveFilter) {
-      await AppHelper.scrollDownUntilId('filterView', 'saveFilterCheckbox');
-      await $(saveId).click();
-    }
     await $(reqId).click();
     await AppHelper.pause();
   }

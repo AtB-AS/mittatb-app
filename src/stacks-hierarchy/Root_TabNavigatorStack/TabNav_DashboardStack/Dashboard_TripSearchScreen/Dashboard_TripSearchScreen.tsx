@@ -50,7 +50,6 @@ import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePopOverContext} from '@atb/modules/popover';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
@@ -61,6 +60,7 @@ import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DatePickerSheet} from '@atb/components/date-selection';
+import SharedTexts from '@atb/translations/shared';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -77,7 +77,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
-  const statusColor = theme.color.status.valid.primary;
+  const statusColor = theme.color.status.info.primary;
   const [searchTime, setSearchTime] = useState<TripSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -87,7 +87,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
   const isFocused = useIsFocusedAndActive();
-  const {addPopOver} = usePopOverContext();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
 
@@ -116,9 +115,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
-  const isFlexibleTransportEnabled =
-    isFlexibleTransportEnabledInRemoteConfig &&
-    filtersState?.filtersSelection?.flexibleTransport?.enabled;
+  const [flexibleTransportInfoDismissed, setFlexibleTransportInfoDismissed] =
+    useState(false);
+  const isFlexibleTransportEnabled = isFlexibleTransportEnabledInRemoteConfig;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -166,8 +165,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     navigation.navigate('Root_LocationSearchByTextScreen', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
+          ? t(SharedTexts.from)
+          : t(SharedTexts.to),
       callerRouteName: route.name,
       callerRouteParam,
       initialLocation,
@@ -266,7 +265,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       <FullScreenView
         headerProps={{
           title: t(TripSearchTexts.header.title),
-          rightButton: {type: 'chat'},
           leftButton: {
             type: 'back',
             onPress: () => {
@@ -312,7 +310,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 }
                 updatingLocation={updatingLocation && !to}
                 location={from}
-                label={t(TripSearchTexts.location.departurePicker.label)}
+                label={t(SharedTexts.from)}
                 onPress={() => openLocationSearch('fromLocation', from)}
                 icon={<ThemeIcon svg={LocationIcon} />}
                 onIconPress={setCurrentLocationOrRequest}
@@ -336,7 +334,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 accessibilityLabel={t(
                   TripSearchTexts.location.destinationPicker.a11yLabel,
                 )}
-                label={t(TripSearchTexts.location.destinationPicker.label)}
+                label={t(SharedTexts.to)}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
                 icon={<ThemeIcon svg={Swap} />}
@@ -432,6 +430,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   .map((leg) => leg.authority?.id)
                   .filter(isDefined)
                   .filter(onlyUniques),
+                publicCodes: tripPatterns
+                  .flatMap((tp) => tp.legs)
+                  .map((leg) => leg.line?.publicCode)
+                  .filter(isDefined)
+                  .filter(onlyUniques),
               }}
             />
           </View>
@@ -444,6 +447,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 />
               )}
               {isFlexibleTransportEnabled &&
+                !flexibleTransportInfoDismissed &&
                 (tripPatterns.length > 0 ||
                   searchState === 'search-empty-result') &&
                 !error && (
@@ -451,12 +455,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     from={from}
                     to={to}
                     onDismiss={() => {
-                      filtersState.enabled &&
-                        filtersState.disableFlexibleTransport();
-                      addPopOver({
-                        oneTimeKey: 'trip-search-flexible-transport-dismissed',
-                        target: filterButtonWrapperRef,
-                      });
+                      setFlexibleTransportInfoDismissed(true);
                       analytics.logEvent(
                         'Flexible transport',
                         'Message box dismissed',

@@ -20,6 +20,7 @@ type OperatorActionButtonProps = {
   appStoreUri: string | undefined;
   rentalAppUri: string;
   isBonusPayment?: boolean;
+  setIsBonusPayment?: (isBonusPayment: boolean) => void;
   bonusProductId?: string;
 };
 export const OperatorActionButton = ({
@@ -29,110 +30,18 @@ export const OperatorActionButton = ({
   appStoreUri,
   rentalAppUri,
   isBonusPayment,
+  setIsBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
   const {logEvent} = useBottomSheetContext();
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
+
   const {
     isUserEligibleForBenefit,
     benefitRequiresValueCodeToUnlock,
     isLoading: isLoadingEligible,
   } = useIsEligibleForBenefit(benefit);
-
-  const buttonText =
-    isUserEligibleForBenefit && benefit?.callToAction?.name
-      ? getTextForLanguage(benefit.callToAction.name, language) ??
-        t(MobilityTexts.operatorAppSwitchButton(operatorName))
-      : t(MobilityTexts.operatorAppSwitchButton(operatorName));
-
-  const openAppURL = async (url: string, valueCode?: string) => {
-    logEvent('Mobility', 'Open operator app', {
-      operatorName,
-      benefit,
-      isUserEligibleForBenefit,
-      valueCode,
-    });
-    await Linking.openURL(url).catch(() =>
-      showAppMissingAlert(operatorName, appStoreUri),
-    );
-  };
-
-  if (isLoadingEligible) {
-    return <ActivityIndicator />;
-  } else if (
-    (isUserEligibleForBenefit || isBonusPayment) &&
-    benefitRequiresValueCodeToUnlock
-  ) {
-    const buttonOnPress = (valueCode?: string) => {
-      let url = rentalAppUri;
-      if (benefit?.callToAction.url) {
-        // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
-        url = replaceTokens(benefit.callToAction.url, {
-          APP_URL: rentalAppUri,
-          VALUE_CODE: valueCode,
-        });
-        // If callToAction.url is e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}' the APP_URL token will now
-        // have been replaced with rentalAppUri, e.g. 'trondheimbysykkel://stations?id=44', and look like this:
-        // 'trondheimbysykkel://stations?id=44?voucherCode=1234'. Since both APP_URL and callToAction.url contains
-        // url parameters we need to replace all but the first ? with & to create a valid url.
-        url = replaceAllButFirstOccurrence(url, /\?/, '&');
-      }
-      openAppURL(url, valueCode);
-    };
-    return (
-      <OperatorActionButtonWithValueCode
-        operatorId={operatorId}
-        buttonOnPress={buttonOnPress}
-        buttonText={buttonText}
-        buyValueCodeWithBonusPoints={isBonusPayment}
-        bonusProductId={bonusProductId}
-      />
-    );
-  } else {
-    return (
-      <AppSwitchButton
-        buttonOnPress={() => openAppURL(rentalAppUri)}
-        buttonText={buttonText}
-      />
-    );
-  }
-};
-
-type AppSwitchButtonProps = {
-  buttonOnPress: (valueCode?: string) => void;
-  buttonText: string;
-};
-
-const AppSwitchButton = ({buttonOnPress, buttonText}: AppSwitchButtonProps) => {
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
-
-  return (
-    <Button
-      expanded={true}
-      text={buttonText}
-      onPress={() => buttonOnPress()}
-      mode="primary"
-      interactiveColor={interactiveColor}
-      rightIcon={{svg: ExternalLink}}
-      accessibilityRole="link"
-    />
-  );
-};
-
-type OperatorActionButtonWithValueCodeProps = AppSwitchButtonProps & {
-  operatorId: string | undefined;
-  buyValueCodeWithBonusPoints: boolean | undefined;
-  bonusProductId?: string;
-};
-const OperatorActionButtonWithValueCode = ({
-  operatorId,
-  buttonOnPress,
-  buttonText,
-  buyValueCodeWithBonusPoints,
-  bonusProductId,
-}: OperatorActionButtonWithValueCodeProps) => {
-  const {t} = useTranslation();
 
   const {
     mutateAsync: fetchValueCode,
@@ -146,31 +55,105 @@ const OperatorActionButtonWithValueCode = ({
     isError: isBuyingValueCodeError,
   } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
 
-  const getValueCode = buyValueCodeWithBonusPoints
-    ? buyBonusProduct
-    : fetchValueCode;
+  const needsValueCode =
+    (isUserEligibleForBenefit || isBonusPayment) &&
+    benefitRequiresValueCodeToUnlock;
+  const isLoading =
+    isLoadingEligible ||
+    (needsValueCode &&
+      (isBonusPayment ? isBuyingValueCode : isFetchingValueCode));
+  const hasError =
+    needsValueCode &&
+    (isBonusPayment ? isBuyingValueCodeError : isFetchingValueCodeError);
 
-  const appSwitchButtonOnPress = useCallback(async () => {
-    const valueCode = await getValueCode();
-    valueCode && buttonOnPress(valueCode);
-  }, [buttonOnPress, getValueCode]);
+  const buttonText =
+    isUserEligibleForBenefit && benefit?.callToAction?.name
+      ? getTextForLanguage(benefit.callToAction.name, language) ??
+        t(MobilityTexts.operatorAppSwitchButton(operatorName))
+      : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
-  const isLoading = buyValueCodeWithBonusPoints
-    ? isBuyingValueCode
-    : isFetchingValueCode;
-  const isError = buyValueCodeWithBonusPoints
-    ? isBuyingValueCodeError
-    : isFetchingValueCodeError;
+  const openAppURL = useCallback(
+    async (url: string, valueCode?: string) => {
+      logEvent('Mobility', 'Open operator app', {
+        operatorName,
+        benefit,
+        isUserEligibleForBenefit,
+        valueCode,
+        isBonusPayment,
+      });
+
+      await Linking.openURL(url).catch(() =>
+        showAppMissingAlert(operatorName, appStoreUri),
+      );
+    },
+    [
+      logEvent,
+      operatorName,
+      benefit,
+      isUserEligibleForBenefit,
+      appStoreUri,
+      isBonusPayment,
+    ],
+  );
+
+  const buildUrlWithValueCode = useCallback(
+    (valueCode?: string) => {
+      let url = rentalAppUri;
+      if (benefit?.callToAction.url) {
+        // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
+        url = replaceTokens(benefit.callToAction.url, {
+          APP_URL: rentalAppUri,
+          VALUE_CODE: valueCode,
+        });
+        // If callToAction.url is e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}' the APP_URL token will now
+        // have been replaced with rentalAppUri, e.g. 'trondheimbysykkel://stations?id=44', and look like this:
+        // 'trondheimbysykkel://stations?id=44?voucherCode=1234'. Since both APP_URL and callToAction.url contains
+        // url parameters we need to replace all but the first ? with & to create a valid url.
+        url = replaceAllButFirstOccurrence(url, /\?/, '&');
+      }
+
+      return url;
+    },
+    [rentalAppUri, benefit],
+  );
+
+  const buttonOnPress = useCallback(async () => {
+    if (needsValueCode) {
+      const getValueCode = isBonusPayment ? buyBonusProduct : fetchValueCode;
+      const valueCode = await getValueCode();
+
+      if (valueCode) {
+        const url = buildUrlWithValueCode(valueCode);
+        await openAppURL(url, valueCode);
+
+        // Reset bonus payment state after using value code
+        setIsBonusPayment && setIsBonusPayment(false);
+      }
+    } else {
+      await openAppURL(rentalAppUri);
+    }
+  }, [
+    needsValueCode,
+    isBonusPayment,
+    buyBonusProduct,
+    fetchValueCode,
+    buildUrlWithValueCode,
+    openAppURL,
+    rentalAppUri,
+    setIsBonusPayment,
+  ]);
 
   if (isLoading) {
     return <ActivityIndicator />;
-  } else if (isError) {
+  }
+
+  if (hasError) {
     return (
       <MessageInfoBox
         type="error"
         message={t(MobilityTexts.errorLoadingValueCode.message)}
         onPressConfig={{
-          action: appSwitchButtonOnPress,
+          action: buttonOnPress,
           text: t(MobilityTexts.errorLoadingValueCode.retry),
         }}
       />
@@ -178,9 +161,14 @@ const OperatorActionButtonWithValueCode = ({
   }
 
   return (
-    <AppSwitchButton
-      buttonOnPress={appSwitchButtonOnPress}
-      buttonText={buttonText}
+    <Button
+      expanded={true}
+      text={buttonText}
+      onPress={buttonOnPress}
+      mode="primary"
+      interactiveColor={theme.color.interactive[0]}
+      rightIcon={{svg: ExternalLink}}
+      accessibilityRole="link"
     />
   );
 };

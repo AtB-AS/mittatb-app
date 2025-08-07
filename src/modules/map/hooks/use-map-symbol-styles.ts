@@ -31,7 +31,13 @@ export const useMapSymbolStyles = ({
 
   const featureId: Expression = ['get', 'id'];
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
+  const nothingIsSelected: Expression = ['==', selectedFeatureId, ''];
   const isSelected: Expression = ['==', featureId, selectedFeatureId];
+  const isMinimized: Expression = [
+    'all',
+    ['!', isSelected],
+    ['!', nothingIsSelected],
+  ];
 
   const countPropName = 'count';
   const count: Expression = ['get', countPropName];
@@ -47,21 +53,22 @@ export const useMapSymbolStyles = ({
     'case',
     isSelected,
     'selected',
-    ['case', ['==', selectedFeatureId, ''], 'default', 'minimized'],
+    ['case', isMinimized, 'minimized', 'default'],
   ];
   const mapItemIconState: Expression = [
     'case',
     isCluster,
-    'cluster',
+    ['case', isMinimized, 'cluster_minimized', 'cluster'],
     mapItemIconNonClusterState,
   ];
 
-  const iconFullSize: Expression = [
-    'case',
-    pinType === 'station' ? true : isCluster,
-    0.855,
-    1,
+  const reduceIconSize: Expression = [
+    'all',
+    ['any', pinType === 'station', isCluster],
+    ['!', isMinimized],
   ];
+
+  const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
 
   const iconSize: Expression = [
     'interpolate',
@@ -173,6 +180,8 @@ export const useMapSymbolStyles = ({
   const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
   const numberOfUnitsLimitedAt99Plus: Expression = [
     'case',
+    isMinimized,
+    '+',
     ['>', numberOfUnits, 99],
     '99+',
     numberOfUnits,
@@ -189,21 +198,31 @@ export const useMapSymbolStyles = ({
       : ['case', isCluster, numberOfUnitsLimitedAt99Plus, ''];
 
   const textOffset: Expression = [
-    'step',
-    numberOfUnits,
-    [0.82 * textOffsetXFactor, -0.15],
-    100,
-    [1.0 * textOffsetXFactor, -0.15],
+    'case',
+    isMinimized,
+    [0.44, -0.175],
+    [
+      'step',
+      numberOfUnits,
+      [0.82 * textOffsetXFactor, -0.15],
+      100,
+      [1.0 * textOffsetXFactor, -0.15],
+    ],
   ];
 
   const getCountAdjustedTextSize: (baseSize: number) => Expression = (
     baseSize,
   ) => [
-    'step',
-    numberOfUnits,
+    'case',
+    isMinimized,
     baseSize * textSizeFactor * 12.6,
-    100,
-    baseSize * textSizeFactor * 10.8,
+    [
+      'step',
+      numberOfUnits,
+      baseSize * textSizeFactor * 12.6,
+      100,
+      baseSize * textSizeFactor * 10.8,
+    ],
   ];
 
   const textSize: Expression = [

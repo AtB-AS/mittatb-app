@@ -3,13 +3,11 @@ import {FareContractOrReservation} from './FareContractOrReservation';
 import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
-import {sortFcOrReservationByValidityAndCreation} from './sort-fc-or-reservation';
-import {getFareContractInfo} from './utils';
+import {getSortedFareContractsAndReservations} from './sort-fc-or-reservation';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
-import {useAuthContext} from '@atb/modules/auth';
 
 type Props = {
   reservations: Reservation[];
@@ -31,26 +29,19 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-  const {abtCustomerId} = useAuthContext();
 
-  const fcOrReservations = [...fareContracts, ...reservations];
-
-  const fareContractsAndReservationsSorted =
-    sortFcOrReservationByValidityAndCreation(
-      abtCustomerId,
-      now,
-      fcOrReservations,
-      (currentTime, fareContract, currentUserId) =>
-        getFareContractInfo(currentTime, fareContract, currentUserId)
-          .validityStatus,
-    );
+  const fcAndReservations = getSortedFareContractsAndReservations(
+    fareContracts,
+    reservations,
+    now,
+  );
 
   return (
     <View style={styles.container}>
-      {!fareContractsAndReservationsSorted.length && (
+      {!fcAndReservations.length && (
         <EmptyState {...emptyStateConfig} testID="fareContracts" />
       )}
-      {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
+      {fcAndReservations?.map((fcOrReservation, index) => (
         <FareContractOrReservation
           now={now}
           onPressFareContract={() => {

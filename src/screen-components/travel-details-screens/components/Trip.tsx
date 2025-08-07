@@ -166,6 +166,9 @@ export const Trip: React.FC<TripProps> = ({
             .map((l) => l.transportSubmode)
             .filter(isDefined),
           withinZoneIds: containingZones,
+          publicCodes: tripPattern.legs
+            .map((l) => l.line?.publicCode)
+            .filter(isDefined),
         }}
       />
       {error && (

@@ -15,6 +15,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
 import {Image} from 'react-native-compressor';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -34,6 +35,8 @@ export const Root_ParkingPhotoScreen = ({
   const {mutateAsync: sendShmoBookingEvent, isLoading} =
     useSendShmoBookingEventMutation();
 
+  const {logEvent} = useBottomSheetContext();
+
   const onEndTrip = async (bookingId: string, fileData: string) => {
     if (bookingId) {
       const finishEvent: ShmoBookingEvent = {
@@ -42,6 +45,9 @@ export const Root_ParkingPhotoScreen = ({
         fileType: 'image/jpg',
         fileData: fileData,
       };
+      logEvent('Mobility', 'Shmo booking finished', {
+        bookingId: route.params.bookingId,
+      });
       return await sendShmoBookingEvent({
         bookingId: bookingId,
         shmoBookingEvent: finishEvent,

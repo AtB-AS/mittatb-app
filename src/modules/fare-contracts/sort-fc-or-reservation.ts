@@ -1,36 +1,47 @@
 import {Reservation} from '@atb/modules/ticketing';
-import type {ValidityStatus} from './utils';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAvailabilityStatus} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
-export const sortFcOrReservationByValidityAndCreation = (
-  userId: string | undefined,
+export const getSortedFareContractsAndReservations = (
+  fareContracts: FareContractType[],
+  reservations: Reservation[],
   now: number,
-  fcOrReservations: (Reservation | FareContractType)[],
-  getFareContractStatus: (
-    now: number,
-    fc: FareContractType,
-    currentUserId?: string,
-  ) => ValidityStatus | undefined,
 ): (FareContractType | Reservation)[] => {
-  const getFcOrReservationOrder = (
-    fcOrReservation: FareContractType | Reservation,
-  ) => {
-    const isFareContract = 'travelRights' in fcOrReservation;
-    // Make reservations go first, then fare contracts
-    if (!isFareContract) return -1;
+  // Should show only the most recent "failed" reservation.
+  const sortedReservations = sortFcOrReservationByCreation(reservations);
+  const mostRecentFailedReservation = sortedReservations.find(
+    (reservation) =>
+      !('travelRights' in reservation) &&
+      (reservation.paymentStatus === 'CANCEL' ||
+        reservation.paymentStatus === 'REJECT'),
+  );
 
-    const validityStatus = getFareContractStatus(now, fcOrReservation, userId);
-    return validityStatus === 'valid' ? 0 : 1;
-  };
+  const otherReservations = reservations.filter(
+    (r) => r.paymentStatus !== 'CANCEL' && r.paymentStatus !== 'REJECT',
+  );
 
-  return fcOrReservations.sort((a, b) => {
-    const orderA = getFcOrReservationOrder(a);
-    const orderB = getFcOrReservationOrder(b);
-    // Negative return value for a - b means "place a before b"
-    if (orderA !== orderB) return orderA - orderB;
-    // Make sure most recent dates comes first
-    return b.created.getTime() - a.created.getTime();
+  const validFareContracts = fareContracts.filter((fc) => {
+    return getAvailabilityStatus(fc, now).status === 'valid';
   });
+
+  // Non-valid fare contracts (e.g. inactive carnets) should come last, and be
+  // sorted by creation date.
+  const otherFareContracts = sortFcOrReservationByCreation(
+    fareContracts.filter(
+      (fc) => getAvailabilityStatus(fc, now).status !== 'valid',
+    ),
+  );
+
+  // Sort everything but the non-valid fare contracts by creation date.
+  const sortedFareContractsAndReservations = sortFcOrReservationByCreation(
+    [
+      mostRecentFailedReservation,
+      ...otherReservations,
+      ...validFareContracts,
+    ].filter(isDefined),
+  );
+
+  return [...sortedFareContractsAndReservations, ...otherFareContracts];
 };
 
 export const sortFcOrReservationByCreation = (

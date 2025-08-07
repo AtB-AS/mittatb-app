@@ -26,7 +26,7 @@ import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-chang
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
-import {mapAuthenticationType} from './utils';
+import {mapAuthenticationType, secondsToTokenExpiry} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/modules/auth';
 import {useLocaleContext} from '@atb/modules/locale';
@@ -53,6 +53,9 @@ export const getIdTokenGlobal = () => idTokenGlobal;
 let currentUserIdGlobal: string | undefined = undefined;
 export const getCurrentUserIdGlobal = () => currentUserIdGlobal;
 
+let idTokenExpirationTimeGlobal: string | undefined = undefined;
+export const getIdTokenExpirationTimeGlobal = () => idTokenExpirationTimeGlobal;
+
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
     case 'SIGN_IN_INITIATED': {
@@ -72,6 +75,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         });
         currentUserIdGlobal = action.user.uid;
         idTokenGlobal = undefined;
+        idTokenExpirationTimeGlobal = undefined;
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -99,6 +103,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         authStatus,
       });
       idTokenGlobal = action.idTokenResult.token;
+      idTokenExpirationTimeGlobal = action.idTokenResult.expirationTime;
       return {
         ...prevState,
         idTokenResult: action.idTokenResult,
@@ -132,6 +137,7 @@ type AuthContextState = {
   phoneNumber?: string;
   customerNumber?: number;
   abtCustomerId?: string;
+  isValidIdToken: boolean;
   signInWithPhoneNumber: (
     number: string,
     forceResend?: boolean,
@@ -179,6 +185,9 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         phoneNumber: state.user?.phoneNumber || undefined,
         customerNumber: state.idTokenResult?.claims['customer_number'],
         abtCustomerId: state.idTokenResult?.claims['abt_id'],
+        isValidIdToken: state.idTokenResult
+          ? secondsToTokenExpiry(state.idTokenResult.expirationTime) > 300
+          : false,
         signInWithPhoneNumber: useCallback(
           async (phoneNumberWithPrefix: string, forceResend?: boolean) => {
             if (!backendSmsEnabled) {

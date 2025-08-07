@@ -29,6 +29,10 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
+import {
+  EarnedBonusPointsSectionItem,
+  useBonusAmountEarnedQuery,
+} from '../bonus';
 
 type Props = {
   now: number;
@@ -71,6 +75,14 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
+  const shouldShowEarnedBonusPoints =
+    validityStatus === 'valid' || validityStatus === 'upcoming';
+
+  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
+    fareContract.id,
+    !shouldShowEarnedBonusPoints,
+  );
+
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
@@ -97,6 +109,10 @@ export const FareContractView: React.FC<Props> = ({
       )}
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
+      )}
+
+      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
+        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
@@ -129,5 +145,6 @@ export const FareContractView: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook(() => ({
   header: {
     paddingVertical: 0,
+    borderWidth: 0,
   },
 }));

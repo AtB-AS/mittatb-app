@@ -1,32 +1,32 @@
 import {
-  Reservation,
-  isSentOrReceivedFareContract,
   getLastUsedAccess,
+  isSentOrReceivedFareContract,
+  Reservation,
 } from '@atb/modules/ticketing';
 import {
-  FareContractType,
   FareContractState,
-  UsedAccessType,
-  TravelRightType,
+  FareContractType,
+  getAccesses,
+  type TravelRightType,
+  type UsedAccessType,
 } from '@atb-as/utils';
 import {
+  FareZone,
   findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
-  FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
-  Language,
   FareZonesTexts,
+  Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {getAccesses} from '@atb-as/utils';
 import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
 

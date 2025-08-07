@@ -78,7 +78,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     accessibilityHint: t(
       AnonymousPurchasesTexts.consequences.button.login.a11yHint,
     ),
-    expanded: false,
+    expanded: true,
   };
 
   const continueWithoutLoginButton = {
@@ -88,7 +88,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
     ),
     rightIcon: onPressLogin ? undefined : {svg: ArrowRight},
-    expanded: false,
+    expanded: true,
   };
 
   return (

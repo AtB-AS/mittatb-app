@@ -14,6 +14,7 @@ export type ProfileStackParams = StackParams<{
   Profile_TicketHistoryScreen: TicketHistoryScreenParams;
   Profile_TicketHistorySelectionScreen: undefined;
   Profile_BonusScreen: undefined;
+  Profile_SmartParkAndRideScreen: undefined;
   Profile_DeleteProfileScreen: undefined;
   Profile_EditProfileScreen: undefined;
   Profile_FavoriteListScreen: undefined;
@@ -37,6 +38,7 @@ export type ProfileStackParams = StackParams<{
   Profile_SettingsScreen: undefined;
   Profile_FavoriteScreen: undefined;
   Profile_InformationScreen: undefined;
+  Profile_HelpAndContactScreen: undefined;
 }>;
 
 export type ProfileStackRootProps =

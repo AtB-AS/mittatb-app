@@ -16,6 +16,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
       {
         expectedStartTime: '2023-10-01T10:00:00Z',
@@ -23,6 +24,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP4',
         serviceJourneyId: 'SJ2',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -49,6 +51,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -68,6 +71,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 
@@ -110,6 +114,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP2',
         serviceJourneyId: 'SJ1',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
       {
         expectedStartTime: '2023-01-01T10:00:00Z', // Valid ISO string
@@ -117,6 +122,7 @@ describe('purchaseSelectionBuilder - legs', () => {
         toStopPlaceId: 'SP4',
         serviceJourneyId: 'SJ2',
         mode: 'water',
+        expectedEndTime: '2023-10-01T10:01:00Z',
       },
     ];
 

@@ -297,6 +297,27 @@ const TicketingTexts = {
       'Last inn appen på nytt',
     ),
   },
+  booking: {
+    closed: _(
+      'Billettkjøp stengt i app',
+      'Ticket purchase closed in app',
+      'Billettkjøp stengt i app',
+    ),
+    soldOut: _('Fullbooket', 'Fully booked', 'Fullteikna'),
+    numAvailableTickets: (num: number) =>
+      _(`${num} plasser igjen`, `${num} places left`, `${num} plassar igjen`),
+    cannotFindDepartures: _(
+      'Finner ingen avganger',
+      'Cannot find departures',
+      'Finner ingen avganger',
+    ),
+    adjustTime: _(
+      'Velg en annen dag eller juster tidspunkt',
+      'Choose another day or adjust time',
+      'Velg ein annan dag eller juster tidspunkt',
+    ),
+    select: _('Velg', 'Select', 'Velg'),
+  },
 };
 
 export default TicketingTexts;

@@ -4,14 +4,17 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ProfileTexts = {
   header: {
-    title: _('Profil', 'Profile', 'MProfil'),
+    title: _('Profil', 'Profile', 'Profil'),
   },
   sections: {
     account: {
-      heading: _('Min konto', 'My account', 'Min konto'),
       linkSectionItems: {
         login: {
-          label: _('Logg inn', 'Log in', 'Logg inn'),
+          label: _(
+            'Logg inn eller opprett profil',
+            'Log in or create profile',
+            'Logg inn eller opprett profil',
+          ),
         },
         logout: {
           label: _('Logg ut', 'Log out', 'Logg ut'),
@@ -36,16 +39,39 @@ const ProfileTexts = {
         bonus: {
           label: _('Bonus', 'Bonus', 'Bonus'),
         },
+        smartParkAndRide: {
+          label: _(
+            'Parkering på Ranheim',
+            'Parking at Ranheim',
+            'Parkering på Ranheim',
+          ),
+        },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
         editProfile: {
-          label: _('Rediger Profil', 'Edit Profile', 'Rediger Profil'),
+          label: _('Rediger profil', 'Edit profile', 'Rediger profil'),
         },
       },
       infoItems: {
-        customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
-        phoneNumber: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
+        heading: _('Din informasjon', 'Your information', 'Din informasjon'),
+        notLoggedInHeading: _(
+          'Du er ikke logget inn',
+          'You are not logged in',
+          'Du er ikkje logga inn',
+        ),
+        loggedInWith: (mode: string) =>
+          _(
+            `Logget inn med: ${mode}`,
+            `Logged in with: ${mode}`,
+            `Logga inn med: ${mode}`,
+          ),
+        customerNumber: (number: string | number) =>
+          _(
+            `Kundenummer: ${number}`,
+            `Customer number: ${number}`,
+            `Kundenummer: ${number}`,
+          ),
         claimsError: _(
           'Det oppstod et problem ved lasting av kontoen din.',
           'There was a problem loading your account.',
@@ -205,7 +231,7 @@ const ProfileTexts = {
           },
         },
         enrollment: {
-          label: _('Nye konsepter', 'New concepts', 'Nye konsepter'),
+          label: _('Nye konsepter', 'New concepts', 'Nye konsept'),
         },
         travelAid: {
           label: _('Tilgjengelighet', 'Accessibility', 'Tilgjengelegheit'),
@@ -362,6 +388,19 @@ const ProfileTexts = {
         'Hjelp og kontakt',
       ),
       feedback: _(
+        'Gi tilbakemelding om appen',
+        'Give feedback about the app',
+        'Gi tilbakemelding om appen',
+      ),
+      contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
+      lostAndFound: _('Hittegods', 'Lost and found', 'Hittegods'),
+      refund: _('Refusjon', 'Refund', 'Refusjon'),
+      frequentlyAskedQuestions: _(
+        'Ofte stilte spørsmål',
+        'Frequently asked questions',
+        'Ofte stilte spørsmål',
+      ),
+      chat: _(
         'Gi tilbakemelding om appen',
         'Give feedback about the app',
         'Gi tilbakemelding om appen',

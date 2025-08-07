@@ -412,6 +412,7 @@ export const DepartureDetailsScreenComponent = ({
               fromZones:
                 fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
+              publicCode: publicCode ?? null,
             }}
             style={styles.messageBox}
             textColor={backgroundColor}

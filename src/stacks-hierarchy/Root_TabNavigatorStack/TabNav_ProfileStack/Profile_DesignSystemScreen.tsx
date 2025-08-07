@@ -15,7 +15,7 @@ import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {
   RadioSectionItem,
@@ -37,7 +37,8 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {LabelInfo} from '@atb/components/label-info';
+import {Tag} from '@atb/components/tag';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -159,11 +160,7 @@ export const Profile_DesignSystemScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title="Design System"
-        leftButton={{type: 'back'}}
-        rightButton={{type: 'chat'}}
-      />
+      <FullScreenHeader title="Design System" leftButton={{type: 'back'}} />
 
       <ScrollView>
         <Section style={styles.section}>
@@ -433,20 +430,63 @@ export const Profile_DesignSystemScreen = ({
 
         <Section style={styles.section}>
           <ExpandableSectionItem
-            text="LabelInfo"
+            text="Tag"
             showIconText={false}
             textType="heading__title"
+            label="new"
             expandContent={
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  marginTop: -theme.spacing.small,
-                }}
-              >
-                <LabelInfo label="new" />
-                <LabelInfo label="beta" />
-              </View>
+              <>
+                <ThemeText>Regular:</ThemeText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: theme.spacing.small,
+                    gap: theme.spacing.small,
+                  }}
+                >
+                  <Tag labels={[`primary`]} tagType="primary" />
+                  <Tag labels={[`secondary`]} tagType="secondary" />
+                  <Tag
+                    labels={[`secondary with icon`]}
+                    tagType="secondary"
+                    icon={Swap}
+                  />
+                  <Tag labels={[`valid`]} tagType="valid" />
+                  <Tag labels={[`error`]} tagType="error" />
+                  <Tag labels={[`warning`]} tagType="warning" />
+                  <Tag labels={[`info`]} tagType="info" />
+                </View>
+
+                <ThemeText style={{marginTop: theme.spacing.small}}>
+                  Small:
+                </ThemeText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: theme.spacing.small,
+                    gap: theme.spacing.small,
+                  }}
+                >
+                  <Tag labels={[`primary`]} tagType="primary" size="small" />
+                  <Tag
+                    labels={[`secondary`]}
+                    tagType="secondary"
+                    size="small"
+                  />
+                  <Tag
+                    labels={[`secondary with icon`]}
+                    tagType="secondary"
+                    icon={Swap}
+                    size="small"
+                  />
+                  <Tag labels={[`valid`]} tagType="valid" size="small" />
+                  <Tag labels={[`error`]} tagType="error" size="small" />
+                  <Tag labels={[`warning`]} tagType="warning" size="small" />
+                  <Tag labels={[`info`]} tagType="info" size="small" />
+                </View>
+              </>
             }
           />
         </Section>
@@ -983,8 +1023,13 @@ export const Profile_DesignSystemScreen = ({
         <Section style={styles.section}>
           <ToggleSectionItem
             text="Some short text"
-            leftImage={<ThemeIcon svg={Bus} />}
+            leftImage={<ThemeIcon svg={BusFill} />}
             onValueChange={() => {}}
+          />
+          <ToggleSectionItem
+            text="Toggle with label"
+            onValueChange={() => {}}
+            label="new"
           />
           <RadioSectionItem
             text="Some short text and interactive color"
@@ -994,7 +1039,7 @@ export const Profile_DesignSystemScreen = ({
           <RadioSectionItem
             text="Some very long text over here which goes over multiple lines"
             subtext="With a subtext and icon, no interactive color"
-            leftIcon={Bus}
+            leftIcon={BusFill}
             selected={selected}
             onPress={() => setSelected(!selected)}
           />
@@ -1043,25 +1088,25 @@ export const Profile_DesignSystemScreen = ({
             text="Disabled link"
             onPress={() => {}}
             disabled
-            icon={<ThemeIcon svg={Edit} />}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
-            icon={<ThemeIcon svg={Edit} />}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} color="error" />}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} color="error" />}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Link with interactiveColor"

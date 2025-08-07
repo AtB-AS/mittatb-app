@@ -15,7 +15,7 @@ import {flatMap} from '@atb/utils/array';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
-import {FeatureCategory} from '@atb/sdk';
+import {FeatureCategory} from '@atb/api/bff/types';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
   Language,

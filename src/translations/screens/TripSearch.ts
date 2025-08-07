@@ -53,7 +53,6 @@ const TripSearchTexts = {
   },
   location: {
     departurePicker: {
-      label: _('Fra', 'From', 'Frå'),
       a11yLabel: _(
         'Velg avreisested',
         'Select place of departure',
@@ -66,7 +65,6 @@ const TripSearchTexts = {
       ),
     },
     destinationPicker: {
-      label: _('Til', 'To', 'Til'),
       a11yLabel: _(
         'Velg ankomststed',
         'Select place of arrival',
@@ -195,7 +193,11 @@ const TripSearchTexts = {
       },
     },
     resultItem: {
-      passedTrip: _('Passert reise, ', 'Passed trip, ', 'Passert reise, '),
+      passedTrip: _(
+        'Avgangstid passert',
+        'Departure time passed',
+        'Avgangstid passert',
+      ),
       header: {
         title: (mode: string, placeName: string) =>
           _(
@@ -389,35 +391,14 @@ const TripSearchTexts = {
   },
   filters: {
     bottomSheet: {
-      heading: _('Filter', 'Filter', 'Filter'),
-      modes: {
-        heading: _(
-          'Hva vil du reise med?',
-          'What do you want to travel with?',
-          'Kva vil du reise med?',
-        ),
-        all: _('Alle', 'All', 'Alle'),
-      },
+      title: _('Filter', 'Filter', 'Filter'),
+      heading: _('Transportmidler', 'Transport modes', 'Transportmiddel'),
+      modesAll: _(
+        'Alle transportmidler',
+        'All transport modes',
+        'Alle transportmiddel',
+      ),
       use: _('Bruk', 'Use', 'Bruk'),
-      saveFilters: {
-        text: _(
-          'Lagre valg for fremtidige reisesøk',
-          'Save selection for future travel searches',
-          'Lagre val for framtidige reisesøk',
-        ),
-        a11yHint: {
-          save: _(
-            'Aktiver for å lagre valg for fremtidige reisesøk',
-            'Activate to save selection for future travel searches',
-            'Aktiver for å lagre val for framtidige reisesøk',
-          ),
-          notSave: _(
-            'Aktiver for å ikke lagre valg for fremtidige reisesøk',
-            'Activate to not save selection for future travel searches',
-            'Aktiver for å ikkje lagre val for framtidige reisesøk',
-          ),
-        },
-      },
     },
     selection: {
       transportModes: (selected: number, total: number) =>

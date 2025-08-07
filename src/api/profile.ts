@@ -8,17 +8,15 @@ import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
 import {getAxiosErrorMetadata} from './utils';
 
-const profileEndpoint = '/profile/v1';
-
 export const getProfile = async () => {
-  const response = await client.get<CustomerProfile>(profileEndpoint, {
+  const response = await client.get<CustomerProfile>('/profile/v1', {
     authWithIdToken: true,
   });
   return response.data;
 };
 
 export const updateProfile = async (profile: CustomerProfileUpdate) => {
-  const response = await client.patch(profileEndpoint, profile, {
+  const response = await client.patch('/profile/v1', profile, {
     authWithIdToken: true,
   });
   return response.data;
@@ -27,7 +25,7 @@ export const updateProfile = async (profile: CustomerProfileUpdate) => {
 export async function deleteProfile(opts?: AxiosRequestConfig) {
   const query = {expirationDate: new Date().toISOString()};
   const deleteOK = await client
-    .delete(profileEndpoint, {
+    .delete('/profile/v1', {
       ...opts,
       authWithIdToken: true,
       data: query,
@@ -57,7 +55,7 @@ export const getCustomerAccountId = async (
 ): Promise<string | undefined> => {
   return await client
     .post(
-      `${profileEndpoint}/search`,
+      `/profile/v1/search`,
       {phoneNumber: phoneNumber},
       {
         authWithIdToken: true,
@@ -82,7 +80,7 @@ export const getCustomerAccountId = async (
 export const fetchOnBehalfOfAccounts =
   (): Promise<OnBehalfOfAccountsResponse> =>
     client
-      .get(`${profileEndpoint}/on-behalf-of/accounts`, {
+      .get(`/profile/v1/on-behalf-of/accounts`, {
         authWithIdToken: true,
       })
       .then((response) => response.data);
@@ -99,7 +97,7 @@ export const getPhoneNumberFromId = async (
 ): Promise<string> => {
   return await client
     .post<CustomerProfile>(
-      `${profileEndpoint}/lookup`,
+      `/profile/v1/lookup`,
       {customerAccountId: accountId},
       {
         authWithIdToken: true,
@@ -111,7 +109,7 @@ export const getPhoneNumberFromId = async (
 
 export const deleteOnBehalfOfAccount = async (accountId: string) => {
   await client.patch(
-    `${profileEndpoint}/on-behalf-of/${accountId}`,
+    `/profile/v1/on-behalf-of/${accountId}`,
     {customerAlias: undefined, phoneNumber: undefined},
     {authWithIdToken: true},
   );

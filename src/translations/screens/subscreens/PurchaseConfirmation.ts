@@ -132,6 +132,14 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
+  confirmations: {
+    onlyValidDeparture: _(
+      'Gyldig for avgang:',
+      'Valid for departure:',
+      'Gyldig for avgang:',
+    ),
+  },
+
   paymentWithMultiplePaymentMethods: {
     a11yLabel: (brands: string) =>
       _(`Betal med ${brands}`, `Pay with ${brands}`, `Betal med $${brands}`),

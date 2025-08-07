@@ -5,10 +5,10 @@ import {
 
 describe('phoneNumberUtils', () => {
   describe('formatPhoneNumber', () => {
-    it('Should return a formatted a valid phone number', () => {
+    it('Should return a formatted phone number with non-breaking spaces', () => {
       const phoneNumber = '+4744444444';
       const formattedNumber = formatPhoneNumber(phoneNumber);
-      expect(formattedNumber).toEqual('+47 44 44 44 44');
+      expect(formattedNumber).toEqual('+47 44 44 44 44');
     });
     it('Should not format, but return an invalid phonenumber', () => {
       const phoneNumber = '12345';

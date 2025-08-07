@@ -33,7 +33,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 > [!TIP]
 > If it's been a while since the last time you ran the app, or there's recently been some changes to a unknown set of dependencies, this command should fix most problems:
 >
-> `yarn clean:install && yarn setup dev atb && cd ios && bundle exec pod install && cd ../android && ./gradlew clean && cd - && yarn start --reset-cache`
+> `yarn clean:install && yarn setup dev atb && cd ios && bundle exec pod install && cd ../android && ./gradlew clean && cd .. && yarn start --reset-cache`
 >
 > Then `yarn ios --list-devices` or `yarn android` to build and launch the app
 
