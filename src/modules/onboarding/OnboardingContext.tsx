@@ -45,6 +45,7 @@ type OnboardingContextState = Omit<
   completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartAllOnboardingSections: () => void;
+  currentRouteName: string;
   setCurrentRouteName: (currentRouteName: string) => void;
 };
 
@@ -227,6 +228,7 @@ export const OnboardingContextProvider = ({children}: Props) => {
         completeOnboardingSection,
         restartOnboardingSection,
         restartAllOnboardingSections,
+        currentRouteName,
         setCurrentRouteName,
       }}
     >

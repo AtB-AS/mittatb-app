@@ -31,9 +31,10 @@ import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useOnPushNotificationOpened} from '@atb/modules/notifications';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {
+  useOnboardingContext,
   useOnboardingFlow,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
@@ -53,10 +54,10 @@ export const Root_TabNavigatorStack = () => {
 
   const navigation = useNavigation<RootNavigationProps>();
 
+  const {currentRouteName} = useOnboardingContext();
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
-  const {name: currentRouteName} = useRoute();
 
   useEffect(() => {
     if (
