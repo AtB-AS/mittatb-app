@@ -25,14 +25,26 @@ import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
 
+type MinZoomLevelProp = {minZoomLevel: number};
+const vehiclesAndStationsMinZoom = 14;
+const vehiclesAndStationsMaxZoom = 17;
+const vehiclesAndStationsZoomLevels = Array.from(
+  {length: vehiclesAndStationsMaxZoom - vehiclesAndStationsMinZoom + 1},
+  (_, i) => i + vehiclesAndStationsMinZoom,
+);
+// console.log('vehiclesAndStationsZoomLevels', vehiclesAndStationsZoomLevels);
+
 export const VehiclesWithClusters = ({
   selectedFeatureId,
-}: SelectedFeatureIdProp) => {
-  const minZoomLevel = 14;
+  minZoomLevel,
+}: SelectedFeatureIdProp & MinZoomLevelProp) => {
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'vehicle',
-    reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.3,
+    reachFullScaleAtZoomLevel:
+      minZoomLevel +
+      scaleTransitionZoomRange +
+      (minZoomLevel === vehiclesAndStationsMinZoom ? 0.15 : 0),
   });
 
   const filter: FilterExpression = useMemo(
@@ -50,10 +62,15 @@ export const VehiclesWithClusters = ({
 
   return (
     <MapboxGL.SymbolLayer
-      id="vehicles-clustered-symbol-layer"
-      sourceID={vehiclesAndStationsVectorSourceId}
+      id={`vehicles-clustered-symbol-layer-${minZoomLevel}`}
+      sourceID={vehiclesAndStationsVectorSourceId + minZoomLevel.toString()}
       sourceLayerID="combined_layer"
       minZoomLevel={minZoomLevel}
+      maxZoomLevel={
+        minZoomLevel === vehiclesAndStationsMaxZoom
+          ? undefined
+          : minZoomLevel + 1 + scaleTransitionZoomRange
+      }
       aboveLayerID={MapSlotLayerId.Vehicles}
       filter={filter}
       style={style}
@@ -158,10 +175,15 @@ export const VehiclesAndStations = ({
       onPress={onPress}
     >
       <>
-        {!!showVehicles && (
-          <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
-        )}
-        {!!showStations && (
+        {!!showVehicles &&
+          vehiclesAndStationsZoomLevels.map((zoomLevel) => (
+            <VehiclesWithClusters
+              key={zoomLevel.toString()}
+              selectedFeatureId={selectedFeatureId}
+              minZoomLevel={zoomLevel}
+            />
+          ))}
+        {!!showStations && false && (
           <Stations
             selectedFeatureId={selectedFeatureId}
             showNonVirtualStations={true}
@@ -181,25 +203,28 @@ export const VehiclesAndStations = ({
  * @returns {id: string, source: StyleJsonVectorSource}
  */
 export const useVehiclesAndStationsVectorSource: () => {
-  id: string;
-  source: StyleJsonVectorSource;
+  [key: string]: StyleJsonVectorSource;
 } = () => {
   // Could consider adding the sources only if shown.
   // The reason not to, is to simplify potential cache tile hotloading on the server.
   const tileLayerNames: TileLayerName[] = ['vehicles_clustered', 'stations'];
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
 
-  return useMemo(
-    () => ({
-      id: vehiclesAndStationsVectorSourceId,
-      source: {
+  return useMemo(() => {
+    const vehiclesAndStationsVectorSources: {
+      [key: string]: StyleJsonVectorSource;
+    } = {};
+    vehiclesAndStationsZoomLevels.forEach((zoomLevel) => {
+      vehiclesAndStationsVectorSources[
+        vehiclesAndStationsVectorSourceId + zoomLevel.toString()
+      ] = {
         type: 'vector',
         tiles: [tileUrlTemplate || ''],
-        minzoom: 14,
-        maxzoom: 19,
+        minzoom: zoomLevel,
+        maxzoom: zoomLevel,
         volatile: true,
-      },
-    }),
-    [tileUrlTemplate],
-  );
+      };
+    });
+    return vehiclesAndStationsVectorSources;
+  }, [tileUrlTemplate]);
 };
