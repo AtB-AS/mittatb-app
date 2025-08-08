@@ -6,6 +6,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
+import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -49,13 +50,18 @@ export const useMapboxJsonStyle: (
       themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
     const themedLayers = themedStyle.layers.map((layer) => ({
       ...layer,
-      slot: 'middle', // above mapbox ground style, but below 3d buildings/items
+      slot: 'middle', // above mapbox ground style, but below 3d buildings/items, https://docs.mapbox.com/mapbox-gl-js/guides/migrate/#layer-slots
       paint: {
         ...layer.paint,
-        // add emissive strength in order to be unaffected by lightPreset
+        // add emissive strength to everything in order to be unaffected by lightPreset
         'background-emissive-strength': 1,
         'fill-emissive-strength': 1,
         'line-emissive-strength': 1,
+        'icon-emissive-strength': 1,
+        'circle-emissive-strength': 1,
+        'fill-extrusion-emissive-strength': 1,
+        'model-emissive-strength': 1,
+        'text-emissive-strength': 1,
       },
     }));
 
@@ -102,6 +108,7 @@ export const useMapboxJsonStyle: (
               showPedestrianRoads: true,
               showRoadLabels: false,
             },
+            'color-theme': colorTheme,
           },
         ],
       }),
