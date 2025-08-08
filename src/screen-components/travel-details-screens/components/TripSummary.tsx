@@ -1,5 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {WalkFill, BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
@@ -29,7 +29,7 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
       />
       {readableWalkDistance && (
         <SummaryDetail
-          icon={Walk}
+          icon={WalkFill}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
               readableWalkDistance,
@@ -45,7 +45,7 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
       )}
       {readableBikeDistance && (
         <SummaryDetail
-          icon={Bicycle}
+          icon={BicycleFill}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.bikeDistance.a11yLabel(
               readableBikeDistance,

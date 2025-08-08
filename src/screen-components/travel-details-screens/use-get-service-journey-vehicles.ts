@@ -1,4 +1,4 @@
-import {getServiceJourneyVehicles} from '@atb/api/vehicles';
+import {getServiceJourneyVehicles} from '@atb/api/bff/vehicles';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useQuery} from '@tanstack/react-query';
 

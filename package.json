@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.71.0",
+  "version": "1.72.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "5.16.0",
-    "@atb-as/generate-assets": "17.3.0",
+    "@atb-as/config-specs": "^7.1.0",
+    "@atb-as/generate-assets": "^18.3.1",
     "@atb-as/theme": "^14.1.0",
     "@atb-as/utils": "^3.5.0",
     "@bugsnag/react-native": "^7.25.0",
@@ -117,7 +117,6 @@
     "react-native-localize": "^3.2.1",
     "react-native-pager-view": "^6.3.3",
     "react-native-permissions": "^4.1.5",
-    "react-native-popover-view": "^5.1.8",
     "react-native-portalize": "^1.0.7",
     "react-native-reanimated": "^3.16.1",
     "react-native-safe-area-context": "^4.10.8",

@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
-import {getAgeVerification} from '@atb/api/vipps-login/api';
+import {getAgeVerification} from '@atb/api/identity';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export enum AgeVerificationEnum {

@@ -129,6 +129,9 @@ const ShmoOperatorSchema = z.object({
 export const AssetSchema = z.object({
   id: z.string().nullish(),
   operator: ShmoOperatorSchema,
+  systemId: z.string().nullish(),
+  vehicleTypeId: z.string().nullish(),
+  vehicleCode: z.string().nullish(),
   stationId: z.string().nullish(),
   licensePlate: z.string().nullish(),
   stateOfCharge: z.number().int().nullish(),

@@ -17,15 +17,18 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {UserBonusBalance} from './UserBonusBalance';
 import {isDefined} from '@atb/utils/presence';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
+  operatorName: string;
   isChecked: boolean;
-  onPress?: () => void;
+  onPress: () => void;
 };
 
 export const PayWithBonusPointsCheckbox = ({
   bonusProduct,
+  operatorName,
   isChecked,
   onPress,
   ...props
@@ -33,6 +36,7 @@ export const PayWithBonusPointsCheckbox = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
+  const {logEvent} = useBottomSheetContext();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -62,7 +66,13 @@ export const PayWithBonusPointsCheckbox = ({
       <Section {...props}>
         <GenericClickableSectionItem
           active={isChecked}
-          onPress={onPress}
+          onPress={() => {
+            onPress();
+            logEvent('Bonus', 'bonus points checkbox toggled', {
+              bonusProductId: bonusProduct.id,
+              newState: isChecked,
+            });
+          }}
           disabled={isDisabled}
           accessibilityRole="checkbox"
           accessibilityState={{checked: isChecked}}
@@ -99,9 +109,18 @@ export const PayWithBonusPointsCheckbox = ({
       </Section>
       {isError && (
         <MessageInfoBox
-          style={styles.errorMessage}
+          style={styles.infoMessage}
           type="error"
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+        />
+      )}
+      {isChecked && (
+        <MessageInfoBox
+          style={styles.infoMessage}
+          type="warning"
+          message={t(
+            BonusProgramTexts.log_in_operator_app_warning(operatorName),
+          )}
         />
       )}
     </>
@@ -122,7 +141,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
   textContainer: {flex: 1},
-  errorMessage: {
+  infoMessage: {
     marginTop: theme.spacing.medium,
   },
 }));

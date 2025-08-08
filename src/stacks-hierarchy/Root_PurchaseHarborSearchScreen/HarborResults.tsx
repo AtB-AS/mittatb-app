@@ -6,7 +6,7 @@ import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Boat} from '@atb/assets/svg/mono-icons/transportation';
+import {BoatFill} from '@atb/assets/svg/mono-icons/transportation';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import sortBy from 'lodash.sortby';
 import {GeoLocation} from '@atb/modules/favorites';
@@ -78,7 +78,7 @@ export const HarborResults: React.FC<Props> = ({
                 style={styles.button}
                 testID={'harborResult' + index}
               >
-                <ThemeIcon svg={Boat} />
+                <ThemeIcon svg={BoatFill} />
                 <View style={styles.nameContainer}>
                   <ThemeText typography="body__primary--bold">
                     {harbor.name}

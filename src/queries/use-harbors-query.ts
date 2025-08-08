@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {
   getStopPlaceConnections,
   getStopPlacesByMode,
-} from '@atb/api/stop-places';
+} from '@atb/api/bff/stop-places';
 import {
   TransportMode,
   TransportSubmode,

@@ -10,13 +10,16 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {enrollIntoBetaGroups} from '@atb/api/enrollment';
+import {enrollIntoBetaGroups} from '@atb/api/bff/enrollment';
 import analytics from '@react-native-firebase/analytics';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -89,10 +92,12 @@ type UserProperties = {[key: string]: string | null};
 
 const useEnroll = () => {
   const {refresh} = useRemoteConfigContext();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
+
   const onEnroll = useCallback(
     async function onEnroll(key: string) {
       setHasError(false);
@@ -107,6 +112,18 @@ const useEnroll = () => {
           await analytics().setUserProperties(userProperties);
           refresh();
           setIsEnrolled(true);
+
+          if (enrollment.enrollmentId) {
+            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
+              config.enrollmentIds.includes(enrollment.enrollmentId),
+            );
+
+            if (onboardingConfig) {
+              navigation.navigate('Root_EnrollmentOnboardingStack', {
+                configId: onboardingConfig.id,
+              });
+            }
+          }
         }
       } catch (err) {
         console.warn(err);
@@ -116,7 +133,7 @@ const useEnroll = () => {
         setIsLoading(false);
       }
     },
-    [setHasError, setIsLoading, setIsEnrolled, refresh],
+    [setHasError, setIsLoading, setIsEnrolled, refresh, navigation],
   );
 
   return {

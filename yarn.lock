@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@5.16.0":
-  version "5.16.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-5.16.0.tgz#804a704dd9e089ae58fe492f0c511f521d08dd78"
-  integrity sha512-q5HOxj+EXDha318C52jqHqPHsCmxUMmdUvSRd+xunn330oOhjPbzk4o+Q077WJGI2wjfBZ8QzwBZtRgEG1TeNQ==
+"@atb-as/config-specs@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-7.1.0.tgz#f856fc9a6e412a36a60d8a2e28b3781544e3e5f2"
+  integrity sha512-8UWGAbotaI8RhTV5dudpAL2KU30eYPob5NQC9JTkpxM8dxO0OVEfkwdm4L5kcwW7A0HzWM/LE2m7LmJflvfXAg==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -33,19 +33,19 @@
     zod "^3.24.4"
     zod-to-json-schema "^3.24.5"
 
-"@atb-as/generate-assets@17.3.0":
-  version "17.3.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.3.0.tgz#59dcb2d2bb6ba1a90e4ada03179a3ed5986234d5"
-  integrity sha512-qLpPXyiovyW/MNHy4qM2fb6onmulg9u6kb89Aq1nCuRj3ZLS4JPycHyrj2mUv0iRXJG6sVQIBszcdMtwtkcuQg==
+"@atb-as/generate-assets@^18.3.1":
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.3.1.tgz#b962faa62493937889b2a822d9d1bddd9911f80c"
+  integrity sha512-Rmp7wJVk0H10hSIZysrfReRbV1GSjve8rWJr2CZQ+k/haLrXbgiIBm3V3aLJNlVBqRpspGrh87YwXH8F0l+Mvw==
   dependencies:
-    "@atb-as/theme" "^14.0.1"
+    "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^14.0.1":
+"@atb-as/theme@14.0.1":
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-14.0.1.tgz#82f3d3cc179ee788a1b32d9d2c89948ea2d88dfb"
   integrity sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==
@@ -3020,11 +3020,6 @@
     metro-config "^0.81.0"
     metro-runtime "^0.81.0"
 
-"@react-native/normalize-color@*":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.1.0.tgz#939b87a9849e81687d3640c5efa2a486ac266f91"
-  integrity sha512-Z1jQI2NpdFJCVgpY+8Dq/Bt3d+YUi1928Q+/CZm/oh66fzM0RUl54vvuXlPJKybH4pdCZey1eDTPaLHkMPNgWA==
-
 "@react-native/normalize-colors@0.76.7":
   version "0.76.7"
   resolved "https://registry.yarnpkg.com/@react-native/normalize-colors/-/normalize-colors-0.76.7.tgz#dbf0a44e1a9a9ccae4dbb124b389eeedbd33976c"
@@ -5778,15 +5773,6 @@ depd@2.0.0:
   resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
-deprecated-react-native-prop-types@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/deprecated-react-native-prop-types/-/deprecated-react-native-prop-types-2.3.0.tgz#c10c6ee75ff2b6de94bb127f142b814e6e08d9ab"
-  integrity sha512-pWD0voFtNYxrVqvBMYf5gq3NA2GCpfodS1yNynTPc93AYA/KEMGeWDqqeUB6R2Z9ZofVhks2aeJXiuQqKNpesA==
-  dependencies:
-    "@react-native/normalize-color" "*"
-    invariant "*"
-    prop-types "*"
-
 dequal@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
@@ -7378,7 +7364,7 @@ internal-slot@^1.0.4, internal-slot@^1.0.5, internal-slot@^1.0.7:
     hasown "^2.0.0"
     side-channel "^1.0.4"
 
-invariant@*, invariant@^2.2.4:
+invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -9712,7 +9698,7 @@ prompts@^2.0.1, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.5.10, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.5.10, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -9997,14 +9983,6 @@ react-native-permissions@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.5.tgz#db4d1ddbf076570043f4fd4168f54bb6020aec92"
   integrity sha512-r6VMRacASmtRHS+GZ+5HQCp9p9kiE+UU9magHOZCXZLTJitdTuVHWZRrb4v4oqZGU+zAp3mZhTQftuMMv+WLUg==
-
-react-native-popover-view@^5.1.8:
-  version "5.1.8"
-  resolved "https://registry.yarnpkg.com/react-native-popover-view/-/react-native-popover-view-5.1.8.tgz#5c13815d56862cd59a0cdef548d892ce572a7956"
-  integrity sha512-kDH2liv/Xb8y0JCY25Ft2SiA5fJtVL4o7gk2dXyhXeNhjSEEss3Z3hZyeYMi4ctHimovWSBZz/CjfejNbUF1jA==
-  dependencies:
-    deprecated-react-native-prop-types "^2.3.0"
-    prop-types "^15.8.1"
 
 react-native-portalize@^1.0.7:
   version "1.0.7"

@@ -1,7 +1,6 @@
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject, useRef} from 'react';
 import {RefundBottomSheet} from './RefundBottomSheet';
@@ -40,7 +39,7 @@ export function RefundSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.refund.refund)}
       onPress={onPress}
-      icon={<ThemeIcon svg={TicketInvalid} />}
+      rightIcon={{svg: TicketInvalid}}
       ref={onCloseFocusRef}
       {...sectionProps}
     />

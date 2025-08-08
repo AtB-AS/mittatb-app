@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {getServiceJourneyMapLegs} from '@atb/api/bff/servicejourney';
 
 export function useMapData(
   serviceJourneyId?: string,

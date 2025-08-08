@@ -1,10 +1,17 @@
 import {client} from '@atb/api';
-import {VehicleRegistration} from '../types';
+import {
+  SvvVehicleInfo,
+  SvvVehicleInfoSchema,
+  VehicleRegistration,
+} from '../types';
 
-export const addVehicleRegistration = (licensePlate: string): Promise<void> => {
+export const addVehicleRegistration = (
+  licensePlate: string,
+  nickname?: string,
+): Promise<void> => {
   return client.post(
     `/spar/v1/vehicle-registrations`,
-    {licensePlate},
+    {licensePlate, nickname},
     {authWithIdToken: true},
   );
 };
@@ -21,10 +28,28 @@ export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
 export const editVehicleRegistration = (
   id: string,
   licensePlate: string,
+  nickname?: string,
 ): Promise<void> => {
   return client.put(
     `/spar/v1/vehicle-registrations/${id}`,
-    {licensePlate},
+    {licensePlate, nickname},
     {authWithIdToken: true},
   );
+};
+
+export const deleteVehicleRegistration = (id: string): Promise<void> => {
+  return client.delete(`/spar/v1/vehicle-registrations/${id}`, {
+    authWithIdToken: true,
+  });
+};
+
+export const searchVehicleInformation = (
+  licensePlate: string,
+): Promise<SvvVehicleInfo> => {
+  return client
+    .get(`/spar/v1/search-vehicle/${licensePlate}`, {
+      authWithIdToken: true,
+      skipErrorLogging: (error) => error.response?.status === 400,
+    })
+    .then((response) => SvvVehicleInfoSchema.parse(response.data));
 };

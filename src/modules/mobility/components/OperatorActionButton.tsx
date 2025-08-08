@@ -79,13 +79,21 @@ export const OperatorActionButton = ({
         benefit,
         isUserEligibleForBenefit,
         valueCode,
+        isBonusPayment,
       });
 
       await Linking.openURL(url).catch(() =>
         showAppMissingAlert(operatorName, appStoreUri),
       );
     },
-    [logEvent, operatorName, benefit, isUserEligibleForBenefit, appStoreUri],
+    [
+      logEvent,
+      operatorName,
+      benefit,
+      isUserEligibleForBenefit,
+      appStoreUri,
+      isBonusPayment,
+    ],
   );
 
   const buildUrlWithValueCode = useCallback(

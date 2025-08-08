@@ -105,7 +105,8 @@ export function ExpandableSectionItem({
         {suffixNode}
         {label && (
           <Tag
-            labels={[t(TagInfoTexts.labels[label])]}
+            labels={[t(TagInfoTexts.labels[label].text)]}
+            a11yLabel={t(TagInfoTexts.labels[label].a11y)}
             tagType="primary"
             customStyle={styles.labelContainer}
           />

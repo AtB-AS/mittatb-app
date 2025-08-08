@@ -45,7 +45,6 @@ export function BookingTripSelection({
     reload,
   } = useBookingTrips({
     selection,
-    enabled: true,
   });
 
   // Refetch in case the availability has changed
@@ -79,10 +78,9 @@ export function BookingTripSelection({
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
   onSelect: (legs: TripPatternLegs) => void;
-  key?: string | number;
 };
 
-export function BookingTrip({tripPattern, onSelect, key}: BookingTripProps) {
+export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t, language} = useTranslation();
@@ -98,7 +96,6 @@ export function BookingTrip({tripPattern, onSelect, key}: BookingTripProps) {
 
   return (
     <PressableOpacity
-      key={key}
       disabled={tripPattern.booking.availability !== 'available'}
       onPress={onPress}
       style={[

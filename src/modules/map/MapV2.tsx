@@ -2,15 +2,16 @@ import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
 } from '@atb/modules/geolocation';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
 import {
   LocationPuck,
   UserTrackingMode,
   Viewport,
   Camera,
   MapView,
+  UserLocation,
 } from '@rnmapbox/maps';
-import {Feature} from 'geojson';
+import {Feature, Position} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
@@ -43,6 +44,7 @@ import {
   isScooterV2,
   useInitShmoBookingMutationStatus,
   MapFilter,
+  useVehicleQuery,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -122,9 +124,6 @@ export const MapV2 = (props: MapProps) => {
     isMapV2Enabled,
   } = useFeatureTogglesContext();
 
-  const showGeofencingZones =
-    isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
-
   useShmoActiveBottomSheet(
     mapCameraRef,
     mapViewRef,
@@ -138,6 +137,12 @@ export const MapV2 = (props: MapProps) => {
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
 
+  const showGeofencingZones =
+    isGeofencingZonesEnabled &&
+    (selectedFeatureIsAVehicle ||
+      (activeShmoBooking?.bookingId !== undefined &&
+        activeShmoBooking.state === ShmoBookingState.IN_USE));
+
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
     isMapV2Enabled &&
@@ -147,6 +152,12 @@ export const MapV2 = (props: MapProps) => {
     !initShmoOneStopBookingIsMutating &&
     !mapFilterIsOpen;
 
+  const {
+    data: vehicle,
+    isLoading: vehicleIsLoading,
+    isError: vehicleError,
+  } = useVehicleQuery(selectedFeature?.properties?.id);
+
   useAutoSelectMapItem(
     mapCameraRef,
     mapViewRef,
@@ -155,6 +166,13 @@ export const MapV2 = (props: MapProps) => {
   );
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
+  const [followCameraState, setFollowCameraState] = useState<
+    | {
+        centerCoordinate: Position;
+        zoomLevel: number;
+      }
+    | undefined
+  >(undefined);
   const stablePreviousActiveShmoBooking =
     useStablePreviousValue(activeShmoBooking);
   const stableActiveShmoBooking = useStableValue(activeShmoBooking);
@@ -309,11 +327,20 @@ export const MapV2 = (props: MapProps) => {
           />
           <Camera
             ref={mapCameraRef}
-            zoomLevel={DEFAULT_ZOOM_LEVEL}
-            centerCoordinate={[
-              startingCoordinates.longitude,
-              startingCoordinates.latitude,
-            ]}
+            zoomLevel={followCameraState?.zoomLevel ?? DEFAULT_ZOOM_LEVEL}
+            centerCoordinate={
+              followCameraState
+                ? [
+                    followCameraState.centerCoordinate[0],
+                    followCameraState.centerCoordinate[1],
+                  ]
+                : [startingCoordinates.longitude, startingCoordinates.latitude]
+            }
+            padding={
+              activeShmoBooking?.bookingId
+                ? getMapPadding(tabBarHeight)
+                : undefined
+            }
             {...MapCameraConfig}
             followUserLocation={
               !!activeShmoBooking &&
@@ -323,9 +350,16 @@ export const MapV2 = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getMapPadding(tabBarHeight)}
           />
-          {showGeofencingZones && (
+          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              selectedVehicleId={selectedFeature?.properties?.id}
+              systemId={
+                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
+              }
+              vehicleTypeId={
+                vehicle?.vehicleType.id ??
+                activeShmoBooking?.asset.vehicleTypeId ??
+                null
+              }
             />
           )}
 
@@ -339,6 +373,28 @@ export const MapV2 = (props: MapProps) => {
           )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
+          <UserLocation
+            visible={false}
+            onUpdate={async (location) => {
+              const coords = [
+                location.coords.longitude,
+                location.coords.latitude,
+              ];
+              if (
+                followUserLocation &&
+                mapViewRef.current &&
+                activeShmoBooking?.bookingId
+              ) {
+                const zoom = await mapViewRef.current.getZoom();
+
+                setFollowCameraState({
+                  centerCoordinate: coords,
+                  zoomLevel: zoom ?? DEFAULT_ZOOM_LEVEL,
+                });
+              }
+            }}
+          />
+
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={selectedFeature?.properties?.id}

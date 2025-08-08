@@ -1,4 +1,4 @@
-import {completeAgeVerification} from '@atb/api/vipps-login/api';
+import {completeAgeVerification} from '@atb/api/identity';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {getAgeVerificationQueryKey} from './use-get-age-verification-query';
 

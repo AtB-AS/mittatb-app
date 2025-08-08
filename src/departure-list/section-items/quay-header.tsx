@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
-import {QuayInfo} from '@atb/api/departures/types';
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {QuayInfo} from '@atb/api/bff/types';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {screenReaderPause} from '@atb/components/text';
 import {
   SectionItemProps,
@@ -95,7 +95,7 @@ function Distance({distance}: DistanceProps) {
   return (
     <View style={styles.itemStyle}>
       <ThemeText>{distance}</ThemeText>
-      <ThemeIcon svg={Walk} style={styles.icon} />
+      <ThemeIcon svg={WalkFill} style={styles.icon} />
     </View>
   );
 }

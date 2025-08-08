@@ -1,4 +1,4 @@
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
@@ -185,7 +185,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <Animated.View
-      style={{opacity: fadeInValueRef.current}}
+      style={[{opacity: fadeInValueRef.current}, styles.container]}
       {...props}
       accessible={false}
     >
@@ -298,8 +298,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 export const MemoizedResultItem = React.memo(ResultItem);
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+    gap: theme.spacing.medium,
+  },
   detailsContainer: {
-    paddingTop: theme.spacing.medium,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -388,7 +391,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginVertical: theme.spacing.xSmall,
+    marginTop: theme.spacing.xSmall,
   },
   scheduledTime: {
     marginLeft: theme.spacing.xSmall,
@@ -466,7 +469,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={Walk} />
+      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );

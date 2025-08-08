@@ -3,7 +3,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
-import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
+import {BicycleFill, CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ScrollView, View} from 'react-native';
 import {
@@ -21,7 +21,6 @@ import {ThemeText} from '@atb/components/text';
 import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
-import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
 
 type Props = {
@@ -96,7 +95,7 @@ export const ParkAndRideBottomSheet = ({
                 <MobilityStats
                   first={
                     <MobilityStat
-                      svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
+                      svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
                       primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
                     />
                   }

@@ -14,7 +14,7 @@ then
 fi
 releaseVersion=$REPLY
 
-read -p "This will create a draft release $releaseVersion on Github, are you sure you want to do release? (n/Y) " -n 1 -r
+read -p "This will create a draft release $releaseVersion on Github, are you sure you want to do release? (N/y) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then

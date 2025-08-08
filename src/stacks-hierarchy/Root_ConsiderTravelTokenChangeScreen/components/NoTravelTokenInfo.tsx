@@ -29,7 +29,7 @@ export function NoTravelTokenInfo({
       footerButton={{
         onPress: onPressFooterButton,
         text: t(MobileTokenOnboardingTexts.ok),
-        expanded: false,
+        expanded: true,
       }}
     >
       <ThemeText

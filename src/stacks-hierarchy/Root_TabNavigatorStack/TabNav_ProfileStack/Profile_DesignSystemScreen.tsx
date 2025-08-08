@@ -15,7 +15,7 @@ import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {
   RadioSectionItem,
@@ -160,11 +160,7 @@ export const Profile_DesignSystemScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title="Design System"
-        leftButton={{type: 'back'}}
-        rightButton={{type: 'chat'}}
-      />
+      <FullScreenHeader title="Design System" leftButton={{type: 'back'}} />
 
       <ScrollView>
         <Section style={styles.section}>
@@ -437,6 +433,7 @@ export const Profile_DesignSystemScreen = ({
             text="Tag"
             showIconText={false}
             textType="heading__title"
+            label="new"
             expandContent={
               <>
                 <ThemeText>Regular:</ThemeText>
@@ -1026,8 +1023,13 @@ export const Profile_DesignSystemScreen = ({
         <Section style={styles.section}>
           <ToggleSectionItem
             text="Some short text"
-            leftImage={<ThemeIcon svg={Bus} />}
+            leftImage={<ThemeIcon svg={BusFill} />}
             onValueChange={() => {}}
+          />
+          <ToggleSectionItem
+            text="Toggle with label"
+            onValueChange={() => {}}
+            label="new"
           />
           <RadioSectionItem
             text="Some short text and interactive color"
@@ -1037,7 +1039,7 @@ export const Profile_DesignSystemScreen = ({
           <RadioSectionItem
             text="Some very long text over here which goes over multiple lines"
             subtext="With a subtext and icon, no interactive color"
-            leftIcon={Bus}
+            leftIcon={BusFill}
             selected={selected}
             onPress={() => setSelected(!selected)}
           />
@@ -1086,25 +1088,25 @@ export const Profile_DesignSystemScreen = ({
             text="Disabled link"
             onPress={() => {}}
             disabled
-            icon={<ThemeIcon svg={Edit} />}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
-            icon={<ThemeIcon svg={Edit} />}
+            rightIcon={{svg: Edit}}
           />
           <LinkSectionItem
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} color="error" />}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
             onPress={() => {}}
-            icon={<ThemeIcon svg={Delete} color="error" />}
+            rightIcon={{svg: Delete, color: 'error'}}
           />
           <LinkSectionItem
             text="Link with interactiveColor"

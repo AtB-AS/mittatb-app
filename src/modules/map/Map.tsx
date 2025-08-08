@@ -2,7 +2,7 @@ import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
 } from '@atb/modules/geolocation';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/screen-components/travel-details-map-screen';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
@@ -37,6 +37,7 @@ import {
   isCarStation,
   isStation,
   MapFilter,
+  useVehicleQuery,
 } from '@atb/modules/mobility';
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {AutoSelectableBottomSheetType, useMapContext} from './MapContext';
@@ -127,6 +128,12 @@ export const Map = (props: MapProps) => {
       center,
     });
   };
+
+  const {
+    data: vehicle,
+    isLoading: vehicleIsLoading,
+    isError: vehicleError,
+  } = useVehicleQuery(selectedFeature?.properties?.id);
 
   /**
    * OnMapIdle fires more often than expected, because of that we check if the
@@ -235,13 +242,10 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          {showGeofencingZones && (
+          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              selectedVehicleId={
-                aVehicleIsAutoSelected
-                  ? bottomSheetCurrentlyAutoSelected.id
-                  : selectedFeature?.properties?.id
-              }
+              systemId={vehicle?.system.id ?? null}
+              vehicleTypeId={vehicle?.vehicleType.id ?? null}
             />
           )}
 

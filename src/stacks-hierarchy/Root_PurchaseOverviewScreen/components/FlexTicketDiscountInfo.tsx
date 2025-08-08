@@ -22,6 +22,7 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -121,7 +122,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         {expanded && (
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
-            icon="external-link"
+            rightIcon={{svg: ExternalLink}}
             onPress={() => Linking.openURL(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),

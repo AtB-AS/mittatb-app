@@ -1,5 +1,5 @@
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useLiveVehicleSubscription} from '@atb/api/vehicles';
+import {useLiveVehicleSubscription} from '@atb/api/bff/vehicles';
 import {
   AnyMode,
   AnySubMode,

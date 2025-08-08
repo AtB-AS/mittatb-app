@@ -82,10 +82,10 @@ export const mobileTokenClient = {
   Check if token should be renewed. Will return true if either:
    - Token is expired
    - It is less than 12 hours until token expires
-   - Less than 10 % of the token validity time is left
+   - It has lived longer than 90% percent of its total time to live
    */
   shouldRenew: (token: ActivatedToken) =>
-    abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 10),
+    abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 90),
   currentTimeMillis: () => abtClient.getCurrentTimeMillis(),
   setDebugSabotage: (attestationSabotage: AttestationSabotage) =>
     abtClient.setAttestationSabotage(attestationSabotage),

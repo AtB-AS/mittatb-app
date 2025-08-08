@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {initViolationsReporting} from '@atb/api/mobility';
+import {initViolationsReporting} from '@atb/api/bff/mobility';
 import {
   ParkingViolationType,
   ViolationsReportingProvider,
 } from '@atb/api/types/mobility';
-import {Coordinates} from '@atb/sdk';
+import {Coordinates} from '@atb/utils/coordinates';
 
 type ParkingViolationsState =
   | 'loading'

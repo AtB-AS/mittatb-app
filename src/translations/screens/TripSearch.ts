@@ -193,7 +193,11 @@ const TripSearchTexts = {
       },
     },
     resultItem: {
-      passedTrip: _('Passert reise, ', 'Passed trip, ', 'Passert reise, '),
+      passedTrip: _(
+        'Avgangstid passert',
+        'Departure time passed',
+        'Avgangstid passert',
+      ),
       header: {
         title: (mode: string, placeName: string) =>
           _(
