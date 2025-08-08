@@ -165,10 +165,10 @@ export const ThemedContactIllustration = getThemedAsset(
   ContactIllustrationDark,
 );
 export const ThemedProfileCardLoggedIn = getThemedAsset(
-  ProfileCardLoggedInDark,
   ProfileCardLoggedInLight,
+  ProfileCardLoggedInDark,
 );
 export const ThemedProfileCardLoggedOut = getThemedAsset(
-  ProfileCardLoggedOutDark,
   ProfileCardLoggedOutLight,
+  ProfileCardLoggedOutDark,
 );
