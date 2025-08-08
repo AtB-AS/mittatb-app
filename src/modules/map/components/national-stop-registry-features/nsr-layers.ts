@@ -63,7 +63,7 @@ export const nsrCircleLayers: NsrCircleLayer[] = [
 
 /**
  * Always use type 'all', which is extendable by appending.
- * Note: cannot include pitchBasedDistanceFilter here as this part of the filter
+ * Note: cannot include hideItemsInTheDistanceFilter here as this part of the filter
  * is also used not as the root, and ['pitch'] must be used as root in style.
  */
 const getAllFilter: (

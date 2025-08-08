@@ -21,7 +21,7 @@ import {
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {
-  pitchBasedDistanceFilter,
+  hideItemsInTheDistanceFilter,
   scaleTransitionZoomRange,
 } from '../../hooks/use-map-symbol-styles';
 
@@ -39,7 +39,7 @@ export const VehiclesWithClusters = ({
   });
 
   const filter: FilterExpression = useMemo(
-    () => ['all', ['!', isSelected], pitchBasedDistanceFilter],
+    () => ['all', ['!', isSelected], hideItemsInTheDistanceFilter],
     [isSelected],
   );
 
@@ -109,7 +109,7 @@ export const Stations = ({
           ['!', !showSharedCars],
         ],
       ],
-      pitchBasedDistanceFilter,
+      hideItemsInTheDistanceFilter,
     ];
   }, [
     isSelected,
