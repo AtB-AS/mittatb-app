@@ -10,6 +10,7 @@ import {NsrProps} from './NationalStopRegistryFeatures';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {useMemo} from 'react';
+import {pitchBasedDistanceFilter} from '../../hooks/use-map-symbol-styles';
 
 export const useNsrSymbolLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
@@ -29,7 +30,7 @@ export const useNsrSymbolLayers = (
         const nsrSymbolLayerSourceProps = getNsrLayerSourceProps(id);
 
         const filter = getFilterWhichAlsoHidesSelectedFeature(
-          nsrSymbolLayer.filter,
+          [...nsrSymbolLayer.filter, pitchBasedDistanceFilter], // also hide features too far away when the camera is pitched
           selectedFeaturePropertyId,
         );
 

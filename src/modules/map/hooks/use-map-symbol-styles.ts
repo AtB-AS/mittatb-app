@@ -5,6 +5,7 @@ import {
   ExpressionField,
   Expression,
   SymbolLayerStyleProps,
+  FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
@@ -251,3 +252,19 @@ export const useMapSymbolStyles = ({
     textStyle,
   };
 };
+
+/**
+ * Add this filter to hide far away items.
+ * The higher pitch, the less distance away makes sense to show.
+ * Otherwise the whole horizon may be filled with items.
+ */
+export const pitchBasedDistanceFilter: FilterExpression = [
+  'case',
+  ['<=', ['pitch'], 40],
+  true,
+  [
+    '<=',
+    ['distance-from-center'],
+    ['interpolate', ['linear'], ['pitch'], 40, 1.25, 75, 0.3],
+  ],
+];
