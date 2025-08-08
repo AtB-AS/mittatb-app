@@ -33,6 +33,7 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useEffect} from 'react';
 
 type Props = {
   now: number;
@@ -61,6 +62,15 @@ export const FareContractView: React.FC<Props> = ({
     fareContract,
     currentUserId,
   );
+
+  useEffect(() => {
+    console.log(
+      'FareContractView: Is inspectable:',
+      isInspectable,
+      ' and validityStatus:',
+      validityStatus,
+    );
+  }, [isInspectable, validityStatus]);
 
   const firstTravelRight = travelRights[0];
   const {preassignedFareProducts} = useFirestoreConfigurationContext();

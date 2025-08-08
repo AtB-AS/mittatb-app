@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
@@ -72,6 +72,9 @@ export const DetailsContent: React.FC<Props> = ({
   onReceiptNavigate,
   onNavigateToMap,
 }) => {
+  useEffect(() => {
+    console.log('Hello?');
+  }, []);
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {t} = useTranslation();
@@ -98,6 +101,15 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
+
+  useEffect(() => {
+    console.log(
+      'DetailsContent: Is inspectable:',
+      isInspectable,
+      ' and validityStatus:',
+      validityStatus,
+    );
+  }, [isInspectable, validityStatus]);
 
   // If the ticket is received, get the sender account ID to look up for phone number.
   const senderAccountId = isReceived ? fc.purchasedBy : undefined;

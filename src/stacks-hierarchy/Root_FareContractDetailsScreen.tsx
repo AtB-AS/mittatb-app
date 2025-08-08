@@ -7,7 +7,7 @@ import {
   TicketingTexts,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
@@ -30,6 +30,10 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
     useTicketInfo(route.params.fareContractId);
+
+  useEffect(() => {
+    console.log('FareContract: ', fareContract);
+  }, [fareContract]);
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&

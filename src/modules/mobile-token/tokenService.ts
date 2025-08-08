@@ -76,6 +76,7 @@ export const tokenService: TokenService = {
       deviceInfo: deviceInfo.data,
       deviceInfoType: deviceInfo.type,
     };
+    console.log('Initiating new mobile token with data:', data);
     return await client
       .post<InitiateTokenResponse>('/token/v1/init', data, {
         headers: {
@@ -90,8 +91,9 @@ export const tokenService: TokenService = {
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
   },
-  activateNewMobileToken: async (pendingToken, correlationId) =>
-    client
+  activateNewMobileToken: async (pendingToken, correlationId) => {
+    console.log('Activating new mobile token with pendingToken:', pendingToken);
+    return client
       .post<CompleteTokenInitializationResponse>(
         '/token/v1/activate',
         pendingToken.toJSON(),
@@ -106,9 +108,11 @@ export const tokenService: TokenService = {
         },
       )
       .then((res) => res.data.activeTokenDetails)
-      .catch(handleError),
-  initiateMobileTokenRenewal: async (token, secureContainer, correlationId) =>
-    client
+      .catch(handleError);
+  },
+  initiateMobileTokenRenewal: async (token, secureContainer, correlationId) => {
+    console.log('Initiating mobile token renewal with token:', token);
+    return client
       .post<InitiateTokenRenewalResponse>('/token/v1/renew', undefined, {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
@@ -120,14 +124,19 @@ export const tokenService: TokenService = {
         skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.pendingTokenDetails)
-      .catch(handleError),
+      .catch(handleError);
+  },
   completeMobileTokenRenewal: async (
     pendingToken,
     secureContainer,
     activatedToken,
     correlationId,
-  ) =>
-    client
+  ) => {
+    console.log(
+      'Completing mobile token renewal with pendingToken:',
+      pendingToken,
+    );
+    return client
       .post<CompleteTokenRenawalResponse>(
         '/token/v1/complete',
         pendingToken.toJSON(),
@@ -143,14 +152,16 @@ export const tokenService: TokenService = {
         },
       )
       .then((res) => res.data.activeTokenDetails)
-      .catch(handleError),
+      .catch(handleError);
+  },
   reattestMobileToken: async (
     token,
     secureContainer,
     reattestation,
     correlationId,
-  ) =>
-    client
+  ) => {
+    console.log('Reattesting mobile token with token:', token);
+    return client
       .get<GetTokenDetailsResponse>('/token/v1/details', {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
@@ -164,9 +175,11 @@ export const tokenService: TokenService = {
         skipErrorLogging: isRemoteTokenStateError,
       })
       .then(() => {})
-      .catch(handleError),
-  getMobileTokenDetails: async (token, secureContainer, traceId) =>
-    client
+      .catch(handleError);
+  },
+  getMobileTokenDetails: async (token, secureContainer, traceId) => {
+    console.log('Getting mobile token details with token:', token);
+    return client
       .get<GetTokenDetailsResponse>('/token/v1/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
@@ -178,9 +191,11 @@ export const tokenService: TokenService = {
         skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.activeTokenDetails)
-      .catch(handleError),
-  removeToken: async (tokenId: string, traceId: string): Promise<boolean> =>
-    client
+      .catch(handleError);
+  },
+  removeToken: async (tokenId: string, traceId: string): Promise<boolean> => {
+    console.log('Removing token with ID:', tokenId);
+    return client
       .post<RemoveTokenResponse>(
         '/token/v1/remove',
         {tokenId},
@@ -195,9 +210,11 @@ export const tokenService: TokenService = {
         },
       )
       .then((res) => res.data.removed)
-      .catch(handleError),
-  listTokens: async (secureContainer, traceId) =>
-    client
+      .catch(handleError);
+  },
+  listTokens: async (secureContainer, traceId) => {
+    console.log('Listing tokens with secureContainer:', secureContainer);
+    return client
       .get<ListResponse>('/token/v1/list', {
         headers: {
           [SignedTokenHeaderName]: secureContainer,
@@ -209,13 +226,20 @@ export const tokenService: TokenService = {
         skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.tokens)
-      .catch(handleError),
+      .catch(handleError);
+  },
   toggle: async (
     tokenId: string,
     traceId: string,
     bypassRestrictions: boolean,
-  ) =>
-    client
+  ) => {
+    console.log(
+      'Toggling token with ID:',
+      tokenId,
+      'bypassRestrictions:',
+      bypassRestrictions,
+    );
+    return client
       .post<ToggleResponse>(
         '/token/v1/toggle',
         {tokenId, bypassRestrictions},
@@ -230,10 +254,12 @@ export const tokenService: TokenService = {
         },
       )
       .then((res) => res.data.tokens)
-      .catch(handleError),
+      .catch(handleError);
+  },
 
-  getTokenToggleDetails: async () =>
-    client
+  getTokenToggleDetails: async () => {
+    console.log('Getting token toggle details');
+    return client
       .get<TokenLimitResponse>('/token/v1/toggle/details', {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
@@ -241,8 +267,17 @@ export const tokenService: TokenService = {
         skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data)
-      .catch(handleError),
+      .catch(handleError);
+  },
   postTokenStatus: async (tokenId, tokenStatus, traceId) => {
+    console.log(
+      'Posting token status with ID:',
+      tokenId,
+      'status:',
+      tokenStatus,
+      'traceId:',
+      traceId,
+    );
     await client.post(
       '/token/v1/status',
       {

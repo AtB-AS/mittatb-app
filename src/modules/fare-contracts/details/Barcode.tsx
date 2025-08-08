@@ -28,6 +28,9 @@ type Props = {
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
   const {mobileTokenStatus} = useMobileTokenContext();
   useScreenBrightnessIncrease();
+  useEffect(() => {
+    console.log('Mounting barcode component for fc with id: ', fc.id);
+  }, [fc]);
   if (validityStatus !== 'valid') return null;
 
   switch (mobileTokenStatus) {
@@ -52,6 +55,7 @@ function useScreenBrightnessIncrease() {
   useEffect(
     function () {
       let originalBrightness: number | undefined;
+
       async function setLevel() {
         try {
           if (isActive) {

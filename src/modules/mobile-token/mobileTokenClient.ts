@@ -12,6 +12,7 @@ import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
 import {HALF_DAY_MS} from '@atb/utils/durations';
 import {Platform} from 'react-native';
+
 const CONTEXT_ID = 'main';
 
 /**
@@ -90,4 +91,16 @@ export const mobileTokenClient = {
   setDebugSabotage: (attestationSabotage: AttestationSabotage) =>
     abtClient.setAttestationSabotage(attestationSabotage),
   clearDebugSabotage: () => abtClient.clearAttestationSabotage(),
+  refresh: () => {
+    abtClient.remoteClientCallHandler(
+      CONTEXT_ID,
+      {
+        challenges: [],
+        tokenActions: [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS],
+        includeCertificate: false,
+      },
+      '',
+      async () => {},
+    );
+  },
 };

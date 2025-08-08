@@ -108,6 +108,7 @@ export const Profile_DebugInfoScreen = () => {
       sabotage,
       setAllTokenInspectable,
       allTokenInspectable,
+      refresh,
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
@@ -136,6 +137,7 @@ export const Profile_DebugInfoScreen = () => {
         `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
+
   function copyIdToken() {
     const idToken = getIdTokenGlobal();
     if (idToken) setClipboard(idToken);
@@ -491,6 +493,7 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={renewToken}
                   />
                 )}
+                <Button onPress={refresh} expanded={true} text="Refresh" />
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}

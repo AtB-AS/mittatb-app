@@ -47,6 +47,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           onPressFareContract={() => {
             // Reservations don't have `id`, but also don't show the link to
             // ticket details.
+            console.log('Navigating to ticket details for', fcOrReservation);
             if ('id' in fcOrReservation) {
               analytics.logEvent('Ticketing', 'Ticket details clicked');
               onPressFareContract(fcOrReservation.id);

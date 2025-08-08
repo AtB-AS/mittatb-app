@@ -77,6 +77,7 @@ type MobileTokenContextState = {
     sabotage: AttestationSabotage | undefined;
     setAllTokenInspectable: (inspectable?: boolean) => void;
     allTokenInspectable: boolean | undefined;
+    refresh: () => void;
   };
 };
 
@@ -343,6 +344,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
             setAllTokenInspectable(inspectable);
           },
           allTokenInspectable: allTokenInspectable,
+          refresh: () => {
+            console.log('Refreshing mobile token context');
+            mobileTokenClient.refresh();
+          },
         },
       }}
     >
