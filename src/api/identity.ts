@@ -83,6 +83,17 @@ export const getAgeVerification = (
     .then((res) => res.data);
 };
 
+export const getBirthdate = (
+  opts?: AxiosRequestConfig,
+): Promise<string | null> => {
+  return client
+    .get(`/identity/v1/vipps/birthdate`, {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((res) => res.data.birthdate);
+};
+
 export const initAgeVerification = async (
   opts?: AxiosRequestConfig,
 ): Promise<void> => {

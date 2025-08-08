@@ -28,6 +28,25 @@ export const EditProfileTexts = {
           `${phoneNumber} kan ikkje endrast, fordi telefonnummeret ditt er brukt til innlogging.`,
         ),
     },
+    birthdate: {
+      header: _('Fødselsdato', 'Birthdate', 'Fødselsdato'),
+      info: _(
+        'Du har delt fødselsdatoen din med AtB via Vipps og kan trekke tilbake samtykket i Vipps-appen.',
+        'You have shared your birthdate with AtB via Vipps and can withdraw your consent in the Vipps app.',
+        'Du har delt fødselsdatoa di med AtB via Vipps og kan trekkje attende samtykket i Vipps-appen.',
+      ),
+      a11yHintLink: _(
+        'Gå til Vipps-appen',
+        'Go to the Vipps app',
+        'Gå til Vipps-appen',
+      ),
+      link: _('Vipps', 'Vipps', 'Vipps'),
+      openVippsError: _(
+        'Vipps er ikke installert',
+        'Vipps is not installed',
+        'Vipps er ikkje installert',
+      ),
+    },
     email: {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
       placeholder: _(
