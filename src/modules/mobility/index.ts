@@ -57,3 +57,4 @@ export {
   type AgeVerificationEnum,
   useGetAgeVerificationQuery,
 } from './queries/use-get-age-verification-query';
+export {useGetBirthdateQuery} from './queries/use-get-birthdate-query';

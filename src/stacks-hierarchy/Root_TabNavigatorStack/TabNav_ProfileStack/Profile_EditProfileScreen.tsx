@@ -1,5 +1,5 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Alert, Linking, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import React, {useEffect, useState} from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -17,6 +17,10 @@ import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {useGetBirthdateQuery} from '@atb/modules/mobility';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -44,6 +48,13 @@ export const Profile_EditProfileScreen = ({
     refetch: refetchProfile,
     isRefetching: isRefetchingProfile,
   } = useProfileQuery();
+
+  const {
+    data: birthdate,
+    isLoading: isLoadingGetBirthdate,
+    isError: isErrorGetBirthdate,
+  } = useGetBirthdateQuery();
+
   const {disable_email_field_in_profile_page} = useRemoteConfigContext();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
@@ -53,7 +64,7 @@ export const Profile_EditProfileScreen = ({
   const [surname, setSurname] = useState('');
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const isLoadingOrSubmittingProfile =
-    isLoadingUpdateProfile || isLoadingGetProfile;
+    isLoadingUpdateProfile || isLoadingGetProfile || isLoadingGetBirthdate;
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
 
@@ -73,6 +84,18 @@ export const Profile_EditProfileScreen = ({
       return t(EditProfileTexts.personalDetails.email.unavailableError);
     } else if (invalidEmail) {
       return t(EditProfileTexts.personalDetails.email.formattingError);
+    }
+  };
+
+  const handleOpenVippsApp = async () => {
+    const deepLink = __DEV__ ? 'vippsMT://' : 'vipps://';
+
+    const canOpen = await Linking.canOpenURL(deepLink);
+
+    if (canOpen) {
+      await Linking.openURL(deepLink);
+    } else {
+      Alert.alert(t(EditProfileTexts.personalDetails.birthdate.openVippsError));
     }
   };
 
@@ -200,7 +223,7 @@ export const Profile_EditProfileScreen = ({
               )}
               {phoneNumber && (
                 <View style={styles.phone}>
-                  <ThemeText>
+                  <ThemeText typography="body__secondary">
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
                   <ThemeText typography="body__secondary" color="secondary">
@@ -210,6 +233,38 @@ export const Profile_EditProfileScreen = ({
                       ),
                     )}
                   </ThemeText>
+                </View>
+              )}
+
+              {birthdate && !isErrorGetBirthdate && (
+                <View style={styles.birthdateWrapper}>
+                  <ThemeText typography="body__secondary">
+                    {t(EditProfileTexts.personalDetails.birthdate.header)}
+                  </ThemeText>
+                  <ThemeText style={styles.birthdate}>
+                    {new Intl.DateTimeFormat('nb-NO', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    }).format(new Date(birthdate))}
+                  </ThemeText>
+                  <ThemeText typography="body__secondary" color="secondary">
+                    {t(EditProfileTexts.personalDetails.birthdate.info)}
+                  </ThemeText>
+
+                  <PressableOpacity
+                    onPress={handleOpenVippsApp}
+                    accessibilityRole="link"
+                    accessibilityHint={t(
+                      EditProfileTexts.personalDetails.birthdate.a11yHintLink,
+                    )}
+                    style={styles.vippsLink}
+                  >
+                    <ThemeText typography="body__primary--underline">
+                      {t(EditProfileTexts.personalDetails.birthdate.link)}
+                    </ThemeText>
+                    <ThemeIcon svg={ExternalLink} />
+                  </PressableOpacity>
                 </View>
               )}
 
@@ -309,6 +364,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.xLarge,
     marginBottom: theme.spacing.medium,
   },
+  birthdateWrapper: {
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
+    gap: theme.spacing.small,
+  },
+  birthdate: {
+    letterSpacing: 0.8,
+  },
   submitSection: {
     margin: theme.spacing.medium,
   },
@@ -330,5 +394,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   deleteProfile: {
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
+  },
+  vippsLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
   },
 }));
