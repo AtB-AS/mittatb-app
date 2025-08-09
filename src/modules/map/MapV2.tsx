@@ -10,6 +10,7 @@ import {
   Camera,
   MapView,
   UserLocation,
+  MapState,
 } from '@rnmapbox/maps';
 import {Feature, Position} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -62,14 +63,16 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {VectorSourceTilePreloader} from './components/VectorSourceTilePreloader';
 
-const DEFAULT_ZOOM_LEVEL = 14.5;
+export const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const MapV2 = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
+  const mapStateRef = useRef<MapState | null>(null);
 
   const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
   const {height: bottomSheetHeight} = useBottomSheetContext();
@@ -316,6 +319,9 @@ export const MapV2 = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
+          onCameraChanged={(state) => {
+            mapStateRef.current = state;
+          }}
           {...mapViewConfig}
         >
           <Viewport
@@ -396,12 +402,25 @@ export const MapV2 = (props: MapProps) => {
           />
 
           {shouldShowVehiclesAndStations && (
-            <VehiclesAndStations
-              selectedFeatureId={selectedFeature?.properties?.id}
-              onPress={onMapItemClick}
-              showVehicles={showVehicles}
-              showStations={showStations}
-            />
+            <>
+              <VehiclesAndStations
+                selectedFeatureId={selectedFeature?.properties?.id}
+                onPress={onMapItemClick}
+                showVehicles={showVehicles}
+                showStations={showStations}
+              />
+              <VectorSourceTilePreloader
+                startingCoordinates={startingCoordinates}
+                ref={mapStateRef}
+              >
+                <VehiclesAndStations
+                  isPreloader={true}
+                  selectedFeatureId={undefined}
+                  showVehicles={showVehicles}
+                  showStations={showStations}
+                />
+              </VectorSourceTilePreloader>
+            </>
           )}
         </MapView>
         <View

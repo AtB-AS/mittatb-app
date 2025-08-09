@@ -25,19 +25,24 @@ import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
 
-type MinZoomLevelProp = {minZoomLevel: number};
 const vehiclesAndStationsMinZoom = 14;
 const vehiclesAndStationsMaxZoom = 17;
 const vehiclesAndStationsZoomLevels = Array.from(
   {length: vehiclesAndStationsMaxZoom - vehiclesAndStationsMinZoom + 1},
   (_, i) => i + vehiclesAndStationsMinZoom,
 );
-// console.log('vehiclesAndStationsZoomLevels', vehiclesAndStationsZoomLevels);
+
+type VehiclesWithClustersProps = SelectedFeatureIdProp & {
+  minZoomLevel: number;
+  /** Whether to draw the icons or not. Useful for optimizing tile preloading performance. */
+  hideSymbols?: boolean;
+};
 
 export const VehiclesWithClusters = ({
   selectedFeatureId,
   minZoomLevel,
-}: SelectedFeatureIdProp & MinZoomLevelProp) => {
+  hideSymbols,
+}: VehiclesWithClustersProps) => {
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
     pinType: 'vehicle',
@@ -72,8 +77,8 @@ export const VehiclesWithClusters = ({
           : minZoomLevel + 1 + scaleTransitionZoomRange
       }
       aboveLayerID={MapSlotLayerId.Vehicles}
-      filter={filter}
-      style={style}
+      filter={hideSymbols ? JSON.stringify(['==', 1, 0]) : filter}
+      style={hideSymbols ? undefined : style}
     />
   );
 };
@@ -154,35 +159,39 @@ export const Stations = ({
   );
 };
 
+type VehiclesAndStationsProps = SelectedFeatureIdProp & {
+  onPress?: (e: OnPressEvent) => void;
+  showVehicles: boolean;
+  showStations: boolean;
+  isPreloader?: boolean;
+};
+
 // Vehicles and stations are grouped to optimize tile loading (limiting the number of requests)
 export const VehiclesAndStations = ({
   selectedFeatureId,
   onPress,
   showVehicles,
   showStations,
-}: SelectedFeatureIdProp & {
-  onPress?: (e: OnPressEvent) => void;
-  showVehicles: boolean;
-  showStations: boolean;
-}) => {
+  isPreloader,
+}: VehiclesAndStationsProps) => {
   if (!showVehicles && !showStations) return null;
 
-  return (
+  return vehiclesAndStationsZoomLevels.map((zoomLevel) => (
     <MapboxGL.VectorSource
-      id={vehiclesAndStationsVectorSourceId}
+      key={zoomLevel.toString()}
+      id={vehiclesAndStationsVectorSourceId + zoomLevel.toString()}
       existing={true}
       hitbox={hitboxCoveringIconOnly}
       onPress={onPress}
     >
       <>
-        {!!showVehicles &&
-          vehiclesAndStationsZoomLevels.map((zoomLevel) => (
-            <VehiclesWithClusters
-              key={zoomLevel.toString()}
-              selectedFeatureId={selectedFeatureId}
-              minZoomLevel={zoomLevel}
-            />
-          ))}
+        {!!showVehicles && (
+          <VehiclesWithClusters
+            selectedFeatureId={selectedFeatureId}
+            minZoomLevel={zoomLevel}
+            hideSymbols={isPreloader}
+          />
+        )}
         {!!showStations && false && (
           <Stations
             selectedFeatureId={selectedFeatureId}
@@ -191,7 +200,7 @@ export const VehiclesAndStations = ({
         )}
       </>
     </MapboxGL.VectorSource>
-  );
+  ));
 };
 
 /**
