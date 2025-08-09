@@ -64,6 +64,7 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {VectorSourceTilePreloader} from './components/VectorSourceTilePreloader';
+import {useRemoteConfigContext} from '../remote-config';
 
 export const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -73,6 +74,8 @@ export const MapV2 = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const mapStateRef = useRef<MapState | null>(null);
+
+  const {enable_tile_preloading} = useRemoteConfigContext();
 
   const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
   const {height: bottomSheetHeight} = useBottomSheetContext();
@@ -409,17 +412,19 @@ export const MapV2 = (props: MapProps) => {
                 showVehicles={showVehicles}
                 showStations={showStations}
               />
-              <VectorSourceTilePreloader
-                startingCoordinates={startingCoordinates}
-                ref={mapStateRef}
-              >
-                <VehiclesAndStations
-                  isPreloader={true}
-                  selectedFeatureId={undefined}
-                  showVehicles={showVehicles}
-                  showStations={showStations}
-                />
-              </VectorSourceTilePreloader>
+              {enable_tile_preloading && (
+                <VectorSourceTilePreloader
+                  startingCoordinates={startingCoordinates}
+                  ref={mapStateRef}
+                >
+                  <VehiclesAndStations
+                    isPreloader={true}
+                    selectedFeatureId={undefined}
+                    showVehicles={showVehicles}
+                    showStations={showStations}
+                  />
+                </VectorSourceTilePreloader>
+              )}
             </>
           )}
         </MapView>
