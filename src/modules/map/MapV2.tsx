@@ -11,7 +11,7 @@ import {
   MapView,
   MapState,
 } from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
+import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
