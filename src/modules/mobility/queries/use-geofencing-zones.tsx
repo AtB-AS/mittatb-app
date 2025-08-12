@@ -1,12 +1,12 @@
 import {useQuery} from '@tanstack/react-query';
 import {getGeofencingZones} from '@atb/api/bff/mobility';
-import {HALF_DAY_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const useGeofencingZonesQuery = (systemId: string) => {
   return useQuery({
     queryKey: ['getGeofencingZones', systemId],
     queryFn: ({signal}) => getGeofencingZones([systemId], {signal}),
-    staleTime: HALF_DAY_MS,
-    cacheTime: HALF_DAY_MS,
+    staleTime: ONE_HOUR_MS,
+    cacheTime: ONE_HOUR_MS,
   });
 };
