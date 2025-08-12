@@ -12,6 +12,7 @@ import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartPar
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {RootStackScreenProps} from '..';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
@@ -22,6 +23,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
   const [nickname, setNickname] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
+  const focusRef = useFocusOnLoad(true);
 
   const hideHeader = route.params.hideHeader;
 
@@ -38,9 +40,11 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
     <View style={styles.container}>
       <View style={styles.content}>
         <ThemedBundlingCarSharing style={styles.illustration} width={150} />
-        <ThemeText typography="body__primary--big--bold">
-          {t(SmartParkAndRideTexts.add.content.title)}
-        </ThemeText>
+        <View ref={focusRef} accessible={true} accessibilityRole="header">
+          <ThemeText typography="body__primary--big--bold">
+            {t(SmartParkAndRideTexts.add.content.title)}
+          </ThemeText>
+        </View>
         <ThemeText typography="body__primary" style={styles.descriptionText}>
           {t(SmartParkAndRideTexts.add.content.text)}
         </ThemeText>
