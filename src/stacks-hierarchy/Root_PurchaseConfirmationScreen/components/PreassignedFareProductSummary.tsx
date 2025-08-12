@@ -26,7 +26,7 @@ import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SalesTripPatternLeg} from '@atb/api/types/sales';
-import {TripPatternLegsSummary} from '@atb/components/trip-pattern-legs-summary';
+import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -175,7 +175,7 @@ export const PreassignedFareContractSummary = ({
           )}
         </View>
       </GenericSectionItem>
-      <TripPatternLegsSummary legs={legs} />
+      <JourneyLegsSummary legs={legs} />
     </Section>
   );
 };

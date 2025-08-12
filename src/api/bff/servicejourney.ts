@@ -46,9 +46,10 @@ export async function getServiceJourneyMapLegs(
 }
 
 export async function getDatedServiceJourney(
-  id: string,
+  id?: string,
   opts?: AxiosRequestConfig,
 ) {
-  const url = `bff/v2/servicejourney/datedServiceJourney/${id}`;
+  if (!id) return undefined;
+  const url = `bff/v2/servicejourney/datedservicejourney/${id}`;
   return await client.get<DatedServiceJourney>(url, opts);
 }

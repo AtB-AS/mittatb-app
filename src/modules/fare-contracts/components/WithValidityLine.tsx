@@ -37,8 +37,7 @@ export const WithValidityLine = (props: Props) => {
       </View>
     );
   } else if ('fc' in props) {
-    const firstTravelRight = getFareContractInfo(serverNow, props.fc)
-      .travelRights?.[0];
+    const firstTravelRight = props.fc.travelRights[0];
     const preassignedFareProduct = findReferenceDataById(
       preassignedFareProducts,
       firstTravelRight.fareProductRef,

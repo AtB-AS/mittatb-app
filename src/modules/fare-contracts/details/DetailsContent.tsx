@@ -83,7 +83,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
   const {
-    travelRights,
     validityStatus,
     usedAccesses,
     maximumNumberOfAccesses,
@@ -93,7 +92,7 @@ export const DetailsContent: React.FC<Props> = ({
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
 
-  const firstTravelRight = travelRights[0];
+  const firstTravelRight = fc.travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const {benefits} = useOperatorBenefitsForFareProduct(

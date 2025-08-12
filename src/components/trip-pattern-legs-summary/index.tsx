@@ -1,1 +1,1 @@
-export {TripPatternLegsSummary} from './TripPatternLegsSummary';
+export {JourneyLegsSummary} from './JourneyLegsSummary';

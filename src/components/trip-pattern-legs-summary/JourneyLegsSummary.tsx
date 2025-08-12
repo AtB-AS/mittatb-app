@@ -9,7 +9,8 @@ import React from 'react';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 import {StyleSheet} from '@atb/theme';
 
-export function TripPatternLegsSummary({legs}: {legs?: SalesTripPatternLeg[]}) {
+export function JourneyLegsSummary({legs}: {legs?: SalesTripPatternLeg[]}) {
+  console.log('Legs in JourneyLegsSummary:', legs);
   const styles = useStyles();
   const {t, language} = useTranslation();
   if (!legs || legs.length === 0) return null;

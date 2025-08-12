@@ -33,6 +33,8 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useFareContractLegs} from './use-fare-contract-legs';
+import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
 
 type Props = {
   now: number;
@@ -56,13 +58,13 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelRights, validityStatus} = getFareContractInfo(
+  const {validityStatus} = getFareContractInfo(
     now,
     fareContract,
     currentUserId,
   );
 
-  const firstTravelRight = travelRights[0];
+  const firstTravelRight = fareContract.travelRights[0];
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -70,6 +72,9 @@ export const FareContractView: React.FC<Props> = ({
   );
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
+  );
+  const {legs} = useFareContractLegs(
+    firstTravelRight?.datedServiceJourneys?.[0],
   );
 
   const shouldShowBundlingInfo =
@@ -114,6 +119,8 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
         <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
+      {!!legs.length && <JourneyLegsSummary legs={legs} />}
+
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
           <ActivateNowSectionItem
