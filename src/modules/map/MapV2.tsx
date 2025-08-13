@@ -9,9 +9,9 @@ import {
   Viewport,
   Camera,
   MapView,
-  UserLocation,
+  MapState,
 } from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
+import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
@@ -166,13 +166,8 @@ export const MapV2 = (props: MapProps) => {
   );
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
-  const [followCameraState, setFollowCameraState] = useState<
-    | {
-        centerCoordinate: Position;
-        zoomLevel: number;
-      }
-    | undefined
-  >(undefined);
+  const mapStateRef = useRef<MapState | null>(null);
+
   const stablePreviousActiveShmoBooking =
     useStablePreviousValue(activeShmoBooking);
   const stableActiveShmoBooking = useStableValue(activeShmoBooking);
@@ -316,6 +311,11 @@ export const MapV2 = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
+          onCameraChanged={(state) => {
+            if (followUserLocation && activeShmoBooking?.bookingId) {
+              mapStateRef.current = state;
+            }
+          }}
           {...mapViewConfig}
         >
           <Viewport
@@ -327,13 +327,12 @@ export const MapV2 = (props: MapProps) => {
           />
           <Camera
             ref={mapCameraRef}
-            zoomLevel={followCameraState?.zoomLevel ?? DEFAULT_ZOOM_LEVEL}
+            zoomLevel={
+              mapStateRef.current?.properties.zoom ?? DEFAULT_ZOOM_LEVEL
+            }
             centerCoordinate={
-              followCameraState
-                ? [
-                    followCameraState.centerCoordinate[0],
-                    followCameraState.centerCoordinate[1],
-                  ]
+              mapStateRef.current?.properties.center
+                ? mapStateRef.current.properties.center
                 : [startingCoordinates.longitude, startingCoordinates.latitude]
             }
             padding={
@@ -373,27 +372,6 @@ export const MapV2 = (props: MapProps) => {
           )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          <UserLocation
-            visible={false}
-            onUpdate={async (location) => {
-              const coords = [
-                location.coords.longitude,
-                location.coords.latitude,
-              ];
-              if (
-                followUserLocation &&
-                mapViewRef.current &&
-                activeShmoBooking?.bookingId
-              ) {
-                const zoom = await mapViewRef.current.getZoom();
-
-                setFollowCameraState({
-                  centerCoordinate: coords,
-                  zoomLevel: zoom ?? DEFAULT_ZOOM_LEVEL,
-                });
-              }
-            }}
-          />
 
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
