@@ -33,7 +33,7 @@ export const EditProfileTexts = {
       info: _(
         'Du har delt fødselsdatoen din med AtB via Vipps og kan trekke tilbake samtykket i Vipps-appen.',
         'You have shared your birthdate with AtB via Vipps and can withdraw your consent in the Vipps app.',
-        'Du har delt fødselsdatoa di med AtB via Vipps og kan trekkje attende samtykket i Vipps-appen.',
+        'Du har delt fødselsdatoen din med AtB via Vipps og kan trekkje attende samtykket i Vipps-appen.',
       ),
       a11yHintLink: _(
         'Gå til Vipps-appen',

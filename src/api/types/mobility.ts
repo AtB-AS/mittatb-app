@@ -344,3 +344,8 @@ export const VehiclesClusteredFeatureSchema =
 export type VehiclesClusteredFeature = z.infer<
   typeof VehiclesClusteredFeatureSchema
 >;
+
+export const DateResponseSchema = z.object({
+  birthdate: z.string().nullable(),
+});
+export type DateResponse = z.infer<typeof DateResponseSchema>;

@@ -50,7 +50,7 @@ export const Profile_EditProfileScreen = ({
   } = useProfileQuery();
 
   const {
-    data: birthdate,
+    data: birthdateRes,
     isLoading: isLoadingGetBirthdate,
     isError: isErrorGetBirthdate,
   } = useGetBirthdateQuery();
@@ -236,7 +236,7 @@ export const Profile_EditProfileScreen = ({
                 </View>
               )}
 
-              {birthdate && !isErrorGetBirthdate && (
+              {!!birthdateRes?.birthdate && !isErrorGetBirthdate && (
                 <View style={styles.birthdateWrapper}>
                   <ThemeText typography="body__secondary">
                     {t(EditProfileTexts.personalDetails.birthdate.header)}
@@ -246,7 +246,7 @@ export const Profile_EditProfileScreen = ({
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
-                    }).format(new Date(birthdate))}
+                    }).format(new Date(birthdateRes.birthdate))}
                   </ThemeText>
                   <ThemeText typography="body__secondary" color="secondary">
                     {t(EditProfileTexts.personalDetails.birthdate.info)}

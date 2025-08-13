@@ -9,6 +9,7 @@ import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {AgeVerificationEnum} from '@atb/modules/mobility';
 import {v4 as uuid} from 'uuid';
+import {DateResponse, DateResponseSchema} from './types/mobility';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 
@@ -85,13 +86,13 @@ export const getAgeVerification = (
 
 export const getBirthdate = (
   opts?: AxiosRequestConfig,
-): Promise<string | null> => {
+): Promise<DateResponse | null> => {
   return client
     .get(`/identity/v1/vipps/birthdate`, {
       ...opts,
       authWithIdToken: true,
     })
-    .then((res) => res.data.birthdate);
+    .then((res) => DateResponseSchema.parse(res.data));
 };
 
 export const initAgeVerification = async (
