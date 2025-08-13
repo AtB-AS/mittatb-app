@@ -54,7 +54,7 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
-import {useFareContractLegs} from '@atb/modules/fare-contracts/use-fare-contract-legs';
+import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
 
 type Props = {
