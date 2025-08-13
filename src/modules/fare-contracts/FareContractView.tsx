@@ -83,6 +83,9 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowEarnedBonusPoints =
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs.length;
+
   const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
     fareContract.id,
     !shouldShowEarnedBonusPoints,
@@ -119,10 +122,20 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
         <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
-      {!!legs.length && <JourneyLegsSummary legs={legs} />}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <JourneyLegsSummary legs={legs} compact={true} />
+        </GenericSectionItem>
+      )}
 
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+        isCanBeActivatedNowFareContract(
+          fareContract,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
           <ActivateNowSectionItem
             fareContractId={fareContract.id}
             fareProductType={preassignedFareProduct?.type}

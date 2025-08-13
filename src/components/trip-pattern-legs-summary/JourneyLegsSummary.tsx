@@ -1,4 +1,3 @@
-import {GenericSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
@@ -9,61 +8,68 @@ import React from 'react';
 import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 import {StyleSheet} from '@atb/theme';
 
-export function JourneyLegsSummary({legs}: {legs?: SalesTripPatternLeg[]}) {
-  console.log('Legs in JourneyLegsSummary:', legs);
+export function JourneyLegsSummary({
+  legs,
+  compact = false,
+}: {
+  legs?: SalesTripPatternLeg[];
+  compact: boolean;
+}) {
   const styles = useStyles();
   const {t, language} = useTranslation();
   if (!legs || legs.length === 0) return null;
 
   return (
-    <GenericSectionItem radius="bottom">
-      <View style={styles.legSection}>
+    <View style={styles.legSection}>
+      {!compact && (
         <ThemeText typography="body__primary" color="secondary">
           {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
         </ThemeText>
-        {legs.map(
-          (
-            {
-              fromStopPlaceName,
-              toStopPlaceName,
-              expectedStartTime,
-              expectedEndTime,
-              lineNumber,
-              lineName,
-              mode,
-              subMode,
-            },
-            i,
-          ) => (
-            <View
-              accessible={true}
-              style={styles.legSection}
-              id={lineNumber}
-              key={`leg-${i}`}
-            >
-              <View style={[styles.legSectionItem, styles.mediumTopMargin]}>
-                <TransportationIconBox
-                  style={[styles.sectionItemSpacing, styles.centered]}
-                  type="standard"
-                  mode={mode as AnyMode}
-                  subMode={subMode}
-                  lineNumber={lineNumber}
-                />
-                <ThemeText
-                  typography="body__primary"
-                  style={[styles.legName, styles.centered]}
-                >
-                  {lineName}
-                </ThemeText>
-                <ThemeText
-                  typography="body__primary--bold"
-                  style={[styles.legSectionItemTime, styles.centered]}
-                >
-                  {expectedStartTime &&
-                    formatLocaleTime(expectedStartTime, language)}
-                </ThemeText>
-              </View>
-              <View style={styles.mediumTopMargin}>
+      )}
+      {legs.map(
+        (
+          {
+            fromStopPlaceName,
+            toStopPlaceName,
+            expectedStartTime,
+            expectedEndTime,
+            lineNumber,
+            lineName,
+            mode,
+            subMode,
+          },
+          i,
+        ) => (
+          <View
+            accessible={true}
+            style={styles.legSection}
+            id={lineNumber}
+            key={`leg-${i}`}
+          >
+            <View style={styles.legSectionItem}>
+              <TransportationIconBox
+                style={[styles.sectionItemSpacing, styles.centered]}
+                type="standard"
+                mode={mode as AnyMode}
+                subMode={subMode}
+                lineNumber={lineNumber}
+              />
+              <ThemeText
+                typography="body__primary"
+                style={[styles.legName, styles.centered]}
+              >
+                {lineName}
+              </ThemeText>
+              <ThemeText
+                typography="body__primary--bold"
+                style={[styles.legSectionItemTime, styles.centered]}
+              >
+                {expectedStartTime &&
+                  formatLocaleTime(expectedStartTime, language)}
+              </ThemeText>
+            </View>
+            {!compact && (
+              <View>
                 <View style={styles.legSectionItem}>
                   <ThemeText
                     typography="body__secondary"
@@ -113,11 +119,11 @@ export function JourneyLegsSummary({legs}: {legs?: SalesTripPatternLeg[]}) {
                   </ThemeText>
                 </View>
               </View>
-            </View>
-          ),
-        )}
-      </View>
-    </GenericSectionItem>
+            )}
+          </View>
+        ),
+      )}
+    </View>
   );
 }
 
@@ -136,6 +142,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legSection: {
     flexGrow: 1,
+    gap: theme.spacing.medium,
   },
   legSectionItem: {
     flexDirection: 'row',

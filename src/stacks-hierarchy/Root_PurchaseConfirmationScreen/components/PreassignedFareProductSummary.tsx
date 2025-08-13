@@ -175,7 +175,9 @@ export const PreassignedFareContractSummary = ({
           )}
         </View>
       </GenericSectionItem>
-      <JourneyLegsSummary legs={legs} />
+      <GenericSectionItem>
+        <JourneyLegsSummary legs={legs} compact={false} />
+      </GenericSectionItem>
     </Section>
   );
 };

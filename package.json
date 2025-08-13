@@ -32,7 +32,7 @@
     "@atb-as/config-specs": "^7.1.0",
     "@atb-as/generate-assets": "^18.3.1",
     "@atb-as/theme": "^14.1.0",
-    "@atb-as/utils": "^4.2.0",
+    "@atb-as/utils": "^4.3.0",
     "@bugsnag/react-native": "^7.25.0",
     "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "3.3.14-hotfix1",

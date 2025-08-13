@@ -33,32 +33,39 @@ export function useFareContractLegs(
   });
 
   if (!!data) {
-    return {legs: mapToSalesTripPatternLegs(data.data)};
+    const leg = mapToSalesTripPatternLeg(
+      data.data,
+      dsjRefs?.startPointRef,
+      dsjRefs?.endPointRef,
+    );
+    return {legs: leg ? [leg] : []};
   }
   return {legs: []};
 }
 
-function mapToSalesTripPatternLegs(
+function mapToSalesTripPatternLeg(
   datedServiceJourney: DatedServiceJourney,
-): SalesTripPatternLeg[] {
-  const estimatedCalls =
-    datedServiceJourney.journeyPattern?.serviceJourneysForDate?.[0]
-      ?.estimatedCalls;
-  if (!estimatedCalls || estimatedCalls.length < 2) return [];
-  return estimatedCalls.slice(0, -1).map((fromCall, idx) => {
-    const toCall = estimatedCalls[idx + 1];
-    return {
-      expectedStartTime: fromCall.expectedDepartureTime ?? '',
-      expectedEndTime: toCall.expectedArrivalTime ?? '',
-      fromStopPlaceId: fromCall.quay.stopPlace?.id ?? '',
-      fromStopPlaceName: fromCall.quay.stopPlace?.name,
-      toStopPlaceId: toCall.quay.stopPlace?.id ?? '',
-      toStopPlaceName: toCall.quay.stopPlace?.name,
-      serviceJourneyId: datedServiceJourney.id,
-      mode: datedServiceJourney.journeyPattern?.line.transportMode ?? '',
-      subMode: datedServiceJourney.journeyPattern?.line?.transportSubmode,
-      lineNumber: datedServiceJourney.journeyPattern?.line?.publicCode,
-      lineName: datedServiceJourney.journeyPattern?.line?.name,
-    };
-  });
+  startPointId?: string,
+  endPointId?: string,
+): SalesTripPatternLeg | undefined {
+  const estimatedCalls = datedServiceJourney.estimatedCalls;
+  if (!estimatedCalls || estimatedCalls.length < 2) return undefined;
+  const [fromCall, toCall] = [
+    estimatedCalls.find((call) => call.quay.stopPlace?.id === startPointId),
+    estimatedCalls.find((call) => call.quay.stopPlace?.id === endPointId),
+  ];
+
+  return {
+    expectedStartTime: fromCall?.expectedDepartureTime ?? '',
+    expectedEndTime: toCall?.expectedArrivalTime ?? '',
+    fromStopPlaceId: fromCall?.quay.stopPlace?.id ?? '',
+    fromStopPlaceName: fromCall?.quay.stopPlace?.name,
+    toStopPlaceId: toCall?.quay.stopPlace?.id ?? '',
+    toStopPlaceName: toCall?.quay.stopPlace?.name,
+    serviceJourneyId: datedServiceJourney.id,
+    mode: datedServiceJourney.serviceJourney.transportMode ?? '',
+    subMode: datedServiceJourney.serviceJourney.transportSubmode,
+    lineNumber: datedServiceJourney.serviceJourney?.line?.publicCode,
+    lineName: datedServiceJourney.serviceJourney?.line?.name,
+  };
 }

@@ -1,23 +1,20 @@
-import * as Types from './journey_planner_v3_types';
+import type {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type DatedServiceJourneyQuery = {
   datedServiceJourney?: {
-    journeyPattern?: {
-      serviceJourneys: Array<{
-        id: string;
-        transportMode?: Types.TransportMode;
-        transportSubmode?: Types.TransportSubmode;
-        line: {id: string; publicCode?: string};
-        estimatedCalls: Array<{
-          expectedArrivalTime: any;
-          expectedDepartureTime: any;
-          actualArrivalTime?: any;
-          actualDepartureTime?: any;
-          realtime: boolean;
-          quay: {name: string};
-          destinationDisplay?: {frontText?: string};
-        }>;
-      }>;
+    id: string;
+    estimatedCalls: Array<{
+      expectedDepartureTime: any;
+      expectedArrivalTime: any;
+      quay: {stopPlace?: {id: string; name: string}};
+    }>;
+    serviceJourney: {
+      transportMode?: TransportMode;
+      transportSubmode?: TransportSubmode;
+      line: {publicCode?: string; name?: string};
     };
   };
 };
