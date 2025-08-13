@@ -55,14 +55,13 @@ import {
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
-import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
+import {JourneyLegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  M;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
   hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;

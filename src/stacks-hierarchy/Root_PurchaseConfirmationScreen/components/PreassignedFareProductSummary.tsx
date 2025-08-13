@@ -26,7 +26,7 @@ import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {SalesTripPatternLeg} from '@atb/api/types/sales';
-import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
+import {JourneyLegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;

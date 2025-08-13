@@ -34,7 +34,7 @@ import {
   useBonusAmountEarnedQuery,
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
-import {JourneyLegsSummary} from '@atb/components/trip-pattern-legs-summary';
+import {JourneyLegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   now: number;
