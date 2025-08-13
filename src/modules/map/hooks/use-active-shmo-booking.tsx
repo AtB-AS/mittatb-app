@@ -6,7 +6,10 @@ import {flyToLocation, getMapPadding} from '../utils';
 import MapboxGL from '@rnmapbox/maps';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
+import {
+  FinishingScooterSheet,
+  useActiveShmoBookingQuery,
+} from '@atb/modules/mobility';
 import {ActiveScooterSheet} from '@atb/modules/mobility';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/modules/geolocation';
@@ -74,6 +77,25 @@ export const useShmoActiveBottomSheet = (
                       bookingId: activeBooking.bookingId,
                     });
                   }}
+                  photoNavigation={() => {
+                    mapSelectionCloseCallback();
+                    closeBottomSheet();
+                    navigation.navigate('Root_ParkingPhotoScreen', {
+                      bookingId: activeBooking.bookingId,
+                    });
+                  }}
+                />
+              ),
+              onCloseFocusRef,
+              false,
+              tabBarHeight,
+            );
+            break;
+          case ShmoBookingState.FINISHING:
+            openBottomSheet(
+              () => (
+                <FinishingScooterSheet
+                  onForceClose={mapSelectionCloseCallback}
                   photoNavigation={() => {
                     mapSelectionCloseCallback();
                     closeBottomSheet();
