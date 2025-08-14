@@ -26,7 +26,7 @@ export function Backdrop({animatedOffset}: {animatedOffset: Animated.Value}) {
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   backdrop: {
-    backgroundColor: 'black',
+    //backgroundColor: 'black',
     position: 'absolute',
     bottom: 0,
     top: 0,
