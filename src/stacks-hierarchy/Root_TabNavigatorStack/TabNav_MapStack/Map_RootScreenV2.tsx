@@ -10,6 +10,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useFocusEffect} from '@react-navigation/native';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {StatusBar} from 'react-native';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -83,11 +84,14 @@ export const Map_RootScreenV2 = ({
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
   return (
-    <MapV2
-      navigateToQuay={navigateToQuay}
-      navigateToDetails={navigateToDetails}
-      navigateToTripSearch={navigateToTripSearch}
-      includeSnackbar={true}
-    />
+    <>
+      <StatusBar backgroundColor="blue" barStyle="light-content" />
+      <MapV2
+        navigateToQuay={navigateToQuay}
+        navigateToDetails={navigateToDetails}
+        navigateToTripSearch={navigateToTripSearch}
+        includeSnackbar={true}
+      />
+    </>
   );
 };
