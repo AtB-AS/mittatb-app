@@ -1,7 +1,7 @@
 import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Announcement} from './Announcement';
+import {AnnouncementSection} from './AnnouncementSection';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
@@ -34,7 +34,10 @@ export const Announcements = ({style}: Props) => {
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
-    isWithinTimeRange(a, now),
+    isWithinTimeRange(
+      {startDate: a.startDate?.valueOf(), endDate: a.endDate?.valueOf()},
+      now,
+    ),
   );
 
   if (filteredAnnouncements.length === 0) return null;
@@ -55,7 +58,7 @@ export const Announcements = ({style}: Props) => {
         horizontal={showHorizontally}
       >
         {filteredAnnouncements.map((a) => (
-          <Announcement
+          <AnnouncementSection
             key={a.id}
             announcement={a}
             style={showHorizontally && styles.announcement}

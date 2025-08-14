@@ -1,3 +1,9 @@
+/**
+ * Compares two version strings in the format "x.y.z" and returns:
+ * - 1 if versionA is greater than versionB,
+ * - -1 if versionB is greater than versionA,
+ * - 0 if they are equal.
+ */
 export function compareVersion(versionA: string, versionB: string) {
   if (!versionA || !versionB) return NaN;
 
