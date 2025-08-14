@@ -13,6 +13,7 @@ export {PaymentScreenComponent} from './components/onboarding/PaymentScreenCompo
 export {RulesScreenComponent} from './components/onboarding/RulesScreenComponent';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {ActiveScooterSheet} from './components/sheets/ActiveScooterSheet';
+export {FinishingScooterSheet} from './components/sheets/FinishingScooterSheet';
 export {FinishedScooterSheet} from './components/sheets/FinishedScooterSheet';
 export {ScooterSheet} from './components/sheets/ScooterSheet';
 export {SelectShmoPaymentMethodSheet} from './components/sheets/SelectShmoPaymentMethodsSheet';

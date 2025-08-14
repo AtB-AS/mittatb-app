@@ -206,7 +206,9 @@ export const MapV2 = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      const isActiveTrip = activeShmoBooking?.state === ShmoBookingState.IN_USE;
+      const isActiveTrip =
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING;
       if (!isFeaturePoint(feature)) return;
 
       if (!showGeofencingZones && !isActiveTrip) {
@@ -268,7 +270,8 @@ export const MapV2 = (props: MapProps) => {
       if (
         !featuresAtClick ||
         featuresAtClick.length === 0 ||
-        activeShmoBooking?.state === ShmoBookingState.IN_USE
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING
       )
         return;
       const featureToSelect = getFeatureToSelect(

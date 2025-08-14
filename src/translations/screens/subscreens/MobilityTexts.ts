@@ -29,6 +29,24 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  finishing: {
+    button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
+    header: _(
+      'Ta bilde før du avslutter',
+      'Take a photo before you finish',
+      'Ta eit bilde før du avsluttar',
+    ),
+    p1: _(
+      'Du kan få bot hvis sparkesykkelen meldes som feilparkert.',
+      'You may get a fine if the scooter is reported as incorrectly parked.',
+      'Du kan få bot viss sparkesykkelen vert meldt som feilparkert.',
+    ),
+    p2: _(
+      'Bilde kan brukes som bevis på at du har parkert riktig.',
+      'Photo can be used as evidence that you have parked correctly.',
+      'Bilde kan brukast som bevis på at du har parkert riktig.',
+    ),
+  },
   photo: {
     header: _(
       'Ta bilde av el-sparkesykkelen',
