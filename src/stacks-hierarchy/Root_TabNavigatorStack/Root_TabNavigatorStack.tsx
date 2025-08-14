@@ -120,7 +120,7 @@ export const Root_TabNavigatorStack = () => {
             lineHeight,
             'mapTab',
           ),
-          ...{freezeOnBlur: false}, // needed to update the map to not load tiles from the vector source
+          // ...{freezeOnBlur: false}, // needed to update the map to not load tiles from the vector source
         }}
       />
       <Tab.Screen
