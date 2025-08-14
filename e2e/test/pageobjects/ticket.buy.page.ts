@@ -1,6 +1,6 @@
 import AppHelper from '../utils/app.helper.ts';
 
-class TicketPage {
+class TicketBuyPage {
   /**
    * Choose a ticket aka fare product
    * @param fareProduct fare product to choose, e.g. 'single'
@@ -28,4 +28,4 @@ class TicketPage {
   }
 }
 
-export default new TicketPage();
+export default new TicketBuyPage();

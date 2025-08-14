@@ -2,6 +2,22 @@ import AppHelper from '../utils/app.helper.ts';
 
 class MyProfilePage {
   /**
+   * Get the login button
+   */
+  get login() {
+    const reqId = `//*[@resource-id="loginButton"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Get the logged in with info
+   */
+  get loggedInWithInfo() {
+    const reqId = `//*[@resource-id="loggedInWith"]`;
+    return $(reqId).getText();
+  }
+
+  /**
    * Open a setting from profile
    * @param setting the setting to open
    */

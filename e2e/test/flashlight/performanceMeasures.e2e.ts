@@ -7,7 +7,7 @@ import SearchPage from '../pageobjects/search.page.ts';
 import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page.ts';
 import DepartureSearchPage from '../pageobjects/departure.search.page.ts';
 import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
-import TicketPage from '../pageobjects/ticket.page.ts';
+import TicketPage from '../pageobjects/ticket.buy.page.ts';
 
 /**
  * Runs through some simple use cases in the app. Used together with '$ flashlight measure' to get performance metrics

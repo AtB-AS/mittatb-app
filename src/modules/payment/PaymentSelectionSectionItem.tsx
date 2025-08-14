@@ -49,6 +49,7 @@ export const PaymentSelectionSectionItem = forwardRef<
       accessibilityLabel={a11yLabel}
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
+      testID="paymentSelectionItem"
     >
       <View style={[topContainer, style.container]}>
         <PaymentBrand
