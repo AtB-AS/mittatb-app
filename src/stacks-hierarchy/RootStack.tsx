@@ -190,7 +190,7 @@ export const RootStack = () => {
       <StatusBar
         barStyle={theme.statusBarStyle}
         translucent={true}
-        backgroundColor={statusBarColor}
+        backgroundColor="red"
       />
       <Host>
         <LoadingScreenBoundary>
