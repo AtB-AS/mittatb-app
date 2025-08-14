@@ -12,7 +12,6 @@ import {
 import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
@@ -36,8 +35,6 @@ export const FinishingScooterSheet = ({
 
   const {t} = useTranslation();
   const styles = useStyles();
-
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   useEffect(() => {
     if (activeBooking === null) {
@@ -63,46 +60,42 @@ export const FinishingScooterSheet = ({
 
   return (
     <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
-      {isShmoDeepIntegrationEnabled && (
-        <>
-          {isLoading && (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
+      {isLoading && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+      {!isLoading && !isError && activeBooking && (
+        <View style={styles.container}>
+          <View style={styles.contentWrapper}>
+            <ThemeText typography="heading--big">
+              {t(MobilityTexts.finishing.header)}
+            </ThemeText>
+            <View style={styles.illustrationWrapper}>
+              <ThemedBeacons height={102} />
             </View>
-          )}
-          {!isLoading && !isError && activeBooking && (
-            <View style={styles.container}>
-              <View style={styles.contentWrapper}>
-                <ThemeText typography="heading--big">
-                  {t(MobilityTexts.finishing.header)}
-                </ThemeText>
-                <View style={styles.illustrationWrapper}>
-                  <ThemedBeacons height={102} />
-                </View>
-                <ThemeText>{t(MobilityTexts.finishing.p1)}</ThemeText>
-                <ThemeText>{t(MobilityTexts.finishing.p2)}</ThemeText>
-              </View>
+            <ThemeText>{t(MobilityTexts.finishing.p1)}</ThemeText>
+            <ThemeText>{t(MobilityTexts.finishing.p2)}</ThemeText>
+          </View>
 
-              <Button
-                mode="primary"
-                active={false}
-                expanded={true}
-                type="large"
-                accessibilityRole="button"
-                onPress={startFinishingShmoBooking}
-                text={t(MobilityTexts.finishing.button)}
-              />
-            </View>
-          )}
-          {!isLoading && (isError || !activeBooking) && (
-            <View style={styles.container}>
-              <MessageInfoBox
-                type="error"
-                message={t(ScooterTexts.loadingFailed)}
-              />
-            </View>
-          )}
-        </>
+          <Button
+            mode="primary"
+            active={false}
+            expanded={true}
+            type="large"
+            accessibilityRole="button"
+            onPress={startFinishingShmoBooking}
+            text={t(MobilityTexts.finishing.button)}
+          />
+        </View>
+      )}
+      {!isLoading && (isError || !activeBooking) && (
+        <View style={styles.container}>
+          <MessageInfoBox
+            type="error"
+            message={t(ScooterTexts.loadingFailed)}
+          />
+        </View>
       )}
     </BottomSheetContainer>
   );

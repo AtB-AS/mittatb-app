@@ -62,6 +62,14 @@ export const useShmoActiveBottomSheet = (
         activeBooking &&
         activeBooking.asset.formFactor === FormFactor.Scooter
       ) {
+        const photoNavigation = () => {
+          mapSelectionCloseCallback();
+          closeBottomSheet();
+          navigation.navigate('Root_ParkingPhotoScreen', {
+            bookingId: activeBooking.bookingId,
+          });
+        };
+
         switch (activeBooking.state) {
           case ShmoBookingState.IN_USE:
             openBottomSheet(
@@ -77,13 +85,7 @@ export const useShmoActiveBottomSheet = (
                       bookingId: activeBooking.bookingId,
                     });
                   }}
-                  photoNavigation={() => {
-                    mapSelectionCloseCallback();
-                    closeBottomSheet();
-                    navigation.navigate('Root_ParkingPhotoScreen', {
-                      bookingId: activeBooking.bookingId,
-                    });
-                  }}
+                  photoNavigation={photoNavigation}
                 />
               ),
               onCloseFocusRef,
@@ -96,13 +98,7 @@ export const useShmoActiveBottomSheet = (
               () => (
                 <FinishingScooterSheet
                   onForceClose={mapSelectionCloseCallback}
-                  photoNavigation={() => {
-                    mapSelectionCloseCallback();
-                    closeBottomSheet();
-                    navigation.navigate('Root_ParkingPhotoScreen', {
-                      bookingId: activeBooking.bookingId,
-                    });
-                  }}
+                  photoNavigation={photoNavigation}
                 />
               ),
               onCloseFocusRef,
