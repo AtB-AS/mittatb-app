@@ -5,14 +5,14 @@ import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
 import {formatLocaleTime} from '@atb/utils/date';
 import SharedTexts from '@atb/translations/shared';
 import React from 'react';
-import type {SalesTripPatternLeg} from '@atb/api/types/sales';
 import {StyleSheet} from '@atb/theme';
+import type {Leg} from '@atb/api/types/trips';
 
-export function JourneyLegsSummary({
+export function LegsSummary({
   legs,
   compact = false,
 }: {
-  legs?: SalesTripPatternLeg[];
+  legs?: Leg[];
   compact: boolean;
 }) {
   const styles = useStyles();
@@ -29,21 +29,20 @@ export function JourneyLegsSummary({
       {legs.map(
         (
           {
-            fromStopPlaceName,
-            toStopPlaceName,
+            fromPlace,
+            toPlace,
             expectedStartTime,
             expectedEndTime,
-            lineNumber,
-            lineName,
+            line,
             mode,
-            subMode,
+            transportSubmode,
           },
           i,
         ) => (
           <View
             accessible={true}
             style={styles.legSection}
-            id={lineNumber}
+            id={line?.publicCode}
             key={`leg-${i}`}
           >
             <View style={styles.legSectionItem}>
@@ -51,20 +50,20 @@ export function JourneyLegsSummary({
                 style={[styles.sectionItemSpacing, styles.centered]}
                 type="standard"
                 mode={mode as AnyMode}
-                subMode={subMode}
-                lineNumber={lineNumber}
+                subMode={transportSubmode}
+                lineNumber={line?.publicCode}
               />
               <ThemeText
                 typography="body__primary"
                 style={[styles.legName, styles.centered]}
               >
-                {lineName}
+                {line?.name}
               </ThemeText>
               <ThemeText
                 typography="body__primary--bold"
                 style={[styles.legSectionItemTime, styles.centered]}
               >
-                {expectedStartTime &&
+                {!!expectedStartTime &&
                   formatLocaleTime(expectedStartTime, language)}
               </ThemeText>
             </View>
@@ -83,14 +82,14 @@ export function JourneyLegsSummary({
                     color="secondary"
                     style={styles.legName}
                   >
-                    {fromStopPlaceName}
+                    {fromPlace.quay?.stopPlace?.name}
                   </ThemeText>
                   <ThemeText
                     typography="body__secondary"
                     color="secondary"
                     style={styles.legSectionItemTime}
                   >
-                    {expectedStartTime &&
+                    {!!expectedStartTime &&
                       formatLocaleTime(expectedStartTime, language)}
                   </ThemeText>
                 </View>
@@ -107,14 +106,14 @@ export function JourneyLegsSummary({
                     color="secondary"
                     style={styles.legName}
                   >
-                    {toStopPlaceName}
+                    {toPlace.quay?.stopPlace?.name}
                   </ThemeText>
                   <ThemeText
                     typography="body__secondary"
                     color="secondary"
                     style={styles.legSectionItemTime}
                   >
-                    {expectedEndTime &&
+                    {!!expectedEndTime &&
                       formatLocaleTime(expectedEndTime, language)}
                   </ThemeText>
                 </View>

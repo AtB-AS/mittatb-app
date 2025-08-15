@@ -1,1 +1,1 @@
-export {JourneyLegsSummary} from './JourneyLegsSummary';
+export {LegsSummary} from './LegsSummary';

@@ -55,7 +55,7 @@ import {
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
-import {JourneyLegsSummary} from '@atb/components/journey-legs-summary';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   fareContract: FareContractType;
@@ -99,9 +99,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
-  const {legs} = useFareContractLegs(
-    firstTravelRight.datedServiceJourneys?.[0],
-  );
+  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
 
   // If the ticket is received, get the sender account ID to look up for phone number.
   const senderAccountId = isReceived ? fc.purchasedBy : undefined;
@@ -212,7 +210,7 @@ export const DetailsContent: React.FC<Props> = ({
 
       {shouldShowLegs && (
         <GenericSectionItem>
-          <JourneyLegsSummary compact={false} legs={legs} />
+          <LegsSummary compact={false} legs={legs} />
         </GenericSectionItem>
       )}
 

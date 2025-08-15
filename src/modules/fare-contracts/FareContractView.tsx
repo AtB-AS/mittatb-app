@@ -34,7 +34,7 @@ import {
   useBonusAmountEarnedQuery,
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
-import {JourneyLegsSummary} from '@atb/components/journey-legs-summary';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   now: number;
@@ -73,9 +73,7 @@ export const FareContractView: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
-  const {legs} = useFareContractLegs(
-    firstTravelRight?.datedServiceJourneys?.[0],
-  );
+  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
@@ -125,7 +123,7 @@ export const FareContractView: React.FC<Props> = ({
 
       {shouldShowLegs && (
         <GenericSectionItem>
-          <JourneyLegsSummary legs={legs} compact={true} />
+          <LegsSummary legs={legs} compact={true} />
         </GenericSectionItem>
       )}
 
