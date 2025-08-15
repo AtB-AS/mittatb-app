@@ -67,6 +67,7 @@ enum FareContractFromToMode {
   Harbors = 'harbors',
   School = 'school',
 }
+
 type HarborsFromToData = {
   mode: FareContractFromToMode.Harbors;
   startPointRef: string;
@@ -162,9 +163,10 @@ function useFareContractFromToController(
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
+      const dsj = travelRight.datedServiceJourneys?.[0];
       return {
-        startPointRef: travelRight.startPointRef,
-        endPointRef: travelRight.endPointRef,
+        startPointRef: travelRight.startPointRef ?? dsj?.startPointRef,
+        endPointRef: travelRight.endPointRef ?? dsj?.endPointRef,
       };
     } else if (isRecentFareContract(fcOrRfc) && fcOrRfc.pointToPointValidity) {
       return {

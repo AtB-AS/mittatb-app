@@ -9,6 +9,8 @@ import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
 import type {SearchOfferPrice, TicketOffer} from '@atb-as/utils';
+import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
+import {useTranslation} from '@atb/translations';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
@@ -168,6 +170,7 @@ export function useOfferState(
 ) {
   const offerReducer = getOfferReducer(selection.userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
+  const {t} = useTranslation();
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
@@ -200,7 +203,7 @@ export function useOfferState(
           if (selection.legs.length) {
             const response = await fetchOfferFromLegs(
               new Date(selection.legs[0].expectedStartTime),
-              selection.legs,
+              mapToSalesTripPatternLegs(t, selection.legs),
               offerTravellers,
               preassignedFareProductAlternatives.map((p) => p.id),
             );
@@ -259,7 +262,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives],
+    [selection, preassignedFareProductAlternatives, t],
   );
 
   useEffect(() => {

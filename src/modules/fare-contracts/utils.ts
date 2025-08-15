@@ -7,7 +7,6 @@ import {
   FareContractState,
   FareContractType,
   getAccesses,
-  type TravelRightType,
   type UsedAccessType,
 } from '@atb-as/utils';
 import {
@@ -246,7 +245,6 @@ export function fareZonesSummary(
 }
 
 type FareContractInfoProps = {
-  travelRights: TravelRightType[];
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -290,7 +288,6 @@ export function getFareContractInfo(
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
 
   return {
-    travelRights,
     validityStatus,
     validFrom,
     validTo,

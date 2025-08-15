@@ -33,6 +33,8 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useFareContractLegs} from './use-fare-contract-legs';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   now: number;
@@ -56,13 +58,13 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelRights, validityStatus} = getFareContractInfo(
+  const {validityStatus} = getFareContractInfo(
     now,
     fareContract,
     currentUserId,
   );
 
-  const firstTravelRight = travelRights[0];
+  const firstTravelRight = fareContract.travelRights[0];
   const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -71,12 +73,16 @@ export const FareContractView: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
+  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const shouldShowEarnedBonusPoints =
     validityStatus === 'valid' || validityStatus === 'upcoming';
+
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs.length;
 
   const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
     fareContract.id,
@@ -114,8 +120,20 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
         <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
       )}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <LegsSummary legs={legs} compact={true} />
+        </GenericSectionItem>
+      )}
+
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+        isCanBeActivatedNowFareContract(
+          fareContract,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
           <ActivateNowSectionItem
             fareContractId={fareContract.id}
             fareProductType={preassignedFareProduct?.type}

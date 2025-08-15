@@ -54,6 +54,8 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
+import {useFareContractLegs} from '@atb/modules/fare-contracts';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   fareContract: FareContractType;
@@ -82,7 +84,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
   const {
-    travelRights,
     validityStatus,
     usedAccesses,
     maximumNumberOfAccesses,
@@ -92,12 +93,13 @@ export const DetailsContent: React.FC<Props> = ({
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
 
-  const firstTravelRight = travelRights[0];
+  const firstTravelRight = fc.travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
+  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
 
   // If the ticket is received, get the sender account ID to look up for phone number.
   const senderAccountId = isReceived ? fc.purchasedBy : undefined;
@@ -129,6 +131,9 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowCarnetFooter =
     accesses &&
     accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
+
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs.length;
 
   const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
 
@@ -202,6 +207,13 @@ export const DetailsContent: React.FC<Props> = ({
           />
         </GenericSectionItem>
       )}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <LegsSummary compact={false} legs={legs} />
+        </GenericSectionItem>
+      )}
+
       {shouldShowBundlingInfo && (
         <MobilityBenefitsActionSectionItem
           benefits={benefits}
@@ -238,7 +250,12 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
+        isCanBeActivatedNowFareContract(
+          fc,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
           <ActivateNowSectionItem
             fareContractId={fc.id}
             fareProductType={preassignedFareProduct?.type}

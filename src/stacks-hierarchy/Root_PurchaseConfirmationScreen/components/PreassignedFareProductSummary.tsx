@@ -25,8 +25,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {SalesTripPatternLeg} from '@atb/api/types/sales';
-import {TripPatternLegsSummary} from '@atb/components/trip-pattern-legs-summary';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
+import type {Leg} from '@atb/api/types/trips';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -37,7 +37,7 @@ type Props = {
   toPlace: FareZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
   travelDate?: string;
-  legs?: SalesTripPatternLeg[];
+  legs?: Leg[];
 };
 
 export const PreassignedFareContractSummary = ({
@@ -175,7 +175,9 @@ export const PreassignedFareContractSummary = ({
           )}
         </View>
       </GenericSectionItem>
-      <TripPatternLegsSummary legs={legs} />
+      <GenericSectionItem>
+        <LegsSummary legs={legs} compact={false} />
+      </GenericSectionItem>
     </Section>
   );
 };

@@ -1,1 +1,0 @@
-export {TripPatternLegsSummary} from './TripPatternLegsSummary';

@@ -38,13 +38,9 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {
-    travelRights,
-    validityStatus,
-    numberOfUsedAccesses,
-    maximumNumberOfAccesses,
-  } = getFareContractInfo(serverNow, fc, currentUserId);
-  const firstTravelRight = travelRights[0];
+  const {validityStatus, numberOfUsedAccesses, maximumNumberOfAccesses} =
+    getFareContractInfo(serverNow, fc, currentUserId);
+  const firstTravelRight = fc.travelRights[0];
   const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
@@ -56,7 +52,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   });
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
-    travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
+    fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
   );
 
