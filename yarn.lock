@@ -3115,10 +3115,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@rnmapbox/maps@^10.1.37":
-  version "10.1.37"
-  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.1.37.tgz#fee835a18cc7377ba6a1515ce5a1d7e7c02a777c"
-  integrity sha512-9TJ79pjj7v2vQOPJZXO5lJmlYi0xlesRnAPTAwfOjXlHdGPtiucXoxL8+e1xL0PJBVMqVJGOjPLeb1+05kGx2g==
+"@rnmapbox/maps@^10.1.39":
+  version "10.1.39"
+  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.1.39.tgz#20673c90eadc976e7fb3877ee4ad137845610ff5"
+  integrity sha512-h96h/wPwmuJ6Je/qDL8KTh3QSVvlX41SNVAZpEUtPpIos/n/3eDzERvBxNd/8FGZYZVR/3FcZnv4razaNCFksg==
   dependencies:
     "@turf/along" "6.5.0"
     "@turf/distance" "6.5.0"
