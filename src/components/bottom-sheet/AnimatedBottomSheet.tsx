@@ -34,20 +34,13 @@ export function AnimatedBottomSheet({
   );
   return (
     <>
-      <View
-        style={styles.alwaysPaintOnEntireScreenToAvoidFlicker}
-        pointerEvents="box-none"
-      />
+      <View style={styles.alwaysPaintOnEntireScreenToAvoidFlicker} />
 
       <View
         style={{
-          position: 'absolute',
+          ...styles.bottomSheetContainer,
           bottom: bottomOffset,
-          left: 0,
-          right: 0,
           height: windowHeight,
-          overflow: 'hidden',
-          pointerEvents: 'box-none',
         }}
       >
         <Animated.View
@@ -67,6 +60,23 @@ export function AnimatedBottomSheet({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  alwaysPaintOnEntireScreenToAvoidFlicker: {
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    opacity: 0,
+    backgroundColor: 'white',
+    pointerEvents: 'box-none',
+  },
+  bottomSheetContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+    pointerEvents: 'box-none',
+  },
   bottomSheet: {
     backgroundColor: getThemeColor(theme).background,
     width: '100%',
@@ -74,14 +84,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
     borderTopLeftRadius: theme.border.radius.large,
     borderTopRightRadius: theme.border.radius.large,
-  },
-  alwaysPaintOnEntireScreenToAvoidFlicker: {
-    opacity: 0,
-    backgroundColor: 'white',
-    position: 'absolute',
-    bottom: 0,
-    top: 0,
-    left: 0,
-    right: 0,
   },
 }));
