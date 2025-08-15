@@ -33,29 +33,36 @@ export function AnimatedBottomSheet({
     [animatedOffset, bottomOffset, windowHeight],
   );
   return (
-    <View
-      style={{
-        position: 'absolute',
-        bottom: bottomOffset,
-        left: 0,
-        right: 0,
-        height: windowHeight,
-        overflow: 'hidden',
-        pointerEvents: 'box-none',
-      }}
-    >
-      <Animated.View
+    <>
+      <View
+        style={styles.alwaysPaintOnEntireScreenToAvoidFlicker}
+        pointerEvents="box-none"
+      />
+
+      <View
         style={{
-          ...styles.bottomSheet,
-          transform: [{translateY}],
-          maxHeight: windowHeight,
-          ...shadows,
+          position: 'absolute',
+          bottom: bottomOffset,
+          left: 0,
+          right: 0,
+          height: windowHeight,
+          overflow: 'hidden',
+          pointerEvents: 'box-none',
         }}
-        onLayout={onLayout}
       >
-        {children}
-      </Animated.View>
-    </View>
+        <Animated.View
+          style={{
+            ...styles.bottomSheet,
+            transform: [{translateY}],
+            maxHeight: windowHeight,
+            ...shadows,
+          }}
+          onLayout={onLayout}
+        >
+          {children}
+        </Animated.View>
+      </View>
+    </>
   );
 }
 
@@ -67,5 +74,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
     borderTopLeftRadius: theme.border.radius.large,
     borderTopRightRadius: theme.border.radius.large,
+  },
+  alwaysPaintOnEntireScreenToAvoidFlicker: {
+    opacity: 0,
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
   },
 }));
