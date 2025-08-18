@@ -400,6 +400,11 @@ const ProfileTexts = {
         'Frequently asked questions',
         'Ofte stilte spørsmål',
       ),
+      chat: _(
+        'Gi tilbakemelding om appen',
+        'Give feedback about the app',
+        'Gi tilbakemelding om appen',
+      ),
     },
   },
   installId: {

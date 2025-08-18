@@ -6,35 +6,40 @@ import {
   PreProcessedGeofencingZones,
   usePreProcessedGeofencingZones,
 } from '@atb/modules/map';
-import {useVehicleQuery} from '@atb/modules/mobility';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 type GeofencingZonesProps = {
-  selectedVehicleId: string;
+  systemId: string | null;
+  vehicleTypeId: string | null;
 };
-export const GeofencingZones = ({selectedVehicleId}: GeofencingZonesProps) => {
-  const {
-    data: vehicle,
-    isLoading,
-    isError,
-  } = useVehicleQuery(selectedVehicleId);
-
-  if (!vehicle || !selectedVehicleId || isLoading || isError) {
+export const GeofencingZones = ({
+  systemId,
+  vehicleTypeId,
+}: GeofencingZonesProps) => {
+  if (!systemId || !vehicleTypeId) {
     return <></>;
   }
-  return <GeofencingZonesForVehicle vehicle={vehicle} />;
+  return (
+    <GeofencingZonesForVehicle
+      systemId={systemId}
+      vehicleTypeId={vehicleTypeId}
+    />
+  );
 };
 
-type GeofencingZonesForVehicleProps = {
-  vehicle: VehicleExtendedFragment;
-};
 const GeofencingZonesForVehicle = ({
-  vehicle,
-}: GeofencingZonesForVehicleProps) => {
-  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(vehicle);
+  systemId,
+  vehicleTypeId,
+}: {
+  systemId: string;
+  vehicleTypeId: string;
+}) => {
+  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(
+    systemId,
+    vehicleTypeId,
+  );
 
   return (
     <>

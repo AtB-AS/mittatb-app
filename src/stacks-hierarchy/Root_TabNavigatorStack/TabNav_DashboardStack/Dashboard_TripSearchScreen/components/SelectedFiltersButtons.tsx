@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {View} from 'react-native';
 import React from 'react';
@@ -49,7 +49,7 @@ export const SelectedFiltersButtons = ({
         onPress={resetTransportModes}
         interactiveColor={theme.color.interactive[0]}
         active={true}
-        leftIcon={{svg: Bus}}
+        leftIcon={{svg: BusFill}}
         rightIcon={{svg: Close}}
         testID="selectedFilterButton"
       />

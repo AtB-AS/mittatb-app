@@ -17,9 +17,10 @@ import {
 import React from 'react';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
+export type IconColor = ContrastColor | TextColor | Statuses | ColorValue;
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  color?: ContrastColor | TextColor | ColorValue;
+  color?: IconColor;
   size?: keyof Theme['icon']['size'];
   customSize?: number;
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
@@ -70,7 +71,7 @@ export const ThemeIcon = ({
   );
 };
 
-function useColor(color?: ContrastColor | TextColor | Statuses | ColorValue) {
+function useColor(color?: IconColor) {
   const {theme} = useThemeContext();
   if (typeof color === 'object') {
     return color.foreground.primary;

@@ -40,8 +40,7 @@ export const WithValidityLine = (props: Props) => {
       </View>
     );
   } else if ('fc' in props) {
-    const firstTravelRight = getFareContractInfo(serverNow, props.fc)
-      .travelRights?.[0];
+    const firstTravelRight = props.fc.travelRights[0];
     const preassignedFareProduct = findReferenceDataById(
       preassignedFareProducts,
       firstTravelRight.fareProductRef,
@@ -69,7 +68,7 @@ export const WithValidityLine = (props: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'column',
-    marginHorizontal: -theme.spacing.medium,
+    marginHorizontal: -theme.spacing.medium + theme.border.width.slim,
     borderTopRightRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     overflow: 'hidden',

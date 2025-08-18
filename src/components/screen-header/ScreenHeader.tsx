@@ -18,12 +18,12 @@ import {ContrastColor} from '@atb/theme/colors';
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'chat' | 'skip' | 'custom'>;
+  type: Exclude<ButtonModes, 'skip' | 'custom'>;
 };
 
 export type RightButtonProps =
   | (HeaderButtonProps & {
-      type: 'chat' | 'skip' | 'close';
+      type: 'skip' | 'close';
     })
   | (HeaderButtonProps & {
       type: 'info';

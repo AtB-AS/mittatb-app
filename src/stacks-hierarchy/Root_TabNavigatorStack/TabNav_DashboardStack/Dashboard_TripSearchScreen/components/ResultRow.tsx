@@ -1,5 +1,4 @@
 import React from 'react';
-import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import type {TripSearchTime} from '../../types';
@@ -26,6 +25,7 @@ import {
 } from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {getTripPatternBookingText, isSignificantDifference} from '../utils';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type ResultRowProps = {
   tripPattern: TripPattern;
@@ -68,16 +68,20 @@ export const ResultRow: React.FC<ResultRowProps> = ({
       accessible={true}
       testID={testID}
     >
-      <View style={[styles.resultRow, isInPast && styles.resultInPast]}>
-        <MemoizedResultItem
-          tripPattern={tripPattern}
-          state={isInPast ? 'dimmed' : 'enabled'}
-        />
-        <MemoizedResultItemFooter
-          tripPattern={tripPattern}
-          isInPast={isInPast}
-        />
-      </View>
+      <Section>
+        <GenericSectionItem>
+          <MemoizedResultItem
+            tripPattern={tripPattern}
+            state={isInPast ? 'dimmed' : 'enabled'}
+          />
+        </GenericSectionItem>
+        <GenericSectionItem>
+          <MemoizedResultItemFooter
+            tripPattern={tripPattern}
+            isInPast={isInPast}
+          />
+        </GenericSectionItem>
+      </Section>
     </PressableOpacity>
   );
 };
@@ -85,17 +89,6 @@ export const ResultRow: React.FC<ResultRowProps> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pressableOpacity: {
     marginTop: theme.spacing.small,
-  },
-  resultRow: {
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-    rowGap: theme.spacing.small,
-    marginTop: theme.spacing.small,
-    paddingTop: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.medium,
-  },
-  resultInPast: {
-    backgroundColor: theme.color.background.neutral[2].background,
   },
 }));
 
@@ -151,7 +144,7 @@ const tripSummary = (
       ),
     ) + screenReaderPause;
   const passedTripText = isInPast
-    ? t(TripSearchTexts.results.resultItem.passedTrip)
+    ? t(TripSearchTexts.results.resultItem.passedTrip) + ', '
     : undefined;
 
   const modeAndNumberText = firstLeg

@@ -22,7 +22,11 @@ import {
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ArrowUpLeft,
+  ExpandLess,
+  ExpandMore,
+} from '@atb/assets/svg/mono-icons/navigation';
 import {DebugOverride} from './components/DebugOverride';
 import {
   ButtonSectionItem,
@@ -143,11 +147,7 @@ export const Profile_DebugInfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title="Debug info"
-        leftButton={{type: 'back'}}
-        rightButton={{type: 'chat'}}
-      />
+      <FullScreenHeader title="Debug info" leftButton={{type: 'back'}} />
       <ScrollView testID="debugInfoScrollView">
         <Section style={styles.section}>
           <ButtonSectionItem
@@ -167,6 +167,11 @@ export const Profile_DebugInfoScreen = () => {
                 />
               );
             })}
+          />
+
+          <ButtonSectionItem
+            label="Reset Smart Park & Ride onboarding"
+            onPress={() => storage.remove('@ATB_smart_park_and_ride_onboarded')}
           />
         </Section>
         <Section style={styles.section}>
@@ -226,12 +231,12 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
-            icon="arrow-upleft"
+            rightIcon={{svg: ArrowUpLeft}}
             onPress={() => copyFirestoreLink()}
           />
           <LinkSectionItem
             text="Copy ID token"
-            icon="arrow-upleft"
+            rightIcon={{svg: ArrowUpLeft}}
             onPress={() => copyIdToken()}
           />
           <LinkSectionItem

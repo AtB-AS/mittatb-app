@@ -15,6 +15,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
@@ -67,7 +68,7 @@ export const Profile_HelpAndContactScreen = () => {
             {!!contactFormUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.contactForm)}
-                icon="external-link"
+                rightIcon={{svg: ExternalLink}}
                 onPress={() => openLink(contactFormUrl)}
                 accessibility={{
                   accessibilityHint: t(
@@ -81,7 +82,7 @@ export const Profile_HelpAndContactScreen = () => {
             {!!lostAndFoundUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.lostAndFound)}
-                icon="external-link"
+                rightIcon={{svg: ExternalLink}}
                 onPress={() => openLink(lostAndFoundUrl)}
                 accessibility={{
                   accessibilityHint: t(
@@ -95,7 +96,7 @@ export const Profile_HelpAndContactScreen = () => {
             {!!refundInfoUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.refund)}
-                icon="external-link"
+                rightIcon={{svg: ExternalLink}}
                 onPress={() => openLink(refundInfoUrl)}
                 accessibility={{
                   accessibilityHint: t(
@@ -109,7 +110,7 @@ export const Profile_HelpAndContactScreen = () => {
             {!!frequentlyAskedQuestionsUrl?.trim() && (
               <LinkSectionItem
                 text={t(ProfileTexts.sections.contact.frequentlyAskedQuestions)}
-                icon="external-link"
+                rightIcon={{svg: ExternalLink}}
                 onPress={() => openLink(frequentlyAskedQuestionsUrl)}
                 accessibility={{
                   accessibilityHint: t(

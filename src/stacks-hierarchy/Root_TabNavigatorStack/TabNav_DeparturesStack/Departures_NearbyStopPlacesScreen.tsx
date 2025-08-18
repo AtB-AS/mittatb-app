@@ -22,8 +22,6 @@ export const Departures_NearbyStopPlacesScreen = ({
       mode={route.params.mode}
       headerProps={{
         title: t(DeparturesTexts.header.title),
-        rightButton: {type: 'chat'},
-        leftButton: {type: 'status-disruption'},
         globalMessageContext: GlobalMessageContextEnum.appDepartures,
       }}
       onPressLocationSearch={(location) =>

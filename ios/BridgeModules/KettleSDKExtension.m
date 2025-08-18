@@ -1,5 +1,5 @@
 #import "KettleSDKExtension.h"
-#import "AtB-Swift.h"
+#import "AppDelegate.h"
 
 #ifdef KETTLE_API_KEY
 #import <KettleKit/KettleKit.h>
@@ -34,7 +34,7 @@ RCT_EXPORT_METHOD(initializeKettleSDK:(RCTPromiseResolveBlock)resolve
   NSString *apiKey = [NSString stringWithFormat:@"%@", KETTLE_API_KEY];
   if ([apiKey length] > 0) {
     dispatch_async(dispatch_get_main_queue(), ^{
-      InitializeKettle([AppDelegate shared].launchOptions);
+      InitializeKettle([AppDelegate sharedInstance].launchOptions);
       resolve(@YES);
     });
   }

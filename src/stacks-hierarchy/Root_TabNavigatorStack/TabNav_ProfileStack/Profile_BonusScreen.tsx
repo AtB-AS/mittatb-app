@@ -177,9 +177,7 @@ export const Profile_BonusScreen = () => {
         <Section>
           <LinkSectionItem
             text={t(BonusProgramTexts.bonusProfile.feedback.button)}
-            icon={
-              <ThemeIcon color={theme.color.background.accent[0]} svg={Chat} />
-            }
+            rightIcon={{svg: Chat}}
             onPress={() => {
               analytics.logEvent('Bonus', 'Feedback button clicked');
               Intercom.presentSpace(Space.home);

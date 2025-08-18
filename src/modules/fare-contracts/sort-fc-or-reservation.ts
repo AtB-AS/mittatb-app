@@ -1,19 +1,47 @@
 import {Reservation} from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAvailabilityStatus} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
 export const getSortedFareContractsAndReservations = (
-  fcOrReservations: (Reservation | FareContractType)[],
+  fareContracts: FareContractType[],
+  reservations: Reservation[],
+  now: number,
 ): (FareContractType | Reservation)[] => {
-  let fcFound = false;
-  return sortFcOrReservationByCreation(fcOrReservations).filter((item) =>
-    'travelRights' in item
-      ? (fcFound = true)
-      : !(
-          (item.paymentStatus === 'CANCEL' ||
-            item.paymentStatus === 'REJECT') &&
-          fcFound
-        ),
+  // Should show only the most recent "failed" reservation.
+  const sortedReservations = sortFcOrReservationByCreation(reservations);
+  const mostRecentFailedReservation = sortedReservations.find(
+    (reservation) =>
+      !('travelRights' in reservation) &&
+      (reservation.paymentStatus === 'CANCEL' ||
+        reservation.paymentStatus === 'REJECT'),
   );
+
+  const otherReservations = reservations.filter(
+    (r) => r.paymentStatus !== 'CANCEL' && r.paymentStatus !== 'REJECT',
+  );
+
+  const validFareContracts = fareContracts.filter((fc) => {
+    return getAvailabilityStatus(fc, now).status === 'valid';
+  });
+
+  // Non-valid fare contracts (e.g. inactive carnets) should come last, and be
+  // sorted by creation date.
+  const otherFareContracts = sortFcOrReservationByCreation(
+    fareContracts.filter(
+      (fc) => getAvailabilityStatus(fc, now).status !== 'valid',
+    ),
+  );
+
+  // Sort everything but the non-valid fare contracts by creation date.
+  const sortedFareContractsAndReservations = sortFcOrReservationByCreation(
+    [
+      mostRecentFailedReservation,
+      ...otherReservations,
+      ...validFareContracts,
+    ].filter(isDefined),
+  );
+
+  return [...sortedFareContractsAndReservations, ...otherFareContracts];
 };
 
 export const sortFcOrReservationByCreation = (

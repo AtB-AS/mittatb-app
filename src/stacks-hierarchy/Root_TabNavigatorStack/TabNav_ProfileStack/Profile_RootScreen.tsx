@@ -1,4 +1,9 @@
-import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
+import {
+  LogIn,
+  LogOut,
+  NewConcept,
+  Settings,
+} from '@atb/assets/svg/mono-icons/profile';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
@@ -6,7 +11,7 @@ import {ThemeText} from '@atb/components/text';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
@@ -29,6 +34,14 @@ import {
 import {ClickableCopy} from './components/ClickableCopy';
 import {UserInfo} from './components/UserInfo';
 import {Button} from '@atb/components/button';
+import {Card, Receipt} from '@atb/assets/svg/mono-icons/ticketing';
+import {Star} from '@atb/assets/svg/mono-icons/bonus';
+import {Favorite} from '@atb/assets/svg/mono-icons/places';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {useChatUnreadCount} from '@atb/modules/chat';
+import Intercom, {Space} from '@intercom/intercom-react-native';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -50,13 +63,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
   const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
     useFeatureTogglesContext();
+  const unreadCount = useChatUnreadCount();
+  const {theme} = useThemeContext();
+  const {enable_intercom} = useRemoteConfigContext();
 
   return (
     <>
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
-          rightButton: {type: 'chat'},
         }}
       >
         <View
@@ -100,6 +115,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <Section>
               <LinkSectionItem
                 text={t(ProfileTexts.sections.settings.heading)}
+                leftIcon={{svg: Settings}}
                 onPress={() => navigation.navigate('Profile_SettingsScreen')}
                 testID="settingsButton"
               />
@@ -110,6 +126,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   text={t(
                     ProfileTexts.sections.account.linkSectionItems.bonus.label,
                   )}
+                  leftIcon={{svg: Star}}
                   onPress={() => navigation.navigate('Profile_BonusScreen')}
                   testID="BonusButton"
                   label="new"
@@ -127,6 +144,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.account.linkSectionItems.ticketHistory
                   .label,
               )}
+              leftIcon={{svg: Receipt}}
               onPress={() =>
                 navigation.navigate('Profile_TicketHistorySelectionScreen')
               }
@@ -138,6 +156,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.account.linkSectionItems.paymentMethods
                     .label,
                 )}
+                leftIcon={{svg: Card}}
                 onPress={() =>
                   navigation.navigate('Profile_PaymentMethodsScreen')
                 }
@@ -145,6 +164,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
             <LinkSectionItem
               text={t(ProfileTexts.sections.favorites.heading)}
+              leftIcon={{svg: Favorite}}
               onPress={() => navigation.navigate('Profile_FavoriteScreen')}
               testID="favoriteButton"
             />
@@ -154,6 +174,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.account.linkSectionItems
                     .smartParkAndRide.label,
                 )}
+                leftIcon={{svg: Car}}
                 onPress={() =>
                   navigation.navigate('Profile_SmartParkAndRideScreen')
                 }
@@ -170,6 +191,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.settings.linkSectionItems.enrollment
                   .label,
               )}
+              leftIcon={{svg: NewConcept}}
               onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
               testID="invitationCodeButton"
             />
@@ -182,6 +204,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <Section>
                 <LinkSectionItem
                   text={t(ProfileTexts.sections.information.label)}
+                  leftIcon={{svg: Info}}
                   onPress={() =>
                     navigation.navigate('Profile_InformationScreen')
                   }
@@ -193,12 +216,33 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <ContentHeading text={t(ProfileTexts.sections.contact.heading)} />
           <Section>
             <LinkSectionItem
+              leftIcon={{svg: Unknown}}
               text={t(ProfileTexts.sections.contact.helpAndContact)}
               onPress={() =>
                 navigation.navigate('Profile_HelpAndContactScreen')
               }
               testID="contactButton"
             />
+            {enable_intercom && (
+              <LinkSectionItem
+                leftIcon={{
+                  svg: Chat,
+                  notificationColor: unreadCount
+                    ? theme.color.status.error.primary
+                    : undefined,
+                }}
+                text={t(ProfileTexts.sections.contact.chat)}
+                onPress={() => {
+                  unreadCount
+                    ? Intercom.presentSpace(Space.messages)
+                    : Intercom.presentSpace(Space.home);
+                  analytics.logEvent(
+                    'Contact',
+                    'Send Intercom message clicked',
+                  );
+                }}
+              />
+            )}
           </Section>
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||

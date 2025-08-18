@@ -3,6 +3,8 @@ import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import {AxiosRequestConfig} from 'axios';
+import type {DatedServiceJourney} from '@atb/api/types/generated/journey_planner_v3_types';
 
 /**
  * @param id Service Journey ID
@@ -41,4 +43,13 @@ export async function getServiceJourneyMapLegs(
       mapLegs: [],
     }
   );
+}
+
+export async function getDatedServiceJourney(
+  id?: string,
+  opts?: AxiosRequestConfig,
+) {
+  if (!id) return undefined;
+  const url = `bff/v2/servicejourney/datedservicejourney/${id}`;
+  return await client.get<DatedServiceJourney>(url, opts);
 }

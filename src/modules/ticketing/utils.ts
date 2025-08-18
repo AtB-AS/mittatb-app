@@ -24,8 +24,12 @@ export function isCanBeActivatedNowFareContract(
   f: FareContractType,
   now: number,
   currentUserId: string | undefined,
+  isBooking: boolean = false,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
+
+  // You cannot activate a booking fare contract early
+  if (isBooking) return false;
 
   // A fare contract with accesses (carnets) cannot be activated by itself. It
   // is instead "consumed" to activate an access
@@ -52,6 +56,7 @@ export function getLastUsedAccess(
 
   return {status, validFrom, validTo};
 }
+
 function getUsedAccessValidity(
   now: number,
   validFrom: number,

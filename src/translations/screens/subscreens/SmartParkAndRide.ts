@@ -12,6 +12,16 @@ const SmartParkAndRideTexts = {
     heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
     addVehicle: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
+  howItWorks: {
+    heading: _('Les mer', 'Read more', 'Les meir'),
+    title: _('Hvordan funker det?', 'How does it work?', 'Korleis funkar det?'),
+    description: _(
+      'Med gyldig billett fra AtB kan du stå gratis på Ranheim Fabrikker i 48 timer.',
+      'With a valid ticket from AtB, you can park for free at Ranheim Fabrikker for 48 hours.',
+      'Med gyldig billett frå AtB kan du stå gratis på Ranheim Fabrikker i 48 timar.',
+    ),
+    link: _('Sånn funker det', 'How it works', 'Slik fungerer det'),
+  },
   add: {
     header: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
@@ -24,6 +34,11 @@ const SmartParkAndRideTexts = {
         'Skriv inn skiltnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
       ),
     },
+    max: _(
+      'Du kan legge til maks to kjøretøy',
+      'You can add a maximum of two vehicles',
+      'Du kan leggje til maks to køyretøy',
+    ),
     inputs: {
       nickname: {
         label: _('Navn', 'Name', 'Namn'),
@@ -113,6 +128,55 @@ const SmartParkAndRideTexts = {
       'Press to edit or remove vehicle',
       'Trykk for å redigere eller fjerne køyretøy',
     ),
+  },
+  onboarding: {
+    information: {
+      title: _(
+        'Billett gir gratis parkering',
+        'Ticket gives free parking',
+        'Billett gir gratis parkering',
+      ),
+      description: _(
+        'Stå gratis på Ranheim Fabrikker i 48 timer, uansett hvilken AtB-billett du har. Billetten må være aktiv senest 30 minutter etter innkjøring.',
+        'Park for free at Ranheim Fabrikker for 48 hours, regardless of which AtB ticket you have. The ticket must be active at least 30 minutes after entering.',
+        'Stå gratis på Ranheim Fabrikker i 48 timar, uansett kva AtB-billett du har. Billetten må vere aktiv seinast 30 minutt etter innkjøring.',
+      ),
+      penaltyNotice: _(
+        'Uten billett er det fast pris på 400 kr.',
+        'Without a ticket, there is a fixed price of 400 NOK.',
+        'Utan billett er det fast pris på 400 kr.',
+      ),
+      buttonText: _(
+        'Hvordan gjør vi det?',
+        'How do we do it?',
+        'Korleis gjer vi det?',
+      ),
+    },
+    automaticRegistration: {
+      title: _(
+        'Automatisk registrering',
+        'Automatic registration',
+        'Automatisk registrering',
+      ),
+      description: _(
+        'Kjøretøyet registrer seg automatisk ved inn- og utkjøring, og vi sjekker i appen om du har billett. Legg til kjøretøyet ditt for å knytte billetten til parkeringen.',
+        'The vehicle automatically registers upon entering and exiting, and we check the app for your ticket. Add your vehicle to link the ticket to the parking.',
+        'Køyretøyet registrer seg automatisk ved inn- og utkjøring, og vi sjekker i appen om du har billett. Legg til køyretøyet ditt for å knytte billetten til parkeringen.',
+      ),
+      descriptionLink: {
+        text: _(
+          'Les mer på atb.no/RanheimFabrikker',
+          'Read more at atb.no/RanheimFabrikker',
+          'Les meir på atb.no/RanheimFabrikker',
+        ),
+        a11yHint: _(
+          'Les mer på atb.no/RanheimFabrikker',
+          'Read more at atb.no/RanheimFabrikker',
+          'Les meir på atb.no/RanheimFabrikker',
+        ),
+      },
+      buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
+    },
   },
 };
 

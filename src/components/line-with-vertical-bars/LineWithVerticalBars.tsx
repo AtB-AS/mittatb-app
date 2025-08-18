@@ -74,12 +74,12 @@ const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
 };
 
 /**
-   Get the number of vertical lines necessary to fill the progress bar. For
-   simplicity's sake it is calculated by using the window viewport width instead
-   of actual progress bar width. I found using the onLayout listener to calculate
-   the actual progress bar width was not worth the effort as some overflowing
-   hidden vertical lines doesn't hurt anybody.
-   */
+ Get the number of vertical lines necessary to fill the progress bar. For
+ simplicity's sake it is calculated by using the window viewport width instead
+ of actual progress bar width. I found using the onLayout listener to calculate
+ the actual progress bar width was not worth the effort as some overflowing
+ hidden vertical lines doesn't hurt anybody.
+ */
 const getNumberOfVerticalLines = () =>
   Math.ceil(Dimensions.get('window').width / SPACE_BETWEEN_VERTICAL_LINES);
 
@@ -122,13 +122,16 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
   progressBar: {
     height: 12,
-    width: '100%',
+    // Make the animation slightly larger than the view to avoid glitches along
+    // the edges.
+    width: '104%',
+    marginLeft: '-2%',
     overflow: 'hidden',
   },
   verticalLine: {
     position: 'absolute',
     bottom: 0,
-    width: 16,
+    width: 20,
     height: '100%',
   },
 }));

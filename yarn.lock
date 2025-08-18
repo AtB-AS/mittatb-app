@@ -33,10 +33,10 @@
     zod "^3.24.4"
     zod-to-json-schema "^3.24.5"
 
-"@atb-as/generate-assets@^17.5.2":
-  version "17.5.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-17.5.2.tgz#cd64cb4af0d4af14bc622fb362ac03f6dea1ab69"
-  integrity sha512-RHXB6EP5yxnD/nJW9yDHK8TBlsuKJTSCYHmgo+6duiMBMGGxoFJSL9DwlJIt8jgv7zyD8m1AJKxf7+a5M/iS/w==
+"@atb-as/generate-assets@^18.3.1":
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.3.1.tgz#b962faa62493937889b2a822d9d1bddd9911f80c"
+  integrity sha512-Rmp7wJVk0H10hSIZysrfReRbV1GSjve8rWJr2CZQ+k/haLrXbgiIBm3V3aLJNlVBqRpspGrh87YwXH8F0l+Mvw==
   dependencies:
     "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
@@ -63,10 +63,10 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/utils@^3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-3.5.0.tgz#11d90f966195f54e6693b111bc06034193a6ea4f"
-  integrity sha512-+xpV0SxYq2Ex7TactaC8Eqr8pI6qWys9+n+vGNAsfaMYknYqYJWPWJOR1QnOK4/yEW+Js2GJN4YMPOGqx+V8Nw==
+"@atb-as/utils@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-4.3.0.tgz#7a225c818e8f8ec005cabe5f8a1d104becb85e1e"
+  integrity sha512-Qusgnp7yshISqaZLh23cTb+BjKZlZLxTrWcZsSi0eRapYsv5/JuxghOPQUYZIxYFGoXDvjqPzg3Mi5ADd8kz2g==
   dependencies:
     lodash "^4.17.21"
     zod "^3.24.1"

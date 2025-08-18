@@ -21,10 +21,8 @@ type BookingTripsType = {
 
 export function useBookingTrips({
   selection,
-  enabled,
 }: {
   selection: PurchaseSelectionType;
-  enabled: boolean;
 }): BookingTripsType {
   const {
     stopPlaces,
@@ -63,7 +61,9 @@ export function useBookingTrips({
           count: p.count,
         })),
       }),
-    enabled: enabled && isValidSelection(selection),
+    enabled:
+      !!selection.preassignedFareProduct.isBookingEnabled &&
+      isValidSelection(selection),
     retry: 3,
   });
 
@@ -88,9 +88,7 @@ export function useBookingTrips({
      * At refetch (isLoading === false && isFetching === true):                       The query is not loading
      */
     isLoadingBooking: isLoading && isFetching,
-    isBookingRequired:
-      isSuccess &&
-      data.trip.tripPatterns.filter(tripPatternAvailabilityFilter).length > 0,
+    isBookingRequired: !!preassignedFareProduct.isBookingEnabled,
     tripPatterns,
     reload: refetch,
     isError: isError,

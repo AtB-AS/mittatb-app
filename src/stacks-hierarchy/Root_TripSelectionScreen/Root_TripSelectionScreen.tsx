@@ -11,11 +11,9 @@ import {
 } from '@atb/components/date-selection';
 import {ScreenHeading} from '@atb/components/heading';
 import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
-import {type TranslateFunction, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
-import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
-import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
@@ -78,7 +76,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           onSelect={(legs) => {
             const newSelection = builder
               .fromSelection(selection)
-              .legs(mapToSalesTripPatternLegs(t, legs))
+              .legs(legs)
               .build();
             setSelection(newSelection);
 
@@ -103,28 +101,6 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
     </FullScreenView>
   );
 };
-
-export function mapToSalesTripPatternLegs(
-  t: TranslateFunction,
-  legs: TripPatternFragment['legs'],
-) {
-  return legs.map((l) => ({
-    fromStopPlaceId: l.fromPlace.quay?.stopPlace?.id ?? '',
-    fromStopPlaceName: l.fromPlace.quay?.stopPlace?.name ?? '',
-    toStopPlaceId: l.toPlace.quay?.stopPlace?.id ?? '',
-    toStopPlaceName: l.toPlace.quay?.stopPlace?.name ?? '',
-    expectedStartTime: l.expectedStartTime,
-    expectedEndTime: l.expectedEndTime,
-    mode: l.mode,
-    subMode: l.transportSubmode,
-    serviceJourneyId: l.serviceJourney?.id ?? '',
-    lineNumber: l.line?.publicCode ?? '',
-    lineName: formatDestinationDisplay(
-      t,
-      l.fromEstimatedCall?.destinationDisplay,
-    ),
-  }));
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {

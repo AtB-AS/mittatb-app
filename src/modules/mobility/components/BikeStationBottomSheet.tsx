@@ -16,7 +16,7 @@ import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeText} from '@atb/components/text';
-import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
@@ -112,7 +112,7 @@ export const BikeStationBottomSheet = ({
                     <MobilityStats
                       first={
                         <MobilityStat
-                          svg={Bicycle}
+                          svg={BicycleFill}
                           primaryStat={availableBikes}
                           secondaryStat={t(
                             BicycleTexts.stations.numBikesAvailable(

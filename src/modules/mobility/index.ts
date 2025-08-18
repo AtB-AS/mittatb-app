@@ -13,6 +13,7 @@ export {PaymentScreenComponent} from './components/onboarding/PaymentScreenCompo
 export {RulesScreenComponent} from './components/onboarding/RulesScreenComponent';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {ActiveScooterSheet} from './components/sheets/ActiveScooterSheet';
+export {FinishingScooterSheet} from './components/sheets/FinishingScooterSheet';
 export {FinishedScooterSheet} from './components/sheets/FinishedScooterSheet';
 export {ScooterSheet} from './components/sheets/ScooterSheet';
 export {SelectShmoPaymentMethodSheet} from './components/sheets/SelectShmoPaymentMethodsSheet';
@@ -36,6 +37,7 @@ export {useShmoRequirements} from './use-shmo-requirements';
 export {useStations} from './use-stations';
 export {useVehicle} from './use-vehicle';
 export {useVehicles} from './use-vehicles';
+export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
@@ -56,3 +58,4 @@ export {
   type AgeVerificationEnum,
   useGetAgeVerificationQuery,
 } from './queries/use-get-age-verification-query';
+export {useGetBirthdateQuery} from './queries/use-get-birthdate-query';
