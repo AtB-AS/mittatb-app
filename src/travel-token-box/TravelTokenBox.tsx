@@ -52,6 +52,7 @@ export function TravelTokenBox({
           action: retry,
           text: t(dictionary.retry),
         }}
+        testID="tokenErrorMessage"
       />
     );
   }
@@ -104,6 +105,7 @@ export function TravelTokenBox({
           type="error"
           textColor={interactiveColor.default}
           message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+          testID="noInspectableToken"
         />
       )}
       <Button
@@ -116,7 +118,7 @@ export function TravelTokenBox({
             ? t(TravelTokenBoxTexts.change)
             : t(TravelTokenBoxTexts.select)
         }
-        testID="continueWithoutChangingTravelTokenButton"
+        testID="changeTravelTokenButton"
       />
     </View>
   );

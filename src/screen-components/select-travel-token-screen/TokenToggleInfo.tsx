@@ -77,6 +77,7 @@ const TokenToggleContent = ({
       type={getToggleInfoIcon(toggleLimit)}
       a11yLabel={getToggleInfo(toggleLimit, countRenewalDateA11yLabel)}
       textColor={textColor}
+      testID="tokenToggleInfo"
     />
   );
 };

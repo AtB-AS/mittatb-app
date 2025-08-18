@@ -433,11 +433,12 @@ export const Profile_DebugInfoScreen = () => {
           <ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
+            testID="mobileTokenDebug"
             expandContent={
               <View>
                 {nativeToken && (
                   <View>
-                    <ThemeText>{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
+                    <ThemeText testID="tokenId">{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
                     <ThemeText>{`Token start: ${new Date(
                       nativeToken.getValidityStart(),
                     ).toISOString()}`}</ThemeText>
@@ -448,7 +449,7 @@ export const Profile_DebugInfoScreen = () => {
                     <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
                   </View>
                 )}
-                <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
+                <ThemeText testID="tokenStatus">{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Override remote token inspectable: ${allTokenInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
