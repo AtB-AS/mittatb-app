@@ -5,13 +5,11 @@ import ElementHelper from '../utils/element.helper.js';
 class TicketActivePage {
   /**
    * Get the product name
+   * @param index which ticket to check (default: 0, i.e. first ticket)
    */
-  get productName() {
+  async productName(index: number = 0) {
     const reqId = `//*[@resource-id="productName"]`;
-    //TODO
-    const s = $(reqId).getText();
-    console.log(`=====\nproductName: ${s}\n=====`);
-    return $(reqId).getText();
+    return $$(reqId)[index].getText();
   }
 
   /**

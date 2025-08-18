@@ -1,6 +1,6 @@
 import AppHelper from '../utils/app.helper.ts';
 
-class MyProfilePage {
+class ProfilePage {
   /**
    * Get the login button
    */
@@ -18,14 +18,14 @@ class MyProfilePage {
   }
 
   /**
-   * Open a setting from profile
-   * @param setting the setting to open
+   * Open an option from profile
+   * @param option the setting to open
    */
-  async openSetting(setting: string) {
-    const reqId = `//*[@resource-id="${setting}Button"]`;
+  async open(option: string) {
+    const reqId = `//*[@resource-id="${option}Button"]`;
     await $(reqId).click();
     await AppHelper.pause();
   }
 }
 
-export default new MyProfilePage();
+export default new ProfilePage();

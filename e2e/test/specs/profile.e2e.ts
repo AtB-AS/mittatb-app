@@ -2,7 +2,7 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import MyProfilePage from '../pageobjects/myProfile.page.ts';
+import ProfilePage from '../pageobjects/profile.page.ts';
 import AlertHelper from '../utils/alert.helper.ts';
 import PrivacyPage from '../pageobjects/privacy.page.ts';
 import NotificationsPage from '../pageobjects/notifications.page.ts';
@@ -31,8 +31,8 @@ describe('Profile', () => {
       'on-behalf-of': true,
     };
     try {
-      await MyProfilePage.openSetting('settings');
-      await MyProfilePage.openSetting('notifications');
+      await ProfilePage.open('settings');
+      await ProfilePage.open('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
 
@@ -76,8 +76,8 @@ describe('Profile', () => {
   // Verify that login is required and email is missing for email notifications
   it('should show login and missing email info for email notifications', async () => {
     try {
-      await MyProfilePage.openSetting('settings');
-      await MyProfilePage.openSetting('notifications');
+      await ProfilePage.open('settings');
+      await ProfilePage.open('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
 
@@ -110,8 +110,8 @@ describe('Profile', () => {
   // Check that data collection is not enabled as default
   it.only('should collect data only when enabled', async () => {
     try {
-      await MyProfilePage.openSetting('settings');
-      await MyProfilePage.openSetting('privacy');
+      await ProfilePage.open('settings');
+      await ProfilePage.open('privacy');
       await ElementHelper.waitForElement('text', 'Privacy');
 
       // Default
