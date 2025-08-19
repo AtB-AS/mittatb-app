@@ -48,7 +48,7 @@ describe('Auth', () => {
       );
       authorized = true;
     } catch (errMsg) {
-      await AppHelper.screenshot('error_auth_test');
+      await AppHelper.screenshot('error_auth_login');
       throw errMsg;
     }
   });
@@ -73,6 +73,7 @@ describe('Auth', () => {
         // Verify
         expect(await TokenPage.tokenSelection('Travelcard')).toExist();
         expect(await TokenPage.tokenSelection('Mobile')).toExist();
+        expect(await TokenPage.tokenSelectionRadio('Mobile')).toBeChecked();
         expect(await TokenPage.tokenSelectionRadio('Mobile')).toBeChecked();
         // Select travel card
         await TokenPage.selectToken('Travelcard');

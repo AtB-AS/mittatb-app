@@ -51,14 +51,6 @@ class FrontPagePage {
   }
 
   /**
-   * Open service disruptions
-   */
-  get serviceDisruptionsInfo() {
-    const reqId = `//*[@resource-id="lhb"]`;
-    return $(reqId);
-  }
-
-  /**
    * Favorite departures
    */
   get favoriteDepartures() {

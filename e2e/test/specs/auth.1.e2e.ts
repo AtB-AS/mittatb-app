@@ -46,7 +46,7 @@ describe('Auth', () => {
       );
       authorized = true;
     } catch (errMsg) {
-      await AppHelper.screenshot('error_auth_test');
+      await AppHelper.screenshot('error_auth_login');
       throw errMsg;
     }
   });

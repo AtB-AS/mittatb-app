@@ -108,7 +108,7 @@ describe('Profile', () => {
   });
 
   // Check that data collection is not enabled as default
-  it.only('should collect data only when enabled', async () => {
+  it('should collect data only when enabled', async () => {
     try {
       await ProfilePage.open('settings');
       await ProfilePage.open('privacy');
