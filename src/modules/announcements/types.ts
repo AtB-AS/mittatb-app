@@ -8,23 +8,12 @@ const TimestampSchema = z
   .custom<Timestamp>((value) => value instanceof Timestamp)
   .transform((ts) => new Date(ts.toMillis()));
 
-const b64ImagePrefix = 'data:image/';
 const Base64ImageSchema = z
   .string()
-  .min((b64ImagePrefix + 'png;base64,').length)
   .max(700000) // images should not be too large
-  .startsWith(b64ImagePrefix)
-  .refine(
-    // ensure valid file type
-    (imgStr) => {
-      const end = imgStr.indexOf(';', b64ImagePrefix.length);
-      if (end === -1) return false;
-      const fileType = imgStr.slice(b64ImagePrefix.length, end);
-      const allowedFileTypes = ['png', 'jpeg', 'jpg'];
-      return allowedFileTypes.includes(fileType);
-    },
-    {message: 'Unsupported image file type'},
-  )
+  .regex(/^data:image\/(png|jpeg|jpg);base64,.+$/, {
+    message: 'Invalid image data URI',
+  })
   .refine(
     // ensure valid base64 data
     (imgStr) => {
