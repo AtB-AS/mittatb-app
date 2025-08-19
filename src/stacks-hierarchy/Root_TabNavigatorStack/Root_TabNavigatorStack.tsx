@@ -66,13 +66,7 @@ export const Root_TabNavigatorStack = () => {
   }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
 
   const getProfileNotification = (): ThemeIconProps['notification'] => {
-    if (customerNumber === undefined) {
-      return {
-        color: theme.color.status.error.primary,
-        backgroundColor: interactiveColor.default,
-      };
-    }
-    if (unreadCount) {
+    if (customerNumber === undefined || unreadCount) {
       return {
         color: theme.color.status.error.primary,
         backgroundColor: interactiveColor.default,
