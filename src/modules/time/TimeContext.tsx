@@ -1,11 +1,12 @@
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
-import {mobileTokenClient} from '@atb/modules/mobile-token';
-import React, {createContext, useContext, useState} from 'react';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useServerTimeQuery} from './use-server-time-query';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type TimeContextState = {
   /**
-   * The current time in milliseconds, updated every 2.5 seconds. This is based
+   * The current time in milliseconds, updated every second. This is based
    * on server time when possible, and can be safely used for checking the
    * validity of fare contracts.
    */
@@ -14,35 +15,41 @@ type TimeContextState = {
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
-// The number of milliseconds the device time is ahead of server time.
-let serverDiff = 0;
+/**
+ * The number of milliseconds the device time is ahead of server time.
+ */
+let serverTimeOffsetGlobal = 0;
 
 /**
- * Returns the current time in milliseconds.
+ * Returns the current UNIX time in milliseconds.
  */
-export const getServerNow = () => Date.now() - serverDiff;
+export const getServerNowGlobal = () => Date.now() - serverTimeOffsetGlobal;
 
 type Props = {
   children: React.ReactNode;
 };
 
+/** https://github.com/AtB-AS/identity/blob/main/identity-service/src/handlers/identity/mod.rs#L53 */
+const TimeResult = z.object({
+  timestamp: z.string(),
+  timestampMs: z.number(),
+});
+
 export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());
   const {isServerTimeEnabled} = useFeatureTogglesContext();
 
+  const {data} = useServerTimeQuery(isServerTimeEnabled);
+  useEffect(() => {
+    const timeData = TimeResult.safeParse(data).data;
+    if (timeData?.timestampMs) {
+      serverTimeOffsetGlobal = timeData.timestampMs - Date.now();
+    }
+  }, [data]);
+
   useInterval(
-    () => {
-      if (isServerTimeEnabled) {
-        mobileTokenClient.currentTimeMillis().then((ms) => {
-          serverDiff = Date.now() - ms;
-          setServerNow(ms);
-        });
-      } else {
-        serverDiff = 0;
-        setServerNow(Date.now());
-      }
-    },
-    [isServerTimeEnabled],
+    () => setServerNow(Date.now() - serverTimeOffsetGlobal),
+    [],
     1000,
     false,
     true,
