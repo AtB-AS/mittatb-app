@@ -5,6 +5,7 @@ import firestore, {
 import {addHours} from 'date-fns';
 import {CustomerProfile, Reservation} from './types';
 import {FareContractType} from '@atb-as/utils';
+import {isDefined} from '@atb/utils/presence';
 
 type SnapshotListener<T> = {
   onSnapshot: (snapshot: T) => void;
@@ -54,20 +55,25 @@ export function setupFirestoreListeners(
 
   const mapFareContract = (
     d: FirebaseFirestoreTypes.DocumentSnapshot,
-  ): FareContractType => {
+  ): FareContractType | undefined => {
     const fareContract = d.data();
     if (!fareContract) {
-      throw new Error('No fare contract data');
+      return undefined;
     }
-    return {
-      ...fareContract,
-      created: (
+    try {
+      const created = (
         fareContract.created as FirebaseFirestoreTypes.Timestamp
-      ).toDate(),
-      ...(fareContract.travelRights && {
-        travelRights: fareContract.travelRights.map(mapTravelRight),
-      }),
-    };
+      ).toDate();
+      const travelRights = fareContract.travelRights.map(mapTravelRight);
+      return {
+        ...fareContract,
+        created,
+        travelRights,
+      } as FareContractType;
+    } catch (e) {
+      console.warn('Error mapping fare contract:', e);
+      return undefined;
+    }
   };
 
   const mapReservation = (
@@ -95,8 +101,9 @@ export function setupFirestoreListeners(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const fareContracts =
-          snapshot.docs.map<FareContractType>(mapFareContract);
+        const fareContracts = snapshot.docs
+          .map<FareContractType | undefined>(mapFareContract)
+          .filter(isDefined);
         listeners.fareContracts.onSnapshot(fareContracts);
 
         Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
@@ -118,8 +125,9 @@ export function setupFirestoreListeners(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const sentFareContracts =
-          snapshot.docs.map<FareContractType>(mapFareContract);
+        const sentFareContracts = snapshot.docs
+          .map<FareContractType | undefined>(mapFareContract)
+          .filter(isDefined);
         listeners.sentFareContracts.onSnapshot(sentFareContracts);
 
         Bugsnag.leaveBreadcrumb('sentfarecontract_snapshot', {
