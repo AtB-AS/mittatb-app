@@ -32,6 +32,7 @@
     "tsx": "4.19.1",
     "typescript": "^5.1.6",
     "wdio-mochawesome-reporter": "4.0.0",
+    "wdio-performancetotal-service": "3.1.0",
     "wdio-wait-for": "3.0.2"
   }
 }

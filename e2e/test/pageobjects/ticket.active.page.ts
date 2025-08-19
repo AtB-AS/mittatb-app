@@ -13,6 +13,14 @@ class TicketActivePage {
   }
 
   /**
+   * Check if a ticket exists
+   * @param ticketIndex which ticket to check (default: 0, i.e. first ticket)
+   */
+  async hasTicket(ticketIndex: number = 0) {
+    return await ElementHelper.isElementExisting(`ticket${ticketIndex}`, 1);
+  }
+
+  /**
    * Checks if an available ticket is valid
    * @param ticketIndex which ticket to check (default: 0, i.e. first ticket)
    */

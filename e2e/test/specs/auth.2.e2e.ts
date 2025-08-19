@@ -11,6 +11,7 @@ import ProfilePage from '../pageobjects/profile.page.js';
 import TokenPage from '../pageobjects/token.page.js';
 import DebugPage from '../pageobjects/debug.page.js';
 import Config from '../conf/config.js';
+import {performancetotal} from 'wdio-performancetotal-service';
 
 describe('Auth', () => {
   const phoneNumber = Config.phoneNumber();
@@ -136,31 +137,43 @@ describe('Auth', () => {
     try {
       if (authorized) {
         await NavigationHelper.tapMenu('tickets');
+        await NavigationHelper.tapTicketTab('activeTickets');
 
-        let ticketIsValid = await TicketActivePage.isTicketValid();
-        // Pull to refresh if not valid
-        if (!ticketIsValid) {
-          await TicketActivePage.pullToRefresh();
-          ticketIsValid = await TicketActivePage.isTicketValid();
-        }
-
-        if (ticketIsValid) {
-          const productName = await TicketActivePage.productName();
-          expect(productName).toContain('Single ticket');
-
-          // Details
-          await TicketActivePage.openTicketDetails();
-          await ElementHelper.waitForElement('text', 'Ticket details');
-
-          // Barcode
-          expect(await TicketDetailsPage.hasBarcode()).toBe(true);
-          if (hasMobileToken) {
-            const barcodeType = await TicketDetailsPage.getBarcodeType();
-            expect(barcodeType).toContain('mobileToken');
-          } else {
-            const barcodeType = await TicketDetailsPage.getBarcodeType();
-            expect(barcodeType).toContain('static');
+        const hasTicket: boolean = await TicketActivePage.hasTicket();
+        if (hasTicket) {
+          performancetotal.sampleStart('ticketIsValid');
+          let ticketIsValid = await TicketActivePage.isTicketValid();
+          performancetotal.sampleEnd('ticketIsValid');
+          // Pull to refresh if not valid
+          if (!ticketIsValid) {
+            await TicketActivePage.pullToRefresh();
+            ticketIsValid = await TicketActivePage.isTicketValid();
           }
+
+          if (ticketIsValid) {
+            performancetotal.sampleStart('getProductName');
+            const productName = await TicketActivePage.productName();
+            expect(productName).toContain('Single ticket');
+            performancetotal.sampleEnd('getProductName');
+
+            // Details
+            performancetotal.sampleStart('openTicketDetails');
+            await TicketActivePage.openTicketDetails();
+            await ElementHelper.waitForElement('text', 'Ticket details');
+            performancetotal.sampleEnd('openTicketDetails');
+
+            // Barcode
+            expect(await TicketDetailsPage.hasBarcode()).toBe(true);
+            if (hasMobileToken) {
+              const barcodeType = await TicketDetailsPage.getBarcodeType();
+              expect(barcodeType).toContain('mobileToken');
+            } else {
+              const barcodeType = await TicketDetailsPage.getBarcodeType();
+              expect(barcodeType).toContain('static');
+            }
+          }
+        } else {
+          console.log(`[WARN] Ticket not validated due to no existing ticket`);
         }
       }
     } catch (errMsg) {

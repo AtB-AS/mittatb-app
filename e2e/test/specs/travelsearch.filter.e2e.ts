@@ -6,6 +6,7 @@ import SearchPage from '../pageobjects/search.page.ts';
 import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import TravelsearchFilterPage from '../pageobjects/travelsearch.filter.page.js';
+import {performancetotal} from 'wdio-performancetotal-service';
 
 describe('Travel search filter', () => {
   before(async () => {
@@ -29,6 +30,7 @@ describe('Travel search filter', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
       await ElementHelper.waitForElement('id', 'searchToButton');
@@ -36,6 +38,7 @@ describe('Travel search filter', () => {
       await SearchPage.setSearchLocation(arrival);
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       // Check number of transport modes
       const numberOfModesInitial =
@@ -95,12 +98,14 @@ describe('Travel search filter', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
@@ -140,12 +145,14 @@ describe('Travel search filter', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       // Fallback if filters are enabled from last test
       await TravelsearchFilterPage.removeSelectedFilterIfExists();
@@ -167,12 +174,14 @@ describe('Travel search filter', () => {
 
       // New search
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       // Filters are NOT enabled
       expect(

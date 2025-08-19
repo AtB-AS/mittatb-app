@@ -68,9 +68,8 @@ describe('Auth', () => {
         );
         await AppHelper.removeGlobalMessages();
 
-        const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
-        // Ensure an offer
-        if (totalPrice > 0) {
+        const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
+        if (hasOffer) {
           await PurchaseOverviewPage.goToPayment.click();
 
           // Ticket summary
@@ -95,6 +94,8 @@ describe('Auth', () => {
           await PurchaseSummaryPage.confirmPayment.click();
 
           await AppHelper.pause(5000);
+        } else {
+          console.log(`[WARN] Ticket not purchased due to no offer received`);
         }
       }
     } catch (errMsg) {
