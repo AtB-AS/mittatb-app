@@ -23,13 +23,10 @@ const Base64ImageSchema = z
         // Due to performance concerns, only validate the first and last x chars as base64
         const numberOfChars = 4 * 10; // needs to be a number divisible by 4
         const start = base64Part.slice(0, numberOfChars);
-        const end = base64Part.slice(
-          base64Part.length - numberOfChars,
-          base64Part.length,
+        const end = base64Part.slice(-numberOfChars);
+        return [start, end].every(
+          (part) => z.string().base64().safeParse(part).success,
         );
-        z.string().base64().parse(start);
-        z.string().base64().parse(end);
-        return true;
       } catch {
         return false;
       }
