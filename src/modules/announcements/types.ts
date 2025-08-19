@@ -17,19 +17,15 @@ const Base64ImageSchema = z
   .refine(
     // ensure valid base64 data
     (imgStr) => {
-      try {
-        const base64Part = imgStr.split(',')[1];
-        if (!base64Part) return false;
-        // Due to performance concerns, only validate the first and last x chars as base64
-        const numberOfChars = 4 * 10; // needs to be a number divisible by 4
-        const start = base64Part.slice(0, numberOfChars);
-        const end = base64Part.slice(-numberOfChars);
-        return [start, end].every(
-          (part) => z.string().base64().safeParse(part).success,
-        );
-      } catch {
-        return false;
-      }
+      const base64Part = imgStr.split(',')[1];
+      if (!base64Part) return false;
+      // Due to performance concerns, only validate the first and last x chars as base64
+      const numberOfChars = 4 * 10; // needs to be a number divisible by 4
+      const start = base64Part.slice(0, numberOfChars);
+      const end = base64Part.slice(-numberOfChars);
+      return [start, end].every(
+        (part) => z.string().base64().safeParse(part).success,
+      );
     },
     {message: 'Invalid base64 payload'},
   );
