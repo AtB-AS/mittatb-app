@@ -15,12 +15,11 @@ const Base64ImageSchema = z
     message: 'Invalid image data URI',
   })
   .refine(
-    // ensure valid base64 data
     (imgStr) => {
       const base64Part = imgStr.split(',')[1];
-      if (!base64Part) return false;
-      // Due to performance concerns, only validate the first and last x chars as base64
-      const numberOfChars = 4 * 10; // needs to be a number divisible by 4
+      if (!base64Part || base64Part.length % 4 !== 0) return false;
+      // Due to performance concerns, only validate the start and end as base64 data
+      const numberOfChars = 4 * 10; // must be divisible by 4
       const start = base64Part.slice(0, numberOfChars);
       const end = base64Part.slice(-numberOfChars);
       return [start, end].every(
