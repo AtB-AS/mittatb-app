@@ -7,7 +7,7 @@ import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.ts';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.ts';
 import PurchasePaymentPage from '../pageobjects/purchase.payment.page.ts';
 
-describe('Ticket', () => {
+describe('Ticket Anonymous', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('tickets');
@@ -35,8 +35,8 @@ describe('Ticket', () => {
       );
 
       // Restrictions page
-      expect(await OnboardingPage.logIn).toBeEnabled();
-      expect(await OnboardingPage.acceptLimitations).toBeEnabled();
+      expect(await OnboardingPage.logIn.isEnabled()).toBe(true);
+      expect(await OnboardingPage.acceptLimitations.isEnabled()).toBe(true);
       await OnboardingPage.acceptLimitations.click();
 
       await ElementHelper.waitForElement('text', 'Travel search');
@@ -49,8 +49,8 @@ describe('Ticket', () => {
       expect(await OnboardingPage.logInPurchaseDescription).toContain(
         'requires that you are logged in',
       );
-      expect(await OnboardingPage.logIn).toBeEnabled();
-      expect(await OnboardingPage.logInLater).toBeEnabled();
+      expect(await OnboardingPage.logIn.isEnabled()).toBe(true);
+      expect(await OnboardingPage.logInLater.isEnabled()).toBe(true);
       await OnboardingPage.logInLater.click();
       await ElementHelper.waitForElement('text', 'Tickets');
     } catch (errMsg) {
@@ -80,10 +80,11 @@ describe('Ticket', () => {
 
       expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Child');
 
-      const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
       // Ensure an offer
-      if (totalPrice > 0) {
-        expect(await PurchaseOverviewPage.goToPayment).toBeEnabled();
+      const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
+      if (hasOffer) {
+        const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
+        expect(await PurchaseOverviewPage.goToPayment.isEnabled()).toBe(true);
         await PurchaseOverviewPage.goToPayment.click();
 
         // Ticket summary
@@ -94,18 +95,18 @@ describe('Ticket', () => {
         expect(
           await PurchaseSummaryPage.userProfileCountAndName.getText(),
         ).toContain('1 Child');
-        expect(await PurchaseSummaryPage.getTotalPrice()).toBeGreaterThan(0);
+        expect(await PurchaseSummaryPage.getTotalPrice()).toBe(totalPrice)
         await PurchaseSummaryPage.choosePayment.click();
 
         // Payment
-        expect(await PurchasePaymentPage.vipps).toExist();
-        expect(await PurchasePaymentPage.newPaymentCard).toExist();
-        expect(await PurchasePaymentPage.confirmPayment).toBeDisabled();
+        expect(await PurchasePaymentPage.confirmPayment.isEnabled()).toBe(
+          false,
+        );
 
         await PurchasePaymentPage.vipps.click();
-        expect(await PurchasePaymentPage.confirmPayment).toBeEnabled();
+        expect(await PurchasePaymentPage.confirmPayment.isEnabled()).toBe(true);
         await PurchasePaymentPage.newPaymentCard.click();
-        expect(await PurchasePaymentPage.confirmPayment).toBeEnabled();
+        expect(await PurchasePaymentPage.confirmPayment.isEnabled()).toBe(true);
         // NOTE! Only for logged-in users
         /*
             expect(await PurchasePaymentPage.saveCard).toExist()
@@ -122,7 +123,7 @@ describe('Ticket', () => {
       }
       // No offer
       else {
-        expect(await PurchaseOverviewPage.goToPayment).toBeDisabled();
+        expect(await PurchaseOverviewPage.goToPayment.isEnabled()).toBe(false);
         await NavigationHelper.back();
       }
     } catch (errMsg) {
@@ -152,67 +153,6 @@ describe('Ticket', () => {
       await NavigationHelper.back();
     } catch (errMsg) {
       await AppHelper.screenshot('error_ticket_on_behalf_of_anonymous');
-      throw errMsg;
-    }
-  });
-
-  // Choose to buy a ticket on behalf of others, and check the information along the purchase flow
-  // NB! Disabled since on-behalf-of is only for logged-in users
-  xit('should be able to buy on behalf of others', async () => {
-    const onBehalfOfPhoneNumber: number = 91111111;
-
-    try {
-      await TicketBuyPage.chooseFareProduct('single');
-      await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
-      await AppHelper.removeGlobalMessages();
-
-      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
-
-      // Set on-behalf-of
-      await PurchaseOverviewPage.selectTraveller();
-      await PurchaseOverviewPage.decreaseTravellerCount('adult');
-      await PurchaseOverviewPage.increaseTravellerCount('child');
-      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toBeChecked();
-      await PurchaseOverviewPage.onBehalfOfToggle.click();
-      await PurchaseOverviewPage.confirmTravellers();
-
-      const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
-      // Ensure an offer
-      if (totalPrice > 0) {
-        expect(await PurchaseOverviewPage.goToPayment).toBeEnabled();
-        await PurchaseOverviewPage.goToPayment.click();
-
-        // On-behalf-of
-        await ElementHelper.waitForElement('text', 'Buy for others');
-        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeDisabled();
-        await PurchaseOverviewPage.setPhoneNumber(onBehalfOfPhoneNumber);
-        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeEnabled();
-        await PurchaseOverviewPage.goToPaymentOnBehalfOf.click();
-
-        // Ticket summary
-        await ElementHelper.waitForElement('text', 'Ticket summary', 15000);
-        expect(
-          await PurchaseSummaryPage.summaryOnBehalfOfText.getText(),
-        ).toContain(`Sending to +47${onBehalfOfPhoneNumber}`);
-        expect(
-          await PurchaseSummaryPage.userProfileCountAndName.getText(),
-        ).toContain('1 Child');
-        expect(await PurchaseSummaryPage.getTotalPrice()).toBeGreaterThan(0);
-        expect(await PurchaseSummaryPage.choosePayment).toBeEnabled();
-
-        await NavigationHelper.back();
-        await AppHelper.pause();
-        await NavigationHelper.back();
-        await AppHelper.pause();
-        await NavigationHelper.back();
-      }
-      // No offer
-      else {
-        expect(await PurchaseOverviewPage.goToPayment).toBeDisabled();
-        await NavigationHelper.back();
-      }
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_ticket_buy_on_behalf_of');
       throw errMsg;
     }
   });

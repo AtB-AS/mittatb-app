@@ -45,6 +45,13 @@ class PurchaseOverviewPage {
   }
 
   /**
+   * Check if offer exists
+   */
+  async hasOffer() {
+    return await ElementHelper.isElementExisting('offerTotalPriceText', 1);
+  }
+
+  /**
    * Click on the edit traveller button
    */
   async selectTraveller() {
