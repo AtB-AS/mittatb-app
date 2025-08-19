@@ -34,6 +34,10 @@ export function AnimatedBottomSheet({
   );
   return (
     <>
+      {/** On Android 15 and later, a black bar was observed at the top
+       * when navigating away from the map only after having opened a bottom sheet.
+       * The core issue is likely related to the Animated.View below.
+       * The fix is to add a view that ensures the whole screen is always painted on. */}
       <View style={styles.alwaysPaintOnEntireScreenToAvoidFlicker} />
 
       <View
