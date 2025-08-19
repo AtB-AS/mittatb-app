@@ -4,7 +4,7 @@ const EnrollmentTexts = {
   info: _(
     'Vi tester ny funksjonalitet i appen på utvalgte brukere. Har du fått en kode for å bli med? Skriv den inn her.',
     'We are trying out new features in the app on a select group of users. Have you received a code to join? Enter it here.',
-    'Me testar ny funksjonalitet i appen på utvalte brukarar. Har du fått ein kode for å bli med? Skriv den inn her.',
+    'Me testar ny funksjonalitet i appen på utvalde brukarar. Har du fått ein kode for å bli med? Skriv den inn her.',
   ),
   success: _('Du er inne!', 'You are in!', 'Du er inne!'),
   label: _('Kode', 'Code', 'Kode'),
