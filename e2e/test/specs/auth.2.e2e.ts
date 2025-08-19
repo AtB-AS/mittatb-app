@@ -74,7 +74,6 @@ describe('Auth', () => {
         expect(await TokenPage.tokenSelection('Travelcard')).toExist();
         expect(await TokenPage.tokenSelection('Mobile')).toExist();
         expect(await TokenPage.tokenSelectionRadio('Mobile')).toBeChecked();
-        expect(await TokenPage.tokenSelectionRadio('Mobile')).toBeChecked();
         // Select travel card
         await TokenPage.selectToken('Travelcard');
         expect(await TokenPage.tokenSelectionRadio('Mobile')).not.toBeChecked();
