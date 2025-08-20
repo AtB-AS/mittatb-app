@@ -31,7 +31,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     refresh: refetchRecentFareContracts,
   } = useRecentFareContracts();
   const {
-    data: fareProducts,
+    data: preassignedFareProducts,
     refetch: refetchPreassignedFareProducts,
     isRefetching: isRefetchingPreassignedFareProducts,
     isPlaceholderData,
@@ -120,7 +120,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
             refetchRecentFareContracts();
             refetchPreassignedFareProducts();
             analytics.logEvent('Ticketing', 'Pull to refresh products', {
-              fareProductsCount: fareProducts.length,
+              fareProductsCount: preassignedFareProducts.length,
               isPlaceholderData,
             });
           }}
@@ -158,7 +158,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         )}
 
         <FareProducts
-          fareProducts={fareProducts}
+          fareProducts={preassignedFareProducts}
           onProductSelect={onProductSelect}
         />
       </View>
