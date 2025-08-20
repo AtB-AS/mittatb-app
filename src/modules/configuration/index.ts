@@ -27,6 +27,7 @@ export type {
   TravelSearchTransportModes,
   UserProfile,
 } from './types';
+export {LanguageAndTextTypeArray} from './types';
 export {
   findReferenceDataById,
   getReferenceDataName,

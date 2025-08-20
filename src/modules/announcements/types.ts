@@ -1,53 +1,69 @@
-import {LanguageAndTextType} from '@atb/modules/configuration';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AppPlatformType} from '@atb/modules/global-messages';
+import {z} from 'zod';
+import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
+import {AppPlatform} from '@atb/modules/global-messages';
+import {Timestamp} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
 
-export type AnnouncementId = string;
+const TimestampSchema = z
+  .custom<Timestamp>((value) => value instanceof Timestamp)
+  .transform((ts) => new Date(ts.toMillis()));
+
+const Base64ImageSchema = z
+  .string()
+  .max(700000) // images should not be too large
+  .regex(/^data:image\/(png|jpeg|jpg);base64,.+$/, {
+    message: 'Invalid image data URI',
+  })
+  .refine(
+    (imgStr) => {
+      const base64Part = imgStr.split(',')[1];
+      if (!base64Part || base64Part.length % 4 !== 0) return false;
+      // Due to performance concerns, only validate the start and end as base64 data
+      const numberOfChars = 4 * 10; // must be divisible by 4
+      const start = base64Part.slice(0, numberOfChars);
+      const end = base64Part.slice(-numberOfChars);
+      return [start, end].every(
+        (part) => z.string().base64().safeParse(part).success,
+      );
+    },
+    {message: 'Invalid base64 payload'},
+  );
 
 export enum ActionType {
   external = 'external',
   deeplink = 'deeplink',
   bottom_sheet = 'bottom_sheet',
 }
+const BottomSheetActionButton = z.object({
+  label: LanguageAndTextTypeArray.optional(),
+  actionType: z.literal(ActionType.bottom_sheet),
+});
+const UrlActionButton = z.object({
+  label: LanguageAndTextTypeArray.optional(),
+  url: z.string().url(),
+  actionType: z.union([
+    z.literal(ActionType.external),
+    z.literal(ActionType.deeplink),
+  ]),
+});
+const ActionButton = z.union([BottomSheetActionButton, UrlActionButton]);
 
-export type BottomSheetActionButton = {
-  label?: LanguageAndTextType[];
-  actionType: Extract<ActionType, ActionType.bottom_sheet>;
-};
-
-export type UrlActionButton = {
-  label?: LanguageAndTextType[];
-  url: string;
-  actionType: Extract<ActionType, ActionType.external | ActionType.deeplink>;
-};
-
-export type ActionButton = BottomSheetActionButton | UrlActionButton;
-
-export type AnnouncementRaw = {
-  id: AnnouncementId;
-  active: boolean;
-  summaryTitle?: LanguageAndTextType[];
-  summary: LanguageAndTextType[];
-  summaryImage?: string;
-  fullTitle: LanguageAndTextType[];
-  body: LanguageAndTextType[];
-  mainImage?: string;
-  isDismissable?: boolean;
-  appPlatforms: AppPlatformType[];
-  appVersionMin: string;
-  appVersionMax: string;
-  startDate?: FirebaseFirestoreTypes.Timestamp;
-  endDate?: FirebaseFirestoreTypes.Timestamp;
-  rules?: Rule[];
-  actionButton?: ActionButton;
-};
-
-export type AnnouncementType = Omit<
-  AnnouncementRaw,
-  'appPlatforms' | 'appVersionMin' | 'appVersionMax' | 'startDate' | 'endDate'
-> & {
-  startDate?: number;
-  endDate?: number;
-  actionButton: ActionButton;
-};
+export const Announcement = z.object({
+  id: z.string(),
+  active: z.boolean(),
+  summaryTitle: LanguageAndTextTypeArray.optional(),
+  summary: LanguageAndTextTypeArray,
+  summaryImage: Base64ImageSchema.optional(),
+  fullTitle: LanguageAndTextTypeArray,
+  body: LanguageAndTextTypeArray,
+  mainImage: Base64ImageSchema.optional(),
+  isDismissable: z.boolean().optional(),
+  appPlatforms: z.array(AppPlatform).optional(),
+  appVersionMin: z.string().optional(),
+  appVersionMax: z.string().optional(),
+  startDate: TimestampSchema.optional(),
+  endDate: TimestampSchema.optional(),
+  rules: z.array(Rule).optional(),
+  actionButton: ActionButton.optional(),
+});
+export type Announcement = z.infer<typeof Announcement>;
