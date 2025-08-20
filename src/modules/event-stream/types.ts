@@ -1,23 +1,5 @@
 import {z} from 'zod';
 
-const FareContractSchema = z.object({
-  fareContractId: z.string(),
-});
-
-const TokenSchema = z.object({
-  tokenId: z.string(),
-});
-
-const OrderSchema = z.object({
-  orderId: z.string(),
-});
-
-const VehicleSchema = z.object({
-  vehicleId: z.number().int().nonnegative(),
-  longitude: z.number(),
-  latitude: z.number(),
-});
-
 export enum EventKind {
   FareContract = 'FARE_CONTRACT',
   Order = 'ORDER',
@@ -27,33 +9,30 @@ export enum EventKind {
 }
 
 export const StreamEventSchema = z.discriminatedUnion('event', [
-  z
-    .object({
-      event: z.literal(EventKind.FareContract),
-    })
-    .merge(FareContractSchema),
-
-  z
-    .object({
-      event: z.literal(EventKind.Order),
-    })
-    .merge(OrderSchema),
+  z.object({
+    event: z.literal(EventKind.FareContract),
+    fareContractId: z.string(),
+  }),
+  z.object({
+    event: z.literal(EventKind.Order),
+    orderId: z.string(),
+  }),
 
   z.object({
     event: z.literal(EventKind.Profile),
   }),
 
-  z
-    .object({
-      event: z.literal(EventKind.Token),
-    })
-    .merge(TokenSchema),
+  z.object({
+    event: z.literal(EventKind.Token),
+    tokenId: z.string(),
+  }),
 
-  z
-    .object({
-      event: z.literal(EventKind.Vehicle),
-    })
-    .merge(VehicleSchema),
+  z.object({
+    event: z.literal(EventKind.Vehicle),
+    vehicleId: z.number().int().nonnegative(),
+    longitude: z.number(),
+    latitude: z.number(),
+  }),
 ]);
 
 export type StreamEvent = z.infer<typeof StreamEventSchema>;
