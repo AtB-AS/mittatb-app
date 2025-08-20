@@ -133,7 +133,7 @@ export const DetailsContent: React.FC<Props> = ({
     accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
   const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs.length;
+    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
 

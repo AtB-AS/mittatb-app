@@ -82,7 +82,7 @@ export const FareContractView: React.FC<Props> = ({
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
   const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs.length;
+    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
     fareContract.id,
