@@ -8,6 +8,7 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
@@ -94,8 +95,8 @@ type FareContractFromToControllerDataType =
 function useFareContractFromToController(
   fcOrRfc: FareContractType | RecentFareContractType,
 ): FareContractFromToControllerDataType {
-  const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   if (isFareContract(fcOrRfc)) {
     const firstTravelRight = fcOrRfc.travelRights.at(0);
