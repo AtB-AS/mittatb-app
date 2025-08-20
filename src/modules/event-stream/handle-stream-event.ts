@@ -12,7 +12,7 @@ export const handleStreamEvent = (
   },
 ) => {
   switch (streamEvent.event) {
-    case EventKind.FARE_CONTRACT:
+    case EventKind.FareContract:
       queryClient.invalidateQueries({
         queryKey: getBonusAmountEarnedQueryKey(
           userId,

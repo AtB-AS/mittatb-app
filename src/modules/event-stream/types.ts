@@ -19,39 +19,39 @@ const VehicleSchema = z.object({
 });
 
 export enum EventKind {
-  FARE_CONTRACT = 'FARE_CONTRACT',
-  ORDER = 'ORDER',
-  PROFILE = 'PROFILE',
-  TOKEN = 'TOKEN',
-  VEHICLE = 'VEHICLE',
+  FareContract = 'FARE_CONTRACT',
+  Order = 'ORDER',
+  Profile = 'PROFILE',
+  Token = 'TOKEN',
+  Vehicle = 'VEHICLE',
 }
 
 export const StreamEventSchema = z.discriminatedUnion('event', [
   z
     .object({
-      event: z.literal(EventKind.FARE_CONTRACT),
+      event: z.literal(EventKind.FareContract),
     })
     .merge(FareContractSchema),
 
   z
     .object({
-      event: z.literal(EventKind.ORDER),
+      event: z.literal(EventKind.Order),
     })
     .merge(OrderSchema),
 
   z.object({
-    event: z.literal(EventKind.PROFILE),
+    event: z.literal(EventKind.Profile),
   }),
 
   z
     .object({
-      event: z.literal(EventKind.TOKEN),
+      event: z.literal(EventKind.Token),
     })
     .merge(TokenSchema),
 
   z
     .object({
-      event: z.literal(EventKind.VEHICLE),
+      event: z.literal(EventKind.Vehicle),
     })
     .merge(VehicleSchema),
 ]);
