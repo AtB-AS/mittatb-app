@@ -9,8 +9,8 @@ import {
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 
-export const scaleTransitionZoomRange = 0.4;
-const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+export const scaleTransitionZoomRange = 0.3;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 4;
 const smallestAllowedSizeFactor = 0.3;
 
 type MapSymbolStylesProps = {
@@ -66,18 +66,6 @@ export const useMapSymbolStyles = ({
     'all',
     ['any', pinType === 'station', isCluster],
     ['!', isMinimized],
-  ];
-
-  const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
-
-  const iconSize: Expression = [
-    'interpolate',
-    ['linear'],
-    ['zoom'],
-    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    smallestAllowedSizeFactor,
-    reachFullScaleAtZoomLevel,
-    iconFullSize,
   ];
 
   const stopPlacesExpression: (Expression | ExpressionField)[] = nsrSymbolLayers
@@ -168,14 +156,6 @@ export const useMapSymbolStyles = ({
     1,
   ];
 
-  const iconStyle: SymbolLayerStyleProps = {
-    iconImage,
-    iconSize,
-    iconOpacity: fadeInOpacity,
-    iconOffset: [0, 0],
-    iconAllowOverlap: true,
-  };
-
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
   const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
   const numberOfUnitsLimitedAt99Plus: Expression = [
@@ -210,19 +190,56 @@ export const useMapSymbolStyles = ({
     ],
   ];
 
+  const countAdjustmentMaxFactorIncrease = 0.2;
+  const countAdjustedSizeFactor = [
+    'step',
+    numberOfUnits,
+    ['+', 1, ['*', numberOfUnits, countAdjustmentMaxFactorIncrease / 100]],
+    100,
+    1 + countAdjustmentMaxFactorIncrease,
+  ];
+
+  const iconFullSize: Expression = [
+    '*',
+    ['case', reduceIconSize, 0.855, 1],
+    countAdjustedSizeFactor,
+  ];
+
+  const iconSize: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    smallestAllowedSizeFactor,
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+  ];
+
+  const iconStyle: SymbolLayerStyleProps = {
+    iconImage,
+    iconSize,
+    iconOpacity: fadeInOpacity,
+    iconOffset: [0, 0],
+    iconAllowOverlap: true,
+  };
+
   const getCountAdjustedTextSize: (baseSize: number) => Expression = (
     baseSize,
   ) => [
-    'case',
-    isMinimized,
-    baseSize * textSizeFactor * 12.6,
+    '*',
     [
-      'step',
-      numberOfUnits,
+      'case',
+      isMinimized,
       baseSize * textSizeFactor * 12.6,
-      100,
-      baseSize * textSizeFactor * 10.8,
+      [
+        'step',
+        numberOfUnits,
+        baseSize * textSizeFactor * 12.6,
+        100,
+        baseSize * textSizeFactor * 10.8,
+      ],
     ],
+    countAdjustedSizeFactor,
   ];
 
   const textSize: Expression = [
