@@ -266,6 +266,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   testID="debugButton"
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />
+                <LinkSectionItem
+                  text="Live Activities Test"
+                  testID="liveActivitiesTestButton"
+                  onPress={() =>
+                    navigation.navigate('Profile_LiveActivitiesTestScreen')
+                  }
+                />
+                <LinkSectionItem
+                  text="Live Activities Debug"
+                  testID="liveActivitiesDebugButton"
+                  onPress={() =>
+                    navigation.navigate('Profile_LiveActivitiesDebugScreen')
+                  }
+                />
               </Section>
             </>
           )}

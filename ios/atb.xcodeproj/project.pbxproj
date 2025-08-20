@@ -17,6 +17,10 @@
 		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
+		468F74092E5475A80022CCB2 /* RNLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F74082E5475A80022CCB2 /* RNLiveActivity.swift */; };
+		468F740C2E5499CA0022CCB2 /* RNLiveActivityBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 468F740B2E5499CA0022CCB2 /* RNLiveActivityBridge.m */; };
+		468F74152E54A79C0022CCB2 /* LiveActivityDataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F74142E54A79C0022CCB2 /* LiveActivityDataStructures.swift */; };
+		468F74362E55B3630022CCB2 /* LiveActivityDataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F74142E54A79C0022CCB2 /* LiveActivityDataStructures.swift */; };
 		500752DC29855BD100AC5A7F /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500752DB29855BD100AC5A7F /* Intents.framework */; };
 		500752DF29855BD100AC5A7F /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500752DE29855BD100AC5A7F /* IntentHandler.swift */; };
 		500752E329855BD100AC5A7F /* AtbAppIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 500752DA29855BD100AC5A7F /* AtbAppIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -39,8 +43,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -136,6 +140,10 @@
 		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
 		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		468F74082E5475A80022CCB2 /* RNLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNLiveActivity.swift; sourceTree = "<group>"; };
+		468F740A2E5499CA0022CCB2 /* RNLiveActivityBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNLiveActivityBridge.h; sourceTree = "<group>"; };
+		468F740B2E5499CA0022CCB2 /* RNLiveActivityBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNLiveActivityBridge.m; sourceTree = "<group>"; };
+		468F74142E54A79C0022CCB2 /* LiveActivityDataStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityDataStructures.swift; sourceTree = "<group>"; };
 		500752DA29855BD100AC5A7F /* AtbAppIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AtbAppIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		500752DB29855BD100AC5A7F /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		500752DE29855BD100AC5A7F /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
@@ -384,6 +392,8 @@
 		FEBDDCCC2931035E00C3755B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				468F74142E54A79C0022CCB2 /* LiveActivityDataStructures.swift */,
+				468F74082E5475A80022CCB2 /* RNLiveActivity.swift */,
 				FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */,
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
@@ -395,6 +405,8 @@
 		FEBDDCD829310DCB00C3755B /* BridgeModules */ = {
 			isa = PBXGroup;
 			children = (
+				468F740A2E5499CA0022CCB2 /* RNLiveActivityBridge.h */,
+				468F740B2E5499CA0022CCB2 /* RNLiveActivityBridge.m */,
 				FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */,
 				FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */,
 				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
@@ -477,7 +489,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -662,10 +674,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468F74092E5475A80022CCB2 /* RNLiveActivity.swift in Sources */,
 				FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */,
 				FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */,
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
+				468F740C2E5499CA0022CCB2 /* RNLiveActivityBridge.m in Sources */,
+				468F74152E54A79C0022CCB2 /* LiveActivityDataStructures.swift in Sources */,
 				FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
@@ -706,6 +721,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468F74362E55B3630022CCB2 /* LiveActivityDataStructures.swift in Sources */,
 				5038614E28FD81B700E16E13 /* Structs.swift in Sources */,
 				50AAE58229897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
@@ -715,8 +731,8 @@
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				500752EC29855E4D00AC5A7F /* IntentHandler.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
-				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
+				503D2E5C2967436E002E0A6A /* (null) in Sources */,
+				503D2E5A29674028002E0A6A /* (null) in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -790,7 +806,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE8186AD297593DA000D2195 /* Debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atb/atbDebug.entitlements;
@@ -833,7 +848,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE8186AE297593DA000D2195 /* Release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atb/AtB.entitlements;

@@ -120,5 +120,9 @@
 	<string>$(INTERCOM_IOS_API_KEY)</string>
 	<key>IntercomAppId</key>
 	<string>$(INTERCOM_APP_ID)</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
+	<true/>
 </dict>
 </plist>

@@ -32,6 +32,10 @@ import {Profile_SettingsScreen} from './Profile_SettingsScreen';
 import {Profile_FavoriteScreen} from './Profile_FavoriteScreen';
 import {Profile_InformationScreen} from './Profile_InformationScreen';
 import {Profile_HelpAndContactScreen} from './Profile_HelpAndContactScreen';
+import {
+  LiveActivitiesTestScreen,
+  LiveActivitiesDebugScreen,
+} from '@atb/modules/live-activities';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -159,6 +163,14 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_InformationScreen"
         component={Profile_InformationScreen}
+      />
+      <Stack.Screen
+        name="Profile_LiveActivitiesTestScreen"
+        component={LiveActivitiesTestScreen}
+      />
+      <Stack.Screen
+        name="Profile_LiveActivitiesDebugScreen"
+        component={LiveActivitiesDebugScreen}
       />
     </Stack.Navigator>
   );

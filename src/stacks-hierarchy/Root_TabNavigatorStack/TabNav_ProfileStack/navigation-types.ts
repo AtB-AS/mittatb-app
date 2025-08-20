@@ -39,6 +39,8 @@ export type ProfileStackParams = StackParams<{
   Profile_FavoriteScreen: undefined;
   Profile_InformationScreen: undefined;
   Profile_HelpAndContactScreen: undefined;
+  Profile_LiveActivitiesTestScreen: undefined;
+  Profile_LiveActivitiesDebugScreen: undefined;
 }>;
 
 export type ProfileStackRootProps =
