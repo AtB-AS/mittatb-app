@@ -27,7 +27,6 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import Bugsnag from '@bugsnag/react-native';
 import {RefObject, useRef} from 'react';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {isDefined} from '@atb/utils/presence';
 
 type Props = {
   announcement: Announcement;
