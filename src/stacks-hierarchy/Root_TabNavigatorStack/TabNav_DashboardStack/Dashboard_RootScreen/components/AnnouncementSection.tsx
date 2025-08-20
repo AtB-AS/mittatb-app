@@ -27,6 +27,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import Bugsnag from '@bugsnag/react-native';
 import {RefObject, useRef} from 'react';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {isDefined} from '@atb/utils/presence';
 
 type Props = {
   announcement: Announcement;
@@ -77,18 +78,20 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
               >
                 {summaryTitle}
               </ThemeText>
-              <PressableOpacity
-                style={styles.close}
-                role="button"
-                hitSlop={insets.all(theme.spacing.medium)}
-                accessibilityHint={t(
-                  DashboardTexts.announcemens.announcement.closeA11yHint,
-                )}
-                onPress={() => handleDismiss()}
-                testID="closeAnnouncement"
-              >
-                <ThemeIcon svg={Close} />
-              </PressableOpacity>
+              {!(announcement.isDismissable === false) && (
+                <PressableOpacity
+                  style={styles.close}
+                  role="button"
+                  hitSlop={insets.all(theme.spacing.medium)}
+                  accessibilityHint={t(
+                    DashboardTexts.announcemens.announcement.closeA11yHint,
+                  )}
+                  onPress={() => handleDismiss()}
+                  testID="closeAnnouncement"
+                >
+                  <ThemeIcon svg={Close} />
+                </PressableOpacity>
+              )}
             </View>
             <ThemeText style={styles.summary}>
               {getTextForLanguage(announcement.summary, language)}
