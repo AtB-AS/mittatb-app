@@ -135,7 +135,7 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs.length;
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
 
   return (
     <Section style={styles.section}>
@@ -220,8 +220,8 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {earnedBonusPoints != undefined && earnedBonusPoints > 0 && (
-        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
+        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
       )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
