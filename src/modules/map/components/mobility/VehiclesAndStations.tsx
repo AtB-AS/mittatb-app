@@ -196,7 +196,7 @@ export const useVehiclesAndStationsVectorSource: () => {
         type: 'vector',
         tiles: [tileUrlTemplate || ''],
         minzoom: 14,
-        maxzoom: 19,
+        maxzoom: 17,
         volatile: true,
       },
     }),
