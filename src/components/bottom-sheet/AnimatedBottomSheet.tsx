@@ -33,33 +33,54 @@ export function AnimatedBottomSheet({
     [animatedOffset, bottomOffset, windowHeight],
   );
   return (
-    <View
-      style={{
-        position: 'absolute',
-        bottom: bottomOffset,
-        left: 0,
-        right: 0,
-        height: windowHeight,
-        overflow: 'hidden',
-        pointerEvents: 'box-none',
-      }}
-    >
-      <Animated.View
+    <>
+      {/** On Android 15 and later, a black bar was observed at the top
+       * when navigating away from the map only after having opened a bottom sheet.
+       * The core issue is likely related to the Animated.View below.
+       * The fix is to add a view that ensures the whole screen is always painted on. */}
+      <View style={styles.alwaysPaintOnEntireScreenToAvoidFlicker} />
+
+      <View
         style={{
-          ...styles.bottomSheet,
-          transform: [{translateY}],
-          maxHeight: windowHeight,
-          ...shadows,
+          ...styles.bottomSheetContainer,
+          bottom: bottomOffset,
+          height: windowHeight,
         }}
-        onLayout={onLayout}
       >
-        {children}
-      </Animated.View>
-    </View>
+        <Animated.View
+          style={{
+            ...styles.bottomSheet,
+            transform: [{translateY}],
+            maxHeight: windowHeight,
+            ...shadows,
+          }}
+          onLayout={onLayout}
+        >
+          {children}
+        </Animated.View>
+      </View>
+    </>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  alwaysPaintOnEntireScreenToAvoidFlicker: {
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    opacity: 0,
+    backgroundColor: 'white',
+    pointerEvents: 'box-none',
+  },
+  bottomSheetContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+    pointerEvents: 'box-none',
+  },
   bottomSheet: {
     backgroundColor: getThemeColor(theme).background,
     width: '100%',

@@ -82,7 +82,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
         onPress={navigateBack}
         text={t(SmartParkAndRideTexts.add.footer.later)}
         mode="secondary"
-        backgroundColor={theme.color.background.neutral[1]}
+        backgroundColor={theme.color.background.accent[0]}
       />
     </View>
   );
