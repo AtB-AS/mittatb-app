@@ -178,6 +178,18 @@ const SmartParkAndRideTexts = {
       buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
     },
   },
+  notLoggedIn: {
+    title: _(
+      'Du er ikke logget inn',
+      'You are not logged in',
+      'Du er ikkje logga inn',
+    ),
+    message: _(
+      'Hvis du logger inn i appen senere, må du registrere alle kjøretøy på nytt.',
+      'If you log in to the app later, you will need to register all vehicles again.',
+      'Om du loggar inn i appen seinare, må du registrere alle køyretøy på nytt.',
+    ),
+  },
 };
 
 export default SmartParkAndRideTexts;
