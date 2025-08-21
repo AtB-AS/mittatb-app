@@ -67,9 +67,9 @@ export const StopSignalButton = ({
           onPress={() => {
             analytics.logEvent('Journey aid', 'Stop signal button pressed');
             onPress({
-              serviceJourneyId: serviceJourney.id,
               quayId: selectedCall.quay.id,
-              serviceDate: selectedCall.date,
+              serviceJourneyId: serviceJourney.id,
+              serviceJourneyDate: selectedCall.date,
             });
           }}
           loading={status === 'loading'}
