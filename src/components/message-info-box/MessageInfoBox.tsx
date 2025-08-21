@@ -122,6 +122,7 @@ export const MessageInfoBox = ({
           color={textColor}
           typography="body__primary"
           isMarkdown={isMarkdown}
+          testID={testID ? `${testID}Text` : 'text'}
         >
           {message}
         </ThemeText>

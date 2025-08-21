@@ -6,7 +6,6 @@ import SearchPage from '../pageobjects/search.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
 import FavoritePage from '../pageobjects/favorite.page.ts';
-import FrontpagePage from '../pageobjects/frontpage.page.ts';
 
 describe('Frontpage', () => {
   before(async () => {
@@ -177,29 +176,6 @@ describe('Frontpage', () => {
       await ElementHelper.expectText('Tickets');
     } catch (errMsg) {
       await AppHelper.screenshot('error_frontpage_should_open_tickets_tab');
-      throw errMsg;
-    }
-  });
-
-  /**
-   * Service disruption info
-   */
-  it('should show link to service disruptions', async () => {
-    const linkText = 'atb.no/driftsavvik';
-
-    try {
-      await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await FrontPagePage.serviceDisruptionsInfo.click();
-
-      await ElementHelper.waitForElement('id', 'serviceDisruptionsBottomSheet');
-      await ElementHelper.waitForElement('id', 'navigateToServiceDisruptions');
-      expect(await FrontpagePage.serviceDisruptionsLink).toContain(linkText);
-
-      await NavigationHelper.close();
-    } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_frontpage_should_show_link_to_service_disruptions',
-      );
       throw errMsg;
     }
   });

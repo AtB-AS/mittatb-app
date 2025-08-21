@@ -11,10 +11,9 @@ import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
   fc: FareContractType;
-  testID?: string;
 };
 
-export const ProductName = ({fc, testID}: Props) => {
+export const ProductName = ({fc}: Props) => {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
@@ -32,7 +31,7 @@ export const ProductName = ({fc, testID}: Props) => {
     <ThemeText
       typography="body__secondary--bold"
       accessibilityLabel={productName + screenReaderPause}
-      testID={testID + 'Product'}
+      testID="productName"
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}
     >

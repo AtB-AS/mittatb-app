@@ -450,6 +450,7 @@ const PaymentButton = ({
         onGoToPayment();
       }}
       loading={reserveStatus === 'loading'}
+      testID="confirmPaymentButton"
     />
   );
 };

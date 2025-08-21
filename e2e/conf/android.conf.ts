@@ -15,14 +15,27 @@ export const config: WebdriverIO.Config = {
           //command: 'appium',
         },
       ],
-      ['visual',
+      [
+        'visual',
         {
           // folder options are set in the tests
-          formatImageName: "{tag}-{deviceName}-{width}x{height}",
+          formatImageName: '{tag}-{deviceName}-{width}x{height}',
           createJsonReportFiles: true,
           autoSaveBaseline: false,
           isHybridApp: true,
-        }],
+        },
+      ],
+      [
+        'performancetotal',
+        {
+          disableAppendToExistingFile: false,
+          performanceResultsFileName: `performance-results_${new Date().getTime()}`,
+          dropResultsFromFailedTest: false,
+          performanceResultsDirectory: 'results/performance-results',
+          analyzeByBrowser: false,
+          recentDays: 0,
+        },
+      ],
     ],
     capabilities: [
       {

@@ -4,7 +4,7 @@ import NavigationHelper from '../../utils/navigation.helper.ts';
 import FrontPagePage from '../../pageobjects/frontpage.page.js';
 import VisualHelper from '../../utils/visual.helper.js';
 import ElementHelper from '../../utils/element.helper.js';
-import MyProfilePage from '../../pageobjects/myProfile.page.js';
+import MyProfilePage from '../../pageobjects/profile.page.js';
 import Config from '../../conf/config.js';
 
 /**
@@ -53,8 +53,8 @@ describe('Visual tests', () => {
       await ElementHelper.waitForElement('text', 'Profile');
 
       // Notifications
-      await MyProfilePage.openSetting('settings');
-      await MyProfilePage.openSetting('notifications');
+      await MyProfilePage.open('settings');
+      await MyProfilePage.open('notifications');
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
       await VisualHelper.visualTestScreen(
@@ -65,7 +65,7 @@ describe('Visual tests', () => {
 
       // Standard travellers
       await NavigationHelper.back();
-      await MyProfilePage.openSetting('defaultTraveller');
+      await MyProfilePage.open('defaultTraveller');
       await ElementHelper.waitForElement('text', 'Default traveller');
       await VisualHelper.visualTestScreen(
         'profile_defaultTraveller',

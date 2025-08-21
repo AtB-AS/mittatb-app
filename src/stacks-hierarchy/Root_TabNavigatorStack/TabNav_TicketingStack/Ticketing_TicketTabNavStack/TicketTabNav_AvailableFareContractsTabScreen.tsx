@@ -64,6 +64,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
             }}
           />
         }
+        testID="availableFCScrollView"
       >
         <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
         <FareContractAndReservationsList
