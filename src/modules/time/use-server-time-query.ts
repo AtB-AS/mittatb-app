@@ -8,6 +8,6 @@ export const useServerTimeQuery = (enabled: boolean) =>
     queryFn: () => getServerTime(),
     refetchInterval: ONE_MINUTE_MS,
     refetchOnReconnect: true,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: 'always',
     enabled,
   });
