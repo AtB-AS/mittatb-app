@@ -57,7 +57,6 @@ export const Announcement = z.object({
   fullTitle: LanguageAndTextTypeArray,
   body: LanguageAndTextTypeArray,
   mainImage: Base64ImageSchema.optional(),
-  isDismissable: z.boolean().optional(),
   appPlatforms: z.array(AppPlatform).optional(),
   appVersionMin: z.string().optional(),
   appVersionMax: z.string().optional(),
