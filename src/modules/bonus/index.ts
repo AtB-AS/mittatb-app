@@ -9,6 +9,7 @@ export {
   useBonusBalanceQuery,
   useBuyValueCodeWithBonusPointsMutation,
   useBonusAmountEarnedQuery,
+  getBonusAmountEarnedQueryKey,
 } from './queries';
 export {
   bonusEnrollmentConfig,
