@@ -2,7 +2,6 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
 import {useServerTimeQuery} from './use-server-time-query';
-import {useFeatureTogglesContext} from '../feature-toggles';
 
 type TimeContextState = {
   /**
@@ -37,9 +36,8 @@ const TimeResult = z.object({
 
 export const TimeContextProvider = ({children}: Props) => {
   const [serverNow, setServerNow] = useState(Date.now());
-  const {isServerTimeEnabled} = useFeatureTogglesContext();
 
-  const {data} = useServerTimeQuery(isServerTimeEnabled);
+  const {data} = useServerTimeQuery();
   useEffect(() => {
     const timeData = TimeResult.safeParse(data).data;
     if (timeData?.timestampMs) {
