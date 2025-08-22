@@ -115,7 +115,7 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowBonusAmountEarned && !!bonusAmountEarned && (
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
       )}
 
