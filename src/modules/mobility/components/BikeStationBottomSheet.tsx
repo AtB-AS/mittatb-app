@@ -1,6 +1,9 @@
 import {useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheetContext,
+} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {
@@ -67,6 +70,7 @@ export const BikeStationBottomSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
+  const {logEvent} = useBottomSheetContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
@@ -149,9 +153,14 @@ export const BikeStationBottomSheet = ({
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() =>
-                    setPayWithBonusPoints(
-                      (payWithBonusPoints) => !payWithBonusPoints,
-                    )
+                    setPayWithBonusPoints((payWithBonusPoints) => {
+                      const newState = !payWithBonusPoints;
+                      logEvent('Bonus', 'bonus points checkbox toggled', {
+                        bonusProductId: bonusProduct.id,
+                        newState: newState,
+                      });
+                      return newState;
+                    })
                   }
                   style={styles.payWithBonusPointsSection}
                 />
