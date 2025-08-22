@@ -378,6 +378,14 @@ const ProfileTexts = {
             'Tilgjengelegheitserklæring, åpner side i nettlesar',
           ),
         },
+        serviceDisruptions: {
+          label: _('Driftsmeldinger', 'Service disruptions', 'Driftsmeldingar'),
+          a11yLabel: _(
+            'Driftsmeldinger, åpner side i nettleser',
+            'Service disruptions, opens page in browser',
+            'Driftsmeldingar, opnar side i nettlesar',
+          ),
+        },
       },
     },
     contact: {
