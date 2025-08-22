@@ -38,7 +38,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
     useVehicleRegistrationsQuery();
-  const {authStatus} = useAuthContext();
+  const {authenticationType} = useAuthContext();
 
   const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
@@ -104,7 +104,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
           )}
         </Section>
 
-        {authStatus === 'authenticated' && (
+        {authenticationType !== 'phone' && (
           <MessageInfoBox
             type="warning"
             title={t(SmartParkAndRideTexts.notLoggedIn.title)}

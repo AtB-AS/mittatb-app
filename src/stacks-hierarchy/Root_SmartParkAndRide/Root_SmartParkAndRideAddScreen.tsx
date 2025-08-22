@@ -26,7 +26,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(true);
-  const {authStatus} = useAuthContext();
+  const {authenticationType} = useAuthContext();
 
   const hideHeader = route.params.hideHeader;
 
@@ -53,7 +53,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
         </ThemeText>
       </View>
 
-      {authStatus === 'authenticated' && (
+      {authenticationType !== 'phone' && (
         <MessageInfoBox
           type="warning"
           title={t(SmartParkAndRideTexts.notLoggedIn.title)}
