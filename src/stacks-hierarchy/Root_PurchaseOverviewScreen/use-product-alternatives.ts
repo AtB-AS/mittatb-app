@@ -1,10 +1,9 @@
 import {useMemo} from 'react';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export const useProductAlternatives = (selection: PurchaseSelectionType) => {
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
-
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   return useMemo(() => {
     const productAliasId = selection.preassignedFareProduct?.productAliasId;
     return productAliasId

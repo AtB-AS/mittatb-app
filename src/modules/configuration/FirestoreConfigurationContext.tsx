@@ -62,7 +62,6 @@ export type AppTexts = {
 };
 
 type ConfigurationContextState = {
-  /** @deprecated Use useGetFareProductsQuery instead */
   preassignedFareProducts: PreassignedFareProduct[];
   fareProductGroups: FareProductGroupType[];
   fareZones: FareZone[];

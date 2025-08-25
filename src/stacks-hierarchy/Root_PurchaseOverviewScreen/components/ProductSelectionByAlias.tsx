@@ -7,13 +7,13 @@ import {
 import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {isProductSellableInApp} from '@atb/modules/configuration';
+import {
+  isProductSellableInApp,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
-import {
-  useGetFareProductsQuery,
-  useTicketingContext,
-} from '@atb/modules/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {
@@ -36,7 +36,7 @@ export function ProductSelectionByAlias({
 }: Props) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {customerProfile} = useTicketingContext();
   const selectionBuilder = usePurchaseSelectionBuilder();
 

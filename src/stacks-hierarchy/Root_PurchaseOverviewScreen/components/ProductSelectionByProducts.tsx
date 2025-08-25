@@ -7,6 +7,7 @@ import {
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   PreassignedFareProduct,
+  useFirestoreConfigurationContext,
   getReferenceDataName,
   isProductSellableInApp,
 } from '@atb/modules/configuration';
@@ -16,10 +17,7 @@ import {
   RadioGroupSection,
   Section,
 } from '@atb/components/sections';
-import {
-  useGetFareProductsQuery,
-  useTicketingContext,
-} from '@atb/modules/ticketing';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {ContentHeading} from '@atb/components/heading';
@@ -41,7 +39,7 @@ export function ProductSelectionByProducts({
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {customerProfile} = useTicketingContext();
   const {hideProductDescriptions} = usePreferencesContext().preferences;
   const selectionBuilder = usePurchaseSelectionBuilder();

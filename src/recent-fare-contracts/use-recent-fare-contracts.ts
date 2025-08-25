@@ -10,7 +10,6 @@ import {
 import {
   listRecentFareContracts,
   RecentOrderDetails,
-  useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
@@ -21,14 +20,14 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
 
 type State = {
-  isError: boolean;
-  isLoading: boolean;
+  error: boolean;
+  loading: boolean;
   recentFareContracts: RecentOrderDetails[];
 };
 
 const initialState: State = {
-  isError: false,
-  isLoading: true,
+  error: false,
+  loading: true,
   recentFareContracts: [],
 };
 
@@ -44,20 +43,20 @@ const reducer: Reducer = (prevState, action): State => {
     case 'FETCH':
       return {
         ...prevState,
-        isLoading: true,
-        isError: false,
+        loading: true,
+        error: false,
       };
     case 'ERROR':
       return {
         ...prevState,
-        isLoading: false,
-        isError: true,
+        loading: false,
+        error: true,
       };
     case 'SUCCESS':
       return {
         ...prevState,
-        isLoading: false,
-        isError: false,
+        loading: false,
+        error: false,
         recentFareContracts: action.data,
       };
   }
@@ -198,9 +197,12 @@ const mapToLastThreeUniqueRecentFareContracts = (
 export const useRecentFareContracts = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {fareContracts} = useTicketingContext();
-  const {fareProductTypeConfigs, fareZones, userProfiles} =
-    useFirestoreConfigurationContext();
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {
+    preassignedFareProducts,
+    fareProductTypeConfigs,
+    fareZones,
+    userProfiles,
+  } = useFirestoreConfigurationContext();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -240,8 +242,8 @@ export const useRecentFareContracts = () => {
   );
 
   return {
-    isLoading: state.isLoading,
-    isError: state.isError,
+    loading: state.loading,
+    error: state.error,
     recentFareContracts,
     refresh: fetchRecentFareContracts,
   };

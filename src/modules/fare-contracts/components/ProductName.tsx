@@ -4,17 +4,17 @@ import {type FareContractType} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,
+  useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
   fc: FareContractType;
 };
 
 export const ProductName = ({fc}: Props) => {
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();

@@ -53,7 +53,7 @@ export const RecentFareContracts = ({
 
   return (
     <View>
-      {loading && !memoizedRecentFareContracts.length && (
+      {loading && (
         <View
           style={{
             paddingVertical: theme.spacing.xLarge,
@@ -73,7 +73,7 @@ export const RecentFareContracts = ({
         </View>
       )}
 
-      {!!memoizedRecentFareContracts.length && (
+      {!loading && !!memoizedRecentFareContracts.length && (
         <>
           <ThemeText typography="body__secondary" style={styles.header}>
             {t(RecentFareContractsTexts.repeatPurchase.label)}

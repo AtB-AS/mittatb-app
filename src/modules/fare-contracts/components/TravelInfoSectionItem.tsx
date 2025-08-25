@@ -6,10 +6,7 @@ import {
   useGetPhoneByAccountIdQuery,
   useFetchOnBehalfOfAccountsQuery,
 } from '@atb/modules/on-behalf-of';
-import {
-  isSentOrReceivedFareContract,
-  useGetFareProductsQuery,
-} from '@atb/modules/ticketing';
+import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
@@ -44,9 +41,8 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {validityStatus, numberOfUsedAccesses, maximumNumberOfAccesses} =
     getFareContractInfo(serverNow, fc, currentUserId);
   const firstTravelRight = fc.travelRights[0];
-  const {userProfiles, fareProductTypeConfigs} =
+  const {userProfiles, fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfigurationContext();
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,

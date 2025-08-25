@@ -1,17 +1,19 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
 import {type FareContractType} from '@atb-as/utils';
-import {findReferenceDataById} from '@atb/modules/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
   fc: FareContractType;
 };
 
 export const Description = ({fc}: Props) => {
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();

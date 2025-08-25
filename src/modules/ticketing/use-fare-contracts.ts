@@ -6,7 +6,6 @@ import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
-import {ONE_WEEK_MS} from '@atb/utils/durations';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -82,7 +81,7 @@ export const useGetFareContractsQuery = (props: {
     refetchOnReconnect: true,
     refetchOnMount: false,
     retry: 0,
-    cacheTime: ONE_WEEK_MS,
+    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
     meta: {
       persistInAsyncStorage: true,
     },

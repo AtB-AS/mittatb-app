@@ -1,9 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {
-  useFareContracts,
-  useGetFareProductsQuery,
-  useTicketingContext,
-} from '@atb/modules/ticketing';
+import {useFareContracts, useTicketingContext} from '@atb/modules/ticketing';
 import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
@@ -36,7 +32,6 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     {availability: 'historical'},
     serverNow,
   );
-  const {refetch: refetchPreassignedFareProducts} = useGetFareProductsQuery();
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -56,7 +51,6 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
             refreshing={isRefetchingAvailableFareContracts}
             onRefresh={() => {
               refetchAvailableFareContracts();
-              refetchPreassignedFareProducts();
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
                 reservationsCount: reservations.length,
                 availableFareContractsCount: availableFareContracts.length,

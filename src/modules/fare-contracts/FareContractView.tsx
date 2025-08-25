@@ -12,7 +12,6 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
-  useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
@@ -26,7 +25,10 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
-import {findReferenceDataById} from '@atb/modules/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
@@ -63,7 +65,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const firstTravelRight = fareContract.travelRights[0];
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfigurationContext();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
