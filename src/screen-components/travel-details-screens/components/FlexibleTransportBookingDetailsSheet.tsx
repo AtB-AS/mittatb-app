@@ -4,13 +4,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {
-  Dimensions,
-  Linking,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, Linking, ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
@@ -24,6 +18,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
@@ -111,7 +106,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             }
           </View>
 
-          <TouchableOpacity
+          <PressableOpacity
             style={style.readMoreAbout}
             onPress={() => {
               const flexTransportInfoUrl = getTextForLanguage(
@@ -134,7 +129,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             >
               {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
             </ThemeText>
-          </TouchableOpacity>
+          </PressableOpacity>
 
           {bookingStatus === 'bookable' && (
             <BookingOptions bookingArrangements={leg.bookingArrangements} />
