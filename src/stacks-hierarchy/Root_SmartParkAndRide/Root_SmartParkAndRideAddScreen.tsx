@@ -14,6 +14,8 @@ import {View, ScrollView} from 'react-native';
 import {RootStackScreenProps} from '..';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '@atb/components/screen-footer';
+import {useAuthContext} from '@atb/modules/auth';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 
@@ -24,6 +26,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(true);
+  const {authenticationType} = useAuthContext();
 
   const hideHeader = route.params.hideHeader;
 
@@ -50,6 +53,13 @@ export const Root_SmartParkAndRideAddScreen = ({navigation, route}: Props) => {
         </ThemeText>
       </View>
 
+      {authenticationType !== 'phone' && (
+        <MessageInfoBox
+          type="warning"
+          title={t(SmartParkAndRideTexts.notLoggedIn.title)}
+          message={t(SmartParkAndRideTexts.notLoggedIn.message)}
+        />
+      )}
       <Section>
         <TextInputSectionItem
           label={t(SmartParkAndRideTexts.add.inputs.nickname.label)}
@@ -130,7 +140,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.medium,
     marginTop: theme.spacing.xLarge * 2,
-    marginBottom: theme.spacing.xLarge,
+    marginBottom: theme.spacing.large,
   },
   illustration: {
     marginBottom: theme.spacing.large,
