@@ -7,13 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {
-  AccessibilityProps,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {
   GenericClickableSectionItem,
@@ -27,6 +21,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ZonesSelectionProps = {
   selection: PurchaseSelectionType;
@@ -40,7 +35,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const zonesRef = useRef<typeof TouchableOpacity>(null);
+    const zonesRef = useRef<typeof PressableOpacity>(null);
     useImperativeHandle(ref, () => ({
       zonesRef,
     }));
