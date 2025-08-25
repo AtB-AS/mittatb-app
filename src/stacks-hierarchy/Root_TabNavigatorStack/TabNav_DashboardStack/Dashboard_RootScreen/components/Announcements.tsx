@@ -8,6 +8,8 @@ import {useNow} from '@atb/utils/use-now';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useTimeContext} from '@atb/modules/time';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 
@@ -25,12 +27,20 @@ export const Announcements = ({style}: Props) => {
   const shareTravelHabitsIsOnboarded =
     useOnboardingSectionIsOnboarded('shareTravelHabits');
 
+  const {serverNow} = useTimeContext();
+  const {fareContracts: validFareContracts} = useFareContracts(
+    {availability: 'available', status: 'valid'},
+    serverNow,
+  );
+  const hasValidFareContract = validFareContracts.length > 0;
+
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
     shareTravelHabitsIsOnboarded,
+    hasValidFareContract,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
