@@ -26,7 +26,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -248,7 +248,7 @@ function DepartureTimeItem({
     return null;
   }
   return (
-    <TouchableOpacity
+    <PressableOpacity
       style={styles.departure}
       testID={testID}
       key={departure.aimedTime + departure.serviceJourneyId}
@@ -266,7 +266,7 @@ function DepartureTimeItem({
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
       {rightIcon && <ThemeIcon svg={rightIcon} />}
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

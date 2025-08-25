@@ -1,6 +1,6 @@
 import {shadows} from '@atb/modules/map';
 import {ThemeText} from '@atb/components/text';
-import {Animated, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {Animated, View, ViewStyle} from 'react-native';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -16,6 +16,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+import {PressableOpacity} from '../pressable-opacity';
 
 export type SnackbarPosition = 'top' | 'bottom';
 const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
@@ -142,7 +143,7 @@ const SnackbarInstance = ({
             )}
 
             {(isDismissable || isScreenReaderEnabled) && (
-              <TouchableOpacity
+              <PressableOpacity
                 onPress={hideSnackbar}
                 style={styles.closeButton}
                 accessible={true}
@@ -152,7 +153,7 @@ const SnackbarInstance = ({
                 testID="closeSnackbarButton"
               >
                 <ThemeIcon svg={Close} size="normal" />
-              </TouchableOpacity>
+              </PressableOpacity>
             )}
           </View>
         </View>
