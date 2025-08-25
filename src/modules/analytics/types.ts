@@ -10,6 +10,7 @@ export type AnalyticsEventContext =
   | 'Map'
   | 'Mobility'
   | 'Onboarding'
+  | 'OnPress event'
   | 'Parking violations'
   | 'Profile'
   | 'Receipt'
