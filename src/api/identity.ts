@@ -13,6 +13,13 @@ import {DateResponse, DateResponseSchema} from './types/mobility';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 
+export const getServerTime = async () => {
+  const response = await client.get('/identity/v1/time', {
+    authWithIdToken: false,
+  });
+  return response.data;
+};
+
 export const authenticateWithSms = async (
   phoneNumber: string,
   language: Language,
