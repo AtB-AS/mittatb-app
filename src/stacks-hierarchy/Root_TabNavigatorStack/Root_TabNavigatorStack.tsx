@@ -24,7 +24,7 @@ import {
   useBottomNavigationStyles,
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
@@ -169,6 +169,10 @@ export const Root_TabNavigatorStack = () => {
     </Tab.Navigator>
   );
 };
+
+type LabelPosition = NonNullable<
+  BottomTabNavigationOptions['tabBarLabelPosition']
+>;
 
 type TabSettings = {
   tabBarLabel(props: {

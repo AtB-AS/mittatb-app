@@ -2797,7 +2797,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context (4.14.1):
+  - react-native-safe-area-context (5.6.1):
     - React-Core
   - react-native-slider (4.5.2):
     - DoubleConversion
@@ -3250,7 +3250,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.35.0):
+  - RNScreens (4.15.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3721,7 +3721,7 @@ SPEC CHECKSUMS:
   MapboxMaps: d8c2712ac2c30dea29054ff0c7642f1d4208737b
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
+  RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: 7691283dd69fed46f6653d376de6fa83aaad774c
   RCTRequired: eac044a04629288f272ee6706e31f81f3a2b4bfe
   RCTTypeSafety: cfe499e127eda6dd46e5080e12d80d0bfe667228
@@ -3759,7 +3759,7 @@ SPEC CHECKSUMS:
   react-native-keep-awake: 03b74eebe4f2bb5e8478fc8f420651a92463b6f8
   react-native-kettle-module: bd43213d8f7d6a3838d16b387838ec3b0fa8a8a0
   react-native-pager-view: 1b70e63833fef9845f895d5ca0bad88cb4267938
-  react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
+  react-native-safe-area-context: 2243039f43d10cb1ea30ec5ac57fc6d1448413f4
   react-native-slider: d34699c23a92c851e312220d553946e4f723aa74
   React-nativeconfig: c77447a7820ac780b97f121ae6248ac07248835f
   React-NativeModulesApple: 3156840c8d3cddd5cdf9df8ff417641088ae43d3
@@ -3807,13 +3807,13 @@ SPEC CHECKSUMS:
   rnmapbox-maps: f08ccc7454f02131916905654d9612db262baa87
   RNPermissions: 8f723aff8930c269b8faebf8cde4a7bcffd21b8d
   RNReanimated: 25ec70669c387101a4c8e671fcc58cffda76da88
-  RNScreens: 4a5446dc4d922b2375df14c3a3f30bfc7719f6b1
+  RNScreens: a75a64bb9a2e5fd0b16999163d44f344e57f796b
   RNSVG: a07e14363aa208062c6483bad24a438d5986d490
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 59b914855fe3abc93d34670061450422aee2ea7b
   TokenCore: 10f20eb282693b9b6ee15e38dae3b9f1a64b372b
-  TokenStateReactNativeLib: 3fe19c9e178b15d2c5b696bc7af057185c4c7de1
+  TokenStateReactNativeLib: 100e93add1c37165379339721ad43dd41e19a09c
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisualCodeModeliOSLib: fde1749faebf9266352736a1260bdbed1c9a06b1
   VisualCodeViewiOSLib: 2c79d22b46584eea81e7638ac19817e9a9e6abac
