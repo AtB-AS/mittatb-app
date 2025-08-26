@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useMemo} from 'react';
 import {
   PostHog,
-  type PostHogAutocaptureOptions,
+  type PostHogOptions,
   PostHogProvider,
 } from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
@@ -28,10 +28,8 @@ const initPosthogClient = (
 
 export const getPosthogClientGlobal = () => client;
 
-const AUTO_CAPTURE_OPTIONS: PostHogAutocaptureOptions = {
-  captureScreens: true,
-  captureLifecycleEvents: true,
-  captureTouches: false,
+const OPTIONS: PostHogOptions = {
+  captureAppLifecycleEvents: true,
 };
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
@@ -61,7 +59,11 @@ export const AnalyticsContextProvider = ({children}: Props) => {
   return (
     <AnalyticsContext.Provider value={client}>
       {client && (
-        <PostHogProvider autocapture={AUTO_CAPTURE_OPTIONS} client={client}>
+        <PostHogProvider
+          autocapture={false} // Screen events are handled differently for react-navigation v7 and higher
+          client={client}
+          options={OPTIONS}
+        >
           {children}
         </PostHogProvider>
       )}
