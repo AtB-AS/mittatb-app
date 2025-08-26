@@ -74,7 +74,7 @@ export function ToggleSectionItem({
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
       accessibilityLabel={
-        text + (label && ` ${t(TagInfoTexts.labels[label].a11y)}`)
+        text + (label ? ` ${t(TagInfoTexts.labels[label].a11y)}` : '')
       }
       {...accessibility}
       testID="toggleItem"
