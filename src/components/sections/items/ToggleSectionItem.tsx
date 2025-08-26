@@ -62,6 +62,10 @@ export function ToggleSectionItem({
     setTimeout(() => onValueChange(v), 0);
   };
 
+  let a11yLabel = text;
+  if (label) a11yLabel += ` ${t(TagInfoTexts.labels[label].a11y)}`;
+  if (subtext) a11yLabel += `, ${subtext}`;
+
   return (
     <View
       style={topContainer}
@@ -73,9 +77,7 @@ export function ToggleSectionItem({
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
-      accessibilityLabel={
-        text + (label ? ` ${t(TagInfoTexts.labels[label].a11y)}` : '')
-      }
+      accessibilityLabel={a11yLabel}
       {...accessibility}
       testID="toggleItem"
     >
