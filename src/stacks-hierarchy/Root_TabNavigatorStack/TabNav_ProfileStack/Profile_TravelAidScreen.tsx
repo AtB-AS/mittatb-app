@@ -66,9 +66,9 @@ export const Profile_TravelAidScreen = () => {
             isSubtextMarkdown
             testID="toggleTravelAid"
           />
-          <GenericSectionItem style={styles.buttonContainer}>
-            <View style={styles.buttonContainer}>
-              {hasContactPhoneNumber && (
+          {hasContactPhoneNumber && (
+            <GenericSectionItem style={styles.buttonContainer}>
+              <View style={styles.buttonContainer}>
                 <Button
                   expanded={true}
                   mode="secondary"
@@ -91,9 +91,9 @@ export const Profile_TravelAidScreen = () => {
                     }
                   }}
                 />
-              )}
-            </View>
-          </GenericSectionItem>
+              </View>
+            </GenericSectionItem>
+          )}
         </Section>
       </View>
     </FullScreenView>
