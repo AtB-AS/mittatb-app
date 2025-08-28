@@ -14,6 +14,11 @@ const restrictedImportStacksHierarchy = {
   message:
     'Not allowed to import stuff from stacks-hierarchy from the outside. An exception may be made for ScreenParams types, and you can disable the eslint check for those imports.',
 };
+const restrictedImportTouchableOpacity = {
+  name: 'react-native',
+  importNames: ['TouchableOpacity'],
+  message: 'Use PressableOpacity instead',
+};
 
 const notPattern = (toRemove) => (pattern) => pattern !== toRemove;
 
@@ -22,6 +27,7 @@ const noRestrictedImportsPatterns = [
   restrictedImportAuth,
   restrictedImportStacksHierarchy,
 ];
+const noRestrictedImportsPaths = [restrictedImportTouchableOpacity];
 
 module.exports = {
   env: {
@@ -76,8 +82,13 @@ module.exports = {
       {android: 'always', ios: 'always', json: 'always'},
     ],
 
-    // Error on imports not done through index files (as of now only applied for @atb/components)
-    'no-restricted-imports': ['error', {patterns: noRestrictedImportsPatterns}],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: noRestrictedImportsPatterns,
+        paths: noRestrictedImportsPaths,
+      },
+    ],
 
     // Error on wildcard imports like 'import * as Utils from ...'
     'no-restricted-syntax': [

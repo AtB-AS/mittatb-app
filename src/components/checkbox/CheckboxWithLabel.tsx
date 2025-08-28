@@ -1,10 +1,11 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
+import {StyleProp, ViewStyle} from 'react-native';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Checkbox} from '.';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import type {ContrastColor} from '@atb-as/theme';
+import {PressableOpacity} from '../pressable-opacity';
 
 export const CheckboxWithLabel = ({
   label,
@@ -28,7 +29,7 @@ export const CheckboxWithLabel = ({
     t(checked ? dictionary.checked : dictionary.unchecked);
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       style={[styles.container, style]}
       accessible={true}
       accessibilityLabel={a11yLabel}
@@ -36,7 +37,7 @@ export const CheckboxWithLabel = ({
     >
       <Checkbox checked={checked} />
       <ThemeText color={color}>{label}</ThemeText>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 
