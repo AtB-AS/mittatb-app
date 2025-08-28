@@ -40,6 +40,7 @@ import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 configureAndStartBugsnag();
 configureReanimatedLogger({
@@ -105,13 +106,15 @@ export const App = () => {
                                                   <AnnouncementsContextProvider>
                                                     <NotificationContextProvider>
                                                       <BottomSheetContextProvider>
-                                                        <FeedbackQuestionsContextProvider>
-                                                          <BeaconsContextProvider>
-                                                            <OnboardingContextProvider>
-                                                              <RootStack />
-                                                            </OnboardingContextProvider>
-                                                          </BeaconsContextProvider>
-                                                        </FeedbackQuestionsContextProvider>
+                                                        <BottomSheetModalProvider>
+                                                          <FeedbackQuestionsContextProvider>
+                                                            <BeaconsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
+                                                            </BeaconsContextProvider>
+                                                          </FeedbackQuestionsContextProvider>
+                                                        </BottomSheetModalProvider>
                                                       </BottomSheetContextProvider>
                                                     </NotificationContextProvider>
                                                   </AnnouncementsContextProvider>

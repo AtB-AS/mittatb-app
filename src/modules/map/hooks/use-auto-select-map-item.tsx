@@ -6,7 +6,6 @@ import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
-  ScooterSheet,
 } from '@atb/modules/mobility';
 import {flyToLocation, getMapPadding} from '../utils';
 import {BicycleSheet} from '@atb/modules/mobility';
@@ -16,14 +15,13 @@ import {
 } from '@atb/api/types/generated/fragments/stations';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
-import {useEnterPaymentMethods} from './use-enter-payment-methods';
+//import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
+//import {useEnterPaymentMethods} from './use-enter-payment-methods';
 import MapboxGL from '@rnmapbox/maps';
 
 export type AutoSelectableMapItem =
@@ -50,11 +48,9 @@ export const useAutoSelectMapItem = (
   const isFocused = useIsFocusedAndActive();
   const {open: openBottomSheet, close} = useBottomSheetContext();
   const navigation = useNavigation<RootNavigationProps>();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
   const {enable_vipps_login} = useRemoteConfigContext();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const navigateToPaymentMethods = useEnterPaymentMethods();
+  //const navigateToPaymentMethods = useEnterPaymentMethods();
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -96,7 +92,7 @@ export const useAutoSelectMapItem = (
     [mapCameraRef, mapViewRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
-  const openScooterSheet = useCallback(
+  /*const openScooterSheet = useCallback(
     (vehicleId: string) => {
       async function selectPaymentMethod(vehicleId: string) {
         openBottomSheet(
@@ -161,19 +157,8 @@ export const useAutoSelectMapItem = (
         tabBarHeight,
       );
     },
-    [
-      openBottomSheet,
-      tabBarHeight,
-      closeBottomSheet,
-      navigateToPaymentMethods,
-      flyToMapItemLocation,
-      onReportParkingViolation,
-      close,
-      navigation,
-      hasReservationOrAvailableFareContract,
-      enable_vipps_login,
-    ],
-  );
+    [openBottomSheet, tabBarHeight, navigateToPaymentMethods, close],
+  );*/
 
   /**
    * This should probably be aligned with useUpdateBottomSheetWhenSelectedEntityChanges,
@@ -205,9 +190,9 @@ export const useAutoSelectMapItem = (
                   />
                 );
               }
-            } else {
+            } /*else {
               openScooterSheet(bottomSheetToAutoSelect.id);
-            }
+            }*/
             break;
           case AutoSelectableBottomSheetType.Bicycle:
             BottomSheetComponent = (
@@ -265,10 +250,8 @@ export const useAutoSelectMapItem = (
     setBottomSheetCurrentlyAutoSelected,
     navigation,
     enable_vipps_login,
-    hasReservationOrAvailableFareContract,
     close,
     isShmoDeepIntegrationEnabled,
     tabBarHeight,
-    openScooterSheet,
   ]);
 };

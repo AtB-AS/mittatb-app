@@ -9,6 +9,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useFocusEffect} from '@react-navigation/native';
+import {useBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 export type MapScreenParams = {
@@ -20,14 +21,16 @@ export const Map_RootScreenV2 = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {close} = useBottomSheetContext();
+  const {dismissAll} = useBottomSheetModal();
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         // on screen blur (navigating away from map tab), close bottomsheet
         close();
+        dismissAll();
       };
-    }, [close]),
+    }, [close, dismissAll]),
   );
 
   const navigateToQuay = useCallback(

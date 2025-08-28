@@ -18,10 +18,9 @@ import {
   isBicycle,
   isBikeStation,
   isCarStation,
-  isScooter,
+  //isScooter,
   ParkAndRideBottomSheet,
-  ScooterSheet,
-  isScooterV2,
+  //isScooterV2,
   isBicycleV2,
   isBikeStationV2,
   isCarStationV2,
@@ -30,12 +29,11 @@ import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/modules/mobility';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {MapFilterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
-import {useEnterPaymentMethods} from './use-enter-payment-methods';
+//import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
+//import {useEnterPaymentMethods} from './use-enter-payment-methods';
 import {useMapContext} from '../MapContext';
 
 /**
@@ -60,11 +58,12 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
   const analytics = useMapSelectionAnalytics();
+
   const navigation = useNavigation<RootNavigationProps>();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
+  /*const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();*/
   const {enable_vipps_login} = useRemoteConfigContext();
-  const navigateToPaymentMethods = useEnterPaymentMethods();
+  //const navigateToPaymentMethods = useEnterPaymentMethods();
   const {setMapFilterIsOpen} = useMapContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
@@ -82,7 +81,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     navigation.navigate('Root_ParkingViolationsSelectScreen');
   }, [closeWithCallback, analytics, navigation]);
 
-  const openScooterSheet = useCallback(
+  /*const openScooterSheet = useCallback(
     (vehicleId: string) => {
       async function selectPaymentMethod() {
         openBottomSheet(
@@ -149,16 +148,11 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     [
       openBottomSheet,
       tabBarHeight,
-      closeCallback,
       selectedFeature?.properties?.id,
       closeBottomSheet,
       navigateToPaymentMethods,
-      onReportParkingViolation,
-      navigation,
-      hasReservationOrAvailableFareContract,
-      enable_vipps_login,
     ],
-  );
+  );*/
 
   useEffect(() => {
     (async function () {
@@ -281,13 +275,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
           tabBarHeight,
         );
-      } else if (
+      } /*else if (
         isMapV2Enabled
           ? isScooterV2(selectedFeature)
           : isScooter(selectedFeature)
       ) {
         openScooterSheet(selectedFeature?.properties?.id);
-      } else if (
+      }*/ else if (
         isMapV2Enabled
           ? isBicycleV2(selectedFeature)
           : isBicycle(selectedFeature)
@@ -339,7 +333,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     distance,
     analytics,
     enable_vipps_login,
-    hasReservationOrAvailableFareContract,
   ]);
 
   return {selectedFeature, onReportParkingViolation};
