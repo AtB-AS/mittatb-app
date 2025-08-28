@@ -5,13 +5,13 @@ import {WS_API_BASE_URL} from '@env';
 import {getIdTokenGlobal, useAuthContext} from '../auth';
 import Bugsnag from '@bugsnag/react-native';
 import {handleStreamEvent} from './handle-stream-event';
-import {StreamEvent} from './types';
+import {StreamEventSchema} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
-  const {isValidIdToken} = useAuthContext();
+  const {userId, isValidIdToken} = useAuthContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
 
@@ -19,7 +19,9 @@ export const useSetupEventStream = () => {
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
-      const message = StreamEvent.safeParse(jsonStringToObject(event.data));
+      const message = StreamEventSchema.safeParse(
+        jsonStringToObject(event.data),
+      );
       if (!message.success) {
         Bugsnag.leaveBreadcrumb('Received unknown message from stream', {
           data: event.data,
@@ -30,11 +32,11 @@ export const useSetupEventStream = () => {
       Bugsnag.leaveBreadcrumb('Received event from stream', {
         data: event.data,
       });
-      handleStreamEvent(streamEvent, queryClient, {
+      handleStreamEvent(streamEvent, queryClient, userId, {
         isEventStreamFareContractsEnabled,
       });
     },
-    [queryClient, isEventStreamFareContractsEnabled],
+    [queryClient, isEventStreamFareContractsEnabled, userId],
   );
 
   const authenticate = useCallback((ws: WebSocket) => {

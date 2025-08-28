@@ -17,6 +17,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -25,8 +26,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
     props.route.params.preassignedFareProductId,

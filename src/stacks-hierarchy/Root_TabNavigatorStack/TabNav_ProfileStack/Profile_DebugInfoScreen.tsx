@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -111,6 +111,7 @@ export const Profile_DebugInfoScreen = () => {
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
+  const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
 
   const {
     fcmToken,
@@ -175,6 +176,9 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
         <Section style={styles.section}>
+          <GenericSectionItem>
+            <ThemeText>{`Device is ${serverTimeOffset}ms ahead of server time`}</ThemeText>
+          </GenericSectionItem>
           <LinkSectionItem
             text="Reset shareTravelHabits session counter"
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
@@ -438,11 +442,12 @@ export const Profile_DebugInfoScreen = () => {
           <ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
+            testID="mobileTokenDebug"
             expandContent={
               <View>
                 {nativeToken && (
                   <View>
-                    <ThemeText>{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
+                    <ThemeText testID="tokenId">{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
                     <ThemeText>{`Token start: ${new Date(
                       nativeToken.getValidityStart(),
                     ).toISOString()}`}</ThemeText>
@@ -453,7 +458,7 @@ export const Profile_DebugInfoScreen = () => {
                     <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
                   </View>
                 )}
-                <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
+                <ThemeText testID="tokenStatus">{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Override remote token inspectable: ${allTokenInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>

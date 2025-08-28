@@ -2347,6 +2347,11 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
+app-root-path@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-3.1.0.tgz#5971a2fc12ba170369a7a1ef018c71e6e47c2e86"
+  integrity sha512-biN3PwB2gUtjaYy/isrU3aNWI5w+fAfvHkSvCKeQGxhmYpwKFUxudR3Yya+KqVRHBmEDYh+/lTozYCFbmzX4nA==
+
 appium-adb@^12.0.0, appium-adb@^12.0.2:
   version "12.0.3"
   resolved "https://registry.yarnpkg.com/appium-adb/-/appium-adb-12.0.3.tgz#36659fd2da64109988480fe206a59be89724b598"
@@ -2620,6 +2625,13 @@ ast-types@^0.13.4:
   integrity sha512-x1FCFnFifvYDDzTaLII71vG5uvDwgtmDTEVWAxrgeiR8VjMONcCXJx7E+USjDtHlwFmt9MysbqgF9b9Vjr6w+w==
   dependencies:
     tslib "^2.0.1"
+
+async-csv@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/async-csv/-/async-csv-2.1.3.tgz#d6e43c61050ed3501b57f53c4c28943c5da59172"
+  integrity sha512-mpsCN+D7mzZeqrlDw7UTPhvDQDlx1i819E9fbKIt8drkgED5FSOlBv3Rk/+sXdevnO2wwlRkVOQ4kdT0AyqPqQ==
+  dependencies:
+    csv "^5.1.3"
 
 async-exit-hook@^2.0.1:
   version "2.0.1"
@@ -3547,6 +3559,31 @@ css-what@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-6.1.0.tgz#fb5effcf76f1ddea2c81bdfaa4de44e79bac70f4"
   integrity sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==
+
+csv-generate@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/csv-generate/-/csv-generate-3.4.3.tgz#bc42d943b45aea52afa896874291da4b9108ffff"
+  integrity sha512-w/T+rqR0vwvHqWs/1ZyMDWtHHSJaN06klRqJXBEpDJaM/+dZkso0OKh1VcuuYvK3XM53KysVNq8Ko/epCK8wOw==
+
+csv-parse@^4.16.3:
+  version "4.16.3"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.3.tgz#7ca624d517212ebc520a36873c3478fa66efbaf7"
+  integrity sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==
+
+csv-stringify@^5.6.5:
+  version "5.6.5"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-5.6.5.tgz#c6d74badda4b49a79bf4e72f91cce1e33b94de00"
+  integrity sha512-PjiQ659aQ+fUTQqSrd1XEDnOr52jh30RBurfzkscaE2tPaFsDH5wOAHJiw8XAHphRknCwMUE9KRayc4K/NbO8A==
+
+csv@^5.1.3:
+  version "5.5.3"
+  resolved "https://registry.yarnpkg.com/csv/-/csv-5.5.3.tgz#cd26c1e45eae00ce6a9b7b27dcb94955ec95207d"
+  integrity sha512-QTaY0XjjhTQOdguARF0lGKm5/mEq9PD9/VhZZegHDIBq2tQwgNpHc3dneD4mGo2iJs+fTKv5Bp0fZ+BRuY3Z0g==
+  dependencies:
+    csv-generate "^3.4.3"
+    csv-parse "^4.16.3"
+    csv-stringify "^5.6.5"
+    stream-transform "^2.1.3"
 
 data-uri-to-buffer@^4.0.0:
   version "4.0.1"
@@ -6230,6 +6267,11 @@ mitt@3.0.0:
   resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
   integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
 
+mixme@^0.5.1:
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/mixme/-/mixme-0.5.10.tgz#d653b2984b75d9018828f1ea333e51717ead5f51"
+  integrity sha512-5H76ANWinB1H3twpJ6JY8uvAtpmFvHNArpilJAjXRKXSDDLPIMoZArw5SH0q9z+lLs8IrMw7Q2VWpWimFKFT1Q==
+
 mkdirp-classic@^0.5.2:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
@@ -6477,6 +6519,13 @@ object-inspect@^1.12.0, object-inspect@^1.9.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.13.1.tgz#b96c6109324ccfef6b12216a956ca4dc2ff94bc2"
   integrity sha512-5qoj1RUiKOMsCCNLV1CBiPYE10sziTsnmNxkAI/rZhiD63CF7IqdFGC/XzjWjpSgLf0LxXX3bDFIh0E18f6UhQ==
+
+objects-to-csv@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/objects-to-csv/-/objects-to-csv-1.3.6.tgz#05f25144099151ee915d2dd1458d4dd3ea96d84a"
+  integrity sha512-383eSpS3hmgCksW85KIqBtcbgSW5DDVsCmzLoM6C3q4yzOX2rmtWxF4pbLJ76fz+ufA+4/SwAT4QdaY6IUWmAg==
+  dependencies:
+    async-csv "^2.1.3"
 
 obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
@@ -7773,6 +7822,13 @@ stream-combiner@^0.2.2:
     duplexer "~0.1.1"
     through "~2.3.4"
 
+stream-transform@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/stream-transform/-/stream-transform-2.1.3.tgz#a1c3ecd72ddbf500aa8d342b0b9df38f5aa598e3"
+  integrity sha512-9GHUiM5hMiCi6Y03jD2ARC1ettBXkQBoQAe7nJsPknnI0ow10aXjTnew8QtYQmLjzn974BnmWEAJgCY6ZP1DeQ==
+  dependencies:
+    mixme "^0.5.1"
+
 streamx@^2.15.0:
   version "2.15.7"
   resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.15.7.tgz#a12fe09faa3fda2483e8044c406b72286994a138"
@@ -8449,6 +8505,14 @@ wdio-mochawesome-reporter@4.0.0:
     "@wdio/reporter" "^5.7.8"
     strip-ansi "^5.2.0"
     uuid "^3.0.1"
+
+wdio-performancetotal-service@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/wdio-performancetotal-service/-/wdio-performancetotal-service-3.1.0.tgz#c378a22627a859892689c4b50d54830fea10698f"
+  integrity sha512-weDeAo6vDma5OAsKZdYcpEwzr20BZEHZsSCeP6D+lgt8cOM1ZMFu4gKQVtFH2BwR1GYN/XBqYSai2wUQbxOyfA==
+  dependencies:
+    app-root-path "^3.1.0"
+    objects-to-csv "^1.3.6"
 
 wdio-wait-for@3.0.2:
   version "3.0.2"

@@ -42,6 +42,9 @@ import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
+// https://rnfirebase.io/migrating-to-v22
+(globalThis as any).RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
+
 configureAndStartBugsnag();
 configureReanimatedLogger({
   strict: false,

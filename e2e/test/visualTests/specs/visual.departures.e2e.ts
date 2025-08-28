@@ -8,7 +8,7 @@ import Config from '../../conf/config.js';
 import DepartureSearchPage from '../../pageobjects/departure.search.page.js';
 import DepartureOverviewPage from '../../pageobjects/departure.overview.page.js';
 import TimePickerPage from '../../pageobjects/time.picker.page.js';
-import MyProfilePage from '../../pageobjects/myProfile.page.js';
+import MyProfilePage from '../../pageobjects/profile.page.js';
 import AccessibilityPage from '../../pageobjects/accessibility.page.js';
 import DepartureDetailsPage from '../../pageobjects/departure.details.page.js';
 import JourneyAidPage from '../../pageobjects/journey.aid.page.js';
@@ -78,8 +78,8 @@ describe('Visual tests', () => {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
       await ElementHelper.waitForElement('text', 'Profile');
-      await MyProfilePage.openSetting('settings');
-      await MyProfilePage.openSetting('travelAid');
+      await MyProfilePage.open('settings');
+      await MyProfilePage.open('travelAid');
       await ElementHelper.waitForElement('text', 'Journey Aid');
       await AccessibilityPage.toggleJourneyAid();
       await NavigationHelper.tapMenu('departures');
@@ -168,7 +168,7 @@ describe('Visual tests', () => {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
       await ElementHelper.waitForElement('text', 'Profile');
-      await MyProfilePage.openSetting('travelAid');
+      await MyProfilePage.open('travelAid');
       await ElementHelper.waitForElement('text', 'Journey Aid');
       await AccessibilityPage.toggleJourneyAid();
       await NavigationHelper.tapMenu('departures');

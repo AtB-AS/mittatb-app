@@ -69,3 +69,5 @@ export {
   getFeaturesAtClick,
   isFeatureGeofencingZone,
 } from './utils';
+
+export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';

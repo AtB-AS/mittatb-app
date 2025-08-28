@@ -42,6 +42,16 @@ class NavigationHelper {
     await $(menuId).click();
     await AppHelper.pause(1000);
   }
+
+  /**
+   * Go to the chosen ticket tab
+   * @param tab tab to open
+   */
+  async tapTicketTab(tab: 'purchase' | 'activeTickets') {
+    const menuId = `//*[@resource-id="${tab}Tab"]`;
+    await $(menuId).click();
+    await AppHelper.pause(1000);
+  }
 }
 
 export default new NavigationHelper();

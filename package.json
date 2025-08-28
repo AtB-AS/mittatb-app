@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.72.0",
+  "version": "1.73.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^7.1.0",
+    "@atb-as/config-specs": "^7.2.0",
     "@atb-as/generate-assets": "^18.3.1",
     "@atb-as/theme": "^14.1.0",
     "@atb-as/utils": "^4.3.0",
@@ -48,12 +48,12 @@
     "@react-native-community/cli-platform-ios": "15.0.1",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-community/geolocation": "^3.3.0",
-    "@react-native-firebase/analytics": "~20.5.0",
-    "@react-native-firebase/app": "~20.5.0",
-    "@react-native-firebase/auth": "~20.5.0",
-    "@react-native-firebase/firestore": "~20.5.0",
-    "@react-native-firebase/messaging": "~20.5.0",
-    "@react-native-firebase/remote-config": "~20.5.0",
+    "@react-native-firebase/analytics": "^22.4.0",
+    "@react-native-firebase/app": "^22.4.0",
+    "@react-native-firebase/auth": "^22.4.0",
+    "@react-native-firebase/firestore": "^22.4.0",
+    "@react-native-firebase/messaging": "^22.4.0",
+    "@react-native-firebase/remote-config": "^22.4.0",
     "@react-native/typescript-config": "^0.76.7",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/devtools": "^6.0.27",
@@ -126,7 +126,8 @@
     "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

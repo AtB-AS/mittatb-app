@@ -6,14 +6,19 @@ class Config {
     LOADING_SCREEN_ENABLED: true,
     LOADING_ERROR_SCREEN_ENABLED: false,
     ONBOARDING_LOGIN_ENABLED: true,
-    TRAVEL_SEARCH_DATE: '2025-09-14',
-    DEPARTURE_DATE: '2025-09-14',
+    TRAVEL_SEARCH_DATE: '2025-11-16',
+    DEPARTURE_DATE: '2025-11-16',
     RECORD_BASELINE: false,
     APP_ENV: 'debug',
+    PHONE_NUMBER: '41111114',
   };
 
   appEnvironment = (): string => {
     return <string>(process.env.APP_ENV || this.config.APP_ENV);
+  };
+
+  phoneNumber = (): string => {
+    return <string>(process.env.PHONE_NUMBER || this.config.PHONE_NUMBER);
   };
 
   loadingScreenEnabled = (): boolean => {

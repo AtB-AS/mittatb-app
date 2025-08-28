@@ -83,10 +83,7 @@ export function RadioBox({
       >
         {description}
       </ThemeText>
-      <View
-        style={styles.radioIcon}
-        testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
-      >
+      <View style={styles.radioIcon} testID={`${testID}Radio`}>
         <RadioIcon checked={selected} color={textColor} />
       </View>
     </PressableOpacity>

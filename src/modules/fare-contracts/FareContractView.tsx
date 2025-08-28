@@ -12,6 +12,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
+  useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
@@ -25,10 +26,7 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
-import {
-  findReferenceDataById,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
@@ -65,7 +63,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const firstTravelRight = fareContract.travelRights[0];
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
@@ -78,15 +76,15 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const shouldShowEarnedBonusPoints =
+  const shouldShowBonusAmountEarned =
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.id,
-    !shouldShowEarnedBonusPoints,
+    !shouldShowBonusAmountEarned,
   );
 
   return (
@@ -117,8 +115,8 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
-        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
       )}
 
       {shouldShowLegs && (

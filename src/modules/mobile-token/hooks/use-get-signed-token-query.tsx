@@ -33,5 +33,6 @@ export const useGetSignedTokenQuery = () => {
       }
     },
     refetchInterval: TEN_SECONDS_MS,
+    refetchOnWindowFocus: 'always',
   });
 };

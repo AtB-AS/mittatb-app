@@ -51,6 +51,7 @@ export const MessageInfoText = ({
           color={textColor}
           isMarkdown={isMarkdown}
           typography="body__secondary"
+          testID={`${testID}Text`}
         >
           {message}
         </ThemeText>

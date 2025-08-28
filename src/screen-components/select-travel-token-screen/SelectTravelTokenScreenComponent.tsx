@@ -141,6 +141,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
             isMarkdown={true}
+            testID="noTravelcardWarning"
           />
         )}
         {selectedType === 'mobile' && !mobileTokens?.length && (

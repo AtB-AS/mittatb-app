@@ -26,6 +26,8 @@ import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {useEffect} from 'react';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAuthContext} from '@atb/modules/auth';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -36,6 +38,7 @@ const Profile_SmartParkAndRideScreenContent = () => {
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
     useVehicleRegistrationsQuery();
+  const {authenticationType} = useAuthContext();
 
   const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
@@ -100,6 +103,14 @@ const Profile_SmartParkAndRideScreenContent = () => {
             />
           )}
         </Section>
+
+        {authenticationType !== 'phone' && (
+          <MessageInfoBox
+            type="warning"
+            title={t(SmartParkAndRideTexts.notLoggedIn.title)}
+            message={t(SmartParkAndRideTexts.notLoggedIn.message)}
+          />
+        )}
 
         {!canAddVehicleRegistrations && (
           <View style={styles.maxVehiclesInfo}>

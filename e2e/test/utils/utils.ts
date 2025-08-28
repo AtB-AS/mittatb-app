@@ -32,3 +32,12 @@ export function stringToNumArray(
 ): number[] {
   return inputString.split(separator).map((el) => parseInt(el));
 }
+
+/**
+ * Format a phone number (e.g. 12345678 > 12 34 56 78)
+ * @param raw phone number (8 digits), e.g. 12345678
+ */
+export function formatPhoneNumber(raw: string): string {
+  const compressed = raw.replace(' ', '');
+  return compressed.replace(/(\d{2})(?=\d)/g, '$1 ');
+}

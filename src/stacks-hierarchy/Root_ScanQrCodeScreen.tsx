@@ -10,7 +10,11 @@ import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
+import {
+  AutoSelectableBottomSheetType,
+  useMapContext,
+  useMapSelectionAnalytics,
+} from '@atb/modules/map';
 import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {tGlobal} from '@atb/modules/locale';
@@ -26,6 +30,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
     useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
+  const analytics = useMapSelectionAnalytics();
 
   const {
     mutateAsync: getAssetFromQrCode,
@@ -91,6 +96,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       if (!!type && !!id) {
         setBottomSheetToAutoSelect({type, id});
+        analytics.logEvent('Map', 'Scooter selected', {
+          id,
+        });
       } else {
         clearStateAndAlertResultError();
         return;
@@ -98,7 +106,12 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       navigation.goBack();
     },
-    [clearStateAndAlertResultError, navigation, setBottomSheetToAutoSelect],
+    [
+      analytics,
+      clearStateAndAlertResultError,
+      navigation,
+      setBottomSheetToAutoSelect,
+    ],
   );
 
   const onQrCodeScanned = useCallback(

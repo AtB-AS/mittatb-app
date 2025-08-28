@@ -17,6 +17,7 @@ import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 import qs from 'query-string';
+import {isDefined} from '@atb/utils/presence';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -194,7 +195,9 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
     authWithIdToken: true,
   });
 
-  return response.data;
+  return response.data
+    .map((p) => PreassignedFareProduct.safeParse(p).data)
+    .filter(isDefined);
 }
 
 export async function getFareContracts(
