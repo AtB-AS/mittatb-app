@@ -4,7 +4,7 @@ import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navig
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '../../enrollment-onboarding/use-navigate-to-next-onboarding-screen';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
 import {bonusPilotEnrollmentId} from './config';
 
 export type BuyTicketsScreenProps =
