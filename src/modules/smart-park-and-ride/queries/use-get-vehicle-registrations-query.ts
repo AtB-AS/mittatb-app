@@ -8,19 +8,13 @@ export const getVehicleRegistrationsQueryKey = (userId: string | undefined) => {
 };
 
 export const useVehicleRegistrationsQuery = (disabled: boolean = false) => {
-  const {userId, authStatus} = useAuthContext();
+  const {userId} = useAuthContext();
   const {isSmartParkAndRideEnabled} = useFeatureTogglesContext();
-  const {authenticationType} = useAuthContext();
-  const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
     queryKey: getVehicleRegistrationsQueryKey(userId),
     queryFn: getVehicleRegistrations,
     retry: 3,
-    enabled:
-      authStatus === 'authenticated' &&
-      isSmartParkAndRideEnabled &&
-      isLoggedIn &&
-      !disabled,
+    enabled: isSmartParkAndRideEnabled && !disabled,
   });
 };
