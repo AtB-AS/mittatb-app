@@ -22,7 +22,6 @@ import {
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {useEffect} from 'react';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
@@ -34,24 +33,11 @@ export const Profile_SmartParkAndRideScreen = () => {
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
-    useVehicleRegistrationsQuery();
+  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
 
-  const shouldShowOnboarding = false; // useShouldShowSmartParkAndRideOnboarding(); // todo - use actual onboarding instead
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
-  const hasVehicleRegistrations =
-    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
-
-  // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
-  useEffect(() => {
-    if (shouldShowOnboarding && !hasVehicleRegistrations) {
-      navigation.navigate('Root_EnrollmentOnboardingStack', {
-        configId: 'spar-pilot',
-      });
-    }
-  }, [shouldShowOnboarding, hasVehicleRegistrations, navigation]);
 
   return (
     <FullScreenView
@@ -121,7 +107,10 @@ export const Profile_SmartParkAndRideScreen = () => {
 
         <HowItWorksSection
           onPress={() => {
-            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+            navigation.navigate({
+              name: 'Root_EnrollmentOnboardingStack',
+              params: {configId: 'spar-pilot'},
+            });
           }}
         />
       </View>

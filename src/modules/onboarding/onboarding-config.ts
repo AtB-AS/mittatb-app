@@ -104,7 +104,8 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       params: {configId: 'spar-pilot'},
     },
     customEntryPointRouteName: 'Profile_SmartParkAndRideScreen',
-    shouldShowPredicate: ({currentRouteName}) =>
-      currentRouteName === 'Profile_SmartParkAndRideScreen',
+    shouldShowPredicate: ({currentRouteName, hasVehicleRegistrations}) =>
+      currentRouteName === 'Profile_SmartParkAndRideScreen' &&
+      !hasVehicleRegistrations,
   },
 ];

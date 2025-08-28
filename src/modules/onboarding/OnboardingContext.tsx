@@ -31,6 +31,7 @@ import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useVehicleRegistrationsQuery} from '../smart-park-and-ride';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -324,6 +325,13 @@ const useShouldShowArgs = (
 
   const {mobileTokenStatus} = useMobileTokenContext();
 
+  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
+    useVehicleRegistrationsQuery(
+      currentRouteName !== 'Profile_SmartParkAndRideScreen',
+    );
+  const hasVehicleRegistrations =
+    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
+
   return useMemo(
     () => ({
       hasFareContractWithActivatedNotification,
@@ -338,6 +346,7 @@ const useShouldShowArgs = (
       userCreationIsOnboarded,
       mobileTokenStatus,
       currentRouteName,
+      hasVehicleRegistrations,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -352,6 +361,7 @@ const useShouldShowArgs = (
       userCreationIsOnboarded,
       mobileTokenStatus,
       currentRouteName,
+      hasVehicleRegistrations,
     ],
   );
 };

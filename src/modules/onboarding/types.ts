@@ -37,6 +37,7 @@ export type ShouldShowArgsType = {
   userCreationIsOnboarded: boolean;
   shouldShowShareTravelHabitsScreen: boolean;
   currentRouteName: string;
+  hasVehicleRegistrations: boolean;
 };
 
 export type OnboardingSectionConfig = {
