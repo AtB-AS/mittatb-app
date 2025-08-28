@@ -77,7 +77,7 @@ export const Profile_EnrollmentScreen = () => {
           )}
           <Button
             expanded={true}
-            onPress={() => onEnroll(inviteCode)}
+            onPress={() => onEnroll(inviteCode, () => setInviteCode(''))}
             text={t(EnrollmentTexts.button)}
             interactiveColor={interactiveColor}
             loading={isLoading}
@@ -99,7 +99,7 @@ const useEnroll = () => {
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
 
   const onEnroll = useCallback(
-    async function onEnroll(key: string) {
+    async function onEnroll(key: string, clearKey: () => void) {
       setHasError(false);
       setIsLoading(true);
       try {
@@ -112,6 +112,7 @@ const useEnroll = () => {
           await analytics().setUserProperties(userProperties);
           refresh();
           setIsEnrolled(true);
+          clearKey();
 
           if (enrollment.enrollmentId) {
             const onboardingConfig = enrollmentOnboardingConfig.find((config) =>

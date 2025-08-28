@@ -9,6 +9,7 @@ import {
   Viewport,
   Camera,
   MapView,
+  MapState,
 } from '@rnmapbox/maps';
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -43,6 +44,7 @@ import {
   isScooterV2,
   useInitShmoBookingMutationStatus,
   MapFilter,
+  useVehicleQuery,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -122,9 +124,6 @@ export const MapV2 = (props: MapProps) => {
     isMapV2Enabled,
   } = useFeatureTogglesContext();
 
-  const showGeofencingZones =
-    isGeofencingZonesEnabled && selectedFeatureIsAVehicle;
-
   useShmoActiveBottomSheet(
     mapCameraRef,
     mapViewRef,
@@ -138,6 +137,12 @@ export const MapV2 = (props: MapProps) => {
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
 
+  const showGeofencingZones =
+    isGeofencingZonesEnabled &&
+    (selectedFeatureIsAVehicle ||
+      (activeShmoBooking?.bookingId !== undefined &&
+        activeShmoBooking.state === ShmoBookingState.IN_USE));
+
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
     isMapV2Enabled &&
@@ -147,6 +152,12 @@ export const MapV2 = (props: MapProps) => {
     !initShmoOneStopBookingIsMutating &&
     !mapFilterIsOpen;
 
+  const {
+    data: vehicle,
+    isLoading: vehicleIsLoading,
+    isError: vehicleError,
+  } = useVehicleQuery(selectedFeature?.properties?.id);
+
   useAutoSelectMapItem(
     mapCameraRef,
     mapViewRef,
@@ -155,6 +166,8 @@ export const MapV2 = (props: MapProps) => {
   );
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
+  const mapStateRef = useRef<MapState | null>(null);
+
   const stablePreviousActiveShmoBooking =
     useStablePreviousValue(activeShmoBooking);
   const stableActiveShmoBooking = useStableValue(activeShmoBooking);
@@ -193,7 +206,9 @@ export const MapV2 = (props: MapProps) => {
    */
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      const isActiveTrip = activeShmoBooking?.state === ShmoBookingState.IN_USE;
+      const isActiveTrip =
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING;
       if (!isFeaturePoint(feature)) return;
 
       if (!showGeofencingZones && !isActiveTrip) {
@@ -255,7 +270,8 @@ export const MapV2 = (props: MapProps) => {
       if (
         !featuresAtClick ||
         featuresAtClick.length === 0 ||
-        activeShmoBooking?.state === ShmoBookingState.IN_USE
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING
       )
         return;
       const featureToSelect = getFeatureToSelect(
@@ -298,6 +314,11 @@ export const MapV2 = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
+          onCameraChanged={(state) => {
+            if (followUserLocation && activeShmoBooking?.bookingId) {
+              mapStateRef.current = state;
+            }
+          }}
           {...mapViewConfig}
         >
           <Viewport
@@ -309,11 +330,19 @@ export const MapV2 = (props: MapProps) => {
           />
           <Camera
             ref={mapCameraRef}
-            zoomLevel={DEFAULT_ZOOM_LEVEL}
-            centerCoordinate={[
-              startingCoordinates.longitude,
-              startingCoordinates.latitude,
-            ]}
+            zoomLevel={
+              mapStateRef.current?.properties.zoom ?? DEFAULT_ZOOM_LEVEL
+            }
+            centerCoordinate={
+              mapStateRef.current?.properties.center
+                ? mapStateRef.current.properties.center
+                : [startingCoordinates.longitude, startingCoordinates.latitude]
+            }
+            padding={
+              activeShmoBooking?.bookingId
+                ? getMapPadding(tabBarHeight)
+                : undefined
+            }
             {...MapCameraConfig}
             followUserLocation={
               !!activeShmoBooking &&
@@ -323,9 +352,16 @@ export const MapV2 = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getMapPadding(tabBarHeight)}
           />
-          {showGeofencingZones && (
+          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              selectedVehicleId={selectedFeature?.properties?.id}
+              systemId={
+                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
+              }
+              vehicleTypeId={
+                vehicle?.vehicleType.id ??
+                activeShmoBooking?.asset.vehicleTypeId ??
+                null
+              }
             />
           )}
 
@@ -339,6 +375,7 @@ export const MapV2 = (props: MapProps) => {
           )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
+
           {shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={selectedFeature?.properties?.id}

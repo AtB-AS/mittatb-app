@@ -14,7 +14,7 @@ then
 fi
 releaseVersion=$REPLY
 
-read -p "This will create a draft release $releaseVersion on Github, are you sure you want to do release? (n/Y) " -n 1 -r
+read -p "This will create a draft release $releaseVersion on Github, are you sure you want to do release? (N/y) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -25,7 +25,7 @@ echo 'Gathering commits and creating changelog'
 message=`yarn --silent conventional-changelog -p angular -n ./tools/release/changelog.config.js`
 
 if [ $? -eq 0 ]; then
-  gh release create $releaseVersion --draft --title "$releaseVersion release draft" --notes "$message" 
+  gh release create $releaseVersion --draft --title "$releaseVersion release draft" --notes "$message" --target "$branch"
 else
   echo 'Could not create changelog'
   exit 1;

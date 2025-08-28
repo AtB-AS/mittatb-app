@@ -7,9 +7,11 @@ import {
   AgeVerificationEnum,
   useGetAgeVerificationQuery,
 } from './queries/use-get-age-verification-query';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 export const useShmoRequirements = () => {
   const USER_AGE_LIMIT = 18; // Define the age limit for verification
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {preciseLocationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
@@ -27,22 +29,22 @@ export const useShmoRequirements = () => {
   const requirements: ShmoRequirementType[] = [
     {
       requirementCode: ShmoRequirementEnum.AGE_VERIFICATION,
-      isLoading: ageVerifiedLoading,
+      isLoading: ageVerifiedLoading && isShmoDeepIntegrationEnabled,
       isBlocking: ageVerification === AgeVerificationEnum.NotVerified,
     },
     {
       requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
-      isLoading: false,
+      isLoading: false && isShmoDeepIntegrationEnabled,
       isBlocking: !givenConsent,
     },
     {
       requirementCode: ShmoRequirementEnum.LOCATION,
-      isLoading: false,
+      isLoading: false && isShmoDeepIntegrationEnabled,
       isBlocking: !preciseLocationIsAvailable,
     },
     {
       requirementCode: ShmoRequirementEnum.PAYMENT_CARD,
-      isLoading: paymentsLoading,
+      isLoading: paymentsLoading && isShmoDeepIntegrationEnabled,
       isBlocking: recurringPayments ? recurringPayments?.length === 0 : true,
     },
   ];

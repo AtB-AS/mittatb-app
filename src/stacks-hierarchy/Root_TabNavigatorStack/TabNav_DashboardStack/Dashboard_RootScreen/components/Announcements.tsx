@@ -1,13 +1,15 @@
 import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Announcement} from './Announcement';
+import {AnnouncementSection} from './AnnouncementSection';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useTimeContext} from '@atb/modules/time';
+import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 
@@ -25,16 +27,27 @@ export const Announcements = ({style}: Props) => {
   const shareTravelHabitsIsOnboarded =
     useOnboardingSectionIsOnboarded('shareTravelHabits');
 
+  const {serverNow} = useTimeContext();
+  const {fareContracts: validFareContracts} = useFareContracts(
+    {availability: 'available', status: 'valid'},
+    serverNow,
+  );
+  const hasValidFareContract = validFareContracts.length > 0;
+
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
     shareTravelHabitsIsOnboarded,
+    hasValidFareContract,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
-    isWithinTimeRange(a, now),
+    isWithinTimeRange(
+      {startDate: a.startDate?.valueOf(), endDate: a.endDate?.valueOf()},
+      now,
+    ),
   );
 
   if (filteredAnnouncements.length === 0) return null;
@@ -55,7 +68,7 @@ export const Announcements = ({style}: Props) => {
         horizontal={showHorizontally}
       >
         {filteredAnnouncements.map((a) => (
-          <Announcement
+          <AnnouncementSection
             key={a.id}
             announcement={a}
             style={showHorizontally && styles.announcement}

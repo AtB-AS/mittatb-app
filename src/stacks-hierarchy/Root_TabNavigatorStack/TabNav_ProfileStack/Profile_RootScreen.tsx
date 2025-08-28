@@ -11,7 +11,7 @@ import {ThemeText} from '@atb/components/text';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
@@ -39,6 +39,9 @@ import {Star} from '@atb/assets/svg/mono-icons/bonus';
 import {Favorite} from '@atb/assets/svg/mono-icons/places';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {useChatUnreadCount} from '@atb/modules/chat';
+import Intercom, {Space} from '@intercom/intercom-react-native';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -60,13 +63,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const [isLoading, setIsLoading] = useIsLoading(false);
   const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
     useFeatureTogglesContext();
+  const unreadCount = useChatUnreadCount();
+  const {theme} = useThemeContext();
+  const {enable_intercom} = useRemoteConfigContext();
 
   return (
     <>
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
-          rightButton: {type: 'chat'},
         }}
       >
         <View
@@ -218,6 +223,26 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               }
               testID="contactButton"
             />
+            {enable_intercom && (
+              <LinkSectionItem
+                leftIcon={{
+                  svg: Chat,
+                  notificationColor: unreadCount
+                    ? theme.color.status.error.primary
+                    : undefined,
+                }}
+                text={t(ProfileTexts.sections.contact.chat)}
+                onPress={() => {
+                  unreadCount
+                    ? Intercom.presentSpace(Space.messages)
+                    : Intercom.presentSpace(Space.home);
+                  analytics.logEvent(
+                    'Contact',
+                    'Send Intercom message clicked',
+                  );
+                }}
+              />
+            )}
           </Section>
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||

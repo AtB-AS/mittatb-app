@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ScreenHeaderTexts = {
   headerButton: {
@@ -27,13 +26,6 @@ const ScreenHeaderTexts = {
         'Aktivér for å lukke',
       ),
     },
-    'status-disruption': {
-      a11yHint: _(
-        'Aktivér for å gå til driftsavvik',
-        'Ativate to go to service disruptions',
-        'Aktivér for å gå til driftsavvik',
-      ),
-    },
     skip: {
       text: _('Hopp over', 'Skip', 'Hopp over'),
       a11yHint: _(
@@ -42,39 +34,10 @@ const ScreenHeaderTexts = {
         'Aktivér for å hoppe over',
       ),
     },
-    chat: {
-      a11yHint: _('Kontakt AtB', 'Contact AtB', 'Kontakt AtB'),
-    },
     info: {
       text: _('Info', 'Info', 'Info'),
     },
   },
 };
 
-export default orgSpecificTranslations(ScreenHeaderTexts, {
-  nfk: {
-    headerButton: {
-      chat: {
-        a11yHint: _(
-          'Kontakt Reis Nordland',
-          'Contact Reis Nordland',
-          'Kontakt Reis Nordland',
-        ),
-      },
-    },
-  },
-  fram: {
-    headerButton: {
-      chat: {
-        a11yHint: _('Kontakt FRAM', 'Contact FRAM', 'Kontakt FRAM'),
-      },
-    },
-  },
-  troms: {
-    headerButton: {
-      chat: {
-        a11yHint: _('Kontakt Svipper', 'Contact Svipper', 'Kontakt Svipper'),
-      },
-    },
-  },
-});
+export default ScreenHeaderTexts;

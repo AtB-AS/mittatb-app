@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {
+  GenericSectionItem,
   LinkSectionItem,
   Section,
   SelectionInlineSectionItem,
@@ -22,6 +23,9 @@ import {
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {useEffect} from 'react';
+import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAuthContext} from '@atb/modules/auth';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -32,6 +36,7 @@ export const Profile_SmartParkAndRideScreen = () => {
   const navigation = useNavigation<RootNavigationProps>();
   const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
     useVehicleRegistrationsQuery();
+  const {authenticationType} = useAuthContext();
 
   const shouldShowOnboarding = false; // useShouldShowSmartParkAndRideOnboarding(); // todo - use actual onboarding instead
   const canAddVehicleRegistrations =
@@ -99,14 +104,68 @@ export const Profile_SmartParkAndRideScreen = () => {
           )}
         </Section>
 
+        {authenticationType !== 'phone' && (
+          <MessageInfoBox
+            type="warning"
+            title={t(SmartParkAndRideTexts.notLoggedIn.title)}
+            message={t(SmartParkAndRideTexts.notLoggedIn.message)}
+          />
+        )}
+
         {!canAddVehicleRegistrations && (
           <View style={styles.maxVehiclesInfo}>
             <ThemeIcon svg={statusTypeToIcon('info', true, themeName)} />
             <ThemeText>{t(SmartParkAndRideTexts.add.max)}</ThemeText>
           </View>
         )}
+
+        <HowItWorksSection
+          onPress={() => {
+            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+          }}
+        />
       </View>
     </FullScreenView>
+  );
+};
+
+type HowItWorksSectionProps = {
+  onPress: () => void;
+};
+
+const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+
+  return (
+    <>
+      <ContentHeading text={t(SmartParkAndRideTexts.howItWorks.heading)} />
+      <Section>
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <ThemedBundlingCarSharing
+              height={61}
+              width={61}
+              style={{
+                alignSelf: 'flex-start',
+              }}
+            />
+            <View style={styles.howItWorks}>
+              <ThemeText typography="body__primary--bold">
+                {t(SmartParkAndRideTexts.howItWorks.title)}
+              </ThemeText>
+              <ThemeText typography="body__secondary" color="secondary">
+                {t(SmartParkAndRideTexts.howItWorks.description)}
+              </ThemeText>
+            </View>
+          </View>
+        </GenericSectionItem>
+        <LinkSectionItem
+          text={t(SmartParkAndRideTexts.howItWorks.link)}
+          onPress={onPress}
+        />
+      </Section>
+    </>
   );
 };
 
@@ -144,5 +203,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.small,
     marginTop: theme.spacing.xSmall,
+  },
+  horizontalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+  },
+  howItWorks: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
 }));

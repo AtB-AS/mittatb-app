@@ -84,6 +84,18 @@ class OnboardingPage {
   }
 
   /**
+   * Deny location prompt in onboarding
+   */
+  async denyLocationInOnboarding() {
+    await ElementHelper.waitForElement(
+      'id',
+      'locationWhenInUsePermissionButton',
+    );
+    await this.locationPermission.click();
+    await this.denyLocation();
+  }
+
+  /**
    * Tap through the onboarding
    */
   async skipOnboarding(testName: string = '') {
@@ -98,12 +110,7 @@ class OnboardingPage {
       }
 
       // Onboarding: location
-      await ElementHelper.waitForElement(
-        'id',
-        'locationWhenInUsePermissionButton',
-      );
-      await this.locationPermission.click();
-      await this.denyLocation();
+      await this.denyLocationInOnboarding();
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
       throw errMsg;

@@ -81,6 +81,7 @@ export function RadioSectionItem({
           <ThemeText
             typography="body__primary"
             style={[contentContainer, {color: textColor}]}
+            testID={`${testID}Text`}
           >
             {text}
           </ThemeText>
@@ -89,6 +90,7 @@ export function RadioSectionItem({
               typography="body__secondary"
               color="secondary"
               style={{marginTop: theme.spacing.small}}
+              testID={`${testID}SubText`}
             >
               {subtext}
             </ThemeText>

@@ -160,11 +160,7 @@ export const Profile_DesignSystemScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title="Design System"
-        leftButton={{type: 'back'}}
-        rightButton={{type: 'chat'}}
-      />
+      <FullScreenHeader title="Design System" leftButton={{type: 'back'}} />
 
       <ScrollView>
         <Section style={styles.section}>

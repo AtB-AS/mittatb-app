@@ -12,6 +12,16 @@ const SmartParkAndRideTexts = {
     heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
     addVehicle: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
+  howItWorks: {
+    heading: _('Les mer', 'Read more', 'Les meir'),
+    title: _('Hvordan funker det?', 'How does it work?', 'Korleis funkar det?'),
+    description: _(
+      'Med gyldig billett fra AtB kan du stå gratis på Ranheim Fabrikker i 48 timer.',
+      'With a valid ticket from AtB, you can park for free at Ranheim Fabrikker for 48 hours.',
+      'Med gyldig billett frå AtB kan du stå gratis på Ranheim Fabrikker i 48 timar.',
+    ),
+    link: _('Sånn funker det', 'How it works', 'Slik fungerer det'),
+  },
   add: {
     header: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
@@ -167,6 +177,18 @@ const SmartParkAndRideTexts = {
       },
       buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
     },
+  },
+  notLoggedIn: {
+    title: _(
+      'Du er ikke logget inn',
+      'You are not logged in',
+      'Du er ikkje logga inn',
+    ),
+    message: _(
+      'Hvis du logger inn i appen senere, må du registrere alle kjøretøy på nytt.',
+      'If you log in to the app later, you will need to register all vehicles again.',
+      'Om du loggar inn i appen seinare, må du registrere alle køyretøy på nytt.',
+    ),
   },
 };
 

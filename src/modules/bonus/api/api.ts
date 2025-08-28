@@ -1,4 +1,5 @@
 import {client} from '@atb/api';
+import {z} from 'zod';
 
 export const getBonusBalance = (isLoggedIn: boolean): Promise<number> => {
   if (!isLoggedIn) {
@@ -28,19 +29,18 @@ export const buyValueCodeWithBonusPoints = (
     .then((response) => String(response.data.code));
 };
 
+const BonusAmountEarnedSchema = z.object({
+  amount: z.number(),
+});
+
+export type BonusAmountEarned = z.infer<typeof BonusAmountEarnedSchema>;
+
 export const getBonusAmountEarned = (
   fareContractId: string | undefined,
-): Promise<number> => {
+): Promise<BonusAmountEarned> => {
   return client
     .get(`/bonus/v1/fare-contract/${fareContractId}/amount`, {
       authWithIdToken: true,
     })
-    .then((response) => {
-      const value =
-        response.data.amount === null ? 0 : Number(response.data.amount);
-      if (value == 0) {
-        throw new Error();
-      }
-      return value;
-    });
+    .then((response) => BonusAmountEarnedSchema.parse(response.data));
 };

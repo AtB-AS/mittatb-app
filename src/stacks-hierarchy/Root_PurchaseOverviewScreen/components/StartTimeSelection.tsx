@@ -54,7 +54,7 @@ export function StartTimeSelection({
             ),
           )}
           accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
-          testID="selectZonesButton"
+          testID="startTimeButton"
         >
           <View style={styles.sectionContent}>
             <ThemeText typography="body__primary--bold">

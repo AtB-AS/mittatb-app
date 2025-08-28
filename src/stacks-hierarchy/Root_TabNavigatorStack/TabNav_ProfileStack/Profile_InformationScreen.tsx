@@ -11,12 +11,14 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const Profile_InformationScreen = () => {
   const style = useStyle();
   const {t, language} = useTranslation();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
+  const {service_disruption_url} = useRemoteConfigContext();
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
@@ -47,6 +49,24 @@ export const Profile_InformationScreen = () => {
         style={style.contentContainer}
       >
         <Section>
+          {service_disruption_url && (
+            <LinkSectionItem
+              rightIcon={{svg: ExternalLink}}
+              text={t(
+                ProfileTexts.sections.information.linkSectionItems
+                  .serviceDisruptions.label,
+              )}
+              testID="serviceDisruptionsButton"
+              onPress={() => Linking.openURL(service_disruption_url)}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.information.linkSectionItems
+                    .serviceDisruptions.a11yLabel,
+                ),
+                accessibilityRole: 'link',
+              }}
+            />
+          )}
           {ticketingInfoUrl && (
             <LinkSectionItem
               rightIcon={{svg: ExternalLink}}

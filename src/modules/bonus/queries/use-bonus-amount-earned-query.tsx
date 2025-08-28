@@ -3,6 +3,13 @@ import {useAuthContext} from '@atb/modules/auth';
 import {getBonusAmountEarned} from '../api/api';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
+export const getBonusAmountEarnedQueryKey = (
+  userId: string | undefined,
+  fareContractId: string | undefined,
+) => {
+  return ['bonusUserBalance', userId, fareContractId];
+};
+
 export const useBonusAmountEarnedQuery = (
   fareContractId: string | undefined,
   disabled: boolean = false,
@@ -13,9 +20,8 @@ export const useBonusAmountEarnedQuery = (
   const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
-    queryKey: ['bonusUserBalance', userId, fareContractId],
+    queryKey: getBonusAmountEarnedQueryKey(userId, fareContractId),
     queryFn: () => getBonusAmountEarned(fareContractId),
-    retry: 3,
     enabled:
       authStatus === 'authenticated' &&
       isBonusProgramEnabled &&

@@ -6,16 +6,13 @@ import {
 } from '@atb/modules/map';
 
 import {useMemo} from 'react';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
 
 export const usePreProcessedGeofencingZones = (
-  vehicle: VehicleExtendedFragment,
+  systemId: string,
+  vehicleTypeId: string,
 ) => {
-  const systemId = vehicle?.system.id;
-  const vehicleTypeId = vehicle?.vehicleType.id;
-
   const {theme} = useThemeContext();
 
   const {

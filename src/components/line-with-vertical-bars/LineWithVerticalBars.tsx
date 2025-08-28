@@ -122,7 +122,10 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
   progressBar: {
     height: 12,
-    width: '100%',
+    // Make the animation slightly larger than the view to avoid glitches along
+    // the edges.
+    width: '104%',
+    marginLeft: '-2%',
     overflow: 'hidden',
   },
   verticalLine: {

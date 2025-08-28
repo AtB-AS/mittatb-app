@@ -14,6 +14,7 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
+import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
 
 export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();
@@ -28,7 +29,11 @@ export const Profile_DeleteProfileScreen = () => {
 
   const {deleteCollectedData} = useBeaconsContext();
 
+  const {mutateAsync: deleteAgeVerification} =
+    useDeleteAgeVerificationMutation();
+
   const handleDeleteProfile = async () => {
+    await deleteAgeVerification();
     const isProfileDeleted = await deleteProfile();
     if (isProfileDeleted) {
       await deleteCollectedData();

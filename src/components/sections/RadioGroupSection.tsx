@@ -47,7 +47,7 @@ export function RadioGroupSection<T>({
             hideSubtext={hideSubtext}
             subtext={itemToSubtext?.(item, index) || ''}
             onPress={() => onSelect?.(item, index)}
-            testID={'radioButton' + itemToText(item, index)}
+            testID={`radioButton${index}`}
             accessibilityHint={thisItemSelected ? '' : accessibilityHint}
             accessibilityLabel={itemToA11yLabel?.(item)}
             rightAction={itemToRightAction?.(item)}

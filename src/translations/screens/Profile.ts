@@ -378,6 +378,14 @@ const ProfileTexts = {
             'Tilgjengelegheitserklæring, åpner side i nettlesar',
           ),
         },
+        serviceDisruptions: {
+          label: _('Driftsmeldinger', 'Service disruptions', 'Driftsmeldingar'),
+          a11yLabel: _(
+            'Driftsmeldinger, åpner side i nettleser',
+            'Service disruptions, opens page in browser',
+            'Driftsmeldingar, opnar side i nettlesar',
+          ),
+        },
       },
     },
     contact: {
@@ -399,6 +407,11 @@ const ProfileTexts = {
         'Ofte stilte spørsmål',
         'Frequently asked questions',
         'Ofte stilte spørsmål',
+      ),
+      chat: _(
+        'Gi tilbakemelding om appen',
+        'Give feedback about the app',
+        'Gi tilbakemelding om appen',
       ),
     },
   },

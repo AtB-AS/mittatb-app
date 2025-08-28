@@ -171,8 +171,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     <View style={style.container}>
       <FullScreenHeader
         title={t(DashboardTexts.header.title)}
-        rightButton={{type: 'chat'}}
-        leftButton={{type: 'status-disruption'}}
         globalMessageContext={GlobalMessageContextEnum.appAssistant}
       />
 

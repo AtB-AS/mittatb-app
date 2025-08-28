@@ -12,6 +12,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
+  useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
@@ -25,14 +26,13 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
-import {
-  findReferenceDataById,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useFareContractLegs} from './use-fare-contract-legs';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
 
 type Props = {
   now: number;
@@ -56,14 +56,14 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelRights, validityStatus} = getFareContractInfo(
+  const {validityStatus} = getFareContractInfo(
     now,
     fareContract,
     currentUserId,
   );
 
-  const firstTravelRight = travelRights[0];
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const firstTravelRight = fareContract.travelRights[0];
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
@@ -71,16 +71,20 @@ export const FareContractView: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
+  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const shouldShowEarnedBonusPoints =
+  const shouldShowBonusAmountEarned =
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.id,
-    !shouldShowEarnedBonusPoints,
+    !shouldShowBonusAmountEarned,
   );
 
   return (
@@ -111,11 +115,23 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
-        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
       )}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <LegsSummary legs={legs} compact={true} />
+        </GenericSectionItem>
+      )}
+
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+        isCanBeActivatedNowFareContract(
+          fareContract,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
           <ActivateNowSectionItem
             fareContractId={fareContract.id}
             fareProductType={preassignedFareProduct?.type}
