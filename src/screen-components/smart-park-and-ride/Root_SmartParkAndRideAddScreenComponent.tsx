@@ -14,6 +14,9 @@ import {View, ScrollView} from 'react-native';
 
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useOnboardingNavigation} from '@atb/modules/onboarding';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useAuthContext} from '@atb/modules/auth';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = {
   showHeader?: boolean;
@@ -28,6 +31,8 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
   const [licensePlate, setLicensePlate] = useState('');
   const {theme} = useThemeContext();
   const {continueFromOnboardingSection} = useOnboardingNavigation();
+  const focusRef = useFocusOnLoad(true);
+  const {authenticationType} = useAuthContext();
 
   const navigateBack = () => continueFromOnboardingSection('smartParkAndRide');
 
@@ -40,14 +45,23 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
     <View style={styles.container}>
       <View style={styles.content}>
         <ThemedBundlingCarSharing style={styles.illustration} width={150} />
-        <ThemeText typography="body__primary--big--bold">
-          {t(SmartParkAndRideTexts.add.content.title)}
-        </ThemeText>
+        <View ref={focusRef} accessible={true} accessibilityRole="header">
+          <ThemeText typography="body__primary--big--bold">
+            {t(SmartParkAndRideTexts.add.content.title)}
+          </ThemeText>
+        </View>
         <ThemeText typography="body__primary" style={styles.descriptionText}>
           {t(SmartParkAndRideTexts.add.content.text)}
         </ThemeText>
       </View>
 
+      {authenticationType !== 'phone' && (
+        <MessageInfoBox
+          type="warning"
+          title={t(SmartParkAndRideTexts.notLoggedIn.title)}
+          message={t(SmartParkAndRideTexts.notLoggedIn.message)}
+        />
+      )}
       <Section>
         <TextInputSectionItem
           label={t(SmartParkAndRideTexts.add.inputs.nickname.label)}
@@ -85,7 +99,6 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
     </View>
   );
 
-  // todo, align better?
   if (showHeader) {
     return (
       <FullScreenView
