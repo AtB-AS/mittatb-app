@@ -17,6 +17,7 @@ import {useOnboardingNavigation} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   showHeader?: boolean;
@@ -132,37 +133,41 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    rowGap: theme.spacing.small,
-    margin: theme.spacing.large,
-  },
-  content: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: theme.spacing.medium,
-    marginTop: theme.spacing.xLarge * 2,
-    marginBottom: theme.spacing.xLarge,
-  },
-  illustration: {
-    marginBottom: theme.spacing.large,
-  },
-  descriptionText: {
-    textAlign: 'center',
-  },
-  footer: {
-    display: 'flex',
-    gap: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
-  },
-  hideHeaderContainer: {
-    flex: 1,
-    backgroundColor: theme.color.background.accent[0].background,
-  },
-  flex: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {top: safeAreaTop} = useSafeAreaInsets();
+  return {
+    container: {
+      rowGap: theme.spacing.small,
+      margin: theme.spacing.large,
+    },
+    content: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: theme.spacing.medium,
+      marginTop: theme.spacing.xLarge * 2,
+      marginBottom: theme.spacing.xLarge,
+    },
+    illustration: {
+      marginBottom: theme.spacing.large,
+    },
+    descriptionText: {
+      textAlign: 'center',
+    },
+    footer: {
+      display: 'flex',
+      gap: theme.spacing.medium,
+      paddingTop: theme.spacing.medium,
+    },
+    hideHeaderContainer: {
+      paddingTop: safeAreaTop,
+      flex: 1,
+      backgroundColor: theme.color.background.accent[0].background,
+    },
+    flex: {
+      flex: 1,
+    },
+    scrollContent: {
+      flexGrow: 1,
+    },
+  };
+});
