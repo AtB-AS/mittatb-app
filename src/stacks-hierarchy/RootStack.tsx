@@ -195,6 +195,7 @@ export const RootStack = () => {
       <Host>
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
+            navigationInChildEnabled // This is needed for react-navigation v7 and higher, will be removed in the future and we will have to fix nested navigation
             onStateChange={trackNavigation}
             initialState={getInitialNavigationContainerState()}
             ref={navRef}

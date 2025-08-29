@@ -42,7 +42,7 @@ export const Ticketing_TicketTabNavStack = () => {
         options={{
           tabBarLabel: t(TicketingTexts.purchaseTab.label),
           tabBarAccessibilityLabel: t(TicketingTexts.purchaseTab.a11yLabel),
-          tabBarTestID: 'purchaseTab',
+          tabBarButtonTestID: 'purchaseTab',
         }}
       />
       <TopTabNav.Screen
@@ -52,7 +52,7 @@ export const Ticketing_TicketTabNavStack = () => {
           tabBarLabel: t(
             TicketingTexts.availableFareProductsAndReservationsTab.label,
           ),
-          tabBarTestID: 'activeTicketsTab',
+          tabBarButtonTestID: 'activeTicketsTab',
         }}
       />
     </TopTabNav.Navigator>
@@ -119,7 +119,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             <ThemeText
               typography={isFocused ? 'body__primary--bold' : 'body__primary'}
               color={tabColor}
-              testID={options.tabBarTestID}
+              testID={options.tabBarButtonTestID}
             >
               <>{label}</>
             </ThemeText>
