@@ -95,5 +95,6 @@ export const useMapSelectionChangeEffect = (
     selectedFeature,
     onReportParkingViolation,
     closeCallback,
+    mapSelectionAction,
   };
 };

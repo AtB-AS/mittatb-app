@@ -40,6 +40,7 @@ import {NotificationContextProvider} from '@atb/modules/notifications';
 import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 // https://rnfirebase.io/migrating-to-v22
 (globalThis as any).RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
@@ -108,13 +109,15 @@ export const App = () => {
                                                   <AnnouncementsContextProvider>
                                                     <NotificationContextProvider>
                                                       <BottomSheetContextProvider>
-                                                        <FeedbackQuestionsContextProvider>
-                                                          <BeaconsContextProvider>
-                                                            <OnboardingContextProvider>
-                                                              <RootStack />
-                                                            </OnboardingContextProvider>
-                                                          </BeaconsContextProvider>
-                                                        </FeedbackQuestionsContextProvider>
+                                                        <BottomSheetModalProvider>
+                                                          <FeedbackQuestionsContextProvider>
+                                                            <BeaconsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
+                                                            </BeaconsContextProvider>
+                                                          </FeedbackQuestionsContextProvider>
+                                                        </BottomSheetModalProvider>
                                                       </BottomSheetContextProvider>
                                                     </NotificationContextProvider>
                                                   </AnnouncementsContextProvider>

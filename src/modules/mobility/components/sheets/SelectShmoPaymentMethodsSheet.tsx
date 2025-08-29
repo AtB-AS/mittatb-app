@@ -5,7 +5,6 @@ import {Button} from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -18,6 +17,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
+import {BottomSheet} from '@atb/components/bottomsheet-new';
 
 type Props = {
   onSelect: () => void;
@@ -54,9 +54,11 @@ export const SelectShmoPaymentMethodSheet = ({
   }, [defaultPaymentMethod]);
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      onClose={onClose}
+    <BottomSheet
+      closeCallback={onClose}
+      enableDynamicSizing={true}
+      detached={false}
+      bottomMargin={0}
     >
       <ScrollView>
         <View style={{flex: 1}}>
@@ -120,7 +122,7 @@ export const SelectShmoPaymentMethodSheet = ({
           </FullScreenFooter>
         </View>
       </ScrollView>
-    </BottomSheetContainer>
+    </BottomSheet>
   );
 };
 

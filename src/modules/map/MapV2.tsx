@@ -62,6 +62,7 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {MapBottomSheets} from './hooks/use-map-bottom-sheets';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -94,6 +95,7 @@ export const MapV2 = (props: MapProps) => {
     selectedFeature: mapSelectionSelectedFeature,
     onReportParkingViolation,
     closeCallback: mapSelectionCloseCallback,
+    mapSelectionAction,
   } = useMapSelectionChangeEffect(
     props,
     mapViewRef,
@@ -433,6 +435,12 @@ export const MapV2 = (props: MapProps) => {
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
+      <MapBottomSheets
+        selectedMapItem={mapSelectionAction}
+        vehicleId={vehicle?.id}
+        unSelectMapItem={mapSelectionCloseCallback}
+        bottomMargin={tabBarHeight}
+      />
     </View>
   );
 };
