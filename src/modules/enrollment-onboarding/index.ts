@@ -3,7 +3,4 @@ export type {
   EnrollmentOnboardingConfig,
   EnrollmentOnboardingConfigId,
 } from './types';
-export {
-  EnrollmentOnboardingContextProvider,
-  useEnrollmentOnboarding,
-} from './EnrollmentOnboardingContext';
+export {useNavigateToNextEnrollmentOnboardingScreen} from './use-navigate-to-next-onboarding-screen';

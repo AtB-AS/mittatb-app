@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
+  useState,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {storage} from '@atb/modules/storage';
@@ -30,6 +31,7 @@ import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useVehicleRegistrationsQuery} from '../smart-park-and-ride';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -44,6 +46,8 @@ type OnboardingContextState = Omit<
   completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartAllOnboardingSections: () => void;
+  currentRouteName: string;
+  setCurrentRouteName: (currentRouteName: string) => void;
 };
 
 type OnboardingReducerAction =
@@ -201,7 +205,12 @@ export const OnboardingContextProvider = ({children}: Props) => {
     [loadedOnboardingSections, restartOnboardingSection],
   );
 
-  const shouldShowArgs = useShouldShowArgs(loadedOnboardingSections);
+  const [currentRouteName, setCurrentRouteName] = useState('');
+
+  const shouldShowArgs = useShouldShowArgs(
+    loadedOnboardingSections,
+    currentRouteName,
+  );
 
   const onboardingSections = useMemo(
     () =>
@@ -220,6 +229,8 @@ export const OnboardingContextProvider = ({children}: Props) => {
         completeOnboardingSection,
         restartOnboardingSection,
         restartAllOnboardingSections,
+        currentRouteName,
+        setCurrentRouteName,
       }}
     >
       <OnboardingDispatch.Provider value={dispatch}>
@@ -286,6 +297,7 @@ const storeOnboardingSectionIsOnboarded = async (
 
 const useShouldShowArgs = (
   loadedOnboardingSections: LoadedOnboardingSection[],
+  currentRouteName: string,
 ): ShouldShowArgsType => {
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
@@ -313,6 +325,13 @@ const useShouldShowArgs = (
 
   const {mobileTokenStatus} = useMobileTokenContext();
 
+  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
+    useVehicleRegistrationsQuery(
+      currentRouteName !== 'Profile_SmartParkAndRideScreen',
+    );
+  const hasVehicleRegistrations =
+    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
+
   return useMemo(
     () => ({
       hasFareContractWithActivatedNotification,
@@ -326,6 +345,8 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      currentRouteName,
+      hasVehicleRegistrations,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -339,6 +360,8 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
+      currentRouteName,
+      hasVehicleRegistrations,
     ],
   );
 };

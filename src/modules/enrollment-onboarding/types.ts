@@ -3,13 +3,22 @@ import {
   BonusPilotEnrollmentScreenNames,
 } from '../bonus';
 
-export type EnrollmentOnboardingScreenName = BonusPilotEnrollmentScreenNames;
+import {
+  sparPilotEnrollmentId,
+  SparPilotEnrollmentScreenNames,
+} from '../smart-park-and-ride';
 
-export type EnrollmentOnboardingConfigId = typeof bonusPilotEnrollmentId;
+export type EnrollmentOnboardingScreenName =
+  | BonusPilotEnrollmentScreenNames
+  | SparPilotEnrollmentScreenNames;
+
+export type EnrollmentOnboardingConfigId =
+  | typeof bonusPilotEnrollmentId
+  | typeof sparPilotEnrollmentId;
 
 export type EnrollmentOnboardingConfig = {
   id: EnrollmentOnboardingConfigId;
-  enrollmentIds: string[];
+  enrollmentIds?: string[];
   onboardingScreens: {
     name: EnrollmentOnboardingScreenName;
     component: React.ComponentType<any>;

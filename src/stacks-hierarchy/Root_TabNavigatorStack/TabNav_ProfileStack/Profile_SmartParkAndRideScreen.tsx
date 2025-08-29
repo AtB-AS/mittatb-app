@@ -17,41 +17,27 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
-  SmartParkAndRideOnboardingProvider,
-  useShouldShowSmartParkAndRideOnboarding,
   useVehicleRegistrationsQuery,
   VehicleRegistration,
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {useEffect} from 'react';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
-const Profile_SmartParkAndRideScreenContent = () => {
+export const Profile_SmartParkAndRideScreen = () => {
   const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations, isLoading: isLoadingVehicleRegistrations} =
-    useVehicleRegistrationsQuery();
+  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
 
-  const shouldShowOnboarding = useShouldShowSmartParkAndRideOnboarding();
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
-  const hasVehicleRegistrations =
-    !!vehicleRegistrations?.length && !isLoadingVehicleRegistrations;
-
-  // Auto-navigate to onboarding if user hasn't seen it yet and has no vehicles registered
-  useEffect(() => {
-    if (shouldShowOnboarding && !hasVehicleRegistrations) {
-      navigation.navigate('Root_SmartParkAndRideOnboardingStack');
-    }
-  }, [shouldShowOnboarding, hasVehicleRegistrations, navigation]);
 
   return (
     <FullScreenView
@@ -121,7 +107,10 @@ const Profile_SmartParkAndRideScreenContent = () => {
 
         <HowItWorksSection
           onPress={() => {
-            navigation.navigate('Root_SmartParkAndRideOnboardingStack');
+            navigation.navigate({
+              name: 'Root_EnrollmentOnboardingStack',
+              params: {configId: 'spar-pilot'},
+            });
           }}
         />
       </View>
@@ -214,13 +203,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
 }));
-
-const Profile_SmartParkAndRideScreen = () => {
-  return (
-    <SmartParkAndRideOnboardingProvider>
-      <Profile_SmartParkAndRideScreenContent />
-    </SmartParkAndRideOnboardingProvider>
-  );
-};
-
-export {Profile_SmartParkAndRideScreen};

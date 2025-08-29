@@ -11,7 +11,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -60,7 +60,7 @@ import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
-import {useOnboardingFlow} from '@atb/modules/onboarding';
+import {useOnboardingContext, useOnboardingFlow} from '@atb/modules/onboarding';
 import {useRegisterIntercomUser} from '@atb/modules/chat';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
@@ -81,7 +81,7 @@ import {
   Root_SmartParkAndRideEditScreen,
 } from './Root_SmartParkAndRide';
 import {Root_EnrollmentOnboardingStack} from './Root_EntrollmentOnboradingStack';
-import {Root_SmartParkAndRideOnboardingStack} from './Root_SmartParkAndRide/onboarding';
+import {getActiveRouteName} from '@atb/utils/navigation';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -94,6 +94,16 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+  const {setCurrentRouteName} = useOnboardingContext();
+  const onNavigationStateChange = useCallback(
+    (state?: NavigationState) => {
+      const currentRouteName = !state ? '' : getActiveRouteName(state);
+      setCurrentRouteName(currentRouteName);
+      state && trackNavigation(currentRouteName);
+    },
+    [setCurrentRouteName],
+  );
+
   const {minimum_app_version} = useRemoteConfigContext();
 
   useBeaconsContext();
@@ -195,7 +205,7 @@ export const RootStack = () => {
       <Host>
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
-            onStateChange={trackNavigation}
+            onStateChange={onNavigationStateChange}
             initialState={getInitialNavigationContainerState()}
             ref={navRef}
             theme={ReactNavigationTheme}
@@ -463,10 +473,6 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_SmartParkAndRideEditScreen"
                   component={Root_SmartParkAndRideEditScreen}
-                />
-                <Stack.Screen
-                  name="Root_SmartParkAndRideOnboardingStack"
-                  component={Root_SmartParkAndRideOnboardingStack}
                 />
                 <Stack.Screen
                   name="Root_EnrollmentOnboardingStack"

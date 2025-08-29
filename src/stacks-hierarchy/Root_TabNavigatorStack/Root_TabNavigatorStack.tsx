@@ -34,10 +34,12 @@ import {useOnPushNotificationOpened} from '@atb/modules/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {
+  useOnboardingContext,
   useOnboardingFlow,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
 import {useAuthContext} from '@atb/modules/auth';
+import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
@@ -53,17 +55,27 @@ export const Root_TabNavigatorStack = () => {
 
   const navigation = useNavigation<RootNavigationProps>();
 
+  const {currentRouteName} = useOnboardingContext();
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
 
   useEffect(() => {
-    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
-
-    const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
-    nextOnboardingScreen?.name && goToScreen(false, nextOnboardingScreen);
-  }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
+    if (
+      isDefined(nextOnboardingSection?.customEntryPointRouteName)
+        ? currentRouteName === nextOnboardingSection?.customEntryPointRouteName
+        : navigation.isFocused()
+    ) {
+      goToScreen(false, nextOnboardingSection?.initialScreen);
+    }
+  }, [
+    nextOnboardingSection?.initialScreen,
+    nextOnboardingSection?.customEntryPointRouteName,
+    goToScreen,
+    navigation,
+    currentRouteName,
+  ]);
 
   const getProfileNotification = (): ThemeIconProps['notification'] => {
     if (customerNumber === undefined || unreadCount) {

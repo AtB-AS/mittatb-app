@@ -116,7 +116,7 @@ const useEnroll = () => {
 
           if (enrollment.enrollmentId) {
             const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
-              config.enrollmentIds.includes(enrollment.enrollmentId),
+              config?.enrollmentIds?.includes(enrollment.enrollmentId),
             );
 
             if (onboardingConfig) {

@@ -169,11 +169,6 @@ export const Profile_DebugInfoScreen = () => {
               );
             })}
           />
-
-          <ButtonSectionItem
-            label="Reset Smart Park & Ride onboarding"
-            onPress={() => storage.remove('@ATB_smart_park_and_ride_onboarded')}
-          />
         </Section>
         <Section style={styles.section}>
           <GenericSectionItem>
