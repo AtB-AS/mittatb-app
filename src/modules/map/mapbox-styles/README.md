@@ -41,13 +41,13 @@ const visibleLayersWithoutMetadata = styleFromMapbox.layers
     });
 
 copy({
-    sources: styleFromMapbox.sources
-    glyphs: styleFromMapbox.glyphs
+    sources: styleFromMapbox.sources,
+    glyphs: styleFromMapbox.glyphs,
     layers: visibleLayersWithoutMetadata
 })
 ```
 
-Paste it in the mapbox style files. Then make sure to use env variables for sources and glyphs:
+Paste it in the mapbox style files. Then make sure to use env variables for sources and glyphs (very likely that you just want to discard the changes to sources and glyphs):
 
 ```ts
 sources: {
