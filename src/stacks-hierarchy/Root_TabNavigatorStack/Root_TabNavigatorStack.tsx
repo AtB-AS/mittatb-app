@@ -201,7 +201,14 @@ function tabSettings(
     tabBarLabel: ({color}) => (
       <ThemeText
         typography="body__secondary"
-        style={{color, textAlign: 'center', lineHeight}}
+        style={{
+          color,
+          textAlign: 'center',
+          lineHeight,
+          // react-navigation v7 adds 5px padding to the tab bar label, and breaks text too early
+          // this workaround is to use negative margins to extend beyond parent padding
+          marginHorizontal: -5,
+        }}
         accessibilityLabel={tabBarA11yLabel}
         maxFontSizeMultiplier={1.2}
         testID={testID}
