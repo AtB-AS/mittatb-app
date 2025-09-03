@@ -47,7 +47,11 @@ export const TimeContextProvider = ({children}: Props) => {
 
   useInterval(
     () => setServerNow(Date.now() + serverTimeOffsetGlobal),
-    [],
+    // NOTE: When we get new server time data, we need to reset this interval.
+    // This is due to a bug in React Native that causes intervals to stop
+    // running when device time is set back in time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data],
     1000,
     false,
     true,
