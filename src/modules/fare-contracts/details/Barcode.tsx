@@ -19,6 +19,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -249,28 +250,34 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  aztecCode: {
-    width: '100%',
-    aspectRatio: 1,
-    padding: theme.spacing.large,
-    backgroundColor: '#FFFFFF',
-    maxHeight: 275,
-  },
-  staticBottomContainer: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  staticQrCode: {
-    padding: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: 250,
-  },
-  staticQrCodeSmall: {
-    maxWidth: 125,
-  },
-}));
+const useStyles = () => {
+  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
+  return StyleSheet.createThemeHook((theme) => ({
+    aztecCode: {
+      width: '100%',
+      aspectRatio: 1,
+      padding:
+        aztec_code_padding == Number.MIN_SAFE_INTEGER
+          ? theme.spacing.large
+          : aztec_code_padding,
+      backgroundColor: '#FFFFFF',
+      maxHeight: aztec_code_max_height,
+    },
+    staticBottomContainer: {
+      flex: 1,
+      backgroundColor: '#ffffff',
+    },
+    staticQrCode: {
+      padding: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      maxWidth: 250,
+    },
+    staticQrCodeSmall: {
+      maxWidth: 125,
+    },
+  }))();
+};
 
 function useStaticBarcodeBottomSheet(
   qrCodeSvg: string | undefined,
