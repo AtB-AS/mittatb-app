@@ -3140,6 +3140,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/geolocation/-/geolocation-3.4.0.tgz#8b6ee024a71cf94526ab796af1e9ae140684802c"
   integrity sha512-bzZH89/cwmpkPMKKveoC72C4JH0yF4St5Ceg/ZM9pA1SqX9MlRIrIrrOGZ/+yi++xAvFDiYfihtn9TvXWU9/rA==
 
+"@react-native-community/slider@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-5.0.1.tgz#478789e526af31e0660c6f49fa5c5429d8d4287b"
+  integrity sha512-K3JRWkIW4wQ79YJ6+BPZzp1SamoikxfPRw7Yw4B4PElEQmqZFrmH9M5LxvIo460/3QSrZF/wCgi3qizJt7g/iw==
+
 "@react-native-firebase/analytics@^23.2.2":
   version "23.2.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-23.2.2.tgz#1ea4252c2147e75a092e3103d266037e6f3f2c7e"
@@ -10438,10 +10443,10 @@ react-native-get-random-values@^1.11.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 
-react-native-in-app-review@^4.3.3:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-in-app-review/-/react-native-in-app-review-4.4.1.tgz#3bbc3ca3729ad4076057c66b9aecf931d9328582"
-  integrity sha512-669qhR+H4oqQwHf/6CbCMWl7CVpCSKcuMUxil5byNAG7tMaPns/NmfCAm9xC9cCM+kzAfaGdXW8CbtqCJXMFIQ==
+react-native-in-app-review@4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-in-app-review/-/react-native-in-app-review-4.4.2.tgz#eaa908cdc7adee26158903a0e6f22ca6af415f7b"
+  integrity sha512-iUoZnP4cgpbiNMLpqPgK40AcT7xluJhlwEPKFEfcCZsWT4MzGygS8p1dxf6e1NH/LUgUEtjsZQ8ka/SbF1pE8Q==
 
 react-native-inappbrowser-reborn@^3.7.0:
   version "3.7.0"
@@ -10461,10 +10466,10 @@ react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
-react-native-kettle-module@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-2.0.0.tgz#b85ef8924300d37650346b9c2bedd97eb660387b"
-  integrity sha512-YnQlmRhok23rU1/4GCIgyjKaFVnucCCUok83vdjz3yrTQy9IOfObO/bBwrPlA6bpTWfNLQuH5gHTsSB4UMwXfg==
+react-native-kettle-module@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.2.0.tgz#52a4b0a9d70e2bdf9638242d38b03ee7c2cdd834"
+  integrity sha512-8rsjlqWecppYzRStFLvcCNWeOcBP0apZI2v1ZEccgMz47Kplp0WApI7FNrXK70TrEJUvniVEZ+3AA6iQ7gzI7g==
 
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
