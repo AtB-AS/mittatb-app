@@ -4,16 +4,25 @@ import {
   SvvVehicleInfoSchema,
   VehicleRegistration,
 } from '../types';
+import {getErrorResponse} from '@atb/api/utils';
+import {isAxiosError} from 'axios';
 
-export const addVehicleRegistration = (
+export const addVehicleRegistration = async (
   licensePlate: string,
   nickname?: string,
 ): Promise<void> => {
-  return client.post(
-    `/spar/v1/vehicle-registrations`,
-    {licensePlate, nickname},
-    {authWithIdToken: true},
-  );
+  try {
+    await client.post(
+      `/spar/v1/vehicle-registrations`,
+      {licensePlate, nickname},
+      {authWithIdToken: true},
+    );
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw getErrorResponse(error);
+    }
+    throw error;
+  }
 };
 
 export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {

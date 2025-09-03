@@ -69,6 +69,23 @@ const SmartParkAndRideTexts = {
         },
       },
     },
+    errors: {
+      invalidLicensePlate: _(
+        'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 tegn.',
+        'Invalid license plate. The license plate must have 2-14 characters.',
+        'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 teikn.',
+      ),
+      vehicleAlreadyAdded: _(
+        'Dette kjøretøyet er allerede lagt til.',
+        'This vehicle has already been added.',
+        'Dette køyretøyet er allereie lagt til.',
+      ),
+      unknown: _(
+        'Noe gikk galt. Prøv igjen.',
+        'Something went wrong. Please try again.',
+        'Noko gjekk gale. Prøv igjen.',
+      ),
+    },
     footer: {
       add: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
       later: _('Gjør det senere', 'Do it later', 'Gjer det seinare'),

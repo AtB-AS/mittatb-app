@@ -7,7 +7,7 @@ import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-rid
 import {LicensePlateSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
-import {useTranslation} from '@atb/translations';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
@@ -37,8 +37,10 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const navigateBack = () => continueFromOnboardingSection('smartParkAndRide');
 
-  const {mutateAsync: handleAddVehicleRegistration} =
-    useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
+  const {
+    mutateAsync: handleAddVehicleRegistration,
+    error: handleAddVehicleError,
+  } = useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
 
   const themeColor = theme.color.background.accent[0];
 
@@ -84,6 +86,12 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const footerNode = (
     <View style={styles.footer}>
+      {handleAddVehicleError && (
+        <MessageInfoBox
+          type="error"
+          message={getErrorMessageTranslation(handleAddVehicleError?.kind, t)}
+        />
+      )}
       <Button
         expanded={true}
         onPress={() => handleAddVehicleRegistration()}
@@ -171,3 +179,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
+
+function getErrorMessageTranslation(
+  kind: string | undefined,
+  t: TranslateFunction,
+) {
+  switch (kind) {
+    case 'INVALID_LICENSE_PLATE':
+      return t(SmartParkAndRideTexts.add.errors.invalidLicensePlate);
+    case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
+      return t(SmartParkAndRideTexts.add.errors.vehicleAlreadyAdded);
+    default:
+      return t(SmartParkAndRideTexts.add.errors.unknown);
+  }
+}
