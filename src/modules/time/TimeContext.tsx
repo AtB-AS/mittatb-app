@@ -46,7 +46,7 @@ export const TimeContextProvider = ({children}: Props) => {
   }, [data]);
 
   useInterval(
-    () => setServerNow(Date.now() - serverTimeOffsetGlobal),
+    () => setServerNow(Date.now() + serverTimeOffsetGlobal),
     [],
     1000,
     false,
