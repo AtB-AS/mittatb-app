@@ -15,5 +15,11 @@ gem 'xcodeproj', '~> 1.27.0'
 gem 'concurrent-ruby', '< 1.3.4'
 gem 'configure_extensions'
 
+# Ruby 3.4.0 has removed some libraries from the standard library.
+gem 'bigdecimal'
+gem 'logger'
+gem 'benchmark'
+gem 'mutex_m'
+
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
 eval_gemfile(plugins_path) if File.exist?(plugins_path)
