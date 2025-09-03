@@ -186,10 +186,10 @@ function getErrorMessageTranslation(
 ) {
   switch (kind) {
     case 'INVALID_LICENSE_PLATE':
-      return t(SmartParkAndRideTexts.add.errors.invalidLicensePlate);
+      return t(SmartParkAndRideTexts.errors.invalidLicensePlate);
     case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
-      return t(SmartParkAndRideTexts.add.errors.vehicleAlreadyAdded);
+      return t(SmartParkAndRideTexts.errors.vehicleAlreadyAdded);
     default:
-      return t(SmartParkAndRideTexts.add.errors.unknown);
+      return t(SmartParkAndRideTexts.errors.unknown);
   }
 }

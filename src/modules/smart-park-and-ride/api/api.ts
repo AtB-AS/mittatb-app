@@ -25,25 +25,33 @@ export const addVehicleRegistration = async (
   }
 };
 
-export const getVehicleRegistrations = (): Promise<VehicleRegistration[]> => {
-  return client
-    .get(`/spar/v1/vehicle-registrations`, {
-      authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 404,
-    })
-    .then((response) => response.data.vehicles);
+export const getVehicleRegistrations = async (): Promise<
+  VehicleRegistration[]
+> => {
+  const response = await client.get(`/spar/v1/vehicle-registrations`, {
+    authWithIdToken: true,
+    skipErrorLogging: (error_1) => error_1.response?.status === 404,
+  });
+  return response.data.vehicles;
 };
 
-export const editVehicleRegistration = (
+export const editVehicleRegistration = async (
   id: string,
   licensePlate: string,
   nickname?: string,
 ): Promise<void> => {
-  return client.put(
-    `/spar/v1/vehicle-registrations/${id}`,
-    {licensePlate, nickname},
-    {authWithIdToken: true},
-  );
+  try {
+    await client.put(
+      `/spar/v1/vehicle-registrations/${id}`,
+      {licensePlate, nickname},
+      {authWithIdToken: true},
+    );
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw getErrorResponse(error);
+    }
+    throw error;
+  }
 };
 
 export const deleteVehicleRegistration = (id: string): Promise<void> => {
@@ -52,13 +60,12 @@ export const deleteVehicleRegistration = (id: string): Promise<void> => {
   });
 };
 
-export const searchVehicleInformation = (
+export const searchVehicleInformation = async (
   licensePlate: string,
 ): Promise<SvvVehicleInfo> => {
-  return client
-    .get(`/spar/v1/search-vehicle/${licensePlate}`, {
-      authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 400,
-    })
-    .then((response) => SvvVehicleInfoSchema.parse(response.data));
+  const response = await client.get(`/spar/v1/search-vehicle/${licensePlate}`, {
+    authWithIdToken: true,
+    skipErrorLogging: (error_1) => error_1.response?.status === 400,
+  });
+  return SvvVehicleInfoSchema.parse(response.data);
 };
