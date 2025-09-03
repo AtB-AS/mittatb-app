@@ -1,5 +1,6 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
+import {themes} from '@atb/theme';
 
 export type RemoteConfig = {
   aztec_code_padding: number;
@@ -85,7 +86,7 @@ export type RemoteConfig = {
 
 export const defaultRemoteConfig: RemoteConfig = {
   aztec_code_max_height: 275,
-  aztec_code_padding: Number.MIN_SAFE_INTEGER, // default will be read from theme
+  aztec_code_padding: themes['light'].spacing.large,
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({

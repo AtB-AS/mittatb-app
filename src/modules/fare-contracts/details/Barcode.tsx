@@ -252,14 +252,11 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
 
 const useStyles = () => {
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
-  return StyleSheet.createThemeHook((theme) => ({
+  return StyleSheet.createThemeHook(() => ({
     aztecCode: {
       width: '100%',
       aspectRatio: 1,
-      padding:
-        aztec_code_padding == Number.MIN_SAFE_INTEGER
-          ? theme.spacing.large
-          : aztec_code_padding,
+      padding: aztec_code_padding,
       backgroundColor: '#FFFFFF',
       maxHeight: aztec_code_max_height,
     },
