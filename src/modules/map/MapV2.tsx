@@ -17,9 +17,12 @@ import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
-import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
-import {GeofencingZoneCustomProps, MapProps} from './types';
+import {
+  GeofencingZoneCustomProps,
+  MapProps,
+  MapSelectionActionType,
+} from './types';
 
 import {
   isFeaturePoint,
@@ -63,6 +66,9 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheets} from './hooks/use-map-bottom-sheets';
+import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
+import {useDecideCameraFocusMode} from './hooks/use-decide-camera-focus-mode';
+import {useUpdateBottomSheetWhenSelectedEntityChanges} from './hooks/use-update-bottom-sheet-when-selected-entity-changes';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -71,9 +77,20 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
+  const {location: currentLocation} = useGeolocationContext();
 
-  const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
-  const {height: bottomSheetHeight} = useBottomSheetContext();
+  const {
+    autoSelectedFeature,
+    mapFilter,
+    mapFilterIsOpen,
+    setBottomSheetCurrentlyAutoSelected,
+    setAutoSelectedMapItem,
+    setBottomSheetToAutoSelect,
+    mapSelectionState,
+    mapSelectionDispatch,
+  } = useMapContext();
+  const {height: bottomSheetHeight, close: closeBottomSheet} =
+    useBottomSheetContext();
   const showMapFilterButton = bottomSheetHeight === 0; // hide filter button when a bottom sheet is open
 
   const tabBarHeight = useBottomTabBarHeight();
@@ -90,19 +107,47 @@ export const MapV2 = (props: MapProps) => {
     [initialLocation],
   );
 
-  const {
-    onMapClick,
-    selectedFeature: mapSelectionSelectedFeature,
-    onReportParkingViolation,
-    closeCallback: mapSelectionCloseCallback,
+  const [mapSelectionAction, setMapSelectionAction] = useState<
+    MapSelectionActionType | undefined
+  >({source: 'my-position', coords: startingCoordinates});
+
+  const cameraFocusMode = useDecideCameraFocusMode(
+    currentLocation?.coordinates,
     mapSelectionAction,
-  } = useMapSelectionChangeEffect(
-    props,
     mapViewRef,
-    mapCameraRef,
-    startingCoordinates,
     true,
     true,
+  );
+
+  const mapSelectionCloseCallback = useCallback(() => {
+    setMapSelectionAction(undefined);
+    setAutoSelectedMapItem(undefined);
+    setBottomSheetCurrentlyAutoSelected(undefined);
+    setBottomSheetToAutoSelect(undefined);
+    closeBottomSheet();
+    mapSelectionDispatch({mapState: 'NONE'});
+  }, [
+    closeBottomSheet,
+    mapSelectionDispatch,
+    setAutoSelectedMapItem,
+    setBottomSheetCurrentlyAutoSelected,
+    setBottomSheetToAutoSelect,
+  ]);
+
+  const distance =
+    cameraFocusMode?.mode === 'map-lines'
+      ? cameraFocusMode.distance
+      : undefined;
+
+  const {
+    //selectedFeature: mapSelectionSelectedFeature,
+    onReportParkingViolation,
+  } = useUpdateBottomSheetWhenSelectedEntityChanges(
+    props,
+    distance,
+    mapSelectionAction,
+    mapViewRef,
+    mapSelectionCloseCallback,
     tabBarHeight,
   );
 
@@ -115,7 +160,7 @@ export const MapV2 = (props: MapProps) => {
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
-  const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
+  const selectedFeature = mapSelectionState.feature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
@@ -198,6 +243,13 @@ export const MapV2 = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneTextContent],
   );
 
+  useTriggerCameraMoveEffect(
+    cameraFocusMode,
+    mapCameraRef,
+    mapViewRef,
+    tabBarHeight,
+  );
+
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -214,7 +266,7 @@ export const MapV2 = (props: MapProps) => {
       if (!isFeaturePoint(feature)) return;
 
       if (!showGeofencingZones && !isActiveTrip) {
-        onMapClick({source: 'map-click', feature});
+        setMapSelectionAction({source: 'map-click', feature});
         return;
       }
 
@@ -245,7 +297,7 @@ export const MapV2 = (props: MapProps) => {
         );
       } else {
         if (isFeaturePoint(featureToSelect) && !isActiveTrip) {
-          onMapClick({
+          setMapSelectionAction({
             source: 'map-click',
             feature: featureToSelect,
           });
@@ -258,7 +310,6 @@ export const MapV2 = (props: MapProps) => {
     [
       hideSnackbar,
       showGeofencingZones,
-      onMapClick,
       geofencingZoneOnPress,
       selectedFeature,
       activeShmoBooking,
@@ -296,13 +347,13 @@ export const MapV2 = (props: MapProps) => {
       } else if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
         // use isVehicleFeature here?
-        onMapClick({
+        setMapSelectionAction({
           source: 'map-item',
           feature: featureToSelect,
         });
       }
     },
-    [activeShmoBooking?.state, tabBarHeight, onMapClick],
+    [activeShmoBooking?.state, tabBarHeight],
   );
 
   return (
@@ -394,11 +445,11 @@ export const MapV2 = (props: MapProps) => {
             mapFilterIsOpen && {bottom: 0},
           ]}
         >
-          <ExternalRealtimeMapButton onMapClick={onMapClick} />
+          <ExternalRealtimeMapButton onMapClick={setMapSelectionAction} />
 
           {showMapFilterButton && (
             <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
+              onPress={() => setMapSelectionAction({source: 'filters-button'})}
               isLoading={false}
             />
           )}
@@ -436,10 +487,10 @@ export const MapV2 = (props: MapProps) => {
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
       <MapBottomSheets
-        selectedMapItem={mapSelectionAction}
-        vehicleId={vehicle?.id}
         unSelectMapItem={mapSelectionCloseCallback}
-        bottomMargin={tabBarHeight}
+        mapCameraRef={mapCameraRef}
+        mapViewRef={mapViewRef}
+        tabBarHeight={tabBarHeight}
       />
     </View>
   );

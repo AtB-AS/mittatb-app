@@ -1,6 +1,5 @@
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
@@ -15,6 +14,8 @@ import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useShmoBookingQuery} from '../../queries/use-shmo-booking-query';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   onClose: () => void;
@@ -38,10 +39,15 @@ export const FinishedScooterSheet = ({
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.7}
-      onClose={onClose}
+    <BottomSheetMap
+      snapPoints={['50%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -106,7 +112,7 @@ export const FinishedScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 

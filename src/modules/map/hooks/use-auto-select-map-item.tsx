@@ -6,6 +6,8 @@ import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
+  //ScooterSheet,
+  //SelectShmoPaymentMethodSheet,
 } from '@atb/modules/mobility';
 import {flyToLocation, getMapPadding} from '../utils';
 import {BicycleSheet} from '@atb/modules/mobility';
@@ -20,7 +22,6 @@ import {InteractionManager} from 'react-native';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {FinishedScooterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-//import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
 //import {useEnterPaymentMethods} from './use-enter-payment-methods';
 import MapboxGL from '@rnmapbox/maps';
 
@@ -122,29 +123,13 @@ export const useAutoSelectMapItem = (
         () => {
           return (
             <ScooterSheet
+              //bottomMargin={tabBarHeight ?? 0}
               selectPaymentMethod={() => selectPaymentMethod(vehicleId)}
               vehicleId={vehicleId}
               onClose={closeBottomSheet}
               onVehicleReceived={flyToMapItemLocation}
               onReportParkingViolation={onReportParkingViolation}
-              navigateSupportCallback={close}
               navigation={navigation}
-              loginCallback={() => {
-                close();
-                if (hasReservationOrAvailableFareContract) {
-                  navigation.navigate(
-                    'Root_LoginAvailableFareContractWarningScreen',
-                    {},
-                  );
-                } else if (enable_vipps_login) {
-                  navigation.navigate('Root_LoginOptionsScreen', {
-                    showGoBack: true,
-                    transitionOverride: 'slide-from-bottom',
-                  });
-                } else {
-                  navigation.navigate('Root_LoginPhoneInputScreen', {});
-                }
-              }}
               startOnboardingCallback={() => {
                 close();
                 navigation.navigate('Root_ShmoOnboardingScreen');
@@ -157,7 +142,16 @@ export const useAutoSelectMapItem = (
         tabBarHeight,
       );
     },
-    [openBottomSheet, tabBarHeight, navigateToPaymentMethods, close],
+    [
+      openBottomSheet,
+      tabBarHeight,
+      close,
+      navigateToPaymentMethods,
+      closeBottomSheet,
+      flyToMapItemLocation,
+      onReportParkingViolation,
+      navigation,
+    ],
   );*/
 
   /**

@@ -1,8 +1,4 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -29,6 +25,9 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -51,7 +50,7 @@ export const ActiveScooterSheet = ({
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -126,7 +125,15 @@ export const ActiveScooterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
+    <BottomSheetMap
+      snapPoints={['70%']}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={activeBooking?.asset.operator.name}
+      subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      enablePanDownToClose={false}
+    >
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
@@ -146,7 +153,6 @@ export const ActiveScooterSheet = ({
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
-                  operatorName={activeBooking.asset.operator.name}
                 />
               </ScrollView>
               <View style={styles.footer}>
@@ -206,7 +212,7 @@ export const ActiveScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {View} from 'react-native';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
@@ -17,16 +16,12 @@ type Props = {
   pricingPlan: PricingPlanFragment | ShmoPricingPlan;
   currentFuelPercent: number | undefined;
   currentRangeMeters: number;
-  operatorName: string;
-  brandLogoUrl?: string;
 };
 
 export const VehicleCard = ({
   pricingPlan,
   currentFuelPercent,
   currentRangeMeters,
-  operatorName,
-  brandLogoUrl,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -35,13 +30,6 @@ export const VehicleCard = ({
 
   return (
     <Section style={styles.container}>
-      <GenericSectionItem>
-        <OperatorNameAndLogo
-          operatorName={operatorName}
-          logoUrl={brandLogoUrl}
-          style={styles.operatorNameAndLogo}
-        />
-      </GenericSectionItem>
       <GenericSectionItem>
         <View style={styles.content}>
           <>

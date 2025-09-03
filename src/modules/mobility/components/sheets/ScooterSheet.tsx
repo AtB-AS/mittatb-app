@@ -2,8 +2,8 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React, {useMemo} from 'react';
-import {useTranslation} from '@atb/translations';
+import React from 'react';
+import {dictionary, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
@@ -30,7 +30,8 @@ import {
   PaymentSelectionSectionItem,
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {BottomSheet} from '@atb/components/bottomsheet-new';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -38,10 +39,8 @@ type Props = {
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
-  //navigateSupportCallback: () => void;
   startOnboardingCallback: () => void;
   navigation: RootNavigationProps;
-  bottomMargin: number;
 };
 
 export const ScooterSheet = ({
@@ -50,10 +49,8 @@ export const ScooterSheet = ({
   onClose,
   onReportParkingViolation,
   onVehicleReceived,
-  //navigateSupportCallback,
   startOnboardingCallback,
   navigation,
-  bottomMargin,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -68,8 +65,6 @@ export const ScooterSheet = ({
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
-
-  const snapPoints = useMemo(() => ['70%', '80%'], []);
 
   const {mobilityOperators} = useOperators();
   const operatorIsIntegrationEnabled = mobilityOperators?.find(
@@ -89,14 +84,17 @@ export const ScooterSheet = ({
   } = useFeatureTogglesContext();
 
   return (
-    <BottomSheet
-      snapPoints={snapPoints}
+    <BottomSheetMap
+      snapPoints={['70%', '80%']}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      detached={false}
-      bottomMargin={bottomMargin}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
     >
       {(isLoading || shmoReqIsLoading) && (
         <View
@@ -121,8 +119,6 @@ export const ScooterSheet = ({
               pricingPlan={vehicle.pricingPlan}
               currentFuelPercent={vehicle.currentFuelPercent}
               currentRangeMeters={vehicle.currentRangeMeters}
-              operatorName={operatorName}
-              brandLogoUrl={brandLogoUrl}
             />
             {selectedPaymentMethod &&
               isShmoDeepIntegrationEnabled &&
@@ -199,7 +195,7 @@ export const ScooterSheet = ({
           />
         </View>
       )}
-    </BottomSheet>
+    </BottomSheetMap>
   );
 };
 

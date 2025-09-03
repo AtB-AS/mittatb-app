@@ -13,6 +13,7 @@ import {
 } from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, Platform, StatusBar} from 'react-native';
+import {useMapContext} from '../MapContext';
 
 type BoundingBox = {
   xMin: number;
@@ -38,6 +39,7 @@ export const useTriggerCameraMoveEffect = (
 ) => {
   const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
+  const {mapSelectionState} = useMapContext();
 
   useEffect(() => {
     if (cameraFocusMode?.mode === 'coordinates') {
@@ -57,7 +59,7 @@ export const useTriggerCameraMoveEffect = (
    * padding.
    */
   useEffect(() => {
-    if (!bottomSheetHeight) return;
+    if (!bottomSheetHeight && mapSelectionState.mapState === 'NONE') return;
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
     } else if (cameraFocusMode?.mode === 'entity') {

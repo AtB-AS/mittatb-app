@@ -1,11 +1,10 @@
-import {MapFilterType, MapProps, MapSelectionActionType} from '../types';
-import React, {
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import {
+  MapFilterType,
+  MapProps,
+  MapSelectionActionType,
+  ParkingType,
+} from '../types';
+import React, {RefObject, useCallback, useEffect, useRef} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
@@ -18,12 +17,12 @@ import {
   isBicycle,
   isBikeStation,
   isCarStation,
-  //isScooter,
   ParkAndRideBottomSheet,
-  //isScooterV2,
   isBicycleV2,
   isBikeStationV2,
   isCarStationV2,
+  isScooterV2,
+  isScooter,
 } from '@atb/modules/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/modules/mobility';
@@ -34,7 +33,7 @@ import {MapFilterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 //import {SelectShmoPaymentMethodSheet} from '@atb/modules/mobility';
 //import {useEnterPaymentMethods} from './use-enter-payment-methods';
-import {useMapContext} from '../MapContext';
+import {AutoSelectableBottomSheetType, useMapContext} from '../MapContext';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -54,7 +53,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
 } => {
   const {isMapV2Enabled} = useFeatureTogglesContext();
   const isFocused = useIsFocused();
-  const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
+  //const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
   const analytics = useMapSelectionAnalytics();
@@ -64,7 +63,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     useHasReservationOrAvailableFareContract();*/
   const {enable_vipps_login} = useRemoteConfigContext();
   //const navigateToPaymentMethods = useEnterPaymentMethods();
-  const {setMapFilterIsOpen} = useMapContext();
+  const {setMapFilterIsOpen, mapSelectionDispatch, mapSelectionState} =
+    useMapContext();
 
   // NOTE: This ref is not used for anything since the map doesn't support
   // screen readers, but a ref is required when opening bottom sheets.
@@ -81,81 +81,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     navigation.navigate('Root_ParkingViolationsSelectScreen');
   }, [closeWithCallback, analytics, navigation]);
 
-  /*const openScooterSheet = useCallback(
-    (vehicleId: string) => {
-      async function selectPaymentMethod() {
-        openBottomSheet(
-          () => {
-            return (
-              <SelectShmoPaymentMethodSheet
-                onSelect={() => {
-                  openScooterSheet(selectedFeature?.properties?.id);
-                }}
-                onClose={() => {
-                  openScooterSheet(selectedFeature?.properties?.id);
-                }}
-                onGoToPaymentPage={() => {
-                  closeBottomSheet();
-                  navigateToPaymentMethods();
-                }}
-              />
-            );
-          },
-          onCloseFocusRef,
-          false,
-          tabBarHeight,
-        );
-      }
-
-      openBottomSheet(
-        () => {
-          return (
-            <ScooterSheet
-              selectPaymentMethod={selectPaymentMethod}
-              vehicleId={vehicleId}
-              onClose={closeCallback}
-              onReportParkingViolation={onReportParkingViolation}
-              navigateSupportCallback={closeBottomSheet}
-              navigation={navigation}
-              loginCallback={() => {
-                closeBottomSheet();
-                if (hasReservationOrAvailableFareContract) {
-                  navigation.navigate(
-                    'Root_LoginAvailableFareContractWarningScreen',
-                    {},
-                  );
-                } else if (enable_vipps_login) {
-                  navigation.navigate('Root_LoginOptionsScreen', {
-                    showGoBack: true,
-                    transitionOverride: 'slide-from-bottom',
-                  });
-                } else {
-                  navigation.navigate('Root_LoginPhoneInputScreen', {});
-                }
-              }}
-              startOnboardingCallback={() => {
-                closeBottomSheet();
-                navigation.navigate('Root_ShmoOnboardingScreen');
-              }}
-            />
-          );
-        },
-        onCloseFocusRef,
-        false,
-        tabBarHeight,
-      );
-    },
-    [
-      openBottomSheet,
-      tabBarHeight,
-      selectedFeature?.properties?.id,
-      closeBottomSheet,
-      navigateToPaymentMethods,
-    ],
-  );*/
-
   useEffect(() => {
     (async function () {
+      closeBottomSheet();
       const selectedFeature =
         mapSelectionAction?.source === 'map-item'
           ? mapSelectionAction.feature
@@ -163,12 +91,22 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
 
-      setSelectedFeature(selectedFeature);
+      mapSelectionDispatch({
+        mapState: 'MAP_SELECTION_ITEM',
+        feature: selectedFeature,
+      });
+
       if (selectedFeature) {
         analytics.logMapSelection(selectedFeature);
       }
     })();
-  }, [mapSelectionAction, analytics, mapViewRef]);
+  }, [
+    mapSelectionAction,
+    analytics,
+    mapViewRef,
+    mapSelectionDispatch,
+    closeBottomSheet,
+  ]);
 
   useEffect(() => {
     (async function () {
@@ -212,17 +150,20 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         return;
       }
 
-      if (!selectedFeature) {
+      if (!mapSelectionState?.feature) {
         closeBottomSheet();
         return;
       }
-      if (isStopPlace(selectedFeature)) {
+      if (
+        mapSelectionState?.feature &&
+        isStopPlace(mapSelectionState.feature)
+      ) {
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
               onClose={closeCallback}
               distance={distance}
-              stopPlaceFeature={selectedFeature}
+              stopPlaceFeature={mapSelectionState.feature!}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToDetails(...params);
@@ -243,13 +184,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         );
       } else if (
         isMapV2Enabled
-          ? isBikeStationV2(selectedFeature)
-          : isBikeStation(selectedFeature)
+          ? isBikeStationV2(mapSelectionState.feature)
+          : isBikeStation(mapSelectionState.feature)
       ) {
         openBottomSheet(
           () => (
             <BikeStationBottomSheet
-              stationId={selectedFeature?.properties?.id}
+              stationId={mapSelectionState.feature?.properties?.id}
               distance={distance}
               onClose={closeCallback}
             />
@@ -260,13 +201,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         );
       } else if (
         isMapV2Enabled
-          ? isCarStationV2(selectedFeature)
-          : isCarStation(selectedFeature)
+          ? isCarStationV2(mapSelectionState.feature)
+          : isCarStation(mapSelectionState.feature)
       ) {
         openBottomSheet(
           () => (
             <CarSharingStationBottomSheet
-              stationId={selectedFeature?.properties?.id}
+              stationId={mapSelectionState.feature?.properties?.id}
               distance={distance}
               onClose={closeCallback}
             />
@@ -275,22 +216,26 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
           tabBarHeight,
         );
-      } /*else if (
+      } else if (
         isMapV2Enabled
-          ? isScooterV2(selectedFeature)
-          : isScooter(selectedFeature)
+          ? isScooterV2(mapSelectionState.feature)
+          : isScooter(mapSelectionState.feature)
       ) {
-        openScooterSheet(selectedFeature?.properties?.id);
-      }*/ else if (
+        mapSelectionDispatch({
+          mapState: AutoSelectableBottomSheetType.Scooter,
+          assetId: mapSelectionState.feature?.properties?.id,
+          feature: mapSelectionState.feature,
+        });
+      } else if (
         isMapV2Enabled
-          ? isBicycleV2(selectedFeature)
-          : isBicycle(selectedFeature)
+          ? isBicycleV2(mapSelectionState.feature)
+          : isBicycle(mapSelectionState.feature)
       ) {
         openBottomSheet(
           () => {
             return (
               <BicycleSheet
-                vehicleId={selectedFeature?.properties?.id}
+                vehicleId={mapSelectionState.feature?.properties?.id}
                 onClose={closeCallback}
               />
             );
@@ -299,22 +244,33 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
           tabBarHeight,
         );
-      } else if (isParkAndRide(selectedFeature)) {
+      } else if (
+        mapSelectionState?.feature &&
+        isParkAndRide(mapSelectionState.feature)
+      ) {
         openBottomSheet(
           () => {
             return (
-              <ParkAndRideBottomSheet
-                name={selectedFeature.properties.name}
-                capacity={selectedFeature.properties.totalCapacity}
-                parkingFor={selectedFeature.properties.parkingVehicleTypes}
-                feature={selectedFeature}
-                distance={distance}
-                onClose={closeCallback}
-                navigateToTripSearch={(...params) => {
-                  closeBottomSheet();
-                  mapProps.navigateToTripSearch(...params);
-                }}
-              />
+              mapSelectionState?.feature && (
+                <ParkAndRideBottomSheet
+                  name={mapSelectionState?.feature?.properties?.name}
+                  capacity={
+                    mapSelectionState?.feature?.properties?.totalCapacity
+                  }
+                  parkingFor={
+                    mapSelectionState?.feature?.properties?.parkingVehicleTypes
+                  }
+                  feature={
+                    mapSelectionState?.feature as Feature<Point, ParkingType>
+                  }
+                  distance={distance}
+                  onClose={closeCallback}
+                  navigateToTripSearch={(...params) => {
+                    closeBottomSheet();
+                    mapProps.navigateToTripSearch(...params);
+                  }}
+                />
+              )
             );
           },
           onCloseFocusRef,
@@ -327,13 +283,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    mapSelectionAction,
-    selectedFeature,
+    mapSelectionState?.feature,
     isFocused,
     distance,
     analytics,
     enable_vipps_login,
   ]);
 
-  return {selectedFeature, onReportParkingViolation};
+  // still returning for mapv1
+  return {selectedFeature: mapSelectionState.feature, onReportParkingViolation};
 };
