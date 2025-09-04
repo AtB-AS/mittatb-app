@@ -19,6 +19,7 @@ import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
   useVehicleRegistrationsQuery,
   VehicleRegistration,
+  useSmartParkAndRideTexts,
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
@@ -123,12 +124,12 @@ type HowItWorksSectionProps = {
 };
 
 const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
-  const {t} = useTranslation();
   const styles = useStyles();
+  const {howItWorks} = useSmartParkAndRideTexts();
 
   return (
     <>
-      <ContentHeading text={t(SmartParkAndRideTexts.howItWorks.heading)} />
+      <ContentHeading text={howItWorks.heading} />
       <Section>
         <GenericSectionItem>
           <View style={styles.horizontalContainer}>
@@ -141,18 +142,15 @@ const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
             />
             <View style={styles.howItWorks}>
               <ThemeText typography="body__primary--bold">
-                {t(SmartParkAndRideTexts.howItWorks.title)}
+                {howItWorks.title}
               </ThemeText>
               <ThemeText typography="body__secondary" color="secondary">
-                {t(SmartParkAndRideTexts.howItWorks.description)}
+                {howItWorks.description}
               </ThemeText>
             </View>
           </View>
         </GenericSectionItem>
-        <LinkSectionItem
-          text={t(SmartParkAndRideTexts.howItWorks.link)}
-          onPress={onPress}
-        />
+        <LinkSectionItem text={howItWorks.link} onPress={onPress} />
       </Section>
     </>
   );

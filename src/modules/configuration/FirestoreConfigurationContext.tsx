@@ -58,7 +58,13 @@ export const defaultVatPercent: number = 12;
 export const defaultStopSignalButtonConfig = StopSignalButtonConfig.parse({});
 
 export type AppTexts = {
-  discountInfo: LanguageAndTextType[];
+  discountInfo: LanguageAndTextType[] | undefined;
+  sparInformationDescription?: LanguageAndTextType[];
+  sparInformationPenaltyNotice?: LanguageAndTextType[];
+  sparAutomaticRegistrationDescription?: LanguageAndTextType[];
+  sparAutomaticRegistrationDescriptionLinkText?: LanguageAndTextType[];
+  sparAutomaticRegistrationDescriptionLinkUrl?: LanguageAndTextType[];
+  sparHowItWorksDescription?: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
@@ -575,10 +581,29 @@ function getAppTextsFromSnapshot(
     Bugsnag.notify(
       `App text field "discountInfo" should conform: "LanguageAndTextType"`,
     );
-    return undefined;
   }
 
-  return {discountInfo};
+  return {
+    discountInfo,
+    sparInformationDescription: mapLanguageAndTextType(
+      appTextsRaw.get('sparInformationDescription'),
+    ),
+    sparInformationPenaltyNotice: mapLanguageAndTextType(
+      appTextsRaw.get('sparInformationPenaltyNotice'),
+    ),
+    sparAutomaticRegistrationDescription: mapLanguageAndTextType(
+      appTextsRaw.get('sparAutomaticRegistrationDescription'),
+    ),
+    sparAutomaticRegistrationDescriptionLinkText: mapLanguageAndTextType(
+      appTextsRaw.get('sparAutomaticRegistrationDescriptionLinkText'),
+    ),
+    sparAutomaticRegistrationDescriptionLinkUrl: mapLanguageAndTextType(
+      appTextsRaw.get('sparAutomaticRegistrationDescriptionLinkUrl'),
+    ),
+    sparHowItWorksDescription: mapLanguageAndTextType(
+      appTextsRaw.get('sparHowItWorksDescription'),
+    ),
+  };
 }
 
 function getConfigurableLinksFromSnapshot(
