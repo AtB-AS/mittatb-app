@@ -203,7 +203,7 @@
     "typescript": "^5.9.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "resolutions": {
     "zod": "3.24.1"
