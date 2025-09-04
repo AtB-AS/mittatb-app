@@ -33,7 +33,7 @@ export const getVehicleRegistrations = async (): Promise<
     authWithIdToken: true,
     skipErrorLogging: (error) => error.response?.status === 404,
   });
-  return VehicleRegistrationSchema.array().parse(response.data.vehicles);
+  return VehicleRegistrationSchema.array().parse(response?.data?.vehicles);
 };
 
 export const editVehicleRegistration = async (
