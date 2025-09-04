@@ -2,6 +2,16 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 
 export type RemoteConfig = {
+  /**
+   * Some code readers are sensitive to code size.
+   * Configurable parameter allows quick response to reading issues.
+   */
+  aztec_code_padding: number;
+  /**
+   * Some code readers are sensitive to padding around code.
+   * Configurable parameter allows quick response to reading issues.
+   */
+  aztec_code_max_height: number;
   customer_feedback_url: string;
   customer_service_url: string;
   default_map_filter: string;
@@ -82,6 +92,8 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
+  aztec_code_max_height: 275,
+  aztec_code_padding: 20,
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
@@ -167,6 +179,12 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
 
+  const aztec_code_max_height =
+    values['aztec_code_max_height']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_max_height;
+  const aztec_code_padding =
+    values['aztec_code_padding']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_padding;
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??
     defaultRemoteConfig.customer_feedback_url;
@@ -374,6 +392,8 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.vehicles_poll_interval;
 
   return {
+    aztec_code_max_height,
+    aztec_code_padding,
     customer_feedback_url,
     customer_service_url,
     default_map_filter,
