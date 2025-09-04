@@ -1,15 +1,8 @@
 import ElementHelper from '../utils/element.helper.js';
 import {$} from '@wdio/globals';
+import AppHelper from "../utils/app.helper.js";
 
 class TokenPage {
-  /**
-   * Get the mobile token name
-   */
-  get mobileTokenName() {
-    const reqId = `//*[@resource-id="mobileTokenName"]`;
-    return $(reqId);
-  }
-
   /**
    * Get the token toggle info
    */
@@ -35,11 +28,35 @@ class TokenPage {
   }
 
   /**
-   * Device text (NB! assume only 1 device)
+   * Check if a device name exists
+   * @param typeOfDevice either this or other device name
    */
-  get selectedDeviceText() {
-    const reqId = `//*[@resource-id="radioButton0Text"]`;
+  async deviceNameExists(typeOfDevice: 'this' | 'other') {
+    const reqId = `//*[@resource-id="${typeOfDevice}DeviceName"]`;
+    return $(reqId).isExisting();
+  }
+
+  /**
+   * Get device text
+   * @param index index of button text to return
+   */
+  async deviceText(index: number) {
+    const reqId = `//*[@resource-id="radioButton${index}Text"]`;
     return $(reqId).getText();
+  }
+
+  /**
+   * Select this device (always at index 0)
+   */
+  async selectThisDevice() {
+    for (let i = 0; i < 10; i++){
+      const text = await this.deviceText(i);
+      if (text.includes('this device')) {
+        const reqId = `//*[@resource-id="radioButton${i}"]`;
+        await $(reqId).click();
+        break
+      }
+    }
   }
 
   /**
@@ -48,6 +65,27 @@ class TokenPage {
   async confirmSelection() {
     const reqId = `//*[@resource-id="confirmSelectionButton"]`;
     await $(reqId).click();
+  }
+
+  /**
+   * Set this device as bearer. Used from other tabs (e.g. tickets, onboarding)
+   * @param toggleToDevice whether to toggle to this device or not
+   */
+  async toggleToThisDevice(toggleToDevice: boolean = true) {
+    const isNotMyDevice = await ElementHelper.isElementExisting('travelTokenBox', 1)
+    if (isNotMyDevice) {
+      // Toggle or not
+      if (toggleToDevice){
+        await this.openTokenToggle()
+        await this.selectThisDevice()
+        await this.confirmSelection();
+      }
+      else {
+        const reqId = `//*[@resource-id="nextButton"]`;
+        await $(reqId).click();
+      }
+      await AppHelper.pause(200);
+    }
   }
 
   /**

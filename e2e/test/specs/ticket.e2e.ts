@@ -7,7 +7,7 @@ import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.ts';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.ts';
 import PurchasePaymentPage from '../pageobjects/purchase.payment.page.ts';
 
-describe('Ticket Anonymous', () => {
+describe('Ticket', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('tickets');
@@ -109,10 +109,21 @@ describe('Ticket Anonymous', () => {
         expect(await PurchasePaymentPage.confirmPayment.isEnabled()).toBe(true);
         // NOTE! Only for logged-in users
         /*
-            expect(await PurchasePaymentPage.saveCard).toExist()
-            expect(await PurchasePaymentPage.saveCard).not.toBeChecked()
-            await PurchasePaymentPage.saveCard.click()
-            expect(await PurchasePaymentPage.saveCard).toBeChecked()
+          // Check on card options
+          expect(await PurchasePaymentPage.saveCard).toExist()
+          expect(await PurchasePaymentPage.saveCard).not.toBeChecked()
+          await PurchasePaymentPage.saveCard.click()
+          expect(await PurchasePaymentPage.saveCard).toBeChecked()
+
+          // Purchase with recurring card
+          if (!(await PurchaseSummaryPage.confirmPayment.isExisting())) {
+            await PurchaseSummaryPage.choosePayment.click();
+            await PurchasePaymentPage.chooseRecurringPaymentCard();
+            await PurchasePaymentPage.confirmPayment.click();
+          }
+          await ElementHelper.waitForElement('id', 'confirmPaymentButton');
+          expect(await PurchaseSummaryPage.recurringPaymentCard.isExisting()).toBe(true);
+          await PurchaseSummaryPage.confirmPayment.click();
          */
 
         await NavigationHelper.close();
