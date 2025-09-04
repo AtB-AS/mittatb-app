@@ -63,7 +63,7 @@ function renderToken(
 
     case 'br':
     case 'space':
-      return <Text key={index} />;
+      return <Text accessible={false} key={index} />;
 
     case 'em':
       return (
@@ -101,6 +101,10 @@ function renderToken(
                 flexDirection: 'row',
                 paddingTop: props.spacingBetweenListElements ?? 0,
               }}
+              accessibilityLabel={`${
+                token.ordered ? `${itemIndex + 1}.` : '\u2022,'
+              } ${item.text}`}
+              accessible={true}
             >
               <Text {...props.textProps}>
                 {token.ordered ? `${itemIndex + 1}. ` : '\u2022 '}
