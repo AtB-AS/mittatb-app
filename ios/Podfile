@@ -1,10 +1,5 @@
 plugin 'cocoapods-patch'
 
-# Disable new architecture, this now comes true by default,
-# but there are some of our dependencies still not compatible.
-# For more details please check https://reactnative.dev/architecture/landing-page#ios
-ENV['RCT_NEW_ARCH_ENABLED'] = '0'
-
 def node_require(script)
   # Resolve script with node to allow for hoisting
   require Pod::Executable.execute_command('node', ['-p',

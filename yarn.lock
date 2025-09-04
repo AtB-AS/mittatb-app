@@ -3140,10 +3140,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/geolocation/-/geolocation-3.4.0.tgz#8b6ee024a71cf94526ab796af1e9ae140684802c"
   integrity sha512-bzZH89/cwmpkPMKKveoC72C4JH0yF4St5Ceg/ZM9pA1SqX9MlRIrIrrOGZ/+yi++xAvFDiYfihtn9TvXWU9/rA==
 
-"@react-native-community/slider@4.5.2":
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.5.2.tgz#c3835788dbc1bd83d3778b83ca15533c805db149"
-  integrity sha512-DbFyCyI7rwl0FkBkp0lzEVp+5mNfS5qU/nM2sK2aSguWhj0Odkt1aKHP2iW/ljruOhgS/O4dEixXlne4OdZJDQ==
+"@react-native-community/slider@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-5.0.1.tgz#478789e526af31e0660c6f49fa5c5429d8d4287b"
+  integrity sha512-K3JRWkIW4wQ79YJ6+BPZzp1SamoikxfPRw7Yw4B4PElEQmqZFrmH9M5LxvIo460/3QSrZF/wCgi3qizJt7g/iw==
 
 "@react-native-firebase/analytics@^23.2.2":
   version "23.2.2"
@@ -10407,10 +10407,10 @@ react-native-compressor@^1.10.4:
   resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.12.0.tgz#4c387f100ec6d98adbee10c22496d0e42397d8bf"
   integrity sha512-NMAYpXnTLwx/KecwlLF+9Dnrn/tKV5UVfta8Lk9eROsb05JYnUoKLprRzSSpHcyLjIdQAVaTtx2lPYsappMezw==
 
-react-native-date-picker@^5.0.8:
-  version "5.0.13"
-  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.13.tgz#fe05f58652aaeee9e67f73cf7436c32a623ff3a4"
-  integrity sha512-qCLUODZVsJetO5zuoXjw1D39K527XWqBG8sOfhWdHyPzf13h8RXR1/RSKd1N0fdRDi5GdyizYmB0lPAK12/hbw==
+react-native-date-picker@5.0.12:
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.12.tgz#12540b6a58500811ee7e4fc0244e3accc7cca9c1"
+  integrity sha512-R/mUnCKhcuxbhKPFwYdBQCxQt9HHLqpM4ruRUqlcBjiUZ3N2wdnwOMyc888Ps8qp8e7v29PrDHtUlG8LPuFn9w==
 
 react-native-device-info@^14.0.4:
   version "14.0.4"
@@ -10463,10 +10463,10 @@ react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
-react-native-kettle-module@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.2.0.tgz#52a4b0a9d70e2bdf9638242d38b03ee7c2cdd834"
-  integrity sha512-8rsjlqWecppYzRStFLvcCNWeOcBP0apZI2v1ZEccgMz47Kplp0WApI7FNrXK70TrEJUvniVEZ+3AA6iQ7gzI7g==
+react-native-kettle-module@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-2.0.0.tgz#b85ef8924300d37650346b9c2bedd97eb660387b"
+  integrity sha512-YnQlmRhok23rU1/4GCIgyjKaFVnucCCUok83vdjz3yrTQy9IOfObO/bBwrPlA6bpTWfNLQuH5gHTsSB4UMwXfg==
 
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
