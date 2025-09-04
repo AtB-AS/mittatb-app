@@ -5,7 +5,7 @@ import {
   NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
-  TextInputFocusEventData,
+  FocusEvent,
   TextInputProps as InternalTextInputProps,
   View,
 } from 'react-native';
@@ -26,8 +26,6 @@ import {GenericClickableSectionItem} from '@atb/components/sections';
 import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
-
-type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 type Props = SectionItemProps<
   InternalTextInputProps & {

@@ -18,10 +18,10 @@ type Props = SectionItemProps<{
   subtext?: string;
   hideSubtext?: boolean;
   onPress(checked: boolean): void;
-  leftIcon?: (props: SvgProps) => JSX.Element;
+  leftIcon?: (props: SvgProps) => React.JSX.Element;
   selected: boolean;
   rightAction?: {
-    icon: (props: SvgProps) => JSX.Element;
+    icon: (props: SvgProps) => React.JSX.Element;
     onPress: () => void;
     isLoading?: boolean;
   };

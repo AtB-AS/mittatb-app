@@ -19,7 +19,7 @@ export const BenefitImage = ({
   formFactor,
   eligible,
   style,
-}: BenefitImageProps): JSX.Element => {
+}: BenefitImageProps): React.JSX.Element => {
   return (
     <View style={style}>
       <BenefitImageAsset formFactor={formFactor} eligible={eligible} />

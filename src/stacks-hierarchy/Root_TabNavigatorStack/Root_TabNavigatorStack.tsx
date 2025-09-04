@@ -179,20 +179,20 @@ type TabSettings = {
     focused: boolean;
     color: string;
     position: LabelPosition;
-  }): JSX.Element;
+  }): React.JSX.Element;
   tabBarIcon(props: {
     focused: boolean;
     color: string;
     size: number;
-  }): JSX.Element;
+  }): React.JSX.Element;
   testID?: string;
 };
 
 function tabSettings(
   tabBarLabel: string,
   tabBarA11yLabel: string,
-  Icon: (svg: SvgProps) => JSX.Element,
-  IconSelected: (svg: SvgProps) => JSX.Element,
+  Icon: (svg: SvgProps) => React.JSX.Element,
+  IconSelected: (svg: SvgProps) => React.JSX.Element,
   lineHeight: number,
   testID: string,
   notification?: ThemeIconProps['notification'],

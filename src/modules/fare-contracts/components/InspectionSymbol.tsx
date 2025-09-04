@@ -123,7 +123,7 @@ const NotInspectableContent = () => {
 const getInspectionSvg = (
   illustration: string | undefined,
   transportModes: ProductTypeTransportModes[] | undefined,
-): ((props: SvgProps) => JSX.Element) => {
+): ((props: SvgProps) => React.JSX.Element) => {
   if (illustration === 'night') return Moon;
   if (illustration === 'youth') return Youth;
   if (illustration === 'school') return Student;

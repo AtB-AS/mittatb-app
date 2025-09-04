@@ -25,7 +25,7 @@ type Props = {
   fc: FareContractType;
 };
 
-export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
+export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {mobileTokenStatus} = useMobileTokenContext();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;

@@ -19,7 +19,7 @@ type Props = SectionItemProps<{
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
-  leftImage?: JSX.Element;
+  leftImage?: React.JSX.Element;
   interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
   textType?: TextNames;

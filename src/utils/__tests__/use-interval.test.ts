@@ -55,7 +55,7 @@ describe('useInterval', () => {
     );
     await nextTimerTick();
 
-    expect(callback).toBeCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenCalledTimes(2);
     expect(setTimeout).toHaveBeenLastCalledWith(
       expect.any(Function),
@@ -63,7 +63,7 @@ describe('useInterval', () => {
     );
 
     await runPendingTimers();
-    expect(callback).toBeCalledTimes(2);
+    expect(callback).toHaveBeenCalledTimes(2);
   });
 
   it('should be able to disable useInterval', async () => {
@@ -78,30 +78,30 @@ describe('useInterval', () => {
 
     // Start with it enabled, should call callback
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 
     hook.rerender({disabled: true});
 
     // Should not call callback any time as it is disabled
     // even over multiple timer ticks
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 
     // Re-enable interval,
     hook.rerender({disabled: false});
 
     // Callback called on each timer tick.
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(2);
+    expect(callback).toHaveBeenCalledTimes(2);
 
     await nextTimerTick();
-    expect(callback).toBeCalledTimes(3);
+    expect(callback).toHaveBeenCalledTimes(3);
   });
 });
 

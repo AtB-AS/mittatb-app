@@ -14,7 +14,7 @@ export function ActivateNowSectionItem({
   fareContractId,
   fareProductType,
   ...sectionProps
-}: ActivateNowSectionItemProps): JSX.Element {
+}: ActivateNowSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
   const {open} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);

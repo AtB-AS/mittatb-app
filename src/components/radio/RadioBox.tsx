@@ -17,7 +17,7 @@ type Props = {
   a11yHint: string;
   disabled: boolean;
   selected: boolean;
-  icon: JSX.Element;
+  icon: React.JSX.Element;
   type?: ContainerSizingType;
   onPress: () => void;
   style?: ViewStyle;

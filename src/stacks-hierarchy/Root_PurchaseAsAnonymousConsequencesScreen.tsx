@@ -131,7 +131,7 @@ export const Consequence = ({
   icon,
 }: {
   value: string;
-  icon: JSX.Element;
+  icon: React.JSX.Element;
 }) => {
   const styles = useStyle();
   const {theme} = useThemeContext();

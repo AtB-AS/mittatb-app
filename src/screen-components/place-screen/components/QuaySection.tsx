@@ -59,7 +59,7 @@ export function QuaySection({
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
-}: QuaySectionProps): JSX.Element {
+}: QuaySectionProps): React.JSX.Element {
   const {favoriteDepartures} = useFavoritesContext();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
