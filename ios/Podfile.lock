@@ -3333,7 +3333,7 @@ PODS:
     - Yoga
   - react-native-safe-area-context (5.6.1):
     - React-Core
-  - react-native-slider (5.0.1):
+  - react-native-slider (4.5.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -4670,7 +4670,7 @@ SPEC CHECKSUMS:
   react-native-kettle-module: 65bb12c6832b91bffb8da9415f9967bcbe345a54
   react-native-pager-view: 3d6161515c4f121854b8c82278007892ddb77b5d
   react-native-safe-area-context: 2243039f43d10cb1ea30ec5ac57fc6d1448413f4
-  react-native-slider: b269fcb018cc5da8205ed2800ca448a38d99ec21
+  react-native-slider: f2609d573c5d5835e2f259f7b931ef4b7790a632
   React-NativeModulesApple: be767e4e204802b135c68a81024f5b758bc0653e
   React-oscompat: b12c633e9c00f1f99467b1e0e0b8038895dae436
   React-perflogger: 58d12c4e5df1403030c97b9c621375c312cca454
