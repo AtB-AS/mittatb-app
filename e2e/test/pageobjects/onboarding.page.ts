@@ -1,6 +1,6 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.ts';
-import TokenPage from "./token.page.js";
+import TokenPage from './token.page.js';
 
 class OnboardingPage {
   /**
@@ -122,12 +122,15 @@ class OnboardingPage {
    * Wait to see if token "onboarding" appears, i.e. token is used elsewhere, then change to this device
    * @param toggleToDevice whether to toggle to this device or not
    */
-  async waitOnTokenOnboarding(toggleToDevice: boolean = true){
+  async waitOnTokenOnboarding(toggleToDevice: boolean = true) {
     // Wait for potential token onboarding
-    const tokenOnboardingAppear = await ElementHelper.isElementExisting('travelTokenBox', 10)
+    const tokenOnboardingAppear = await ElementHelper.isElementExisting(
+      'travelTokenBox',
+      10,
+    );
     // Change to this device
     if (tokenOnboardingAppear) {
-      await TokenPage.toggleToThisDevice(toggleToDevice)
+      await TokenPage.toggleToThisDevice(toggleToDevice);
     }
   }
 }

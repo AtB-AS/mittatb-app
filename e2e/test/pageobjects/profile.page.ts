@@ -1,6 +1,6 @@
 import AppHelper from '../utils/app.helper.ts';
-import ElementHelper from "../utils/element.helper.js";
-import AlertHelper from "../utils/alert.helper.js";
+import ElementHelper from '../utils/element.helper.js';
+import AlertHelper from '../utils/alert.helper.js';
 
 class ProfilePage {
   /**

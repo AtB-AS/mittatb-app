@@ -24,7 +24,7 @@ describe('Auth Buy Ticket', () => {
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false)
+      await OnboardingPage.waitOnTokenOnboarding(false);
       await ElementHelper.waitForElement('text', 'Travel search');
       await AppHelper.pause(2000);
 
@@ -58,7 +58,10 @@ describe('Auth Buy Ticket', () => {
           'Single ticket, bus and tram',
         );
         await AppHelper.removeGlobalMessages();
-        await AppHelper.scrollDownUntilId('purchaseOverviewScrollView', 'goToPaymentButton')
+        await AppHelper.scrollDownUntilId(
+          'purchaseOverviewScrollView',
+          'goToPaymentButton',
+        );
 
         const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
         if (hasOffer) {

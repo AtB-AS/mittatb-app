@@ -1,5 +1,5 @@
-import AppHelper from "../utils/app.helper.js";
-import {$} from "@wdio/globals";
+import AppHelper from '../utils/app.helper.js';
+import {$} from '@wdio/globals';
 
 class DebugPage {
   /**
@@ -15,8 +15,8 @@ class DebugPage {
    */
   async scrollToMobileToken() {
     await AppHelper.scrollDownUntilId(
-        'debugInfoScrollView',
-        'mobileTokenDebug',
+      'debugInfoScrollView',
+      'mobileTokenDebug',
     );
   }
 
@@ -39,10 +39,10 @@ class DebugPage {
       const buttonId = `//*[@resource-id="removeRemoteToken${i}"]`;
       const buttonExists = await $(buttonId).isExisting();
       if (buttonExists) {
-        await $(buttonId).click()
+        await $(buttonId).click();
         await AppHelper.scrollDown('debugInfoScrollView');
       } else {
-        break
+        break;
       }
     }
   }

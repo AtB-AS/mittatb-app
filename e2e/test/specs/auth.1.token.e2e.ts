@@ -28,7 +28,7 @@ describe('Auth Mobile Token', () => {
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false)
+      await OnboardingPage.waitOnTokenOnboarding(false);
       await ElementHelper.waitForElement('text', 'Travel search');
       await AppHelper.pause(2000);
 
@@ -58,8 +58,8 @@ describe('Auth Mobile Token', () => {
         await ElementHelper.waitForElement('id', 'travelTokenBox');
 
         // Check if mobile token is OK
-        hasMobileTokenOnThisDevice = await TokenPage.deviceNameExists('this')
-        hasMobileTokenOnOtherDevice = await TokenPage.deviceNameExists('other')
+        hasMobileTokenOnThisDevice = await TokenPage.deviceNameExists('this');
+        hasMobileTokenOnOtherDevice = await TokenPage.deviceNameExists('other');
 
         if (hasMobileTokenOnThisDevice || hasMobileTokenOnOtherDevice) {
           expect(await TokenPage.tokenToggleInfo).toContain('switches left');
@@ -71,15 +71,17 @@ describe('Auth Mobile Token', () => {
           expect(await TokenPage.tokenSelectionRadio('Mobile')).toBeChecked();
           // Select travel card
           await TokenPage.selectToken('Travelcard');
-          expect(await TokenPage.tokenSelectionRadio('Mobile')).not.toBeChecked();
+          expect(
+            await TokenPage.tokenSelectionRadio('Mobile'),
+          ).not.toBeChecked();
           expect(await TokenPage.noTravelcardWarning).toContain(
-              'no t:card registered',
+            'no t:card registered',
           );
           // Select mobile
           await TokenPage.selectToken('Mobile');
           // Due to a current error, the change from travecard to mobile also changes the marked token
           //await TokenPage.confirmSelection();
-          await NavigationHelper.back()
+          await NavigationHelper.back();
           await ElementHelper.waitForElement('id', 'travelTokenBox');
         } else {
           const errorMessage: string = await TokenPage.tokenErrorMessage;
@@ -113,11 +115,10 @@ describe('Auth Mobile Token', () => {
         expect(await DebugPage.getMobileTokenStatus()).toBe(
           'success-and-inspectable',
         );
-      }
-      else if (hasMobileTokenOnOtherDevice) {
+      } else if (hasMobileTokenOnOtherDevice) {
         expect(await DebugPage.hasMobileTokenId).toBe(true);
         expect(await DebugPage.getMobileTokenStatus()).toBe(
-            'success-not-inspectable',
+          'success-not-inspectable',
         );
       } else {
         expect(await DebugPage.hasMobileTokenId).toBe(false);
@@ -135,12 +136,11 @@ describe('Auth Mobile Token', () => {
       try {
         await NavigationHelper.tapMenu('profile');
         await ElementHelper.waitForElement('text', 'Profile');
-        await ProfilePage.logout()
-
+        await ProfilePage.logout();
       } catch (errMsg) {
         await AppHelper.screenshot('error_auth_logout');
         throw errMsg;
       }
     }
-  })
+  });
 });

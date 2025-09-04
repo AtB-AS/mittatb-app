@@ -1,6 +1,6 @@
 import ElementHelper from '../utils/element.helper.js';
 import {$} from '@wdio/globals';
-import AppHelper from "../utils/app.helper.js";
+import AppHelper from '../utils/app.helper.js';
 
 class TokenPage {
   /**
@@ -49,12 +49,12 @@ class TokenPage {
    * Select this device (always at index 0)
    */
   async selectThisDevice() {
-    for (let i = 0; i < 10; i++){
+    for (let i = 0; i < 10; i++) {
       const text = await this.deviceText(i);
       if (text.includes('this device')) {
         const reqId = `//*[@resource-id="radioButton${i}"]`;
         await $(reqId).click();
-        break
+        break;
       }
     }
   }
@@ -72,15 +72,17 @@ class TokenPage {
    * @param toggleToDevice whether to toggle to this device or not
    */
   async toggleToThisDevice(toggleToDevice: boolean = true) {
-    const isNotMyDevice = await ElementHelper.isElementExisting('travelTokenBox', 1)
+    const isNotMyDevice = await ElementHelper.isElementExisting(
+      'travelTokenBox',
+      1,
+    );
     if (isNotMyDevice) {
       // Toggle or not
-      if (toggleToDevice){
-        await this.openTokenToggle()
-        await this.selectThisDevice()
+      if (toggleToDevice) {
+        await this.openTokenToggle();
+        await this.selectThisDevice();
         await this.confirmSelection();
-      }
-      else {
+      } else {
         const reqId = `//*[@resource-id="nextButton"]`;
         await $(reqId).click();
       }

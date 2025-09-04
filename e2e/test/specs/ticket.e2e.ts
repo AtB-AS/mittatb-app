@@ -95,7 +95,7 @@ describe('Ticket', () => {
         expect(
           await PurchaseSummaryPage.userProfileCountAndName.getText(),
         ).toContain('1 Child');
-        expect(await PurchaseSummaryPage.getTotalPrice()).toBe(totalPrice)
+        expect(await PurchaseSummaryPage.getTotalPrice()).toBe(totalPrice);
         await PurchaseSummaryPage.choosePayment.click();
 
         // Payment

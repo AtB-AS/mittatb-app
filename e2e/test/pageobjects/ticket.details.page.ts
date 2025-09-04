@@ -1,4 +1,4 @@
-import {$} from "@wdio/globals";
+import {$} from '@wdio/globals';
 
 class TicketDetailsPage {
   /**
@@ -17,19 +17,19 @@ class TicketDetailsPage {
    * @param type type of barcode (mobileToken or static or notInspectable)
    */
   async checkBarcodeType(type: 'mobileToken' | 'static' | 'notInspectable') {
-    let reqId = ''
+    let reqId = '';
     switch (type) {
       case 'mobileToken':
         reqId = `//*[@resource-id="mobileTokenBarcode"]`;
-        break
+        break;
       case 'static':
         reqId = `//*[@resource-id="staticBarcode"]`;
-        break
+        break;
       case 'notInspectable':
         reqId = `//*[@resource-id="notInspectableIcon"]`;
-        break
+        break;
     }
-    return await $(reqId).isExisting()
+    return await $(reqId).isExisting();
   }
 
   /**

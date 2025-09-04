@@ -12,8 +12,8 @@ import TokenPage from '../pageobjects/token.page.js';
 import DebugPage from '../pageobjects/debug.page.js';
 import Config from '../conf/config.js';
 import {performancetotal} from 'wdio-performancetotal-service';
-import {$} from "@wdio/globals";
-import AlertHelper from "../utils/alert.helper.js";
+import {$} from '@wdio/globals';
+import AlertHelper from '../utils/alert.helper.js';
 
 describe('Auth Cleanup', () => {
   const phoneNumber = Config.phoneNumber();
@@ -38,7 +38,7 @@ describe('Auth Cleanup', () => {
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false)
+      await OnboardingPage.waitOnTokenOnboarding(false);
       await ElementHelper.waitForElement('text', 'Travel search');
       await AppHelper.pause(2000);
 
@@ -60,14 +60,17 @@ describe('Auth Cleanup', () => {
       try {
         // Open mobile token section in the debug menu
         await NavigationHelper.tapMenu('profile');
-        await AppHelper.scrollDownUntilId('profileHomeScrollView', 'debugButton');
+        await AppHelper.scrollDownUntilId(
+          'profileHomeScrollView',
+          'debugButton',
+        );
         await ProfilePage.open('debug');
-        await DebugPage.scrollToMobileToken()
+        await DebugPage.scrollToMobileToken();
         await DebugPage.open('mobileToken');
 
         // Remove all remote tokens
-        await DebugPage.showRemoteTokens()
-        await DebugPage.removeAllRemoteTokens()
+        await DebugPage.showRemoteTokens();
+        await DebugPage.removeAllRemoteTokens();
 
         await NavigationHelper.tapMenu('profile');
       } catch (errMsg) {
@@ -82,12 +85,11 @@ describe('Auth Cleanup', () => {
       try {
         await NavigationHelper.tapMenu('profile');
         await ElementHelper.waitForElement('text', 'Profile');
-        await ProfilePage.logout()
-
+        await ProfilePage.logout();
       } catch (errMsg) {
         await AppHelper.screenshot('error_auth_logout');
         throw errMsg;
       }
     }
-  })
+  });
 });

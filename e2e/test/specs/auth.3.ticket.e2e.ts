@@ -9,13 +9,13 @@ import Config from '../conf/config.js';
 import MyProfilePage from '../pageobjects/profile.page.js';
 import AuthenticationPage from '../pageobjects/authentication.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
-import TokenPage from "../pageobjects/token.page.js";
-import TicketActivePage from "../pageobjects/ticket.active.page.js";
-import {performancetotal} from "wdio-performancetotal-service";
-import TicketDetailsPage from "../pageobjects/ticket.details.page.js";
-import ProfilePage from "../pageobjects/profile.page.js";
-import FrontPagePage from "../pageobjects/frontpage.page.js";
-import TicketFrontpagePage from "../pageobjects/ticket.frontpage.page.js";
+import TokenPage from '../pageobjects/token.page.js';
+import TicketActivePage from '../pageobjects/ticket.active.page.js';
+import {performancetotal} from 'wdio-performancetotal-service';
+import TicketDetailsPage from '../pageobjects/ticket.details.page.js';
+import ProfilePage from '../pageobjects/profile.page.js';
+import FrontPagePage from '../pageobjects/frontpage.page.js';
+import TicketFrontpagePage from '../pageobjects/ticket.frontpage.page.js';
 
 describe('Auth Ticket', () => {
   const phoneNumber = Config.phoneNumber();
@@ -32,7 +32,7 @@ describe('Auth Ticket', () => {
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false)
+      await OnboardingPage.waitOnTokenOnboarding(false);
       await ElementHelper.waitForElement('text', 'Travel search');
       await AppHelper.pause(2000);
 
@@ -59,18 +59,18 @@ describe('Auth Ticket', () => {
         await ProfilePage.open('travelToken');
 
         // Check type of mobile token
-        hasMobileTokenOnThisDevice = await TokenPage.deviceNameExists('this')
-        hasMobileTokenOnOtherDevice = await TokenPage.deviceNameExists('other')
+        hasMobileTokenOnThisDevice = await TokenPage.deviceNameExists('this');
+        hasMobileTokenOnOtherDevice = await TokenPage.deviceNameExists('other');
       }
       await NavigationHelper.tapMenu('profile');
     } catch (errMsg) {
       await AppHelper.screenshot('error_auth_token_check');
       throw errMsg;
     }
-  })
+  });
 
   // Choose to buy a ticket on behalf of others, and check the information along the purchase flow
-  xit('should be able to buy on behalf of others', async () => {
+  it('should be able to buy on behalf of others', async () => {
     const onBehalfOfPhoneNumber: number = 91111111;
     const onBehalfOfPhoneNumberFormatted: string = '+47 91 11 11 11';
 
@@ -96,7 +96,10 @@ describe('Auth Ticket', () => {
         await PurchaseOverviewPage.onBehalfOfToggle.click();
 
         // Ensure an offer
-        await AppHelper.scrollDownUntilId('purchaseOverviewScrollView', 'goToPaymentButton')
+        await AppHelper.scrollDownUntilId(
+          'purchaseOverviewScrollView',
+          'goToPaymentButton',
+        );
         const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
         if (hasOffer) {
           const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
@@ -160,28 +163,37 @@ describe('Auth Ticket', () => {
           // Inspectable icon
           if (hasMobileTokenOnOtherDevice) {
             expect(await TicketFrontpagePage.ticketIsInspectable()).toBe(false);
-            expect(await TicketFrontpagePage.ticketIsNotInspectable()).toBe(true);
+            expect(await TicketFrontpagePage.ticketIsNotInspectable()).toBe(
+              true,
+            );
           } else {
             expect(await TicketFrontpagePage.ticketIsInspectable()).toBe(true);
-            expect(await TicketFrontpagePage.ticketIsNotInspectable()).toBe(false);
+            expect(await TicketFrontpagePage.ticketIsNotInspectable()).toBe(
+              false,
+            );
           }
 
           // Details
           performancetotal.sampleStart('openTicketDetails');
           await TicketFrontpagePage.openTicketDetails();
           performancetotal.sampleEnd('openTicketDetails');
-          await AppHelper.pause(2000)
+          await AppHelper.pause(2000);
           const detailsProductName = await TicketDetailsPage.productName();
           expect(detailsProductName).toContain('Single ticket');
 
           // Barcode
           if (hasMobileTokenOnThisDevice) {
-            expect(await TicketDetailsPage.checkBarcodeType('mobileToken')).toBe(true);
-          } else if (hasMobileTokenOnOtherDevice){
-            expect(await TicketDetailsPage.checkBarcodeType('notInspectable')).toBe(true);
-          }
-          else {
-            expect(await TicketDetailsPage.checkBarcodeType('static')).toBe(true);
+            expect(
+              await TicketDetailsPage.checkBarcodeType('mobileToken'),
+            ).toBe(true);
+          } else if (hasMobileTokenOnOtherDevice) {
+            expect(
+              await TicketDetailsPage.checkBarcodeType('notInspectable'),
+            ).toBe(true);
+          } else {
+            expect(await TicketDetailsPage.checkBarcodeType('static')).toBe(
+              true,
+            );
           }
 
           // Close
@@ -234,12 +246,17 @@ describe('Auth Ticket', () => {
 
             // Barcode
             if (hasMobileTokenOnThisDevice) {
-              expect(await TicketDetailsPage.checkBarcodeType('mobileToken')).toBe(true);
-            } else if (hasMobileTokenOnOtherDevice){
-              expect(await TicketDetailsPage.checkBarcodeType('notInspectable')).toBe(true);
-            }
-            else {
-              expect(await TicketDetailsPage.checkBarcodeType('static')).toBe(true);
+              expect(
+                await TicketDetailsPage.checkBarcodeType('mobileToken'),
+              ).toBe(true);
+            } else if (hasMobileTokenOnOtherDevice) {
+              expect(
+                await TicketDetailsPage.checkBarcodeType('notInspectable'),
+              ).toBe(true);
+            } else {
+              expect(await TicketDetailsPage.checkBarcodeType('static')).toBe(
+                true,
+              );
             }
 
             // Close
@@ -260,12 +277,11 @@ describe('Auth Ticket', () => {
       try {
         await NavigationHelper.tapMenu('profile');
         await ElementHelper.waitForElement('text', 'Profile');
-        await ProfilePage.logout()
-
+        await ProfilePage.logout();
       } catch (errMsg) {
         await AppHelper.screenshot('error_auth_logout');
         throw errMsg;
       }
     }
-  })
+  });
 });
