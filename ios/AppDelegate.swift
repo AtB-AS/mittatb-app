@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  atb
-//
-//  Created by Christian Brevik on 03/09/2025.
-//
-
-
 import UIKit
 import React
 import Bugsnag
@@ -39,6 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     reactNativeDelegate = delegate
     reactNativeFactory = factory
+    
+    // Initialize window
+    window = UIWindow(frame: UIScreen.main.bounds)
 
     // Initialize Intercom
     if let intercomPath = Bundle.main.path(forResource: "Intercom", ofType: "plist"),
@@ -76,9 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
   
-  /*override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     return RCTLinkingManager.application(app, open: url, options: options)
-  }*/
+  }
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
