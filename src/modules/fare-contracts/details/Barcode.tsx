@@ -251,6 +251,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
 };
 
 const useStyles = () => {
+  // Some code readers are sensitive to size and padding. Configurable parameters allow quick response to reading issues.
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   return StyleSheet.createThemeHook(() => ({
     aztecCode: {
