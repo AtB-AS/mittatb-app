@@ -36,7 +36,7 @@ export const Profile_SmartParkAndRideScreen = () => {
   const {
     data: vehicleRegistrations,
     refetch: refetchVehicleRegistrations,
-    isFetching: vehicleRegistrationsLoading,
+    isFetching: vehicleRegistrationsIsFetching,
   } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
 
@@ -51,7 +51,7 @@ export const Profile_SmartParkAndRideScreen = () => {
       }}
       refreshControl={
         <RefreshControl
-          refreshing={vehicleRegistrationsLoading}
+          refreshing={vehicleRegistrationsIsFetching}
           onRefresh={refetchVehicleRegistrations}
         />
       }

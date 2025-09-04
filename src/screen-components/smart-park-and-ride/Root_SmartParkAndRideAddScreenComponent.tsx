@@ -39,7 +39,7 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const {
     mutateAsync: handleAddVehicleRegistration,
-    error: handleAddVehicleError,
+    error: addVehicleRegistrationError,
   } = useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
 
   const themeColor = theme.color.background.accent[0];
@@ -86,10 +86,13 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const footerNode = (
     <View style={styles.footer}>
-      {handleAddVehicleError && (
+      {addVehicleRegistrationError && (
         <MessageInfoBox
           type="error"
-          message={getErrorMessageTranslation(handleAddVehicleError?.kind, t)}
+          message={getErrorMessageTranslation(
+            addVehicleRegistrationError?.kind,
+            t,
+          )}
         />
       )}
       <Button

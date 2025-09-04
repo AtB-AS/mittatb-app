@@ -3,6 +3,7 @@ import {
   SvvVehicleInfo,
   SvvVehicleInfoSchema,
   VehicleRegistration,
+  VehicleRegistrationSchema,
 } from '../types';
 import {getErrorResponse} from '@atb/api/utils';
 import {isAxiosError} from 'axios';
@@ -30,9 +31,9 @@ export const getVehicleRegistrations = async (): Promise<
 > => {
   const response = await client.get(`/spar/v1/vehicle-registrations`, {
     authWithIdToken: true,
-    skipErrorLogging: (error_1) => error_1.response?.status === 404,
+    skipErrorLogging: (error) => error.response?.status === 404,
   });
-  return response.data.vehicles;
+  return VehicleRegistrationSchema.array().parse(response.data.vehicles);
 };
 
 export const editVehicleRegistration = async (
@@ -65,7 +66,7 @@ export const searchVehicleInformation = async (
 ): Promise<SvvVehicleInfo> => {
   const response = await client.get(`/spar/v1/search-vehicle/${licensePlate}`, {
     authWithIdToken: true,
-    skipErrorLogging: (error_1) => error_1.response?.status === 400,
+    skipErrorLogging: (error) => error.response?.status === 400,
   });
   return SvvVehicleInfoSchema.parse(response.data);
 };
