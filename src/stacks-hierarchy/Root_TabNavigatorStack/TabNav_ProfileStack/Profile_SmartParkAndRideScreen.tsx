@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TranslateFunction, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {
@@ -33,7 +33,11 @@ export const Profile_SmartParkAndRideScreen = () => {
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
+  const {
+    data: vehicleRegistrations,
+    refetch: refetchVehicleRegistrations,
+    isFetching: vehicleRegistrationsIsFetching,
+  } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
 
   const canAddVehicleRegistrations =
@@ -45,6 +49,12 @@ export const Profile_SmartParkAndRideScreen = () => {
         title: t(SmartParkAndRideTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
+      refreshControl={
+        <RefreshControl
+          refreshing={vehicleRegistrationsIsFetching}
+          onRefresh={refetchVehicleRegistrations}
+        />
+      }
     >
       <View style={styles.container}>
         <ContentHeading text={t(SmartParkAndRideTexts.content.heading)} />
