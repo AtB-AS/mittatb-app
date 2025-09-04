@@ -104,7 +104,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
         return (
           <PressableOpacity
             key={index}
-            accessibilityRole="button"
+            accessibilityRole="tab"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
