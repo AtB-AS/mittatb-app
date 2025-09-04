@@ -68,5 +68,5 @@ export const searchVehicleInformation = async (
     authWithIdToken: true,
     skipErrorLogging: (error) => error.response?.status === 400,
   });
-  return SvvVehicleInfoSchema.parse(response.data);
+  return SvvVehicleInfoSchema.parse(response?.data);
 };
