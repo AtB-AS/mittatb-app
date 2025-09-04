@@ -16,6 +16,11 @@ export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 export const getServerTime = async () => {
   const response = await client.get('/identity/v1/time', {
     authWithIdToken: false,
+    headers: {
+      // When the device time is wrong, we can't rely on the device's judgement
+      // on what is fresh and stale data, so we disable caching completely here.
+      'Cache-Control': 'no-store',
+    },
   });
   return response.data;
 };

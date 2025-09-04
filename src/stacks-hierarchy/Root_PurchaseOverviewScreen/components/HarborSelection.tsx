@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
@@ -11,6 +11,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
@@ -25,8 +26,8 @@ export const HarborSelection = forwardRef<
   const {t} = useTranslation();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const fromHarborRef = useRef<typeof TouchableOpacity>(null);
-  const toHarborRef = useRef<typeof TouchableOpacity>(null);
+  const fromHarborRef = useRef<typeof PressableOpacity>(null);
+  const toHarborRef = useRef<typeof PressableOpacity>(null);
   useImperativeHandle(ref, () => ({
     fromHarborRef: fromHarborRef as any,
     toHarborRef: toHarborRef as any,
@@ -77,7 +78,7 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  typeof TouchableOpacity,
+  typeof PressableOpacity,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();

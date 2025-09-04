@@ -15,7 +15,6 @@ import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  isSubtextMarkdown?: boolean;
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
@@ -38,7 +37,6 @@ export function ToggleSectionItem({
   interactiveColor,
   textType,
   disabled = false,
-  isSubtextMarkdown = false,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -62,6 +60,10 @@ export function ToggleSectionItem({
     setTimeout(() => onValueChange(v), 0);
   };
 
+  let a11yLabel = text;
+  if (label) a11yLabel += ` ${t(TagInfoTexts.labels[label].a11y)}`;
+  if (subtext) a11yLabel += `, ${subtext}`;
+
   return (
     <View
       style={topContainer}
@@ -73,9 +75,7 @@ export function ToggleSectionItem({
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
-      accessibilityLabel={
-        text + (label && ` ${t(TagInfoTexts.labels[label].a11y)}`)
-      }
+      accessibilityLabel={a11yLabel}
       {...accessibility}
       testID="toggleItem"
     >
@@ -107,11 +107,7 @@ export function ToggleSectionItem({
             />
           </View>
           {subtext && (
-            <ThemeText
-              typography="body__secondary"
-              color="secondary"
-              isMarkdown={isSubtextMarkdown}
-            >
+            <ThemeText typography="body__secondary" color="secondary">
               {subtext}
             </ThemeText>
           )}
