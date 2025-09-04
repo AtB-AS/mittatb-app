@@ -96,7 +96,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <PressableOpacity style={styles.button} onPress={onExpand}>
+      <PressableOpacity
+        style={styles.button}
+        onPress={onExpand}
+        accessibilityRole="button"
+      >
         <ThemeText typography="body__secondary--bold" color="primary">
           {buttonText}
         </ThemeText>
