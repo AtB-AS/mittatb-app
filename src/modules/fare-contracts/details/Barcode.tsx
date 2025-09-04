@@ -86,6 +86,7 @@ function useScreenBrightnessIncrease() {
  */
 const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
+  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const {data: signedToken} = useGetSignedTokenQuery();
   const [aztecCodeError, setAztecCodeError] = useState(false);
@@ -108,7 +109,10 @@ const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
 
   return (
     <View
-      style={styles.aztecCode}
+      style={[
+        styles.aztecCode,
+        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+      ]}
       accessible={true}
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="mobileTokenBarcode"
@@ -180,6 +184,7 @@ const LoadingBarcode = () => {
 
 const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
+  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -197,7 +202,12 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   if (!aztecXml) return null;
 
   return (
-    <View style={styles.aztecCode}>
+    <View
+      style={[
+        styles.aztecCode,
+        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+      ]}
+    >
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
@@ -215,6 +225,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
 
 const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
+  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
@@ -233,7 +244,12 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
 
   return (
     <View
-      style={[styles.aztecCode, styles.staticQrCode, styles.staticQrCodeSmall]}
+      style={[
+        styles.aztecCode,
+        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+        styles.staticQrCode,
+        styles.staticQrCodeSmall,
+      ]}
     >
       <PressableOpacity
         onPress={onOpenBarcodePress}
@@ -250,38 +266,33 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   );
 };
 
-const useStyles = () => {
-  // Some code readers are sensitive to size and padding. Configurable parameters allow quick response to reading issues.
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
-  return StyleSheet.createThemeHook(() => ({
-    aztecCode: {
-      width: '100%',
-      aspectRatio: 1,
-      padding: aztec_code_padding,
-      backgroundColor: '#FFFFFF',
-      maxHeight: aztec_code_max_height,
-    },
-    staticBottomContainer: {
-      flex: 1,
-      backgroundColor: '#ffffff',
-    },
-    staticQrCode: {
-      padding: 0,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      maxWidth: 250,
-    },
-    staticQrCodeSmall: {
-      maxWidth: 125,
-    },
-  }))();
-};
+const useStyles = StyleSheet.createThemeHook(() => ({
+  aztecCode: {
+    width: '100%',
+    aspectRatio: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  staticBottomContainer: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  staticQrCode: {
+    padding: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: 250,
+  },
+  staticQrCodeSmall: {
+    maxWidth: 125,
+  },
+}));
 
 function useStaticBarcodeBottomSheet(
   qrCodeSvg: string | undefined,
   onCloseFocusRef: RefObject<any>,
 ) {
   const styles = useStyles();
+  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
 
   const {
@@ -299,7 +310,13 @@ function useStaticBarcodeBottomSheet(
           fullHeight
         >
           <View style={styles.staticBottomContainer}>
-            <View style={[styles.aztecCode, styles.staticQrCode]}>
+            <View
+              style={[
+                styles.aztecCode,
+                {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+                styles.staticQrCode,
+              ]}
+            >
               <PressableOpacity
                 ref={onOpenFocusRef}
                 onPress={closeBottomSheet}
