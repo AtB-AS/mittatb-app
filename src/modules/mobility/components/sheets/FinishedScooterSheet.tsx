@@ -40,7 +40,6 @@ export const FinishedScooterSheet = ({
 
   return (
     <BottomSheetMap
-      snapPoints={['50%']}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}

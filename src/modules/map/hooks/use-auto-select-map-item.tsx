@@ -19,8 +19,8 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {InteractionManager} from 'react-native';
-import {ShmoBookingState} from '@atb/api/types/mobility';
-import {FinishedScooterSheet} from '@atb/modules/mobility';
+//import {ShmoBookingState} from '@atb/api/types/mobility';
+//import {FinishedScooterSheet} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 //import {useEnterPaymentMethods} from './use-enter-payment-methods';
 import MapboxGL from '@rnmapbox/maps';
@@ -165,7 +165,7 @@ export const useAutoSelectMapItem = (
         let BottomSheetComponent: JSX.Element | undefined = undefined;
         switch (bottomSheetToAutoSelect.type) {
           case AutoSelectableBottomSheetType.Scooter:
-            if (
+            /*if (
               bottomSheetToAutoSelect?.shmoBookingState ===
               ShmoBookingState.FINISHED
             ) {
@@ -184,7 +184,7 @@ export const useAutoSelectMapItem = (
                   />
                 );
               }
-            } /*else {
+            }*/ /*else {
               openScooterSheet(bottomSheetToAutoSelect.id);
             }*/
             break;

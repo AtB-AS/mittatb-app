@@ -1,7 +1,11 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
+  ActiveScooterSheet,
+  FinishedScooterSheet,
+  FinishingScooterSheet,
   ScooterSheet,
   SelectShmoPaymentMethodSheet,
+  useActiveShmoBookingQuery,
 } from '@atb/modules/mobility';
 
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
@@ -13,6 +17,8 @@ import {AutoSelectableMapItem} from './use-auto-select-map-item';
 import {InteractionManager} from 'react-native';
 import {flyToLocation, getMapPadding} from '../utils';
 import MapboxGL from '@rnmapbox/maps';
+import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useGeolocationContext} from '@atb/modules/geolocation';
 
 type MapBottomSheetsProps = {
   unSelectMapItem: () => void;
@@ -31,6 +37,8 @@ export const MapBottomSheets = ({
   const navigateToPaymentMethods = useEnterPaymentMethods();
   const {mapSelectionState, mapSelectionDispatch, setAutoSelectedMapItem} =
     useMapContext();
+  const {getCurrentCoordinates} = useGeolocationContext();
+  const {data: activeBooking} = useActiveShmoBookingQuery();
 
   const analytics = useAnalyticsContext();
   const navigation = useNavigation<RootNavigationProps>();
@@ -65,6 +73,21 @@ export const MapBottomSheets = ({
     [mapCameraRef, mapViewRef, setAutoSelectedMapItem, tabBarHeight],
   );
 
+  const flyToUserLocation = useCallback(async () => {
+    const coordinates = await getCurrentCoordinates();
+    mapCameraRef &&
+      flyToLocation({
+        coordinates: {
+          latitude: coordinates?.latitude ?? 0,
+          longitude: coordinates?.longitude ?? 0,
+        },
+        padding: getMapPadding(tabBarHeight),
+        mapCameraRef,
+        mapViewRef,
+        zoomLevel: 15,
+      });
+  }, [getCurrentCoordinates, mapCameraRef, mapViewRef, tabBarHeight]);
+
   console.log('yo');
 
   async function selectPaymentMethod() {
@@ -79,7 +102,8 @@ export const MapBottomSheets = ({
   return (
     <>
       {mapSelectionState.mapState === AutoSelectableBottomSheetType.Scooter &&
-        !openPaymentType && (
+        !openPaymentType &&
+        !activeBooking?.bookingId && (
           <ScooterSheet
             onVehicleReceived={flyToMapItemLocation}
             selectPaymentMethod={selectPaymentMethod}
@@ -107,6 +131,51 @@ export const MapBottomSheets = ({
           }}
         />
       )}
+
+      {activeBooking?.state === ShmoBookingState.IN_USE && (
+        <ActiveScooterSheet
+          mapViewRef={mapViewRef}
+          onForceClose={unSelectMapItem}
+          onActiveBookingReceived={flyToUserLocation}
+          navigateSupportCallback={() => {
+            navigation.navigate('Root_ScooterHelpScreen', {
+              operatorId: activeBooking.asset.operator.id,
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+          photoNavigation={() => {
+            handleCloseScooterSheet();
+            navigation.navigate('Root_ParkingPhotoScreen', {
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+        />
+      )}
+      {activeBooking?.state === ShmoBookingState.FINISHING && (
+        <FinishingScooterSheet
+          onForceClose={unSelectMapItem}
+          photoNavigation={() => {
+            handleCloseScooterSheet();
+            navigation.navigate('Root_ParkingPhotoScreen', {
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+        />
+      )}
+      {mapSelectionState.mapState === 'FINISHED_BOOKING' &&
+        !!mapSelectionState?.assetId && (
+          <FinishedScooterSheet
+            bookingId={mapSelectionState.assetId as string}
+            onClose={handleCloseScooterSheet}
+            navigateSupportCallback={(operatorId, bookingId) => {
+              handleCloseScooterSheet();
+              navigation.navigate('Root_ScooterHelpScreen', {
+                operatorId,
+                bookingId,
+              });
+            }}
+          />
+        )}
     </>
   );
 };

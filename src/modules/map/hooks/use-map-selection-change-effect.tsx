@@ -71,10 +71,10 @@ export const useMapSelectionChangeEffect = (
     useUpdateBottomSheetWhenSelectedEntityChanges(
       mapProps,
       distance,
-      mapSelectionAction,
       mapViewRef,
       closeCallback,
       tabBarHeight,
+      mapSelectionAction,
     );
 
   const onMapClick = useCallback(

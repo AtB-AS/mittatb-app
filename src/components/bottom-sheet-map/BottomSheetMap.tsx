@@ -79,6 +79,8 @@ export const BottomSheetMap = ({
   return (
     <BottomSheetGor
       ref={ref}
+      handleIndicatorStyle={styles.handleIndicatorStyle}
+      handleStyle={styles.handleStyle}
       snapPoints={computedSnapPoints}
       enableDynamicSizing={enableDynamicSizing}
       backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
@@ -117,13 +119,17 @@ export const BottomSheetMap = ({
                   )
                 ) : null}
                 <View style={styles.headingWrapper}>
-                  <ThemeText typography="heading--big">{heading}</ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color={theme.color.foreground.dynamic.secondary}
-                  >
-                    {subText}
-                  </ThemeText>
+                  {heading && (
+                    <ThemeText typography="heading--big">{heading}</ThemeText>
+                  )}
+                  {subText && (
+                    <ThemeText
+                      typography="body__secondary"
+                      color={theme.color.foreground.dynamic.secondary}
+                    >
+                      {subText}
+                    </ThemeText>
+                  )}
                 </View>
               </View>
             )}
@@ -177,5 +183,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   logo: {
     marginEnd: theme.spacing.small,
+  },
+  handleIndicatorStyle: {
+    backgroundColor: theme.color.foreground.inverse.secondary,
+    width: 75,
+    height: 8,
+  },
+  handleStyle: {
+    paddingBottom: theme.spacing.medium,
+    paddingTop: theme.spacing.xSmall,
   },
 }));
