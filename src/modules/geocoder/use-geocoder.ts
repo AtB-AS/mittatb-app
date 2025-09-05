@@ -1,10 +1,11 @@
 import {useEffect} from 'react';
-import {CancelToken, isCancel} from '@atb/api';
+import {CancelToken} from '@atb/api';
 import {Coordinates} from '@atb/utils/coordinates';
 import {autocomplete} from '@atb/api';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
 import {mapFeatureToLocation} from './utils';
-import {getAxiosErrorType} from '@atb/api/utils';
+import {ErrorResponse} from '@atb-as/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 
 export function useGeocoder(
   text: string | null,
@@ -37,9 +38,10 @@ export function useGeocoder(
             locations: response?.data?.map(mapFeatureToLocation),
           });
         } catch (err) {
-          if (!isCancel(err)) {
+          const error = err as ErrorResponse;
+          if (!(error.kind === 'AXIOS_CANCEL')) {
             console.warn(err);
-            dispatch({type: 'SET_ERROR', error: getAxiosErrorType(err)});
+            dispatch({type: 'SET_ERROR', error: error.kind as AxiosErrorKind});
           } else {
             dispatch({type: 'SET_LOCATIONS', locations: null});
           }

@@ -3,9 +3,10 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {reverse} from '@atb/api';
 import {mapFeatureToLocation} from './utils';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
-import {getAxiosErrorType} from '@atb/api/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 import {SearchLocation} from '@atb/modules/favorites';
 import {useTimeoutRequest} from '@atb/api/client';
+import {ErrorResponse} from '@atb-as/utils';
 
 type ReverseGeocoderState = GeocoderState & {
   closestLocation?: SearchLocation;
@@ -33,9 +34,10 @@ export function useReverseGeocoder(
             locations: response?.data?.map(mapFeatureToLocation),
           });
         } catch (err) {
+          const error = err as ErrorResponse;
           dispatch({
             type: 'SET_ERROR',
-            error: getAxiosErrorType(err, timeoutRequest.didTimeout),
+            error: error.kind as AxiosErrorKind,
           });
         }
       } else {

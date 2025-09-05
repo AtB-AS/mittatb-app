@@ -94,10 +94,7 @@ async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
 }
 
 function responseErrorHandler(error: AxiosError) {
-  const errorJson: any = error.toJSON();
-  // TODO: `error.status` returns undefined, but calling `toJSON` and indexind
-  // `status` works.
-  const status = errorJson['status'];
+  const status = error.response?.status ?? error.status;
 
   const errorResponse: ErrorResponse = getErrorResponse(error) ?? {
     http: {

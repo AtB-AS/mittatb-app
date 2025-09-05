@@ -1,5 +1,5 @@
 import {format, parseISO} from 'date-fns';
-import {ErrorType} from '@atb/api/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
 import {FareZone} from '@atb/modules/configuration';
 import {
@@ -20,12 +20,12 @@ export function getExpireDate(iso: string): string {
 }
 
 export function translateErrorType(
-  errorType: ErrorType,
+  errorType: AxiosErrorKind,
   t: TranslateFunction,
 ): string {
   switch (errorType) {
-    case 'network-error':
-    case 'timeout':
+    case 'AXIOS_NETWORK_ERROR':
+    case 'AXIOS_TIMEOUT':
       return t(LocationSearchTexts.messages.networkError);
     default:
       return t(LocationSearchTexts.messages.defaultError);
