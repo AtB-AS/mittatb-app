@@ -1,7 +1,12 @@
 import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
-import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
+import {
+  ErrorResponse,
+  getAxiosErrorMetadata,
+  getAxiosErrorType,
+  getErrorResponse,
+} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
   AppIdentifierHeaderName,
@@ -23,12 +28,6 @@ import {
   getIdTokenValidityStatus,
 } from '@atb/modules/auth';
 
-type InternalUpstreamServerError = {
-  errorCode: 602;
-  shortNorwegian: string;
-  shortEnglish: string;
-};
-
 export const client = createClient(API_BASE_URL);
 
 const DEFAULT_TIMEOUT = 15000;
@@ -37,8 +36,6 @@ declare module 'axios' {
   export interface AxiosRequestConfig {
     // Use id token as bearer token in authorization header
     authWithIdToken?: boolean;
-    // Force refresh id token from firebase before request
-    forceRefreshIdToken?: boolean;
     // Whether the error logging to Bugsnag should be skipped for a given error
     skipErrorLogging?: (error: AxiosError) => boolean;
   }
@@ -53,7 +50,6 @@ export function createClient(baseUrl: string | undefined) {
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
-  client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
   return client;
 }
@@ -97,26 +93,29 @@ async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   return config;
 }
 
-function responseIdTokenHandler(error: AxiosError) {
-  if (error?.config) {
-    error.config.forceRefreshIdToken =
-      error.config.authWithIdToken && error.response?.status === 401;
-  }
-  throw error;
-}
-
-function isInternalUpstreamServerError(
-  e: any,
-): e is InternalUpstreamServerError {
-  return 'errorCode' in e && 'shortNorwegian' in e;
-}
-
 function responseErrorHandler(error: AxiosError) {
-  if (shouldSkipLogging(error)) {
-    return Promise.reject(error);
-  }
+  const errorJson: any = error.toJSON();
+  // TODO: `error.status` returns undefined, but calling `toJSON` and indexind
+  // `status` works.
+  const status = errorJson['status'];
 
-  const errorType = getAxiosErrorType(error);
+  const errorResponse: ErrorResponse = getErrorResponse(error) ?? {
+    http: {
+      code: status ?? -1, // TODO: What is best to default here?
+      message: error.code ?? 'UNKNOWN',
+    },
+    message: error.message,
+    kind: 'UNKNOWN',
+    details: [
+      {
+        responseData: error.response?.data,
+      },
+    ],
+  };
+
+  if (shouldSkipLogging(error)) {
+    return Promise.reject(errorResponse);
+  }
 
   const idTokenMetadata = {
     idToken: getIdTokenGlobal(),
@@ -127,6 +126,8 @@ function responseErrorHandler(error: AxiosError) {
 
   // ID token breadcrumb logging on API error
   Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
+
+  const errorType = getAxiosErrorType(error);
 
   switch (errorType) {
     case 'default':
@@ -139,19 +140,20 @@ function responseErrorHandler(error: AxiosError) {
       break;
     case 'unknown':
       Bugsnag.notify(error);
+      errorResponse.kind = 'AXIOS_UNKNOWN';
       break;
     case 'network-error':
+      errorResponse.kind = 'AXIOS_NETWORK_ERROR';
+      break;
     case 'timeout':
+      errorResponse.kind = 'AXIOS_TIMEOUT';
+      break;
+    case 'cancel':
+      errorResponse.kind = 'AXIOS_CANCEL';
       break;
   }
-  const variable: any = error?.response?.data;
-  if (variable?.upstreamError) {
-    const upstreamError = JSON.parse(variable.upstreamError);
-    if (isInternalUpstreamServerError(upstreamError)) {
-      return Promise.reject({...error, status: upstreamError.errorCode});
-    }
-  }
-  return Promise.reject(error);
+
+  return Promise.reject(errorResponse);
 }
 
 const shouldSkipLogging = (error: AxiosError) =>
