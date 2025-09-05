@@ -8,6 +8,7 @@ export {LicensePlateSection} from './components/LicensePlateSection';
 export {useSearchVehicleInformationQuery} from './queries/use-search-vehicle-information-query';
 export {SmartParkAndRideOnboarding_InformationScreen} from './enrollment/SmartParkAndRideOnboarding_InformationScreen';
 export {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './enrollment/SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
+export {useSmartParkAndRideTexts} from './useSmartParkAndRideTexts';
 
 export {
   sparEnrollmentConfig,
