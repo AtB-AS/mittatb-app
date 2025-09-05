@@ -3,7 +3,7 @@ import {z} from 'zod';
 export const VehicleRegistrationSchema = z.object({
   id: z.string(),
   licensePlate: z.string(),
-  nickname: z.string().optional(),
+  nickname: z.string().nullish(),
 });
 
 export type VehicleRegistration = z.infer<typeof VehicleRegistrationSchema>;
