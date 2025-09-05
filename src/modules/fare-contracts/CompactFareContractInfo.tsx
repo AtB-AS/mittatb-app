@@ -20,6 +20,7 @@ import {secondsToDuration} from '@atb/utils/date';
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   style?: StyleProp<ViewStyle>;
   onPressDetails?: () => void;
+  testID?: string;
 };
 
 type FareContractInfoTextsProps = {
@@ -55,7 +56,10 @@ export const CompactFareContractInfo = (
 
   return (
     <Section style={props.style} {...accessibility}>
-      <GenericClickableSectionItem onPress={props.onPressDetails}>
+      <GenericClickableSectionItem
+        onPress={props.onPressDetails}
+        testID={props.testID ? props.testID : ''}
+      >
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
@@ -93,7 +97,11 @@ const CompactFareContractInfoTexts = (
         ))
       )}
       {productName && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText
+          typography="body__secondary"
+          color="secondary"
+          testID="productName"
+        >
           {productName}
         </ThemeText>
       )}
