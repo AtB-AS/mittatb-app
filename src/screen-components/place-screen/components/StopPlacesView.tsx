@@ -85,6 +85,7 @@ export const StopPlacesView = (props: Props) => {
     () => stopPlaceAndQuays.map(({quay}) => quay),
     [stopPlaceAndQuays],
   );
+  const didLoadingDataFail = !!state.isError;
 
   const quayListData: SectionListData<StopPlaceAndQuay>[] =
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];

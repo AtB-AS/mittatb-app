@@ -22,7 +22,7 @@ import {isRemoteTokenStateError, parseTokenServerErrors} from './utils';
 import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
-import { ErrorResponse } from '@atb-as/utils';
+import {ErrorResponse} from '@atb-as/utils';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
