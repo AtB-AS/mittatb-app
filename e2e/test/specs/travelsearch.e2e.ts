@@ -58,7 +58,7 @@ describe('Travel search', () => {
       //expect(TimeHelper.getTimeDurationInMin(startTime, endTime)).toEqual(travelTime + 1)
 
       // ** Details **
-      await TravelsearchOverviewPage.openFirstSearchResult();
+      await TravelsearchOverviewPage.openSearchResult();
 
       // Check start time and departure
       const startTimeInDetails = await TravelsearchDetailsPage.getTime(
@@ -141,7 +141,7 @@ describe('Travel search', () => {
       if (await TravelsearchOverviewPage.hasTravelSearchResults()) {
         // Number of legs
         const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
-        await TravelsearchOverviewPage.openFirstSearchResult();
+        await TravelsearchOverviewPage.openSearchResult();
         await AppHelper.scrollDownUntilId(
           'tripDetailsContentView',
           `legContainer${noLegs - 1}`,
