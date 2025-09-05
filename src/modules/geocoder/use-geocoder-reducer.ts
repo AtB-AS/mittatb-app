@@ -1,11 +1,11 @@
 import {SearchLocation} from '@atb/modules/favorites';
 import {useReducer} from 'react';
-import {ErrorType} from '@atb/api/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 
 export type GeocoderState = {
   locations: SearchLocation[] | null;
   isSearching: boolean;
-  error?: ErrorType;
+  error?: AxiosErrorKind;
 };
 
 type GeocoderReducerAction =
@@ -16,7 +16,7 @@ type GeocoderReducerAction =
   | {
       type: 'SET_IS_SEARCHING';
     }
-  | {type: 'SET_ERROR'; error: ErrorType};
+  | {type: 'SET_ERROR'; error: AxiosErrorKind};
 
 type GeocoderReducer = (
   prevState: GeocoderState,

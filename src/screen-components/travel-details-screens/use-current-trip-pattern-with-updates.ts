@@ -1,12 +1,12 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {AxiosError} from 'axios';
 import {useCallback, useEffect, useState} from 'react';
 import {singleTripSearch} from '@atb/api/bff/trips';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
+import {ErrorResponse} from '@atb-as/utils';
 
 type TripPatternUpdate = {
   tp: TripPattern;
-  error?: AxiosError;
+  error?: ErrorResponse;
 };
 
 /**
@@ -18,7 +18,7 @@ type TripPatternUpdate = {
  */
 export const useCurrentTripPatternWithUpdates = (
   originalTripPattern: TripPattern,
-): {updatedTripPattern: TripPattern; error?: AxiosError} => {
+): {updatedTripPattern: TripPattern; error?: ErrorResponse} => {
   const [tripPatternUpdates, setTripPatternUpdates] =
     useState<TripPatternUpdate>({tp: originalTripPattern});
 
@@ -32,7 +32,7 @@ export const useCurrentTripPatternWithUpdates = (
 
   const [updatedTripPattern, , , error] = usePollableResource<
     TripPattern | undefined,
-    AxiosError
+    ErrorResponse
   >(fetchTripPattern, {
     initialValue: originalTripPattern,
     pollingTimeInSeconds: 20,

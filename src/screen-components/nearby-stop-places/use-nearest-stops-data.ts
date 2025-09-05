@@ -6,16 +6,16 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {DepartureGroupMetadata} from '@atb/api/bff/types';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
 import {getNearestStops} from '@atb/api/bff/departures';
 import {NearestStopPlaceNode} from '@atb/api/types/departures';
+import {ErrorResponse} from '@atb-as/utils';
 
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
   data?: NearestStopPlaceNode[];
-  error?: {type: ErrorType; loadType: LoadType};
+  error?: {type: string; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
@@ -46,7 +46,7 @@ type DepartureDataActions =
   | {
       type: 'SET_ERROR';
       loadType: LoadType;
-      error: ErrorType;
+      error: string;
       reset?: boolean;
     };
 
@@ -85,11 +85,13 @@ const reducer: ReducerWithSideEffects<
               result: nearestStopPlaceNodes,
             });
           } catch (e) {
+            const error = e as ErrorResponse;
+
             dispatch({
               type: 'SET_ERROR',
               reset: action.location?.id !== state.locationId,
               loadType: 'initial',
-              error: getAxiosErrorType(e),
+              error: error.kind,
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});

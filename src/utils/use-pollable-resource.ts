@@ -2,6 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useInterval} from './use-interval';
 import {useIsLoading} from './use-is-loading';
 import {useIsFocusedAndActive} from './use-is-focused-and-active';
+import {ErrorResponse} from '@atb-as/utils';
 
 type PollableResourceOptions<T> = {
   initialValue: T;
@@ -27,7 +28,7 @@ type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
  * @param opts: PollableResourceOptions<T>
  * @returns [T, () => Promise<void>, boolean, E]
  */
-export const usePollableResource = <T, E extends Error = Error>(
+export const usePollableResource = <T, E extends ErrorResponse = ErrorResponse>(
   callback: (signal?: AbortSignal) => Promise<T>,
   opts: PollableResourceOptions<T>,
 ): [
