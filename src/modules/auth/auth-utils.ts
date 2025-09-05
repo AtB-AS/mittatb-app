@@ -4,7 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction, ConfirmationErrorCode} from './types';
 import {authenticateWithSms, verifySms} from '@atb/api/identity';
 import {Language} from '@atb/translations';
-import {getAxiosErrorMetadata} from '@atb/api/utils';
+import {ErrorResponse, errorDetailsToResponseData} from '@atb/api/utils';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
@@ -41,14 +41,14 @@ export const authSignInWithPhoneNumber = async (
     await authenticateWithSms(phoneNumberWithPrefix, language);
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
   } catch (e: any) {
-    const error = getAxiosErrorMetadata(e);
-    if (error.responseStatus === 400) {
-      const errorData = error.responseData && JSON.parse(error.responseData);
+    const error = e as ErrorResponse;
+    if (error.http.code === 400) {
+      const errorData = errorDetailsToResponseData(error);
       if (errorData?.error_code === 'BAD_REQUEST') {
         return 'invalid_phone';
       }
     }
-    if (error.responseStatus === 429) {
+    if (error.http.code === 429) {
       return 'too_many_attempts';
     }
     Bugsnag.notify(error as any);
@@ -85,15 +85,15 @@ export const authConfirmCode = async (
     const token = await verifySms(phoneNumber, code);
     return await authSignInWithCustomToken(token);
   } catch (e) {
-    const error = getAxiosErrorMetadata(e as any);
-    const status = error.responseStatus;
+    const error = e as ErrorResponse;
+    const status = error.http.code;
     switch (status) {
       case 400:
-        const errorData = error.responseData && JSON.parse(error.responseData);
-        if (errorData?.error_code === 'INVALID_CODE') {
+        const responseData = errorDetailsToResponseData(error);
+        if (responseData?.error_code === 'INVALID_CODE') {
           return 'invalid_code';
         }
-        if (errorData?.error_code === 'NOT_FOUND') {
+        if (responseData?.error_code === 'NOT_FOUND') {
           // 10 minutes passed since the code was sent
           return 'session_expired';
         }
@@ -104,7 +104,7 @@ export const authConfirmCode = async (
     }
     notifyBugsnag('Unexpected response on login OTP attempt', {
       errorGroupHash: 'LoginConfirmCode',
-      metadata: {status, responseData: error.responseData, error: e},
+      metadata: {status, responseData: error.details, error: e},
     });
     return 'unknown_error';
   }

@@ -1,4 +1,4 @@
-import {ErrorType} from '@atb/api/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 import {DayLabel} from './DayLabel';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -30,7 +30,7 @@ type Props = {
   isSearching: boolean;
   resultReasons: string[];
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  errorType?: ErrorType;
+  errorType?: AxiosErrorKind;
   searchTime: TripSearchTime;
   anyFiltersApplied: boolean;
 };
@@ -55,8 +55,8 @@ export const Results: React.FC<Props> = ({
   useEffect(() => {
     if (errorType) {
       switch (errorType) {
-        case 'network-error':
-        case 'timeout':
+        case 'AXIOS_NETWORK_ERROR':
+        case 'AXIOS_TIMEOUT':
           setErrorMessage(t(TripSearchTexts.results.error.network));
           break;
         default:
