@@ -27,8 +27,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
-  const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
-    useMapContext();
+  const {
+    setBottomSheetToAutoSelect,
+    setBottomSheetCurrentlyAutoSelected,
+    mapSelectionDispatch,
+  } = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
   const analytics = useMapSelectionAnalytics();
 
@@ -96,6 +99,10 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       if (!!type && !!id) {
         setBottomSheetToAutoSelect({type, id});
+        mapSelectionDispatch({
+          mapState: type,
+          assetId: id,
+        });
         analytics.logEvent('Map', 'Scooter selected', {
           id,
         });
@@ -109,6 +116,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     [
       analytics,
       clearStateAndAlertResultError,
+      mapSelectionDispatch,
       navigation,
       setBottomSheetToAutoSelect,
     ],

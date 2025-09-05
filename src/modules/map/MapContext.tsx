@@ -1,10 +1,21 @@
-import React, {createContext, useContext, useMemo, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import {AutoSelectableMapItem, MapFilterType} from '@atb/modules/map';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useUserMapFilters} from './hooks/use-map-filter';
+import {
+  mapStateReducer,
+  ReducerMapState,
+  ReducerMapStateAction,
+} from './mapStateReducer';
 
 type MapContextState = {
   bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
@@ -21,6 +32,8 @@ type MapContextState = {
   setMapFilter: (mapFilter: MapFilterType) => void;
   mapFilterIsOpen: boolean;
   setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
+  mapSelectionState: ReducerMapState;
+  mapSelectionDispatch: React.Dispatch<ReducerMapStateAction>;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -47,6 +60,12 @@ type Props = {
 export const MapContextProvider = ({children}: Props) => {
   const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
     useState<AutoSelectableBottomSheet>();
+  const [mapSelectionState, mapSelectionDispatch] = useReducer(
+    mapStateReducer,
+    {
+      mapState: 'NONE',
+    },
+  );
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
   const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
@@ -97,6 +116,8 @@ export const MapContextProvider = ({children}: Props) => {
         setMapFilter,
         mapFilterIsOpen,
         setMapFilterIsOpen,
+        mapSelectionState,
+        mapSelectionDispatch,
       }}
     >
       {children}

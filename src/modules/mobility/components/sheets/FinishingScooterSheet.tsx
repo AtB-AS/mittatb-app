@@ -1,8 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -16,6 +13,7 @@ import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-q
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
 
 type Props = {
   photoNavigation: () => void;
@@ -59,7 +57,12 @@ export const FinishingScooterSheet = ({
   ]);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
+    <BottomSheetMap
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      enablePanDownToClose={false}
+    >
       {isLoading && (
         <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" />
@@ -97,7 +100,7 @@ export const FinishingScooterSheet = ({
           />
         </View>
       )}
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 

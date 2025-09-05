@@ -30,6 +30,7 @@ export const Root_ParkingPhotoScreen = ({
     setBottomSheetToAutoSelect,
     setBottomSheetCurrentlyAutoSelected,
     setAutoSelectedMapItem,
+    mapSelectionDispatch,
   } = useMapContext();
 
   const {mutateAsync: sendShmoBookingEvent, isLoading} =
@@ -76,7 +77,10 @@ export const Root_ParkingPhotoScreen = ({
       id: route.params.bookingId,
       shmoBookingState: ShmoBookingState.FINISHED,
     });
-
+    mapSelectionDispatch({
+      mapState: 'FINISHED_BOOKING',
+      assetId: route.params.bookingId,
+    });
     if (base64data) {
       await onEndTrip(route.params.bookingId, base64data);
     }

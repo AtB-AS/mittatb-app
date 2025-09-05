@@ -119,7 +119,7 @@ const fetchMapLines = async (
   return undefined;
 };
 
-const getFocusMode = async (
+export const getFocusMode = async (
   entityFeature: Feature<Point> | undefined,
   fromCoords: Coordinates | undefined,
   disableShouldShowMapLines: boolean,

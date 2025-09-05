@@ -17,9 +17,12 @@ import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
-import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
-import {GeofencingZoneCustomProps, MapProps} from './types';
+import {
+  CameraFocusModeType,
+  GeofencingZoneCustomProps,
+  MapProps,
+} from './types';
 
 import {
   isFeaturePoint,
@@ -31,8 +34,12 @@ import {
   flyToLocation,
   getMapPadding,
   getFeatureToSelect,
+  findEntityAtClick,
+  isParkAndRide,
+  isStopPlace,
 } from './utils';
 import {
+  AutoSelectableBottomSheetType,
   GeofencingZones,
   useGeofencingZoneTextContent,
   useMapViewConfig,
@@ -45,6 +52,9 @@ import {
   useInitShmoBookingMutationStatus,
   MapFilter,
   useVehicleQuery,
+  isStationV2,
+  isCarStationV2,
+  isBikeStationV2,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -56,12 +66,15 @@ import {NationalStopRegistryFeatures} from './components/national-stop-registry-
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
-import {useShmoActiveBottomSheet} from './hooks/use-active-shmo-booking';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {MapBottomSheets} from './hooks/use-map-bottom-sheets';
+import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
+import {useUpdateBottomSheetWhenSelectedEntityChanges} from './hooks/use-update-bottom-sheet-when-selected-entity-changes';
+import {getFocusMode} from './hooks/use-decide-camera-focus-mode';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -70,9 +83,22 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
+  const {location: currentLocation} = useGeolocationContext();
 
-  const {autoSelectedFeature, mapFilter, mapFilterIsOpen} = useMapContext();
-  const {height: bottomSheetHeight} = useBottomSheetContext();
+  const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
+
+  const {
+    autoSelectedFeature,
+    mapFilter,
+    mapFilterIsOpen,
+    setBottomSheetCurrentlyAutoSelected,
+    setAutoSelectedMapItem,
+    setBottomSheetToAutoSelect,
+    mapSelectionState,
+    mapSelectionDispatch,
+  } = useMapContext();
+  const {height: bottomSheetHeight, close: closeBottomSheet} =
+    useBottomSheetContext();
   const showMapFilterButton = bottomSheetHeight === 0; // hide filter button when a bottom sheet is open
 
   const tabBarHeight = useBottomTabBarHeight();
@@ -89,19 +115,35 @@ export const MapV2 = (props: MapProps) => {
     [initialLocation],
   );
 
+  const mapSelectionCloseCallback = useCallback(() => {
+    setAutoSelectedMapItem(undefined);
+    setBottomSheetCurrentlyAutoSelected(undefined);
+    setBottomSheetToAutoSelect(undefined);
+    closeBottomSheet();
+    mapSelectionDispatch({mapState: 'NONE'});
+  }, [
+    closeBottomSheet,
+    mapSelectionDispatch,
+    setAutoSelectedMapItem,
+    setBottomSheetCurrentlyAutoSelected,
+    setBottomSheetToAutoSelect,
+  ]);
+
+  const distance = undefined;
+  /*cameraFocusMode?.mode === 'map-lines'
+      ? cameraFocusMode.distance
+      : undefined;*/
+
   const {
-    onMapClick,
-    selectedFeature: mapSelectionSelectedFeature,
+    //selectedFeature: mapSelectionSelectedFeature,
     onReportParkingViolation,
-    closeCallback: mapSelectionCloseCallback,
-  } = useMapSelectionChangeEffect(
+  } = useUpdateBottomSheetWhenSelectedEntityChanges(
     props,
+    distance,
     mapViewRef,
-    mapCameraRef,
-    startingCoordinates,
-    true,
-    true,
+    mapSelectionCloseCallback,
     tabBarHeight,
+    //mapSelectionState.mapSelection,
   );
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
@@ -113,7 +155,7 @@ export const MapV2 = (props: MapProps) => {
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
-  const selectedFeature = mapSelectionSelectedFeature || autoSelectedFeature;
+  const selectedFeature = mapSelectionState.feature || autoSelectedFeature;
 
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
@@ -124,12 +166,12 @@ export const MapV2 = (props: MapProps) => {
     isMapV2Enabled,
   } = useFeatureTogglesContext();
 
-  useShmoActiveBottomSheet(
+  /*useShmoActiveBottomSheet(
     mapCameraRef,
     mapViewRef,
     mapSelectionCloseCallback,
     tabBarHeight,
-  );
+  );*/
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -196,6 +238,13 @@ export const MapV2 = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneTextContent],
   );
 
+  useTriggerCameraMoveEffect(
+    cameraFocusMode,
+    mapCameraRef,
+    mapViewRef,
+    tabBarHeight,
+  );
+
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -212,7 +261,12 @@ export const MapV2 = (props: MapProps) => {
       if (!isFeaturePoint(feature)) return;
 
       if (!showGeofencingZones && !isActiveTrip) {
-        onMapClick({source: 'map-click', feature});
+        const entity = await findEntityAtClick(feature, mapViewRef);
+
+        setCameraFocusMode(
+          await getFocusMode(entity, currentLocation?.coordinates, true, true),
+        );
+
         return;
       }
 
@@ -243,10 +297,15 @@ export const MapV2 = (props: MapProps) => {
         );
       } else {
         if (isFeaturePoint(featureToSelect) && !isActiveTrip) {
-          onMapClick({
-            source: 'map-click',
-            feature: featureToSelect,
-          });
+          const entity = await findEntityAtClick(featureToSelect, mapViewRef);
+          setCameraFocusMode(
+            await getFocusMode(
+              entity,
+              currentLocation?.coordinates,
+              true,
+              true,
+            ),
+          );
         } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
           // outside of operational area, rules unspecified
           geofencingZoneOnPress(undefined);
@@ -254,12 +313,12 @@ export const MapV2 = (props: MapProps) => {
       }
     },
     [
-      hideSnackbar,
+      activeShmoBooking?.state,
       showGeofencingZones,
-      onMapClick,
+      hideSnackbar,
+      currentLocation?.coordinates,
       geofencingZoneOnPress,
       selectedFeature,
-      activeShmoBooking,
     ],
   );
 
@@ -274,10 +333,12 @@ export const MapV2 = (props: MapProps) => {
         activeShmoBooking?.state === ShmoBookingState.FINISHING
       )
         return;
+
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,
         positionClicked,
       );
+
       if (isClusterFeatureV2(featureToSelect)) {
         const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
         const toZoomLevel = Math.max(fromZoomLevel + 2);
@@ -293,14 +354,64 @@ export const MapV2 = (props: MapProps) => {
         });
       } else if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
-        // use isVehicleFeature here?
-        onMapClick({
-          source: 'map-item',
-          feature: featureToSelect,
-        });
+
+        if (isScooterV2(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: AutoSelectableBottomSheetType.Scooter,
+            assetId: featureToSelect.properties.id,
+            feature: featureToSelect,
+          });
+        } else if (isBicycleV2(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: AutoSelectableBottomSheetType.Bicycle,
+            assetId: featureToSelect.properties.id,
+            feature: featureToSelect,
+          });
+        } else if (isCarStationV2(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: AutoSelectableBottomSheetType.CarStation,
+            assetId: featureToSelect.properties.id,
+            feature: featureToSelect,
+          });
+        } else if (isParkAndRide(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: 'PARK_AND_RIDE',
+            feature: featureToSelect,
+          });
+        } else if (isStopPlace(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: 'STOP_PLACE',
+            feature: featureToSelect,
+          });
+        } else if (isBikeStationV2(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: AutoSelectableBottomSheetType.BikeStation,
+            assetId: featureToSelect.properties.id,
+            feature: featureToSelect,
+          });
+        } else if (isStationV2(featureToSelect)) {
+          mapSelectionDispatch({
+            mapState: 'STATION',
+            assetId: featureToSelect.properties.id,
+            feature: featureToSelect,
+          });
+        }
+        setCameraFocusMode(
+          await getFocusMode(
+            featureToSelect,
+            currentLocation?.coordinates,
+            true,
+            true,
+          ),
+        );
       }
     },
-    [activeShmoBooking?.state, tabBarHeight, onMapClick],
+    [
+      activeShmoBooking?.state,
+      currentLocation?.coordinates,
+      mapSelectionDispatch,
+      tabBarHeight,
+    ],
   );
 
   return (
@@ -392,11 +503,24 @@ export const MapV2 = (props: MapProps) => {
             mapFilterIsOpen && {bottom: 0},
           ]}
         >
-          <ExternalRealtimeMapButton onMapClick={onMapClick} />
+          <ExternalRealtimeMapButton
+            onMapClick={(res) => {
+              if (res.source === 'external-map-button') {
+                mapSelectionDispatch({
+                  mapState: 'EXTERNAL_MAP',
+                  url: res.url,
+                });
+              }
+            }}
+          />
 
           {showMapFilterButton && (
             <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
+              onPress={() =>
+                mapSelectionDispatch({
+                  mapState: 'FILTER',
+                })
+              }
               isLoading={false}
             />
           )}
@@ -433,6 +557,12 @@ export const MapV2 = (props: MapProps) => {
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
+      <MapBottomSheets
+        unSelectMapItem={mapSelectionCloseCallback}
+        mapCameraRef={mapCameraRef}
+        mapViewRef={mapViewRef}
+        tabBarHeight={tabBarHeight}
+      />
     </View>
   );
 };
