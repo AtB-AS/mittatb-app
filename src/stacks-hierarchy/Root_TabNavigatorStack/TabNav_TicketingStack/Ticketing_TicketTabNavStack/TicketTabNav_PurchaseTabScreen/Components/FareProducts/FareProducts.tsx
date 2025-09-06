@@ -75,8 +75,8 @@ export const FareProducts = ({
             group.heading
               ? getTextForLanguage(group.heading, language)
               : groupedFareProducts.length === 1
-              ? t(TicketingTexts.availableFareProducts.allTickets)
-              : undefined
+                ? t(TicketingTexts.availableFareProducts.allTickets)
+                : undefined
           }
           key={[
             group.transportModes.map((m) => m.mode).join('-'),

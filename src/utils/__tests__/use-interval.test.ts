@@ -1,4 +1,4 @@
-import {renderHook} from '@testing-library/react-hooks';
+import {renderHook} from '@testing-library/react-native';
 import {useInterval} from '../use-interval';
 
 describe('useInterval', () => {
@@ -68,7 +68,8 @@ describe('useInterval', () => {
 
   it('should be able to disable useInterval', async () => {
     const hook = renderHook(
-      ({disabled}) => useInterval(callback, [], 200, disabled),
+      ({disabled}: {disabled: boolean}) =>
+        useInterval(callback, [], 200, disabled),
       {
         initialProps: {
           disabled: false,

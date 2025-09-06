@@ -1446,13 +1446,6 @@
     "@babel/plugin-transform-modules-commonjs" "^7.27.1"
     "@babel/plugin-transform-typescript" "^7.27.1"
 
-"@babel/runtime@^7.12.5":
-  version "7.26.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.0.tgz#8600c2f595f277c60815256418b85356a65173c1"
-  integrity sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==
-  dependencies:
-    regenerator-runtime "^0.14.0"
-
 "@babel/runtime@^7.17.8", "@babel/runtime@^7.26.0", "@babel/runtime@^7.8.4":
   version "7.28.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.3.tgz#75c5034b55ba868121668be5d5bb31cc64e6e61a"
@@ -2525,6 +2518,11 @@
   dependencies:
     "@jest/types" "^29.6.3"
 
+"@jest/diff-sequences@30.0.1":
+  version "30.0.1"
+  resolved "https://registry.yarnpkg.com/@jest/diff-sequences/-/diff-sequences-30.0.1.tgz#0ededeae4d071f5c8ffe3678d15f3a1be09156be"
+  integrity sha512-n5H8QLDJ47QqbCNn5SuFjCRDrOLEZ0h8vAHCK5RL9Ls7Xa8AQLa/YxAc9UjFqoEDM48muwtBGjtMY5cr0PLDCw==
+
 "@jest/environment@^29.7.0":
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/@jest/environment/-/environment-29.7.0.tgz#24d61f54ff1f786f3cd4073b4b94416383baf2a7"
@@ -2561,6 +2559,11 @@
     jest-message-util "^29.7.0"
     jest-mock "^29.7.0"
     jest-util "^29.7.0"
+
+"@jest/get-type@30.1.0":
+  version "30.1.0"
+  resolved "https://registry.yarnpkg.com/@jest/get-type/-/get-type-30.1.0.tgz#4fcb4dc2ebcf0811be1c04fd1cb79c2dba431cbc"
+  integrity sha512-eMbZE2hUnx1WV0pmURZY9XoXPkUYjpc55mb0CrhtdWLtzMQPFvu/rZkTLZFTsdaVQa+Tr4eWAteqcUzoawq/uA==
 
 "@jest/globals@^29.7.0":
   version "29.7.0"
@@ -3732,13 +3735,15 @@
     picocolors "^1.1.1"
     redent "^3.0.0"
 
-"@testing-library/react-hooks@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-8.0.1.tgz#0924bbd5b55e0c0c0502d1754657ada66947ca12"
-  integrity sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==
+"@testing-library/react-native@^13.3.3":
+  version "13.3.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-13.3.3.tgz#4bf02911c4e18075df40b5de0e029c209fb45bda"
+  integrity sha512-k6Mjsd9dbZgvY4Bl7P1NIpePQNi+dfYtlJ5voi9KQlynxSyQkfOgJmYGCYmw/aSgH/rUcFvG8u5gd4npzgRDyg==
   dependencies:
-    "@babel/runtime" "^7.12.5"
-    react-error-boundary "^3.1.0"
+    jest-matcher-utils "^30.0.5"
+    picocolors "^1.1.1"
+    pretty-format "^30.0.5"
+    redent "^3.0.0"
 
 "@testing-library/user-event@^14.6.1":
   version "14.6.1"
@@ -4697,7 +4702,7 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-ansi-styles@^5.0.0:
+ansi-styles@^5.0.0, ansi-styles@^5.2.0:
   version "5.2.0"
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
@@ -8213,6 +8218,16 @@ jest-config@^29.7.0:
     slash "^3.0.0"
     strip-json-comments "^3.1.1"
 
+jest-diff@30.1.2:
+  version "30.1.2"
+  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-30.1.2.tgz#8ff4217e5b63fef49a5b37462999d8f5299a4eb4"
+  integrity sha512-4+prq+9J61mOVXCa4Qp8ZjavdxzrWQXrI80GNxP8f4tkI2syPuPrJgdRPZRrfUTRvIoUwcmNLbqEJy9W800+NQ==
+  dependencies:
+    "@jest/diff-sequences" "30.0.1"
+    "@jest/get-type" "30.1.0"
+    chalk "^4.1.2"
+    pretty-format "30.0.5"
+
 jest-diff@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-29.7.0.tgz#017934a66ebb7ecf6f205e84699be10afd70458a"
@@ -8322,6 +8337,16 @@ jest-matcher-utils@^29.7.0:
     jest-diff "^29.7.0"
     jest-get-type "^29.6.3"
     pretty-format "^29.7.0"
+
+jest-matcher-utils@^30.0.5:
+  version "30.1.2"
+  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-30.1.2.tgz#3f1b63949f740025aff740c6c6a1b653ae370fbb"
+  integrity sha512-7ai16hy4rSbDjvPTuUhuV8nyPBd6EX34HkBsBcBX2lENCuAQ0qKCPb/+lt8OSWUa9WWmGYLy41PrEzkwRwoGZQ==
+  dependencies:
+    "@jest/get-type" "30.1.0"
+    chalk "^4.1.2"
+    jest-diff "30.1.2"
+    pretty-format "30.0.5"
 
 jest-message-util@^29.7.0:
   version "29.7.0"
@@ -9955,6 +9980,15 @@ prettier@^3.5.3, prettier@^3.6.2:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
   integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
 
+pretty-format@30.0.5, pretty-format@^30.0.5:
+  version "30.0.5"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-30.0.5.tgz#e001649d472800396c1209684483e18a4d250360"
+  integrity sha512-D1tKtYvByrBkFLe2wHJl2bwMJIiT8rW+XA+TiataH79/FszLQMrpGEvzUVkzPau7OCO0Qnrhpe87PqtOAIB8Yw==
+  dependencies:
+    "@jest/schemas" "30.0.5"
+    ansi-styles "^5.2.0"
+    react-is "^18.3.1"
+
 pretty-format@^29.0.0, pretty-format@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.7.0.tgz#ca42c758310f365bfa71a0bda0a807160b776812"
@@ -10143,13 +10177,6 @@ react-dom@19.1.0:
   dependencies:
     scheduler "^0.26.0"
 
-react-error-boundary@^3.1.0:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
-  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-
 react-freeze@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.3.tgz#5e3ca90e682fed1d73a7cb50c2c7402b3e85618d"
@@ -10160,7 +10187,7 @@ react-is@^16.13.1, react-is@^16.7.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-is@^18.0.0:
+react-is@^18.0.0, react-is@^18.3.1:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==

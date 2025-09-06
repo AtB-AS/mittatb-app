@@ -1,4 +1,4 @@
-import {renderHook, act} from '@testing-library/react-hooks';
+import {renderHook, act} from '@testing-library/react-native';
 import {useStableValue} from '../use-stable-value';
 
 type TestValue = {a?: number; b?: number} | undefined;

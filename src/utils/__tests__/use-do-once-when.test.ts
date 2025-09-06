@@ -1,4 +1,4 @@
-import {renderHook} from '@testing-library/react-hooks';
+import {renderHook} from '@testing-library/react-native';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 
 let functionRunCount = 0;
@@ -14,7 +14,8 @@ describe('useDoOnceWhen', () => {
 
   it('Should run when condition changes from false to true', async () => {
     const hook = renderHook(
-      ({condition}) => useDoOnceWhen(() => functionRunCount++, condition),
+      ({condition}: {condition: boolean}) =>
+        useDoOnceWhen(() => functionRunCount++, condition),
       {initialProps: {condition: false}},
     );
     expect(functionRunCount).toBe(0);
@@ -24,7 +25,8 @@ describe('useDoOnceWhen', () => {
 
   it('Should rerun if condition switches back to false and to true again', async () => {
     const hook = renderHook(
-      ({condition}) => useDoOnceWhen(() => functionRunCount++, condition),
+      ({condition}: {condition: boolean}) =>
+        useDoOnceWhen(() => functionRunCount++, condition),
       {initialProps: {condition: false}},
     );
     hook.rerender({condition: true});
@@ -34,18 +36,25 @@ describe('useDoOnceWhen', () => {
   });
 
   it('Should not rerun if given function changes', async () => {
-    const hook = renderHook(({func}) => useDoOnceWhen(func, true), {
-      initialProps: {func: () => functionRunCount++},
-    });
+    const hook = renderHook(
+      ({func}: {func: () => void}) => useDoOnceWhen(func, true),
+      {
+        initialProps: {func: () => functionRunCount++},
+      },
+    );
     expect(functionRunCount).toBe(1);
     hook.rerender({func: () => functionRunCount++});
     expect(functionRunCount).toBe(1);
   });
 
   it('Should run with the most recent function', async () => {
-    const hook = renderHook(({func, cond}) => useDoOnceWhen(func, cond), {
-      initialProps: {func: () => functionRunCount++, cond: false},
-    });
+    const hook = renderHook(
+      ({func, cond}: {func: () => void; cond: boolean}) =>
+        useDoOnceWhen(func, cond),
+      {
+        initialProps: {func: () => functionRunCount++, cond: false},
+      },
+    );
     expect(functionRunCount).toBe(0);
     hook.rerender({func: () => (functionRunCount += 2), cond: true});
     expect(functionRunCount).toBe(2);
@@ -53,7 +62,8 @@ describe('useDoOnceWhen', () => {
 
   it('Should run only once even if condition switches when onlyOnce is true', async () => {
     const hook = renderHook(
-      ({condition}) => useDoOnceWhen(() => functionRunCount++, condition, true),
+      ({condition}: {condition: boolean}) =>
+        useDoOnceWhen(() => functionRunCount++, condition, true),
       {initialProps: {condition: false}},
     );
 
@@ -70,7 +80,7 @@ describe('useDoOnceWhen', () => {
 
   it('Should run multiple times when condition changes back to true if onlyOnce is false', async () => {
     const hook = renderHook(
-      ({condition}) =>
+      ({condition}: {condition: boolean}) =>
         useDoOnceWhen(() => functionRunCount++, condition, false),
       {initialProps: {condition: false}},
     );
@@ -88,7 +98,7 @@ describe('useDoOnceWhen', () => {
 
   it('Should rerun when onlyOnce changes from true to false', async () => {
     const hook = renderHook(
-      ({condition, onlyOnce}) =>
+      ({condition, onlyOnce}: {condition: boolean; onlyOnce: boolean}) =>
         useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
       {initialProps: {condition: false, onlyOnce: true}},
     );
@@ -107,7 +117,7 @@ describe('useDoOnceWhen', () => {
 
   it('Should not rerun when onlyOnce switches to true with condition set to true from before', async () => {
     const hook = renderHook(
-      ({condition, onlyOnce}) =>
+      ({condition, onlyOnce}: {condition: boolean; onlyOnce: boolean}) =>
         useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
       {initialProps: {condition: false, onlyOnce: true}},
     );
@@ -126,7 +136,7 @@ describe('useDoOnceWhen', () => {
 
   it('Should stop rerunning when onlyOnce is set back to true', async () => {
     const hook = renderHook(
-      ({condition, onlyOnce}) =>
+      ({condition, onlyOnce}: {condition: boolean; onlyOnce: boolean}) =>
         useDoOnceWhen(() => functionRunCount++, condition, onlyOnce),
       {initialProps: {condition: false, onlyOnce: false}},
     );

@@ -43,10 +43,10 @@ type OfferReducer = (
 ) => OfferState;
 
 const getCurrencyAsFloat = (price: SearchOfferPrice, currency = 'NOK') =>
-  price.currency === currency ? price.amountFloat ?? 0 : 0;
+  price.currency === currency ? (price.amountFloat ?? 0) : 0;
 
 const getOriginalPriceAsFloat = (price: SearchOfferPrice, currency: string) =>
-  price.currency === currency ? price.originalAmountFloat ?? 0 : 0;
+  price.currency === currency ? (price.originalAmountFloat ?? 0) : 0;
 
 const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
   offer.validFrom && offer.validTo
@@ -224,8 +224,8 @@ export function useOfferState(
             const offerEndpoint = selection.stopPlaces
               ? 'stop-places'
               : selection.zones
-              ? 'zones'
-              : 'authority';
+                ? 'zones'
+                : 'authority';
 
             offers = await searchOffers(offerEndpoint, params, {
               cancelToken,
