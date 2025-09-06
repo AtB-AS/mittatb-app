@@ -21,7 +21,7 @@ export function useMapData(
           toQuayId,
         );
         setMapData(result);
-      } catch (e) {}
+      } catch {}
     };
 
     getData();

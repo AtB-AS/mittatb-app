@@ -24,7 +24,7 @@ class HistoryStore<T = SearchHistoryEntry | JourneySearchHistoryEntry> {
       const parsed = JSON.parse(searchHistory);
       if (!parsed || !Array.isArray(parsed)) return [];
       return parsed as T[];
-    } catch (e) {
+    } catch {
       return [];
     }
   }

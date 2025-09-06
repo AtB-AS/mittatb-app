@@ -2,7 +2,6 @@ import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   Keyboard,
-  NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
   FocusEvent,

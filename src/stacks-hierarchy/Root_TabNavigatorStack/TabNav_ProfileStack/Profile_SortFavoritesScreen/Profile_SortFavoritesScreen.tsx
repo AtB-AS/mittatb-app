@@ -26,7 +26,7 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
     try {
       await setFavorites(sortedItems);
       navigation.goBack();
-    } catch (_) {
+    } catch {
       setError(t(FavoriteListTexts.sortableScreen.messages.error));
     }
   };

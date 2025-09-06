@@ -65,7 +65,7 @@ export const AgeVerificationScreenComponent = ({
               completeAgeVerification(code);
               await storage.set('vipps_state', '');
               await storage.set('vipps_nonce', '');
-            } catch (err) {
+            } catch {
               setError('unknown_error');
             }
           }

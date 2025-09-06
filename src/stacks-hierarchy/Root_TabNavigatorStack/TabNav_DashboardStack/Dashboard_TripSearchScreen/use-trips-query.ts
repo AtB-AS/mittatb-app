@@ -91,7 +91,7 @@ export function useTripsQuery(
                 toLocation.resultType !== 'geolocation'
               )
                 await addJourneySearchEntry([fromLocation, toLocation]);
-            } catch (e) {}
+            } catch {}
 
             let nextPageAvailable = true;
             while (

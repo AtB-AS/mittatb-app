@@ -105,7 +105,7 @@ const BeaconsContextProvider = ({children}: Props) => {
   const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY;
 
   const updateBeaconsInfo = () => {
-    var beaconsInfo = getBeaconsInfo();
+    const beaconsInfo = getBeaconsInfo();
     setBeaconsInfo(beaconsInfo);
   };
 
@@ -194,7 +194,7 @@ const BeaconsContextProvider = ({children}: Props) => {
     await initializeKettle(true);
     try {
       Kettle.deleteCollectedData();
-    } catch (error) {
+    } catch (error: unknown) {
       Bugsnag.notify(error as Error);
     }
   }, [isBeaconsSupported, initializeKettle]);
