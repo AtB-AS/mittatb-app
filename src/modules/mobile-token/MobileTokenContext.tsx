@@ -497,7 +497,7 @@ export const getIsInspectableFromStatus = (
 const getTokenToggleDetails = async () => {
   try {
     return await tokenService.getTokenToggleDetails();
-  } catch (err) {
+  } catch {
     return undefined;
   }
 };

@@ -113,7 +113,7 @@ export const authConfirmCode = async (
 export const authSignInWithCustomToken = async (token: string) => {
   try {
     await auth().signInWithCustomToken(token);
-  } catch (err) {
+  } catch {
     return 'unknown_error';
   }
 };

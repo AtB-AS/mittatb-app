@@ -24,7 +24,7 @@ import {
   useBottomNavigationStyles,
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
@@ -170,25 +170,29 @@ export const Root_TabNavigatorStack = () => {
   );
 };
 
+type LabelPosition = NonNullable<
+  BottomTabNavigationOptions['tabBarLabelPosition']
+>;
+
 type TabSettings = {
   tabBarLabel(props: {
     focused: boolean;
     color: string;
     position: LabelPosition;
-  }): JSX.Element;
+  }): React.JSX.Element;
   tabBarIcon(props: {
     focused: boolean;
     color: string;
     size: number;
-  }): JSX.Element;
+  }): React.JSX.Element;
   testID?: string;
 };
 
 function tabSettings(
   tabBarLabel: string,
   tabBarA11yLabel: string,
-  Icon: (svg: SvgProps) => JSX.Element,
-  IconSelected: (svg: SvgProps) => JSX.Element,
+  Icon: (svg: SvgProps) => React.JSX.Element,
+  IconSelected: (svg: SvgProps) => React.JSX.Element,
   lineHeight: number,
   testID: string,
   notification?: ThemeIconProps['notification'],
@@ -197,7 +201,14 @@ function tabSettings(
     tabBarLabel: ({color}) => (
       <ThemeText
         typography="body__secondary"
-        style={{color, textAlign: 'center', lineHeight}}
+        style={{
+          color,
+          textAlign: 'center',
+          lineHeight,
+          // react-navigation v7 adds 5px padding to the tab bar label, and breaks text too early
+          // this workaround is to use negative margins to extend beyond parent padding
+          marginHorizontal: -5,
+        }}
         accessibilityLabel={tabBarA11yLabel}
         maxFontSizeMultiplier={1.2}
         testID={testID}

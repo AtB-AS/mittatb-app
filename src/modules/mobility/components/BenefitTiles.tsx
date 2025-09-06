@@ -29,7 +29,7 @@ export const BenefitTile = ({
   benefit,
   interactiveColor,
   onNavigateToMap,
-}: BenefitCardProps): JSX.Element => {
+}: BenefitCardProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const title = t(
@@ -108,7 +108,7 @@ export const BenefitTiles = ({
   benefits,
   style,
   ...props
-}: BenefitCardsProps): JSX.Element => {
+}: BenefitCardsProps): React.JSX.Element => {
   const styles = useStyles();
 
   return (

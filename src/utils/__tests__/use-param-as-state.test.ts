@@ -1,4 +1,4 @@
-import {renderHook, act} from '@testing-library/react-hooks';
+import {renderHook, act} from '@testing-library/react-native';
 import {useParamAsState} from '../use-param-as-state';
 
 const TEST_OBJECT = {val: 5};
@@ -10,9 +10,12 @@ describe('useParamAsState', () => {
   });
 
   it('should work when param changes', () => {
-    const {result, rerender} = renderHook(({param}) => useParamAsState(param), {
-      initialProps: {param: 5 as number | undefined},
-    });
+    const {result, rerender} = renderHook(
+      ({param}: {param: number | undefined}) => useParamAsState(param),
+      {
+        initialProps: {param: 5 as number | undefined},
+      },
+    );
     expect(result.current[0]).toBe(5);
 
     rerender({param: 10});
@@ -41,9 +44,12 @@ describe('useParamAsState', () => {
   });
 
   it('should work with both param change and setState', () => {
-    const {result, rerender} = renderHook(({param}) => useParamAsState(param), {
-      initialProps: {param: 5 as number | undefined},
-    });
+    const {result, rerender} = renderHook(
+      ({param}: {param: number | undefined}) => useParamAsState(param),
+      {
+        initialProps: {param: 5 as number | undefined},
+      },
+    );
     expect(result.current[0]).toBe(5);
     const setState = result.current[1];
 

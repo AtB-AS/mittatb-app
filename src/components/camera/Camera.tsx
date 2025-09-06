@@ -2,7 +2,11 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {hasProp} from '@atb/utils/object';
 import {RefObject, useRef} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {Camera as CameraKitCamera, CameraType} from 'react-native-camera-kit';
+import {
+  Camera as CameraKitCamera,
+  CameraApi,
+  CameraType,
+} from 'react-native-camera-kit';
 import {Processing} from '../loading';
 import {MessageInfoBox} from '../message-info-box';
 import {CaptureButton} from './CaptureButton';
@@ -33,7 +37,7 @@ export const Camera = ({
   onCapture,
   focusRef,
 }: Props) => {
-  const camera = useRef<CameraKitCamera>(null);
+  const camera = useRef<CameraApi>(null);
   const styles = useStyles();
   const {isAuthorized} = usePermissions();
   const {theme} = useThemeContext();

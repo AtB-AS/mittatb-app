@@ -61,7 +61,7 @@ export function ExpandableSectionItem({
   const {t} = useTranslation();
 
   const [expanded, setExpanded] = useState<boolean>(
-    'expanded' in props ? props.expanded ?? false : !!props.initiallyExpanded,
+    'expanded' in props ? (props.expanded ?? false) : !!props.initiallyExpanded,
   );
 
   useEffect(() => {

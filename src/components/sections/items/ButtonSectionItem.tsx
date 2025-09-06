@@ -19,10 +19,10 @@ export type ButtonSectionItemProps = SectionItemProps<{
   onIconPress?(): void;
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
-  value?: string | JSX.Element;
+  value?: string | React.JSX.Element;
   inlineValue?: boolean;
   highlighted?: boolean;
-  icon?: NavigationIconTypes | JSX.Element;
+  icon?: NavigationIconTypes | React.JSX.Element;
   containerStyle?: ViewStyle;
   testID?: string;
   focusRef?: RefObject<any>;

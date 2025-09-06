@@ -17,7 +17,7 @@ export function RefundSectionItem({
   fareProductType,
   state,
   ...sectionProps
-}: RefundSectionItemProps): JSX.Element {
+}: RefundSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
   const {open} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);

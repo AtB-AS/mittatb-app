@@ -61,7 +61,7 @@ export const Root_LoginOptionsScreen = ({
     setIsLoading(true);
     try {
       await authorizeUser(setIsLoading);
-    } catch (err) {
+    } catch {
       setError('unknown_error');
       setIsLoading(false);
     }
@@ -87,13 +87,12 @@ export const Root_LoginOptionsScreen = ({
   useEffect(() => {
     const signInVippsUser = async (authorizationCode: string) => {
       try {
-        const customToken = await getOrCreateVippsUserCustomToken(
-          authorizationCode,
-        );
+        const customToken =
+          await getOrCreateVippsUserCustomToken(authorizationCode);
         await signInUsingCustomToken(customToken.data as string);
         await storage.set('vipps_state', '');
         await storage.set('vipps_nonce', '');
-      } catch (err) {
+      } catch {
         setError('unknown_error');
         setIsLoading(false);
       }

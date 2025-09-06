@@ -604,7 +604,7 @@ function InterchangeSection({
 
 export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
-  return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
+  return place.quay ? (getQuayName(place.quay) ?? fallback) : fallback;
 }
 
 export function mapLegToTimeValues(leg: Leg) {

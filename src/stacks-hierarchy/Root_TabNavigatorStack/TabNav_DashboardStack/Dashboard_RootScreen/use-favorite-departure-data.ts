@@ -205,7 +205,7 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         data: action.reset
-          ? action.result?.data ?? []
+          ? (action.result?.data ?? [])
           : (state.data ?? []).concat(action.result?.data ?? []),
         cursorInfo: action.result?.metadata,
         tick: new Date(),

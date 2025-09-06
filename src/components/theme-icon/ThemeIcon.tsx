@@ -19,7 +19,7 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 export type IconColor = ContrastColor | TextColor | Statuses | ColorValue;
 export type ThemeIconProps = {
-  svg(props: SvgProps): JSX.Element;
+  svg(props: SvgProps): React.JSX.Element;
   color?: IconColor;
   size?: keyof Theme['icon']['size'];
   customSize?: number;
@@ -36,7 +36,7 @@ export const ThemeIcon = ({
   style,
   allowFontScaling = true,
   ...props
-}: ThemeIconProps): JSX.Element | null => {
+}: ThemeIconProps): React.JSX.Element | null => {
   const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const fill = useColor(color);

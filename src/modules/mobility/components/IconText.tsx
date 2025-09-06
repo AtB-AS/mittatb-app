@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 
 type Props = {
-  svg?(props: SvgProps): JSX.Element;
+  svg?(props: SvgProps): React.JSX.Element;
   text: string;
 };
 export const IconText = ({svg, text}: Props) => {

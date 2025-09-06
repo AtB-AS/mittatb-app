@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type MobilityStatProps = {
-  svg?(props: SvgProps): JSX.Element;
+  svg?(props: SvgProps): React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   primaryStat: string | number;
   secondaryStat?: string | number;
@@ -38,7 +38,7 @@ export const MobilityStat = ({
 };
 
 type StatWithIconProps = {
-  svg?(props: SvgProps): JSX.Element;
+  svg?(props: SvgProps): React.JSX.Element;
   text: string;
 };
 

@@ -28,7 +28,7 @@ type ActionButton = {
   id: string;
   text: string;
   interactiveColor: InteractiveColor;
-  icon?: (props: SvgProps) => JSX.Element;
+  icon?: (props: SvgProps) => React.JSX.Element;
   accessibilityHint?: string;
   onPress: () => void;
 };

@@ -1,4 +1,4 @@
-import {renderHook, act} from '@testing-library/react-hooks';
+import {renderHook, act} from '@testing-library/react-native';
 import {useStableValue} from '../use-stable-value';
 
 type TestValue = {a?: number; b?: number} | undefined;
@@ -24,7 +24,6 @@ describe('useStableValue', () => {
     const {result} = renderHook(() => useStableValue(initialValue));
     expect(result.current).toEqual(initialValue);
   });
-
   it('should update the stable value when the new value is not deeply equal to the current value', () => {
     const {result, rerender} = renderHook(
       (value: TestValue) => useStableValue(value),
@@ -36,7 +35,7 @@ describe('useStableValue', () => {
     rerender({a: 2});
     expect(result.current).toEqual({a: 2});
 
-    rerender({b: 3});
+    rerender({b: 3} as any);
     expect(result.current).toEqual({b: 3});
   });
 

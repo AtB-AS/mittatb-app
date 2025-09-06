@@ -16,7 +16,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {IconColor} from '@atb/components/theme-icon';
 
 type IconProps = {
-  svg: ({fill}: {fill: string}) => JSX.Element;
+  svg: ({fill}: {fill: string}) => React.JSX.Element;
   color?: IconColor;
   notificationColor?: ContrastColor;
 };

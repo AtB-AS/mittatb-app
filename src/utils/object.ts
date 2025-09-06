@@ -82,5 +82,5 @@ export function jsonStringToObject(data?: any): object | undefined {
     if (typeof result !== 'object') return undefined;
 
     return result;
-  } catch (e) {}
+  } catch {}
 }

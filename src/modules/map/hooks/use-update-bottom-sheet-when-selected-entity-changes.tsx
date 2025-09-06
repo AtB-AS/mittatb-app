@@ -166,8 +166,8 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         mapSelectionAction?.source === 'map-item'
           ? mapSelectionAction.feature
           : mapSelectionAction?.source === 'map-click'
-          ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
-          : undefined;
+            ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
+            : undefined;
 
       setSelectedFeature(selectedFeature);
       if (selectedFeature) {

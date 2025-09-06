@@ -17,7 +17,7 @@ type DescriptionLink = {
 };
 
 type OnboardingScreenComponentParams = {
-  illustration?: JSX.Element;
+  illustration?: React.JSX.Element;
   title: string;
   description?: string;
   descriptionLink?: DescriptionLink;
@@ -27,7 +27,7 @@ type OnboardingScreenComponentParams = {
   footerButton?: ButtonProps;
   testID?: string;
   headerProps?: ScreenHeaderProps;
-  contentNode?: JSX.Element;
+  contentNode?: React.JSX.Element;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

@@ -1,4 +1,4 @@
-import {act, renderHook} from '@testing-library/react-hooks';
+import {act, renderHook, waitFor} from '@testing-library/react-native';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import type {StorageService} from '@atb/modules/storage';
 
@@ -8,7 +8,7 @@ const createStorage = (initialValue?: string) =>
   ({
     get: jest.fn(() => Promise.resolve(initialValue || null)),
     set: jest.fn(() => Promise.resolve()),
-  } as any as StorageService);
+  }) as any as StorageService;
 
 describe('usePersistedBoolState', () => {
   it('should be false if initial state false and no value in storage', async () => {
@@ -20,7 +20,7 @@ describe('usePersistedBoolState', () => {
     expect(hook.result.current[0]).toBe(false);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
-    await hook.waitFor(() => expect(storage.get).toHaveReturned());
+    await waitFor(() => expect(storage.get).toHaveReturned());
     expect(hook.result.current[0]).toBe(false);
 
     expect(storage.get).toHaveBeenCalledTimes(1);
@@ -36,7 +36,7 @@ describe('usePersistedBoolState', () => {
     expect(hook.result.current[0]).toBe(true);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
-    await hook.waitFor(() => expect(storage.get).toHaveReturned());
+    await waitFor(() => expect(storage.get).toHaveReturned());
     expect(hook.result.current[0]).toBe(true);
 
     expect(storage.get).toHaveBeenCalledTimes(1);
@@ -52,9 +52,7 @@ describe('usePersistedBoolState', () => {
     expect(hook.result.current[0]).toBe(false);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[0]).toBe(true);
-
+    await waitFor(() => expect(hook.result.current[0]).toBe(true));
     expect(storage.get).toHaveBeenCalledTimes(1);
     expect(storage.set).toHaveBeenCalledTimes(0);
   });
@@ -68,9 +66,7 @@ describe('usePersistedBoolState', () => {
     expect(hook.result.current[0]).toBe(true);
     expect(storage.get).toHaveBeenCalledWith(STORAGE_KEY);
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[0]).toBe(false);
-
+    await waitFor(() => expect(hook.result.current[0]).toBe(false));
     expect(storage.get).toHaveBeenCalledTimes(1);
     expect(storage.set).toHaveBeenCalledTimes(0);
   });

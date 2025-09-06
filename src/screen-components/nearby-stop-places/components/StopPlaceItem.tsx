@@ -27,7 +27,7 @@ export const StopPlaceItem = ({
   stopPlaceNode,
   onPress,
   testID,
-}: StopPlaceItemProps): JSX.Element => {
+}: StopPlaceItemProps): React.JSX.Element => {
   const styles = useStyles();
   const {t} = useTranslation();
 
