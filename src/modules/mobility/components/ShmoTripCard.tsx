@@ -7,6 +7,7 @@ import {useTransportColor} from '@atb/utils/use-transport-color';
 
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
+import {View} from 'react-native';
 
 type ShmoTripCardProps = {
   shmoBooking: ShmoBooking;
@@ -18,16 +19,17 @@ export const ShmoTripCard = ({shmoBooking}: ShmoTripCardProps) => {
   const backgroundColor = useTransportColor('scooter', 'escooter');
 
   return (
-    <Section style={styles.container}>
-      <LineWithVerticalBars
-        backgroundColor={
-          shmoBooking?.state === ShmoBookingState.IN_USE
-            ? backgroundColor.primary.background
-            : backgroundColor.primary.foreground.disabled
-        }
-        style={styles.lineBars}
-        animate={shmoBooking?.state === ShmoBookingState.IN_USE}
-      />
+    <Section>
+      <View style={styles.lineWrapper}>
+        <LineWithVerticalBars
+          backgroundColor={
+            shmoBooking?.state === ShmoBookingState.IN_USE
+              ? backgroundColor.primary.background
+              : backgroundColor.primary.foreground.disabled
+          }
+          animate={shmoBooking?.state === ShmoBookingState.IN_USE}
+        />
+      </View>
 
       <ShmoTripDetailsSectionItem
         startDateTime={shmoBooking?.departureTime ?? new Date()}
@@ -45,13 +47,12 @@ export const ShmoTripCard = ({shmoBooking}: ShmoTripCardProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    container: {
-      paddingHorizontal: theme.spacing.medium,
-      marginBottom: theme.spacing.medium,
-    },
-    lineBars: {
-      borderTopLeftRadius: theme.border.radius.regular,
+    lineWrapper: {
+      marginHorizontal: -theme.spacing.medium + theme.spacing.medium,
       borderTopRightRadius: theme.border.radius.regular,
+      borderTopLeftRadius: theme.border.radius.regular,
+      overflow: 'hidden',
+      flex: 1,
     },
   };
 });

@@ -29,7 +29,7 @@ export const VehicleCard = ({
   const price = formatPricePerUnit(pricingPlan, language);
 
   return (
-    <Section style={styles.container}>
+    <Section>
       <GenericSectionItem>
         <View style={styles.content}>
           <>
@@ -62,10 +62,6 @@ export const VehicleCard = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    container: {
-      paddingHorizontal: theme.spacing.medium,
-      marginBottom: theme.spacing.medium,
-    },
     content: {
       flex: 1,
       flexDirection: 'row',

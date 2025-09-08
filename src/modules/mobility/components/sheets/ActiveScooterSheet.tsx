@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
@@ -141,7 +141,10 @@ export const ActiveScooterSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <ScrollView style={styles.container}>
-                <ShmoTripCard shmoBooking={activeBooking} />
+                <View style={styles.tripWrapper}>
+                  <ShmoTripCard shmoBooking={activeBooking} />
+                </View>
+
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
@@ -223,6 +226,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     container: {
       gap: theme.spacing.medium,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     footer: {
       marginBottom: theme.spacing.medium,
@@ -231,6 +236,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     endTripWrapper: {
       gap: theme.spacing.medium,
+    },
+    tripWrapper: {
+      marginBottom: theme.spacing.medium,
     },
   };
 });

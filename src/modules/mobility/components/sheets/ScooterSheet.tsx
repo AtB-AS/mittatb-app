@@ -115,11 +115,14 @@ export const ScooterSheet = ({
                 style={styles.operatorBenefit}
               />
             )}
-            <VehicleCard
-              pricingPlan={vehicle.pricingPlan}
-              currentFuelPercent={vehicle.currentFuelPercent}
-              currentRangeMeters={vehicle.currentRangeMeters}
-            />
+            <View style={styles.vehicleCardWrapper}>
+              <VehicleCard
+                pricingPlan={vehicle.pricingPlan}
+                currentFuelPercent={vehicle.currentFuelPercent}
+                currentRangeMeters={vehicle.currentRangeMeters}
+              />
+            </View>
+
             {selectedPaymentMethod &&
               isShmoDeepIntegrationEnabled &&
               isMapV2Enabled &&
@@ -205,7 +208,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     paymentWrapper: {
-      paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
@@ -213,6 +215,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     container: {
       gap: theme.spacing.medium,
+      paddingHorizontal: theme.spacing.medium,
     },
     actionWrapper: {
       gap: theme.spacing.medium,
@@ -226,6 +229,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     operatorNameAndLogo: {
       flexDirection: 'row',
+    },
+    vehicleCardWrapper: {
+      marginBottom: theme.spacing.medium,
     },
   };
 });
