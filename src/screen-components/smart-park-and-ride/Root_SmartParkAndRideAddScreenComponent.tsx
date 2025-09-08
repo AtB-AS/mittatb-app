@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
 import {LicensePlateSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ThemedCarFront, ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
+import {ThemedCarFront} from '@atb/theme/ThemedAssets';
 import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
