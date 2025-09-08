@@ -3,7 +3,11 @@ import {Announcement} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {
+  DashboardTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -21,15 +25,16 @@ export const AnnouncementSheet = ({announcement}: Props) => {
   const {language} = useTranslation();
   const style = useStyle();
   const {requestReview} = useInAppReviewFlow();
+  const {t} = useTranslation();
 
   return (
     <BottomSheetContainer
-      title={getTextForLanguage(announcement.fullTitle, language)}
+      title={t(DashboardTexts.announcemens.header)}
       onClose={() => {
         requestReview(InAppReviewContext.Announcement);
       }}
     >
-      <ScrollView style={style.container}>
+      <ScrollView contentContainerStyle={style.container}>
         {announcement.mainImage && (
           <View style={style.imageContainer}>
             <Image
@@ -39,7 +44,10 @@ export const AnnouncementSheet = ({announcement}: Props) => {
           </View>
         )}
         <Section>
-          <GenericSectionItem>
+          <GenericSectionItem type="spacious" style={style.articleContainer}>
+            <ThemeText typography="heading--big">
+              {getTextForLanguage(announcement.fullTitle, language)}
+            </ThemeText>
             <ThemeText isMarkdown={true}>
               {getTextForLanguage(announcement.body, language)}
             </ThemeText>
@@ -55,13 +63,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
       minHeight: 350,
+      gap: theme.spacing.medium,
+      paddingBottom: Math.max(bottom, theme.spacing.medium),
+    },
+    articleContainer: {
+      gap: theme.spacing.medium,
     },
     imageContainer: {
       width: '100%',
       maxHeight: 150,
-      marginBottom: theme.spacing.medium,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
     },

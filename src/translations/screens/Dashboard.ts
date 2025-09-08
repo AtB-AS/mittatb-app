@@ -9,7 +9,7 @@ const DashboardTexts = {
   },
   buyButton: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
   announcemens: {
-    header: _('Aktuelt', 'Announcements', 'Aktuelt'),
+    header: _('Aktuelt', 'Latest', 'Aktuelt'),
     button: {
       accessibility: _(
         'Aktiver for å lese mer',
