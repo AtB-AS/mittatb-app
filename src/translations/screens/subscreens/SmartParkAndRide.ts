@@ -132,6 +132,11 @@ const SmartParkAndRideTexts = {
       'This vehicle has already been added.',
       'Dette køyretøyet er allereie lagt til.',
     ),
+    maximumNumberOfVehiclesReached: _(
+      'Du kan ikke legge til flere kjøretøy. Du kan legge til maks to kjøretøy.',
+      'You cannot add more vehicles. You can add a maximum of two vehicles.',
+      'Du kan ikkje leggje til fleire køyretøy. Du kan leggje til maks to køyretøy.',
+    ),
     unknown: _(
       'Noe gikk galt. Prøv igjen.',
       'Something went wrong. Please try again.',
