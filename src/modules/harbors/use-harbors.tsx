@@ -10,12 +10,13 @@ import _ from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
 
 export const useHarbors = ({
-  fromHarborId,
-  transportModes,
-}: {
+                             fromHarborId,
+                             transportModes,
+                           }: {
   fromHarborId?: string;
   transportModes?: ProductTypeTransportModes[];
 } = {}) => {
+  const allHarborsQuery = useHarborsQuery({transportModes});
   const harborsQuery = useHarborsQuery({fromHarborId, transportModes});
   const connectionsQuery = useHarborsQuery({fromHarborId, transportModes});
   const overrides = useHarborConnectionOverrides(fromHarborId);
@@ -26,16 +27,9 @@ export const useHarbors = ({
   const isSuccess = fromHarborId
     ? connectionsQuery.isSuccess
     : harborsQuery.isSuccess;
-  const refetch = fromHarborId
-    ? () =>
-        Promise.all([connectionsQuery.refetch(), harborsQuery.refetch()]).then(
-          ([connectionsQuery, harborsQuery]) =>
-            applyOverrides(harborsQuery.data, connectionsQuery.data, overrides),
-        )
-    : harborsQuery.refetch;
 
   const data: StopPlaceFragmentWithIsFree[] = fromHarborId
-    ? applyOverrides(harborsQuery.data, connectionsQuery.data, overrides)
+    ? applyOverrides(allHarborsQuery.data, connectionsQuery.data, overrides)
     : harborsQuery.data ?? [];
 
   return {
@@ -44,7 +38,6 @@ export const useHarbors = ({
     isError,
     error,
     data,
-    refetch,
   };
 };
 
