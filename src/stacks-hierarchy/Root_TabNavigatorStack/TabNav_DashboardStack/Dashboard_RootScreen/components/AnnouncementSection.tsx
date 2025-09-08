@@ -82,7 +82,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
                 role="button"
                 hitSlop={insets.all(theme.spacing.medium)}
                 accessibilityHint={t(
-                  DashboardTexts.announcemens.announcement.closeA11yHint,
+                  DashboardTexts.announcements.announcement.closeA11yHint,
                 )}
                 onPress={() => handleDismiss()}
                 testID="closeAnnouncement"
@@ -101,7 +101,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
           text={
             getTextForLanguage(announcement.actionButton.label, language) ??
             t(
-              DashboardTexts.announcemens.buttonAction.defaultLabel(
+              DashboardTexts.announcements.buttonAction.defaultLabel(
                 summaryTitle,
               ),
             )
@@ -114,7 +114,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
           }
           accessibility={{
             accessibilityHint: t(
-              DashboardTexts.announcemens.buttonAction.a11yHint[
+              DashboardTexts.announcements.buttonAction.a11yHint[
                 announcement.actionButton.actionType
               ],
             ),
