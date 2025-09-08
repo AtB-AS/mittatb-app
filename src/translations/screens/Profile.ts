@@ -11,9 +11,9 @@ const ProfileTexts = {
       linkSectionItems: {
         login: {
           label: _(
-            'Logg inn eller opprett profil',
-            'Log in or create profile',
-            'Logg inn eller opprett profil',
+            'Logg inn',
+            'Log in',
+            'Logg inn',
           ),
         },
         logout: {
