@@ -29,7 +29,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
 
   return (
     <BottomSheetContainer
-      title={t(DashboardTexts.announcemens.header)}
+      title={t(DashboardTexts.announcements.header)}
       onClose={() => {
         requestReview(InAppReviewContext.Announcement);
       }}

@@ -8,7 +8,7 @@ const DashboardTexts = {
     },
   },
   buyButton: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
-  announcemens: {
+  announcements: {
     header: _('Aktuelt', 'Latest', 'Aktuelt'),
     button: {
       accessibility: _(
