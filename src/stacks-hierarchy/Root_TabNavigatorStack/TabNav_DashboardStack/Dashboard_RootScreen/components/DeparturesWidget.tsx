@@ -171,7 +171,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesTextContainer: {
     flex: 1,
     paddingVertical: theme.spacing.small,
-    paddingHorizontal: theme.spacing.medium
+    paddingHorizontal: theme.spacing.medium,
   },
   noFavouritesText: {
     marginHorizontal: theme.spacing.small,
