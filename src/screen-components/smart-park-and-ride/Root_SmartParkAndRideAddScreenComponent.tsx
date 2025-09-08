@@ -192,6 +192,8 @@ function getErrorMessageTranslation(
       return t(SmartParkAndRideTexts.errors.invalidLicensePlate);
     case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
       return t(SmartParkAndRideTexts.errors.vehicleAlreadyAdded);
+    case 'MAXIMUM_NUMBER_OF_VEHICLE_REGISTRATIONS_REACHED':
+      return t(SmartParkAndRideTexts.errors.maximumNumberOfVehiclesReached);
     default:
       return t(SmartParkAndRideTexts.errors.unknown);
   }
