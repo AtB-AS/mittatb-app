@@ -2,7 +2,7 @@ import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking} from 'react-native';
@@ -19,7 +19,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedCityBike height={170} />}
+      illustration={<ThemedCarRegister height={170} />}
       title={t(SmartParkAndRideTexts.onboarding.automaticRegistration.title)}
       description={t(
         SmartParkAndRideTexts.onboarding.automaticRegistration.description,

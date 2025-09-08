@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
 import {LicensePlateSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
+import {ThemedCarFront} from '@atb/theme/ThemedAssets';
 import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
@@ -47,7 +47,7 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
   const contentNode = (
     <View style={styles.container}>
       <View style={styles.content}>
-        <ThemedBundlingCarSharing style={styles.illustration} width={150} />
+        <ThemedCarFront style={styles.illustration} width={170} />
         <View ref={focusRef} accessible={true} accessibilityRole="header">
           <ThemeText typography="body__primary--big--bold">
             {t(SmartParkAndRideTexts.add.content.title)}
