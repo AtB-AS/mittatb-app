@@ -82,7 +82,7 @@ export const DeparturesWidget = ({
         <Section>
           <GenericSectionItem>
             <View style={styles.noFavouritesView}>
-              <ThemedNoFavouriteDepartureImage height={97} width={87} />
+              <ThemedNoFavouriteDepartureImage height={64} width={64} />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
                   typography="body__secondary"
@@ -171,6 +171,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesTextContainer: {
     flex: 1,
     paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium
   },
   noFavouritesText: {
     marginHorizontal: theme.spacing.small,
