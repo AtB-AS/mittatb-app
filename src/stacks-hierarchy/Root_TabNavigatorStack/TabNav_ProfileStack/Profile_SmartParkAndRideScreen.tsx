@@ -22,7 +22,7 @@ import {
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
+import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 
@@ -142,9 +142,9 @@ const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
       <Section>
         <GenericSectionItem>
           <View style={styles.horizontalContainer}>
-            <ThemedBundlingCarSharing
-              height={61}
-              width={61}
+            <ThemedCarRegister
+              height={63}
+              width={63}
               style={{
                 alignSelf: 'flex-start',
               }}
