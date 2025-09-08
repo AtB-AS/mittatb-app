@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -36,7 +36,7 @@ export const Root_SmartParkAndRideEditScreen = ({
 
   const {
     mutate: editVehicleRegistrationMutate,
-    isError: editVehicleRegistrationIsError,
+    error: editVehicleRegistrationError,
   } = useEditVehicleRegistrationMutation(
     params.vehicleRegistration.id,
     licensePlate,
@@ -124,10 +124,13 @@ export const Root_SmartParkAndRideEditScreen = ({
           }}
         />
 
-        {editVehicleRegistrationIsError && (
+        {editVehicleRegistrationError && (
           <MessageInfoBox
             type="error"
-            message={t(SmartParkAndRideTexts.edit.error)}
+            message={getErrorMessageTranslation(
+              editVehicleRegistrationError?.kind,
+              t,
+            )}
           />
         )}
         {deleteVehicleRegistrationIsError && (
@@ -153,3 +156,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
 }));
+
+function getErrorMessageTranslation(
+  kind: string | undefined,
+  t: TranslateFunction,
+) {
+  switch (kind) {
+    case 'INVALID_LICENSE_PLATE':
+      return t(SmartParkAndRideTexts.errors.invalidLicensePlate);
+    case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
+      return t(SmartParkAndRideTexts.errors.vehicleAlreadyAdded);
+    default:
+      return t(SmartParkAndRideTexts.errors.unknown);
+  }
+}

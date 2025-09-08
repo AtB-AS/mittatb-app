@@ -96,4 +96,16 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       travelCardDisabled &&
       authenticationType === 'phone',
   },
+  {
+    isOnboardedStoreKey: '@ATB_smart_park_and_ride_onboarded',
+    onboardingSectionId: 'smartParkAndRide',
+    initialScreen: {
+      name: 'Root_EnrollmentOnboardingStack',
+      params: {configId: 'spar-pilot'},
+    },
+    customEntryPointRouteName: 'Profile_SmartParkAndRideScreen',
+    shouldShowPredicate: ({currentRouteName, hasVehicleRegistrations}) =>
+      currentRouteName === 'Profile_SmartParkAndRideScreen' &&
+      !hasVehicleRegistrations,
+  },
 ];

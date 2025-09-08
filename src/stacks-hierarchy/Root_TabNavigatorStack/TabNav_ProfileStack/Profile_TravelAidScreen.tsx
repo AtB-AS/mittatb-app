@@ -17,6 +17,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
+import {ThemeText} from '@atb/components/text';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
@@ -29,9 +30,6 @@ export const Profile_TravelAidScreen = () => {
 
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
-
-  const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
-  const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
 
   return (
     <FullScreenView
@@ -49,7 +47,7 @@ export const Profile_TravelAidScreen = () => {
       <View style={styles.content}>
         <Section>
           <ToggleSectionItem
-            text={travelAidToggleTitle}
+            text={t(TravelAidSettingsTexts.toggle.title)}
             value={preferences.journeyAidEnabled}
             onValueChange={(checked) => {
               analytics.logEvent(
@@ -62,13 +60,16 @@ export const Profile_TravelAidScreen = () => {
               );
               setPreference({journeyAidEnabled: checked});
             }}
-            subtext={travelAidSubtext}
-            isSubtextMarkdown
             testID="toggleTravelAid"
           />
-          <GenericSectionItem style={styles.buttonContainer}>
-            <View style={styles.buttonContainer}>
-              {hasContactPhoneNumber && (
+          <GenericSectionItem>
+            <ThemeText isMarkdown={true} typography="body__secondary">
+              {t(TravelAidSettingsTexts.toggle.subText)}
+            </ThemeText>
+          </GenericSectionItem>
+          {hasContactPhoneNumber && (
+            <GenericSectionItem style={styles.buttonContainer}>
+              <View style={styles.buttonContainer}>
                 <Button
                   expanded={true}
                   mode="secondary"
@@ -91,9 +92,9 @@ export const Profile_TravelAidScreen = () => {
                     }
                   }}
                 />
-              )}
-            </View>
-          </GenericSectionItem>
+              </View>
+            </GenericSectionItem>
+          )}
         </Section>
       </View>
     </FullScreenView>

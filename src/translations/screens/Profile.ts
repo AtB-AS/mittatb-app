@@ -40,11 +40,7 @@ const ProfileTexts = {
           label: _('Bonus', 'Bonus', 'Bonus'),
         },
         smartParkAndRide: {
-          label: _(
-            'Parkering på Ranheim',
-            'Parking at Ranheim',
-            'Parkering på Ranheim',
-          ),
+          label: _('Innfartsparkering', 'Park and ride', 'Innfartsparkering'),
         },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),

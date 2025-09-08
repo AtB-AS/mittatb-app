@@ -16,7 +16,7 @@ export const useOnboardingNavigation = () => {
   const {completeOnboardingSection} = useOnboardingContext();
 
   const goToScreen = useCallback(
-    (replace: any, screen: {name?: any; params?: any}) => {
+    (replace: any, screen?: {name?: any; params?: any}) => {
       InteractionManager.runAfterInteractions(() => {
         if (!screen?.name) return;
         if (replace) {
@@ -39,7 +39,7 @@ export const useOnboardingNavigation = () => {
       if (nextOnboardingSection?.initialScreen?.name) {
         goToScreen(true, nextOnboardingSection?.initialScreen);
       } else {
-        navigation.goBack();
+        navigation.getParent()?.goBack() ?? navigation.goBack(); // get parent in case of stack. If problematic, accept param to determine which.
       }
     },
     [

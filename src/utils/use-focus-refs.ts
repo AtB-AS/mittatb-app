@@ -1,9 +1,9 @@
 import {RefObject, useRef, useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
 import {giveFocus} from './use-focus-on-load';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type FocusRefsType = {
-  [key: string]: RefObject<typeof TouchableOpacity>;
+  [key: string]: RefObject<typeof PressableOpacity>;
 };
 
 export function useFocusRefs(focusOnElementName: string | undefined) {
@@ -31,10 +31,10 @@ ref={focusRefs}
 forwardRef<FocusRefsType, MyProps>(...)
 
 // create new relevant refs in child
-const fromHarborRef = useRef<TouchableOpacity>(null);
-const toHarborRef = useRef<TouchableOpacity>(null);
-<TouchableOpacity ref={fromHarborRef} />
-<TouchableOpacity ref={toHarborRef} />
+const fromHarborRef = useRef<PressableOpacity>(null);
+const toHarborRef = useRef<PressableOpacity>(null);
+<PressableOpacity ref={fromHarborRef} />
+<PressableOpacity ref={toHarborRef} />
 
 // make the new refs available to the ref in useFocusRefs
 useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));

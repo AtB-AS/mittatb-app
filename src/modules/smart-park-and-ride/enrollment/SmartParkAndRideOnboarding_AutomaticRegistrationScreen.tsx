@@ -4,22 +4,18 @@ import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useSmartParkAndRideOnboarding} from './SmartParkAndRideOnboardingContext';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+
 import {Linking} from 'react-native';
+import {sparPilotEnrollmentId} from './config';
+import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t} = useTranslation();
-  const {completeOnboarding} = useSmartParkAndRideOnboarding();
-  const navigation = useNavigation<RootNavigationProps>();
 
-  const handleComplete = () => {
-    completeOnboarding();
-    navigation.navigate('Root_SmartParkAndRideAddScreen', {
-      hideHeader: true,
-    });
-  };
+  const navigateToNextScreen = useNavigateToNextEnrollmentOnboardingScreen(
+    sparPilotEnrollmentId,
+    'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
+  );
 
   return (
     <OnboardingScreenComponent
@@ -42,7 +38,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
         },
       }}
       footerButton={{
-        onPress: handleComplete,
+        onPress: navigateToNextScreen,
         text: t(
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),
