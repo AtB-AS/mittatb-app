@@ -11,6 +11,7 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type Props = {
   announcement: Announcement;
@@ -37,9 +38,13 @@ export const AnnouncementSheet = ({announcement}: Props) => {
             />
           </View>
         )}
-        <ThemeText isMarkdown={true}>
-          {getTextForLanguage(announcement.body, language)}
-        </ThemeText>
+        <Section>
+          <GenericSectionItem>
+            <ThemeText isMarkdown={true}>
+              {getTextForLanguage(announcement.body, language)}
+            </ThemeText>
+          </GenericSectionItem>
+        </Section>
       </ScrollView>
     </BottomSheetContainer>
   );
