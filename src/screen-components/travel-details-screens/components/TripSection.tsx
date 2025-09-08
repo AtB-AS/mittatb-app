@@ -667,6 +667,7 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginBottom: theme.spacing.large,
+    backgroundColor: 'red',
   },
   a11yHelper: {
     position: 'absolute',
