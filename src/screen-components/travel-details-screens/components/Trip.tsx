@@ -265,8 +265,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   trip: {
     marginTop: theme.spacing.medium,
-    height: '50%',
-    backgroundColor: 'blue',
   },
 }));
 
