@@ -10,11 +10,7 @@ const ProfileTexts = {
     account: {
       linkSectionItems: {
         login: {
-          label: _(
-            'Logg inn eller opprett profil',
-            'Log in or create profile',
-            'Logg inn eller opprett profil',
-          ),
+          label: _('Logg inn', 'Log in', 'Logg inn'),
         },
         logout: {
           label: _('Logg ut', 'Log out', 'Logg ut'),

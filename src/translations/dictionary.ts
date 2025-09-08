@@ -9,7 +9,7 @@ const dictionary = {
   fromPlace: _('Avreisested', 'Place of departure', 'Avreisestad'),
   toPlace: _('Destinasjon', 'Destination', 'Destinasjon'),
   navigation: {
-    assistant: _(`Reise${softhyphen}søk`, 'Assistant', `Reisesøk`),
+    assistant: _(`Reise`, 'Travel', `Reise`),
     assistant_a11y: _(
       `Aktiver for reisesøk. Aktiver to ganger for å nullstille søket.`,
       'Activate for search assistant. Activate twice to reset search.',
