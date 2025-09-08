@@ -10,13 +10,11 @@
 		0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
 		0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825C247C33BC00FB80EE /* Intercom.plist */; };
 		0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2260BF082E6F569600F55B52 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2260BF072E6F569600F55B52 /* AppDelegate.swift */; };
 		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
-		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		500752DC29855BD100AC5A7F /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500752DB29855BD100AC5A7F /* Intents.framework */; };
 		500752DF29855BD100AC5A7F /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500752DE29855BD100AC5A7F /* IntentHandler.swift */; };
 		500752E329855BD100AC5A7F /* AtbAppIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 500752DA29855BD100AC5A7F /* AtbAppIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -122,18 +120,14 @@
 		0FF6825C247C33BC00FB80EE /* Intercom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Intercom.plist; path = atb/Intercom.plist; sourceTree = "<group>"; };
 		0FF6825E247FE01600FB80EE /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = atb/BootSplash.storyboard; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AtB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtB.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = atb/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.mm; path = atb/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = atb/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = atb/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = atb/main.m; sourceTree = "<group>"; };
+		2260BF072E6F569600F55B52 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		298D19482AEBC45E00065733 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		298D194A2AEBC45F00065733 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		298D194B2AEBC55C00065733 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
-		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
-		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
 		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		500752DA29855BD100AC5A7F /* AtbAppIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AtbAppIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,15 +235,11 @@
 		13B07FAE1A68108700A75B9A /* atb */ = {
 			isa = PBXGroup;
 			children = (
+				2260BF072E6F569600F55B52 /* AppDelegate.swift */,
 				0F1FBC3125CBDED600484CA4 /* AtB.entitlements */,
 				FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
-				38CD3275254B616300C6B978 /* AtBRootView.h */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				38CD326F254B612600C6B978 /* AtBRootView.m */,
-				13B07FB71A68108700A75B9A /* main.m */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */,
@@ -664,17 +654,15 @@
 			files = (
 				FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */,
 				FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */,
-				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
+				2260BF082E6F569600F55B52 /* AppDelegate.swift in Sources */,
 				FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
 				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
