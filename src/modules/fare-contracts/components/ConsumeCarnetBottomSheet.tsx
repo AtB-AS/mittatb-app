@@ -8,9 +8,9 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {consumeCarnet} from '@atb/modules/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -32,6 +32,7 @@ export const ConsumeCarnetBottomSheet = ({
   const [isSchoolError, setSchoolError] = useState<boolean>(false);
   const {close} = useBottomSheetContext();
   const {logEvent} = useBottomSheetContext();
+  const {theme} = useThemeContext();
 
   const onConsume = async () => {
     setIsLoading(true);
@@ -90,6 +91,13 @@ export const ConsumeCarnetBottomSheet = ({
           text={t(FareContractTexts.carnet.activateCarnet)}
           rightIcon={{svg: Confirm}}
           loading={isLoading}
+        />
+        <Button
+          expanded={true}
+          mode="secondary"
+          onPress={close}
+          text={t(dictionary.cancel)}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       </ScrollView>
     </BottomSheetContainer>
