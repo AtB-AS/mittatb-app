@@ -71,6 +71,16 @@ import {
   BonusTransaction as BonusTransactionDark,
   BonusTrashCan as BonusTrashCanDark,
 } from '@atb/assets/svg/color/images/bonus/dark';
+import {
+  CarFront as CarFrontLight,
+  CarRegister as CarRegisterLight,
+  CarValidTicket as CarValidTicketLight,
+} from '@atb/assets/svg/color/images/smart-park-and-ride/light';
+import {
+  CarFront as CarFrontDark,
+  CarRegister as CarRegisterDark,
+  CarValidTicket as CarValidTicketDark,
+} from '@atb/assets/svg/color/images/smart-park-and-ride/dark';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {SvgProps} from 'react-native-svg';
 
@@ -171,4 +181,13 @@ export const ThemedProfileCardLoggedIn = getThemedAsset(
 export const ThemedProfileCardLoggedOut = getThemedAsset(
   ProfileCardLoggedOutLight,
   ProfileCardLoggedOutDark,
+);
+export const ThemedCarFront = getThemedAsset(CarFrontLight, CarFrontDark);
+export const ThemedCarRegister = getThemedAsset(
+  CarRegisterLight,
+  CarRegisterDark,
+);
+export const ThemedCarValidTicket = getThemedAsset(
+  CarValidTicketLight,
+  CarValidTicketDark,
 );

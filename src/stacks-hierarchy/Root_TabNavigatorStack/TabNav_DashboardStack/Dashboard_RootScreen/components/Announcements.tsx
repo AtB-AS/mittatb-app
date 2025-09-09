@@ -60,7 +60,7 @@ export const Announcements = ({style}: Props) => {
       <View style={styles.headerWrapper}>
         <ContentHeading
           color={theme.color.background.accent[0]}
-          text={t(DashboardTexts.announcemens.header)}
+          text={t(DashboardTexts.announcements.header)}
         />
       </View>
       <ScrollView

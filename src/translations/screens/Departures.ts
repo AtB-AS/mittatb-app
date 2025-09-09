@@ -43,12 +43,12 @@ const DeparturesTexts = {
       'Aktiver for å gå til førre dag',
     ),
     options: {
-      now: _('Avreise nå', 'Leave now', 'Avreise no'),
-      departure: _('Avreisetid', 'Leave at', 'Avreisetid'),
+      now: _('Nå', 'Leave now', 'Nå'),
+      departure: _('Velg tid', 'Leave at', 'Velg tid'),
     },
     departureNow: _(`Avreise nå`, `Leave now`, `Avreise no`),
     departureLater: (time: string) =>
-      _(`Avreisetid ${time}`, `Leave at ${time}`, `Avreisetid ${time}`),
+      _(`Avreise ${time}`, `Leave at ${time}`, `Avreise ${time}`),
     a11yDisabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
     a11yChangeDateHint: _(
       'Aktiver for å forandre dato',
@@ -134,9 +134,9 @@ const DeparturesTexts = {
       'Det er ingen avgangar som skal visast, då du ikkje har nokon haldeplassar markert som favorittar.',
     ),
     noFavouritesWidget: _(
-      'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
-      'You have no favourite departures. \nPress “Add favourite departure” to save a frequently used departure.',
-      'Du har ingen favorittavgangar. \nTrykk "Legg til favorittavgang" for å lagre ein avgang du brukar ofte.',
+      'Du har ingen favorittavganger.',
+      'You have no favourite departures.',
+      'Du har ingen favorittavgangar.',
     ),
     emptyResult: _(
       'Fant ingen avganger på valgt sted.',

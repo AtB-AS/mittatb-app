@@ -124,7 +124,17 @@ export const FareContractView: React.FC<Props> = ({
           <LegsSummary legs={legs} compact={true} />
         </GenericSectionItem>
       )}
-
+      {!isStatic && (
+        <LinkSectionItem
+          text={t(
+            validityStatus === 'valid' && isInspectable
+              ? FareContractTexts.detailsLink.valid
+              : FareContractTexts.detailsLink.notValid,
+          )}
+          onPress={onPressDetails}
+          testID={testID + 'Details'}
+        />
+      )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(
           fareContract,
@@ -137,17 +147,6 @@ export const FareContractView: React.FC<Props> = ({
             fareProductType={preassignedFareProduct?.type}
           />
         )}
-      {!isStatic && (
-        <LinkSectionItem
-          text={t(
-            validityStatus === 'valid' && isInspectable
-              ? FareContractTexts.detailsLink.valid
-              : FareContractTexts.detailsLink.notValid,
-          )}
-          onPress={onPressDetails}
-          testID={testID + 'Details'}
-        />
-      )}
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem
           fareContractId={fareContract.id}
