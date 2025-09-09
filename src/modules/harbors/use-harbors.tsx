@@ -8,7 +8,17 @@ import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
+import {useConnectionsQuery} from '@atb/queries/use-connections-query';
 
+/**
+ * This hook is pretty generic, but I do think it serves a purpose as-is.
+ * You can think of it as a "HarborService" in a way, as it encapsulates
+ * everything needed to work with harbors and their connections, whether you
+ * need all harbors or just those connected to a specific harbor.
+ *
+ * @param fromHarborId - If provided, fetches harbors connected to this harbor. If not provided, fetches all harbors.
+ * @param transportModes - If provided, filters harbors by these transport modes.
+ */
 export const useHarbors = ({
   fromHarborId,
   transportModes,
@@ -16,23 +26,21 @@ export const useHarbors = ({
   fromHarborId?: string;
   transportModes?: ProductTypeTransportModes[];
 } = {}) => {
-  const allHarborsQuery = useHarborsQuery({transportModes});
-  const harborsQuery = useHarborsQuery({fromHarborId, transportModes});
-  const connectionsQuery = useHarborsQuery({fromHarborId, transportModes});
+  const allHarborsQuery = useHarborsQuery(transportModes);
+  const connectionsQuery = useConnectionsQuery(fromHarborId);
   const overrides = useHarborConnectionOverrides(fromHarborId);
 
-  const isLoading = harborsQuery.isLoading || connectionsQuery.isLoading;
-  const isError = harborsQuery.isError || connectionsQuery.isError;
-  const error = fromHarborId ? connectionsQuery.error : harborsQuery.error;
+  const isLoading = allHarborsQuery.isLoading || connectionsQuery.isFetching;
+  const isError = allHarborsQuery.isError || connectionsQuery.isError;
+  const error = fromHarborId ? connectionsQuery.error : allHarborsQuery.error;
   const isSuccess = fromHarborId
     ? connectionsQuery.isSuccess
-    : harborsQuery.isSuccess;
+    : allHarborsQuery.isSuccess;
   const refetch = fromHarborId
     ? () =>
         Promise.all([
           connectionsQuery.refetch(),
           allHarborsQuery.refetch(),
-          harborsQuery.refetch(),
         ]).then(([connectionsQuery, allHarborsQuery]) =>
           applyOverrides(
             allHarborsQuery.data,
@@ -40,11 +48,11 @@ export const useHarbors = ({
             overrides,
           ),
         )
-    : harborsQuery.refetch;
+    : allHarborsQuery.refetch;
 
   const data: StopPlaceFragmentWithIsFree[] = fromHarborId
     ? applyOverrides(allHarborsQuery.data, connectionsQuery.data, overrides)
-    : harborsQuery.data ?? [];
+    : allHarborsQuery.data ?? [];
 
   return {
     isLoading,
