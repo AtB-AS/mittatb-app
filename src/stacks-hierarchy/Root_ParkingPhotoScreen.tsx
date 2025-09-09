@@ -12,7 +12,11 @@ import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
+import {
+  BottomSheetType,
+  MapStateActionType,
+  useMapContext,
+} from '@atb/modules/map';
 import {Image} from 'react-native-compressor';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
@@ -26,12 +30,7 @@ export const Root_ParkingPhotoScreen = ({
 }: ParkingPhotoScreenProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-    setAutoSelectedMapItem,
-    mapSelectionDispatch,
-  } = useMapContext();
+  const {setBottomSheetToAutoSelect, mapSelectionDispatch} = useMapContext();
 
   const {mutateAsync: sendShmoBookingEvent, isLoading} =
     useSendShmoBookingEventMutation();
@@ -70,15 +69,13 @@ export const Root_ParkingPhotoScreen = ({
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
-    setBottomSheetCurrentlyAutoSelected(undefined);
-    setAutoSelectedMapItem(undefined);
     setBottomSheetToAutoSelect({
-      type: AutoSelectableBottomSheetType.Scooter,
+      type: BottomSheetType.Scooter,
       id: route.params.bookingId,
       shmoBookingState: ShmoBookingState.FINISHED,
     });
     mapSelectionDispatch({
-      mapState: 'FINISHED_BOOKING',
+      type: MapStateActionType.FinishedBooking,
       assetId: route.params.bookingId,
     });
     if (base64data) {

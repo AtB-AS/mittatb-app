@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -14,6 +13,7 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   photoNavigation: () => void;
@@ -29,7 +29,7 @@ export const FinishingScooterSheet = ({
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
   const styles = useStyles();

@@ -12,13 +12,11 @@ export {
   filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
 } from './geofencing-zone-utils';
-export type {AutoSelectableMapItem} from './hooks/use-auto-select-map-item';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
-export {Map} from './Map';
 export {useShmoWarnings} from './hooks/use-shmo-warnings.tsx';
 export {
   MapCameraConfig,
@@ -28,7 +26,7 @@ export {
   SLIGHTLY_RAISED_MAP_PADDING,
 } from './MapConfig';
 export {
-  AutoSelectableBottomSheetType,
+  BottomSheetType,
   MapContextProvider,
   useMapContext,
 } from './MapContext.tsx';
@@ -69,5 +67,5 @@ export {
   getFeaturesAtClick,
   isFeatureGeofencingZone,
 } from './utils';
-
+export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';

@@ -1,9 +1,5 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {
@@ -34,6 +30,9 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   stationId: string;
@@ -70,16 +69,23 @@ export const BikeStationBottomSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <BottomSheetContainer
-      maxHeightValue={0.6}
-      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      onClose={onClose}
+    <BottomSheetMap
+      snapPoints={['80%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
     >
       <>
         {isLoading && (
@@ -191,7 +197,7 @@ export const BikeStationBottomSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 

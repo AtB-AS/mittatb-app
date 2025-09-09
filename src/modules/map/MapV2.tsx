@@ -17,7 +17,6 @@ import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
-import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
 import {
   CameraFocusModeType,
   GeofencingZoneCustomProps,
@@ -39,8 +38,8 @@ import {
   isStopPlace,
 } from './utils';
 import {
-  AutoSelectableBottomSheetType,
   GeofencingZones,
+  MapStateActionType,
   useGeofencingZoneTextContent,
   useMapViewConfig,
 } from '@atb/modules/map';
@@ -71,9 +70,8 @@ import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {MapBottomSheets} from './hooks/use-map-bottom-sheets';
+import {MapBottomSheets} from './use-map-bottom-sheets';
 import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
-import {useUpdateBottomSheetWhenSelectedEntityChanges} from './hooks/use-update-bottom-sheet-when-selected-entity-changes';
 import {getFocusMode} from './hooks/use-decide-camera-focus-mode';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
@@ -88,11 +86,9 @@ export const MapV2 = (props: MapProps) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
   const {
-    autoSelectedFeature,
     mapFilter,
     mapFilterIsOpen,
     setBottomSheetCurrentlyAutoSelected,
-    setAutoSelectedMapItem,
     setBottomSheetToAutoSelect,
     mapSelectionState,
     mapSelectionDispatch,
@@ -116,35 +112,16 @@ export const MapV2 = (props: MapProps) => {
   );
 
   const mapSelectionCloseCallback = useCallback(() => {
-    setAutoSelectedMapItem(undefined);
     setBottomSheetCurrentlyAutoSelected(undefined);
     setBottomSheetToAutoSelect(undefined);
     closeBottomSheet();
-    mapSelectionDispatch({mapState: 'NONE'});
+    mapSelectionDispatch({type: MapStateActionType.None});
   }, [
     closeBottomSheet,
     mapSelectionDispatch,
-    setAutoSelectedMapItem,
     setBottomSheetCurrentlyAutoSelected,
     setBottomSheetToAutoSelect,
   ]);
-
-  const distance = undefined;
-  /*cameraFocusMode?.mode === 'map-lines'
-      ? cameraFocusMode.distance
-      : undefined;*/
-
-  const {
-    //selectedFeature: mapSelectionSelectedFeature,
-    onReportParkingViolation,
-  } = useUpdateBottomSheetWhenSelectedEntityChanges(
-    props,
-    distance,
-    mapViewRef,
-    mapSelectionCloseCallback,
-    tabBarHeight,
-    //mapSelectionState.mapSelection,
-  );
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
   const showStations =
@@ -155,7 +132,7 @@ export const MapV2 = (props: MapProps) => {
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
-  const selectedFeature = mapSelectionState.feature || autoSelectedFeature;
+  const selectedFeature = mapSelectionState.feature;
 
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
@@ -165,13 +142,6 @@ export const MapV2 = (props: MapProps) => {
     isShmoDeepIntegrationEnabled,
     isMapV2Enabled,
   } = useFeatureTogglesContext();
-
-  /*useShmoActiveBottomSheet(
-    mapCameraRef,
-    mapViewRef,
-    mapSelectionCloseCallback,
-    tabBarHeight,
-  );*/
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -199,13 +169,6 @@ export const MapV2 = (props: MapProps) => {
     isLoading: vehicleIsLoading,
     isError: vehicleError,
   } = useVehicleQuery(selectedFeature?.properties?.id);
-
-  useAutoSelectMapItem(
-    mapCameraRef,
-    mapViewRef,
-    onReportParkingViolation,
-    tabBarHeight,
-  );
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapStateRef = useRef<MapState | null>(null);
@@ -357,41 +320,41 @@ export const MapV2 = (props: MapProps) => {
 
         if (isScooterV2(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: AutoSelectableBottomSheetType.Scooter,
+            type: MapStateActionType.Scooter,
             assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isBicycleV2(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: AutoSelectableBottomSheetType.Bicycle,
+            type: MapStateActionType.Bicycle,
             assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isCarStationV2(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: AutoSelectableBottomSheetType.CarStation,
+            type: MapStateActionType.CarStation,
             assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isParkAndRide(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: 'PARK_AND_RIDE',
+            type: MapStateActionType.ParkAndRideStation,
             feature: featureToSelect,
           });
         } else if (isStopPlace(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: 'STOP_PLACE',
+            type: MapStateActionType.StopPlace,
             feature: featureToSelect,
           });
         } else if (isBikeStationV2(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: AutoSelectableBottomSheetType.BikeStation,
+            type: MapStateActionType.BikeStation,
             assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isStationV2(featureToSelect)) {
           mapSelectionDispatch({
-            mapState: 'STATION',
+            type: MapStateActionType.Station,
             assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
@@ -507,7 +470,7 @@ export const MapV2 = (props: MapProps) => {
             onMapClick={(res) => {
               if (res.source === 'external-map-button') {
                 mapSelectionDispatch({
-                  mapState: 'EXTERNAL_MAP',
+                  type: MapStateActionType.ExternalMap,
                   url: res.url,
                 });
               }
@@ -518,7 +481,7 @@ export const MapV2 = (props: MapProps) => {
             <MapFilter
               onPress={() =>
                 mapSelectionDispatch({
-                  mapState: 'FILTER',
+                  type: MapStateActionType.Filter,
                 })
               }
               isLoading={false}
@@ -562,6 +525,7 @@ export const MapV2 = (props: MapProps) => {
         mapCameraRef={mapCameraRef}
         mapViewRef={mapViewRef}
         tabBarHeight={tabBarHeight}
+        mapProps={props}
       />
     </View>
   );

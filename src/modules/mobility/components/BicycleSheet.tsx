@@ -3,8 +3,7 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -29,6 +28,8 @@ import {MobilityStat} from './MobilityStat';
 import {BrandingImage} from './BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   vehicleId: VehicleId;
@@ -57,10 +58,17 @@ export const BicycleSheet = ({
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      onClose={onClose}
-      maxHeightValue={0.5}
+    <BottomSheetMap
+      snapPoints={['80%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
     >
       <>
         {isLoading && (
@@ -151,7 +159,7 @@ export const BicycleSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 
