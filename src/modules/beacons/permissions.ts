@@ -1,5 +1,6 @@
 import {Platform} from 'react-native';
-import {KettleModules, KettleConsents} from 'react-native-kettle-module';
+import {KettleModules} from 'react-native-kettle-module';
+import {KettleConsents} from 'react-native-kettle-module';
 import {
   PERMISSIONS,
   Permission,

@@ -97,7 +97,7 @@
 		<string>UseLocationIntent</string>
 	</array>
 	<key>RCTNewArchEnabled</key>
-	<true/>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>

@@ -149,6 +149,5 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     left: 0,
     right: 0,
   },
-  // used to be overflow: 'visible', but that squishes content under new architecture
-  childrenIOS: {},
+  childrenIOS: {overflow: 'visible'},
 }));
