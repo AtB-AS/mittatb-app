@@ -10,14 +10,6 @@ import {
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type MapContextState = {
-  bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
-  setBottomSheetToAutoSelect: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
-  bottomSheetCurrentlyAutoSelected?: AutoSelectableBottomSheet;
-  setBottomSheetCurrentlyAutoSelected: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
   mapFilterIsOpen: boolean;
@@ -54,8 +46,6 @@ type Props = {
 };
 
 export const MapContextProvider = ({children}: Props) => {
-  const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
-    useState<AutoSelectableBottomSheet>();
   const [mapSelectionState, mapSelectionDispatch] = useReducer(
     mapStateReducer,
     {
@@ -66,18 +56,9 @@ export const MapContextProvider = ({children}: Props) => {
   const {mapFilter, setMapFilter} = useUserMapFilters();
   const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
-  const [
-    bottomSheetCurrentlyAutoSelected,
-    setBottomSheetCurrentlyAutoSelected,
-  ] = useState<AutoSelectableBottomSheet>();
-
   return (
     <MapContext.Provider
       value={{
-        bottomSheetToAutoSelect,
-        setBottomSheetToAutoSelect,
-        bottomSheetCurrentlyAutoSelected,
-        setBottomSheetCurrentlyAutoSelected,
         mapFilter,
         setMapFilter,
         mapFilterIsOpen,

@@ -30,6 +30,7 @@ type DeparturesDialogSheetProps = {
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  tabBarHeight: number | undefined;
 };
 
 export const DeparturesDialogSheet = ({
@@ -39,10 +40,11 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
+  tabBarHeight,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const styles = useBottomSheetStyles();
+  const styles = useBottomSheetStyles(tabBarHeight ?? 0)();
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -134,6 +136,7 @@ export const DeparturesDialogSheet = ({
       snapPoints={['80%']}
       closeCallback={onClose}
       allowBackgroundTouch={false}
+      enableDynamicSizing={false}
       heading={
         stopPlaceFeature.properties?.name ??
         stopDetailsData?.stopPlaces[0]?.name
@@ -141,7 +144,7 @@ export const DeparturesDialogSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
     >
-      <View>
+      <View style={styles.listWrapper}>
         <StopPlaceViewOrError />
       </View>
     </BottomSheetMap>
@@ -161,8 +164,12 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
-const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
-  paddingHorizontal: {
-    paddingHorizontal: theme.spacing.medium,
-  },
-}));
+const useBottomSheetStyles = (tabBarHeight: number) =>
+  StyleSheet.createThemeHook((theme) => ({
+    paddingHorizontal: {
+      paddingHorizontal: theme.spacing.medium,
+    },
+    listWrapper: {
+      paddingBottom: tabBarHeight,
+    },
+  }));

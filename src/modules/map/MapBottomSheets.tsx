@@ -37,7 +37,6 @@ import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 
 type MapBottomSheetsProps = {
-  unSelectMapItem: () => void;
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
   mapViewRef: RefObject<MapboxGL.MapView | null>;
   tabBarHeight?: number;
@@ -45,7 +44,6 @@ type MapBottomSheetsProps = {
 };
 
 export const MapBottomSheets = ({
-  unSelectMapItem,
   mapCameraRef,
   mapViewRef,
   tabBarHeight,
@@ -111,11 +109,9 @@ export const MapBottomSheets = ({
 
   const handleCloseSheet = useCallback(() => {
     mapSelectionDispatch({type: MapStateActionType.None});
-    unSelectMapItem();
-  }, [mapSelectionDispatch, unSelectMapItem]);
+  }, [mapSelectionDispatch]);
 
   useEffect(() => {
-    console.log('mapSelectionFeature', mapSelectionState.feature);
     if (mapSelectionState.feature) {
       mapAnalytics.logMapSelection(mapSelectionState.feature);
     }
@@ -136,7 +132,6 @@ export const MapBottomSheets = ({
         !activeBooking?.bookingId && (
           <ScooterSheet
             onVehicleReceived={(item) => {
-              console.log('running');
               const feature: Feature<Point, GeoJsonProperties> =
                 getFeatureFromScan(item, mapSelectionState);
 
@@ -176,7 +171,7 @@ export const MapBottomSheets = ({
       {activeBooking?.state === ShmoBookingState.IN_USE && (
         <ActiveScooterSheet
           mapViewRef={mapViewRef}
-          onForceClose={unSelectMapItem}
+          onForceClose={handleCloseSheet}
           onActiveBookingReceived={flyToUserLocation}
           navigateSupportCallback={() => {
             navigation.navigate('Root_ScooterHelpScreen', {
@@ -194,7 +189,7 @@ export const MapBottomSheets = ({
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING && (
         <FinishingScooterSheet
-          onForceClose={unSelectMapItem}
+          onForceClose={handleCloseSheet}
           photoNavigation={() => {
             handleCloseSheet();
             navigation.navigate('Root_ParkingPhotoScreen', {
@@ -294,6 +289,7 @@ export const MapBottomSheets = ({
       {mapSelectionState?.mapState === BottomSheetType.StopPlace &&
         mapSelectionState.feature && (
           <DeparturesDialogSheet
+            tabBarHeight={tabBarHeight}
             onClose={handleCloseSheet}
             distance={undefined}
             stopPlaceFeature={mapSelectionState.feature}

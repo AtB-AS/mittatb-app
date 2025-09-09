@@ -27,11 +27,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
-  const {
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-    mapSelectionDispatch,
-  } = useMapContext();
+  const {mapSelectionDispatch} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
   const analytics = useMapSelectionAnalytics();
 
@@ -42,8 +38,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   } = useGetAssetFromQrCodeMutation();
 
   const clearStateAndAlertResultError = useCallback(() => {
-    setBottomSheetToAutoSelect(undefined);
-    setBottomSheetCurrentlyAutoSelected(undefined);
+    mapSelectionDispatch({
+      type: MapStateActionType.None,
+    });
     Alert.alert(
       tGlobal(MapTexts.qr.notFound.title),
       tGlobal(MapTexts.qr.notFound.description),
@@ -55,11 +52,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         },
       ],
     );
-  }, [
-    navigation.goBack,
-    setBottomSheetCurrentlyAutoSelected,
-    setBottomSheetToAutoSelect,
-  ]);
+  }, [mapSelectionDispatch, navigation.goBack]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {

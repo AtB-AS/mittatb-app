@@ -38,6 +38,7 @@ import {
   isStopPlace,
 } from './utils';
 import {
+  BottomSheetType,
   GeofencingZones,
   MapStateActionType,
   useGeofencingZoneTextContent,
@@ -69,8 +70,7 @@ import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {MapBottomSheets} from './use-map-bottom-sheets';
+import {MapBottomSheets} from './MapBottomSheets';
 import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
 import {getFocusMode} from './hooks/use-decide-camera-focus-mode';
 
@@ -85,17 +85,11 @@ export const MapV2 = (props: MapProps) => {
 
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
-  const {
-    mapFilter,
-    mapFilterIsOpen,
-    setBottomSheetCurrentlyAutoSelected,
-    setBottomSheetToAutoSelect,
-    mapSelectionState,
-    mapSelectionDispatch,
-  } = useMapContext();
-  const {height: bottomSheetHeight, close: closeBottomSheet} =
-    useBottomSheetContext();
-  const showMapFilterButton = bottomSheetHeight === 0; // hide filter button when a bottom sheet is open
+  const {mapFilter, mapFilterIsOpen, mapSelectionState, mapSelectionDispatch} =
+    useMapContext();
+
+  const showMapFilterButton =
+    mapSelectionState.mapState === BottomSheetType.None; // hide filter button when a bottom sheet is open
 
   const tabBarHeight = useBottomTabBarHeight();
   const controlStyles = useControlPositionsStyle(false, tabBarHeight);
@@ -110,18 +104,6 @@ export const MapV2 = (props: MapProps) => {
         : getCurrentCoordinatesGlobal() || FOCUS_ORIGIN,
     [initialLocation],
   );
-
-  const mapSelectionCloseCallback = useCallback(() => {
-    setBottomSheetCurrentlyAutoSelected(undefined);
-    setBottomSheetToAutoSelect(undefined);
-    closeBottomSheet();
-    mapSelectionDispatch({type: MapStateActionType.None});
-  }, [
-    closeBottomSheet,
-    mapSelectionDispatch,
-    setBottomSheetCurrentlyAutoSelected,
-    setBottomSheetToAutoSelect,
-  ]);
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
   const showStations =
@@ -514,14 +496,15 @@ export const MapV2 = (props: MapProps) => {
         </View>
         {showScanButton && (
           <ScanButton
-            onPressCallback={mapSelectionCloseCallback}
+            onPressCallback={() => {
+              mapSelectionDispatch({type: MapStateActionType.None});
+            }}
             tabBarHeight={tabBarHeight}
           />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
       <MapBottomSheets
-        unSelectMapItem={mapSelectionCloseCallback}
         mapCameraRef={mapCameraRef}
         mapViewRef={mapViewRef}
         tabBarHeight={tabBarHeight}
