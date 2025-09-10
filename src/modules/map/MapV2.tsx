@@ -22,7 +22,6 @@ import {
   GeofencingZoneCustomProps,
   MapProps,
 } from './types';
-
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -45,7 +44,6 @@ import {
   useMapViewConfig,
 } from '@atb/modules/map';
 import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
-
 import {
   isBicycleV2,
   isScooterV2,

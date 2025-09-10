@@ -287,7 +287,7 @@ export const MapBottomSheets = ({
         />
       )}
       {mapSelectionState?.mapState === BottomSheetType.StopPlace &&
-        mapSelectionState.feature && (
+        !!mapSelectionState.feature && (
           <DeparturesDialogSheet
             tabBarHeight={tabBarHeight}
             onClose={handleCloseSheet}
