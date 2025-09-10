@@ -11,7 +11,7 @@ import {StopPlaceFragmentWithIsFree} from './types';
 import {useConnectionsQuery} from '@atb/queries/use-connections-query';
 
 /**
- * This hook is pretty generic, but I do think it serves a purpose as-is.
+ * This hook is pretty generic, but it does serve a purpose as-is.
  * You can think of it as a "HarborService" in a way, as it encapsulates
  * everything needed to work with harbors and their connections, whether you
  * need all harbors or just those connected to a specific harbor.
