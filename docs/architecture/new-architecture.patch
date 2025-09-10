@@ -121,6 +121,33 @@ index f6598a8f2..973a86405 100644
 +  // used to be overflow: 'visible', but that squishes content under new architecture
 +  childrenIOS: {},
  }));
+diff --git a/src/components/toggle/Toggle.tsx b/src/components/toggle/Toggle.tsx
+index e17caa3c9..e68dfe3b2 100644
+--- a/src/components/toggle/Toggle.tsx
++++ b/src/components/toggle/Toggle.tsx
+@@ -54,10 +54,6 @@ export function Toggle({
+         // The disabled state is not shown visually on Android by default, so we
+         // need to style it manually.
+         Platform.OS === 'android' && props.disabled && styles.androidDisabled,
+-
+-        // Fix for React Native 0.81 Switch component layout issue
+-        // See: https://github.com/facebook/react-native/issues/53537
+-        styles.fixedDimensions,
+       ]}
+       {...props}
+       testID={props.testID}
+@@ -80,11 +76,5 @@ const useStyles = StyleSheet.createThemeHook(() => {
+     ios: {
+       transform: [{scale: 0.7 * scale}],
+     },
+-    fixedDimensions: {
+-      // Fix for React Native 0.81 Switch component layout problem
+-      // Adding explicit dimensions as recommended in the issue
+-      width: 51, // Standard iOS switch width
+-      height: 31, // Standard iOS switch height
+-    },
+   };
+ });
 diff --git a/src/modules/beacons/BeaconsContext.tsx b/src/modules/beacons/BeaconsContext.tsx
 index 98b0c5dab..45d91a3f3 100644
 --- a/src/modules/beacons/BeaconsContext.tsx
