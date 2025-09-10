@@ -35,7 +35,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, useAndroidSystemFont} = useThemeContext();
+  const {theme, androidSystemFont} = useThemeContext();
   const textColor = useColor(color, type);
 
   const typeStyle = {
@@ -45,7 +45,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 
   let textStyle: TextStyle = typeStyle;
 
-  if (Platform.OS === 'android' && !useAndroidSystemFont) {
+  if (Platform.OS === 'android' && !androidSystemFont) {
     textStyle = {
       ...typeStyle,
       fontFamily:
