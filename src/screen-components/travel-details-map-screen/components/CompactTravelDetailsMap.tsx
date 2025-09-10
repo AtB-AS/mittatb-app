@@ -1,8 +1,6 @@
 import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/modules/map';
-
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
-import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
@@ -31,7 +29,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   buttonText,
   onExpand,
 }) => {
-  const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
@@ -57,10 +54,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }, [bounds]);
 
   const styles = useStyles();
-
-  if (disableMap) {
-    return null;
-  }
 
   return (
     <View>
@@ -96,7 +89,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <PressableOpacity style={styles.button} onPress={onExpand}>
+      <PressableOpacity
+        style={styles.button}
+        onPress={onExpand}
+        accessibilityRole="button"
+      >
         <ThemeText typography="body__secondary--bold" color="primary">
           {buttonText}
         </ThemeText>

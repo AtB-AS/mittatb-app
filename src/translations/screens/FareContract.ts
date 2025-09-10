@@ -198,16 +198,16 @@ const FareContractTexts = {
   activateNow: {
     startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
     bottomSheetTitle: _(
-      'Vil du starte billetten?',
-      'Do you want to start the ticket?',
-      'Vil du starte billetten?',
+      'Start billett før planlagt tid?',
+      'Start ticket before scheduled time?',
+      'Start billett før planlagt tid?',
     ),
     bottomSheetDescription: _(
-      'Billetten starter med en gang du bekrefter. Dette valget kan ikke angres.',
-      'The ticket will start as soon as you confirm. This choice cannot be undone.',
-      'Billetten startar med ein gong du bekreftar. Dette valet kan ikkje gjerast om på.',
+      'Dette valget kan ikke angres. Billetten starter med en gang.',
+      'This action cannot be undone. The ticket will start immediately.',
+      'Dette valet kan ikkje angrast. Billetten startar med ein gong.',
     ),
-    confirm: _('Bekreft og start', 'Confirm and start', 'Bekreft og start'),
+    confirm: _('Start billett', 'Start ticket', 'Start billett'),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',

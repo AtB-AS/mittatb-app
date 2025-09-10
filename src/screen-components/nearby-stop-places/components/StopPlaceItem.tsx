@@ -64,6 +64,7 @@ export const StopPlaceItem = ({
     <Section>
       <GenericClickableSectionItem
         onPress={() => onPress(place)}
+        accessibilityRole="button"
         accessibilityLabel={a11yLabel}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,

@@ -1,8 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {
-  getStopPlaceConnections,
-  getStopPlacesByMode,
-} from '@atb/api/bff/stop-places';
+import {getStopPlacesByMode} from '@atb/api/bff/stop-places';
 import {
   TransportMode,
   TransportSubmode,
@@ -11,13 +8,9 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {ProductTypeTransportModes} from '@atb-as/config-specs';
 import {onlyUniques} from '@atb/utils/only-uniques';
 
-export const useHarborsQuery = ({
-  fromHarborId,
-  transportModes,
-}: {
-  fromHarborId?: string;
-  transportModes?: ProductTypeTransportModes[];
-} = {}) => {
+export const useHarborsQuery = (
+  transportModes?: ProductTypeTransportModes[],
+) => {
   const defaultModes = [TransportMode.Water];
   const defaultSubmodes = [
     TransportSubmode.HighSpeedPassengerService,
@@ -39,16 +32,8 @@ export const useHarborsQuery = ({
     : defaultSubmodes;
 
   return useQuery({
-    queryKey: [
-      'harbors',
-      {connectionFrom: fromHarborId},
-      uniqueModes,
-      uniqueSubmodes,
-    ],
-    queryFn: () =>
-      fromHarborId
-        ? getStopPlaceConnections(fromHarborId)
-        : getStopPlacesByMode(uniqueModes, uniqueSubmodes),
+    queryKey: ['harbors', uniqueModes, uniqueSubmodes],
+    queryFn: () => getStopPlacesByMode(uniqueModes, uniqueSubmodes),
     staleTime: ONE_HOUR_MS,
     cacheTime: ONE_HOUR_MS,
   });
