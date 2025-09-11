@@ -1,5 +1,11 @@
 import React from 'react';
-import {AccessibilityProps, ActivityIndicator, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  AccessibilityProps,
+  ActivityIndicator,
+  Platform,
+  View,
+} from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -66,7 +72,14 @@ export function RadioSectionItem({
   return (
     <View style={[style.spaceBetween, topContainer]}>
       <PressableOpacity
-        onPress={() => onPress(!selected)}
+        onPress={() => {
+          onPress(!selected);
+          // Talkback doesn't read out the updated state automatically, so we
+          // trigger it manually instead.
+          if (Platform.OS === 'android' && !selected) {
+            AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
+          }
+        }}
         style={styles.mainContent}
         testID={testID}
         accessibilityRole="button"
