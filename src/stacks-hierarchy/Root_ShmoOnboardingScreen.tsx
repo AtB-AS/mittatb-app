@@ -13,7 +13,7 @@ type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
   const {requirements, hasBlockers, setGivenConsent, legalAge} =
-    useShmoRequirements();
+    useShmoRequirements(undefined);
 
   useEffect(() => {
     if (!hasBlockers) {
