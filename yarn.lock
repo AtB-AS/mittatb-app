@@ -21,9 +21,9 @@
     "@jridgewell/trace-mapping" "^0.3.9"
 
 "@atb-as/config-specs@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-7.2.0.tgz#3c2ad47dec279ff71d2f5cc5c1a1d8b0b10985c3"
-  integrity sha512-CiCFqiRnArUcj6xigfFfqeHLtR3rgpKHiiuFfOCeJhtVPsQFdYvYKEfXi/xtJGxhZba3R0vZNIe09GUEeWq+Eg==
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-7.3.0.tgz#29666607fae6e5313594b24885e9adfa902f6ace"
+  integrity sha512-cBKzi6aRj+oJkLI3F39DY2vE3zCfPFjZdxfzKLN7UfF2JBQFVRu8CXet+IudiZkZnz50zwYlpZpGfbIZRPxDUA==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"

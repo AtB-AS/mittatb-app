@@ -8,9 +8,14 @@ import {
   useGetAgeVerificationQuery,
 } from './queries/use-get-age-verification-query';
 import {useFeatureTogglesContext} from '../feature-toggles';
+import {useOperators} from './use-operators';
 
-export const useShmoRequirements = () => {
-  const USER_AGE_LIMIT = 18; // Define the age limit for verification
+export const useShmoRequirements = (operatorId: string | undefined) => {
+  const {mobilityOperators} = useOperators();
+
+  const operator = mobilityOperators?.find((op) => op.id === operatorId);
+  const operatorAgeLimit = operator?.ageLimit;
+
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {preciseLocationIsAvailable} = useGeolocationContext();
@@ -24,7 +29,7 @@ export const useShmoRequirements = () => {
   );
 
   const {data: ageVerification, isLoading: ageVerifiedLoading} =
-    useGetAgeVerificationQuery(USER_AGE_LIMIT);
+    useGetAgeVerificationQuery(operatorAgeLimit);
 
   const requirements: ShmoRequirementType[] = [
     {
@@ -59,7 +64,7 @@ export const useShmoRequirements = () => {
     numberOfBlockers,
     setGivenConsent,
     isLoading,
-    legalAge: USER_AGE_LIMIT,
+    operatorAgeLimit,
     ageVerification,
   };
 };

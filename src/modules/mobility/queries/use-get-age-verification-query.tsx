@@ -9,12 +9,12 @@ export enum AgeVerificationEnum {
   NotVerified = 'notVerified',
 }
 
-export const getAgeVerificationQueryKey = (legalAge: number) => [
+export const getAgeVerificationQueryKey = (legalAge: number | undefined) => [
   'getAgeVerification',
   legalAge,
 ];
 
-export const useGetAgeVerificationQuery = (legalAge: number) => {
+export const useGetAgeVerificationQuery = (legalAge: number | undefined) => {
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   return useQuery({
     enabled: isShmoDeepIntegrationEnabled,
