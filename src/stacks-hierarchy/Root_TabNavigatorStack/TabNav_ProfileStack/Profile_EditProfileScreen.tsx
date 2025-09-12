@@ -21,6 +21,8 @@ import {useGetBirthdateQuery} from '@atb/modules/mobility';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {ErrorResponse} from '@atb-as/utils';
+import {errorDetailsToResponseData} from '@atb/api/utils';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -78,10 +80,17 @@ export const Profile_EditProfileScreen = ({
 
   const getEmailErrorText = (
     invalidEmail: boolean,
-    errorOnUpdate: any,
+    errorResponse: ErrorResponse | null,
   ): string | undefined => {
-    if (errorOnUpdate?.status === 602) {
-      return t(EditProfileTexts.personalDetails.email.unavailableError);
+    if (!!errorResponse) {
+      const errorResponseData = errorDetailsToResponseData(errorResponse);
+
+      if ('upstreamError' in errorResponseData) {
+        const upstreamError = JSON.parse(errorResponseData.upstreamError);
+        if (upstreamError['errorCode'] === 602) {
+          return t(EditProfileTexts.personalDetails.email.unavailableError);
+        }
+      }
     } else if (invalidEmail) {
       return t(EditProfileTexts.personalDetails.email.formattingError);
     }
