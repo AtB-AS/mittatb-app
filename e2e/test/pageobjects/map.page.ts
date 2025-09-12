@@ -29,42 +29,15 @@ class MapPage {
   }
 
   /**
-   * Open filter and toggle on/off a mode, i.e. toggle all for a mode
+   * Open filter and toggle on/off a mode
    * @param mode type of mode to toggle all [scooter|bicycle|car]
    */
-  async toggleAll(mode: 'scooter' | 'bicycle' | 'car') {
+  async toggle(mode: 'scooter' | 'bicycle' | 'car') {
     await this.mapFilter.click();
-    const reqId = `//*[@resource-id="${mode}ToggleAll"]`;
+    const reqId = `//*[@resource-id="${mode}Toggle"]`;
     await $(reqId).click();
     await AppHelper.pause(50);
     await this.confirmFilter.click();
-  }
-
-  /**
-   * Open filter and toggle on/off an operator
-   * @param operator type of operator to toggle
-   */
-  async toggleOperator(operator: string) {
-    await this.mapFilter.click();
-    const reqId = `//*[@resource-id="${operator}Toggle"]`;
-    await $(reqId).click();
-    await AppHelper.pause(50);
-    await this.confirmFilter.click();
-  }
-
-  /**
-   * Toggle a filter (needs to open the filter first)
-   * @param type type to toggle (mode or operator)
-   */
-  async toggle(type: string) {
-    let elemId = `${type}Toggle`;
-    // Toggle "all" if a mode is selected
-    if (type in ['scooter', 'bicycle', 'car']) {
-      elemId = elemId.concat('All');
-    }
-    const reqId = `//*[@resource-id="${elemId}"]`;
-    await $(reqId).click();
-    await AppHelper.pause(50);
   }
 
   /**
@@ -82,7 +55,7 @@ class MapPage {
       height: 1000,
       percent: pinchPct,
     });
-    await AppHelper.pause(100);
+    await AppHelper.pause(300);
   }
 
   /**
@@ -100,7 +73,7 @@ class MapPage {
       height: 1000,
       percent: pinchPct,
     });
-    await AppHelper.pause(100);
+    await AppHelper.pause(300);
   }
 
   /**
@@ -140,6 +113,7 @@ class MapPage {
       endX: endX,
       endY: endY,
     });
+    await AppHelper.pause(300);
   }
 }
 

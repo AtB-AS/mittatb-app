@@ -87,6 +87,7 @@ export const TicketHistoryScreenComponent = ({
           />
         }
         contentContainerStyle={styles.flatListContent}
+        testID="ticketHistoryScrollView"
       />
     </View>
   );

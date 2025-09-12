@@ -494,7 +494,8 @@ export const Profile_DebugInfoScreen = () => {
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
-                  expandContent={tokens?.map((token) => (
+                  testID="remoteTokenExpandable"
+                  expandContent={tokens?.map((token, index) => (
                     <View key={token.id} style={styles.remoteToken}>
                       {keys(token).map((k) => (
                         <ThemeText key={token.id + k}>
@@ -505,6 +506,7 @@ export const Profile_DebugInfoScreen = () => {
                         expanded={true}
                         onPress={() => removeRemoteToken(token.id)}
                         text="Remove"
+                        testID={`removeRemoteToken${index}`}
                       />
                     </View>
                   ))}
