@@ -124,16 +124,19 @@ export const mapToUserProfilesWithCount = (
   userProfiles: UserProfile[],
 ): UserProfileWithCount[] =>
   userProfileRefs
-    .reduce((groupedById, userProfileRef) => {
-      const existing = groupedById.find(
-        (r) => r.userProfileRef === userProfileRef,
-      );
-      if (existing) {
-        existing.count += 1;
-        return groupedById;
-      }
-      return [...groupedById, {userProfileRef, count: 1}];
-    }, [] as {userProfileRef: string; count: number}[])
+    .reduce(
+      (groupedById, userProfileRef) => {
+        const existing = groupedById.find(
+          (r) => r.userProfileRef === userProfileRef,
+        );
+        if (existing) {
+          existing.count += 1;
+          return groupedById;
+        }
+        return [...groupedById, {userProfileRef, count: 1}];
+      },
+      [] as {userProfileRef: string; count: number}[],
+    )
     .map((refAndCount) => {
       const userProfile = findReferenceDataById(
         userProfiles,

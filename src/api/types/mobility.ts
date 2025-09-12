@@ -168,7 +168,7 @@ const ShmoCoordinatesSchema = z.object({
   altitude: z.number().nullish(),
 });
 
-const InitShmoOneStopBookingRequestBodySchema = z.object({
+export const InitShmoOneStopBookingRequestBodySchema = z.object({
   recurringPaymentId: z.number().int(),
   coordinates: ShmoCoordinatesSchema,
   assetId: z
@@ -187,7 +187,7 @@ export enum ShmoBookingEventType {
   FINISH = 'FINISH',
 }
 
-const ShmoImageFileSchema = z.object({
+export const ShmoImageFileSchema = z.object({
   fileName: z.string(),
   fileType: z.string(),
   fileData: z.string().describe('base64 encoded image data'),

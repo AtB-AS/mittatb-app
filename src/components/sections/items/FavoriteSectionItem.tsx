@@ -14,7 +14,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type BaseProps = {
   favorite: StoredLocationFavorite;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   testID?: string;
 };
 type WithOnPress = BaseProps & {

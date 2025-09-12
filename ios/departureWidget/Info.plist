@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ApiBaseUrl</key>
+	<string>$(API_BASE_URL)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>
@@ -9,7 +11,7 @@
 	</dict>
 	<key>NSWidgetWantsLocation</key>
 	<true/>
-	<key>ApiBaseUrl</key>
-	<string>$(API_BASE_URL)</string>
+	<key>RCTNewArchEnabled</key>
+	<false/>
 </dict>
 </plist>

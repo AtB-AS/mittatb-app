@@ -153,9 +153,8 @@ const BeaconsContextProvider = ({children}: Props) => {
         // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
         permissionsGranted = await NativeModules.BeaconsPermissions.request();
       } else {
-        permissionsGranted = await requestAndroidBeaconPermissions(
-          rationaleMessages,
-        );
+        permissionsGranted =
+          await requestAndroidBeaconPermissions(rationaleMessages);
       }
       if (permissionsGranted) {
         // Initialize beacons SDK after consent is granted

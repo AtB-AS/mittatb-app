@@ -55,7 +55,7 @@ export const getActiveRouteName = (state: NavigationState): string => {
     }
 
     return route.name;
-  } catch (err) {
+  } catch {
     return 'Unknown';
   }
 };

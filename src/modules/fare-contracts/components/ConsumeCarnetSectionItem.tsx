@@ -15,7 +15,7 @@ export function ConsumeCarnetSectionItem({
   fareContractId,
   fareProductType,
   ...sectionProps
-}: ConsumeCarnetSectionItemProps): JSX.Element {
+}: ConsumeCarnetSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];

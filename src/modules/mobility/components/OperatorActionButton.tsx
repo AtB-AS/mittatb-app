@@ -68,8 +68,8 @@ export const OperatorActionButton = ({
 
   const buttonText =
     isUserEligibleForBenefit && benefit?.callToAction?.name
-      ? getTextForLanguage(benefit.callToAction.name, language) ??
-        t(MobilityTexts.operatorAppSwitchButton(operatorName))
+      ? (getTextForLanguage(benefit.callToAction.name, language) ??
+        t(MobilityTexts.operatorAppSwitchButton(operatorName)))
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const openAppURL = useCallback(

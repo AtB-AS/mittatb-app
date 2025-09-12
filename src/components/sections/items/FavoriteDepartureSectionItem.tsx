@@ -14,7 +14,7 @@ import {formatDestinationDisplay} from '@atb/screen-components/travel-details-sc
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   testID?: string;
 };
 type WithOnPress = BaseProps & {

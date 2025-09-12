@@ -8,7 +8,7 @@ import type {ServiceJourneyWithGuaranteedCalls} from '../types';
 const withModes = (
   transportMode?: TransportMode,
   transportSubmode?: TransportSubmode,
-) => ({transportMode, transportSubmode} as ServiceJourneyWithGuaranteedCalls);
+) => ({transportMode, transportSubmode}) as ServiceJourneyWithGuaranteedCalls;
 
 describe('isApplicableTransportMode', () => {
   it('should give true if modes array includes service journey transport mode', () => {

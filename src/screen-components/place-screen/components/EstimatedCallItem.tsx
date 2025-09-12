@@ -61,7 +61,7 @@ export const EstimatedCallItem = memo(
     onPressFavorite,
     existingFavorite,
     showBottomBorder,
-  }: EstimatedCallItemProps): JSX.Element => {
+  }: EstimatedCallItemProps): React.JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
     const testID = 'estimatedCallItem';

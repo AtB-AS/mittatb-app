@@ -326,8 +326,9 @@ export const getNewFilterState = (
   // If 'showAll' was true at the time of unchecking one, all other operators should be added to the list.
   const operators = currentFilter?.showAll
     ? allOperators.map((o) => o.id).filter((o) => o !== selectedOperator)
-    : currentFilter?.operators?.filter((o: string) => o !== selectedOperator) ??
-      [];
+    : (currentFilter?.operators?.filter(
+        (o: string) => o !== selectedOperator,
+      ) ?? []);
   return {
     operators,
     showAll: false,

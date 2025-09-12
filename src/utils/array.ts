@@ -33,5 +33,5 @@ export function iterateWithNext<T>(
       next = iterator.next();
     }
   }
-  return [...generator(iterable)];
+  return [...generator(iterable)] as {current: T; next: T}[];
 }

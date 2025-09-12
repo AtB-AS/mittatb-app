@@ -56,9 +56,8 @@ const getBaseUrl = async () => {
   const debugUrl = await storage.get('@ATB_debug_token_server_ip_address');
   const authId = getCurrentUserIdGlobal();
   if (debugUrl && debugUrl.length > 0) {
-    client.defaults.headers.common[
-      'entur-customer-account-id'
-    ] = `ATB:CustomerAccount:${authId}`;
+    client.defaults.headers.common['entur-customer-account-id'] =
+      `ATB:CustomerAccount:${authId}`;
     return debugUrl;
   } else return API_BASE_URL;
 };

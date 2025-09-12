@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "AppDelegate.h"
+#import "AtB-Swift.h"
 #import "ChangeNativeBridge.h"
 #import <React/RCTLog.h>
 

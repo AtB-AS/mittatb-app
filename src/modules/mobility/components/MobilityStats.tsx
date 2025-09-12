@@ -3,8 +3,8 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
 type MobilityStatsProps = {
-  first: JSX.Element;
-  second: JSX.Element;
+  first: React.JSX.Element;
+  second: React.JSX.Element;
 };
 export const MobilityStats = ({first, second}: MobilityStatsProps) => {
   const style = useStyles();

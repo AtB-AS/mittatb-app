@@ -82,12 +82,12 @@ const ResultItemHeader: React.FC<{
               ),
             )
           : startLegIsFlexibleTransport && publicCode
-          ? t(
-              TripSearchTexts.results.resultItem.header.flexTransportTitle(
-                publicCode,
-              ),
-            )
-          : transportName}
+            ? t(
+                TripSearchTexts.results.resultItem.header.flexTransportTitle(
+                  publicCode,
+                ),
+              )
+            : transportName}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -464,8 +464,8 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
           ),
         )
       : mustWait
-      ? t(TripSearchTexts.results.resultItem.footLeg.waitLabel(waitDuration))
-      : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
+        ? t(TripSearchTexts.results.resultItem.footLeg.waitLabel(waitDuration))
+        : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
     <View style={styles.walkContainer} testID="footLeg">

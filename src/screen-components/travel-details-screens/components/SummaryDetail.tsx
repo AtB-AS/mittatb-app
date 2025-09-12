@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {SvgProps} from 'react-native-svg';
 
 type Props = {
-  icon(props: SvgProps): JSX.Element;
+  icon(props: SvgProps): React.JSX.Element;
   accessibilityLabel: string;
   label: string;
   testID?: string;

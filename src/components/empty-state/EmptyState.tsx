@@ -8,7 +8,7 @@ import React from 'react';
 export type EmptyStateProps = {
   title: string;
   details: string;
-  illustrationComponent: JSX.Element;
+  illustrationComponent: React.JSX.Element;
   buttonProps?: {
     onPress: () => void;
     text: string;

@@ -183,7 +183,7 @@ export const useAutoSelectMapItem = (
     if (!isFocused) return;
     try {
       if (bottomSheetToAutoSelect) {
-        let BottomSheetComponent: JSX.Element | undefined = undefined;
+        let BottomSheetComponent: React.JSX.Element | undefined = undefined;
         switch (bottomSheetToAutoSelect.type) {
           case AutoSelectableBottomSheetType.Scooter:
             if (

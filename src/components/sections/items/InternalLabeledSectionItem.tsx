@@ -12,7 +12,7 @@ export type InternalLabeledItemProps = SectionItemProps<
   PropsWithChildren<{
     label: string;
     subtext?: string;
-    leftIcon?: (props: SvgProps) => JSX.Element;
+    leftIcon?: (props: SvgProps) => React.JSX.Element;
     accessibleLabel?: boolean;
     wrapperStyle?: StyleProp<ViewStyle>;
   }>

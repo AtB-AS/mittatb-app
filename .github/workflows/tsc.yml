@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: install node v18
+      - name: install node v22
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:

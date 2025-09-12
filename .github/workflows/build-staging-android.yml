@@ -49,10 +49,10 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
-      - name: install node v18
+      - name: install node v22
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
       - name: Get potential cached node_modules
         if: env.ENV_FORCE_BUILD != 'true'
         uses: actions/cache@v3

@@ -28,7 +28,10 @@ export const HarborSelection = forwardRef<
 
   const fromHarborRef = useRef<typeof PressableOpacity>(null);
   const toHarborRef = useRef<typeof PressableOpacity>(null);
-  useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
+  useImperativeHandle(ref, () => ({
+    fromHarborRef: fromHarborRef as any,
+    toHarborRef: toHarborRef as any,
+  }));
 
   if (!selection.stopPlaces) return null;
 

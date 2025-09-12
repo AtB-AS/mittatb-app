@@ -37,7 +37,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
 
     const zonesRef = useRef<typeof PressableOpacity>(null);
     useImperativeHandle(ref, () => ({
-      zonesRef,
+      zonesRef: zonesRef as any,
     }));
 
     if (!selection.zones) return null;

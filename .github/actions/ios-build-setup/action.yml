@@ -3,7 +3,7 @@ description: 'Sets up the necessarry dependencies, environment and assets for bu
 inputs:
   # Dev dependencies
   node-version:
-    default: "18"
+    default: "22"
     required: false
   ruby-version:
     default: "3.1.0"

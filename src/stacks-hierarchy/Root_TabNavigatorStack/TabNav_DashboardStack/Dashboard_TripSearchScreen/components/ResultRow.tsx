@@ -184,20 +184,20 @@ const tripSummary = (
           .footLegsOnly,
       )
     : nonFootLegs.length === 1
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription
-          .noSwitching,
-      )
-    : nonFootLegs.length === 2
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription
-          .oneSwitch,
-      )
-    : t(
-        TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-          nonFootLegs.length - 1,
-        ),
-      );
+      ? t(
+          TripSearchTexts.results.resultItem.journeySummary.legsDescription
+            .noSwitching,
+        )
+      : nonFootLegs.length === 2
+        ? t(
+            TripSearchTexts.results.resultItem.journeySummary.legsDescription
+              .oneSwitch,
+          )
+        : t(
+            TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+              nonFootLegs.length - 1,
+            ),
+          );
 
   const walkDistance = tripPattern.legs
     .filter((l) => l.mode === Mode.Foot)

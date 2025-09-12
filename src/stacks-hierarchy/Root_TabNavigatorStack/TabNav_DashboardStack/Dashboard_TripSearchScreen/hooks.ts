@@ -48,8 +48,8 @@ export function useJourneyModes(): Modes {
       isFlexibleTransportEnabled && isFlexibleTransportOnDirectModeEnabled
         ? StreetMode.Flexible
         : isNonTransitTripSearchEnabled
-        ? undefined
-        : defaultJourneyModes.directMode,
+          ? undefined
+          : defaultJourneyModes.directMode,
     egressMode:
       isFlexibleTransportEnabled && isFlexibleTransportOnEgressModeEnabled
         ? StreetMode.Flexible
