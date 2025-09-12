@@ -1,41 +1,42 @@
-import React, {createContext, useContext, useMemo, useState} from 'react';
-import {AutoSelectableMapItem, MapFilterType} from '@atb/modules/map';
-import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
+import React, {createContext, useContext, useReducer, useState} from 'react';
+import {MapFilterType} from '@atb/modules/map';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useUserMapFilters} from './hooks/use-map-filter';
+import {
+  mapStateReducer,
+  ReducerMapState,
+  ReducerMapStateAction,
+} from './mapStateReducer';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type MapContextState = {
-  bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
-  setBottomSheetToAutoSelect: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
-  bottomSheetCurrentlyAutoSelected?: AutoSelectableBottomSheet;
-  setBottomSheetCurrentlyAutoSelected: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
-  setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
-  autoSelectedFeature?: AutoSelectedFeature;
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
   mapFilterIsOpen: boolean;
   setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
+  mapSelectionState: ReducerMapState;
+  mapSelectionDispatch: React.Dispatch<ReducerMapStateAction>;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
 
-export enum AutoSelectableBottomSheetType {
+export enum BottomSheetType {
   Scooter = 'SCOOTER',
   Bicycle = 'BICYCLE',
   BikeStation = 'BIKE_STATION',
   CarStation = 'CAR_STATION',
-  // StopPlace = 'STOP_PLACE', // add support if needed
-  // ParkAndRideStation = 'PARK_AND_RIDE_STATION', // add support if needed
+  StopPlace = 'STOP_PLACE',
+  ParkAndRideStation = 'PARK_AND_RIDE_STATION',
+  Filter = 'FILTER',
+  ExternalMap = 'EXTERNAL_MAP',
+  FinishedBooking = 'FINISHED_BOOKING',
+  Station = 'STATION',
+  AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
+  None = 'NONE',
 }
 
 export type AutoSelectableBottomSheet = {
-  type: AutoSelectableBottomSheetType;
+  type: BottomSheetType;
   id: string;
   shmoBookingState?: ShmoBookingState;
 };
@@ -45,58 +46,25 @@ type Props = {
 };
 
 export const MapContextProvider = ({children}: Props) => {
-  const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
-    useState<AutoSelectableBottomSheet>();
+  const [mapSelectionState, mapSelectionDispatch] = useReducer(
+    mapStateReducer,
+    {
+      mapState: BottomSheetType.None,
+    },
+  );
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
   const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
-  const [
-    bottomSheetCurrentlyAutoSelected,
-    setBottomSheetCurrentlyAutoSelected,
-  ] = useState<AutoSelectableBottomSheet>();
-
-  const [autoSelectedMapItem, setAutoSelectedMapItem] =
-    useState<AutoSelectableMapItem>();
-
-  // todo: support station selection
-  const autoSelectedFeature: AutoSelectedFeature = useMemo(
-    () =>
-      !autoSelectedMapItem?.id
-        ? undefined
-        : {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [autoSelectedMapItem?.lon, autoSelectedMapItem?.lat],
-            },
-            // properties should match the one received from the map onPressEvent
-            properties: {
-              id: autoSelectedMapItem.id,
-              system_id: autoSelectedMapItem?.system.id,
-              count: 1,
-              vehicle_type_form_factor:
-                mapAutoSelectableBottomSheetTypeToFormFactor(
-                  bottomSheetCurrentlyAutoSelected?.type,
-                ),
-            },
-          },
-    [autoSelectedMapItem, bottomSheetCurrentlyAutoSelected?.type],
-  );
-
   return (
     <MapContext.Provider
       value={{
-        bottomSheetToAutoSelect,
-        setBottomSheetToAutoSelect,
-        bottomSheetCurrentlyAutoSelected,
-        setBottomSheetCurrentlyAutoSelected,
-        setAutoSelectedMapItem,
-        autoSelectedFeature,
         mapFilter,
         setMapFilter,
         mapFilterIsOpen,
         setMapFilterIsOpen,
+        mapSelectionState,
+        mapSelectionDispatch,
       }}
     >
       {children}
@@ -125,17 +93,17 @@ export function useMapContext() {
   return context;
 }
 
-function mapAutoSelectableBottomSheetTypeToFormFactor(
-  autoSelectableBottomSheetType?: AutoSelectableBottomSheetType,
+export function mapAutoSelectableBottomSheetTypeToFormFactor(
+  autoSelectableBottomSheetType?: BottomSheetType,
 ): FormFactor | undefined {
   switch (autoSelectableBottomSheetType) {
-    case AutoSelectableBottomSheetType.Bicycle:
+    case BottomSheetType.Bicycle:
       return FormFactor.Bicycle;
-    case AutoSelectableBottomSheetType.Scooter:
+    case BottomSheetType.Scooter:
       return FormFactor.Scooter;
-    case AutoSelectableBottomSheetType.BikeStation:
+    case BottomSheetType.BikeStation:
       return FormFactor.Bicycle;
-    case AutoSelectableBottomSheetType.CarStation:
+    case BottomSheetType.CarStation:
       return FormFactor.Car;
     default:
       return undefined;

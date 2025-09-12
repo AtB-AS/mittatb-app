@@ -1,6 +1,5 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
 import {BicycleFill, CarFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -22,6 +21,8 @@ import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
+import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   name: string | undefined;
@@ -58,10 +59,15 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(ParkAndRideTexts.title)}
-      onClose={onClose}
-      maxHeightValue={0.5}
+    <BottomSheetMap
+      snapPoints={['80%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={t(ParkAndRideTexts.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
     >
       <ScrollView>
         <View style={styles.buttonsContainer}>
@@ -122,7 +128,7 @@ export const ParkAndRideBottomSheet = ({
           </Section>
         </ScrollView>
       </ScrollView>
-    </BottomSheetContainer>
+    </BottomSheetMap>
   );
 };
 

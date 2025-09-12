@@ -1,18 +1,14 @@
 import {useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {
-  ShmoBookingEvent,
-  ShmoBookingEventType,
-  ShmoBookingState,
-} from '@atb/api/types/mobility';
+import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {AutoSelectableBottomSheetType, useMapContext} from '@atb/modules/map';
+import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {Image} from 'react-native-compressor';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
@@ -26,11 +22,7 @@ export const Root_ParkingPhotoScreen = ({
 }: ParkingPhotoScreenProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {
-    setBottomSheetToAutoSelect,
-    setBottomSheetCurrentlyAutoSelected,
-    setAutoSelectedMapItem,
-  } = useMapContext();
+  const {mapSelectionDispatch} = useMapContext();
 
   const {mutateAsync: sendShmoBookingEvent, isLoading} =
     useSendShmoBookingEventMutation();
@@ -69,14 +61,10 @@ export const Root_ParkingPhotoScreen = ({
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
-    setBottomSheetCurrentlyAutoSelected(undefined);
-    setAutoSelectedMapItem(undefined);
-    setBottomSheetToAutoSelect({
-      type: AutoSelectableBottomSheetType.Scooter,
-      id: route.params.bookingId,
-      shmoBookingState: ShmoBookingState.FINISHED,
+    mapSelectionDispatch({
+      type: MapStateActionType.FinishedBooking,
+      assetId: route.params.bookingId,
     });
-
     if (base64data) {
       await onEndTrip(route.params.bookingId, base64data);
     }

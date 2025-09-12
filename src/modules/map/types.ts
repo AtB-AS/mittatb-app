@@ -14,8 +14,15 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
-import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {
+  BikeStationFragment,
+  CarStationFragment,
+  StationBasicFragment,
+} from '@atb/api/types/generated/fragments/stations';
+import {
+  VehicleBasicFragment,
+  VehicleExtendedFragment,
+} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -241,3 +248,8 @@ export type SelectedMapItemProperties = GeoJsonProperties & {
 export type SelectedFeatureIdProp = {
   selectedFeatureId: SelectedMapItemProperties['id'];
 };
+
+export type AutoSelectableMapItem =
+  | VehicleExtendedFragment
+  | BikeStationFragment
+  | CarStationFragment;
