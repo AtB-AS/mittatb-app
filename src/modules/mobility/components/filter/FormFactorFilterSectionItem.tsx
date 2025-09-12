@@ -55,7 +55,11 @@ export const FormFactorFilterSectionItem = (
                 {t(MobilityTexts.formFactor(formFactor, true))}
               </ThemeText>
             </View>
-            <Toggle value={showAll()} onValueChange={onAllToggle} />
+            <Toggle
+              value={showAll()}
+              onValueChange={onAllToggle}
+              testID={`${formFactor.toLowerCase()}Toggle`}
+            />
           </View>
         </View>
       </View>
