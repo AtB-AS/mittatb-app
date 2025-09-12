@@ -56,6 +56,7 @@ import {
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   fareContract: FareContractType;
@@ -265,21 +266,24 @@ export const DetailsContent: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  globalMessages: {
-    flex: 1,
-    rowGap: theme.spacing.medium,
-  },
-  section: {
-    marginBottom: theme.spacing.large,
-  },
-  fareContractDetails: {
-    flex: 1,
-    paddingBottom: theme.spacing.large,
-    rowGap: theme.spacing.medium,
-  },
-  enlargedWhiteBarcodePaddingView: {
-    backgroundColor: '#ffffff',
-    paddingVertical: theme.spacing.xLarge * 2,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+  return {
+    globalMessages: {
+      flex: 1,
+      rowGap: theme.spacing.medium,
+    },
+    section: {
+      marginBottom: bottomSafeAreaInset,
+    },
+    fareContractDetails: {
+      flex: 1,
+      paddingBottom: theme.spacing.large,
+      rowGap: theme.spacing.medium,
+    },
+    enlargedWhiteBarcodePaddingView: {
+      backgroundColor: '#ffffff',
+      paddingVertical: theme.spacing.xLarge * 2,
+    },
+  };
+});

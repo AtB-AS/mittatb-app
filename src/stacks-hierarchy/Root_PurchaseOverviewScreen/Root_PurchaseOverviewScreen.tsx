@@ -384,7 +384,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -392,7 +392,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

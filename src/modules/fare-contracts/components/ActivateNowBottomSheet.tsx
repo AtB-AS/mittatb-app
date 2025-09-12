@@ -100,7 +100,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       backgroundColor: theme.color.background.neutral[1].background,
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottom + theme.spacing.medium,
     },
     contentContainer: {
       rowGap: theme.spacing.medium,
