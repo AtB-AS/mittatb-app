@@ -105,12 +105,12 @@ export const ConsumeCarnetBottomSheet = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       backgroundColor: theme.color.background.neutral[1].background,
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     contentContainer: {
       rowGap: theme.spacing.medium,

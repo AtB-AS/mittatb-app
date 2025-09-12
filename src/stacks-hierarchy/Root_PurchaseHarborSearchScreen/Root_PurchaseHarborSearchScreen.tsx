@@ -21,6 +21,7 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarbors} from '@atb/modules/harbors';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -131,24 +132,28 @@ export const Root_PurchaseHarborSearchScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.color.background.neutral[2].background,
-  },
-  headerContainer: {
-    backgroundColor: theme.color.background.accent[0].background,
-  },
-  header: {
-    backgroundColor: theme.color.background.accent[0].background,
-  },
-  withMargin: {
-    margin: theme.spacing.medium,
-  },
-  contentBlock: {
-    marginHorizontal: theme.spacing.medium,
-  },
-  scroll: {
-    flex: 1,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+  return {
+    container: {
+      flex: 1,
+      backgroundColor: theme.color.background.neutral[2].background,
+      paddingBottom: bottomSafeAreaInset,
+    },
+    headerContainer: {
+      backgroundColor: theme.color.background.accent[0].background,
+    },
+    header: {
+      backgroundColor: theme.color.background.accent[0].background,
+    },
+    withMargin: {
+      margin: theme.spacing.medium,
+    },
+    contentBlock: {
+      marginHorizontal: theme.spacing.medium,
+    },
+    scroll: {
+      flex: 1,
+    },
+  };
+});
