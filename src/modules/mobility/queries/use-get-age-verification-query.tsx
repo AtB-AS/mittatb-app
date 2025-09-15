@@ -9,8 +9,10 @@ export enum AgeVerificationEnum {
   NotVerified = 'notVerified',
 }
 
+export const ageVerificationQueryKeyString = 'getAgeVerification';
+
 export const getAgeVerificationQueryKey = (legalAge: number | undefined) => [
-  'getAgeVerification',
+  ageVerificationQueryKeyString,
   legalAge,
 ];
 

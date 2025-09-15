@@ -12,7 +12,7 @@ import {RootStackScreenProps} from './navigation-types';
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
-  const {requirements, hasBlockers, setGivenConsent, legalAge} =
+  const {requirements, hasBlockers, setGivenConsent} =
     useShmoRequirements(undefined);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.AGE_VERIFICATION,
     )?.isBlocking
   ) {
-    return <AgeVerificationScreenComponent legalAge={legalAge} />;
+    return <AgeVerificationScreenComponent />;
   }
 
   if (
