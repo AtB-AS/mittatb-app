@@ -179,7 +179,7 @@ module.exports = {
     },
     // Error on imports from stacks-hierarchy from paths outside of stacks-hierarchy
     {
-      files: ['src/modules/auth/**', 'src/setup.ts'],
+      files: ['src/modules/auth/**', 'src/modules/setup/**'],
       rules: {
         'no-restricted-imports': [
           'error',

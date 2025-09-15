@@ -16,7 +16,7 @@ import {
 import {TravelRightDirection} from '@atb-as/utils';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
-import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
+import {RecentFareContractType} from '@atb/modules/recent-fare-contracts';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
 

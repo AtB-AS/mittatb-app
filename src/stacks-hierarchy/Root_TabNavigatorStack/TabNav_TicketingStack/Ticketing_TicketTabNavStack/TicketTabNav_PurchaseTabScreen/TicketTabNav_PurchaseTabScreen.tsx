@@ -15,8 +15,10 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {FareZone} from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
-import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
-import type {RecentFareContractType} from '@atb/recent-fare-contracts';
+import {
+  useRecentFareContracts,
+  type RecentFareContractType,
+} from '@atb/modules/recent-fare-contracts';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;

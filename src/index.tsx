@@ -25,7 +25,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/modules/locale';
-import {setupConfig} from '@atb/setup';
+import {setupConfig} from '@atb/modules/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
 import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';

@@ -14,7 +14,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {
   RecentFareContract,
   type RecentFareContractType,
-} from '@atb/recent-fare-contracts';
+} from '@atb/modules/recent-fare-contracts';
 
 type Props = {
   recentFareContracts: RecentFareContractType[];
