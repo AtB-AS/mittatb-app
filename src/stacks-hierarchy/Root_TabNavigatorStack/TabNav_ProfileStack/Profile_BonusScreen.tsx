@@ -221,7 +221,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function UserBonusBalanceSection(): JSX.Element {
+function UserBonusBalanceSection(): React.JSX.Element {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();

@@ -152,7 +152,7 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   let adjacentSiteIds: string[];
   try {
     adjacentSiteIds = adjSitesRaw ? JSON.parse(adjSitesRaw) : [];
-  } catch (_) {
+  } catch {
     adjacentSiteIds = [];
   }
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);

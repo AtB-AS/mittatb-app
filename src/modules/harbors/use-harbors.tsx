@@ -52,7 +52,7 @@ export const useHarbors = ({
 
   const data: StopPlaceFragmentWithIsFree[] = fromHarborId
     ? applyOverrides(allHarborsQuery.data, connectionsQuery.data, overrides)
-    : allHarborsQuery.data ?? [];
+    : (allHarborsQuery.data ?? []);
 
   return {
     isLoading,

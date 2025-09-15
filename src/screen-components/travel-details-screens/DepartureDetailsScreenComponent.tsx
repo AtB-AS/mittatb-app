@@ -548,7 +548,7 @@ type TripItemProps = {
   call: EstimatedCallWithMetadata;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
-  collapseButton: JSX.Element | null;
+  collapseButton: React.JSX.Element | null;
   situations: SituationFragment[];
   onPressQuay: Props['onPressQuay'];
 };

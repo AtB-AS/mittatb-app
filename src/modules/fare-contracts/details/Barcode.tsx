@@ -26,7 +26,7 @@ type Props = {
   fc: FareContractType;
 };
 
-export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
+export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {mobileTokenStatus} = useMobileTokenContext();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
@@ -59,7 +59,7 @@ function useScreenBrightnessIncrease() {
             originalBrightness = await DeviceBrightness.getBrightnessLevel();
             DeviceBrightness.setBrightnessLevel(1);
           }
-        } catch (e) {
+        } catch {
           Bugsnag.leaveBreadcrumb(`Failed to set brightness.`);
         }
       }
@@ -71,7 +71,7 @@ function useScreenBrightnessIncrease() {
           if (originalBrightness) {
             DeviceBrightness.setBrightnessLevel(originalBrightness);
           }
-        } catch (e) {
+        } catch {
           Bugsnag.leaveBreadcrumb(`Failed to reset brightness.`);
         }
       };

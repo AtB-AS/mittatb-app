@@ -1,4 +1,4 @@
-import {renderHook} from '@testing-library/react-hooks';
+import {renderHook} from '@testing-library/react-native';
 import {LoadingParams, LoadingStatus} from '../types';
 import {useNotifyBugsnagOnTimeoutStatus} from '../use-notify-bugsnag-on-timeout-status';
 import React, {MutableRefObject} from 'react';
@@ -77,7 +77,8 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       remoteConfigIsLoaded: true,
     });
     const hook = renderHook(
-      ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
+      ({status}: {status: LoadingStatus}) =>
+        useNotifyBugsnagOnTimeoutStatus(status, ref),
       {
         initialProps: {status: 'loading' as LoadingStatus},
       },
@@ -121,7 +122,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       }),
     ]);
     mockBugsnagNotification = undefined;
-    hook.rerender();
+    hook.rerender({});
     expect(mockBugsnagNotification).toEqual(undefined);
   });
 
@@ -133,7 +134,8 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       remoteConfigIsLoaded: true,
     });
     const hook = renderHook(
-      ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
+      ({status}: {status: LoadingStatus}) =>
+        useNotifyBugsnagOnTimeoutStatus(status, ref),
       {
         initialProps: {status: 'loading' as LoadingStatus},
       },
@@ -189,7 +191,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       firestoreConfigStatus: 'success',
       remoteConfigIsLoaded: true,
     };
-    hook.rerender();
+    hook.rerender({});
     expect(mockBugsnagNotification).toEqual(undefined);
   });
 });

@@ -10,7 +10,7 @@ type FavoriteToggleProps = {
 export function FavoriteToggle({
   enabled,
   setEnabled,
-}: FavoriteToggleProps): JSX.Element {
+}: FavoriteToggleProps): React.JSX.Element {
   const {t} = useTranslation();
 
   return (

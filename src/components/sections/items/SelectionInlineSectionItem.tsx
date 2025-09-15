@@ -18,8 +18,8 @@ export type SelectionInlineSectionItemProps = SectionItemProps<{
   value?: string;
   onPress: () => void;
   onPressLabel?: string;
-  onPressIcon?: NavigationIconTypes | ((props: SvgProps) => JSX.Element);
-  icon?: (props: SvgProps) => JSX.Element;
+  onPressIcon?: NavigationIconTypes | ((props: SvgProps) => React.JSX.Element);
+  icon?: (props: SvgProps) => React.JSX.Element;
   iconAccessibility?: AccessibilityProps;
   accessibility?: AccessibilityProps;
   testID?: string;

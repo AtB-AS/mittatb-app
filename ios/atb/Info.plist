@@ -54,6 +54,10 @@
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>IntercomApiKey</key>
+	<string>$(INTERCOM_IOS_API_KEY)</string>
+	<key>IntercomAppId</key>
+	<string>$(INTERCOM_APP_ID)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>vipps</string>
@@ -76,6 +80,8 @@
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(APP_NAME) trenger tilgang til kamera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -86,12 +92,12 @@
 	<string>Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
-	<key>NSCameraUsageDescription</key>
-	<string>$(APP_NAME) trenger tilgang til kamera</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>UseLocationIntent</string>
 	</array>
+	<key>RCTNewArchEnabled</key>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>
@@ -116,9 +122,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>IntercomApiKey</key>
-	<string>$(INTERCOM_IOS_API_KEY)</string>
-	<key>IntercomAppId</key>
-	<string>$(INTERCOM_APP_ID)</string>
 </dict>
 </plist>

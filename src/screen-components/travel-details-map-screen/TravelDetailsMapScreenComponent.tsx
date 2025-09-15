@@ -326,8 +326,8 @@ const LiveVehicleMarker = ({
                 isError
                   ? theme.color.interactive.destructive.default.background
                   : isStale
-                  ? theme.color.interactive[1].default.background
-                  : fillColor
+                    ? theme.color.interactive[1].default.background
+                    : fillColor
               }
             />
           )}
@@ -347,7 +347,7 @@ const LiveVehicleIcon = ({
   subMode,
   isStale,
   isError,
-}: LiveVehicleIconProps): JSX.Element => {
+}: LiveVehicleIconProps): React.JSX.Element => {
   const {theme} = useThemeContext();
   const fillColor = useTransportColor(mode, subMode).primary.foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);

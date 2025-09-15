@@ -15,7 +15,7 @@ export function useRegisterIntercomUser() {
     const register = async () => {
       try {
         await Intercom.loginUnidentifiedUser();
-      } catch (error: any) {
+      } catch {
         // do nothing
       }
       await Intercom.setBottomPadding(Platform.OS === 'ios' ? 40 : 80);
