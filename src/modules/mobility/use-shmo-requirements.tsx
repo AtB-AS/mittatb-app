@@ -14,7 +14,7 @@ export const useShmoRequirements = (operatorId: string | undefined) => {
   const {mobilityOperators} = useOperators();
 
   const operator = mobilityOperators?.find((op) => op.id === operatorId);
-  const operatorAgeLimit = operator?.ageLimit;
+  const operatorAgeLimit = operator?.ageLimit ?? 0;
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 

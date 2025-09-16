@@ -82,14 +82,9 @@ export const getOrCreateVippsUserCustomToken = async (
 };
 
 export const getAgeVerification = (
-  legalAge: number | undefined,
+  legalAge: number,
   opts?: AxiosRequestConfig,
 ): Promise<AgeVerificationEnum> => {
-  if (legalAge === undefined) {
-    //all users are of legal age if no age limit is set
-    return Promise.resolve(AgeVerificationEnum.LegalAge);
-  }
-
   const url = '/identity/v1/vipps/age-verification';
   const query = qs.stringify({legalAge});
 
