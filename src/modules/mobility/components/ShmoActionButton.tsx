@@ -122,15 +122,14 @@ export const ShmoActionButton = ({
           )}
         />
       )}
-      {ageVerification === AgeVerificationEnum.UnderAge &&
-        operatorAgeLimit !== undefined && (
-          <MessageInfoBox
-            type="warning"
-            message={t(
-              MobilityTexts.shmoRequirements.underAgeWarning(operatorAgeLimit),
-            )}
-          />
-        )}
+      {ageVerification === AgeVerificationEnum.UnderAge && (
+        <MessageInfoBox
+          type="warning"
+          message={t(
+            MobilityTexts.shmoRequirements.underAgeWarning(operatorAgeLimit),
+          )}
+        />
+      )}
       <Button
         mode="primary"
         active={false}
