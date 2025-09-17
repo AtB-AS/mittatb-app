@@ -10,7 +10,7 @@ import {
 import {useFeatureTogglesContext} from '../feature-toggles';
 import {useOperators} from './use-operators';
 
-export const useShmoRequirements = (operatorId: string | undefined) => {
+export const useShmoRequirements = (operatorId?: string) => {
   const {mobilityOperators} = useOperators();
 
   const operator = mobilityOperators?.find((op) => op.id === operatorId);

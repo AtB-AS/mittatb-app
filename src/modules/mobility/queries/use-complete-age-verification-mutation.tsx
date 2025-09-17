@@ -10,6 +10,7 @@ export const useCompleteAgeVerificationMutation = () => {
       completeAgeVerification(authorizationCode),
 
     onSuccess: () => {
+      //invalidate all age verification queries
       queryClient.invalidateQueries({
         queryKey: [ageVerificationQueryKeyString],
       });
