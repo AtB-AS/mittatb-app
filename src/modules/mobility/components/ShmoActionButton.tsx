@@ -34,7 +34,8 @@ export const ShmoActionButton = ({
   paymentMethod,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
-  const {hasBlockers, numberOfBlockers} = useShmoRequirements();
+  const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
+    useShmoRequirements(operatorId);
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -48,8 +49,6 @@ export const ShmoActionButton = ({
     isError: initShmoOneStopBookingIsError,
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
-
-  const {ageVerification, legalAge} = useShmoRequirements();
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
@@ -126,7 +125,9 @@ export const ShmoActionButton = ({
       {ageVerification === AgeVerificationEnum.UnderAge && (
         <MessageInfoBox
           type="warning"
-          message={t(MobilityTexts.shmoRequirements.underAgeWarning(legalAge))}
+          message={t(
+            MobilityTexts.shmoRequirements.underAgeWarning(operatorAgeLimit),
+          )}
         />
       )}
       <Button

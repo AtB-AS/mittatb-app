@@ -74,7 +74,9 @@ export const ScooterSheet = ({
     (e) => e.id === operatorId,
   )?.isDeepIntegrationEnabled;
 
-  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements();
+  const {isLoading: shmoReqIsLoading, hasBlockers} =
+    useShmoRequirements(operatorId);
+
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 

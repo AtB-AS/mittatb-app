@@ -14,13 +14,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useInitAgeVerificationMutation} from '../../index';
 
-export type AgeVerificationScreenComponentProps = {
-  legalAge: number;
-};
-
-export const AgeVerificationScreenComponent = ({
-  legalAge,
-}: AgeVerificationScreenComponentProps) => {
+export const AgeVerificationScreenComponent = () => {
   const {t} = useTranslation();
   const appStatus = useAppStateStatus();
   const [error, setError] = useState<VippsSignInErrorCode>();
@@ -30,7 +24,7 @@ export const AgeVerificationScreenComponent = ({
     mutateAsync: completeAgeVerification,
     isLoading: isCompleting,
     error: completeError,
-  } = useCompleteAgeVerificationMutation(legalAge);
+  } = useCompleteAgeVerificationMutation();
 
   const {
     mutateAsync: initAgeVerification,
