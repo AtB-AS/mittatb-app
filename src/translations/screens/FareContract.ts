@@ -96,15 +96,15 @@ const FareContractTexts = {
       ),
     sentTo: (phoneNumber: string) =>
       _(
-        `Denne billetten ble sendt til ${phoneNumber}`,
-        `This ticket was sent to ${phoneNumber}`,
-        `Denne billetten vart sendt til ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
+        `Sent to ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
       ),
     purchasedBy: (phoneNumber: string) =>
       _(
-        `Denne billetten ble kjøpt av ${phoneNumber}`,
-        `This ticket was purchased by ${phoneNumber}`,
-        `Denne billetten vart kjøpt av ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
+        `Purchased by ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(
