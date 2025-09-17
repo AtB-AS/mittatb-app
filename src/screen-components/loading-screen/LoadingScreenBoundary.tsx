@@ -12,8 +12,8 @@ const LOADING_TIMEOUT_MS = 10000;
 export const LoadingScreenBoundary = ({
   children,
 }: {
-  children: JSX.Element;
-}): JSX.Element => {
+  children: React.JSX.Element;
+}): React.JSX.Element => {
   const {isLoadingScreenEnabled, isLoadingErrorScreenEnabled} =
     useFeatureTogglesContext();
   const {loading_screen_delay_ms} = useRemoteConfigContext();

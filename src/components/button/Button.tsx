@@ -22,7 +22,7 @@ type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 type ButtonType = 'large' | 'small';
 
 type ButtonIconProps = {
-  svg: ({fill}: {fill: string}) => JSX.Element;
+  svg: ({fill}: {fill: string}) => React.JSX.Element;
   notificationColor?: ContrastColor;
 };
 

@@ -39,7 +39,7 @@ const Logo = ({
   paymentType,
 }: {
   paymentType: PaymentType | undefined;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   switch (paymentType) {
     case PaymentType.Visa:
       return <Visa height="100%" width="100%" />;

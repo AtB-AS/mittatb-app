@@ -1,4 +1,4 @@
-import {act, renderHook} from '@testing-library/react-hooks';
+import {act, renderHook, waitFor} from '@testing-library/react-native';
 import {useFeatureTogglesContextState} from '../use-feature-toggle-context-state.ts';
 import type {StorageService} from '@atb/modules/storage';
 import type {RemoteConfig} from '@atb/modules/remote-config';
@@ -13,7 +13,7 @@ const getStorageMock = (
     getMulti: async () =>
       getMultiResponse.map(([n, v]) => [toStorageKey(n), v || null]),
     set: async () => {},
-  } as any as StorageService);
+  }) as any as StorageService;
 
 const getRCMock = (conf: {[K in string]: boolean}) =>
   conf as any as RemoteConfig;
@@ -29,8 +29,7 @@ describe('useFeatureTogglesContextState', () => {
       {initialProps: rc},
     );
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[toggle.name]).toBe(false);
+    await waitFor(() => expect(hook.result.current[toggle.name]).toBe(false));
 
     hook.rerender(getRCMock({[toggle.remoteConfigKey]: true}));
     expect(hook.result.current[toggle.name]).toBe(true);
@@ -44,7 +43,7 @@ describe('useFeatureTogglesContextState', () => {
     const storage = getStorageMock([[toggle.name, 'false']]);
 
     const hook = renderHook(
-      ({rc}) => useFeatureTogglesContextState(rc, storage),
+      ({rc}: {rc: RemoteConfig}) => useFeatureTogglesContextState(rc, storage),
       {
         initialProps: {
           rc: getRCMock({[toggle.remoteConfigKey]: true}),
@@ -52,8 +51,7 @@ describe('useFeatureTogglesContextState', () => {
       },
     );
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[toggle.name]).toBe(false);
+    await waitFor(() => expect(hook.result.current[toggle.name]).toBe(false));
 
     hook.rerender({rc: getRCMock({[toggle.remoteConfigKey]: false})});
     expect(hook.result.current[toggle.name]).toBe(false);
@@ -67,7 +65,7 @@ describe('useFeatureTogglesContextState', () => {
     const storage = getStorageMock([[toggle.name, 'true']]);
 
     const hook = renderHook(
-      ({rc}) => useFeatureTogglesContextState(rc, storage),
+      ({rc}: {rc: RemoteConfig}) => useFeatureTogglesContextState(rc, storage),
       {
         initialProps: {
           rc: getRCMock({[toggle.remoteConfigKey]: false}),
@@ -75,8 +73,7 @@ describe('useFeatureTogglesContextState', () => {
       },
     );
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[toggle.name]).toBe(true);
+    await waitFor(() => expect(hook.result.current[toggle.name]).toBe(true));
 
     hook.rerender({rc: getRCMock({[toggle.remoteConfigKey]: true})});
     expect(hook.result.current[toggle.name]).toBe(true);
@@ -92,8 +89,7 @@ describe('useFeatureTogglesContextState', () => {
 
     const hook = renderHook(() => useFeatureTogglesContextState(rc, storage));
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current[toggle.name]).toBe(true);
+    await waitFor(() => expect(hook.result.current[toggle.name]).toBe(true));
 
     act(() => hook.result.current.debug.setOverride(toggle.name, false));
     expect(hook.result.current[toggle.name]).toBe(false);
@@ -119,10 +115,11 @@ describe('useFeatureTogglesContextState', () => {
 
     const hook = renderHook(() => useFeatureTogglesContextState(rc, storage));
 
-    await hook.waitForNextUpdate();
-    expect(hook.result.current.debug.overrides).toContainEqual({
-      name: toggle1.name,
-      value: undefined,
+    await waitFor(() => {
+      expect(hook.result.current.debug.overrides).toContainEqual({
+        name: toggle1.name,
+        value: undefined,
+      });
     });
     expect(hook.result.current.debug.overrides).toContainEqual({
       name: toggle2.name,

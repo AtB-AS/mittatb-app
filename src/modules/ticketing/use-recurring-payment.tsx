@@ -67,9 +67,8 @@ export const useRecurringPayment = () => {
 
   const onAddRecurringPayment = async () => {
     const callbackUrl = `${APP_SCHEME}://payment-method-callback`;
-    const {recurringPaymentId, terminalUrl} = await addPaymentMethod(
-      callbackUrl,
-    );
+    const {recurringPaymentId, terminalUrl} =
+      await addPaymentMethod(callbackUrl);
 
     setAwaitingRecurringPaymentId(recurringPaymentId);
 

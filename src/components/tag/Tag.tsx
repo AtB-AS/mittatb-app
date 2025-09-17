@@ -25,7 +25,7 @@ type BaseTagProps = {
 
 type TagProps = BaseTagProps & {
   tagType: TagStatuses;
-  icon?: (props: SvgProps) => JSX.Element;
+  icon?: (props: SvgProps) => React.JSX.Element;
 };
 
 export const Tag = ({
@@ -116,7 +116,7 @@ const usePrimaryTagStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const SecondaryTag: React.FC<
-  BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
+  BaseTagProps & {icon?: (props: SvgProps) => React.JSX.Element}
 > = ({labels, a11yLabel, size = 'regular', icon, customStyle}) => {
   const commonStyles = useCommonTagStyles();
   const styles = useSecondaryTagStyles();

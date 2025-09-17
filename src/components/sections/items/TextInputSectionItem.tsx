@@ -1,10 +1,9 @@
 import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
-  NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
-  TextInputFocusEventData,
+  FocusEvent,
   TextInputProps as InternalTextInputProps,
   View,
 } from 'react-native';
@@ -20,8 +19,6 @@ import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {MessageInfoText} from '@atb/components/message-info-text';
-
-type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 type TextProps = SectionItemProps<
   InternalTextInputProps & {

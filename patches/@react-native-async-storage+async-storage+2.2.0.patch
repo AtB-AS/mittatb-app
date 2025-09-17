@@ -1,5 +1,5 @@
 diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
-index 4bfa945..7452200 100644
+index fa3bb04..3930a2e 100644
 --- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 +++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 @@ -19,6 +19,7 @@
@@ -35,7 +35,7 @@ index 4bfa945..7452200 100644
      });
      return manifestFilePath;
  }
-@@ -662,8 +668,22 @@ - (BOOL)_passthroughDelegate
+@@ -665,8 +671,22 @@ - (BOOL)_passthroughDelegate
          [self.delegate respondsToSelector:@selector(isPassthrough)] && self.delegate.isPassthrough;
  }
  
@@ -59,7 +59,7 @@ index 4bfa945..7452200 100644
  RCT_EXPORT_METHOD(multiGet:(NSArray<NSString *> *)keys
                    callback:(RCTResponseSenderBlock)callback)
 diff --git a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
-index 03bef6b..6b73491 100644
+index c5d3a6b..bd3e593 100644
 --- a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
 +++ b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
 @@ -28,6 +28,7 @@ export type AsyncStorageHook = {
@@ -71,7 +71,7 @@ index 03bef6b..6b73491 100644
       * Fetches an item for a `key` and invokes a callback upon completion.
       *
 diff --git a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
-index d7cbaf9..00b8c32 100644
+index 6ba0f29..94147e9 100644
 --- a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
 +++ b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
 @@ -51,6 +51,19 @@ const AsyncStorage = ((): AsyncStorageStatic => {
@@ -95,10 +95,10 @@ index d7cbaf9..00b8c32 100644
       * Fetches an item for a `key` and invokes a callback upon completion.
       *
 diff --git a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
-index 805253d..e6459eb 100644
+index 60a6a1a..0be828d 100644
 --- a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
 +++ b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
-@@ -66,6 +66,12 @@ function createPromiseAll<ReturnType, Result, ResultProcessor extends Function>(
+@@ -74,6 +74,12 @@ function createPromiseAll<
  }
  
  const AsyncStorage: AsyncStorageStatic = {
@@ -112,7 +112,7 @@ index 805253d..e6459eb 100644
     * Fetches `key` value.
     */
 diff --git a/node_modules/@react-native-async-storage/async-storage/src/types.ts b/node_modules/@react-native-async-storage/async-storage/src/types.ts
-index 94cc27f..9ac737d 100644
+index 5dd2a6c..4dbbfc8 100644
 --- a/node_modules/@react-native-async-storage/async-storage/src/types.ts
 +++ b/node_modules/@react-native-async-storage/async-storage/src/types.ts
 @@ -42,6 +42,7 @@ export type AsyncStorageHook = {

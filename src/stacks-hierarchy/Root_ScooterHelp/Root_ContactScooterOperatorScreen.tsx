@@ -166,8 +166,8 @@ export const Root_ContactScooterOperatorScreen = ({
                           .errorMessage,
                       )
                     : !isContactInfoPresent && showError
-                    ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
-                    : undefined
+                      ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
+                      : undefined
                 }
               />
             </Section>
@@ -206,8 +206,8 @@ export const Root_ContactScooterOperatorScreen = ({
                           .errorMessage,
                       )
                     : !isContactInfoPresent && showError
-                    ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
-                    : undefined
+                      ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
+                      : undefined
                 }
               />
             </Section>

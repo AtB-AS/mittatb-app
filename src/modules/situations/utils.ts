@@ -115,10 +115,9 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
   }
   return situations
     .map(getMessageTypeForSituation)
-    .reduce<Exclude<Statuses, 'valid'> | undefined>(
-      toMostCriticalStatus,
-      undefined,
-    );
+    .reduce<
+      Exclude<Statuses, 'valid'> | undefined
+    >(toMostCriticalStatus, undefined);
 };
 
 /**

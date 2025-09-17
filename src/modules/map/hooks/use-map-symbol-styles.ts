@@ -141,15 +141,15 @@ export const useMapSymbolStyles = ({
     pinType === 'stop'
       ? ''
       : pinType !== 'station'
-      ? mapItemIconState
-      : [
-          'case',
-          ['==', iconCode, 'citybike'],
-          'bikes',
-          ['==', iconCode, 'sharedcar'],
-          'cars',
-          'bikes',
-        ],
+        ? mapItemIconState
+        : [
+            'case',
+            ['==', iconCode, 'citybike'],
+            'bikes',
+            ['==', iconCode, 'sharedcar'],
+            'cars',
+            'bikes',
+          ],
     ['case', ['==', suffix, ''], '', '_'],
     suffix,
     '_',
