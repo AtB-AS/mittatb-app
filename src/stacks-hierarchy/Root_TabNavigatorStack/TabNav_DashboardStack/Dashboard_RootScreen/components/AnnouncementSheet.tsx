@@ -59,13 +59,13 @@ export const AnnouncementSheet = ({announcement}: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
       minHeight: 350,
       gap: theme.spacing.medium,
-      paddingBottom: Math.max(bottom, theme.spacing.medium),
+      paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     articleContainer: {
       gap: theme.spacing.medium,
