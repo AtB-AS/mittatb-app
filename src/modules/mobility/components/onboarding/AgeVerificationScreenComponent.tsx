@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
-import {ThemedBabyOnScooter, ThemedTokenPhone} from '@atb/theme/ThemedAssets';
+import {ThemedBabyOnScooter} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {VIPPS_CALLBACK_URL} from '@atb/api/identity';
